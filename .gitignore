@@ -1,0 +1,46 @@
+######################
+# 解决java产生文件
+######################
+*.class
+
+######################
+# 解决maven产生的文件
+######################
+target/
+**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+######################
+# 解决各类编辑器自动产生的文件
+######################
+*.iml
+.idea/
+/out/
+/target/
+.idea_modules/
+local.properties
+
+######################
+# gradle
+######################
+.gradle
+
+######################
+# android
+######################
+build
+captures
+gradle.properties
+.externalNativeBuild
+
+######################
+# mac
+######################
+.DS_Store
