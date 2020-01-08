@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'//maven插件，用于上传插件到仓库
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
@@ -29,11 +31,10 @@ android {
 //    repositories.mavenDeployer {
 //        repository(url: "file://" + rootDir.toString() + "/maven_local/")
 //        pom.project {
-//            groupId project.mnaLib.publishGroupID
-//            artifactId "lib-utils"
-//            version project.mnaLib.versionName
+//            groupId project.groupId
+//            artifactId "lib-gson"
+//            version project.publishVersion
 //        }
-//
 //    }
 //}
 
@@ -52,4 +53,5 @@ publish {
 dependencies {
     api "com.bihe0832.android:lib-utils:1.0.0"
     api "com.google.code.gson:gson:${project.gson_version}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${project.kotlin_version}"
 }

@@ -1,11 +1,11 @@
 package com.bihe0832.android.lib.gson
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.tencent.mocmna.utils.Logger
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-11-18.
  * Description: Description
  */
@@ -52,7 +52,7 @@ object JsonHelper {
         try {
             return getGson().toJson(beanObject)
         } catch (e: Exception) {
-            Logger.e("JsonParserWrapper toJson error:$e")
+            Log.e("JsonHelper","JsonParserWrapper toJson error:$e")
         }
 
         return null
@@ -72,7 +72,7 @@ object JsonHelper {
         try {
             return getGson().fromJson(json, beanClass)
         } catch (e: Exception) {
-            Logger.e("JsonParserWrapper fromJson error:$e")
+            Log.e("JsonHelper","JsonParserWrapper fromJson error:$e")
         }
 
         return null

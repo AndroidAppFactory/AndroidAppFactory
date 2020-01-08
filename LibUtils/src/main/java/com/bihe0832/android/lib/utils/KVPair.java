@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.utils;
 
 /**
- * Created by hardyshi on 2017/7/24.
+ * Created by zixie on 2017/7/24.
  */
 
 public class KVPair {

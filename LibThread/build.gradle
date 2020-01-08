@@ -32,7 +32,7 @@ uploadArchives {
         repository(url: "file://" + rootDir.toString() + "/maven_local/")
         pom.project {
             groupId project.groupId
-            artifactId "lib-utils"
+            artifactId "lib-thread"
             version project.publishVersion
         }
 
@@ -41,12 +41,12 @@ uploadArchives {
 
 //添加发布相关的配置
 publish {
-    artifactId = 'lib-utils'//项目名称
+    artifactId = 'lib-thread'//项目名称
     repoName=rootProject.repoName
-    publishVersion = '1.0.1'//版本号
+    publishVersion = '1.0.0'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
-    desc = 'the base utils for zixie'//项目描述
+    desc = 'the base thread manager for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
