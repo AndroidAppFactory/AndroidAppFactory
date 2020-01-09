@@ -160,11 +160,20 @@ object DownloadManagerWrapper {
         if (applicationContext == null) {
             applicationContext = context.applicationContext
         }
-        if (hasDownload(info.downloadURL) && null != downloadListener) {
-            mCurrentDownloadList[info.downloadURL]?.apply {
-                downloadNotifyListenerList.add(downloadListener)
+        if (hasDownload(info.downloadURL)) {
+            if(info.forceDownloadNew){
+                mCurrentDownloadList[info.downloadURL]?.downloadNotifyListenerList?.let {
+                    info.downloadNotifyListenerList.addAll(it)
+                }
+                cancleDownload(info.downloadURL)
+            }else{
+                downloadListener?.let {
+                    mCurrentDownloadList[info.downloadURL]?.apply {
+                        downloadNotifyListenerList.add(downloadListener)
+                    }
+                }
+                return
             }
-            return
         }else{
             downloadListener?.let {
                 info.downloadNotifyListenerList.add(it)
@@ -192,6 +201,8 @@ object DownloadManagerWrapper {
                 return
             }
         }
+
+
         val request = DownloadManager.Request(Uri.parse(info.downloadURL)).apply {
             //设置允许使用的网络类型，这里是移动网络和wifi都可以
             setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
