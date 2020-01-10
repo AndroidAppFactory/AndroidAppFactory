@@ -8,13 +8,13 @@
     <application>
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="@string/lib_bihe0832_install_file_provider"
+            android:authorities="${applicationId}.bihe0832"
             android:exported="false"
             android:grantUriPermissions="true"
             tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"
+                android:resource="@xml/zixie_file_paths"
                 tools:replace="android:resource" />
         </provider>
     </application>

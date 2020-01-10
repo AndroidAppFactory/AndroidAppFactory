@@ -25,11 +25,23 @@ android {
     }
 }
 
+uploadArchives {
+    //本地仓库的一种
+    repositories.mavenDeployer {
+        repository(url: "file://" + rootDir.toString() + "/../../mnaapp/mna-application/libs/")
+        pom.project {
+            groupId project.groupId
+            artifactId "lib-a"
+            version "1.0.0"
+        }
+    }
+}
+
 //添加发布相关的配置
 publish {
     artifactId = 'lib-download-install'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.0.6'//版本号
+    publishVersion = '1.1.0'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -39,5 +51,7 @@ publish {
 
 dependencies {
     api "com.bihe0832.android:lib-encrypt:1.0.1"
+    api "com.bihe0832.android:lib-file:1.0.1"
+    api "com.bihe0832.android:lib-thread:1.0.1"
     api "com.android.support:appcompat-v7:${project.android_support_version}"
 }

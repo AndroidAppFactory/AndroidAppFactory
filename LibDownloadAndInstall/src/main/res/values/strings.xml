@@ -1,6 +1,0 @@
-<resources>
-    <!--  provider，必须以应用包名开头  -->
-    <string name="lib_bihe0832_install_file_provider"></string>
-    <!--  应用下载的目录名称  -->
-    <string name="lib_bihe0832_install_folder">Download/</string>
-</resources>
