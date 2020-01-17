@@ -23,13 +23,10 @@ abstract class DownloadWrapper {
 
     val TAG = "Download ->"
 
-
-
     protected val CONTENT_URI = Uri.parse("content://downloads/my_downloads")
     protected var mCurrentDownloadList = HashMap<String, DownloadItem>()
     protected var applicationContext: Context? = null
     protected var DOWNLOAD_PATH = "Download/"
-
 
     fun startDownload(context: Context, info: DownloadItem, downloadListener: DownloadListener?) {
         Log.d(TAG, "info:${info}")
@@ -52,7 +49,7 @@ abstract class DownloadWrapper {
             }
         }
 
-        when (hasDownload(info.downloadURL, info.fileName, info.fileMD5, info.forceDownloadNew)) {
+        when (hasDownload(applicationContext!!, info.downloadURL, info.fileName, info.fileMD5, info.forceDownloadNew)) {
             NO_DOWNLOAD -> {
                 downloadListener?.let {
                     info.downloadNotifyListenerList.add(it)
@@ -131,7 +128,11 @@ abstract class DownloadWrapper {
         }
     }
 
-    fun hasDownload(url: String, filePath: String, fileMD5: String, forceDownloadNew: Boolean): Int {
+    fun hasDownload(context: Context, url: String, fileName: String, fileMD5: String, forceDownloadNew: Boolean): Int {
+        if(applicationContext == null){
+            applicationContext = context
+        }
+        var filePath = applicationContext!!.getExternalFilesDir(DOWNLOAD_PATH).absolutePath + "/" + fileName
         return if (FileUtils.checkFileExist(filePath, fileMD5) && !forceDownloadNew) {
             //已下载
             HAS_DOWNLOAD

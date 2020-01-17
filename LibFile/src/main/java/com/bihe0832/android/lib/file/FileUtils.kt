@@ -31,7 +31,7 @@ object FileUtils {
             if (TextUtils.isEmpty(fileMD5)) {
                 file != null && file.length() > 0 && file.exists() && file.isFile
             } else {
-                MD5.getMd5(filePath).equals(fileMD5, ignoreCase = true)
+                getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
             }
         }
     }

@@ -21,7 +21,7 @@ const val HAS_DOWNLOAD = 2
 const val IS_DOWNLOADING_HTTP = 3
 const val IS_DOWNLOADING_DM = 4
 
-object DownloadUtils{
+object DownloadUtils {
 
     private val httpDownload by lazy {
         DownloadByHttp()
@@ -31,17 +31,17 @@ object DownloadUtils{
         DownloadByDownloadManager()
     }
 
-    fun hasDownload(type : Int, url: String, filePath: String, fileMD5: String, forceDownloadNew: Boolean): Int {
-        return when(type){
-            DOWNLOAD_TYPE_HTTP -> httpDownload.hasDownload(url, filePath, fileMD5, forceDownloadNew)
-            else -> downloadManagerDownload.hasDownload(url, filePath, fileMD5, forceDownloadNew)
+    fun hasDownload(type: Int, context: Context, url: String, fileName: String, fileMD5: String, forceDownloadNew: Boolean): Int {
+        return when (type) {
+            DOWNLOAD_TYPE_HTTP -> httpDownload.hasDownload(context, url, fileName, fileMD5, forceDownloadNew)
+            else -> downloadManagerDownload.hasDownload(context, url, fileName, fileMD5, forceDownloadNew)
         }
     }
 
-    fun hasDownload(url: String, filePath: String, fileMD5: String, forceDownloadNew: Boolean): Int {
-        when (downloadManagerDownload.hasDownload(url, filePath, fileMD5, forceDownloadNew)) {
+    fun hasDownload(context: Context, url: String, fileName: String, fileMD5: String, forceDownloadNew: Boolean): Int {
+        when (downloadManagerDownload.hasDownload(context, url, fileName, fileMD5, forceDownloadNew)) {
             NO_DOWNLOAD -> {
-                when (httpDownload.hasDownload(url, filePath, fileMD5, forceDownloadNew)) {
+                when (httpDownload.hasDownload(context, url, fileName, fileMD5, forceDownloadNew)) {
                     NO_DOWNLOAD -> {
                         return NO_DOWNLOAD
                     }
@@ -60,8 +60,8 @@ object DownloadUtils{
         return NO_DOWNLOAD
     }
 
-    fun startDownload(type : Int, context: Context, info: DownloadItem, downloadListener: DownloadListener?) {
-        when(type){
+    fun startDownload(type: Int, context: Context, info: DownloadItem, downloadListener: DownloadListener?) {
+        when (type) {
             DOWNLOAD_TYPE_HTTP -> httpDownload.startDownload(context, info, downloadListener)
             else -> downloadManagerDownload.startDownload(context, info, downloadListener)
         }
@@ -76,8 +76,8 @@ object DownloadUtils{
         httpDownload.cancleDownload(url)
     }
 
-    fun cancleDownload(type : Int, url: String){
-        when(type){
+    fun cancleDownload(type: Int, url: String) {
+        when (type) {
             DOWNLOAD_TYPE_HTTP -> httpDownload.cancleDownload(url)
             else -> downloadManagerDownload.cancleDownload(url)
         }
