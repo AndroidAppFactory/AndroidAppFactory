@@ -1,0 +1,42 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: 'config.gradle'
+
+buildscript {
+    repositories {
+        maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
+        maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath "com.bihe0832.android:GradleDependenciesCheck:1.0.11"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.50"
+        classpath 'com.novoda:bintray-release:0.9.1'
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
+        maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+subprojects {
+    apply plugin: 'com.bihe0832.gradleDependenciesCheck'
+    GradleDependenciesCheckConfig {
+        showResultType = 1
+    }
+    afterEvaluate { Project project ->
+        project.getTasks().getByName('clean').doFirst {
+            delete "build"
+            delete ".externalNativeBuild"
+        }
+        project.getTasks().getByName('clean').dependsOn("checkGradleDependencies")
+        project.getTasks().getByName('preBuild').dependsOn("checkGradleDependencies")
+    }
+}

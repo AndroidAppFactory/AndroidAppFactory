@@ -1,0 +1,42 @@
+ext {
+    //Android编译SDK版本
+    compileSdkVersion = 28
+    //Android编译工具版本
+    buildToolsVersion = "28.0.3"
+    //Lib 最低适配Android 版本
+    commonMinSdkVersion  = 9
+    //APK 最低适配Android 版本
+    appMinSdkVersion = 21
+    //Android 最佳适配Android 版本
+    targetSdkVersion = 26
+    //版本号，正式版本会由自动构建替换
+    versionCode = 1
+    //版本名，正式版本会由自动构建替换
+    versionName = "1.0.0"
+    //Android 构建包时是否混淆代码
+    minifyEnabled = true
+
+    //签名信息
+    mnaLib = [
+            versionCode:1,
+            versionName:'1.0.0'
+    ]
+
+    repoName = "android"
+    userOrg = 'bihe0832'
+    groupId = "com.bihe0832.android"
+    licences = ""
+    //使用kotlin版本
+    kotlin_version = '1.3.50'
+
+    glide_version = "4.6.1"
+    gson_version = "2.8.2"
+
+    //使用Android Support库版本
+    android_support_version = "28.0.0"
+    android_constraint_layout_version = '1.1.3'
+    android_arch_lifecycle_version = '1.1.1'
+    android_arch_persistence_version = '1.1.1'
+
+    robolectricVersion = '3.3.2'
+}

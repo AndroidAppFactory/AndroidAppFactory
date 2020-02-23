@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+// 不同类型的包，仅仅修改下面两项即可，其余内容保持一致
+project.ext.applicationID = "com.bihe0832.android.test"
+project.ext.applicationName="子勰Lib"
+project.ext.applicationPrefix="Zixie"
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+    defaultConfig {
+        applicationId applicationID
+        minSdkVersion project.appMinSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionName project.versionName
+        versionCode project.versionCode
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
+        ndk {
+            abiFilters "armeabi-v7a"
+            stl "stlport_static"
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+
+    android.applicationVariants.all { variant ->
+        def finalFileName = applicationPrefix + "_V${defaultConfig.versionName}_${defaultConfig.versionCode}"
+        variant.outputs.all {
+            if (variant.buildType.name == 'debug') {
+                outputFileName = finalFileName + "_debug.apk"
+            }else{
+                outputFileName = finalFileName + "_release.apk"
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-v4:28.0.0'
+    api project(":LibDownloadAndInstall")
+
+}

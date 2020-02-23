@@ -26,7 +26,6 @@ abstract class DownloadWrapper {
     protected val CONTENT_URI = Uri.parse("content://downloads/my_downloads")
     protected var mCurrentDownloadList = HashMap<String, DownloadItem>()
     protected var applicationContext: Context? = null
-    protected var DOWNLOAD_PATH = "Download/"
 
     fun startDownload(context: Context, info: DownloadItem, downloadListener: DownloadListener?) {
         Log.d(TAG, "info:${info}")
@@ -39,7 +38,7 @@ abstract class DownloadWrapper {
             return
         }
 
-        var finalFileName = applicationContext!!.getExternalFilesDir(applicationContext!!.getString(R.string.lib_bihe0832_install_folder)).absolutePath + "/" + info.fileName
+        var finalFileName = applicationContext!!.getExternalFilesDir(applicationContext!!.getString(R.string.lib_bihe0832_file_folder)).absolutePath + "/" + info.fileName
         if (FileUtils.checkFileExist(finalFileName, info.fileMD5)) {
             if (info.forceDownloadNew) {
                 FileUtils.deleteFile(finalFileName)
@@ -88,13 +87,13 @@ abstract class DownloadWrapper {
     protected fun notifyDownload(downloadInfo : DownloadItem,fileUri :String){
         mCurrentDownloadList.remove(downloadInfo.downloadURL)
         var downloadFile: String = Uri.parse(fileUri).path
-        var finalFileName: String = applicationContext!!.getExternalFilesDir(DOWNLOAD_PATH).absolutePath + "/" + downloadInfo.fileName
+        var finalFileName: String = applicationContext!!.getExternalFilesDir(applicationContext!!.getString(R.string.lib_bihe0832_file_folder)).absolutePath + "/" + downloadInfo.fileName
         try {
             val oldfile = File(downloadFile)
             Log.d(TAG, " oldfile:$oldfile")
             Log.d(TAG, " oldfile:" + MD5.getFileMD5(oldfile))
             val md5 = MD5.getFileMD5(downloadFile)
-            if (TextUtils.isEmpty(downloadInfo.fileMD5) || md5 == downloadInfo.fileMD5) {
+            if (TextUtils.isEmpty(downloadInfo.fileMD5) || md5.equals(downloadInfo.fileMD5,ignoreCase = true)) {
                 val newfile = File(finalFileName)
                 if (newfile.exists()) {
                     newfile.delete()
@@ -132,7 +131,7 @@ abstract class DownloadWrapper {
         if(applicationContext == null){
             applicationContext = context
         }
-        var filePath = applicationContext!!.getExternalFilesDir(DOWNLOAD_PATH).absolutePath + "/" + fileName
+        var filePath = applicationContext!!.getExternalFilesDir(applicationContext!!.getString(R.string.lib_bihe0832_file_folder)).absolutePath + "/" + fileName
         return if (FileUtils.checkFileExist(filePath, fileMD5) && !forceDownloadNew) {
             //已下载
             HAS_DOWNLOAD

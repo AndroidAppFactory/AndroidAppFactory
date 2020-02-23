@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download.manager
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.R
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.io.BufferedInputStream
 import java.io.FileOutputStream
@@ -27,7 +28,7 @@ class DownloadByHttp : DownloadWrapper() {
         ThreadManager.getInstance().start {
             var count: Int
             var input: BufferedInputStream? = null
-            var finalFileName = applicationContext!!.getExternalFilesDir(DOWNLOAD_PATH).absolutePath + "/" + "temp_" + System.currentTimeMillis() + "_" + info.fileName
+            var finalFileName = applicationContext!!.getExternalFilesDir(applicationContext!!.getString(R.string.lib_bihe0832_file_folder)).absolutePath + "/" + "temp_" + System.currentTimeMillis() + "_" + info.fileName
             val output = FileOutputStream(finalFileName)
             try {
                 val url = URL(info.downloadURL)

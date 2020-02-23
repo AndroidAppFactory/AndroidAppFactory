@@ -1,0 +1,7 @@
+include ':APPTest'
+include ':LibDownloadAndInstall'
+//include ':LibEncrypt'
+include ':LibFile'
+//include ':LibGson'
+//include ':LibThread'
+//include ':LibUtils'

@@ -13,6 +13,7 @@ import android.text.TextUtils
 import android.util.Log
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.R
 
 /**
  *
@@ -33,7 +34,7 @@ class DownloadByDownloadManager : DownloadWrapper() {
                 // 查询进度并回调
                 val dm = applicationContext?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 mCurrentDownloadList.forEach { listItem ->
-                    listItem.value?.let { downloadInfo ->
+                    listItem.value.let { downloadInfo ->
                         var c: Cursor? = null
                         try {
                             val query = DownloadManager.Query().setFilterById(downloadInfo.downloadID)
@@ -118,9 +119,9 @@ class DownloadByDownloadManager : DownloadWrapper() {
             }
             if (info.notificationVisibility == DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED ||
                     info.notificationVisibility == DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION) {
-                setDestinationInExternalFilesDir(context, DOWNLOAD_PATH, info.fileName)
+                setDestinationInExternalFilesDir(context, applicationContext!!.getString(R.string.lib_bihe0832_file_folder), info.fileName)
             } else {
-                setDestinationInExternalFilesDir(context, DOWNLOAD_PATH, "temp_" + System.currentTimeMillis() + "_" + info.fileName)
+                setDestinationInExternalFilesDir(context, applicationContext!!.getString(R.string.lib_bihe0832_file_folder), "temp_" + System.currentTimeMillis() + "_" + info.fileName)
             }
         }
         val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
