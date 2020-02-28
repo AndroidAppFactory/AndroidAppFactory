@@ -50,9 +50,9 @@ publish {
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-encrypt:1.+"
+    api "com.bihe0832.android:lib-encrypt:1.0.1"
 //    api project(":LibFile")
-    api "com.bihe0832.android:lib-file:1.+"
-    api "com.bihe0832.android:lib-thread:1.+"
+    api "com.bihe0832.android:lib-file:1.0.6"
+    api "com.bihe0832.android:lib-thread:1.0.1"
     api "com.android.support:appcompat-v7:${project.android_support_version}"
 }

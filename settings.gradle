@@ -1,5 +1,5 @@
-include ':APPTest'
-include ':LibDownloadAndInstall'
+//include ':APPTest'
+//include ':LibDownloadAndInstall'
 //include ':LibEncrypt'
 include ':LibFile'
 //include ':LibGson'
