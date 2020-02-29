@@ -16,6 +16,7 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.thread.ThreadManager
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.time.Duration
@@ -38,6 +39,7 @@ class MainActivity : Activity() {
             item.downloadDesc = "ffsf"
             item.fileName = "MobileAssistant_1.apk"
             item.downloadURL = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk"
+            item.forceDownloadNew = true
             DownloadUtils.startDownload(this, item, object : DownloadListener {
                 override fun onProgress(total: Long, cur: Long) {
                     showResult("$cur/$total")
@@ -45,14 +47,16 @@ class MainActivity : Activity() {
 
                 override fun onSuccess(finalFileName: String) {
 //                    var finalFileName: String = applicationContext!!.getExternalFilesDir("zixie/").absolutePath + "/" + "MobileAssistant_1.apk"
-                    showResult("startDownloadApk download installApkPath: $finalFileName")
-                    if (it.id == doActionWithMyProvider.id) {
-                        var photoURI = FileProvider.getUriForFile(this@MainActivity, "com.bihe0832.android.test.bihe0832.test", File(finalFileName))
-                        InstallUtils.installAPP(this@MainActivity, photoURI, File(finalFileName))
-                    }
+                    ThreadManager.getInstance().runOnUIThread {
+                        showResult("startDownloadApk download installApkPath: $finalFileName")
+                        if (it.id == doActionWithMyProvider.id) {
+                            var photoURI = FileProvider.getUriForFile(this@MainActivity, "com.bihe0832.android.test.bihe0832.test", File(finalFileName))
+                            InstallUtils.installAPP(this@MainActivity, photoURI, File(finalFileName))
+                        }
 
-                    if (it.id == doActionWithLibProvider.id) {
-                        InstallUtils.installAPP(this@MainActivity, finalFileName)
+                        if (it.id == doActionWithLibProvider.id) {
+                            InstallUtils.installAPP(this@MainActivity, finalFileName)
+                        }
                     }
                 }
 
