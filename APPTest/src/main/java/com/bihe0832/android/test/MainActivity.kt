@@ -47,16 +47,14 @@ class MainActivity : Activity() {
 
                 override fun onSuccess(finalFileName: String) {
 //                    var finalFileName: String = applicationContext!!.getExternalFilesDir("zixie/").absolutePath + "/" + "MobileAssistant_1.apk"
-                    ThreadManager.getInstance().runOnUIThread {
-                        showResult("startDownloadApk download installApkPath: $finalFileName")
-                        if (it.id == doActionWithMyProvider.id) {
-                            var photoURI = FileProvider.getUriForFile(this@MainActivity, "com.bihe0832.android.test.bihe0832.test", File(finalFileName))
-                            InstallUtils.installAPP(this@MainActivity, photoURI, File(finalFileName))
-                        }
+                    showResult("startDownloadApk download installApkPath: $finalFileName")
+                    if (it.id == doActionWithMyProvider.id) {
+                        var photoURI = FileProvider.getUriForFile(this@MainActivity, "com.bihe0832.android.test.bihe0832.test", File(finalFileName))
+                        InstallUtils.installAPP(this@MainActivity, photoURI, File(finalFileName))
+                    }
 
-                        if (it.id == doActionWithLibProvider.id) {
-                            InstallUtils.installAPP(this@MainActivity, finalFileName)
-                        }
+                    if (it.id == doActionWithLibProvider.id) {
+                        InstallUtils.installAPP(this@MainActivity, finalFileName)
                     }
                 }
 
