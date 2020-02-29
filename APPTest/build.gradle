@@ -47,6 +47,6 @@ android {
 dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
 //    api project(":LibDownloadAndInstall")
-    api "com.bihe0832.android:lib-download-install:1.1.4"
+    api "com.bihe0832.android:lib-download-install:1.1.5"
 
 }

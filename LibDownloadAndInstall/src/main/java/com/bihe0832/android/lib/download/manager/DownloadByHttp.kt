@@ -47,7 +47,9 @@ class DownloadByHttp : DownloadWrapper() {
                     total += count.toLong()
                     mCurrentDownloadList[info.downloadURL]?.let { downloadItem ->
                         downloadItem.downloadNotifyListenerList.forEach {
-                            it.onProgress(lenghtOfFile.toLong(),total)
+                            ThreadManager.getInstance().runOnUIThread{
+                                it.onProgress(lenghtOfFile.toLong(),total)
+                            }
                         }
                     }
                     output.write(data, 0, count)
@@ -61,7 +63,9 @@ class DownloadByHttp : DownloadWrapper() {
                 e.printStackTrace()
                 mCurrentDownloadList[info.downloadURL]?.let { downloadItem ->
                     downloadItem.downloadNotifyListenerList.forEach {
-                        it.onError(-7, "download with exception")
+                        ThreadManager.getInstance().runOnUIThread{
+                            it.onError(-7, "download with exception")
+                        }
                     }
                 }
                 cancleDownload(info.downloadURL)

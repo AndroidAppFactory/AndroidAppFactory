@@ -34,7 +34,9 @@ abstract class DownloadWrapper {
         }
 
         if (TextUtils.isEmpty(info.fileName) || TextUtils.isEmpty(info.downloadURL)) {
-            downloadListener?.onError(-4, "bad para")
+            ThreadManager.getInstance().runOnUIThread{
+                downloadListener?.onError(-4, "bad para")
+            }
             return
         }
 
@@ -43,7 +45,9 @@ abstract class DownloadWrapper {
             if (info.forceDownloadNew) {
                 FileUtils.deleteFile(finalFileName)
             } else {
-                downloadListener?.onSuccess(finalFileName)
+                ThreadManager.getInstance().runOnUIThread{
+                    downloadListener?.onSuccess(finalFileName)
+                }
                 return
             }
         }
@@ -105,24 +109,32 @@ abstract class DownloadWrapper {
                     Log.d(TAG, " :$finalFileName")
                     Log.d(TAG, " :" + MD5.getFileMD5(finalFileName))
                     downloadInfo.downloadNotifyListenerList?.forEach {
-                        it.onSuccess(finalFileName)
+                        ThreadManager.getInstance().runOnUIThread{
+                            it.onSuccess(finalFileName)
+                        }
                     }
                 } else {
                     Log.d(TAG, "Sorry! the file can't be renamed")
                     downloadInfo.downloadNotifyListenerList?.forEach {
-                        it.onSuccess(downloadFile)
+                        ThreadManager.getInstance().runOnUIThread{
+                            it.onSuccess(downloadFile)
+                        }
                     }
                 }
             } else {
                 downloadInfo.downloadNotifyListenerList?.forEach {
-                    it.onError(-2, "Sorry! the file md5 is bad")
+                    ThreadManager.getInstance().runOnUIThread{
+                        it.onError(-2, "Sorry! the file md5 is bad")
+                    }
                 }
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
             downloadInfo.downloadNotifyListenerList?.forEach {
-                it.onError(-3, "Sorry! the file can't be renamed")
+                ThreadManager.getInstance().runOnUIThread{
+                    it.onError(-3, "Sorry! the file can't be renamed")
+                }
             }
         }
     }

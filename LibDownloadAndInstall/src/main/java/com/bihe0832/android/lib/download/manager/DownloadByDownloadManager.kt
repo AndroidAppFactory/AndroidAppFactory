@@ -14,6 +14,7 @@ import android.util.Log
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.R
+import com.bihe0832.android.lib.thread.ThreadManager
 
 /**
  *
@@ -44,7 +45,9 @@ class DownloadByDownloadManager : DownloadWrapper() {
                                 val totalSize = c.getInt(c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
                                 if (totalSize > 0) {
                                     downloadInfo.downloadNotifyListenerList?.forEach {
-                                        it.onProgress(totalSize.toLong(), curSize.toLong())
+                                        ThreadManager.getInstance().runOnUIThread{
+                                            it.onProgress(totalSize.toLong(), curSize.toLong())
+                                        }
                                     }
                                 }
                                 if (curSize == totalSize) {
@@ -81,7 +84,9 @@ class DownloadByDownloadManager : DownloadWrapper() {
                         // 下载失败也会返回这个广播，所以要判断下是否真的下载成功
                         if (DownloadManager.STATUS_FAILED == c.getInt(columnIndex)) {
                             listItem.value.downloadNotifyListenerList.forEach {
-                                it.onError(-5, "download failed")
+                                ThreadManager.getInstance().runOnUIThread{
+                                    it.onError(-5, "download failed")
+                                }
                             }
                         }
                         mCurrentDownloadList.remove(listItem.key)
@@ -130,7 +135,9 @@ class DownloadByDownloadManager : DownloadWrapper() {
             mCurrentDownloadList[info.downloadURL] = info
         } else {
             info.downloadNotifyListenerList?.forEach {
-                it.onError(-6, "id is bad")
+                ThreadManager.getInstance().runOnUIThread{
+                    it.onError(-6, "id is bad")
+                }
             }
         }
     }
@@ -139,8 +146,10 @@ class DownloadByDownloadManager : DownloadWrapper() {
         mCurrentDownloadList[url]?.let {
             val dm = applicationContext?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             dm?.remove(it.downloadID)
-            it.downloadNotifyListenerList.forEach {
-                it.onError(-8, "cancle")
+            it.downloadNotifyListenerList.forEach {listener->
+                ThreadManager.getInstance().runOnUIThread{
+                    listener.onError(-8, "cancle")
+                }
             }
         }
         stopDownload(url)
