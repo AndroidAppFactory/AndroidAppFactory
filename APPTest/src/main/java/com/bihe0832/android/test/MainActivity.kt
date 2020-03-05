@@ -17,9 +17,11 @@ import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.tts.LibTTS
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.time.Duration
+import java.util.*
 
 
 class MainActivity : Activity() {
@@ -65,6 +67,40 @@ class MainActivity : Activity() {
         }
         doActionWithMyProvider.setOnClickListener(a)
         doActionWithLibProvider.setOnClickListener(a)
+
+        var lastStart = System.currentTimeMillis()
+        LibTTS.init(applicationContext, Locale.CHINA, object : LibTTS.TTSResultListener {
+            override fun onLangUnAvaiavble() {
+                Log.d(LOG_TAG, "onLangUnAvaiavble")
+            }
+
+            override fun onLangAvaiavble() {
+                Log.d(LOG_TAG, "onLangAvaiavble")
+            }
+
+            override fun onLangError() {
+                Log.d(LOG_TAG, "onLangError")
+            }
+
+            override fun onUtteranceStart(utteranceId: String) {
+                lastStart = System.currentTimeMillis()
+                Log.d(LOG_TAG, "onStart $utteranceId : $lastStart")
+            }
+
+            override fun onUtteranceDone(utteranceId: String) {
+                var end = System.currentTimeMillis()
+                Log.d(LOG_TAG, "onDone $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
+            }
+
+            override fun onUtteranceError(utteranceId: String) {
+                var end = System.currentTimeMillis()
+                Log.d(LOG_TAG, "onError $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
+            }
+
+        })
+        speak.setOnClickListener {
+            LibTTS.speak(testInput.text.toString())
+        }
     }
 
     private fun userInput(): String? {
