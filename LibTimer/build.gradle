@@ -39,9 +39,9 @@ android {
 
 //添加发布相关的配置
 publish {
-    artifactId = 'lib-tts'//项目名称
+    artifactId = 'lib-timer'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.0.4'//版本号
+    publishVersion = '1.0.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -50,5 +50,5 @@ publish {
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-utils:1.0.0"
+    api "com.bihe0832.android:lib-thread:1.0.1"
 }

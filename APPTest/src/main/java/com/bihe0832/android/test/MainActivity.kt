@@ -18,6 +18,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.tts.LibTTS
+import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.time.Duration
@@ -101,6 +102,8 @@ class MainActivity : Activity() {
         speak.setOnClickListener {
             LibTTS.speak(testInput.text.toString())
         }
+
+        TaskManager.getInstance().addTask(TestTask())
     }
 
     private fun userInput(): String? {

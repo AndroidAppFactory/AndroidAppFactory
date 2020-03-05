@@ -41,14 +41,7 @@ object LibTTS {
         mLocale = loc
         mSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val supported = setLanguage(mLocale)
-                if (supported != TextToSpeech.LANG_AVAILABLE && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-                    Log.i(TAG, "onInit: 不支持当前语言")
-                    mTTSResultListener?.onLangUnAvaiavble()
-                } else {
-                    Log.i(TAG, "onInit: 支持当前选择语言")
-                    mTTSResultListener?.onLangAvaiavble()
-                }
+                setLanguage(mLocale)
             } else {
                 Log.i(TAG, "onInit: TTS引擎初始化失败")
                 mTTSResultListener?.onLangError()
@@ -95,7 +88,15 @@ object LibTTS {
     }
 
     fun setLanguage(loc: Locale): Int {
-        return mSpeech?.setLanguage(loc) ?: TextToSpeech.ERROR
+        val supported = mSpeech?.setLanguage(loc)
+        if (supported != TextToSpeech.LANG_AVAILABLE && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+            Log.i(TAG, "onInit: 不支持当前语言")
+            mTTSResultListener?.onLangUnAvaiavble()
+        } else {
+            Log.i(TAG, "onInit: 支持当前选择语言")
+            mTTSResultListener?.onLangAvaiavble()
+        }
+        return supported?:TextToSpeech.ERROR
     }
 
     fun getLanguage(): Locale? {
