@@ -46,7 +46,8 @@ android {
 
 dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
-    api project(":LibTTS")
+//    api project(":LibTTS")
+    api "com.bihe0832.android:lib-tts:1.0.2"
     api "com.bihe0832.android:lib-download-install:1.1.5"
 
 }
