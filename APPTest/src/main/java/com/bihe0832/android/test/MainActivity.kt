@@ -2,8 +2,6 @@ package com.bihe0832.android.test
 
 import android.app.Activity
 import android.app.DownloadManager
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -14,14 +12,11 @@ import android.widget.Toast
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.install.InstallUtils
-import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-import java.time.Duration
 import java.util.*
 
 
@@ -70,18 +65,28 @@ class MainActivity : Activity() {
         doActionWithLibProvider.setOnClickListener(a)
 
         var lastStart = System.currentTimeMillis()
-        LibTTS.init(applicationContext, Locale.CHINA, object : LibTTS.TTSResultListener {
-            override fun onLangUnAvaiavble() {
-                Log.d(LOG_TAG, "onLangUnAvaiavble")
-            }
+        LibTTS.init(applicationContext,object : LibTTS.TTSInitListener {
 
-            override fun onLangAvaiavble() {
-                Log.d(LOG_TAG, "onLangAvaiavble")
-            }
-
-            override fun onLangError() {
+            override fun onInitError() {
                 Log.d(LOG_TAG, "onLangError")
             }
+
+            override fun onInitSuccess() {
+                Log.d(LOG_TAG, "onInitSuccess")
+
+                LibTTS.setLanguage(Locale.CHINA, object : LibTTS.TTSLanguageListener{
+                    override fun onLangUnAvaiavble() {
+                        Log.d(LOG_TAG, "onLangUnAvaiavble")
+                    }
+
+                    override fun onLangAvaiavble() {
+                        Log.d(LOG_TAG, "onLangAvaiavble")
+                    }
+                })
+            }
+        })
+
+        LibTTS.addTTSSpeakListener( object : LibTTS.TTSSpeakListener {
 
             override fun onUtteranceStart(utteranceId: String) {
                 lastStart = System.currentTimeMillis()
@@ -97,8 +102,8 @@ class MainActivity : Activity() {
                 var end = System.currentTimeMillis()
                 Log.d(LOG_TAG, "onError $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
             }
-
         })
+
         speak.setOnClickListener {
             LibTTS.speak(testInput.text.toString())
         }
