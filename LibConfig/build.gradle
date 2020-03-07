@@ -1,0 +1,52 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'//maven插件，用于上传插件到仓库
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.commonMinSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionCode project.mnaLib.versionCode
+        versionName project.mnaLib.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+//uploadArchives {
+//    //本地仓库的一种
+//    repositories.mavenDeployer {
+//        repository(url: "file://" + rootDir.toString() + "/../../mnaapp/mna-application/libs/")
+//        pom.project {
+//            groupId project.groupId
+//            artifactId "lib-file"
+//            version "1.0.2"
+//        }
+//    }
+//}
+
+//添加发布相关的配置
+publish {
+    artifactId = 'lib-config'//项目名称
+    repoName = rootProject.repoName
+    publishVersion = '1.0.1'//版本号
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    licences = rootProject.licences
+    desc = 'the config module for zixie'//项目描述
+    website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
+}
+
+dependencies {
+    api "com.bihe0832.android:lib-utils:1.0.0"
+}
