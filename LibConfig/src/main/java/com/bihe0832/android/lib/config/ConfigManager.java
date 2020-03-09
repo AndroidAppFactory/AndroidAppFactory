@@ -23,8 +23,7 @@ import java.util.Set;
 /**
  * @author code@bihe0832.com
  */
-
-public class ConfigManager {
+class ConfigManager {
     private static final String TAG = "ConfigManager";
     private static volatile ConfigManager instance = null;
 
