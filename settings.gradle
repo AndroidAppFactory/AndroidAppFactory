@@ -1,8 +1,8 @@
-//include ':APPTest'
+include ':APPTest'
 include ':LibTTS'
 //include ':LibTimer'
-
 //include ':LibEncrypt'
+include ':LibConfig'
 //include ':LibFile'
 //include ':LibGson'
 //include ':LibThread'

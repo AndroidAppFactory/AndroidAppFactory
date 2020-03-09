@@ -26,11 +26,11 @@ android {
 //uploadArchives {
 //    //本地仓库的一种
 //    repositories.mavenDeployer {
-//        repository(url: "file://" + rootDir.toString() + "/../../mnaapp/mna-application/libs/")
+//        repository(url: "file://" + rootDir.toString() + "/libs")
 //        pom.project {
 //            groupId project.groupId
-//            artifactId "lib-file"
-//            version "1.0.2"
+//            artifactId "lib-config"
+//            version "1.0.1"
 //        }
 //    }
 //}

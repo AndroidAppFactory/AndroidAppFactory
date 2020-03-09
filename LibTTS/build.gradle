@@ -31,8 +31,8 @@ android {
 //        repository(url: "file://" + rootDir.toString() + "/../../mnaapp/mna-application/libs/")
 //        pom.project {
 //            groupId project.groupId
-//            artifactId "lib-file"
-//            version "1.0.2"
+//            artifactId "lib-tts"
+//            version "1.0.9"
 //        }
 //    }
 //}
@@ -45,10 +45,12 @@ publish {
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
-    desc = 'the base file utils for zixie'//项目描述
+    desc = 'the text to speech module  for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
 
 dependencies {
     api "com.bihe0832.android:lib-utils:1.0.0"
+//    api "com.bihe0832.android:lib-config:1.0.1"
+    api project(":LibConfig")
 }

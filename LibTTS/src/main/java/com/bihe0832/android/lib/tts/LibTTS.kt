@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
+import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.utils.ConvertUtils
 import java.io.File
 import java.math.RoundingMode
@@ -24,19 +25,21 @@ import kotlin.collections.HashMap
 object LibTTS {
 
     private const val TAG = "TTSHelper"
-    private const val UNIT_CHANGE = 0.1f
+    private val CONFIG_KEY_PITCH = this.javaClass.name.toString() + "pitch"
+    private val CONFIG_KEY_SPEECH_RATE = this.javaClass.name.toString() + "speech.rate"
+
+    private const val CONFIG_VALUE_PITCH = 0.4f
+    private const val CONFIG_VALUE_SPEECH_RATE = 0.4f
 
     private var mSpeech: TextToSpeech? = null
 
     private val mMsgList = mutableListOf<String>()
     const val SPEEAK_TYPE_SEQUENCE = 1
     const val SPEEAK_TYPE_NEXT = 2
-    const val SPEEAK_TYPE_FORCE = 3
+    const val SPEEAK_TYPE_FLUSH = 3
     const val SPEEAK_TYPE_CLEAR = 4
 
     private var mUtteranceId = 1
-    private var mPitch = 0.4f
-    private var mSpeechRate = 0.4f
 
     private val mTTSSpeakListenerList = mutableListOf<TTSSpeakListener>()
     private val mTTSInitListenerList = mutableListOf<TTSInitListener>()
@@ -99,8 +102,8 @@ object LibTTS {
             }
         })
 
-        setPitch(mPitch)
-        setSpeechRate(mSpeechRate)
+        setPitch(Config.readConfig(CONFIG_KEY_PITCH, CONFIG_VALUE_PITCH))
+        setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, CONFIG_VALUE_SPEECH_RATE))
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
             mSpeech?.setOnUtteranceCompletedListener { utteranceId ->
                 mTTSResultListener.onUtteranceDone(utteranceId ?: "")
@@ -184,20 +187,7 @@ object LibTTS {
         }
     }
 
-    fun speak(tempStr: String, type: Int) {
-        when (type) {
-            SPEEAK_TYPE_SEQUENCE -> mMsgList.add(tempStr)
-            SPEEAK_TYPE_NEXT -> mMsgList.add(0, tempStr)
-            SPEEAK_TYPE_FORCE -> speak(tempStr)
-            SPEEAK_TYPE_CLEAR -> {
-                mMsgList.clear()
-                speak(tempStr)
-            }
-        }
-        if (mSpeech?.isSpeaking == false) {
-            startSpeak()
-        }
-    }
+
 
     fun isSpeak(): Boolean {
         return mSpeech?.isSpeaking ?: false
@@ -214,6 +204,27 @@ object LibTTS {
             speak(s)
         }
     }
+
+    fun stopSpeak() {
+        mSpeech?.stop()
+        mMsgList.clear()
+    }
+
+    fun speak(tempStr: String, type: Int) {
+        when (type) {
+            SPEEAK_TYPE_SEQUENCE -> mMsgList.add(tempStr)
+            SPEEAK_TYPE_NEXT -> mMsgList.add(0, tempStr)
+            SPEEAK_TYPE_FLUSH -> speak(tempStr)
+            SPEEAK_TYPE_CLEAR -> {
+                mMsgList.clear()
+                speak(tempStr)
+            }
+        }
+        if (mSpeech?.isSpeaking == false) {
+            startSpeak()
+        }
+    }
+
 
     fun speak(tempStr: String) {
         mUtteranceId++
@@ -246,73 +257,58 @@ object LibTTS {
 
 
     fun getSpeechRate(): Float {
+        val speechRate = Config.readConfig(CONFIG_KEY_SPEECH_RATE, CONFIG_VALUE_SPEECH_RATE)
         DecimalFormat("0.00").apply {
             roundingMode = RoundingMode.HALF_UP
         }.let {
-            return ConvertUtils.parseFloat(it.format(mSpeechRate), mSpeechRate)
+            return ConvertUtils.parseFloat(it.format(speechRate), speechRate)
         }
+    }
+
+    fun getDefaultSpeechRate(): Float {
+        return CONFIG_VALUE_SPEECH_RATE
     }
 
     fun setSpeechRate(speechRate: Float) {
+        var tempmSpeechRate = speechRate
+        if (tempmSpeechRate > 1) {
+            tempmSpeechRate = 1f
+        } else if (tempmSpeechRate < 0) {
+            tempmSpeechRate = 0f
+        }
         val result = mSpeech?.setSpeechRate(speechRate * 4)
-        Log.i(TAG, "setSpeechRate: $result")
-    }
+        val result1 = Config.writeConfig(CONFIG_KEY_SPEECH_RATE, tempmSpeechRate)
 
-    //增加语速
-    fun increSpeechRate() {
-        mSpeechRate += UNIT_CHANGE
-        if (mSpeechRate > 1) {
-            mSpeechRate = 1f
-        }
-        Log.i(TAG, "mSpeechRate:  ${String.format("%2f", mSpeechRate)}")
-        setSpeechRate(mSpeechRate)
-    }
-
-
-    //减小语速
-    fun decreSpeechRate() {
-        mSpeechRate -= UNIT_CHANGE
-        if (mSpeechRate <= 0) {
-            mSpeechRate = 0.1f
-        }
-        Log.i(TAG, "mSpeechRate: ${String.format("%2f", mSpeechRate)}")
-        setSpeechRate(mSpeechRate)
+        Log.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result $result1")
     }
 
 
     fun getPitch(): Float {
+        val pitch = Config.readConfig(CONFIG_KEY_PITCH, CONFIG_VALUE_PITCH)
+
         DecimalFormat("0.00").apply {
             roundingMode = RoundingMode.HALF_UP
         }.let {
-            return ConvertUtils.parseFloat(it.format(mPitch), mPitch)
+            return ConvertUtils.parseFloat(it.format(pitch), pitch)
         }
+    }
+
+    fun getDefaultPitch(): Float {
+        return CONFIG_VALUE_PITCH
     }
 
     fun setPitch(pitch: Float) {
-        val result = mSpeech!!.setPitch(pitch * 2)
-        Log.i(TAG, "setPitch:  ${String.format("%2f", mSpeechRate)}")
-    }
+        var tempPitch = pitch
 
-    //升高音调
-    fun increPitch() {
-        mPitch += UNIT_CHANGE
-        if (mPitch > 1) {
-            mPitch = 1.0f
+        if (tempPitch > 1) {
+            tempPitch = 1f
+        } else if (tempPitch < 0) {
+            tempPitch = 0f
         }
-        Log.i(TAG, "mPitch:  ${String.format("%2f", mSpeechRate)}")
-        setPitch(mPitch)
+        val result = mSpeech?.setPitch(tempPitch * 2)
+        val result1 = Config.writeConfig(CONFIG_KEY_PITCH, tempPitch)
+        Log.i(TAG, "setPitch: $pitch $tempPitch $result $result1")
     }
-
-    //减低音调
-    fun decrePitch() {
-        mPitch -= UNIT_CHANGE
-        if (mPitch <= 0) {
-            mPitch = 0.1f
-        }
-        Log.i(TAG, "mPitch:  ${String.format("%2f", mSpeechRate)}")
-        setPitch(mPitch)
-    }
-
 
     fun onDestroy() {
         if (mSpeech != null) {
