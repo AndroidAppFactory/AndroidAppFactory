@@ -39,18 +39,32 @@ object LibTTS {
     private var mSpeechRate = 0.4f
 
     private val mTTSSpeakListenerList = mutableListOf<TTSSpeakListener>()
+    private val mTTSInitListenerList = mutableListOf<TTSInitListener>()
 
-    fun addTTSSpeakListener(listener: TTSSpeakListener){
+    fun addTTSSpeakListener(listener: TTSSpeakListener) {
         mTTSSpeakListenerList.add(listener)
     }
 
-    fun removeTTSSpeakListener(listener: TTSSpeakListener){
-        if(mTTSSpeakListenerList.contains(listener)){
+    fun removeTTSSpeakListener(listener: TTSSpeakListener) {
+        if (mTTSSpeakListenerList.contains(listener)) {
             mTTSSpeakListenerList.remove(listener)
         }
     }
 
-    private val mTTSResultListener = object : TTSSpeakListener{
+    fun addTTSInitListener(listener: TTSInitListener) {
+        if(mTTSInitListenerList.contains(listener)){
+            return
+        }
+        mTTSInitListenerList.add(listener)
+    }
+
+    fun removeTTSInitListener(listener: TTSInitListener) {
+        if (mTTSInitListenerList.contains(listener)) {
+            mTTSInitListenerList.remove(listener)
+        }
+    }
+
+    private val mTTSResultListener = object : TTSSpeakListener {
 
         override fun onUtteranceStart(utteranceId: String) {
             mTTSSpeakListenerList.forEach {
@@ -71,14 +85,17 @@ object LibTTS {
         }
     }
 
-    fun init(context: Context, listener :TTSInitListener?) {
+    fun init(context: Context, loc: Locale, listener: TTSInitListener) {
+        mTTSInitListenerList.add(listener)
         mSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
             if (status == TextToSpeech.SUCCESS) {
                 Log.d(TAG, "onInit: TTS引擎初始化成功")
-                listener?.onInitSuccess()
+                setLanguage(loc)
             } else {
                 Log.e(TAG, "onInit: TTS引擎初始化失败")
-                listener?.onInitError()
+                mTTSInitListenerList.forEach {
+                    it.onInitError()
+                }
             }
         })
 
@@ -112,10 +129,6 @@ object LibTTS {
 
         fun onInitError()
 
-        fun onInitSuccess()
-    }
-
-    interface TTSLanguageListener {
         fun onLangUnAvaiavble()
 
         fun onLangAvaiavble()
@@ -130,25 +143,37 @@ object LibTTS {
         fun onUtteranceError(utteranceId: String)
     }
 
-    fun setLanguage(loc: Locale, listener: TTSLanguageListener): Int {
+    fun setLanguage(loc: Locale, listener: TTSInitListener): Int {
+        mTTSInitListenerList.add(listener)
+        return setLanguage(loc)
+    }
 
+    private fun setLanguage(loc: Locale): Int {
         val supported = mSpeech?.setLanguage(loc)
         if (supported != TextToSpeech.LANG_AVAILABLE && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
             Log.i(TAG, "onInit: 不支持当前语言")
-            listener.onLangUnAvaiavble()
+            mTTSInitListenerList.forEach {
+                it.onLangUnAvaiavble()
+            }
         } else {
+            mTTSInitListenerList.forEach {
+                it.onLangAvaiavble()
+            }
             Log.i(TAG, "onInit: 支持当前选择语言")
-            listener.onLangAvaiavble()
         }
         return supported ?: TextToSpeech.ERROR
     }
 
-    fun getLanguage(): Locale? {
+    fun getLanguage(): String {
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mSpeech?.language
+            mSpeech?.language?.language ?: ""
         } else {
-            mSpeech?.voice?.locale
+            mSpeech?.voice?.locale?.language ?: ""
         }
+    }
+
+    fun isLanguageAvailable(laca: Locale): Int {
+        return mSpeech?.isLanguageAvailable(laca) ?: TextToSpeech.LANG_NOT_SUPPORTED
     }
 
     fun getAvailableLanguages(): Set<Locale>? {
@@ -169,26 +194,27 @@ object LibTTS {
                 speak(tempStr)
             }
         }
-        if(mSpeech?.isSpeaking == false){
+        if (mSpeech?.isSpeaking == false) {
             startSpeak()
         }
     }
 
-    fun isSpeak() : Boolean{
-        return mSpeech?.isSpeaking?:false
+    fun isSpeak(): Boolean {
+        return mSpeech?.isSpeaking ?: false
     }
 
-    fun hasMoreSpeak(): Boolean{
+    fun hasMoreSpeak(): Boolean {
         return mMsgList.size > 0
     }
 
-    fun startSpeak(){
-        if(mMsgList.isNotEmpty()){
+    fun startSpeak() {
+        if (mMsgList.isNotEmpty()) {
             var s = mMsgList[0]
             mMsgList.removeAt(0)
             speak(s)
         }
     }
+
     fun speak(tempStr: String) {
         mUtteranceId++
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -238,7 +264,7 @@ object LibTTS {
         if (mSpeechRate > 1) {
             mSpeechRate = 1f
         }
-        Log.i(TAG, "mSpeechRate: $mSpeechRate")
+        Log.i(TAG, "mSpeechRate:  ${String.format("%2f", mSpeechRate)}")
         setSpeechRate(mSpeechRate)
     }
 
@@ -249,7 +275,7 @@ object LibTTS {
         if (mSpeechRate <= 0) {
             mSpeechRate = 0.1f
         }
-        Log.i(TAG, "mSpeechRate: $mSpeechRate")
+        Log.i(TAG, "mSpeechRate: ${String.format("%2f", mSpeechRate)}")
         setSpeechRate(mSpeechRate)
     }
 
@@ -264,7 +290,7 @@ object LibTTS {
 
     fun setPitch(pitch: Float) {
         val result = mSpeech!!.setPitch(pitch * 2)
-        Log.i(TAG, "setPitch: $result")
+        Log.i(TAG, "setPitch:  ${String.format("%2f", mSpeechRate)}")
     }
 
     //升高音调
@@ -273,7 +299,7 @@ object LibTTS {
         if (mPitch > 1) {
             mPitch = 1.0f
         }
-        Log.i(TAG, "mPitch: $mPitch")
+        Log.i(TAG, "mPitch:  ${String.format("%2f", mSpeechRate)}")
         setPitch(mPitch)
     }
 
@@ -283,7 +309,7 @@ object LibTTS {
         if (mPitch <= 0) {
             mPitch = 0.1f
         }
-        Log.i(TAG, "mPitch: $mPitch")
+        Log.i(TAG, "mPitch:  ${String.format("%2f", mSpeechRate)}")
         setPitch(mPitch)
     }
 

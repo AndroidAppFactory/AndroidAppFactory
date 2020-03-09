@@ -65,24 +65,33 @@ class MainActivity : Activity() {
         doActionWithLibProvider.setOnClickListener(a)
 
         var lastStart = System.currentTimeMillis()
-        LibTTS.init(applicationContext,object : LibTTS.TTSInitListener {
+        LibTTS.init(applicationContext,Locale.CHINA,object : LibTTS.TTSInitListener {
 
             override fun onInitError() {
                 Log.d(LOG_TAG, "onLangError")
             }
 
-            override fun onInitSuccess() {
-                Log.d(LOG_TAG, "onInitSuccess")
+            override fun onLangUnAvaiavble() {
+                Log.d(LOG_TAG, "onLangUnAvaiavble")
+            }
 
-                LibTTS.setLanguage(Locale.CHINA, object : LibTTS.TTSLanguageListener{
-                    override fun onLangUnAvaiavble() {
-                        Log.d(LOG_TAG, "onLangUnAvaiavble")
-                    }
+            override fun onLangAvaiavble() {
+                Log.d(LOG_TAG, "onLangAvaiavble")
+            }
+        })
 
-                    override fun onLangAvaiavble() {
-                        Log.d(LOG_TAG, "onLangAvaiavble")
-                    }
-                })
+        LibTTS.addTTSInitListener(object : LibTTS.TTSInitListener {
+
+            override fun onInitError() {
+                Log.d(LOG_TAG, "onLangError")
+            }
+
+            override fun onLangUnAvaiavble() {
+                Log.d(LOG_TAG, "onLangUnAvaiavble")
+            }
+
+            override fun onLangAvaiavble() {
+                Log.d(LOG_TAG, "onLangAvaiavble")
             }
         })
 
