@@ -273,8 +273,8 @@ object LibTTS {
         var tempmSpeechRate = speechRate
         if (tempmSpeechRate > 1) {
             tempmSpeechRate = 1f
-        } else if (tempmSpeechRate < 0) {
-            tempmSpeechRate = 0f
+        } else if (tempmSpeechRate <=0) {
+            tempmSpeechRate = 0.1f
         }
         val result = mSpeech?.setSpeechRate(speechRate * 4)
         val result1 = Config.writeConfig(CONFIG_KEY_SPEECH_RATE, tempmSpeechRate)
@@ -302,8 +302,8 @@ object LibTTS {
 
         if (tempPitch > 1) {
             tempPitch = 1f
-        } else if (tempPitch < 0) {
-            tempPitch = 0f
+        } else if (tempPitch <= 0) {
+            tempPitch = 0.1f
         }
         val result = mSpeech?.setPitch(tempPitch * 2)
         val result1 = Config.writeConfig(CONFIG_KEY_PITCH, tempPitch)

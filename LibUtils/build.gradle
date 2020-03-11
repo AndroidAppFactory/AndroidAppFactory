@@ -26,23 +26,23 @@ android {
 }
 
 
-uploadArchives {
-    //本地仓库的一种
-    repositories.mavenDeployer {
-        repository(url: "file://" + rootDir.toString() + "/maven_local/")
-        pom.project {
-            groupId project.groupId
-            artifactId "lib-utils"
-            version project.publishVersion
-        }
-
-    }
-}
+//uploadArchives {
+//    //本地仓库的一种
+//    repositories.mavenDeployer {
+//        repository(url: "file://" + rootDir.toString() + "/maven_local/")
+//        pom.project {
+//            groupId project.groupId
+//            artifactId "lib-utils"
+//            version project.publishVersion
+//        }
+//
+//    }
+//}
 
 //添加发布相关的配置
 publish {
     artifactId = 'lib-utils'//项目名称
-    repoName=rootProject.repoName
+    repoName= rootProject.repoName
     publishVersion = '1.0.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId

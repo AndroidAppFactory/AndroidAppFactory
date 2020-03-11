@@ -22,7 +22,6 @@ buildscript {
 allprojects {
     repositories {
         maven { url "https://mirrors.tencent.com/repository/maven/mna" }
-
         maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://dl.bintray.com/bihe0832/android" }
@@ -44,6 +43,6 @@ subprojects {
             delete ".externalNativeBuild"
         }
         project.getTasks().getByName('clean').dependsOn("checkGradleDependencies")
-        project.getTasks().getByName('preBuild').dependsOn("checkGradleDependencies")
+//        project.getTasks().getByName('preBuild').dependsOn("checkGradleDependencies")
     }
 }

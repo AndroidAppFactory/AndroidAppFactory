@@ -25,32 +25,14 @@ android {
     }
 }
 
-//uploadArchives {
-//    //本地仓库的一种
-//    repositories.mavenDeployer {
-//        repository(url: "file://" + rootDir.toString() + "/../../mnaapp/mna-application/libs/")
-//        pom.project {
-//            groupId project.groupId
-//            artifactId "lib-tts"
-//            version "1.0.9"
-//        }
-//    }
-//}
-
 //添加发布相关的配置
 publish {
-    artifactId = 'lib-tts'//项目名称
-    repoName = rootProject.repoName
-    publishVersion = '1.0.10'//版本号
+    artifactId = 'lib-channel'//项目名称
+    repoName=rootProject.repoName
+    publishVersion = '1.0.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
-    desc = 'the text to speech module  for zixie'//项目描述
+    desc = 'the channel read for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
-}
-
-dependencies {
-    api "com.bihe0832.android:lib-utils:1.0.0"
-    api "com.bihe0832.android:lib-config:1.0.1"
-//    api project(":LibConfig")
 }

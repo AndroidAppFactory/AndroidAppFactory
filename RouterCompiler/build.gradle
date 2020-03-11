@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'com.novoda.bintray-release'
+
+//添加发布相关的配置
+publish {
+    artifactId = 'lib-router-compiler'//项目名称
+    repoName = rootProject.repoName
+    publishVersion = '1.0.2'//版本号
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    licences = rootProject.licences
+    desc = 'the router compiler for zixie'//项目描述
+    website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
+}
+
+dependencies {
+    compile 'com.squareup:javapoet:1.8.0'
+    compile 'com.google.auto.service:auto-service:1.0-rc3'
+    compile 'com.bihe0832.android:lib-router-annotation:1.0.2'
+}
