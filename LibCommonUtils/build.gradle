@@ -41,37 +41,12 @@ android {
 
 //添加发布相关的配置
 publish {
-    artifactId = 'lib-utils'//项目名称
+    artifactId = 'lib-utils-common'//项目名称
     repoName= rootProject.repoName
     publishVersion = '1.0.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
-    desc = 'the utils for zixie'//项目描述
+    desc = 'the common utils for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
-}
-
-dependencies {
-    api 'com.bihe0832.android:lib-utils-common:1.0.1'
-    api 'com.bihe0832.android:lib-tts:1.0.10'
-    api 'com.bihe0832.android:lib-tts:1.0.10'
-    api 'com.bihe0832.android:lib-channel:1.0.1'
-    api 'com.bihe0832.android:lib-router:1.0.1'
-    api 'com.bihe0832.android:lib-config:1.0.1'
-    api 'com.bihe0832.android:lib-download-install:1.1.5'
-    api 'com.bihe0832.android:lib-encrypt:1.0.1'
-    api 'com.bihe0832.android:lib-file:1.0.6'
-    api 'com.bihe0832.android:lib-gson:1.0.1'
-    api "com.bihe0832.android:lib-http-advanced:1.0.3"
-    api 'com.bihe0832.android:lib-http-common:1.0.3'
-    api 'com.bihe0832.android:lib-router:1.0.1'
-    api 'com.bihe0832.android:lib-router-annotation:1.0.2'
-    api 'com.bihe0832.android:lib-router-compiler:1.0.2'
-    api 'com.bihe0832.android:lib-thread:1.0.1'
-    api 'com.bihe0832.android:lib-timer:1.0.3'
-    api "com.bihe0832.android:lib-encrypt:1.0.1"
-    api "com.bihe0832.android:lib-file:1.0.6"
-    api "com.bihe0832.android:lib-download-install:1.1.4"
-    api "com.bihe0832.android:lib-timer:1.0.3"
-
 }
