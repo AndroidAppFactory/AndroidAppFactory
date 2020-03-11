@@ -2,6 +2,7 @@ package com.bihe0832.android.test
 
 import android.app.Activity
 import android.app.DownloadManager
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -83,41 +84,10 @@ class MainActivity : Activity() {
             }
         })
 
-        LibTTS.addTTSInitListener(object : LibTTS.TTSInitListener {
-
-            override fun onInitError() {
-                Log.d(LOG_TAG, "onLangError")
-            }
-
-            override fun onLangUnAvaiavble() {
-                Log.d(LOG_TAG, "onLangUnAvaiavble")
-            }
-
-            override fun onLangAvaiavble() {
-                Log.d(LOG_TAG, "onLangAvaiavble")
-            }
-        })
-
-        LibTTS.addTTSSpeakListener( object : LibTTS.TTSSpeakListener {
-
-            override fun onUtteranceStart(utteranceId: String) {
-                lastStart = System.currentTimeMillis()
-                Log.d(LOG_TAG, "onStart $utteranceId : $lastStart")
-            }
-
-            override fun onUtteranceDone(utteranceId: String) {
-                var end = System.currentTimeMillis()
-                Log.d(LOG_TAG, "onDone $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
-            }
-
-            override fun onUtteranceError(utteranceId: String) {
-                var end = System.currentTimeMillis()
-                Log.d(LOG_TAG, "onError $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
-            }
-        })
-
         speak.setOnClickListener {
-            LibTTS.speak(testInput.text.toString())
+            val intent = Intent(this, TestTTSActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
 
         TaskManager.getInstance().addTask(TestTask())

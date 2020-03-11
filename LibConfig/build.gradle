@@ -39,7 +39,7 @@ android {
 publish {
     artifactId = 'lib-config'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.0.1'//版本号
+    publishVersion = '1.2.0'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -48,5 +48,5 @@ publish {
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-utils:1.0.0"
+    api "com.bihe0832.android:lib-utils-common:1.2.0"
 }

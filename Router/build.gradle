@@ -31,16 +31,16 @@ android {
 publish {
     artifactId = 'lib-router'//项目名称
     repoName= rootProject.repoName
-    publishVersion = '1.0.1'//版本号
+    publishVersion = '1.2.0'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
-    desc = 'the base utils for zixie'//项目描述
+    desc = 'the router module for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
 
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
-    api 'com.bihe0832.android:lib-router-annotation:1.0.2'
+    api 'com.bihe0832.android:lib-router-annotation:1.2.0'
 
 }
