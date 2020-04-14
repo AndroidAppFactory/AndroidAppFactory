@@ -42,11 +42,15 @@ android {
 //添加发布相关的配置
 publish {
     artifactId = 'lib-utils-common'//项目名称
-    repoName= rootProject.repoName
+    repoName = rootProject.repoName
     publishVersion = '1.2.0'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
     desc = 'the common utils for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
+}
+
+dependencies {
+    api "com.android.support:support-v4:$project.android_support_version"
 }

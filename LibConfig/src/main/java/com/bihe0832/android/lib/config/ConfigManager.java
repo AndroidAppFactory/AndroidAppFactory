@@ -138,7 +138,7 @@ class ConfigManager {
     }
 
     // 从云端推送保存到本地SharedPreferences的config，云端配置读取不使用默认值
-    private String readCloudConfig(String key) {
+    private String readCloudConfig(String key, String defValue) {
         String value = null;
         try {
             if (null != mConfigSP && mConfigSP.contains(key)) {
@@ -160,7 +160,7 @@ class ConfigManager {
             Log.w(TAG, "use cache value:" + value);
             return value;
         }
-        value = readCloudConfig(key);
+        value = readCloudConfig(key,defValue);
         if (TextUtils.isEmpty(value)) {
             Log.w(TAG, "read local value");
             value = readLocalConfig(key);

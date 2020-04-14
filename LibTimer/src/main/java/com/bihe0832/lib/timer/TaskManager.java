@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import kotlin.jvm.Synchronized;
+
 public class TaskManager {	
 	//定时任务检查的时间粒度
 	private static final String LOG_TAG = "TASK";
@@ -53,23 +55,29 @@ public class TaskManager {
     
     private class TaskDispatcher extends TimerTask {
         @Override
+        @Synchronized
         public void run() {
             Log.d(LOG_TAG,"TaskDispatcher run");
-            synchronized (mTaskList) {
-            	Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
-            	while (iter.hasNext()) {
-            		Entry<String, BaseTask> entry = iter.next();
-            		final BaseTask task = (BaseTask)entry.getValue();
-            		if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
-                        task.resetNotifiedTimes();
-            		    task.run();
+            try {
+                synchronized (mTaskList) {
+                    Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        Entry<String, BaseTask> entry = iter.next();
+                        final BaseTask task = (BaseTask)entry.getValue();
+                        if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
+                            task.resetNotifiedTimes();
+                            task.run();
+                        }
+                        task.increaseNotifiedTimes();
                     }
-                    task.increaseNotifiedTimes();
-            	}
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
-    
+
+    @Synchronized
     public int addTask(BaseTask task) {
         Log.d(LOG_TAG,"add task:"+ task.getTaskName());
         if(task.getMyInterval() < 1){
@@ -111,6 +119,7 @@ public class TaskManager {
      * @param taskName 任务名称
      * @return true 为删除成功，false 为没有此任务删除失败
      */
+    @Synchronized
     public Boolean removeTask(String taskName) {
         Log.d(LOG_TAG,"remove task:"+ taskName);
     	if (null != taskName) {

@@ -41,7 +41,7 @@ android {
 publish {
     artifactId = 'lib-utils-apk'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.2.0'//版本号
+    publishVersion = '1.2.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -50,6 +50,6 @@ publish {
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-toast:1.2.0"
+    api "com.bihe0832.android:lib-toast:1.3.0"
     api "com.android.support:appcompat-v7:${project.android_support_version}"
 }

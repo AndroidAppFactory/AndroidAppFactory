@@ -1,4 +1,4 @@
-package com.jygaming.android.framework.channel
+package com.bihe0832.android.lib.channel
 
 import android.content.Context
 import android.text.TextUtils

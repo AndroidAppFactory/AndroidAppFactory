@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.FileProvider
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.lib.config.Config
@@ -16,6 +18,7 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.tts.LibTTS
+import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -69,7 +72,7 @@ class MainActivity : Activity() {
         doActionWithLibProvider.setOnClickListener(a)
 
         var lastStart = System.currentTimeMillis()
-        LibTTS.init(applicationContext,Locale.CHINA,object : LibTTS.TTSInitListener {
+        LibTTS.init(applicationContext, Locale.CHINA,object : LibTTS.TTSInitListener {
 
             override fun onInitError() {
                 Log.d(LOG_TAG, "onLangError")
@@ -91,6 +94,10 @@ class MainActivity : Activity() {
         }
 
         TaskManager.getInstance().addTask(TestTask())
+
+        testToast.setOnClickListener {
+            ToastUtil.showTop(this,"敌方已有英雄<font color ='#38ADFF'><b>达到四级</b></font>，请注意", Toast.LENGTH_LONG)
+        }
     }
 
     private fun userInput(): String? {

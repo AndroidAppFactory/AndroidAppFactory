@@ -1,3 +1,4 @@
+//备注：这里的Lib严格按照先后依赖顺序排序，方便快速查看依赖
 //include 'RouterAnnotation'
 //include 'Router'
 //include 'RouterCompiler'
