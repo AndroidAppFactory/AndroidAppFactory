@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
 //    api project(':LibUtils')
 //    api project(':LibUIUtils')
-    api "com.bihe0832.android:lib-utils:1.2.4"
+//    api project(':LibTTS')
+    api "com.bihe0832.android:lib-utils:1.2.5"
     api "com.bihe0832.android:lib-uiutils:1.2.2"
 }

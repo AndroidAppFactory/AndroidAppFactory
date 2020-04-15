@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.tts
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -32,6 +33,8 @@ object LibTTS {
     private const val CONFIG_VALUE_SPEECH_RATE = 0.4f
 
     private var mSpeech: TextToSpeech? = null
+    private var mContext: Context? = null
+    private var mLocale: Locale? = null
 
     private val mMsgList = mutableListOf<String>()
     const val SPEEAK_TYPE_SEQUENCE = 1
@@ -89,48 +92,63 @@ object LibTTS {
     }
 
     fun init(context: Context, loc: Locale, listener: TTSInitListener) {
+        mContext = context
+        mLocale = loc
         mTTSInitListenerList.add(listener)
-        mSpeech = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                Log.d(TAG, "onInit: TTS引擎初始化成功")
-                setLanguage(loc)
-            } else {
-                Log.e(TAG, "onInit: TTS引擎初始化失败")
-                mTTSInitListenerList.forEach {
-                    it.onInitError()
-                }
-            }
-        })
+        initTTS()
+    }
 
-        setPitch(Config.readConfig(CONFIG_KEY_PITCH, CONFIG_VALUE_PITCH))
-        setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, CONFIG_VALUE_SPEECH_RATE))
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-            mSpeech?.setOnUtteranceCompletedListener { utteranceId ->
-                mTTSResultListener.onUtteranceDone(utteranceId ?: "")
-            }
-        } else {
-            mSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                override fun onStart(utteranceId: String) {
-                    mTTSResultListener.onUtteranceStart(utteranceId)
-                }
-
-                override fun onDone(utteranceId: String) {
-                    mTTSResultListener.onUtteranceDone(utteranceId)
-                    startSpeak()
-                }
-
-                override fun onError(utteranceId: String) {
-                    mTTSResultListener.onUtteranceError(utteranceId)
+    private fun initTTS(){
+        if(mContext != null && mLocale != null){
+            mSpeech?.shutdown()
+            mSpeech = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    Log.d(TAG, "onInit: TTS引擎初始化成功")
+                    setLanguage(mLocale!!)
+                } else {
+                    Log.e(TAG, "onInit: TTS引擎初始化失败")
+                    mTTSInitListenerList.forEach {
+                        it.onInitError()
+                    }
                 }
             })
+
+            setPitch(Config.readConfig(CONFIG_KEY_PITCH, CONFIG_VALUE_PITCH))
+            setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, CONFIG_VALUE_SPEECH_RATE))
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                mSpeech?.setOnUtteranceCompletedListener { utteranceId ->
+                    mTTSResultListener.onUtteranceDone(utteranceId ?: "")
+                }
+            } else {
+                mSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                    override fun onStart(utteranceId: String) {
+                        mTTSResultListener.onUtteranceStart(utteranceId)
+                    }
+
+                    override fun onDone(utteranceId: String) {
+                        mTTSResultListener.onUtteranceDone(utteranceId)
+                        startSpeak()
+                    }
+
+                    override fun onError(utteranceId: String) {
+                        mTTSResultListener.onUtteranceError(utteranceId)
+                    }
+                })
+            }
+        }else{
+            Log.e(TAG, "onInit: TTS引擎初始化失败")
+            mTTSInitListenerList.forEach {
+                it.onInitError()
+            }
         }
 
     }
 
-
     interface TTSInitListener {
 
         fun onInitError()
+
+        fun onTTSError()
 
         fun onLangUnAvaiavble()
 
@@ -163,6 +181,7 @@ object LibTTS {
                 it.onLangAvaiavble()
             }
             Log.i(TAG, "onInit: 支持当前选择语言")
+            startSpeak()
         }
         return supported ?: TextToSpeech.ERROR
     }
@@ -198,36 +217,57 @@ object LibTTS {
     }
 
     fun startSpeak() {
-        if (mMsgList.isNotEmpty()) {
-            var s = mMsgList[0]
-            mMsgList.removeAt(0)
-            speak(s)
+        if(mSpeech?.language == null){
+            Log.e(TAG, "TTS引擎异常，重新再次初始化")
+            mTTSInitListenerList.forEach {
+                it.onTTSError()
+            }
+            initTTS()
+        }else{
+            if (mMsgList.isNotEmpty()) {
+                var s = mMsgList[0]
+                mMsgList.removeAt(0)
+                speak(s)
+            }
         }
     }
 
     fun stopSpeak() {
         mSpeech?.stop()
+        mSpeech?.shutdown()
         mMsgList.clear()
     }
 
     fun speak(tempStr: String, type: Int) {
         when (type) {
-            SPEEAK_TYPE_SEQUENCE -> mMsgList.add(tempStr)
-            SPEEAK_TYPE_NEXT -> mMsgList.add(0, tempStr)
-            SPEEAK_TYPE_FLUSH -> speak(tempStr)
+            SPEEAK_TYPE_SEQUENCE -> {
+                mMsgList.add(tempStr)
+                if (mSpeech?.isSpeaking == false) {
+                    startSpeak()
+                }
+            }
+            SPEEAK_TYPE_NEXT -> {
+                mMsgList.add(0, tempStr)
+                if (mSpeech?.isSpeaking == false) {
+                    startSpeak()
+                }
+            }
+            SPEEAK_TYPE_FLUSH -> {
+                mMsgList.add(0, tempStr)
+                startSpeak()
+            }
             SPEEAK_TYPE_CLEAR -> {
                 mMsgList.clear()
-                speak(tempStr)
+                mMsgList.add(0, tempStr)
+                startSpeak()
             }
-        }
-        if (mSpeech?.isSpeaking == false) {
-            startSpeak()
         }
     }
 
 
     fun speak(tempStr: String) {
         mUtteranceId++
+        Log.e(TAG, "mUtteranceId: $mUtteranceId $tempStr")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null)
         } else {

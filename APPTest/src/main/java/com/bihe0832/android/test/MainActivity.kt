@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.FileProvider
 import android.util.Log
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.lib.config.Config
@@ -17,12 +15,10 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.install.InstallUtils
-import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-import java.util.*
 
 
 class MainActivity : Activity() {
@@ -71,22 +67,6 @@ class MainActivity : Activity() {
         doActionWithMyProvider.setOnClickListener(a)
         doActionWithLibProvider.setOnClickListener(a)
 
-        var lastStart = System.currentTimeMillis()
-        LibTTS.init(applicationContext, Locale.CHINA,object : LibTTS.TTSInitListener {
-
-            override fun onInitError() {
-                Log.d(LOG_TAG, "onLangError")
-            }
-
-            override fun onLangUnAvaiavble() {
-                Log.d(LOG_TAG, "onLangUnAvaiavble")
-            }
-
-            override fun onLangAvaiavble() {
-                Log.d(LOG_TAG, "onLangAvaiavble")
-            }
-        })
-
         speak.setOnClickListener {
             val intent = Intent(this, TestTTSActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -96,7 +76,7 @@ class MainActivity : Activity() {
         TaskManager.getInstance().addTask(TestTask())
 
         testToast.setOnClickListener {
-            ToastUtil.showTop(this,"敌方已有英雄<font color ='#38ADFF'><b>达到四级</b></font>，请注意", Toast.LENGTH_LONG)
+            ToastUtil.showTop(this,"这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
         }
     }
 

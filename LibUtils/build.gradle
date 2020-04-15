@@ -43,7 +43,7 @@ android {
 publish {
     artifactId = 'lib-utils'//项目名称
     repoName= rootProject.repoName
-    publishVersion = '1.2.4'//版本号
+    publishVersion = '1.2.5'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -64,6 +64,6 @@ dependencies {
     api "com.bihe0832.android:lib-file:1.2.0"
     api 'com.bihe0832.android:lib-download-install:1.2.0'
     api 'com.bihe0832.android:lib-utils-apk:1.2.1'
-    api 'com.bihe0832.android:lib-tts:1.0.10'
+    api 'com.bihe0832.android:lib-tts:1.2.1'
 
 }

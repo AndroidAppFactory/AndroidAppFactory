@@ -5,6 +5,8 @@ import android.app.DownloadManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -15,13 +17,14 @@ import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.lib.timer.BaseTask
+import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_test_tts.*
 import java.util.*
 
 class TestTTSActivity : Activity() {
     private val TAG = "TestTTSFragment-> "
     private val FORMAT = "语音播报测试：语速 %s,语调 %s，最大ID %s "
-    private val MY_LOCALE = Locale.CHINA
     private var times = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +48,10 @@ class TestTTSActivity : Activity() {
 
             override fun onLangAvaiavble() {
                 hideGuide()
+            }
+
+            override fun onTTSError() {
+                ToastUtil.showShort(this@TestTTSActivity,"TTS引擎异常，正在重新初始化")
             }
         })
 
@@ -105,6 +112,7 @@ class TestTTSActivity : Activity() {
             }.let {
                 DownloadUtils.startDownload(applicationContext, it, object : DownloadListener {
                     override fun onProgress(total: Long, cur: Long) {
+                        Log.d(TAG,"startDownloadApk download onProgress: $cur")
                     }
 
                     override fun onSuccess(finalFileName: String) {
@@ -173,6 +181,24 @@ class TestTTSActivity : Activity() {
         tts_clear.setOnClickListener {
             LibTTS.speak(getMsg(), LibTTS.SPEEAK_TYPE_CLEAR)
         }
+
+        TaskManager.getInstance().addTask(object : BaseTask(){
+            override fun run() {
+                LibTTS.stopSpeak()
+            }
+
+            override fun getNextEarlyRunTime(): Int {
+                return 0
+            }
+
+            override fun getMyInterval(): Int {
+                return 10 * 2
+            }
+
+            override fun getTaskName(): String {
+                return "TTS-DISABLED"
+            }
+        })
     }
 
     private fun getMsg(): String {
