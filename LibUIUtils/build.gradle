@@ -30,7 +30,7 @@ android {
 publish {
     artifactId = 'lib-uiutils'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.2.2'//版本号
+    publishVersion = '1.2.3'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -39,5 +39,5 @@ publish {
 }
 
 dependencies {
-    api 'com.bihe0832.android:lib-toast:1.3.0'
+    api 'com.bihe0832.android:lib-toast:1.3.1'
 }
