@@ -1,7 +1,9 @@
 package com.bihe0832.android.lib.file
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
@@ -47,6 +49,31 @@ object FileUtils {
             } else {
                 getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
             }
+        }
+    }
+
+
+    fun openFile(context: Context, filePath: String, fileType: String) {
+        try { //设置intent的data和Type属性
+            File(filePath).let { file ->
+                val fileProvider = getZixieFileProvider(context, file)
+                Intent(Intent.ACTION_VIEW).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    addCategory("android.intent.category.DEFAULT")
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        setDataAndType(Uri.fromFile(file), fileType)
+                    } else {
+                        setDataAndType(fileProvider, "text/plain")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    }
+                }.let {
+                    context.startActivity(it)
+                }
+            }
+
+        } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
+            e.printStackTrace()
         }
     }
 
