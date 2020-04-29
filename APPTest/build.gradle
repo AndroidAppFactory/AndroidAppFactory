@@ -49,6 +49,6 @@ dependencies {
 //    api project(':LibUtils')
 //    api project(':LibUIUtils')
 //    api project(':LibTTS')
-    api "com.bihe0832.android:lib-utils:1.2.7"
+    api "com.bihe0832.android:lib-utils:1.2.8"
     api "com.bihe0832.android:lib-uiutils:1.2.3"
 }

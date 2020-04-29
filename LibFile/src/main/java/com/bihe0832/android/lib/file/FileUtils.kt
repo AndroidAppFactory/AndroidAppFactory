@@ -63,7 +63,7 @@ object FileUtils {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                         setDataAndType(Uri.fromFile(file), fileType)
                     } else {
-                        setDataAndType(fileProvider, "text/plain")
+                        setDataAndType(fileProvider, fileType)
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                     }
