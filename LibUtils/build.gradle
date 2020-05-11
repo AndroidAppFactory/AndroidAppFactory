@@ -43,7 +43,7 @@ android {
 publish {
     artifactId = 'lib-utils'//项目名称
     repoName= rootProject.repoName
-    publishVersion = '1.2.8'//版本号
+    publishVersion = '1.2.9'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -52,8 +52,8 @@ publish {
 }
 
 dependencies {
-    api 'com.bihe0832.android:lib-router:1.2.0'
-    api 'com.bihe0832.android:lib-router-annotation:1.2.0'
+    api 'com.bihe0832.android:lib-router:1.2.1'
+    api 'com.bihe0832.android:lib-router-annotation:1.2.1'
     api 'com.bihe0832.android:lib-utils-common:1.2.0'
     api 'com.bihe0832.android:lib-thread:1.2.0'
     api 'com.bihe0832.android:lib-encrypt:1.2.0'

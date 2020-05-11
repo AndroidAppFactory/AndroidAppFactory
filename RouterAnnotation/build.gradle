@@ -5,7 +5,7 @@ apply plugin: 'com.novoda.bintray-release'
 publish {
     artifactId = 'lib-router-annotation'//项目名称
     repoName= rootProject.repoName
-    publishVersion = '1.2.0'//版本号
+    publishVersion = '1.2.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences

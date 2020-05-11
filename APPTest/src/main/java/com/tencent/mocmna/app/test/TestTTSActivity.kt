@@ -1,12 +1,10 @@
-package com.bihe0832.android.test
+package com.tencent.mocmna.app.test
 
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -17,6 +15,7 @@ import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.test.R
 import com.bihe0832.lib.timer.BaseTask
 import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_test_tts.*

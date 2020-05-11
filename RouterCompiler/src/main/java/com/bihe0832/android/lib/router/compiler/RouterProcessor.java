@@ -25,8 +25,8 @@ import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 public class RouterProcessor extends AbstractProcessor {
-    private static final String STUB_PACKAGE_NAME = "com.tencent.mna.lib.router.stub";
-    private static final String ROUTER_PACKAGE_NAME = "com.tencent.mna.lib.router";
+    private static final String STUB_PACKAGE_NAME = "com.bihe0832.android.lib.router.stub";
+    private static final String ROUTER_PACKAGE_NAME = "com.bihe0832.android.lib.router";
 
     private static final boolean DEBUG = false;
     private Messager messager;

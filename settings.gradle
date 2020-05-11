@@ -16,7 +16,7 @@
 //include 'LibAPK'
 //
 //
-//include 'LibUIUtils'
+include 'LibUIUtils'
 include 'LibUtils'
 include ':APPTest'
 
