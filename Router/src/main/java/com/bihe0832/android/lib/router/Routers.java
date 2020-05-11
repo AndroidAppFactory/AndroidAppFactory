@@ -19,6 +19,9 @@ import java.util.Set;
 public class Routers {
 
     public static final String ROUTERS_KEY_RAW_URL = "com.bihe0832.router.URI";
+    //必须与RouterCompiler一致
+    public static final String STUB_PACKAGE_NAME = "com.bihe0832.android.lib.router.stub";
+    public static final String ROUTER_PACKAGE_NAME = "com.bihe0832.android.lib.router";
 
     private static HashMap<String,Class<? extends Activity>> mappings = new HashMap<>();
 
@@ -27,7 +30,7 @@ public class Routers {
             return;
         }
         try {
-            Class<?> threadClazz = Class.forName("com.tencent.mna.lib.router.stub.RouterMapping_"+ format);
+            Class<?> threadClazz = Class.forName(STUB_PACKAGE_NAME + ".RouterMapping_"+ format);
             Method method = threadClazz.getMethod("map");
             System.out.println(method.invoke(null, null));
         }catch (Exception e){
