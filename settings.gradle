@@ -14,10 +14,13 @@
 //include ':LibTTS'
 //include ':LibToast'
 //include ':LibAPK'
-include ':LibAdapter'
-
-//include ':LibUIUtils'
-//include ':LibUtils'
+//include ':LibAdapter'
+//include ':LibFragmentation_core'
+//include ':LibFragmentation'
+//include ':LibFragmentation_swipeback'
+//
+include ':LibUIUtils'
+include ':LibUtils'
 //include '::APPTest'
 
 
