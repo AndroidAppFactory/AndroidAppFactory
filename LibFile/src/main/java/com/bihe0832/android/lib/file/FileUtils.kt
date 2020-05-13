@@ -11,7 +11,7 @@ import java.io.File
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020-01-10.
  * 使用FileUtils 提供的Provider时，可以选择自定路径或者使用库默认路径
  * 如果是选择自定义的，需要做如下操作，否则会造成无法安装等问题：

@@ -25,18 +25,6 @@ android {
     }
 }
 
-//uploadArchives {
-//    //本地仓库的一种
-//    repositories.mavenDeployer {
-//        repository(url: "file://" + rootDir.toString() + "/../../mnaapp/mna-application/libs/")
-//        pom.project {
-//            groupId project.groupId
-//            artifactId "lib-file"
-//            version "1.0.2"
-//        }
-//    }
-//}
-
 //添加发布相关的配置
 publish {
     artifactId = 'lib-file'//项目名称

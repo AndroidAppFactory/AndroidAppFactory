@@ -23,17 +23,6 @@ android {
     }
 }
 
-//uploadArchives {
-//    //本地仓库的一种
-//    repositories.mavenDeployer {
-//        repository(url: "file://" + rootDir.toString() + "/libs")
-//        pom.project {
-//            groupId project.groupId
-//            artifactId "lib-config"
-//            version "1.0.1"
-//        }
-//    }
-//}
 
 //添加发布相关的配置
 publish {

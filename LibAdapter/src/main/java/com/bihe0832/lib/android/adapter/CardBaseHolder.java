@@ -6,7 +6,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 /**
- * Created by hardyshi on 2017/12/7.
+ * Created by zixie on 2017/12/7.
  *
  * 所有卡片的Holder都继承自该类并实现对应的view查找和内容填充
  */

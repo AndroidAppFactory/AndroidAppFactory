@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2017-07-18.
  * Description: Description
  */

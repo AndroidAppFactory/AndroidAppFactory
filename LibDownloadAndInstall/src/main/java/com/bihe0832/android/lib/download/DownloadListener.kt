@@ -2,7 +2,7 @@ package com.bihe0832.android.lib.download
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020-01-09.
  * Description: Description
  *

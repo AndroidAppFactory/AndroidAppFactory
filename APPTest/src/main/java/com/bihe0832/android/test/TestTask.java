@@ -6,7 +6,7 @@ import com.bihe0832.lib.timer.BaseTask;
 import com.bihe0832.lib.timer.TaskManager;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020-03-05.
  * Description: Description
  */

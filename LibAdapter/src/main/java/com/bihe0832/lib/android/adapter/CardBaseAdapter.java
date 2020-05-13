@@ -12,7 +12,7 @@ import java.util.List;
 
 
 /**
- * @author hardyshi
+ * @author zixie
  */
 public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, BaseViewHolder> {
 

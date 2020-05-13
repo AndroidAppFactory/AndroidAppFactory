@@ -17,7 +17,7 @@ import java.io.File;
 import static android.content.ContentValues.TAG;
 
 /**
- * Created by hardyshi on 2017/11/1.
+ * Created by zixie on 2017/11/1.
  * <p>
  * 使用InstallUtils的前提是要按照  {@link FileUtils }的说明 定义好
  * lib_bihe0832_file_folder 和 zixie_file_paths.xml
