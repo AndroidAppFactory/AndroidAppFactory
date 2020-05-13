@@ -18,10 +18,11 @@
 //include ':LibFragmentation_core'
 //include ':LibFragmentation'
 //include ':LibFragmentation_swipeback'
-//
+//include ':LibFlycoTabLayout'
+
 include ':LibUIUtils'
 include ':LibUtils'
-//include '::APPTest'
+include '::APPTest'
 
 
 
