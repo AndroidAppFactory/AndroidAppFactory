@@ -21,7 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.bihe0832.lib.android.qrcode.R;
+import com.bihe0832.android.lib.qrcode.R;
 import com.google.zxing.*;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.common.HybridBinarizer;

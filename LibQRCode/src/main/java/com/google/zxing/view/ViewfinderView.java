@@ -22,7 +22,7 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.bihe0832.lib.android.qrcode.R;
+import com.bihe0832.android.lib.qrcode.R;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.camera.CameraManager;
 

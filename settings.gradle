@@ -2,6 +2,7 @@
 //include ':RouterAnnotation'
 //include ':Router'
 //include ':RouterCompiler'
+//include ':LibAndroid'
 //include '::LibCommonUtils'
 //include ':LibThread'
 //include ':LibEncrypt'
@@ -20,10 +21,10 @@
 //include ':LibFragmentation_swipeback'
 //include ':LibFlycoTabLayout'
 //include ':LibQRCode'
-//include ':LibAndroid'
+//include ':LibRefresh'
 
-include ':LibUIUtils'
-include ':LibUtils'
+//include ':LibUIUtils'
+//include ':LibUtils'
 include '::APPTest'
 
 
