@@ -53,5 +53,5 @@ dependencies {
     api 'com.bihe0832.android:lib-adapter:1.0.0'
     api 'com.bihe0832.android:lib-fragmentation-swipeback:1.0.0'
     api 'com.bihe0832.android:lib-flycotablayout:1.0.0'
-
+    api 'com.bihe0832.android:lib-qrcode:1.0.0'
 }

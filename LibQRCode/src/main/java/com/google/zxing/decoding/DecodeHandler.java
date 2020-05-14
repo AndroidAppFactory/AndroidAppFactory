@@ -32,7 +32,6 @@ import com.google.zxing.activity.MessageConstants;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.camera.PlanarYUVLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import com.tencent.mna.lib.qrcode.R;
 
 import java.util.Hashtable;
 

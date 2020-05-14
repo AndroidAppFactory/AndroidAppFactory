@@ -30,7 +30,6 @@ import com.google.zxing.activity.CaptureActivity;
 import com.google.zxing.activity.MessageConstants;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.view.ViewfinderResultPointCallback;
-import com.tencent.mna.lib.qrcode.R;
 
 import java.util.Vector;
 

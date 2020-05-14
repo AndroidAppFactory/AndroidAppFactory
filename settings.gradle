@@ -19,10 +19,12 @@
 //include ':LibFragmentation'
 //include ':LibFragmentation_swipeback'
 //include ':LibFlycoTabLayout'
-include ':LibQRCode'
-//include ':LibUIUtils'
-//include ':LibUtils'
-//include '::APPTest'
+//include ':LibQRCode'
+//include ':LibAndroid'
+
+include ':LibUIUtils'
+include ':LibUtils'
+include '::APPTest'
 
 
 

@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.bihe0832.lib.android.qrcode.R;
 import com.google.zxing.*;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.common.HybridBinarizer;
@@ -30,7 +32,6 @@ import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.util.BitmapUtil;
 import com.google.zxing.util.Constant;
 import com.google.zxing.view.ViewfinderView;
-import com.tencent.mna.lib.qrcode.R;
 
 import java.io.IOException;
 import java.util.Hashtable;
