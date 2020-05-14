@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-fragmentation'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.0.0'//版本号
+    publishVersion = '1.0.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -42,6 +42,6 @@ dependencies {
 }
 
 dependencies {
-    compileOnly 'com.bihe0832.android:lib-fragmentation-core:1.0.0'
+    api 'com.bihe0832.android:lib-fragmentation-core:1.0.0'
     api "com.android.support:appcompat-v7:$project.android_support_version"
 }
