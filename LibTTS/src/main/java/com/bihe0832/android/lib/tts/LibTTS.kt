@@ -2,7 +2,6 @@ package com.bihe0832.android.lib.tts
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -58,7 +57,7 @@ object LibTTS {
     }
 
     fun addTTSInitListener(listener: TTSInitListener) {
-        if(mTTSInitListenerList.contains(listener)){
+        if (mTTSInitListenerList.contains(listener)) {
             return
         }
         mTTSInitListenerList.add(listener)
@@ -98,9 +97,14 @@ object LibTTS {
         initTTS()
     }
 
-    private fun initTTS(){
-        if(mContext != null && mLocale != null){
-            mSpeech?.shutdown()
+    private fun initTTS() {
+        if (mContext != null && mLocale != null) {
+            try {
+                mSpeech?.shutdown()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             mSpeech = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
                 if (status == TextToSpeech.SUCCESS) {
                     Log.d(TAG, "onInit: TTS引擎初始化成功")
@@ -135,7 +139,7 @@ object LibTTS {
                     }
                 })
             }
-        }else{
+        } else {
             Log.e(TAG, "onInit: TTS引擎初始化失败")
             mTTSInitListenerList.forEach {
                 it.onInitError()
@@ -207,7 +211,6 @@ object LibTTS {
     }
 
 
-
     fun isSpeak(): Boolean {
         return mSpeech?.isSpeaking ?: false
     }
@@ -217,13 +220,13 @@ object LibTTS {
     }
 
     fun startSpeak() {
-        if(mSpeech?.language == null){
+        if (mSpeech?.language == null) {
             Log.e(TAG, "TTS引擎异常，重新再次初始化")
             mTTSInitListenerList.forEach {
                 it.onTTSError()
             }
             initTTS()
-        }else{
+        } else {
             if (mMsgList.isNotEmpty()) {
                 var s = mMsgList[0]
                 mMsgList.removeAt(0)
@@ -313,7 +316,7 @@ object LibTTS {
         var tempmSpeechRate = speechRate
         if (tempmSpeechRate > 1) {
             tempmSpeechRate = 1f
-        } else if (tempmSpeechRate <=0) {
+        } else if (tempmSpeechRate <= 0) {
             tempmSpeechRate = 0.1f
         }
         val result = mSpeech?.setSpeechRate(speechRate * 4)
