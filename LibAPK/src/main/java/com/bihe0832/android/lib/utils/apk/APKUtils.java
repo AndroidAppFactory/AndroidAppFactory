@@ -71,7 +71,6 @@ public class APKUtils {
         try {
             return pm.getPackageInfo(pkgName.trim(), 0);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
             return null;
         }
     }

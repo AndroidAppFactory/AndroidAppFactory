@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-utils'//项目名称
     repoName= rootProject.repoName
-    publishVersion = '1.3.2'//版本号
+    publishVersion = '1.3.4'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -50,9 +50,11 @@ dependencies {
     api 'com.bihe0832.android:lib-config:1.2.0'
     api 'com.bihe0832.android:lib-download-install:1.2.2'
     api 'com.bihe0832.android:lib-utils-apk:1.2.2'
-    api 'com.bihe0832.android:lib-tts:1.2.2'
+    api 'com.bihe0832.android:lib-tts:1.3.1'
     api 'com.bihe0832.android:lib-fragmentation-swipeback:1.0.1'
     api 'com.bihe0832.android:lib-flycotablayout:1.0.0'
     api 'com.bihe0832.android:lib-qrcode:1.0.1'
     api 'com.bihe0832.android:lib-refresh:1.0.0'
+
+//    api project(":LibTTS")
 }

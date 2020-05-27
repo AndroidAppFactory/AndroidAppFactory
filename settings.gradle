@@ -12,9 +12,9 @@
 //include ':LibConfig'
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
-//include ':LibTTS'
 //include ':LibToast'
-//include ':LibAPK'
+include ':LibAPK'
+//include ':LibTTS'
 //include ':LibAdapter'
 //include ':LibFragmentation_core'
 //include ':LibFragmentation'
@@ -24,8 +24,8 @@
 //include ':LibRefresh'
 
 //include ':LibUIUtils'
-include ':LibUtils'
-//include '::APPTest'
+//include ':LibUtils'
+include '::APPTest'
 
 
 

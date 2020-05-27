@@ -6,10 +6,12 @@ import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.text.TextUtils
 import android.util.Log
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.utils.ConvertUtils
 import java.io.File
+import java.lang.reflect.Field
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
@@ -25,23 +27,29 @@ import kotlin.collections.HashMap
 object LibTTS {
 
     private const val TAG = "TTSHelper"
+
     private val CONFIG_KEY_PITCH = this.javaClass.name.toString() + "pitch"
     private val CONFIG_KEY_SPEECH_RATE = this.javaClass.name.toString() + "speech.rate"
+    private val CONFIG_KEY_ENGINE = this.javaClass.name.toString() + "engine"
 
-    private const val CONFIG_VALUE_PITCH = 0.4f
-    private const val CONFIG_VALUE_SPEECH_RATE = 0.4f
-
-    private var mSpeech: TextToSpeech? = null
-    private var mContext: Context? = null
-    private var mLocale: Locale? = null
-
-    private val mMsgList = mutableListOf<String>()
     const val SPEEAK_TYPE_SEQUENCE = 1
     const val SPEEAK_TYPE_NEXT = 2
     const val SPEEAK_TYPE_FLUSH = 3
     const val SPEEAK_TYPE_CLEAR = 4
 
+    const val CONFIG_VALUE_ENGINE = "com.google.android.tts"
+    private const val CONFIG_VALUE_PITCH = 0.4f
+    private const val CONFIG_VALUE_SPEECH_RATE = 0.4f
+
     private var mUtteranceId = 1
+
+    private var mSpeech: TextToSpeech? = null
+    private var mContext: Context? = null
+    private var mLocale: Locale? = null
+
+    private val mMsgList by lazy {
+        mutableListOf<String>()
+    }
 
     private val mTTSSpeakListenerList = mutableListOf<TTSSpeakListener>()
     private val mTTSInitListenerList = mutableListOf<TTSInitListener>()
@@ -90,21 +98,36 @@ object LibTTS {
         }
     }
 
-    fun init(context: Context, loc: Locale, listener: TTSInitListener) {
+    fun init(context: Context, loc: Locale, engine: String?, listener: TTSInitListener) {
         mContext = context
         mLocale = loc
         mTTSInitListenerList.add(listener)
+        engine?.let {
+            setEngine(it)
+        }
         initTTS()
+        mSpeech?.engines?.forEach {
+            Log.e(TAG, "onInit: 引擎列表：" + it.label + " " + it.name)
+            if (it.name == mSpeech!!.defaultEngine) {
+                Log.e(TAG, "onInit: 默认引擎：" + it.label + " " + it.name)
+            }
+        }
     }
+
+    fun init(context: Context, loc: Locale, listener: TTSInitListener) {
+        init(context, loc, null, listener)
+    }
+
 
     private fun initTTS() {
         if (mContext != null && mLocale != null) {
-            try {
-                mSpeech?.shutdown()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            var enginePackageName = Config.readConfig(CONFIG_KEY_ENGINE, CONFIG_VALUE_ENGINE).let {
+                if (it.isEmpty()) {
+                    null
+                } else {
+                    it
+                }
             }
-
             mSpeech = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
                 if (status == TextToSpeech.SUCCESS) {
                     Log.d(TAG, "onInit: TTS引擎初始化成功")
@@ -115,10 +138,9 @@ object LibTTS {
                         it.onInitError()
                     }
                 }
-            })
-
-            setPitch(Config.readConfig(CONFIG_KEY_PITCH, CONFIG_VALUE_PITCH))
-            setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, CONFIG_VALUE_SPEECH_RATE))
+            }, enginePackageName)
+            setPitch(Config.readConfig(CONFIG_KEY_PITCH, getDefaultPitch()))
+            setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, getDefaultSpeechRate()))
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                 mSpeech?.setOnUtteranceCompletedListener { utteranceId ->
                     mTTSResultListener.onUtteranceDone(utteranceId ?: "")
@@ -140,12 +162,11 @@ object LibTTS {
                 })
             }
         } else {
-            Log.e(TAG, "onInit: TTS引擎初始化失败")
+            Log.e(TAG, "onInit: TTS引擎初始化失败，参数失败")
             mTTSInitListenerList.forEach {
                 it.onInitError()
             }
         }
-
     }
 
     interface TTSInitListener {
@@ -154,9 +175,9 @@ object LibTTS {
 
         fun onTTSError()
 
-        fun onLangUnAvaiavble()
+        fun onLangUnAvailable()
 
-        fun onLangAvaiavble()
+        fun onLangAvailable()
     }
 
     interface TTSSpeakListener {
@@ -168,21 +189,16 @@ object LibTTS {
         fun onUtteranceError(utteranceId: String)
     }
 
-    fun setLanguage(loc: Locale, listener: TTSInitListener): Int {
-        mTTSInitListenerList.add(listener)
-        return setLanguage(loc)
-    }
-
     private fun setLanguage(loc: Locale): Int {
         val supported = mSpeech?.setLanguage(loc)
         if (supported != TextToSpeech.LANG_AVAILABLE && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
             Log.i(TAG, "onInit: 不支持当前语言")
             mTTSInitListenerList.forEach {
-                it.onLangUnAvaiavble()
+                it.onLangUnAvailable()
             }
         } else {
             mTTSInitListenerList.forEach {
-                it.onLangAvaiavble()
+                it.onLangAvailable()
             }
             Log.i(TAG, "onInit: 支持当前选择语言")
             startSpeak()
@@ -190,26 +206,31 @@ object LibTTS {
         return supported ?: TextToSpeech.ERROR
     }
 
-    fun getLanguage(): String {
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mSpeech?.language?.language ?: ""
-        } else {
-            mSpeech?.voice?.locale?.language ?: ""
+    fun isTTSServiceOK(tts: TextToSpeech?): Boolean {
+        var isBindConnection = true
+        if (tts == null) {
+            return false
         }
-    }
-
-    fun isLanguageAvailable(laca: Locale): Int {
-        return mSpeech?.isLanguageAvailable(laca) ?: TextToSpeech.LANG_NOT_SUPPORTED
-    }
-
-    fun getAvailableLanguages(): Set<Locale>? {
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            null
-        } else {
-            mSpeech?.availableLanguages
+        val fields: Array<Field> = tts.javaClass.getDeclaredFields()
+        for (j in fields.indices) {
+            fields[j].setAccessible(true)
+            if (TextUtils.equals("mServiceConnection", fields[j].getName()) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())) {
+                try {
+                    if (fields[j].get(tts) == null) {
+                        isBindConnection = false
+                        Log.e(TAG, "******* TTS -> mServiceConnection == null*******")
+                    }
+                } catch (e: IllegalArgumentException) {
+                    e.printStackTrace()
+                } catch (e: IllegalAccessException) {
+                    e.printStackTrace()
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
         }
+        return isBindConnection
     }
-
 
     fun isSpeak(): Boolean {
         return mSpeech?.isSpeaking ?: false
@@ -220,11 +241,8 @@ object LibTTS {
     }
 
     fun startSpeak() {
-        if (mSpeech?.language == null) {
+        if (!isTTSServiceOK(mSpeech)) {
             Log.e(TAG, "TTS引擎异常，重新再次初始化")
-            mTTSInitListenerList.forEach {
-                it.onTTSError()
-            }
             initTTS()
         } else {
             if (mMsgList.isNotEmpty()) {
@@ -279,6 +297,10 @@ object LibTTS {
     }
 
     fun save(tempStr: String, finalFileName: String): Int {
+        if (!isTTSServiceOK(mSpeech)) {
+            Log.e(TAG, "TTS引擎异常，重新再次初始化")
+            initTTS()
+        }
         mUtteranceId++
         var result = TextToSpeech.ERROR
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -300,7 +322,7 @@ object LibTTS {
 
 
     fun getSpeechRate(): Float {
-        val speechRate = Config.readConfig(CONFIG_KEY_SPEECH_RATE, CONFIG_VALUE_SPEECH_RATE)
+        val speechRate = Config.readConfig(CONFIG_KEY_SPEECH_RATE, getDefaultSpeechRate())
         DecimalFormat("0.00").apply {
             roundingMode = RoundingMode.HALF_UP
         }.let {
@@ -327,7 +349,7 @@ object LibTTS {
 
 
     fun getPitch(): Float {
-        val pitch = Config.readConfig(CONFIG_KEY_PITCH, CONFIG_VALUE_PITCH)
+        val pitch = Config.readConfig(CONFIG_KEY_PITCH, getDefaultPitch())
 
         DecimalFormat("0.00").apply {
             roundingMode = RoundingMode.HALF_UP
@@ -351,6 +373,33 @@ object LibTTS {
         val result = mSpeech?.setPitch(tempPitch * 2)
         val result1 = Config.writeConfig(CONFIG_KEY_PITCH, tempPitch)
         Log.i(TAG, "setPitch: $pitch $tempPitch $result $result1")
+    }
+
+    private fun setEngine(tempEngine: String) {
+        Config.writeConfig(CONFIG_KEY_ENGINE, tempEngine)
+//        APKUtils.getInstalledPackage(mContext, tempEngine).let { packageInfo ->
+//            if (null == packageInfo || TextUtils.isEmpty(packageInfo?.packageName)) {
+//                APKUtils.getInstalledPackage(mContext, CONFIG_VALUE_ENGINE).let { androidTTS ->
+//                    if (null == androidTTS || TextUtils.isEmpty(androidTTS?.packageName)) {
+//                        Config.writeConfig(CONFIG_KEY_ENGINE, "")
+//                    } else {
+//                        val result = Config.writeConfig(CONFIG_KEY_ENGINE, androidTTS?.packageName)
+//                        Log.i(TAG, "setEngine: ${androidTTS?.packageName} ; result $result")
+//                    }
+//                }
+//            } else {
+//                val result = Config.writeConfig(CONFIG_KEY_ENGINE, packageInfo?.packageName)
+//                Log.i(TAG, "setEngine: ${packageInfo?.packageName} ; result $result")
+//            }
+//        }
+    }
+
+    fun getEngines(): List<TextToSpeech.EngineInfo>? {
+        return mSpeech?.engines
+    }
+
+    fun getDefaultEngine(): String? {
+        return mSpeech?.defaultEngine
     }
 
     fun onDestroy() {

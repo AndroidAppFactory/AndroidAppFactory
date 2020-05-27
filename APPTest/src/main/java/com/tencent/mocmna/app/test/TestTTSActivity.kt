@@ -36,16 +36,16 @@ class TestTTSActivity : Activity() {
         }
         setContentView(R.layout.activity_test_tts)
 
-        LibTTS.init(this, Locale.CHINA, object : LibTTS.TTSInitListener {
+        LibTTS.init(this, Locale.CHINA, "com.iflytek.vflynote", object : LibTTS.TTSInitListener {
             override fun onInitError() {
                 showGuide()
             }
 
-            override fun onLangUnAvaiavble() {
+            override fun onLangUnAvailable() {
                 showGuide()
             }
 
-            override fun onLangAvaiavble() {
+            override fun onLangAvailable() {
                 hideGuide()
             }
 
