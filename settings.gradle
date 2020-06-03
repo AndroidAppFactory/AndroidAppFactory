@@ -3,7 +3,9 @@
 //include ':Router'
 //include ':RouterCompiler'
 //include ':LibAndroid'
-//include '::LibCommonUtils'
+//include ':LibCommonUtils'
+
+//include ':LibRequest'
 //include ':LibThread'
 //include ':LibEncrypt'
 //include ':LibGson'
@@ -13,7 +15,7 @@
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
 //include ':LibToast'
-include ':LibAPK'
+//include ':LibAPK'
 //include ':LibTTS'
 //include ':LibAdapter'
 //include ':LibFragmentation_core'
@@ -25,7 +27,7 @@ include ':LibAPK'
 
 //include ':LibUIUtils'
 //include ':LibUtils'
-include '::APPTest'
+//include '::APPTest'
 
 
 

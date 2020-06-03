@@ -17,7 +17,6 @@ import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.lib.timer.TaskManager
-import com.tencent.mocmna.app.test.TestTTSActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 

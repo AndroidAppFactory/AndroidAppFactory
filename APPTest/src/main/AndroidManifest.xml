@@ -24,7 +24,7 @@
         </activity>
 
         <activity
-            android:name="com.tencent.mocmna.app.test.TestTTSActivity"
+            android:name=".TestTTSActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="sensor">
 

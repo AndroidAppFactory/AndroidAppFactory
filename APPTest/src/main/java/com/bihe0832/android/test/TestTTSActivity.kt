@@ -1,4 +1,4 @@
-package com.tencent.mocmna.app.test
+package com.bihe0832.android.test
 
 import android.app.Activity
 import android.app.DownloadManager
@@ -15,7 +15,6 @@ import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import com.bihe0832.android.test.R
 import com.bihe0832.lib.timer.BaseTask
 import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_test_tts.*
