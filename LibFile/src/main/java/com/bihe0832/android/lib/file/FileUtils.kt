@@ -17,10 +17,10 @@ import java.io.File
  * 如果是选择自定义的，需要做如下操作，否则会造成无法安装等问题：
  *      添加以下String值定义：
  *          lib_bihe0832_file_folder：自定义文件目录
- *      在res/xml添加文件：zixie_file_paths.xml，内容为：
+ *      在res/xml添加文件：file_paths.xml，内容为：
  *      <?xml version="1.0" encoding="utf-8"?>
  *          <paths>
- *              <external-files-path name="zixie_download" path="你自定义的文件目录"/>
+ *              <external-files-path name="download" path="你自定义的文件目录"/>
  *          </paths>
  * 如果是选择默认的路径，则不需要上述定义；如果此时你需要获取库提供的provider 可以使用接口 {@link getZixieFileProvider}
  */

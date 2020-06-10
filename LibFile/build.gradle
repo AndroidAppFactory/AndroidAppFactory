@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-file'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.2.2'//版本号
+    publishVersion = '1.2.4'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences

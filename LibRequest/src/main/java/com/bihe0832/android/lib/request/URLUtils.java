@@ -48,8 +48,13 @@ public class URLUtils {
             return "";
         } else {
             int start = url.lastIndexOf("/");
+            int finish = url.indexOf(URLUtils.HTTP_REQ_ENTITY_START);
             if (start != -1) {
-                return url.substring(start + 1);
+                if(finish != -1){
+                    return url.substring(start + 1, finish);
+                }else {
+                    return url.substring(start + 1);
+                }
             } else {
                 return "";
             }

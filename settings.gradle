@@ -5,28 +5,34 @@
 //include ':LibAndroid'
 //include ':LibCommonUtils'
 
-//include ':LibRequest'
+
+//include ':LibFragmentation_core'
+//include ':LibFragmentation'
+//include ':LibFragmentation_swipeback'
+//include ':LibFlycoTabLayout'
+//include ':LibQRCode'
+
+//include ':LibAdapter'
+//include ':LibRefresh'
+
 //include ':LibThread'
 //include ':LibEncrypt'
 //include ':LibGson'
 //include ':LibChannel'
 //include ':LibTimer'
 //include ':LibConfig'
-//include ':LibFile'
-//include ':LibDownloadAndInstall'
+//include ':LibRequest'
+
+
 //include ':LibToast'
 //include ':LibAPK'
 //include ':LibTTS'
-//include ':LibAdapter'
-//include ':LibFragmentation_core'
-//include ':LibFragmentation'
-//include ':LibFragmentation_swipeback'
-//include ':LibFlycoTabLayout'
-//include ':LibQRCode'
-//include ':LibRefresh'
+
+//include ':LibFile'
+//include ':LibDownloadAndInstall'
 
 //include ':LibUIUtils'
-//include ':LibUtils'
+include ':LibUtils'
 //include '::APPTest'
 
 
