@@ -11,29 +11,27 @@
 //include ':LibFragmentation_swipeback'
 //include ':LibFlycoTabLayout'
 //include ':LibQRCode'
-
 //include ':LibAdapter'
 //include ':LibRefresh'
 
 //include ':LibThread'
 //include ':LibEncrypt'
-//include ':LibGson'
 //include ':LibChannel'
+//include ':LibRequest'
+//include ':LibSqlite'
+//
+//include ':LibGson'
 //include ':LibTimer'
 //include ':LibConfig'
-//include ':LibRequest'
-include ':LibSqlite'
-
 //include ':LibToast'
 //include ':LibAPK'
+//include ':LibNotification'
 //include ':LibTTS'
-
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
 
-
 //include ':LibUIUtils'
-//include ':LibUtils'
+include ':LibUtils'
 //include '::APPTest'
 
 

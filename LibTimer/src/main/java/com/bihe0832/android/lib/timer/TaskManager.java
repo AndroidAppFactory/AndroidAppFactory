@@ -60,15 +60,19 @@ public class TaskManager {
             Log.d(LOG_TAG,"TaskDispatcher run");
             try {
                 synchronized (mTaskList) {
-                    Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
-                    while (iter.hasNext()) {
-                        Entry<String, BaseTask> entry = iter.next();
-                        final BaseTask task = (BaseTask)entry.getValue();
-                        if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
-                            task.resetNotifiedTimes();
-                            task.run();
+                    if(mTaskList.isEmpty()){
+                        stopTimer();
+                    }else {
+                        Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
+                        while (iter.hasNext()) {
+                            Entry<String, BaseTask> entry = iter.next();
+                            final BaseTask task = (BaseTask)entry.getValue();
+                            if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
+                                task.resetNotifiedTimes();
+                                task.run();
+                            }
+                            task.increaseNotifiedTimes();
                         }
-                        task.increaseNotifiedTimes();
                     }
                 }
             }catch (Exception e){

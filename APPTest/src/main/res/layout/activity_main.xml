@@ -65,6 +65,15 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:text="Toast测试" />
+
+        <Button
+            android:id="@+id/testFun"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:text="通用测试" />
     </LinearLayout>
 
 </ScrollView>

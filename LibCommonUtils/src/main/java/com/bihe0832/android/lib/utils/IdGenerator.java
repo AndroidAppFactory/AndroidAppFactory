@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.notification;
+package com.bihe0832.android.lib.utils;
 
 /**
  * @author hardyshi code@bihe0832.com

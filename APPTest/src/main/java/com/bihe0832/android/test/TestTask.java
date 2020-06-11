@@ -2,8 +2,9 @@ package com.bihe0832.android.test;
 
 import android.util.Log;
 
-import com.bihe0832.lib.timer.BaseTask;
-import com.bihe0832.lib.timer.TaskManager;
+import com.bihe0832.android.lib.timer.BaseTask;
+import com.bihe0832.android.lib.timer.TaskManager;
+
 
 /**
  * @author zixie code@bihe0832.com

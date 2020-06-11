@@ -12,11 +12,11 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.timer.BaseTask
+import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import com.bihe0832.lib.timer.BaseTask
-import com.bihe0832.lib.timer.TaskManager
 import kotlinx.android.synthetic.main.activity_test_tts.*
 import java.util.*
 
