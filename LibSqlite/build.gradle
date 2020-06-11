@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'//maven插件，用于上传插件到仓库
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.commonMinSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionCode project.mnaLib.versionCode
+        versionName project.mnaLib.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+//添加发布相关的配置
+publish {
+    artifactId = 'lib-sqlite'//项目名称
+    repoName=rootProject.repoName
+    publishVersion = '1.0.0'//版本号
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    licences = rootProject.licences
+    desc = 'the base sqlite helper for zixie'//项目描述
+    website = 'https://github.com/bihe0832/AndroidAppFactory.git'//项目对应网站
+}

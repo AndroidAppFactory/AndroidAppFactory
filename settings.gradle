@@ -22,7 +22,7 @@
 //include ':LibTimer'
 //include ':LibConfig'
 //include ':LibRequest'
-
+include ':LibSqlite'
 
 //include ':LibToast'
 //include ':LibAPK'
@@ -31,8 +31,9 @@
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
 
+
 //include ':LibUIUtils'
-include ':LibUtils'
+//include ':LibUtils'
 //include '::APPTest'
 
 
