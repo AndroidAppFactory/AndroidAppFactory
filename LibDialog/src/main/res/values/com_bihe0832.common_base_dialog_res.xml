@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BaseDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowMinWidthMajor">65%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
+        <!--背景颜色及和透明程度-->
+        <item name="android:windowBackground">@drawable/com_bihe0832_commonm_dialog_bg</item>
+        <item name="android:background">@android:color/transparent</item>
+        <!--是否去除标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否模糊-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--输入框适配-->
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:textColorPrimary">@color/dialog_title</item>
+        <item name="android:textColorSecondary">@color/dialog_title</item>
+        <item name="android:textColorHint">@color/dialog_hint</item>
+        <item name="android:textColorHintInverse">@color/dialog_hint</item>
+    </style>
+
+    <color name="dialog_bg">#182b37</color>
+    <color name="dialog_title">#ffffff</color>
+    <color name="dialog_hint">#999999</color>
+    <color name="dialog_button">#38ADFF</color>
+    <color name="dialog_tips">#FFF44C36</color>
+    <color name="dialog_split">#1C313F</color>
+</resources>

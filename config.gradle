@@ -29,7 +29,7 @@ ext {
     //使用kotlin版本
     kotlin_version = '1.3.50'
 
-    glide_version = "4.6.1"
+    glide_version = "4.11.0"
     gson_version = "2.8.2"
 
     //使用Android Support库版本

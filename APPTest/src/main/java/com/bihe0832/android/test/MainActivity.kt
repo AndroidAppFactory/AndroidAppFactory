@@ -19,9 +19,9 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.notification.NotifyManager
-import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.test.module.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -49,7 +49,7 @@ class MainActivity : Activity() {
                     Log.d(LOG_TAG, "[DownloadNotificationsManager] onReceive: $action")
                     when (action) {
                         NotifyManager.ACTION_RESUME -> {
-                            startTestDown(notificationId)
+                            testNotifyProcess(notificationId)
                         }
 
                         NotifyManager.ACTION_PAUSE -> {
@@ -122,41 +122,11 @@ class MainActivity : Activity() {
             ToastUtil.showTop(this, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
         }
 
-
         testFun.setOnClickListener {
-
-//            NotifyManager.sendNotifyNow(applicationContext,
-//                    "通知标题" + id,
-//                    "通知二级标题" + id,
-//                    "通知描述" + id, "mna://login", "download")
-
-            startTestDown(0)
-
+            testLoading(this)
         }
     }
 
-    fun startTestDown(noticeId: Int) {
-        TaskManager.getInstance().addTask(object : BaseTask() {
-            override fun run() {
-                NotifyManager.sendDownloadNotify(applicationContext,
-                        "王者荣耀",
-                        1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_DOWNLOADING, "download", noticeId)
-                process++
-            }
-
-            override fun getNextEarlyRunTime(): Int {
-                return 0
-            }
-
-            override fun getMyInterval(): Int {
-                return 2
-            }
-
-            override fun getTaskName(): String {
-                return LOG_TAG
-            }
-        })
-    }
 
     private fun userInput(): String? {
         var input = testInput.text?.toString()

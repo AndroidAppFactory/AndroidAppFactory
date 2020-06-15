@@ -1,0 +1,18 @@
+<resources>
+
+    <style name="LoadingProgressDialog" parent="BaseDialog">
+        <item name="android:windowBackground">@color/loading_background</item>
+    </style>
+
+    <style name="LoadingProcessStyle" parent="@android:style/Widget.ProgressBar.Small.Inverse">
+        <item name="android:indeterminateDrawable">@anim/loading_animation</item>
+        <item name="android:minWidth">28dp</item>
+        <item name="android:maxWidth">28dp</item>
+        <item name="android:minHeight">28dp</item>
+        <item name="android:maxHeight">28dp</item>
+        //旋转速度
+        <item name="android:indeterminateDuration">3000</item>
+    </style>
+
+    <color name="loading_background">#80000000</color>
+</resources>

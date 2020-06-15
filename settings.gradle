@@ -5,7 +5,6 @@
 //include ':LibAndroid'
 //include ':LibCommonUtils'
 
-
 //include ':LibFragmentation_core'
 //include ':LibFragmentation'
 //include ':LibFragmentation_swipeback'
@@ -30,9 +29,13 @@
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
 
+//include ':LibCommonUIUtils'
+//include ':LibImage'
+//include ':LibDialog'
+
 //include ':LibUIUtils'
-include ':LibUtils'
-//include '::APPTest'
+//include ':LibUtils'
+include '::APPTest'
 
 
 

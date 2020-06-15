@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 底色 -->
+    <item>
+        <shape>
+            <corners android:radius="5dip" />
+            <gradient
+                android:angle="270"
+                android:centerY="0.75"
+                android:endColor="@color/process_back_color"
+                android:startColor="@color/process_back_color" />
+        </shape>
+    </item>
+    <!-- 进度 -->
+    <item>
+        <clip>
+            <shape>
+                <corners android:radius="5dip" />
+                <gradient
+                    android:angle="270"
+                    android:centerY="0.75"
+                    android:endColor="@color/process_color"
+                    android:startColor="@color/process_color" />
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

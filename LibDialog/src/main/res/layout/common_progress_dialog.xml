@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/com_bihe0832_commonm_dialog_bg">
+
+    <TextView
+        android:id="@+id/update_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        tools:text="版本更新"
+        android:textColor="@color/dialog_title"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/update_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:lineSpacingMultiplier="1.5"
+        android:textColor="@color/dialog_hint"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/update_title"
+        tools:text="1. 适配Android Q \n2. 修复若干bug" />
+
+    <ProgressBar
+        android:id="@+id/update_progress_bar"
+        style="@style/CommonProgressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/update_message" />
+
+    <TextView
+        android:id="@+id/update_progress_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/dialog_hint"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/update_progress_bar"
+        tools:text="70%" />
+
+    <TextView
+        android:id="@+id/update_progress_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/dialog_hint"
+        android:textSize="14dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/update_progress_percent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="20M/50M" />
+
+    <View
+        android:id="@+id/update_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/dialog_split"
+        app:layout_constraintTop_toBottomOf="@+id/update_progress_percent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/update_line">
+
+        <Button
+            android:id="@+id/update_progress_cancle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:singleLine="true"
+            android:textColor="#38ADFF"
+            android:textSize="16dp"
+            tools:text="取消更新" />
+
+        <View
+            android:id="@+id/update_progress_column_line"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/dialog_split" />
+
+        <Button
+            android:id="@+id/update_progress_positive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:singleLine="true"
+            android:textColor="#38ADFF"
+            android:textSize="16dp"
+            tools:text="后台更新" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
