@@ -3,10 +3,12 @@ package com.bihe0832.android.lib.ui.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -49,16 +51,15 @@ public class LoadingDialog extends Dialog {
             CharSequence charSequence = Html.fromHtml(title);//支持html
             titleTv.setText(charSequence);
         }
+
         if(isFullScreen){
-            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            ViewGroup.LayoutParams lp = findViewById(R.id.loading_main_layout).getLayoutParams();
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            findViewById(R.id.loading_main_layout).setLayoutParams(lp);
         }else {
             findViewById(R.id.loading_main_layout).setBackgroundResource(R.drawable.loading_progress_bg);
-            getWindow().setBackgroundDrawableResource(Color.TRANSPARENT);
         }
-
-        getWindow().setGravity(Gravity.CENTER);
     }
 
     private void showAction() {

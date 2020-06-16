@@ -8,11 +8,13 @@ import android.os.Build
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
-import com.bihe0832.android.lib.ui.dialog.*
+import com.bihe0832.android.lib.ui.dialog.CommonDialog
+import com.bihe0832.android.lib.ui.dialog.DownloadProgressDialog
+import com.bihe0832.android.lib.ui.dialog.LoadingDialog
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.test.MainActivity
-import com.bihe0832.android.test.R
 
 /**
  *
@@ -29,7 +31,7 @@ fun MainActivity.testAlert(activity: Activity) {
     dialog.setTitle(title)
     dialog.setPositive("分享给我们")
     dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
-    dialog.setImageContentResId(R.mipmap.debug)
+//    dialog.setImageContentResId(R.mipmap.debug)
     dialog.setFeedBackContent("我们保证你提供的信息仅用于问题定位")
     dialog.setNegtive("复制到剪切板")
     dialog.setOnClickBottomListener(object : OnDialogListener {
@@ -65,7 +67,7 @@ fun MainActivity.testAlert(activity: Activity) {
 
 fun MainActivity.testUpdate(activity: Activity) {
     var taskName = "TEST"
-    var progressDialog = CommonDialogNew(activity).apply {
+    var progressDialog = DownloadProgressDialog(activity).apply {
         setTitle("更新测试")
         setMessage("正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~")
         setCurrentSize(1)
@@ -73,7 +75,7 @@ fun MainActivity.testUpdate(activity: Activity) {
         setNegtive("取消下载")
         setPositive("后台下载")
         setShouldCanceled(false)
-        setOnClickListener(object : OnDialogListener{
+        setOnClickListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 dismiss()
                 TaskManager.getInstance().removeTask(taskName)

@@ -1,7 +1,6 @@
 <resources>
 
     <style name="LoadingProgressDialog" parent="BaseDialog">
-        <item name="android:windowBackground">@color/loading_background</item>
     </style>
 
     <style name="LoadingProcessStyle" parent="@android:style/Widget.ProgressBar.Small.Inverse">

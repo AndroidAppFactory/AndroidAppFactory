@@ -1,29 +1,29 @@
 package com.bihe0832.android.lib.ui.dialog;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.StyleRes;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.Formatter;
+import android.text.method.ScrollingMovementMethod;
 import android.text.style.StyleSpan;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bihe0832.android.lib.ui.common.ViewUtils;
+
 import java.text.NumberFormat;
 
 
-public class DownloadProgressDialog extends AlertDialog {
+public class DownloadProgressDialog extends Dialog {
 
     private TextView mTitileView;
-    private TextView mMessageView;
+    private TextView mContentView;
     private ProgressBar mProgress;
     private TextView mProgressPercent;
     private TextView mProgressNumber;
@@ -31,200 +31,238 @@ public class DownloadProgressDialog extends AlertDialog {
     private View mButtonLine;
     private Button mPositiveButton;
 
-    // 下载百分比进度
-    private NumberFormat mProgressPercentFormat = NumberFormat.getPercentInstance();
+    public DownloadProgressDialog(Context context) {
+        super(context, R.style.CommonProgressDialogStyle);
+    }
 
-
-    private CharSequence mTitleString;
-    private CharSequence mMessageString;
+    private String mTitleString;
+    private String mContentString;
     private int mAPKSize;
     private int mCurrentSize;
 
+    private boolean shouldCanceledOutside = false;
+    private boolean shouldCanceled  = true;
+    private NumberFormat mProgressPercentFormat = NumberFormat.getPercentInstance();
+
+    private int maxLine = -1;
+    private static final int MAX_LINES_LANDSCAPE = 3;
+    private static final int MAX_LINES_PORTRAIT = 8;
+
     private CharSequence mNegativeButtonString;
-    private View.OnClickListener mNegativeButtonListener;
-
     private CharSequence mPositiveButtonString;
-    private View.OnClickListener mPositiveButtonListener;
-
-    private boolean mHasStarted;
-
-    public DownloadProgressDialog(Context context) {
-        // 默认采用的风格
-        this(context, R.style.CommonProgressDialogStyle);
-    }
-
-    public DownloadProgressDialog(Context context, boolean cancelable, DialogInterface.OnCancelListener cancelListener) {
-        this(context, R.style.CommonProgressDialogStyle);
-        setCancelable(cancelable);
-        setOnCancelListener(cancelListener);
-    }
-
-    public DownloadProgressDialog(Context context, @StyleRes int themeResId) {
-        super(context, themeResId);
-        initFormat();
-    }
-
-    private void initFormat() {
-        mProgressPercentFormat.setMaximumFractionDigits(0);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.common_progress_dialog, null);
-        mTitileView = (TextView) view.findViewById(R.id.update_title);
-        mMessageView = (TextView) view.findViewById(R.id.update_message);
-        mProgress = (ProgressBar) view.findViewById(R.id.update_progress_bar);
-        mProgressNumber = (TextView) view.findViewById(R.id.update_progress_number);
-        mProgressPercent = (TextView) view.findViewById(R.id.update_progress_percent);
-        mPositiveButton = (Button) view.findViewById(R.id.update_progress_cancle);
-        mNegativeButton = (Button) view.findViewById(R.id.update_progress_positive);
-        mButtonLine = view.findViewById(R.id.update_progress_column_line);
-        setView(view);
-        // 重新设置在onCreate之前传入的参数
-        if (null != mTitleString) {
-            mTitileView.setText(mTitleString);
-        }
-
-        if (null != mMessageString) {
-            mMessageView.setText(mMessageString);
-        }
-
-        if (mAPKSize > 0) {
-            setAPKSize(mAPKSize);
-        }
-        if (mCurrentSize > 0) {
-            setCurrentSize(mCurrentSize);
-        }
-
-        if (null != mNegativeButtonString) {
-            mNegativeButton.setText(mNegativeButtonString);
-        }
-
-        if (null != mNegativeButtonListener) {
-            mNegativeButton.setOnClickListener(mNegativeButtonListener);
-        }
-
-        if (null != mPositiveButtonString) {
-            mPositiveButton.setText(mPositiveButtonString);
-        }
-
-        if (null != mPositiveButtonListener) {
-            mPositiveButton.setOnClickListener(mPositiveButtonListener);
-        }
-
-        onProgressChanged();
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.common_progress_dialog);
+        //初始化界面控件
+        initView();
+        //初始化界面数据
+        refreshView();
+        //初始化界面控件的事件
+        initEvent();
+    }
+
+    /**
+     * 初始化界面的确定和取消监听器
+     */
+    private void initEvent() {
+        //设置确定按钮被点击后，向外界提供监听
+        mPositiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickBottomListener != null) {
+                    onClickBottomListener.onPositiveClick();
+                }
+            }
+        });
+        //设置取消按钮被点击后，向外界提供监听
+        mNegativeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickBottomListener != null) {
+                    onClickBottomListener.onNegtiveClick();
+                }
+            }
+        });
+    }
+
+    /**
+     * 初始化界面控件的显示数据
+     */
+    private void refreshView() {
+        //如果用户自定了title和message
+        setCanceledOnTouchOutside(shouldCanceledOutside);
+        setCancelable(shouldCanceled);
+        int screenWidth = ViewUtils.getScreenWidth(getContext());
+        int screenheight = ViewUtils.getScreenHeight(getContext());
+        if (mTitileView != null) {
+            if (!TextUtils.isEmpty(mTitleString)) {
+                mTitileView.setText(mTitleString);
+                mTitileView.setVisibility(View.VISIBLE);
+            } else {
+                mTitileView.setVisibility(View.GONE);
+            }
+        }
+
+        if (null != mContentView) {
+            if (!TextUtils.isEmpty(mContentString)) {
+                if (!TextUtils.isEmpty(mContentString)) {
+                    CharSequence charSequence = Html.fromHtml(mContentString);//支持html
+                    mContentView.setText(charSequence);
+                }
+                mContentView.setVisibility(View.VISIBLE);
+                mContentView.setMovementMethod(new ScrollingMovementMethod());
+                if (screenWidth > screenheight) {
+                    if (maxLine > 0) {
+                        if (maxLine > MAX_LINES_LANDSCAPE) {
+                            mContentView.setMaxLines(MAX_LINES_LANDSCAPE);
+                        } else {
+                            mContentView.setMaxLines(maxLine);
+                        }
+                    } else {
+                        mContentView.setMaxLines(MAX_LINES_LANDSCAPE);
+                    }
+                } else {
+                    if (maxLine > 0) {
+                        if (maxLine > MAX_LINES_PORTRAIT) {
+                            mContentView.setMaxLines(MAX_LINES_PORTRAIT);
+                        } else {
+                            mContentView.setMaxLines(maxLine);
+                        }
+                    } else {
+                        mContentView.setMaxLines(MAX_LINES_PORTRAIT);
+                    }
+                }
+            } else {
+                mContentView.setVisibility(View.GONE);
+            }
+        }
+
+        if(null != mProgressNumber){
+            if (mAPKSize < 1) {
+                mProgressNumber.setVisibility(View.GONE);
+            } else {
+                mProgressNumber.setVisibility(View.VISIBLE);
+                mProgressNumber.setText(
+                        Formatter.formatFileSize(getContext(), mCurrentSize) + "/"
+                                + Formatter.formatFileSize(getContext(), mAPKSize));
+            }
+        }
+
+        if(null != mProgressPercent){
+            if (mAPKSize < 1) {
+                mProgressPercent.setVisibility(View.GONE);
+            } else {
+                mProgressPercent.setVisibility(View.VISIBLE);
+                if (mProgressPercentFormat != null) {
+                    double percent = mCurrentSize * 1d / mAPKSize;
+                    SpannableString tmp = new SpannableString(mProgressPercentFormat.format(percent));
+                    tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
+                            0, tmp.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    mProgressPercent.setText(tmp);
+                } else {
+                    mProgressPercent.setText("");
+                }
+            }
+        }
+        if(null != mProgress){
+            mProgress.setMax(mAPKSize);
+            mProgress.setProgress(mCurrentSize);
+        }
+
+        //如果设置按钮的文字
+        if (mPositiveButton != null) {
+            if (!TextUtils.isEmpty(mPositiveButtonString)) {
+                mPositiveButton.setText(mPositiveButtonString);
+            } else {
+                mPositiveButton.setText("确定");
+            }
+        }
+
+        if (mNegativeButton != null) {
+            if (!TextUtils.isEmpty(mNegativeButtonString)) {
+                mNegativeButton.setText(mNegativeButtonString);
+                mNegativeButton.setVisibility(View.VISIBLE);
+                mButtonLine.setVisibility(View.VISIBLE);
+            }else {
+                mNegativeButton.setVisibility(View.GONE);
+                mButtonLine.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mHasStarted = true;
+    public void show() {
+        super.show();
+        refreshView();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mHasStarted = false;
+    /**
+     * 初始化界面控件
+     */
+    private void initView() {
+        mTitileView = (TextView) findViewById(R.id.update_title);
+        mContentView = (TextView) findViewById(R.id.update_message);
+        mProgress = (ProgressBar) findViewById(R.id.update_progress_bar);
+        mProgressNumber = (TextView) findViewById(R.id.update_progress_number);
+        mProgressPercent = (TextView) findViewById(R.id.update_progress_percent);
+        mPositiveButton = (Button) findViewById(R.id.update_progress_cancle);
+        mNegativeButton = (Button) findViewById(R.id.update_progress_positive);
+        mButtonLine = findViewById(R.id.update_progress_column_line);
+    }
+
+    /**
+     * 设置确定取消按钮的回调
+     */
+    public OnDialogListener onClickBottomListener;
+
+    public DownloadProgressDialog setOnClickListener(OnDialogListener onClickBottomListener) {
+        this.onClickBottomListener = onClickBottomListener;
+        return this;
+    }
+
+    public DownloadProgressDialog setMessage(String message) {
+        this.mContentString = message;
+        return this;
+    }
+
+
+    public DownloadProgressDialog setTitle(String title) {
+        this.mTitleString = title;
+        return this;
+    }
+
+
+    public DownloadProgressDialog setPositive(String positive) {
+        this.mPositiveButtonString = positive;
+        return this;
+    }
+
+    public DownloadProgressDialog setNegtive(String negtive) {
+        this.mNegativeButtonString = negtive;
+        return this;
+    }
+
+    public DownloadProgressDialog setContentMaxLine(int maxLine) {
+        this.maxLine = maxLine;
+        return this;
+    }
+
+    public DownloadProgressDialog setShouldCanceled(boolean flag) {
+        shouldCanceled = flag;
+        return this;
     }
 
     // setProgress传入的参数以B为单位
     public void setCurrentSize(int value) {
         mCurrentSize = value;
-        if (mHasStarted) {
-            mProgress.setProgress(value);
-            onProgressChanged();
-        }
+        refreshView();
     }
 
     // setMax传入的参数以B为单位
     public void setAPKSize(int max) {
         mAPKSize = max;
-        if (mProgress != null) {
-            mProgress.setMax(mAPKSize);
-            onProgressChanged();
-        }
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        if (mTitileView != null) {
-            mTitileView.setVisibility(View.VISIBLE);
-            mTitileView.setText(title);
-        } else {
-            mTitleString = title;
-        }
-    }
-
-    @Override
-    public void setMessage(CharSequence message) {
-        if (mMessageView != null) {
-            mMessageView.setVisibility(View.VISIBLE);
-            mMessageView.setText(message);
-        } else {
-            mMessageString = message;
-        }
-    }
-
-    public void setNegativeButton(CharSequence text, View.OnClickListener listener) {
-        if (mNegativeButton != null) {
-            if (listener == null) {
-                mNegativeButton.setVisibility(View.GONE);
-            } else {
-                mNegativeButton.setText(text);
-                mNegativeButton.setOnClickListener(listener);
-                mNegativeButton.setVisibility(View.VISIBLE);
-            }
-        } else {
-            mNegativeButtonString = text;
-            mNegativeButtonListener = listener;
-        }
-    }
-
-    public void setPositiveButton(String text, View.OnClickListener listener) {
-        if (mPositiveButton != null) {
-            if (listener == null || TextUtils.isEmpty(text)) {
-                mPositiveButton.setVisibility(View.GONE);
-            } else {
-                mPositiveButton.setText(text);
-                mPositiveButton.setOnClickListener(listener);
-                mPositiveButton.setVisibility(View.VISIBLE);
-            }
-        } else {
-            mPositiveButtonString = text;
-            mPositiveButtonListener = listener;
-        }
-    }
-
-    private void onProgressChanged() {
-        getWindow().setBackgroundDrawable(new ColorDrawable(0));
-        if (mProgress.getMax() < 1) {
-            mProgressNumber.setVisibility(View.GONE);
-            mProgressPercent.setVisibility(View.GONE);
-            mProgress.setVisibility(View.GONE);
-        } else {
-            mProgressNumber.setVisibility(View.VISIBLE);
-            mProgressPercent.setVisibility(View.VISIBLE);
-            mProgress.setVisibility(View.VISIBLE);
-            mProgressNumber.setText(
-                    Formatter.formatFileSize(getContext(), mProgress.getProgress()) + "/"
-                            + Formatter.formatFileSize(getContext(), mProgress.getMax()));
-
-            if (mProgressPercentFormat != null) {
-                double percent = mProgress.getProgress() * 1d / mProgress.getMax();
-                SpannableString tmp = new SpannableString(mProgressPercentFormat.format(percent));
-                tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
-                        0, tmp.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mProgressPercent.setText(tmp);
-            } else {
-                mProgressPercent.setText("");
-            }
-            if (mPositiveButton.getText() == null || mNegativeButton.getText() != null) {
-                mButtonLine.setVisibility(View.GONE);
-            } else {
-                mButtonLine.setVisibility(View.VISIBLE);
-            }
-        }
+        refreshView();
     }
 }
