@@ -8,6 +8,8 @@ import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
 import java.io.File
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 /**
  *
@@ -25,6 +27,12 @@ import java.io.File
  * 如果是选择默认的路径，则不需要上述定义；如果此时你需要获取库提供的provider 可以使用接口 {@link getZixieFileProvider}
  */
 object FileUtils {
+
+    const val SPACE_KB = 1024.0
+    const val SPACE_MB = 1024 * SPACE_KB
+    const val SPACE_GB = 1024 * SPACE_MB
+    const val SPACE_TB = 1024 * SPACE_GB
+
 
     fun checkFileExist(filePath: String): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
@@ -52,6 +60,34 @@ object FileUtils {
         }
     }
 
+
+    fun getFileLength(sizeInBytes: Long): String {
+        val nf: NumberFormat = DecimalFormat().apply {
+            maximumFractionDigits = 2
+        }
+
+        return try {
+            when {
+                sizeInBytes < SPACE_KB -> {
+                    nf.format(sizeInBytes) + " B"
+                }
+                sizeInBytes < SPACE_MB -> {
+                    nf.format(sizeInBytes / SPACE_KB) + " KB"
+                }
+                sizeInBytes < SPACE_GB -> {
+                    nf.format(sizeInBytes / SPACE_MB) + " MB"
+                }
+                sizeInBytes < SPACE_TB -> {
+                    nf.format(sizeInBytes / SPACE_GB) + " GB"
+                }
+                else -> {
+                    nf.format(sizeInBytes / SPACE_TB) + " TB"
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            "$sizeInBytes B"
+        }
+    }
 
     fun openFile(context: Context, filePath: String, fileType: String) {
         try { //设置intent的data和Type属性

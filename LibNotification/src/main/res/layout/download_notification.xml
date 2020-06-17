@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/iv_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
 
     <ImageView
         android:id="@+id/iv_logo"
@@ -13,31 +16,6 @@
         android:scaleType="centerCrop"
         tools:src="@mipmap/icon" />
 
-    <LinearLayout
-        android:id="@+id/btn_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/btn_restart"
-            android:layout_width="50dp"
-            android:layout_height="36dp"
-            android:text="继续"
-            android:textSize="12dp" />
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="50dp"
-            android:layout_height="36dp"
-            android:text="终止"
-            android:textSize="12dp" />
-    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -50,11 +28,11 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textSize="14dp"
-            android:textStyle="bold"
             android:paddingTop="3dp"
-            android:text="腾讯手游加速器正为您下载PUBG Mobile(Asia)" />
+            android:singleLine="true"
+            android:text="腾讯手游加速器正为您下载PUBG Mobile(Asia)"
+            android:textSize="14dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_download_speed"
@@ -62,18 +40,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_title"
             android:layout_marginTop="5dp"
-            android:textSize="10dp"
-            android:text="2333KB/s" />
+            android:text="2333KB/s"
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/tv_download_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_below="@id/tv_title"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
-            android:textSize="10dp"
-            android:text="233.3MB/1.8GB" />
+            android:text="233.3MB/1.8GB"
+            android:textSize="10dp" />
 
         <ProgressBar
             android:id="@+id/progress_bar_download"
@@ -85,4 +63,41 @@
             android:progress="23" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/btn_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_restart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            android:scaleType="centerInside"
+            tools:src="@mipmap/btn_pause" />
+
+        <ImageButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="10dp"
+            android:scaleType="centerInside"
+            tools:src="@mipmap/btn_cancel" />
+    </LinearLayout>
 </RelativeLayout>

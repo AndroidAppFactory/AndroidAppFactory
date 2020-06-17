@@ -56,7 +56,7 @@ class MainActivity : Activity() {
                             TaskManager.getInstance().removeTask(LOG_TAG)
                             NotifyManager.sendDownloadNotify(applicationContext,
                                     "王者荣耀",
-                                    1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_PAUSED, "download", notificationId)
+                                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_PAUSED, "download", notificationId)
                         }
 
                         NotifyManager.ACTION_DELETE -> {
@@ -123,7 +123,7 @@ class MainActivity : Activity() {
         }
 
         testFun.setOnClickListener {
-            testLoading(this)
+            testNotifyProcess(0)
         }
     }
 

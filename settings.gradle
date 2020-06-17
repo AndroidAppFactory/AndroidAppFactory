@@ -12,7 +12,7 @@
 //include ':LibQRCode'
 //include ':LibAdapter'
 //include ':LibRefresh'
-
+//
 //include ':LibThread'
 //include ':LibEncrypt'
 //include ':LibChannel'
@@ -24,18 +24,19 @@
 //include ':LibConfig'
 //include ':LibToast'
 //include ':LibAPK'
-//include ':LibNotification'
+//
 //include ':LibTTS'
 //include ':LibFile'
-//include ':LibDownloadAndInstall'
-
+include ':LibDownloadAndInstall'
+//
 //include ':LibCommonUIUtils'
 //include ':LibImage'
 //include ':LibDialog'
+//include ':LibNotification'
 
 //include ':LibUIUtils'
-////include ':LibUtils'
-include '::APPTest'
-
+include ':LibUtils'
+//include '::APPTest'
+//
 
 

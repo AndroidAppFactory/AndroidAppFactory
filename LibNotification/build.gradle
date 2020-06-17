@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-notification'//项目名称
     repoName=rootProject.repoName
-    publishVersion = '1.0.4'//版本号
+    publishVersion = '1.0.7'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -44,6 +44,7 @@ dependencies {
 
     api "com.bihe0832.android:lib-utils-common:1.2.1"
     api 'com.bihe0832.android:lib-utils-apk:1.2.3'
+    api "com.bihe0832.android:lib-image:1.0.0"
 }
 
 

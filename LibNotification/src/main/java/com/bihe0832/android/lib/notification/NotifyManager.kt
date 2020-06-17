@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.support.v4.app.NotificationCompat
@@ -13,8 +14,12 @@ import android.text.TextUtils
 import android.text.format.Formatter
 import android.view.View
 import android.widget.RemoteViews
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import java.util.*
 
 object NotifyManager {
@@ -110,96 +115,119 @@ object NotifyManager {
         (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(noticeID)
     }
 
-    fun sendDownloadNotify(context: Context, appName: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyIDFromParam: Int): Int {
+    fun sendDownloadNotify(context: Context, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyIDFromParam: Int): Int {
 
-        var notifyID = if (notifyIDFromParam < 0) {
+        var notifyID = if (notifyIDFromParam < 1) {
             mNotifyID.generate()
         } else {
             notifyIDFromParam
         }
-        context.applicationContext.let { context ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (!mNotificationChannel.contains(channelID)) {
-                    createNotificationChannel(context, APKUtils.getAppName(context) + channelID, channelId = channelID)?.let {
-                        mNotificationChannel.put(channelID, it)
-                    }
-                }
-            }
-
-            val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
-            remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
-            remoteViews.setTextViewText(R.id.tv_download_progress, Formatter.formatFileSize(context, finished) + "/" + Formatter.formatFileSize(context, total))
-            remoteViews.setProgressBar(R.id.progress_bar_download, 100, process, false)
-            when (downloadType) {
-
-                DOWNLOAD_TYPE_DOWNLOADING -> {
-                    remoteViews.setTextViewText(R.id.tv_title, APKUtils.getAppName(context) + "正为你下载" + appName)
-                    remoteViews.setTextViewText(R.id.tv_download_speed, Formatter.formatFileSize(context, speed) + "/s")
-                    R.id.btn_restart.let {
-                        remoteViews.setTextViewText(it, "暂停")
-                        remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_PAUSE))
-                    }
-                    remoteViews.setViewVisibility(R.id.btn_cancel, View.GONE)
-                }
-
-                DOWNLOAD_TYPE_PAUSED -> {
-                    remoteViews.setTextViewText(R.id.tv_title, appName + "下载已暂停")
-                    remoteViews.setTextViewText(R.id.tv_download_speed, "")
-                    R.id.btn_restart.let {
-                        remoteViews.setTextViewText(it, "继续")
-                        remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_RESUME))
-                    }
-                    R.id.btn_cancel.let {
-                        remoteViews.setTextViewText(it, "取消")
-                        remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
+        ThreadManager.getInstance().runOnUIThread {
+            context.applicationContext.let { context ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (!mNotificationChannel.contains(channelID)) {
+                        createNotificationChannel(context, APKUtils.getAppName(context) + channelID, channelId = channelID)?.let {
+                            mNotificationChannel.put(channelID, it)
+                        }
                     }
                 }
 
-                DOWNLOAD_TYPE_FAILED -> {
-                    remoteViews.setTextViewText(R.id.tv_title, appName + "下载失败")
-                    remoteViews.setTextViewText(R.id.tv_download_speed, "")
-                    R.id.btn_restart.let {
-                        remoteViews.setTextViewText(it, "重试")
-                        remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_RETRY))
-                    }
-                    R.id.btn_cancel.let {
-                        remoteViews.setTextViewText(it, "取消")
-                        remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
-                    }
-                }
+                val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
 
-                DOWNLOAD_TYPE_FINISHED -> {
-                    remoteViews.setTextViewText(R.id.tv_title, appName + "下载已完成")
-                    remoteViews.setTextViewText(R.id.tv_download_speed, "")
-                    remoteViews.setViewVisibility(R.id.btn_restart, View.GONE)
-                    R.id.btn_cancel.let {
-                        remoteViews.setTextViewText(it, "安装")
-                        remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_INSTALL))
+                if (notifyIDFromParam < 1) {
+                    if (!TextUtils.isEmpty(iconURL)) {
+                        Glide.with(context.applicationContext)
+                                .asBitmap()
+                                .load(iconURL)
+                                .into(object : SimpleTarget<Bitmap>() {
+                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                        remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
+                                        updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
+                                    }
+                                })
+                    } else {
+                        remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
+                        updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
                     }
                 }
-            }
-            NotificationCompat.Builder(context, channelID).apply {
-                setOnlyAlertOnce(true)
-                setContent(remoteViews)
-                //设置小图标
-                setSmallIcon(R.mipmap.icon)
-                //禁止用户点击删除按钮删除
-                setAutoCancel(false)
-                //禁止滑动删除
-                setOngoing(true)
-                //取消右上角的时间显示
-                setShowWhen(false)
-            }.build().let {
-                (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(notifyID, it)
             }
         }
         return notifyID
+    }
+
+    fun updateContent(remoteViews: RemoteViews, context: Context, appName: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
+        remoteViews.setTextViewText(R.id.tv_download_progress, Formatter.formatFileSize(context, finished) + "/" + Formatter.formatFileSize(context, total))
+        remoteViews.setProgressBar(R.id.progress_bar_download, 100, process, false)
+        when (downloadType) {
+
+            DOWNLOAD_TYPE_DOWNLOADING -> {
+                remoteViews.setTextViewText(R.id.tv_title, "正在下载" + appName)
+                remoteViews.setTextViewText(R.id.tv_download_speed, Formatter.formatFileSize(context, speed) + "/s")
+                R.id.btn_restart.let {
+                    remoteViews.setImageViewResource(it, R.mipmap.btn_pause)
+                    remoteViews.setViewVisibility(it, View.VISIBLE)
+                    remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_PAUSE))
+                }
+                R.id.btn_cancel.let {
+                    remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
+                    remoteViews.setViewVisibility(it, View.VISIBLE)
+                    remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
+                }
+            }
+
+            DOWNLOAD_TYPE_PAUSED -> {
+                remoteViews.setTextViewText(R.id.tv_title, appName + "下载已暂停")
+                remoteViews.setTextViewText(R.id.tv_download_speed, "")
+                R.id.btn_restart.let {
+                    remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
+                    remoteViews.setViewVisibility(it, View.VISIBLE)
+                    remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_RESUME))
+                }
+                R.id.btn_cancel.let {
+                    remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
+                    remoteViews.setViewVisibility(it, View.VISIBLE)
+                    remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
+                }
+            }
+
+            DOWNLOAD_TYPE_FAILED -> {
+                remoteViews.setTextViewText(R.id.tv_title, appName + "下载失败")
+                remoteViews.setTextViewText(R.id.tv_download_speed, "")
+                R.id.btn_restart.let {
+                    remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
+                    remoteViews.setViewVisibility(it, View.VISIBLE)
+                    remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_RETRY))
+                }
+                R.id.btn_cancel.let {
+                    remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
+                    remoteViews.setViewVisibility(it, View.VISIBLE)
+                    remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
+                }
+            }
+
+            DOWNLOAD_TYPE_FINISHED -> {
+                remoteViews.setTextViewText(R.id.tv_title, appName + "下载完成")
+                remoteViews.setTextViewText(R.id.tv_download_speed, "")
+                remoteViews.setViewVisibility(R.id.btn_restart, View.GONE)
+                remoteViews.setOnClickPendingIntent(R.id.iv_layout, getPendingIntent(context, notifyID, ACTION_INSTALL))
+                remoteViews.setViewVisibility(R.id.btn_cancel, View.GONE)
+                remoteViews.setViewVisibility(R.id.btn_restart, View.GONE)
+            }
+        }
+        NotificationCompat.Builder(context, channelID).apply {
+            setOnlyAlertOnce(true)
+            setContent(remoteViews)
+            //设置小图标
+            setSmallIcon(R.mipmap.icon)
+            //禁止用户点击删除按钮删除
+            setAutoCancel(false)
+            //禁止滑动删除
+            setOngoing(true)
+            //取消右上角的时间显示
+            setShowWhen(false)
+        }.build().let {
+            (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(notifyID, it)
+        }
     }
 
     fun getPendingIntent(context: Context, notifyID: Int, action: String): PendingIntent {
