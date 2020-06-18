@@ -14,7 +14,6 @@ import android.text.TextUtils
 import android.text.format.Formatter
 import android.view.View
 import android.widget.RemoteViews
-import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bumptech.glide.Glide
@@ -122,34 +121,33 @@ object NotifyManager {
         } else {
             notifyIDFromParam
         }
-        ThreadManager.getInstance().runOnUIThread {
-            context.applicationContext.let { context ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (!mNotificationChannel.contains(channelID)) {
-                        createNotificationChannel(context, APKUtils.getAppName(context) + channelID, channelId = channelID)?.let {
-                            mNotificationChannel.put(channelID, it)
-                        }
+        context.applicationContext.let { context ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!mNotificationChannel.contains(channelID)) {
+                    createNotificationChannel(context, APKUtils.getAppName(context) + channelID, channelId = channelID)?.let {
+                        mNotificationChannel.put(channelID, it)
                     }
                 }
+            }
 
-                val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
+            val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
 
-                if (notifyIDFromParam < 1) {
-                    if (!TextUtils.isEmpty(iconURL)) {
-                        Glide.with(context.applicationContext)
-                                .asBitmap()
-                                .load(iconURL)
-                                .into(object : SimpleTarget<Bitmap>() {
-                                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                        remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
-                                        updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
-                                    }
-                                })
-                    } else {
-                        remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
-                        updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
-                    }
+            if (notifyIDFromParam < 1) {
+                if (!TextUtils.isEmpty(iconURL)) {
+                    Glide.with(context.applicationContext)
+                            .asBitmap()
+                            .load(iconURL)
+                            .into(object : SimpleTarget<Bitmap>() {
+                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                    remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
+                                    updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
+                                }
+                            })
+                } else {
+                    remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
                 }
+            }else{
+                updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
             }
         }
         return notifyID

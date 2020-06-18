@@ -1,11 +1,11 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'com.novoda.bintray-release'
 
 //添加发布相关的配置
 publish {
     artifactId = 'lib-router-compiler'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.2.3'//版本号
+    publishVersion = '1.2.4'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences

@@ -27,16 +27,16 @@
 //
 //include ':LibTTS'
 //include ':LibFile'
-include ':LibDownloadAndInstall'
+//include ':LibDownloadAndInstall'
 //
 //include ':LibCommonUIUtils'
-//include ':LibImage'
+include ':LibImage'
 //include ':LibDialog'
 //include ':LibNotification'
-
-//include ':LibUIUtils'
+//
+include ':LibUIUtils'
 include ':LibUtils'
-//include '::APPTest'
+include '::APPTest'
 //
 
 
