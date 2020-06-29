@@ -7,6 +7,8 @@ public abstract class BaseTask {
 
     protected int notifiedTimes = runAfterAdd() ? getMyInterval() : 0;
 
+    private boolean isDeleted = false;
+
     // 返回各自需要的执行间隔, 如果此函数返回n, 则此任务每n*500毫秒会被运行
     public abstract int getMyInterval();
 
@@ -47,5 +49,13 @@ public abstract class BaseTask {
 
     protected void letTaskRunEarly() {
         this.notifiedTimes = this.notifiedTimes + getNextEarlyRunTime();
+    }
+
+    protected void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    protected boolean isDeleted() {
+        return isDeleted;
     }
 }
