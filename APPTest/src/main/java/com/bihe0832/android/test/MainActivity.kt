@@ -17,11 +17,13 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
+import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.test.module.*
+import com.bihe0832.android.test.module.JsonTest
+import com.bihe0832.android.test.module.testNotifyProcess
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -56,7 +58,7 @@ class MainActivity : Activity() {
                             TaskManager.getInstance().removeTask(LOG_TAG)
                             NotifyManager.sendDownloadNotify(applicationContext,
                                     "王者荣耀",
-                                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_PAUSED, "download", notificationId)
+                                    "https://blog.bihe0832.com/public/img/head.jpg", 1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_PAUSED, "download", notificationId)
                         }
 
                         NotifyManager.ACTION_DELETE -> {
@@ -124,6 +126,13 @@ class MainActivity : Activity() {
 
         testFun.setOnClickListener {
             testNotifyProcess(0)
+            for (i in 0..100 ){
+                var start = System.currentTimeMillis()
+                Log.d(LOG_TAG, "JsonHelper: start $start")
+                JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
+                var end = System.currentTimeMillis()
+                Log.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
+            }
         }
     }
 

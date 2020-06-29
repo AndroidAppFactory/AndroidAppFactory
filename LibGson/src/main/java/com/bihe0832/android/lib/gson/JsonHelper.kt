@@ -11,8 +11,16 @@ import com.google.gson.GsonBuilder
  */
 object JsonHelper {
 
-    private val mGson: Gson by lazy {
-        GsonBuilder()
+    /**
+     * 增加后台返回""和"null"的处理
+     * 1.int=>0
+     * 2.double=>0.00
+     * 3.long=>0L
+     *
+     * @return
+     */
+    fun getGson(): Gson {
+        return GsonBuilder()
                 .registerTypeAdapter(Double::class.java, DoubleDefaultAdapter())
                 .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
                 .registerTypeAdapter(Boolean::class.java, DoubleDefaultAdapter())
@@ -25,18 +33,6 @@ object JsonHelper {
                 .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
                 .registerTypeAdapter(String::class.java, StringNullAdapter())
                 .create()
-    }
-
-    /**
-     * 增加后台返回""和"null"的处理
-     * 1.int=>0
-     * 2.double=>0.00
-     * 3.long=>0L
-     *
-     * @return
-     */
-    fun getGson(): Gson {
-        return mGson
     }
 
     /**

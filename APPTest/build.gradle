@@ -49,7 +49,7 @@ dependencies {
 //    api "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}"
 //    api "com.android.support:appcompat-v7:${project.android_support_version}"
     kapt "com.bihe0832.android:lib-router-compiler:1.2.1"
-    api 'com.bihe0832.android:lib-wrapper:1.0.1'
+    api 'com.bihe0832.android:lib-wrapper:1.0.2'
 
 //    api project(':LibWrapper')
 }
