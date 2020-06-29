@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="30dp"
+            android:text="网络请求测试：" />
+
+        <EditText
+            android:id="@+id/paraEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ems="10"
+            android:hint="请输入测试文字"
+            android:inputType="textPersonName"
+            android:text="test" />
+
+        <Button
+            android:id="@+id/getBasic"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_button_min_height_material"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="使用Basic库发送GET请求" />
+
+        <Button
+            android:id="@+id/postBasic"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_button_min_height_material"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="使用Basic库发送POST请求" />
+
+
+        <Button
+            android:id="@+id/getAdvanced"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_button_min_height_material"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="使用Advanced库发送GET请求" />
+
+        <Button
+            android:id="@+id/postAdvanced"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_button_min_height_material"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="使用Advanced发送POST请求" />
+
+        <Button
+            android:id="@+id/clearResult"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/abc_action_button_min_height_material"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="清空网络请求结果" />
+
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:lineSpacingMultiplier="1.25"
+            android:maxLines="10"
+            android:text="Result:" />
+
+
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>

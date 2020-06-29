@@ -25,21 +25,19 @@ android {
     }
 }
 
-//添加发布相关的配置
+//添加
 publish {
-    artifactId = 'lib-wrapper'//项目名称
-    repoName= rootProject.repoName
-    publishVersion = '1.0.3'//版本号
+    artifactId = 'lib-http-advanced'//项目名称
+    repoName = rootProject.repoName
+    publishVersion = '1.3.0'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
-    desc = 'the utils waptter for zixie'//项目描述
-    website = 'https://github.com/bihe0832/AndroidAppFactory.git'//项目对应网站
+    desc = 'a http request library based on HttpURLConnection'
+    website = 'https://github.com/bihe0832/AndroidAppFactory.git'
 }
 
 dependencies {
-//    api project(':LibUtils')
-//    api project(':LibUIUtils')
-    api "com.bihe0832.android:lib-utils:1.6.0"
-    api "com.bihe0832.android:lib-uiutils:1.3.10"
+    api 'com.bihe0832.android:lib-http-common:1.3.0'
+    api 'com.bihe0832.android:lib-gson:1.2.2'
 }

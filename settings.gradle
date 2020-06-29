@@ -16,9 +16,11 @@
 //include ':LibThread'
 //include ':LibEncrypt'
 //include ':LibChannel'
-//include ':LibRequest'
+include ':LibRequest'
+//include ':LibHttpCommon'
+//include ':LibHttpAdvanced'
 //include ':LibSqlite'
-//
+
 //include ':LibGson'
 //include ':LibTimer'
 //include ':LibConfig'
@@ -28,7 +30,8 @@
 //include ':LibTTS'
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
-//
+
+
 //include ':LibCommonUIUtils'
 //include ':LibImage'
 //include ':LibDialog'
@@ -37,7 +40,7 @@
 //include ':LibUIUtils'
 //include ':LibUtils'
 //include ':LibWrapper'
-
+//
 include '::APPTest'
-
+//
 

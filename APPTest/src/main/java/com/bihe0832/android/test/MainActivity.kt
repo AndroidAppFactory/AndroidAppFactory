@@ -29,7 +29,7 @@ import java.io.File
 
 
 class MainActivity : Activity() {
-    val LOG_TAG = "MainActivity"
+    val LOG_TAG = "TestHttpActivity"
     var process = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,9 +113,11 @@ class MainActivity : Activity() {
         doActionWithLibProvider.setOnClickListener(a)
 
         speak.setOnClickListener {
-            val intent = Intent(this, TestTTSActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            startActivity(TestTTSActivity::class.java)
+        }
+
+        httptest.setOnClickListener {
+            startActivity(TestHttpActivity::class.java)
         }
 
         TaskManager.getInstance().addTask(TestTask())
@@ -126,7 +128,7 @@ class MainActivity : Activity() {
 
         testFun.setOnClickListener {
             testNotifyProcess(0)
-            for (i in 0..100 ){
+            for (i in 0..100) {
                 var start = System.currentTimeMillis()
                 Log.d(LOG_TAG, "JsonHelper: start $start")
                 JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
@@ -155,4 +157,10 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun startActivity(cls: Class<*>?) {
+        val intent = Intent(this, cls)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(intent)
+    }
 }
