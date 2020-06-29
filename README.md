@@ -31,7 +31,7 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-uiutils:1.3.10'
+		implementation 'com.bihe0832.android:lib-uiutils:1.3.10'
 
 ![LibUtils](https://img.shields.io/badge/AndroidAppFactory-LibUtils-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-utils/images/download.svg) ](https://bintray.com/bihe0832/android/lib-utils/_latestVersion)
 
@@ -41,7 +41,7 @@
     
 - 使用：
 
-    		implementation 'com.bihe0832.android:lib-utils:1.6.0'
+		implementation 'com.bihe0832.android:lib-utils:1.6.0'
 
 ## 组件列表
 
@@ -74,7 +74,7 @@
 	
 - 使用：
 
-    	kapt "com.bihe0832.android:lib-router-compiler:1.2.1"
+		kapt "com.bihe0832.android:lib-router-compiler:1.2.1"
 
 ![LibAndroid](https://img.shields.io/badge/AndroidAppFactory-LibAndroid-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-android/images/download.svg) ](https://bintray.com/bihe0832/android/lib-android/_latestVersion)
 
@@ -95,7 +95,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-utils-common:1.2.1'
+		implementation 'com.bihe0832.android:lib-utils-common:1.2.1'
 		
 ![LibFragmentation_core](https://img.shields.io/badge/AndroidAppFactory-LibFragmentation_core-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-fragmentation-core/images/download.svg) ](https://bintray.com/bihe0832/android/lib-fragmentation-core/_latestVersion)
 
@@ -106,7 +106,7 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-fragmentation-core:1.0.0'
+		implementation 'com.bihe0832.android:lib-fragmentation-core:1.0.0'
 		
 ![LibFragmentation](https://img.shields.io/badge/AndroidAppFactory-LibFragmentation-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-fragmentation/images/download.svg) ](https://bintray.com/bihe0832/android/lib-fragmentation/_latestVersion)
 
@@ -116,7 +116,7 @@
 
 - 使用：
 		
-        implementation 'com.bihe0832.android:lib-fragmentation:1.0.1'
+		implementation 'com.bihe0832.android:lib-fragmentation:1.0.1'
         
 ![LibFragmentation_swipeback](https://img.shields.io/badge/AndroidAppFactory-LibFragmentation_swipeback-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-fragmentation-swipeback/images/download.svg) ](https://bintray.com/bihe0832/android/lib-fragmentation-swipeback/_latestVersion)
 
@@ -126,7 +126,7 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-fragmentation-swipeback:1.0.1'
+		implementation 'com.bihe0832.android:lib-fragmentation-swipeback:1.0.1'
 
 ![LibFlycoTabLayout](https://img.shields.io/badge/AndroidAppFactory-LibFlycoTabLayout-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-flycotablayout/images/download.svg) ](https://bintray.com/bihe0832/android/lib-flycotablayout/_latestVersion)
 
@@ -136,7 +136,7 @@
 	
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-flycotablayout:1.0.0'
+		implementation 'com.bihe0832.android:lib-flycotablayout:1.0.0'
 
 ![LibQRCode](https://img.shields.io/badge/AndroidAppFactory-LibQRCode-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-qrcode/images/download.svg) ](https://bintray.com/bihe0832/android/lib-qrcode/_latestVersion)
 
@@ -146,7 +146,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-qrcode:1.0.4'
+		implementation 'com.bihe0832.android:lib-qrcode:1.0.4'
 
 
 ![LibAdapter](https://img.shields.io/badge/AndroidAppFactory-LibAdapter-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-adapter/images/download.svg?version=1.0.0) ](https://bintray.com/bihe0832/android/lib-adapter/1.0.0/link)
@@ -176,7 +176,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-refresh:1.0.0'
+		implementation 'com.bihe0832.android:lib-refresh:1.0.0'
         
 ![LibThread](https://img.shields.io/badge/AndroidAppFactory-LibThread-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-thread/images/download.svg) ](https://bintray.com/bihe0832/android/lib-thread/_latestVersion)
 
@@ -186,7 +186,7 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-thread:1.2.0'
+		implementation 'com.bihe0832.android:lib-thread:1.2.0'
 
 ![LibEncrypt](https://img.shields.io/badge/AndroidAppFactory-LibEncrypt-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-encrypt/images/download.svg) ](https://bintray.com/bihe0832/android/lib-encrypt/_latestVersion)
 
@@ -196,7 +196,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-encrypt:1.2.0'
+		implementation 'com.bihe0832.android:lib-encrypt:1.2.0'
 
 ![LibChannel](https://img.shields.io/badge/AndroidAppFactory-LibChannel-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-channel/images/download.svg) ](https://bintray.com/bihe0832/android/lib-channel/_latestVersion)
 
@@ -216,7 +216,7 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-request:1.0.2'
+		implementation 'com.bihe0832.android:lib-request:1.0.2'
 
 ![LibHttpCommon](https://img.shields.io/badge/AndroidAppFactory-LibHttpCommon-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-http-common/images/download.svg) ](https://bintray.com/bihe0832/android/lib-http-common/_latestVersion)
 
@@ -226,7 +226,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-http-common:1.3.0'
+		implementation 'com.bihe0832.android:lib-http-common:1.3.0'
 
 ![LibHttpAdvanced](https://img.shields.io/badge/AndroidAppFactory-LibHttpAdvanced-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-http-advanced/images/download.svg) ](https://bintray.com/bihe0832/android/lib-http-advanced/_latestVersion)
 
@@ -236,7 +236,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-http-advanced:1.3.0'
+		implementation 'com.bihe0832.android:lib-http-advanced:1.3.0'
     
     
 ![LibSqlite](https://img.shields.io/badge/AndroidAppFactory-LibSqlite-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-sqlite/images/download.svg) ](https://bintray.com/bihe0832/android/lib-sqlite/_latestVersion)
@@ -247,7 +247,7 @@
 
 - 使用：
 
-			implementation 'com.bihe0832.android:lib-sqlite:1.0.0'
+		implementation 'com.bihe0832.android:lib-sqlite:1.0.0'
 
 ![LibGson](https://img.shields.io/badge/AndroidAppFactory-LibGson-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-gson/images/download.svg) ](https://bintray.com/bihe0832/android/lib-gson/_latestVersion)
 
@@ -257,26 +257,9 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-gson:1.2.2'
+		implementation 'com.bihe0832.android:lib-gson:1.2.2'
 
 ![LibTimer](https://img.shields.io/badge/AndroidAppFactory-LibTimer-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-timer/images/download.svg) ](https://bintray.com/bihe0832/android/lib-timer/_latestVersion)
-
-- 简介：
-
-- 使用：
-
-
-![Download](https://img.shields.io/badge/AndroidAppFactory-LibConfig-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-config/images/download.svg) ](https://bintray.com/bihe0832/android/lib-config/_latestVersion)
-
-- 简介：
-
-	配置管理相关，支持读取本地配置文件、支持配置保存本地
-	
-- 使用：
-
-		implementation 'com.bihe0832.android:lib-config:1.2.1'
-		
-![Download](https://img.shields.io/badge/AndroidAppFactory-LibToast-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-channel/images/download.svg) ](https://bintray.com/bihe0832/android/lib-channel/_latestVersion)
 
 - 简介：
 
@@ -284,8 +267,27 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-timer:1.2.5'
+		implementation 'com.bihe0832.android:lib-timer:1.2.5'
 
+![LibConfig](https://img.shields.io/badge/AndroidAppFactory-LibConfig-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-config/images/download.svg) ](https://bintray.com/bihe0832/android/lib-config/_latestVersion)
+
+- 简介：
+
+	配置管理相关，支持读取本地配置文件、支持配置保存本地
+	
+- 使用：
+		implementation 'com.bihe0832.android:lib-config:1.2.1'
+		
+![LibToast](https://img.shields.io/badge/AndroidAppFactory-LibToast-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-toast/images/download.svg) ](https://bintray.com/bihe0832/android/lib-toast/_latestVersion)
+
+- 简介：
+
+	通用的Toast弹框，支持各种自定义设置
+
+- 使用：
+
+		implementation 'com.bihe0832.android:lib-toast:1.3.1'
+		
 ![LibAPK](https://img.shields.io/badge/AndroidAppFactory-LibAPK-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-utils-apk/images/download.svg) ](https://bintray.com/bihe0832/android/lib-utils-apk/_latestVersion)
 
 - 简介：
@@ -294,7 +296,7 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-utils-apk:1.2.3'
+		implementation 'com.bihe0832.android:lib-utils-apk:1.2.3'
 
 ![LibTTS](https://img.shields.io/badge/AndroidAppFactory-LibTTS-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-tts/images/download.svg) ](https://bintray.com/bihe0832/android/lib-tts/_latestVersion)
 
@@ -304,7 +306,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-tts:1.3.4'
+		implementation 'com.bihe0832.android:lib-tts:1.3.4'
 
 
 ![LibFile](https://img.shields.io/badge/AndroidAppFactory-LibFile-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-file/images/download.svg) ](https://bintray.com/bihe0832/android/lib-file/_latestVersion)
@@ -315,7 +317,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-file:1.2.8'
+		implementation 'com.bihe0832.android:lib-file:1.2.8'
 
 ![LibDownloadAndInstall](https://img.shields.io/badge/AndroidAppFactory-LibDownloadAndInstall-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-download-install/images/download.svg) ](https://bintray.com/bihe0832/android/lib-download-install/_latestVersion)
 
@@ -325,7 +327,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-download-install:1.2.8'
+		implementation 'com.bihe0832.android:lib-download-install:1.2.8'
 
 
 ![LibCommonUIUtils](https://img.shields.io/badge/AndroidAppFactory-LibCommonUIUtils-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-ui-common/images/download.svg) ](https://bintray.com/bihe0832/android/lib-ui-common/_latestVersion)
@@ -336,7 +338,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-ui-common:1.0.2'
+		implementation 'com.bihe0832.android:lib-ui-common:1.0.2'
         
     
 ![LibImage](https://img.shields.io/badge/AndroidAppFactory-LibImage-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-image/images/download.svg) ](https://bintray.com/bihe0832/android/lib-image/_latestVersion)
@@ -347,7 +349,7 @@
 
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-image:1.0.0'
+		implementation 'com.bihe0832.android:lib-image:1.0.0'
 
 ![LibDialog](https://img.shields.io/badge/AndroidAppFactory-LibDialog-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-dialog/images/download.svg) ](https://bintray.com/bihe0832/android/lib-dialog/_latestVersion)
 
@@ -357,7 +359,7 @@
     
 - 使用：
 
-        implementation 'com.bihe0832.android:lib-dialog:1.0.4'
+		implementation 'com.bihe0832.android:lib-dialog:1.0.4'
 
 
 ![LibNotification](https://img.shields.io/badge/AndroidAppFactory-LibNotification-brightgreen)[ ![Download](https://api.bintray.com/packages/bihe0832/android/lib-notification/images/download.svg) ](https://bintray.com/bihe0832/android/lib-notification/_latestVersion)
@@ -368,5 +370,5 @@
 
 - 使用：
         
-        implementation 'com.bihe0832.android:lib-notification:1.0.9'
+		implementation 'com.bihe0832.android:lib-notification:1.0.9'
 
