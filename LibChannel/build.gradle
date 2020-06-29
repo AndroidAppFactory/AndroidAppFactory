@@ -34,5 +34,5 @@ publish {
     groupId = rootProject.groupId
     licences = rootProject.licences
     desc = 'the channel read for zixie'//项目描述
-    website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
+    website = 'https://github.com/bihe0832/AndroidAppFactory.git'//项目对应网站
 }

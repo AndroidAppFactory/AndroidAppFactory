@@ -3,7 +3,7 @@
 //include ':Router'
 //include ':RouterCompiler'
 //include ':LibAndroid'
-//include ':LibCommonUtils'
+include ':LibCommonUtils'
 
 //include ':LibFragmentation_core'
 //include ':LibFragmentation'
@@ -30,13 +30,15 @@
 //include ':LibDownloadAndInstall'
 //
 //include ':LibCommonUIUtils'
-include ':LibImage'
+//include ':LibImage'
 //include ':LibDialog'
 //include ':LibNotification'
 //
-include ':LibUIUtils'
-include ':LibUtils'
-include '::APPTest'
+//include ':LibUIUtils'
+//include ':LibUtils'
+include ':LibWrapper'
+//
+//include '::APPTest'
 //
 
 

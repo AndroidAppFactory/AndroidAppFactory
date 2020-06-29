@@ -27,17 +27,19 @@ android {
 
 //添加发布相关的配置
 publish {
-    artifactId = 'lib-file'//项目名称
-    repoName = rootProject.repoName
-    publishVersion = '1.2.8'//版本号
+    artifactId = 'lib-wrapper'//项目名称
+    repoName= rootProject.repoName
+    publishVersion = '1.0.1'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
-    desc = 'the base file utils for zixie'//项目描述
-    website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
+    desc = 'the utils waptter for zixie'//项目描述
+    website = 'https://github.com/bihe0832/AndroidAppFactory.git'//项目对应网站
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-encrypt:1.2.0"
-    api "com.android.support:appcompat-v7:${project.android_support_version}"
+//    api project(':LibUtils')
+//    api project(':LibUIUtils')
+    api "com.bihe0832.android:lib-utils:1.5.8"
+    api "com.bihe0832.android:lib-uiutils:1.3.10"
 }
