@@ -16,7 +16,7 @@
 //include ':LibThread'
 //include ':LibEncrypt'
 //include ':LibChannel'
-include ':LibRequest'
+//include ':LibRequest'
 //include ':LibHttpCommon'
 //include ':LibHttpAdvanced'
 //include ':LibSqlite'
@@ -39,8 +39,8 @@ include ':LibRequest'
 //
 //include ':LibUIUtils'
 //include ':LibUtils'
-//include ':LibWrapper'
-//
+include ':LibWrapper'
+
 include '::APPTest'
-//
+
 

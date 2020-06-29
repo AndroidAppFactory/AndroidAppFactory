@@ -23,6 +23,7 @@ import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.test.module.JsonTest
+import com.bihe0832.android.test.module.TestTask
 import com.bihe0832.android.test.module.testNotifyProcess
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -78,7 +79,7 @@ class MainActivity : Activity() {
             }
         }, IntentFilter(NotifyManager.NOTIFICATION_BROADCAST_ACTION))
 
-        val a = View.OnClickListener {
+        View.OnClickListener {
             val item = DownloadItem()
             item.notificationVisibility = DownloadManager.Request.VISIBILITY_VISIBLE
             item.dowmloadTitle = this.getString(R.string.app_name)
@@ -108,9 +109,11 @@ class MainActivity : Activity() {
                     showResult("应用下载失败（$error）")
                 }
             })
+        }.let {
+            doActionWithMyProvider.setOnClickListener(it)
+            doActionWithLibProvider.setOnClickListener(it)
         }
-        doActionWithMyProvider.setOnClickListener(a)
-        doActionWithLibProvider.setOnClickListener(a)
+
 
         speak.setOnClickListener {
             startActivity(TestTTSActivity::class.java)
@@ -120,21 +123,22 @@ class MainActivity : Activity() {
             startActivity(TestHttpActivity::class.java)
         }
 
-        TaskManager.getInstance().addTask(TestTask())
 
         testToast.setOnClickListener {
             ToastUtil.showTop(this, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
         }
 
         testFun.setOnClickListener {
-            testNotifyProcess(0)
-            for (i in 0..100) {
-                var start = System.currentTimeMillis()
-                Log.d(LOG_TAG, "JsonHelper: start $start")
-                JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
-                var end = System.currentTimeMillis()
-                Log.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
-            }
+//            testNotifyProcess(0)
+//            for (i in 0..100) {
+//                var start = System.currentTimeMillis()
+//                Log.d(LOG_TAG, "JsonHelper: start $start")
+//                JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
+//                var end = System.currentTimeMillis()
+//                Log.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
+//            }
+
+            TaskManager.getInstance().addTask(TestTask())
         }
     }
 
