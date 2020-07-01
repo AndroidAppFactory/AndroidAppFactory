@@ -157,7 +157,7 @@ class ConfigManager {
             value = mConfigInfoInCache.get(key);
         }
         if (!TextUtils.isEmpty(value)) {
-            Log.w(TAG, "use cache value:" + value);
+            Log.w(TAG, "readConfig: key=" + key + ";use cache value:" + value);
             return value;
         }
         value = readCloudConfig(key,defValue);
