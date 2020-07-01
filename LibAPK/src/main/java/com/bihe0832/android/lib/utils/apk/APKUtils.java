@@ -87,21 +87,22 @@ public class APKUtils {
         intent.setComponent(cmp);
         PackageManager pm = ctx.getPackageManager();
         intent = pm.getLaunchIntentForPackage(pkgName);
-        return startApp(ctx, appName, pkgName,intent);
+        return startApp(ctx, appName, pkgName, intent);
     }
 
     public static boolean startApp(Context ctx, String appName, String pkgName) {
         PackageManager pm = ctx.getPackageManager();
         Intent intent = pm.getLaunchIntentForPackage(pkgName);
-        return startApp(ctx, appName, pkgName,intent);
+        return startApp(ctx, appName, pkgName, intent);
     }
 
     private static boolean startApp(Context ctx, String appName, String pkgName, Intent intent) {
-        if (getInstalledPackage(ctx, pkgName) == null) {
-            ToastUtil.showShort(ctx, appName + "未安装，请安装后重试");
-            return false;
-        }
+
         try {
+            if (getInstalledPackage(ctx, pkgName) == null) {
+                ToastUtil.showShort(ctx, appName + "未安装，请安装后重试");
+                return false;
+            }
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -116,7 +117,7 @@ public class APKUtils {
 
     private static String getUid(Context context, String packageName) {
         if (context == null || TextUtils.isEmpty(packageName)) {
-            Log.d("APKUtils","getUid context or packageName is null");
+            Log.d("APKUtils", "getUid context or packageName is null");
             return "";
         }
         try {
@@ -124,7 +125,7 @@ public class APKUtils {
             ApplicationInfo ai = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
             return String.valueOf(ai.uid);
         } catch (Exception e) {
-            Log.d("APKUtils","getUid Exception:" + e.getStackTrace());
+            Log.d("APKUtils", "getUid Exception:" + e.getStackTrace());
         }
 
         return "";
@@ -133,16 +134,16 @@ public class APKUtils {
 
     public static boolean isRunningTask(Context context, String packageName) {
         if (context == null || TextUtils.isEmpty(packageName)) {
-            Log.d("APKUtils","getTcpCountOfRunningTask context or packageName is null");
+            Log.d("APKUtils", "getTcpCountOfRunningTask context or packageName is null");
             return false;
         } else {
-            BufferedReader bufferReader = (BufferedReader)null;
+            BufferedReader bufferReader = (BufferedReader) null;
             try {
                 bufferReader = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/net/tcp"), "UTF-8"));
                 String line = null;
                 String uid = getUid(context, packageName);
                 HashSet ports = new HashSet<String>();
-                for(line = bufferReader.readLine(); line != null; line = bufferReader.readLine()) {
+                for (line = bufferReader.readLine(); line != null; line = bufferReader.readLine()) {
                     line = line.trim();
                     String[] targets = line.split("\\s+");
                     if (targets.length > 7) {
@@ -156,10 +157,10 @@ public class APKUtils {
                         }
                     }
                 }
-                Log.d("APKUtils","getTcpCountOfRunningTask app: ${packageName}, uid:${uid}, result:${ports.toTypedArray().contentToString()}");
+                Log.d("APKUtils", "getTcpCountOfRunningTask app: ${packageName}, uid:${uid}, result:${ports.toTypedArray().contentToString()}");
                 return ports.contains(uid);
             } catch (Exception e) {
-                Log.d("APKUtils","getTcpCountOfRunningTask, execNetStat IP failed." + e.getStackTrace());
+                Log.d("APKUtils", "getTcpCountOfRunningTask, execNetStat IP failed." + e.getStackTrace());
             } finally {
                 if (bufferReader != null) {
                     try {

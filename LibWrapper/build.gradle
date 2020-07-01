@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-wrapper'//项目名称
     repoName= rootProject.repoName
-    publishVersion = '1.0.4'//版本号
+    publishVersion = '1.0.5'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -41,5 +41,5 @@ dependencies {
 //    api project(':LibUtils')
 //    api project(':LibUIUtils')
     api "com.bihe0832.android:lib-utils:1.6.1"
-    api "com.bihe0832.android:lib-uiutils:1.3.10"
+    api "com.bihe0832.android:lib-uiutils:1.3.11"
 }
