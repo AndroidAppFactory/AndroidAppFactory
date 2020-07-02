@@ -20,7 +20,9 @@
 //include ':LibHttpCommon'
 //include ':LibHttpAdvanced'
 //include ':LibSqlite'
-//
+
+//include ':LibDeviceNetwork'
+
 //include ':LibGson'
 //include ':LibTimer'
 //include ':LibConfig'
@@ -37,9 +39,8 @@
 //include ':LibNotification'
 //
 //include ':LibUIUtils'
-//include ':LibUtils'
-include ':LibWrapper'
-//
+include ':LibUtils'
+//include ':LibWrapper'
 //include '::APPTest'
 
 
