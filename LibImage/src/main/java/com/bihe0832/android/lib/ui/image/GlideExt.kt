@@ -58,15 +58,15 @@ fun ImageView.loadImage(
 
 fun ImageView.loadImage(
         url: String,
-        placeholder: Int = Color.GRAY,
-        error: Int = placeholder,
+        placeholder: Int,
+        error: Int,
         requestOptions: RequestOptions = RequestOptions()
 ) {
     requestOptions
             .downsample(DownsampleStrategy.CENTER_INSIDE)//将图片缩小至目标大小
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)//换成变换后的图片
-            .placeholder(ColorDrawable(placeholder))
-            .error(ColorDrawable(error))
+            .placeholder(placeholder)
+            .error(error)
 
     if (url.endsWith("gif")) {
         Glide.with(this).asGif().load(url).thumbnail(0.3f).apply(requestOptions).into(this)
