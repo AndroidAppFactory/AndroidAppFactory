@@ -131,29 +131,25 @@ object NotifyManager {
             }
 
             val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
-
-            if (notifyIDFromParam < 1) {
-                if (!TextUtils.isEmpty(iconURL)) {
-                    Glide.with(context.applicationContext)
-                            .asBitmap()
-                            .load(iconURL)
-                            .into(object : SimpleTarget<Bitmap>() {
-                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                    remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
-                                    updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
-                                }
-                            })
-                } else {
-                    remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
-                }
-            }else{
-                updateContent(remoteViews, context, appName, finished, total, speed, process, downloadType, channelID, notifyID)
-            }
+            updateContent(remoteViews, context, appName, iconURL, finished, total, speed, process, downloadType, channelID, notifyID)
         }
         return notifyID
     }
 
-    fun updateContent(remoteViews: RemoteViews, context: Context, appName: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
+    fun updateContent(remoteViews: RemoteViews, context: Context, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
+        if (!TextUtils.isEmpty(iconURL)) {
+            Glide.with(context.applicationContext)
+                    .asBitmap()
+                    .load(iconURL)
+                    .into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
+                        }
+                    })
+        } else {
+            remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
+        }
+
         remoteViews.setTextViewText(R.id.tv_download_progress, Formatter.formatFileSize(context, finished) + "/" + Formatter.formatFileSize(context, total))
         remoteViews.setProgressBar(R.id.progress_bar_download, 100, process, false)
         when (downloadType) {

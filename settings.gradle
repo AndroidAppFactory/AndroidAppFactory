@@ -4,7 +4,16 @@
 //include ':RouterCompiler'
 //include ':LibAndroid'
 //include ':LibCommonUtils'
-//
+//include ':LibCommonUIUtils'
+
+//include ':LibThread'
+//include ':LibEncrypt'
+//include ':LibChannel'
+//include ':LibRequest'
+//include ':LibHttpCommon'
+//include ':LibHttpAdvanced'
+//include ':LibSqlite'
+
 //include ':LibFragmentation_core'
 //include ':LibFragmentation'
 //include ':LibFragmentation_swipeback'
@@ -13,13 +22,6 @@
 //include ':LibAdapter'
 //include ':LibRefresh'
 //
-//include ':LibThread'
-//include ':LibEncrypt'
-//include ':LibChannel'
-//include ':LibRequest'
-//include ':LibHttpCommon'
-//include ':LibHttpAdvanced'
-//include ':LibSqlite'
 
 //include ':LibDeviceNetwork'
 
@@ -32,15 +34,14 @@
 //include ':LibTTS'
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
-//
-//include ':LibCommonUIUtils'
+
 //include ':LibImage'
 //include ':LibDialog'
 //include ':LibNotification'
-//
+
 //include ':LibUIUtils'
-include ':LibUtils'
-include ':LibWrapper'
+//include ':LibUtils'
+//include ':LibWrapper'
 include '::APPTest'
 
 
