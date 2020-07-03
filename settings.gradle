@@ -40,7 +40,7 @@
 //
 //include ':LibUIUtils'
 include ':LibUtils'
-//include ':LibWrapper'
-//include '::APPTest'
+include ':LibWrapper'
+include '::APPTest'
 
 

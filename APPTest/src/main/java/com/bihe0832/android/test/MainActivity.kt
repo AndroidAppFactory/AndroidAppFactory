@@ -17,12 +17,10 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
-import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.TestTask
 import com.bihe0832.android.test.module.testNotifyProcess
 import kotlinx.android.synthetic.main.activity_main.*
