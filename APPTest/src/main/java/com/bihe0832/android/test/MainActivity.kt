@@ -19,9 +19,10 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.notification.NotifyManager
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.test.module.TestTask
+import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.test.module.testNotifyProcess
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -136,7 +137,33 @@ class MainActivity : Activity() {
 //                Log.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //            }
 
-            TaskManager.getInstance().addTask(TestTask())
+//            TaskManager.getInstance().addTask(TestTask())
+
+            File("/sdcard/screen.png").let {
+                Log.d(LOG_TAG, MD5.getFileMD5(it))
+                Log.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
+            }
+
+            ThreadManager.getInstance().start {
+                File("/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk").let {
+                    Log.d(LOG_TAG, "===============start==================")
+                    var start = System.currentTimeMillis() /1000
+                    for (i in 0..5) {
+                        Log.d(LOG_TAG, MD5.getFileMD5(it))
+                    }
+
+                    Log.d(LOG_TAG, "total time : " + (System.currentTimeMillis() /1000 - start))
+                    Log.d(LOG_TAG, "===============end==================")
+                    Log.d(LOG_TAG, "===============start==================")
+                    start = System.currentTimeMillis() /1000
+                    for (i in 0..5) {
+                        Log.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
+                    }
+                    Log.d(LOG_TAG, "total time : " + (System.currentTimeMillis() /1000 - start))
+                    Log.d(LOG_TAG, "===============end==================")
+
+                }
+            }
         }
     }
 
