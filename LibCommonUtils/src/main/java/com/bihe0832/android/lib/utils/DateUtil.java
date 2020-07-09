@@ -6,17 +6,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 /**
  * Created by zixie on 2017/11/10.
  * 各式时间转换
  */
-
 public class DateUtil {
 
-
     private static final String TAG = "DateUtil";
+    public static final int ONE_DAY_MILLSEC = 24 * 60 * 60 * 1000;
 
     public static String getDateEN() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -42,6 +42,12 @@ public class DateUtil {
         return date;
     }
 
+    public static String getDateENyyyyMMdd() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.US);
+        String date = format.format(new Date(System.currentTimeMillis()));
+        return date;
+    }
+
     public static String getDateENHMS(long currentTime) {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         String date = format.format(new Date(currentTime));
@@ -53,7 +59,7 @@ public class DateUtil {
         try {
             Date dt1 = df.parse(date1);
             Date dt2 = df.parse(date2);
-            return  (int)(Math.abs(dt2.getTime() - dt1.getTime()) / 1000);
+            return (int) (Math.abs(dt2.getTime() - dt1.getTime()) / 1000);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -76,7 +82,7 @@ public class DateUtil {
         try {
             Date dt1 = date1;
             Date dt2 = df.parse(date2);
-            Log.d(TAG,"dt1.getTime:" + dt1.getTime() + ",dt2.getTime:" + dt2.getTime());
+            Log.d(TAG, "dt1.getTime:" + dt1.getTime() + ",dt2.getTime:" + dt2.getTime());
             if (dt1.getTime() >= dt2.getTime()) {
                 return 1;
             } else if (dt1.getTime() < dt2.getTime()) {
@@ -121,8 +127,7 @@ public class DateUtil {
     }
 
 
-
-    public static String getDateCompareResult(long oldTimestamp){
+    public static String getDateCompareResult(long oldTimestamp) {
         long minute = 1000 * 60;
         long hour = minute * 60;
         long day = hour * 24;
@@ -158,12 +163,45 @@ public class DateUtil {
         }
     }
 
+    public static String getDateCompareResult1(long oldTimestamp) {
+        long minute = 1000 * 60;
+        long hour = minute * 60;
+        long day = hour * 24;
+        long month = day * 30;
+        long year = month * 12;
+        long currentTimestamp = System.currentTimeMillis();
+        long diffValue = currentTimestamp - oldTimestamp;
+        long yearC = diffValue / year;
+        long monthC = diffValue / month;
+        long weekC = diffValue / (7 * day);
+        long dayC = diffValue / day;
+        long hourC = diffValue / hour;
+        long minC = diffValue / minute;
+        if (yearC > 0) {
+            return yearC + "年前";
+        } else if (monthC > 0) {
+            return monthC + "月前";
+        } else if (weekC > 0) {
+            return weekC + "周前";
+        } else if (dayC > 1) {
+            return new SimpleDateFormat("M月d日").format(new Date(oldTimestamp));
+        } else if (dayC > 0) {
+            return "昨天";
+        } else if (hourC > 0) {
+            return hourC + "小时前";
+        } else if (minC > 0) {
+            return minC + "分钟前";
+        } else {
+            return "刚刚";
+        }
+    }
+
     public static boolean isToady(long timestamp) {
         Calendar pre = Calendar.getInstance();
         pre.setTimeInMillis(timestamp);
         Calendar cur = Calendar.getInstance();
         cur.setTimeInMillis(System.currentTimeMillis());
-        Log.d(TAG,"isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
+        Log.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
         if (pre.get(Calendar.YEAR) == cur.get(Calendar.YEAR)) {
             int diffDay = cur.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
             if (0 == diffDay) {
