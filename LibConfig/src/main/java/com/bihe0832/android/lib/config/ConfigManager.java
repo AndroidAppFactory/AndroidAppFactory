@@ -3,9 +3,8 @@ package com.bihe0832.android.lib.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 
-
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 
 import org.json.JSONObject;
@@ -27,6 +26,7 @@ class ConfigManager {
     private static final String TAG = "ConfigManager";
     private static volatile ConfigManager instance = null;
 
+    private boolean mIsDebug = false;
     //配置文件配置
     private Properties mLocalConfig = null;
     //内存中的配置
@@ -46,36 +46,37 @@ class ConfigManager {
     }
 
     protected void init(Context ctx, String file, boolean isDebug) {
+        mIsDebug = isDebug;
         if (ctx == null) {
-            Log.w(TAG, "context is null");
+            ZLog.w(TAG, "context is null");
             return;
         }
         try {
             loadFile(ctx, file, isDebug);
             mConfigSP = ctx.getSharedPreferences(file.toUpperCase(), Context.MODE_PRIVATE);
             if (isDebug) {
-                Log.d(TAG, "================== config ================");
-                Log.d(TAG, "local config:");
+                ZLog.d(TAG, "================== config ================");
+                ZLog.d(TAG, "local config:");
                 Set<Map.Entry<Object, Object>> entrySet = mLocalConfig.entrySet();//返回的属性键值对实体
                 for (Map.Entry<Object, Object> entry : entrySet) {
-                    Log.d(TAG, entry.getKey() + "=" + entry.getValue());
+                    ZLog.d(TAG, entry.getKey() + "=" + entry.getValue());
                 }
-                Log.d(TAG, "local config:");
+                ZLog.d(TAG, "local config:");
                 Map<String, ?> allContent = mConfigSP.getAll();
                 for (Map.Entry<String, ?> entry : allContent.entrySet()) {
-                    Log.d(TAG, entry.getKey() + "=" + entry.getValue());
+                    ZLog.d(TAG, entry.getKey() + "=" + entry.getValue());
                 }
-                Log.d(TAG, "================== config ================");
+                ZLog.d(TAG, "================== config ================");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "ERROR: config file");
+            ZLog.d(TAG, "ERROR: config file");
         }
     }
 
     protected void loadFile(Context ctx, String file, boolean isDebug) {
         if (ctx == null) {
-            Log.w(TAG, "context is null");
+            ZLog.w(TAG, "context is null");
             return;
         }
         InputStream inputStream = null;
@@ -94,17 +95,17 @@ class ConfigManager {
                 }
             }
             if (isDebug) {
-                Log.d(TAG, "================== config ================");
-                Log.d(TAG, "local config:");
+                ZLog.d(TAG, "================== config ================");
+                ZLog.d(TAG, "local config:");
                 Set<Map.Entry<Object, Object>> entrySet = mLocalConfig.entrySet();//返回的属性键值对实体
                 for (Map.Entry<Object, Object> entry : entrySet) {
-                    Log.d(TAG, entry.getKey() + "=" + entry.getValue());
+                    ZLog.d(TAG, entry.getKey() + "=" + entry.getValue());
                 }
-                Log.d(TAG, "================== config ================");
+                ZLog.d(TAG, "================== config ================");
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG, "ERROR: config file");
+            ZLog.d(TAG, "ERROR: config file");
         } finally {
             if (inputStream != null) {
                 try {
@@ -126,13 +127,13 @@ class ConfigManager {
         try {
             value = mLocalConfig.getProperty(key, null);
             if (value == null || value.length() == 0) {
-                Log.d(TAG, "key value is empty: " + key);
+                ZLog.d(TAG, "key value is empty: " + key);
                 return value;
             }
             return value.trim();
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "readLocalConfig failed");
+            ZLog.d(TAG, "readLocalConfig failed");
             return value;
         }
     }
@@ -146,7 +147,7 @@ class ConfigManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "readCloudConfig failed");
+            ZLog.d(TAG, "readCloudConfig failed");
         }
         return value;
     }
@@ -157,20 +158,20 @@ class ConfigManager {
             value = mConfigInfoInCache.get(key);
         }
         if (!TextUtils.isEmpty(value)) {
-            Log.w(TAG, "readConfig: key=" + key + ";use cache value:" + value);
+            ZLog.w(TAG, "readConfig: key=" + key + ";use cache value:" + value);
             return value;
         }
-        value = readCloudConfig(key,defValue);
+        value = readCloudConfig(key, defValue);
         if (TextUtils.isEmpty(value)) {
-            Log.w(TAG, "read local value");
+            ZLog.w(TAG, "read local value");
             value = readLocalConfig(key);
         }
-        Log.w(TAG, "read cloud value");
+        ZLog.w(TAG, "read cloud value");
         if (value == null || value.length() == 0) {
             value = defValue;
         }
         mConfigInfoInCache.put(key, value);
-        Log.w(TAG, "readConfig: key=" + key + ";value=" + value);
+        ZLog.w(TAG, "readConfig: key=" + key + ";value=" + value);
         return value;
     }
 
@@ -210,10 +211,10 @@ class ConfigManager {
     }
 
     protected boolean writeConfig(String key, String value, boolean saveToLocal) {
-        Log.d(TAG, "writeConfig, key is :" + key + ";value is:" + value);
+        ZLog.d(TAG, "writeConfig, key is :" + key + ";value is:" + value);
         try {
             if (TextUtils.isEmpty(value)) {
-                Log.d(TAG, "writeConfig, value is null:" + key);
+                ZLog.d(TAG, "writeConfig, value is null:" + key);
                 value = "";
             }
             if (null != mConfigInfoInCache) {
@@ -224,13 +225,13 @@ class ConfigManager {
                 return true;
             } else {
                 if (null == mConfigSP) {
-                    Log.d(TAG, "writeConfig, sp is null:");
+                    ZLog.d(TAG, "writeConfig, sp is null:");
                     return false;
                 }
                 SharedPreferences.Editor editor = mConfigSP.edit();
                 editor.putString(key, value);
                 boolean result = editor.commit();
-                Log.d(TAG, "writeConfig result:" + result);
+                ZLog.d(TAG, "writeConfig result:" + result);
                 return result;
             }
         } catch (Exception e) {
@@ -246,14 +247,14 @@ class ConfigManager {
     protected boolean writeConfigs(Map<String, String> configs, boolean saveToLocal) {
         boolean result = true;
         try {
-            Log.d(TAG, "writeConfig, " + configs);
+            ZLog.d(TAG, "writeConfig, " + configs);
             if (null == mConfigInfoInCache) {
-                Log.d(TAG, "writeConfig ConfigInfoInCache is null");
+                ZLog.d(TAG, "writeConfig ConfigInfoInCache is null");
                 return false;
             }
 
             if (null == mConfigSP && saveToLocal) {
-                Log.d(TAG, "writeConfig, sp is null:");
+                ZLog.d(TAG, "writeConfig, sp is null:");
                 return false;
             }
             SharedPreferences.Editor editor = null;
@@ -274,13 +275,13 @@ class ConfigManager {
                 }
                 if (saveToLocal) {
                     result = editor.commit();
-                    Log.d(TAG, "writeConfig result:" + result);
+                    ZLog.d(TAG, "writeConfig result:" + result);
                     return result;
                 } else {
                     return true;
                 }
             } else {
-                Log.d(TAG, "writeConfig, configs is null:");
+                ZLog.d(TAG, "writeConfig, configs is null:");
                 return false;
             }
         } catch (Exception e) {
@@ -292,14 +293,14 @@ class ConfigManager {
     protected boolean writeConfigs(JSONObject configs, boolean saveToLocal) {
         boolean result = true;
         try {
-            Log.d(TAG, "writeConfig, " + configs);
+            ZLog.d(TAG, "writeConfig, " + configs);
             if (null == mConfigInfoInCache) {
-                Log.d(TAG, "writeConfig ConfigInfoInCache is null");
+                ZLog.d(TAG, "writeConfig ConfigInfoInCache is null");
                 return false;
             }
 
             if (null == mConfigSP && saveToLocal) {
-                Log.d(TAG, "writeConfig, sp is null:");
+                ZLog.d(TAG, "writeConfig, sp is null:");
                 return false;
             }
             SharedPreferences.Editor editor = null;
@@ -312,7 +313,7 @@ class ConfigManager {
                     // 获得key
                     String key = keys.next();
                     String value = configs.getString(key);
-                    Log.d(TAG,"key :" + key  + " ;value: "+ value);
+                    ZLog.d(TAG, "key :" + key + " ;value: " + value);
                     if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
                         if (saveToLocal && null != editor) {
                             editor.putString(key, value);
@@ -322,13 +323,13 @@ class ConfigManager {
                 }
                 if (saveToLocal) {
                     result = editor.commit();
-                    Log.d(TAG, "writeConfig result:" + result);
+                    ZLog.d(TAG, "writeConfig result:" + result);
                     return result;
                 } else {
                     return true;
                 }
             } else {
-                Log.d(TAG, "writeConfig, configs is null:");
+                ZLog.d(TAG, "writeConfig, configs is null:");
                 return false;
             }
         } catch (Exception e) {

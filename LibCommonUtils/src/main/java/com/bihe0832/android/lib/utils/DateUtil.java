@@ -1,6 +1,6 @@
 package com.bihe0832.android.lib.utils;
 
-import android.util.Log;
+import com.bihe0832.android.lib.log.ZLog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -82,7 +82,7 @@ public class DateUtil {
         try {
             Date dt1 = date1;
             Date dt2 = df.parse(date2);
-            Log.d(TAG, "dt1.getTime:" + dt1.getTime() + ",dt2.getTime:" + dt2.getTime());
+            ZLog.d(TAG, "dt1.getTime:" + dt1.getTime() + ",dt2.getTime:" + dt2.getTime());
             if (dt1.getTime() >= dt2.getTime()) {
                 return 1;
             } else if (dt1.getTime() < dt2.getTime()) {
@@ -201,7 +201,7 @@ public class DateUtil {
         pre.setTimeInMillis(timestamp);
         Calendar cur = Calendar.getInstance();
         cur.setTimeInMillis(System.currentTimeMillis());
-        Log.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
+        ZLog.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
         if (pre.get(Calendar.YEAR) == cur.get(Calendar.YEAR)) {
             int diffDay = cur.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
             if (0 == diffDay) {

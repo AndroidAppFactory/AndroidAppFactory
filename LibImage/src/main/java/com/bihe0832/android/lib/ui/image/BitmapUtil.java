@@ -9,12 +9,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.bihe0832.android.lib.log.ZLog;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -206,7 +205,7 @@ public class BitmapUtil {
             } else {
                 filePath = dir + fileName;
             }
-            Log.e("BitmapUtil" ,"filePath = " + filePath);
+            ZLog.e("BitmapUtil" ,"filePath = " + filePath);
             try {
                 File file = new File(filePath);
                 if (file.exists()) {
@@ -233,7 +232,7 @@ public class BitmapUtil {
 
         if (topBitmap == null || topBitmap.isRecycled()
                 || bottomBitmap == null || bottomBitmap.isRecycled()) {
-            Log.d("BitmapUtil", "topBitmap=" + topBitmap + ";bottomBitmap=" + bottomBitmap);
+            ZLog.d("BitmapUtil", "topBitmap=" + topBitmap + ";bottomBitmap=" + bottomBitmap);
             return null;
         }
         int width = 0;
@@ -292,7 +291,7 @@ public class BitmapUtil {
 
         if (bottomBitmap == null || bottomBitmap.isRecycled()
                 || iconBitmap == null || iconBitmap.isRecycled()) {
-            Log.d("BitmapUtil", "topBitmap=" + bottomBitmap + ";bottomBitmap=" + iconBitmap);
+            ZLog.d("BitmapUtil", "topBitmap=" + bottomBitmap + ";bottomBitmap=" + iconBitmap);
             return null;
         }
         int width = iconBitmap.getWidth();

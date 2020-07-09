@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.sqlite.impl;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
 import com.bihe0832.android.lib.sqlite.BaseTableModel;

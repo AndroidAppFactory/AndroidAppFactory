@@ -34,7 +34,7 @@ subprojects {
     apply plugin: 'com.bihe0832.gradleDependenciesCheck'
     GradleDependenciesCheckConfig {
         showResultType = 1
-        excludePackage ="com.android.support;org.jetbrains.kotlin"
+        excludePackage ="com.android.support;org.jetbrains.kotlin;android.arch.lifecycle"
     }
     afterEvaluate { Project project ->
         project.getTasks().getByName('clean').doFirst {

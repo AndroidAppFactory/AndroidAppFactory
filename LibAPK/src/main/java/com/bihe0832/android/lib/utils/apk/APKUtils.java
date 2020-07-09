@@ -7,8 +7,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 
 import java.io.BufferedReader;
@@ -117,7 +117,7 @@ public class APKUtils {
 
     private static String getUid(Context context, String packageName) {
         if (context == null || TextUtils.isEmpty(packageName)) {
-            Log.d("APKUtils", "getUid context or packageName is null");
+            ZLog.d("APKUtils", "getUid context or packageName is null");
             return "";
         }
         try {
@@ -125,7 +125,7 @@ public class APKUtils {
             ApplicationInfo ai = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
             return String.valueOf(ai.uid);
         } catch (Exception e) {
-            Log.d("APKUtils", "getUid Exception:" + e.getStackTrace());
+            ZLog.d("APKUtils", "getUid Exception:" + e.getStackTrace());
         }
 
         return "";
@@ -134,7 +134,7 @@ public class APKUtils {
 
     public static boolean isRunningTask(Context context, String packageName) {
         if (context == null || TextUtils.isEmpty(packageName)) {
-            Log.d("APKUtils", "getTcpCountOfRunningTask context or packageName is null");
+            ZLog.d("APKUtils", "getTcpCountOfRunningTask context or packageName is null");
             return false;
         } else {
             BufferedReader bufferReader = (BufferedReader) null;
@@ -157,10 +157,10 @@ public class APKUtils {
                         }
                     }
                 }
-                Log.d("APKUtils", "getTcpCountOfRunningTask app: ${packageName}, uid:${uid}, result:${ports.toTypedArray().contentToString()}");
+                ZLog.d("APKUtils", "getTcpCountOfRunningTask app: ${packageName}, uid:${uid}, result:${ports.toTypedArray().contentToString()}");
                 return ports.contains(uid);
             } catch (Exception e) {
-                Log.d("APKUtils", "getTcpCountOfRunningTask, execNetStat IP failed." + e.getStackTrace());
+                ZLog.d("APKUtils", "getTcpCountOfRunningTask, execNetStat IP failed." + e.getStackTrace());
             } finally {
                 if (bufferReader != null) {
                     try {

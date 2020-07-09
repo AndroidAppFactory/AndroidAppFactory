@@ -1,7 +1,8 @@
 package com.bihe0832.android.lib.ui.common;
 
 import android.content.res.Resources;
-import android.util.Log;
+
+import com.bihe0832.android.lib.log.ZLog;
 
 
 public class Res {
@@ -10,14 +11,14 @@ public class Res {
 
     private static int reflectResouce(Resources r, String type, String name, String pkg) {
         if (type == null || name == null) {
-            Log.d(TAG, "type || name null");
+            ZLog.d(TAG, "type || name null");
             return -1;
         }
         try {
             return r.getIdentifier(name, type, pkg);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "getIdentifier exception");
+            ZLog.d(TAG, "getIdentifier exception");
             return -1;
         }
     }

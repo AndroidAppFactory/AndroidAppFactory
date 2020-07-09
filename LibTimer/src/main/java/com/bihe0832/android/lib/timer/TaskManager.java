@@ -2,7 +2,8 @@ package com.bihe0832.android.lib.timer;
 
 
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.bihe0832.android.lib.log.ZLog;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,7 +59,7 @@ public class TaskManager {
         @Override
         @Synchronized
         public void run() {
-            Log.d(LOG_TAG, "TaskDispatcher run");
+            ZLog.d(LOG_TAG, "TaskDispatcher run");
             try {
                 synchronized (mTaskList) {
                     if (mTaskList.isEmpty()) {
@@ -88,13 +89,13 @@ public class TaskManager {
 
     @Synchronized
     public int addTask(BaseTask task) {
-        Log.d(LOG_TAG, "add task:" + task.getTaskName());
+        ZLog.d(LOG_TAG, "add task:" + task.getTaskName());
         if (TextUtils.isEmpty(task.getTaskName())) {
-            Log.e(LOG_TAG, "add task: bad task name" + task.getTaskName());
+            ZLog.e(LOG_TAG, "add task: bad task name" + task.getTaskName());
             return -3;
         }
         if (task.getMyInterval() < 1) {
-            Log.e(LOG_TAG, "add task: bad Interval" + task.getTaskName());
+            ZLog.e(LOG_TAG, "add task: bad Interval" + task.getTaskName());
             return -1;
         }
         int result = -1;
@@ -138,7 +139,7 @@ public class TaskManager {
      * @return true 为删除成功，false 为没有此任务删除失败
      */
     public void removeTask(String taskName) {
-        Log.d(LOG_TAG, "remove task:" + taskName);
+        ZLog.d(LOG_TAG, "remove task:" + taskName);
         if (!TextUtils.isEmpty(taskName)) {
             if (mTaskList.containsKey(taskName)) {
                 mTaskList.get(taskName).setDeleted(true);
@@ -147,7 +148,7 @@ public class TaskManager {
     }
 
     public void letTaskRunEarly(String taskName) {
-        Log.d(LOG_TAG, "letTaskRunEarly task:" + taskName);
+        ZLog.d(LOG_TAG, "letTaskRunEarly task:" + taskName);
         BaseTask task = getTaskByName(taskName);
         if (null != task) {
             task.letTaskRunEarly();

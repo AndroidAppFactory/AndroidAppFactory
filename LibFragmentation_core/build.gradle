@@ -27,7 +27,7 @@ android {
 publish {
     artifactId = 'lib-fragmentation-core'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.0.1'//版本号
+    publishVersion = '1.0.2'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -36,5 +36,5 @@ publish {
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-ui-common:1.0.4"
+    api "com.bihe0832.android:lib-ui-common:1.0.6"
 }

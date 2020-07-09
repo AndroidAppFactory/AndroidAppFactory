@@ -4,8 +4,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 
 import java.net.HttpURLConnection;
@@ -49,7 +49,7 @@ public class HTTPServer {
                         if(msg.obj != null && msg.obj instanceof HttpBasicRequest){
                             executeRequest((HttpBasicRequest)msg.obj);
                         }else{
-                            Log.d(LOG_TAG,msg.toString());
+                            ZLog.d(LOG_TAG,msg.toString());
                         }
                         break;
                     default:
@@ -81,10 +81,10 @@ public class HTTPServer {
 
         String url = request.getUrl();
         if(DEBUG){
-            Log.w(LOG_TAG,"=======================================");
-            Log.w(LOG_TAG,request.getClass().toString());
-            Log.w(LOG_TAG,url);
-            Log.w(LOG_TAG,"=======================================");
+            ZLog.w(LOG_TAG,"=======================================");
+            ZLog.w(LOG_TAG,request.getClass().toString());
+            ZLog.w(LOG_TAG,url);
+            ZLog.w(LOG_TAG,"=======================================");
         }
         BaseConnection connection = null;
         if(url.startsWith("https:")){
@@ -95,12 +95,12 @@ public class HTTPServer {
 
         String result = connection.doRequest(request);
         if(DEBUG){
-            Log.w(LOG_TAG,"=======================================");
-            Log.w(LOG_TAG,request.getClass().toString());
-            Log.w(LOG_TAG,result);
-            Log.w(LOG_TAG, String.valueOf(connection.getResponseCode()));
-            Log.w(LOG_TAG,connection.getResponseMessage());
-            Log.w(LOG_TAG,"=======================================");
+            ZLog.w(LOG_TAG,"=======================================");
+            ZLog.w(LOG_TAG,request.getClass().toString());
+            ZLog.w(LOG_TAG,result);
+            ZLog.w(LOG_TAG, String.valueOf(connection.getResponseCode()));
+            ZLog.w(LOG_TAG,connection.getResponseMessage());
+            ZLog.w(LOG_TAG,"=======================================");
         }
 
         if(connection.getResponseCode() == HttpURLConnection.HTTP_OK){
@@ -108,9 +108,9 @@ public class HTTPServer {
         }else{
             if (TextUtils.isEmpty(result)) {
                 if(DEBUG) {
-                    Log.e(LOG_TAG, request.getClass().getName());
+                    ZLog.e(LOG_TAG, request.getClass().getName());
                 }
-                Log.e(LOG_TAG,"responseBody is null");
+                ZLog.e(LOG_TAG,"responseBody is null");
                 if(TextUtils.isEmpty(connection.getResponseMessage())){
                     request.getResponseHandler().onResponse(connection.getResponseCode(), "");
                 }else{

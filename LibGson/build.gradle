@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-gson'//项目名称
     repoName=rootProject.repoName
-    publishVersion = '1.2.3'//版本号
+    publishVersion = '1.2.4'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -38,7 +38,7 @@ publish {
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-utils-common:1.2.5"
+    api "com.bihe0832.android:lib-utils-common:1.2.6"
     api "com.google.code.gson:gson:${project.gson_version}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${project.kotlin_version}"
 }
