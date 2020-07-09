@@ -3,7 +3,7 @@
 //include ':Router'
 //include ':RouterCompiler'
 //include ':LibAndroid'
-include ':LibLog'
+//include ':LibLog'
 
 //include ':LibCommonUtils'
 //include ':LibCommonUIUtils'
@@ -43,5 +43,5 @@ include ':LibLog'
 //include ':LibUIUtils'
 //include ':LibUtils'
 //include ':LibWrapper'
-//include ':APPTest'
+include ':APPTest'
 

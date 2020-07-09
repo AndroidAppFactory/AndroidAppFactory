@@ -47,5 +47,5 @@ android {
 dependencies {
     kapt "com.bihe0832.android:lib-router-compiler:1.2.1"
     api 'com.bihe0832.android:lib-wrapper:1.1.4'
-    api project(':LibWrapper')
+//    api project(':LibWrapper')
 }

@@ -1,6 +1,6 @@
 package com.bihe0832.android.test.module
 
-import android.util.Log
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 
@@ -26,7 +26,7 @@ class TestTask : BaseTask() {
     }
 
     override fun run() {
-        Log.d("TestTask", "TestTask")
+        ZLog.d("TestTask", "TestTask")
         //        TaskManager.getInstance().letTaskRunEarly("TestTask");
         a++
         if (a > 6) {
