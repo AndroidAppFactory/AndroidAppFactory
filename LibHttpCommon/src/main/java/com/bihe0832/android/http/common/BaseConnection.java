@@ -1,7 +1,8 @@
 package com.bihe0832.android.http.common;
 
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.bihe0832.android.lib.log.ZLog;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -67,7 +68,7 @@ public abstract class BaseConnection {
         }
         for (Map.Entry<String, String> entry : cookieInfo.entrySet()) {
             if(TextUtils.isEmpty(entry.getKey()) || TextUtils.isEmpty(entry.getValue())){
-                Log.d(LOG_TAG,"cookie inf is bad");
+                ZLog.d(LOG_TAG,"cookie inf is bad");
             }else{
                 cookieString = cookieString + entry.getKey() + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + entry.getValue() + ";";
             }
@@ -77,7 +78,7 @@ public abstract class BaseConnection {
 
     public String doRequest(HttpBasicRequest request){
         if(null == getURLConnection()){
-            Log.e(LOG_TAG,"URLConnection is null");
+            ZLog.e(LOG_TAG,"URLConnection is null");
             return "";
         }
         setURLConnectionCommonPara();
@@ -113,7 +114,7 @@ public abstract class BaseConnection {
             is.close();
             result = os.toString(HTTP_REQ_VALUE_CHARSET);
         }catch (javax.net.ssl.SSLHandshakeException ee){
-            Log.e(LOG_TAG, "javax.net.ssl.SSLPeerUnverifiedException");
+            ZLog.e(LOG_TAG, "javax.net.ssl.SSLPeerUnverifiedException");
         }catch (Exception e) {
             e.printStackTrace();
         } finally {

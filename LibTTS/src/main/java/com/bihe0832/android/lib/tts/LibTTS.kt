@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.text.TextUtils
-import android.util.Log
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
 import java.io.File
 import java.lang.reflect.Field
@@ -107,9 +107,9 @@ object LibTTS {
         }
         initTTS()
         mSpeech?.engines?.forEach {
-            Log.e(TAG, "onInit: 引擎列表：" + it.label + " " + it.name)
+            ZLog.e(TAG, "onInit: 引擎列表：" + it.label + " " + it.name)
             if (it.name == mSpeech!!.defaultEngine) {
-                Log.e(TAG, "onInit: 默认引擎：" + it.label + " " + it.name)
+                ZLog.e(TAG, "onInit: 默认引擎：" + it.label + " " + it.name)
             }
         }
     }
@@ -130,10 +130,10 @@ object LibTTS {
             }
             mSpeech = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
                 if (status == TextToSpeech.SUCCESS) {
-                    Log.d(TAG, "onInit: TTS引擎初始化成功")
+                    ZLog.d(TAG, "onInit: TTS引擎初始化成功")
                     setLanguage(mLocale!!)
                 } else {
-                    Log.e(TAG, "onInit: TTS引擎初始化失败")
+                    ZLog.e(TAG, "onInit: TTS引擎初始化失败")
                     mTTSInitListenerList.forEach {
                         it.onInitError()
                     }
@@ -162,7 +162,7 @@ object LibTTS {
                 })
             }
         } else {
-            Log.e(TAG, "onInit: TTS引擎初始化失败，参数失败")
+            ZLog.e(TAG, "onInit: TTS引擎初始化失败，参数失败")
             mTTSInitListenerList.forEach {
                 it.onInitError()
             }
@@ -192,7 +192,7 @@ object LibTTS {
     private fun setLanguage(loc: Locale): Int {
         val supported = mSpeech?.setLanguage(loc)
         if (supported != TextToSpeech.LANG_AVAILABLE && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-            Log.i(TAG, "onInit: 不支持当前语言")
+            ZLog.i(TAG, "onInit: 不支持当前语言")
             mTTSInitListenerList.forEach {
                 it.onLangUnAvailable()
             }
@@ -200,7 +200,7 @@ object LibTTS {
             mTTSInitListenerList.forEach {
                 it.onLangAvailable()
             }
-            Log.i(TAG, "onInit: 支持当前选择语言")
+            ZLog.i(TAG, "onInit: 支持当前选择语言")
             startSpeak()
         }
         return supported ?: TextToSpeech.ERROR
@@ -218,7 +218,7 @@ object LibTTS {
                 try {
                     if (fields[j].get(tts) == null) {
                         isBindConnection = false
-                        Log.e(TAG, "******* TTS -> mServiceConnection == null*******")
+                        ZLog.e(TAG, "******* TTS -> mServiceConnection == null*******")
                     }
                 } catch (e: IllegalArgumentException) {
                     e.printStackTrace()
@@ -242,7 +242,7 @@ object LibTTS {
 
     fun startSpeak() {
         if (!isTTSServiceOK(mSpeech)) {
-            Log.e(TAG, "TTS引擎异常，重新再次初始化")
+            ZLog.e(TAG, "TTS引擎异常，重新再次初始化")
             initTTS()
         } else {
             if (mMsgList.isNotEmpty()) {
@@ -288,7 +288,7 @@ object LibTTS {
 
     fun speak(tempStr: String) {
         mUtteranceId++
-        Log.e(TAG, "mUtteranceId: $mUtteranceId $tempStr")
+        ZLog.e(TAG, "mUtteranceId: $mUtteranceId $tempStr")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null)
         } else {
@@ -298,7 +298,7 @@ object LibTTS {
 
     fun save(tempStr: String, finalFileName: String): Int {
         if (!isTTSServiceOK(mSpeech)) {
-            Log.e(TAG, "TTS引擎异常，重新再次初始化")
+            ZLog.e(TAG, "TTS引擎异常，重新再次初始化")
             initTTS()
         }
         mUtteranceId++
@@ -316,7 +316,7 @@ object LibTTS {
                     ?: TextToSpeech.ERROR
 
         }
-        Log.i(TAG, "saveAudioFile: $finalFileName 文件保存结果： $result")
+        ZLog.i(TAG, "saveAudioFile: $finalFileName 文件保存结果： $result")
         return result
     }
 
@@ -344,7 +344,7 @@ object LibTTS {
         val result = mSpeech?.setSpeechRate(speechRate * 4)
         val result1 = Config.writeConfig(CONFIG_KEY_SPEECH_RATE, tempmSpeechRate)
 
-        Log.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result $result1")
+        ZLog.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result $result1")
     }
 
 
@@ -372,7 +372,7 @@ object LibTTS {
         }
         val result = mSpeech?.setPitch(tempPitch * 2)
         val result1 = Config.writeConfig(CONFIG_KEY_PITCH, tempPitch)
-        Log.i(TAG, "setPitch: $pitch $tempPitch $result $result1")
+        ZLog.i(TAG, "setPitch: $pitch $tempPitch $result $result1")
     }
 
     private fun setEngine(tempEngine: String) {
@@ -384,12 +384,12 @@ object LibTTS {
 //                        Config.writeConfig(CONFIG_KEY_ENGINE, "")
 //                    } else {
 //                        val result = Config.writeConfig(CONFIG_KEY_ENGINE, androidTTS?.packageName)
-//                        Log.i(TAG, "setEngine: ${androidTTS?.packageName} ; result $result")
+//                        ZLog.i(TAG, "setEngine: ${androidTTS?.packageName} ; result $result")
 //                    }
 //                }
 //            } else {
 //                val result = Config.writeConfig(CONFIG_KEY_ENGINE, packageInfo?.packageName)
-//                Log.i(TAG, "setEngine: ${packageInfo?.packageName} ; result $result")
+//                ZLog.i(TAG, "setEngine: ${packageInfo?.packageName} ; result $result")
 //            }
 //        }
     }

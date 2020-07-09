@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.utils.encypt;
 
-import android.util.Log;
+
+import com.bihe0832.android.lib.log.ZLog;
 
 import java.io.UnsupportedEncodingException;
 
@@ -25,7 +26,7 @@ public class AESUtils {
         byte[] cByte = null;
         try {
             cByte = content.getBytes("UTF-8");
-        } catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return null;
         }
         return docrypt(cByte, keyBytes, Cipher.ENCRYPT_MODE);
@@ -43,13 +44,13 @@ public class AESUtils {
             cipher.init(mode, key, iv);// 初始化
             byte[] result = cipher.doFinal(content);
             return result; // 加密
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static byte[] docrypt(byte[] content, byte[] keyBytes, byte[] ivParaBytes , int mode ) {
+    public static byte[] docrypt(byte[] content, byte[] keyBytes, byte[] ivParaBytes, int mode) {
         try {
             SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");// 创建密码器
@@ -57,7 +58,7 @@ public class AESUtils {
             cipher.init(mode, key, iv);// 初始化
             byte[] result = cipher.doFinal(content);
             return result; // 加密
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -67,28 +68,28 @@ public class AESUtils {
      * 加密
      *
      * @param data 需要加密的内容
-     * @param key 加密密码
+     * @param key  加密密码
      * @return
      */
-    public static String encrypt(String data, byte[] key , byte[] ivParaBytes) {
-        return doAES(data, key, ivParaBytes ,Cipher.ENCRYPT_MODE);
+    public static String encrypt(String data, byte[] key, byte[] ivParaBytes) {
+        return doAES(data, key, ivParaBytes, Cipher.ENCRYPT_MODE);
     }
 
     /**
      * 解密
      *
      * @param data 待解密内容
-     * @param key 解密密钥
+     * @param key  解密密钥
      * @return
      */
-    public static String decrypt(String data, byte[] key , byte[] ivParaBytes) {
-        return doAES(data, key, ivParaBytes ,Cipher.DECRYPT_MODE);
+    public static String decrypt(String data, byte[] key, byte[] ivParaBytes) {
+        return doAES(data, key, ivParaBytes, Cipher.DECRYPT_MODE);
     }
 
     /**
      * 加解密
      */
-    private static String doAES(String data, byte[] key, byte[] ivParaBytes ,int mode) {
+    private static String doAES(String data, byte[] key, byte[] ivParaBytes, int mode) {
         try {
             if ((data == null) || key == null) {
                 return null;
@@ -116,7 +117,7 @@ public class AESUtils {
                 return new String(result, "UTF-8");
             }
         } catch (Exception e) {
-            Log.e("AESUtil", "AES 密文处理异常", e);
+            ZLog.e("AESUtil", "AES 密文处理异常：" + e);
         }
         return null;
     }

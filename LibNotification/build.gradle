@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-notification'//项目名称
     repoName=rootProject.repoName
-    publishVersion = '1.0.17'//版本号
+    publishVersion = '1.0.18'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -39,9 +39,9 @@ publish {
 
 
 dependencies {
-    api "com.bihe0832.android:lib-utils-common:1.2.5"
-    api 'com.bihe0832.android:lib-utils-apk:1.2.4'
-    api 'com.bihe0832.android:lib-dialog:1.0.7'
+    api "com.bihe0832.android:lib-utils-common:1.2.6"
+    api 'com.bihe0832.android:lib-utils-apk:1.2.5'
+    api 'com.bihe0832.android:lib-dialog:1.0.8'
 }
 
 

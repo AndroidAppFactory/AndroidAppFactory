@@ -29,7 +29,7 @@ android {
 publish {
     artifactId = 'lib-device-network'//项目名称
     repoName=rootProject.repoName
-    publishVersion = '1.0.5'//版本号
+    publishVersion = '1.0.6'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -38,5 +38,5 @@ publish {
 }
 
 dependencies {
-    api "com.bihe0832.android:lib-utils-common:1.2.5"
+    api "com.bihe0832.android:lib-utils-common:1.2.6"
 }

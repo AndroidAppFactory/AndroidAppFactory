@@ -3,7 +3,8 @@ package com.bihe0832.android.lib.utils.intent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
+
+import com.bihe0832.android.lib.log.ZLog;
 
 
 public class IntentUtils {
@@ -16,13 +17,13 @@ public class IntentUtils {
         }
         try {
             Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-            Log.d(TAG, "jumpToOtherApp url:" + url + ",intent:" + intent.toString());
+            ZLog.d(TAG, "jumpToOtherApp url:" + url + ",intent:" + intent.toString());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(intent);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "jumpToOtherApp failed:" + e.getMessage());
+            ZLog.e(TAG, "jumpToOtherApp failed:" + e.getMessage());
             return false;
         }
     }
@@ -34,13 +35,13 @@ public class IntentUtils {
         try {
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            Log.d(TAG, "openWebPage url:" + url + ",intent:" + intent.toString());
+            ZLog.d(TAG, "openWebPage url:" + url + ",intent:" + intent.toString());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             context.startActivity(intent);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "openWebPage failed:" + e.getMessage());
+            ZLog.e(TAG, "openWebPage failed:" + e.getMessage());
             return false;
         }
     }
