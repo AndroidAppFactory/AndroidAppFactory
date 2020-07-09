@@ -5,13 +5,13 @@ import android.app.DownloadManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.tts.LibTTS
@@ -58,17 +58,17 @@ class TestTTSActivity : Activity() {
             var lastStart = System.currentTimeMillis()
             override fun onUtteranceStart(utteranceId: String) {
                 lastStart = System.currentTimeMillis()
-                Log.d(TAG,"onStart $utteranceId : $lastStart")
+                ZLog.d(TAG,"onStart $utteranceId : $lastStart")
             }
 
             override fun onUtteranceDone(utteranceId: String) {
                 var end = System.currentTimeMillis()
-                Log.d(TAG,"onDone $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
+                ZLog.d(TAG,"onDone $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
             }
 
             override fun onUtteranceError(utteranceId: String) {
                 var end = System.currentTimeMillis()
-                Log.d(TAG,"onError $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
+                ZLog.d(TAG,"onError $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
             }
 
         })
@@ -110,11 +110,11 @@ class TestTTSActivity : Activity() {
             }.let {
                 DownloadUtils.startDownload(applicationContext, it, object : DownloadListener {
                     override fun onProgress(total: Long, cur: Long) {
-                        Log.d(TAG,"startDownloadApk download onProgress: $cur")
+                        ZLog.d(TAG,"startDownloadApk download onProgress: $cur")
                     }
 
                     override fun onSuccess(finalFileName: String) {
-                        Log.d(TAG,"startDownloadApk download installApkPath: $finalFileName")
+                        ZLog.d(TAG,"startDownloadApk download installApkPath: $finalFileName")
                         InstallUtils.installAPP(applicationContext, finalFileName)
                     }
 

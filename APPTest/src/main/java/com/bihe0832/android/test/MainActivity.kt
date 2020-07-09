@@ -10,19 +10,21 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.FileProvider
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
+import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
+import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.testNotifyProcess
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -35,7 +37,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        ZLog.setDebug(false)
         Config.init(applicationContext, "", true)
 
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
@@ -44,11 +46,11 @@ class MainActivity : Activity() {
 
         registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                Log.d(LOG_TAG, "user input:$intent")
+                ZLog.d(LOG_TAG, "user input:$intent")
                 intent?.let {
                     val notificationId = it.getIntExtra(NotifyManager.NOTIFICATION_ID_KEY, -1)
                     val action = it.getStringExtra(NotifyManager.ACTION_KEY)
-                    Log.d(LOG_TAG, "[DownloadNotificationsManager] onReceive: $action")
+                    ZLog.d(LOG_TAG, "[DownloadNotificationsManager] onReceive: $action")
                     when (action) {
                         NotifyManager.ACTION_RESUME -> {
                             testNotifyProcess(notificationId)
@@ -129,44 +131,54 @@ class MainActivity : Activity() {
 
         testFun.setOnClickListener {
 //            testNotifyProcess(0)
-//            for (i in 0..100) {
-//                var start = System.currentTimeMillis()
-//                Log.d(LOG_TAG, "JsonHelper: start $start")
-//                JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
-//                var end = System.currentTimeMillis()
-//                Log.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
-//            }
+
+            ZLog.d(LOG_TAG,"fdsfs")
+
 
 //            TaskManager.getInstance().addTask(TestTask())
 
-            File("/sdcard/screen.png").let {
-                Log.d(LOG_TAG, MD5.getFileMD5(it))
-                Log.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
-            }
 
-            ThreadManager.getInstance().start {
-                File("/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk").let {
-                    Log.d(LOG_TAG, "===============start==================")
-                    var start = System.currentTimeMillis() /1000
-                    for (i in 0..5) {
-                        Log.d(LOG_TAG, MD5.getFileMD5(it))
-                    }
-
-                    Log.d(LOG_TAG, "total time : " + (System.currentTimeMillis() /1000 - start))
-                    Log.d(LOG_TAG, "===============end==================")
-                    Log.d(LOG_TAG, "===============start==================")
-                    start = System.currentTimeMillis() /1000
-                    for (i in 0..5) {
-                        Log.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
-                    }
-                    Log.d(LOG_TAG, "total time : " + (System.currentTimeMillis() /1000 - start))
-                    Log.d(LOG_TAG, "===============end==================")
-
-                }
-            }
         }
     }
 
+
+    private fun testJson() {
+        for (i in 0..100) {
+            var start = System.currentTimeMillis()
+            ZLog.d(LOG_TAG, "JsonHelper: start $start")
+            JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
+            var end = System.currentTimeMillis()
+            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
+        }
+    }
+
+    private fun testMD5() {
+        File("/sdcard/screen.png").let {
+            ZLog.d(LOG_TAG, MD5.getFileMD5(it))
+            ZLog.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
+        }
+
+        ThreadManager.getInstance().start {
+            File("/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk").let {
+                ZLog.d(LOG_TAG, "===============start==================")
+                var start = System.currentTimeMillis() / 1000
+                for (i in 0..5) {
+                    ZLog.d(LOG_TAG, MD5.getFileMD5(it))
+                }
+
+                ZLog.d(LOG_TAG, "total time : " + (System.currentTimeMillis() / 1000 - start))
+                ZLog.d(LOG_TAG, "===============end==================")
+                ZLog.d(LOG_TAG, "===============start==================")
+                start = System.currentTimeMillis() / 1000
+                for (i in 0..5) {
+                    ZLog.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
+                }
+                ZLog.d(LOG_TAG, "total time : " + (System.currentTimeMillis() / 1000 - start))
+                ZLog.d(LOG_TAG, "===============end==================")
+
+            }
+        }
+    }
 
     private fun userInput(): String? {
         var input = testInput.text?.toString()
@@ -174,14 +186,14 @@ class MainActivity : Activity() {
             Toast.makeText(this, "user input is bad!", Toast.LENGTH_LONG).show()
             ""
         } else {
-            Log.d(LOG_TAG, "user input:$input")
+            ZLog.d(LOG_TAG, "user input:$input")
             input
         }
     }
 
     private fun showResult(s: String?) {
         s?.let {
-            Log.d(LOG_TAG, "showResult:$s")
+            ZLog.d(LOG_TAG, "showResult:$s")
             testResult.text = "Result: $s"
         }
     }
