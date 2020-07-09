@@ -26,21 +26,21 @@ allprojects {
     }
 }
 
-//task clean(type: Delete) {
-//    delete rootProject.buildDir
-//}
-//
-//subprojects {
-//    apply plugin: 'com.bihe0832.gradleDependenciesCheck'
-//    GradleDependenciesCheckConfig {
-//        showResultType = 1
-//    }
-//    afterEvaluate { Project project ->
-//        project.getTasks().getByName('clean').doFirst {
-//            delete "build"
-//            delete ".externalNativeBuild"
-//        }
-//        project.getTasks().getByName('clean').dependsOn("checkGradleDependencies")
-////        project.getTasks().getByName('preBuild').dependsOn("checkGradleDependencies")
-//    }
-//}
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+subprojects {
+    apply plugin: 'com.bihe0832.gradleDependenciesCheck'
+    GradleDependenciesCheckConfig {
+        showResultType = 1
+    }
+    afterEvaluate { Project project ->
+        project.getTasks().getByName('clean').doFirst {
+            delete "build"
+            delete ".externalNativeBuild"
+        }
+        project.getTasks().getByName('clean').dependsOn("checkGradleDependencies")
+//        project.getTasks().getByName('preBuild').dependsOn("checkGradleDependencies")
+    }
+}

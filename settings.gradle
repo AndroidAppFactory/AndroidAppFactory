@@ -1,11 +1,11 @@
-//备注：这里的Lib严格按照先后依赖顺序排序，方便快速查看依赖
+////备注：这里的Lib严格按照先后依赖顺序排序，方便快速查看依赖
 //include ':RouterAnnotation'
 //include ':Router'
 //include ':RouterCompiler'
 //include ':LibAndroid'
 //include ':LibCommonUtils'
 //include ':LibCommonUIUtils'
-
+//
 //include ':LibThread'
 //include ':LibEncrypt'
 //include ':LibChannel'
@@ -13,7 +13,7 @@
 //include ':LibHttpCommon'
 //include ':LibHttpAdvanced'
 //include ':LibSqlite'
-
+//
 //include ':LibFragmentation_core'
 //include ':LibFragmentation'
 //include ':LibFragmentation_swipeback'
@@ -22,26 +22,26 @@
 //include ':LibAdapter'
 //include ':LibRefresh'
 //
-
+//
 //include ':LibDeviceNetwork'
-
+//
 //include ':LibGson'
 //include ':LibTimer'
 //include ':LibConfig'
 //include ':LibToast'
 //include ':LibAPK'
-//
+////
 //include ':LibTTS'
 //include ':LibFile'
 //include ':LibDownloadAndInstall'
 //
-////include ':LibImage'
-////include ':LibDialog'
-////include ':LibNotification'
-//
+//include ':LibImage'
+//include ':LibDialog'
+//include ':LibNotification'
+
 //include ':LibUIUtils'
 //include ':LibUtils'
-//include ':LibWrapper'
-include '::APPTest'
+include ':LibWrapper'
+//include ':APPTest'
 
-
+//

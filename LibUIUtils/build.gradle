@@ -30,7 +30,7 @@ android {
 publish {
     artifactId = 'lib-uiutils'//项目名称
     repoName = rootProject.repoName
-    publishVersion = '1.4.1'//版本号
+    publishVersion = '1.4.2'//版本号
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
     licences = rootProject.licences
@@ -47,7 +47,7 @@ dependencies {
     api 'com.bihe0832.android:lib-refresh:1.0.2'
 
     api 'com.bihe0832.android:lib-toast:1.3.1'
-    api 'com.bihe0832.android:lib-notification:1.0.15'
+    api 'com.bihe0832.android:lib-notification:1.0.16'
 //    api project(':LibNotification')
 }
 
