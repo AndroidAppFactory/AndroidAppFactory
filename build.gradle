@@ -23,6 +23,9 @@ allprojects {
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://dl.bintray.com/bihe0832/android" }
         jcenter()
+        flatDir {
+            dirs './../libs/'
+        }
     }
 }
 
