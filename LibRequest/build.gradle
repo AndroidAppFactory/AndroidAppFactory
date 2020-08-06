@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion project.commonMinSdkVersion
         targetSdkVersion project.targetSdkVersion
-        versionCode project.mnaLib.versionCode
-        versionName project.mnaLib.versionName
+        versionCode project.zixieVersionCode
+        versionName project.zixieVersionName
     }
 
     buildTypes {
@@ -27,12 +27,12 @@ android {
 
 //添加发布相关的配置
 publish {
-    artifactId = 'lib-request'//项目名称
-    repoName=rootProject.repoName
-    publishVersion = '1.0.2'//版本号
-    userOrg = rootProject.userOrg
-    groupId = rootProject.groupId
-    licences = rootProject.licences
+    artifactId = rootProject.zixieModuleInfo[project.name].get("artifactId")
+    repoName = rootProject.zixieRepoName
+    publishVersion = rootProject.zixieModuleInfo[project.name].get("version")
+    userOrg = rootProject.zixieUserOrg
+    groupId = rootProject.zixieGroupId
+    licences = rootProject.zixieLicences
     desc = 'the base request or url utils for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }

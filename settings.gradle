@@ -1,47 +1,63 @@
-//////备注：这里的Lib严格按照先后依赖顺序排序，方便快速查看依赖
-//include ':RouterAnnotation'
-//include ':Router'
-//include ':RouterCompiler'
-//include ':LibAndroid'
-//include ':LibLog'
+apply from: rootDir.toString() + '/build_module.gradle'
+System.err.println("MainProjectList: " + zixieMainProject)
+System.err.println("DevProjectList: " + zixieDevelopModule)
+if (zixieIncludeALL) {
+    zixieModuleInfo.each { projectName, subModuleList ->
+        System.out.println("-------- Check ALL Module Project: " + projectName + "--------")
+        autoAddIncludeMax(projectName)
+        System.out.println("-------- Check ALL Module Project: " + projectName + " --------")
+    }
+} else {
+    zixieMainProject.split(",").each { projectName ->
+        System.out.println("-------- Check Module Project: " + projectName + " --------")
+        addInclude(projectName)
+        autoAddIncludeMin(projectName)
+        System.out.println("-------- Check Module Project: " + projectName + " --------")
+    }
+}
 
-//include ':LibCommonUtils'
-//include ':LibCommonUIUtils'
 
-//include ':LibThread'
-//include ':LibEncrypt'
-//include ':LibChannel'
-//include ':LibRequest'
-//include ':LibHttpCommon'
-//include ':LibHttpAdvanced'
-//include ':LibSqlite'
+def addInclude(projectName) {
+    if (zixieIncludeList.contains(projectName)) {
+        if (zixieIsDebug) System.out.println("Add Include: " + projectName + " has add !")
+    } else {
+        String finalProjectName = ':' + projectName
+        System.out.println("include " + finalProjectName)
+        include finalProjectName
+        zixieIncludeList.add(projectName)
+    }
+}
 
-//include ':LibFragmentation_core'
-//include ':LibFragmentation'
-//include ':LibFragmentation_swipeback'
-//include ':LibFlycoTabLayout'
-//include ':LibQRCode'
-//include ':LibAdapter'
-//include ':LibRefresh'
+def autoAddIncludeMax(projectName){
+    if (zixieIsDebug) System.out.println("Auto Add Include Max: " + projectName + " ~~~")
+    if (checkModuleIsDev(projectName)) {
+        if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + "is dev")
+        addInclude(projectName)
+    } else {
+        if (zixieIsDebug) System.out.println("Check Module: " + projectName + "is not dev")
+    }
+}
 
-//include ':LibDeviceNetwork'
-//
-//include ':LibGson'
-//include ':LibTimer'
-//include ':LibConfig'
-//include ':LibToast'
-//include ':LibAPK'
-////
-//include ':LibTTS'
-//include ':LibFile'
-//include ':LibDownloadAndInstall'
+def autoAddIncludeMin(projectName) {
+    if (zixieIsDebug) System.out.println("Auto Add Include Min: " + projectName + " ~~~")
+    if (zixieIsDebug) System.out.println("ModuleList:" + zixieModuleInfo[projectName])
+    if (null != zixieModuleInfo[projectName]) {
+        if (zixieIsDebug) System.out.println("dependenciesList:" + zixieModuleInfo[projectName].get("dependenciesList"))
+        zixieModuleInfo[projectName].get("dependenciesList").each { moduleName ->
+            if (!zixieIncludeList.contains(moduleName)) {
+                if (checkModuleIsDev(moduleName)) {
+                    if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + " has " + moduleName + "is dev")
+                    addInclude(moduleName)
+                } else {
+                    if (zixieIsDebug) System.out.println("Check Module: " + moduleName + "is not dev")
+                }
+            } else {
+                if (zixieIsDebug) System.out.println("Check Module: " + moduleName + "has add to include")
+            }
+            autoAddIncludeMin(moduleName)
+        }
+    }
+}
 
-//include ':LibImage'
-//include ':LibDialog'
-//include ':LibNotification'
-//
-//include ':LibUIUtils'
-//include ':LibUtils'
-//include ':LibWrapper'
-include ':APPTest'
+
 

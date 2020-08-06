@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion project.commonMinSdkVersion
         targetSdkVersion project.targetSdkVersion
-        versionCode project.mnaLib.versionCode
-        versionName project.mnaLib.versionName
+        versionCode project.zixieVersionCode
+        versionName project.zixieVersionName
     }
 
     buildTypes {
@@ -25,17 +25,12 @@ android {
 }
 
 publish {
-    artifactId = 'lib-refresh'//项目名称
-    repoName= rootProject.repoName
-    publishVersion = '1.0.3'//版本号
-    userOrg = rootProject.userOrg
-    groupId = rootProject.groupId
-    licences = rootProject.licences
+    artifactId = rootProject.zixieModuleInfo[project.name].get("artifactId")
+    repoName = rootProject.zixieRepoName
+    publishVersion = rootProject.zixieModuleInfo[project.name].get("version")
+    userOrg = rootProject.zixieUserOrg
+    groupId = rootProject.zixieGroupId
+    licences = rootProject.zixieLicences
     desc = 'the refresh lib for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
-}
-
-dependencies {
-    api 'com.github.ybq:Android-SpinKit:1.0.2'
-    api 'com.bihe0832.android:lib-adapter:1.0.3'
 }

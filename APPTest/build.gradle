@@ -46,18 +46,4 @@ android {
 
 dependencies {
     kapt "com.bihe0832.android:lib-router-compiler:1.2.1"
-//    api 'com.bihe0832.android:lib-wrapper:1.1.4'
-//    api project(':LibWrapper')
-
-    api fileTree(include: ['*.jar'], dir: './../libs')
-    def aarNativeList= {
-        fileTree(dir: './../libs' ,include:'*.aar').each { File file ->
-            //获取文件名
-            def name = file.name.lastIndexOf('.').with {
-                it != -1 ? file.name[0..<it] : file.name
-            }
-            api(name: name,ext:'aar')
-        }
-    }
-    aarNativeList()
 }
