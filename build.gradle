@@ -39,10 +39,16 @@ allprojects {
             subproject.getTasks().create("zixiePublishCommand", {
                 zixiePublishCommand()
             })
+
+            subproject.getTasks().create("showInfo", {
+                System.err.println("****************************************************\n")
+                System.err.println("    Android 构建已基于组件化重构，详细信息可以参考文档：   \n")
+                System.err.println("    https://android.bihe0832.com/#!doc/dev.md\n")
+                System.err.println("*****************************************************")
+            })
+
             rootProject.getTasks().getByName('buildEnvironment').doLast {
-                System.err.println("组件依赖关系处理中，预计耗时较久，请耐心等待...")
                 zixiePublishCommand()
-                System.err.println("组件依赖关系处理已完成...")
             }
         }
     }

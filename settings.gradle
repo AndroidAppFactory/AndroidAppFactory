@@ -19,6 +19,9 @@ if (zixieIncludeALL) {
     }
 }
 
+System.err.println("\n\n========================================\n\n")
+System.err.println("当前工程导入组件如下：\n\n\t" + zixieIncludeList )
+System.err.println("\n\n========================================\n\n")
 
 def addInclude(projectName) {
     if (zixieIncludeList.contains(projectName)) {
