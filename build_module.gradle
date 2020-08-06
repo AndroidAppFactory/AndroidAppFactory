@@ -1,268 +1,23 @@
 apply from: rootDir.toString() + '/config.gradle'
-def project = ext
-
-/************************************ 组件化开发常用配置 ************************************/
-/**
- * 当前开发中，最终运行的主工程，多个用 "," 分隔
- * 当前如果全量填"APPTest"
- */
-
-def mainProject = "APPTest"
-/**
- * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
- * 当前如果全量填"LibAndroid,LibThread,LibCommonUtils,LibCommonUIUtils,LibRequest,LibSqlite"
- */
-def developModule = ""
-/**
- * 是否将所有依赖了 developModule 的模块都加载进来。
- *  true 全都加载，
- *  false 仅加载与 mainProject 相关的模块
- */
-def includeALLDependOnDevelopModule = false
-/**
- * 组件所有模块的最新版本，下次发布时使用
- */
-def moduleVersionName = "2.0.5"
-/************************************ 组件化开发常用配置 ************************************/
-
-def moduleInfo = [
-
-        "APPTest"                   : [
-                "version"         : "",
-                "artifactId"      : "",
-                "dependenciesList": ["LibWrapper"]
-        ],
-        "RouterAnnotation"          : [
-                "version"         : "1.2.1",
-                "artifactId"      : "lib-router-annotation",
-                "dependenciesList": []
-        ],
-        "RouterCompiler"            : [
-                "version"         : "1.2.4",
-                "artifactId"      : "lib-router-compiler",
-                "dependenciesList": [
-                        'com.squareup:javapoet:1.8.0',
-                        'com.google.auto.service:auto-service:1.0-rc3',
-                        'com.bihe0832.android:lib-router-annotation:1.2.1',
-                        'com.bihe0832.android:lib-router:1.2.3'
-                ]
-        ],
-        "Router"                    : [
-                "version"         : "1.2.4",
-                "artifactId"      : "lib-router",
-                "dependenciesList": [
-                        "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}",
-                        "RouterAnnotation"
-                ]
-        ],
-        "LibAndroid"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-android",
-                "dependenciesList": [
-                        "com.android.support:appcompat-v7:${project.android_support_version}",
-                        "com.android.support:recyclerview-v7:${project.android_support_version}",
-                        "com.android.support:support-annotations:$project.android_support_version",
-                        "com.android.support:support-v4:${project.android_support_version}",
-                        "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}"
-                ]
-        ],
-        "LibLog"                    : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-log",
-                "dependenciesList": ["LibAndroid"]
-        ],
-
-        "LibCommonUtils"            : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-utils-common",
-                "dependenciesList": ["LibAndroid", "LibLog"]
-        ],
-        "LibCommonUIUtils"          : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-ui-common",
-                "dependenciesList": ["LibAndroid", "LibLog"]
-        ],
-        "LibThread"                 : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-thread",
-                "dependenciesList": []
-        ],
-        "LibEncrypt"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-encrypt",
-                "dependenciesList": ["LibLog"]
-        ],
-        "LibChannel"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-channel",
-                "dependenciesList": ["LibLog"]
-        ],
-        "LibRequest"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-request",
-                "dependenciesList": []
-        ],
-        "LibGson"                   : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-gson",
-                "dependenciesList": [
-                        "com.google.code.gson:gson:${project.gson_version}",
-                        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${project.kotlin_version}",
-                        "LibCommonUtils",
-                ]
-        ],
-        "LibHttpCommon"             : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-http-common",
-                "dependenciesList": ["LibThread", "LibLog"]
-        ],
-        "LibHttpAdvanced"           : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-http-advanced",
-                "dependenciesList": ["LibHttpCommon", "LibGson"]
-        ],
-        "LibSqlite"                 : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-sqlite",
-                "dependenciesList": []
-        ],
-        "LibFragmentation_core"     : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-fragmentation-core",
-                "dependenciesList": ["LibCommonUIUtils"]
-        ],
-        "LibFragmentation"          : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-fragmentation",
-                "dependenciesList": ["LibFragmentation_core"]
-        ],
-        "LibFragmentation_swipeback": [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-fragmentation-swipeback",
-                "dependenciesList": ["LibFragmentation"]
-        ],
-        "LibFlycoTabLayout"         : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-flycotablayout",
-                "dependenciesList": ["LibCommonUIUtils"]
-        ],
-        "LibQRCode"                 : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-qrcode",
-                "dependenciesList": [
-                        'com.google.zxing:core:3.3.0',
-                        "LibCommonUIUtils"
-                ]
-        ],
-        "LibAdapter"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-adapter",
-                "dependenciesList": ["LibCommonUIUtils"]
-        ],
-        "LibRefresh"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-refresh",
-                "dependenciesList": [
-                        'com.github.ybq:Android-SpinKit:1.0.2',
-                        "LibAdapter"
-                ]
-        ],
-        "LibDeviceNetwork"          : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-device-network",
-                "dependenciesList": ["LibCommonUtils"]
-        ],
-        "LibTimer"                  : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-timer",
-                "dependenciesList": ["LibThread", "LibLog"]
-        ],
-        "LibConfig"                 : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-config",
-                "dependenciesList": ["LibCommonUtils"]
-        ],
-        "LibToast"                  : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-toast",
-                "dependenciesList": ["LibThread"]
-        ],
-        "LibAPK"                    : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-utils-apk",
-                "dependenciesList": ["LibToast", "LibLog"]
-        ],
-        "LibTTS"                    : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-tts",
-                "dependenciesList": ["LibConfig"]
-        ],
-        "LibFile"                   : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-file",
-                "dependenciesList": ["LibEncrypt", "LibCommonUtils"]
-        ],
-        "LibDownloadAndInstall"     : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-download-install",
-                "dependenciesList": ["LibFile", "LibThread"]
-        ],
-        "LibImage"                  : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-image",
-                "dependenciesList": [
-                        "com.github.bumptech.glide:glide:${project.glide_version}",
-                        "com.github.bumptech.glide:okhttp3-integration:${project.glide_version}",
-                        "LibLog"
-                ]
-        ],
-        "LibDialog"                 : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-dialog",
-                "dependenciesList": ["LibThread", "LibImage", "LibCommonUIUtils"]
-        ],
-        "LibNotification"           : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-notification",
-                "dependenciesList": ["LibDialog", "LibAPK", "LibCommonUtils"]
-        ],
-        "LibUIUtils"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-uiutils",
-                "dependenciesList": [
-                        "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
-                        "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification"
-                ]
-        ],
-        "LibUtils"                  : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-utils",
-                "dependenciesList": [
-                        "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
-                        "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownloadAndInstall",
-                        "LibAPK", "LibTTS"
-                ]
-        ],
-        "LibWrapper"                : [
-                "version"         : "2.0.5",
-                "artifactId"      : "lib-wrapper",
-                "dependenciesList": ["LibUtils", "LibUIUtils"]
-        ]
-]
+apply from: rootDir.toString() + '/dependencies.gradle'
 
 def checkModuleIsDev(String moduleName) {
-    if(zixieModules.contains(moduleName)){
+    if (zixieIsDebug) println("checkDev:" + moduleName + " is dev true")
+    if (zixieModules.contains(moduleName)) {
         return true
+    }
+    if (moduleName.contains(".")) {
+        return false
     }
     boolean moduleIsDev = false
     zixieDevelopModule.split(",").each { projectName ->
         if (moduleName == projectName) {
-            if (zixieIsDebug) println("checkDev:" + moduleName + " find with " + projectName )
-            moduleIsDev =  true
+            if (zixieIsDebug) println("checkDev:" + moduleName + " find with " + projectName)
+            moduleIsDev = true
         }
     }
     if (moduleIsDev) {
-        println("checkDev:" + moduleName + " is dev true")
+        if (zixieIsDebug) println("checkDev:" + moduleName + " is dev true")
         zixieModules.add(moduleName)
         return true
     } else {
@@ -281,15 +36,29 @@ def checkModuleIsDev(String moduleName) {
 }
 
 def checkModuleDependencies(String moduleA, String moduleB) {
-    if (zixieIsDebug) println("checkDev:" + moduleA + " " + moduleB)
+    if (zixieIsDebug) println("checkModuleDependencies:" + moduleA + " " + moduleB)
+    if (tempDependenciesList.containsKey(moduleA)) {
+        if (tempDependenciesList.get(moduleA).contains(moduleB)) {
+            return 1
+        }
+    }
+    if (tempDependenciesList.containsKey(moduleB)) {
+        if (tempDependenciesList.get(moduleB).contains(moduleA)) {
+            return -1
+        }
+    }
+    if (zixieIsDebug) println("checkModuleDependencies:" + moduleA + " " + moduleB)
     if (null != zixieModuleInfo[moduleA]) {
         if (zixieModuleInfo[moduleA].get("dependenciesList").contains(moduleB)) {
+            addToDependencies(moduleA, moduleB)
             return 1
         } else {
             zixieModuleInfo[moduleA].get("dependenciesList").each { item ->
-                def result = checkModuleDependencies(item, moduleB)
-                if (result != 0) {
-                    return result
+                if (!item.contains(".")) {
+                    def result = checkModuleDependencies(item, moduleB)
+                    if (result != 0) {
+                        return result
+                    }
                 }
             }
         }
@@ -297,12 +66,15 @@ def checkModuleDependencies(String moduleA, String moduleB) {
 
     if (null != zixieModuleInfo[moduleB]) {
         if (zixieModuleInfo[moduleB].get("dependenciesList").contains(moduleA)) {
+            addToDependencies(moduleB, moduleA)
             return -1
         } else {
             zixieModuleInfo[moduleB].get("dependenciesList").each { item ->
-                def result = checkModuleDependencies(item, moduleA)
-                if (result != 0) {
-                    return result
+                if (!item.contains(".")) {
+                    def result = checkModuleDependencies(item, moduleA)
+                    if (result != 0) {
+                        return result
+                    }
                 }
             }
         }
@@ -311,7 +83,23 @@ def checkModuleDependencies(String moduleA, String moduleB) {
     return 0
 }
 
+ext.tempDependenciesList = new HashMap<String, ArrayList<String>>()
+
+def addToDependencies(String mainModule, String dependenciesModule) {
+    if (!tempDependenciesList.containsKey(mainModule)) {
+        tempDependenciesList.put(mainModule, new ArrayList<String>())
+    }
+    tempDependenciesList.get(mainModule).add(dependenciesModule)
+    if (tempDependenciesList.containsKey(dependenciesModule)) {
+        tempDependenciesList.get(dependenciesModule).each { item ->
+            addToDependencies(mainModule, item)
+        }
+    }
+}
+
 def zixiePublishCommand() {
+    System.err.println("组件依赖关系处理中，预计耗时较久，请耐心等待...\n\n")
+
     if (zixieIsDebug) println("showCommand")
     def moduleList = []
     zixieModuleInfo.each { projectName, subModuleList ->
@@ -320,35 +108,44 @@ def zixiePublishCommand() {
         }
     }
 
-    if (zixieIsDebug) System.err.println("showCommand before :" + moduleList)
-    for (int i = 0; i < moduleList.size() - 1; i++) {
-        for (int j = 0; j < moduleList.size() - 1; j++) {
-            if (zixieIsDebug) println("----- showCommand " + i + " " + j)
-            if (zixieIsDebug) println("showCommand :" + moduleList)
-            if (zixieIsDebug) println("showCommand " + moduleList.get(i) + " " + moduleList.get(j) + " " + checkModuleDependencies(moduleList.get(i), moduleList.get(j)))
-            if (checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0) {
-                def temp = moduleList.get(j)
-                moduleList.set(j, moduleList.get(j + 1))
-                moduleList.set(j, temp)
+    if (moduleList.size() > 0) {
+        if (zixieIsDebug) System.err.println("showCommand before :" + moduleList)
+        for (int i = 0; i < moduleList.size(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (zixieIsDebug) println("----- showCommand " + i + " " + j)
+                if (zixieIsDebug) println("showCommand " + moduleList.get(i) + " " + moduleList.get(j) + " " + (checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0))
+                if ((checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0)) {
+                    def temp = moduleList.get(j + 1)
+                    if (zixieIsDebug) println("showCommand before:" + moduleList)
+                    moduleList.set(j + 1, moduleList.get(j))
+                    moduleList.set(j, temp)
+                    if (zixieIsDebug) println("showCommand before:" + moduleList)
+                } else {
+                    if (zixieIsDebug) println("showCommand noting")
+                }
+                if (zixieIsDebug) println("----- showCommand " + i + " " + j)
             }
-            if (zixieIsDebug) println("---- showCommand:" + moduleList)
         }
+
+        if (zixieIsDebug) System.err.println("showCommand end :" + moduleList)
+
+        def resultList = "\n"
+        moduleList.each { item ->
+            resultList = resultList + item + "\n"
+        }
+        System.err.println("\n\n========================================\n\n")
+        System.err.println("当前开发的组件开发修改版本号后，直接在根目录运行下面的命令即可发布所有依赖到最新版本\n")
+        System.err.println("运行后升级版本的组件有：\n\n\t" + moduleList)
+        System.err.println("\n发布使用的命令： \n\n")
+
+        System.err.println("echo \"" + resultList + "\"  | xargs -I {} /bin/bash ./build_upload.sh {} " + zixieVersionName)
+        System.err.println("\n\n========================================\n\n")
+    }else {
+        System.err.println("组件依赖关系处理已完成，没有组件需要更新...")
     }
 
-    if (zixieIsDebug) System.err.println("showCommand end :" + moduleList)
-    def resultList = "\n"
-    moduleList.each { item ->
-        resultList = resultList + item + "\n"
-    }
-    System.err.println("\n\n========================================\n\n")
-    System.err.println("当前开发的组件开发修改版本号后，直接在根目录运行下面的命令即可发布所有依赖到最新版本\n")
-    System.err.println("运行后升级版本的组件有：\n\n\t" + moduleList)
-    System.err.println("\n发布使用的命令： \n\n")
 
-    System.err.println("echo \"" + resultList + "\"  | xargs -I {} /bin/bash ./build_upload.sh {} " + zixieVersionName)
-    System.err.println("\n\n========================================\n\n")
 }
-
 
 def autoDependencies(String projectName, String moduleName) {
     if (zixieIsDebug) println("======== autoDependencies " + projectName + " ========")
@@ -379,15 +176,15 @@ def autoDependencies(String projectName, String moduleName) {
 }
 
 ext {
-    zixieMainProject = mainProject
-    zixieDevelopModule = developModule
+    zixieMainProject = ext.mainProject
+    zixieDevelopModule = ext.developModule
     zixieRepoName = "android"
     zixieUserOrg = 'bihe0832'
     zixieGroupId = "com.bihe0832.android"
     zixieLicences = ""
     zixieVersionCode = Integer.parseInt(['sh', '-c', 'git rev-list --all --count'].execute().text.trim())
-    zixieVersionName = moduleVersionName
-    zixieModuleInfo = moduleInfo
+    zixieVersionName = ext.moduleVersionName
+    zixieModuleInfo = ext.moduleInfo
     zixieModules = new ArrayList<>()
     zixieIncludeList = new ArrayList<>()
     zixieIsDebug = false
