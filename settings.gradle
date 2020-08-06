@@ -2,6 +2,9 @@ apply from: rootDir.toString() + '/build_module.gradle'
 System.err.println("MainProjectList: " + zixieMainProject)
 System.err.println("DevProjectList: " + zixieDevelopModule)
 if (zixieIncludeALL) {
+    zixieDevelopModule.split(",").each { projectName ->
+        addInclude(projectName)
+    }
     zixieModuleInfo.each { projectName, subModuleList ->
         System.out.println("-------- Check ALL Module Project: " + projectName + "--------")
         autoAddIncludeMax(projectName)
