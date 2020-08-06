@@ -1,5 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply from: 'config.gradle'
+apply from: rootDir.toString() + '/config.gradle'
+apply from: rootDir.toString() + '/build_module.gradle'
 
 buildscript {
     repositories {
@@ -17,6 +18,11 @@ buildscript {
     }
 }
 
+task clean(type: Delete) {
+    println("clean " + rootProject.buildDir)
+    delete rootProject.buildDir
+}
+
 allprojects {
     repositories {
         maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
@@ -27,24 +33,53 @@ allprojects {
             dirs './../libs/'
         }
     }
+
+    afterEvaluate { Project subproject ->
+        if (subproject.name == rootProject.name) {
+            subproject.getTasks().create("zixiePublishCommand", {
+                zixiePublishCommand()
+            })
+//            rootProject.getTasks().getByName('buildEnvironment').doLast {
+//                System.err.println("zixiePublishCommand exex ")
+//                zixiePublishCommand()
+//            }
+        }
+    }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
 
 subprojects {
-    apply plugin: 'com.bihe0832.gradleDependenciesCheck'
-    GradleDependenciesCheckConfig {
-        showResultType = 1
-        excludePackage ="com.android.support;org.jetbrains.kotlin;android.arch.lifecycle"
-    }
-    afterEvaluate { Project project ->
-        project.getTasks().getByName('clean').doFirst {
+//    apply plugin: 'com.bihe0832.gradleDependenciesCheck'
+//
+//    GradleDependenciesCheckConfig {
+//        showResultType = 1
+//        excludePackage = "com.android.support;org.jetbrains.kotlin;android.arch.lifecycle"
+//    }
+
+    afterEvaluate { Project subproject ->
+        if (zixieIsDebug) println("subprojects afterEvaluate : " + subproject.name)
+
+        if (zixieIsDebug) println("======== Dependencies " + subproject.name + " ========")
+        def projectName = subproject.name
+        fileTree(dir: rootDir.toString() + '/libs', include: '*.aar').each { File file ->
+            def name = file.name.lastIndexOf('.').with {
+                it != -1 ? file.name[0..<it] : file.name
+            }
+            if (zixieIsDebug) println("fileTree dependencies： " + file + "")
+            project(':' + projectName).dependencies.add("api", [name: name, ext: 'aar'])
+        }
+
+        fileTree(dir: rootDir.toString() + '/libs', include: '*.jar').each { File file ->
+            if (zixieIsDebug) println("fileTree dependencies： " + file + "")
+            project(':' + projectName).dependencies.add("api", files(file))
+        }
+        zixieAutoDependencies(projectName, projectName)
+        if (zixieIsDebug) println("======== Dependencies " + subproject.name + " ========")
+
+        subproject.getTasks().getByName('clean').doFirst {
             delete "build"
             delete ".externalNativeBuild"
         }
-        project.getTasks().getByName('clean').dependsOn("checkGradleDependencies")
-//        project.getTasks().getByName('preBuild').dependsOn("checkGradleDependencies")
+//        subproject.getTasks().getByName('bintrayUpload').dependsOn("build")
     }
 }

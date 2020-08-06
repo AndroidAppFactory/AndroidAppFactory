@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion project.commonMinSdkVersion
         targetSdkVersion project.targetSdkVersion
-        versionCode project.mnaLib.versionCode
-        versionName project.mnaLib.versionName
+        versionCode project.zixieVersionCode
+        versionName project.zixieVersionName
     }
 
     buildTypes {
@@ -26,19 +26,12 @@ android {
 }
 
 publish {
-    artifactId = 'lib-android'//项目名称
-    repoName = rootProject.repoName
-    publishVersion = '1.0.1'//版本号
-    userOrg = rootProject.userOrg
-    groupId = rootProject.groupId
-    licences = rootProject.licences
+    artifactId = rootProject.zixieModuleInfo[project.name].get("artifactId")
+    repoName = rootProject.zixieRepoName
+    publishVersion = rootProject.zixieModuleInfo[project.name].get("version")
+    userOrg = rootProject.zixieUserOrg
+    groupId = rootProject.zixieGroupId
+    licences = rootProject.zixieLicences
     desc = 'the android source for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
-}
-dependencies {
-    api "com.android.support:appcompat-v7:${project.android_support_version}"
-    api "com.android.support:recyclerview-v7:${project.android_support_version}"
-    api "com.android.support:support-annotations:$project.android_support_version"
-    api "com.android.support:support-v4:${project.android_support_version}"
-    api "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}"
 }
