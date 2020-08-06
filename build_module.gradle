@@ -111,13 +111,13 @@ def zixiePublishCommand() {
     if (moduleList.size() > 0) {
         if (zixieIsDebug) System.err.println("showCommand before :" + moduleList)
         for (int i = 0; i < moduleList.size(); i++) {
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j < moduleList.size() - 1; j++) {
                 if (zixieIsDebug) println("----- showCommand " + i + " " + j)
                 if (zixieIsDebug) println("showCommand " + moduleList.get(i) + " " + moduleList.get(j) + " " + (checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0))
                 if ((checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0)) {
-                    def temp = moduleList.get(j + 1)
+                    def temp = moduleList.get(i)
                     if (zixieIsDebug) println("showCommand before:" + moduleList)
-                    moduleList.set(j + 1, moduleList.get(j))
+                    moduleList.set(i, moduleList.get(j))
                     moduleList.set(j, temp)
                     if (zixieIsDebug) println("showCommand before:" + moduleList)
                 } else {
@@ -161,7 +161,6 @@ def autoDependencies(String projectName, String moduleName) {
                 if (item.contains(":")) {
                     project(':' + projectName).dependencies.add("api", item)
                 } else {
-                    rootProject.zixieUserOrg
                     if (null != zixieModuleInfo[item]) {
                         project(':' + projectName).dependencies.add("api", zixieGroupId + ":" + zixieModuleInfo[item].get("artifactId") + ":" + zixieModuleInfo[item].get("version"))
                     }
