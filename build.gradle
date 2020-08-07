@@ -66,22 +66,7 @@ subprojects {
     afterEvaluate { Project subproject ->
         if (zixieIsDebug) println("subprojects afterEvaluate : " + subproject.name)
 
-        if (zixieIsDebug) println("======== Dependencies " + subproject.name + " ========")
-        def projectName = subproject.name
-        fileTree(dir: rootDir.toString() + '/libs', include: '*.aar').each { File file ->
-            def name = file.name.lastIndexOf('.').with {
-                it != -1 ? file.name[0..<it] : file.name
-            }
-            if (zixieIsDebug) println("fileTree dependencies： " + file + "")
-            project(':' + projectName).dependencies.add("api", [name: name, ext: 'aar'])
-        }
-
-        fileTree(dir: rootDir.toString() + '/libs', include: '*.jar').each { File file ->
-            if (zixieIsDebug) println("fileTree dependencies： " + file + "")
-            project(':' + projectName).dependencies.add("api", files(file))
-        }
-        zixieAutoDependencies(projectName, projectName)
-        if (zixieIsDebug) println("======== Dependencies " + subproject.name + " ========")
+        zixieAutoDependencies(subproject.name)
 
         subproject.getTasks().getByName('clean').doFirst {
             delete "build"
