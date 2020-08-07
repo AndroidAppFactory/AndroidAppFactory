@@ -36,7 +36,7 @@ def addInclude(projectName) {
 
 def autoAddIncludeMax(projectName){
     if (zixieIsDebug) System.out.println("Auto Add Include Max: " + projectName + " ~~~")
-    if (checkModuleIsDev(projectName)) {
+    if (zixieCheckModuleIsDev(projectName)) {
         if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + "is dev")
         addInclude(projectName)
     } else {
@@ -51,7 +51,7 @@ def autoAddIncludeMin(projectName) {
         if (zixieIsDebug) System.out.println("dependenciesList:" + zixieModuleInfo[projectName].get("dependenciesList"))
         zixieModuleInfo[projectName].get("dependenciesList").each { moduleName ->
             if (!zixieIncludeList.contains(moduleName)) {
-                if (checkModuleIsDev(moduleName)) {
+                if (zixieCheckModuleIsDev(moduleName)) {
                     if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + " has " + moduleName + "is dev")
                     addInclude(moduleName)
                 } else {

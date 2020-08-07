@@ -5,9 +5,9 @@ uploadArchives {
     repositories.mavenDeployer {
         repository(url: "file://" + rootDir.toString() + "/mnalibs/")
         pom.project {
-            groupId project.mnaGroup
+            groupId project.zixieGroupId
             artifactId module.name
-            version project.mnaVersionName
+            version project.zixieVersionName
         }
     }
 }
