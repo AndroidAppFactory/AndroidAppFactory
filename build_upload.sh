@@ -56,22 +56,22 @@ rm -fr $localPath/bin/*
 # 修改版本名称
 src="def *mainProject *= *\\\""
 dst="def mainProject = \\\"${libName}\\\""
-cat $localPath/build_module.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/build_module.gradle
-mv -f $localPath/bin/build_module.gradle $localPath/build_module.gradle
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 src="def *developModule *= *\\\""
 dst="def developModule = \\\"${libName}\\\""
-cat $localPath/build_module.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/build_module.gradle
-mv -f $localPath/bin/build_module.gradle $localPath/build_module.gradle
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
 src="[0-9]*\.[0-9]*\.[0-9]*"
-cat $localPath/build_module.gradle | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/build_module.gradle
-mv -f $localPath/bin/build_module.gradle $localPath/build_module.gradle
+cat $localPath/dependencies.gradle | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 if [[ $libName == Router* ]]; then
   ./gradlew clean bintrayUpload -PdryRun=false
 else
   ./gradlew clean bintrayUpload -PdryRun=false -xjavadocRelease -xlint
 fi
 checkResult
-git add $localPath/build_module.gradle
-git commit $localPath/build_module.gradle -m"auto add by build.sh, author:zixie "
+git add $localPath/dependencies.gradle
+git commit $localPath/dependencies.gradle -m"auto add by build.sh, author:zixie "
 checkResult
