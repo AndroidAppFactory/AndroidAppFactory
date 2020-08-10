@@ -37,7 +37,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ZLog.setDebug(false)
+        ZLog.setDebug(true)
         Config.init(applicationContext, "", true)
 
         if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
@@ -132,8 +132,8 @@ class MainActivity : Activity() {
         testFun.setOnClickListener {
 //            testNotifyProcess(0)
 
-            ZLog.d(LOG_TAG,"fdsfs")
-
+            ZLog.d(LOG_TAG, "fdsfs")
+            testJson()
 
 //            TaskManager.getInstance().addTask(TestTask())
 
@@ -143,13 +143,16 @@ class MainActivity : Activity() {
 
 
     private fun testJson() {
-        for (i in 0..100) {
-            var start = System.currentTimeMillis()
-            ZLog.d(LOG_TAG, "JsonHelper: start $start")
-            JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
-            var end = System.currentTimeMillis()
-            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
-        }
+//        for (i in 0..100) {
+//            var start = System.currentTimeMillis()
+//            ZLog.d(LOG_TAG, "JsonHelper: start $start")
+//            JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
+//            var end = System.currentTimeMillis()
+//            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
+//        }
+        var result = JsonHelper.getGson().fromJson("{\"key\": 1222,\"value\": [1222,2222]}", JsonTest::class.java)
+        ZLog.d(LOG_TAG, "result:" + result)
+
     }
 
     private fun testMD5() {
