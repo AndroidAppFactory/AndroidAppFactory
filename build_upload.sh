@@ -53,13 +53,12 @@ if [ ! -d "$localPath/bin" ]; then
 fi
 rm -fr $localPath/bin/*
 
-# 修改版本名称
-src="def *mainProject *= *\\\""
-dst="def mainProject = \\\"${libName}\\\""
+src=" *ext.mainProject *= *\\\""
+dst="ext.mainProject = \\\"${libName}\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
-src="def *developModule *= *\\\""
-dst="def developModule = \\\"${libName}\\\""
+src=" *ext.developModule *= *\\\""
+dst="ext.developModule = \\\"${libName}\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
