@@ -1,0 +1,250 @@
+apply from: rootDir.toString() + '/config.gradle'
+def project = ext
+
+/************************************ 组件化开发常用配置 ************************************/
+/**
+ * 当前开发中，最终运行的主工程，多个用 "," 分隔
+ * 当前如果全量填"APPTest"
+ */
+ext.mainProject = "APPTest"
+/**
+ * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
+ * 当前如果全量填"LibAndroid,LibThread,LibCommonUtils,LibCommonUIUtils,LibRequest,LibSqlite"
+ */
+ext.developModule = "LibGson"
+/**
+ * 是否将所有依赖了 developModule 的模块都加载进来。
+ *  true 全都加载，
+ *  false 仅加载与 mainProject 相关的模块
+ */
+ext.includeALLDependOnDevelopModule = false
+/**
+ * 组件所有模块的最新版本，下次发布时使用
+ */
+ext.moduleVersionName = "2.0.6"
+/************************************ 组件化开发常用配置 ************************************/
+
+ext.moduleInfo = [
+
+        "APPTest"                   : [
+                "version"         : "",
+                "artifactId"      : "",
+                "dependenciesList": ["LibWrapper"]
+        ],
+        "RouterAnnotation"          : [
+                "version"         : "1.2.1",
+                "artifactId"      : "lib-router-annotation",
+                "dependenciesList": []
+        ],
+        "RouterCompiler"            : [
+                "version"         : "1.2.4",
+                "artifactId"      : "lib-router-compiler",
+                "dependenciesList": [
+                        'com.squareup:javapoet:1.8.0',
+                        'com.google.auto.service:auto-service:1.0-rc3',
+                        'com.bihe0832.android:lib-router-annotation:1.2.1',
+                        'com.bihe0832.android:lib-router:1.2.3'
+                ]
+        ],
+        "Router"                    : [
+                "version"         : "1.2.4",
+                "artifactId"      : "lib-router",
+                "dependenciesList": [
+                        "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}",
+                        "RouterAnnotation"
+                ]
+        ],
+        "LibAndroid"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-android",
+                "dependenciesList": [
+                        "com.android.support:appcompat-v7:${project.android_support_version}",
+                        "com.android.support:recyclerview-v7:${project.android_support_version}",
+                        "com.android.support:support-annotations:$project.android_support_version",
+                        "com.android.support:support-v4:${project.android_support_version}",
+                        "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}"
+                ]
+        ],
+        "LibLog"                    : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-log",
+                "dependenciesList": ["LibAndroid"]
+        ],
+
+        "LibCommonUtils"            : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-utils-common",
+                "dependenciesList": ["LibAndroid", "LibLog"]
+        ],
+        "LibCommonUIUtils"          : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-ui-common",
+                "dependenciesList": ["LibAndroid", "LibLog"]
+        ],
+        "LibThread"                 : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-thread",
+                "dependenciesList": []
+        ],
+        "LibEncrypt"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-encrypt",
+                "dependenciesList": ["LibLog"]
+        ],
+        "LibChannel"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-channel",
+                "dependenciesList": ["LibLog"]
+        ],
+        "LibRequest"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-request",
+                "dependenciesList": []
+        ],
+        "LibGson"                   : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-gson",
+                "dependenciesList": [
+                        "com.google.code.gson:gson:${project.gson_version}",
+                        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${project.kotlin_version}",
+                        "LibCommonUtils",
+                ]
+        ],
+        "LibHttpCommon"             : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-http-common",
+                "dependenciesList": ["LibThread", "LibLog"]
+        ],
+        "LibHttpAdvanced"           : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-http-advanced",
+                "dependenciesList": ["LibHttpCommon", "LibGson"]
+        ],
+        "LibSqlite"                 : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-sqlite",
+                "dependenciesList": []
+        ],
+        "LibFragmentation_core"     : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-fragmentation-core",
+                "dependenciesList": ["LibCommonUIUtils"]
+        ],
+        "LibFragmentation"          : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-fragmentation",
+                "dependenciesList": ["LibFragmentation_core"]
+        ],
+        "LibFragmentation_swipeback": [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-fragmentation-swipeback",
+                "dependenciesList": ["LibFragmentation"]
+        ],
+        "LibFlycoTabLayout"         : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-flycotablayout",
+                "dependenciesList": ["LibCommonUIUtils"]
+        ],
+        "LibQRCode"                 : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-qrcode",
+                "dependenciesList": [
+                        'com.google.zxing:core:3.3.0',
+                        "LibCommonUIUtils"
+                ]
+        ],
+        "LibAdapter"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-adapter",
+                "dependenciesList": ["LibCommonUIUtils"]
+        ],
+        "LibRefresh"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-refresh",
+                "dependenciesList": [
+                        'com.github.ybq:Android-SpinKit:1.0.2',
+                        "LibAdapter"
+                ]
+        ],
+        "LibDeviceNetwork"          : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-device-network",
+                "dependenciesList": ["LibCommonUtils"]
+        ],
+        "LibTimer"                  : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-timer",
+                "dependenciesList": ["LibThread", "LibLog"]
+        ],
+        "LibConfig"                 : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-config",
+                "dependenciesList": ["LibCommonUtils"]
+        ],
+        "LibToast"                  : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-toast",
+                "dependenciesList": ["LibThread"]
+        ],
+        "LibAPK"                    : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-utils-apk",
+                "dependenciesList": ["LibToast", "LibLog"]
+        ],
+        "LibTTS"                    : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-tts",
+                "dependenciesList": ["LibConfig"]
+        ],
+        "LibFile"                   : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-file",
+                "dependenciesList": ["LibEncrypt", "LibCommonUtils"]
+        ],
+        "LibDownloadAndInstall"     : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-download-install",
+                "dependenciesList": ["LibFile", "LibThread"]
+        ],
+        "LibImage"                  : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-image",
+                "dependenciesList": [
+                        "com.github.bumptech.glide:glide:${project.glide_version}",
+                        "com.github.bumptech.glide:okhttp3-integration:${project.glide_version}",
+                        "LibLog"
+                ]
+        ],
+        "LibDialog"                 : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-dialog",
+                "dependenciesList": ["LibThread", "LibImage", "LibCommonUIUtils"]
+        ],
+        "LibNotification"           : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-notification",
+                "dependenciesList": ["LibDialog", "LibAPK", "LibCommonUtils"]
+        ],
+        "LibUIUtils"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-uiutils",
+                "dependenciesList": [
+                        "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
+                        "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification"
+                ]
+        ],
+        "LibUtils"                  : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-utils",
+                "dependenciesList": [
+                        "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
+                        "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownloadAndInstall",
+                        "LibAPK", "LibTTS"
+                ]
+        ],
+        "LibWrapper"                : [
+                "version"         : "2.0.5",
+                "artifactId"      : "lib-wrapper",
+                "dependenciesList": ["LibUtils", "LibUIUtils"]
+        ]
+]
