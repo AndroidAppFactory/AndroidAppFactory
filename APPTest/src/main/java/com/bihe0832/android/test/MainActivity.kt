@@ -10,13 +10,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.FileProvider
+import android.text.Html
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
-import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
@@ -24,7 +24,6 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
-import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.testNotifyProcess
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -133,11 +132,7 @@ class MainActivity : Activity() {
 //            testNotifyProcess(0)
 
             ZLog.d(LOG_TAG, "fdsfs")
-            testJson()
-
-//            TaskManager.getInstance().addTask(TestTask())
-
-
+            testTextView()
         }
     }
 
@@ -150,8 +145,9 @@ class MainActivity : Activity() {
 //            var end = System.currentTimeMillis()
 //            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //        }
-        var result = JsonHelper.getGson().fromJson("{\"key\": 1222,\"value\": [1222,2222]}", JsonTest::class.java)
-        ZLog.d(LOG_TAG, "result:" + result)
+//        var result = JsonHelper.getGson().fromJson("{\"key\": 1222,\"value\": [1222,2222]}", JsonTest::class.java)
+//        ZLog.d(LOG_TAG, "result:" + result)
+
 
     }
 
@@ -181,6 +177,18 @@ class MainActivity : Activity() {
 
             }
         }
+    }
+
+    private fun testTextView() {
+        var data =
+                "正常的文字效果<BR>" +
+                "<p>正常的文字效果</p>" +
+                "<p><b>文字加粗</b></p>" +
+                "<p><em>文字斜体</em></p>" +
+                "<p><font color='#428bca'>修改文字颜色</font></p>"
+
+        testResult.text = Html.fromHtml(data)
+
     }
 
     private fun userInput(): String? {
