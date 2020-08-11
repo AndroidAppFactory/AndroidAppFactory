@@ -1,6 +1,6 @@
 package com.bihe0832.android.test.module;
 
-import com.bihe0832.android.lib.gson.RawStringJsonAdapter;
+import com.bihe0832.android.lib.gson.adapter.RawStringJsonAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
