@@ -148,6 +148,11 @@ class MainActivity : Activity() {
 //        }
         var result = JsonHelper.fromJsonList<JsonTest>("[{\"key\": 1111,\"value\": [1222,2222]},{\"key\": 2222,\"value\": [1222,2222]}]", JsonTest::class.java)
         ZLog.d(LOG_TAG, "result:" + result)
+        JsonTest().apply {
+            key = 1212
+        }.let {
+            ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
+        }
 
 
     }

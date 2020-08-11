@@ -41,10 +41,11 @@ allprojects {
             })
 
             subproject.getTasks().create("showInfo", {
-                System.err.println("****************************************************\n")
-                System.err.println("    Android 构建已基于组件化重构，详细信息可以参考文档：   \n")
-                System.err.println("    https://android.bihe0832.com/#!doc/dev.md\n")
-                System.err.println("*****************************************************")
+
+                System.err.println("\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+                System.err.println("|\n|  Android 构建已基于组件化重构，详细信息可以参考文档" )
+                System.err.println("|\n|  https://android.bihe0832.com/#!doc/dev.md" )
+                System.err.println("|\n >>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             })
 
             rootProject.getTasks().getByName('buildEnvironment').doLast {
