@@ -8,7 +8,9 @@ import com.google.gson.stream.JsonWriter;
 /**
  * @author hardyshi code@bihe0832.com
  * Created on 2020/8/10.
- * Description: 通过 @JsonAdapter 注解，部分字段不解析
+ * Description: 通过
+ *          @JsonAdapter(RawStringJsonAdapter.class)
+ *   注解，该字段不解析
  */
 public class RawStringJsonAdapter extends TypeAdapter<String> {
 
