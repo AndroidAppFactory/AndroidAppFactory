@@ -1,9 +1,11 @@
 package com.bihe0832.android.lib.gson
 
 import android.util.Log
+import com.bihe0832.android.lib.gson.adapter.*
+import com.bihe0832.android.lib.gson.type.ParameterizedTypeImpl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 
 /**
@@ -34,6 +36,8 @@ object JsonHelper {
                 .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
                 .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
                 .registerTypeAdapter(String::class.java, StringNullAdapter())
+                .registerTypeAdapter(String::class.javaPrimitiveType, StringNullAdapter())
+
                 .create()
     }
 
@@ -65,7 +69,7 @@ object JsonHelper {
      * @return T类型的bean类
      *
      * i.e: BeanClass beanClass = JsonHelper.fromJson(json, BeanClass.class);
-    */
+     */
     fun <T> fromJson(json: String, beanClass: Class<T>): T? {
         try {
             return getGson().fromJson(json, beanClass)
@@ -85,16 +89,11 @@ object JsonHelper {
      * @return List<T> bean类的List
      *
      * i.e: List<BeanClass>  beanClass = JsonHelper.fromJsonList(json, BeanClass.class);
-    */
-    fun <T> fromJsonList(json: String, beanClass: Class<T>): List<T>? {
+     */
+    fun <T> fromJsonList(json: String, clazz: Class<*>?): List<T>? {
         try {
-            val typeToken = object : TypeToken<ArrayList<T>>() {}
-            val result = getGson().fromJson(json, typeToken.rawType)
-            return if (result is List<*>) {
-                result as List<T>
-            } else {
-                mutableListOf()
-            }
+            val type: Type = ParameterizedTypeImpl(clazz)
+            return Gson().fromJson(json, type)
         } catch (e: Exception) {
             Log.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
         }

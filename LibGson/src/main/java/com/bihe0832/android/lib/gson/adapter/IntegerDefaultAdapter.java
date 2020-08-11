@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.gson;
+package com.bihe0832.android.lib.gson.adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -15,19 +15,19 @@ import java.lang.reflect.Type;
  * Created on 2019-11-18.
  * Description: Description
  */
-public class LongDefaultAdapter implements JsonSerializer<Long>, JsonDeserializer<Long> {
+public class IntegerDefaultAdapter implements JsonSerializer<Integer>, JsonDeserializer<Integer> {
     @Override
-    public Long deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context){
+    public Integer deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context){
         try {
-            return ConvertUtils.parseLong(json.getAsString(),0);
+            return ConvertUtils.parseInt(json.getAsString(),0);
         } catch (Exception ignore) {
             ignore.printStackTrace();
-            return 0L;
+            return 0;
         }
     }
 
     @Override
-    public JsonElement serialize(Long src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(Integer src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(src);
     }
 }

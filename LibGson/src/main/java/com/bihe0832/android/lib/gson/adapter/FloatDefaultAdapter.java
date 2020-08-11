@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.gson;
+package com.bihe0832.android.lib.gson.adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -15,19 +15,19 @@ import java.lang.reflect.Type;
  * Created on 2019-11-18.
  * Description: Description
  */
-public class DoubleDefaultAdapter implements JsonSerializer<Double>, JsonDeserializer<Double> {
+public class FloatDefaultAdapter implements JsonSerializer<Float>, JsonDeserializer<Float> {
     @Override
-    public Double deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context){
+    public Float deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context){
         try {
-            return ConvertUtils.parseDouble(json.getAsString(),0);
+            return ConvertUtils.parseFloat(json.getAsString(),0);
         } catch (Exception ignore) {
             ignore.printStackTrace();
-            return 0d;
+            return 0f;
         }
     }
 
     @Override
-    public JsonElement serialize(Double src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(Float src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(src);
     }
 }

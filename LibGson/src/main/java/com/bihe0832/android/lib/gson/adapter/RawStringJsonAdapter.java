@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.gson;
+package com.bihe0832.android.lib.gson.adapter;
 
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
