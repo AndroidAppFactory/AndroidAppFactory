@@ -149,28 +149,18 @@ def getPublishCommand() {
 def addDependencies(String projectName) {
     if (zixieIsDebug) println("======== addDependencies " + projectName + " ========")
     fileTree(dir: rootDir.toString() + '/libs', include: '*.aar').each { File file ->
-        def name = file.name.lastIndexOf('.').with {
-            it != -1 ? file.name[0..<it] : file.name
-        }
         if (zixieIsDebug) println("fileTree dependencies： " + file + "")
-        if (isApplicationModule(projectName)) {
-            project(':' + projectName).dependencies.add("api", [name: name, ext: 'aar'])
-        } else {
-            project(':' + projectName).dependencies.add("compileOnly", [name: name, ext: 'aar'])
-        }
+        addDependenciesOnce(projectName, file.name)
     }
 
     fileTree(dir: rootDir.toString() + '/libs', include: '*.jar').each { File file ->
         if (zixieIsDebug) println("fileTree dependencies： " + file + "")
-        if (isApplicationModule(projectName)) {
-            project(':' + projectName).dependencies.add("api", files(file))
-        } else {
-            project(':' + projectName).dependencies.add("compileOnly", files(file))
-        }
+        addDependenciesOnce(projectName, rootDir.toString() + '/libs/' + file.name)
     }
     autoDependencies(projectName, projectName)
     if (zixieIsDebug) println("======== addDependencies " + projectName + " ========")
 }
+
 
 //根据依赖添加依赖
 def autoDependencies(String projectName, String moduleName) {
@@ -178,22 +168,8 @@ def autoDependencies(String projectName, String moduleName) {
     if (zixieIsDebug) println("check " + projectName + " depenciese:" + moduleName)
     if (zixieModuleInfo[moduleName] != null) {
         zixieModuleInfo[moduleName].get("dependenciesList").each { item ->
-            if (checkModuleIsDev(item)) {
-                if (zixieIsDebug) println(projectName + " add source dependencies:" + item)
-                project(':' + projectName).dependencies.add("api", project(':' + item + ''))
-            } else {
-                if (zixieIsDebug) println(projectName + " add aar dependencies:" + item)
-                if (item.contains(":")) {
-                    project(':' + projectName).dependencies.add("api", item)
-                } else {
-                    if (zixieIsDebug) println(projectName + " add aar dependencies:" + item)
-                    if (zixieIsDebug) println(projectName + " add aar dependencies:" + zixieModuleInfo[item])
-                    if (null != zixieModuleInfo[item]) {
-//                        project(':' + projectName).dependencies.add("api", [name: item + "-release", ext: 'aar'])
-                        project(':' + projectName).dependencies.add("api", zixieGroupId + ":" + zixieModuleInfo[item].get("artifactId") + ":" + zixieModuleInfo[item].get("version"))
-                    }
-                }
-            }
+            if (zixieIsDebug) println(projectName + " addDependenciesOnce:" + item)
+            addDependenciesOnce(projectName, item)
             autoDependencies(projectName, item)
         }
     }
@@ -201,8 +177,47 @@ def autoDependencies(String projectName, String moduleName) {
     return true
 }
 
+
+def addDependenciesOnce(projectName, String moduleName) {
+    String type = ""
+    if (isDebugModule(moduleName)) {
+        type = "debugApi"
+    } else {
+        if (isApplicationModule(projectName)) {
+            type = "api"
+        } else {
+            type = "implementation"
+        }
+    }
+    if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + type + " " + moduleName)
+    if (moduleName.endsWith(".jar")) {
+        project(':' + projectName).dependencies.add(type, files(moduleName))
+    } else if (moduleName.endsWith(".aar")) {
+        def name = moduleName.lastIndexOf('.').with {
+            it != -1 ? moduleName[0..<it] : moduleName
+        }
+        project(':' + projectName).dependencies.add(type, [name: name, ext: 'aar'])
+    } else if (moduleName.contains(":")) {
+        project(':' + projectName).dependencies.add(type, moduleName)
+    } else if (checkModuleIsDev(moduleName)) {
+        project(':' + projectName).dependencies.add(type, project(':' + moduleName + ''))
+    } else {
+        if (moduleName.contains(":")) {
+            project(':' + projectName).dependencies.add(type, moduleName)
+        } else {
+            if (null != zixieModuleInfo[item]) {
+                project(':' + projectName).dependencies.add(type, zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
+            }
+        }
+    }
+}
+
 def isApplicationModule(String projectName) {
     return projectName == "APPTest"
+}
+
+def isDebugModule(String projectName) {
+    return false
 }
 
 ext {
