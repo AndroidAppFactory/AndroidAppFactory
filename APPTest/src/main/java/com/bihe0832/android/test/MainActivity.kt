@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
+import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
@@ -145,8 +146,9 @@ class MainActivity : Activity() {
 //            var end = System.currentTimeMillis()
 //            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //        }
-//        var result = JsonHelper.getGson().fromJson("{\"key\": 1222,\"value\": [1222,2222]}", JsonTest::class.java)
-//        ZLog.d(LOG_TAG, "result:" + result)
+        var data = "[{\"head\": \"本场最佳:M24\", \"icon\": null, \"text\": [], \"attribute\": [{\"name\": \"击杀敌人\", \"value\": \"13次\"}, {\"name\": \"击倒敌人\", \"value\": \"10次\"}, {\"name\": \"武器类型\", \"value\": \"狙击步枪\"}, {\"name\": \"开火方式\", \"value\": \"单发\"}, {\"name\": \"子弹类型\", \"value\": \"7.62毫米\"}, {\"name\": \"弹夹容量\", \"value\": \"5发\"}, {\"name\": \"子弹初速\", \"value\": \"790米/秒\"}, {\"name\": \"归零距离\", \"value\": \"100-800\"}, {\"name\": \"躯干伤害\", \"value\": \"107.2\"}, {\"name\": \"爆头伤害\", \"value\": \"187.5\"}, {\"name\": \"每秒发射\", \"value\": \"0.56发\"}, {\"name\": \"换弹时间\", \"value\": \"4.2秒\"}, {\"name\": \"垂直后座强度\", \"value\": \"27\"}, {\"name\": \"水平后座强度\", \"value\": \"12.6\"}]}]"
+        var result = JsonHelper.getGson().fromJson("{\"key\": 1222,\"value\": [1222,2222]}", JsonTest::class.java)
+        ZLog.d(LOG_TAG, "result:" + result)
 
 
     }

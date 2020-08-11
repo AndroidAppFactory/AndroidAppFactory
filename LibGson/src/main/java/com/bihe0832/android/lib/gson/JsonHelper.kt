@@ -87,8 +87,8 @@ object JsonHelper {
      * i.e: List<BeanClass>  beanClass = JsonHelper.fromJsonList(json, BeanClass.class);
     */
     fun <T> fromJsonList(json: String, beanClass: Class<T>): List<T>? {
-        val typeToken = object : TypeToken<ArrayList<T>>() {}
         try {
+            val typeToken = object : TypeToken<ArrayList<T>>() {}
             val result = getGson().fromJson(json, typeToken.rawType)
             return if (result is List<*>) {
                 result as List<T>
