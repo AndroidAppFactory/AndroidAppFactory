@@ -205,7 +205,7 @@ def addDependenciesOnce(projectName, String moduleName) {
         if (moduleName.contains(":")) {
             project(':' + projectName).dependencies.add(type, moduleName)
         } else {
-            if (null != zixieModuleInfo[item]) {
+            if (null != zixieModuleInfo[moduleName]) {
                 project(':' + projectName).dependencies.add(type, zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
             }
         }
