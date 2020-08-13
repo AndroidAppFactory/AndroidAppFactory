@@ -180,13 +180,20 @@ def autoDependencies(String projectName, String moduleName) {
 
 def addDependenciesOnce(projectName, String moduleName) {
     String type = ""
+    if(null == moduleName || moduleName.trim().length() ==0){
+        return
+    }
     if (isDebugModule(moduleName)) {
         type = "debugApi"
     } else {
         if (isApplicationModule(projectName)) {
             type = "api"
         } else {
-            type = "implementation"
+            if(moduleName.endsWith(".jar") || moduleName.endsWith(".aar")){
+                type = "compileOnly"
+            }else {
+                type = "implementation"
+            }
         }
     }
     if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + type + " " + moduleName)
@@ -205,6 +212,7 @@ def addDependenciesOnce(projectName, String moduleName) {
         if (moduleName.contains(":")) {
             project(':' + projectName).dependencies.add(type, moduleName)
         } else {
+	    //project(':' + projectName).dependencies.add(type, [name: moduleName + "-release", ext: 'aar'])
             if (null != zixieModuleInfo[moduleName]) {
                 project(':' + projectName).dependencies.add(type, zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
             }

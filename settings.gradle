@@ -24,7 +24,9 @@ System.err.println("当前工程导入组件如下：\n\n\t" + zixieIncludeList 
 System.err.println("\n\n========================================\n\n")
 
 def addInclude(projectName) {
-    if (zixieIncludeList.contains(projectName)) {
+    if (null == projectName || projectName.trim().length() == 0) {
+        if (zixieIsDebug) System.out.println("Add Include: " + projectName + " is bad !")
+    } else if (zixieIncludeList.contains(projectName)) {
         if (zixieIsDebug) System.out.println("Add Include: " + projectName + " has add !")
     } else {
         String finalProjectName = ':' + projectName
