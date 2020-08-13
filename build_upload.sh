@@ -27,15 +27,16 @@ deleteempty() {
 echo "********APK build init set env *******"
 localPath=$(pwd)
 echo "localPath:"$localPath
+libName=$1
+version=$2
+echo "libName:"$libName
+echo "version:"$version
 hasNotCommit=$(git status | grep "what will be committed" | wc -l)
 if [ $hasNotCommit -gt 0 ]; then
   echo "------------- git has code not commit !!!!!!!!!!!! -------------"
    exit
 fi
-libName=$1
-version=$2
-echo "libName:"$libName
-echo "version:"$version
+
 if [ "$libName"x = ""x ]; then
   echo "------------- libName can not be null !!!!!!!!!!!! -------------"
   exit
