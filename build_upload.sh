@@ -58,8 +58,15 @@ src=" *ext.mainProject *= *\\\""
 dst="ext.mainProject = \\\"${libName}\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
+
 src=" *ext.developModule *= *\\\""
 dst="ext.developModule = \\\"${libName}\\\""
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
+
+
+src=" *ext.includeALLDependOnDevelopModule *= *\\\""
+dst="ext.includeALLDependOnDevelopModule = false"
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
