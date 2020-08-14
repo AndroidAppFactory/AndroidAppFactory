@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,28 +20,12 @@ import java.util.Set;
 public class Routers {
 
     public static final String ROUTERS_KEY_RAW_URL = "com.bihe0832.router.URI";
-    //必须与RouterCompiler一致
-    public static final String STUB_PACKAGE_NAME = "com.bihe0832.android.lib.router.stub";
-    public static final String ROUTER_PACKAGE_NAME = "com.bihe0832.android.lib.router";
-
-    private static HashMap<String,Class<? extends Activity>> mappings = new HashMap<>();
 
     private static void initIfNeed(String format) {
-        if (!mappings.isEmpty() && mappings.containsKey(format)) {
+        if (!RouterMappingManager.getInstance().getMappings().isEmpty() && RouterMappingManager.getInstance().getMappings().containsKey(format)) {
             return;
         }
-        try {
-            Class<?> threadClazz = Class.forName(STUB_PACKAGE_NAME + ".RouterMapping_"+ format);
-            Method method = threadClazz.getMethod("map");
-            System.out.println(method.invoke(null, null));
-        }catch (Exception e){
-            e.printStackTrace();
-            mappings.put(format,null);
-        }
-    }
-
-    public static void map(String format, Class<? extends Activity> activity) {
-        mappings.put(format, activity);
+        RouterMappingManager.getInstance().initMapping(format);
     }
 
     public static boolean open(Context context, String url) {
@@ -108,7 +93,7 @@ public class Routers {
 
     public static Intent resolve(Context context, Uri uri) {
         initIfNeed(uri.getHost());
-        for (Map.Entry<String, Class<? extends Activity>> entry : mappings.entrySet()) {
+        for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getMappings().entrySet()) {
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
             if(entry.getKey().equalsIgnoreCase(uri.getHost()) && null != entry.getValue()){
                 Intent intent = new Intent(context, entry.getValue());
@@ -122,7 +107,7 @@ public class Routers {
 
     private static boolean doOpen(Context context, Uri uri, int requestCode) {
         initIfNeed(uri.getHost());
-        for (Map.Entry<String, Class<? extends Activity>> entry : mappings.entrySet()) {
+        for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getMappings().entrySet()) {
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
             if(entry.getKey().equalsIgnoreCase(uri.getHost()) && null != entry.getValue()){
                 Intent intent = new Intent(context, entry.getValue());
@@ -155,5 +140,9 @@ public class Routers {
             bundle.putString(name.toLowerCase(), value);
         }
         return bundle;
+    }
+
+    public static ArrayList<Class<? extends Activity>>  getMainActivityList(){
+        return RouterMappingManager.getInstance().getActivityIsMain();
     }
 }

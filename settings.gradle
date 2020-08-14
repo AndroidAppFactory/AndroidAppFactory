@@ -42,14 +42,14 @@ def autoAddIncludeMax(projectName){
         if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + "is dev")
         addInclude(projectName)
     } else {
-        if (zixieIsDebug) System.out.println("Check Module: " + projectName + "is not dev")
+        if (zixieIsDebug) System.out.println("Check Module: " + projectName + " is not dev")
     }
 }
 
 def autoAddIncludeMin(projectName) {
     if (zixieIsDebug) System.out.println("Auto Add Include Min: " + projectName + " ~~~")
-    if (zixieIsDebug) System.out.println("ModuleList:" + zixieModuleInfo[projectName])
-    if (null != zixieModuleInfo[projectName]) {
+    if (null != zixieModuleInfo &&   null != zixieModuleInfo[projectName]) {
+        if (zixieIsDebug) System.out.println("ModuleList of :" + projectName + ": " + zixieModuleInfo[projectName])
         if (zixieIsDebug) System.out.println("dependenciesList:" + zixieModuleInfo[projectName].get("dependenciesList"))
         zixieModuleInfo[projectName].get("dependenciesList").each { moduleName ->
             if (!zixieIncludeList.contains(moduleName)) {
@@ -57,15 +57,16 @@ def autoAddIncludeMin(projectName) {
                     if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + " has " + moduleName + "is dev")
                     addInclude(moduleName)
                 } else {
-                    if (zixieIsDebug) System.out.println("Check Module: " + moduleName + "is not dev")
+                    if (zixieIsDebug) System.out.println("Check Module: " + moduleName + " is not dev")
                 }
             } else {
                 if (zixieIsDebug) System.out.println("Check Module: " + moduleName + "has add to include")
             }
-            autoAddIncludeMin(moduleName)
+            if (!moduleName.contains(":")) {
+                autoAddIncludeMin(moduleName)
+            }
         }
     }
 }
-
 
 

@@ -196,6 +196,10 @@ def addDependenciesOnce(projectName, String moduleName) {
             }
         }
     }
+
+    if(projectName == "RouterCompiler"){
+        type = "compile"
+    }
     if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + type + " " + moduleName)
     if (moduleName.endsWith(".jar")) {
         project(':' + projectName).dependencies.add(type, files(moduleName))
@@ -207,11 +211,13 @@ def addDependenciesOnce(projectName, String moduleName) {
     } else if (moduleName.contains(":")) {
         project(':' + projectName).dependencies.add(type, moduleName)
     } else if (checkModuleIsDev(moduleName)) {
+        if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + type + " " + moduleName + "projec")
         project(':' + projectName).dependencies.add(type, project(':' + moduleName + ''))
     } else {
         if (moduleName.contains(":")) {
             project(':' + projectName).dependencies.add(type, moduleName)
         } else {
+            if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + type + " " + moduleName + "" + zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
 	    //project(':' + projectName).dependencies.add(type, [name: moduleName + "-release", ext: 'aar'])
             if (null != zixieModuleInfo[moduleName]) {
                 project(':' + projectName).dependencies.add(type, zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
