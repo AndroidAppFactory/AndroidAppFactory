@@ -6,18 +6,18 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest,Router,RouterCompiler,RouterAnnotation,LibDeviceNetwork"
+ext.mainProject = "RouterAnnotation"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid,LibThread,LibCommonUtils,LibCommonUIUtils,LibRequest,LibSqlite"
  */
-ext.developModule =  "RouterAnnotation,Router"
+ext.developModule = "RouterAnnotation"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
  *  false 仅加载与 mainProject 相关的模块
  */
-ext.includeALLDependOnDevelopModule = true
+ext.includeALLDependOnDevelopModule = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
@@ -32,7 +32,7 @@ ext.moduleInfo = [
                 "dependenciesList": ["LibWrapper"]
         ],
         "RouterAnnotation"          : [
-                "version"         : "2.0.12",
+                "version"         : "2.0.13",
                 "artifactId"      : "lib-router-annotation",
                 "dependenciesList": []
         ],
