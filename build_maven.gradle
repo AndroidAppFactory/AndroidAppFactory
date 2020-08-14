@@ -3,7 +3,7 @@ apply from: rootDir.toString() + '/build_module.gradle'
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: "file://" + rootDir.toString() + "/mnalibs/")
+        repository(url: "file://" + rootDir.toString() + "/libs/")
         pom.project {
             groupId project.zixieGroupId
             artifactId module.name

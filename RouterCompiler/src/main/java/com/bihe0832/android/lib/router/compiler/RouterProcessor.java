@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.router.compiler;
 
+import com.bihe0832.android.lib.router.annotation.APPMain;
 import com.bihe0832.android.lib.router.annotation.Module;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
@@ -10,6 +11,7 @@ import com.squareup.javapoet.TypeSpec;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -20,7 +22,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 public class RouterProcessor extends AbstractProcessor {
@@ -28,7 +29,7 @@ public class RouterProcessor extends AbstractProcessor {
     //必须与RouterCompiler一致
     public static final String STUB_PACKAGE_NAME = "com.bihe0832.android.lib.router.stub";
     public static final String ROUTER_PACKAGE_NAME = "com.bihe0832.android.lib.router";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private Messager messager;
     private Filer filer;
 
@@ -43,6 +44,7 @@ public class RouterProcessor extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> ret = new HashSet<>();
         ret.add(Module.class.getCanonicalName());
+        ret.add(APPMain.class.getCanonicalName());
         return ret;
     }
 
@@ -56,6 +58,30 @@ public class RouterProcessor extends AbstractProcessor {
         debug("process apt with " + annotations.toString());
         if (annotations.isEmpty()) {
             return false;
+        }
+
+        MethodSpec.Builder initMethod = MethodSpec.methodBuilder("init").addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC);
+        Set<? extends Element> mainList = roundEnv.getElementsAnnotatedWith(APPMain.class);
+        debug("process mainList: " + mainList.size());
+        if (mainList != null && mainList.size() > 0) {
+            for (Element tempModule: mainList) {
+                ClassName className = ClassName.get((TypeElement) tempModule);
+                APPMain annotation = tempModule.getAnnotation(APPMain.class);
+                if(null != annotation){
+                    initMethod.addStatement(ROUTER_PACKAGE_NAME + ".RouterMappingManager.addMain(" +className + ".class);");
+                }
+            }
+        }
+        TypeSpec routerInit = TypeSpec.classBuilder("RouterInit")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addMethod(initMethod.build())
+                .build();
+        try {
+            JavaFile.builder(STUB_PACKAGE_NAME, routerInit)
+                    .build()
+                    .writeTo(filer);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         ArrayList<String> modulesNameList = new ArrayList<>();
@@ -97,7 +123,7 @@ public class RouterProcessor extends AbstractProcessor {
         for (Element element : elements) {
             Module router = element.getAnnotation(Module.class);
             ClassName className = ClassName.get((TypeElement) element);
-            mapMethod.addStatement(ROUTER_PACKAGE_NAME + ".Routers.map($S, $T.class)", router.value(), className);
+            mapMethod.addStatement(ROUTER_PACKAGE_NAME + ".RouterMappingManager.getInstance().addMapping($S, $T.class)", router.value(), className);
             mapMethod.addCode("\n");
         }
         TypeSpec routerMapping = TypeSpec.classBuilder(genClassName)
@@ -116,7 +142,8 @@ public class RouterProcessor extends AbstractProcessor {
 
     private void debug(String msg) {
         if (DEBUG) {
-            messager.printMessage(Diagnostic.Kind.NOTE, msg);
+//            messager.printMessage(Diagnostic.Kind.NOTE, msg);
+            System.out.println(msg);
         }
     }
 }

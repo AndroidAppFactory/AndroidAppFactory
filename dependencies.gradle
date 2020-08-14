@@ -6,22 +6,22 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "LibWrapper"
+ext.mainProject = "APPTest,Router,RouterCompiler,RouterAnnotation,LibDeviceNetwork"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid,LibThread,LibCommonUtils,LibCommonUIUtils,LibRequest,LibSqlite"
  */
-ext.developModule = "LibLog"
+ext.developModule =  "RouterAnnotation,Router"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
  *  false 仅加载与 mainProject 相关的模块
  */
-ext.includeALLDependOnDevelopModule = false
+ext.includeALLDependOnDevelopModule = true
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "2.0.10"
+ext.moduleVersionName = "2.0.12"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -32,7 +32,7 @@ ext.moduleInfo = [
                 "dependenciesList": ["LibWrapper"]
         ],
         "RouterAnnotation"          : [
-                "version"         : "1.2.1",
+                "version"         : "2.0.12",
                 "artifactId"      : "lib-router-annotation",
                 "dependenciesList": []
         ],
@@ -42,16 +42,15 @@ ext.moduleInfo = [
                 "dependenciesList": [
                         'com.squareup:javapoet:1.8.0',
                         'com.google.auto.service:auto-service:1.0-rc3',
-                        'com.bihe0832.android:lib-router-annotation:1.2.1',
-                        'com.bihe0832.android:lib-router:1.2.3'
+                        "Router","RouterAnnotation"
+
                 ]
         ],
         "Router"                    : [
-                "version"         : "1.2.4",
+                "version"         : "1.2.7",
                 "artifactId"      : "lib-router",
                 "dependenciesList": [
-                        "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}",
-                        "RouterAnnotation"
+                        "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
                 ]
         ],
         "LibAndroid"                : [
@@ -237,7 +236,7 @@ ext.moduleInfo = [
                 "version"         : "2.0.10",
                 "artifactId"      : "lib-utils",
                 "dependenciesList": [
-                        "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
+                        "Router","RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
                         "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownloadAndInstall",
                         "LibAPK", "LibTTS"
                 ]

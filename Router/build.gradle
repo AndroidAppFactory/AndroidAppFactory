@@ -12,8 +12,8 @@ android {
     defaultConfig {
         minSdkVersion project.commonMinSdkVersion
         targetSdkVersion project.targetSdkVersion
-        versionCode project.mnaLib.versionCode
-        versionName project.mnaLib.versionName
+        versionCode project.zixieVersionCode
+        versionName project.zixieVersionName
     }
 
     buildTypes {
@@ -41,6 +41,4 @@ publish {
 
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
-    api 'com.bihe0832.android:lib-router-annotation:1.2.1'
-
 }
