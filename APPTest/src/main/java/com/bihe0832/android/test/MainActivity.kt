@@ -27,6 +27,7 @@ import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.testNotifyProcess
@@ -135,7 +136,8 @@ class MainActivity : Activity() {
         testFun.setOnClickListener {
 //            testNotifyProcess(0)
             ZLog.d(LOG_TAG, "result:" + Routers.getMainActivityList().size)
-            Routers.open(this,"mna://TestHttpActivity")
+//            Routers.open(this,"mna://TestHttpActivity")
+            APKUtils.startApp(this,"com.tencent",true)
         }
     }
 
