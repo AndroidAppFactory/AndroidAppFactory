@@ -70,6 +70,13 @@ dst="ext.includeALLDependOnDevelopModule = false"
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
+src=" *ext.moduleVersionName *= *"
+dst="ext.moduleVersionName = \\\"${version}\\\""
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
+
+
+
 src="[0-9]*\.[0-9]*\.[0-9]*"
 cat $localPath/dependencies.gradle | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
