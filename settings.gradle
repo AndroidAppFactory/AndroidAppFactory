@@ -11,6 +11,10 @@ if (zixieIncludeALL) {
         System.out.println("-------- Check ALL Module Project: " + projectName + " --------")
     }
 } else {
+    zixieDevelopModule.split(",").each { projectName ->
+        addInclude(projectName)
+    }
+
     zixieMainProject.split(",").each { projectName ->
         System.out.println("-------- Check Module Project: " + projectName + " --------")
         addInclude(projectName)

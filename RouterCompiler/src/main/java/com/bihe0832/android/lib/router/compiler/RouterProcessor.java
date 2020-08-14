@@ -63,25 +63,30 @@ public class RouterProcessor extends AbstractProcessor {
         MethodSpec.Builder initMethod = MethodSpec.methodBuilder("init").addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC);
         Set<? extends Element> mainList = roundEnv.getElementsAnnotatedWith(APPMain.class);
         debug("process mainList: " + mainList.size());
+        boolean hasMain = false;
         if (mainList != null && mainList.size() > 0) {
             for (Element tempModule: mainList) {
                 ClassName className = ClassName.get((TypeElement) tempModule);
                 APPMain annotation = tempModule.getAnnotation(APPMain.class);
                 if(null != annotation){
                     initMethod.addStatement(ROUTER_PACKAGE_NAME + ".RouterMappingManager.addMain(" +className + ".class);");
+                    hasMain = true;
                 }
             }
         }
-        TypeSpec routerInit = TypeSpec.classBuilder("RouterInit")
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addMethod(initMethod.build())
-                .build();
-        try {
-            JavaFile.builder(STUB_PACKAGE_NAME, routerInit)
-                    .build()
-                    .writeTo(filer);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if(hasMain){
+            TypeSpec routerInit = TypeSpec.classBuilder("RouterInit")
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                    .addMethod(initMethod.build())
+                    .build();
+            try {
+                JavaFile.builder(STUB_PACKAGE_NAME, routerInit)
+                        .build()
+                        .writeTo(filer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         ArrayList<String> modulesNameList = new ArrayList<>();
