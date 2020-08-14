@@ -45,5 +45,5 @@ android {
 }
 
 dependencies {
-    kapt "com.bihe0832.android:lib-router-compiler:2.0.13"
+    kapt "com.bihe0832.android:lib-router-compiler:2.0.14"
 }
