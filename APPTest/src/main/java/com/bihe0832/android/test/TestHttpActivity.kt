@@ -5,6 +5,8 @@ import android.os.Bundle
 import com.bihe0832.android.http.common.HTTPServer
 import com.bihe0832.android.http.common.HttpBasicRequest
 import com.bihe0832.android.http.common.HttpResponseHandler
+import com.bihe0832.android.lib.router.annotation.APPMain
+import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.test.module.request.Constants
 import com.bihe0832.android.test.module.request.advanced.AdvancedGetRequest
 import com.bihe0832.android.test.module.request.advanced.AdvancedPostRequest
@@ -13,7 +15,8 @@ import com.bihe0832.android.test.module.request.basic.BasicGetRequest
 import com.bihe0832.android.test.module.request.basic.BasicPostRequest
 import com.bihe0832.http.advanced.HttpAdvancedRequest
 import kotlinx.android.synthetic.main.activity_http_test.*
-
+@APPMain
+@Module("TestHttpActivity")
 class TestHttpActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

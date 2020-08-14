@@ -21,6 +21,9 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
+import com.bihe0832.android.lib.router.Routers
+import com.bihe0832.android.lib.router.annotation.APPMain
+import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
@@ -29,12 +32,11 @@ import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.testNotifyProcess
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-
-
+@APPMain
+@Module("MainActivity")
 class MainActivity : Activity() {
     val LOG_TAG = "TestHttpActivity"
     var process = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -132,8 +134,8 @@ class MainActivity : Activity() {
 
         testFun.setOnClickListener {
 //            testNotifyProcess(0)
-
-            testJson()
+            ZLog.d(LOG_TAG, "result:" + Routers.getMainActivityList().size)
+            Routers.open(this,"mna://TestHttpActivity")
         }
     }
 
@@ -153,8 +155,6 @@ class MainActivity : Activity() {
         }.let {
             ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
         }
-
-
     }
 
     private fun testMD5() {
