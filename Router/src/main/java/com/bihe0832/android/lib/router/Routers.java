@@ -145,4 +145,8 @@ public class Routers {
     public static ArrayList<Class<? extends Activity>>  getMainActivityList(){
         return RouterMappingManager.getInstance().getActivityIsMain();
     }
+
+    public static HashMap<String, Class<? extends Activity>>  getRouterMappings(){
+        return RouterMappingManager.getInstance().getMappings();
+    }
 }
