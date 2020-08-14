@@ -49,9 +49,13 @@ public class APKUtils {
     }
 
     public static String getAppName(Context context) {
+        return getAppName(context, context.getPackageName());
+    }
+
+    public static String getAppName(Context context, String packageName) {
         PackageManager pm = context.getPackageManager();
         try {
-            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? "" : pi.applicationInfo.loadLabel(pm).toString();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -81,26 +85,43 @@ public class APKUtils {
     public static final String APK_PACKAGE_NAME_QQ = "com.tencent.mobileqq";
     public static final String APK_LAUNCHER_CLASS_QQ = "com.tencent.mobileqq.activity.HomeActivity";
 
+    public static boolean startApp(Context ctx, String pkgName) {
+        return startApp(ctx, pkgName, true);
+    }
+
+    public static boolean startApp(Context ctx, String pkgName, boolean showTips) {
+        PackageManager pm = ctx.getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage(pkgName);
+        return startApp(ctx, getAppName(ctx), pkgName, intent, showTips);
+    }
+
     public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass) {
+        return startApp(ctx, appName, pkgName, launcerClass, true);
+    }
+
+    public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass, boolean showTips) {
         Intent intent = new Intent();
         ComponentName cmp = new ComponentName(pkgName, launcerClass);
         intent.setComponent(cmp);
         PackageManager pm = ctx.getPackageManager();
         intent = pm.getLaunchIntentForPackage(pkgName);
-        return startApp(ctx, appName, pkgName, intent);
+        return startApp(ctx, appName, pkgName, intent, showTips);
     }
 
     public static boolean startApp(Context ctx, String appName, String pkgName) {
-        PackageManager pm = ctx.getPackageManager();
-        Intent intent = pm.getLaunchIntentForPackage(pkgName);
-        return startApp(ctx, appName, pkgName, intent);
+        return startApp(ctx, appName, pkgName, true);
     }
 
-    private static boolean startApp(Context ctx, String appName, String pkgName, Intent intent) {
+    public static boolean startApp(Context ctx, String appName, String pkgName, boolean showTips) {
+        PackageManager pm = ctx.getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage(pkgName);
+        return startApp(ctx, appName, pkgName, intent, showTips);
+    }
 
+    private static boolean startApp(Context ctx, String appName, String pkgName, Intent intent, boolean showTips) {
         try {
             if (getInstalledPackage(ctx, pkgName) == null) {
-                ToastUtil.showShort(ctx, appName + "未安装，请安装后重试");
+                if (showTips) ToastUtil.showShort(ctx, appName + "未安装，请安装后重试");
                 return false;
             }
             intent.setAction(Intent.ACTION_MAIN);
@@ -110,7 +131,7 @@ public class APKUtils {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            ToastUtil.showShort(ctx, "拉起" + appName + "失败，请手动尝试");
+            if (showTips) ToastUtil.showShort(ctx, "拉起" + appName + "失败，请手动尝试");
             return false;
         }
     }
