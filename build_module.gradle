@@ -1,114 +1,78 @@
 apply from: rootDir.toString() + '/config.gradle'
 apply from: rootDir.toString() + '/dependencies.gradle'
 
+//根据依赖添加依赖
+def updateRealDependencies(String projectName, String moduleName) {
+    if (zixieIsDebug) println("======== updateRealDependencies ========")
+    println("add depenciese of  " + moduleName + " to " + projectName)
+    if (zixieModuleInfo[moduleName] != null) {
+        if (zixieIsDebug) println(moduleName + " depenciese:" + zixieModuleInfo[moduleName])
+        zixieModuleInfo[moduleName].get("dependenciesList").each { item ->
+            if (zixieIsDebug) println(zixieDepenciesList[projectName])
+            if (zixieIsDebug) println("add " + item + " to " + projectName)
+            if (zixieDepenciesList[projectName] == null) {
+                zixieDepenciesList[projectName] = new ArrayList<>()
+            }
+            if (zixieDepenciesList[item] == null) {
+                zixieDepenciesList[item] = new ArrayList<>()
+            }
+            zixieDepenciesList[projectName].add(item)
+            if (zixieIsDebug) println(zixieDepenciesList[projectName])
+            if (!item.contains(":")) {
+                updateRealDependencies(projectName, item)
+            }
+        }
+    }
+    if (zixieIsDebug) println("======== updateRealDependencies ========")
+}
+
 // 检查一个模块当前是否为可开发状态
 def checkModuleIsDev(String moduleName) {
     if (zixieIsDebug) println("checkDev:" + moduleName)
-    if (zixieModules.contains(moduleName)) {
-        if (zixieIsDebug) println("checkDev:" + moduleName + " has dev before")
-        return true
-    }
-    if (moduleName.contains(".")) {
-        return false
-    }
-    boolean moduleIsDev = false
-    zixieDevelopModule.split(",").each { projectName ->
-        if (moduleName == projectName) {
-            if (zixieIsDebug) println("checkDev:" + moduleName + " find from zixieDevelopModule with " + projectName)
-            moduleIsDev = true
-        }
-    }
-    if (moduleIsDev) {
-        if (zixieIsDebug) println("checkDev:" + moduleName + " is dev true")
-        zixieModules.add(moduleName)
-        return true
-    } else {
-        boolean hasChildIsDev = false
-        if (zixieIsDebug) println("checkDev:" + moduleName)
-        if (zixieModuleInfo[moduleName] != null) {
-            zixieModuleInfo[moduleName].get("dependenciesList").each { item ->
-                if (!item.contains(".") && checkModuleIsDev(item)) {
-                    if (zixieIsDebug) println("checkDev:" + moduleName + " dependencies is dev true")
-                    zixieModules.add(moduleName)
-                    hasChildIsDev = true
-                }
-            }
-        }
-        return hasChildIsDev
-    }
-}
-
-//依赖管理
-ext.tempDependenciesList = new HashMap<String, ArrayList<String>>()
-def addToDependencies(String mainModule, String dependenciesModule) {
-    if (zixieIsDebug) println("addToDependencies:" + mainModule + " " + dependenciesModule)
-    if (!tempDependenciesList.containsKey(mainModule)) {
-        tempDependenciesList.put(mainModule, new ArrayList<String>())
-    }
-    if (!tempDependenciesList.get(mainModule).contains(dependenciesModule)) {
-        tempDependenciesList.get(mainModule).add(dependenciesModule)
-        if (tempDependenciesList.containsKey(dependenciesModule)) {
-            tempDependenciesList.get(dependenciesModule).each { item ->
-                addToDependencies(mainModule, item)
+    boolean isDev = false
+    if (!moduleName.contains(":")) {
+        if (zixieIsDebug) println("checkModuleIsDev dependenciesModule  " + moduleName + zixieDepenciesList[moduleName])
+        zixieDevelopModule.split(",").each { devModuleName ->
+            if (null != zixieDepenciesList[moduleName] && zixieDepenciesList[moduleName].contains(devModuleName)) {
+                if (zixieIsDebug) println("checkModuleIsDev ：" + moduleName + " is dev add by " + devModuleName)
+                isDev = true
+            }else if(moduleName == devModuleName){
+                isDev = true
             }
         }
     }
-}
-
-// 检查 mainModule 是否有依赖 checkedModule
-def checkModuleDependenciesOnce(String mainModule, String checkedModule) {
-    if (zixieIsDebug) println("checkModuleDependencies:" + mainModule + " " + checkedModule)
-    if (tempDependenciesList.containsKey(mainModule)) {
-        if (tempDependenciesList.get(mainModule).contains(checkedModule)) {
-            return 1
-        }
-    }
-
-    if (null != zixieModuleInfo[mainModule]) {
-        if (zixieModuleInfo[mainModule].get("dependenciesList").contains(checkedModule)) {
-            addToDependencies(mainModule, checkedModule)
-            return 1
-        } else {
-            zixieModuleInfo[mainModule].get("dependenciesList").each { item ->
-                if (!item.contains(".")) {
-                    def result = checkModuleDependenciesOnce(item, checkedModule)
-                    if (result > 0) {
-                        addToDependencies(item, checkedModule)
-                        return result
-                    }
-                }
-            }
-        }
-    }
-    return 0
+    return isDev
 }
 
 // 检查 moduleA 和 moduleB 是否有依赖关系
 def checkModuleDependencies(String moduleA, String moduleB) {
     if (zixieIsDebug) println("checkModuleDependencies:" + moduleA + " " + moduleB)
-    if (checkModuleDependenciesOnce(moduleA, moduleB) > 0) {
+    if (zixieDepenciesList.containsKey(moduleA) && zixieDepenciesList.get(moduleA).contains(moduleB)) {
         return 1
-    } else if (checkModuleDependenciesOnce(moduleB, moduleA) > 0) {
-        return -1
-    } else {
-        return 0
     }
+
+    if (zixieDepenciesList.containsKey(moduleB) && zixieDepenciesList.get(moduleB).contains(moduleA)) {
+        return -1
+    }
+    return 0
 }
 
 // 更新组件命令生成
 def getPublishCommand() {
     System.err.println("组件依赖关系处理中，预计耗时较久，请耐心等待...\n\n")
 
-    if (zixieIsDebug) println("showCommand")
     def moduleList = []
     zixieModuleInfo.each { projectName, subModuleList ->
+        zixieUpdateRealDependencies(projectName, projectName)
+    }
+    zixieDepenciesList.each { projectName, subModuleList ->
+        println("showCommand projectName :" + projectName + " " + checkModuleIsDev(projectName))
         if (!isApplicationModule(projectName) && checkModuleIsDev(projectName)) {
             moduleList.add(projectName)
         }
     }
-
     if (moduleList.size() > 0) {
-        if (zixieIsDebug) System.err.println("showCommand before :" + moduleList)
+        System.err.println("showCommand before :" + moduleList)
         for (int i = 0; i < moduleList.size(); i++) {
             for (int j = 0; j < moduleList.size() - 1; j++) {
                 if (zixieIsDebug) println("----- showCommand " + i + " " + j)
@@ -166,21 +130,18 @@ def addDependencies(String projectName) {
 def autoDependencies(String projectName, String moduleName) {
     if (zixieIsDebug) println("======== autoDependencies " + projectName + " ========")
     if (zixieIsDebug) println("check " + projectName + " depenciese:" + moduleName)
-    if (zixieModuleInfo[moduleName] != null) {
-        zixieModuleInfo[moduleName].get("dependenciesList").each { item ->
+    if (zixieDepenciesList[moduleName] != null) {
+        zixieDepenciesList[moduleName].each { item ->
             if (zixieIsDebug) println(projectName + " addDependenciesOnce:" + item)
             addDependenciesOnce(projectName, item)
-            autoDependencies(projectName, item)
         }
     }
     if (zixieIsDebug) println("======== autoDependencies " + projectName + " ========")
-    return true
 }
-
 
 def addDependenciesOnce(projectName, String moduleName) {
     String type = ""
-    if(null == moduleName || moduleName.trim().length() ==0){
+    if (null == moduleName || moduleName.trim().length() == 0) {
         return
     }
     if (isDebugModule(moduleName)) {
@@ -189,15 +150,15 @@ def addDependenciesOnce(projectName, String moduleName) {
         if (isApplicationModule(projectName)) {
             type = "api"
         } else {
-            if(moduleName.endsWith(".jar") || moduleName.endsWith(".aar")){
+            if (moduleName.endsWith(".jar") || moduleName.endsWith(".aar")) {
                 type = "compileOnly"
-            }else {
+            } else {
                 type = "implementation"
             }
         }
     }
 
-    if(projectName == "RouterCompiler"){
+    if (projectName == "RouterCompiler") {
         type = "compile"
     }
     if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + type + " " + moduleName)
@@ -218,7 +179,7 @@ def addDependenciesOnce(projectName, String moduleName) {
             project(':' + projectName).dependencies.add(type, moduleName)
         } else {
             if (zixieIsDebug) println("addDependenciesOnce :  " + projectName + " " + type + " " + moduleName + "" + zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
-	    //project(':' + projectName).dependencies.add(type, [name: moduleName + "-release", ext: 'aar'])
+            //project(':' + projectName).dependencies.add(type, [name: moduleName + "-release", ext: 'aar'])
             if (null != zixieModuleInfo[moduleName]) {
                 project(':' + projectName).dependencies.add(type, zixieGroupId + ":" + zixieModuleInfo[moduleName].get("artifactId") + ":" + zixieModuleInfo[moduleName].get("version"))
             }
@@ -245,9 +206,12 @@ ext {
     zixieVersionName = ext.moduleVersionName
     zixieModuleInfo = ext.moduleInfo
     zixieModules = new ArrayList<>()
-    zixieIncludeList = new ArrayList<>()
     zixieIsDebug = false
     zixieIncludeALL = includeALLDependOnDevelopModule
+
+    zixieIncludeList = new ArrayList()
+    zixieDepenciesList = new HashMap<String, ArrayList>()
+    zixieUpdateRealDependencies = this.&updateRealDependencies
     zixiePublishCommand = this.&getPublishCommand
     zixieAutoDependencies = this.&addDependencies
     zixieCheckModuleIsDev = this.&checkModuleIsDev

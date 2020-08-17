@@ -1,75 +1,55 @@
 apply from: rootDir.toString() + '/build_module.gradle'
 System.err.println("MainProjectList: " + zixieMainProject)
 System.err.println("DevProjectList: " + zixieDevelopModule)
+
+zixieModuleInfo.each { projectName, subModuleList ->
+    zixieUpdateRealDependencies(projectName, projectName)
+    if (zixieIsDebug) println("Depenciese of  " + projectName + " " + zixieDepenciesList[projectName])
+}
+
+
+zixieMainProject.split(",").each { projectName ->
+    addInclude(projectName)
+}
+
+zixieDevelopModule.split(",").each { projectName ->
+    addInclude(projectName)
+}
+
+
 if (zixieIncludeALL) {
-    zixieDevelopModule.split(",").each { projectName ->
-        addInclude(projectName)
-    }
-    zixieModuleInfo.each { projectName, subModuleList ->
-        System.out.println("-------- Check ALL Module Project: " + projectName + "--------")
-        autoAddIncludeMax(projectName)
-        System.out.println("-------- Check ALL Module Project: " + projectName + " --------")
+    zixieDepenciesList.each { projectName, subModuleList ->
+        autoAddInclude(projectName)
     }
 } else {
-    zixieDevelopModule.split(",").each { projectName ->
-        addInclude(projectName)
-    }
-
     zixieMainProject.split(",").each { projectName ->
-        System.out.println("-------- Check Module Project: " + projectName + " --------")
-        addInclude(projectName)
-        autoAddIncludeMin(projectName)
-        System.out.println("-------- Check Module Project: " + projectName + " --------")
+        zixieDepenciesList[projectName].each { dependenciesModule ->
+            autoAddInclude(dependenciesModule)
+        }
     }
 }
 
 System.err.println("\n\n========================================\n\n")
-System.err.println("当前工程导入组件如下：\n\n\t" + zixieIncludeList )
+System.err.println("当前工程导入组件如下：\n\n\t" + zixieIncludeList)
 System.err.println("\n\n========================================\n\n")
 
 def addInclude(projectName) {
     if (null == projectName || projectName.trim().length() == 0) {
         if (zixieIsDebug) System.out.println("Add Include: " + projectName + " is bad !")
     } else if (zixieIncludeList.contains(projectName)) {
-        if (zixieIsDebug) System.out.println("Add Include: " + projectName + " has add !")
-    } else {
+        if (zixieIsDebug) System.out.println("Add Include: " + projectName + " has bad !")
+    } else{
         String finalProjectName = ':' + projectName
         System.out.println("include " + finalProjectName)
-        include finalProjectName
         zixieIncludeList.add(projectName)
+        include finalProjectName
     }
 }
 
-def autoAddIncludeMax(projectName){
-    if (zixieIsDebug) System.out.println("Auto Add Include Max: " + projectName + " ~~~")
-    if (zixieCheckModuleIsDev(projectName)) {
-        if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + "is dev")
-        addInclude(projectName)
-    } else {
-        if (zixieIsDebug) System.out.println("Check Module: " + projectName + " is not dev")
-    }
-}
-
-def autoAddIncludeMin(projectName) {
-    if (zixieIsDebug) System.out.println("Auto Add Include Min: " + projectName + " ~~~")
-    if (null != zixieModuleInfo &&   null != zixieModuleInfo[projectName]) {
-        if (zixieIsDebug) System.out.println("ModuleList of :" + projectName + ": " + zixieModuleInfo[projectName])
-        if (zixieIsDebug) System.out.println("dependenciesList:" + zixieModuleInfo[projectName].get("dependenciesList"))
-        zixieModuleInfo[projectName].get("dependenciesList").each { moduleName ->
-            if (!zixieIncludeList.contains(moduleName)) {
-                if (zixieCheckModuleIsDev(moduleName)) {
-                    if (zixieIsDebug) System.out.println("Check Module Result: " + projectName + " has " + moduleName + "is dev")
-                    addInclude(moduleName)
-                } else {
-                    if (zixieIsDebug) System.out.println("Check Module: " + moduleName + " is not dev")
-                }
-            } else {
-                if (zixieIsDebug) System.out.println("Check Module: " + moduleName + "has add to include")
-            }
-            if (!moduleName.contains(":")) {
-                autoAddIncludeMin(moduleName)
-            }
-        }
+def autoAddInclude(dependenciesModule) {
+    if (zixieIsDebug) println("autoAddInclude Depenciese of dependenciesModule " + dependenciesModule + " " + zixieCheckModuleIsDev(dependenciesModule))
+    if(zixieCheckModuleIsDev(dependenciesModule)){
+        addInclude(dependenciesModule)
     }
 }
 
