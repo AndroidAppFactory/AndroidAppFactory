@@ -9,13 +9,11 @@
 
 - 主页：[https://android.bihe0832.com](https://android.bihe0832.com)
 
-	主要是一个整体的展示和呈现
-
 - 源码：[https://github.com/bihe0832/AndroidAppFactory](https://github.com/bihe0832/AndroidAppFactory)
 	
 	目前包含了绝大部分公共的基础组件的源码，上层组件及持续集成等正在逐渐完善中。
 	
-- 方案介绍：[https://blog.bihe0832.com/android-dev-architecture.html](https://blog.bihe0832.com/android-dev-architecture.html)
+- 方案介绍：[https://blog.bihe0832.com/android-dev-summary.html](https://blog.bihe0832.com/android-dev-summary.html)
 
 	完整的介绍了整个基于组件化的多APP开发方案。
 	
