@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/item_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="我的"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="#ff40f9fc"
+        android:textSize="14dp" />
+
+    <ImageView
+        android:id="@+id/item_red_dot"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="2dp"
+        android:src="@drawable/com_bihe0832_ui_red_dot"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/item_red_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:maxWidth="20dp"
+        android:textColor="#ff0000"
+        android:textStyle="bold"
+        tools:text="100000"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="2dp"
+        android:textSize="10dp"
+        android:visibility="gone"/>
+
+</RelativeLayout>
