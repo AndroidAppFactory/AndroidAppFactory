@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.text.TextUtils;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
+import com.bihe0832.android.lib.utils.encypt.MD5;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -61,6 +63,30 @@ public class APKUtils {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String getSigMd5ByPkgName(Context context, String pkgName) {
+        return getSigMd5ByPkgName(context, pkgName, false);
+    }
+
+    public static String getSigMd5ByPkgName(Context context, String pkgName, boolean showTips) {
+        if (null != pkgName && pkgName.length() > 0) {
+            try {
+                Signature sig = context.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_SIGNATURES).signatures[0];
+                String result = MD5.getMd5(sig.toByteArray());
+                if (null != result && result.length() > 0) {
+                    return result;
+                } else {
+                    if (showTips) ToastUtil.showShort(context, "读取失败，请重试或者检查应用是否有签名！");
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                if (showTips) ToastUtil.showShort(context, "应用未安装，请检查输入的包名是否正确！");
+            }
+        } else {
+            if (showTips) ToastUtil.showShort(context, "请先在输入框输入需要查询签名应用的包名！");
         }
         return "";
     }

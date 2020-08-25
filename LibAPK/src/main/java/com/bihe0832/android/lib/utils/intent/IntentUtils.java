@@ -47,6 +47,26 @@ public class IntentUtils {
     }
 
 
+    public static boolean startIntent(Context ctx, Intent intent) {
+        if (null == intent) {
+            ZLog.d("startIntent intent == null");
+            return false;
+        }
+
+        if (null == ctx) {
+            ZLog.d("startIntent ctx == null");
+            return false;
+        }
+        try {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void sendTextInfo(final Context context, final String title, final String content) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
