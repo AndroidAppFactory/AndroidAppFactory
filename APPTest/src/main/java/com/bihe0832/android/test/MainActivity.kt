@@ -12,6 +12,7 @@ import android.os.StrictMode
 import android.support.v4.content.FileProvider
 import android.text.Html
 import android.view.View
+import android.webkit.WebChromeClient
 import android.widget.Toast
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
@@ -138,6 +139,7 @@ class MainActivity : Activity() {
             ZLog.d(LOG_TAG, "result:" + Routers.getMainActivityList().size)
 //            Routers.open(this,"mna://TestHttpActivity")
             APKUtils.startApp(this,"com.tencent",true)
+
         }
     }
 

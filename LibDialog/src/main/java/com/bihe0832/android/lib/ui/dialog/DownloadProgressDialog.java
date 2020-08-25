@@ -51,6 +51,11 @@ public class DownloadProgressDialog extends Dialog {
     private CharSequence mNegativeButtonString;
     private CharSequence mPositiveButtonString;
 
+    /**
+     * 设置确定取消按钮的回调
+     */
+    public OnDialogListener mClickBottomListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +76,8 @@ public class DownloadProgressDialog extends Dialog {
         mPositiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onClickBottomListener != null) {
-                    onClickBottomListener.onPositiveClick();
+                if (mClickBottomListener != null) {
+                    mClickBottomListener.onPositiveClick();
                 }
             }
         });
@@ -80,8 +85,8 @@ public class DownloadProgressDialog extends Dialog {
         mNegativeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onClickBottomListener != null) {
-                    onClickBottomListener.onNegtiveClick();
+                if (mClickBottomListener != null) {
+                    mClickBottomListener.onNegtiveClick();
                 }
             }
         });
@@ -212,13 +217,10 @@ public class DownloadProgressDialog extends Dialog {
         mButtonLine = findViewById(R.id.update_progress_column_line);
     }
 
-    /**
-     * 设置确定取消按钮的回调
-     */
-    public OnDialogListener onClickBottomListener;
 
-    public DownloadProgressDialog setOnClickListener(OnDialogListener onClickBottomListener) {
-        this.onClickBottomListener = onClickBottomListener;
+
+    public DownloadProgressDialog setOnClickListener(OnDialogListener bottomListener) {
+        mClickBottomListener = bottomListener;
         return this;
     }
 
