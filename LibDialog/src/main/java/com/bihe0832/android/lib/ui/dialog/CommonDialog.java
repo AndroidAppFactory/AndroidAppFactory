@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bihe0832.android.lib.ui.common.ViewUtils;
 import com.bihe0832.android.lib.ui.image.GlideExtKt;
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 
 public class CommonDialog extends Dialog {
@@ -121,8 +121,8 @@ public class CommonDialog extends Dialog {
     private void refreshView() {
         //如果用户自定了title和message
         setCanceledOnTouchOutside(shouldCanceledOutside);
-        int screenWidth = ViewUtils.getScreenWidth(getContext());
-        int screenheight = ViewUtils.getScreenHeight(getContext());
+        int screenWidth = DisplayUtil.getScreenWidth(getContext());
+        int screenheight = DisplayUtil.getScreenHeight(getContext());
         if (titleTv != null) {
             if (!TextUtils.isEmpty(title)) {
                 titleTv.setText(title);
@@ -205,7 +205,7 @@ public class CommonDialog extends Dialog {
                 if (para.width > 0) {
                     para.height = para.width * 1080 / 720;
                 } else {
-                    para.height = (int) ((screenWidth - ViewUtils.dip2px(getContext(), 88)) * 720 / 1080);
+                    para.height = (int) ((screenWidth - DisplayUtil.dip2px(getContext(), 88)) * 720 / 1080);
                 }
                 imageView.setLayoutParams(para);
                 if (screenWidth > screenheight) {
