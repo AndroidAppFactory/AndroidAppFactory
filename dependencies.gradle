@@ -19,6 +19,12 @@ ext.developModule = "LibWrapper"
  */
 ext.includeALLDependOnDevelopModule = false
 /**
+ * 应用组件 （Pub 开头，各个外发APP的发布模块）是否以application模式运行，当需要独立运行应用组件时修改，默认为false
+ * true 表示以 application 模式运行
+ * false 表示以 Android Library 模式运行
+ */
+ext.pubModuleIsApplication = false
+/**
  * 组件所有模块的最新版本，下次发布时使用
  */
 ext.moduleVersionName = "2.0.18"
