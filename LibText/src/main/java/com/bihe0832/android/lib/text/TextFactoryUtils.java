@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.text;
 
 import android.text.Html;
 import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
@@ -101,5 +102,13 @@ public class TextFactoryUtils {
             }, s.getSpanStart(u), s.getSpanEnd(u), 0);
         }
         return s;
+    }
+
+    public static Spanned getSpannedTextByHtml(String text) {
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(text);
+        }
     }
 }
