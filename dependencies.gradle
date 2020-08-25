@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "LibDownloadAndInstall"
+ext.mainProject = "LibGson"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"Framework"
  */
-ext.developModule = "LibDownloadAndInstall"
+ext.developModule = "LibGson"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -137,7 +137,7 @@ ext.moduleInfo = [
                 "apidependenciesList": []
         ],
         "LibGson"                   : [
-                "version"            : "2.0.10",
+                "version"            : "2.5.0",
                 "artifactId"         : "lib-gson",
                 "apidependenciesList": [
                         "com.google.code.gson:gson:${project.gson_version}",
