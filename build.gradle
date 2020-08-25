@@ -69,6 +69,7 @@ subprojects {
         if (zixieIsDebug) println("subprojects afterEvaluate : " + subproject.name)
 
         zixieAutoDependencies(subproject.name)
+        zixieLocalDependencies(subproject.name, subproject.getProjectDir().absolutePath + "/libs")
 
         subproject.getTasks().getByName('clean').doFirst {
             delete "build"
