@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.ui.touchregion;
 
 import android.view.View
-import com.bihe0832.android.lib.ui.common.ViewUtils
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 /**
  *
@@ -15,16 +15,16 @@ fun View.expandTouchRegionWithpx(px: Int) {
 }
 
 fun View.expandTouchRegionWithdp(dp: Float) {
-    TouchRegion(this).expandViewTouchRegion(this, ViewUtils.dip2px(context, dp))
+    TouchRegion(this).expandViewTouchRegion(this, DisplayUtil.dip2px(context, dp))
 }
 
 fun View.expandTouchRegionWithdp(left: Float, top: Float, right: Float, bottom: Float) {
     TouchRegion(this).expandViewTouchRegion(
             this,
-            ViewUtils.dip2px(context, left),
-            ViewUtils.dip2px(context, top),
-            ViewUtils.dip2px(context, right),
-            ViewUtils.dip2px(context, bottom))
+            DisplayUtil.dip2px(context, left),
+            DisplayUtil.dip2px(context, top),
+            DisplayUtil.dip2px(context, right),
+            DisplayUtil.dip2px(context, bottom))
 }
 
 fun View.expandTouchRegionWithpx(left: Int, top: Int, right: Int, bottom: Int) {

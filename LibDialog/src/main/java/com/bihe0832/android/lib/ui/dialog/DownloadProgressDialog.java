@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bihe0832.android.lib.ui.common.ViewUtils;
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 import java.text.NumberFormat;
 
@@ -99,8 +99,8 @@ public class DownloadProgressDialog extends Dialog {
         //如果用户自定了title和message
         setCanceledOnTouchOutside(shouldCanceledOutside);
         setCancelable(shouldCanceled);
-        int screenWidth = ViewUtils.getScreenWidth(getContext());
-        int screenheight = ViewUtils.getScreenHeight(getContext());
+        int screenWidth = DisplayUtil.getScreenWidth(getContext());
+        int screenheight = DisplayUtil.getScreenHeight(getContext());
         if (mTitileView != null) {
             if (!TextUtils.isEmpty(mTitleString)) {
                 mTitileView.setText(mTitleString);
