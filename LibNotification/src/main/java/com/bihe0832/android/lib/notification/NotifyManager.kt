@@ -45,7 +45,7 @@ object NotifyManager {
     private val mIntentID = IdGenerator(1)
 
 
-    private fun createNotificationChannel(context: Context, channelName: CharSequence, channelId: String): NotificationChannel? {
+    fun createNotificationChannel(context: Context, channelName: CharSequence, channelId: String): NotificationChannel? {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
