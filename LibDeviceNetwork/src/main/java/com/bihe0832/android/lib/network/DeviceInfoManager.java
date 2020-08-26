@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.device;
+package com.bihe0832.android.lib.network;
 
 import android.Manifest;
 import android.content.Context;
