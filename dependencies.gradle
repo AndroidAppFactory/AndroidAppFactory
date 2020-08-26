@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "LibTouchRegion"
+ext.mainProject = "LibDeviceNetwork"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"Framework"
  */
-ext.developModule = "LibTouchRegion"
+ext.developModule = "LibDeviceNetwork"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -202,7 +202,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibDeviceNetwork"          : [
-                "version"            : "2.5.0",
+                "version"            : "2.5.4",
                 "artifactId"         : "lib-device-network",
                 "apidependenciesList": ["LibCommonUtils", "LibText", "LibThread", "LibEncrypt"]
         ],
