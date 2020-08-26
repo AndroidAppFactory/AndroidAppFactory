@@ -34,7 +34,7 @@ public class DeviceInfoManager {
 
     }
 
-    void init(Context context) {
+    public void init(Context context) {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
