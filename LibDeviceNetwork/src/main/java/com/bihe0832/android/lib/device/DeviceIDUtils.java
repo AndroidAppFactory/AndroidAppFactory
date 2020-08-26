@@ -30,17 +30,12 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 
-public class DeviceValueUtils {
+public class DeviceIDUtils {
     private static String sAndroidId = "";
 
     public static final int BUFFERED_SIZE = 1024; // 其实此时已经是2K字节，Java的char是2Byte
     public static final String MARSHMALLOW_MAC = "02:00:00:00:00:00"; // 6.0以后获取到的手机MAC地址
 
-    public static boolean isAirplaneMode(Context context) {
-        int isAirplaneMode = Settings.System.getInt(context.getContentResolver(),
-                Settings.System.AIRPLANE_MODE_ON, 0);
-        return isAirplaneMode == 1;
-    }
 
     public static String getImei(Context context) {
         String imei = "UNKNOWN";
@@ -57,79 +52,6 @@ public class DeviceValueUtils {
             ZLog.d("getImei error:" + e.getMessage());
         }
         return imei;
-    }
-
-    /**
-     * 获取手机厂商
-     *
-     * @return 手机厂商
-     */
-    public static String getDeviceBrand() {
-        return android.os.Build.BRAND;
-    }
-
-    /**
-     * 获取手机型号
-     *
-     * @return 型号
-     */
-    public static String getDeviceModel() {
-        return android.os.Build.MODEL;
-    }
-
-    /**
-     * 获取当前手机系统版本号
-     *
-     * @return 系统版本号
-     */
-    public static String getSystemVersion() {
-        return android.os.Build.VERSION.RELEASE;
-    }
-
-    public static int getApiLevel() {
-        return android.os.Build.VERSION.SDK_INT;
-    }
-
-    public static int getBatteryLevel(Context context) {
-        if(context == null) {
-            ZLog.d("battery context null");
-            return -1;
-        }
-        int level = -1;
-        try {
-            Intent batteryIntent = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            if(batteryIntent != null) {
-                level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            }
-        } catch(Exception e) {
-            ZLog.d("battery exception:" + e.getMessage());
-        }
-
-        return level;
-    }
-
-    // acc_back{电量等级，是否充电(充电为1，否则为0)}
-    public static int[] getBatteryLevelAndCharging(Context context) {
-        int[] value = {-1, 0};
-        if(context == null) {
-            ZLog.e("battery context null");
-            return value;
-        }
-        try {
-            Intent batteryIntent = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            if(batteryIntent != null) {
-                value[0] = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                int status = batteryIntent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
-                if(status == BatteryManager.BATTERY_STATUS_CHARGING
-                        || status == BatteryManager.BATTERY_STATUS_FULL) {
-                    value[1] = 1;
-                }
-            }
-        } catch(Exception e) {
-            ZLog.d("battery " + e.getMessage());
-        }
-
-        return value;
     }
 
     @SuppressLint("HardwareIds")

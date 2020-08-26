@@ -11,6 +11,26 @@ import com.bihe0832.android.lib.text.TextFactoryUtils;
  */
 
 public class ManufacturerUtil {
+
+    /**
+     * 获取手机厂商
+     *
+     * @return 手机厂商
+     */
+    public static String getDeviceBrand() {
+        return android.os.Build.BRAND;
+    }
+
+    /**
+     * 获取手机型号
+     *
+     * @return 型号
+     */
+    public static String getDeviceModel() {
+        return android.os.Build.MODEL;
+    }
+
+
     public static boolean isHuawei() {
         String manufacturer = SystemProperties.get("ro.product.manufacturer", null);
         if (TextFactoryUtils.trimSpace(manufacturer.toLowerCase()).contains("huawei")) {

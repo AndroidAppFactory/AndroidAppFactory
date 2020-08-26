@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "LibWrapper"
+ext.mainProject = "APPTest"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"Framework"
  */
-ext.developModule = "LibWrapper"
+ext.developModule = "LibDeviceNetwork,LibOS"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -27,7 +27,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "2.5.2"
+ext.moduleVersionName = "2.5.3"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -54,7 +54,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "2.5.2",
+                "version"            : "2.5.0",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -63,7 +63,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "2.5.2",
+                "version"            : "2.5.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
@@ -202,7 +202,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibDeviceNetwork"          : [
-                "version"            : "2.5.2",
+                "version"            : "2.5.0",
                 "artifactId"         : "lib-device-network",
                 "apidependenciesList": ["LibCommonUtils", "LibText", "LibThread", "LibEncrypt"]
         ],
