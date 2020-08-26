@@ -139,26 +139,6 @@ public class DeviceIDUtils {
         return "";
     }
 
-    public static String getFingerprint(Context context) {
-        String hexString = "";
-        try {
-            PackageManager pm = context.getPackageManager();
-            String packageName = context.getPackageName();
-            @SuppressLint("PackageManagerGetSignatures")
-            PackageInfo packageInfo = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
-            Signature[] signatures = packageInfo.signatures;
-            byte[] cert = signatures[0].toByteArray();
-            InputStream input = new ByteArrayInputStream(cert);
-            CertificateFactory cf = CertificateFactory.getInstance("X509");
-            X509Certificate c = (X509Certificate) cf.generateCertificate(input);
-            MessageDigest md = MessageDigest.getInstance("SHA1");
-            byte[] publicKey = md.digest(c.getEncoded());
-            hexString = HexUtils.bytes2HexStr(publicKey);
-        } catch(Exception e) {
-            // ignore
-        }
-        return hexString;
-    }
 
     /*
      * 获取设备唯一ID AndroidID
