@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.utils.os;
 
+import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
@@ -45,4 +47,25 @@ public class OSUtils {
     public static boolean isAndroidQVersion() {
         return Build.VERSION.SDK_INT > Build.VERSION_CODES.P;
     }
+
+    public static boolean isAirplaneMode(Context context) {
+        int isAirplaneMode = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_ON, 0);
+        return isAirplaneMode == 1;
+    }
+
+
+    /**
+     * 获取当前手机系统版本号
+     *
+     * @return 系统版本号
+     */
+    public static String getSystemVersion() {
+        return android.os.Build.VERSION.RELEASE;
+    }
+
+    public static int getApiLevel() {
+        return android.os.Build.VERSION.SDK_INT;
+    }
+
 }
