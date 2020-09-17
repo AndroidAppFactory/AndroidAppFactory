@@ -12,7 +12,6 @@ import android.os.StrictMode
 import android.support.v4.content.FileProvider
 import android.text.Html
 import android.view.View
-import android.webkit.WebChromeClient
 import android.widget.Toast
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
@@ -32,8 +31,10 @@ import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.testNotifyProcess
+import com.flyco.tablayout.listener.CustomTabEntity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+
 @APPMain
 @Module("MainActivity")
 class MainActivity : Activity() {
@@ -139,7 +140,43 @@ class MainActivity : Activity() {
             ZLog.d(LOG_TAG, "result:" + Routers.getMainActivityList().size)
 //            Routers.open(this,"mna://TestHttpActivity")
             APKUtils.startApp(this,"com.tencent",true)
+        }
 
+        val mTitles = arrayOf("首页", "消息", "联系人", "更多")
+        val mTabTextSizes = floatArrayOf(
+                10f, 20f, 20f, 10f)
+
+        val tabEntities = ArrayList<CustomTabEntity>()
+        for (i in mTitles.indices) {
+            tabEntities.add(TabEntity(mTitles[i], mTabTextSizes[i]))
+        }
+
+        commonTabLayout.apply {
+            setTabData(tabEntities)
+            showMsg(1, "免费")
+            setMsgMargin(1, -15f, 5f)
+            showMsg(2, 100)
+            setMsgMargin(2, -15f, 5f)
+            showMsg(3, 5)
+        }
+    }
+
+    inner class TabEntity(var title: String, var tabTs: Float) : CustomTabEntity {
+
+        override fun getTabTitle(): String {
+            return title
+        }
+
+        override fun getTabTextSize(): Float {
+            return tabTs
+        }
+
+        override fun getTabSelectedIcon(): Int {
+            return R.mipmap.icon
+        }
+
+        override fun getTabUnselectedIcon(): Int {
+            return R.mipmap.icon
         }
     }
 
