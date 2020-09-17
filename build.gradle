@@ -37,20 +37,21 @@ allprojects {
 
     afterEvaluate { Project subproject ->
         if (subproject.name == rootProject.name) {
-            subproject.getTasks().create("zixiePublishCommand", {
-                zixiePublishCommand()
-            })
 
-            subproject.getTasks().create("showInfo", {
-
+            subproject.getTasks().create("showPublishCommand") {
+                group = "zixieDev"
+                doLast {
+                    zixiePublishCommand()
+                }
+            }
+            rootProject.getTasks().create("showInfo") {
+                group = "zixieDev"
+                doLast {
                 System.err.println("\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 System.err.println("|\n|  Android 构建已基于组件化重构，详细信息可以参考文档" )
                 System.err.println("|\n|  https://android.bihe0832.com/#!doc/dev.md" )
                 System.err.println("|\n >>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-            })
-
-            rootProject.getTasks().getByName('buildEnvironment').doLast {
-                zixiePublishCommand()
+                }
             }
         }
     }
@@ -76,11 +77,14 @@ subprojects {
             delete ".externalNativeBuild"
         }
 
-        subproject.getTasks().create("copyAAR", Copy.class, {
-            from 'build/outputs/aar/' + module.name + '-release.aar'
-            into "./../libs/"
-        })
-        subproject.getTasks().getByName('copyAAR').dependsOn("assembleRelease")
-//        subproject.getTasks().getByName('bintrayUpload').dependsOn("build")
+        if (!subproject.name.startsWith("Pub") || subproject.name != "APPTest") {
+            subproject.getTasks().create("copyAAR", Copy.class) {
+                group = "zixieDev"
+                from 'build/outputs/aar/' + module.name + '-release.aar'
+                into "./../libs/"
+            }
+
+            subproject.getTasks().getByName('copyAAR').dependsOn("assembleRelease")
+        }
     }
 }

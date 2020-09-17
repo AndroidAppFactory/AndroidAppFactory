@@ -5,7 +5,11 @@ import android.support.v7.widget.RecyclerView
 import com.bihe0832.android.lib.log.ZLog
 
 /**
- * A utility that tracks current view visibility.
+ *
+ * @author hardyshi code@bihe0832.com
+ * Created on 2020/9/17.
+ * Description: Description
+ *
  */
 class RecyclerViewItemActiveHelper(
         private val recyclerView: RecyclerView,
@@ -23,10 +27,20 @@ class RecyclerViewItemActiveHelper(
     private val dimenRect by lazy { Rect() }
 
     private val itemsPositionGetter by lazy {
-        RecyclerViewItemPositionGetter(
-                recyclerView,
-                recyclerView.layoutManager as SafeLinearLayoutManager
-        )
+        if(recyclerView.layoutManager is SafeLinearLayoutManager){
+            RecyclerViewItemPositionGetterForLinearLayoutManager(
+                    recyclerView,
+                    recyclerView.layoutManager as SafeLinearLayoutManager
+            )
+        }else if(recyclerView.layoutManager is SafeGridLayoutManager){
+            RecyclerViewItemPositionGetterForGridLayoutManager(
+                    recyclerView,
+                    recyclerView.layoutManager as SafeGridLayoutManager
+            )
+        }else{
+            null
+        }
+
     }
 
     private var currentItem = ItemData(0, null, null)
@@ -36,7 +50,9 @@ class RecyclerViewItemActiveHelper(
         }
 
     fun onScrollStateIdle(forceNotify: Boolean = false) {
-        calculateFirstVisibleItem(itemsPositionGetter,forceNotify)
+        itemsPositionGetter?.let {
+            calculateFirstVisibleItem(it,forceNotify)
+        }
     }
 
     private fun calculateFirstVisibleItem(itemsPositionGetter: ItemsPositionGetter, forceNotify: Boolean = false) {
@@ -87,7 +103,7 @@ class RecyclerViewItemActiveHelper(
         }
     }
 
-    fun onScrolled(itemsPositionGetter: RecyclerViewItemPositionGetter?, scrollState: Int) {
+    fun onScrolled(itemsPositionGetter: RecyclerViewItemPositionGetterForLinearLayoutManager?, scrollState: Int) {
 //        itemsPositionGetter?.let {
 //            ZLog.d(TAG + ">> onScroll")
 //            ZLog.d(TAG +
@@ -119,7 +135,7 @@ class RecyclerViewItemActiveHelper(
 
 
     private fun calculateActiveItem(
-            itemsPositionGetter: RecyclerViewItemPositionGetter,
+            itemsPositionGetter: RecyclerViewItemPositionGetterForLinearLayoutManager,
             listItemData: ItemData
     ) {
 
