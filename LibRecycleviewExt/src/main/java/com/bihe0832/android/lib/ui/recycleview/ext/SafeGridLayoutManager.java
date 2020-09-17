@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.ui.recycleview.ext;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
@@ -10,17 +10,19 @@ import android.util.AttributeSet;
  * Created on 2020/9/17.
  * Description: Description
  */
-public class SafeLinearLayoutManager extends LinearLayoutManager {
-    public SafeLinearLayoutManager(Context context) {
-        super(context);
-    }
+public class SafeGridLayoutManager extends GridLayoutManager {
 
-    public SafeLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
-        super(context, orientation, reverseLayout);
-    }
-
-    public SafeLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SafeGridLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public SafeGridLayoutManager(Context context, int spanCount) {
+        super(context, spanCount);
+    }
+
+    public SafeGridLayoutManager(Context context, int spanCount, int orientation, boolean reverseLayout) {
+        super(context, spanCount, orientation, reverseLayout);
+
     }
 
     @Override
