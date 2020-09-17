@@ -46,6 +46,20 @@ public class UnreadMsgUtils {
         }
     }
 
+    public static void show(MsgView msgView, String text) {
+        if (msgView == null) {
+            return;
+        }
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) msgView.getLayoutParams();
+        DisplayMetrics dm = msgView.getResources().getDisplayMetrics();
+        msgView.setVisibility(View.VISIBLE);
+        lp.height = (int) (18 * dm.density);
+        lp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+        msgView.setPadding((int) (6 * dm.density), 0, (int) (6 * dm.density), 0);
+        msgView.setText(text);
+        msgView.setLayoutParams(lp);
+    }
+
     public static void setSize(MsgView rtv, int size) {
         if (rtv == null) {
             return;

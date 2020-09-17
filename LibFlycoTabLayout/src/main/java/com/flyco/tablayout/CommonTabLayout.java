@@ -92,6 +92,7 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
     private int mTextUnselectColor;
     private int mTextBold;
     private boolean mTextAllCaps;
+    private boolean mIsTitleUseTextSize;
 
     /** icon */
     private boolean mIconVisible;
@@ -176,6 +177,7 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
         mTextUnselectColor = ta.getColor(R.styleable.CommonTabLayout_tl_textUnselectColor, Color.parseColor("#AAffffff"));
         mTextBold = ta.getInt(R.styleable.CommonTabLayout_tl_textBold, TEXT_BOLD_NONE);
         mTextAllCaps = ta.getBoolean(R.styleable.CommonTabLayout_tl_textAllCaps, false);
+        mIsTitleUseTextSize = ta.getBoolean(R.styleable.CommonTabLayout_tl_is_title_use_textsize, true);
 
         mIconVisible = ta.getBoolean(R.styleable.CommonTabLayout_tl_iconVisible, true);
         mIconGravity = ta.getInt(R.styleable.CommonTabLayout_tl_iconGravity, Gravity.TOP);
@@ -234,6 +236,7 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
     private void addTab(final int position, View tabView) {
         TextView tv_tab_title = (TextView) tabView.findViewById(R.id.tv_tab_title);
         tv_tab_title.setText(mTabEntitys.get(position).getTabTitle());
+        tv_tab_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mIsTitleUseTextSize ? mTextsize : sp2px(mTabEntitys.get(position).getTabTextSize()));
         ImageView iv_tab_icon = (ImageView) tabView.findViewById(R.id.iv_tab_icon);
         iv_tab_icon.setImageResource(mTabEntitys.get(position).getTabUnselectedIcon());
 
@@ -270,7 +273,7 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
             tabView.setPadding((int) mTabPadding, 0, (int) mTabPadding, 0);
             TextView tv_tab_title = (TextView) tabView.findViewById(R.id.tv_tab_title);
             tv_tab_title.setTextColor(i == mCurrentTab ? mTextSelectColor : mTextUnselectColor);
-            tv_tab_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextsize);
+            tv_tab_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv_tab_title.getTextSize());
 //            tv_tab_title.setPadding((int) mTabPadding, 0, (int) mTabPadding, 0);
             if (mTextAllCaps) {
                 tv_tab_title.setText(tv_tab_title.getText().toString().toUpperCase());
@@ -806,6 +809,37 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
         MsgView tipView = (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
         if (tipView != null) {
             UnreadMsgUtils.show(tipView, num);
+
+            if (mInitSetMap.get(position) != null && mInitSetMap.get(position)) {
+                return;
+            }
+
+            if (!mIconVisible) {
+                setMsgMargin(position, 2, 2);
+            } else {
+                setMsgMargin(position, 0,
+                        mIconGravity == Gravity.LEFT || mIconGravity == Gravity.RIGHT ? 4 : 0);
+            }
+
+            mInitSetMap.put(position, true);
+        }
+    }
+
+    /**
+     * 显示未读消息
+     *
+     * @param position 显示tab位置
+     * @param text     显示文字
+     */
+    public void showMsg(int position, String text) {
+        if (position >= mTabCount) {
+            position = mTabCount - 1;
+        }
+
+        View tabView = mTabsContainer.getChildAt(position);
+        MsgView tipView = (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
+        if (tipView != null) {
+            UnreadMsgUtils.show(tipView, text);
 
             if (mInitSetMap.get(position) != null && mInitSetMap.get(position)) {
                 return;

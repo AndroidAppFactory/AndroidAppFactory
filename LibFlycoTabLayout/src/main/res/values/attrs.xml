@@ -62,6 +62,8 @@
     <attr name="tl_tab_width" format="dimension"/>
 
     <!-- title -->
+    <!-- 设置title字体大小是否使用tl_textsize还是使用自定义大小-->
+    <attr name="tl_is_title_use_textsize" format="boolean"/>
     <!-- 设置字体大小 -->
     <attr name="tl_textsize" format="dimension"/>
     <!-- 设置字体选中颜色 -->
@@ -147,6 +149,7 @@
         <attr name="tl_tab_width"/>
 
         <!-- title -->
+        <attr name="tl_is_title_use_textsize"/>
         <attr name="tl_textsize"/>
         <attr name="tl_textSelectColor"/>
         <attr name="tl_textUnselectColor"/>
