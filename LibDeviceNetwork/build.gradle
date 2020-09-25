@@ -36,7 +36,3 @@ publish {
     desc = 'the device network utils for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory.git'//项目对应网站
 }
-
-dependencies {
-    api "com.bihe0832.android:lib-utils-common:1.2.6"
-}

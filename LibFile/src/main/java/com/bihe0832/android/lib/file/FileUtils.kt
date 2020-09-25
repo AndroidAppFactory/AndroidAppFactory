@@ -1,9 +1,12 @@
 package com.bihe0832.android.lib.file
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
@@ -32,7 +35,8 @@ object FileUtils {
     const val SPACE_MB = 1024 * SPACE_KB
     const val SPACE_GB = 1024 * SPACE_MB
     const val SPACE_TB = 1024 * SPACE_GB
-
+    const val ZIP_DOWNLOADED_FILE_SUFFIX = ".zip"
+    const val APK_FILE_SUFFIX = ".apk"
 
     fun checkFileExist(filePath: String): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
@@ -45,6 +49,15 @@ object FileUtils {
 
     fun getZixieFileProvider(context: Context, file: File): Uri? {
         return FileProvider.getUriForFile(context, context.packageName + ".bihe0832", file)
+    }
+
+    fun getZixieFilePath(context: Context): String {
+        return context.getExternalFilesDir(context.getString(R.string.lib_bihe0832_file_folder)).absolutePath
+    }
+
+    fun checkStoragePermissions(context: Context): Boolean {
+        return PackageManager.PERMISSION_GRANTED ==
+                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     fun checkFileExist(filePath: String, fileMD5: String): Boolean {
@@ -124,5 +137,36 @@ object FileUtils {
             e.printStackTrace()
         }
         return false
+    }
+
+    fun isZipFile(file: File?): Boolean {
+        return file?.name?.endsWith(ZIP_DOWNLOADED_FILE_SUFFIX) == true
+    }
+
+    fun getExtensionName(filename: String?): String {
+        filename?.let {
+            val dot = filename.lastIndexOf('.')
+            if (dot > -1 && dot < filename.length - 1) {
+                return filename.substring(dot + 1)
+            }
+        }
+        return ""
+    }
+
+    fun getFileNameWithoutEx(filename: String?): String {
+        filename?.let {
+            val dot = filename.lastIndexOf('.')
+            val split = filename.lastIndexOf('/')
+            if(split < dot){
+                if (dot > -1 && dot < filename.length) {
+                    return if(split > -1){
+                        filename.substring(split + 1, dot)
+                    }else{
+                        filename.substring(0, dot)
+                    }
+                }
+            }
+        }
+        return ""
     }
 }

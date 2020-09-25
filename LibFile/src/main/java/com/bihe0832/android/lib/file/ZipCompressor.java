@@ -1,16 +1,21 @@
 package com.bihe0832.android.lib.file;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ZipCompressor {
-    static final int BUFFER = 8192;
+    private static final int BUFFER = 8 * 1024;
 
     private File zipFile;
 
@@ -94,6 +99,41 @@ public class ZipCompressor {
             bis.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void unzip2Dst(ZipFile zipFile, ZipEntry zipEntry, File dstFile){
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            inputStream = new BufferedInputStream(zipFile.getInputStream(zipEntry), BUFFER);
+            outputStream = new BufferedOutputStream(new FileOutputStream(dstFile), BUFFER);
+            try {
+                byte[] buffer = new byte[BUFFER];
+                int readLen;
+                while (-1 != (readLen = inputStream.read(buffer))) {
+                    outputStream.write(buffer, 0, readLen);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(inputStream != null){
+                try {
+                    inputStream.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            if(outputStream != null){
+                try {
+                    outputStream.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }   

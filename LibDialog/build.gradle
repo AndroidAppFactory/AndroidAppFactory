@@ -37,9 +37,3 @@ publish {
     desc = 'the dialog tools for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory.git'//项目对应网站
 }
-
-dependencies {
-    api "com.bihe0832.android:lib-thread:1.2.0"
-    api "com.bihe0832.android:lib-ui-common:1.0.6"
-    api "com.bihe0832.android:lib-image:1.0.4"
-}

@@ -35,7 +35,3 @@ publish {
     desc = 'the adapter of list  for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
-
-dependencies {
-    api "com.bihe0832.android:lib-ui-common:1.0.6"
-}
