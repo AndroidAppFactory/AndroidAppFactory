@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "LibFragmentation_core"
+ext.mainProject = "LibCommonUtils"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid"
  */
-ext.developModule = "LibFragmentation_core"
+ext.developModule = "LibCommonUtils"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -107,7 +107,7 @@ ext.moduleInfo = [
         ],
 
         "LibCommonUtils"            : [
-                "version"            : "2.5.0",
+                "version"            : "2.5.10",
                 "artifactId"         : "lib-utils-common",
                 "apidependenciesList": ["LibAndroid", "LibLog"]
         ],
