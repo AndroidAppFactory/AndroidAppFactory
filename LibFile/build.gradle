@@ -36,8 +36,3 @@ publish {
     desc = 'the base file utils for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
-
-dependencies {
-    api "com.bihe0832.android:lib-encrypt:1.2.1"
-    api "com.bihe0832.android:lib-utils-common:1.2.6"
-}

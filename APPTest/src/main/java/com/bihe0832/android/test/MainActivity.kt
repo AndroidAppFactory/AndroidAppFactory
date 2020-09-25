@@ -17,17 +17,16 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
-import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.testNotifyProcess
@@ -46,7 +45,7 @@ class MainActivity : Activity() {
         ZLog.setDebug(true)
         Config.init(applicationContext, "", true)
 
-        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         }
 
@@ -135,12 +134,6 @@ class MainActivity : Activity() {
             ToastUtil.showTop(this, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
         }
 
-        testFun.setOnClickListener {
-//            testNotifyProcess(0)
-            ZLog.d(LOG_TAG, "result:" + Routers.getMainActivityList().size)
-//            Routers.open(this,"mna://TestHttpActivity")
-            APKUtils.startApp(this,"com.tencent",true)
-        }
 
         val mTitles = arrayOf("首页", "消息", "联系人", "更多")
         val mTabTextSizes = floatArrayOf(
@@ -159,6 +152,13 @@ class MainActivity : Activity() {
             setMsgMargin(2, -15f, 5f)
             showMsg(3, 5)
         }
+
+        testFun.setOnClickListener {
+//            testNotifyProcess(0)
+//            Routers.open(this,"mna://TestHttpActivity")
+            InstallUtils.installAPP(this, "/sdcard/Download/jp.co.sumzap.pj0007.zip", "jp.co.sumzap.pj0007")
+        }
+
     }
 
     inner class TabEntity(var title: String, var tabTs: Float) : CustomTabEntity {
@@ -229,10 +229,10 @@ class MainActivity : Activity() {
     private fun testTextView() {
         var data =
                 "正常的文字效果<BR>" +
-                "<p>正常的文字效果</p>" +
-                "<p><b>文字加粗</b></p>" +
-                "<p><em>文字斜体</em></p>" +
-                "<p><font color='#428bca'>修改文字颜色</font></p>"
+                        "<p>正常的文字效果</p>" +
+                        "<p><b>文字加粗</b></p>" +
+                        "<p><em>文字斜体</em></p>" +
+                        "<p><font color='#428bca'>修改文字颜色</font></p>"
 
         testResult.text = Html.fromHtml(data)
 

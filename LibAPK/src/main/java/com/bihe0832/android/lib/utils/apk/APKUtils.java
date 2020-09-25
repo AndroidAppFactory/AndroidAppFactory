@@ -1,6 +1,5 @@
 package com.bihe0832.android.lib.utils.apk;
 
-import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.bihe0832.android.lib.log.ZLog;
@@ -35,11 +35,16 @@ public class APKUtils {
     /**
      * 获取APP版本号
      */
-    public static int getAppVersionCode(Context context) {
+    public static long getAppVersionCode(Context context) {
         PackageManager pm = context.getPackageManager();
         try {
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
-            return pi == null ? 0 : pi.versionCode;
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1){
+                return pi == null ? 0 : pi.getLongVersionCode();
+            }else {
+                return pi == null ? 0 : pi.versionCode;
+            }
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

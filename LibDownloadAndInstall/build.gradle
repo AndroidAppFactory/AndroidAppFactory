@@ -36,8 +36,3 @@ publish {
     desc = 'the base download and install for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
-
-dependencies {
-    api "com.bihe0832.android:lib-file:1.2.13"
-    api "com.bihe0832.android:lib-thread:1.2.0"
-}
