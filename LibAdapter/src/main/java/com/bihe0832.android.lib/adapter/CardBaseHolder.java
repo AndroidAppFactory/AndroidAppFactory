@@ -1,4 +1,4 @@
-package com.bihe0832.lib.android.adapter;
+package com.bihe0832.android.lib.adapter;
 
 import android.content.Context;
 import android.view.View;

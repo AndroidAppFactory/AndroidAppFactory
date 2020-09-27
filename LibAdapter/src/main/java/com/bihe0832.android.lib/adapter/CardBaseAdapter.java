@@ -1,9 +1,11 @@
-package com.bihe0832.lib.android.adapter;
+package com.bihe0832.android.lib.adapter;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bihe0832.android.lib.adapter.CardBaseHolder;
+import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
