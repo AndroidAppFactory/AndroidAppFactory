@@ -27,16 +27,16 @@ public class ThreadManager {
     private final static String THREAD_NAME_NORMAL = "THREAD_NORMAL";
     // 高优先级线程，可以用于分发网络请求等（网络请求的处理建议利用临时线程池）
     private final static String THREAD_NAME_HIGHER = "THREAD_HIGHER";
-    // 低优先级线程，可以用于处理一些临时逻辑、延迟逻辑、数据上报等
+    // 低优先级线程，可以用于处理一些临时逻辑、延迟逻辑、数据上报等，底层会转发到线程池
     private final static String THREAD_NAME_LOWER = "THREAD_LOWER";
     private Handler mPostDelayTempHandler;
 
     // 临时线程池，用于通过Runnable处理其余临时逻辑，线程池内所有线程都为低优先级线程
     private ExecutorService executor;
-    private static final int MAX_RUNNING_THREAD = 5;
     private final static String EXECUTOR_NAME_TEMP = "TEMP_THREADS";
 
     private static volatile ThreadManager instance;
+
     public static ThreadManager getInstance() {
         if (instance == null) {
             synchronized (ThreadManager.class) {
@@ -48,26 +48,26 @@ public class ThreadManager {
         return instance;
     }
 
-    private ThreadManager(){
+    private ThreadManager() {
     }
 
     public Looper getLooper(int type) {
         if (type == LOOPER_TYPE_ANDROID_MAIN) {
             return Looper.getMainLooper();
         } else if (type == LOOPER_TYPE_LOWER) {
-            if(null == mLowerHandlerThread){
+            if (null == mLowerHandlerThread) {
                 mLowerHandlerThread = new HandlerThread(THREAD_NAME_LOWER, Thread.MIN_PRIORITY);
                 mLowerHandlerThread.start();
             }
             return mLowerHandlerThread.getLooper();
         } else if (type == LOOPER_TYPE_HIGHER) {
-            if(null == mHigherHandlerThread){
+            if (null == mHigherHandlerThread) {
                 mHigherHandlerThread = new HandlerThread(THREAD_NAME_HIGHER, Thread.MAX_PRIORITY);
                 mHigherHandlerThread.start();
             }
             return mHigherHandlerThread.getLooper();
-        }  else {
-            if(null == mNormalHandlerThread){
+        } else {
+            if (null == mNormalHandlerThread) {
                 mNormalHandlerThread = new HandlerThread(THREAD_NAME_NORMAL, Thread.NORM_PRIORITY);
                 mNormalHandlerThread.start();
             }
@@ -75,12 +75,12 @@ public class ThreadManager {
         }
     }
 
-    public void start(Runnable runnable){
-        if(null == executor){
+    public void start(Runnable runnable) {
+        if (null == executor) {
             try {
-                executor = Executors.newFixedThreadPool(MAX_RUNNING_THREAD, new CommonThreadFactory());
-            } catch (Throwable t) {
                 executor = Executors.newCachedThreadPool(new CommonThreadFactory());
+            } catch (Throwable t) {
+                t.printStackTrace();
             }
         }
         try {
@@ -90,18 +90,20 @@ public class ThreadManager {
         }
     }
 
-    public void start(Runnable runnable, int seconds){
-        if(null == mPostDelayTempHandler){
+    public void start(final Runnable runnable, long delayMillis) {
+        if (null == mPostDelayTempHandler) {
             mPostDelayTempHandler = new Handler(getLooper(LOOPER_TYPE_HIGHER));
         }
-        mPostDelayTempHandler.postDelayed(runnable, seconds * 1000);
+        mPostDelayTempHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                start(runnable);
+            }
+        }, delayMillis);
     }
 
-    public void start(Runnable runnable, long delayMillis){
-        if(null == mPostDelayTempHandler){
-            mPostDelayTempHandler = new Handler(getLooper(LOOPER_TYPE_HIGHER));
-        }
-        mPostDelayTempHandler.postDelayed(runnable, delayMillis);
+    public void start(final Runnable runnable, int seconds) {
+        start(runnable, seconds * 1000L);
     }
 
     private class CommonThreadFactory implements ThreadFactory {
@@ -128,10 +130,10 @@ public class ThreadManager {
         }
     }
 
-    public void runOnUIThread(Runnable runnable){
-        try{
+    public void runOnUIThread(Runnable runnable) {
+        try {
             new Handler(Looper.getMainLooper()).post(runnable);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
