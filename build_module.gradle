@@ -62,7 +62,7 @@ def checkModuleIsDev(String moduleName) {
     boolean isDev = false
     if (!moduleName.contains(":")) {
         if (zixieIsDebug) println("checkModuleIsDev dependenciesModule  " + moduleName + zixieDepenciesList[moduleName])
-        zixieDevelopModule.split(",").each { devModuleName ->
+        zixieDevelopModule.replaceAll("\\s*", "").split(",").each { devModuleName ->
             if (null != zixieDepenciesList[moduleName] && zixieDepenciesList[moduleName].contains(devModuleName)) {
                 if (zixieIsDebug) println("checkModuleIsDev ：" + moduleName + " is dev add by " + devModuleName)
                 isDev = true

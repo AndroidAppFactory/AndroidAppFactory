@@ -72,10 +72,10 @@ subprojects {
         zixieAutoDependencies(subproject.name)
         zixieLocalDependencies(subproject.name, subproject.getProjectDir().absolutePath + "/libs")
 
-        subproject.getTasks().getByName('clean').doFirst {
-            delete "build"
-            delete ".externalNativeBuild"
-        }
+//        subproject.getTasks().getByName('clean').doFirst {
+//            delete "build"
+//            delete ".externalNativeBuild"
+//        }
 
         if (!subproject.name.startsWith("Pub") || subproject.name != "APPTest") {
             subproject.getTasks().create("copyAAR", Copy.class) {

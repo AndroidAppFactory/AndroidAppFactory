@@ -6,7 +6,7 @@ zixieMainProject.split(",").each { projectName ->
     addInclude(projectName)
 }
 
-zixieDevelopModule.split(",").each { projectName ->
+zixieDevelopModule.replaceAll("\\s*", "").split(",").each { projectName ->
     addInclude(projectName)
 }
 
