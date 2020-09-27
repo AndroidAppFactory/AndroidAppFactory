@@ -4,6 +4,7 @@ import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.R
+import com.bihe0832.android.lib.request.HTTPRequestUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.io.BufferedInputStream
 import java.io.FileOutputStream
@@ -35,7 +36,7 @@ class DownloadByHttp : DownloadWrapper() {
                 val conection = url.openConnection() as HttpURLConnection
                 mCurrentConnectList[info.downloadURL] = conection
                 conection.connect()
-                val lenghtOfFile = conection.contentLength
+                val lenghtOfFile = HTTPRequestUtils.getContentLength(conection)
                 input = BufferedInputStream(url.openStream(), 8192)
 
                 val data = ByteArray(1024)
@@ -48,7 +49,7 @@ class DownloadByHttp : DownloadWrapper() {
                     mCurrentDownloadList[info.downloadURL]?.let { downloadItem ->
                         downloadItem.downloadNotifyListenerList.forEach {
                             ThreadManager.getInstance().runOnUIThread{
-                                it.onProgress(lenghtOfFile.toLong(),total)
+                                it.onProgress(lenghtOfFile,total)
                             }
                         }
                     }
