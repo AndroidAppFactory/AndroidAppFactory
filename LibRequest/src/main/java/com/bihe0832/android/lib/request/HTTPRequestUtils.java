@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -57,7 +58,7 @@ public class HTTPRequestUtils {
         }
     }
 
-    private static HTTPRequestUtils.ContentType getContentTypeHeader(URLConnection conn) {
+    public static HTTPRequestUtils.ContentType getContentTypeHeader(URLConnection conn) {
         try {
             int e = 0;
             boolean moreHeaders = true;
@@ -79,7 +80,15 @@ public class HTTPRequestUtils {
         return null;
     }
 
-    private static Charset getCharset(HTTPRequestUtils.ContentType contentType) {
+    public static long getContentLength(URLConnection conn) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return conn.getContentLengthLong();
+        }else {
+            return conn.getContentLength();
+        }
+    }
+
+    public static Charset getCharset(HTTPRequestUtils.ContentType contentType) {
         try {
             return contentType != null && contentType.charsetName != null && Charset.isSupported(contentType.charsetName) ? Charset.forName(contentType.charsetName) : null;
         } catch(Exception var2) {
@@ -88,7 +97,7 @@ public class HTTPRequestUtils {
         }
     }
 
-    private static final class ContentType {
+    public static final class ContentType {
         private static final Pattern CHARSET_HEADER = Pattern.compile("charset=([-_a-zA-Z0-9]+)",
                 Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
         private String contentType;
