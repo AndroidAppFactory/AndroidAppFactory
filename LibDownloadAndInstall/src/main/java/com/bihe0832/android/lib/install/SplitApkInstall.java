@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.ZipCompressor;
-import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
-import com.bihe0832.android.lib.log.ZLog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +33,7 @@ class SplitApkInstall {
                 return false;
             }
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            String fileDir = FileUtils.INSTANCE.getZixieFilePath(context) + "/Download/" + packageName + "/";
+            String fileDir = FileUtils.INSTANCE.getZixieFilePath(context) + "/" + packageName;
             while (entries.hasMoreElements()) {
                 ZipEntry zipEntry = entries.nextElement();
                 String zipEntryName = zipEntry.getName();
