@@ -69,7 +69,6 @@ public class HTTPRequestUtils {
                 if(headerName != null && headerName.equalsIgnoreCase("Content-Type")) {
                     return new HTTPRequestUtils.ContentType(headerValue);
                 }
-
                 ++e;
                 moreHeaders = headerName != null || headerValue != null;
             } while(moreHeaders);

@@ -26,13 +26,13 @@ object SplitApksInstallHelper {
     private var mPackageInstaller: PackageInstaller? = null
     private var mContext: Context? = null
 
-    interface SplitApksInstallCb {
-        fun onInstallSuccess()
-        fun onInstallFailed()
-    }
-
+    private var hasInit = false;
     private fun init(context: Context) {
-        mContext = context
+        if(hasInit){
+            return
+        }
+        mContext = context.applicationContext
+        hasInit = true
         mPackageInstaller = context.packageManager.packageInstaller
         mBroadcastReceiver = SplitApksInstallBroadcastReceiver(context)
         mBroadcastReceiver?.addEventObserver(object : SplitApksInstallBroadcastReceiver.EventObserver {
@@ -127,7 +127,7 @@ object SplitApksInstallHelper {
                 ZLog.d(TAG, "doCreateSession: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!param is null")
             }
             sessionId = mPackageInstaller!!.createSession(params)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return sessionId

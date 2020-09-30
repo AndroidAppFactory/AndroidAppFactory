@@ -40,7 +40,7 @@ class ObbFileInstall {
                 return false;
             }
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            String fileDir = FileUtils.INSTANCE.getZixieFilePath(context) + "/Download/" + packageName + "/";
+            String fileDir = FileUtils.INSTANCE.getZixieFilePath(context)+ "/" + packageName ;
             String dstApkFilePath = "";
             while (entries.hasMoreElements()) {
                 ZipEntry zipEntry = entries.nextElement();

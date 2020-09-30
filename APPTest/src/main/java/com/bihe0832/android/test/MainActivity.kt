@@ -156,7 +156,7 @@ class MainActivity : Activity() {
         testFun.setOnClickListener {
 //            testNotifyProcess(0)
 //            Routers.open(this,"mna://TestHttpActivity")
-            InstallUtils.installAPP(this, "/sdcard/Download/jp.co.sumzap.pj0007.zip", "jp.co.sumzap.pj0007")
+            InstallUtils.installAPP(this, "/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars")
         }
 
     }
