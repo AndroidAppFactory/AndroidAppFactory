@@ -19,11 +19,9 @@ import java.io.File;
  */
 class APKInstall {
     private static String INSTALL_TYPE = "application/vnd.android.package-archive";
-    private static final String APK_FILE_SUFFIX = ".apk";
 
-    static boolean isApkFile(String filename) {
-        return filename.endsWith(APK_FILE_SUFFIX);
-    }
+
+
 
     static boolean installAPK(Context context, String filePath) {
         if (!TextUtils.isEmpty(filePath)) {
