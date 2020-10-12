@@ -9,6 +9,7 @@ import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.RemoteException
+import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.io.*
@@ -28,7 +29,10 @@ object SplitApksInstallHelper {
 
     private var hasInit = false;
     private fun init(context: Context) {
-        if(hasInit){
+        if (hasInit) {
+            mBroadcastReceiver?.let {
+                context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
+            }
             return
         }
         mContext = context.applicationContext
@@ -37,13 +41,14 @@ object SplitApksInstallHelper {
         mBroadcastReceiver = SplitApksInstallBroadcastReceiver(context)
         mBroadcastReceiver?.addEventObserver(object : SplitApksInstallBroadcastReceiver.EventObserver {
             override fun onConfirmationPending() {
+                ZLog.e("onConfirmationPending")
             }
 
             override fun onInstallationSucceeded() {
                 try {
                     context.unregisterReceiver(mBroadcastReceiver)
                 } catch (e: java.lang.Exception) {
-                    ZLog.e("unregisterReceiver failed:${e.message}")
+                    ZLog.e("onInstallationSucceeded unregisterReceiver failed:${e.message}")
                 }
             }
 
@@ -51,7 +56,7 @@ object SplitApksInstallHelper {
                 try {
                     context.unregisterReceiver(mBroadcastReceiver)
                 } catch (e: java.lang.Exception) {
-                    ZLog.e("unregisterReceiver failed:${e.message}")
+                    ZLog.e("onInstallationFailed unregisterReceiver failed:${e.message}")
                 }
             }
         })
@@ -60,17 +65,19 @@ object SplitApksInstallHelper {
         }
     }
 
-    fun installApk(context: Context, fileDir: File?) :Boolean {
+    fun installApk(context: Context, fileDir: File?, packageName: String): Boolean {
         init(context)
         fileDir?.let {
             if (it.isDirectory) {
-                val files = ArrayList<String>()
-                it.listFiles().forEach { file ->
-                    ZLog.d("$TAG fileName:${it.name},absolutePath:${file.absolutePath}")
-                    files.add(file.absolutePath)
-                }
                 ThreadManager.getInstance().start {
-                    installApk(files)
+                    val files = ArrayList<String>()
+                    it.listFiles().forEach { file ->
+                        ZLog.d("$TAG fileName:${it.name},absolutePath:${file.absolutePath}")
+                        if (InstallUtils.isApkFile(file.name)) {
+                            files.add(file.absolutePath)
+                        }
+                    }
+                    installApk(files, packageName)
                 }
                 return true
             }
@@ -78,7 +85,7 @@ object SplitApksInstallHelper {
         return false
     }
 
-    private fun installApk(files: ArrayList<String>): Int {
+    private fun installApk(files: ArrayList<String>, packageName: String): Int {
 
         val nameSizeMap = HashMap<String, Long>()
         val filenameToPathMap = HashMap<String, String>()
@@ -98,7 +105,7 @@ object SplitApksInstallHelper {
             e.printStackTrace()
             return -1
         }
-        val installParams = makeSessionParams(totalSize)
+        val installParams = makeSessionParams(totalSize, packageName)
         try {
             sessionId = runInstallCreate(installParams)
             for ((key, value) in nameSizeMap) {
@@ -205,11 +212,12 @@ object SplitApksInstallHelper {
         }
     }
 
-    private fun makeSessionParams(totalSize: Long): SessionParams {
+    private fun makeSessionParams(totalSize: Long, packageName: String): SessionParams {
         val sessionParams = SessionParams(SessionParams.MODE_FULL_INSTALL)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             sessionParams.setInstallReason(PackageManager.INSTALL_REASON_USER)
         }
+        sessionParams.setAppPackageName(packageName)
         sessionParams.setSize(totalSize)
         return sessionParams
     }

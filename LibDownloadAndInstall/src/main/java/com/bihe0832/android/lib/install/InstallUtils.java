@@ -10,13 +10,12 @@ import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.zip.ZipUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.LinkedList;
 
 /**
  * Created by zixie on 2017/11/1.
@@ -27,6 +26,12 @@ import java.util.zip.ZipFile;
  */
 
 public class InstallUtils {
+
+    private static final String APK_FILE_SUFFIX = ".apk";
+
+    public static boolean isApkFile(String filename) {
+        return filename.endsWith(APK_FILE_SUFFIX);
+    }
 
     public static boolean installAPP(Context context, Uri fileProvider, File file) {
         return APKInstall.realInstallAPK(context, fileProvider, file);
@@ -41,7 +46,6 @@ public class InstallUtils {
     }
 
     private static final String TAG = "InstallUtils";
-    private static final String ZIP_DOWNLOADED_FILE_SUFFIX = ".zip";
 
     enum ApkInstallType {
         APK,
@@ -56,11 +60,11 @@ public class InstallUtils {
             if (downloadedFile == null) {
                 return false;
             }
-            if (FileUtils.INSTANCE.isZipFile(downloadedFile)) {
+            if (ZipUtils.isZipFile(downloadedFile.getAbsolutePath())) {
                 ThreadManager.getInstance().start(new Runnable() {
                     @Override
                     public void run() {
-                        boolean result = installSpecialAPK(context, filePath, packageName);
+                        boolean result = installSpecialAPKByZip(context, filePath, packageName);
                         ZLog.d(TAG + "installSpecialAPK result:" + result);
                     }
                 });
@@ -69,7 +73,14 @@ public class InstallUtils {
                 if (!downloadedFile.isDirectory()) {
                     return APKInstall.installAPK(context, downloadedFile.getAbsolutePath());
                 } else {
-                    return SplitApksInstallHelper.INSTANCE.installApk(context, downloadedFile);
+                    ThreadManager.getInstance().start(new Runnable() {
+                        @Override
+                        public void run() {
+                            boolean result = installSpecialAPKByFolder(context, downloadedFile.getAbsolutePath(), packageName);
+                            ZLog.d(TAG + "installSpecialAPK result:" + result);
+                        }
+                    });
+                    return true;
                 }
             }
         } catch (Exception e) {
@@ -79,57 +90,107 @@ public class InstallUtils {
         }
     }
 
-    static boolean installSpecialAPK(@NotNull Context context, @NonNull String zipFilePath, String packageName) {
+    static boolean installSpecialAPKByZip(@NotNull Context context, @NonNull String zipFilePath, String packageName) {
+        ZLog.d(TAG + "installSpecialAPKByZip:" + zipFilePath);
         String finalPackageName = "";
-        if(TextUtils.isEmpty(packageName)){
+        if (TextUtils.isEmpty(packageName)) {
             finalPackageName = FileUtils.INSTANCE.getFileNameWithoutEx(zipFilePath);
-        }else {
+        } else {
             finalPackageName = packageName;
         }
-        ApkInstallType apkInstallType = getApkInstallType(new File(zipFilePath));
+
+        ApkInstallType apkInstallType = getApkInstallTypeByZip(zipFilePath);
         if (apkInstallType == ApkInstallType.OBB) {
             return ObbFileInstall.installObbAPKByZip(context, zipFilePath, finalPackageName);
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
-            return SplitApkInstall.installSplitAPKByZip(context, zipFilePath, finalPackageName);
+            String fileDir = FileUtils.INSTANCE.getZixieFilePath(context) + "/" + packageName;
+            ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
+            ZipUtils.unCompress(zipFilePath, fileDir);
+            ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
+            return SplitApksInstallHelper.INSTANCE.installApk(context, new File(fileDir), finalPackageName);
         }
         return false;
     }
 
-    static ApkInstallType getApkInstallType(File apkInstallFile) {
+    static boolean installSpecialAPKByFolder(@NotNull Context context, @NonNull String folderPath, String packageName) {
+        ZLog.d(TAG + "installSpecialAPKByFolder:" + folderPath);
+        String finalPackageName = "";
+        if (TextUtils.isEmpty(packageName)) {
+            finalPackageName = FileUtils.INSTANCE.getFileName(folderPath);
+        } else {
+            finalPackageName = packageName;
+        }
+
+        ApkInstallType apkInstallType = getApkInstallTypeByFolder(new File(folderPath));
+        ZLog.d(TAG + "installSpecialAPKByFolder start install:" + folderPath);
+        if (apkInstallType == ApkInstallType.OBB) {
+            return ObbFileInstall.installObbAPKByFile(context, folderPath, finalPackageName);
+        } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
+            return SplitApksInstallHelper.INSTANCE.installApk(context, new File(folderPath), finalPackageName);
+        }
+        return false;
+    }
+
+    static ApkInstallType getApkInstallTypeByZip(String zipFile) {
+        if (zipFile == null) {
+            return ApkInstallType.APK;
+        }
+        int apkFileCount = 0;
+        for (String fileName : ZipUtils.getFileList(zipFile)) {
+            if (OBBFormats.isObbFile(fileName)) {
+                return ApkInstallType.OBB;
+            } else if (isApkFile(fileName)) {
+                if (apkFileCount > 0) {
+                    return ApkInstallType.SPLIT_APKS;
+                } else {
+                    apkFileCount++;
+                }
+            }
+        }
+        return apkFileCount > 1 ? ApkInstallType.SPLIT_APKS : ApkInstallType.APK;
+    }
+
+    static ApkInstallType getApkInstallTypeByFolder(File apkInstallFile) {
         if (apkInstallFile == null || !apkInstallFile.exists()) {
             return ApkInstallType.APK;
         }
-        String apkInstallFileName = apkInstallFile.getName();
-        ZLog.d(TAG + "getApkInstallType apkInstallFile:" + apkInstallFile + ",apkInstallFileName:" + apkInstallFileName);
-        if (APKInstall.isApkFile(apkInstallFileName)) {
-            return ApkInstallType.APK;
-        } else if (apkInstallFileName.endsWith(ZIP_DOWNLOADED_FILE_SUFFIX)) {
-            ZipFile zipFile;
-            try {
-                zipFile = new ZipFile(apkInstallFile);
-                int apkFileCount = 0;
-                Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                while (entries.hasMoreElements()) {
-                    ZipEntry zipEntry = entries.nextElement();
-                    String zipEntryName = zipEntry.getName();
-                    ZLog.d(TAG + "getApkInstallType zipEntryName:" + zipEntryName);
-                    String filename = new File(zipEntryName).getName();
-                    ZLog.d(TAG + "getApkInstallType filename:" + filename);
-                    if (OBBFormats.isObbFile(filename)) {
-                        return ApkInstallType.OBB;
-                    }
+        int apkFileCount = 0;
 
-                    if (APKInstall.isApkFile(filename)) {
+        LinkedList<File> folderList = new LinkedList<>();
+        for (File file2 : apkInstallFile.listFiles()) {
+            if (file2.isDirectory()) {
+                folderList.add(file2);
+            } else {
+                if (OBBFormats.isObbFile(file2.getAbsolutePath())) {
+                    return ApkInstallType.OBB;
+                } else if (isApkFile(file2.getAbsolutePath())) {
+                    if (apkFileCount > 0) {
+                        return ApkInstallType.SPLIT_APKS;
+                    } else {
                         apkFileCount++;
                     }
                 }
-                ZLog.d(TAG + "getApkInstallType apkFileCount:" + apkFileCount);
-                return apkFileCount > 1 ? ApkInstallType.SPLIT_APKS : ApkInstallType.APK;
-            } catch (Exception e) {
-                ZLog.e(TAG + "getApkInstallType failed:" + e.getMessage());
             }
         }
-        return ApkInstallType.APK;
+        File temp_file;
+        while (!folderList.isEmpty()) {
+            temp_file = folderList.removeFirst();
+            for (File file2 : temp_file.listFiles()) {
+                if (file2.isDirectory()) {
+                    folderList.add(file2);
+                } else {
+                    if (OBBFormats.isObbFile(file2.getAbsolutePath())) {
+                        return ApkInstallType.OBB;
+                    } else if (isApkFile(file2.getAbsolutePath())) {
+                        if (apkFileCount > 0) {
+                            return ApkInstallType.SPLIT_APKS;
+                        } else {
+                            apkFileCount++;
+                        }
+                    }
+                }
+            }
+        }
+        return apkFileCount > 1 ? ApkInstallType.SPLIT_APKS : ApkInstallType.APK;
     }
-
 }

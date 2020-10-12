@@ -11,6 +11,9 @@ import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.nio.channels.FileChannel
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
@@ -35,7 +38,6 @@ object FileUtils {
     const val SPACE_MB = 1024 * SPACE_KB
     const val SPACE_GB = 1024 * SPACE_MB
     const val SPACE_TB = 1024 * SPACE_GB
-    const val ZIP_DOWNLOADED_FILE_SUFFIX = ".zip"
     const val APK_FILE_SUFFIX = ".apk"
 
     fun checkFileExist(filePath: String): Boolean {
@@ -139,9 +141,31 @@ object FileUtils {
         return false
     }
 
-    fun isZipFile(file: File?): Boolean {
-        return file?.name?.endsWith(ZIP_DOWNLOADED_FILE_SUFFIX) == true
+
+    fun copyFile(source: File, dest: File) {
+        var inputChannel: FileChannel? = null
+        var outputChannel: FileChannel? = null
+        try {
+            inputChannel = FileInputStream(source).getChannel()
+            outputChannel = FileOutputStream(dest).getChannel()
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size())
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                inputChannel?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            try {
+                outputChannel?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
+
 
     fun getExtensionName(filename: String?): String {
         filename?.let {
@@ -153,15 +177,27 @@ object FileUtils {
         return ""
     }
 
+    fun getFileName(filePath: String?): String {
+        filePath?.let {
+            val split = filePath.lastIndexOf('/')
+            return if (split > -1) {
+                filePath.substring(split + 1)
+            } else {
+                filePath
+            }
+        }
+        return ""
+    }
+
     fun getFileNameWithoutEx(filename: String?): String {
         filename?.let {
             val dot = filename.lastIndexOf('.')
             val split = filename.lastIndexOf('/')
-            if(split < dot){
+            if (split < dot) {
                 if (dot > -1 && dot < filename.length) {
-                    return if(split > -1){
+                    return if (split > -1) {
                         filename.substring(split + 1, dot)
-                    }else{
+                    } else {
                         filename.substring(0, dot)
                     }
                 }

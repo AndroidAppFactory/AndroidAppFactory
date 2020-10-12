@@ -17,7 +17,6 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -154,9 +153,7 @@ class MainActivity : Activity() {
         }
 
         testFun.setOnClickListener {
-//            testNotifyProcess(0)
-//            Routers.open(this,"mna://TestHttpActivity")
-            InstallUtils.installAPP(this, "/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars")
+            testFun()
         }
 
     }
@@ -261,5 +258,34 @@ class MainActivity : Activity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         startActivity(intent)
+    }
+
+    private fun testFun() {
+//            testNotifyProcess(0)
+//            Routers.open(this,"mna://TestHttpActivity")
+        InstallUtils.installAPP(this, "/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars")
+//        ZipManager.debug(BuildConfig.DEBUG)
+
+
+        var startTime = System.currentTimeMillis()
+//        ZipManager.unzip("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip", "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927",null)
+//        ZipUtils.unCompress("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip", "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927")
+//        var duration = System.currentTimeMillis() - startTime
+//        ZLog.d(LOG_TAG, "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration")
+
+//        startTime = System.currentTimeMillis();
+//        ZipUtils.unCompress("/sdcard/Download/com.garena.game.kgtw.zip", "/sdcard/Download/com.garena.game.kgtw")
+//        duration = System.currentTimeMillis() - startTime
+//        ZLog.d(LOG_TAG, "ZipCompressor unzip com.garena.game.kgtw.zip cost:$duration")
+//
+//        startTime = System.currentTimeMillis();
+//        ZipUtils.unCompress("/sdcard/Download/com.supercell.brawlstars.zip", "/sdcard/Download/com.supercell.brawlstars")
+//        duration = System.currentTimeMillis() - startTime
+//        ZLog.d(LOG_TAG, "ZipCompressor unzip com.supercell.brawlstars.zip cost:$duration")
+//
+//        startTime = System.currentTimeMillis();
+//        ZipUtils.unCompress("/sdcard/Download/jp.co.sumzap.pj0007.zip", "/sdcard/Download/jp.co.sumzap.pj0007")
+//        duration = System.currentTimeMillis() - startTime
+//        ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
     }
 }
