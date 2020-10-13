@@ -27,11 +27,21 @@ object SplitApksInstallHelper {
     private var mPackageInstaller: PackageInstaller? = null
     private var mContext: Context? = null
 
-    private var hasInit = false;
+    private var hasInit = false
+    private var hasUnregister = false
+
+    @Synchronized
     private fun init(context: Context) {
         if (hasInit) {
-            mBroadcastReceiver?.let {
-                context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
+            if(hasUnregister){
+                mBroadcastReceiver?.let {
+                    try {
+                        context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
+                        hasUnregister = false
+                    } catch (e: java.lang.Exception) {
+                        ZLog.e("registerReceiver failed:${e.message}")
+                    }
+                }
             }
             return
         }
@@ -47,6 +57,7 @@ object SplitApksInstallHelper {
             override fun onInstallationSucceeded() {
                 try {
                     context.unregisterReceiver(mBroadcastReceiver)
+                    hasUnregister = true
                 } catch (e: java.lang.Exception) {
                     ZLog.e("onInstallationSucceeded unregisterReceiver failed:${e.message}")
                 }
@@ -55,13 +66,19 @@ object SplitApksInstallHelper {
             override fun onInstallationFailed() {
                 try {
                     context.unregisterReceiver(mBroadcastReceiver)
+                    hasUnregister = true
                 } catch (e: java.lang.Exception) {
                     ZLog.e("onInstallationFailed unregisterReceiver failed:${e.message}")
                 }
             }
         })
         mBroadcastReceiver?.let {
-            context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
+            try {
+                context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
+                hasUnregister = false
+            } catch (e: java.lang.Exception) {
+                ZLog.e("registerReceiver failed:${e.message}")
+            }
         }
     }
 
