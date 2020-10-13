@@ -263,7 +263,7 @@ class MainActivity : Activity() {
     private fun testFun() {
 //            testNotifyProcess(0)
 //            Routers.open(this,"mna://TestHttpActivity")
-        InstallUtils.installAPP(this, "/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars")
+        InstallUtils.installAPP(this, "/sdcard/Download/tw.sonet.princessconnect_47.apk", "tw.sonet.princessconnect")
 //        ZipManager.debug(BuildConfig.DEBUG)
 
 

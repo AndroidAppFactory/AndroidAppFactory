@@ -21,7 +21,6 @@ public class ZipUtils {
             return false;
         }
         try {
-
             ZipFile zipFile = new ZipFile(filePath);
             return zipFile.isValidZipFile();
         } catch (Exception e) {

@@ -21,8 +21,6 @@ class APKInstall {
     private static String INSTALL_TYPE = "application/vnd.android.package-archive";
 
 
-
-
     static boolean installAPK(Context context, String filePath) {
         if (!TextUtils.isEmpty(filePath)) {
             try {
