@@ -60,7 +60,9 @@ public class InstallUtils {
             if (downloadedFile == null) {
                 return false;
             }
-            if (ZipUtils.isZipFile(downloadedFile.getAbsolutePath())) {
+            if(isApkFile(filePath)){
+                return APKInstall.installAPK(context, downloadedFile.getAbsolutePath());
+            }else if (ZipUtils.isZipFile(downloadedFile.getAbsolutePath())) {
                 ThreadManager.getInstance().start(new Runnable() {
                     @Override
                     public void run() {
