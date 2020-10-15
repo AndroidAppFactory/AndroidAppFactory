@@ -300,7 +300,7 @@ object LibTTS {
     }
 
 
-    fun speak(tempStr: String) {
+    private fun speak(tempStr: String) {
         mUtteranceId++
         ZLog.e(TAG, "mUtteranceId: $mUtteranceId $tempStr")
         var result = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
