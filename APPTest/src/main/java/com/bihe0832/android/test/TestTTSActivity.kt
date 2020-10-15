@@ -71,6 +71,11 @@ class TestTTSActivity : Activity() {
                 ZLog.d(TAG,"onError $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
             }
 
+            override fun onUtteranceFailed(utteranceId: String, textSpeak: String) {
+                var end = System.currentTimeMillis()
+                ZLog.d(TAG,"onError $utteranceId : ${textSpeak}")
+            }
+
         })
         initView()
     }

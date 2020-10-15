@@ -96,6 +96,12 @@ object LibTTS {
                 it.onUtteranceError(utteranceId)
             }
         }
+
+        override fun onUtteranceFailed(utteranceId: String, textSpeak: String) {
+            mTTSSpeakListenerList.forEach {
+                it.onUtteranceFailed(utteranceId, textSpeak)
+            }
+        }
     }
 
     fun init(context: Context, loc: Locale, engine: String?, listener: TTSInitListener) {
