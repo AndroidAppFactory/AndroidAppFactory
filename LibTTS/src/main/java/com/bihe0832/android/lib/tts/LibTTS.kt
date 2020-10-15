@@ -11,7 +11,6 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
 import java.io.File
-import java.lang.Exception
 import java.lang.reflect.Field
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -131,7 +130,7 @@ object LibTTS {
             }
             try {
                 mSpeech?.shutdown()
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace();
             }
 
@@ -194,6 +193,8 @@ object LibTTS {
         fun onUtteranceDone(utteranceId: String)
 
         fun onUtteranceError(utteranceId: String)
+
+        fun onUtteranceFailed(utteranceId: String, textSpeak: String)
     }
 
     private fun setLanguage(loc: Locale): Int {
@@ -302,8 +303,8 @@ object LibTTS {
             mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null, mUtteranceId.toString())
         }
 
-        if (result == TextToSpeech.ERROR){
-            mTTSResultListener.onUtteranceError(mUtteranceId.toString())
+        if (result == TextToSpeech.ERROR) {
+            mTTSResultListener.onUtteranceFailed(mUtteranceId.toString(), tempStr)
             initTTS()
         }
     }
