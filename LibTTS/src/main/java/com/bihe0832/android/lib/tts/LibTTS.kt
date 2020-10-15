@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
 import java.io.File
+import java.lang.Exception
 import java.lang.reflect.Field
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -128,6 +129,12 @@ object LibTTS {
                     it
                 }
             }
+            try {
+                mSpeech?.shutdown()
+            }catch (e:Exception){
+                e.printStackTrace();
+            }
+
             mSpeech = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
                 if (status == TextToSpeech.SUCCESS) {
                     ZLog.d(TAG, "onInit: TTS引擎初始化成功")
@@ -289,10 +296,15 @@ object LibTTS {
     fun speak(tempStr: String) {
         mUtteranceId++
         ZLog.e(TAG, "mUtteranceId: $mUtteranceId $tempStr")
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        var result = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null)
         } else {
             mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null, mUtteranceId.toString())
+        }
+
+        if (result == TextToSpeech.ERROR){
+            mTTSResultListener.onUtteranceError(mUtteranceId.toString())
+            initTTS()
         }
     }
 
