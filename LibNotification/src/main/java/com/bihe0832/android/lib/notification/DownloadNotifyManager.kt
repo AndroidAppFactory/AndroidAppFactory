@@ -23,6 +23,8 @@ object DownloadNotifyManager {
 
     const val NOTIFICATION_ID_KEY = "notificationId"
     const val ACTION_KEY = "action"
+    const val NOTIFICATION_URL_KEY = "downloadURL"
+
     const val ACTION_RESUME = "resume"
     const val ACTION_PAUSE = "pause"
     const val ACTION_DELETE = "delete"
@@ -45,7 +47,7 @@ object DownloadNotifyManager {
     }
 
     @Synchronized
-    private fun getNotifyIDByURL(url: String): Int {
+    fun getNotifyIDByURL(url: String): Int {
         var id = try {
             return if (mListID.containsValue(url)) {
                 mListID.filter { it.value == url }.keys.first()
@@ -73,12 +75,12 @@ object DownloadNotifyManager {
         }
         context.applicationContext.let { context ->
             val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
-            updateContent(remoteViews, context, appName, iconURL, finished, total, speed, process, downloadType, channelID, notifyID)
+            updateContent(remoteViews, context, downloadURL, appName, iconURL, finished, total, speed, process, downloadType, channelID, notifyID)
         }
         return notifyID
     }
 
-    private fun updateContent(remoteViews: RemoteViews, context: Context, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
+    private fun updateContent(remoteViews: RemoteViews, context: Context, downloadURL: String,appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
         ThreadManager.getInstance().runOnUIThread {
             if (!TextUtils.isEmpty(iconURL)) {
                 Glide.with(context.applicationContext)
@@ -103,12 +105,12 @@ object DownloadNotifyManager {
                     R.id.btn_restart.let {
                         remoteViews.setImageViewResource(it, R.mipmap.btn_pause)
                         remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_PAUSE))
+                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_PAUSE))
                     }
                     R.id.btn_cancel.let {
                         remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
                         remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
+                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL,notifyID, ACTION_DELETE))
                     }
                 }
 
@@ -118,12 +120,12 @@ object DownloadNotifyManager {
                     R.id.btn_restart.let {
                         remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
                         remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_RESUME))
+                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_RESUME))
                     }
                     R.id.btn_cancel.let {
                         remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
                         remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
+                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
                     }
                 }
 
@@ -133,12 +135,12 @@ object DownloadNotifyManager {
                     R.id.btn_restart.let {
                         remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
                         remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_RETRY))
+                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_RETRY))
                     }
                     R.id.btn_cancel.let {
                         remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
                         remoteViews.setViewVisibility(it, View.VISIBLE)
-                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, notifyID, ACTION_DELETE))
+                        remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
                     }
                 }
 
@@ -146,7 +148,7 @@ object DownloadNotifyManager {
                     remoteViews.setTextViewText(R.id.tv_title, appName + "下载完成")
                     remoteViews.setTextViewText(R.id.tv_download_speed, "")
                     remoteViews.setViewVisibility(R.id.btn_restart, View.GONE)
-                    remoteViews.setOnClickPendingIntent(R.id.iv_layout, getPendingIntent(context, notifyID, ACTION_INSTALL))
+                    remoteViews.setOnClickPendingIntent(R.id.iv_layout, getPendingIntent(context, downloadURL, notifyID, ACTION_INSTALL))
                     remoteViews.setViewVisibility(R.id.btn_cancel, View.GONE)
                     remoteViews.setViewVisibility(R.id.btn_restart, View.GONE)
                 }
@@ -156,11 +158,12 @@ object DownloadNotifyManager {
         NotifyManager.sendNotifyNow(remoteViews, context, channelID, notifyID)
     }
 
-    fun getPendingIntent(context: Context, notifyID: Int, action: String): PendingIntent {
+    fun getPendingIntent(context: Context, url: String, notifyID: Int, action: String): PendingIntent {
         return PendingIntent.getBroadcast(context, mIntentID.generate(), Intent().apply {
             setAction(NOTIFICATION_BROADCAST_ACTION)
             putExtra(NOTIFICATION_ID_KEY, notifyID)
             putExtra(ACTION_KEY, action)
+            putExtra(NOTIFICATION_URL_KEY,url)
         }, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 }
