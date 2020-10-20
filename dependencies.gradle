@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "LibWrapper"
+ext.mainProject = "APPTest"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid"
  */
-ext.developModule = "LibWrapper"
+ext.developModule = "LibAPK,LibSuperAPP"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -27,7 +27,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "2.5.20"
+ext.moduleVersionName = "2.5.21"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -43,6 +43,11 @@ ext.moduleInfo = [
                                 "com.bihe0832.android:lib-router-compiler:2.0.15"
                         ]
                 ]
+        ],
+        "LibWrapper"                : [
+                "version"            : "2.5.20",
+                "artifactId"         : "lib-wrapper",
+                "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
                 "version"            : "2.5.13",
@@ -61,11 +66,6 @@ ext.moduleInfo = [
                         "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownloadAndInstall",
                         "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibDebug", "LibOS","LibZip"
                 ]
-        ],
-        "LibWrapper"                : [
-                "version"            : "2.5.20",
-                "artifactId"         : "lib-wrapper",
-                "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "RouterAnnotation"          : [
                 "version"            : "2.0.13",
@@ -105,15 +105,15 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-log",
                 "apidependenciesList": ["LibAndroid"]
         ],
+        "LibOS"                     : [
+                "version"            : "2.5.10",
+                "artifactId"         : "lib-android-os",
+                "apidependenciesList": ["LibLog"]
+        ],
 
         "LibCommonUtils"            : [
                 "version"            : "2.5.10",
                 "artifactId"         : "lib-utils-common",
-                "apidependenciesList": ["LibAndroid", "LibLog"]
-        ],
-        "LibCommonUIUtils"          : [
-                "version"            : "2.5.10",
-                "artifactId"         : "lib-ui-common",
                 "apidependenciesList": ["LibAndroid", "LibLog"]
         ],
         "LibThread"                 : [
@@ -160,6 +160,68 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-sqlite",
                 "apidependenciesList": []
         ],
+        "LibDeviceNetwork"          : [
+                "version"            : "2.5.13",
+                "artifactId"         : "lib-device-network",
+                "apidependenciesList": ["LibCommonUtils", "LibText", "LibThread", "LibEncrypt"]
+        ],
+        "LibTimer"                  : [
+                "version"            : "2.5.13",
+                "artifactId"         : "lib-timer",
+                "apidependenciesList": ["LibThread", "LibLog"]
+        ],
+        "LibConfig"                 : [
+                "version"            : "2.5.10",
+                "artifactId"         : "lib-config",
+                "apidependenciesList": ["LibCommonUtils"]
+        ],
+        "LibAPK"                    : [
+                "version"            : "2.5.13",
+                "artifactId"         : "lib-utils-apk",
+                "apidependenciesList": ["LibToast", "LibLog", "LibEncrypt"]
+        ],
+        "LibTTS"                    : [
+                "version"            : "2.5.20",
+                "artifactId"         : "lib-tts",
+                "apidependenciesList": ["LibConfig"]
+        ],
+        "LibFile"                   : [
+                "version"            : "2.5.15",
+                "artifactId"         : "lib-file",
+                "apidependenciesList": [
+                        "LibEncrypt",
+                        "LibCommonUtils"]
+        ],
+        "LibZip"                   : [
+                "version"            : "2.5.15",
+                "artifactId"         : "lib-zip",
+                "apidependenciesList": [ "LibLog","LibThread"]
+        ],
+        "LibDownloadAndInstall"     : [
+                "version"            : "2.5.17",
+                "artifactId"         : "lib-download-install",
+                "apidependenciesList": ["LibFile","LibZip", "LibRequest", "LibThread"]
+        ],
+        "LibText"                   : [
+                "version"            : "2.5.10",
+                "artifactId"         : "lib-text",
+                "apidependenciesList": ["LibAndroid"]
+        ],
+        "LibSuperAPP"               : [
+                "version"            : "2.5.13",
+                "artifactId"         : "lib-super-app",
+                "apidependenciesList": ["LibDialog", "LibAPK"]
+        ],
+        "LibDebug"                  : [
+                "version"            : "2.5.13",
+                "artifactId"         : "lib-debug",
+                "apidependenciesList": ["LibDialog", "LibToast"]
+        ],
+        "LibCommonUIUtils"          : [
+                "version"            : "2.5.10",
+                "artifactId"         : "lib-ui-common",
+                "apidependenciesList": ["LibAndroid", "LibLog"]
+        ],
         "LibFragmentation_core"     : [
                 "version"            : "2.5.10",
                 "artifactId"         : "lib-fragmentation-core",
@@ -201,52 +263,10 @@ ext.moduleInfo = [
                         "LibAdapter"
                 ]
         ],
-        "LibDeviceNetwork"          : [
-                "version"            : "2.5.13",
-                "artifactId"         : "lib-device-network",
-                "apidependenciesList": ["LibCommonUtils", "LibText", "LibThread", "LibEncrypt"]
-        ],
-        "LibTimer"                  : [
-                "version"            : "2.5.13",
-                "artifactId"         : "lib-timer",
-                "apidependenciesList": ["LibThread", "LibLog"]
-        ],
-        "LibConfig"                 : [
-                "version"            : "2.5.10",
-                "artifactId"         : "lib-config",
-                "apidependenciesList": ["LibCommonUtils"]
-        ],
         "LibToast"                  : [
                 "version"            : "2.5.13",
                 "artifactId"         : "lib-toast",
                 "apidependenciesList": ["LibThread"]
-        ],
-        "LibAPK"                    : [
-                "version"            : "2.5.13",
-                "artifactId"         : "lib-utils-apk",
-                "apidependenciesList": ["LibToast", "LibLog", "LibEncrypt"]
-        ],
-        "LibTTS"                    : [
-                "version"            : "2.5.20",
-                "artifactId"         : "lib-tts",
-                "apidependenciesList": ["LibConfig"]
-        ],
-        "LibFile"                   : [
-                "version"            : "2.5.15",
-                "artifactId"         : "lib-file",
-                "apidependenciesList": [
-                        "LibEncrypt",
-                        "LibCommonUtils"]
-        ],
-        "LibZip"                   : [
-                "version"            : "2.5.15",
-                "artifactId"         : "lib-zip",
-                "apidependenciesList": [ "LibLog","LibThread"]
-        ],
-        "LibDownloadAndInstall"     : [
-                "version"            : "2.5.17",
-                "artifactId"         : "lib-download-install",
-                "apidependenciesList": ["LibFile","LibZip", "LibRequest", "LibThread"]
         ],
         "LibImage"                  : [
                 "version"            : "2.5.10",
@@ -267,21 +287,6 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": ["LibDialog", "LibAPK", "LibCommonUtils"]
         ],
-        "LibText"                   : [
-                "version"            : "2.5.10",
-                "artifactId"         : "lib-text",
-                "apidependenciesList": ["LibAndroid"]
-        ],
-        "LibSuperAPP"               : [
-                "version"            : "2.5.13",
-                "artifactId"         : "lib-super-app",
-                "apidependenciesList": ["LibDialog", "LibAPK"]
-        ],
-        "LibDebug"                  : [
-                "version"            : "2.5.13",
-                "artifactId"         : "lib-debug",
-                "apidependenciesList": ["LibDialog", "LibToast"]
-        ],
         "LibCustomView"             : [
                 "version"            : "2.5.10",
                 "artifactId"         : "lib-custom-view",
@@ -301,14 +306,7 @@ ext.moduleInfo = [
                 "version"            : "2.5.10",
                 "artifactId"         : "lib-view-ext",
                 "apidependenciesList": ["LibCommonUIUtils"]
-        ],
-        "LibOS"                     : [
-                "version"            : "2.5.10",
-                "artifactId"         : "lib-android-os",
-                "apidependenciesList": ["LibLog"]
         ]
-
-
 ]
 
 

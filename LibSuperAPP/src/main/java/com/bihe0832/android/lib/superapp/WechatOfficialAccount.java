@@ -54,7 +54,7 @@ public class WechatOfficialAccount {
                         cm.setText(data.mAccountID);
                     }
                     ToastUtil.showShort(context, "公众账号信息已复制到剪贴板");
-                    APKUtils.startApp(context, "微信", APKUtils.APK_PACKAGE_NAME_WECHAT, APKUtils.APK_LAUNCHER_CLASS_WECHAT);
+                    APKUtils.startApp(context, "微信", SuperAPPContants.APK_PACKAGE_NAME_WECHAT, SuperAPPContants.APK_LAUNCHER_CLASS_WECHAT);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
