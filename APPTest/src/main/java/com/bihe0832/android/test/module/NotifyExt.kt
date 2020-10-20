@@ -27,10 +27,10 @@ fun MainActivity.testNotifyProcess(noticeId: Int) {
 
     TaskManager.getInstance().addTask(object : BaseTask() {
         override fun run() {
-//            NotifyManager.sendDownloadNotify(applicationContext,
-//                    "王者荣耀",
-//                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_FINISHED, "download", noticeId)
-//            process++
+            NotifyManager.sendDownloadNotify(applicationContext,
+                    "王者荣耀",
+                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_FINISHED, "download", noticeId)
+            process++
         }
 
         override fun getNextEarlyRunTime(): Int {
