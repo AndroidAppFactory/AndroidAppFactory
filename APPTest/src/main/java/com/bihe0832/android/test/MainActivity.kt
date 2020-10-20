@@ -264,8 +264,8 @@ class MainActivity : Activity() {
     }
 
     private fun testFun() {
-//            testNotifyProcess(0)
-        var a = HTTPServer.getInstance().doRequestAsync("http://dldir1.qq.com/INO/applist/20201019/applist_20201019_162802.txt")
-        ZLog.d(LOG_TAG, "HTTPServer:$a")
+            testNotifyProcess(1)
+//        var a = HTTPServer.getInstance().doRequestAsync("http://dldir1.qq.com/INO/applist/20201019/applist_20201019_162802.txt")
+//        ZLog.d(LOG_TAG, "HTTPServer:$a")
     }
 }
