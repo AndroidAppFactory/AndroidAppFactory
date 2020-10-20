@@ -23,6 +23,7 @@ import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.notification.DownloadNotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
@@ -55,28 +56,28 @@ class MainActivity : Activity() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 ZLog.d(LOG_TAG, "user input:$intent")
                 intent?.let {
-                    val notificationId = it.getIntExtra(NotifyManager.NOTIFICATION_ID_KEY, -1)
-                    val action = it.getStringExtra(NotifyManager.ACTION_KEY)
+                    val notificationId = it.getIntExtra(DownloadNotifyManager.NOTIFICATION_ID_KEY, -1)
+                    val action = it.getStringExtra(DownloadNotifyManager.ACTION_KEY)
                     ZLog.d(LOG_TAG, "[DownloadNotificationsManager] onReceive: $action")
                     when (action) {
-                        NotifyManager.ACTION_RESUME -> {
-                            testNotifyProcess(notificationId)
+                        DownloadNotifyManager.ACTION_RESUME -> {
+                            testNotifyProcess()
                         }
 
-                        NotifyManager.ACTION_PAUSE -> {
+                        DownloadNotifyManager.ACTION_PAUSE -> {
                             TaskManager.getInstance().removeTask(LOG_TAG)
-                            NotifyManager.sendDownloadNotify(applicationContext,
-                                    "王者荣耀",
-                                    "https://blog.bihe0832.com/public/img/head.jpg", 1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_PAUSED, "download", notificationId)
+                            DownloadNotifyManager.sendDownloadNotify(applicationContext,
+                                    "https://blog.bihe0832.com/public/img/head.jpg","王者荣耀",
+                                    "https://blog.bihe0832.com/public/img/head.jpg", 1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_PAUSED, "download")
                         }
 
-                        NotifyManager.ACTION_DELETE -> {
+                        DownloadNotifyManager.ACTION_DELETE -> {
                             TaskManager.getInstance().removeTask(LOG_TAG)
-                            NotifyManager.cancleNotify(this@MainActivity, notificationId)
+                            DownloadNotifyManager.cancleNotify(this@MainActivity, notificationId)
                         }
-                        NotifyManager.ACTION_INSTALL -> {
+                        DownloadNotifyManager.ACTION_INSTALL -> {
                             TaskManager.getInstance().removeTask(LOG_TAG)
-                            NotifyManager.cancleNotify(this@MainActivity, notificationId)
+                            DownloadNotifyManager.cancleNotify(this@MainActivity, notificationId)
                         }
                         else -> {
 
@@ -85,7 +86,7 @@ class MainActivity : Activity() {
                 }
 
             }
-        }, IntentFilter(NotifyManager.NOTIFICATION_BROADCAST_ACTION))
+        }, IntentFilter(DownloadNotifyManager.NOTIFICATION_BROADCAST_ACTION))
 
         View.OnClickListener {
             val item = DownloadItem()
@@ -264,7 +265,7 @@ class MainActivity : Activity() {
     }
 
     private fun testFun() {
-            testNotifyProcess(1)
+            testNotifyProcess()
 //        var a = HTTPServer.getInstance().doRequestAsync("http://dldir1.qq.com/INO/applist/20201019/applist_20201019_162802.txt")
 //        ZLog.d(LOG_TAG, "HTTPServer:$a")
     }
