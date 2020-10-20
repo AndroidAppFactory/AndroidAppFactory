@@ -1,5 +1,6 @@
 package com.bihe0832.android.test.module
 
+import com.bihe0832.android.lib.notification.DownloadNotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -20,16 +21,16 @@ fun MainActivity.testNotify() {
             "通知描述", "", "download")
 }
 
-fun MainActivity.testNotifyProcess(noticeId: Int) {
-    NotifyManager.sendDownloadNotify(applicationContext,
-            "王者荣耀",
-            "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_FINISHED, "download", noticeId)
+fun MainActivity.testNotifyProcess() {
+    DownloadNotifyManager.sendDownloadNotify(applicationContext,
+            "https://blog.bihe0832.com/public/img/head.jpg","王者荣耀",
+            "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_FINISHED, "download")
 
     TaskManager.getInstance().addTask(object : BaseTask() {
         override fun run() {
-            NotifyManager.sendDownloadNotify(applicationContext,
-                    "王者荣耀",
-                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, NotifyManager.DOWNLOAD_TYPE_FINISHED, "download", noticeId)
+            DownloadNotifyManager.sendDownloadNotify(applicationContext,
+                    "https://blog.bihe0832.com/public/img/head.jpg","王者荣耀",
+                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_FINISHED, "download")
             process++
         }
 
