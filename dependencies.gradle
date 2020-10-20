@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "LibUIUtils"
+ext.mainProject = "LibNotification"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid"
  */
-ext.developModule = "LibUIUtils"
+ext.developModule = "LibNotification"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -27,7 +27,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "2.5.23"
+ext.moduleVersionName = "2.5.24"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -283,7 +283,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibThread", "LibImage", "LibOS"]
         ],
         "LibNotification"           : [
-                "version"            : "2.5.23",
+                "version"            : "2.5.24",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": ["LibDialog", "LibAPK", "LibCommonUtils"]
         ],
