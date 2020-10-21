@@ -6,7 +6,7 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest"
+ext.mainProject = "LibAPK"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid"
@@ -176,7 +176,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibCommonUtils"]
         ],
         "LibAPK"                    : [
-                "version"            : "2.5.21",
+                "version"            : "2.5.29",
                 "artifactId"         : "lib-utils-apk",
                 "apidependenciesList": ["LibToast", "LibLog", "LibEncrypt"]
         ],
