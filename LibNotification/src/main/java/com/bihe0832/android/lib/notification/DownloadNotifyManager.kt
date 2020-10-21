@@ -3,7 +3,7 @@ package com.bihe0832.android.lib.notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
+import android.support.v4.app.NotificationCompat
 import android.text.TextUtils
 import android.text.format.Formatter
 import android.view.View
@@ -11,8 +11,7 @@ import android.widget.RemoteViews
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.request.target.NotificationTarget
 import java.util.*
 
 object DownloadNotifyManager {
@@ -71,7 +70,7 @@ object DownloadNotifyManager {
         } else {
             notifyIDFromParam
         }
-        ThreadManager.getInstance().runOnUIThread{
+        ThreadManager.getInstance().runOnUIThread {
             context.applicationContext.let { context ->
                 val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
                 updateContent(remoteViews, context, downloadURL, appName, iconURL, finished, total, speed, process, downloadType, channelID, notifyID)
@@ -82,18 +81,6 @@ object DownloadNotifyManager {
 
     private fun updateContent(remoteViews: RemoteViews, context: Context, downloadURL: String, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
 
-        if (!TextUtils.isEmpty(iconURL)) {
-            Glide.with(context.applicationContext)
-                    .asBitmap()
-                    .load(iconURL)
-                    .into(object : SimpleTarget<Bitmap>() {
-                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                            remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
-                        }
-                    })
-        } else {
-            remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
-        }
         remoteViews.setTextViewText(R.id.tv_download_progress, Formatter.formatFileSize(context, finished) + "/" + Formatter.formatFileSize(context, total))
         remoteViews.setProgressBar(R.id.progress_bar_download, 100, process, false)
 
@@ -154,13 +141,34 @@ object DownloadNotifyManager {
             }
         }
 
+        var notification = NotificationCompat.Builder(context, channelID).apply {
+            setOnlyAlertOnce(true)
+            setContent(remoteViews)
+            //设置小图标
+            setSmallIcon(R.mipmap.icon)
+            //禁止用户点击删除按钮删除
+            setAutoCancel(false)
+            //禁止滑动删除
+            setOngoing(true)
+            //取消右上角的时间显示
+            setShowWhen(false)
+        }.build()
 
-        NotifyManager.sendNotifyNow(remoteViews, context, channelID, notifyID)
+        if (!TextUtils.isEmpty(iconURL)) {
+            Glide.with(context.applicationContext)
+                    .asBitmap()
+                    .load(iconURL)
+                    .into(NotificationTarget(context, R.id.iv_logo, remoteViews, notification, notifyID))
+        } else {
+            remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
+        }
+
+        NotifyManager.sendNotifyNow(context, channelID, notification, notifyID)
     }
 
     fun getPendingIntent(context: Context, url: String, notifyID: Int, action: String): PendingIntent {
         return PendingIntent.getBroadcast(context, mIntentID.generate(), Intent().apply {
-            setAction(NOTIFICATION_BROADCAST_ACTION)
+            setAction(context.packageName + "." + NOTIFICATION_BROADCAST_ACTION)
             putExtra(NOTIFICATION_ID_KEY, notifyID)
             putExtra(ACTION_KEY, action)
             putExtra(NOTIFICATION_URL_KEY, url)

@@ -40,15 +40,7 @@ object NotifyManager {
     fun sendNotifyNow(context: Context, title: String, subTitle: String?, content: String?, action: String?, channelID: String): Int {
         var noticeID = mNotifyID.generate()
         context.applicationContext.let { context ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (!mNotificationChannel.contains(channelID)) {
-                    createNotificationChannel(context, APKUtils.getAppName(context) + channelID, channelId = channelID)?.let {
-                        mNotificationChannel.put(channelID, it)
-                    }
-                }
-            }
-
-            NotificationCompat.Builder(context, channelID).apply {
+           NotificationCompat.Builder(context, channelID).apply {
                 setContentTitle(title)
                 //设置内容
                 if (content?.isNotEmpty() == true) {
@@ -79,7 +71,7 @@ object NotifyManager {
                 }
 
             }.build().let {
-                (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(noticeID, it)
+                sendNotifyNow(context, channelID, it, noticeID)
             }
         }
         return noticeID
@@ -89,8 +81,7 @@ object NotifyManager {
         (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(noticeID)
     }
 
-
-    fun sendNotifyNow(remoteViews: RemoteViews, context: Context, channelID: String, notifyID: Int) {
+    fun sendNotifyNow(context: Context, channelID: String, notification: Notification, notifyID: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (!mNotificationChannel.contains(channelID)) {
                 createNotificationChannel(context, APKUtils.getAppName(context) + channelID, channelId = channelID)?.let {
@@ -98,22 +89,7 @@ object NotifyManager {
                 }
             }
         }
-
-        NotificationCompat.Builder(context, channelID).apply {
-            setOnlyAlertOnce(true)
-            setContent(remoteViews)
-            //设置小图标
-            setSmallIcon(R.mipmap.icon)
-            //禁止用户点击删除按钮删除
-            setAutoCancel(false)
-            //禁止滑动删除
-            setOngoing(true)
-            //取消右上角的时间显示
-            setShowWhen(false)
-        }.build().let {
-            (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(notifyID, it)
-        }
-
+        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(notifyID, notification)
     }
 }
 
