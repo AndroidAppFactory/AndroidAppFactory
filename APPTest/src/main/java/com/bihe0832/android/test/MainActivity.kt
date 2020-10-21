@@ -14,8 +14,6 @@ import android.text.Html
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.http.common.HTTPServer
-import com.bihe0832.android.http.common.HttpBasicRequest
-import com.bihe0832.android.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
@@ -24,7 +22,6 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
-import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -67,7 +64,7 @@ class MainActivity : Activity() {
                         DownloadNotifyManager.ACTION_PAUSE -> {
                             TaskManager.getInstance().removeTask(LOG_TAG)
                             DownloadNotifyManager.sendDownloadNotify(applicationContext,
-                                    "https://blog.bihe0832.com/public/img/head.jpg","王者荣耀",
+                                    "https://blog.bihe0832.com/public/img/head.jpg", "王者荣耀",
                                     "https://blog.bihe0832.com/public/img/head.jpg", 1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_PAUSED, "download")
                         }
 
@@ -86,7 +83,7 @@ class MainActivity : Activity() {
                 }
 
             }
-        }, IntentFilter(DownloadNotifyManager.NOTIFICATION_BROADCAST_ACTION))
+        }, IntentFilter(DownloadNotifyManager.getDownloadBroadcastFilter(this)))
 
         View.OnClickListener {
             val item = DownloadItem()
@@ -265,8 +262,12 @@ class MainActivity : Activity() {
     }
 
     private fun testFun() {
-            testNotifyProcess()
+        testNotifyProcess()
+
+        var a = HTTPServer.getInstance().doRequestAsync("https://microdemo.bihe0832.com/AndroidHTTP/post.php","para=agagag")
 //        var a = HTTPServer.getInstance().doRequestAsync("http://dldir1.qq.com/INO/applist/20201019/applist_20201019_162802.txt")
-//        ZLog.d(LOG_TAG, "HTTPServer:$a")
+        ZLog.d(LOG_TAG, "HTTPServer post :$a")
+        a = HTTPServer.getInstance().doRequestAsync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=test")
+        ZLog.d(LOG_TAG, "HTTPServer get:$a")
     }
 }
