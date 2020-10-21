@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 
 /**
@@ -67,7 +66,7 @@ public class HTTPServer {
     }
 
     public String doRequestAsync(final String url) {
-        return doRequestAsync(url, "");
+        return doRequestAsync(url, (byte[]) null);
     }
 
     public String doRequestAsync(final String url, final String params) {
@@ -80,7 +79,7 @@ public class HTTPServer {
         }
 
         if (null == bytes) {
-            return doRequestAsync(url, "");
+            return doRequestAsync(url, (byte[]) null);
         } else {
             return doRequestAsync(url, bytes);
         }
@@ -161,7 +160,7 @@ public class HTTPServer {
             ZLog.w(LOG_TAG, "=======================================");
             ZLog.w(LOG_TAG, request.getClass().toString());
             ZLog.w(LOG_TAG, url);
-            if(request.data != null){
+            if (request.data != null) {
                 ZLog.w(LOG_TAG, new String(request.data));
             }
             ZLog.w(LOG_TAG, "=======================================");
