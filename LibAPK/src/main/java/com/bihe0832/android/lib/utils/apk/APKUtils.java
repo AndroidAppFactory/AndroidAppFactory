@@ -38,11 +38,11 @@ public class APKUtils {
     public static long getAppVersionCode(Context context) {
         return getAppVersionCode(context, context.getPackageName());
     }
-
     /**
      * 获取APP版本号
      */
     public static long getAppVersionCode(Context context, String packageName) {
+
         PackageManager pm = context.getPackageManager();
         try {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
