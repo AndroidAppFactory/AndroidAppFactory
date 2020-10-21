@@ -71,9 +71,11 @@ object DownloadNotifyManager {
         } else {
             notifyIDFromParam
         }
-        context.applicationContext.let { context ->
-            val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
-            updateContent(remoteViews, context, downloadURL, appName, iconURL, finished, total, speed, process, downloadType, channelID, notifyID)
+        ThreadManager.getInstance().runOnUIThread{
+            context.applicationContext.let { context ->
+                val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
+                updateContent(remoteViews, context, downloadURL, appName, iconURL, finished, total, speed, process, downloadType, channelID, notifyID)
+            }
         }
         return notifyID
     }
@@ -81,16 +83,14 @@ object DownloadNotifyManager {
     private fun updateContent(remoteViews: RemoteViews, context: Context, downloadURL: String, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
 
         if (!TextUtils.isEmpty(iconURL)) {
-            ThreadManager.getInstance().runOnUIThread {
-                Glide.with(context.applicationContext)
-                        .asBitmap()
-                        .load(iconURL)
-                        .into(object : SimpleTarget<Bitmap>() {
-                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
-                            }
-                        })
-            }
+            Glide.with(context.applicationContext)
+                    .asBitmap()
+                    .load(iconURL)
+                    .into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            remoteViews.setImageViewBitmap(R.id.iv_logo, resource)
+                        }
+                    })
         } else {
             remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
         }
