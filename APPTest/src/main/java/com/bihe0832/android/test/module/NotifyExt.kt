@@ -24,13 +24,13 @@ fun MainActivity.testNotify() {
 fun MainActivity.testNotifyProcess() {
     DownloadNotifyManager.sendDownloadNotify(applicationContext,
             "https://blog.bihe0832.com/public/img/head.jpg","王者荣耀",
-            "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_FINISHED, "download")
+            "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_DOWNLOADING, "download")
 
     TaskManager.getInstance().addTask(object : BaseTask() {
         override fun run() {
             DownloadNotifyManager.sendDownloadNotify(applicationContext,
                     "https://blog.bihe0832.com/public/img/head.jpg","王者荣耀",
-                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_FINISHED, "download")
+                    "https://blog.bihe0832.com/public/img/head.jpg",1000000, 2345600789, 239909 * process.toLong(), process, DownloadNotifyManager.DOWNLOAD_TYPE_DOWNLOADING, "download")
             process++
         }
 
