@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 
 /**
@@ -37,7 +38,7 @@ public class HTTPServer {
     private HTTPServer() {
     }
 
-    public void init() {
+    private void init() {
 
         mCallHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_HIGHER)) {
             @Override
@@ -66,6 +67,26 @@ public class HTTPServer {
     }
 
     public String doRequestAsync(final String url) {
+        return doRequestAsync(url, "");
+    }
+
+    public String doRequestAsync(final String url, final String params) {
+        byte[] bytes = null;
+
+        try {
+            bytes = params.getBytes("UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (null == bytes) {
+            return doRequestAsync(url, "");
+        } else {
+            return doRequestAsync(url, bytes);
+        }
+    }
+
+    public String doRequestAsync(final String url, byte[] bytes) {
         BaseConnection connection = getConnection(url);
         HttpBasicRequest basicRequest = new HttpBasicRequest() {
             @Override
@@ -78,6 +99,9 @@ public class HTTPServer {
                 return null;
             }
         };
+        if (bytes != null) {
+            basicRequest.data = bytes;
+        }
         String result = executeRequest(basicRequest, connection);
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             return result;
@@ -131,12 +155,15 @@ public class HTTPServer {
         return connection;
     }
 
-    public String executeRequest(HttpBasicRequest request, BaseConnection connection) {
+    private String executeRequest(HttpBasicRequest request, BaseConnection connection) {
         String url = request.getUrl();
         if (DEBUG) {
             ZLog.w(LOG_TAG, "=======================================");
             ZLog.w(LOG_TAG, request.getClass().toString());
             ZLog.w(LOG_TAG, url);
+            if(request.data != null){
+                ZLog.w(LOG_TAG, new String(request.data));
+            }
             ZLog.w(LOG_TAG, "=======================================");
         }
         request.setRequestTime(System.currentTimeMillis() / 1000);
