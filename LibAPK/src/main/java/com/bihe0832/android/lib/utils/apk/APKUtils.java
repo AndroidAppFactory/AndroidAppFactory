@@ -36,12 +36,19 @@ public class APKUtils {
      * 获取APP版本号
      */
     public static long getAppVersionCode(Context context) {
+        return getAppVersionCode(context, context.getPackageName());
+    }
+
+    /**
+     * 获取APP版本号
+     */
+    public static long getAppVersionCode(Context context, String packageName) {
         PackageManager pm = context.getPackageManager();
         try {
-            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1){
+            PackageInfo pi = pm.getPackageInfo(packageName, 0);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
                 return pi == null ? 0 : pi.getLongVersionCode();
-            }else {
+            } else {
                 return pi == null ? 0 : pi.versionCode;
             }
 
@@ -51,15 +58,20 @@ public class APKUtils {
         return 0;
     }
 
-    public static String getAppVersionName(Context context) {
+
+    public static String getAppVersionName(Context context, String packageName) {
         PackageManager pm = context.getPackageManager();
         try {
-            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? "" : pi.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static String getAppVersionName(Context context) {
+        return getAppVersionName(context, context.getPackageName());
     }
 
     public static String getAppName(Context context) {
@@ -240,7 +252,7 @@ public class APKUtils {
             MessageDigest md = MessageDigest.getInstance("SHA1");
             byte[] publicKey = md.digest(c.getEncoded());
             hexString = HexUtils.bytes2HexStr(publicKey);
-        } catch(Exception e) {
+        } catch (Exception e) {
             // ignore
         }
         return hexString;
