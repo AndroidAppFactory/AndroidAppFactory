@@ -16,7 +16,7 @@ import java.util.*
 
 object DownloadNotifyManager {
 
-    const val NOTIFICATION_BROADCAST_ACTION = "com.bihe0832.android.lib.notification.NotificationBroadcastAction"
+    private const val NOTIFICATION_BROADCAST_ACTION = "com.bihe0832.android.lib.notification.NotificationBroadcastAction"
 
     const val NOTIFICATION_ID_KEY = "notificationId"
     const val ACTION_KEY = "action"
@@ -166,9 +166,13 @@ object DownloadNotifyManager {
         NotifyManager.sendNotifyNow(context, channelID, notification, notifyID)
     }
 
+    fun getDownloadBroadcastFilter(context: Context): String {
+        return context.packageName + "." + NOTIFICATION_BROADCAST_ACTION
+    }
+
     fun getPendingIntent(context: Context, url: String, notifyID: Int, action: String): PendingIntent {
         return PendingIntent.getBroadcast(context, mIntentID.generate(), Intent().apply {
-            setAction(context.packageName + "." + NOTIFICATION_BROADCAST_ACTION)
+            setAction(getDownloadBroadcastFilter(context))
             putExtra(NOTIFICATION_ID_KEY, notifyID)
             putExtra(ACTION_KEY, action)
             putExtra(NOTIFICATION_URL_KEY, url)
