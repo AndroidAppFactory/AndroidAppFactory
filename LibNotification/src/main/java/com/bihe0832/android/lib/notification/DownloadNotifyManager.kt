@@ -1,7 +1,5 @@
 package com.bihe0832.android.lib.notification
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -49,7 +47,7 @@ object DownloadNotifyManager {
     @Synchronized
     fun getNotifyIDByURL(url: String): Int {
         var id = try {
-            return if (mListID.containsValue(url)) {
+            if (mListID.containsValue(url)) {
                 mListID.filter { it.value == url }.keys.first()
             } else {
                 mNotifyID.generate()
