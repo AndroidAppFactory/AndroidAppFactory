@@ -1,0 +1,8 @@
+<resources>
+    <!-- some dimen from material design guideline -->
+
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- 通用 -->
+    <dimen name="toolbar_padding_top">25dp</dimen>
+</resources>

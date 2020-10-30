@@ -1,12 +1,12 @@
 package com.bihe0832.android.test
 
-import android.app.Activity
 import android.app.DownloadManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import com.bihe0832.android.framework.base.BaseActivity
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
@@ -20,7 +20,7 @@ import com.bihe0832.android.lib.utils.apk.APKUtils
 import kotlinx.android.synthetic.main.activity_test_tts.*
 import java.util.*
 
-class TestTTSActivity : Activity() {
+class TestTTSActivity : BaseActivity() {
     private val TAG = "TestTTSFragment-> "
     private val FORMAT = "语音播报测试：语速 %s,语调 %s，最大ID %s "
     private var times = 0

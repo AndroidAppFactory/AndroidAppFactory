@@ -1,6 +1,5 @@
 package com.bihe0832.android.test
 
-import android.app.Activity
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -13,7 +12,7 @@ import android.support.v4.content.FileProvider
 import android.text.Html
 import android.view.View
 import android.widget.Toast
-import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.framework.base.BaseActivity
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
@@ -27,22 +26,23 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
+import com.bihe0832.android.lib.webview.BaseWebView
 import com.bihe0832.android.test.module.JsonTest
 import com.bihe0832.android.test.module.testNotifyProcess
+import com.bihe0832.android.test.module.web.WebPageActivity
+import com.bihe0832.android.test.module.web.WebviewFragment
 import com.flyco.tablayout.listener.CustomTabEntity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
 @APPMain
 @Module("MainActivity")
-class MainActivity : Activity() {
+class MainActivity : BaseActivity() {
     val LOG_TAG = "TestHttpActivity"
     var process = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ZLog.setDebug(true)
-        Config.init(applicationContext, "", true)
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
@@ -261,10 +261,15 @@ class MainActivity : Activity() {
     }
 
     private fun testFun() {
+        val intent = Intent(this, WebPageActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent.putExtra(WebviewFragment.INTENT_KEY_URL,"http://blog.bihe0832.com")
+        startActivity(intent)
 //            testNotifyProcess(0)
 //            Routers.open(this,"mna://TestHttpActivity")
 //        InstallUtils.installAPP(this, "/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars")
-        InstallUtils.installAPP(this, "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip", "com.herogame.gplay.lastdayrulessurvival")
+//        InstallUtils.installAPP(this, "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip", "com.herogame.gplay.lastdayrulessurvival")
 
 //        ZipManager.debug(BuildConfig.DEBUG)
 

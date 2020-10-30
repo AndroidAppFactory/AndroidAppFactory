@@ -1,8 +1,8 @@
 package com.bihe0832.android.test.module.request.basic;
 
 
-import com.bihe0832.android.http.common.HttpRequest;
-import com.bihe0832.android.http.common.HttpResponseHandler;
+import com.bihe0832.android.lib.http.common.HttpRequest;
+import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 import com.bihe0832.android.test.module.request.Constants;
 
 public class BasicPostRequest extends HttpRequest {

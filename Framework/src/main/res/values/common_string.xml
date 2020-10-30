@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AndroidAPPFactofy</string>
+    <string name="app_desc">来自子勰的开发组件</string>
+    <string name="router_schema">zixie</string>
+
+
+    <string name="common_reminder_title">温馨提示</string>
+    <string name="comfirm">确定</string>
+    <string name="go_on">继续</string>
+    <string name="cancel">取消</string>
+
+    <string name="exist_msg">是否退出%1$s</string>
+
+    <string name="login">登录</string>
+
+    
+    <string name="version_update">版本更新</string>
+    <string name="dialog_apk_update">发现新版本：</string>
+    <string name="dialog_apk_version">版本号</string>
+    <string name="dialog_apk_updating">版本（ %1$s ）更新中...</string>
+    <string name="dialog_apk_updateinfo">版本内容：</string>
+
+    <string name="agreement_title">《用户协议》和</string>
+    <string name="privacy_title">《隐私协议》</string>
+
+</resources>
