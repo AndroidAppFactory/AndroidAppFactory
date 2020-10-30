@@ -168,8 +168,6 @@ public class WifiUtil {
         beaconData.put("Netmask", IpUtils.ipn2s(netmaskNetSeq));
         beaconData.put("Gateway", IpUtils.ipn2s(dhcpInfo.gateway));
 
-//        MnaReportHelper.reportEvent("routerinfo_network_status", beaconData);
-
         if (netmaskNetSeq == 0) {
             netmaskNetSeq = 16777215; // 默认子网掩码, 即255.255.255.0
             ZLog.d("getRouterInfo, netmaskNetSeq is null");

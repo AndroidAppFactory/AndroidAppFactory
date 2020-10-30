@@ -1,4 +1,4 @@
-package com.tencent.mna.lib.devices
+package com.bihe0832.android.lib.network;
 
 import android.content.BroadcastReceiver
 import android.content.Context

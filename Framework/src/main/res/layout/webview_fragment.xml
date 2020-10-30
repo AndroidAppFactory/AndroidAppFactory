@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/app_webview_progressbar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/app_webview_swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/app_webview_progressbar">
+
+        <FrameLayout
+            android:id="@+id/app_webview_x5webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+        </FrameLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/error_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:background="@color/transparent"
+        android:paddingLeft="18dp"
+        android:paddingRight="16dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_webview_progressbar">
+
+        <TextView
+            android:id="@+id/web_load_failed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="网页加载失败"
+            android:textColor="#768289"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/web_error_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="#FF3AC8EF"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/web_load_failed"
+            tools:text="TextView" />
+
+
+        <View
+            android:id="@+id/web_split_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="25dp"
+            android:background="#E5E5E5"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/web_error_url" />
+
+        <TextView
+            android:id="@+id/web_error_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:lineSpacingExtra="12dp"
+            android:text="• 没有网络信号或数据连接\n• 此网页可能暂时出现故障\n• 输入网址不正确"
+            android:textColor="#333333"
+            android:textSize="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/web_split_line" />
+
+        <TextView
+            android:id="@+id/web_retry"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_bg_shape"
+            android:gravity="center"
+            android:text="点击重试"
+            android:textColor="#333333"
+            app:layout_constraintBottom_toBottomOf="@+id/web_native_browser"
+            app:layout_constraintEnd_toStartOf="@+id/web_native_browser"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/web_native_browser" />
+
+        <TextView
+            android:id="@+id/web_native_browser"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/button_bg_shape"
+            android:gravity="center"
+            android:text="用系统浏览器打开"
+            android:textColor="#333333"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/web_retry"
+            app:layout_constraintTop_toBottomOf="@+id/web_error_info" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>

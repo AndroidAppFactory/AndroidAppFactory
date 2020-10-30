@@ -1,10 +1,11 @@
 package com.bihe0832.android.test
 
-import android.app.Activity
 import android.os.Bundle
-import com.bihe0832.android.http.common.HTTPServer
-import com.bihe0832.android.http.common.HttpBasicRequest
-import com.bihe0832.android.http.common.HttpResponseHandler
+import com.bihe0832.android.framework.base.BaseActivity
+import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
+import com.bihe0832.android.lib.http.common.HTTPServer
+import com.bihe0832.android.lib.http.common.HttpBasicRequest
+import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.test.module.request.Constants
@@ -13,11 +14,11 @@ import com.bihe0832.android.test.module.request.advanced.AdvancedPostRequest
 import com.bihe0832.android.test.module.request.advanced.TestResponse
 import com.bihe0832.android.test.module.request.basic.BasicGetRequest
 import com.bihe0832.android.test.module.request.basic.BasicPostRequest
-import com.bihe0832.http.advanced.HttpAdvancedRequest
 import kotlinx.android.synthetic.main.activity_http_test.*
+
 @APPMain
 @Module("TestHttpActivity")
-class TestHttpActivity : Activity() {
+class TestHttpActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

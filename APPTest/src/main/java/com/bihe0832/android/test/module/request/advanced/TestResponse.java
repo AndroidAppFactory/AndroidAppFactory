@@ -3,7 +3,7 @@ package com.bihe0832.android.test.module.request.advanced;
 
 import com.google.gson.annotations.SerializedName;
 
-import static com.bihe0832.http.advanced.HttpAdvancedRequest.RET_FAIL;
+import static com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest.RET_FAIL;
 
 
 public class TestResponse {

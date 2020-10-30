@@ -1,8 +1,8 @@
 package com.bihe0832.android.test.module.request.advanced;
 
 
+import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest;
 import com.bihe0832.android.test.module.request.Constants;
-import com.bihe0832.http.advanced.HttpAdvancedRequest;
 
 import org.jetbrains.annotations.NotNull;
 
