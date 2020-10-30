@@ -1,8 +1,8 @@
-package com.bihe0832.http.advanced;
+package com.bihe0832.android.lib.http.advanced;
 
 
-import com.bihe0832.android.http.common.HttpBasicRequest;
-import com.bihe0832.android.http.common.HttpResponseHandler;
+import com.bihe0832.android.lib.http.common.HttpBasicRequest;
+import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 import com.bihe0832.android.lib.gson.JsonHelper;
 
 import org.jetbrains.annotations.NotNull;
