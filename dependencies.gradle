@@ -308,7 +308,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibCommonUIUtils"]
         ],
         "LibWebview"                : [
-                "version"            : "2.6.0",
+                "version"            : "2.6.1",
                 "artifactId"         : "lib-webview",
                 "apidependenciesList": [
                         "com.tencent.tbs.tbssdk:sdk:43697"
