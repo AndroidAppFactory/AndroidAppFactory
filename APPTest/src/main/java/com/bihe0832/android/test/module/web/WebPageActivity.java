@@ -1,9 +1,11 @@
 package com.bihe0832.android.test.module.web;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.bihe0832.android.framework.base.BaseActivity;
@@ -27,7 +29,7 @@ public class WebPageActivity extends BaseActivity {
         mWebViewViewModel = ViewModelProviders.of(this).get(WebViewViewModel.class);
         ZLog.d(TAG + QbSdk.getTbsVersion(this));
         handleIntent(getIntent());
-//        initToolbar();
+        initToolbar();
     }
 
     @Override
@@ -58,24 +60,18 @@ public class WebPageActivity extends BaseActivity {
         }
     }
 
-//    private void initToolbar() {
-//        mToolbar = findViewById(R.id.common_toolbar);
-//        mWebViewViewModel.getTitleLiveData().observe(WebPageActivity.this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable final String s) {
-//                if (!s.equals("about:blank")) {
-//                    mToolbar.setTitle(s);
-//                }
-//                ZLog.d("mWebViewViewModel: " + hashCode() + "  title: " + s);
-//            }
-//        });
-//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressedSupport();
-//            }
-//        });
-//    }
+    private void initToolbar() {
+        mWebViewViewModel.getTitleLiveData().observe(WebPageActivity.this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable final String s) {
+                if (!s.equals("about:blank")) {
+                    initToolbar(R.id.common_toolbar, s, true);
+
+                }
+                ZLog.d("mWebViewViewModel: " + hashCode() + "  title: " + s);
+            }
+        });
+    }
 
 }
 

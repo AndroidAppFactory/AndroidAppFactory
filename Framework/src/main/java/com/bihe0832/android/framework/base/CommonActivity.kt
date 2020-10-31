@@ -14,21 +14,7 @@ open class CommonActivity : BaseActivity() {
     }
 
     protected fun initToolbar(titleString: String?, needBack: Boolean) {
-        try {
-            if (null == mToolbar) {
-                mToolbar = findViewById(R.id.common_toolbar)
-            }
-            mToolbar?.apply {
-                title = titleString
-                if (needBack) {
-                    setNavigationOnClickListener { onBackPressedSupport() }
-                } else {
-                    setNavigationIcon(R.mipmap.icon)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        initToolbar(R.id.common_toolbar, titleString, needBack)
     }
 
     protected fun hideBottomUIMenu() {

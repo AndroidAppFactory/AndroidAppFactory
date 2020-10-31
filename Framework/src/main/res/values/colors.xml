@@ -16,12 +16,12 @@
     <color name="divider">#BDBDBD</color>
 
     <!--Dialog相关配色-->
-    <color name="dialog_bg">#182b37</color>
+    <color name="dialog_bg">#002539</color>
     <color name="dialog_title">#ffffff</color>
     <color name="dialog_hint">#999999</color>
     <color name="dialog_button">#38ADFF</color>
     <color name="dialog_tips">#FFF44C36</color>
-    <color name="dialog_split">#FF173851</color>
+    <color name="dialog_split">#003653</color>
 
     <!--常用颜色定义-->
     <color name="transparent">#00000000</color>

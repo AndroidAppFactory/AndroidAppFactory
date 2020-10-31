@@ -1,18 +1,19 @@
 package com.bihe0832.android.test.module
 
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.Toast
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.ZixieContext.getDeviceId
+import com.bihe0832.android.framework.ZixieContext.getVersionCode
+import com.bihe0832.android.framework.ZixieContext.getVersionName
+import com.bihe0832.android.framework.ZixieContext.isDebug
+import com.bihe0832.android.framework.ZixieContext.isOfficial
 import com.bihe0832.android.framework.ZixieContext.showDebug
-import com.bihe0832.android.lib.gson.JsonHelper
-import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.InputDialogCompletedCallback
-import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.lib.zip.ZipUtils
+import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.TestItem
-import com.bihe0832.android.test.module.json.JsonTest
 
 open class TestDebugCommonFragment : BaseTestFragment() {
     private var lastUrl = "https://blog.bihe0832.com"
@@ -29,6 +30,10 @@ open class TestDebugCommonFragment : BaseTestFragment() {
 
     override fun getDataList(): List<TestItem> {
         return mutableListOf<TestItem>().apply {
+            add(TestItem("查看应用版本及环境") { showAPPInfo() })
+            add(TestItem("查看设备信息") { showMobileInfo() })
+            add(TestItem("分享第三方应用信息") { showOtherAPPInfo() })
+
             add(TestItem("打开指定Web页面") {
                 showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl, InputDialogCompletedCallback { result: String ->
                     try {
@@ -43,68 +48,62 @@ open class TestDebugCommonFragment : BaseTestFragment() {
                 })
             })
             add(TestItem("打开JSbridge调试页面") { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") })
-            add(TestItem("测试自定义请求") { testOneRequest() })
             add(TestItem("打开TBS调试页面") { openWeb("http://debugtbs.qq.com/") })
-            add(TestItem("JsonHelper") { testJson() })
-            add(TestItem("Toast测试") {
-                ToastUtil.showTop(context, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
-            })
-            add(TestItem("ZIP测试") { testZIP() })
+
 
         }
     }
 
-    private fun testJson() {
-//        for (i in 0..100) {
-//            var start = System.currentTimeMillis()
-//            ZLog.d(LOG_TAG, "JsonHelper: start $start")
-//            JsonHelper.getGson().fromJson("{\"key\": 1222}", JsonTest::class.java)
-//            var end = System.currentTimeMillis()
-//            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
-//        }
-        var result = JsonHelper.fromJsonList<JsonTest>("[{\"key\": 1111,\"value\": [1222,2222]},{\"key\": 2222,\"value\": [1222,2222]}]", JsonTest::class.java)
-        ZLog.d(LOG_TAG, "result:" + result)
-        JsonTest().apply {
-            key = 1212
-        }.let {
-            ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
+    private fun showMobileInfo() {
+        val builder = StringBuilder()
+        builder.append("PackageName: ${context!!.packageName}\n")
+        builder.append("deviceId: ${getDeviceId()}\n")
+        builder.append("厂商&型号: ${Build.MANUFACTURER}, ${Build.MODEL}, ${Build.BRAND}\n")
+        builder.append("系统版本: ${Build.VERSION.RELEASE}, ${Build.VERSION.SDK_INT}\n")
+        builder.append("系统指纹: ${Build.FINGERPRINT}\n")
+
+        showInfo("分享设备信息给开发者", builder.toString())
+    }
+
+    private fun showAPPInfo() {
+        val builder = StringBuilder()
+        var version = ""
+        version = if (isDebug) {
+            "内测版"
+        } else {
+            if (isOfficial) {
+                "外发版"
+            } else {
+                "预发布版"
+            }
+        }
+        builder.append("PackageName: ${context!!.packageName}\n")
+        builder.append("Version: ${getVersionName()}.${getVersionCode()}\n")
+        builder.append("Tag: ${ZixieContext.tag}\n")
+        showInfo("${APKUtils.getAppName(context)} $version 信息", builder.toString())
+    }
+
+    private fun showOtherAPPInfo() {
+        val builder = StringBuilder()
+        builder.append("第三方应用信息:\n\n")
+        addPackageInfo("com.tencent.mobileqq", builder)
+        addPackageInfo("com.tencent.mm", builder)
+        addPackageInfo("com.tencent.qqlite", builder)
+        addPackageInfo("com.tencent.mobileqqi", builder)
+        addPackageInfo("com.tencent.tim", builder)
+        sendInfo("分享第三方应用信息给开发者", builder.toString())
+    }
+
+    private fun addPackageInfo(packageName: String, builder: StringBuilder) {
+        val info = APKUtils.getInstalledPackage(context, packageName)
+        builder.append("\n$packageName: ")
+        if (null == info) {
+            builder.append("未安装")
+        } else {
+            builder.append("\n\tname: ${APKUtils.getAppName(context, packageName)}\n")
+            builder.append("	versionName: ${info.versionName}\n")
+            builder.append("	versionCode: ${info.versionCode}\n")
         }
     }
-    private fun testZIP() {
 
-        var startTime = System.currentTimeMillis()
-        ZipUtils.unCompress("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip", "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927")
-        var duration = System.currentTimeMillis() - startTime
-        ZLog.d(LOG_TAG, "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration")
-
-        startTime = System.currentTimeMillis();
-        ZipUtils.unCompress("/sdcard/Download/com.garena.game.kgtw.zip", "/sdcard/Download/com.garena.game.kgtw")
-        duration = System.currentTimeMillis() - startTime
-        ZLog.d(LOG_TAG, "ZipCompressor unzip com.garena.game.kgtw.zip cost:$duration")
-
-        startTime = System.currentTimeMillis();
-        ZipUtils.unCompress("/sdcard/Download/com.supercell.brawlstars.zip", "/sdcard/Download/com.supercell.brawlstars")
-        duration = System.currentTimeMillis() - startTime
-        ZLog.d(LOG_TAG, "ZipCompressor unzip com.supercell.brawlstars.zip cost:$duration")
-
-        startTime = System.currentTimeMillis();
-        ZipUtils.unCompress("/sdcard/Download/jp.co.sumzap.pj0007.zip", "/sdcard/Download/jp.co.sumzap.pj0007")
-        duration = System.currentTimeMillis() - startTime
-        ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
-    }
-
-    private fun testTextView() {
-        var data =
-                "正常的文字效果<BR>" +
-                        "<p>正常的文字效果</p>" +
-                        "<p><b>文字加粗</b></p>" +
-                        "<p><em>文字斜体</em></p>" +
-                        "<p><font color='#428bca'>修改文字颜色</font></p>"
-
-//        testResult?.text = Html.fromHtml(data)
-    }
-
-
-    private fun testOneRequest() {
-    }
 }
