@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.WindowManager
+import com.bihe0832.android.framework.R
 import me.yokeyword.fragmentation.SupportActivity
 
 open class BaseActivity : SupportActivity() {
@@ -43,6 +44,23 @@ open class BaseActivity : SupportActivity() {
         return true
     }
 
+    protected fun initToolbar(resID :Int, titleString: String?, needBack: Boolean) {
+        try {
+            if (null == mToolbar) {
+                mToolbar = findViewById(resID)
+            }
+            mToolbar?.apply {
+                title = titleString
+                if (needBack) {
+                    setNavigationOnClickListener { onBackPressedSupport() }
+                } else {
+                    setNavigationIcon(R.mipmap.icon)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     override fun onBackPressedSupport() {
         onBackPressedSupportAction(exitAuto())
     }
