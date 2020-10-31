@@ -1,4 +1,4 @@
-package com.bihe0832.android.test
+package com.bihe0832.android.test.module.request
 
 import android.os.Bundle
 import com.bihe0832.android.framework.base.BaseActivity
@@ -6,9 +6,7 @@ import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
-import com.bihe0832.android.lib.router.annotation.APPMain
-import com.bihe0832.android.lib.router.annotation.Module
-import com.bihe0832.android.test.module.request.Constants
+import com.bihe0832.android.test.R
 import com.bihe0832.android.test.module.request.advanced.AdvancedGetRequest
 import com.bihe0832.android.test.module.request.advanced.AdvancedPostRequest
 import com.bihe0832.android.test.module.request.advanced.TestResponse
@@ -16,14 +14,12 @@ import com.bihe0832.android.test.module.request.basic.BasicGetRequest
 import com.bihe0832.android.test.module.request.basic.BasicPostRequest
 import kotlinx.android.synthetic.main.activity_http_test.*
 
-@APPMain
-@Module("TestHttpActivity")
 class TestHttpActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_http_test)
-
+        common_toolbar.setNavigationOnClickListener { onBackPressedSupport() }
         getBasic.setOnClickListener { sendGetBasicRequest() }
 
         postBasic.setOnClickListener { sendPostBasicRequest() }

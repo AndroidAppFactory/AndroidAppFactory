@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="dialog_bg">#182b37</color>
-    <color name="dialog_title">#ffffff</color>
-    <color name="dialog_hint">#999999</color>
-    <color name="dialog_button">#38ADFF</color>
-    <color name="dialog_tips">#FFF44C36</color>
-    <color name="dialog_split">#FF173851</color>
-</resources>

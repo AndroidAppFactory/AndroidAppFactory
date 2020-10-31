@@ -35,7 +35,7 @@ object ZixieCoreInit {
                 Log.e(ZixieContext.tag, "isDebug: ${ZixieContext.isDebug} ;isOfficial: ${ZixieContext.isOfficial}")
                 Log.e(ZixieContext.tag, "tag: ${ZixieContext.tag}")
                 Log.e(ZixieContext.tag, "version: ${ZixieContext.getVersionNameAndCode()}")
-                Log.e(ZixieContext.tag, "DeviceId: ${ZixieContext.getDeviceId()} ;DeviceKey: ${ZixieContext.getDeviceKey()}")
+                Log.e(ZixieContext.tag, "DeviceId: ${ZixieContext.getDeviceId()}")
                 Log.e(ZixieContext.tag, "APPInstalledTime: ${ZixieContext.getAPPInstalledTime()} ;VersionInstalledTime: ${ZixieContext.getVersionInstalledTime()}")
                 Log.e(ZixieContext.tag, "———————————————————————— 版本信息 ————————————————————————")
             }

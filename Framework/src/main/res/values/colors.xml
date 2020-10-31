@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1C313F</color>
-    <color name="colorPrimaryDark">#182B37</color>
-    <color name="colorAccent">#7988b3</color>
+    <!--    主题相关配色-->
+    <color name="colorPrimary">#03A9F4</color>
+    <color name="colorPrimaryDark">#0288D1</color>
+    <color name="colorPrimaryLight">#B3E5FC</color>
+    <color name="colorAccent">#7C4DFF</color>
     <color name="colorButtonNormal">#7988b3</color>
     <color name="colorControlActivated">#7988B3</color>
     <color name="colorControlHighlight">#FF3AC8EF</color>
     <color name="colorControlNormal">#7988B3</color>
-    <color name="colorTextColor">#E2E2E4</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
 
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
+    <!--Dialog相关配色-->
+    <color name="dialog_bg">#182b37</color>
+    <color name="dialog_title">#ffffff</color>
+    <color name="dialog_hint">#999999</color>
+    <color name="dialog_button">#38ADFF</color>
+    <color name="dialog_tips">#FFF44C36</color>
+    <color name="dialog_split">#FF173851</color>
+
+    <!--常用颜色定义-->
     <color name="transparent">#00000000</color>
     <color name="gray_light">#f2f2f2</color>
     <color name="gray">#646464</color>

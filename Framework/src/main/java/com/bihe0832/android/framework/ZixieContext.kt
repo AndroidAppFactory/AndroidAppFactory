@@ -136,13 +136,6 @@ object ZixieContext {
         return DeviceIDUtils.getAndroidId(applicationContext) ?: return ""
     }
 
-    fun getDeviceKey(): Long {
-        return getDeviceId()?.let {
-            return ConvertUtils.getUnsignedInt(it.hashCode())
-        }
-        return 0
-    }
-
     fun initModule(action: () -> Unit, canInitWithBackgroundThread: Boolean) {
         try {
             if (canInitWithBackgroundThread) {

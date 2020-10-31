@@ -1,4 +1,4 @@
-package com.bihe0832.android.test.module;
+package com.bihe0832.android.test.module.json;
 
 import com.bihe0832.android.lib.gson.adapter.RawStringJsonAdapter;
 import com.google.gson.annotations.JsonAdapter;
