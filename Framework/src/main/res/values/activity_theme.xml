@@ -7,8 +7,7 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Animation.Activity"
-        parent="@android:style/Animation.Activity">
+    <style name="Animation.Activity" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
         <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>
         <item name="android:activityCloseEnterAnimation">@anim/slide_left_in</item>
@@ -29,7 +28,7 @@
         <item name="titleTextAppearance">@style/Title.Base</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/colorPrimary</item>
         <item name="navigationIcon">@mipmap/ic_left_arrow_white</item>
     </style>
 
@@ -44,22 +43,22 @@
         <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">false</item>
-
+        <item name="android:windowActionBar">false</item>
         <item name="colorButtonNormal">@color/colorButtonNormal</item>
         <item name="colorControlActivated">@color/colorControlActivated</item>
         <item name="colorControlHighlight">@color/colorControlHighlight</item>
         <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
     </style>
 
+    <!--    主要用于闪屏 -->
     <style name="fullscreenActivityTheme" parent="activityTheme">
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowBackground">@color/transparent</item>
     </style>
 
     <!--使用 transparentActivityTheme 主题的Activity 不要定义 screenOrientation -->
@@ -68,7 +67,7 @@
     </style>
 
     <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->
-    <style name="bottomShare"  parent="activityTheme">
+    <style name="bottomShare" parent="activityTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:splitMotionEvents">false</item>

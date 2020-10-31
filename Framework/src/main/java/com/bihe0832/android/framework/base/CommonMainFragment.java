@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Created on 2020/8/3.
  * Description: Description
  */
-public abstract class BaseMainFragment extends BaseFragment {
+public abstract class CommonMainFragment extends BaseFragment {
 
     private BottomBar bottomBar = null;
     private int currentPosition = getDefaultTabID();
