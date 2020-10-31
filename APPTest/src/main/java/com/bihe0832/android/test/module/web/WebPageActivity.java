@@ -8,14 +8,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.bihe0832.android.framework.base.BaseActivity;
+import com.bihe0832.android.framework.base.CommonActivity;
 import com.bihe0832.android.framework.webview.BaseWebviewFragment;
 import com.bihe0832.android.framework.webview.WebViewViewModel;
+import com.bihe0832.android.framework.webview.CommonWebviewFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.test.R;
 import com.tencent.smtt.sdk.QbSdk;
 
-public class WebPageActivity extends BaseActivity {
+public class WebPageActivity extends CommonActivity {
 
     //标题栏
     private static final String TAG = "WebPageActivity";
@@ -25,7 +26,6 @@ public class WebPageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.common_activity_framelayout);
         mWebViewViewModel = ViewModelProviders.of(this).get(WebViewViewModel.class);
         ZLog.d(TAG + QbSdk.getTbsVersion(this));
         handleIntent(getIntent());
@@ -40,7 +40,7 @@ public class WebPageActivity extends BaseActivity {
             finish();
             return;
         } else {
-            if (findFragment(WebviewFragment.class) == null) {
+            if (findFragment(CommonWebviewFragment.class) == null) {
                 loadRootFragment(R.id.common_fragment_content, getWebViewFragment());
             }
         }
@@ -48,7 +48,7 @@ public class WebPageActivity extends BaseActivity {
 
 
     protected BaseWebviewFragment getWebViewFragment(){
-        return  WebviewFragment.newInstance(mURL);
+        return  CommonWebviewFragment.newInstance(mURL);
     }
 
     private void handleIntent(Intent intent) {

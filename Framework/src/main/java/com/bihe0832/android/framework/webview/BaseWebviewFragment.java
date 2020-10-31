@@ -66,8 +66,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
     public static final String INTENT_KEY_THIRD_PART = "http://localhost";
     public static final String KEY_WX_PAY_PART = "https://wx.tenpay.com";
 
-
-
     HashMap<String, String> globalLocalRes = new HashMap<String, String>();
 
     // 追加业务参数
