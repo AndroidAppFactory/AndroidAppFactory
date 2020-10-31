@@ -16,7 +16,7 @@ import com.bihe0832.android.lib.text.DebugTools
 import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.module.web.WebPageActivity
-import com.bihe0832.android.test.module.web.WebviewFragment
+import com.bihe0832.android.framework.webview.CommonWebviewFragment
 
 abstract class BaseTestFragment : BaseFragment() {
     private var mRecy: RecyclerView? = null
@@ -68,7 +68,7 @@ abstract class BaseTestFragment : BaseFragment() {
         val intent = Intent(context, WebPageActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        intent.putExtra(WebviewFragment.INTENT_KEY_URL, url)
+        intent.putExtra(CommonWebviewFragment.INTENT_KEY_URL, url)
         startActivity(intent)
     }
 

@@ -1,4 +1,4 @@
-package com.bihe0832.android.test.module.web;
+package com.bihe0832.android.framework.webview;
 
 
 import android.net.Uri;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
-import com.bihe0832.android.framework.webview.BaseWebviewFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
@@ -17,7 +16,7 @@ import com.tencent.smtt.sdk.CookieSyncManager;
  * Created by akihuang on 2019/7/4.
  */
 
-public class WebviewFragment extends BaseWebviewFragment {
+public class CommonWebviewFragment extends BaseWebviewFragment {
 
     private static final String URL_USER_AGENT_VERSION = "ZixieVersion";
     private static final String URL_USER_AGENT_JS_BRIDGE_VERSION = "JSVersion";
@@ -28,16 +27,16 @@ public class WebviewFragment extends BaseWebviewFragment {
     private static final String URL_PARAM_VERSION_CODE = URL_USER_AGENT_VERSION + "Code";
     private static final String URL_PARAM_PLATFORM = "OSVersion";
 
-    public static WebviewFragment newInstance(String url) {
-        WebviewFragment fragment = new WebviewFragment();
+    public static CommonWebviewFragment newInstance(String url) {
+        CommonWebviewFragment fragment = new CommonWebviewFragment();
         Bundle bundle = new Bundle();
         bundle.putString(INTENT_KEY_URL, url);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static WebviewFragment newInstance(String url, boolean refreshable) {
-        WebviewFragment fragment = new WebviewFragment();
+    public static CommonWebviewFragment newInstance(String url, boolean refreshable) {
+        CommonWebviewFragment fragment = new CommonWebviewFragment();
         Bundle bundle = new Bundle();
         bundle.putString(INTENT_KEY_URL, url);
         bundle.putBoolean(INTENT_KEY_REFRESH, refreshable);
