@@ -6,10 +6,9 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bihe0832.android.framework.ZixieContext;
-import com.bihe0832.android.framework.base.BaseActivity;
+import com.bihe0832.android.framework.ui.BaseActivity;
 import com.bihe0832.android.lib.ui.touchregion.ViewExtForTouchRegionKt;
 import com.bihe0832.android.test.R;
 

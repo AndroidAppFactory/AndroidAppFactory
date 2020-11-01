@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.base;
+package com.bihe0832.android.framework.ui.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bihe0832.android.framework.R;
+import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.view.BottomBar;
 import com.bihe0832.android.lib.ui.view.BottomBarTab;

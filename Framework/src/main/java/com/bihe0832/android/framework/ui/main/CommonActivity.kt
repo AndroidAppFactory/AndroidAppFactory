@@ -1,7 +1,8 @@
-package com.bihe0832.android.framework.base
+package com.bihe0832.android.framework.ui.main
 
 import android.os.Bundle
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.framework.ui.BaseActivity
 
 
 open class CommonActivity : BaseActivity() {

@@ -1,7 +1,7 @@
 package com.bihe0832.android.test.module.request
 
 import android.os.Bundle
-import com.bihe0832.android.framework.base.BaseActivity
+import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpBasicRequest

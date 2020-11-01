@@ -9,14 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.bihe0832.android.framework.base.BaseFragment
+import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.DebugTools
 import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.module.web.WebPageActivity
-import com.bihe0832.android.framework.webview.CommonWebviewFragment
+import com.bihe0832.android.framework.ui.webview.CommonWebviewFragment
 
 abstract class BaseTestFragment : BaseFragment() {
     private var mRecy: RecyclerView? = null

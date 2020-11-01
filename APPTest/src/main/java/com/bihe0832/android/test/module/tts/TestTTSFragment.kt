@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.base.BaseFragment
+import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils

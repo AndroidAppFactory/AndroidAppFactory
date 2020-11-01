@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.webview;
+package com.bihe0832.android.framework.ui.webview;
 
 
 import android.arch.lifecycle.LiveData;
@@ -34,7 +34,7 @@ import com.bihe0832.android.lib.webview.BaseWebView;
 import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
 import com.bihe0832.android.lib.webview.jsbridge.JsBridge;
 import com.bihe0832.android.framework.ZixieContext;
-import com.bihe0832.android.framework.base.BaseFragment;
+import com.bihe0832.android.framework.ui.BaseFragment;
 import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
@@ -118,7 +118,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
     private WebViewRefreshCallback mRefreshCallback = null;
 
     public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback){
-        this.mRefreshCallback = callback;
+        mRefreshCallback = callback;
     }
 
     @Override
@@ -136,7 +136,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.webview_fragment, container, false);
+        View view = inflater.inflate(R.layout.common_fragment_webview, container, false);
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);
         mRedirect = (TextView) view.findViewById(R.id.web_native_browser);

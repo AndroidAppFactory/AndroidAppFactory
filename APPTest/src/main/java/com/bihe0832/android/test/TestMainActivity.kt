@@ -1,7 +1,7 @@
 package com.bihe0832.android.test
 
 import android.os.Bundle
-import com.bihe0832.android.framework.base.CommonActivity
+import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 

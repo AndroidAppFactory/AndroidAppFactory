@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.base;
+package com.bihe0832.android.framework.ui;
 
 import android.app.ActivityManager;
 import android.app.Application;
@@ -7,14 +7,12 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.bihe0832.android.lib.config.Config;
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.web.WebViewHelper;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ZixieCoreInit;
-import com.bihe0832.android.framework.constant.Constants;
 
 import java.util.List;
 

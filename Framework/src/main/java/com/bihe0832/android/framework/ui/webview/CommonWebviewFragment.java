@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.webview;
+package com.bihe0832.android.framework.ui.webview;
 
 
 import android.net.Uri;
@@ -11,10 +11,6 @@ import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.CookieSyncManager;
-
-/**
- * Created by akihuang on 2019/7/4.
- */
 
 public class CommonWebviewFragment extends BaseWebviewFragment {
 
