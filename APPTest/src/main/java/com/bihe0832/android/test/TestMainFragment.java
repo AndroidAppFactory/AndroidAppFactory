@@ -11,13 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bihe0832.android.framework.base.BaseFragment;
+import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.test.module.TestDebugCommonFragment;
 import com.bihe0832.android.test.module.TestDebugTempFragment;
 import com.bihe0832.android.test.module.TestRouterFragment;
 import com.bihe0832.android.test.module.dialog.TestDialgFragment;
-import com.bihe0832.android.test.module.tts.TestTTSFragment;
 import com.flyco.tablayout.SlidingTabLayout;
 
 

@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.base
+package com.bihe0832.android.framework.ui
 
 import android.os.Build
 import android.os.Bundle

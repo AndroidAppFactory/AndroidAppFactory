@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.bihe0832.android.framework.base.CommonActivity;
-import com.bihe0832.android.framework.webview.BaseWebviewFragment;
-import com.bihe0832.android.framework.webview.WebViewViewModel;
-import com.bihe0832.android.framework.webview.CommonWebviewFragment;
+import com.bihe0832.android.framework.ui.main.CommonActivity;
+import com.bihe0832.android.framework.ui.webview.BaseWebviewFragment;
+import com.bihe0832.android.framework.ui.webview.WebViewViewModel;
+import com.bihe0832.android.framework.ui.webview.CommonWebviewFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.test.R;
 import com.tencent.smtt.sdk.QbSdk;
