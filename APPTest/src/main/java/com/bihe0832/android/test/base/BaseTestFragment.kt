@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -27,8 +28,13 @@ abstract class BaseTestFragment : BaseFragment() {
         return view
     }
 
-    protected val testTips: String
-        protected get() = ""
+    protected val testTips by lazy {
+        getTipsText()
+    }
+
+    open fun getTipsText(): String {
+        return ""
+    }
 
     private fun initView(view: View) {
         mAdapter = TestPagerAdapter(_mActivity)
@@ -38,7 +44,7 @@ abstract class BaseTestFragment : BaseFragment() {
         if (TextUtils.isEmpty(testTips)) {
             textView.visibility = View.GONE
         } else {
-            textView.text = testTips
+            textView.text = Html.fromHtml(testTips)
             textView.visibility = View.VISIBLE
         }
         mRecy?.setHasFixedSize(true)

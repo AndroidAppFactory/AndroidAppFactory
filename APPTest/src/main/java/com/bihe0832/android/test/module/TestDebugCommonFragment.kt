@@ -1,10 +1,13 @@
 package com.bihe0832.android.test.module
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.text.TextUtils
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.app.router.openWebPage
 import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getDeviceId
@@ -17,6 +20,7 @@ import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.TestItem
+import java.util.HashMap
 
 open class TestDebugCommonFragment : BaseTestFragment() {
     private var lastUrl = "https://blog.bihe0832.com"
@@ -29,6 +33,14 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             fragment.arguments = args
             return fragment
         }
+    }
+
+    override fun getTipsText(): String {
+        return "APPFactory的通用组件和工具<BR>" +
+                "<p>正常的文字效果</p>" +
+                "<p><b>文字加粗</b></p>" +
+                "<p><em>文字斜体</em></p>" +
+                "<p><font color='#428bca' ><small>修改文字颜色<small></font></p>"
     }
 
     override fun getDataList(): List<TestItem> {
@@ -53,6 +65,11 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItem("打开TBS调试页面") { openWeb("http://debugtbs.qq.com/") })
             add(TestItem("弹出评分页面") {
                 UserPraiseManager.showUserPraiseDialog(activity!!, APPFactoryRouter.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK))
+            })
+            add(TestItem("打开反馈页面") {
+                val map = HashMap<String, String>()
+                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode("https://support.qq.com/product/290858")
+                APPFactoryRouter.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             })
         }
     }
