@@ -43,6 +43,6 @@ publish {
     userOrg = rootProject.zixieUserOrg
     groupId = rootProject.zixieGroupId
     licences = rootProject.zixieLicences
-    desc = 'the base zip utils for zixie'//项目描述
+    desc = 'the framework of android app factory for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
