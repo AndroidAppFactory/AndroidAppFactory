@@ -126,16 +126,6 @@ class TestDebugTempFragment : BaseTestFragment() {
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
     }
 
-    private fun testTextView() {
-        var data =
-                "正常的文字效果<BR>" +
-                        "<p>正常的文字效果</p>" +
-                        "<p><b>文字加粗</b></p>" +
-                        "<p><em>文字斜体</em></p>" +
-                        "<p><font color='#428bca'>修改文字颜色</font></p>"
-
-//        testResult?.text = Html.fromHtml(data)
-    }
 
 
 

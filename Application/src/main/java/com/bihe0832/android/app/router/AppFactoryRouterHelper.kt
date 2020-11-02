@@ -32,5 +32,5 @@ fun getSkipListHostList(): List<String> {
 fun APPFactoryRouter.openWebPage(url: String) {
     val map = HashMap<String, String>()
     map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
-    APPFactoryRouter.openPageRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
+    openPageRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
 }
