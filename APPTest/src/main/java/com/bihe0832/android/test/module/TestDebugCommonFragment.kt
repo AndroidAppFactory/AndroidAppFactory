@@ -3,6 +3,9 @@ package com.bihe0832.android.test.module
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import com.bihe0832.android.app.router.APPFactoryRouter
+import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getDeviceId
 import com.bihe0832.android.framework.ZixieContext.getVersionCode
@@ -33,7 +36,6 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItem("查看应用版本及环境") { showAPPInfo() })
             add(TestItem("查看设备信息") { showMobileInfo() })
             add(TestItem("分享第三方应用信息") { showOtherAPPInfo() })
-
             add(TestItem("打开指定Web页面") {
                 showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl, InputDialogCompletedCallback { result: String ->
                     try {
@@ -49,8 +51,9 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             })
             add(TestItem("打开JSbridge调试页面") { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") })
             add(TestItem("打开TBS调试页面") { openWeb("http://debugtbs.qq.com/") })
-
-
+            add(TestItem("弹出评分页面") {
+                UserPraiseManager.showUserPraiseDialog(activity!!, APPFactoryRouter.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK))
+            })
         }
     }
 

@@ -12,15 +12,15 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.device.DeviceIDUtils
+import com.bihe0832.android.lib.lifecycle.ActivityObserver
+import com.bihe0832.android.lib.lifecycle.ApplicationObserver
+import com.bihe0832.android.lib.lifecycle.KEY_APP_INSTALLED_TIME
+import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import com.bihe0832.android.lib.lifecycle.ActivityObserver
-import com.bihe0832.android.lib.lifecycle.ApplicationObserver
-import com.bihe0832.android.framework.constant.Constants.*
 import kotlin.system.exitProcess
 
 
@@ -123,6 +123,30 @@ object ZixieContext {
         return versionCode
     }
 
+    fun isFirstStart(): Int {
+        return LifecycleHelper.isFirstStart
+    }
+
+    fun getAPPLastVersionInstalledTime(): Long {
+        return LifecycleHelper.getAPPLastVersionInstalledTime()
+    }
+
+    fun getAPPInstalledTime(): Long {
+        return LifecycleHelper.getAPPInstalledTime()
+    }
+
+    fun getAPPLastStartTime(): Long {
+        return LifecycleHelper.getAPPLastStartTime()
+    }
+
+    fun getAPPUsedDays(): Int {
+        return LifecycleHelper.getAPPUsedDays()
+    }
+
+    fun getAPPUsedTimes(): Int {
+        return LifecycleHelper.getAPPUsedTimes()
+    }
+
     fun getLogPath(): String {
         return if (PackageManager.PERMISSION_GRANTED ==
                 ContextCompat.checkSelfPermission(applicationContext!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -148,29 +172,7 @@ object ZixieContext {
         }
     }
 
-    val isFirstStart by lazy {
-        var lastStartVersion = Config.readConfig(KEY_LAST_INSTALLED_VERSION, 0L)
-        if (getVersionCode() != lastStartVersion) {
-            Config.writeConfig(KEY_LAST_INSTALLED_VERSION, getVersionCode())
-            Config.writeConfig(KEY_LAST_INSTALLED_TIME_VERSION, System.currentTimeMillis())
-            if (lastStartVersion > 0) {
-                INSTALL_TYPE_VERSION_FIRST
-            } else {
-                Config.writeConfig(KEY_LAST_INSTALLED_TIME_APP, System.currentTimeMillis())
-                INSTALL_TYPE_APP_FIRST
-            }
-        } else {
-            INSTALL_TYPE_NOT_FIRST
-        }
-    }
 
-    fun getVersionInstalledTime(): Long {
-        return Config.readConfig(KEY_LAST_INSTALLED_TIME_VERSION, 0L)
-    }
-
-    fun getAPPInstalledTime(): Long {
-        return Config.readConfig(KEY_LAST_INSTALLED_TIME_APP, 0L)
-    }
 
     /**
      * 尽量使用页面归属的Activity，在没有页面的前提下，优先使用applicationContext，只有别无选择的场景，使用该方式
@@ -180,7 +182,7 @@ object ZixieContext {
     }
 
     fun exitAPP() {
-        ThreadManager.getInstance().start ({
+        ThreadManager.getInstance().start({
             ActivityObserver.getCurrentActivity()?.let { context ->
                 (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)?.let {
                     it.killBackgroundProcesses(context.packageName)
@@ -214,7 +216,7 @@ object ZixieContext {
             setCancelable(true)
             positive = applicationContext!!.resources.getString(R.string.comfirm)
             negtive = applicationContext!!.resources.getString(R.string.cancel)
-            setOnClickBottomListener(object: OnDialogListener {
+            setOnClickBottomListener(object : OnDialogListener {
                 override fun onPositiveClick() {
                     callbackListener?.onPositiveClick()
                     dismiss()

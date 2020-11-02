@@ -16,8 +16,8 @@
         <activity
             android:name="com.bihe0832.android.test.TestMainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/activityTheme"
-            android:screenOrientation="sensor">
+            android:screenOrientation="portrait"
+            android:theme="@style/activityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,22 +27,16 @@
         <activity
             android:name=".module.touch.TouchRegionActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/activityTheme"
-            android:screenOrientation="sensor">
+            android:screenOrientation="portrait"
+            android:theme="@style/activityTheme">
 
         </activity>
 
         <activity
             android:name=".module.request.TestHttpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/activityTheme"
-            android:screenOrientation="sensor"></activity>
-
-        <activity
-            android:name=".module.web.WebPageActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/activityTheme"
-            android:screenOrientation="sensor"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/activityTheme"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +94,7 @@ public class Routers {
         initIfNeed(uri.getHost());
         for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getMappings().entrySet()) {
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-            if(entry.getKey().equalsIgnoreCase(uri.getHost()) && null != entry.getValue()){
+            if (entry.getKey().equalsIgnoreCase(uri.getHost()) && null != entry.getValue()) {
                 Intent intent = new Intent(context, entry.getValue());
                 intent.putExtras(parseExtras(uri));
                 intent.putExtra(ROUTERS_KEY_RAW_URL, uri.toString());
@@ -107,12 +106,35 @@ public class Routers {
 
     private static boolean doOpen(Context context, Uri uri, int requestCode) {
         initIfNeed(uri.getHost());
-        for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getMappings().entrySet()) {
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-            if(entry.getKey().equalsIgnoreCase(uri.getHost()) && null != entry.getValue()){
-                Intent intent = new Intent(context, entry.getValue());
-                intent.putExtras(parseExtras(uri));
-                intent.putExtra(ROUTERS_KEY_RAW_URL, uri.toString());
+        if (RouterMappingManager.getInstance().getMappings().containsKey(uri.getHost())) {
+            Class<? extends Activity> activityClass = RouterMappingManager.getInstance().getMappings().get(uri.getHost());
+            if (null != activityClass) {
+                try {
+                    Intent intent = new Intent(context, activityClass);
+                    intent.putExtras(parseExtras(uri));
+                    intent.putExtra(ROUTERS_KEY_RAW_URL, uri.toString());
+                    if (!(context instanceof Activity)) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    }
+                    if (requestCode >= 0) {
+                        if (context instanceof Activity) {
+                            ((Activity) context).startActivityForResult(intent, requestCode);
+                        } else {
+                            throw new RuntimeException("can not startActivityForResult context " + context);
+                        }
+                    } else {
+                        context.startActivity(intent);
+                    }
+                    return true;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+        } else {
+            try {
+                Intent intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+                System.out.println("jumpToOtherApp url:" + uri.toString() + ",intent:" + intent.toString());
                 if (!(context instanceof Activity)) {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -127,8 +149,11 @@ public class Routers {
                     context.startActivity(intent);
                 }
                 return true;
+            } catch (Exception e) {
+                return false;
             }
         }
+
         return false;
     }
 
@@ -142,11 +167,11 @@ public class Routers {
         return bundle;
     }
 
-    public static ArrayList<Class<? extends Activity>>  getMainActivityList(){
+    public static ArrayList<Class<? extends Activity>> getMainActivityList() {
         return RouterMappingManager.getInstance().getActivityIsMain();
     }
 
-    public static HashMap<String, Class<? extends Activity>>  getRouterMappings(){
+    public static HashMap<String, Class<? extends Activity>> getRouterMappings() {
         return RouterMappingManager.getInstance().getMappings();
     }
 }

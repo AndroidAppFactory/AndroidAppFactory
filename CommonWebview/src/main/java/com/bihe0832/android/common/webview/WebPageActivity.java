@@ -1,4 +1,4 @@
-package com.bihe0832.android.test.module.web;
+package com.bihe0832.android.common.webview;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -9,14 +9,15 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.bihe0832.android.framework.ui.main.CommonActivity;
-import com.bihe0832.android.framework.ui.webview.BaseWebviewFragment;
-import com.bihe0832.android.framework.ui.webview.WebViewViewModel;
-import com.bihe0832.android.framework.ui.webview.CommonWebviewFragment;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.test.R;
+import com.bihe0832.android.lib.router.annotation.Module;
 import com.tencent.smtt.sdk.QbSdk;
 
+import static com.bihe0832.android.common.webview.WebPageActivity.MODULE_NAME_WEB_PAGE;
+
+@Module(MODULE_NAME_WEB_PAGE)
 public class WebPageActivity extends CommonActivity {
+    public static final String MODULE_NAME_WEB_PAGE = "web";
 
     //标题栏
     private static final String TAG = "WebPageActivity";

@@ -1,0 +1,34 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from: rootDir.toString() + "/build_maven.gradle"
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion project.commonMinSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionName project.zixieVersionName
+        versionCode project.zixieVersionCode
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+
+        release {
+            proguardFiles "./../proguard-rules-common.pro"
+            shrinkResources false
+        }
+    }
+}
