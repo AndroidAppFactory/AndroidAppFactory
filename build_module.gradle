@@ -178,8 +178,14 @@ def autoDependencies(String projectName, String moduleName, HashMap<String, Arra
             if (null != data) {
                 data.each { listItem ->
                     if (zixieIsDebug) println(projectName + " " + item + " :" + listItem)
-                    project(':' + projectName).dependencies.add(item, listItem)
-                    addDependenciesOnce(projectName, listItem, item, dependencies)
+                    if (listItem.contains(":")) {
+                        project(':' + projectName).dependencies.add(item, listItem)
+                    } else {
+                        if (null != zixieModuleInfo[listItem]) {
+                            project(':' + projectName).dependencies.add(item, zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
+                            if (zixieIsDebug) println(item + " " + zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
+                        }
+                    }
                 }
             }
 
@@ -245,7 +251,7 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
 }
 
 def isApplicationModule(String projectName) {
-    return projectName == "APPTest" || projectName == "Framework" || projectName == "Application"
+    return projectName == "APPTest" || projectName == "Application"
 }
 
 def isDebugModule(String projectName) {
