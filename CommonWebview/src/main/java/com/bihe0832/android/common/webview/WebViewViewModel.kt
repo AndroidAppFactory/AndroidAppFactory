@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.ui.webview
+package com.bihe0832.android.common.webview
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData

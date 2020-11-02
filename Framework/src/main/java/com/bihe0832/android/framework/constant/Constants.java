@@ -15,12 +15,5 @@ public class Constants {
     public static final String SYSTEM_CONSTANT = "android";
 
 
-    public static final int INSTALL_TYPE_NOT_FIRST = 1;
-    public static final int INSTALL_TYPE_VERSION_FIRST = 2;
-    public static final int INSTALL_TYPE_APP_FIRST = 3;
-
-    public static final String KEY_LAST_INSTALLED_VERSION = "zixieLastInstalledVersion";
-    public static final String KEY_LAST_INSTALLED_TIME_VERSION = "zixieVersionInstalledTime";
-    public static final String KEY_LAST_INSTALLED_TIME_APP = "zixieAppInstalledTime";
 
 }

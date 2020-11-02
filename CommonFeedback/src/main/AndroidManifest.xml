@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.bihe0832.android.common.feedback"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name="com.bihe0832.android.common.feedback.FeedbackActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/activityTheme"
+            android:hardwareAccelerated="true"
+            android:process=":web"
+            android:screenOrientation="portrait"></activity>
+    </application>
+</manifest>

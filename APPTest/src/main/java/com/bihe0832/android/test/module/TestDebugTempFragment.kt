@@ -2,6 +2,8 @@ package com.bihe0832.android.test.module
 
 import android.os.Bundle
 import android.widget.Toast
+import com.bihe0832.android.app.router.APPFactoryRouter
+import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
 import com.bihe0832.android.lib.log.ZLog
@@ -13,6 +15,7 @@ import com.bihe0832.android.test.module.request.TestHttpActivity
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.TestItem
 import com.bihe0832.android.test.module.json.JsonTest
+import com.bihe0832.android.test.module.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.test.module.touch.TouchRegionActivity
 import java.io.File
 
@@ -39,7 +42,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             })
 
             add(TestItem("HTTP Request") {
-                startActivity(TestHttpActivity::class.java)
+                APPFactoryRouter.openPageByRouter(ROUTRT_NAME_TEST_HTTP)
             })
 
             add(TestItem("文件MD5") {

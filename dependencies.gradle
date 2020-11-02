@@ -11,7 +11,7 @@ ext.mainProject = "APPTest"
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite"
  */
-ext.developModule = "LibAdapter"
+ext.developModule = "LibAndroid,LibThread,LibRequest,LibSqlite"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -36,6 +36,30 @@ ext.moduleInfo = [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
+                        "Application"
+                ],
+                "specialdependenciesList": [
+                        "kapt": [
+                                "com.bihe0832.android:lib-router-compiler:2.0.15"
+                        ]
+                ]
+        ],
+        "Application"               : [
+                "version"                : "",
+                "artifactId"             : "",
+                "apidependenciesList"    : [
+                        "Framework", "CommonPraise", "CommonFeedback", "CommonWebview"
+                ],
+                "specialdependenciesList": [
+                        "kapt": [
+                                "com.bihe0832.android:lib-router-compiler:2.0.15"
+                        ]
+                ]
+        ],
+        "CommonWebview"            : [
+                "version"            : "2.7.0",
+                "artifactId"         : "common-webview",
+                "apidependenciesList": [
                         "Framework"
                 ],
                 "specialdependenciesList": [
@@ -44,12 +68,31 @@ ext.moduleInfo = [
                         ]
                 ]
         ],
-        "Framework"                : [
-                "version"            : "",
-                "artifactId"         : "",
+        "CommonFeedback"            : [
+                "version"            : "2.7.0",
+                "artifactId"         : "common-feedback",
+                "apidependenciesList": [
+                        "CommonWebview"
+                ],
+                "specialdependenciesList": [
+                        "kapt": [
+                                "com.bihe0832.android:lib-router-compiler:2.0.15"
+                        ]
+                ]
+        ],
+        "CommonPraise"              : [
+                "version"            : "2.7.0",
+                "artifactId"         : "common-praise",
+                "apidependenciesList": [
+                        "Framework"
+                ]
+        ],
+        "Framework"                 : [
+                "version"            : "2.7.0",
+                "artifactId"         : "framework",
                 "apidependenciesList": [
                         "com.android.support:multidex:1.0.0",
-                        "LibWrapper","LibLifecycle"
+                        "LibWrapper", "LibLifecycle"
                 ]
         ],
         "LibWrapper"                : [
@@ -63,7 +106,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibCustomView",
-                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt","LibWebview"
+                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview"
                 ]
         ],
         "LibUtils"                  : [
@@ -307,7 +350,7 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}",
-                        "LibThread", "LibImage", "LibOS"]
+                        "LibThread", "LibImage", "LibOS", "LibCommonUIUtils"]
         ],
         "LibNotification"           : [
                 "version"            : "2.7.0",
@@ -349,14 +392,14 @@ ext.moduleInfo = [
                         "LibLog", "LibThread", "LibToast", "LibAPK"
                 ]
         ],
-        "LibLifecycle"                : [
+        "LibLifecycle"              : [
                 "version"            : "2.7.0",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         "android.arch.lifecycle:extensions:${project.android_arch_lifecycle_version}",
                         "android.arch.lifecycle:common:${project.android_arch_lifecycle_version}",
                         "android.arch.lifecycle:runtime:${project.android_arch_lifecycle_version}",
-                        "LibLog",
+                        "LibLog", "LibConfig", "LibAPK"
                 ]
         ]
 ]

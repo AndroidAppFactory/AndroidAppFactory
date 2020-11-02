@@ -9,14 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.bihe0832.android.app.router.APPFactoryRouter
+import com.bihe0832.android.app.router.openWebPage
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.DebugTools
 import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.test.R
-import com.bihe0832.android.test.module.web.WebPageActivity
-import com.bihe0832.android.framework.ui.webview.CommonWebviewFragment
 
 abstract class BaseTestFragment : BaseFragment() {
     private var mRecy: RecyclerView? = null
@@ -65,11 +65,7 @@ abstract class BaseTestFragment : BaseFragment() {
     }
 
     protected fun openWeb(url: String) {
-        val intent = Intent(context, WebPageActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        intent.putExtra(CommonWebviewFragment.INTENT_KEY_URL, url)
-        startActivity(intent)
+        APPFactoryRouter.openWebPage(url)
     }
 
     protected fun startActivity(cls: Class<*>) {

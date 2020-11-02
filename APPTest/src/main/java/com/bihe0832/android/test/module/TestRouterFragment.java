@@ -1,6 +1,5 @@
 package com.bihe0832.android.test.module;
 
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.bihe0832.android.lib.router.Routers;
@@ -25,6 +24,8 @@ public class TestRouterFragment extends BaseTestFragment {
     public List<TestItem> getDataList() {
         List<TestItem> items = new ArrayList<TestItem>();
         items.add(new RouterItem("zixie://test"));
+        items.add(new RouterItem("zixie://testhttp"));
+        items.add(new RouterItem("zixie://feedback"));
         return items;
     }
 

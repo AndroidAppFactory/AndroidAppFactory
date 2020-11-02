@@ -1,0 +1,104 @@
+package com.bihe0832.android.app.router
+
+import android.net.Uri
+import com.bihe0832.android.app.R
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.router.RouterAction
+import com.bihe0832.android.framework.router.RouterInterrupt
+import com.bihe0832.android.lib.lifecycle.ApplicationObserver
+import com.bihe0832.android.lib.log.ZLog
+
+
+/**
+ * Created by hardyshi on 2017/6/27.
+ *
+ */
+object APPFactoryRouter {
+
+    val SCHEME by lazy {
+        ZixieContext.applicationContext?.getString(R.string.router_schema) ?: "zixie"
+    }
+
+    //需要拦截
+    private val needCheckInterceptHostList by lazy {
+        getNeedCheckInterceptHostList()
+    }
+
+    //需要登录
+    private val needLoginInterceptHostList by lazy {
+        getNeedLoginInterceptHostList()
+    }
+
+    //不需要检查，直接跳过的路由
+    private val skipListHostList by lazy {
+        getSkipListHostList()
+    }
+
+    //一些特殊场景，需要直接跳过的URL（完整URL）
+    private val tempSkipRouterList = mutableListOf<String>()
+
+    fun initRouter() {
+        //应用前后台检测
+        ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
+            override fun onForeground() {
+                ZLog.d(RouterInterrupt.TAG, "onForeground")
+            }
+
+            override fun onBackground() {
+
+            }
+        })
+
+        //路由拦截初始化
+        RouterInterrupt.init(object : RouterInterrupt.RouterProcess {
+
+            override fun needLogin(uri: Uri): Boolean {
+                return needLoginInterceptHostList.contains(uri.host)
+            }
+
+            override fun needInterrupt(uri: Uri): Boolean {
+                return if (skipListHostList.contains(uri.host)) {
+                    false
+                } else {
+                    //需要被拦截
+                    needCheckInterceptHostList.contains(uri.host)
+                }
+            }
+
+            override fun doInterrupt(uri: Uri): Boolean {
+                return false
+            }
+        })
+    }
+
+    /**
+     * 通过传入实际路径打开路由，同时将路由添加到临时权限调用示例
+     *
+     * RouterHelper.openAndTempAuthorize(RouterHelper.getFinalURL(RouterConstants.MODULE_NAME_TEST,mutableMapOf(RouterConstants.INTENT_EXTRA_KEY_TEST_ITEM_TAB to 1)))
+     *
+     */
+    fun openFinalURLAndTempAuthorize(url: String) {
+        tempSkipRouterList.add(url)
+        openFinalURL(url)
+    }
+
+    private fun openFinalURL(pathHost: String) {
+        RouterAction.openFinalURL(pathHost)
+    }
+
+    fun getFinalURL(pathHost: String, para: Map<String, String>?): String {
+        return RouterAction.getFinalURL(SCHEME, pathHost, para)
+    }
+
+    fun getFinalURL(pathHost: String): String {
+        return RouterAction.getFinalURL(SCHEME, pathHost)
+    }
+
+    fun openPageRouter(pathHost: String, para: Map<String, String>?) {
+        RouterAction.open(SCHEME, pathHost, para)
+    }
+
+    fun openPageByRouter(pathHost: String) {
+        RouterAction.open(SCHEME, pathHost)
+    }
+}

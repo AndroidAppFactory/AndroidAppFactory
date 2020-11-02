@@ -6,8 +6,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import com.bihe0832.android.lib.notification.DownloadNotifyManager
-import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -17,7 +15,7 @@ import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.bihe0832.android.test.TestMainActivity
+import com.bihe0832.android.test.R
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.TestItem
 import java.util.*
@@ -49,7 +47,7 @@ class TestDialgFragment : BaseTestFragment() {
         dialog.setTitle(title)
         dialog.setPositive("分享给我们")
         dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
-//    dialog.setImageContentResId(R.mipmap.debug)
+        dialog.setImageContentResId(R.mipmap.debug)
         dialog.setFeedBackContent("我们保证你提供的信息仅用于问题定位")
         dialog.setNegtive("复制到剪切板")
         dialog.setOnClickBottomListener(object : OnDialogListener {
@@ -113,14 +111,14 @@ class TestDialgFragment : BaseTestFragment() {
         ThreadManager.getInstance().runOnUIThread { progressDialog.show() }
         var i = 0
 
-        TaskManager.getInstance().addTask(object : BaseTask(){
+        TaskManager.getInstance().addTask(object : BaseTask() {
             override fun run() {
-                if(i< 100 ){
+                if (i < 100) {
                     activity!!.runOnUiThread(Runnable {
                         progressDialog.setAPKSize(10000)
                         progressDialog.setCurrentSize(100 * i)
                     })
-                }else{
+                } else {
                     TaskManager.getInstance().removeTask(taskName)
                 }
                 i++
@@ -131,7 +129,7 @@ class TestDialgFragment : BaseTestFragment() {
             }
 
             override fun getMyInterval(): Int {
-                return  1
+                return 1
             }
 
             override fun getTaskName(): String {

@@ -22,9 +22,9 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.d("Application", "base BaseApplication onCreate start");
-        LifecycleHelper.INSTANCE.init(this);
         ZixieContext.INSTANCE.init(getApplicationContext());
         ZixieCoreInit.INSTANCE.initCore(getApplicationContext());
+        LifecycleHelper.INSTANCE.init(this);
         ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo it : runningApps) {

@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.ui.webview;
+package com.bihe0832.android.common.webview;
 
 
 import android.arch.lifecycle.LiveData;
@@ -26,7 +26,6 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bihe0832.android.framework.R;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;

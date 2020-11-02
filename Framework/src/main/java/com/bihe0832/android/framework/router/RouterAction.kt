@@ -49,12 +49,12 @@ object RouterAction {
         return "${schema}://$path"
     }
 
-    fun open(schema: String, path: String, para: Map<String, String>?) {
-        Routers.open(ZixieContext.applicationContext, getFinalURL(schema, path, para))
-    }
-
     fun open(schema: String, path: String) {
         Routers.open(ZixieContext.applicationContext, "${schema}://$path")
+    }
+
+    fun open(schema: String, path: String, para: Map<String, String>?) {
+        Routers.open(ZixieContext.applicationContext, getFinalURL(schema, path, para))
     }
 
     fun openFinalURL(path: String) {
