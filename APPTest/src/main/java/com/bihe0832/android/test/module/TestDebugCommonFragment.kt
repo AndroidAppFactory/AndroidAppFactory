@@ -20,6 +20,7 @@ import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.TestItem
+import com.bihe0832.android.test.module.network.TestNetworkActivity
 import java.util.HashMap
 
 open class TestDebugCommonFragment : BaseTestFragment() {
@@ -67,6 +68,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode("https://support.qq.com/product/290858")
                 APPFactoryRouter.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             })
+            add(TestItem("网络切换监控") { startActivity(TestNetworkActivity::class.java)})
         }
     }
 

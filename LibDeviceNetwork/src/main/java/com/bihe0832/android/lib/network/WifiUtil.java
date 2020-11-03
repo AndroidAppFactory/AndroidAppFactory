@@ -38,7 +38,10 @@ import java.util.regex.Pattern;
 
 /**
  * 实现WIFI相关的网络信息获取方法
+ *
+ * 尽量使用 {@link WifiManagerWrapper}
  */
+@Deprecated
 public class WifiUtil {
 
     public static final int SECURITY_NONE = 0;
@@ -360,7 +363,6 @@ public class WifiUtil {
                         }
                         break;
                     }
-
                 }
             }
         } catch (Exception e) {

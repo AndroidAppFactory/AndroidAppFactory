@@ -10,8 +10,8 @@ import android.os.Handler;
 
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.network.MobileUtil;
 import com.bihe0832.android.lib.network.NetworkUtil;
+import com.bihe0832.android.lib.network.MobileUtil;
 import com.bihe0832.android.lib.network.WifiManagerWrapper;
 import com.bihe0832.android.lib.thread.ThreadManager;
 
@@ -21,10 +21,8 @@ import java.util.ArrayList;
 
 public class NetworkChangeManager {
 
-
     private static final String TAG = "NetworkChangeManager";
     private int sPreNetType = 0;
-    private int sPreDtType = 0;
     private String sPreBssId = "";
     private String sPreCellID = "";
 
@@ -33,9 +31,10 @@ public class NetworkChangeManager {
     private ArrayList<NetworkChangeListener> networkChangeListeners = new ArrayList<NetworkChangeListener>();
 
     private static volatile NetworkChangeManager instance;
+
     public static NetworkChangeManager getInstance() {
         if (instance == null) {
-            synchronized (ThreadManager.class) {
+            synchronized (NetworkChangeManager.class) {
                 if (instance == null) {
                     instance = new NetworkChangeManager();
                 }
@@ -69,7 +68,6 @@ public class NetworkChangeManager {
         if (sPreCellID == null) {
             sPreCellID = "";
         }
-
         listenNetChange(context);
     }
 
@@ -87,7 +85,7 @@ public class NetworkChangeManager {
     }
 
     private void change(final Context context, final Intent intent) {
-        ZLog.d(TAG,"change");
+        ZLog.d(TAG, "change");
         if (mBgHandler == null) {
             init(context);
             return;
@@ -96,44 +94,44 @@ public class NetworkChangeManager {
             @Override
             public void run() {
                 int curNetType = WifiManagerWrapper.Companion.getInstance().getNetType(context);
-                final NetworkUtil.DtTypeInfo curDtTypeInfo = NetworkUtil.getDtTypeInfo(context);
-                int curDtType = curDtTypeInfo.dtType;
-                ZLog.d(TAG, "network change >> netType: " + curNetType + ", deType: " + curDtType);
-                ZLog.d(TAG, "network change >> netType before: " + curNetType + ", dtType: " + curDtType + ",intent.getAction():" + intent.getAction());
+                ZLog.d(TAG, "network change >> netType: " + curNetType + ", sPreNetType: " + sPreNetType);
                 String curBssid = "unknown";
                 String curCellId = "-1_-1_-1_-1";
                 String curWifiSsid = "";
                 int curWifiSignal = 0;
                 boolean needPost = false;
-                ZLog.d(TAG, "network change >> netType correctAfter: " + curNetType + ", dtType: " + curDtType + ",intent.getAction():" + intent.getAction());
+                ZLog.d(TAG, "network change >> netType correctAfter: " + curNetType + ",intent.getAction():" + intent.getAction());
                 if (NetworkUtil.isWifiNet(curNetType)) {
                     curBssid = WifiManagerWrapper.Companion.getInstance().getBSSID();
                     curWifiSsid = WifiManagerWrapper.Companion.getInstance().getSSID();
                     curWifiSignal = WifiManagerWrapper.Companion.getInstance().getSignalLevel();
-                    if (curNetType != sPreNetType || curDtType != sPreDtType || (sPreBssId != null && !sPreBssId.equals(curBssid))) {
+                    if (curNetType != sPreNetType || (sPreBssId != null && !sPreBssId.equals(curBssid))) {
                         needPost = true;
                     }
                 } else if (NetworkUtil.isMobileNet(curNetType)) {
                     curCellId = MobileUtil.getPhoneCellInfo(context);
-                    if (curNetType != sPreNetType || curDtType != sPreDtType || (sPreCellID != null && !sPreCellID.equals(curCellId))) {
+                    if (curNetType != sPreNetType || (sPreCellID != null && !sPreCellID.equals(curCellId))) {
                         needPost = true;
                     }
                 } else {
-                    if (curNetType != sPreNetType || curDtType != sPreDtType) {
+                    if (curNetType != sPreNetType) {
                         needPost = true;
                     }
                 }
                 if (needPost) {
                     ZLog.e(TAG, "notify change: preNetType:" + sPreNetType + " curNetType:" + curNetType + " curWifiSsid:" + curWifiSsid + " preBssId:" + sPreBssId
-                            + " bssId:" + curBssid + " curWifiSignal:" + curWifiSignal + " curCellId:" + curCellId + ", preDtType：" + sPreDtType + ",curDtType:" + curDtType);
-                    NetworkChangeEvent networkChangeEvent = new NetworkChangeEvent(sPreNetType, curNetType, sPreDtType, curDtType, curWifiSsid, curBssid, curWifiSignal, curCellId, curDtTypeInfo);
-                    postNetworkChangeEvent(networkChangeEvent, intent);
-                    sPreDtType = curDtType;
+                            + " bssId:" + curBssid + " curWifiSignal:" + curWifiSignal + " curCellId:" + curCellId );
+                    postNetworkChangeEvent(sPreNetType, curNetType, intent);
                     sPreBssId = curBssid;
                     sPreCellID = curCellId;
+                    sPreNetType = curNetType;
                 }
             }
         });
+    }
+
+    public interface NetworkChangeListener {
+        void onNetworkChange(final int sPreNetType, final int curNetType, Intent intent);
     }
 
     public final void addListener(@NotNull NetworkChangeListener networkChangeListener) {
@@ -148,9 +146,9 @@ public class NetworkChangeManager {
         }
     }
 
-    public final void postNetworkChangeEvent(@NotNull final NetworkChangeEvent networkChangeEvent, Intent intent) {
+    public final void postNetworkChangeEvent(final int sPreNetType, final int curNetType, Intent intent) {
         for (NetworkChangeListener networkChangeListener : networkChangeListeners) {
-            networkChangeListener.onNetworkChange(networkChangeEvent, intent);
+            networkChangeListener.onNetworkChange(sPreNetType, curNetType, intent);
         }
     }
 }
