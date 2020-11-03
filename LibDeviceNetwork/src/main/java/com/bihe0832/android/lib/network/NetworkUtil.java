@@ -57,7 +57,7 @@ public class NetworkUtil {
         return getNetworkName(getNetworkState(context));
     }
 
-    private static String getNetworkName(int netState) {
+    public static String getNetworkName(int netState) {
         String name = "unknown";
         switch (netState) {
             case NETWORK_CLASS_NONET:
