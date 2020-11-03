@@ -15,11 +15,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
-    <application>
-
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
+    <application
+        android:name="com.bihe0832.android.app.Application">
 
 
     </application>

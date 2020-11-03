@@ -25,7 +25,7 @@ public class TestRouterFragment extends BaseTestFragment {
     @NotNull
     @Override
     public String getTipsText() {
-        return "可以使用下面的工具测试：\nhttps://microdemo.bihe0832.com/MyJS/router/index.html ";
+        return "可以使用下面的工具测试：<BR><small>https://microdemo.bihe0832.com/MyJS/router/</small> ";
     }
 
     @Override
