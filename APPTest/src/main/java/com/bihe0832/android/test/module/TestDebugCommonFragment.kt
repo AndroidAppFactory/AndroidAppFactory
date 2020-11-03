@@ -36,11 +36,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
     }
 
     override fun getTipsText(): String {
-        return "APPFactory的通用组件和工具<BR>" +
-                "<p>正常的文字效果</p>" +
-                "<p><b>文字加粗</b></p>" +
-                "<p><em>文字斜体</em></p>" +
-                "<p><font color='#428bca' ><small>修改文字颜色<small></font></p>"
+        return "APPFactory的通用组件和工具"
     }
 
     override fun getDataList(): List<TestItem> {
