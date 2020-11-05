@@ -132,6 +132,31 @@ object FileUtils {
         return MD5.getFileMD5(filePath)
     }
 
+
+    fun deleteDirectory(dir: File): Boolean {
+        try {
+            if (!dir.exists()) {
+                return true
+            }else{
+                if (dir.isDirectory) {
+                    val childrens: Array<String> = dir.list()
+                    // 递归删除目录中的子目录下
+                    for (child in childrens) {
+                        val success: Boolean = deleteDirectory(File(dir, child))
+                        if (!success) return false
+                    }
+                    return dir.delete()
+                }else{
+                    return deleteFile(dir.absolutePath)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+
+    }
+
     fun deleteFile(filePath: String): Boolean {
         try {
             return File(filePath).delete()
