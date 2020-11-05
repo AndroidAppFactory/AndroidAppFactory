@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.network.WifiManagerWrapper
@@ -49,6 +50,7 @@ class TestNetworkActivity : BaseActivity() {
         ){
             builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n")
                     .append("    CellInfo(").append(MobileUtil.getPhoneCellInfo(this))
+                    .append(");\n    运营商(").append(DeviceInfoManager.getInstance().getMobileOperatorType())
                     .append(");\n    强度(").append(MobileUtil.getSignalLevel())
                     .append(");\n    IP(").append(NetworkUtil.getDtTypeInfo(this).mobileIp).append(")")
         }
