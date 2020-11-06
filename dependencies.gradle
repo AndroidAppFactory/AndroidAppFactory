@@ -27,7 +27,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.2.2"
+ext.moduleVersionName = "3.2.3"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -245,7 +245,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibConfig"]
         ],
         "LibFile"                   : [
-                "version"            : "3.2.2",
+                "version"            : "3.2.3",
                 "artifactId"         : "lib-file",
                 "apidependenciesList": [
                         "com.android.support:support-v4:${project.android_support_version}",
