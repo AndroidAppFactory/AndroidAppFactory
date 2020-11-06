@@ -154,7 +154,6 @@ object FileUtils {
             e.printStackTrace()
             return false
         }
-
     }
 
     fun deleteFile(filePath: String): Boolean {
@@ -188,6 +187,27 @@ object FileUtils {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    private fun copyDirectory(src: File, dest: File) {
+        try {
+            if (src.isDirectory) {
+                if (!dest.exists()) {
+                    dest.mkdir()
+                }
+                val files = src.list()
+                for (file in files) {
+                    val srcFile = File(src, file)
+                    val destFile = File(dest, file)
+                    // 递归复制
+                    copyDirectory(srcFile, destFile)
+                }
+            } else {
+                copyFile(src, dest)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
