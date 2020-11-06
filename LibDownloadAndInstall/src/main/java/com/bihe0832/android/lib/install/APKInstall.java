@@ -12,6 +12,9 @@ import com.bihe0832.android.lib.file.FileUtils;
 
 import java.io.File;
 
+import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
+import static com.bihe0832.android.lib.install.InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION;
+
 /**
  * @author hardyshi code@bihe0832.com
  * Created on 2020/9/25.
@@ -21,22 +24,22 @@ class APKInstall {
     private static String INSTALL_TYPE = "application/vnd.android.package-archive";
 
 
-    static boolean installAPK(Context context, String filePath) {
+    static void installAPK(Context context, String filePath, final InstallListener listener) {
         if (!TextUtils.isEmpty(filePath)) {
             try {
                 File file = new File(filePath);
                 Uri fileProvider = FileUtils.INSTANCE.getZixieFileProvider(context, file);
-                return realInstallAPK(context, fileProvider, file);
+                realInstallAPK(context, fileProvider, file, listener);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-                return false;
+                listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
             }
         } else {
-            return false;
+            listener.onInstallFailed(FILE_NOT_FOUND);
         }
     }
 
-    static boolean realInstallAPK(Context context, Uri fileProvider, File file) {
+    static void realInstallAPK(Context context, Uri fileProvider, File file, final InstallListener listener) {
         if (file != null && file.exists()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -54,13 +57,13 @@ class APKInstall {
                     Log.e("InstallUtils", "app don't hava install permission");
                 }
                 context.startActivity(intent);
-                return true;
+                listener.onInstallStart();
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-                return false;
+                listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
             }
         } else {
-            return false;
+            listener.onInstallFailed(FILE_NOT_FOUND);
         }
     }
 }

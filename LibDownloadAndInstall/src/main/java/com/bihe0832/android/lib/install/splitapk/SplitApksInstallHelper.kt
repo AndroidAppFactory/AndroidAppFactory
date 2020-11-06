@@ -9,9 +9,10 @@ import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.RemoteException
+import com.bihe0832.android.lib.install.InstallErrorCode
+import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.thread.ThreadManager
 import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,14 +27,13 @@ object SplitApksInstallHelper {
     private var mBroadcastReceiver: SplitApksInstallBroadcastReceiver? = null
     private var mPackageInstaller: PackageInstaller? = null
     private var mContext: Context? = null
-
     private var hasInit = false
     private var hasUnregister = false
 
     @Synchronized
-    private fun init(context: Context) {
+    private fun init(context: Context, listener: InstallListener) {
         if (hasInit) {
-            if(hasUnregister){
+            if (hasUnregister) {
                 mBroadcastReceiver?.let {
                     try {
                         context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
@@ -82,11 +82,13 @@ object SplitApksInstallHelper {
         }
     }
 
-    fun installApk(context: Context, fileDir: File?, packageName: String): Boolean {
-        init(context)
-        fileDir?.let {
-            if (it.isDirectory) {
-                ThreadManager.getInstance().start {
+    fun installApk(context: Context, fileDir: File?, packageName: String, listener: InstallListener) {
+        init(context, listener)
+        if (fileDir == null) {
+            listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND)
+        } else {
+            fileDir.let {
+                if (it.isDirectory) {
                     val files = ArrayList<String>()
                     it.listFiles().forEach { file ->
                         ZLog.d("$TAG fileName:${it.name},absolutePath:${file.absolutePath}")
@@ -94,16 +96,15 @@ object SplitApksInstallHelper {
                             files.add(file.absolutePath)
                         }
                     }
-                    installApk(files, packageName)
+                    installApk(files, packageName, listener)
+                } else {
+                    listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE)
                 }
-                return true
             }
         }
-        return false
     }
 
-    private fun installApk(files: ArrayList<String>, packageName: String): Int {
-
+    private fun installApk(files: ArrayList<String>, packageName: String, listener: InstallListener): Int {
         val nameSizeMap = HashMap<String, Long>()
         val filenameToPathMap = HashMap<String, String>()
         var totalSize: Long = 0
@@ -120,6 +121,7 @@ object SplitApksInstallHelper {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            listener.onInstallFailed(InstallErrorCode.UNKNOWN_EXCEPTION)
             return -1
         }
         val installParams = makeSessionParams(totalSize, packageName)
@@ -128,12 +130,14 @@ object SplitApksInstallHelper {
             for ((key, value) in nameSizeMap) {
                 runInstallWrite(value, sessionId, key, filenameToPathMap[key])
             }
-            if (doCommitSession(sessionId)
-                    != PackageInstaller.STATUS_SUCCESS) {
-            }
+            doCommitSession(sessionId)
+            listener.onInstallStart()
             ZLog.d("$TAG Success")
         } catch (e: RemoteException) {
             e.printStackTrace()
+        }
+        if (sessionId < 0) {
+
         }
         return sessionId
     }
@@ -175,6 +179,7 @@ object SplitApksInstallHelper {
                 sizeBytes = file.length()
             }
         }
+
         var session: PackageInstaller.Session? = null
         var `in`: InputStream? = null
         var out: OutputStream? = null
