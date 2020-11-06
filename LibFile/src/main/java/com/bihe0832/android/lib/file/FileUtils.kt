@@ -190,7 +190,7 @@ object FileUtils {
         }
     }
 
-    private fun copyDirectory(src: File, dest: File) {
+    fun copyDirectory(src: File, dest: File) {
         try {
             if (src.isDirectory) {
                 if (!dest.exists()) {
