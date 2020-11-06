@@ -3,15 +3,14 @@ package com.bihe0832.android.test.module
 import android.os.Bundle
 import android.widget.Toast
 import com.bihe0832.android.app.router.APPFactoryRouter
-import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.gson.JsonHelper
-import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
+import com.bihe0832.android.lib.install.InstallListener
+import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.zip.ZipUtils
-import com.bihe0832.android.test.module.request.TestHttpActivity
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.TestItem
 import com.bihe0832.android.test.module.json.JsonTest
@@ -20,6 +19,7 @@ import com.bihe0832.android.test.module.touch.TouchRegionActivity
 import java.io.File
 
 class TestDebugTempFragment : BaseTestFragment() {
+    val LOG_TAG = "TestDebugTempFragment"
 
     companion object {
         @JvmStatic
@@ -103,6 +103,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
         }
     }
+
     private fun testZIP() {
 
         var startTime = System.currentTimeMillis()
@@ -125,8 +126,6 @@ class TestDebugTempFragment : BaseTestFragment() {
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
     }
-
-
 
 
     private fun testOneRequest() {

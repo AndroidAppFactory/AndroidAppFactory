@@ -17,6 +17,7 @@ import com.bihe0832.android.test.module.TestDebugCommonFragment;
 import com.bihe0832.android.test.module.TestDebugTempFragment;
 import com.bihe0832.android.test.module.TestRouterFragment;
 import com.bihe0832.android.test.module.dialog.TestDialgFragment;
+import com.bihe0832.android.test.module.download.TestDownloadFragment;
 import com.flyco.tablayout.SlidingTabLayout;
 
 
@@ -99,7 +100,7 @@ public class TestMainFragment extends BaseFragment {
         public Fragment getItem(int position) {
 
             if (mTabString[position].equals(TAB_FOR_NEW)) {
-                return TestDialgFragment.Companion.newInstance();
+                return TestDownloadFragment.Companion.newInstance();
             } else if (mTabString[position].equals(TAB_FOR_DEV_COMMON)) {
                 return TestDebugCommonFragment.newInstance();
             } else if (mTabString[position].equals(TAB_FOR_DEV_TEMP)) {
