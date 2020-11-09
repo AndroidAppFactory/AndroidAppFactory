@@ -15,7 +15,6 @@ buildscript {
         classpath "com.bihe0832.android:GradleDependenciesCheck:1.1.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.50"
         classpath 'com.novoda:bintray-release:0.9.1'
-
     }
 }
 
