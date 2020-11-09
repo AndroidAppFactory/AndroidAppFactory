@@ -1,0 +1,23 @@
+// 依赖groovy插件
+plugins {
+    id 'groovy'
+}
+
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compile 'com.android.tools.build:gradle:3.2.1'
+    compile group: 'org.javassist', name: 'javassist', version: '3.22.0-GA'
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+// 将该插件上传到本地Maven库
+group='com.happy.plugin'
+version='1.0.0'
