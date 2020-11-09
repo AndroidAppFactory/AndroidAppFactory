@@ -20,8 +20,8 @@ const val KEY_LAST_STARTED_VERSION_INSTALL_TIME = "zixieLastStartedVersionInstal
 const val KEY_LAST_STARTED_VERSION = "zixieLastStartedVersion"
 const val KEY_LAST_START_TIME = "zixieAppLastStartTime"
 
-const val KEY_USED_DAYS = "zixieLastStartedVersion"
-const val KEY_USED_TIMES = "zixieAppLastStartTime"
+const val KEY_USED_DAYS = "zixieUsedDays"
+const val KEY_USED_TIMES = "zixieUsedTimes"
 
 
 const val INSTALL_TYPE_NOT_FIRST = 1
