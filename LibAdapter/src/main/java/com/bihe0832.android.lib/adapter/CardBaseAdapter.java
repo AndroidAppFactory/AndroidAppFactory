@@ -21,9 +21,9 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     private Context mContext;
     private ArrayList mHeaderIDList = new ArrayList();
 
-    abstract int getResourceIdByCardType(int cardType);
+    public abstract int getResourceIdByCardType(int cardType);
 
-    abstract CardBaseHolder createViewHolder(int cardType, View itemView, Context context);
+    public abstract CardBaseHolder createViewHolder(int cardType, View itemView, Context context);
 
     public CardBaseAdapter(Context context, List data) {
         super(data);
