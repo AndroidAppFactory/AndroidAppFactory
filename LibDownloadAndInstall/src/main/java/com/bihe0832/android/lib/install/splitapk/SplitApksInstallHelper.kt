@@ -17,11 +17,6 @@ import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-/**
- * Author: waynescliu
- * Date: 2020/8/20
- * Description:split apks install,无需root，但是对于miui，开发者模式中的miui优化会导致安装失败，建议关闭
- */
 object SplitApksInstallHelper {
     private const val TAG = "SplitApksInstallHelper:::"
     private var mBroadcastReceiver: SplitApksInstallBroadcastReceiver? = null
@@ -87,18 +82,27 @@ object SplitApksInstallHelper {
         if (fileDir == null) {
             listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND)
         } else {
-            fileDir.let {
-                if (it.isDirectory) {
-                    val files = ArrayList<String>()
-                    it.listFiles().forEach { file ->
-                        ZLog.d("$TAG fileName:${it.name},absolutePath:${file.absolutePath}")
-                        if (InstallUtils.isApkFile(file.name)) {
-                            files.add(file.absolutePath)
-                        }
-                    }
-                    installApk(files, packageName, listener)
-                } else {
-                    listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE)
+            val files = ArrayList<String>()
+            addApkToFilesList(fileDir,files)
+            if(files.size > 0){
+                installApk(files, packageName, listener)
+
+            }else{
+                listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE)
+            }
+        }
+    }
+
+    private fun addApkToFilesList(fileDir: File?, files: ArrayList<String>) {
+        fileDir?.let {
+            if (it.isDirectory) {
+                it.listFiles().forEach { file ->
+                    ZLog.d("$TAG fileName:${it.name},absolutePath:${file.absolutePath}")
+                    addApkToFilesList(file, files)
+                }
+            } else {
+                if (InstallUtils.isApkFile(fileDir.name)) {
+                    files.add(fileDir.absolutePath)
                 }
             }
         }
