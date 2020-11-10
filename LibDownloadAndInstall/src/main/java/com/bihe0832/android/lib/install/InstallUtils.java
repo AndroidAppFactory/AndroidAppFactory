@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.LinkedList;
 
-import static com.bihe0832.android.lib.install.InstallErrorCode.BAD_APK_TYPE;
 
 /**
  * Created by zixie on 2017/11/1.
@@ -42,12 +41,15 @@ public class InstallUtils {
     public static ApkInstallType getFileType(String filepath) {
         if (TextUtils.isEmpty(filepath)) {
             return ApkInstallType.NULL;
-        }
-        File apkFile = new File(filepath);
-        if (apkFile.isDirectory()) {
-            return getApkInstallTypeByFolder(apkFile);
-        } else {
-            return getApkInstallTypeByZip(filepath);
+        }else if(isApkFile(filepath)){
+            return ApkInstallType.APK;
+        }else {
+            File apkFile = new File(filepath);
+            if (apkFile.isDirectory()) {
+                return getApkInstallTypeByFolder(apkFile);
+            } else {
+                return getApkInstallTypeByZip(filepath);
+            }
         }
     }
 
@@ -152,7 +154,7 @@ public class InstallUtils {
             ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
             SplitApksInstallHelper.INSTANCE.installApk(context, new File(fileDir), finalPackageName, listener);
         } else {
-            listener.onInstallFailed(BAD_APK_TYPE);
+            listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE);
         }
     }
 
@@ -172,7 +174,7 @@ public class InstallUtils {
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
             SplitApksInstallHelper.INSTANCE.installApk(context, new File(folderPath), finalPackageName, listener);
         } else {
-            listener.onInstallFailed(BAD_APK_TYPE);
+            listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE);
         }
     }
 
@@ -204,7 +206,7 @@ public class InstallUtils {
 
     static ApkInstallType getApkInstallTypeByFolder(File apkInstallFile) {
         if (apkInstallFile == null || !apkInstallFile.exists()) {
-            return ApkInstallType.APK;
+            return ApkInstallType.NULL;
         }
         int apkFileCount = 0;
 
