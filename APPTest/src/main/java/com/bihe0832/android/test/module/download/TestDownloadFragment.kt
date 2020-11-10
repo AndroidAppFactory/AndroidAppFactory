@@ -6,7 +6,7 @@ import android.support.v4.content.FileProvider
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
-import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -24,8 +24,11 @@ class TestDownloadFragment : BaseTestFragment() {
         items.add(TestItem("自定义Provider安装") { startDownload(INSTALL_BY_CUSTOMER) })
         items.add(TestItem("默认Provider安装") { startDownload(INSTALL_BY_DEFAULT) })
 
-        items.add(TestItem("OOB安装") { testInstallOOB() })
-        items.add(TestItem("Split安装") { testInstallSplit() })
+        items.add(TestItem("通过ZIP安装OBB") { testInstallOOBByZip() })
+        items.add(TestItem("通过文件夹安装OBB") { testInstallOOBByFolder() })
+        items.add(TestItem("通过ZIP安装Split") { testInstallSplitByGoodZip() })
+        items.add(TestItem("通过非标准Split格式的ZIP安装Split") { testInstallSplitByBadZip() })
+        items.add(TestItem("通过文件夹安装Split") { testInstallSplitByFolder() })
 
         return items
     }
@@ -92,9 +95,17 @@ class TestDownloadFragment : BaseTestFragment() {
         })
     }
 
-    private fun testInstallOOB() {
-        ZLog.d("test")
-        InstallUtils.installAPP(context, "/sdcard/Download/jp.co.sumzap.pj0007.zip", "jp.co.sumzap.pj0007", object : InstallListener {
+    private fun testInstallOOBByZip() {
+        testInstallOOB("/sdcard/Download/jp.co.sumzap.pj0007.zip")
+    }
+
+    private fun testInstallOOBByFolder() {
+        testInstallOOB(FileUtils.getZixieFilePath(context!!) + "/test/")
+    }
+
+    private fun testInstallOOB(filePath: String) {
+        ZLog.d("testInstallOOB")
+        InstallUtils.installAPP(context, filePath, "jp.co.sumzap.pj0007", object : InstallListener {
             override fun onUnCompress() {
                 ZLog.d(LOG_TAG, "onUnCompress")
             }
@@ -114,9 +125,21 @@ class TestDownloadFragment : BaseTestFragment() {
         })
     }
 
-    private fun testInstallSplit() {
+    private fun testInstallSplitByGoodZip() {
+        testInstallSplit("/sdcard/Download/com.supercell.brawlstars.zip","com.supercell.brawlstars")
+    }
+
+    private fun testInstallSplitByBadZip() {
+        testInstallSplit("/sdcard/Download/a3469c6189204495bc0283e909eb94a6_com.riotgames.legendsofruneterratw_113012.zip","com.riotgames.legendsofruneterratw")
+    }
+
+    private fun testInstallSplitByFolder() {
+        testInstallSplit(FileUtils.getZixieFilePath(context!!) +"/com.supercell.brawlstars","com.supercell.brawlstars")
+    }
+
+    private fun testInstallSplit(filePath: String, packangeName: String) {
         ZLog.d("test")
-        InstallUtils.installAPP(context, "/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars", object : InstallListener {
+        InstallUtils.installAPP(context, filePath, packangeName, object : InstallListener {
             override fun onUnCompress() {
                 ZLog.d(LOG_TAG, "onUnCompress")
             }

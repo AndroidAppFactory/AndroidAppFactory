@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.install;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
@@ -12,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import static com.bihe0832.android.lib.install.InstallErrorCode.BAD_APK_TYPE;
+import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
 import static com.bihe0832.android.lib.install.InstallErrorCode.PERMISSION_DENY;
 import static com.bihe0832.android.lib.install.InstallErrorCode.UNKNOWN_EXCEPTION;
 import static com.bihe0832.android.lib.install.InstallErrorCode.UNZIP_FAILED;
@@ -33,35 +36,53 @@ class ObbFileInstall {
                 return;
             }
             File obbFolder = OBBFormats.getObbDir(packageName);
-            File[] a = (new File(fileDir)).listFiles();
-            String dstApkFilePath = "";
-            for (File tempFile : a) {
-                if (OBBFormats.isObbFile(tempFile.getName())) {
-                    if (!obbFolder.exists() && !obbFolder.mkdirs()) {
-                        listener.onInstallFailed(UNZIP_FAILED);
-                        return;
-                    }
-                    File targetObbFile = new File(obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(tempFile.getAbsolutePath()));
+            if (!obbFolder.exists() && !obbFolder.mkdirs()) {
+                listener.onInstallFailed(UNZIP_FAILED);
+                return;
+            }
+            String result = prepareInstallOBB(new File(fileDir), obbFolder, listener);
+            if (!TextUtils.isEmpty(result)) {
+                APKInstall.installAPK(context, result, listener);
+            }
+        } catch (Exception e) {
+            ZLog.d(TAG + "prepare4InstallObb failed, for " + e);
+            listener.onInstallFailed(UNKNOWN_EXCEPTION);
+        }
+    }
+
+    static String prepareInstallOBB(final File fileDir, File obbFolder, final InstallListener listener) {
+        if (fileDir == null || !fileDir.exists()) {
+            listener.onInstallFailed(FILE_NOT_FOUND);
+            return "";
+        }
+        String dstApkFilePath = "";
+        for (File file2 : fileDir.listFiles()) {
+            if (file2.isDirectory()) {
+                String result = prepareInstallOBB(file2, obbFolder, listener);
+                if (!TextUtils.isEmpty(result)) {
+                    dstApkFilePath = result;
+                }
+            } else {
+                if (OBBFormats.isObbFile(file2.getAbsolutePath())) {
+                    File targetObbFile = new File(obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(file2.getAbsolutePath()));
                     ZLog.d(TAG + "installObbAPKByZip start copyFile");
                     if (targetObbFile.exists()) {
                         targetObbFile.deleteOnExit();
                     }
                     listener.onInstallPrepare();
-                    FileUtils.INSTANCE.copyFile(tempFile, targetObbFile);
+                    FileUtils.INSTANCE.copyFile(file2, targetObbFile);
                     ZLog.d(TAG + "installObbAPKByZip finished copyFile");
                     if (!FileUtils.INSTANCE.checkFileExist(targetObbFile.getAbsolutePath())) {
                         listener.onInstallFailed(UNZIP_FAILED);
-                        return;
+                        return "";
                     }
-                } else if (InstallUtils.isApkFile(tempFile.getName())) {
-                    dstApkFilePath = tempFile.getAbsolutePath();
+                } else if (InstallUtils.isApkFile(file2.getAbsolutePath())) {
+                    dstApkFilePath = file2.getAbsolutePath();
                 }
             }
-            APKInstall.installAPK(context, dstApkFilePath, listener);
-        } catch (Exception e) {
-            ZLog.d(TAG + "prepare4InstallObb failed, for " + e);
-            listener.onInstallFailed(UNKNOWN_EXCEPTION);
         }
+        return dstApkFilePath;
+
     }
 
     static void installObbAPKByZip(@NotNull Context context, @NonNull String zipFile, String packageName, final InstallListener listener) {

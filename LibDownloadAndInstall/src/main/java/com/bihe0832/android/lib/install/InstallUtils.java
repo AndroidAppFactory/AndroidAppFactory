@@ -53,7 +53,6 @@ public class InstallUtils {
         }
     }
 
-
     public static boolean isApkFile(String filename) {
         return filename.endsWith(APK_FILE_SUFFIX);
     }
