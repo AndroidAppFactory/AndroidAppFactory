@@ -20,6 +20,6 @@ public class CardBaseModule implements MultiItemEntity {
 
     public int getItemType() {
         CardInfo getAnnotation = this.getClass().getAnnotation(CardInfo.class);
-        return getAnnotation.id();
+        return getAnnotation.resId();
     }
 }
