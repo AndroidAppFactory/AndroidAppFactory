@@ -4,12 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bihe0832.android.lib.adapter.CardBaseHolder;
-import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -21,27 +21,25 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     private Context mContext;
     private ArrayList mHeaderIDList = new ArrayList();
 
-    public abstract int getResourceIdByCardType(int cardType);
-
-    public abstract CardBaseHolder createViewHolder(int cardType, View itemView, Context context);
+    private HashMap<String, Class<CardBaseModule>> test = new HashMap<>();
 
     public CardBaseAdapter(Context context, List data) {
         super(data);
         mContext = context;
     }
 
-    protected void addItemToAdapter(int cardType) {
-        addItemToAdapter(cardType, false);
+    protected void addItemToAdapter(Class<? extends CardBaseModule> module) {
+        addItemToAdapter(module, false);
     }
 
-    protected void addItemToAdapter(int cardType, boolean isHeader) {
-        addItemToAdapter(cardType, getResourceIdByCardType(cardType),isHeader);
-    }
-
-    protected void addItemToAdapter(int cardType, int layoutResId, boolean isHeader) {
-        addItemType(cardType, layoutResId);
-        if(isHeader){
-            mHeaderIDList.add(cardType);
+    protected void addItemToAdapter(Class<? extends CardBaseModule> module, boolean isHeader) {
+        if (module.isAnnotationPresent(CardInfo.class)) {
+            CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
+            addItemType(getAnnotation.id(), getAnnotation.id());
+            CardInfoManager.getInstance().addCardItem(getAnnotation.id(), getAnnotation.hoderCalss());
+            if (isHeader) {
+                mHeaderIDList.add(getAnnotation.id());
+            }
         }
     }
 
@@ -58,7 +56,7 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int cardId) {
         if (BaseMultiItemQuickAdapter.TYPE_NOT_FOUND != getLayoutId(cardId)) {
             View itemView = getItemView(getLayoutId(cardId), parent);
-            return createViewHolder(cardId,itemView,mContext);
+            return CardInfoManager.getInstance().createViewHolder(cardId, itemView, mContext);
         } else {
             return createBaseViewHolder(parent, getLayoutId(cardId));
         }
