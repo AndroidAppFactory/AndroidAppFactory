@@ -2,12 +2,12 @@ package com.bihe0832.android.framework
 
 import android.content.Context
 import android.util.Log
+import com.bihe0832.android.framework.constant.Constants
+import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
-import com.bihe0832.android.framework.constant.Constants
-import com.bihe0832.android.framework.log.LoggerFile
 
 
 /**
