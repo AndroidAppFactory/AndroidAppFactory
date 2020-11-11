@@ -8,32 +8,16 @@ import com.bihe0832.android.test.module.card.section.SectionDataContent
 import com.bihe0832.android.test.module.card.section.SectionDataContent2
 import com.bihe0832.android.test.module.card.section.SectionDataHeader
 import com.bihe0832.android.test.module.card.section.SectionDataHeader2
-const val ROUTRT_NAME_TEST_SECTION= "testlist"
+
+const val ROUTRT_NAME_TEST_SECTION = "testlist"
+
 @Module(ROUTRT_NAME_TEST_SECTION)
 class TestListActivity : CommonListActivity() {
-    val mDataList by lazy {
-
-        ArrayList<CardBaseModule>().apply {
-            for (i in 0..5) {
-                add(if (i < 2) {
-                    SectionDataHeader("标题1:$i")
-                } else {
-                    SectionDataHeader2("标题2:$i")
-                })
-                for (j in 0..14) {
-                    add(if (i < 2) {
-                        SectionDataContent("内容1:$j")
-                    } else {
-                        SectionDataContent2("内容2:$j")
-                    })
-                }
-            }
-        }
-    }
-
+    val mDataList = ArrayList<CardBaseModule>()
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
             override fun fetchData() {
+                mDataList.addAll(getTempData())
                 postValue(mDataList)
             }
 
@@ -42,19 +26,39 @@ class TestListActivity : CommonListActivity() {
             }
 
             override fun loadMore() {
-
+                mDataList.addAll(getTempData())
+                postValue(mDataList)
             }
 
             override fun hasMore(): Boolean {
-                return false
+                return true
             }
 
             override fun canRefresh(): Boolean {
-                return false
+                return true
             }
 
             override fun getEmptyText(): String {
                 return ""
+            }
+        }
+    }
+
+    private fun getTempData(): List<CardBaseModule> {
+        return mutableListOf<CardBaseModule>().apply {
+            for (i in 0..2) {
+                add(if (i < 2) {
+                    SectionDataHeader("标题1:${System.currentTimeMillis()}")
+                } else {
+                    SectionDataHeader2("标题2:${System.currentTimeMillis()}")
+                })
+                for (j in 0..3) {
+                    add(if (i < 2) {
+                        SectionDataContent("内容1:${System.currentTimeMillis()}")
+                    } else {
+                        SectionDataContent2("内容2:${System.currentTimeMillis()}")
+                    })
+                }
             }
         }
     }
