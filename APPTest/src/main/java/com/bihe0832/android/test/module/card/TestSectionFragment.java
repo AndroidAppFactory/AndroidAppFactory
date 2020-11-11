@@ -44,6 +44,7 @@ public class TestSectionFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.activity_test_card, container, false);
+
         initList();
         initView(mView);
         return mView;

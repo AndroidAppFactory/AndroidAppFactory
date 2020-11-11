@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.adapter;
 
 
+import android.content.Context;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 /**
@@ -18,8 +20,13 @@ public class CardBaseModule implements MultiItemEntity {
         }
     }
 
-    final public int getItemType() {
-        CardInfo getAnnotation = this.getClass().getAnnotation(CardInfo.class);
-        return getAnnotation.resId();
+    final public int getItemType(Context context) {
+        try {
+            CardInfo getAnnotation = this.getClass().getAnnotation(CardInfo.class);
+            return CardInfoHelper.getInstance().getResIdByCardInfo(context, getAnnotation);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

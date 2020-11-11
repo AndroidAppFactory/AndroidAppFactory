@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,7 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     public CardBaseAdapter(Context context, List data) {
         super(data);
         mContext = context;
+        CardInfoHelper.getInstance().init(context);
     }
 
     protected void addItemToAdapter(Class<? extends CardBaseModule> module) {
@@ -35,10 +35,11 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     protected void addItemToAdapter(Class<? extends CardBaseModule> module, boolean isHeader) {
         if (module.isAnnotationPresent(CardInfo.class)) {
             CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
-            addItemType(getAnnotation.resId(), getAnnotation.resId());
-            CardInfoManager.getInstance().addCardItem(getAnnotation.resId(), getAnnotation.holderCalss());
+            int resID = CardInfoHelper.getInstance().getResIdByCardInfo(mContext, getAnnotation);
+            addItemType(resID, resID);
+            CardInfoHelper.getInstance().addCardItem(resID, getAnnotation.holderCalss());
             if (isHeader) {
-                mHeaderIDList.add(getAnnotation.resId());
+                mHeaderIDList.add(resID);
             }
         }
     }
@@ -56,7 +57,7 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int cardId) {
         if (BaseMultiItemQuickAdapter.TYPE_NOT_FOUND != getLayoutId(cardId)) {
             View itemView = getItemView(getLayoutId(cardId), parent);
-            return CardInfoManager.getInstance().createViewHolder(cardId, itemView, mContext);
+            return CardInfoHelper.getInstance().createViewHolder(cardId, itemView, mContext);
         } else {
             return createBaseViewHolder(parent, getLayoutId(cardId));
         }

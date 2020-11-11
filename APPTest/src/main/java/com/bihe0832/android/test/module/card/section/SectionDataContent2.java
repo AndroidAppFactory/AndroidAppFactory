@@ -10,7 +10,7 @@ import com.bihe0832.android.test.module.card.TestSectionAdapter;
  * Created on 2019-11-21.
  * Description: Description
  */
-@CardInfo(resId = R.layout.card_demo_section_content_2, holderCalss = SectionHolderContent2.class)
+@CardInfo(resFileName = "card_demo_section_content_2", holderCalss = SectionHolderContent2.class)
 public class SectionDataContent2 extends CardBaseModule {
 
     public String mContentText;

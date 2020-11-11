@@ -38,7 +38,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     protected int getDefItemViewType(int position) {
         Object item = mData.get(position);
         if (item instanceof MultiItemEntity) {
-            return ((MultiItemEntity) item).getItemType();
+            return ((MultiItemEntity) item).getItemType(mContext);
         }
         return DEFAULT_VIEW_TYPE;
     }

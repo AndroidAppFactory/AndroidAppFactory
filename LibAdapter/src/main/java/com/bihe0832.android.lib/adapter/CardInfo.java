@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
 @Inherited
 @Target(ElementType.TYPE)//次注解作用于类和字段上
 public @interface CardInfo {
-    int resId() default 0;
+    String resFileName() default "";
     Class holderCalss() default Object.class;
-
 }
