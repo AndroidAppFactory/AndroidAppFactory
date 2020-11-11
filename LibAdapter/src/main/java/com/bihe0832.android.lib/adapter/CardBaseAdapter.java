@@ -35,10 +35,10 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     protected void addItemToAdapter(Class<? extends CardBaseModule> module, boolean isHeader) {
         if (module.isAnnotationPresent(CardInfo.class)) {
             CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
-            addItemType(getAnnotation.id(), getAnnotation.id());
-            CardInfoManager.getInstance().addCardItem(getAnnotation.id(), getAnnotation.hoderCalss());
+            addItemType(getAnnotation.resId(), getAnnotation.resId());
+            CardInfoManager.getInstance().addCardItem(getAnnotation.resId(), getAnnotation.holderCalss());
             if (isHeader) {
-                mHeaderIDList.add(getAnnotation.id());
+                mHeaderIDList.add(getAnnotation.resId());
             }
         }
     }

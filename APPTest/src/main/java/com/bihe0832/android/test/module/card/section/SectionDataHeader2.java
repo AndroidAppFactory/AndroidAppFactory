@@ -10,7 +10,7 @@ import com.bihe0832.android.test.module.card.TestSectionAdapter;
  * Created on 2019-11-21.
  * Description: Description
  */
-@CardInfo(id = R.layout.card_demo_section_header_2, hoderCalss = SectionHolderHeader2.class)
+@CardInfo(resId = R.layout.card_demo_section_header_2, holderCalss = SectionHolderHeader2.class)
 public class SectionDataHeader2 extends CardBaseModule {
 
     public String mHeaderText;

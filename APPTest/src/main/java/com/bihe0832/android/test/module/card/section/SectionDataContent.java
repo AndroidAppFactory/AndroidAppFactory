@@ -9,7 +9,7 @@ import com.bihe0832.android.test.R;
  * Created on 2019-11-21.
  * Description: Description
  */
-@CardInfo(id = R.layout.card_demo_section_content, hoderCalss = SectionHolderContent.class)
+@CardInfo(resId = R.layout.card_demo_section_content, holderCalss = SectionHolderContent.class)
 public class SectionDataContent extends CardBaseModule {
 
     public String mContentText;
