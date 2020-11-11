@@ -1,18 +1,18 @@
 package com.bihe0832.android.test.module
 
-import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.APPFactoryRouter
+import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.gson.JsonHelper
-import com.bihe0832.android.lib.install.InstallListener
-import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.zip.ZipUtils
 import com.bihe0832.android.test.base.BaseTestFragment
-import com.bihe0832.android.test.base.TestItem
+import com.bihe0832.android.test.base.item.TestItemData
+import com.bihe0832.android.test.base.item.TestTipsData
 import com.bihe0832.android.test.module.json.JsonTest
 import com.bihe0832.android.test.module.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.test.module.touch.TouchRegionActivity
@@ -21,39 +21,29 @@ import java.io.File
 class TestDebugTempFragment : BaseTestFragment() {
     val LOG_TAG = "TestDebugTempFragment"
 
-    companion object {
-        @JvmStatic
-        fun newInstance(): TestDebugTempFragment {
-            val args = Bundle()
-            val fragment = TestDebugTempFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
+    override fun getDataList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
+            add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
+            add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
 
-    override fun getDataList(): List<TestItem> {
-        return mutableListOf<TestItem>().apply {
-            add(TestItem("简单测试函数") { testFunc() })
-            add(TestItem("通用测试预处理") { preTest() })
-            add(TestItem("测试自定义请求") { testOneRequest() })
-
-            add(TestItem("点击区扩大Demo") {
+            add(TestItemData("点击区扩大Demo", View.OnClickListener {
                 startActivity(TouchRegionActivity::class.java)
-            })
+            }))
 
-            add(TestItem("HTTP Request") {
+            add(TestItemData("HTTP Request", View.OnClickListener {
                 APPFactoryRouter.openPageByRouter(ROUTRT_NAME_TEST_HTTP)
-            })
+            }))
 
-            add(TestItem("文件MD5") {
+            add(TestItemData("文件MD5", View.OnClickListener {
                 testMD5()
-            })
+            }))
 
-            add(TestItem("JsonHelper") { testJson() })
-            add(TestItem("Toast测试") {
+            add(TestItemData("JsonHelper", View.OnClickListener { testJson() }))
+            add(TestItemData("Toast测试", View.OnClickListener {
                 ToastUtil.showTop(context, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
-            })
-            add(TestItem("ZIP测试") { testZIP() })
+            }))
+            add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
 
         }
     }

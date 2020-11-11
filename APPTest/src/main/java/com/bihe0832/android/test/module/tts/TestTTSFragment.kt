@@ -27,15 +27,6 @@ class TestTTSFragment : BaseFragment() {
 
     private var times = 0
 
-    companion object {
-        fun newInstance(): TestTTSFragment {
-            val args = Bundle()
-            val fragment = TestTTSFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_test_tts, container, false)
         return view

@@ -1,69 +1,78 @@
 package com.bihe0832.android.test.base
 
 import android.content.Intent
-import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.text.Html
-import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.openWebPage
-import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
+import com.bihe0832.android.framework.ui.list.CommonListFragment
+import com.bihe0832.android.framework.ui.list.CommonListLiveData
+import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.DebugTools
 import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.test.R
+import com.bihe0832.android.test.base.item.TestItemData
+import com.bihe0832.android.test.base.item.TestTipsData
 
-abstract class BaseTestFragment : BaseFragment() {
-    private var mRecy: RecyclerView? = null
-    protected var mAdapter: TestPagerAdapter? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_test_tab, container, false)
-        initView(view)
-        return view
-    }
+open class BaseTestFragment : CommonListFragment() {
 
-    protected val testTips by lazy {
-        getTipsText()
-    }
-
-    open fun getTipsText(): String {
-        return ""
-    }
-
-    private fun initView(view: View) {
-        mAdapter = TestPagerAdapter(_mActivity)
-        mAdapter!!.setDatas(getDataList())
-        mRecy = view.findViewById(R.id.test_recy)
-        val textView = view.findViewById<TextView>(R.id.test_tips)
-        if (TextUtils.isEmpty(testTips)) {
-            textView.visibility = View.GONE
-        } else {
-            textView.text = Html.fromHtml(testTips)
-            textView.visibility = View.VISIBLE
+    open fun getDataList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(TestItemData("test"))
         }
-        mRecy?.setHasFixedSize(true)
-        val manager = LinearLayoutManager(_mActivity)
-        mRecy?.setLayoutManager(manager)
-        mRecy?.setAdapter(mAdapter)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    val mDataList by lazy {
+        ArrayList<CardBaseModule>().apply {
+            addAll(getDataList())
+        }
     }
 
-    abstract fun getDataList(): List<TestItem>
+
+    override fun getDataLiveData(): CommonListLiveData {
+        return object : CommonListLiveData() {
+            override fun fetchData() {
+                postValue(mDataList)
+            }
+
+            override fun clearData() {
+                mDataList.clear()
+            }
+
+            override fun loadMore() {
+
+            }
+
+            override fun hasMore(): Boolean {
+                return false
+            }
+
+            override fun canRefresh(): Boolean {
+                return false
+            }
+
+            override fun getEmptyText(): String {
+                return ""
+            }
+        }
+    }
+
+    override fun getCardList(): List<Class<out CardBaseModule>> {
+        return mutableListOf(
+                TestItemData::class.java,
+                TestTipsData::class.java
+
+        )
+    }
+
     protected fun sendInfo(title: String, content: String) {
         DebugTools.sendInfo(context, title, content, false)
     }
 
+
     protected fun showInfo(title: String, content: String) {
-        DebugTools.showInfo(context, title, content, "分享给我们")
+        DebugTools.showInfo(context, title, content, "发送到第三方应用")
     }
 
     fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: InputDialogCompletedCallback) {
@@ -83,7 +92,7 @@ abstract class BaseTestFragment : BaseFragment() {
 
     protected fun showResult(s: String?) {
         s?.let {
-            ZLog.d(LOG_TAG, "showResult:$s")
+            ZLog.d(HttpBasicRequest.LOG_TAG, "showResult:$s")
             val textView = view?.findViewById<TextView>(R.id.test_tips)
             textView?.text = "Result: $s"
         }

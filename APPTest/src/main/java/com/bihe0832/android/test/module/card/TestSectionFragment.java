@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bihe0832.android.app.router.APPFactoryRouter;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.test.R;
+import com.bihe0832.android.test.base.item.TestItemData;
+import com.bihe0832.android.test.base.item.TestTipsData;
 import com.bihe0832.android.test.module.card.section.SectionDataContent;
 import com.bihe0832.android.test.module.card.section.SectionDataContent2;
 import com.bihe0832.android.test.module.card.section.SectionDataHeader;
@@ -19,6 +22,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.ArrayList;
 
+import static com.bihe0832.android.test.module.card.TestListActivityKt.ROUTRT_NAME_TEST_SECTION;
+
 
 public class TestSectionFragment extends BaseFragment {
     private static final String TAG = "TestSectionFragment-> ";
@@ -26,14 +31,6 @@ public class TestSectionFragment extends BaseFragment {
     private TestSectionAdapter mRecycleAdapter;
     private RecyclerView mRecycleView;
     private ArrayList<CardBaseModule> mDataList = new ArrayList<>();
-
-    public static TestSectionFragment newInstance() {
-
-        Bundle args = new Bundle();
-        TestSectionFragment fragment = new TestSectionFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +47,7 @@ public class TestSectionFragment extends BaseFragment {
         return mView;
     }
 
-    void initView(View mView){
+    void initView(View mView) {
         mRecycleView = (RecyclerView) mView.findViewById(R.id.card_list);
         mRecycleAdapter = new TestSectionAdapter(this.getContext(), mDataList);
         mRecycleView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
@@ -61,26 +58,31 @@ public class TestSectionFragment extends BaseFragment {
 
             }
         });
-
-
     }
 
     private void initList() {
 
+        mDataList.add(
+                new TestTipsData("点击打开List 测试Activity", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        APPFactoryRouter.INSTANCE.openPageByRouter(ROUTRT_NAME_TEST_SECTION);
+                    }
+                }));
         for (int i = 0; i < 6; i++) {
             CardBaseModule sectionHeader = null;
-            if(i < 2 ){
+            if (i < 2) {
                 sectionHeader = new SectionDataHeader("标题1:" + i);
-            }else{
-                sectionHeader = new SectionDataHeader2( "标题2:" + i);
+            } else {
+                sectionHeader = new SectionDataHeader2("标题2:" + i);
             }
             mDataList.add(sectionHeader);
             for (int j = 0; j < 15; j++) {
                 CardBaseModule section;
-                if(i < 2 ){
-                    section = new SectionDataContent( "内容1:" + j);
-                }else{
-                    section = new SectionDataContent2( "内容2:" + j);
+                if (i < 2) {
+                    section = new SectionDataContent("内容1:" + j);
+                } else {
+                    section = new SectionDataContent2("内容2:" + j);
                 }
                 mDataList.add(section);
             }

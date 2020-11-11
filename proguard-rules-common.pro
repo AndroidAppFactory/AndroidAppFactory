@@ -163,3 +163,7 @@
 -keepclassmembernames class com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy {
     public *;
 }
+
+-keepclassmembers class * extends com.bihe0832.android.lib.adapter.CardBaseHolder {
+    public *;
+}
