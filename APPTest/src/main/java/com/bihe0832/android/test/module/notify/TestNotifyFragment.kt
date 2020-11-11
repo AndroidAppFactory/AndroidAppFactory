@@ -1,38 +1,30 @@
 package com.bihe0832.android.test.module.notify
 
-import android.os.Bundle
+import android.view.View
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager
-import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.test.base.BaseTestFragment
-import com.bihe0832.android.test.base.OnTestItemClickListener
-import com.bihe0832.android.test.base.TestItem
-import com.bihe0832.android.test.module.TestDebugCommonFragment
-import com.bihe0832.android.test.module.touch.TouchRegionActivity
-import java.util.*
+import com.bihe0832.android.test.base.item.TestItemData
+import com.bihe0832.android.test.module.TestDebugTempFragment
 
 class TestNotifyFragment : BaseTestFragment() {
-    var process = 0
-    override fun getDataList(): List<TestItem> {
-        val items: MutableList<TestItem> = ArrayList()
-        items.add(TestItem("简单测试函数") { testNotify() })
-        items.add(TestItem("通用测试预处理") { testNotifyProcess() })
-        return items
-    }
 
-    companion object {
-        fun newInstance(): TestNotifyFragment {
-            val args = Bundle()
-            val fragment = TestNotifyFragment()
-            fragment.arguments = args
-            return fragment
+    override fun getDataList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(TestItemData("简单测试函数", View.OnClickListener { testNotify() }))
+            add(TestItemData("通用测试预处理", View.OnClickListener { testNotifyProcess() }))
         }
     }
 
-    fun testNotify() {
+    var process = 0
+
+    private fun testNotify() {
+        ZixieContext.showToast("fsfd")
         NotifyManager.sendNotifyNow(context!!,
                 "通知标题",
                 "通知二级标题",

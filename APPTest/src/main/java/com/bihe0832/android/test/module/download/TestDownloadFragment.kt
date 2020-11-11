@@ -1,8 +1,9 @@
 package com.bihe0832.android.test.module.download
 
 import android.app.DownloadManager
-import android.os.Bundle
 import android.support.v4.content.FileProvider
+import android.view.View
+import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
@@ -12,33 +13,22 @@ import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.base.BaseTestFragment
-import com.bihe0832.android.test.base.TestItem
+import com.bihe0832.android.test.base.item.TestItemData
 import java.io.File
 import java.util.*
 
 class TestDownloadFragment : BaseTestFragment() {
     val LOG_TAG = "TestDownloadFragment"
 
-    override fun getDataList(): List<TestItem> {
-        val items: MutableList<TestItem> = ArrayList()
-        items.add(TestItem("自定义Provider安装") { startDownload(INSTALL_BY_CUSTOMER) })
-        items.add(TestItem("默认Provider安装") { startDownload(INSTALL_BY_DEFAULT) })
-
-        items.add(TestItem("通过ZIP安装OBB") { testInstallOOBByZip() })
-        items.add(TestItem("通过文件夹安装OBB") { testInstallOOBByFolder() })
-        items.add(TestItem("通过ZIP安装Split") { testInstallSplitByGoodZip() })
-        items.add(TestItem("通过非标准Split格式的ZIP安装Split") { testInstallSplitByBadZip() })
-        items.add(TestItem("通过文件夹安装Split") { testInstallSplitByFolder() })
-
-        return items
-    }
-
-    companion object {
-        fun newInstance(): TestDownloadFragment {
-            val args = Bundle()
-            val fragment = TestDownloadFragment()
-            fragment.arguments = args
-            return fragment
+    override fun getDataList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(TestItemData("自定义Provider安装", View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) }))
+            add(TestItemData("默认Provider安装", View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) }))
+            add(TestItemData("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))
+            add(TestItemData("通过文件夹安装OBB", View.OnClickListener { testInstallOOBByFolder() }))
+            add(TestItemData("通过ZIP安装Split", View.OnClickListener { testInstallSplitByGoodZip() }))
+            add(TestItemData("通过非标准Split格式的ZIP安装Split", View.OnClickListener { testInstallSplitByBadZip() }))
+            add(TestItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
         }
     }
 
@@ -126,15 +116,15 @@ class TestDownloadFragment : BaseTestFragment() {
     }
 
     private fun testInstallSplitByGoodZip() {
-        testInstallSplit("/sdcard/Download/com.supercell.brawlstars.zip","com.supercell.brawlstars")
+        testInstallSplit("/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars")
     }
 
     private fun testInstallSplitByBadZip() {
-        testInstallSplit("/sdcard/Download/a3469c6189204495bc0283e909eb94a6_com.riotgames.legendsofruneterratw_113012.zip","com.riotgames.legendsofruneterratw")
+        testInstallSplit("/sdcard/Download/a3469c6189204495bc0283e909eb94a6_com.riotgames.legendsofruneterratw_113012.zip", "com.riotgames.legendsofruneterratw")
     }
 
     private fun testInstallSplitByFolder() {
-        testInstallSplit(FileUtils.getZixieFilePath(context!!) +"/com.supercell.brawlstars","com.supercell.brawlstars")
+        testInstallSplit(FileUtils.getZixieFilePath(context!!) + "/com.supercell.brawlstars", "com.supercell.brawlstars")
     }
 
     private fun testInstallSplit(filePath: String, packangeName: String) {

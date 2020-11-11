@@ -5,7 +5,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
+import android.view.View
+import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -17,30 +18,20 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.base.BaseTestFragment
-import com.bihe0832.android.test.base.TestItem
+import com.bihe0832.android.test.base.item.TestItemData
 import java.util.*
 
 class TestDialgFragment : BaseTestFragment() {
-    override fun getDataList(): List<TestItem> {
-        val items: MutableList<TestItem> = ArrayList()
-        items.add(TestItem("通用弹框") { testAlert(activity) })
-        items.add(TestItem("进度条弹框") { testUpdate(activity) })
-        items.add(TestItem("加载弹框") { testLoading(activity) })
+    override fun getDataList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
 
-        return items
-    }
-
-    companion object {
-        fun newInstance(): TestDialgFragment {
-            val args = Bundle()
-            val fragment = TestDialgFragment()
-            fragment.arguments = args
-            return fragment
+            add(TestItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
+            add(TestItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
+            add(TestItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
         }
     }
 
-
-    fun testAlert(activity: Activity?) {
+    private fun testAlert(activity: Activity?) {
         var title = "分享的标题"
         var content = "分享的内容"
         val dialog = CommonDialog(activity)

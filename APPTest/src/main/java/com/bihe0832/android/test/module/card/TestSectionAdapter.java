@@ -3,6 +3,8 @@ package com.bihe0832.android.test.module.card;
 import android.content.Context;
 
 import com.bihe0832.android.lib.adapter.CardBaseAdapter;
+import com.bihe0832.android.test.base.item.TestItemData;
+import com.bihe0832.android.test.base.item.TestTipsData;
 import com.bihe0832.android.test.module.card.section.SectionDataContent;
 import com.bihe0832.android.test.module.card.section.SectionDataContent2;
 import com.bihe0832.android.test.module.card.section.SectionDataHeader;
@@ -20,6 +22,7 @@ public class TestSectionAdapter extends CardBaseAdapter {
 
     public TestSectionAdapter(Context context, List data) {
         super(context, data);
+        addItemToAdapter(TestTipsData.class, true);
         addItemToAdapter(SectionDataHeader.class, true);
         addItemToAdapter(SectionDataHeader2.class, true);
         addItemToAdapter(SectionDataContent.class, false);

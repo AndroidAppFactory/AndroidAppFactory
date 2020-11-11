@@ -2,12 +2,10 @@ package com.bihe0832.android.test.module
 
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
-import android.text.Html
 import android.text.TextUtils
+import android.view.View
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.RouterConstants
-import com.bihe0832.android.app.router.openWebPage
 import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getDeviceId
@@ -16,36 +14,27 @@ import com.bihe0832.android.framework.ZixieContext.getVersionName
 import com.bihe0832.android.framework.ZixieContext.isDebug
 import com.bihe0832.android.framework.ZixieContext.isOfficial
 import com.bihe0832.android.framework.ZixieContext.showDebug
+import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.test.base.BaseTestFragment
-import com.bihe0832.android.test.base.TestItem
+import com.bihe0832.android.test.base.item.TestItemData
+import com.bihe0832.android.test.base.item.TestTipsData
 import com.bihe0832.android.test.module.network.TestNetworkActivity
-import java.util.HashMap
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 open class TestDebugCommonFragment : BaseTestFragment() {
+
     private var lastUrl = "https://blog.bihe0832.com"
-
-    companion object {
-        @JvmStatic
-        fun newInstance(): TestDebugCommonFragment {
-            val args = Bundle()
-            val fragment = TestDebugCommonFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
-    override fun getTipsText(): String {
-        return "APPFactory的通用组件和工具"
-    }
-
-    override fun getDataList(): List<TestItem> {
-        return mutableListOf<TestItem>().apply {
-            add(TestItem("查看应用版本及环境") { showAPPInfo() })
-            add(TestItem("查看设备信息") { showMobileInfo() })
-            add(TestItem("分享第三方应用信息") { showOtherAPPInfo() })
-            add(TestItem("打开指定Web页面") {
+    override fun getDataList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(TestTipsData("APPFactory的通用组件和工具"))
+            add(TestItemData("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
+            add(TestItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
+            add(TestItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
+            add(TestItemData("打开指定Web页面", View.OnClickListener {
                 showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl, InputDialogCompletedCallback { result: String ->
                     try {
                         if (!TextUtils.isEmpty(result)) {
@@ -57,18 +46,18 @@ open class TestDebugCommonFragment : BaseTestFragment() {
                     } catch (e: Exception) {
                     }
                 })
-            })
-            add(TestItem("打开JSbridge调试页面") { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") })
-            add(TestItem("打开TBS调试页面") { openWeb("http://debugtbs.qq.com/") })
-            add(TestItem("弹出评分页面") {
+            }))
+            add(TestItemData("打开JSbridge调试页面", View.OnClickListener { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
+            add(TestItemData("打开TBS调试页面", View.OnClickListener { openWeb("http://debugtbs.qq.com/") }))
+            add(TestItemData("弹出评分页面", View.OnClickListener {
                 UserPraiseManager.showUserPraiseDialog(activity!!, APPFactoryRouter.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK))
-            })
-            add(TestItem("打开反馈页面") {
+            }))
+            add(TestItemData("打开反馈页面", View.OnClickListener {
                 val map = HashMap<String, String>()
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode("https://support.qq.com/product/290858")
                 APPFactoryRouter.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
-            })
-            add(TestItem("网络切换监控") { startActivity(TestNetworkActivity::class.java)})
+            }))
+            add(TestItemData("网络切换监控", View.OnClickListener { startActivity(TestNetworkActivity::class.java) }))
         }
     }
 

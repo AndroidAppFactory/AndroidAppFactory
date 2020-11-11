@@ -17,8 +17,8 @@ import com.bihe0832.android.test.module.TestDebugCommonFragment;
 import com.bihe0832.android.test.module.TestDebugTempFragment;
 import com.bihe0832.android.test.module.TestRouterFragment;
 import com.bihe0832.android.test.module.card.TestSectionFragment;
-import com.bihe0832.android.test.module.dialog.TestDialgFragment;
-import com.bihe0832.android.test.module.download.TestDownloadFragment;
+import com.bihe0832.android.test.module.notify.TestNotifyFragment;
+import com.bihe0832.android.test.module.tts.TestTTSFragment;
 import com.flyco.tablayout.SlidingTabLayout;
 
 
@@ -65,6 +65,7 @@ public class TestMainFragment extends BaseFragment {
     private void initView(View view) {
         mViewPager = view.findViewById(R.id.framework_viewPager);
         mViewPager.setAdapter(new MyTaskPagerFragmentAdapter(getChildFragmentManager()));
+        mViewPager.setOffscreenPageLimit(mTabString.length);
 
         mTabBar = view.findViewById(R.id.framework_tab);
         mTabBar.setViewPager(mViewPager);
@@ -101,15 +102,15 @@ public class TestMainFragment extends BaseFragment {
         public Fragment getItem(int position) {
 
             if (mTabString[position].equals(TAB_FOR_NEW)) {
-                return TestSectionFragment.newInstance();
+                return new TestSectionFragment();
             } else if (mTabString[position].equals(TAB_FOR_DEV_COMMON)) {
-                return TestDebugCommonFragment.newInstance();
+                return new TestDebugCommonFragment();
             } else if (mTabString[position].equals(TAB_FOR_DEV_TEMP)) {
-                return TestDebugTempFragment.newInstance();
+                return new TestDebugTempFragment();
             } else if (mTabString[position].equals(TAB_FOR_ROUTER)) {
-                return TestRouterFragment.newInstance();
+                return new TestRouterFragment();
             } else {
-                return TestDebugCommonFragment.newInstance();
+                return new TestDebugCommonFragment();
             }
         }
 
