@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-import static com.bihe0832.android.lib.install.InstallErrorCode.BAD_APK_TYPE;
 import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
 import static com.bihe0832.android.lib.install.InstallErrorCode.PERMISSION_DENY;
 import static com.bihe0832.android.lib.install.InstallErrorCode.UNKNOWN_EXCEPTION;
@@ -40,9 +39,19 @@ class ObbFileInstall {
                 listener.onInstallFailed(UNZIP_FAILED);
                 return;
             }
+            listener.onInstallPrepare();
             String result = prepareInstallOBB(new File(fileDir), obbFolder, listener);
             if (!TextUtils.isEmpty(result)) {
-                APKInstall.installAPK(context, result, listener);
+                if (result.startsWith(FileUtils.INSTANCE.getZixieFilePath(context))) {
+                    APKInstall.installAPK(context, result, listener);
+                } else {
+                    String realInstallPath = FileUtils.INSTANCE.getZixieFilePath(context) + "/" + FileUtils.INSTANCE.getFileName(result);
+                    ZLog.d(TAG + "installObbAPKByFile start copy apk File");
+                    FileUtils.INSTANCE.copyFile(new File(result), new File(realInstallPath));
+                    ZLog.d(TAG + "installObbAPKByFile finished copy apk File");
+                    listener.onInstallStart();
+                    APKInstall.installAPK(context, realInstallPath, listener);
+                }
             }
         } catch (Exception e) {
             ZLog.d(TAG + "prepare4InstallObb failed, for " + e);
@@ -65,13 +74,12 @@ class ObbFileInstall {
             } else {
                 if (OBBFormats.isObbFile(file2.getAbsolutePath())) {
                     File targetObbFile = new File(obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(file2.getAbsolutePath()));
-                    ZLog.d(TAG + "installObbAPKByZip start copyFile");
+                    ZLog.d(TAG + "installObbAPKByFile start copy obb File");
                     if (targetObbFile.exists()) {
                         targetObbFile.deleteOnExit();
                     }
-                    listener.onInstallPrepare();
                     FileUtils.INSTANCE.copyFile(file2, targetObbFile);
-                    ZLog.d(TAG + "installObbAPKByZip finished copyFile");
+                    ZLog.d(TAG + "installObbAPKByFile finished copy obb File");
                     if (!FileUtils.INSTANCE.checkFileExist(targetObbFile.getAbsolutePath())) {
                         listener.onInstallFailed(UNZIP_FAILED);
                         return "";
@@ -108,20 +116,23 @@ class ObbFileInstall {
                     }
                     File targetObbFile = new File(obbFolder.getAbsolutePath() + "/" + fileName);
                     targetObbFile.deleteOnExit();
-                    ZLog.d(TAG + "installObbAPKByZip unCompress start");
+                    ZLog.d(TAG + " installObbAPKByZip unCompress obb start");
                     listener.onUnCompress();
                     ZipUtils.unCompress(zipFile, fileName, obbFolder.getAbsolutePath());
-                    ZLog.d(TAG + "installObbAPKByZip unCompress finish");
+                    ZLog.d(TAG + " installObbAPKByZip unCompress obb finish");
                     if (!FileUtils.INSTANCE.checkFileExist(targetObbFile.getAbsolutePath())) {
                         listener.onInstallFailed(UNZIP_FAILED);
                         return;
                     }
                 } else if (InstallUtils.isApkFile(fileName)) {
+                    ZLog.d(TAG + " installObbAPKByZip unCompress apk start");
+                    listener.onUnCompress();
+                    ZipUtils.unCompress(zipFile, fileName, targetFolder.getAbsolutePath());
+                    ZLog.d(TAG + " installObbAPKByZip unCompress apk finish");
                     dstApkFilePath = targetFolder.getAbsolutePath() + "/" + fileName;
                 }
-                listener.onUnCompress();
-                ZipUtils.unCompress(zipFile, fileName, targetFolder.getAbsolutePath());
             }
+            listener.onInstallStart();
             APKInstall.installAPK(context, dstApkFilePath, listener);
         } catch (Exception e) {
             ZLog.d(TAG + "prepare4InstallObb failed, for " + e);

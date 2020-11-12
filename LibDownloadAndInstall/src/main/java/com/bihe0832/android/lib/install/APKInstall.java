@@ -57,13 +57,19 @@ class APKInstall {
                     Log.e("InstallUtils", "app don't hava install permission");
                 }
                 context.startActivity(intent);
-                listener.onInstallStart();
+                if(null != listener){
+                    listener.onInstallStart();
+                }
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-                listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
+                if(null != listener){
+                    listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
+                }
             }
         } else {
-            listener.onInstallFailed(FILE_NOT_FOUND);
+            if(null != listener){
+                listener.onInstallFailed(FILE_NOT_FOUND);
+            }
         }
     }
 }

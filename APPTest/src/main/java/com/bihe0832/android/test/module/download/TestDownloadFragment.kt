@@ -25,7 +25,9 @@ class TestDownloadFragment : BaseTestFragment() {
             add(TestItemData("自定义Provider安装", View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) }))
             add(TestItemData("默认Provider安装", View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) }))
             add(TestItemData("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))
+            add(TestItemData("通过ZIP安装超大OBB", View.OnClickListener { testInstallOOBByBigZip() }))
             add(TestItemData("通过文件夹安装OBB", View.OnClickListener { testInstallOOBByFolder() }))
+            add(TestItemData("通过文件夹安装超大OBB", View.OnClickListener { testInstallBigOOBByFolder() }))
             add(TestItemData("通过ZIP安装Split", View.OnClickListener { testInstallSplitByGoodZip() }))
             add(TestItemData("通过非标准Split格式的ZIP安装Split", View.OnClickListener { testInstallSplitByBadZip() }))
             add(TestItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
@@ -89,9 +91,18 @@ class TestDownloadFragment : BaseTestFragment() {
         testInstallOOB("/sdcard/Download/jp.co.sumzap.pj0007.zip")
     }
 
+    private fun testInstallOOBByBigZip() {
+        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip")
+    }
+
     private fun testInstallOOBByFolder() {
         testInstallOOB(FileUtils.getZixieFilePath(context!!) + "/test/")
     }
+
+    private fun testInstallBigOOBByFolder() {
+        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927")
+    }
+
 
     private fun testInstallOOB(filePath: String) {
         ZLog.d("testInstallOOB")
