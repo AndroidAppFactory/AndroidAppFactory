@@ -13,6 +13,7 @@ import com.bihe0832.android.test.module.card.TestSectionAdapter;
 @CardInfo(resFileName = "card_demo_section_header.xml", holderCalss = SectionHolderHeader.class)
 public class SectionDataHeader extends CardBaseModule {
 
+
     public String mHeaderText;
 
     public SectionDataHeader(String netType) {

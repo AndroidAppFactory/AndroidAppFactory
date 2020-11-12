@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.common.Res;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -40,15 +41,19 @@ class CardInfoHelper {
         mApplicationContext = context;
     }
 
-    public int getResIdByCardInfo(Context context, CardInfo getAnnotation) {
-        ;
+    public int getResIdByCardInfo(Context context, Class<? extends CardBaseModule> module) {
+        CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
+        return getResIdByCardInfo(context, getAnnotation);
+    }
+
+    private int getResIdByCardInfo(Context context, CardInfo getAnnotation) {
         if (getAnnotation == null) {
-            return -1;
+            return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
         }
 
         if (mApplicationContext == null) {
             if (context == null) {
-                return -1;
+                return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
             } else {
                 mApplicationContext = context.getApplicationContext();
             }
@@ -57,18 +62,27 @@ class CardInfoHelper {
         try {
             String resFileName = getAnnotation.resFileName().replace(".xml", "");
             int id = Res.layout(mApplicationContext.getResources(), resFileName, mApplicationContext.getPackageName());
-            ZLog.d(TAG,"getResIdByCardInfo:" + resFileName + " " + id);
+            ZLog.d(TAG, "getResIdByCardInfo:" + resFileName + " " + id);
             return id;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return -1;
+        return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
     }
 
-    public final void addCardItem(int id, Class holder) {
-        ZLog.d(TAG,"addCardItem:" + id + " " + holder.toString());
-        if (holder != null && CardBaseHolder.class.isAssignableFrom(holder)) {
-            mCardList.put(id, holder);
+    public final void addCardItem(Context context, Class<? extends CardBaseModule> module) {
+        CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
+        if (getAnnotation == null) {
+            ZLog.e("getAnnotation is null");
+        } else {
+            addCardItem(context, getResIdByCardInfo(context, getAnnotation), getAnnotation.holderCalss());
+        }
+    }
+
+    public final void addCardItem(Context context, int resID, Class<? extends CardBaseHolder> holderCalss) {
+        ZLog.d(TAG, "addCardItem:" + resID + " " + holderCalss.toString());
+        if (holderCalss != null && CardBaseHolder.class.isAssignableFrom(holderCalss)) {
+            mCardList.put(resID, (Class<CardBaseHolder>) holderCalss);
         }
     }
 
