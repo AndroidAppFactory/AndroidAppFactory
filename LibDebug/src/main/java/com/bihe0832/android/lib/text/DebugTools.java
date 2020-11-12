@@ -67,7 +67,7 @@ public class DebugTools {
         final CommonDialog dialog = new CommonDialog(context);
         dialog.setTitle(title)
                 .setPositive(positiveText)
-                .setContent(content)
+                .setHtmlContent(content)
                 .setNegtive("复制到剪切板")
                 .setOnClickBottomListener(new OnDialogListener() {
                     @Override
