@@ -149,10 +149,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
         mRedirect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mIntentUrl));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                getContext().startActivity(intent);
+                IntentUtils.openWebPage(mIntentUrl, getContext());
             }
         });
         getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
