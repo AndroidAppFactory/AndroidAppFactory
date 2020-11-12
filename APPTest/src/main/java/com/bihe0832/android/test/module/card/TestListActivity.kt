@@ -65,7 +65,7 @@ class TestListActivity : CommonListActivity() {
 
     override fun getCardList(): List<Class<out CardBaseModule?>> {
         return mutableListOf(
-                SectionDataHeader::class.java,
+//                SectionDataHeader::class.java,
                 SectionDataHeader2::class.java,
                 SectionDataContent::class.java,
                 SectionDataContent2::class.java
