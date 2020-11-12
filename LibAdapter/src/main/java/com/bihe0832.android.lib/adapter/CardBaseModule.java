@@ -12,6 +12,15 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  */
 
 public class CardBaseModule implements MultiItemEntity {
+    private String typebadText = "暂不支持的数据格式";
+
+    public void setTypeBadText(String typebadText) {
+        this.typebadText = typebadText;
+    }
+
+    public String getTypebadText() {
+        return typebadText;
+    }
 
     protected CardBaseModule() {
         CardInfo getAnnotation = this.getClass().getAnnotation(CardInfo.class);
@@ -22,8 +31,7 @@ public class CardBaseModule implements MultiItemEntity {
 
     final public int getItemType(Context context) {
         try {
-            CardInfo getAnnotation = this.getClass().getAnnotation(CardInfo.class);
-            return CardInfoHelper.getInstance().getResIdByCardInfo(context, getAnnotation);
+            return CardInfoHelper.getInstance().getResIdByCardInfo(context, this.getClass());
         } catch (Exception e) {
             e.printStackTrace();
         }

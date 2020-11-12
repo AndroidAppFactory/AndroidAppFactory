@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bihe0832.android.lib.adapter.item.BadDataTypeHolder;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -19,8 +19,6 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
 
     private Context mContext;
     private ArrayList mHeaderIDList = new ArrayList();
-
-    private HashMap<String, Class<CardBaseModule>> test = new HashMap<>();
 
     public CardBaseAdapter(Context context, List data) {
         super(data);
@@ -34,10 +32,9 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
 
     protected void addItemToAdapter(Class<? extends CardBaseModule> module, boolean isHeader) {
         if (module.isAnnotationPresent(CardInfo.class)) {
-            CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
-            int resID = CardInfoHelper.getInstance().getResIdByCardInfo(mContext, getAnnotation);
+            int resID = CardInfoHelper.getInstance().getResIdByCardInfo(mContext, module);
             addItemType(resID, resID);
-            CardInfoHelper.getInstance().addCardItem(resID, getAnnotation.holderCalss());
+            CardInfoHelper.getInstance().addCardItem(mContext, module);
             if (isHeader) {
                 mHeaderIDList.add(resID);
             }
@@ -50,17 +47,35 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
 
     @Override
     protected BaseViewHolder createBaseViewHolder(ViewGroup parent, int resID) {
-        return super.createBaseViewHolder(parent, resID);
+        try {
+            return super.createBaseViewHolder(parent, resID);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int cardId) {
+        BaseViewHolder holder = null;
         if (BaseMultiItemQuickAdapter.TYPE_NOT_FOUND != getLayoutId(cardId)) {
-            View itemView = getItemView(getLayoutId(cardId), parent);
-            return CardInfoHelper.getInstance().createViewHolder(cardId, itemView, mContext);
+            try {
+                View itemView = getItemView(getLayoutId(cardId), parent);
+                holder = CardInfoHelper.getInstance().createViewHolder(cardId, itemView, mContext);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (holder == null) {
+                holder = createBaseViewHolder(parent, getLayoutId(cardId));
+            }
         } else {
-            return createBaseViewHolder(parent, getLayoutId(cardId));
+//            holder = createBaseViewHolder(parent, cardId);
         }
+        if (holder == null) {
+            holder = new BadDataTypeHolder(getItemView(R.layout.card_bad_data_item, parent), mContext);
+        }
+        return holder;
     }
 
     @Override
