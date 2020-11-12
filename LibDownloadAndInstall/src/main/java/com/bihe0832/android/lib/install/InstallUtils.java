@@ -41,9 +41,9 @@ public class InstallUtils {
     public static ApkInstallType getFileType(String filepath) {
         if (TextUtils.isEmpty(filepath)) {
             return ApkInstallType.NULL;
-        }else if(isApkFile(filepath)){
+        } else if (isApkFile(filepath)) {
             return ApkInstallType.APK;
-        }else {
+        } else {
             File apkFile = new File(filepath);
             if (apkFile.isDirectory()) {
                 return getApkInstallTypeByFolder(apkFile);
@@ -66,7 +66,7 @@ public class InstallUtils {
     }
 
     public static void installAPP(final Context context, final String filePath, final String packageName) {
-        installAllAPK(context, filePath, packageName, null);
+        installAPP(context, filePath, packageName, null);
     }
 
     public static void installAPP(final Context context, final String filePath, final String packageName, final InstallListener listener) {
@@ -76,6 +76,7 @@ public class InstallUtils {
                 installAllAPK(context, filePath, packageName, new InstallListener() {
                     @Override
                     public void onUnCompress() {
+                        ZLog.d(TAG + " installAllApk onUnCompress");
                         if (listener != null) {
                             listener.onUnCompress();
                         }
@@ -83,6 +84,7 @@ public class InstallUtils {
 
                     @Override
                     public void onInstallPrepare() {
+                        ZLog.d(TAG + " installAllApk onInstallPrepare");
                         if (listener != null) {
                             listener.onInstallPrepare();
                         }
@@ -90,6 +92,7 @@ public class InstallUtils {
 
                     @Override
                     public void onInstallStart() {
+                        ZLog.d(TAG + " installAllApk onInstallStart");
                         if (listener != null) {
                             listener.onInstallStart();
                         }
@@ -97,6 +100,7 @@ public class InstallUtils {
 
                     @Override
                     public void onInstallFailed(int errorcode) {
+                        ZLog.d(TAG + " installAllApk onInstallFailed : " + errorcode);
                         if (listener != null) {
                             listener.onInstallFailed(errorcode);
                         }
