@@ -10,10 +10,5 @@ package com.bihe0832.android.lib.adapter;
 public abstract class CardBaseModule extends CardBaseInnerModule {
 
     public CardBaseModule() {
-        super("");
-    }
-
-    public CardBaseModule(String typeBadText) {
-        super(typeBadText);
     }
 }

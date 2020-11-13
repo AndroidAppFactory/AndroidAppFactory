@@ -11,11 +11,11 @@ import com.bihe0832.android.test.R;
  */
 public class SectionDataContent2 extends CardBaseModule {
 
-    public  int getResID() {
+    public int getResID() {
         return R.layout.card_demo_section_content_2;
     }
 
-    public  Class<? extends CardBaseHolder> getViewHolderClass() {
+    public Class<? extends CardBaseHolder> getViewHolderClass() {
         return SectionHolderContent2.class;
     }
 

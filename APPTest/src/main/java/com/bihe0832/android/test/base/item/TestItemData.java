@@ -13,12 +13,15 @@ import com.bihe0832.android.test.R;
  */
 public class TestItemData extends CardBaseModule {
 
+    public TestItemData() {
+        super();
+    }
+
     public TestItemData(String netType) {
         mContentText = netType;
     }
 
     public TestItemData(String netType, View.OnClickListener listener) {
-        super("");
         mContentText = netType;
         mListener = listener;
     }

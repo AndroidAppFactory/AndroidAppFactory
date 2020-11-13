@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 /**
@@ -58,7 +59,16 @@ class CardInfoHelper {
 
     private CardBaseInnerModule getItemByClass(Class<? extends CardBaseInnerModule> module) {
         try {
-            CardBaseInnerModule moduleItem = module.getConstructor(String.class).newInstance("");
+
+            Constructor ct = module.getConstructors()[0];
+            ZLog.d(TAG, "Constructor = " + ct.toString());
+
+            Class<?>[] params = ct.getParameterTypes();
+            Class[] cArg = new Class[params.length];
+            for (int i = 0; i < params.length; i++) {
+                cArg[i] = null;
+            }
+            CardBaseInnerModule moduleItem = (CardBaseInnerModule) ct.newInstance(cArg);
             return moduleItem;
         } catch (Exception e) {
             ZLog.e(TAG, "class " + module + " should hava a no params Constructor!!!");
