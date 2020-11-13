@@ -1,8 +1,6 @@
 package com.bihe0832.android.lib.adapter;
 
 
-import android.text.TextUtils;
-
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 /**
@@ -13,20 +11,12 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 public abstract class CardBaseInnerModule implements MultiItemEntity {
 
-    private String mTypeBadText = "暂不支持的数据格式";
-
-    public CardBaseInnerModule(String typeBadText) {
-        if (!TextUtils.isEmpty(typeBadText)) {
-            mTypeBadText = typeBadText;
-        }
-    }
-
     public abstract int getResID();
 
     public abstract Class<? extends CardBaseHolder> getViewHolderClass();
 
     public String getTypeBadText() {
-        return mTypeBadText;
+        return "暂不支持的数据格式";
     }
 
 }

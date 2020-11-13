@@ -70,9 +70,13 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
 //            holder = createBaseViewHolder(parent, cardId);
         }
         if (holder == null) {
-            holder = new BadDataTypeHolder(getItemView(R.layout.card_bad_data_item, parent), mContext);
+            holder = new BadDataTypeHolder(getItemView(getBadDataTypeHolderID(), parent), mContext);
         }
         return holder;
+    }
+
+    protected int getBadDataTypeHolderID() {
+        return R.layout.card_bad_data_item;
     }
 
     @Override
