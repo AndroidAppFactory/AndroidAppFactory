@@ -20,7 +20,7 @@ public class CardInfoHelper {
     private static final String TAG = "CardInfoHelper";
     private HashMap<Integer, Class<CardBaseHolder>> mCardList = new HashMap<>();
     private static volatile CardInfoHelper instance;
-    private  boolean mAutoAddItem = false;
+    private boolean mAutoAddItem = false;
 
     public static CardInfoHelper getInstance() {
         if (instance == null) {
@@ -37,7 +37,7 @@ public class CardInfoHelper {
 
     }
 
-    public void setAutoAddItem(boolean autoAddItem){
+    public void setAutoAddItem(boolean autoAddItem) {
         mAutoAddItem = autoAddItem;
     }
 
@@ -68,9 +68,9 @@ public class CardInfoHelper {
             ZLog.d(TAG, "Constructor = " + ct.toString());
 
             Class<?>[] params = ct.getParameterTypes();
-            Class[] cArg = new Class[params.length];
+            Object[] cArg = new Object[params.length];
             for (int i = 0; i < params.length; i++) {
-                cArg[i] = null;
+                cArg[i] = getDefaultValue(params[i]);
             }
             CardBaseInnerModule moduleItem = (CardBaseInnerModule) ct.newInstance(cArg);
             return moduleItem;
@@ -81,6 +81,31 @@ public class CardInfoHelper {
         return null;
     }
 
+
+    private Object getDefaultValue(Class clazz) {
+        if (clazz.equals(boolean.class)) {
+            return true;
+        } else if (clazz.equals(byte.class)) {
+            return Byte.MIN_VALUE;
+        } else if (clazz.equals(short.class)) {
+            return Short.MIN_VALUE;
+        } else if (clazz.equals(int.class)) {
+            return Integer.MIN_VALUE;
+        } else if (clazz.equals(long.class)) {
+            return Long.MIN_VALUE;
+        } else if (clazz.equals(float.class)) {
+            return Float.MIN_VALUE;
+        } else if (clazz.equals(double.class)) {
+            return Double.MIN_VALUE;
+        } else {
+            try {
+                return clazz.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
     public final void addCardItem(int resID, Class<? extends CardBaseHolder> holderCalss) {
         ZLog.d(TAG, "addCardItem:" + resID + " " + holderCalss.toString());
