@@ -22,7 +22,6 @@ public class SectionDataHeader2 extends CardBaseModule {
     public String mHeaderText;
 
     public SectionDataHeader2(String netType) {
-        super("");
         mHeaderText = netType;
     }
 

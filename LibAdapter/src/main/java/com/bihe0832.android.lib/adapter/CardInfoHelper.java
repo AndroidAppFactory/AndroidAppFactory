@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 /**
@@ -41,8 +40,8 @@ class CardInfoHelper {
         mApplicationContext = context;
     }
 
-    public int getResIdByCardInfo(Class<? extends CardBaseModule> module) {
-        CardBaseModule moduleItem = getItemByClass(module);
+    public int getResIdByCardInfo(Class<? extends CardBaseInnerModule> module) {
+        CardBaseInnerModule moduleItem = getItemByClass(module);
         if (null == moduleItem) {
             return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
         } else {
@@ -50,16 +49,16 @@ class CardInfoHelper {
         }
     }
 
-    public final void addCardItem(Class<? extends CardBaseModule> module) {
-        CardBaseModule moduleItem = getItemByClass(module);
+    public final void addCardItem(Class<? extends CardBaseInnerModule> module) {
+        CardBaseInnerModule moduleItem = getItemByClass(module);
         if (null != moduleItem) {
             addCardItem(moduleItem.getResID(), moduleItem.getViewHolderClass());
         }
     }
 
-    private CardBaseModule getItemByClass(Class<? extends CardBaseModule> module) {
+    private CardBaseInnerModule getItemByClass(Class<? extends CardBaseInnerModule> module) {
         try {
-            CardBaseModule moduleItem = module.getConstructor(String.class).newInstance("");
+            CardBaseInnerModule moduleItem = module.getConstructor(String.class).newInstance("");
             return moduleItem;
         } catch (Exception e) {
             ZLog.e(TAG, "class " + module + " should hava a no params Constructor!!!");
