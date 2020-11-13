@@ -14,7 +14,6 @@ import com.bihe0832.android.test.R;
 public class TestItemData extends CardBaseModule {
 
     public TestItemData(String netType) {
-        super("");
         mContentText = netType;
     }
 

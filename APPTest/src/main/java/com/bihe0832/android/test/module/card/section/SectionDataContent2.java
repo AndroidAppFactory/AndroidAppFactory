@@ -22,7 +22,6 @@ public class SectionDataContent2 extends CardBaseModule {
     public String mContentText;
 
     public SectionDataContent2(String netType) {
-        super("");
         mContentText = netType;
     }
 }
