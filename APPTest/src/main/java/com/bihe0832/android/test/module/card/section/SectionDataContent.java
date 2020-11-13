@@ -18,7 +18,6 @@ public class SectionDataContent extends CardBaseModule {
     public Class<? extends CardBaseHolder> getViewHolderClass() {
         return SectionHolderContent.class;
     }
-
     public String mContentText;
 
     public SectionDataContent(String netType) {

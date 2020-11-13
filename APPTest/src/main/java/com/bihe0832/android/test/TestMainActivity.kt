@@ -2,6 +2,7 @@ package com.bihe0832.android.test
 
 import android.os.Bundle
 import com.bihe0832.android.framework.ui.main.CommonActivity
+import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 
@@ -13,6 +14,7 @@ class TestMainActivity : CommonActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initToolbar("AndroidAPPFactory", false)
+        CardInfoHelper.getInstance().setAutoAddItem(true)
     }
 
     override fun onResume() {

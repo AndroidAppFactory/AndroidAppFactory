@@ -25,7 +25,5 @@ public class TestSectionAdapter extends CardBaseAdapter {
         addItemToAdapter(TestTipsData.class, true);
         addItemToAdapter(SectionDataHeader.class, true);
         addItemToAdapter(SectionDataHeader2.class, true);
-        addItemToAdapter(SectionDataContent.class, false);
-        addItemToAdapter(SectionDataContent2.class,false);
     }
 }

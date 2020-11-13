@@ -11,12 +11,22 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 public abstract class CardBaseInnerModule implements MultiItemEntity {
 
+    public CardBaseInnerModule() {
+        if (CardInfoHelper.getInstance().autoAddItem() || autoAddItem()) {
+            CardInfoHelper.getInstance().addCardItem(getResID(), getViewHolderClass());
+        }
+    }
+
+    public boolean autoAddItem() {
+        return false;
+    }
+
     public abstract int getResID();
 
     public abstract Class<? extends CardBaseHolder> getViewHolderClass();
 
     public String getTypeBadText() {
-        return "暂不支持的数据格式";
+        return "当前版本不支持该样式，请更新版本";
     }
 
 }

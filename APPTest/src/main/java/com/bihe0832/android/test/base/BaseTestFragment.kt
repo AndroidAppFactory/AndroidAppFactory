@@ -13,7 +13,6 @@ import com.bihe0832.android.lib.text.DebugTools
 import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.base.item.TestItemData
-import com.bihe0832.android.test.base.item.TestTipsData
 
 open class BaseTestFragment : CommonListFragment() {
 
@@ -57,15 +56,7 @@ open class BaseTestFragment : CommonListFragment() {
             }
         }
     }
-
-    override fun getCardList(): List<Class<out CardBaseModule>> {
-        return mutableListOf(
-                TestItemData::class.java,
-                TestTipsData::class.java
-
-        )
-    }
-
+    
     protected fun sendInfo(title: String, content: String) {
         DebugTools.sendInfo(context, title, content, false)
     }

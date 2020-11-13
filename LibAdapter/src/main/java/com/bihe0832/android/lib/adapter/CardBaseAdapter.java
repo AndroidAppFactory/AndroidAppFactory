@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author zixie
  */
-public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, BaseViewHolder> {
+public class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, BaseViewHolder> {
 
     private Context mContext;
     private ArrayList mHeaderIDList = new ArrayList();
@@ -23,7 +23,6 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     public CardBaseAdapter(Context context, List data) {
         super(data);
         mContext = context;
-        CardInfoHelper.getInstance().init(context);
     }
 
     protected void addItemToAdapter(Class<? extends CardBaseModule> module) {
@@ -62,12 +61,6 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            if (holder == null) {
-                holder = createBaseViewHolder(parent, cardId);
-            }
-        } else {
-//            holder = createBaseViewHolder(parent, cardId);
         }
         if (holder == null) {
             holder = new BadDataTypeHolder(getItemView(getBadDataTypeHolderID(), parent), mContext);
