@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.adapter;
 
 
-import android.content.Context;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
@@ -11,30 +11,22 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  * 所有卡片对应的数据都继承自该类
  */
 
-public class CardBaseModule implements MultiItemEntity {
-    private String typebadText = "暂不支持的数据格式";
+public abstract class CardBaseModule implements MultiItemEntity {
 
-    public void setTypeBadText(String typebadText) {
-        this.typebadText = typebadText;
-    }
+    private String mTypeBadText = "暂不支持的数据格式";
 
-    public String getTypebadText() {
-        return typebadText;
-    }
-
-    protected CardBaseModule() {
-        CardInfo getAnnotation = this.getClass().getAnnotation(CardInfo.class);
-        if (null == getAnnotation) {
-            throw new NullPointerException();
+    public CardBaseModule(String typeBadText) {
+        if (!TextUtils.isEmpty(typeBadText)) {
+            mTypeBadText = typeBadText;
         }
     }
 
-    final public int getItemType(Context context) {
-        try {
-            return CardInfoHelper.getInstance().getResIdByCardInfo(context, this.getClass());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+    public abstract int getResID();
+
+    public abstract Class<? extends CardBaseHolder> getViewHolderClass();
+
+    public String getTypeBadText() {
+        return mTypeBadText;
     }
+
 }

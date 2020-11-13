@@ -38,31 +38,15 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
     protected int getDefItemViewType(int position) {
         Object item = mData.get(position);
         if (item instanceof MultiItemEntity) {
-            return ((MultiItemEntity) item).getItemType(mContext);
+            return ((MultiItemEntity) item).getResID();
         }
         return DEFAULT_VIEW_TYPE;
     }
 
-    protected void setDefaultViewTypeLayout(@LayoutRes int layoutResId) {
-        addItemType(DEFAULT_VIEW_TYPE, layoutResId);
-    }
-
     @Override
     protected K onCreateDefViewHolder(ViewGroup parent, int viewType) {
-        return createBaseViewHolder(parent, getLayoutId(viewType));
+        return createBaseViewHolder(parent, viewType);
     }
-
-    protected int getLayoutId(int viewType) {
-        return layouts.get(viewType, TYPE_NOT_FOUND);
-    }
-
-    protected void addItemType(int type, @LayoutRes int layoutResId) {
-        if (layouts == null) {
-            layouts = new SparseIntArray();
-        }
-        layouts.put(type, layoutResId);
-    }
-
 
     @Override
     public void remove(@IntRange(from = 0L) int position) {
