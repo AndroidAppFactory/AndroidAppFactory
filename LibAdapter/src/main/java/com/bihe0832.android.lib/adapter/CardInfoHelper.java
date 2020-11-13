@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.View;
 
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.ui.common.Res;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 /**
@@ -41,45 +41,35 @@ class CardInfoHelper {
         mApplicationContext = context;
     }
 
-    public int getResIdByCardInfo(Context context, Class<? extends CardBaseModule> module) {
-        CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
-        return getResIdByCardInfo(context, getAnnotation);
+    public int getResIdByCardInfo(Class<? extends CardBaseModule> module) {
+        CardBaseModule moduleItem = getItemByClass(module);
+        if (null == moduleItem) {
+            return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
+        } else {
+            return moduleItem.getResID();
+        }
     }
 
-    private int getResIdByCardInfo(Context context, CardInfo getAnnotation) {
-        if (getAnnotation == null) {
-            return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
+    public final void addCardItem(Class<? extends CardBaseModule> module) {
+        CardBaseModule moduleItem = getItemByClass(module);
+        if (null != moduleItem) {
+            addCardItem(moduleItem.getResID(), moduleItem.getViewHolderClass());
         }
+    }
 
-        if (mApplicationContext == null) {
-            if (context == null) {
-                return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
-            } else {
-                mApplicationContext = context.getApplicationContext();
-            }
-        }
-
+    private CardBaseModule getItemByClass(Class<? extends CardBaseModule> module) {
         try {
-            String resFileName = getAnnotation.resFileName().replace(".xml", "");
-            int id = Res.layout(mApplicationContext.getResources(), resFileName, mApplicationContext.getPackageName());
-            ZLog.d(TAG, "getResIdByCardInfo:" + resFileName + " " + id);
-            return id;
+            CardBaseModule moduleItem = module.getConstructor(String.class).newInstance("");
+            return moduleItem;
         } catch (Exception e) {
+            ZLog.e(TAG, "class " + module + " should hava a no params Constructor!!!");
             e.printStackTrace();
         }
-        return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
+        return null;
     }
 
-    public final void addCardItem(Context context, Class<? extends CardBaseModule> module) {
-        CardInfo getAnnotation = module.getAnnotation(CardInfo.class);
-        if (getAnnotation == null) {
-            ZLog.e("getAnnotation is null");
-        } else {
-            addCardItem(context, getResIdByCardInfo(context, getAnnotation), getAnnotation.holderCalss());
-        }
-    }
 
-    public final void addCardItem(Context context, int resID, Class<? extends CardBaseHolder> holderCalss) {
+    public final void addCardItem(int resID, Class<? extends CardBaseHolder> holderCalss) {
         ZLog.d(TAG, "addCardItem:" + resID + " " + holderCalss.toString());
         if (holderCalss != null && CardBaseHolder.class.isAssignableFrom(holderCalss)) {
             mCardList.put(resID, (Class<CardBaseHolder>) holderCalss);

@@ -31,13 +31,10 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     }
 
     protected void addItemToAdapter(Class<? extends CardBaseModule> module, boolean isHeader) {
-        if (module.isAnnotationPresent(CardInfo.class)) {
-            int resID = CardInfoHelper.getInstance().getResIdByCardInfo(mContext, module);
-            addItemType(resID, resID);
-            CardInfoHelper.getInstance().addCardItem(mContext, module);
-            if (isHeader) {
-                mHeaderIDList.add(resID);
-            }
+        int resID = CardInfoHelper.getInstance().getResIdByCardInfo(module);
+        CardInfoHelper.getInstance().addCardItem(module);
+        if (isHeader) {
+            mHeaderIDList.add(resID);
         }
     }
 
@@ -58,16 +55,16 @@ public abstract class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBase
     @Override
     protected BaseViewHolder onCreateDefViewHolder(ViewGroup parent, int cardId) {
         BaseViewHolder holder = null;
-        if (BaseMultiItemQuickAdapter.TYPE_NOT_FOUND != getLayoutId(cardId)) {
+        if (BaseMultiItemQuickAdapter.TYPE_NOT_FOUND != cardId) {
             try {
-                View itemView = getItemView(getLayoutId(cardId), parent);
+                View itemView = getItemView(cardId, parent);
                 holder = CardInfoHelper.getInstance().createViewHolder(cardId, itemView, mContext);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             if (holder == null) {
-                holder = createBaseViewHolder(parent, getLayoutId(cardId));
+                holder = createBaseViewHolder(parent, cardId);
             }
         } else {
 //            holder = createBaseViewHolder(parent, cardId);

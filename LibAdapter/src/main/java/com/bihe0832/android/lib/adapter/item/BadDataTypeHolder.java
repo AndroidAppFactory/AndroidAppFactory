@@ -30,6 +30,6 @@ public class BadDataTypeHolder extends CardBaseHolder {
 
     @Override
     public void initData(CardBaseModule item) {
-        mHeader.setText(Html.fromHtml(item.getTypebadText()));
+        mHeader.setText(Html.fromHtml(item.getTypeBadText()));
     }
 }
