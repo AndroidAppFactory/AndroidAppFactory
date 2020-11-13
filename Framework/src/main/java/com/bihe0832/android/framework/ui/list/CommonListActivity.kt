@@ -26,7 +26,9 @@ abstract class CommonListActivity : BaseActivity() {
     //提供数据交互的liveData
     abstract fun getDataLiveData(): CommonListLiveData
 
-    abstract fun getCardList(): List<Class<out CardBaseModule>>
+    open fun getCardList(): List<Class<out CardBaseModule>> {
+        return mutableListOf()
+    }
 
     abstract fun getTitleText(): String
 

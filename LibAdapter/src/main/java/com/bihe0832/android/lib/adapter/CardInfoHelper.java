@@ -16,11 +16,11 @@ import java.util.HashMap;
  * Created on 2020/11/11.
  * Description: Description
  */
-class CardInfoHelper {
+public class CardInfoHelper {
     private static final String TAG = "CardInfoHelper";
     private HashMap<Integer, Class<CardBaseHolder>> mCardList = new HashMap<>();
-    private Context mApplicationContext = null;
     private static volatile CardInfoHelper instance;
+    private  boolean mAutoAddItem = false;
 
     public static CardInfoHelper getInstance() {
         if (instance == null) {
@@ -37,8 +37,12 @@ class CardInfoHelper {
 
     }
 
-    public void init(Context context) {
-        mApplicationContext = context;
+    public void setAutoAddItem(boolean autoAddItem){
+        mAutoAddItem = autoAddItem;
+    }
+
+    public boolean autoAddItem() {
+        return mAutoAddItem;
     }
 
     public int getResIdByCardInfo(Class<? extends CardBaseInnerModule> module) {
@@ -80,7 +84,8 @@ class CardInfoHelper {
 
     public final void addCardItem(int resID, Class<? extends CardBaseHolder> holderCalss) {
         ZLog.d(TAG, "addCardItem:" + resID + " " + holderCalss.toString());
-        if (holderCalss != null && CardBaseHolder.class.isAssignableFrom(holderCalss)) {
+        if (!mCardList.containsKey(resID) && holderCalss != null && CardBaseHolder.class.isAssignableFrom(holderCalss)) {
+            ZLog.w(TAG, "added CardItem:" + resID + " " + holderCalss.toString());
             mCardList.put(resID, (Class<CardBaseHolder>) holderCalss);
         }
     }

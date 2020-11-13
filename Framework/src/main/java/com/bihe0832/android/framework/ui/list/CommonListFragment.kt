@@ -26,7 +26,9 @@ abstract class CommonListFragment : BaseFragment() {
     //提供数据交互的liveData
     abstract fun getDataLiveData(): CommonListLiveData
 
-    abstract fun getCardList(): List<Class<out CardBaseModule>>
+    open fun getCardList(): List<Class<out CardBaseModule>> {
+        return mutableListOf()
+    }
 
     private val mHeadView by lazy {
         LinearLayout(context).apply {
@@ -42,7 +44,7 @@ abstract class CommonListFragment : BaseFragment() {
     private val mAdapter: CardBaseAdapter by lazy {
         object : CardBaseAdapter(context, mutableListOf<CardBaseModule>()) {
             init {
-                getCardList().forEach {
+                getCardList()?.forEach {
                     addItemToAdapter(it)
                 }
             }
