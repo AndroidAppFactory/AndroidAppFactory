@@ -23,6 +23,10 @@
     <color name="dialog_tips">#FFF44C36</color>
     <color name="dialog_split">#003653</color>
 
+    <!--CommonActivity 配色-->
+    <color name="common_activity_bg">@color/colorPrimaryDark</color>
+    <color name="common_content_bg">@color/white</color>
+
     <!--常用颜色定义-->
     <color name="transparent">#00000000</color>
     <color name="gray_light">#f2f2f2</color>

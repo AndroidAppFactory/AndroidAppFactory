@@ -56,7 +56,7 @@ open class BaseTestFragment : CommonListFragment() {
             }
         }
     }
-    
+
     protected fun sendInfo(title: String, content: String) {
         DebugTools.sendInfo(context, title, content, false)
     }
