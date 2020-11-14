@@ -87,5 +87,5 @@ else
 fi
 checkResult
 git add $localPath/dependencies.gradle
-git commit $localPath/dependencies.gradle -m"auto add by build.sh, author:zixie "
+git commit $localPath/dependencies.gradle -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
 checkResult
