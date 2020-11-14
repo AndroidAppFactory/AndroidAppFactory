@@ -18,7 +18,6 @@ class TestWebviewActivity : BaseTestActivity() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(TestItemData("test"))
             add(TestItemData("打开指定Web页面", View.OnClickListener {
                 showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl, InputDialogCompletedCallback { result: String ->
                     try {
