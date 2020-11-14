@@ -27,28 +27,12 @@ import kotlin.collections.set
 
 open class TestDebugCommonFragment : BaseTestFragment() {
 
-    private var lastUrl = "https://blog.bihe0832.com"
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestTipsData("APPFactory的通用组件和工具"))
             add(TestItemData("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
             add(TestItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
             add(TestItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
-            add(TestItemData("打开指定Web页面", View.OnClickListener {
-                showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl, InputDialogCompletedCallback { result: String ->
-                    try {
-                        if (!TextUtils.isEmpty(result)) {
-                            lastUrl = result
-                            openWeb(result)
-                        } else {
-                            showDebug("请输入正确的网页地址")
-                        }
-                    } catch (e: Exception) {
-                    }
-                })
-            }))
-            add(TestItemData("打开JSbridge调试页面", View.OnClickListener { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
-            add(TestItemData("打开TBS调试页面", View.OnClickListener { openWeb("http://debugtbs.qq.com/") }))
             add(TestItemData("弹出评分页面", View.OnClickListener {
                 UserPraiseManager.showUserPraiseDialog(activity!!, APPFactoryRouter.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK))
             }))
