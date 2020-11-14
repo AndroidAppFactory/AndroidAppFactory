@@ -3,6 +3,7 @@ package  com.bihe0832.android.framework.ui.list
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.LinearLayout
@@ -26,11 +27,19 @@ abstract class CommonListActivity : BaseActivity() {
     //提供数据交互的liveData
     abstract fun getDataLiveData(): CommonListLiveData
 
-    open fun getCardList(): List<Class<out CardBaseModule>> {
+    abstract fun getTitleText(): String
+
+
+    open fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf()
     }
 
-    abstract fun getTitleText(): String
+    open fun getLayoutManagerForList(): RecyclerView.LayoutManager {
+        return SafeLinearLayoutManager(this).apply {
+            orientation = LinearLayoutManager.VERTICAL
+        }
+    }
+
 
     private val mHeadView by lazy {
         LinearLayout(this).apply {
@@ -46,8 +55,11 @@ abstract class CommonListActivity : BaseActivity() {
     private val mAdapter: CardBaseAdapter by lazy {
         object : CardBaseAdapter(this, mutableListOf<CardBaseModule>()) {
             init {
-                getCardList().forEach {
-                    addItemToAdapter(it)
+                getCardList()?.forEach { item ->
+                    item.getmCardItemClass()?.let {
+                        addItemToAdapter(it, item.isHeader)
+                    }
+
                 }
             }
         }.apply {
@@ -75,12 +87,9 @@ abstract class CommonListActivity : BaseActivity() {
     }
 
     private fun initView() {
-        val layoutManager = SafeLinearLayoutManager(this).apply {
-            orientation = LinearLayoutManager.VERTICAL
-        }
 
         common_activity_list_info_list.apply {
-            this.layoutManager = layoutManager
+            this.layoutManager = getLayoutManagerForList()
             setHasFixedSize(true)
             adapter = mAdapter
             isFocusableInTouchMode = false

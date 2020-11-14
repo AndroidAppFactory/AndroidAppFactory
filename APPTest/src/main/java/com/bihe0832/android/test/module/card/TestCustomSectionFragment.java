@@ -12,7 +12,6 @@ import com.bihe0832.android.app.router.APPFactoryRouter;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.test.R;
-import com.bihe0832.android.test.base.item.TestItemData;
 import com.bihe0832.android.test.base.item.TestTipsData;
 import com.bihe0832.android.test.module.card.section.SectionDataContent;
 import com.bihe0832.android.test.module.card.section.SectionDataContent2;
@@ -25,10 +24,10 @@ import java.util.ArrayList;
 import static com.bihe0832.android.test.module.card.TestListActivityKt.ROUTRT_NAME_TEST_SECTION;
 
 
-public class TestSectionFragment extends BaseFragment {
+public class TestCustomSectionFragment extends BaseFragment {
     private static final String TAG = "TestSectionFragment-> ";
 
-    private TestSectionAdapter mRecycleAdapter;
+    private TestSectionAdapterForCustom mRecycleAdapter;
     private RecyclerView mRecycleView;
     private ArrayList<CardBaseModule> mDataList = new ArrayList<>();
 
@@ -49,7 +48,7 @@ public class TestSectionFragment extends BaseFragment {
 
     void initView(View mView) {
         mRecycleView = (RecyclerView) mView.findViewById(R.id.card_list);
-        mRecycleAdapter = new TestSectionAdapter(this.getContext(), mDataList);
+        mRecycleAdapter = new TestSectionAdapterForCustom(this.getContext(), mDataList);
         mRecycleView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
         mRecycleView.setAdapter(mRecycleAdapter);
         mRecycleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
