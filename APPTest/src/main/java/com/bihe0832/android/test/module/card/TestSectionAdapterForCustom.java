@@ -18,9 +18,9 @@ import java.util.List;
  * <p>
  * Description: Description
  */
-public class TestSectionAdapter extends CardBaseAdapter {
+public class TestSectionAdapterForCustom extends CardBaseAdapter {
 
-    public TestSectionAdapter(Context context, List data) {
+    public TestSectionAdapterForCustom(Context context, List data) {
         super(context, data);
         addItemToAdapter(TestTipsData.class, true);
         addItemToAdapter(SectionDataHeader.class, true);

@@ -2,6 +2,7 @@ package  com.bihe0832.android.framework.ui.list
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,14 @@ abstract class CommonListFragment : BaseFragment() {
     //提供数据交互的liveData
     abstract fun getDataLiveData(): CommonListLiveData
 
-    open fun getCardList(): List<Class<out CardBaseModule>> {
+    open fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf()
+    }
+
+    open fun getLayoutManagerForList(): RecyclerView.LayoutManager {
+        return SafeLinearLayoutManager(context).apply {
+            orientation = LinearLayoutManager.VERTICAL
+        }
     }
 
     private val mHeadView by lazy {
@@ -44,8 +51,11 @@ abstract class CommonListFragment : BaseFragment() {
     private val mAdapter: CardBaseAdapter by lazy {
         object : CardBaseAdapter(context, mutableListOf<CardBaseModule>()) {
             init {
-                getCardList()?.forEach {
-                    addItemToAdapter(it)
+                getCardList()?.forEach { item ->
+                    item.getmCardItemClass()?.let {
+                        addItemToAdapter(it, item.isHeader)
+                    }
+
                 }
             }
         }.apply {
@@ -69,12 +79,9 @@ abstract class CommonListFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val layoutManager = SafeLinearLayoutManager(context).apply {
-            orientation = LinearLayoutManager.VERTICAL
-        }
 
         common_fragment_list_info_list.apply {
-            this.layoutManager = layoutManager
+            this.layoutManager = getLayoutManagerForList()
             setHasFixedSize(true)
             adapter = mAdapter
             isFocusableInTouchMode = false

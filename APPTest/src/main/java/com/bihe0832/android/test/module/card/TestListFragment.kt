@@ -2,35 +2,38 @@ package com.bihe0832.android.test.module.card
 
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import com.bihe0832.android.app.router.APPFactoryRouter.openPageByRouter
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
-import com.bihe0832.android.framework.ui.list.CommonListActivity
+import com.bihe0832.android.framework.ui.list.CommonListFragment
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.test.base.item.TestTipsData
 import com.bihe0832.android.test.module.card.section.SectionDataContent
 import com.bihe0832.android.test.module.card.section.SectionDataContent2
 import com.bihe0832.android.test.module.card.section.SectionDataHeader
 import com.bihe0832.android.test.module.card.section.SectionDataHeader2
 
-const val ROUTRT_NAME_TEST_SECTION = "testlist"
-
-@Module(ROUTRT_NAME_TEST_SECTION)
-class TestListActivity : CommonListActivity() {
+class TestListFragment : CommonListFragment() {
     val mDataList = ArrayList<CardBaseModule>()
 
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
-        return GridLayoutManager(this, 4)
+        return GridLayoutManager(context, 3)
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
+            add(CardItemForCommonList(TestTipsData::class.java, true))
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
+            add(CardItemForCommonList(SectionDataHeader2::class.java, true))
         }
     }
+
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
             override fun fetchData() {
+                mDataList.add(
+                        TestTipsData("点击打开List 测试Activity") { openPageByRouter(ROUTRT_NAME_TEST_SECTION) }
+                )
                 mDataList.addAll(getTempData())
                 postValue(mDataList)
             }
@@ -77,7 +80,4 @@ class TestListActivity : CommonListActivity() {
         }
     }
 
-    override fun getTitleText(): String {
-        return "Section测试"
-    }
 }
