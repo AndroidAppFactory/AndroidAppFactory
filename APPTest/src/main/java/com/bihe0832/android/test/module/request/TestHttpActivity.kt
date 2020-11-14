@@ -1,6 +1,8 @@
 package com.bihe0832.android.test.module.request
 
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
@@ -11,17 +13,22 @@ import com.bihe0832.android.test.R
 import com.bihe0832.android.test.module.request.advanced.AdvancedGetRequest
 import com.bihe0832.android.test.module.request.advanced.AdvancedPostRequest
 import com.bihe0832.android.test.module.request.advanced.TestResponse
-import com.bihe0832.android.test.module.request.basic.BasicGetRequest
 import com.bihe0832.android.test.module.request.basic.BasicPostRequest
 import kotlinx.android.synthetic.main.activity_http_test.*
 
-const val ROUTRT_NAME_TEST_HTTP= "testhttp"
+const val ROUTRT_NAME_TEST_HTTP = "testhttp"
+
 @Module(ROUTRT_NAME_TEST_HTTP)
 class TestHttpActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_http_test)
+
+        if (Build.VERSION.SDK_INT > 9) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
+        }
+
         common_toolbar.setNavigationOnClickListener { onBackPressedSupport() }
         getBasic.setOnClickListener { sendGetBasicRequest() }
 
@@ -41,9 +48,13 @@ class TestHttpActivity : BaseActivity() {
     private fun sendGetBasicRequest() {
         var result = paraEditText.text?.toString()
         if (result?.length ?: 0 > 0) {
-            val handle = TestBasicResponseHandler()
-            val request = BasicGetRequest(result, handle)
-            HTTPServer.getInstance().doRequest(request)
+//            val handle = TestBasicResponseHandler()
+//            val request = BasicGetRequest(result, handle)
+//            HTTPServer.getInstance().doRequest(request)
+
+            HTTPServer.getInstance().doRequestAsync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result).let {
+                showResult("同步请求结果：$it")
+            }
         } else {
             showResult("请在输入框输入请求内容！")
         }
@@ -98,7 +109,7 @@ class TestHttpActivity : BaseActivity() {
     private fun sendPostAdvancedRequest() {
         var result = paraEditText.text?.toString()
 
-        if (result?.length?:0 > 0) {
+        if (result?.length ?: 0 > 0) {
 
             HTTPServer.getInstance().doRequest(object : HttpAdvancedRequest<TestResponse>() {
                 init {
@@ -108,6 +119,7 @@ class TestHttpActivity : BaseActivity() {
                         e.printStackTrace()
                     }
                 }
+
                 var res = object : AdvancedResponseHandler<TestResponse> {
                     override fun onRequestSuccess(response: TestResponse) {
                         showResult(response.toString())
