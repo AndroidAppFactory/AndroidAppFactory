@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -12,11 +13,11 @@ import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.zip.ZipUtils
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.item.TestItemData
-import com.bihe0832.android.test.base.item.TestTipsData
 import com.bihe0832.android.test.module.json.JsonTest
 import com.bihe0832.android.test.module.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.test.module.touch.TouchRegionActivity
 import java.io.File
+import java.lang.Exception
 
 class TestDebugTempFragment : BaseTestFragment() {
     val LOG_TAG = "TestDebugTempFragment"
@@ -44,7 +45,7 @@ class TestDebugTempFragment : BaseTestFragment() {
                 ToastUtil.showTop(context, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
             }))
             add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
-
+            add(TestItemData("配置管理测试", View.OnClickListener { testConfig() }))
         }
     }
 
@@ -117,6 +118,37 @@ class TestDebugTempFragment : BaseTestFragment() {
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
     }
 
+    private fun testConfig(){
+        try {
+            var startTime = System.currentTimeMillis()
+            for (i in 0 until 100){
+                Config.readConfig("test$i", "")
+            }
+            var duration = System.currentTimeMillis() - startTime
+            ZLog.d(LOG_TAG, "testConfig read 1000 cost:$duration")
+
+            startTime = System.currentTimeMillis()
+            for (i in 0 until 100){
+                Config.writeConfig("test$i", i.toString())
+            }
+            duration = System.currentTimeMillis() - startTime
+            ZLog.d(LOG_TAG, "testConfig write 1000 cost:$duration")
+
+            startTime = System.currentTimeMillis()
+            for (i in 0 until 100){
+                Config.readConfig("test$i", "")
+            }
+            duration = System.currentTimeMillis() - startTime
+            ZLog.d(LOG_TAG, "testConfig read 1000 cost:$duration")
+            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
+            Config.writeConfig("A","testconfig")
+            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
+            Config.writeConfig("A","testconfig")
+            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
 
     private fun testOneRequest() {
     }

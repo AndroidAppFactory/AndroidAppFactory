@@ -159,20 +159,20 @@ class ConfigManager {
             value = mConfigInfoInCache.get(key);
         }
         if (!TextUtils.isEmpty(value)) {
-            ZLog.w(TAG, "readConfig: key=" + key + ";use cache value:" + value);
+            ZLog.d(TAG, "readConfig: key=" + key + ";use cache value:" + value);
             return value;
         }
         value = readCloudConfig(key, defValue);
         if (TextUtils.isEmpty(value)) {
-            ZLog.w(TAG, "read local value");
+            ZLog.d(TAG, "read local value");
             value = readLocalConfig(key);
         }
-        ZLog.w(TAG, "read cloud value");
+        ZLog.d(TAG, "read cloud value");
         if (value == null || value.length() == 0) {
             value = defValue;
         }
         mConfigInfoInCache.put(key, value);
-        ZLog.w(TAG, "readConfig: key=" + key + ";value=" + value);
+        ZLog.d(TAG, "readConfig: key=" + key + ";value=" + value);
         return value;
     }
 
