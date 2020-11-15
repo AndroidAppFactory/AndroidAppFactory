@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.common.webview.BaseWebviewFragment;
 import com.bihe0832.android.lib.log.ZLog;
@@ -38,7 +39,9 @@ public class FeedbackActivity extends CommonActivity {
         if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
             mURL = Uri.decode(intent.getStringExtra(BaseWebviewFragment.INTENT_KEY_URL));
         } else {
-            ZLog.d("handle intent, but extra is bad");
+            ZLog.e("handle intent, but extra is bad");
+            ZixieContext.INSTANCE.showToast("请输入正确的反馈地址");
+            finish();
             return;
         }
     }
