@@ -1,13 +1,12 @@
 package com.bihe0832.android.test.module.card
 
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
-import com.bihe0832.android.framework.ui.list.CommonListActivity
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
+import com.bihe0832.android.framework.ui.list.easyrefresh.swiperefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.router.annotation.Module
-import com.bihe0832.android.test.base.item.TestTipsData
+import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
 import com.bihe0832.android.test.module.card.section.SectionDataContent
 import com.bihe0832.android.test.module.card.section.SectionDataContent2
 import com.bihe0832.android.test.module.card.section.SectionDataHeader
@@ -18,9 +17,9 @@ const val ROUTRT_NAME_TEST_SECTION = "testlist"
 @Module(ROUTRT_NAME_TEST_SECTION)
 class TestListActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
-
+    var num = 0
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
-        return GridLayoutManager(this, 4)
+        return SafeGridLayoutManager(this, 4)
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
@@ -28,6 +27,7 @@ class TestListActivity : CommonListActivity() {
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
         }
     }
+
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
             override fun fetchData() {
@@ -37,15 +37,17 @@ class TestListActivity : CommonListActivity() {
 
             override fun clearData() {
                 mDataList.clear()
+                num = 0
             }
 
             override fun loadMore() {
+                num ++
                 mDataList.addAll(getTempData())
                 postValue(mDataList)
             }
 
             override fun hasMore(): Boolean {
-                return true
+                return num < 5;
             }
 
             override fun canRefresh(): Boolean {

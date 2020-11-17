@@ -6,12 +6,12 @@
     android:orientation="vertical">
 
     <com.bihe0832.android.lib.ui.recycleview.ext.MyEasyRefreshLayout
-        android:id="@+id/common_fragment_list_refresh"
+        android:id="@+id/fragment_list_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/common_fragment_list_info_list"
+            android:id="@+id/fragment_list_info_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipChildren="false" />

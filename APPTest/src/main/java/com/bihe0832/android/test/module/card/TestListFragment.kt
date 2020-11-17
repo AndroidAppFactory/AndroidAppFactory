@@ -1,12 +1,12 @@
 package com.bihe0832.android.test.module.card
 
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.bihe0832.android.app.router.APPFactoryRouter.openPageByRouter
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
-import com.bihe0832.android.framework.ui.list.CommonListFragment
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
+import com.bihe0832.android.framework.ui.list.easyrefresh.swiperefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
 import com.bihe0832.android.test.base.item.TestTipsData
 import com.bihe0832.android.test.module.card.section.SectionDataContent
 import com.bihe0832.android.test.module.card.section.SectionDataContent2
@@ -17,7 +17,7 @@ class TestListFragment : CommonListFragment() {
     val mDataList = ArrayList<CardBaseModule>()
 
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
-        return GridLayoutManager(context, 3)
+        return SafeGridLayoutManager(context, 3)
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
@@ -48,7 +48,7 @@ class TestListFragment : CommonListFragment() {
             }
 
             override fun hasMore(): Boolean {
-                return true
+                return false
             }
 
             override fun canRefresh(): Boolean {

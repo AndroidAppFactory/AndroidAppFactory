@@ -6,11 +6,11 @@ import android.os.PersistableBundle
 import android.os.StrictMode
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.openWebPage
-import com.bihe0832.android.framework.ui.list.CommonListActivity
+import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.text.DebugTools
-import com.bihe0832.android.lib.text.InputDialogCompletedCallback
+import com.bihe0832.android.lib.debug.DebugTools
+import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.base.item.TestItemData
 

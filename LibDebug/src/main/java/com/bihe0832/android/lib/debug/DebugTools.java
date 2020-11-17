@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.text;
+package com.bihe0832.android.lib.debug;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import com.bihe0832.android.lib.debug.R;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
@@ -63,11 +62,23 @@ public class DebugTools {
         dialog.show();
     }
 
+    public static void showInfoWithHTML(final Context context, final String title, final String content, final String positiveText) {
+        showInfo(context, title, "", content, positiveText);
+    }
+
     public static void showInfo(final Context context, final String title, final String content, final String positiveText) {
+        showInfo(context, title, content, "", positiveText);
+    }
+
+    public static void showInfo(final Context context, final String title, final String content, final String htmlContent, final String positiveText) {
         final CommonDialog dialog = new CommonDialog(context);
+        if (!TextUtils.isEmpty(content)) {
+            dialog.setContent(content);
+        } else {
+            dialog.setHtmlContent(htmlContent);
+        }
         dialog.setTitle(title)
                 .setPositive(positiveText)
-                .setHtmlContent(content)
                 .setNegtive("复制到剪切板")
                 .setOnClickBottomListener(new OnDialogListener() {
                     @Override
@@ -99,7 +110,7 @@ public class DebugTools {
         dialog.show();
     }
 
-    private static void copyToClipboard(Context context, String content) {
+    public static void copyToClipboard(Context context, String content) {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             cm.setPrimaryClip(ClipData.newPlainText(null, content));
