@@ -4,13 +4,13 @@ import android.content.Intent
 import android.widget.TextView
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.openWebPage
-import com.bihe0832.android.framework.ui.list.CommonListFragment
+import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.debug.DebugTools
+import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.text.DebugTools
-import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.base.item.TestItemData
 

@@ -30,7 +30,4 @@ public class SectionHolderHeader2 extends CardBaseHolder {
         SectionDataHeader2 data = (SectionDataHeader2) item;
         mHeader.setText(data.mHeaderText);
     }
-
-
-
 }

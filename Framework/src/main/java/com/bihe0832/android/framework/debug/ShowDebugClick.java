@@ -5,7 +5,7 @@ import android.os.Build;
 import android.view.View;
 
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.text.DebugTools;
+import com.bihe0832.android.lib.debug.DebugTools;
 import com.bihe0832.android.framework.ZixieContext;
 
 /**

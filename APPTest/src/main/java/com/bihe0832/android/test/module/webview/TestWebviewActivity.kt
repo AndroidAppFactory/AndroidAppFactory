@@ -4,8 +4,8 @@ import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.router.annotation.Module
-import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.test.base.BaseTestActivity
 import com.bihe0832.android.test.base.item.TestItemData
 

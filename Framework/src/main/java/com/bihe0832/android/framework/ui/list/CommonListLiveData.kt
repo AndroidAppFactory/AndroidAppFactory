@@ -19,7 +19,7 @@ abstract class CommonListLiveData : MediatorLiveData<List<CardBaseModule>>() {
     abstract fun loadMore()
     //是否还有更多数据待加载
     abstract fun hasMore(): Boolean
-    //是否还有更多数据待加载
+    //是否支持下拉刷新
     abstract fun canRefresh(): Boolean
     //列表为空时返回数据
     abstract fun getEmptyText() : String

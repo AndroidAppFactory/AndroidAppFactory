@@ -2,7 +2,6 @@ package com.bihe0832.android.test.module
 
 import android.net.Uri
 import android.os.Build
-import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.RouterConstants
@@ -13,9 +12,7 @@ import com.bihe0832.android.framework.ZixieContext.getVersionCode
 import com.bihe0832.android.framework.ZixieContext.getVersionName
 import com.bihe0832.android.framework.ZixieContext.isDebug
 import com.bihe0832.android.framework.ZixieContext.isOfficial
-import com.bihe0832.android.framework.ZixieContext.showDebug
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.text.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.item.TestItemData
@@ -96,5 +93,4 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             builder.append("	versionCode: ${info.versionCode}\n")
         }
     }
-
 }

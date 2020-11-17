@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.text;
+package com.bihe0832.android.lib.debug;
 
 public interface InputDialogCallback {
     void onPositiveClick(String result);
