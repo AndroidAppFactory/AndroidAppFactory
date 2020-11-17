@@ -72,11 +72,15 @@ public class DebugTools {
 
     public static void showInfo(final Context context, final String title, final String content, final String htmlContent, final String positiveText) {
         final CommonDialog dialog = new CommonDialog(context);
+        String tempContent  = "";
         if (!TextUtils.isEmpty(content)) {
             dialog.setContent(content);
+            tempContent = content;
         } else {
             dialog.setHtmlContent(htmlContent);
+            tempContent = htmlContent;
         }
+        final String finalContent = tempContent;
         dialog.setTitle(title)
                 .setPositive(positiveText)
                 .setNegtive("复制到剪切板")
@@ -84,7 +88,7 @@ public class DebugTools {
                     @Override
                     public void onPositiveClick() {
                         try {
-                            sendInfo(context, title, content);
+                            sendInfo(context, title, finalContent);
                             dialog.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -94,7 +98,7 @@ public class DebugTools {
                     @Override
                     public void onNegtiveClick() {
                         try {
-                            copyToClipboard(context, content);
+                            copyToClipboard(context, finalContent);
                             dialog.dismiss();
 
                         } catch (Exception e) {
