@@ -102,8 +102,8 @@ class ObbFileInstall {
             }
 
             File obbFolder = OBBFormats.getObbDir(packageName);
-            File targetFolder = new File(FileUtils.INSTANCE.getZixieFilePath(context) + "/" + packageName);
-            if (!targetFolder.exists() && !targetFolder.mkdirs()) {
+            File targetAPKFolder = new File(FileUtils.INSTANCE.getZixieFilePath(context) + "/" + packageName);
+            if (!targetAPKFolder.exists() && !targetAPKFolder.mkdirs()) {
                 listener.onInstallFailed(UNZIP_FAILED);
                 return;
             }
@@ -114,22 +114,22 @@ class ObbFileInstall {
                         listener.onInstallFailed(UNZIP_FAILED);
                         return;
                     }
-                    File targetObbFile = new File(obbFolder.getAbsolutePath() + "/" + fileName);
-                    targetObbFile.deleteOnExit();
-                    ZLog.d(TAG + " installObbAPKByZip unCompress obb start");
+                    File newTargetObbFile = new File(obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(fileName));
+                    newTargetObbFile.deleteOnExit();
+                    ZLog.d(TAG + " installObbAPKByZip unCompress to " + newTargetObbFile.getAbsolutePath() + " obb start");
                     listener.onUnCompress();
-                    ZipUtils.unCompress(zipFile, fileName, obbFolder.getAbsolutePath());
+                    ZipUtils.unCompressWithOutPath(zipFile, fileName, obbFolder.getAbsolutePath());
                     ZLog.d(TAG + " installObbAPKByZip unCompress obb finish");
-                    if (!FileUtils.INSTANCE.checkFileExist(targetObbFile.getAbsolutePath())) {
+                    if (!FileUtils.INSTANCE.checkFileExist(newTargetObbFile.getAbsolutePath())) {
                         listener.onInstallFailed(UNZIP_FAILED);
                         return;
                     }
                 } else if (InstallUtils.isApkFile(fileName)) {
                     ZLog.d(TAG + " installObbAPKByZip unCompress apk start");
                     listener.onUnCompress();
-                    ZipUtils.unCompress(zipFile, fileName, targetFolder.getAbsolutePath());
+                    ZipUtils.unCompress(zipFile, fileName, targetAPKFolder.getAbsolutePath());
                     ZLog.d(TAG + " installObbAPKByZip unCompress apk finish");
-                    dstApkFilePath = targetFolder.getAbsolutePath() + "/" + fileName;
+                    dstApkFilePath = targetAPKFolder.getAbsolutePath() + "/" + fileName;
                 }
             }
             listener.onInstallStart();

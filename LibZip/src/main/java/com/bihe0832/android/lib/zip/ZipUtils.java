@@ -2,6 +2,8 @@ package com.bihe0832.android.lib.zip;
 
 import android.text.TextUtils;
 
+import com.bihe0832.android.lib.file.FileUtils;
+
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
 import net.lingala.zip4j.model.ZipParameters;
@@ -33,12 +35,12 @@ public class ZipUtils {
         zip(srcPathName, targetFilePath);
     }
 
-    public static void zip(String srcPathName, String targetFilePath) {
-        zip(srcPathName, targetFilePath, "");
-    }
-
     public static void compress(List<String> paths, String fileName) {
         zip(paths, fileName);
+    }
+
+    public static void zip(String srcPathName, String targetFilePath) {
+        zip(srcPathName, targetFilePath, "");
     }
 
     public static void zip(List<String> paths, String fileName) {
@@ -69,6 +71,14 @@ public class ZipUtils {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static boolean unCompressWithOutPath(String zipFileName, String sourceFileName, String dstFolder) {
+        return unzipFileWithOutPath(zipFileName, sourceFileName, dstFolder);
+    }
+
+    public static boolean unzipFileWithOutPath(String zipFileName, String sourceFileName, String dstFolder) {
+        return unzipFile(zipFileName, sourceFileName, dstFolder, FileUtils.INSTANCE.getFileName(sourceFileName), null);
     }
 
     public static List<String> getFileList(String zipFileName) {
@@ -170,8 +180,12 @@ public class ZipUtils {
         }
     }
 
-    private static boolean unzipFile(String zipFileName, String fileName, String dstFile, char[] password) {
-        if (TextUtils.isEmpty(zipFileName) || TextUtils.isEmpty(dstFile)) {
+    private static boolean unzipFile(String zipFileName, String sourceFileName, String dstFolder, char[] password) {
+        return unzipFile(zipFileName, sourceFileName, dstFolder, null, password);
+    }
+
+    private static boolean unzipFile(String zipFileName, String sourceFileName, String dstFolder, String destFileName, char[] password) {
+        if (TextUtils.isEmpty(zipFileName) || TextUtils.isEmpty(sourceFileName) || TextUtils.isEmpty(dstFolder)) {
             return false;
         }
         try {
@@ -181,8 +195,8 @@ public class ZipUtils {
             }
             zipFile.setRunInThread(false);
             for (Object header : zipFile.getFileHeaders()) {
-                if (header instanceof FileHeader && ((FileHeader) header).getFileName().equalsIgnoreCase(fileName)) {
-                    zipFile.extractFile((FileHeader) header, dstFile);
+                if (header instanceof FileHeader && ((FileHeader) header).getFileName().equalsIgnoreCase(sourceFileName)) {
+                    zipFile.extractFile((FileHeader) header, dstFolder, null, destFileName);
                     return true;
                 }
             }

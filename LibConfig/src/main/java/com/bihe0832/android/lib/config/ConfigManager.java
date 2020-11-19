@@ -141,16 +141,16 @@ class ConfigManager {
     }
 
     // 从云端推送保存到本地SharedPreferences的config，云端配置读取不使用默认值
-    private String readCloudConfig(String key, String defValue) {
+    private String readCloudConfig(String key) {
         try {
-            if (null != mMMKVInstance) {
-                return mMMKVInstance.decodeString(key, defValue);
+            if (null != mMMKVInstance && mMMKVInstance.containsKey(key)) {
+                return mMMKVInstance.decodeString(key, "");
             }
         } catch (Exception e) {
             e.printStackTrace();
             ZLog.d(TAG, "readCloudConfig failed");
         }
-        return defValue;
+        return "";
     }
 
     protected String readConfig(String key, String defValue) {
@@ -162,7 +162,7 @@ class ConfigManager {
             ZLog.d(TAG, "readConfig: key=" + key + ";use cache value:" + value);
             return value;
         }
-        value = readCloudConfig(key, defValue);
+        value = readCloudConfig(key);
         if (TextUtils.isEmpty(value)) {
             ZLog.d(TAG, "read local value");
             value = readLocalConfig(key);
