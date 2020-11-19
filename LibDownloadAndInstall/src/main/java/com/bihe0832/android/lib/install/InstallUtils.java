@@ -57,6 +57,10 @@ public class InstallUtils {
         return filename.endsWith(APK_FILE_SUFFIX);
     }
 
+    public static void uninstallAPP(final Context context, final String packageName) {
+        APKInstall.unInstallAPK(context, packageName);
+    }
+
     public static void installAPP(Context context, Uri fileProvider, File file) {
         APKInstall.realInstallAPK(context, fileProvider, file, null);
     }
