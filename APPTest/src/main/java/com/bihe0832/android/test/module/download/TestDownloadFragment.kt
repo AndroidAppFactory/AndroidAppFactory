@@ -22,6 +22,7 @@ class TestDownloadFragment : BaseTestFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(TestItemData("卸载应用", View.OnClickListener { InstallUtils.uninstallAPP(context,"com.google.android.tts")}))
             add(TestItemData("自定义Provider安装", View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) }))
             add(TestItemData("默认Provider安装", View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) }))
             add(TestItemData("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))

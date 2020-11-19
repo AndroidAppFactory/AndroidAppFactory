@@ -57,19 +57,31 @@ class APKInstall {
                     Log.e("InstallUtils", "app don't hava install permission");
                 }
                 context.startActivity(intent);
-                if(null != listener){
+                if (null != listener) {
                     listener.onInstallStart();
                 }
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-                if(null != listener){
+                if (null != listener) {
                     listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
                 }
             }
         } else {
-            if(null != listener){
+            if (null != listener) {
                 listener.onInstallFailed(FILE_NOT_FOUND);
             }
+        }
+    }
+
+    static void unInstallAPK(Context context, String packageName) {
+
+        try {
+            Intent intent = new Intent(Intent.ACTION_DELETE);
+            intent.setData(Uri.parse("package:" + packageName));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
