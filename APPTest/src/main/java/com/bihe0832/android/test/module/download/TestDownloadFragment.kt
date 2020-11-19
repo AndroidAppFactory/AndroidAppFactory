@@ -89,25 +89,25 @@ class TestDownloadFragment : BaseTestFragment() {
     }
 
     private fun testInstallOOBByZip() {
-        testInstallOOB("/sdcard/Download/jp.co.sumzap.pj0007.zip")
+        testInstallOOB("/sdcard/Download/jp.co.sumzap.pj0007.zip","jp.co.sumzap.pj0007")
     }
 
     private fun testInstallOOBByBigZip() {
-        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip")
+        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip","com.herogame.gplay.lastdayrulessurvival")
     }
 
     private fun testInstallOOBByFolder() {
-        testInstallOOB(FileUtils.getZixieFilePath(context!!) + "/test/")
+        testInstallOOB(FileUtils.getZixieFilePath(context!!) + "/test/","jp.co.sumzap.pj0007")
     }
 
     private fun testInstallBigOOBByFolder() {
-        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927")
+        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927","com.herogame.gplay.lastdayrulessurvival")
     }
 
 
-    private fun testInstallOOB(filePath: String) {
+    private fun testInstallOOB(filePath: String,packangeName: String) {
         ZLog.d("testInstallOOB")
-        InstallUtils.installAPP(context, filePath, "jp.co.sumzap.pj0007", object : InstallListener {
+        InstallUtils.installAPP(context, filePath, packangeName, object : InstallListener {
             override fun onUnCompress() {
                 ZLog.d(LOG_TAG, "onUnCompress")
             }
