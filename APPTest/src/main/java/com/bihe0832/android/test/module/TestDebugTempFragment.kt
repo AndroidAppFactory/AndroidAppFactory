@@ -17,7 +17,6 @@ import com.bihe0832.android.test.module.json.JsonTest
 import com.bihe0832.android.test.module.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.test.module.touch.TouchRegionActivity
 import java.io.File
-import java.lang.Exception
 
 class TestDebugTempFragment : BaseTestFragment() {
     val LOG_TAG = "TestDebugTempFragment"
@@ -120,31 +119,37 @@ class TestDebugTempFragment : BaseTestFragment() {
 
     private fun testConfig(){
         try {
-            var startTime = System.currentTimeMillis()
-            for (i in 0 until 100){
-                Config.readConfig("test$i", "")
-            }
-            var duration = System.currentTimeMillis() - startTime
-            ZLog.d(LOG_TAG, "testConfig read 1000 cost:$duration")
-
-            startTime = System.currentTimeMillis()
-            for (i in 0 until 100){
-                Config.writeConfig("test$i", i.toString())
-            }
-            duration = System.currentTimeMillis() - startTime
-            ZLog.d(LOG_TAG, "testConfig write 1000 cost:$duration")
-
-            startTime = System.currentTimeMillis()
-            for (i in 0 until 100){
-                Config.readConfig("test$i", "")
-            }
-            duration = System.currentTimeMillis() - startTime
-            ZLog.d(LOG_TAG, "testConfig read 1000 cost:$duration")
-            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
-            Config.writeConfig("A","testconfig")
-            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
-            Config.writeConfig("A","testconfig")
-            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
+//            var startTime = System.currentTimeMillis()
+//            for (i in 0 until 100){
+//                Config.readConfig("test$i", "")
+//            }
+//            var duration = System.currentTimeMillis() - startTime
+//            ZLog.d(LOG_TAG, "testConfig read 1000 cost:$duration")
+//
+//            startTime = System.currentTimeMillis()
+//            for (i in 0 until 100){
+//                Config.writeConfig("test$i", i.toString())
+//            }
+//            duration = System.currentTimeMillis() - startTime
+//            ZLog.d(LOG_TAG, "testConfig write 1000 cost:$duration")
+//
+//            startTime = System.currentTimeMillis()
+//            for (i in 0 until 100){
+//                Config.readConfig("test$i", "")
+//            }
+//            duration = System.currentTimeMillis() - startTime
+//            ZLog.d(LOG_TAG, "testConfig read 1000 cost:$duration")
+//            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
+//            Config.writeConfig("A","testconfig")
+//            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
+//            Config.writeConfig("A","testconfig")
+//            ZLog.d(LOG_TAG, "readConfig A::${Config.readConfig("A","")}")
+            var key = "aaa"
+            ZLog.d(LOG_TAG, "readConfig A::${Config.isSwitchEnabled(key, false)}")
+            Config.writeConfig(key, true)
+            ZLog.d(LOG_TAG, "readConfig A::${Config.isSwitchEnabled(key, false)}")
+            Config.writeConfig(key, false)
+            ZLog.d(LOG_TAG, "readConfig A::${Config.isSwitchEnabled(key, false)}")
         }catch (e:Exception){
             e.printStackTrace()
         }
