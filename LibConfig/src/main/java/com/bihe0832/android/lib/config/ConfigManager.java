@@ -150,7 +150,7 @@ class ConfigManager {
             e.printStackTrace();
             ZLog.d(TAG, "readCloudConfig failed");
         }
-        return "";
+        return null;
     }
 
     protected String readConfig(String key, String defValue) {
@@ -158,17 +158,17 @@ class ConfigManager {
         if (mConfigInfoInCache.containsKey(key)) {
             value = mConfigInfoInCache.get(key);
         }
-        if (!TextUtils.isEmpty(value)) {
+        if (value != null) {
             ZLog.d(TAG, "readConfig: key=" + key + ";use cache value:" + value);
             return value;
         }
         value = readCloudConfig(key);
-        if (TextUtils.isEmpty(value)) {
+        if (value == null) {
             ZLog.d(TAG, "read local value");
             value = readLocalConfig(key);
         }
         ZLog.d(TAG, "read cloud value");
-        if (value == null || value.length() == 0) {
+        if (value == null) {
             value = defValue;
         }
         mConfigInfoInCache.put(key, value);
