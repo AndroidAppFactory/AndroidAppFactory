@@ -122,7 +122,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
                         "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownloadAndInstall",
-                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibDebug", "LibOS", "LibZip"
+                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibDebug", "LibOS", "LibZip", "LibLifecycle"
                 ]
         ],
         "RouterAnnotation"          : [
