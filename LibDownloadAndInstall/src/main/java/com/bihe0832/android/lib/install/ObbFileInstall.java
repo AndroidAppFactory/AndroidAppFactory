@@ -127,9 +127,9 @@ class ObbFileInstall {
                 } else if (InstallUtils.isApkFile(fileName)) {
                     ZLog.d(TAG + " installObbAPKByZip unCompress apk start");
                     listener.onUnCompress();
-                    ZipUtils.unCompress(zipFile, fileName, targetAPKFolder.getAbsolutePath());
+                    ZipUtils.unCompressWithOutPath(zipFile, fileName, targetAPKFolder.getAbsolutePath());
                     ZLog.d(TAG + " installObbAPKByZip unCompress apk finish");
-                    dstApkFilePath = targetAPKFolder.getAbsolutePath() + "/" + fileName;
+                    dstApkFilePath = targetAPKFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(fileName);
                 }
             }
             listener.onInstallStart();
