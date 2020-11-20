@@ -3,7 +3,7 @@ package com.bihe0832.android.test.module.card
 import android.support.v7.widget.RecyclerView
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.easyrefresh.swiperefresh.CommonListActivity
+import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager

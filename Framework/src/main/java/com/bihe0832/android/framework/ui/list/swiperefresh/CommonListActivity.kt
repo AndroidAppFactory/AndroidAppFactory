@@ -1,10 +1,9 @@
-package  com.bihe0832.android.framework.ui.list.easyrefresh.swiperefresh
+package  com.bihe0832.android.framework.ui.list.swiperefresh
 
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
 import com.bihe0832.android.framework.R
-import com.bihe0832.android.framework.ui.list.BaseListFragment
+import com.bihe0832.android.framework.ui.list.BaseListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 /**
@@ -12,43 +11,46 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
  * Created on 2019-09-12.
  * Description: 一款通用的包含一个recycleView的列表页，目前支持：下拉刷新、加载更多、添加header、列表为空展示空页面等
  */
-abstract class CommonListFragment : BaseListFragment() {
+abstract class CommonListActivity : BaseListActivity() {
 
-    private var mRefresh: SwipeRefreshLayout? = null
-
+    //提供数据交互的liveData
 
     override fun getResID(): Int {
-        return R.layout.common_fragment_list_swipe
+        return R.layout.common_activity_list_swipe
     }
 
-    override fun initView(view: View) {
-        super.initView(view)
-        mRefresh = view.findViewById(R.id.fragment_list_refresh)
+    private var mRefresh: SwipeRefreshLayout? = null
+    override fun initView() {
+        super.initView()
         if (mDataLiveData.canRefresh()) {
+            mRefresh = findViewById(R.id.activity_list_refresh)
             mRefresh?.setOnRefreshListener {
                 mDataLiveData.clearData()
                 mDataLiveData.fetchData()
             }
         }
-
         mRefresh?.setOnChildScrollUpCallback { _, _ ->
-            var headerNum = mAdapter.headerLayoutCount
-            (mRecyclerView?.childCount ?: 0 > 0
-                    && ((mRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > headerNum || mRecyclerView?.getChildAt(0)
-                    ?.top ?: 0 < mRecyclerView?.paddingTop ?: 0))
+            if(mDataLiveData.canRefresh()){
+                var headerNum = mAdapter.headerLayoutCount
+                (mRecyclerView?.childCount ?: 0 > 0
+                        && ((mRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > headerNum || mRecyclerView?.getChildAt(0)
+                        ?.top ?: 0 < mRecyclerView?.paddingTop ?: 0))
+            }else{
+                true
+            }
         }
         mDataLiveData.fetchData()
 
         mAdapter.setOnLoadMoreListener({
             mDataLiveData.loadMore()
-        }, mRecyclerView)
+        },mRecyclerView)
     }
 
     override fun updateData(data: List<CardBaseModule>) {
         super.updateData(data)
+        mAdapter.setEnableLoadMore(mDataLiveData.hasMore())
         mRefresh?.isRefreshing = false
         mAdapter.loadMoreComplete()
-        mAdapter.setEnableLoadMore(mDataLiveData.hasMore())
     }
 
     fun loadDataFinished() {
