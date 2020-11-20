@@ -32,6 +32,7 @@ open class BaseTestFragment : CommonListFragment() {
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
             override fun fetchData() {
+                mDataList.addAll(getDataList())
                 postValue(mDataList)
             }
 

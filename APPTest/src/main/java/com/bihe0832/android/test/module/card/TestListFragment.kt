@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import com.bihe0832.android.app.router.APPFactoryRouter.openPageByRouter
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.easyrefresh.swiperefresh.CommonListFragment
+import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
 import com.bihe0832.android.test.base.item.TestTipsData
