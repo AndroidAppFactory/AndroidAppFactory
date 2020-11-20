@@ -45,7 +45,7 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 	直接在项目依赖中添加对应库的依赖：
 	
 		dependencies {
-		    api 'com.bihe0832.android:lib-wrapper:1.0.3'
+		    api 'com.bihe0832.android:lib-wrapper:+'
 		}
 
 关于组件使用更详细的内容点击链接 [https://android.bihe0832.com/#!start.md](https://android.bihe0832.com/#!start.md) 了解
