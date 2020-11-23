@@ -27,7 +27,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.2.37"
+ext.moduleVersionName = "3.2.38"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -76,7 +76,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"            : "3.2.36",
+                "version"            : "3.2.37",
                 "artifactId"         : "common-feedback",
                 "apidependenciesList": [
                         "CommonWebview"
