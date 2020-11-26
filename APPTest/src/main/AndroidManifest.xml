@@ -33,6 +33,14 @@
         </activity>
 
         <activity
+            android:name="com.bihe0832.android.app.about.AboutActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/activityTheme">
+
+        </activity>
+
+        <activity
             android:name=".module.request.TestHttpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"

@@ -24,7 +24,6 @@ open class BaseTestFragment : CommonListFragment() {
 
     val mDataList by lazy {
         ArrayList<CardBaseModule>().apply {
-            addAll(getDataList())
         }
     }
 

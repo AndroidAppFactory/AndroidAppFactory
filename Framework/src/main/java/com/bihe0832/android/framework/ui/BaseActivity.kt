@@ -23,15 +23,6 @@ open class BaseActivity : SupportActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        for (fragment in supportFragmentManager.fragments) {
-            if (fragment.isAdded) {
-                fragment.userVisibleHint = true
-            }
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         for (fragment in supportFragmentManager.fragments) {

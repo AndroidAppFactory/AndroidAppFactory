@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_settings_bg">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/settings_drivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/settings_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/settings_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/settings_title" />
+
+        <TextView
+            android:id="@+id/settings_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/settings_tips"
+            app:layout_constraintStart_toEndOf="@+id/settings_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/settings_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#0EFFFF"
+            android:textSize="14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/settings_title"
+            app:layout_constraintEnd_toStartOf="@+id/settings_is_new"
+            app:layout_constraintTop_toTopOf="@+id/settings_title"
+            tools:text="前往" />
+
+        <ImageView
+            android:id="@+id/settings_is_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/read_dot"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/settings_title"
+            app:layout_constraintEnd_toStartOf="@+id/settings_go"
+            app:layout_constraintTop_toTopOf="@+id/settings_title" />
+
+        <ImageView
+            android:id="@+id/settings_go"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_right_go"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/settings_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/settings_title" />
+    </android.support.constraint.ConstraintLayout>
+
+
+    <View
+        android:id="@+id/settings_drivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>
