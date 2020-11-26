@@ -2,6 +2,7 @@ package com.bihe0832.android.test.module
 
 import android.view.View
 import android.widget.Toast
+import com.bihe0832.android.app.about.AboutActivity
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
@@ -27,6 +28,9 @@ class TestDebugTempFragment : BaseTestFragment() {
             add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
 
+            add(TestItemData("默认关于页", View.OnClickListener { startActivity(AboutActivity::class.java) }))
+
+
             add(TestItemData("点击区扩大Demo", View.OnClickListener {
                 startActivity(TouchRegionActivity::class.java)
             }))
@@ -45,6 +49,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             }))
             add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(TestItemData("配置管理测试", View.OnClickListener { testConfig() }))
+
         }
     }
 
@@ -117,7 +122,7 @@ class TestDebugTempFragment : BaseTestFragment() {
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
     }
 
-    private fun testConfig(){
+    private fun testConfig() {
         try {
 //            var startTime = System.currentTimeMillis()
 //            for (i in 0 until 100){
@@ -150,7 +155,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             ZLog.d(LOG_TAG, "readConfig A::${Config.isSwitchEnabled(key, false)}")
             Config.writeConfig(key, false)
             ZLog.d(LOG_TAG, "readConfig A::${Config.isSwitchEnabled(key, false)}")
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
