@@ -19,10 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.R;
 
@@ -31,6 +29,7 @@ import me.yokeyword.fragmentation.R;
  */
 
 public class DebugStackDelegate implements SensorEventListener {
+
     private FragmentActivity mActivity;
     private SensorManager mSensorManager;
     private AlertDialog mStackDialog;
@@ -40,7 +39,9 @@ public class DebugStackDelegate implements SensorEventListener {
     }
 
     public void onCreate(int mode) {
-        if (mode != Fragmentation.SHAKE) return;
+        if (mode != Fragmentation.SHAKE) {
+            return;
+        }
         mSensorManager = (SensorManager) mActivity.getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
@@ -48,15 +49,19 @@ public class DebugStackDelegate implements SensorEventListener {
     }
 
     public void onPostCreate(int mode) {
-        if (mode != Fragmentation.BUBBLE) return;
+        if (mode != Fragmentation.BUBBLE) {
+            return;
+        }
         View root = mActivity.findViewById(android.R.id.content);
         if (root instanceof FrameLayout) {
             FrameLayout content = (FrameLayout) root;
             final ImageView stackView = new ImageView(mActivity);
             stackView.setImageResource(R.drawable.fragmentation_ic_stack);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.END;
-            final int dp18 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, mActivity.getResources().getDisplayMetrics());
+            final int dp18 = (int) TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, mActivity.getResources().getDisplayMetrics());
             params.topMargin = dp18 * 7;
             params.rightMargin = dp18;
             stackView.setLayoutParams(params);
@@ -97,11 +102,16 @@ public class DebugStackDelegate implements SensorEventListener {
      * 调试相关:以dialog形式 显示 栈视图
      */
     public void showFragmentStackHierarchyView() {
-        if(!Fragmentation.getDefault().isDebug())return;
-        if (mStackDialog != null && mStackDialog.isShowing()) return;
+        if (!Fragmentation.getDefault().isDebug()) {
+            return;
+        }
+        if (mStackDialog != null && mStackDialog.isShowing()) {
+            return;
+        }
         DebugHierarchyViewContainer container = new DebugHierarchyViewContainer(mActivity);
         container.bindFragmentRecords(getFragmentRecords());
-        container.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        container.setLayoutParams(
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mStackDialog = new AlertDialog.Builder(mActivity)
                 .setView(container)
                 .setPositiveButton("关闭", null)
@@ -115,7 +125,9 @@ public class DebugStackDelegate implements SensorEventListener {
      */
     public void logFragmentRecords(String tag) {
         List<DebugFragmentRecord> fragmentRecordList = getFragmentRecords();
-        if (fragmentRecordList == null) return;
+        if (fragmentRecordList == null) {
+            return;
+        }
 
         StringBuilder sb = new StringBuilder();
 
@@ -149,7 +161,9 @@ public class DebugStackDelegate implements SensorEventListener {
 
         List<Fragment> fragmentList = FragmentationHack.getActiveFragments(mActivity.getSupportFragmentManager());
 
-        if (fragmentList == null || fragmentList.size() < 1) return null;
+        if (fragmentList == null || fragmentList.size() < 1) {
+            return null;
+        }
 
         for (Fragment fragment : fragmentList) {
             addDebugFragmentRecord(fragmentRecordList, fragment);
@@ -158,7 +172,9 @@ public class DebugStackDelegate implements SensorEventListener {
     }
 
     private void processChildLog(List<DebugFragmentRecord> fragmentRecordList, StringBuilder sb, int childHierarchy) {
-        if (fragmentRecordList == null || fragmentRecordList.size() == 0) return;
+        if (fragmentRecordList == null || fragmentRecordList.size() == 0) {
+            return;
+        }
 
         for (int j = 0; j < fragmentRecordList.size(); j++) {
             DebugFragmentRecord childFragmentRecord = fragmentRecordList.get(j);
@@ -183,7 +199,9 @@ public class DebugStackDelegate implements SensorEventListener {
         List<DebugFragmentRecord> fragmentRecords = new ArrayList<>();
 
         List<Fragment> fragmentList = FragmentationHack.getActiveFragments(parentFragment.getChildFragmentManager());
-        if (fragmentList == null || fragmentList.size() < 1) return null;
+        if (fragmentList == null || fragmentList.size() < 1) {
+            return null;
+        }
 
         for (int i = fragmentList.size() - 1; i >= 0; i--) {
             Fragment fragment = fragmentList.get(i);
@@ -220,6 +238,7 @@ public class DebugStackDelegate implements SensorEventListener {
     }
 
     private class StackViewTouchListener implements View.OnTouchListener {
+
         private View stackView;
         private float dX, dY = 0f;
         private float downX, downY = 0f;
@@ -244,7 +263,8 @@ public class DebugStackDelegate implements SensorEventListener {
                     dY = stackView.getY() - event.getRawY();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (Math.abs(X - downX) < clickLimitValue && Math.abs(Y - downY) < clickLimitValue && isClickState) {
+                    if (Math.abs(X - downX) < clickLimitValue && Math.abs(Y - downY) < clickLimitValue
+                            && isClickState) {
                         isClickState = true;
                     } else {
                         isClickState = false;

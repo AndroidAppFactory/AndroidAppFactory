@@ -52,6 +52,7 @@ public class DebugHierarchyViewContainer extends ScrollView {
         mLinearLayout = new LinearLayout(context);
         mLinearLayout.setOrientation(LinearLayout.VERTICAL);
         hScrollView.addView(mLinearLayout);
+        hScrollView.setBackgroundColor(Color.BLACK);
         addView(hScrollView);
 
         mItemHeight = dip2px(50);
@@ -86,6 +87,7 @@ public class DebugHierarchyViewContainer extends ScrollView {
         title.setText("栈视图(Stack)");
         title.setTextSize(20);
         title.setTextColor(Color.WHITE);
+
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         p.gravity = Gravity.CENTER_VERTICAL;
         title.setLayoutParams(p);
@@ -174,7 +176,7 @@ public class DebugHierarchyViewContainer extends ScrollView {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mItemHeight);
         tvItem.setLayoutParams(params);
         if (hierarchy == 0) {
-            tvItem.setTextColor(Color.parseColor("#333333"));
+            tvItem.setTextColor(Color.YELLOW);
             tvItem.setTextSize(16);
         }
         tvItem.setGravity(Gravity.CENTER_VERTICAL);
