@@ -2,24 +2,19 @@ package com.bihe0832.android.app.about;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.format.DateUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bihe0832.android.app.R;
+import com.bihe0832.android.app.update.UpdateManager;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.debug.ShowDebugClick;
 import com.bihe0832.android.framework.ui.BaseActivity;
-import com.bihe0832.android.lib.utils.DateUtil;
-
 import java.util.Calendar;
-import java.util.Date;
 
 public class AboutActivity extends BaseActivity {
 
     protected Class getAboutItemClass() {
         return AboutFragment.class;
-
     }
 
     protected AboutFragment getItemFragment() {
@@ -37,6 +32,8 @@ public class AboutActivity extends BaseActivity {
         if (findFragment(getAboutItemClass()) == null) {
             loadRootFragment(R.id.about_fragment_content, getItemFragment());
         }
+
+        UpdateManager.INSTANCE.checkUpdateAndShowDialog(this, false);
     }
 
     private void initView() {
@@ -47,7 +44,7 @@ public class AboutActivity extends BaseActivity {
         mAppIconImg.setOnClickListener(new ShowDebugClick());
 
         TextView mRight = (TextView) findViewById(R.id.about_copyright);
-        mRight.setText("Copyright 2019-"+ Calendar.getInstance().get(Calendar.YEAR) +" ZIXIE.All Rights Reserved");
+        mRight.setText("Copyright 2019-" + Calendar.getInstance().get(Calendar.YEAR) + " ZIXIE.All Rights Reserved");
     }
 
 }

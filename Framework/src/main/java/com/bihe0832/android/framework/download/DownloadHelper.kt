@@ -43,7 +43,7 @@ object DownloadHelper {
                 }
 
                 override fun onCloseClick() {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onNegtiveClick() {

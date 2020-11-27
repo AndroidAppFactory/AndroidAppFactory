@@ -3,6 +3,7 @@ package com.bihe0832.android.app
 import android.content.Context
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.app.router.APPFactoryRouter
+import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.common.network.NetworkChangeManager
 
 /**

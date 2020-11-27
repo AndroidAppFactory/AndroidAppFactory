@@ -14,9 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
-
 import java.text.NumberFormat;
 
 
@@ -41,7 +39,7 @@ public class DownloadProgressDialog extends Dialog {
     private int mCurrentSize;
 
     private boolean shouldCanceledOutside = false;
-    private boolean shouldCanceled  = true;
+    private boolean shouldCanceled = true;
     private NumberFormat mProgressPercentFormat = NumberFormat.getPercentInstance();
 
     private int maxLine = -1;
@@ -144,7 +142,7 @@ public class DownloadProgressDialog extends Dialog {
             }
         }
 
-        if(null != mProgressNumber){
+        if (null != mProgressNumber) {
             if (mAPKSize < 1) {
                 mProgressNumber.setVisibility(View.GONE);
             } else {
@@ -155,7 +153,7 @@ public class DownloadProgressDialog extends Dialog {
             }
         }
 
-        if(null != mProgressPercent){
+        if (null != mProgressPercent) {
             if (mAPKSize < 1) {
                 mProgressPercent.setVisibility(View.GONE);
             } else {
@@ -171,9 +169,14 @@ public class DownloadProgressDialog extends Dialog {
                 }
             }
         }
-        if(null != mProgress){
-            mProgress.setMax(mAPKSize);
-            mProgress.setProgress(mCurrentSize);
+        if (null != mProgress) {
+            if (mAPKSize < 1) {
+                mProgress.setVisibility(View.INVISIBLE);
+            } else {
+                mProgress.setVisibility(View.VISIBLE);
+                mProgress.setMax(mAPKSize);
+                mProgress.setProgress(mCurrentSize);
+            }
         }
 
         //如果设置按钮的文字
@@ -190,7 +193,7 @@ public class DownloadProgressDialog extends Dialog {
                 mNegativeButton.setText(mNegativeButtonString);
                 mNegativeButton.setVisibility(View.VISIBLE);
                 mButtonLine.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 mNegativeButton.setVisibility(View.GONE);
                 mButtonLine.setVisibility(View.GONE);
             }
@@ -216,7 +219,6 @@ public class DownloadProgressDialog extends Dialog {
         mNegativeButton = (Button) findViewById(R.id.update_progress_positive);
         mButtonLine = findViewById(R.id.update_progress_column_line);
     }
-
 
 
     public DownloadProgressDialog setOnClickListener(OnDialogListener bottomListener) {

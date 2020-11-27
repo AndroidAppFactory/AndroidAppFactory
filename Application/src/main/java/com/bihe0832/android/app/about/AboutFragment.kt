@@ -8,6 +8,7 @@ import com.bihe0832.android.app.R
 import com.bihe0832.android.app.card.SettingsData
 import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
@@ -21,6 +22,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
 
+/**
+ * 如果有更新，第一个Item一定要是更新，否则会导致UI显示异常
+ */
 open class AboutFragment : CommonListFragment() {
 
 
@@ -95,7 +99,7 @@ open class AboutFragment : CommonListFragment() {
             mShowDriver = true
             mHeaderListener = View.OnClickListener {
                 activity?.let {
-//                    MnaUpdateHelper.checkUpdateAndShowDialog(it, true)
+                    UpdateManager.checkUpdateAndShowDialog(it, true)
                 }
             }
         }

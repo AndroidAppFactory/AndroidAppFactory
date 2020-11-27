@@ -12,7 +12,6 @@ import com.bihe0832.android.framework.download.DownloadHelper
 
 
 object UpdateHelper {
-    const val DownloadApkNamePrefix = "zixie_"
     fun startUpdate(activity: Activity?, version: String, versionInfo: String?, url: String?, md5: String?, canCancle: Boolean) {
 
         DownloadHelper.startDownloadAPK(activity,
@@ -72,7 +71,7 @@ object UpdateHelper {
         ThreadManager.getInstance().runOnUIThread {
             CommonDialog(activity).apply {
                 title = activity.resources.getString(R.string.dialog_apk_update) + versionName
-                content = activity.getString(R.string.dialog_apk_updateinfo) + ":\n" + desc
+                setHtmlContent(activity.getString(R.string.dialog_apk_updateinfo) + "<BR>" + desc)
                 positive = "现在更新"
                 negtive = "稍后更新"
                 setOnClickBottomListener(object: OnDialogListener {
