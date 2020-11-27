@@ -10,11 +10,9 @@ import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.channel.ChannelTools
-import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.device.DeviceIDUtils
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
-import com.bihe0832.android.lib.lifecycle.KEY_APP_INSTALLED_TIME
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
@@ -31,30 +29,21 @@ import kotlin.system.exitProcess
  */
 object ZixieContext {
 
-    /**
-     * 是否为调试版本，请勿手动修改，自动构建会自动修改。如有问题，请联系hardy
-     * 当IS_TEST_VERSION为true时，表示当前是开发版本
-     */
-    private const val IS_TEST_VERSION = true
-
-    /**
-     * 是否为正式发布版本，请勿手动修改，自动构建会自动修改。如有问题，请联系hardy
-     * 当 IS_OFFICIAL_VERSION == true && IS_TEST_VERSION == false 时 不提示 [ showOfficial ] 其余都提示
-     */
-    private const val IS_OFFICIAL_VERSION = false
-
-    //版本对应TAG，请勿手动修改，自动构建会自动修改。如有问题，请联系hardy
-    private const val VERSION_TAG = "Tag_ZIXIE_1.0.0_1"
-
     var screenWidth = 0
     var screenHeight = 0
 
     private var versionName = ""
     private var versionCode = 0L
+    private var mDebug = true
+    private var mOfficial = true
+    private var mTag = "Tag_ZIXIE_1.0.0_1"
 
     @Synchronized
-    fun init(ctx: Context) {
+    fun init(ctx: Context, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
         applicationContext = ctx
+        mDebug = appIsDebug
+        mOfficial = appIsOfficial
+        mTag = appTag
         // 初始化渠道号
         initModule({ ChannelTools.init(ctx, "DEBUG") }, false)
     }
@@ -62,25 +51,26 @@ object ZixieContext {
     var applicationContext: Context? = null
         private set
 
+    fun isDebug(): Boolean {
+        return mDebug
+    }
 
-    val isDebug: Boolean
-        get() = IS_TEST_VERSION
+    fun isOfficial(): Boolean {
+        return mOfficial
+    }
 
-    val isOfficial: Boolean
-        get() = if (isDebug) false else IS_OFFICIAL_VERSION
-
-    val tag: String
-        get() = VERSION_TAG
+    fun getVersionTag(): String {
+        return mTag
+    }
 
     val channelID: String
         get() = ChannelTools.getChannel()
 
     fun showDebugEditionToast() {
-        if (!isOfficial) {
+        if (!isOfficial()) {
             showToast("测试版本，请勿外泄~")
         }
     }
-
 
     //任何时候都弹
     fun showToast(msg: String) {
@@ -108,7 +98,7 @@ object ZixieContext {
 
     //仅debug弹
     fun showDebug(msg: String) {
-        if (isDebug) {
+        if (isDebug()) {
             showToast(msg)
         }
     }
@@ -183,7 +173,6 @@ object ZixieContext {
             e.printStackTrace()
         }
     }
-
 
 
     /**
