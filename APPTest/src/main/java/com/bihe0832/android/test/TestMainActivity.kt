@@ -1,6 +1,7 @@
 package com.bihe0832.android.test
 
 import android.os.Bundle
+import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.router.annotation.APPMain
@@ -22,6 +23,7 @@ class TestMainActivity : CommonActivity() {
         if (findFragment(TestMainFragment::class.java) == null) {
             loadRootFragment(R.id.common_fragment_content, TestMainFragment.newInstance(0))
         }
+        UpdateManager.checkUpdateAndShowDialog(this, false)
 //        hideBottomUIMenu()
     }
 

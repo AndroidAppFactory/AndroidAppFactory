@@ -87,6 +87,18 @@ object ZixieContext {
         ToastUtil.showShort(applicationContext, msg)
     }
 
+    //任何时候都弹
+    fun showLongToast(msg: String) {
+        ToastUtil.showLong(applicationContext, msg)
+    }
+
+    //仅APP在前台弹
+    fun showLongToastJustAPPFront(msg: String) {
+        if (!ApplicationObserver.isAPPBackground()) {
+            ToastUtil.showLong(applicationContext, msg)
+        }
+    }
+
     //仅APP在前台弹
     fun showToastJustAPPFront(msg: String) {
         if (!ApplicationObserver.isAPPBackground()) {
