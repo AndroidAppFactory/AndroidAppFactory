@@ -6,8 +6,9 @@ import android.os.Bundle
 import android.view.View
 import com.bihe0832.android.app.R
 import com.bihe0832.android.app.card.SettingsData
-import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.app.router.openWebPage
 import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
@@ -32,6 +33,7 @@ open class AboutFragment : CommonListFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(getUpdate())
             add(getFeedback())
+            add(getZixie())
         }
     }
 
@@ -109,11 +111,11 @@ open class AboutFragment : CommonListFragment() {
     protected fun getFeedback(): SettingsData {
         return SettingsData("建议反馈").apply {
             mItemIconRes = R.mipmap.icon_feedback
-            mHeaderTextBold = true
+            mShowDriver = true
             mHeaderListener = View.OnClickListener {
                 val map = HashMap<String, String>()
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(getString(R.string.feedback_url))
-                APPFactoryRouter.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
+                RouterHelper.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             }
         }
     }
@@ -122,7 +124,7 @@ open class AboutFragment : CommonListFragment() {
         return SettingsData("客服QQ").apply {
             var feedbackQQnumber = getString(R.string.feedback_qq)
             mItemIconRes = R.mipmap.icon_qq_black
-            mHeaderTextBold = true
+            mShowDriver = true
             mTipsText = "<u>${feedbackQQnumber}</u>"
             mHeaderTipsListener = View.OnClickListener {
                 var res = QQHelper.openQQChat(activity, feedbackQQnumber)
@@ -134,9 +136,9 @@ open class AboutFragment : CommonListFragment() {
     }
 
     protected fun getWechat(): SettingsData {
-        return SettingsData("微信公众号）").apply {
+        return SettingsData("微信公众号").apply {
             mItemIconRes = R.mipmap.icon_wechat_black
-            mHeaderTextBold = true
+            mShowDriver = true
             mTipsText = "<u>前往关注</u>"
             mHeaderTipsListener = View.OnClickListener {
                 context?.let {
@@ -146,6 +148,16 @@ open class AboutFragment : CommonListFragment() {
                         this.mSubContent = getString(R.string.wechat_sub_content)
                     })
                 }
+            }
+        }
+    }
+
+    protected fun getZixie(): SettingsData {
+        return SettingsData("关于开发者").apply {
+            mItemIconRes = R.mipmap.icon_author
+            mShowDriver = true
+            mHeaderListener = View.OnClickListener {
+                openWebPage("file:///android_asset/web/author.html")
             }
         }
     }

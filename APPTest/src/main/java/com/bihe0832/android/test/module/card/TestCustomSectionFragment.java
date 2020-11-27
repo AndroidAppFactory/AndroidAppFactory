@@ -1,5 +1,7 @@
 package com.bihe0832.android.test.module.card;
 
+import static com.bihe0832.android.test.module.card.TestListActivityKt.ROUTRT_NAME_TEST_SECTION;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,8 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.bihe0832.android.app.router.APPFactoryRouter;
+import com.bihe0832.android.app.router.RouterHelper;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.test.R;
@@ -18,13 +19,11 @@ import com.bihe0832.android.test.module.card.section.SectionDataContent2;
 import com.bihe0832.android.test.module.card.section.SectionDataHeader;
 import com.bihe0832.android.test.module.card.section.SectionDataHeader2;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-
 import java.util.ArrayList;
-
-import static com.bihe0832.android.test.module.card.TestListActivityKt.ROUTRT_NAME_TEST_SECTION;
 
 
 public class TestCustomSectionFragment extends BaseFragment {
+
     private static final String TAG = "TestSectionFragment-> ";
 
     private TestSectionAdapterForCustom mRecycleAdapter;
@@ -38,7 +37,8 @@ public class TestCustomSectionFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.activity_test_card, container, false);
 
         initList();
@@ -65,7 +65,7 @@ public class TestCustomSectionFragment extends BaseFragment {
                 new TestTipsData("点击打开List 测试Activity", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        APPFactoryRouter.INSTANCE.openPageByRouter(ROUTRT_NAME_TEST_SECTION);
+                        RouterHelper.INSTANCE.openPageByRouter(ROUTRT_NAME_TEST_SECTION);
                     }
                 }));
         for (int i = 0; i < 6; i++) {

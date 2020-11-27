@@ -3,8 +3,8 @@ package com.bihe0832.android.test.module
 import android.net.Uri
 import android.os.Build
 import android.view.View
-import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getDeviceId
@@ -31,12 +31,12 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
             add(TestItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
             add(TestItemData("弹出评分页面", View.OnClickListener {
-                UserPraiseManager.showUserPraiseDialog(activity!!, APPFactoryRouter.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK))
+                UserPraiseManager.showUserPraiseDialog(activity!!, RouterHelper.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK))
             }))
             add(TestItemData("打开反馈页面", View.OnClickListener {
                 val map = HashMap<String, String>()
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode("https://support.qq.com/product/290858")
-                APPFactoryRouter.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
+                RouterHelper.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             }))
             add(TestItemData("网络切换监控", View.OnClickListener { startActivity(TestNetworkActivity::class.java) }))
         }

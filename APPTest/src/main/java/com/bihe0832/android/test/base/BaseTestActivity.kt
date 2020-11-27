@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.os.StrictMode
-import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.openWebPage
 import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
@@ -73,7 +72,7 @@ abstract class BaseTestActivity : CommonListActivity() {
     }
 
     protected fun openWeb(url: String) {
-        APPFactoryRouter.openWebPage(url)
+        openWebPage(url)
     }
 
 }

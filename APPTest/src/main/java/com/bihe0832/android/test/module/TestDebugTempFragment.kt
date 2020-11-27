@@ -2,8 +2,8 @@ package com.bihe0832.android.test.module
 
 import android.view.View
 import android.widget.Toast
-import com.bihe0832.android.app.about.AboutActivity
-import com.bihe0832.android.app.router.APPFactoryRouter
+import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.gson.JsonHelper
@@ -28,7 +28,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
 
-            add(TestItemData("默认关于页", View.OnClickListener { startActivity(AboutActivity::class.java) }))
+            add(TestItemData("默认关于页", View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) }))
 
 
             add(TestItemData("点击区扩大Demo", View.OnClickListener {
@@ -36,7 +36,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             }))
 
             add(TestItemData("HTTP Request", View.OnClickListener {
-                APPFactoryRouter.openPageByRouter(ROUTRT_NAME_TEST_HTTP)
+                RouterHelper.openPageByRouter(ROUTRT_NAME_TEST_HTTP)
             }))
 
             add(TestItemData("文件MD5", View.OnClickListener {
