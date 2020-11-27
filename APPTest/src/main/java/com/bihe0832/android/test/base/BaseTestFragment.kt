@@ -2,10 +2,9 @@ package com.bihe0832.android.test.base
 
 import android.content.Intent
 import android.widget.TextView
-import com.bihe0832.android.app.router.APPFactoryRouter
 import com.bihe0832.android.app.router.openWebPage
-import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
+import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
@@ -71,7 +70,7 @@ open class BaseTestFragment : CommonListFragment() {
     }
 
     protected fun openWeb(url: String) {
-        APPFactoryRouter.openWebPage(url)
+        openWebPage(url)
     }
 
     protected fun startActivity(cls: Class<*>) {

@@ -20,6 +20,7 @@ class TestRouterFragment : BaseTestFragment() {
                     })
             )
             add(RouterItem("zixie://test"))
+            add(RouterItem("zixie://babout"))
             add(RouterItem("zixie://testhttp"))
             add(RouterItem("zixie://feedback?url=https%3A%2F%2Fsupport.qq.com%2Fproduct%2F290858"))
             add(RouterItem("zixie://testlist"))

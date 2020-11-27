@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.log.ZLog
  * Created by hardyshi on 2017/6/27.
  *
  */
-object APPFactoryRouter {
+object RouterHelper {
 
     val SCHEME by lazy {
         ZixieContext.applicationContext?.getString(R.string.router_schema) ?: "zixie"

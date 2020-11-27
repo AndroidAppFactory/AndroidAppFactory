@@ -9,9 +9,12 @@ import com.bihe0832.android.app.update.UpdateManager;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.debug.ShowDebugClick;
 import com.bihe0832.android.framework.ui.BaseActivity;
+import com.bihe0832.android.lib.router.annotation.Module;
 import java.util.Calendar;
 
+@Module(AboutActivity.MODULE_NAME_BASE_ABOUT)
 public class AboutActivity extends BaseActivity {
+    public static final String MODULE_NAME_BASE_ABOUT = "babout";
 
     protected Class getAboutItemClass() {
         return AboutFragment.class;

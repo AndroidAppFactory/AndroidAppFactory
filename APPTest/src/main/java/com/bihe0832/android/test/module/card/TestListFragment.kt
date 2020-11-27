@@ -1,7 +1,7 @@
 package com.bihe0832.android.test.module.card
 
 import android.support.v7.widget.RecyclerView
-import com.bihe0832.android.app.router.APPFactoryRouter.openPageByRouter
+import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListFragment
@@ -32,7 +32,7 @@ class TestListFragment : CommonListFragment() {
         return object : CommonListLiveData() {
             override fun fetchData() {
                 mDataList.add(
-                        TestTipsData("点击打开List 测试Activity") { openPageByRouter(ROUTRT_NAME_TEST_SECTION) }
+                        TestTipsData("点击打开List 测试Activity") { RouterHelper.openPageByRouter(ROUTRT_NAME_TEST_SECTION) }
                 )
                 mDataList.addAll(getTempData())
                 postValue(mDataList)
