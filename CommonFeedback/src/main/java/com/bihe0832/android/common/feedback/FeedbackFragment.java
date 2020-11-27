@@ -45,7 +45,7 @@ public class FeedbackFragment extends CommonWebviewFragment {
         builder.append("&clientVersion=");
         builder.append(ZixieContext.INSTANCE.getVersionName())
                 .append("/").append(ZixieContext.INSTANCE.getVersionCode())
-                .append("/").append(ZixieContext.INSTANCE.getTag())
+                .append("/").append(ZixieContext.INSTANCE.getVersionTag())
                 .append("/").append(ZixieContext.INSTANCE.getChannelID());
         builder.append("&os=");
         builder.append("Android").append("/").append(Build.VERSION.RELEASE).append("/").append(Build.VERSION.SDK_INT);

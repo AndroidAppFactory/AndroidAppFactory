@@ -56,10 +56,10 @@ open class TestDebugCommonFragment : BaseTestFragment() {
     private fun showAPPInfo() {
         val builder = StringBuilder()
         var version = ""
-        version = if (isDebug) {
+        version = if (isDebug()) {
             "内测版"
         } else {
-            if (isOfficial) {
+            if (isOfficial()) {
                 "外发版"
             } else {
                 "预发布版"
@@ -67,7 +67,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         }
         builder.append("PackageName: ${context!!.packageName}\n")
         builder.append("Version: ${getVersionName()}.${getVersionCode()}\n")
-        builder.append("Tag: ${ZixieContext.tag}\n")
+        builder.append("Tag: ${ZixieContext.getVersionTag()}\n")
         showInfo("${APKUtils.getAppName(context)} $version 信息", builder.toString())
     }
 

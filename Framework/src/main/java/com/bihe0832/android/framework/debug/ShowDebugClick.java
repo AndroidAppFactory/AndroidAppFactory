@@ -64,13 +64,14 @@ public class ShowDebugClick implements View.OnClickListener {
         builder.append("设备信息: " + "\n");
         builder.append("厂商&型号: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n");
         builder.append("系统版本: " + Build.VERSION.RELEASE + ", " + Build.VERSION.SDK_INT + "\n");
-        builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n");
+        builder.append("系统指纹: ${Build.FINGERPRINT}\n");
+        builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n\n");
 
         builder.append("版本信息: " + "\n");
         builder.append(
                 "version: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode()
                         + "\n");
-        builder.append("Tag: " + ZixieContext.INSTANCE.getTag() + "\n");
+        builder.append("Tag: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
         builder.append("channel: " + ZixieContext.INSTANCE.getChannelID() + "\n");
         builder.append("official: " + ZixieContext.INSTANCE.isOfficial() + "\n\n");
         return builder.toString();
