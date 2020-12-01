@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest"
+ext.mainProject = "CommonFeedback"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite,Application,Framework"
  */
-ext.developModule = "LibPermission"
+ext.developModule = "CommonFeedback"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -27,7 +27,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.4.1"
+ext.moduleVersionName = "3.4.2"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -61,14 +61,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonNetwork"            : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"            : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "common-webview",
                 "apidependenciesList": [
                         "Framework"
@@ -80,7 +80,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "common-feedback",
                 "apidependenciesList": [
                         "CommonWebview"
@@ -92,14 +92,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "framework",
                 "apidependenciesList": [
                         "com.android.support:multidex:1.0.0",
@@ -107,12 +107,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -417,7 +417,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"            : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.2",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibDialog","LibAPK"
