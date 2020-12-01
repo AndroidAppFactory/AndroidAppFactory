@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.WindowManager
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.lib.permission.PermissionManager
 import me.yokeyword.fragmentation.SupportActivity
 
 open class BaseActivity : SupportActivity() {
@@ -23,6 +24,21 @@ open class BaseActivity : SupportActivity() {
         }
     }
 
+    open fun getPermissionList(): List<String> {
+        return ArrayList()
+    }
+
+    open fun getPermissionResult(): PermissionManager.OnPermissionResult {
+        return PermissionResultOfAAF()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (getPermissionList().isNotEmpty()) {
+            PermissionManager.checkPermission(this, false, getPermissionResult(), *getPermissionList().toTypedArray())
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         for (fragment in supportFragmentManager.fragments) {
@@ -36,7 +52,7 @@ open class BaseActivity : SupportActivity() {
         return true
     }
 
-    protected fun initToolbar(resID :Int, titleString: String?, needBack: Boolean) {
+    protected fun initToolbar(resID: Int, titleString: String?, needBack: Boolean) {
         try {
             if (null == mToolbar) {
                 mToolbar = findViewById(resID)
