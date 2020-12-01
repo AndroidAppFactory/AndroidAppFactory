@@ -1,9 +1,13 @@
 package com.bihe0832.android.lib.device;
 
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.SystemProperties;
-
+import android.text.TextUtils;
+import android.util.Log;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
+import java.util.Locale;
 
 
 /**
@@ -30,6 +34,22 @@ public class ManufacturerUtil {
         return android.os.Build.MODEL;
     }
 
+    public static String getFingerPrint() {
+        return android.os.Build.FINGERPRINT;
+    }
+
+    public static String getManufacturer() {
+        return android.os.Build.MANUFACTURER;
+    }
+
+    public static String getCommonRomVersion() {
+        return SystemProperties.get("ro.build.display.id", "");
+    }
+
+    public static boolean isCurrentLanguageSimpleChinese() {
+        String mCurrentLanguage = Locale.getDefault().getLanguage();
+        return mCurrentLanguage.trim().toLowerCase().equals("zh");
+    }
 
     public static boolean isHuawei() {
         String manufacturer = SystemProperties.get("ro.product.manufacturer", null);
@@ -44,10 +64,45 @@ public class ManufacturerUtil {
         return false;
     }
 
+    public static String getEmuiVersion() {
+        try {
+            String emuiVersion = SystemProperties.get("ro.build.version.emui", (String)null);
+            if (emuiVersion != null) {
+                return emuiVersion.substring(emuiVersion.indexOf("_") + 1);
+            }
+        } catch (Exception var1) {
+            var1.printStackTrace();
+        }
+
+        return VERSION.SDK_INT >= 24 ? "5.0" : "4.0";
+    }
+
     public static boolean isXiaomi() {
         String manufacturerModel = Build.MANUFACTURER + "-" + Build.MODEL;
         return TextFactoryUtils.trimSpace(manufacturerModel.toLowerCase()).contains("xiaomi")
                 || TextFactoryUtils.trimSpace(manufacturerModel.toLowerCase()).contains("redmi");
+    }
+
+    public static boolean isMiRom() {
+        String miUiVersionName = SystemProperties.get("ro.miui.ui.version.name", (String)null);
+        if (!TextUtils.isEmpty(miUiVersionName)) {
+            return true;
+        } else {
+            return Build.MANUFACTURER != null ? TextFactoryUtils.trimSpace(Build.MANUFACTURER).toLowerCase().contains("xiaomi") : false;
+        }
+    }
+
+    public static String getMiuiVersion() {
+        String version = SystemProperties.get("ro.miui.ui.version.name", (String)null);
+        if (version != null) {
+            try {
+                return version.substring(1);
+            } catch (Exception var2) {
+                ZLog.e("get miui version code error, version : " + version);
+            }
+        }
+
+        return version;
     }
 
     public static boolean isOppo() {
@@ -68,9 +123,44 @@ public class ManufacturerUtil {
         return false;
     }
 
+    public static String getOppoRomVersion() {
+        String romVersion = SystemProperties.get("ro.build.version.opporom", "");
+
+        try {
+            return romVersion.substring(1);
+        } catch (Exception var2) {
+            var2.printStackTrace();
+            ZLog.e( "getOppoRomVersion version code error, version : " + romVersion);
+            return romVersion;
+        }
+    }
+
     public static boolean isVivo() {
         String manufacturerModel = Build.MANUFACTURER + "-" + Build.MODEL;
         return TextFactoryUtils.trimSpace(manufacturerModel.toLowerCase()).contains("vivo");
+    }
+
+    public static String getVivoRomVersion() {
+        return SystemProperties.get("ro.vivo.android.os.version", "");
+    }
+
+    public static boolean isSumsung() {
+        String manufacturer = SystemProperties.get("ro.product.manufacturer", (String)null);
+        return TextFactoryUtils.trimSpace(manufacturer.toLowerCase()).contains("samsung");
+    }
+
+    public static String getSumsungRomVersion() {
+        String version = SystemProperties.get("ro.build.display.id");
+
+        try {
+            if (version != null) {
+                return version.substring(0, version.indexOf("."));
+            }
+        } catch (Exception var2) {
+            var2.printStackTrace();
+        }
+
+        return version;
     }
 }
 

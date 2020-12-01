@@ -15,14 +15,6 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
-    <!--Dialog相关配色-->
-    <color name="dialog_bg">#002539</color>
-    <color name="dialog_title">#ffffff</color>
-    <color name="dialog_hint">#999999</color>
-    <color name="dialog_button">#38ADFF</color>
-    <color name="dialog_tips">#FFF44C36</color>
-    <color name="dialog_split">#003653</color>
-
     <!--CommonActivity 配色-->
     <color name="common_activity_bg">@color/colorPrimaryDark</color>
     <color name="common_content_bg">@color/white</color>

@@ -55,7 +55,7 @@ public class DebugTools {
             }
 
             @Override
-            public void onCloseClick() {
+            public void onCancel() {
 
             }
         });
@@ -107,7 +107,7 @@ public class DebugTools {
                     }
 
                     @Override
-                    public void onCloseClick() {
+                    public void onCancel() {
 
                     }
                 });
@@ -187,12 +187,8 @@ public class DebugTools {
             }
 
             @Override
-            public void onCloseClick() {
-                try {
-                    listener.onCloseClick(editText.getText().toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void onCancel() {
+
             }
         });
         dialog.show();

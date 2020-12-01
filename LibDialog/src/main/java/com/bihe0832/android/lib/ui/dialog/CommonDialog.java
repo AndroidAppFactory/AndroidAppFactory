@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
@@ -15,7 +16,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bihe0832.android.lib.ui.image.GlideExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
@@ -113,6 +113,15 @@ public class CommonDialog extends Dialog {
                 }
             }
         });
+
+        setOnCancelListener(new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (onClickBottomListener != null) {
+                    onClickBottomListener.onCancel();
+                }
+            }
+        });
     }
 
     /**
@@ -121,6 +130,7 @@ public class CommonDialog extends Dialog {
     private void refreshView() {
         //如果用户自定了title和message
         setCanceledOnTouchOutside(shouldCanceledOutside);
+        setCancelable(shouldCanceledOutside);
         int screenWidth = DisplayUtil.getScreenWidth(getContext());
         int screenheight = DisplayUtil.getScreenHeight(getContext());
         if (titleTv != null) {
@@ -214,7 +224,6 @@ public class CommonDialog extends Dialog {
             }
         }
 
-
         if (feedback != null) {
             if (!TextUtils.isEmpty(feedbackContent)) {
                 feedback.setText(feedbackContent);
@@ -251,7 +260,9 @@ public class CommonDialog extends Dialog {
 
     @Override
     public void show() {
-        super.show();
+        if (!isShowing()) {
+            super.show();
+        }
         refreshView();
     }
 
@@ -398,6 +409,7 @@ public class CommonDialog extends Dialog {
     }
 
     public interface OnCheckedListener {
+
         public void onChecked(boolean isChecked);
     }
 }

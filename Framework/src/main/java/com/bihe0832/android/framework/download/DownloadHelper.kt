@@ -42,14 +42,16 @@ object DownloadHelper {
                     listener?.onPositiveClick()
                 }
 
-                override fun onCloseClick() {
-
-                }
-
                 override fun onNegtiveClick() {
                     cancleDownload(url)
                     dismiss()
                     listener?.onNegtiveClick()
+                }
+
+                override fun onCancel() {
+                    ZixieContext.showToastJustAPPFront("已切换到后台下载，你可以在通知栏查看下载进度")
+                    dismiss()
+                    listener?.onCancel()
                 }
             })
         }
@@ -105,13 +107,14 @@ object DownloadHelper {
                                 listener?.onNegtiveClick()
                             }
 
-                            override fun onCloseClick() {
-                            }
-
                             override fun onNegtiveClick() {
                                 progressDialog.dismiss()
                                 InstallUtils.installAPP(context, finalFileName)
                                 listener?.onPositiveClick()
+                            }
+
+                            override fun onCancel() {
+                                listener?.onCancel()
                             }
                         })
                     }.let { it.show() }

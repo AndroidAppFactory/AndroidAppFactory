@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="BaseDialog" parent="@android:style/Theme.Dialog">
         <!--背景颜色及和透明程度-->
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -20,10 +21,10 @@
         <item name="android:textColorHintInverse">@color/dialog_hint</item>
     </style>
 
-    <color name="dialog_bg">#182b37</color>
-    <color name="dialog_title">#ffffff</color>
-    <color name="dialog_hint">#999999</color>
-    <color name="dialog_button">#38ADFF</color>
-    <color name="dialog_tips">#FFF44C36</color>
-    <color name="dialog_split">#1C313F</color>
+    <color name="dialog_bg">#f2f2f2</color>-->
+    <color name="dialog_title">#202020</color>
+    <color name="dialog_hint">#333333</color>
+    <color name="dialog_button">#333333</color>
+    <color name="dialog_tips">#F44C36</color>
+    <color name="dialog_split">#999999</color>
 </resources>
