@@ -78,24 +78,27 @@ object PermissionManager {
         checkPermission(context, canCancel, null, *permissions)
     }
 
-    fun checkPermission(context: Context, canCancel: Boolean, result: OnPermissionResult?, vararg permissions: String) {
-        mContext = context.applicationContext
+    fun checkPermission(context: Context?, canCancel: Boolean, result: OnPermissionResult?, vararg permissions: String) {
         mOuterResultListener = result
-        if (!PermissionsChecker(context).lacksPermissions(*permissions)) {
-            mLastPermissionCheckResultListener.onSuccess()
-        } else if (null == context) {
+        if (null == context) {
             mLastPermissionCheckResultListener.onFailed("context is null")
         } else {
-            try {
-                val intent = Intent(context, PermissionsActivity::class.java)
-                intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissions)
-                intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                ActivityCompat.startActivity(context!!, intent, null)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                mLastPermissionCheckResultListener.onFailed("start permission activity failed")
+            mContext = context.applicationContext
+            if (!PermissionsChecker(context).lacksPermissions(*permissions)) {
+                mLastPermissionCheckResultListener.onSuccess()
+            } else {
+                try {
+
+                    val intent = Intent(context, PermissionsActivity::class.java)
+                    intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissions)
+                    intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    ActivityCompat.startActivity(context!!, intent, null)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    mLastPermissionCheckResultListener.onFailed("start permission activity failed")
+                }
             }
         }
     }

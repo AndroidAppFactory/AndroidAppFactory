@@ -18,7 +18,16 @@ class TestMainActivity : CommonActivity() {
         super.onCreate(savedInstanceState)
         initToolbar("AndroidAPPFactory", false)
         CardInfoHelper.getInstance().setAutoAddItem(true)
-        PermissionManager.checkPermission(this, true, object : PermissionManager.OnPermissionResult {
+    }
+
+    override fun getPermissionList(): List<String> {
+        return ArrayList<String>().apply {
+            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+    }
+
+    override fun getPermissionResult(): PermissionManager.OnPermissionResult {
+        return object : PermissionManager.OnPermissionResult {
             override fun onSuccess() {
                 ZixieContext.showDebug("用户授权成功")
             }
@@ -34,9 +43,7 @@ class TestMainActivity : CommonActivity() {
             override fun onFailed(msg: String) {
                 ZixieContext.showDebug("用户授权失败")
             }
-
-        }, Manifest.permission.CAMERA)
-
+        }
     }
 
     override fun onResume() {
