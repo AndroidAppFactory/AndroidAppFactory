@@ -21,39 +21,16 @@ open class BaseTestFragment : CommonListFragment() {
         }
     }
 
-    val mDataList by lazy {
-        ArrayList<CardBaseModule>().apply {
+    private val mTestDataLiveData by lazy {
+        object : TestListLiveData() {
+            override fun fetchData() {
+                postValue(getDataList())
+            }
         }
     }
 
-
     override fun getDataLiveData(): CommonListLiveData {
-        return object : CommonListLiveData() {
-            override fun fetchData() {
-                mDataList.addAll(getDataList())
-                postValue(mDataList)
-            }
-
-            override fun clearData() {
-                mDataList.clear()
-            }
-
-            override fun loadMore() {
-
-            }
-
-            override fun hasMore(): Boolean {
-                return false
-            }
-
-            override fun canRefresh(): Boolean {
-                return false
-            }
-
-            override fun getEmptyText(): String {
-                return ""
-            }
-        }
+        return mTestDataLiveData
     }
 
     protected fun sendInfo(title: String, content: String) {
