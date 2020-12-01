@@ -1,8 +1,7 @@
 package com.bihe0832.android.lib.permission;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.content.PermissionChecker;
 
 public class PermissionsChecker {
 
@@ -24,7 +23,6 @@ public class PermissionsChecker {
 
     // 判断是否缺少权限
     public boolean lacksPermission(String permission) {
-        return ContextCompat.checkSelfPermission(mContext, permission) ==
-                PackageManager.PERMISSION_DENIED;
+        return PermissionChecker.checkSelfPermission(mContext, permission) != PermissionChecker.PERMISSION_GRANTED;
     }
 }
