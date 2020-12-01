@@ -229,9 +229,8 @@ object ZixieContext {
                     dismiss()
                 }
 
-                override fun onCloseClick() {
-                    callbackListener?.onCloseClick()
-                    dismiss()
+                override fun onCancel() {
+                    callbackListener?.onCancel()
                 }
             })
         }.show()

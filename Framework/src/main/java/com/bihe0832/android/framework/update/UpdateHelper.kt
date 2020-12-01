@@ -33,7 +33,10 @@ object UpdateHelper {
                         }
                     }
 
-                    override fun onCloseClick() {
+                    override fun onCancel() {
+                        if (!canCancle) {
+                            ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 1)
+                        }
                     }
                 }, null
         )
@@ -118,7 +121,8 @@ object UpdateHelper {
                         }
                     }
 
-                    override fun onCloseClick() {
+                    override fun onCancel() {
+                        onNegtiveClick()
                     }
                 })
                 setShouldCanceled(false)

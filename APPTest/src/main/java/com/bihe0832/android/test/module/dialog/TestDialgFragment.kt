@@ -66,7 +66,9 @@ class TestDialgFragment : BaseTestFragment() {
                 }
             }
 
-            override fun onCloseClick() {}
+            override fun onCancel() {
+
+            }
         })
         dialog.show()
     }
@@ -81,7 +83,6 @@ class TestDialgFragment : BaseTestFragment() {
             setAPKSize(10000)
             setNegtive("取消下载")
             setPositive("后台下载")
-            setShouldCanceled(false)
             setOnClickListener(object : OnDialogListener {
                 override fun onPositiveClick() {
                     dismiss()
@@ -93,8 +94,7 @@ class TestDialgFragment : BaseTestFragment() {
                     TaskManager.getInstance().removeTask(taskName)
                 }
 
-                override fun onCloseClick() {
-                    dismiss()
+                override fun onCancel() {
                     TaskManager.getInstance().removeTask(taskName)
                 }
             })

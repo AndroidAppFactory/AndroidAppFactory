@@ -96,8 +96,8 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
                 android:singleLine="true"
-                android:textColor="#38ADFF"
-                android:textSize="16dp"
+                android:textColor="@color/dialog_button"
+                android:textSize="14dp"
                 tools:text="取消更新" />
 
         <View
@@ -116,9 +116,10 @@
                 android:gravity="center"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
+                android:textStyle="bold"
                 android:singleLine="true"
-                android:textColor="#38ADFF"
-                android:textSize="16dp"
+                android:textColor="@color/dialog_button"
+                android:textSize="14dp"
                 tools:text="后台更新" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

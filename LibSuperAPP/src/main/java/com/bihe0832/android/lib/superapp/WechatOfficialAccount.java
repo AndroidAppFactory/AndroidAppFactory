@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
-
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
@@ -14,8 +13,8 @@ import com.bihe0832.android.lib.utils.apk.APKUtils;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-11-01.
- * Description: Description
+ *         Created on 2019-11-01.
+ *         Description: Description
  */
 public class WechatOfficialAccount {
 
@@ -54,7 +53,8 @@ public class WechatOfficialAccount {
                         cm.setText(data.mAccountID);
                     }
                     ToastUtil.showShort(context, "公众账号信息已复制到剪贴板");
-                    APKUtils.startApp(context, "微信", SuperAPPContants.APK_PACKAGE_NAME_WECHAT, SuperAPPContants.APK_LAUNCHER_CLASS_WECHAT);
+                    APKUtils.startApp(context, "微信", SuperAPPContants.APK_PACKAGE_NAME_WECHAT,
+                            SuperAPPContants.APK_LAUNCHER_CLASS_WECHAT);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -63,7 +63,7 @@ public class WechatOfficialAccount {
             @Override
             public void onNegtiveClick() {
                 try {
-                    if(data.mOnFinishedClickListener != null){
+                    if (data.mOnFinishedClickListener != null) {
                         data.mOnFinishedClickListener.onClick(null);
                     }
                     dialog.dismiss();
@@ -73,7 +73,7 @@ public class WechatOfficialAccount {
             }
 
             @Override
-            public void onCloseClick() {
+            public void onCancel() {
 
             }
         });

@@ -1,0 +1,8 @@
+<resources>
+    <string name="permission_title">权限申请</string>
+    <string name="permission_default_scene">完整</string>
+    <string name="permission_default_desc">部分设备</string>
+    <string name="permission_negtive">暂不开启</string>
+    <string name="permission_positive">前往开启</string>
+    <string name="permission_color">#38ADFF</string>
+</resources>

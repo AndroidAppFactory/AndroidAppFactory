@@ -15,7 +15,7 @@ public interface OnDialogListener {
      */
     void onNegtiveClick();
     /**
-     * 点击关闭按钮事件
+     * 点击其余位置取消，当 shouldCanceledOutside 为 true 时会回调
      */
-    void onCloseClick();
+    void onCancel();
 }
