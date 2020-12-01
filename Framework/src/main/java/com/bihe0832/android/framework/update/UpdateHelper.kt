@@ -12,6 +12,7 @@ import com.bihe0832.android.framework.download.DownloadHelper
 
 
 object UpdateHelper {
+    var hasShow =  false
     fun startUpdate(activity: Activity?, version: String, versionInfo: String?, url: String?, md5: String?, canCancle: Boolean) {
 
         DownloadHelper.startDownloadAPK(activity,
@@ -25,18 +26,21 @@ object UpdateHelper {
                         if (!canCancle) {
                             ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 1)
                         }
+                        hasShow = false
                     }
 
                     override fun onNegtiveClick() {
                         if (!canCancle) {
                             ZixieContext.exitAPP()
                         }
+                        hasShow = false
                     }
 
                     override fun onCancel() {
                         if (!canCancle) {
                             ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 1)
                         }
+                        hasShow = false
                     }
                 }, null
         )
@@ -71,6 +75,10 @@ object UpdateHelper {
     }
 
     private fun showUpdateDialog(activity: Activity, versionName: String, desc: String, url: String, md5: String, type: Int) {
+        if(hasShow){
+            return
+        }
+        hasShow = true
         ThreadManager.getInstance().runOnUIThread {
             CommonDialog(activity).apply {
                 title = activity.resources.getString(R.string.dialog_apk_update) + versionName
@@ -92,12 +100,14 @@ object UpdateHelper {
                             UpdateDataFromCloud.UPDATE_TYPE_NEED -> {
                                 ThreadManager.getInstance().run { startUpdate(activity, versionName, desc, url, md5, true) }
                                 dismiss()
+                                hasShow = false
                             }
                             UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP,
                             UpdateDataFromCloud.UPDATE_TYPE_RED_JUMP,
                             UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP -> {
                                 IntentUtils.openWebPage(url, ZixieContext.applicationContext)
                                 dismiss()
+                                hasShow = false
                             }
                         }
                     }
@@ -117,6 +127,7 @@ object UpdateHelper {
                             UpdateDataFromCloud.UPDATE_TYPE_RED_JUMP,
                             UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP -> {
                                 dismiss()
+                                hasShow = false
                             }
                         }
                     }

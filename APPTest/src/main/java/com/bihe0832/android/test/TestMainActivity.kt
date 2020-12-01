@@ -18,13 +18,19 @@ class TestMainActivity : CommonActivity() {
         super.onCreate(savedInstanceState)
         initToolbar("AndroidAPPFactory", false)
         CardInfoHelper.getInstance().setAutoAddItem(true)
+
+        PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
+            put(Manifest.permission.CAMERA, "相机")
+        })
+
+        PermissionManager.addPermissionScene(HashMap<String, String>().apply {
+            put(Manifest.permission.CAMERA, "扫描二维码")
+        })
+
+        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
+        UpdateManager.checkUpdateAndShowDialog(this, false)
     }
 
-    override fun getPermissionList(): List<String> {
-        return ArrayList<String>().apply {
-            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
-    }
 
     override fun getPermissionResult(): PermissionManager.OnPermissionResult {
         return object : PermissionManager.OnPermissionResult {
@@ -51,7 +57,6 @@ class TestMainActivity : CommonActivity() {
         if (findFragment(TestMainFragment::class.java) == null) {
             loadRootFragment(R.id.common_fragment_content, TestMainFragment.newInstance(0))
         }
-        UpdateManager.checkUpdateAndShowDialog(this, false)
 //        hideBottomUIMenu()
     }
 
