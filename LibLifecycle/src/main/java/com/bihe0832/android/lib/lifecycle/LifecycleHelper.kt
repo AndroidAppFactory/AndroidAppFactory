@@ -40,8 +40,8 @@ object LifecycleHelper {
     @Synchronized
     fun init(application: Application) {
         applicationContext = application.applicationContext
-        application.registerActivityLifecycleCallbacks(ActivityObserver)
         ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
+        application.registerActivityLifecycleCallbacks(ActivityObserver)
 
         lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
         lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
