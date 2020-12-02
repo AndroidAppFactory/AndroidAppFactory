@@ -14,13 +14,17 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 
 	完整的介绍了整个基于组件化的多APP开发方案。
 	
-- AAF 源码：[https://github.com/bihe0832/AndroidAppFactory](https://github.com/bihe0832/AndroidAppFactory)
-	
-	基础组件和公共组件等可直接复用组件的源码。
-	
-- AAF Sample：[https://github.com/bihe0832/AndroidAppFactory-Sample](https://github.com/bihe0832/AndroidAppFactory-Sample)
+- AAF 源码：基础组件和公共组件等可直接复用组件的源码。
 
-	所以基于AAF开发的独立应用或者Sample的源码
+	- Github：[https://github.com/bihe0832/AndroidAppFactory](https://github.com/bihe0832/AndroidAppFactory)
+	
+	- 代码统计：[https://android.bihe0832.com/source/lib/index.html](https://android.bihe0832.com/source/lib/index.html)
+	
+- AAF Sample：所以基于AAF开发的独立应用或者Sample的源码
+
+	- Github：[https://github.com/bihe0832/AndroidAppFactory-Sample](https://github.com/bihe0832/AndroidAppFactory-Sample)
+
+	- 代码统计：[https://android.bihe0832.com/source/sample/index.html](https://android.bihe0832.com/source/sample/index.html)
 
 ### 组件使用
 
