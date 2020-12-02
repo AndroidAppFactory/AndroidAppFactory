@@ -16,22 +16,26 @@ import com.bihe0832.android.lib.log.ZLog
 object ApplicationObserver : LifecycleObserver {
 
     private const val TAG = "ApplicationObserver"
+    private var mAPPStartTime = 0L
     private var mLastPauseTime = 0L
     private var mLastResumeTime = 0L
     private var mIsAPPBackground = true
+    private val mAPPStatusChangeListenerList = mutableListOf<APPStatusChangeListener>()
 
-    interface APPStatusChangeListener{
+    interface APPStatusChangeListener {
         fun onForeground()
         fun onBackground()
     }
 
-    private val mAPPStatusChangeListenerList = mutableListOf<APPStatusChangeListener>()
+    init {
+        mAPPStartTime = System.currentTimeMillis()
+    }
 
-    fun addStatusChangeListener(listener: APPStatusChangeListener){
+    fun addStatusChangeListener(listener: APPStatusChangeListener) {
         mAPPStatusChangeListenerList.add(listener)
     }
 
-    fun removeStatusChangeListener(listener: APPStatusChangeListener){
+    fun removeStatusChangeListener(listener: APPStatusChangeListener) {
         mAPPStatusChangeListenerList.remove(listener)
     }
 
@@ -40,16 +44,20 @@ object ApplicationObserver : LifecycleObserver {
     }
 
     fun getLastPauseTime(): Long {
-        (LifecycleHelper.applicationContext!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses?.find { it.pid ==  Process.myPid()}.let {
-            if(it?.processName.equals(LifecycleHelper.applicationContext!!.packageName)){
+        (LifecycleHelper.applicationContext!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses?.find { it.pid == Process.myPid() }.let {
+            if (it?.processName.equals(LifecycleHelper.applicationContext!!.packageName)) {
                 return mLastPauseTime
             }
         }
         return System.currentTimeMillis()
     }
 
-    fun getLastResumeTime(): Long {
+    fun getLastResumedTime(): Long {
         return mLastResumeTime
+    }
+
+    fun getAPPStartTime(): Long {
+        return mAPPStartTime
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

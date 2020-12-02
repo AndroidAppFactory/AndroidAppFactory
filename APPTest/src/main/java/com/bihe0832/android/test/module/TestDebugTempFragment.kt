@@ -9,6 +9,8 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.gson.JsonHelper
+import com.bihe0832.android.lib.lifecycle.ActivityObserver
+import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
@@ -51,6 +53,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             }))
             add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(TestItemData("配置管理测试", View.OnClickListener { testConfig() }))
+            add(TestItemData("应用前后台信息", View.OnClickListener { testAPPObserver() }))
 
         }
     }
@@ -162,6 +165,13 @@ class TestDebugTempFragment : BaseTestFragment() {
         }
     }
 
+    private fun testAPPObserver() {
+        ZLog.d("testAPPObserver", "getAPPStartTime ： ${ApplicationObserver.getAPPStartTime()}")
+        ZLog.d("testAPPObserver", "getLastPauseTime ： ${ApplicationObserver.getLastPauseTime()}")
+        ZLog.d("testAPPObserver", "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}")
+        ZLog.d("testAPPObserver", "getCurrentActivity ： ${ActivityObserver.getCurrentActivity()}")
+    }
+
     private fun testOneRequest() {
     }
 
@@ -176,7 +186,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             if (takePhotoIntent.resolveActivity(context!!.getPackageManager()) != null) { //这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
                 activity!!.startActivityForResult(takePhotoIntent, 1) //启动相机
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
