@@ -61,7 +61,7 @@ class ConfigManager {
 
         try {
             String rootDir = MMKV.initialize(ctx.getApplicationContext());
-            mMMKVInstance = MMKV.defaultMMKV();
+            mMMKVInstance = MMKV.mmkvWithID(ctx.getPackageName(), MMKV.MULTI_PROCESS_MODE);
             if (isDebug) {
                 MMKV.setLogLevel(MMKVLogLevel.LevelInfo);
             } else {
