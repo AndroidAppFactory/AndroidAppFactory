@@ -27,15 +27,16 @@ public abstract class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        LifecycleHelper.INSTANCE.init(this);
         Log.d("Application", "base BaseApplication onCreate start");
         ZixieContext.INSTANCE.init(getApplicationContext(), isDebug(), isOfficial(), versionTag());
         ZixieCoreInit.INSTANCE.initCore(getApplicationContext());
-        LifecycleHelper.INSTANCE.init(this);
+
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo it : runningApps) {
-            if (it.pid == android.os.Process.myPid() && it.processName != null && it.processName
-                    .contains(getPackageName())) {
+            if (it.pid == android.os.Process.myPid()
+                    && it.processName != null && it.processName.contains(getPackageName())) {
                 ZLog.e("Application initCore process: name:" + it.processName + " and id:" + it.pid);
                 if (it.processName.equalsIgnoreCase(getPackageName())) {
                     ZixieContext.INSTANCE.showDebugEditionToast();
