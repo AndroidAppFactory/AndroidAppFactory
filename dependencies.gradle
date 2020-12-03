@@ -6,12 +6,12 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest"
+ext.mainProject = "CommonFeedback"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite,Application,Framework"
  */
-ext.developModule = "LibConfig"
+ext.developModule = "CommonFeedback"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -61,14 +61,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonNetwork"            : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"            : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "common-webview",
                 "apidependenciesList": [
                         "Framework"
@@ -80,7 +80,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "common-feedback",
                 "apidependenciesList": [
                         "CommonWebview"
@@ -92,14 +92,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "framework",
                 "apidependenciesList": [
                         "com.android.support:multidex:1.0.0",
@@ -107,7 +107,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
@@ -121,7 +121,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -234,7 +234,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibThread", "LibLog"]
         ],
         "LibConfig"                 : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.5",
                 "artifactId"         : "lib-config",
                 "apidependenciesList": [
                         "LibCommonUtils",
@@ -247,7 +247,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibToast", "LibLog", "LibEncrypt"]
         ],
         "LibTTS"                    : [
-                "version"            : "3.4.1",
+                "version"            : "3.4.5",
                 "artifactId"         : "lib-tts",
                 "apidependenciesList": ["LibConfig"]
         ],
@@ -407,7 +407,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibLifecycle"              : [
-                "version"            : "3.4.4",
+                "version"            : "3.4.5",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         "android.arch.lifecycle:extensions:${project.android_arch_lifecycle_version}",
