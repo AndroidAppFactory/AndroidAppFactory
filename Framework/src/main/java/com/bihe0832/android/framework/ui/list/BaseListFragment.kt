@@ -12,7 +12,9 @@ import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeLinearLayoutManager
+import java.lang.Exception
 
 /**
  * @author code@bihe0832.com
@@ -82,6 +84,9 @@ abstract class BaseListFragment : BaseFragment() {
 
     open fun initView(view: View) {
         mRecyclerView = view.findViewById(R.id.fragment_list_info_list)
+        if(null == mRecyclerView){
+            throw Exception("\n\nAAF: please check recyclerview id name is : fragment_list_info_list !!!\n\n")
+        }
         mRecyclerView?.apply {
             layoutManager = getLayoutManagerForList()
             setHasFixedSize(true)

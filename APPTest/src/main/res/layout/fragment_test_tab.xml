@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/test_tips"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineHeight="30dp"
-            android:padding="20dp"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            tools:text="用于日常功能体验、所有应用共通的信息调试，谨慎添加" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="#c9c9c9"
-            android:textIsSelectable="true" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/test_recy"
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipChildren="false" />
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/test_tips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineHeight="30dp"
+                android:padding="20dp"
+                android:textSize="14dp"
+                android:visibility="gone"
+                tools:text="用于日常功能体验、所有应用共通的信息调试，谨慎添加" />
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#c9c9c9"
+                android:textIsSelectable="true" />
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_list_info_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false" />
 
     </LinearLayout>
 
