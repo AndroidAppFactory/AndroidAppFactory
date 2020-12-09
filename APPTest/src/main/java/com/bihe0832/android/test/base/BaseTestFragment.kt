@@ -1,6 +1,8 @@
 package com.bihe0832.android.test.base
 
 import android.content.Intent
+import android.text.Html
+import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.app.router.openWebPage
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
@@ -27,6 +29,10 @@ open class BaseTestFragment : CommonListFragment() {
                 postValue(getDataList())
             }
         }
+    }
+
+    override fun getResID(): Int {
+        return R.layout.fragment_test_tab
     }
 
     override fun getDataLiveData(): CommonListLiveData {
@@ -60,8 +66,10 @@ open class BaseTestFragment : CommonListFragment() {
     protected fun showResult(s: String?) {
         s?.let {
             ZLog.d(HttpBasicRequest.LOG_TAG, "showResult:$s")
-            val textView = view?.findViewById<TextView>(R.id.test_tips)
-            textView?.text = "Result: $s"
+            view?.findViewById<TextView>(R.id.test_tips)?.apply {
+                this.text = Html.fromHtml("<B>提示信息</b>:<BR> $s")
+                visibility = View.VISIBLE
+            }
         }
     }
 }
