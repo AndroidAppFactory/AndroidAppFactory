@@ -3,6 +3,7 @@ package com.bihe0832.android.framework
 import android.Manifest
 import android.app.Activity
 import android.app.ActivityManager
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -39,13 +40,12 @@ object ZixieContext {
     private var mTag = "Tag_ZIXIE_1.0.0_1"
 
     @Synchronized
-    fun init(ctx: Context, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
-        applicationContext = ctx
+    fun init(application: Application, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
+        applicationContext = application.applicationContext
         mDebug = appIsDebug
         mOfficial = appIsOfficial
         mTag = appTag
-        // 初始化渠道号
-        initModule({ ChannelTools.init(ctx, "DEBUG") }, false)
+        initModule({ ChannelTools.init(application, "DEBUG") }, false)
     }
 
     var applicationContext: Context? = null
@@ -130,7 +130,7 @@ object ZixieContext {
     }
 
     fun getAPPLastVersionInstalledTime(): Long {
-        return LifecycleHelper.getAPPLastVersionInstalledTime()
+        return LifecycleHelper.getVersionInstalledTime()
     }
 
     fun getAPPInstalledTime(): Long {
@@ -173,7 +173,6 @@ object ZixieContext {
             e.printStackTrace()
         }
     }
-
 
     /**
      * 尽量使用页面归属的Activity，在没有页面的前提下，优先使用applicationContext，只有别无选择的场景，使用该方式

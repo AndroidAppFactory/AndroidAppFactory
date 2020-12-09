@@ -15,7 +15,7 @@ import com.bihe0832.android.lib.utils.apk.APKUtils
  *
  */
 const val KEY_APP_INSTALLED_TIME = "zixieAppInstalledTime"
-const val KEY_LAST_STARTED_VERSION_INSTALL_TIME = "zixieLastStartedVersionInstalledTime"
+const val KEY_VERSION_INSTALL_TIME = "zixieVersionInstalledTime"
 
 const val KEY_LAST_STARTED_VERSION = "zixieLastStartedVersion"
 const val KEY_LAST_START_TIME = "zixieAppLastStartTime"
@@ -35,32 +35,32 @@ object LifecycleHelper {
 
     private var lastStartVersion = 0L
     private var lastStartTime = 0L
-    private var lastVersionInstallTime = 0L
 
     @Synchronized
     fun init(application: Application) {
         applicationContext = application.applicationContext
         ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
         application.registerActivityLifecycleCallbacks(ActivityObserver)
-
         lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
         lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
-        lastVersionInstallTime = Config.readConfig(KEY_LAST_STARTED_VERSION_INSTALL_TIME, 0L)
-
         updateNewVersion()
         updateUsedInfo()
-    }
-
-    fun getAPPLastVersionInstalledTime(): Long {
-        return lastVersionInstallTime
     }
 
     fun getAPPInstalledTime(): Long {
         return Config.readConfig(KEY_APP_INSTALLED_TIME, 0L)
     }
 
+    fun getVersionInstalledTime(): Long {
+        return Config.readConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
+    }
+
     fun getAPPLastStartTime(): Long {
         return lastStartTime
+    }
+
+    fun getAPPLastVersion(): Long {
+        return lastStartVersion
     }
 
     fun getAPPUsedDays(): Int {
@@ -74,7 +74,7 @@ object LifecycleHelper {
     private fun updateNewVersion() {
         if (APKUtils.getAppVersionCode(applicationContext) != lastStartVersion) {
             Config.writeConfig(KEY_LAST_STARTED_VERSION, APKUtils.getAppVersionCode(applicationContext))
-            Config.writeConfig(KEY_LAST_STARTED_VERSION_INSTALL_TIME, System.currentTimeMillis())
+            Config.writeConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
             if (lastStartVersion < 1) {
                 Config.writeConfig(KEY_APP_INSTALLED_TIME, System.currentTimeMillis())
             }
