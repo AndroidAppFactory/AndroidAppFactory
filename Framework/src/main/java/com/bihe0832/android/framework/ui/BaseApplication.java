@@ -10,7 +10,6 @@ import android.util.Log;
 import android.webkit.WebView;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ZixieCoreInit;
-import com.bihe0832.android.lib.lifecycle.LifecycleHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.web.WebViewHelper;
@@ -27,11 +26,8 @@ public abstract class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        LifecycleHelper.INSTANCE.init(this);
         Log.d("Application", "base BaseApplication onCreate start");
-        ZixieContext.INSTANCE.init(getApplicationContext(), isDebug(), isOfficial(), versionTag());
-        ZixieCoreInit.INSTANCE.initCore(getApplicationContext());
-
+        ZixieCoreInit.INSTANCE.initCore(this, isDebug(), isOfficial(), versionTag());
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo it : runningApps) {

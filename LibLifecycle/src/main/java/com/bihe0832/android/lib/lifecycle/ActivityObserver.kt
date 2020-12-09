@@ -17,17 +17,17 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
     private val mActivityList = mutableListOf<Activity>()
     private var mSoftReferenceContext: SoftReference<Activity>? = null
 
-    fun getCurrentActivity() : Activity?{
+    fun getCurrentActivity(): Activity? {
         return mSoftReferenceContext?.get()
     }
 
-    fun getActivityList() : List<Activity>{
+    fun getActivityList(): List<Activity> {
         return mActivityList
     }
 
-    fun hasActivity(cmpName : String) : Boolean{
+    fun hasActivity(cmpName: String): Boolean {
         mActivityList.forEach {
-            if (it.javaClass.name == cmpName){
+            if (it.javaClass.name == cmpName) {
                 return true
             }
         }
@@ -35,7 +35,7 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityPaused(activity: Activity?) {
-//        ZLog.d(TAG, "onActivityPaused: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityPaused: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
     }
 
     override fun onActivityResumed(activity: Activity?) {
@@ -47,7 +47,7 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStarted(activity: Activity?) {
-//        ZLog.d(TAG, "onActivityStarted: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityStarted: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
     }
 
     override fun onActivityDestroyed(activity: Activity?) {
@@ -56,13 +56,13 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
             activity?.let {
                 mActivityList.remove(it)
             }
-        }catch (e : Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
-//        ZLog.d(TAG, "onActivitySaveInstanceState: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivitySaveInstanceState: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
     }
 
     override fun onActivityStopped(activity: Activity?) {

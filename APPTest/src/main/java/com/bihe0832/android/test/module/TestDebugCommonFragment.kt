@@ -13,6 +13,8 @@ import com.bihe0832.android.framework.ZixieContext.getVersionName
 import com.bihe0832.android.framework.ZixieContext.isDebug
 import com.bihe0832.android.framework.ZixieContext.isOfficial
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.lifecycle.*
+import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.item.TestItemData
@@ -28,6 +30,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(TestTipsData("APPFactory的通用组件和工具"))
             add(TestItemData("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
+            add(TestItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
             add(TestItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
             add(TestItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
             add(TestItemData("弹出评分页面", View.OnClickListener {
@@ -69,6 +72,34 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         builder.append("Version: ${getVersionName()}.${getVersionCode()}\n")
         builder.append("Tag: ${ZixieContext.getVersionTag()}\n")
         showInfo("${APKUtils.getAppName(context)} $version 信息", builder.toString())
+    }
+
+    private fun showUsedInfo() {
+        val builder = StringBuilder()
+
+        builder.append("应用安装时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPInstalledTime())}\n")
+        builder.append("当前版本安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}\n")
+
+        builder.append("上次启动版本号: ${LifecycleHelper.getAPPLastVersion()}\n")
+        builder.append("上次启动时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPLastStartTime())}\n")
+
+        builder.append("本次启动类型: ${LifecycleHelper.isFirstStart.let {
+            when (it) {
+                INSTALL_TYPE_NOT_FIRST -> "非首次启动"
+                INSTALL_TYPE_VERSION_FIRST -> "版本首次启动"
+                INSTALL_TYPE_APP_FIRST -> "应用首次启动"
+                else -> "类型错误（$it）"
+            }
+        }}\n")
+        builder.append("本次启动时间: ${DateUtil.getDateEN(ApplicationObserver.getAPPStartTime())}\n")
+        builder.append("累积使用天数: ${LifecycleHelper.getAPPUsedDays()}\n")
+        builder.append("累积使用次数: ${LifecycleHelper.getAPPUsedTimes()}\n")
+
+        builder.append("最后一次退后台: ${DateUtil.getDateEN(ApplicationObserver.getLastPauseTime())}\n")
+        builder.append("最后一次回前台: ${DateUtil.getDateEN(ApplicationObserver.getLastResumedTime())}\n")
+
+        builder.append("当前页面: ${ActivityObserver.getCurrentActivity()?.javaClass?.name}\n")
+        showInfo("应用使用情况", builder.toString())
     }
 
     private fun showOtherAPPInfo() {

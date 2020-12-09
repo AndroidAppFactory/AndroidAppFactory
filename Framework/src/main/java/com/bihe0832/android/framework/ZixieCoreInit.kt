@@ -1,10 +1,12 @@
 package com.bihe0832.android.framework
 
-import android.content.Context
+import android.app.Application
 import android.util.Log
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
+import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -25,12 +27,13 @@ object ZixieCoreInit {
 
     //目前仅仅主进程和web进程需要初始化
     @Synchronized
-    fun initCore(ctx: Context) {
+    fun initCore(application: Application, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
+        ZixieContext.init(application, appIsDebug, appIsOfficial, appTag)
         if (!hasInit) {
             hasInit = true
             // 初始化配置管理
             Config.init(ZixieContext.applicationContext, Constants.CONFIG_COMMON_FILE_NAME, !ZixieContext.isOfficial())
-            Config.loadLoaclFile(ctx, Constants.CONFIG_SPECIAL_FILE_NAME, !ZixieContext.isOfficial())
+            Config.loadLoaclFile(application, Constants.CONFIG_SPECIAL_FILE_NAME, !ZixieContext.isOfficial())
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
             Log.e(TAG, "isDebug: ${ZixieContext.isDebug()} ;isOfficial: ${ZixieContext.isOfficial()}")
             Log.e(TAG, "tag: ${ZixieContext.getVersionTag()}")
@@ -38,17 +41,23 @@ object ZixieCoreInit {
             Log.e(TAG, "DeviceId: ${ZixieContext.getDeviceId()}")
             Log.e(TAG, "APPInstalledTime: ${ZixieContext.getAPPInstalledTime()} ;VersionInstalledTime: ${ZixieContext.getAPPLastVersionInstalledTime()}")
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
-            var width = DisplayUtil.getRealScreenSizeX(ZixieContext.applicationContext)
-            var height = DisplayUtil.getRealScreenSizeY(ZixieContext.applicationContext)
-            ZixieContext.screenWidth = Math.min(width, height)
-            ZixieContext.screenHeight = Math.max(width, height)
-            initZixieLibs(ctx, !ZixieContext.isOfficial())
+            initScreenWidthAndHeight()
+            // 初始化渠道号
+            initZixieLibs(application, !ZixieContext.isOfficial())
         }
     }
+    private fun initScreenWidthAndHeight(){
+        var width = DisplayUtil.getRealScreenSizeX(ZixieContext.applicationContext)
+        var height = DisplayUtil.getRealScreenSizeY(ZixieContext.applicationContext)
+        ZixieContext.screenWidth = Math.min(width, height)
+        ZixieContext.screenHeight = Math.max(width, height)
+    }
 
-    private fun initZixieLibs(ctx: Context, isDebug: Boolean) {
-        DeviceInfoManager.getInstance().init(ctx)
-        LoggerFile.init(ctx, isDebug)
+    private fun initZixieLibs(application: Application, isDebug: Boolean) {
+        DeviceInfoManager.getInstance().init(application)
+        LoggerFile.init(application, isDebug)
+        LifecycleHelper.init(application)
+
     }
 
     fun initUserLoginRetBeforeGetUser(platform: Int, openid: String) {
