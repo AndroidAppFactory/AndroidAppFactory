@@ -148,8 +148,6 @@ object DownloadNotifyManager {
             setSmallIcon(R.mipmap.icon)
             //禁止用户点击删除按钮删除
             setAutoCancel(false)
-            //禁止滑动删除
-            setOngoing(true)
             //取消右上角的时间显示
             setShowWhen(false)
         }.build()
