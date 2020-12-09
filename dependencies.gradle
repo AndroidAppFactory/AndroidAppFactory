@@ -30,7 +30,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.4.6"
+ext.moduleVersionName = "3.4.7"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -64,14 +64,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "3.4.6",
+                "version"                : "3.4.7",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -83,7 +83,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "3.4.6",
+                "version"                : "3.4.7",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -95,14 +95,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "framework",
                 "apidependenciesList": [
                         "com.android.support:multidex:1.0.0",
@@ -110,12 +110,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -124,7 +124,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -279,12 +279,12 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibAndroid"]
         ],
         "LibSuperAPP"               : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": ["LibDialog", "LibAPK"]
         ],
         "LibDebug"                  : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": ["LibDialog", "LibToast"]
         ],
@@ -354,7 +354,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibThread"]
         ],
         "LibImage"                  : [
-                "version"                : "3.4.6",
+                "version"                : "3.4.7",
                 "artifactId"             : "lib-image",
                 "apidependenciesList"    : [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
@@ -368,14 +368,14 @@ ext.moduleInfo = [
                 ]
         ],
         "LibDialog"                 : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}",
                         "LibThread", "LibImage", "LibOS", "LibCommonUIUtils"]
         ],
         "LibNotification"           : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": ["LibDialog", "LibAPK", "LibCommonUtils"]
         ],
@@ -425,7 +425,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "3.4.6",
+                "version"            : "3.4.7",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
