@@ -35,6 +35,6 @@ publish {
     userOrg = rootProject.zixieUserOrg
     groupId = rootProject.zixieGroupId
     licences = rootProject.zixieLicences
-    desc = 'the text to speech module for zixie'//项目描述
+    desc = 'the common tools for AAF'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
