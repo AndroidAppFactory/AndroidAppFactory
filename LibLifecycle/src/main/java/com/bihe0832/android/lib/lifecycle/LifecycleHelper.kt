@@ -3,9 +3,11 @@ package com.bihe0832.android.lib.lifecycle
 import android.app.Application
 import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
+import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import java.lang.Exception
 
 /**
  *
@@ -39,12 +41,16 @@ object LifecycleHelper {
     @Synchronized
     fun init(application: Application) {
         applicationContext = application.applicationContext
-        ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
-        application.registerActivityLifecycleCallbacks(ActivityObserver)
-        lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
-        lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
-        updateNewVersion()
-        updateUsedInfo()
+        if(Config.hasInit()){
+            ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
+            application.registerActivityLifecycleCallbacks(ActivityObserver)
+            lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
+            lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
+            updateNewVersion()
+            updateUsedInfo()
+        }else{
+            throw AAFException("please please init Config module first")
+        }
     }
 
     fun getAPPInstalledTime(): Long {

@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.log.ZLog
@@ -85,7 +86,7 @@ abstract class BaseListFragment : BaseFragment() {
     open fun initView(view: View) {
         mRecyclerView = view.findViewById(R.id.fragment_list_info_list)
         if(null == mRecyclerView){
-            throw Exception("\n\nAAF: please check recyclerview id name is : fragment_list_info_list !!!\n\n")
+            throw AAFException("please check recyclerview id name is : fragment_list_info_list")
         }
         mRecyclerView?.apply {
             layoutManager = getLayoutManagerForList()

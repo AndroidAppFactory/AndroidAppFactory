@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeLinearLayoutManager
@@ -80,12 +81,17 @@ abstract class BaseListActivity : BaseActivity() {
         }
         setContentView(getResID())
         mToolbar = findViewById(R.id.common_activity_list_toolbar)
+        if(null == mRecyclerView){
+            throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
+        }
         mToolbar?.apply {
             setNavigationOnClickListener { onBackPressedSupport() }
             title = getTitleText()
         }
         mRecyclerView = findViewById(R.id.activity_list_info_list)
-
+        if(null == mRecyclerView){
+            throw AAFException("please check recyclerview id name is : activity_list_info_list")
+        }
         initView()
     }
 

@@ -11,10 +11,10 @@ ext.mainProject = "APPTest"
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前设计到Android Support库的有：
  *      LibDeviceNetwork,LibFile,LibViewExt,LibFragmentation_core,LibFlycoTabLayout,LibQRCode,LibAdapter,LibCustomView
- * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite,Application,Framework"
+ * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibNotification"
+ext.developModule = "LibNotification,LibConfig,LibAAF"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -421,7 +421,7 @@ ext.moduleInfo = [
                         "android.arch.lifecycle:extensions:${project.android_arch_lifecycle_version}",
                         "android.arch.lifecycle:common:${project.android_arch_lifecycle_version}",
                         "android.arch.lifecycle:runtime:${project.android_arch_lifecycle_version}",
-                        "LibLog", "LibConfig", "LibAPK"
+                        "LibLog", "LibConfig", "LibAPK","LibAAF"
                 ]
         ],
         "LibPermission"             : [
@@ -429,6 +429,12 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
+                ]
+        ],
+        "LibAAF"             : [
+                "version"            : "3.4.7",
+                "artifactId"         : "lib-aaf-tools",
+                "apidependenciesList": [
                 ]
         ]
 ]
