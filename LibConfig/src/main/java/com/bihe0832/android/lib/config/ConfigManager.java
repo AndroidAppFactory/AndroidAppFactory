@@ -27,7 +27,7 @@ class ConfigManager {
     private static final String TAG = "ConfigManager";
     private static volatile ConfigManager instance = null;
 
-    private boolean mIsDebug = false;
+    private boolean hasInit = false;
     //配置文件配置
     private Properties mLocalConfig = null;
     //内存中的配置
@@ -47,11 +47,14 @@ class ConfigManager {
     }
 
     protected void init(Context ctx, String file, boolean isDebug) {
-        mIsDebug = isDebug;
+        if(isDebug){
+            ZLog.setDebug(true);
+        }
         if (ctx == null) {
             ZLog.w(TAG, "context is null");
             return;
         }
+        hasInit = true;
         try {
             loadFile(ctx, file, isDebug);
         } catch (Exception e) {
@@ -74,6 +77,10 @@ class ConfigManager {
             ZLog.d(TAG, "ERROR: config file");
         }
 
+    }
+
+    protected boolean hasInit() {
+        return hasInit;
     }
 
     protected void loadFile(Context ctx, String file, boolean isDebug) {
