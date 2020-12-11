@@ -30,7 +30,7 @@ class TestBasicFragment : BaseFragment() {
         }
 
         test_basic_button_local_2.setOnClickListener {
-            test_basic_content.loadImage("https://i.17173cdn.com/9ih5jd/YWxqaGBf/forum/201810/18/193421zmhdvfx9plm1mdhx.png", R.mipmap.icon, R.mipmap.icon, 800, 400)
+            test_basic_content.loadImage("https://i.17173cdn.com/9ih5jd/YWxqaGBf/forum/201810/18/193421zmhdvfx9plm1mdhx.png", false)
         }
     }
 
