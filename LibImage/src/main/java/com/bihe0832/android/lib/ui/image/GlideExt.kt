@@ -73,7 +73,7 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
     ZLog.d("Glide", "load image:$url")
     requestOptions
             .downsample(DownsampleStrategy.CENTER_INSIDE)//将图片缩小至目标大小
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)//换成变换后的图片
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)//换成变换后的图片
             .placeholder(placeholder)
             .error(error)
     if (width > 0) {
@@ -92,6 +92,8 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
             if (needFade) {
                 transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
                 thumbnail(0.3f)
+            }else{
+                requestOptions.dontAnimate()
             }
         }.apply(requestOptions).into(this)
     } catch (e: Exception) {
@@ -114,9 +116,9 @@ fun ImageView.loadImage(resId: Int) {
 
 
 fun ImageView.loadImage(resId: Int, requestOptions: RequestOptions = RequestOptions()) {
-    requestOptions.centerCrop()
+    requestOptions.dontAnimate().centerCrop()
     try {
-        Glide.with(this.context).load(resId).thumbnail(0.2f)
+        Glide.with(this.context).load(resId).thumbnail(0.3f)
                 .transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
                 .apply(requestOptions)
                 .into(this)
