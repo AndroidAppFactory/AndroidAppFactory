@@ -11,7 +11,7 @@ import android.view.WindowManager
  * @param navigationBarColor 导航栏的颜色
  * @param isDark 文字是否深色
  */
-fun AppCompatActivity.enableActivityImmersive(colorPrimaryDark: Int, navigationBarColor: Int, isDark: Boolean, isAutoHide: Boolean) {
+fun AppCompatActivity.enableActivityImmersive(colorPrimaryDark: Int, navigationBarColor: Int, isDark: Boolean) {
     try {
         val window = window
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT

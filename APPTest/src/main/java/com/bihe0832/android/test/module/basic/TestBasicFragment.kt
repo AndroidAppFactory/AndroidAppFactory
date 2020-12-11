@@ -34,7 +34,7 @@ class TestBasicFragment : BaseFragment() {
             (activity!! as AppCompatActivity).apply {
                 enableActivityImmersive(
                         ContextCompat.getColor(this, R.color.process_color),
-                        ContextCompat.getColor(this, R.color.dialog_button), false, false)
+                        ContextCompat.getColor(this, R.color.dialog_button), false)
 
             }
 //            test_basic_content.loadImage("https://i.17173cdn.com/9ih5jd/YWxqaGBf/forum/201810/18/193421zmhdvfx9plm1mdhx.png")
@@ -44,7 +44,7 @@ class TestBasicFragment : BaseFragment() {
             (activity!! as AppCompatActivity).apply {
                 enableActivityImmersive(
                         ContextCompat.getColor(this, R.color.lib_refresh_spinkit_color),
-                        ContextCompat.getColor(this, R.color.result_point_color), true, true)
+                        ContextCompat.getColor(this, R.color.result_point_color), true)
 
             }
 //            test_basic_content.loadImage("https://i.17173cdn.com/9ih5jd/YWxqaGBf/forum/201810/18/193421zmhdvfx9plm1mdhx.png", false)
