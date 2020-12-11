@@ -3,6 +3,7 @@ package com.bihe0832.android.test.module.request
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import android.support.v4.content.ContextCompat
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer

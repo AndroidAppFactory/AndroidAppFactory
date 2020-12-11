@@ -215,7 +215,7 @@ object ZixieContext {
 
             setCancelable(true)
             positive = applicationContext!!.resources.getString(R.string.comfirm)
-            negtive = applicationContext!!.resources.getString(R.string.cancel)
+            negative = applicationContext!!.resources.getString(R.string.cancel)
             setOnClickBottomListener(object : OnDialogListener {
                 override fun onPositiveClick() {
                     callbackListener?.onPositiveClick()

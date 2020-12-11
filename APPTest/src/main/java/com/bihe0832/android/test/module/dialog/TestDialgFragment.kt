@@ -40,7 +40,7 @@ class TestDialgFragment : BaseTestFragment() {
         dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
         dialog.setImageContentResId(R.mipmap.debug)
         dialog.setFeedBackContent("我们保证你提供的信息仅用于问题定位")
-        dialog.setNegtive("复制到剪切板")
+        dialog.setNegative("复制到剪切板")
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 try {
@@ -81,7 +81,7 @@ class TestDialgFragment : BaseTestFragment() {
             setMessage("正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~")
             setCurrentSize(1)
             setAPKSize(10000)
-            setNegtive("取消下载")
+            setNegative("取消下载")
             setPositive("后台下载")
             setOnClickListener(object : OnDialogListener {
                 override fun onPositiveClick() {

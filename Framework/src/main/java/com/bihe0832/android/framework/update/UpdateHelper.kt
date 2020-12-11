@@ -84,7 +84,7 @@ object UpdateHelper {
                 title = activity.resources.getString(R.string.dialog_apk_update) + versionName
                 setHtmlContent(activity.getString(R.string.dialog_apk_updateinfo) + "<BR>" + desc)
                 positive = "现在更新"
-                negtive = "稍后更新"
+                negative = "稍后更新"
                 setOnClickBottomListener(object: OnDialogListener {
                     override fun onPositiveClick() {
                         when (type) {

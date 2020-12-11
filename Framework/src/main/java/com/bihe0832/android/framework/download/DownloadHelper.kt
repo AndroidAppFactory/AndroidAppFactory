@@ -34,7 +34,7 @@ object DownloadHelper {
                 setCancelable(false)
             }
             setPositive("后台下载")
-            setNegtive("取消下载")
+            setNegative("取消下载")
             setOnClickListener(object : OnDialogListener {
                 override fun onPositiveClick() {
                     ZixieContext.showToastJustAPPFront("已切换到后台下载，你可以在通知栏查看下载进度")
@@ -100,7 +100,7 @@ object DownloadHelper {
                     progressDialog.apply {
                         setAPKSize(0)
                         setPositive("稍候安装")
-                        setNegtive("点击安装")
+                        setNegative("点击安装")
                         setOnClickListener(object : OnDialogListener {
                             override fun onPositiveClick() {
                                 progressDialog.dismiss()

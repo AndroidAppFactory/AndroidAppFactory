@@ -36,7 +36,7 @@ public class CommonDialog extends Dialog {
     /**
      * 确认和取消按钮
      */
-    private Button negtiveBn, positiveBn;
+    private Button negativeBn, positiveBn;
     /**
      * 中间图片
      */
@@ -50,7 +50,7 @@ public class CommonDialog extends Dialog {
     private CheckBox nomoreCb;
     private boolean isShowCheckBox = false;
     private OnCheckedListener onCheckedListener;
-    private int colorRes = -1;
+    private int contentColor = -1;
 
     public CommonDialog(Context context) {
         super(context, R.style.CommonDialog);
@@ -64,7 +64,8 @@ public class CommonDialog extends Dialog {
     private String content;
     private String htmlContent;
     private String feedbackContent;
-    private String positive, negtive;
+    private String positiveString;
+    private String negativeString;
     private String imageUrl = null;
     private boolean shouldCanceledOutside = false;
     private int imageContentResId = -1;
@@ -105,7 +106,7 @@ public class CommonDialog extends Dialog {
             }
         });
         //设置取消按钮被点击后，向外界提供监听
-        negtiveBn.setOnClickListener(new View.OnClickListener() {
+        negativeBn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onClickBottomListener != null) {
@@ -152,8 +153,8 @@ public class CommonDialog extends Dialog {
                 }
                 contentTv.setVisibility(View.VISIBLE);
                 contentTv.setMovementMethod(new ScrollingMovementMethod());
-                if (colorRes != -1) {
-                    contentTv.setTextColor(colorRes);
+                if (contentColor != -1) {
+                    contentTv.setTextColor(contentColor);
                 }
                 if (screenWidth > screenheight) {
                     if (maxLine > 0) {
@@ -186,16 +187,16 @@ public class CommonDialog extends Dialog {
         }
         //如果设置按钮的文字
         if (positiveBn != null) {
-            if (!TextUtils.isEmpty(positive)) {
-                positiveBn.setText(positive);
+            if (!TextUtils.isEmpty(positiveString)) {
+                positiveBn.setText(positiveString);
             } else {
                 positiveBn.setText("确定");
             }
         }
 
-        if (negtiveBn != null) {
-            if (!TextUtils.isEmpty(negtive)) {
-                negtiveBn.setText(negtive);
+        if (negativeBn != null) {
+            if (!TextUtils.isEmpty(negativeString)) {
+                negativeBn.setText(negativeString);
             }
         }
 
@@ -235,12 +236,12 @@ public class CommonDialog extends Dialog {
         /**
          * 只显示一个按钮的时候隐藏取消按钮，回掉只执行确定的事件
          */
-        if (columnLineView != null && negtiveBn != null) {
-            if (isSingle || TextUtils.isEmpty(negtive)) {
+        if (columnLineView != null && negativeBn != null) {
+            if (isSingle || TextUtils.isEmpty(negativeString)) {
                 columnLineView.setVisibility(View.GONE);
-                negtiveBn.setVisibility(View.GONE);
+                negativeBn.setVisibility(View.GONE);
             } else {
-                negtiveBn.setVisibility(View.VISIBLE);
+                negativeBn.setVisibility(View.VISIBLE);
                 columnLineView.setVisibility(View.VISIBLE);
             }
         }
@@ -270,7 +271,7 @@ public class CommonDialog extends Dialog {
      * 初始化界面控件
      */
     private void initView() {
-        negtiveBn = (Button) findViewById(R.id.negtive);
+        negativeBn = (Button) findViewById(R.id.negtive);
         positiveBn = (Button) findViewById(R.id.positive);
         titleTv = (TextView) findViewById(R.id.title);
         content_layout = findViewById(R.id.content_layout);
@@ -320,7 +321,7 @@ public class CommonDialog extends Dialog {
     }
 
     public CommonDialog setContentTextColor(int colorRes) {
-        this.colorRes = colorRes;
+        this.contentColor = colorRes;
         return this;
     }
 
@@ -339,7 +340,7 @@ public class CommonDialog extends Dialog {
     }
 
     public String getPositive() {
-        return positive;
+        return positiveString;
     }
 
 
@@ -348,12 +349,12 @@ public class CommonDialog extends Dialog {
     }
 
     public CommonDialog setPositive(String positive) {
-        this.positive = positive;
+        this.positiveString = positive;
         return this;
     }
 
-    public String getNegtive() {
-        return negtive;
+    public String getNegative() {
+        return negativeString;
     }
 
     public CommonDialog setShouldCanceled(boolean flag) {
@@ -361,8 +362,8 @@ public class CommonDialog extends Dialog {
         return this;
     }
 
-    public CommonDialog setNegtive(String negtive) {
-        this.negtive = negtive;
+    public CommonDialog setNegative(String negtive) {
+        this.negativeString = negtive;
         return this;
     }
 

@@ -40,7 +40,7 @@ public class WechatOfficialAccount {
         dialog.setImageContentResId(data.mResID);
         dialog.setFeedBackContent("点击「前往关注」会自动复制微信公众号ID并拉起微信");
         dialog.setPositive("前往关注");
-        dialog.setNegtive("已经关注");
+        dialog.setNegative("已经关注");
         dialog.setCancelable(false);
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override

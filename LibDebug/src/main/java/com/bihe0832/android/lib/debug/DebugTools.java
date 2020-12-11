@@ -32,7 +32,7 @@ public class DebugTools {
         dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们");
         dialog.setImageContentResId(R.mipmap.debug);
         dialog.setFeedBackContent("我们保证你提供的信息仅用于问题定位");
-        dialog.setNegtive("复制到剪切板");
+        dialog.setNegative("复制到剪切板");
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override
             public void onPositiveClick() {
@@ -83,7 +83,7 @@ public class DebugTools {
         final String finalContent = tempContent;
         dialog.setTitle(title)
                 .setPositive(positiveText)
-                .setNegtive("复制到剪切板")
+                .setNegative("复制到剪切板")
                 .setOnClickBottomListener(new OnDialogListener() {
                     @Override
                     public void onPositiveClick() {
@@ -148,14 +148,14 @@ public class DebugTools {
         dialog.setTitle(titleName);
         dialog.setHtmlContent(msg);
         dialog.setPositive(positive);
-        dialog.setNegtive(negtive);
+        dialog.setNegative(negtive);
         dialog.setCanceledOnTouchOutside(canCanceledOnTouchOutside);
         final EditText editText = new EditText(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(50, 10, 50, 10);
         editText.setLayoutParams(params);
         editText.setSingleLine();
-        editText.setBackgroundColor(context.getResources().getColor(R.color.dialog_title));
+        editText.setBackgroundColor(context.getResources().getColor(R.color.dialog_text));
         editText.setTextColor(context.getResources().getColor(R.color.dialog_bg));
         editText.setHint(hint);
         if (!TextUtils.isEmpty(defaultValue)) {
