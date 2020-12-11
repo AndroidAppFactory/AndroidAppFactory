@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:gravity="center"
-    android:background="@color/common_activity_bg"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -17,6 +16,5 @@
         android:id="@+id/common_fragment_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/common_content_bg"
         android:scrollbars="none" />
 </LinearLayout>
