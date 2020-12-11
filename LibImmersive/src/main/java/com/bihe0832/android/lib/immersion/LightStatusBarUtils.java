@@ -6,36 +6,30 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.bihe0832.android.lib.device.ManufacturerUtil;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-/**
- * @author：luck
- * @data：2018/3/28 下午1:01
- * @描述: 沉浸式
- */
-
 public class LightStatusBarUtils {
 
-    public static void setLightStatusBar(Activity activity, boolean isTransStatusBar, boolean dark) {
+    public static void setLightStatusBar(Activity activity, boolean dark) {
         switch (RomType.getRomType()) {
             case RomType.MIUI:
                 if (ManufacturerUtil.getMiuiVersionCode() >= 7) {
-                    setAndroidNativeLightStatusBar(activity, isTransStatusBar,
-                            dark);
+                    setAndroidNativeLightStatusBar(activity, dark);
                 } else {
-                    setMIUILightStatusBar(activity, isTransStatusBar, dark);
+                    setMIUILightStatusBar(activity, dark);
                 }
                 break;
 
             case RomType.FLYME:
-                setFlymeLightStatusBar(activity, isTransStatusBar, dark);
+                setFlymeLightStatusBar(activity, dark);
                 break;
 
             case RomType.ANDROID_NATIVE:
-                setAndroidNativeLightStatusBar(activity, isTransStatusBar,
-                        dark);
+                setAndroidNativeLightStatusBar(activity, dark);
                 break;
 
             case RomType.NA:
@@ -45,7 +39,7 @@ public class LightStatusBarUtils {
     }
 
 
-    private static boolean setMIUILightStatusBar(Activity activity, boolean isTransStatusBar, boolean darkmode) {
+    private static boolean setMIUILightStatusBar(Activity activity, boolean darkmode) {
         initStatusBarStyle(activity);
 
         Class<? extends Window> clazz = activity.getWindow().getClass();
@@ -58,13 +52,12 @@ public class LightStatusBarUtils {
             extraFlagField.invoke(activity.getWindow(), darkmode ? darkModeFlag : 0, darkModeFlag);
             return true;
         } catch (Exception e) {
-            setAndroidNativeLightStatusBar(activity, isTransStatusBar,
-                    darkmode);
+            setAndroidNativeLightStatusBar(activity, darkmode);
         }
         return false;
     }
 
-    private static boolean setFlymeLightStatusBar(Activity activity, boolean isTransStatusBar, boolean dark) {
+    private static boolean setFlymeLightStatusBar(Activity activity, boolean dark) {
         boolean result = false;
         if (activity != null) {
             initStatusBarStyle(activity);
@@ -88,45 +81,27 @@ public class LightStatusBarUtils {
                 result = true;
 
                 if (RomType.getFlymeVersion() >= 7) {
-                    setAndroidNativeLightStatusBar(activity, isTransStatusBar,
-                            dark);
+                    setAndroidNativeLightStatusBar(activity, dark);
                 }
             } catch (Exception e) {
-                setAndroidNativeLightStatusBar(activity, isTransStatusBar,
-                        dark);
+                setAndroidNativeLightStatusBar(activity, dark);
             }
         }
         return result;
     }
 
     @TargetApi(11)
-    private static void setAndroidNativeLightStatusBar(Activity activity, boolean isTransStatusBar,
-            boolean isDarkStatusBarIcon) {
+    private static void setAndroidNativeLightStatusBar(Activity activity, boolean isDarkStatusBarIcon) {
 
         try {
-            if (isTransStatusBar) {
-                Window window = activity.getWindow();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (isDarkStatusBarIcon && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                    } else {
-                        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                    }
-                }
-            } else {
-                View decor = activity.getWindow().getDecorView();
+            Window window = activity.getWindow();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (isDarkStatusBarIcon && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 } else {
-                    // We want to change tint color to white again.
-                    // You can also record the flags in advance so that you can turn UI back completely if
-                    // you have set other flags before, such as translucent or full screen.
-                    decor.setSystemUiVisibility(0);
+                    initStatusBarStyle(activity);
                 }
             }
         } catch (Exception e) {
