@@ -61,7 +61,7 @@ public class WechatOfficialAccount {
             }
 
             @Override
-            public void onNegtiveClick() {
+            public void onNegativeClick() {
                 try {
                     if (data.mOnFinishedClickListener != null) {
                         data.mOnFinishedClickListener.onClick(null);

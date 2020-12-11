@@ -48,7 +48,7 @@ public class PermissionsActivity extends Activity {
             }
 
             @Override
-            public void onNegtiveClick() {
+            public void onNegativeClick() {
                 PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel();
                 finish();
             }

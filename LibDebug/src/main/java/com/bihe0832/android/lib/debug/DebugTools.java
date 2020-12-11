@@ -45,7 +45,7 @@ public class DebugTools {
             }
 
             @Override
-            public void onNegtiveClick() {
+            public void onNegativeClick() {
                 try {
                     copyToClipboard(context, content);
                     dialog.dismiss();
@@ -96,7 +96,7 @@ public class DebugTools {
                     }
 
                     @Override
-                    public void onNegtiveClick() {
+                    public void onNegativeClick() {
                         try {
                             copyToClipboard(context, finalContent);
                             dialog.dismiss();
@@ -177,7 +177,7 @@ public class DebugTools {
             }
 
             @Override
-            public void onNegtiveClick() {
+            public void onNegativeClick() {
                 try {
                     listener.onNegtiveClick(editText.getText().toString());
                     dialog.dismiss();

@@ -84,7 +84,7 @@ public class DownloadProgressDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 if (mClickBottomListener != null) {
-                    mClickBottomListener.onNegtiveClick();
+                    mClickBottomListener.onNegativeClick();
                 }
             }
         });

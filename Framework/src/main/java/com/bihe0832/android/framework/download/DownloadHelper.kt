@@ -42,10 +42,10 @@ object DownloadHelper {
                     listener?.onPositiveClick()
                 }
 
-                override fun onNegtiveClick() {
+                override fun onNegativeClick() {
                     cancleDownload(url)
                     dismiss()
-                    listener?.onNegtiveClick()
+                    listener?.onNegativeClick()
                 }
 
                 override fun onCancel() {
@@ -104,10 +104,10 @@ object DownloadHelper {
                         setOnClickListener(object : OnDialogListener {
                             override fun onPositiveClick() {
                                 progressDialog.dismiss()
-                                listener?.onNegtiveClick()
+                                listener?.onNegativeClick()
                             }
 
-                            override fun onNegtiveClick() {
+                            override fun onNegativeClick() {
                                 progressDialog.dismiss()
                                 InstallUtils.installAPP(context, finalFileName)
                                 listener?.onPositiveClick()

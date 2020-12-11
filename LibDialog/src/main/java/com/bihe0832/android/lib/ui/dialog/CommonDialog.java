@@ -110,7 +110,7 @@ public class CommonDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 if (onClickBottomListener != null) {
-                    onClickBottomListener.onNegtiveClick();
+                    onClickBottomListener.onNegativeClick();
                 }
             }
         });

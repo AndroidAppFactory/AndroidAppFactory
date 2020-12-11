@@ -29,7 +29,7 @@ object UpdateHelper {
                         hasShow = false
                     }
 
-                    override fun onNegtiveClick() {
+                    override fun onNegativeClick() {
                         if (!canCancle) {
                             ZixieContext.exitAPP()
                         }
@@ -112,7 +112,7 @@ object UpdateHelper {
                         }
                     }
 
-                    override fun onNegtiveClick() {
+                    override fun onNegativeClick() {
                         when (type) {
                             UpdateDataFromCloud.UPDATE_TYPE_MUST -> {
                                 ZixieContext.exitAPP()
@@ -133,7 +133,7 @@ object UpdateHelper {
                     }
 
                     override fun onCancel() {
-                        onNegtiveClick()
+                        onNegativeClick()
                     }
                 })
                 setShouldCanceled(false)

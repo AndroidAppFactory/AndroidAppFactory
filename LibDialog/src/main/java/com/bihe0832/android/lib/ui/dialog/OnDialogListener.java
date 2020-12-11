@@ -13,7 +13,7 @@ public interface OnDialogListener {
     /**
      * 点击取消按钮事件
      */
-    void onNegtiveClick();
+    void onNegativeClick();
     /**
      * 点击其余位置取消，当 shouldCanceledOutside 为 true 时会回调
      */
