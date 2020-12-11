@@ -30,7 +30,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.6.3"
+ext.moduleVersionName = "3.6.4"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -64,14 +64,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "3.6.3",
+                "version"            : "3.6.4",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "3.6.3",
+                "version"                : "3.6.4",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -83,7 +83,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "3.6.3",
+                "version"                : "3.6.4",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -95,14 +95,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "3.6.3",
+                "version"            : "3.6.4",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"            : "3.6.3",
+                "version"            : "3.6.4",
                 "artifactId"         : "framework",
                 "apidependenciesList": [
                         "com.android.support:multidex:1.0.0",
@@ -110,12 +110,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "3.6.3",
+                "version"            : "3.6.4",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
-                "version"            : "3.6.3",
+                "version"            : "3.6.4",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -438,7 +438,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibImmersive"              : [
-                "version"            : "3.6.3",
+                "version"            : "3.6.4",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork",
