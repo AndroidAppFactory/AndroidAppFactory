@@ -223,8 +223,8 @@ object ZixieContext {
                     exitAPP()
                 }
 
-                override fun onNegtiveClick() {
-                    callbackListener?.onNegtiveClick()
+                override fun onNegativeClick() {
+                    callbackListener?.onNegativeClick()
                     dismiss()
                 }
 

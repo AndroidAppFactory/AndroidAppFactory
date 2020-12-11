@@ -51,7 +51,7 @@ class TestDialgFragment : BaseTestFragment() {
                 }
             }
 
-            override fun onNegtiveClick() {
+            override fun onNegativeClick() {
                 try {
                     val cm = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as (ClipboardManager)
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
@@ -89,7 +89,7 @@ class TestDialgFragment : BaseTestFragment() {
                     TaskManager.getInstance().removeTask(taskName)
                 }
 
-                override fun onNegtiveClick() {
+                override fun onNegativeClick() {
                     dismiss()
                     TaskManager.getInstance().removeTask(taskName)
                 }
