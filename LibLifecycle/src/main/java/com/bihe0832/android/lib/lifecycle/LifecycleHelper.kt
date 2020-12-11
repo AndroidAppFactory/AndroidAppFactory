@@ -7,7 +7,6 @@ import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import java.lang.Exception
 
 /**
  *
@@ -37,62 +36,86 @@ object LifecycleHelper {
 
     private var lastStartVersion = 0L
     private var lastStartTime = 0L
+    private var mRecordUsedInfo = true
 
     @Synchronized
     fun init(application: Application) {
+        init(application, true)
+    }
+
+    @Synchronized
+    fun init(application: Application, recordUsedInfo: Boolean) {
         applicationContext = application.applicationContext
-        if(Config.hasInit()){
-            ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
-            application.registerActivityLifecycleCallbacks(ActivityObserver)
-            lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
-            lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
-            updateNewVersion()
-            updateUsedInfo()
-        }else{
-            throw AAFException("please please init Config module first")
-        }
-    }
-
-    fun getAPPInstalledTime(): Long {
-        return Config.readConfig(KEY_APP_INSTALLED_TIME, 0L)
-    }
-
-    fun getVersionInstalledTime(): Long {
-        return Config.readConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
-    }
-
-    fun getAPPLastStartTime(): Long {
-        return lastStartTime
-    }
-
-    fun getAPPLastVersion(): Long {
-        return lastStartVersion
-    }
-
-    fun getAPPUsedDays(): Int {
-        return Config.readConfig(KEY_USED_DAYS, 0)
-    }
-
-    fun getAPPUsedTimes(): Int {
-        return Config.readConfig(KEY_USED_TIMES, 0)
-    }
-
-    private fun updateNewVersion() {
-        if (APKUtils.getAppVersionCode(applicationContext) != lastStartVersion) {
-            Config.writeConfig(KEY_LAST_STARTED_VERSION, APKUtils.getAppVersionCode(applicationContext))
-            Config.writeConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
-            if (lastStartVersion < 1) {
-                Config.writeConfig(KEY_APP_INSTALLED_TIME, System.currentTimeMillis())
+        ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
+        application.registerActivityLifecycleCallbacks(ActivityObserver)
+        mRecordUsedInfo = recordUsedInfo
+        if (mRecordUsedInfo) {
+            if (Config.hasInit()) {
+                lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
+                lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
+                updateNewVersion()
+                updateUsedInfo()
+            } else {
+                throw AAFException("please please init Config module first")
             }
         }
     }
 
+    fun getAPPInstalledTime(): Long {
+        return doActionWithCheckReturnLong {
+            Config.readConfig(KEY_APP_INSTALLED_TIME, 0L)
+        }
+    }
+
+    fun getVersionInstalledTime(): Long {
+        return doActionWithCheckReturnLong {
+            Config.readConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
+        }
+    }
+
+    fun getAPPLastStartTime(): Long {
+        return doActionWithCheckReturnLong {
+            lastStartTime
+        }
+    }
+
+    fun getAPPLastVersion(): Long {
+        return doActionWithCheckReturnLong {
+            lastStartVersion
+        }
+    }
+
+    fun getAPPUsedDays(): Int {
+        return doActionWithCheckReturnLong {
+            Config.readConfig(KEY_USED_DAYS, 0L)
+        }.toInt()
+    }
+
+    fun getAPPUsedTimes(): Int {
+        return doActionWithCheckReturnLong {
+            Config.readConfig(KEY_USED_TIMES, 0L)
+        }.toInt()
+    }
+
+    private fun updateNewVersion() {
+        doActionWithCheck{
+            if (APKUtils.getAppVersionCode(applicationContext) != lastStartVersion) {
+                Config.writeConfig(KEY_LAST_STARTED_VERSION, APKUtils.getAppVersionCode(applicationContext))
+                Config.writeConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
+                if (lastStartVersion < 1) {
+                    Config.writeConfig(KEY_APP_INSTALLED_TIME, System.currentTimeMillis())
+                }
+            }
+        }
+    }
 
     private fun updateUsedInfo() {
-        Config.writeConfig(KEY_LAST_START_TIME, System.currentTimeMillis())
-        addValueOnce(KEY_USED_TIMES)
-        if (DateUtil.getDateEN(lastStartTime, "yyyy-MM-dd") != DateUtil.getDateEN(System.currentTimeMillis(), "yyyy-MM-dd")) {
-            addValueOnce(KEY_USED_DAYS)
+        doActionWithCheck{
+            Config.writeConfig(KEY_LAST_START_TIME, System.currentTimeMillis())
+            addValueOnce(KEY_USED_TIMES)
+            if (DateUtil.getDateEN(lastStartTime, "yyyy-MM-dd") != DateUtil.getDateEN(System.currentTimeMillis(), "yyyy-MM-dd")) {
+                addValueOnce(KEY_USED_DAYS)
+            }
         }
     }
 
@@ -111,5 +134,21 @@ object LifecycleHelper {
 
     private fun addValueOnce(key: String) {
         Config.writeConfig(key, Config.readConfig(key, 0) + 1)
+    }
+
+    private fun doActionWithCheck(action: () -> Unit) {
+        if (mRecordUsedInfo) {
+            action()
+        } else {
+            throw AAFException("LifecycleHelper has closed record used info")
+        }
+    }
+
+    private fun doActionWithCheckReturnLong(action: () -> Long): Long {
+        if (mRecordUsedInfo) {
+            return action()
+        } else {
+            throw AAFException("LifecycleHelper has closed record used info")
+        }
     }
 }

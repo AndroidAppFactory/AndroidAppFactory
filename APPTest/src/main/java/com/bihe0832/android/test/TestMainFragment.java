@@ -103,7 +103,7 @@ public class TestMainFragment extends BaseFragment {
         public Fragment getItem(int position) {
 
             if (mTabString[position].equals(TAB_FOR_NEW)) {
-                return new TestDialgFragment();
+                return new TestBasicFragment();
             } else if (mTabString[position].equals(TAB_FOR_DEV_COMMON)) {
                 return new TestDebugCommonFragment();
             } else if (mTabString[position].equals(TAB_FOR_DEV_TEMP)) {

@@ -16,7 +16,7 @@
         <ImageView
                 android:id="@+id/test_basic_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:scaleType="centerInside"
                 tools:src="@mipmap/share_qq" />
 

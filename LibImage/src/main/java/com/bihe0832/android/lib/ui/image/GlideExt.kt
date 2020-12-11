@@ -11,48 +11,65 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 
-
-fun ImageView.loadCircleCropImage(resId: Int) {
-    loadImage(resId, RequestOptions().circleCrop())
+fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
+    loadCircleCropImage(url, true, placeholder, error)
 }
 
-fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, placeholder, error, RequestOptions().circleCrop())
+fun ImageView.loadCircleCropImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
+    loadImage(url, needFade, placeholder, error, RequestOptions().circleCrop())
 }
 
 fun ImageView.loadRoundCropImage(url: String, radius: Int, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, placeholder, error, RequestOptions.bitmapTransform(RoundedCorners(radius)))
+    loadRoundCropImage(url, radius, true, placeholder, error)
 }
 
-fun ImageView.loadCenterCropImage(resId: Int) {
-    loadImage(resId, RequestOptions().centerCrop())
+fun ImageView.loadRoundCropImage(url: String, radius: Int, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
+    loadImage(url, needFade, placeholder, error, RequestOptions.bitmapTransform(RoundedCorners(radius)))
 }
 
 fun ImageView.loadCenterCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, placeholder, error, RequestOptions().centerCrop())
+    loadCenterCropImage(url, true, placeholder, error)
+}
+
+fun ImageView.loadCenterCropImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
+    loadImage(url, needFade, placeholder, error, RequestOptions().centerCrop())
 }
 
 fun ImageView.loadCenterInsideImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, placeholder, error, RequestOptions().centerInside())
+    loadCenterInsideImage(url, true, placeholder, error)
+}
+
+fun ImageView.loadCenterInsideImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
+    loadImage(url, needFade, placeholder, error, RequestOptions().centerInside())
 }
 
 fun ImageView.loadFitCenterImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, placeholder, error, RequestOptions().fitCenter())
+    loadFitCenterImage(url, true, placeholder, error)
 }
 
-fun ImageView.loadImage(resId: Int) {
-    loadImage(resId, RequestOptions())
+fun ImageView.loadFitCenterImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
+    loadImage(url, needFade, placeholder, error, RequestOptions().fitCenter())
 }
 
 fun ImageView.loadImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, placeholder, error, RequestOptions())
+    loadImage(url, true, placeholder, error)
 }
+
+fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
+    loadImage(url, needFade, placeholder, error, RequestOptions())
+}
+
 
 fun ImageView.loadImage(url: String, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
-    loadImage(url, placeholder, error, 0, 0, requestOptions)
+    loadImage(url, true, placeholder, error, requestOptions)
 }
 
-fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, height: Int, requestOptions: RequestOptions = RequestOptions()) {
+fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
+    loadImage(url, placeholder, error, 0, 0, needFade, requestOptions)
+}
+
+
+fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, height: Int, needFade: Boolean, requestOptions: RequestOptions = RequestOptions()) {
     ZLog.d("Glide", "load image:$url")
     requestOptions
             .downsample(DownsampleStrategy.CENTER_INSIDE)//将图片缩小至目标大小
@@ -71,16 +88,30 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
             if (url.endsWith("gif")) {
                 asGif()
             }
-        }.load(url)
-                .thumbnail(0.2f)
-                .transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
-                .apply(requestOptions)
-                .into(this)
+        }.load(url).apply {
+            if (needFade) {
+                transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
+                thumbnail(0.3f)
+            }
+        }.apply(requestOptions).into(this)
     } catch (e: Exception) {
         e.printStackTrace()
         loadImage(error)
     }
 }
+
+fun ImageView.loadCircleCropImage(resId: Int) {
+    loadImage(resId, RequestOptions().circleCrop())
+}
+
+fun ImageView.loadCenterCropImage(resId: Int) {
+    loadImage(resId, RequestOptions().centerCrop())
+}
+
+fun ImageView.loadImage(resId: Int) {
+    loadImage(resId, RequestOptions())
+}
+
 
 fun ImageView.loadImage(resId: Int, requestOptions: RequestOptions = RequestOptions()) {
     requestOptions.centerCrop()

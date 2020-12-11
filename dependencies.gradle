@@ -6,7 +6,7 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "CommonFeedback"
+ext.mainProject = "APPTest"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前设计到Android Support库的有：
@@ -14,7 +14,7 @@ ext.mainProject = "CommonFeedback"
  * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "CommonFeedback"
+ext.developModule = "LibLifecycle,LibImage"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -120,7 +120,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibCustomView",
-                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission","LibImmersive"
+                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission", "LibImmersive"
                 ]
         ],
         "LibUtils"                  : [
@@ -359,7 +359,7 @@ ext.moduleInfo = [
                 "apidependenciesList"    : [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
                         "com.github.bumptech.glide:okhttp3-integration:${project.glide_version}",
-                        "LibLog","LibOS"
+                        "LibLog", "LibOS"
                 ],
                 "specialdependenciesList": [
                         "kapt": [
@@ -421,7 +421,7 @@ ext.moduleInfo = [
                         "android.arch.lifecycle:extensions:${project.android_arch_lifecycle_version}",
                         "android.arch.lifecycle:common:${project.android_arch_lifecycle_version}",
                         "android.arch.lifecycle:runtime:${project.android_arch_lifecycle_version}",
-                        "LibLog", "LibConfig", "LibAPK","LibAAF"
+                        "LibLog", "LibConfig", "LibAPK", "LibAAF"
                 ]
         ],
         "LibPermission"             : [
@@ -431,13 +431,13 @@ ext.moduleInfo = [
                         "LibDialog", "LibAPK"
                 ]
         ],
-        "LibAAF"             : [
+        "LibAAF"                    : [
                 "version"            : "3.5.0",
                 "artifactId"         : "lib-aaf-tools",
                 "apidependenciesList": [
                 ]
         ],
-        "LibImmersive"             : [
+        "LibImmersive"              : [
                 "version"            : "3.6.0",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
