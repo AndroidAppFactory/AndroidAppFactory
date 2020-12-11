@@ -20,7 +20,7 @@ import java.text.NumberFormat;
 
 public class DownloadProgressDialog extends Dialog {
 
-    private TextView mTitileView;
+    private TextView mTitleView;
     private TextView mContentView;
     private ProgressBar mProgress;
     private TextView mProgressPercent;
@@ -99,12 +99,12 @@ public class DownloadProgressDialog extends Dialog {
         setCancelable(shouldCanceled);
         int screenWidth = DisplayUtil.getScreenWidth(getContext());
         int screenheight = DisplayUtil.getScreenHeight(getContext());
-        if (mTitileView != null) {
+        if (mTitleView != null) {
             if (!TextUtils.isEmpty(mTitleString)) {
-                mTitileView.setText(mTitleString);
-                mTitileView.setVisibility(View.VISIBLE);
+                mTitleView.setText(mTitleString);
+                mTitleView.setVisibility(View.VISIBLE);
             } else {
-                mTitileView.setVisibility(View.GONE);
+                mTitleView.setVisibility(View.GONE);
             }
         }
 
@@ -210,7 +210,7 @@ public class DownloadProgressDialog extends Dialog {
      * 初始化界面控件
      */
     private void initView() {
-        mTitileView = (TextView) findViewById(R.id.update_title);
+        mTitleView = (TextView) findViewById(R.id.update_title);
         mContentView = (TextView) findViewById(R.id.update_message);
         mProgress = (ProgressBar) findViewById(R.id.update_progress_bar);
         mProgressNumber = (TextView) findViewById(R.id.update_progress_number);
@@ -243,8 +243,8 @@ public class DownloadProgressDialog extends Dialog {
         return this;
     }
 
-    public DownloadProgressDialog setNegtive(String negtive) {
-        this.mNegativeButtonString = negtive;
+    public DownloadProgressDialog setNegative(String negative) {
+        this.mNegativeButtonString = negative;
         return this;
     }
 

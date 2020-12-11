@@ -2,26 +2,29 @@ package com.bihe0832.android.framework.ui
 
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.view.WindowManager
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.permission.PermissionManager
 import me.yokeyword.fragmentation.SupportActivity
 
 open class BaseActivity : SupportActivity() {
 
     var mToolbar: Toolbar? = null
-    val CREATE_TIME = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            //透明导航栏
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-        }
+        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
+    }
+
+    open fun getStatusBarColor(): Int {
+        return ContextCompat.getColor(this, R.color.colorPrimaryDark)
+    }
+
+    open fun getNavigationBarColor(): Int {
+        return ContextCompat.getColor(this, R.color.navigationBarColor)
     }
 
     open fun getPermissionList(): List<String> {

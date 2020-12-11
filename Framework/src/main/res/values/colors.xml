@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--常用颜色定义-->
+    <color name="transparent">#00000000</color>
+    <color name="gray_light">#f2f2f2</color>
+    <color name="gray">#646464</color>
+    <color name="gray_font_dark">#646464</color>
+    <color name="black">#202020</color>
+    <color name="white">#ffffff</color>
+    <color name="text_gray">#999999</color>
+
     <!--    主题相关配色-->
     <color name="colorPrimary">#03A9F4</color>
     <color name="colorPrimaryDark">#0288D1</color>
@@ -11,20 +20,14 @@
     <color name="colorControlNormal">#7988B3</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
+    <color name="windowBackground">@color/white</color>
+    <color name="navigationBarColor">#202020</color>
+
+    <!--CommonActivity 配色-->
+    <color name="common_activity_bg">@color/white</color>
+    <color name="common_content_bg">@color/white</color>
 
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
-    <!--CommonActivity 配色-->
-    <color name="common_activity_bg">@color/colorPrimaryDark</color>
-    <color name="common_content_bg">@color/white</color>
-
-    <!--常用颜色定义-->
-    <color name="transparent">#00000000</color>
-    <color name="gray_light">#f2f2f2</color>
-    <color name="gray">#646464</color>
-    <color name="gray_font_dark">#646464</color>
-    <color name="black">#202020</color>
-    <color name="white">#ffffff</color>
-    <color name="text_gray">#999999</color>
 </resources>

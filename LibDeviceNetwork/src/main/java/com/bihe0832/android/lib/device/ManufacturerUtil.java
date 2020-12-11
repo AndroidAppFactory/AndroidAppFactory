@@ -4,9 +4,9 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.SystemProperties;
 import android.text.TextUtils;
-import android.util.Log;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
+import com.bihe0832.android.lib.utils.ConvertUtils;
 import java.util.Locale;
 
 
@@ -66,7 +66,7 @@ public class ManufacturerUtil {
 
     public static String getEmuiVersion() {
         try {
-            String emuiVersion = SystemProperties.get("ro.build.version.emui", (String)null);
+            String emuiVersion = SystemProperties.get("ro.build.version.emui", (String) null);
             if (emuiVersion != null) {
                 return emuiVersion.substring(emuiVersion.indexOf("_") + 1);
             }
@@ -84,16 +84,17 @@ public class ManufacturerUtil {
     }
 
     public static boolean isMiRom() {
-        String miUiVersionName = SystemProperties.get("ro.miui.ui.version.name", (String)null);
+        String miUiVersionName = SystemProperties.get("ro.miui.ui.version.name", (String) null);
         if (!TextUtils.isEmpty(miUiVersionName)) {
             return true;
         } else {
-            return Build.MANUFACTURER != null ? TextFactoryUtils.trimSpace(Build.MANUFACTURER).toLowerCase().contains("xiaomi") : false;
+            return Build.MANUFACTURER != null ? TextFactoryUtils.trimSpace(Build.MANUFACTURER).toLowerCase()
+                    .contains("xiaomi") : false;
         }
     }
 
     public static String getMiuiVersion() {
-        String version = SystemProperties.get("ro.miui.ui.version.name", (String)null);
+        String version = SystemProperties.get("ro.miui.ui.version.name", (String) null);
         if (version != null) {
             try {
                 return version.substring(1);
@@ -103,6 +104,12 @@ public class ManufacturerUtil {
         }
 
         return version;
+    }
+
+    public static long getMiuiVersionCode() {
+        String miuiVersionCodeStr = SystemProperties.get("ro.miui.ui.version.code", (String) null);
+        return ConvertUtils.parseLong(miuiVersionCodeStr, -1);
+
     }
 
     public static boolean isOppo() {
@@ -130,7 +137,7 @@ public class ManufacturerUtil {
             return romVersion.substring(1);
         } catch (Exception var2) {
             var2.printStackTrace();
-            ZLog.e( "getOppoRomVersion version code error, version : " + romVersion);
+            ZLog.e("getOppoRomVersion version code error, version : " + romVersion);
             return romVersion;
         }
     }
@@ -145,7 +152,7 @@ public class ManufacturerUtil {
     }
 
     public static boolean isSumsung() {
-        String manufacturer = SystemProperties.get("ro.product.manufacturer", (String)null);
+        String manufacturer = SystemProperties.get("ro.product.manufacturer", (String) null);
         return TextFactoryUtils.trimSpace(manufacturer.toLowerCase()).contains("samsung");
     }
 

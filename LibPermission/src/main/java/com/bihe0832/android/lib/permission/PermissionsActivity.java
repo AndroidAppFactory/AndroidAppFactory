@@ -32,13 +32,13 @@ public class PermissionsActivity extends Activity {
         if (getIntent() == null || !getIntent().hasExtra(EXTRA_PERMISSIONS)) {
             throw new RuntimeException("PermissionsActivity need check permission");
         }
-        setContentView(R.layout.com_bihe0832_common_permissions_activity);
+        setContentView(R.layout.com_bihe0832_lib_permissions_activity);
 
         mChecker = new PermissionsChecker(this);
         isRequireCheck = true;
         dialog = new CommonDialog(this);
         dialog.setTitle(getResources().getString(R.string.permission_title));
-        dialog.setNegtive(getResources().getString(R.string.permission_negtive));
+        dialog.setNegative(getResources().getString(R.string.permission_negtive));
         dialog.setPositive(getResources().getString(R.string.permission_positive));
         dialog.setShouldCanceled(canCancel());
         dialog.setOnClickBottomListener(new OnDialogListener() {

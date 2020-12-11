@@ -15,16 +15,16 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!--输入框适配-->
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-        <item name="android:textColorPrimary">@color/dialog_title</item>
-        <item name="android:textColorSecondary">@color/dialog_title</item>
+        <item name="android:textColorPrimary">@color/dialog_text</item>
+        <item name="android:textColorSecondary">@color/dialog_text</item>
         <item name="android:textColorHint">@color/dialog_hint</item>
         <item name="android:textColorHintInverse">@color/dialog_hint</item>
     </style>
 
-    <color name="dialog_bg">#f2f2f2</color>-->
-    <color name="dialog_title">#202020</color>
+    <color name="dialog_bg">#FFFFFF</color>-->
+    <color name="dialog_text">#202020</color>
     <color name="dialog_hint">#333333</color>
     <color name="dialog_button">#333333</color>
     <color name="dialog_tips">#F44C36</color>
-    <color name="dialog_split">#999999</color>
+    <color name="dialog_split">#EEEEEE</color>
 </resources>

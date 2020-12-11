@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.utils;
 import android.text.TextUtils;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 常用工具类
@@ -22,7 +23,10 @@ public class ConvertUtils {
 
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                value = Integer.parseInt(str);
+                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
+                if (pattern.matcher(str).matches()) {
+                    value = Integer.parseInt(str);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -52,7 +56,10 @@ public class ConvertUtils {
         long value = defaultValue;
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                value = Long.parseLong(str);
+                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
+                if (pattern.matcher(str).matches()) {
+                    value = Long.parseLong(str);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -92,7 +99,10 @@ public class ConvertUtils {
 
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                value = Float.parseFloat(str);
+                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
+                if (pattern.matcher(str).matches()) {
+                    value = Float.parseFloat(str);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -112,7 +122,10 @@ public class ConvertUtils {
         double value = defaultValue;
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                value = Double.parseDouble(str);
+                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
+                if (pattern.matcher(str).matches()) {
+                    value = Double.parseDouble(str);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
