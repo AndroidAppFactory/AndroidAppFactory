@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/common_activity_bg"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -14,7 +13,6 @@
 
     <com.bihe0832.android.lib.ui.recycleview.ext.MyEasyRefreshLayout
         android:id="@+id/activity_list_refresh"
-        android:background="@color/common_content_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

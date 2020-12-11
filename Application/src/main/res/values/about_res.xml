@@ -10,7 +10,7 @@
     <string name="wechat_sub_content">关注开发者公众号</string>
 
     <string name="contact_QQ_join_failed">未安装手Q或手Q版本过低，请手动添加</string>
-    <color name="card_settings_bg">@color/common_content_bg</color>
+    <color name="card_settings_bg">@color/windowBackground</color>
 
 
 </resources>
