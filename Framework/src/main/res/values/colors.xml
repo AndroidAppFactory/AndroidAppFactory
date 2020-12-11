@@ -21,11 +21,7 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="windowBackground">@color/white</color>
-    <color name="navigationBarColor">#202020</color>
-
-    <!--CommonActivity 配色-->
-    <color name="common_activity_bg">@color/white</color>
-    <color name="common_content_bg">@color/white</color>
+    <color name="navigationBarColor">@color/colorPrimaryText</color>
 
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>

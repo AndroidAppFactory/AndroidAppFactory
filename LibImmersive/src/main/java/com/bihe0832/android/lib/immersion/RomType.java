@@ -5,12 +5,6 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.device.ManufacturerUtil;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 
-/**
- * @author：luck
- * @data：2018/3/28 下午1:02
- * @描述: Rom版本管理
- */
-
 class RomType {
 
     public static final int MIUI = 1;

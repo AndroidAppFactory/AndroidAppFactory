@@ -6,6 +6,7 @@ import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.adapter.CardInfoHelper
+import com.bihe0832.android.lib.immersion.hideBottomUIMenu
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
@@ -29,6 +30,7 @@ class TestMainActivity : CommonActivity() {
 
         PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
         UpdateManager.checkUpdateAndShowDialog(this, false)
+//        hideBottomUIMenu()
     }
 
 

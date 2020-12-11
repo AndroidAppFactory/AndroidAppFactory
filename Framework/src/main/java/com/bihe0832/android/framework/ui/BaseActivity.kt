@@ -1,10 +1,8 @@
 package com.bihe0832.android.framework.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
-import android.view.View
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -16,7 +14,7 @@ open class BaseActivity : SupportActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
+        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor(), false, false)
     }
 
     open fun getStatusBarColor(): Int {
@@ -70,23 +68,6 @@ open class BaseActivity : SupportActivity() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-    }
-
-
-    protected fun hideBottomUIMenu() {
-        //隐藏虚拟按键，并且全屏
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB && Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) { // lower api
-            this.window.decorView?.systemUiVisibility = View.GONE
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            val decorView = window.decorView
-            val uiOptions = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE)
-            decorView.systemUiVisibility = uiOptions
-
         }
     }
 
