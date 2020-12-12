@@ -1,6 +1,8 @@
 package com.bihe0832.android.test.module.card
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListActivity
@@ -26,6 +28,10 @@ class TestListActivity : CommonListActivity() {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
         }
+    }
+
+    override fun getNavigationBarColor(): Int {
+        return ContextCompat.getColor(this, R.color.transparent)
     }
 
     override fun getDataLiveData(): CommonListLiveData {

@@ -14,7 +14,7 @@ open class BaseActivity : SupportActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor(), false)
+        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
     }
 
     open fun getStatusBarColor(): Int {
