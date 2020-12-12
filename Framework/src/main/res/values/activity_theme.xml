@@ -25,9 +25,9 @@
     </style>
 
     <style name="frameWorkAppTheme.Toolbar.Light" parent="frameWorkAppTheme.Toolbar.Base">
-        <item name="titleTextAppearance">@style/Title.Base</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="titleTextAppearance">@style/Title.Base</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="navigationIcon">@mipmap/ic_left_arrow_white</item>
     </style>
@@ -41,6 +41,8 @@
 
     <style name="activityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowActionBar">false</item>

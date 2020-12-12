@@ -35,11 +35,11 @@ class TestMainActivity : CommonActivity() {
     }
 
     override fun getStatusBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.colorPrimary)
+        return ContextCompat.getColor(this, R.color.white)
     }
 
     override fun getNavigationBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.windowBackground)
+        return ContextCompat.getColor(this, R.color.result_point_color)
     }
 
     override fun getPermissionResult(): PermissionManager.OnPermissionResult {
