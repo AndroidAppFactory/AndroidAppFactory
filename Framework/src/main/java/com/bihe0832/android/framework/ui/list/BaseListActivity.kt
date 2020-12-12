@@ -73,12 +73,6 @@ abstract class BaseListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            //透明导航栏
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-        }
         setContentView(getResID())
         mToolbar = findViewById(R.id.common_activity_list_toolbar)
         if(null == mToolbar){
