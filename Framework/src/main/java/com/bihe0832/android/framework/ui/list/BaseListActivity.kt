@@ -81,7 +81,7 @@ abstract class BaseListActivity : BaseActivity() {
         }
         setContentView(getResID())
         mToolbar = findViewById(R.id.common_activity_list_toolbar)
-        if(null == mRecyclerView){
+        if(null == mToolbar){
             throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
         }
         mToolbar?.apply {
