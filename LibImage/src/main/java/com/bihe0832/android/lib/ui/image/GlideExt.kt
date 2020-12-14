@@ -65,15 +65,15 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, requestOption
 }
 
 fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
-    loadImage(url, placeholder, error, 0, 0, needFade, requestOptions)
+    loadImage(url, placeholder, error, 0, 0, needFade, DiskCacheStrategy.RESOURCE, requestOptions)
 }
 
 
-fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, height: Int, needFade: Boolean, requestOptions: RequestOptions = RequestOptions()) {
+fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, height: Int, needFade: Boolean, strategy: DiskCacheStrategy, requestOptions: RequestOptions = RequestOptions()) {
     ZLog.d("Glide", "load image:$url")
     requestOptions
             .downsample(DownsampleStrategy.CENTER_INSIDE)//将图片缩小至目标大小
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)//换成变换后的图片
+            .diskCacheStrategy(strategy)//换成变换后的图片
             .placeholder(placeholder)
             .error(error)
     if (width > 0) {
@@ -92,7 +92,7 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
             if (needFade) {
                 transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
                 thumbnail(0.3f)
-            }else{
+            } else {
                 requestOptions.dontAnimate()
             }
         }.apply(requestOptions).into(this)
