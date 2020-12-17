@@ -151,8 +151,15 @@ public class ConvertUtils {
     }
 
     public static String getSafeValueFromArray(String[] valueList, int index, String defaultValue) {
-        if (valueList != null && index < valueList.length && !TextUtils.isEmpty(valueList[index])) {
+        if (valueList != null && index > -1 && index < valueList.length && !TextUtils.isEmpty(valueList[index])) {
             return valueList[index];
+        }
+        return defaultValue;
+    }
+
+    public static String getSafeValueFromList(List<String> valueList, int index, String defaultValue) {
+        if (valueList != null && index > -1 && index < valueList.size() && !TextUtils.isEmpty(valueList.get(index))) {
+            return valueList.get(index);
         }
         return defaultValue;
     }
