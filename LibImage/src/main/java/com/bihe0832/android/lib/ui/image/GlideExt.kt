@@ -110,18 +110,20 @@ fun ImageView.loadCenterCropImage(resId: Int) {
     loadImage(resId, RequestOptions().centerCrop())
 }
 
+fun ImageView.loadCenterInsideImage(resId: Int) {
+    loadImage(resId, RequestOptions().centerInside())
+}
+
+
 fun ImageView.loadImage(resId: Int) {
     loadImage(resId, RequestOptions())
 }
 
 
 fun ImageView.loadImage(resId: Int, requestOptions: RequestOptions = RequestOptions()) {
-    requestOptions.dontAnimate().centerCrop()
+    requestOptions.dontAnimate()
     try {
-        Glide.with(this.context).load(resId).thumbnail(0.3f)
-                .transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
-                .apply(requestOptions)
-                .into(this)
+        Glide.with(this.context).load(resId).apply(requestOptions).into(this)
     } catch (e: Exception) {
         e.printStackTrace()
         try {
