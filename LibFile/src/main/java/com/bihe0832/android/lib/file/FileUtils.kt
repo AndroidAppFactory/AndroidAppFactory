@@ -49,6 +49,21 @@ object FileUtils {
         }
     }
 
+    fun checkAndCreateFolder(path: String): Boolean {
+        try {
+            File(path).let {
+                return if (!it.exists()) {
+                    it.mkdirs()
+                } else {
+                    true
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
+    }
+
     fun getZixieFileProvider(context: Context, file: File): Uri? {
         return FileProvider.getUriForFile(context, context.packageName + ".bihe0832", file)
     }
@@ -137,7 +152,7 @@ object FileUtils {
         try {
             if (!dir.exists()) {
                 return true
-            }else{
+            } else {
                 if (dir.isDirectory) {
                     val childrens: Array<String> = dir.list()
                     // 递归删除目录中的子目录下
@@ -146,7 +161,7 @@ object FileUtils {
                         if (!success) return false
                     }
                     return dir.delete()
-                }else{
+                } else {
                     return deleteFile(dir.absolutePath)
                 }
             }
