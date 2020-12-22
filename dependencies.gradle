@@ -107,6 +107,11 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "com.android.support:multidex:1.0.0",
                         "LibWrapper", "LibLifecycle"
+                ],
+                "specialdependenciesList": [
+                        "kapt": [
+                                "com.github.bumptech.glide:compiler:${project.glide_version}"
+                        ]
                 ]
         ],
         "LibWrapper"                : [
@@ -360,11 +365,6 @@ ext.moduleInfo = [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
                         "com.github.bumptech.glide:okhttp3-integration:${project.glide_version}",
                         "LibLog", "LibOS"
-                ],
-                "specialdependenciesList": [
-                        "kapt": [
-                                "com.github.bumptech.glide:compiler:${project.glide_version}"
-                        ]
                 ]
         ],
         "LibDialog"                 : [
