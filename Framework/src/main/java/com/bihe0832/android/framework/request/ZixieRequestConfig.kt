@@ -8,16 +8,16 @@ import com.bihe0832.android.lib.utils.encypt.MD5
 
 /**
  *
- * 文件下载及校验
+ * 配置下载及校验
  *  下载URL的格式为：URL;MD5，例如：http://blog.bihe0832.com;7478b16f5acd0a6febb7f7e3d9298f3d
  *  下载以后默认会强校验MD5是否正确，如果关闭校验MD5
  *  下载以后默认会保存本地，下次会优先尝试使用本地数据
  *  支持下载的时候同时提供一个备用URL,如果主URL加载失败，可以尝试加载备用URL
  */
 
-class ZixieRequestFile {
+class ZixieRequestConfig {
 
-    private val TAG = "[ZixieRequestFile] -> "
+    private val TAG = "[ZixieRequestConfig] -> "
     private val CONFIG_SUFFIX_VALUE = "_value"
 
     // 下载使用的主URL
@@ -27,10 +27,10 @@ class ZixieRequestFile {
     private var backupURLWithMD5: String = ""
 
     // 下载文件是否检查MD5
-    private var forceCheckMD5: Boolean = true
+    private var forceCheckMD5: Boolean = false
 
     // 下载文件是否保存本地
-    private var saveDataToLocal: Boolean = true
+    private var saveDataToLocal: Boolean = false
 
     interface ResponseHandler {
         companion object {
@@ -58,36 +58,30 @@ class ZixieRequestFile {
     }
 
     //无备份URL，支持MD5检查，使用本地缓存
-    fun get(configValue: String, callback: ResponseHandler) {
-        get(configValue, true, callback)
+    fun get(urlWithMD5: String, callback: ResponseHandler) {
+        get(urlWithMD5, true, callback)
     }
 
-    //无备份URL，MD5检查可自定义，使用本地缓存
-    fun get(configValue: String, forceCheckMD5: Boolean, callback: ResponseHandler) {
-        get(configValue, forceCheckMD5, true, callback)
-    }
-
-    //无备份URL，MD5检查、是否使用本地值可自定义
-    fun get(configValue: String, forceCheckMD5: Boolean, useCache: Boolean, callback: ResponseHandler) {
-        get(configValue, "", forceCheckMD5, useCache, callback)
+    //无备份URL，MD5检查可自定义，校验MD5时使用本地缓存
+    fun get(urlWithMD5: String, forceCheckMD5: Boolean, callback: ResponseHandler) {
+        get(urlWithMD5, "", forceCheckMD5, callback)
     }
 
     //主URL拉取失败，尝试拉取备份URL，支持MD5检查，使用本地缓存
-    fun get(configValue: String, defaultValue: String, callback: ResponseHandler) {
-        get(configValue, defaultValue, true, callback)
+    fun get(urlWithMD5: String, backupUrlWithMD5: String, callback: ResponseHandler) {
+        get(urlWithMD5, backupUrlWithMD5, true, callback)
     }
 
-    //主URL拉取失败，尝试拉取备份URL，MD5检查可自定义，使用本地缓存
-    fun get(configValue: String, defaultValue: String, forceCheckMD5: Boolean, callback: ResponseHandler) {
-        get(configValue, defaultValue, forceCheckMD5, true, callback)
-    }
-
-    //主URL拉取失败，尝试拉取备份URL，MD5检查、是否使用本地值可自定义
-    fun get(configValue: String, defaultValue: String, forceCheckMD5: Boolean, useCache: Boolean, callback: ResponseHandler) {
-        this.fetchURLWithMD5 = configValue
-        this.backupURLWithMD5 = defaultValue
+    //主URL拉取失败，尝试拉取备份URL，MD5检查可自定义，校验MD5时使用本地缓存
+    fun get(urlWithMD5: String, backupUrlWithMD5: String, forceCheckMD5: Boolean, callback: ResponseHandler) {
+        this.fetchURLWithMD5 = urlWithMD5
+        this.backupURLWithMD5 = backupUrlWithMD5
         this.forceCheckMD5 = forceCheckMD5
-        this.saveDataToLocal = useCache
+        this.saveDataToLocal = forceCheckMD5
+        if (!this.forceCheckMD5 && saveDataToLocal) {
+            //不校验MD5但是使用缓存会导致相同URL无法更新，强提醒
+            ZLog.e(TAG, "$urlWithMD5 不校验MD5但是使用缓存会导致相同URL无法更新，请检查确认！！！")
+        }
         execute(callback)
     }
 
