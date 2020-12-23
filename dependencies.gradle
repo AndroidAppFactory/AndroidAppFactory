@@ -14,7 +14,8 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibWebview"
+ext.developModule = "LibCommonUtils"
+
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
