@@ -1,9 +1,7 @@
 package com.bihe0832.android.lib.permission;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -12,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+import com.bihe0832.android.lib.utils.intent.IntentUtils;
 
 
 public class PermissionsActivity extends Activity {
@@ -20,7 +19,6 @@ public class PermissionsActivity extends Activity {
     public static final String EXTRA_PERMISSIONS = "com.bihe0832.android.lib.permission.extra_permission"; // 权限参数
     public static final String EXTRA_CAN_CANCEL = "com.bihe0832.android.lib.permission.can.cancel"; // 权限参数
 
-    private static final String PACKAGE_URL_SCHEME = "package:"; // 方案
 
     private PermissionsChecker mChecker; // 权限检测器
     private boolean isRequireCheck; // 是否需要系统权限检测, 防止和系统提示框重叠
@@ -44,8 +42,9 @@ public class PermissionsActivity extends Activity {
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override
             public void onPositiveClick() {
-                startAppSettings();
+                IntentUtils.startAppSettings(PermissionsActivity.this);
             }
+
 
             @Override
             public void onNegativeClick() {
@@ -131,12 +130,5 @@ public class PermissionsActivity extends Activity {
                         + "权限，缺少权限在使用中可能会出现部分功能异常。"
         );
         dialog.show();
-    }
-
-    // 启动应用的设置
-    private void startAppSettings() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse(PACKAGE_URL_SCHEME + getPackageName()));
-        startActivity(intent);
     }
 }

@@ -2,12 +2,15 @@ package com.bihe0832.android.lib.permission
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import com.bihe0832.android.lib.log.ZLog
 
 object PermissionManager {
 
     private const val TAG = "PermissionManager"
+
 
     private var mContext: Context? = null
     private var mOuterResultListener: OnPermissionResult? = null
@@ -131,4 +134,5 @@ object PermissionManager {
         return "<font color ='" + (mContext?.resources?.getString(R.string.permission_color)
                 ?: "#38ADFF") + "'><b> $content </b></font> "
     }
+
 }
