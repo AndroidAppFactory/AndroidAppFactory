@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibCommonUtils"
+ext.developModule = "LibPermission,LibWebview,LibImage,LibDeviceNetwork,LibAPK"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -31,7 +31,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.6.11"
+ext.moduleVersionName = "3.6.12"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -429,7 +429,7 @@ ext.moduleInfo = [
                 "version"            : "3.6.11",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
-                        "LibDialog", "LibAPK"
+                        "LibDialog", "LibAPK", "LibDeviceNetwork"
                 ]
         ],
         "LibAAF"                    : [

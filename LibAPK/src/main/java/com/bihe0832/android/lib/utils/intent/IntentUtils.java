@@ -3,7 +3,7 @@ package com.bihe0832.android.lib.utils.intent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-
+import android.provider.Settings;
 import com.bihe0832.android.lib.log.ZLog;
 
 
@@ -65,6 +65,19 @@ public class IntentUtils {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // 启动应用的设置
+    public static void startAppSettings(Context ctx) {
+        startAppSettings(ctx, Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+    }
+
+
+    // 启动应用的设置
+    public static void startAppSettings(Context ctx, String Settings) {
+        Intent intent = new Intent(Settings);
+        intent.setData(Uri.parse("package:" + ctx.getPackageName()));
+        startIntent(ctx, intent);
     }
 
     public static void sendTextInfo(final Context context, final String title, final String content) {

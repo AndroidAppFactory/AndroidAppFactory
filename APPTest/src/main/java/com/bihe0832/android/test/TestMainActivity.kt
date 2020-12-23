@@ -23,10 +23,13 @@ class TestMainActivity : CommonActivity() {
 
         PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "相机")
+            put(Manifest.permission.RECORD_AUDIO, "录音")
+
         })
 
         PermissionManager.addPermissionScene(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "扫描二维码")
+            put(Manifest.permission.RECORD_AUDIO, "语音录制")
         })
 
         PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
@@ -40,6 +43,13 @@ class TestMainActivity : CommonActivity() {
 
     override fun getNavigationBarColor(): Int {
         return ContextCompat.getColor(this, R.color.result_point_color)
+    }
+
+    override fun getPermissionList(): List<String> {
+        return ArrayList<String>().apply {
+            add(Manifest.permission.CAMERA)
+            add(Manifest.permission.RECORD_AUDIO)
+        }
     }
 
     override fun getPermissionResult(): PermissionManager.OnPermissionResult {
