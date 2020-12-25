@@ -1,6 +1,6 @@
 package com.bihe0832.android.plugin
 
-import com.bihe0832.android.lib.router.annotation.Module
+//import com.bihe0832.android.lib.router.annotation.Module
 import javassist.*
 import org.gradle.api.Project
 
@@ -142,8 +142,8 @@ class MyInjectByJavassit {
                     println("ctMethod: $ctMethod")
 
                     Object[] clazzAnnotations = ctClass.getAnnotations();
-                    Module moduleValue = (Module) clazzAnnotations[0];
-                    System.out.println("Zixie" + moduleValue.value());
+//                    Module moduleValue = (Module) clazzAnnotations[0];
+//                    System.out.println("Zixie" + moduleValue.value());
 
                     String toastStr = "android.util.Log.d(\"Zixie\",\"这是一条来自Transform的日志" + moduleValue.value() + "\"); "
 

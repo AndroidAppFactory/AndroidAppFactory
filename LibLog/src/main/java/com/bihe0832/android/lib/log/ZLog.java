@@ -4,19 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import kotlin.jvm.Synchronized;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2020/7/9.
- * Description: Description
+ *         Created on 2020/7/9.
+ *         Description: Description
  */
 public final class ZLog {
 
@@ -25,6 +22,7 @@ public final class ZLog {
     private static final String TAG = "ZLog";
 
     private static final int STACK_TRACE_DEEP = 6;
+    private static final int LOG_LENGTH = 3000;
 
     private static final List<LogImpl> logImplList = new ArrayList<>();
 
@@ -60,9 +58,14 @@ public final class ZLog {
     }
 
     public static void info(String tag, String log) {
-        if (log.length() > 3000) {
-            Log.w(tag, log.substring(0, 3000));
-            info(tag, log.substring(3000));
+        if (log.length() > LOG_LENGTH) {
+            for (int i = 0; i < log.length(); i += LOG_LENGTH) {
+                if (i + LOG_LENGTH < log.length()) {
+                    info(tag, log.substring(i, i + LOG_LENGTH));
+                } else {
+                    info(tag, log.substring(i));
+                }
+            }
         } else {
             Log.w(tag, log);
         }
@@ -76,9 +79,14 @@ public final class ZLog {
 
     public static void i(String tag, String log) {
         if (sDebug) {
-            if (log.length() > 3000) {
-                Log.i(tag, log.substring(0, 3000));
-                i(tag, log.substring(3000));
+            if (log.length() > LOG_LENGTH) {
+                for (int i = 0; i < log.length(); i += LOG_LENGTH) {
+                    if (i + LOG_LENGTH < log.length()) {
+                        Log.i(tag, log.substring(i, i + LOG_LENGTH));
+                    } else {
+                        Log.i(tag, log.substring(i));
+                    }
+                }
             } else {
                 Log.i(tag, log);
             }
@@ -87,10 +95,10 @@ public final class ZLog {
 
 
     private static void debugLog(String tag, String log) {
-        if (log.length() > 3000) {
-            for (int i = 0; i < log.length(); i += 3000) {
-                if (i + 3000 < log.length()) {
-                    Log.d(tag, log.substring(i, i + 3000));
+        if (log.length() > LOG_LENGTH) {
+            for (int i = 0; i < log.length(); i += LOG_LENGTH) {
+                if (i + LOG_LENGTH < log.length()) {
+                    Log.d(tag, log.substring(i, i + LOG_LENGTH));
                 } else {
                     debugLog(tag, log.substring(i));
                 }
@@ -185,9 +193,14 @@ public final class ZLog {
 
     public static void w(String tag, String log) {
         if (sDebug) {
-            if (log.length() > 3000) {
-                Log.w(tag, log.substring(0, 3000));
-                w(tag, log.substring(3000));
+            if (log.length() > LOG_LENGTH) {
+                for (int i = 0; i < log.length(); i += LOG_LENGTH) {
+                    if (i + LOG_LENGTH < log.length()) {
+                        Log.w(tag, log.substring(i, i + LOG_LENGTH));
+                    } else {
+                        Log.w(tag, log.substring(i));
+                    }
+                }
             } else {
                 Log.w(tag, log);
             }
@@ -200,9 +213,14 @@ public final class ZLog {
 
     public static void e(String tag, String log) {
         if (sDebug) {
-            if (log.length() > 3000) {
-                Log.e(tag, log.substring(0, 3000));
-                e(tag, log.substring(3000));
+            if (log.length() > LOG_LENGTH) {
+                for (int i = 0; i < log.length(); i += LOG_LENGTH) {
+                    if (i + LOG_LENGTH < log.length()) {
+                        Log.e(tag, log.substring(i, i + LOG_LENGTH));
+                    } else {
+                        Log.e(tag, log.substring(i));
+                    }
+                }
             } else {
                 Log.e(tag, log);
             }

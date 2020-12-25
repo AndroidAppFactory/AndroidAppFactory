@@ -38,7 +38,3 @@ publish {
     desc = 'the router module for zixie'//项目描述
     website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
 }
-
-dependencies {
-    api "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
-}

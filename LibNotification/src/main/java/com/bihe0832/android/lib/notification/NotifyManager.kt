@@ -8,12 +8,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.text.TextUtils
-import android.widget.RemoteViews
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.util.*
+
 
 object NotifyManager {
 
@@ -40,7 +43,7 @@ object NotifyManager {
     fun sendNotifyNow(context: Context, title: String, subTitle: String?, content: String?, action: String?, channelID: String): Int {
         var noticeID = mNotifyID.generate()
         context.applicationContext.let { context ->
-           NotificationCompat.Builder(context, channelID).apply {
+            NotificationCompat.Builder(context, channelID).apply {
                 setContentTitle(title)
                 //设置内容
                 if (content?.isNotEmpty() == true) {
@@ -90,6 +93,18 @@ object NotifyManager {
             }
         }
         (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(notifyID, notification)
+    }
+
+    fun areNotificationsEnabled(context: Context): Boolean {
+        return NotificationManagerCompat.from(context).areNotificationsEnabled()
+    }
+
+    fun showNotificationsSettings(context: Context): Boolean {
+        return if (IntentUtils.startSettings(context, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) {
+            true
+        } else {
+            return IntentUtils.startAppDetailSettings(context)
+        }
     }
 }
 

@@ -1,7 +1,9 @@
 package com.bihe0832.android.lib.permission;
 
+import android.Manifest;
 import android.content.Context;
 import android.support.v4.content.PermissionChecker;
+import com.bihe0832.android.lib.permission.wrapper.FloatPermissionWrapperKt;
 
 public class PermissionsChecker {
 
@@ -23,6 +25,10 @@ public class PermissionsChecker {
 
     // 判断是否缺少权限
     public boolean lacksPermission(String permission) {
-        return PermissionChecker.checkSelfPermission(mContext, permission) != PermissionChecker.PERMISSION_GRANTED;
+        if (permission.equalsIgnoreCase(Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+            return !FloatPermissionWrapperKt.checkFloatPermission(mContext);
+        } else {
+            return PermissionChecker.checkSelfPermission(mContext, permission) != PermissionChecker.PERMISSION_GRANTED;
+        }
     }
 }
