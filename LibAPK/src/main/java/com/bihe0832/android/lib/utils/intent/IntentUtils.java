@@ -3,8 +3,12 @@ package com.bihe0832.android.lib.utils.intent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
+import com.bihe0832.android.lib.device.ManufacturerUtil;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.intent.wrapper.PermissionIntent;
 
 
 public class IntentUtils {
@@ -68,16 +72,72 @@ public class IntentUtils {
     }
 
     // 启动应用的设置
-    public static void startAppSettings(Context ctx) {
-        startAppSettings(ctx, Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+    public static boolean startAppDetailSettings(Context ctx) {
+        boolean result = false;
+        if (ManufacturerUtil.isXiaomi()) {
+            result = PermissionIntent.gotoMiuiPermission(ctx);
+        } else if (ManufacturerUtil.isMeizu()) {
+            result = PermissionIntent.gotoMeizuPermission(ctx);
+        } else if (ManufacturerUtil.isHuawei()) {
+            result = PermissionIntent.gotoHuaweiPermission(ctx);
+        }
+        if (result) {
+            return true;
+        } else {
+            return startAppSettings(ctx, Settings.ACTION_APPLICATION_DETAILS_SETTINGS, true);
+        }
     }
 
+    // 启动应用的设置
+    public static boolean startAppSettings(Context ctx, String data) {
+        return startAppSettings(ctx, data, true);
+    }
 
     // 启动应用的设置
-    public static void startAppSettings(Context ctx, String Settings) {
-        Intent intent = new Intent(Settings);
-        intent.setData(Uri.parse("package:" + ctx.getPackageName()));
-        startIntent(ctx, intent);
+    public static boolean startAppSettings(Context ctx, String data, boolean showDetail) {
+        if (null == ctx) {
+            ZLog.d("startAppSettings ctx == null");
+            return false;
+        }
+        if (TextUtils.isEmpty(data)) {
+            ZLog.d("startAppSettings data == null");
+            if (showDetail) {
+                return startAppDetailSettings(ctx);
+            } else {
+                return false;
+            }
+        }
+
+        Intent intent = new Intent(data);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //8.0及以上
+            intent.setData(Uri.fromParts("package", ctx.getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //5.0以上到8.0以下
+            intent.putExtra("app_package", ctx.getPackageName());
+            intent.putExtra("app_uid", ctx.getApplicationInfo().uid);
+        } else {
+            intent.setData(Uri.parse("package:" + ctx.getPackageName()));
+        }
+        if (!startIntent(ctx, intent)) {
+            if (showDetail) {
+                return startAppDetailSettings(ctx);
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    // 启动手机的设置
+    public static boolean startSettings(Context ctx, String data) {
+        if (TextUtils.isEmpty(data)) {
+            return false;
+        }
+        Intent intent = new Intent();
+        intent.setAction(data);
+        return startIntent(ctx, intent);
     }
 
     public static void sendTextInfo(final Context context, final String title, final String content) {

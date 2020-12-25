@@ -16,6 +16,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.lifecycle.*
 import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.item.TestItemData
 import com.bihe0832.android.test.base.item.TestTipsData
@@ -42,6 +43,11 @@ open class TestDebugCommonFragment : BaseTestFragment() {
                 RouterHelper.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             }))
             add(TestItemData("网络切换监控", View.OnClickListener { startActivity(TestNetworkActivity::class.java) }))
+            add(TestItemData("打开应用设置", { IntentUtils.startAppDetailSettings(context) }))
+            add(TestItemData("打开开发者模式", View.OnClickListener {
+                IntentUtils.startSettings(context, android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
+            }))
+
         }
     }
 
@@ -83,14 +89,16 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         builder.append("上次启动版本号: ${LifecycleHelper.getAPPLastVersion()}\n")
         builder.append("上次启动时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPLastStartTime())}\n")
 
-        builder.append("本次启动类型: ${LifecycleHelper.isFirstStart.let {
-            when (it) {
-                INSTALL_TYPE_NOT_FIRST -> "非首次启动"
-                INSTALL_TYPE_VERSION_FIRST -> "版本首次启动"
-                INSTALL_TYPE_APP_FIRST -> "应用首次启动"
-                else -> "类型错误（$it）"
+        builder.append("本次启动类型: ${
+            LifecycleHelper.isFirstStart.let {
+                when (it) {
+                    INSTALL_TYPE_NOT_FIRST -> "非首次启动"
+                    INSTALL_TYPE_VERSION_FIRST -> "版本首次启动"
+                    INSTALL_TYPE_APP_FIRST -> "应用首次启动"
+                    else -> "类型错误（$it）"
+                }
             }
-        }}\n")
+        }\n")
         builder.append("本次启动时间: ${DateUtil.getDateEN(ApplicationObserver.getAPPStartTime())}\n")
         builder.append("累积使用天数: ${LifecycleHelper.getAPPUsedDays()}\n")
         builder.append("累积使用次数: ${LifecycleHelper.getAPPUsedTimes()}\n")

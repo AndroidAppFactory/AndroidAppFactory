@@ -2,6 +2,7 @@ package com.bihe0832.android.test
 
 import android.Manifest
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v4.content.ContextCompat
 import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.framework.ZixieContext
@@ -24,15 +25,16 @@ class TestMainActivity : CommonActivity() {
         PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "相机")
             put(Manifest.permission.RECORD_AUDIO, "录音")
-
+            put(Manifest.permission.SYSTEM_ALERT_WINDOW, "悬浮窗")
         })
 
         PermissionManager.addPermissionScene(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "扫描二维码")
             put(Manifest.permission.RECORD_AUDIO, "语音录制")
+            put(Manifest.permission.SYSTEM_ALERT_WINDOW, "悬浮窗")
         })
 
-        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
+//        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
         UpdateManager.checkUpdateAndShowDialog(this, false)
         hideBottomUIMenu()
     }
@@ -49,6 +51,7 @@ class TestMainActivity : CommonActivity() {
         return ArrayList<String>().apply {
             add(Manifest.permission.CAMERA)
             add(Manifest.permission.RECORD_AUDIO)
+            add(Manifest.permission.SYSTEM_ALERT_WINDOW)
         }
     }
 

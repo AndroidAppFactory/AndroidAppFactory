@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.test.R
 import kotlinx.android.synthetic.main.fragment_test_tts.*
 import java.util.*
@@ -134,12 +135,7 @@ class TestTTSFragment : BaseFragment() {
         }
 
         tts_set?.setOnClickListener {
-            Intent().apply {
-                setAction("com.android.settings.TTS_SETTINGS")
-                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }.let {
-                startActivity(it)
-            }
+            IntentUtils.startSettings(context,"com.android.settings.TTS_SETTINGS")
         }
 
         tts_speak?.setOnClickListener {

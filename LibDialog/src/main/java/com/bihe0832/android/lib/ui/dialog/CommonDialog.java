@@ -357,6 +357,16 @@ public class CommonDialog extends Dialog {
         return negativeString;
     }
 
+
+    /**
+     * replaced by {@link #setShouldCanceled(boolean)}
+     */
+    @Deprecated
+    @Override
+    public void setCancelable(boolean flag) {
+        super.setCancelable(flag);
+    }
+
     public CommonDialog setShouldCanceled(boolean flag) {
         shouldCanceledOutside = flag;
         return this;

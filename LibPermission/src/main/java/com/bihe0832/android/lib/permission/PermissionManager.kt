@@ -1,8 +1,8 @@
 package com.bihe0832.android.lib.permission
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import com.bihe0832.android.lib.log.ZLog
@@ -17,6 +17,9 @@ object PermissionManager {
 
     private val mPermissionDesc = HashMap<String, String>()
     private val mPermissionScene = HashMap<String, String>()
+    private val mPermissionSettings = HashMap<String, String>().apply {
+        put(Manifest.permission.SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+    }
 
     private val mDefaultScene by lazy {
         mContext?.getString(R.string.permission_default_scene) ?: "完整"
@@ -66,6 +69,10 @@ object PermissionManager {
         mPermissionDesc.putAll(permissionDesc)
     }
 
+    fun addPermissionSettings(permissionSettings: HashMap<String, String>) {
+        mPermissionSettings.putAll(permissionSettings)
+    }
+
     interface OnPermissionResult {
         fun onSuccess()
         fun onUserCancel()
@@ -91,7 +98,6 @@ object PermissionManager {
                 mLastPermissionCheckResultListener.onSuccess()
             } else {
                 try {
-
                     val intent = Intent(context, PermissionsActivity::class.java)
                     intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissions)
                     intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
@@ -128,6 +134,13 @@ object PermissionManager {
         } else {
             mDefaultDesc
         }
+    }
+
+    fun getPermissionSettings(permission: String): String {
+        mPermissionSettings.get(permission)?.let {
+            return it
+        }
+        return ""
     }
 
     private fun addHtmlWrapper(content: String): String {

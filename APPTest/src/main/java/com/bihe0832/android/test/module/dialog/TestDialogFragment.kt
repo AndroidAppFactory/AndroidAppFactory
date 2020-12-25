@@ -7,6 +7,8 @@ import android.content.Context
 import android.os.Build
 import android.view.View
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.notification.NotifyManager
+import com.bihe0832.android.lib.permission.PermissionDialog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -21,13 +23,14 @@ import com.bihe0832.android.test.base.BaseTestFragment
 import com.bihe0832.android.test.base.item.TestItemData
 import java.util.*
 
-class TestDialgFragment : BaseTestFragment() {
+class TestDialogFragment : BaseTestFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
 
             add(TestItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
             add(TestItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(TestItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
+            add(TestItemData("权限弹框", View.OnClickListener { testPermission(activity) }))
         }
     }
 
@@ -138,5 +141,22 @@ class TestDialgFragment : BaseTestFragment() {
             it.show("这是一个测试~")
         }
     }
+    private fun testPermission(activity: Activity?) {
+        activity?.let {
+            PermissionDialog(it).show("消息通知","通知",true,object :OnDialogListener{
+                override fun onPositiveClick() {
+//                    openFloatPermissionSettings(context)
+                    NotifyManager.showNotificationsSettings(context!!)
+                }
 
+                override fun onNegativeClick() {
+
+                }
+
+                override fun onCancel() {
+
+                }
+            })
+        }
+    }
 }
