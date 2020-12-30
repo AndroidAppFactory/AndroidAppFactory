@@ -13,11 +13,11 @@ import com.bihe0832.android.lib.http.common.HttpResponseHandler
 object ZixieRequestHttp {
 
     fun get(url: String): String {
-        return HTTPServer.getInstance().doRequestAsync(url)
+        return HTTPServer.getInstance().doRequestSync(url)
     }
 
     fun post(url: String, params: String): String {
-        return HTTPServer.getInstance().doRequestAsync(url, params)
+        return HTTPServer.getInstance().doRequestSync(url, params)
     }
 
     fun get(url: String, responseHandler: HttpResponseHandler) {
@@ -30,7 +30,7 @@ object ZixieRequestHttp {
                 return responseHandler
             }
         }.let {
-            HTTPServer.getInstance().doRequest(it)
+            HTTPServer.getInstance().doRequestAsync(it)
         }
     }
 
@@ -46,7 +46,7 @@ object ZixieRequestHttp {
         }.apply {
             data = postData
         }.let {
-            HTTPServer.getInstance().doRequest(it)
+            HTTPServer.getInstance().doRequestAsync(it)
         }
     }
 }

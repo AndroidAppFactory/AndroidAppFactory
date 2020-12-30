@@ -27,6 +27,15 @@ android {
         }
     }
 
+    packagingOptions {
+        project.doNotStripList.each { item ->
+            doNotStrip item
+        }
+        project.excludeList.each { item ->
+            exclude item
+        }
+    }
+
     lintOptions {
         abortOnError false
     }

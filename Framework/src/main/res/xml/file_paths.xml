@@ -2,7 +2,8 @@
 <paths>
     <external-files-path name="downloads" path="downloads/"/>
     <external-files-path name="Download" path="Download/"/>
-    <external-files-path
-        name="pictures"
-        path="pictures/" />
+    <external-files-path name="pictures" path="pictures/" />
+    <files-path name="downloads" path="downloads/"/>
+    <files-path name="Download" path="Download/"/>
+    <files-path name="pictures" path="pictures/"/>
 </paths>

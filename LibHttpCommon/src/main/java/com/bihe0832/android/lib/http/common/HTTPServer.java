@@ -58,18 +58,18 @@ public class HTTPServer {
     }
 
 
-    public void doRequest(HttpBasicRequest request) {
+    public void doRequestAsync(HttpBasicRequest request) {
         Message msg = mCallHandler.obtainMessage();
         msg.what = MSG_REQUEST;
         msg.obj = request;
         mCallHandler.sendMessage(msg);
     }
 
-    public String doRequestAsync(final String url) {
-        return doRequestAsync(url, (byte[]) null);
+    public String doRequestSync(final String url) {
+        return doRequestSync(url, (byte[]) null);
     }
 
-    public String doRequestAsync(final String url, final String params) {
+    public String doRequestSync(final String url, final String params) {
         byte[] bytes = null;
 
         try {
@@ -79,13 +79,13 @@ public class HTTPServer {
         }
 
         if (null == bytes) {
-            return doRequestAsync(url, (byte[]) null);
+            return doRequestSync(url, (byte[]) null);
         } else {
-            return doRequestAsync(url, bytes);
+            return doRequestSync(url, bytes);
         }
     }
 
-    public String doRequestAsync(final String url, byte[] bytes) {
+    public String doRequestSync(final String url, byte[] bytes) {
         BaseConnection connection = getConnection(url);
         HttpBasicRequest basicRequest = new HttpBasicRequest() {
             @Override

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.bihe0832.android.lib.file.FileUtils;
 
+import com.bihe0832.android.lib.file.ZixieFileProvider;
 import java.io.File;
 
 import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
@@ -28,7 +29,7 @@ class APKInstall {
         if (!TextUtils.isEmpty(filePath)) {
             try {
                 File file = new File(filePath);
-                Uri fileProvider = FileUtils.INSTANCE.getZixieFileProvider(context, file);
+                Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, file);
                 realInstallAPK(context, fileProvider, file, listener);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();

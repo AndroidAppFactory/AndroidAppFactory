@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.zip.ZipUtils;
@@ -42,10 +43,10 @@ class ObbFileInstall {
             listener.onInstallPrepare();
             String result = prepareInstallOBB(new File(fileDir), obbFolder, listener);
             if (!TextUtils.isEmpty(result)) {
-                if (result.startsWith(FileUtils.INSTANCE.getZixieFilePath(context))) {
+                if (result.startsWith(ZixieFileProvider.getZixieFilePath(context))) {
                     APKInstall.installAPK(context, result, listener);
                 } else {
-                    String realInstallPath = FileUtils.INSTANCE.getZixieFilePath(context) + "/" + FileUtils.INSTANCE.getFileName(result);
+                    String realInstallPath = ZixieFileProvider.getZixieFilePath(context) + "/" + FileUtils.INSTANCE.getFileName(result);
                     ZLog.d(TAG + "installObbAPKByFile start copy apk File");
                     FileUtils.INSTANCE.copyFile(new File(result), new File(realInstallPath));
                     ZLog.d(TAG + "installObbAPKByFile finished copy apk File");
@@ -102,7 +103,7 @@ class ObbFileInstall {
             }
 
             File obbFolder = OBBFormats.getObbDir(packageName);
-            File targetAPKFolder = new File(FileUtils.INSTANCE.getZixieFilePath(context) + "/" + packageName);
+            File targetAPKFolder = new File(ZixieFileProvider.getZixieFilePath(context) + "/" + packageName);
             if (!targetAPKFolder.exists() && !targetAPKFolder.mkdirs()) {
                 listener.onInstallFailed(UNZIP_FAILED);
                 return;

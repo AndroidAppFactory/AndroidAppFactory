@@ -8,6 +8,7 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadUtils
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -97,7 +98,7 @@ class TestDownloadFragment : BaseTestFragment() {
     }
 
     private fun testInstallOOBByFolder() {
-        testInstallOOB(FileUtils.getZixieFilePath(context!!) + "/test/","jp.co.sumzap.pj0007")
+        testInstallOOB(ZixieFileProvider.getZixieFilePath(context!!) + "/test/","jp.co.sumzap.pj0007")
     }
 
     private fun testInstallBigOOBByFolder() {
@@ -136,7 +137,7 @@ class TestDownloadFragment : BaseTestFragment() {
     }
 
     private fun testInstallSplitByFolder() {
-        testInstallSplit(FileUtils.getZixieFilePath(context!!) + "/com.supercell.brawlstars", "com.supercell.brawlstars")
+        testInstallSplit(ZixieFileProvider.getZixieFilePath(context!!) + "/com.supercell.brawlstars", "com.supercell.brawlstars")
     }
 
     private fun testInstallSplit(filePath: String, packangeName: String) {

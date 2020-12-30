@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
@@ -21,7 +22,7 @@ import java.util.LinkedList;
 /**
  * Created by zixie on 2017/11/1.
  * <p>
- * 使用InstallUtils的前提是要按照  {@link FileUtils }的说明 定义好
+ * 使用InstallUtils的前提是要按照  {@link ZixieFileProvider }的说明 定义好
  * lib_bihe0832_file_folder 和 zixie_file_paths.xml
  * 如果不使用库自定义的fileProvider，请使用 {@link InstallUtils#installAPP(Context, Uri, File)} 安装 }，此时无需关注上述两个定义
  */
@@ -154,7 +155,7 @@ public class InstallUtils {
         if (apkInstallType == ApkInstallType.OBB) {
             ObbFileInstall.installObbAPKByZip(context, zipFilePath, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
-            String fileDir = FileUtils.INSTANCE.getZixieFilePath(context) + "/" + packageName;
+            String fileDir = ZixieFileProvider.getZixieFilePath(context) + "/" + packageName;
             ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
             listener.onUnCompress();
             ZipUtils.unCompress(zipFilePath, fileDir);
