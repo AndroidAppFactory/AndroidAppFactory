@@ -1,12 +1,12 @@
 package com.bihe0832.android.lib.http.common;
 
+import static com.bihe0832.android.lib.http.common.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE;
+
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
-
 import java.net.HttpURLConnection;
 
 /**
@@ -66,7 +66,7 @@ public class HTTPServer {
     }
 
     public String doRequestSync(final String url) {
-        return doRequestSync(url, (byte[]) null);
+        return doRequestSync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE);
     }
 
     public String doRequestSync(final String url, final String params) {
@@ -79,13 +79,20 @@ public class HTTPServer {
         }
 
         if (null == bytes) {
-            return doRequestSync(url, (byte[]) null);
+            return doRequestSync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE);
         } else {
-            return doRequestSync(url, bytes);
+            return doRequestSync(url, bytes, HTTP_REQ_VALUE_CONTENT_TYPE);
         }
     }
 
-    public String doRequestSync(final String url, byte[] bytes) {
+    public String doRequestSync(final String url, byte[] bytes, final String contentType) {
+        final String finalContentType;
+        if (TextUtils.isEmpty(contentType)) {
+            finalContentType = HTTP_REQ_VALUE_CONTENT_TYPE;
+        } else {
+            finalContentType = contentType;
+        }
+
         BaseConnection connection = getConnection(url);
         HttpBasicRequest basicRequest = new HttpBasicRequest() {
             @Override
@@ -96,6 +103,11 @@ public class HTTPServer {
             @Override
             public HttpResponseHandler getResponseHandler() {
                 return null;
+            }
+
+            @Override
+            public String getContentType() {
+                return finalContentType;
             }
         };
         if (bytes != null) {
@@ -136,7 +148,8 @@ public class HTTPServer {
                 if (TextUtils.isEmpty(connection.getResponseMessage())) {
                     request.getResponseHandler().onResponse(connection.getResponseCode(), "");
                 } else {
-                    request.getResponseHandler().onResponse(connection.getResponseCode(), connection.getResponseMessage());
+                    request.getResponseHandler()
+                            .onResponse(connection.getResponseCode(), connection.getResponseMessage());
                 }
             } else {
                 request.getResponseHandler().onResponse(connection.getResponseCode(), result);
