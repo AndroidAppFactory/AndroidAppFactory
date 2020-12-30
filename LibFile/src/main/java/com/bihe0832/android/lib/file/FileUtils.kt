@@ -21,16 +21,6 @@ import java.text.NumberFormat
  *
  * @author zixie code@bihe0832.com
  * Created on 2020-01-10.
- * 使用FileUtils 提供的Provider时，可以选择自定路径或者使用库默认路径
- * 如果是选择自定义的，需要做如下操作，否则会造成无法安装等问题：
- *      添加以下String值定义：
- *          lib_bihe0832_file_folder：自定义文件目录
- *      在res/xml添加文件：file_paths.xml，内容为：
- *      <?xml version="1.0" encoding="utf-8"?>
- *          <paths>
- *              <external-files-path name="download" path="你自定义的文件目录"/>
- *          </paths>
- * 如果是选择默认的路径，则不需要上述定义；如果此时你需要获取库提供的provider 可以使用接口 {@link getZixieFileProvider}
  */
 object FileUtils {
 
@@ -64,14 +54,6 @@ object FileUtils {
         return false
     }
 
-    fun getZixieFileProvider(context: Context, file: File): Uri? {
-        return FileProvider.getUriForFile(context, context.packageName + ".bihe0832", file)
-    }
-
-    fun getZixieFilePath(context: Context): String {
-        return context.getExternalFilesDir(context.getString(R.string.lib_bihe0832_file_folder)).absolutePath
-    }
-
     fun checkStoragePermissions(context: Context): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
                 ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -89,7 +71,6 @@ object FileUtils {
             }
         }
     }
-
 
     fun getFileLength(sizeInBytes: Long): String {
         val nf: NumberFormat = DecimalFormat().apply {
@@ -119,10 +100,13 @@ object FileUtils {
         }
     }
 
+    /**
+     * 仅能打开 [ZixieFileProvider.getZixieFilePath] 对应目录下的文件
+     */
     fun openFile(context: Context, filePath: String, fileType: String) {
         try { //设置intent的data和Type属性
             File(filePath).let { file ->
-                val fileProvider = getZixieFileProvider(context, file)
+                val fileProvider = ZixieFileProvider.getZixieFileProvider(context, file)
                 Intent(Intent.ACTION_VIEW).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     addCategory("android.intent.category.DEFAULT")

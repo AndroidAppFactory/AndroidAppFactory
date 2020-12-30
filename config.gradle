@@ -26,4 +26,14 @@ ext {
     android_arch_lifecycle_version = '1.1.1'
     android_arch_persistence_version = '1.1.1'
     robolectricVersion = '3.3.2'
+
+
+    excludeList = [
+            'META-INF/*.kotlin_module',
+            'META-INF/proguard/androidx-annotations.pro'
+    ]
+
+    doNotStripList = [
+            "*/armeabi-v7a/*.so"
+    ]
 }

@@ -1,9 +1,7 @@
 package com.bihe0832.android.lib.http.common;
 
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.log.ZLog;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,7 +18,7 @@ import java.util.Map;
  */
 public abstract class BaseConnection {
 
-    private  static final String LOG_TAG = "bihe0832 REQUEST";
+    private static final String LOG_TAG = "bihe0832 REQUEST";
     protected static final String HTTP_REQ_PROPERTY_CHARSET = "Accept-Charset";
     protected static final String HTTP_REQ_VALUE_CHARSET = "UTF-8";
     protected static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
@@ -43,64 +41,65 @@ public abstract class BaseConnection {
 
     }
 
-    private void setURLConnectionCommonPara(){
+    private void setURLConnectionCommonPara(String contentTypy) {
         HttpURLConnection connection = getURLConnection();
-        if(null == connection){
+        if (null == connection) {
             return;
         }
         connection.setConnectTimeout(CONNECT_TIMEOUT);
         connection.setReadTimeout(DEFAULT_READ_TIMEOUT);
         connection.setUseCaches(false);
         connection.setRequestProperty(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
-        connection.setRequestProperty(HTTP_REQ_PROPERTY_CONTENT_TYPE, HTTP_REQ_VALUE_CONTENT_TYPE);
+        connection.setRequestProperty(HTTP_REQ_PROPERTY_CONTENT_TYPE, contentTypy);
     }
 
-    private void setURLConnectionCookie(HashMap<String,String> cookieInfo){
+    private void setURLConnectionCookie(HashMap<String, String> cookieInfo) {
         HttpURLConnection connection = getURLConnection();
-        if(null == connection){
+        if (null == connection) {
             return;
         }
         String cookieString = connection.getRequestProperty(HTTP_REQ_COOKIE);
-        if(!TextUtils.isEmpty(cookieString)){
+        if (!TextUtils.isEmpty(cookieString)) {
             cookieString = cookieString + ";";
-        }else{
+        } else {
             cookieString = "";
         }
         for (Map.Entry<String, String> entry : cookieInfo.entrySet()) {
-            if(TextUtils.isEmpty(entry.getKey()) || TextUtils.isEmpty(entry.getValue())){
-                ZLog.d(LOG_TAG,"cookie inf is bad");
-            }else{
-                cookieString = cookieString + entry.getKey() + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + entry.getValue() + ";";
+            if (TextUtils.isEmpty(entry.getKey()) || TextUtils.isEmpty(entry.getValue())) {
+                ZLog.d(LOG_TAG, "cookie inf is bad");
+            } else {
+                cookieString =
+                        cookieString + entry.getKey() + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + entry.getValue() + ";";
             }
         }
-        connection.setRequestProperty(HTTP_REQ_COOKIE,cookieString);
+        connection.setRequestProperty(HTTP_REQ_COOKIE, cookieString);
     }
 
-    public String doRequest(HttpBasicRequest request){
-        if(null == getURLConnection()){
-            ZLog.e(LOG_TAG,"URLConnection is null");
+    public String doRequest(HttpBasicRequest request) {
+        if (null == getURLConnection()) {
+            ZLog.e(LOG_TAG, "URLConnection is null");
             return "";
         }
-        setURLConnectionCommonPara();
+        setURLConnectionCommonPara(request.getContentType());
         //检查cookie
-        if(null != request.cookieInfo && request.cookieInfo.size() > 0){
+        if (null != request.cookieInfo && request.cookieInfo.size() > 0) {
             setURLConnectionCookie(request.cookieInfo);
         }
 
-        if(null == request.data){
+        if (null == request.data) {
             return doGetRequest();
-        }else{
+        } else {
             return doPostRequest(request.data);
         }
     }
 
-    protected String doGetRequest(){
+    protected String doGetRequest() {
         String result = "";
         InputStream is = null;
         BufferedReader br = null;
         try {
             HttpURLConnection connection = getURLConnection();
-            if(null == connection){
+            if (null == connection) {
                 return "";
             }
             connection.setRequestMethod(HTTP_REQ_METHOD_GET);
@@ -108,14 +107,14 @@ public abstract class BaseConnection {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             byte[] buffer = new byte[8192];
             int len;
-            while((len = is.read(buffer)) != -1) {
+            while ((len = is.read(buffer)) != -1) {
                 os.write(buffer, 0, len);
             }
             is.close();
             result = os.toString(HTTP_REQ_VALUE_CHARSET);
-        }catch (javax.net.ssl.SSLHandshakeException ee){
+        } catch (javax.net.ssl.SSLHandshakeException ee) {
             ZLog.e(LOG_TAG, "javax.net.ssl.SSLPeerUnverifiedException");
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
@@ -134,13 +133,13 @@ public abstract class BaseConnection {
         }
     }
 
-    protected String doPostRequest(byte[] data){
+    protected String doPostRequest(byte[] data) {
         BufferedReader br = null;
         InputStream inptStream = null;
         OutputStream outputStream = null;
         try {
             HttpURLConnection connection = getURLConnection();
-            if(null == connection){
+            if (null == connection) {
                 return "";
             }
             connection.setRequestMethod(HTTP_REQ_METHOD_POST);
@@ -150,12 +149,12 @@ public abstract class BaseConnection {
             outputStream.write(data);
 
             int response = connection.getResponseCode();            //获得服务器的响应码
-            if(response == HttpURLConnection.HTTP_OK) {
+            if (response == HttpURLConnection.HTTP_OK) {
                 inptStream = connection.getInputStream();
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 byte[] buffer = new byte[8192];
                 int len;
-                while((len = inptStream.read(buffer)) != -1) {
+                while ((len = inptStream.read(buffer)) != -1) {
                     os.write(buffer, 0, len);
                 }
                 inptStream.close();
@@ -188,28 +187,30 @@ public abstract class BaseConnection {
         }
         return "";
     }
-    public String getResponseMessage(){
+
+    public String getResponseMessage() {
 
         HttpURLConnection connection = getURLConnection();
-        if(null == connection){
+        if (null == connection) {
             return "";
-        }else{
+        } else {
             try {
                 return getURLConnection().getResponseMessage();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
                 return "";
             }
         }
     }
-    public int getResponseCode(){
+
+    public int getResponseCode() {
         HttpURLConnection connection = getURLConnection();
-        if(null == connection){
+        if (null == connection) {
             return -1;
-        }else{
+        } else {
             try {
                 return getURLConnection().getResponseCode();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
                 return -1;
             }

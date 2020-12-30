@@ -3,7 +3,6 @@ package com.bihe0832.android.test.module.request
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
-import android.support.v4.content.ContextCompat
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
@@ -53,7 +52,7 @@ class TestHttpActivity : BaseActivity() {
 //            val request = BasicGetRequest(result, handle)
 //            HTTPServer.getInstance().doRequest(request)
 
-            HTTPServer.getInstance().doRequestAsync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result).let {
+            HTTPServer.getInstance().doRequestSync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result).let {
                 showResult("同步请求结果：$it")
             }
         } else {
@@ -65,7 +64,7 @@ class TestHttpActivity : BaseActivity() {
         var result = paraEditText.text?.toString()
         if (result?.length ?: 0 > 0) {
 
-            HTTPServer.getInstance().doRequest(object : HttpAdvancedRequest<TestResponse>() {
+            HTTPServer.getInstance().doRequestAsync(object : HttpAdvancedRequest<TestResponse>() {
                 var res = object : AdvancedResponseHandler<TestResponse> {
                     override fun onRequestSuccess(response: TestResponse) {
                         showResult(response.toString())
@@ -88,7 +87,7 @@ class TestHttpActivity : BaseActivity() {
             })
 
             AdvancedGetRequest(result, TestAdvancedResponseHandler()).let {
-                HTTPServer.getInstance().doRequest(it)
+                HTTPServer.getInstance().doRequestAsync(it)
             }
         } else {
             showResult("请在输入框输入请求内容！")
@@ -100,7 +99,7 @@ class TestHttpActivity : BaseActivity() {
         if (result?.length ?: 0 > 0) {
             val handle = TestBasicResponseHandler()
             val request = BasicPostRequest(result, handle)
-            HTTPServer.getInstance().doRequest(request)
+            HTTPServer.getInstance().doRequestAsync(request)
         } else {
             showResult("请在输入框输入请求内容！")
 
@@ -112,7 +111,7 @@ class TestHttpActivity : BaseActivity() {
 
         if (result?.length ?: 0 > 0) {
 
-            HTTPServer.getInstance().doRequest(object : HttpAdvancedRequest<TestResponse>() {
+            HTTPServer.getInstance().doRequestAsync(object : HttpAdvancedRequest<TestResponse>() {
                 init {
                     try {
                         this.data = (Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result).toByteArray(charset("UTF-8"))
@@ -141,7 +140,7 @@ class TestHttpActivity : BaseActivity() {
             })
 
             AdvancedPostRequest(result, TestAdvancedResponseHandler()).let {
-                HTTPServer.getInstance().doRequest(it)
+                HTTPServer.getInstance().doRequestAsync(it)
             }
         } else {
             showResult("请在输入框输入请求内容！")
