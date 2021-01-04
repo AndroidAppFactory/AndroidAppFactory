@@ -107,7 +107,7 @@ public class ZipUtils {
     }
 
     private static void zip(String srcPathName, String targetFilePath, String password) {
-        if (!TextUtils.isEmpty(srcPathName) || !TextUtils.isEmpty(targetFilePath)) {
+        if (TextUtils.isEmpty(srcPathName) || TextUtils.isEmpty(targetFilePath)) {
             return;
         }
         try {
