@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-files-path name="downloads" path="downloads/"/>
-    <external-files-path name="Download" path="Download/"/>
-    <external-files-path name="pictures" path="pictures/" />
-    <files-path name="downloads" path="downloads/"/>
-    <files-path name="Download" path="Download/"/>
-    <files-path name="pictures" path="pictures/"/>
+
+    <external-path name="Outer" path="zixie/" />
+    <external-files-path name="OuterExt" path="zixie/"/>
+    <files-path name="Inner" path="zixie/" />
+
+    <external-path name="OuterDownloads" path="zixie/Downloads/" />
+    <external-files-path name="OuterExtDownloads" path="zixie/Downloads/"/>
+    <files-path name="InnerDownloads" path="zixie/Downloads/" />
+
+    <external-path name="OuterImg" path="zixie/pictures/" />
+    <external-files-path name="OuterExtImg" path="zixie/pictures/" />
+    <files-path name="InnerImg" path="zixie/pictures/" />
+
 </paths>

@@ -26,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
@@ -82,7 +83,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
     protected abstract BaseJsBridgeProxy getJsBridgeProxy();
 
     protected static final String TAG = "WebPageFragment -> :";
-    private static final int FILE_CHOOSER_RESULT_CODE = 0;
 
     private View mCustomView;
     public BaseWebView mWebView;
@@ -160,7 +160,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == FILE_CHOOSER_RESULT_CODE) {
+        if (requestCode == ZixieActivityRequestCode.FILE_CHOOSER) {
             if (data != null || resultCode == RESULT_OK) {
                 Uri[] uris = new Uri[1];
                 uris[0] = data.getData();
@@ -500,7 +500,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent, "Image Chooser"), FILE_CHOOSER_RESULT_CODE);
+        startActivityForResult(Intent.createChooser(intent, "Image Chooser"), ZixieActivityRequestCode.FILE_CHOOSER);
     }
 
     private void setUserAgentSupport(WebSettings webSettings) {

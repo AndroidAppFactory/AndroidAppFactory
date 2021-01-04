@@ -1,6 +1,8 @@
 package com.bihe0832.android.framework.ui
 
+import android.content.Intent
 import android.os.Bundle
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 
@@ -35,5 +37,28 @@ open class BaseFragment : SwipeBackFragment() {
 
     open fun getPermissionResult(): PermissionManager.OnPermissionResult {
         return PermissionResultOfAAF()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
+        if (needDispatchAnActivityResult()) {
+            dispatchAnActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    fun needDispatchAnActivityResult(): Boolean {
+        return true
+    }
+
+    fun dispatchAnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
+        try {
+            for (fragment in childFragmentManager.fragments) {
+                fragment.onActivityResult(requestCode, resultCode, data)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

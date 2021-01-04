@@ -1,10 +1,12 @@
 package com.bihe0832.android.framework.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import me.yokeyword.fragmentation.SupportActivity
 
@@ -77,5 +79,17 @@ open class BaseActivity : SupportActivity() {
 
     open fun onBack() {
         finish()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
+        try {
+            for (fragment in supportFragmentManager.fragments) {
+                fragment.onActivityResult(requestCode, resultCode, data)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

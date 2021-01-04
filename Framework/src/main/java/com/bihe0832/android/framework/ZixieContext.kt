@@ -12,14 +12,18 @@ import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.device.DeviceIDUtils
+import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import java.io.File
 import kotlin.system.exitProcess
 
 
@@ -149,13 +153,35 @@ object ZixieContext {
         return LifecycleHelper.getAPPUsedTimes()
     }
 
-    fun getLogPath(): String {
-        return if (PackageManager.PERMISSION_GRANTED ==
+    fun getZixieFolder(): String {
+        var path = ZixieFileProvider.getZixieFilePath(applicationContext!!)
+        return getRealFilePath(path)
+    }
+
+    fun getZixieExtFolder(): String {
+        var path = if (PackageManager.PERMISSION_GRANTED ==
                 ContextCompat.checkSelfPermission(applicationContext!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            "${Environment.getExternalStorageDirectory().absolutePath}/zixie/Applog"
+            "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}zixie${File.separator}"
         } else {
-            applicationContext!!.getExternalFilesDir("log").absolutePath
+            getZixieFolder()
         }
+        return getRealFilePath(path)
+    }
+
+    fun getLogPath(): String {
+        return getRealFilePath(getZixieExtFolder() + File.separator + "log" + File.separator)
+    }
+
+    private fun getRealFilePath(path: String): String {
+        try {
+            var result = FileUtils.checkAndCreateFolder(path)
+            if (!result) {
+                ZLog.e("file $path is bad !!!")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return path
     }
 
     fun getDeviceId(): String {

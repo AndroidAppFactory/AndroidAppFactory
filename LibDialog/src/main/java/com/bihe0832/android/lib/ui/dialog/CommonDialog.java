@@ -51,6 +51,7 @@ public class CommonDialog extends Dialog {
     private boolean isShowCheckBox = false;
     private OnCheckedListener onCheckedListener;
     private int contentColor = -1;
+    private boolean loadImgWithFade = true;
 
     public CommonDialog(Context context) {
         super(context, R.style.CommonDialog);
@@ -205,7 +206,7 @@ public class CommonDialog extends Dialog {
                 imageView.setImageResource(imageContentResId);
                 imageView.setVisibility(View.VISIBLE);
             } else if (imageUrl != null) {
-                GlideExtKt.loadCenterCropImage(imageView, imageUrl, Color.BLACK, Color.WHITE);
+                GlideExtKt.loadCenterCropImage(imageView, imageUrl, loadImgWithFade, Color.BLACK, Color.WHITE);
                 imageView.setVisibility(View.VISIBLE);
             } else {
                 imageView.setVisibility(View.GONE);
@@ -411,6 +412,11 @@ public class CommonDialog extends Dialog {
 
     public CommonDialog setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public CommonDialog setLoadImgWithFade(boolean needFade) {
+        this.loadImgWithFade = needFade;
         return this;
     }
 
