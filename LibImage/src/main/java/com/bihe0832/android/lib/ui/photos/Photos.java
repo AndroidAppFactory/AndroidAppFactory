@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.image;
+package com.bihe0832.android.lib.ui.photos;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.provider.MediaStore;
  * Description: Description
  */
 public class Photos {
-    public static void savePicToPhotos(Context context, String filePath){
+    public static void addPicToPhotos(Context context, String filePath){
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         try {
             MediaStore.Images.Media.insertImage(context.getContentResolver(), filePath, "", "");

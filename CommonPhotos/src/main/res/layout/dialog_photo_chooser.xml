@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:background="@color/windowBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/takePhotoBtn"
+            android:text="拍照"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimaryText"
+            android:paddingLeft="24dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <View
+            android:background="@color/gray"
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp" />
+
+
+    <TextView
+            android:id="@+id/choosePhotoBtn"
+            android:text="从相册选择"
+            android:textSize="14sp"
+            android:paddingLeft="24dp"
+            android:textColor="@color/colorPrimaryText"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -1,11 +1,15 @@
 package com.bihe0832.android.test.module
 
 import android.content.Intent
-import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.common.photos.cropPhoto
+import com.bihe0832.android.common.photos.getDefaultPhoto
+import com.bihe0832.android.common.photos.getPhotosFolder
+import com.bihe0832.android.common.photos.showPhotoChooser
+import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.gson.JsonHelper
@@ -13,6 +17,7 @@ import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.photos.Photos
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -182,14 +187,20 @@ class TestDebugTempFragment : BaseTestFragment() {
     private fun testFunc() {
         ZLog.d("test")
         try {
-            val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE) //用来打开相机的Intent
-            if (takePhotoIntent.resolveActivity(context!!.getPackageManager()) != null) { //这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
-                activity!!.startActivityForResult(takePhotoIntent, 1) //启动相机
-            }
+            activity?.showPhotoChooser()
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        ZLog.d("PhotoChooser", "in PhotoChooser onResult, $this, $requestCode, $resultCode, ${data?.data}")
+        if (requestCode == ZixieActivityRequestCode.TAKE_PHOTO) {
+            Photos.addPicToPhotos(context, activity!!.getDefaultPhoto().absolutePath)
+            activity?.cropPhoto(activity!!.getDefaultPhoto().absolutePath, activity!!.getPhotosFolder() + "a.jpg", 2)
+        }
+    }
 }
