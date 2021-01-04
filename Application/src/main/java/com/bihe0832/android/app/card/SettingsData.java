@@ -19,6 +19,7 @@ public class SettingsData extends CardBaseModule {
     public String mItemIconURL = "";
     public int mItemIconRes = -1;
     public boolean mItemIsNew = false;
+    public boolean mShowGo = true;
     public boolean mShowDriver = false;
     public boolean mHeaderTextBold = false;
     public String mTipsText = "";

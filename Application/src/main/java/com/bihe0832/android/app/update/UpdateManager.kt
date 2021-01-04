@@ -5,12 +5,13 @@ import android.text.TextUtils
 import com.bihe0832.android.app.R
 import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateHelper
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.framework.update.setUpdateType
 import com.bihe0832.android.lib.gson.JsonHelper
+import com.bihe0832.android.lib.http.common.HTTPServer
+import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager.getInstance
@@ -41,9 +42,13 @@ object UpdateManager {
     }
 
     private fun fetchUpdate(activity: Activity, successAction: (info: UpdateDataFromCloud) -> Unit, failedAction: () -> Unit) {
-        ZixieRequestHttp.get(
-                AAFNetWorkApi.getCommonURL(activity.getString(R.string.update_url), ""),
-                HttpResponseHandler { statusCode, updateString ->
+        object : HttpBasicRequest() {
+            override fun getUrl(): String {
+                return AAFNetWorkApi.getCommonURL(activity.getString(R.string.update_url), "")
+            }
+
+            override fun getResponseHandler(): HttpResponseHandler {
+                return HttpResponseHandler { statusCode, updateString ->
                     if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(updateString)) {
                         try {
 //                            var updateString = "{\n" +
@@ -76,6 +81,9 @@ object UpdateManager {
                         failedAction()
                     }
                 }
-        )
+            }
+        }.let {
+            HTTPServer.getInstance().doRequestAsync(it)
+        }
     }
 }

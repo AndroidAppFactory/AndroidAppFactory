@@ -16,5 +16,6 @@ public class RouterConstants {
     public static final String MODULE_NAME_FEEDBACK = FeedbackActivity.MODULE_NAME_FEEDBACK;
     public static final String INTENT_EXTRA_KEY_WEB_URL = BaseWebviewFragment.INTENT_KEY_URL;
     public static final String MODULE_NAME_BASE_ABOUT = AboutActivityKt.MODULE_NAME_BASE_ABOUT;
+    public static final String MODULE_NAME_DEBUG = "debug";
 
 }

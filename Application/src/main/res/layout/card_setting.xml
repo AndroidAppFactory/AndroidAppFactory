@@ -21,7 +21,7 @@
             android:id="@+id/settings_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:src="@mipmap/icon"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/settings_title"
@@ -52,6 +52,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="14dp"
             android:visibility="visible"
+            android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/settings_title"
             app:layout_constraintEnd_toStartOf="@+id/settings_is_new"
             app:layout_constraintTop_toTopOf="@+id/settings_title"
@@ -63,9 +64,9 @@
             android:layout_height="wrap_content"
             android:src="@drawable/read_dot"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/settings_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/settings_go"
-            app:layout_constraintTop_toTopOf="@+id/settings_title" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/settings_go"
@@ -75,9 +76,9 @@
             android:layout_centerVertical="true"
             android:src="@mipmap/ic_right_go"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/settings_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/settings_title" />
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
 

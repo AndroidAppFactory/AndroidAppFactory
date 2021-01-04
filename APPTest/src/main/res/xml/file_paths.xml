@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <external-files-path name="download" path="download/"/>
-    <external-files-path name="download" path="zixie/"/>
-    <root-path name="zixie_file_provider" path="" />
-
-</paths>
