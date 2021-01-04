@@ -69,18 +69,22 @@ public class SettingsHolder extends CardBaseHolder {
             mHeader.setTypeface(null, Typeface.BOLD);
         }
         if(TextUtils.isEmpty(data.mTipsText)){
-            if(data.mItemIsNew){
-                mHeaderIsNew.setVisibility(View.VISIBLE);
-            }else {
-                mHeaderIsNew.setVisibility(View.GONE);
-            }
-            mHeadergo.setVisibility(View.VISIBLE);
             mHeaderTips.setVisibility(View.GONE);
         }else {
             CharSequence charSequence = Html.fromHtml(data.mTipsText);//支持html
             mHeaderTips.setText(charSequence);
             mHeaderTips.setVisibility(View.VISIBLE);
+        }
+
+        if(data.mItemIsNew){
+            mHeaderIsNew.setVisibility(View.VISIBLE);
+        }else {
             mHeaderIsNew.setVisibility(View.GONE);
+        }
+
+        if(data.mShowGo){
+            mHeadergo.setVisibility(View.VISIBLE);
+        }else {
             mHeadergo.setVisibility(View.GONE);
         }
         if(data.mShowDriver){

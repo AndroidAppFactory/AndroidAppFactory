@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.content.ContextCompat
+import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.main.CommonActivity
@@ -16,7 +17,7 @@ import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 
 @APPMain
-@Module("test")
+@Module(RouterConstants.MODULE_NAME_DEBUG)
 class TestMainActivity : CommonActivity() {
     val LOG_TAG = "TestHttpActivity"
     override fun onCreate(savedInstanceState: Bundle?) {

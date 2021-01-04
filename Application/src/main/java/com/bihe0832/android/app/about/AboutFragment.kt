@@ -34,6 +34,9 @@ open class AboutFragment : CommonListFragment() {
             add(getUpdate())
             add(getFeedback())
             add(getZixie())
+            if (!ZixieContext.isOfficial()) {
+                add(getDebug())
+            }
         }
     }
 
@@ -54,11 +57,12 @@ open class AboutFragment : CommonListFragment() {
     open fun updateRedPoint(cloud: UpdateDataFromCloud?) {
         if (mDataList.size > 0) {
             (mDataList[0] as SettingsData).apply {
-                mItemIsNew = null != cloud && cloud.updateType > UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP
-                mTipsText = if (mItemIsNew) {
-                    "发现新版本"
-                } else {
-                    ""
+                if(null != cloud && cloud.updateType > UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP){
+                    mTipsText = "发现新版本"
+                    mItemIsNew = true
+                }else{
+                    mTipsText = ""
+                    mItemIsNew = false
                 }
             }
             getAdapter().notifyDataSetChanged()
@@ -99,6 +103,7 @@ open class AboutFragment : CommonListFragment() {
             mItemIconRes = R.mipmap.icon_update
             mHeaderTextBold = true
             mShowDriver = true
+            mShowGo = true
             mHeaderListener = View.OnClickListener {
                 activity?.let {
                     UpdateManager.checkUpdateAndShowDialog(it, true)
@@ -112,6 +117,7 @@ open class AboutFragment : CommonListFragment() {
         return SettingsData("建议反馈").apply {
             mItemIconRes = R.mipmap.icon_feedback
             mShowDriver = true
+            mShowGo = true
             mHeaderListener = View.OnClickListener {
                 val map = HashMap<String, String>()
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(getString(R.string.feedback_url))
@@ -125,6 +131,7 @@ open class AboutFragment : CommonListFragment() {
             var feedbackQQnumber = getString(R.string.feedback_qq)
             mItemIconRes = R.mipmap.icon_qq_black
             mShowDriver = true
+            mShowGo = true
             mTipsText = "<u>${feedbackQQnumber}</u>"
             mHeaderTipsListener = View.OnClickListener {
                 var res = QQHelper.openQQChat(activity, feedbackQQnumber)
@@ -135,10 +142,22 @@ open class AboutFragment : CommonListFragment() {
         }
     }
 
+    protected fun getDebug(): SettingsData {
+        return SettingsData("调试").apply {
+            mItemIconRes = R.mipmap.icon_author
+            mShowDriver = true
+            mShowGo = true
+            mHeaderListener = View.OnClickListener {
+                RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_DEBUG)
+            }
+        }
+    }
+
     protected fun getWechat(): SettingsData {
         return SettingsData("微信公众号").apply {
             mItemIconRes = R.mipmap.icon_wechat_black
             mShowDriver = true
+            mShowGo = true
             mTipsText = "<u>前往关注</u>"
             mHeaderTipsListener = View.OnClickListener {
                 context?.let {
@@ -156,6 +175,7 @@ open class AboutFragment : CommonListFragment() {
         return SettingsData("关于开发者").apply {
             mItemIconRes = R.mipmap.icon_author
             mShowDriver = true
+            mShowGo = true
             mHeaderListener = View.OnClickListener {
                 openWebPage("file:///android_asset/web/author.html")
             }
