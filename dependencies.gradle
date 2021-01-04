@@ -6,7 +6,7 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest"
+ext.mainProject = "CommonPhotos"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前设计到Android Support库的有：
@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibZip"
+ext.developModule = "CommonPhotos"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -66,21 +66,21 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPhotos"             : [
-                "version"            : "3.8.0",
+                "version"            : "3.8.1",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "3.8.0",
+                "version"            : "3.8.1",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "3.8.0",
+                "version"                : "3.8.1",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -92,7 +92,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "3.8.0",
+                "version"                : "3.8.1",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -104,14 +104,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "3.8.0",
+                "version"            : "3.8.1",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"            : "3.8.0",
+                "version"            : "3.8.1",
                 "artifactId"         : "framework",
                 "apidependenciesList": [
                         "com.android.support:multidex:1.0.0",
@@ -124,7 +124,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "3.8.0",
+                "version"            : "3.8.1",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
@@ -138,7 +138,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "3.8.0",
+                "version"            : "3.8.1",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -278,12 +278,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibZip"                    : [
-                "version"            : "3.7.10",
+                "version"            : "3.8.1",
                 "artifactId"         : "lib-zip",
                 "apidependenciesList": ["LibLog", "LibThread", "LibFile"]
         ],
         "LibDownloadAndInstall"     : [
-                "version"            : "3.7.10",
+                "version"            : "3.8.1",
                 "artifactId"         : "lib-download-install",
                 "apidependenciesList": ["LibFile", "LibZip", "LibRequest", "LibThread"]
         ],
