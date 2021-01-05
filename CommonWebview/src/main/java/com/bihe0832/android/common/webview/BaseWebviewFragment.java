@@ -340,7 +340,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
                 // 3.0及以下的webview调用jsb时会调用同时call起的空白页面，将这个页面屏蔽掉不出来
                 return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
             } else {
-                return IntentUtils.jumpToOtherApp(url, getContext());
+                IntentUtils.jumpToOtherApp(url, getContext());
+                return true;
             }
         }
 
