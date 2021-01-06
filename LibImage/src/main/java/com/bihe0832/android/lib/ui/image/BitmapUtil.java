@@ -1,10 +1,11 @@
 package com.bihe0832.android.lib.ui.image;
 
+import static android.os.Environment.DIRECTORY_PICTURES;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -12,17 +13,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.bihe0832.android.lib.log.ZLog;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-
-import static android.os.Environment.DIRECTORY_PICTURES;
 
 public class BitmapUtil {
 
@@ -55,27 +52,51 @@ public class BitmapUtil {
         return bitmap;
     }
 
-    public static String getViewBitmap(View view){
+    /**
+     * 读取图片，按照缩放比保持长宽比例返回bitmap对象
+     * <p>
+     *
+     * @param scale 缩放比例(1到10, 为2时，长和宽均缩放至原来的2分之1，为3时缩放至3分之1，以此类推)
+     * @return Bitmap
+     */
+    public synchronized static Bitmap getLoacalBitmap(Context context, int res, int scale) {
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = scale;
+            options.inPurgeable = true;
+            options.inInputShareable = true;
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            return BitmapFactory.decodeResource(context.getResources(), res, options);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String getViewBitmap(View view) {
         String filePath = "";
-        Bitmap mAccBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap mAccBitmap = Bitmap
+                .createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas chartCanvas = new Canvas(mAccBitmap);
         view.draw(chartCanvas);
-        filePath = BitmapUtil.saveBitmapToSdCard(view.getContext() , mAccBitmap);
+        filePath = BitmapUtil.saveBitmapToSdCard(view.getContext(), mAccBitmap);
         return filePath;
     }
 
     /**
      * 获取当前View的bitmap并添加一个指定颜色的圆形浮层
+     *
      * @param view
      * @param color
      * @return
      */
     public static Bitmap getImageBitmapWithCircleLayer(ImageView view, int color, float startAngle, float sweepAngle) {
         Bitmap originalBitmap = ((BitmapDrawable) (view).getDrawable()).getBitmap();
-        return getBitmapWithCircleLayer(originalBitmap,color,startAngle,sweepAngle);
+        return getBitmapWithCircleLayer(originalBitmap, color, startAngle, sweepAngle);
     }
 
-    public static Bitmap getBitmapWithCircleLayer(Bitmap originalBitmap, int color, float startAngle, float sweepAngle) {
+    public static Bitmap getBitmapWithCircleLayer(Bitmap originalBitmap, int color, float startAngle,
+            float sweepAngle) {
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
         Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -85,20 +106,21 @@ public class BitmapUtil {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(color);
-        RectF oval2 = new RectF(0, 0,  width, width);// 设置个新的长方形，扫描测量
+        RectF oval2 = new RectF(0, 0, width, width);// 设置个新的长方形，扫描测量
         canvas.drawArc(oval2, startAngle, sweepAngle, true, paint);
         return updatedBitmap;
     }
 
     /**
      * 获取当前View的bitmap并添加一个指定颜色的浮层
+     *
      * @param view
      * @param color
      * @return
      */
     public static Bitmap getImageBitmapWithLayer(ImageView view, int color) {
         Bitmap originalBitmap = ((BitmapDrawable) (view).getDrawable()).getBitmap();
-        return getBitmapWithLayer(originalBitmap,color);
+        return getBitmapWithLayer(originalBitmap, color);
     }
 
     public static Bitmap getBitmapWithLayer(Bitmap originalBitmap, int color) {
@@ -111,7 +133,7 @@ public class BitmapUtil {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(color);
-        canvas.drawRect(0, 0,  width, width,paint);
+        canvas.drawRect(0, 0, width, width, paint);
         return updatedBitmap;
     }
 
@@ -144,13 +166,15 @@ public class BitmapUtil {
         return BitmapFactory.decodeStream(stream, null, options);
     }
 
-    private static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options, boolean centerInside) {
+    private static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options,
+            boolean centerInside) {
         calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight, options,
                 centerInside);
     }
 
-    private static void calculateInSampleSize(int reqWidth, int reqHeight, int width, int height,
-                                      BitmapFactory.Options options, boolean centerInside) {
+    //根据width 和 height 与 reqWidth 和 reqHeight 的差异，计算出如果缩放到一样大，使用的 BitmapFactory.Options
+    public static void calculateInSampleSize(int reqWidth, int reqHeight, int width, int height,
+            BitmapFactory.Options options, boolean centerInside) {
         int sampleSize = 1;
         if (height > reqHeight || width > reqWidth) {
             final int heightRatio;
@@ -171,18 +195,21 @@ public class BitmapUtil {
         options.inJustDecodeBounds = false;
     }
 
+
     /**
      * 把bitmap保存到本地
+     *
      * @return
      */
     public static String saveBitmapToSdCard(Context context, Bitmap bitmap) {
         String packageName = context.getPackageName();
         String filePath = packageName + "_pic_" + System.currentTimeMillis() + ".png";
-        return saveBitmapToSdCard(context, bitmap,filePath);
+        return saveBitmapToSdCard(context, bitmap, filePath);
     }
 
     /**
      * 把bitmap保存到本地
+     *
      * @return
      */
     public static String saveBitmapToSdCard(Context context, Bitmap bitmap, String fileName) {
@@ -205,7 +232,7 @@ public class BitmapUtil {
             } else {
                 filePath = dir + fileName;
             }
-            ZLog.e("BitmapUtil" ,"filePath = " + filePath);
+            ZLog.e("BitmapUtil", "filePath = " + filePath);
             try {
                 File file = new File(filePath);
                 if (file.exists()) {
@@ -225,6 +252,7 @@ public class BitmapUtil {
 
     /**
      * 把两个位图覆盖合成为一个位图，上下拼接
+     *
      * @param isBaseMax 是否以高度大的位图为准，true则小图等比拉伸，false则大图等比压缩
      * @return
      */
@@ -245,9 +273,11 @@ public class BitmapUtil {
         Bitmap tempBitmapB = bottomBitmap;
 
         if (topBitmap.getWidth() != width) {
-            tempBitmapT = Bitmap.createScaledBitmap(topBitmap, width, (int)(topBitmap.getHeight()*1f/topBitmap.getWidth()*width), false);
+            tempBitmapT = Bitmap.createScaledBitmap(topBitmap, width,
+                    (int) (topBitmap.getHeight() * 1f / topBitmap.getWidth() * width), false);
         } else if (bottomBitmap.getWidth() != width) {
-            tempBitmapB = Bitmap.createScaledBitmap(bottomBitmap, width, (int)(bottomBitmap.getHeight()*1f/bottomBitmap.getWidth()*width), false);
+            tempBitmapB = Bitmap.createScaledBitmap(bottomBitmap, width,
+                    (int) (bottomBitmap.getHeight() * 1f / bottomBitmap.getWidth() * width), false);
         }
 
         int height = tempBitmapT.getHeight() + tempBitmapB.getHeight();
@@ -256,34 +286,18 @@ public class BitmapUtil {
         Canvas canvas = new Canvas(bitmap);
 
         Rect topRect = new Rect(0, 0, tempBitmapT.getWidth(), tempBitmapT.getHeight());
-        Rect bottomRect  = new Rect(0, 0, tempBitmapB.getWidth(), tempBitmapB.getHeight());
+        Rect bottomRect = new Rect(0, 0, tempBitmapB.getWidth(), tempBitmapB.getHeight());
 
-        Rect bottomRectT  = new Rect(0, tempBitmapT.getHeight(), width, height);
+        Rect bottomRectT = new Rect(0, tempBitmapT.getHeight(), width, height);
 
         canvas.drawBitmap(tempBitmapT, topRect, topRect, null);
         canvas.drawBitmap(tempBitmapB, bottomRect, bottomRectT, null);
         return bitmap;
     }
 
-    public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
-        return resizedBitmap;
-    }
-
     /**
      * 把两个位图覆盖合成为一个位图，叠加在一起，小图与大图居中对齐
+     *
      * @param isBaseBottom 是否以底图大小为准，true则小图等比拉伸，false则不压缩
      * @return
      */
@@ -298,7 +312,7 @@ public class BitmapUtil {
         int height = iconBitmap.getHeight();
         if (isBaseBottom) {
             width = bottomBitmap.getWidth() > iconBitmap.getWidth() ? bottomBitmap.getWidth() : iconBitmap.getWidth();
-            height = (int)(bottomBitmap.getHeight()*1f/bottomBitmap.getWidth()*width);
+            height = (int) (bottomBitmap.getHeight() * 1f / bottomBitmap.getWidth() * width);
         }
         Bitmap tempBitmapIcon = iconBitmap;
         if (iconBitmap.getWidth() != width) {
@@ -308,7 +322,8 @@ public class BitmapUtil {
         Bitmap bitmap = Bitmap.createBitmap(bottomBitmap.getWidth(), bottomBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawBitmap(bottomBitmap, 0, 0, null);
-        canvas.drawBitmap(tempBitmapIcon, (bottomBitmap.getWidth() - width)/2,  (bottomBitmap.getHeight() - height)/2, null);
+        canvas.drawBitmap(tempBitmapIcon, (bottomBitmap.getWidth() - width) / 2,
+                (bottomBitmap.getHeight() - height) / 2, null);
         return bitmap;
     }
 }
