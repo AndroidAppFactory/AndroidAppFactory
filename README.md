@@ -26,6 +26,8 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 
 	- 代码统计：[https://android.bihe0832.com/source/sample/index.html](https://android.bihe0832.com/source/sample/index.html)
 
+	- 项目展示：[https://android.bihe0832.com/samples/](https://android.bihe0832.com/samples/)
+
 ### 组件使用
 
 -  添加依赖
