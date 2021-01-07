@@ -36,13 +36,17 @@ fun Activity.getPhotosFolder(): String {
 
 fun Activity.cropPhoto(sourceFile: String, targetFile: String, aspectX: Int = 1, aspectY: Int = 1) {
     var sourceFileProvider = ZixieFileProvider.getZixieFileProvider(this@cropPhoto, File(sourceFile))
+    cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
+}
+
+fun Activity.cropPhoto(sourceFile: Uri, targetFile: String, aspectX: Int = 1, aspectY: Int = 1) {
     File(targetFile).let {
         FileUtils.checkAndCreateFolder(it.parent)
         var outSizePerPart = 1080 / aspectX.coerceAtLeast(aspectY)
         // 开始切割
         val intent = Intent("com.android.camera.action.CROP").apply {
             addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            setDataAndType(sourceFileProvider, "image/*")
+            setDataAndType(sourceFile, "image/*")
             putExtra("crop", "true")
             putExtra("aspectX", aspectX) // 裁剪框比例
             putExtra("aspectY", aspectY)
