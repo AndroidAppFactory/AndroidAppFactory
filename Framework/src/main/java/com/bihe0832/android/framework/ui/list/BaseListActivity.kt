@@ -1,11 +1,9 @@
 package  com.bihe0832.android.framework.ui.list
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bihe0832.android.framework.R
@@ -32,6 +30,11 @@ abstract class BaseListActivity : BaseActivity() {
     open fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf()
     }
+
+    open fun hasHeaderView(): Boolean {
+        return false
+    }
+
 
     open fun getLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeLinearLayoutManager(this).apply {
@@ -67,7 +70,9 @@ abstract class BaseListActivity : BaseActivity() {
             emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = mDataLiveData.getEmptyText()
             bindToRecyclerView(mRecyclerView)
             setHeaderFooterEmpty(true, false)
-            setHeaderView(getListHeader())
+            if (hasHeaderView()) {
+                setHeaderView(getListHeader())
+            }
         }
     }
 
@@ -75,7 +80,7 @@ abstract class BaseListActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(getResID())
         mToolbar = findViewById(R.id.common_activity_list_toolbar)
-        if(null == mToolbar){
+        if (null == mToolbar) {
             throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
         }
         mToolbar?.apply {
@@ -83,7 +88,7 @@ abstract class BaseListActivity : BaseActivity() {
             title = getTitleText()
         }
         mRecyclerView = findViewById(R.id.activity_list_info_list)
-        if(null == mRecyclerView){
+        if (null == mRecyclerView) {
             throw AAFException("please check recyclerview id name is : activity_list_info_list")
         }
         initView()

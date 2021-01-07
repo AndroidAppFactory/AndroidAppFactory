@@ -31,9 +31,9 @@ class TestListFragment : CommonListFragment() {
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
             override fun fetchData() {
-                mDataList.add(
-                        TestTipsData("点击打开List 测试Activity") { RouterHelper.openPageByRouter(ROUTRT_NAME_TEST_SECTION) }
-                )
+//                mDataList.add(
+//                        TestTipsData("点击打开List 测试Activity") { RouterHelper.openPageByRouter(ROUTRT_NAME_TEST_SECTION) }
+//                )
                 mDataList.addAll(getTempData())
                 postValue(mDataList)
             }
@@ -61,19 +61,23 @@ class TestListFragment : CommonListFragment() {
         }
     }
 
+    override fun hasHeaderView(): Boolean {
+        return false
+    }
+
     private fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             for (i in 0..2) {
-                add(if (i < 2) {
-                    SectionDataHeader("标题1:${System.currentTimeMillis()}")
-                } else {
-                    SectionDataHeader2("标题2:${System.currentTimeMillis()}")
-                })
+//                add(if (i < 2) {
+//                    SectionDataHeader("标题1:${System.currentTimeMillis()}")
+//                } else {
+//                    SectionDataHeader2("标题2:${System.currentTimeMillis()}")
+//                })
                 for (j in 0..3) {
                     add(if (i < 2) {
-                        SectionDataContent("内容1:${System.currentTimeMillis()}")
+                        SectionDataContent("内容11:${System.currentTimeMillis()}")
                     } else {
-                        SectionDataContent2("内容2:${System.currentTimeMillis()}")
+                        SectionDataContent2("内容22:${System.currentTimeMillis()}")
                     })
                 }
             }
