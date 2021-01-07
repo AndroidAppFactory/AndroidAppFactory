@@ -56,6 +56,10 @@ open class BaseActivity : SupportActivity() {
     }
 
     protected fun initToolbar(resID: Int, titleString: String?, needBack: Boolean) {
+        initToolbar(resID, titleString, needBack, 0)
+    }
+
+    protected fun initToolbar(resID: Int, titleString: String?, needBack: Boolean, iconRes: Int) {
         try {
             if (null == mToolbar) {
                 mToolbar = findViewById(resID)
@@ -65,7 +69,12 @@ open class BaseActivity : SupportActivity() {
                 if (needBack) {
                     setNavigationOnClickListener { onBackPressedSupport() }
                 } else {
-                    setNavigationIcon(R.mipmap.icon)
+                    if (iconRes > 0) {
+                        setNavigationIcon(iconRes)
+                    } else {
+                        setNavigationIcon(R.mipmap.icon)
+                    }
+
                 }
             }
         } catch (e: Exception) {

@@ -12,7 +12,11 @@ open class CommonActivity : BaseActivity() {
     }
 
     protected fun initToolbar(titleString: String?, needBack: Boolean) {
-        initToolbar(R.id.common_toolbar, titleString, needBack)
+        initToolbar(titleString, needBack, 0)
+    }
+
+    protected fun initToolbar(titleString: String?, needBack: Boolean, iconRes: Int) {
+        initToolbar(R.id.common_toolbar, titleString, needBack, iconRes)
     }
 
 }
