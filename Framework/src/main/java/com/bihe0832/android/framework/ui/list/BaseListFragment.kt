@@ -29,6 +29,9 @@ abstract class BaseListFragment : BaseFragment() {
 
     abstract fun getResID(): Int
 
+    open fun hasHeaderView(): Boolean{
+        return false
+    }
 
     open fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf()
@@ -68,7 +71,9 @@ abstract class BaseListFragment : BaseFragment() {
             emptyView = LayoutInflater.from(context).inflate(R.layout.common_view_list_empty, null, false)
             emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = mDataLiveData.getEmptyText()
             setHeaderFooterEmpty(true, false)
-            setHeaderView(getListHeader())
+            if(hasHeaderView()){
+                setHeaderView(getListHeader())
+            }
             bindToRecyclerView(mRecyclerView)
         }
     }
