@@ -2,5 +2,6 @@
     <string name="app_name">AAFTest</string>
     <color name="common_activity_bg">@color/colorPrimaryDark</color>
     <string name="update_url">https://android.bihe0832.com/update/get_apk.json</string>
+    <string name="version_url">https://cdn.bihe0832.com/app/help/zpuzzle.html</string>
 
 </resources>
