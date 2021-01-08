@@ -20,7 +20,7 @@ open class BaseActivity : SupportActivity() {
     }
 
     open fun getStatusBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        return ContextCompat.getColor(this, R.color.colorPrimary)
     }
 
     open fun getNavigationBarColor(): Int {
