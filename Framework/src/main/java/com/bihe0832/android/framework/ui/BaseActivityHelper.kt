@@ -25,7 +25,7 @@ fun BaseActivity.onBackPressedSupportAction(autoExit: Boolean) {
         }
     }
 
-    if (activityNum == 1) {
+    if (activityNum < 2) {
         if (isMain(topActivity)) {
             if (autoExit) {
                 ZixieContext.exitAPP(null)
