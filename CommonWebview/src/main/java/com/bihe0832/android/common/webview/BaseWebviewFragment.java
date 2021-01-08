@@ -25,16 +25,15 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
+import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.webview.BaseWebView;
 import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
 import com.bihe0832.android.lib.webview.jsbridge.JsBridge;
-import com.bihe0832.android.framework.ZixieContext;
-import com.bihe0832.android.framework.ui.BaseFragment;
 import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
@@ -51,14 +50,14 @@ import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseWebviewFragment extends BaseFragment implements ActivityCompat.OnRequestPermissionsResultCallback {
+public abstract class BaseWebviewFragment extends BaseFragment implements
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final String INTENT_KEY_URL = "url";
     public static final String INTENT_KEY_REFRESH = "refresh";
@@ -116,7 +115,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
     private WebViewRefreshCallback mRefreshCallback = null;
 
-    public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback){
+    public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback) {
         mRefreshCallback = callback;
     }
 
@@ -134,7 +133,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.common_fragment_webview, container, false);
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);
@@ -175,7 +175,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
     private void initWebview(View view) {
         mWebView = new BaseWebView(getContext(), null);
         mNormalPage = (SwipeRefreshLayout) view.findViewById(R.id.app_webview_swipe_container);
-        mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
         mErrorPage = (ConstraintLayout) view.findViewById(R.id.error_page);
         mProgressBar = (ProgressBar) view.findViewById(R.id.app_webview_progressbar);
         mProgressBar.setMax(100);
@@ -254,7 +255,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
         if (globalLocalRes.containsKey(url)) {
             try {
-                String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
+                String type = MimeTypeMap.getSingleton()
+                        .getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
                 return new WebResourceResponse(type, "utf-8", getContext().getAssets().open(globalLocalRes.get(url)));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -275,7 +277,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            ZLog.d(TAG + "shouldInterceptRequest");
+            ZLog.d(TAG + "shouldInterceptRequest url:" + url);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 WebResourceResponse res = interceptRequestResult(url);
                 if (null != res) {
@@ -287,7 +289,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            ZLog.d(TAG + "shouldInterceptRequest");
+            ZLog.d(TAG + "shouldInterceptRequest url:" + request.getUrl().toString());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 String url = request.getUrl().toString();
                 WebResourceResponse res = interceptRequestResult(url);
@@ -300,7 +302,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            ZLog.d(TAG + "shouldOverrideUrlLoading url:" +url);
+            ZLog.d(TAG + "shouldOverrideUrlLoading url:" + url);
             if (TextUtils.isEmpty(url)) {
                 return false;
             }
@@ -374,7 +376,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
         @Override
         public void onReceivedSslError(WebView view,
-                                       SslErrorHandler handler, SslError error) {
+                SslErrorHandler handler, SslError error) {
             handler.proceed();// 接受所有网站的证书
         }
     }
@@ -383,7 +385,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
     class MyWebChromeClient extends WebChromeClient {
 
         @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
+                FileChooserParams fileChooserParams) {
             BaseWebviewFragment.this.mPicUploadCallback = filePathCallback;
             openImageChooserActivity();
             return true;
@@ -429,7 +432,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
 
         //处理confirm弹出框
         @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue,
+                JsPromptResult result) {
             Log.e(TAG, "onJsPrompt " + url);
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
@@ -470,7 +474,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
             decor.addView(mCustomView, new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-
 
             getActivity().getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
@@ -526,7 +529,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
         CookieSyncManager.createInstance(mWebView.getContext());
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies(mWebView, true);
@@ -589,7 +591,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
             }
         } else {
             try {
-                Field sConfigCallback = Class.forName("android.webkit.BrowserFrame").getDeclaredField("sConfigCallback");
+                Field sConfigCallback = Class.forName("android.webkit.BrowserFrame")
+                        .getDeclaredField("sConfigCallback");
                 if (sConfigCallback != null) {
                     sConfigCallback.setAccessible(true);
                     sConfigCallback.set(null, null);
@@ -614,7 +617,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements Activi
         }
     }
 
-    public interface WebViewRefreshCallback{
+    public interface WebViewRefreshCallback {
+
         void onRefresh(WebView webView);
     }
 }
