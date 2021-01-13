@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.device.ManufacturerUtil;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.intent.wrapper.PermissionIntent;
@@ -33,7 +34,7 @@ public class IntentUtils {
     }
 
     public static boolean openWebPage(String url, Context context) {
-        if (context == null) {
+        if (context == null || TextUtils.isEmpty(url)) {
             return false;
         }
         try {
