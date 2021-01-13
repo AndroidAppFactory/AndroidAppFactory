@@ -57,7 +57,6 @@ object ZixieCoreInit {
         DeviceInfoManager.getInstance().init(application)
         LoggerFile.init(application, isDebug)
         LifecycleHelper.init(application)
-
     }
 
     fun initUserLoginRetBeforeGetUser(platform: Int, openid: String) {

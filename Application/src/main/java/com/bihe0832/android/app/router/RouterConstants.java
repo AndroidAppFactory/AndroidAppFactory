@@ -10,12 +10,11 @@ import com.bihe0832.android.common.webview.WebPageActivity;
  * Created by hardyshi on 2017/10/25.
  */
 
-public class RouterConstants {
+public class RouterConstants extends com.bihe0832.android.framework.router.RouterConstants {
 
     public static final String MODULE_NAME_WEB_PAGE = WebPageActivity.MODULE_NAME_WEB_PAGE;
     public static final String MODULE_NAME_FEEDBACK = FeedbackActivity.MODULE_NAME_FEEDBACK;
     public static final String INTENT_EXTRA_KEY_WEB_URL = BaseWebviewFragment.INTENT_KEY_URL;
     public static final String MODULE_NAME_BASE_ABOUT = AboutActivityKt.MODULE_NAME_BASE_ABOUT;
-    public static final String MODULE_NAME_DEBUG = "debug";
 
 }

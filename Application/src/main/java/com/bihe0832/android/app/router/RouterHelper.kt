@@ -1,12 +1,14 @@
 package com.bihe0832.android.app.router
 
 import android.net.Uri
-import com.bihe0832.android.app.R
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
+import com.bihe0832.android.framework.router.RouterAction.SCHEME
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
+import java.net.URLEncoder
+import java.util.*
 
 
 /**
@@ -14,10 +16,6 @@ import com.bihe0832.android.lib.log.ZLog
  *
  */
 object RouterHelper {
-
-    val SCHEME by lazy {
-        ZixieContext.applicationContext?.getString(R.string.router_schema) ?: "zixie"
-    }
 
     //需要拦截
     private val needCheckInterceptHostList by lazy {
@@ -61,14 +59,29 @@ object RouterHelper {
                     false
                 } else {
                     //需要被拦截
-                    needCheckInterceptHostList.contains(uri.host)
+                    needCheckInterceptHostList.contains(uri.host) || !RouterInterrupt.hasAgreedPrivacy()
                 }
             }
 
             override fun doInterrupt(uri: Uri): Boolean {
-                return false
+                return if (!RouterInterrupt.hasAgreedPrivacy()) {
+                    goSplash(uri)
+                    true
+                } else {
+                    false
+                }
             }
         })
+    }
+
+    private fun goSplash(uri: Uri?) {
+        HashMap<String, String>().apply {
+            uri?.let {
+                this[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLEncoder.encode(uri.toString())
+            }
+        }.let {
+            RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_SPLASH, it)
+        }
     }
 
     /**
@@ -91,14 +104,14 @@ object RouterHelper {
     }
 
     fun getFinalURL(pathHost: String): String {
-        return RouterAction.getFinalURL(SCHEME, pathHost)
+        return RouterAction.getFinalURL(pathHost)
     }
 
-    fun openPageRouter(pathHost: String, para: Map<String, String>?) {
-        RouterAction.open(SCHEME, pathHost, para)
+    fun openPageByRouter(pathHost: String, para: Map<String, String>?) {
+        RouterAction.openPageByRouter(pathHost, para)
     }
 
     fun openPageByRouter(pathHost: String) {
-        RouterAction.open(SCHEME, pathHost)
+        RouterAction.openPageByRouter(pathHost)
     }
 }

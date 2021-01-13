@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 import java.text.NumberFormat;
 
@@ -111,7 +112,7 @@ public class DownloadProgressDialog extends Dialog {
         if (null != mContentView) {
             if (!TextUtils.isEmpty(mContentString)) {
                 if (!TextUtils.isEmpty(mContentString)) {
-                    CharSequence charSequence = Html.fromHtml(mContentString);//支持html
+                    CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(mContentString);//支持html
                     mContentView.setText(charSequence);
                 }
                 mContentView.setVisibility(View.VISIBLE);

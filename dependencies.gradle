@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "Framework"
+ext.developModule = "LibTimer,LibText"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -52,7 +52,7 @@ ext.moduleInfo = [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
-                        "CommonPraise", "CommonFeedback", "CommonWebview", "CommonNetwork",
+                        "CommonPraise", "CommonFeedback", "CommonWebview", "CommonNetwork", "CommonSplash",
                         "CommonPhotos",
                         'com.squareup.okhttp3:okhttp:3.9.1',
                         'com.squareup.okhttp3:logging-interceptor:3.8.0',
@@ -65,7 +65,14 @@ ext.moduleInfo = [
                         ]
                 ]
         ],
-        "CommonPhotos"             : [
+        "CommonSplash"              : [
+                "version"            : "3.8.6",
+                "artifactId"         : "common-splash",
+                "apidependenciesList": [
+                        "Framework"
+                ]
+        ],
+        "CommonPhotos"              : [
                 "version"            : "3.8.6",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
@@ -111,9 +118,9 @@ ext.moduleInfo = [
                 ]
         ],
         "Framework"                 : [
-                "version"            : "3.8.5",
-                "artifactId"         : "framework",
-                "apidependenciesList": [
+                "version"                : "3.8.5",
+                "artifactId"             : "framework",
+                "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
                         "LibWrapper", "LibLifecycle"
                 ],
@@ -352,7 +359,7 @@ ext.moduleInfo = [
                         "com.android.support:support-annotations:${project.android_support_version}",
                         "com.android.support:support-v4:${project.android_support_version}",
                         "com.android.support:recyclerview-v7:${project.android_support_version}",
-                        "LibCommonUIUtils"
+                        "LibCommonUIUtils","LibText"
                 ]
         ],
         "LibRefresh"                : [
@@ -366,12 +373,12 @@ ext.moduleInfo = [
         "LibToast"                  : [
                 "version"            : "3.7.9",
                 "artifactId"         : "lib-toast",
-                "apidependenciesList": ["LibThread"]
+                "apidependenciesList": ["LibThread","LibText"]
         ],
         "LibImage"                  : [
-                "version"                : "3.8.3",
-                "artifactId"             : "lib-image",
-                "apidependenciesList"    : [
+                "version"            : "3.8.3",
+                "artifactId"         : "lib-image",
+                "apidependenciesList": [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
                         "com.github.bumptech.glide:okhttp3-integration:${project.glide_version}",
                         "LibLog", "LibOS", "LibFile"
@@ -383,7 +390,7 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}",
-                        "LibThread", "LibImage", "LibOS", "LibCommonUIUtils"]
+                        "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText"]
         ],
         "LibNotification"           : [
                 "version"            : "3.8.3",

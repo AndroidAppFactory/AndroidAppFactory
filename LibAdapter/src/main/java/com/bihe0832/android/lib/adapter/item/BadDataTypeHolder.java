@@ -1,18 +1,17 @@
 package com.bihe0832.android.lib.adapter.item;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
-
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.adapter.R;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-11-21.
- * Description: Description
+ *         Created on 2019-11-21.
+ *         Description: Description
  */
 
 public class BadDataTypeHolder extends CardBaseHolder {
@@ -30,6 +29,6 @@ public class BadDataTypeHolder extends CardBaseHolder {
 
     @Override
     public void initData(CardBaseModule item) {
-        mHeader.setText(Html.fromHtml(item.getTypeBadText()));
+        mHeader.setText(TextFactoryUtils.getSpannedTextByHtml(item.getTypeBadText()));
     }
 }

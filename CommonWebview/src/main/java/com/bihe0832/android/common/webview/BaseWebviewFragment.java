@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
+import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
@@ -59,7 +60,7 @@ import java.util.Map;
 public abstract class BaseWebviewFragment extends BaseFragment implements
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-    public static final String INTENT_KEY_URL = "url";
+    public static final String INTENT_KEY_URL = RouterConstants.INTENT_EXTRA_KEY_WEB_URL;
     public static final String INTENT_KEY_REFRESH = "refresh";
     public static final String INTENT_KEY_DATA = "WebviewFragment.data";
     public static final String INTENT_KEY_THIRD_PART = "http://localhost";

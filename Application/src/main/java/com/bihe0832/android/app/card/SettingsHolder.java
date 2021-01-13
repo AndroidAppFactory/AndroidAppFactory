@@ -2,23 +2,23 @@ package com.bihe0832.android.app.card;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bihe0832.android.app.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.image.GlideExtKt;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-11-21.
- * Description: Description
+ *         Created on 2019-11-21.
+ *         Description: Description
  */
 public class SettingsHolder extends CardBaseHolder {
+
     public TextView mHeader;
     public ImageView mHeaderIcon;
     public ImageView mHeaderIsNew;
@@ -43,53 +43,53 @@ public class SettingsHolder extends CardBaseHolder {
     @Override
     public void initData(CardBaseModule item) {
         SettingsData data = (SettingsData) item;
-        if(data.mHeaderListener != null){
+        if (data.mHeaderListener != null) {
             itemView.setOnClickListener(data.mHeaderListener);
         }
 
-        if(data.mHeaderTipsListener != null){
+        if (data.mHeaderTipsListener != null) {
             mHeaderTips.setOnClickListener(data.mHeaderTipsListener);
-        }else {
+        } else {
             mHeaderTips.setOnClickListener(data.mHeaderListener);
         }
-        if(TextUtils.isEmpty(data.mItemIconURL)){
-            if(data.mItemIconRes < 0){
+        if (TextUtils.isEmpty(data.mItemIconURL)) {
+            if (data.mItemIconRes < 0) {
                 mHeaderIcon.setVisibility(View.GONE);
-            }else {
-                GlideExtKt.loadImage(mHeaderIcon,data.mItemIconRes);
+            } else {
+                GlideExtKt.loadImage(mHeaderIcon, data.mItemIconRes);
                 mHeaderIcon.setVisibility(View.VISIBLE);
             }
-        }else {
-            GlideExtKt.loadImage(mHeaderIcon,data.mItemIconURL,R.mipmap.icon,R.mipmap.icon);
+        } else {
+            GlideExtKt.loadImage(mHeaderIcon, data.mItemIconURL, R.mipmap.icon, R.mipmap.icon);
             mHeaderIcon.setVisibility(View.VISIBLE);
         }
 
         mHeader.setText(data.mItemText);
-        if(data.mHeaderTextBold){
+        if (data.mHeaderTextBold) {
             mHeader.setTypeface(null, Typeface.BOLD);
         }
-        if(TextUtils.isEmpty(data.mTipsText)){
+        if (TextUtils.isEmpty(data.mTipsText)) {
             mHeaderTips.setVisibility(View.GONE);
-        }else {
-            CharSequence charSequence = Html.fromHtml(data.mTipsText);//支持html
+        } else {
+            CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(data.mTipsText);//支持html
             mHeaderTips.setText(charSequence);
             mHeaderTips.setVisibility(View.VISIBLE);
         }
 
-        if(data.mItemIsNew){
+        if (data.mItemIsNew) {
             mHeaderIsNew.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mHeaderIsNew.setVisibility(View.GONE);
         }
 
-        if(data.mShowGo){
+        if (data.mShowGo) {
             mHeadergo.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mHeadergo.setVisibility(View.GONE);
         }
-        if(data.mShowDriver){
+        if (data.mShowDriver) {
             settings_drivider.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             settings_drivider.setVisibility(View.GONE);
         }
     }

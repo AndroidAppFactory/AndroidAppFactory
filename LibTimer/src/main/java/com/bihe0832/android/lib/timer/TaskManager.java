@@ -2,24 +2,22 @@ package com.bihe0832.android.lib.timer;
 
 
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.log.ZLog;
-
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import java.util.concurrent.ConcurrentHashMap;
 import kotlin.jvm.Synchronized;
 
 public class TaskManager {
+
     //定时任务检查的时间粒度
-    private static final String LOG_TAG = "TASK";
-    private final int PERIOD = 500;
+    private static final String LOG_TAG = "TaskManager";
+    protected static final int PERIOD = 500;
     private Timer timer = null;
     private boolean started = false;
-    private HashMap<String, BaseTask> mTaskList = new HashMap<String, BaseTask>();
+    private ConcurrentHashMap<String, BaseTask> mTaskList = new ConcurrentHashMap<String, BaseTask>();
 
     private static volatile TaskManager instance;
 
@@ -56,28 +54,29 @@ public class TaskManager {
     }
 
     private class TaskDispatcher extends TimerTask {
+
         @Override
         @Synchronized
         public void run() {
-            ZLog.d(LOG_TAG, "TaskDispatcher run");
             try {
-                synchronized (mTaskList) {
-                    if (mTaskList.isEmpty()) {
-                        stopTimer();
-                    } else {
-                        Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
-                        while (iter.hasNext()) {
-                            Entry<String, BaseTask> entry = iter.next();
-                            final BaseTask task = (BaseTask) entry.getValue();
-                            if(task.isDeleted()){
-                                mTaskList.remove(task);
-                            }else {
-                                if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
-                                    task.resetNotifiedTimes();
-                                    task.run();
-                                }
-                                task.increaseNotifiedTimes();
+                if (mTaskList.isEmpty()) {
+                    ZLog.d(LOG_TAG, "TaskDispatcher stopTimer");
+                    stopTimer();
+                } else {
+                    ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
+                    Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        Entry<String, BaseTask> entry = iter.next();
+                        final BaseTask task = (BaseTask) entry.getValue();
+                        ZLog.d(LOG_TAG, "TaskDispatcher :" + task.getTaskName());
+                        if (task.isDeleted()) {
+                            mTaskList.remove(task);
+                        } else {
+                            if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
+                                task.resetNotifiedTimes();
+                                task.run();
                             }
+                            task.increaseNotifiedTimes();
                         }
                     }
                 }
@@ -99,11 +98,11 @@ public class TaskManager {
             return -1;
         }
         int result = -1;
-        if (mTaskList.containsKey(task.getTaskName()) ) {
-            if(mTaskList.get(task.getTaskName()).isDeleted()){
+        if (mTaskList.containsKey(task.getTaskName())) {
+            if (mTaskList.get(task.getTaskName()).isDeleted()) {
                 mTaskList.get(task.getTaskName()).setDeleted(false);
-                return 0;
-            }else {
+                return 1;
+            } else {
                 return -2;
             }
         } else {
@@ -126,23 +125,20 @@ public class TaskManager {
      * @return 返回对应的定时任务
      */
     public BaseTask getTaskByName(String taskName) {
-        if (mTaskList.containsKey(taskName)) {
-            return mTaskList.get(taskName);
-        }
-        return null;
+        return mTaskList.get(taskName);
     }
 
     /**
      * 根据定时任务名称删除对应的任务
      *
      * @param taskName 任务名称
-     * @return true 为删除成功，false 为没有此任务删除失败
      */
     public void removeTask(String taskName) {
         ZLog.d(LOG_TAG, "remove task:" + taskName);
         if (!TextUtils.isEmpty(taskName)) {
             if (mTaskList.containsKey(taskName)) {
                 mTaskList.get(taskName).setDeleted(true);
+                mTaskList.remove(taskName);
             }
         }
     }

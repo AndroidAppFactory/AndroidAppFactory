@@ -25,12 +25,12 @@ fun getNeedLoginInterceptHostList(): List<String> {
 //不需要检查，直接跳过的路由
 fun getSkipListHostList(): List<String> {
     return listOf<String>(
-
+            com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_SPLASH
     )
 }
 
 fun openWebPage(url: String) {
     val map = HashMap<String, String>()
-    map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] =Uri.encode(url)
-    RouterHelper.openPageRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
+    map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
+    RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
 }
