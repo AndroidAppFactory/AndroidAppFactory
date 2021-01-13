@@ -2,16 +2,12 @@ package com.bihe0832.android.lib.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
 
 
@@ -28,6 +24,7 @@ public class LoadingDialog extends Dialog {
     public LoadingDialog(Context context) {
         super(context, R.style.LoadingProgressDialog);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,25 +42,25 @@ public class LoadingDialog extends Dialog {
         //如果用户自定了title和message
         setCanceledOnTouchOutside(shouldCanceledOutside);
         if (titleTv != null) {
-            if(TextUtils.isEmpty(title)){
+            if (TextUtils.isEmpty(title)) {
                 title = "加载中……";
             }
-            CharSequence charSequence = Html.fromHtml(title);//支持html
+            CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(title);//支持html
             titleTv.setText(charSequence);
         }
 
-        if(isFullScreen){
+        if (isFullScreen) {
             ViewGroup.LayoutParams lp = findViewById(R.id.loading_main_layout).getLayoutParams();
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
             findViewById(R.id.loading_main_layout).setLayoutParams(lp);
-        }else {
+        } else {
             findViewById(R.id.loading_main_layout).setBackgroundResource(R.drawable.loading_progress_bg);
         }
     }
 
     private void showAction() {
-        if(!isShowing()){
+        if (!isShowing()) {
             super.show();
         }
         refreshView();
@@ -74,7 +71,7 @@ public class LoadingDialog extends Dialog {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
-                showAction() ;
+                showAction();
             }
         });
     }

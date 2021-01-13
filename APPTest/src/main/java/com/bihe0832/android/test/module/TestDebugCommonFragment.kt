@@ -40,7 +40,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItemData("打开反馈页面", View.OnClickListener {
                 val map = HashMap<String, String>()
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode("https://support.qq.com/product/290858")
-                RouterHelper.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
+                RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             }))
             add(TestItemData("网络切换监控", View.OnClickListener { startActivity(TestNetworkActivity::class.java) }))
             add(TestItemData("打开应用设置", { IntentUtils.startAppDetailSettings(context) }))

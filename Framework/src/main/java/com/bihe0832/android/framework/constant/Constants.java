@@ -14,6 +14,8 @@ public class Constants {
 
     public static final String SYSTEM_CONSTANT = "android";
 
+    // 是否同意隐私协议
+    public static final String CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED = "KEY_PRIVACY_AGREEMENT_ENABLED";
 
 
 }

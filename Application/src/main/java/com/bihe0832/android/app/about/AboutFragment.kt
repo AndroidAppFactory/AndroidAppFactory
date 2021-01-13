@@ -112,7 +112,7 @@ open class AboutFragment : CommonListFragment() {
                     }else{
                         val map = HashMap<String, String>()
                         map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
-                        RouterHelper.openPageRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
+                        RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
                     }
                 }
             }
@@ -143,7 +143,7 @@ open class AboutFragment : CommonListFragment() {
             mHeaderListener = View.OnClickListener {
                 val map = HashMap<String, String>()
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(getString(R.string.feedback_url))
-                RouterHelper.openPageRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
+                RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             }
         }
     }

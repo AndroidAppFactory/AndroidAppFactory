@@ -7,16 +7,16 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name="com.bihe0832.android.app.Application"
-        android:allowBackup="true"
-        android:icon="@mipmap/icon"
-        android:label="@string/app_name"
-        android:supportsRtl="true">
+            android:name="com.bihe0832.android.app.Application"
+            android:allowBackup="true"
+            android:icon="@mipmap/icon"
+            android:label="@string/app_name"
+            android:supportsRtl="true">
         <activity
-            android:name="com.bihe0832.android.test.TestMainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme">
+                android:name=".TestSplashActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/fullscreenActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,53 +24,64 @@
         </activity>
 
         <activity
-            android:name=".module.touch.TouchRegionActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme">
+                android:name="com.bihe0832.android.test.TestMainActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+        </activity>
+
+        <activity
+                android:name=".module.touch.TouchRegionActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme">
 
         </activity>
 
         <activity
-            android:name="com.bihe0832.android.app.about.AboutActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme">
+                android:name="com.bihe0832.android.app.about.AboutActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme">
 
         </activity>
 
         <activity
-            android:name=".module.request.TestHttpActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme"></activity>
+                android:name=".module.request.TestHttpActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme"></activity>
 
         <activity
-            android:name=".module.network.TestNetworkActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme"></activity>
+                android:name=".module.network.TestNetworkActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme"></activity>
 
         <activity
-            android:name=".module.card.TestListActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme"></activity>
+                android:name=".module.card.TestListActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme"></activity>
 
         <activity
-            android:name=".module.webview.TestWebviewActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme"></activity>
+                android:name=".module.webview.TestWebviewActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme"></activity>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.bihe0832.test"
-            android:exported="false"
-            android:grantUriPermissions="true">
+                android:name="android.support.v4.content.FileProvider"
+                android:authorities="${applicationId}.bihe0832.test"
+                android:exported="false"
+                android:grantUriPermissions="true">
             <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths" />
         </provider>
     </application>
 

@@ -1,6 +1,7 @@
 package com.bihe0832.android.framework.router
 
 import android.app.Activity
+import com.bihe0832.android.framework.R
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.framework.ZixieContext
@@ -12,6 +13,9 @@ import com.bihe0832.android.framework.ZixieContext
  */
 object RouterAction {
 
+    val SCHEME by lazy {
+        ZixieContext.applicationContext?.getString(R.string.router_schema) ?: "zixie"
+    }
 
     /**
      * 通过传入path和参数，获取最终完整的路由链接，调用示例
@@ -20,7 +24,6 @@ object RouterAction {
      *      RouterConstants.INTENT_EXTRA_KEY_TEST_ITEM_TAB to 1
      * ))
      *
-     * return man://test?tab=1
      *
      */
     fun getFinalURL(schema: String, path: String, para: Map<String, String>?): String {
@@ -37,17 +40,26 @@ object RouterAction {
         return url
     }
 
+    fun getFinalURL(pathHost: String, para: Map<String, String>?): String {
+        return getFinalURL(SCHEME, pathHost, para)
+    }
+
     /**
      * 通过传入path和参数，获取最终完整的路由链接，调用示例
      *
      * RouterHelper.getFinalURL("zixie", RouterConstants.MODULE_NAME_TEST)
      *
-     * return man://test
+     * return zixie://test
      *
      */
     fun getFinalURL(schema: String, path: String): String {
         return "${schema}://$path"
     }
+
+    fun getFinalURL(pathHost: String): String {
+        return getFinalURL(SCHEME, pathHost)
+    }
+
 
     fun open(schema: String, path: String) {
         Routers.open(ZixieContext.applicationContext, "${schema}://$path")
@@ -67,5 +79,13 @@ object RouterAction {
 
     fun openForResult(schema: String, activity: Activity, path: String, para: Map<String, String>?, requestCode: Int) {
         Routers.openForResult(activity, getFinalURL(schema, path, para), requestCode)
+    }
+
+    fun openPageByRouter(pathHost: String, para: Map<String, String>?) {
+        open(SCHEME, pathHost, para)
+    }
+
+    fun openPageByRouter(pathHost: String) {
+        open(SCHEME, pathHost)
     }
 }

@@ -6,22 +6,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
+import android.text.method.MovementMethod;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-09-26.
- * Description: Description
+ *         Created on 2019-09-26.
+ *         Description: Description
  */
 public class DebugTools {
 
-    public static void sendInfo(final Context context, final String title, final String content, final boolean showDialog) {
+    public static void sendInfo(final Context context, final String title, final String content,
+            final boolean showDialog) {
         if (!showDialog) {
             sendInfo(context, title, content);
             return;
@@ -63,22 +65,30 @@ public class DebugTools {
     }
 
     public static void showInfoWithHTML(final Context context, final String title, final String content, final String positiveText) {
-        showInfo(context, title, "", content, positiveText);
+        showInfoWithCharSequence(context, title, TextFactoryUtils.getSpannedTextByHtml(content), null, positiveText);
     }
 
-    public static void showInfo(final Context context, final String title, final String content, final String positiveText) {
-        showInfo(context, title, content, "", positiveText);
+    public static void showInfo(final Context context, final String title, final String content,
+            final String positiveText) {
+        showInfo(context, title, content, null, null, positiveText);
     }
 
-    public static void showInfo(final Context context, final String title, final String content, final String htmlContent, final String positiveText) {
+    public static void showInfoWithCharSequence(final Context context, final String title, CharSequence content,
+            MovementMethod method, final String positiveText) {
+        showInfo(context, title, "", content, method, positiveText);
+    }
+
+
+    public static void showInfo(final Context context, final String title, final String content,
+            CharSequence charSequence, MovementMethod method, final String positiveText) {
         final CommonDialog dialog = new CommonDialog(context);
-        String tempContent  = "";
+        String tempContent = "";
         if (!TextUtils.isEmpty(content)) {
             dialog.setContent(content);
             tempContent = content;
         } else {
-            dialog.setHtmlContent(htmlContent);
-            tempContent = htmlContent;
+            dialog.setHtmlContent(charSequence, method);
+            tempContent = charSequence.toString();
         }
         final String finalContent = tempContent;
         dialog.setTitle(title)
@@ -143,7 +153,9 @@ public class DebugTools {
         }
     }
 
-    public static void showInputDialog(final Context context, String titleName, String msg, String positive, String negtive, Boolean canCanceledOnTouchOutside, String defaultValue, String hint, final InputDialogCallback listener) {
+    public static void showInputDialog(final Context context, String titleName, String msg, String positive,
+            String negtive, Boolean canCanceledOnTouchOutside, String defaultValue, String hint,
+            final InputDialogCallback listener) {
         final CommonDialog dialog = new CommonDialog(context);
         dialog.setTitle(titleName);
         dialog.setHtmlContent(msg);
@@ -151,7 +163,8 @@ public class DebugTools {
         dialog.setNegative(negtive);
         dialog.setCanceledOnTouchOutside(canCanceledOnTouchOutside);
         final EditText editText = new EditText(context);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(50, 10, 50, 10);
         editText.setLayoutParams(params);
         editText.setSingleLine();
@@ -194,7 +207,8 @@ public class DebugTools {
         dialog.show();
     }
 
-    public static void showInputDialog(final Context context, String titleName, String msg, String defaultValue, final InputDialogCompletedCallback listener) {
+    public static void showInputDialog(final Context context, String titleName, String msg, String defaultValue,
+            final InputDialogCompletedCallback listener) {
         showInputDialog(context, titleName, msg, "确定", "", true, defaultValue, "输入完成后点击确定~", new InputDialogCallback() {
             @Override
             public void onPositiveClick(String result) {

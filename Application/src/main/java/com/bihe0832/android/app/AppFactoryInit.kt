@@ -30,7 +30,7 @@ object AppFactoryInit {
     }
 
     @Synchronized
-    fun initExtra(ctx: Context, processName: String) {
+    fun initExtra(ctx: Context) {
         // 初始化网络变量和监听
         NetworkChangeManager.getInstance().init(ctx)
         // 监听信号变化，统一到MobileUtil

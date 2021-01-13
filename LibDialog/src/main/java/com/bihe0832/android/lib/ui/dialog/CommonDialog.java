@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.MovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.image.GlideExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
@@ -63,7 +64,8 @@ public class CommonDialog extends Dialog {
     private String message;
     private String title;
     private String content;
-    private String htmlContent;
+    private CharSequence charSequenceContent = null;
+    private MovementMethod movement = null;
     private String feedbackContent;
     private String positiveString;
     private String negativeString;
@@ -145,15 +147,18 @@ public class CommonDialog extends Dialog {
         }
 
         if (null != contentTv) {
-            if (!TextUtils.isEmpty(content) || !TextUtils.isEmpty(htmlContent)) {
+            if (!TextUtils.isEmpty(content) || null != charSequenceContent) {
                 if (!TextUtils.isEmpty(content)) {
                     contentTv.setText(content);
-                } else if (!TextUtils.isEmpty(htmlContent)) {
-                    CharSequence charSequence = Html.fromHtml(htmlContent);//支持html
-                    contentTv.setText(charSequence);
+                } else if (null != charSequenceContent) {
+                    contentTv.setText(charSequenceContent);
+                    if (null != movement) {
+                        contentTv.setMovementMethod(movement);
+                    } else {
+                        contentTv.setMovementMethod(new ScrollingMovementMethod());
+                    }
                 }
                 contentTv.setVisibility(View.VISIBLE);
-                contentTv.setMovementMethod(new ScrollingMovementMethod());
                 if (contentColor != -1) {
                     contentTv.setTextColor(contentColor);
                 }
@@ -327,7 +332,13 @@ public class CommonDialog extends Dialog {
     }
 
     public CommonDialog setHtmlContent(String content) {
-        this.htmlContent = content;
+        this.charSequenceContent = TextFactoryUtils.getSpannedTextByHtml(content);
+        return this;
+    }
+
+    public CommonDialog setHtmlContent(CharSequence content, MovementMethod method) {
+        this.charSequenceContent = content;
+        this.movement = method;
         return this;
     }
 
@@ -344,7 +355,6 @@ public class CommonDialog extends Dialog {
         return positiveString;
     }
 
-
     public void addViewToContent(View view) {
         extraView = view;
     }
@@ -357,7 +367,6 @@ public class CommonDialog extends Dialog {
     public String getNegative() {
         return negativeString;
     }
-
 
     /**
      * replaced by {@link #setShouldCanceled(boolean)}

@@ -1,7 +1,6 @@
 package com.bihe0832.android.test.base
 
 import android.content.Intent
-import android.text.Html
 import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.app.router.openWebPage
@@ -12,6 +11,7 @@ import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.test.R
 import com.bihe0832.android.test.base.item.TestItemData
 
@@ -67,7 +67,7 @@ open class BaseTestFragment : CommonListFragment() {
         s?.let {
             ZLog.d(HttpBasicRequest.LOG_TAG, "showResult:$s")
             view?.findViewById<TextView>(R.id.test_tips)?.apply {
-                this.text = Html.fromHtml("<B>提示信息</b>:<BR> $s")
+                this.text = TextFactoryUtils.getSpannedTextByHtml("<B>提示信息</b>:<BR> $s")
                 visibility = View.VISIBLE
             }
         }
