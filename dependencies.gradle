@@ -7,6 +7,7 @@ def project = ext
  * 当前如果全量填"APPTest"
  */
 ext.mainProject = "APPTest"
+
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前设计到Android Support库的有：
@@ -22,16 +23,19 @@ ext.developModule = "Application"
  *  false 仅加载与 mainProject 相关的模块
  */
 ext.includeALLDependOnDevelopModule = false
+
 /**
  * 应用组件 （Pub 开头，各个外发APP的发布模块）是否以application模式运行，当需要独立运行应用组件时修改，默认为false
  * true 表示以 application 模式运行
  * false 表示以 Android Library 模式运行
  */
 ext.pubModuleIsApplication = false
+
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
 ext.moduleVersionName = "3.9.1"
+
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -66,28 +70,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "3.9.0",
+                "version"                : "3.9.1",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -99,7 +103,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "3.9.0",
+                "version"                : "3.9.1",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -111,14 +115,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "3.9.0",
+                "version"                : "3.9.1",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
@@ -131,12 +135,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -145,7 +149,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -266,7 +270,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibAPK"                    : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-utils-apk",
                 "apidependenciesList": ["LibToast", "LibLog", "LibEncrypt", "LibDeviceNetwork"]
         ],
@@ -300,7 +304,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibAndroid"]
         ],
         "LibSuperAPP"               : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": ["LibDialog", "LibAPK"]
         ],
@@ -393,7 +397,7 @@ ext.moduleInfo = [
                         "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText"]
         ],
         "LibNotification"           : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK", "LibCommonUtils"
@@ -427,7 +431,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWebview"                : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-webview",
                 "apidependenciesList": [
                         "com.tencent.tbs.tbssdk:sdk:43697",
@@ -435,7 +439,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibLifecycle"              : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         "android.arch.lifecycle:extensions:${project.android_arch_lifecycle_version}",
@@ -445,7 +449,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "3.9.0",
+                "version"            : "3.9.1",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK", "LibDeviceNetwork"
