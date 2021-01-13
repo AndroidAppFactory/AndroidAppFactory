@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibAPK"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。

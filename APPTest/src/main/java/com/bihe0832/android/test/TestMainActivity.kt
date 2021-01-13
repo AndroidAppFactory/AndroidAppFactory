@@ -29,12 +29,14 @@ class TestMainActivity : CommonActivity() {
             put(Manifest.permission.CAMERA, "相机")
             put(Manifest.permission.RECORD_AUDIO, "录音")
             put(Manifest.permission.SYSTEM_ALERT_WINDOW, "悬浮窗")
+            put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡")
         })
 
         PermissionManager.addPermissionScene(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "扫描二维码")
             put(Manifest.permission.RECORD_AUDIO, "语音录制")
             put(Manifest.permission.SYSTEM_ALERT_WINDOW, "悬浮窗")
+            put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储权限测试")
         })
 
 //        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
