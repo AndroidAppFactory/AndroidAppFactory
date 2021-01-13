@@ -41,17 +41,7 @@ object AppFactoryInit {
     }
 
     fun initPermission() {
-        PermissionManager.addPermissionDesc(
-                HashMap<String, String>().apply {
-                    put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡")
-                }
-        )
 
-        PermissionManager.addPermissionScene(
-                HashMap<String, String>().apply {
-                    put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储权限测试")
-                }
-        )
     }
 
 }
