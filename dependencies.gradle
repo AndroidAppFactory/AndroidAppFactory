@@ -6,7 +6,7 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest"
+ext.mainProject = "CommonFeedback"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前设计到Android Support库的有：
@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibTimer,LibText"
+ext.developModule = "CommonFeedback"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -31,7 +31,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.8.6"
+ext.moduleVersionName = "3.9.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -66,28 +66,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "3.8.6",
+                "version"            : "3.9.0",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "3.8.6",
+                "version"            : "3.9.0",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "3.8.5",
+                "version"            : "3.9.0",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "3.8.5",
+                "version"                : "3.9.0",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -99,7 +99,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "3.8.5",
+                "version"                : "3.9.0",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -111,14 +111,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "3.8.5",
+                "version"            : "3.9.0",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "3.8.5",
+                "version"                : "3.9.0",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
@@ -131,12 +131,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -145,7 +145,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -242,7 +242,7 @@ ext.moduleInfo = [
                 "apidependenciesList": []
         ],
         "LibDeviceNetwork"          : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-device-network",
                 "apidependenciesList": [
                         "com.android.support:appcompat-v7:${project.android_support_version}",
@@ -253,7 +253,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibTimer"                  : [
-                "version"            : "3.7.9",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-timer",
                 "apidependenciesList": ["LibThread", "LibLog"]
         ],
@@ -266,7 +266,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibAPK"                    : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-utils-apk",
                 "apidependenciesList": ["LibToast", "LibLog", "LibEncrypt", "LibDeviceNetwork"]
         ],
@@ -295,17 +295,17 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibFile", "LibZip", "LibRequest", "LibThread"]
         ],
         "LibText"                   : [
-                "version"            : "3.7.9",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-text",
                 "apidependenciesList": ["LibAndroid"]
         ],
         "LibSuperAPP"               : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": ["LibDialog", "LibAPK"]
         ],
         "LibDebug"                  : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": ["LibDialog", "LibToast"]
         ],
@@ -353,7 +353,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibAdapter"                : [
-                "version"            : "3.7.9",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-adapter",
                 "apidependenciesList": [
                         "com.android.support:support-annotations:${project.android_support_version}",
@@ -363,7 +363,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibRefresh"                : [
-                "version"            : "3.7.9",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-refresh",
                 "apidependenciesList": [
                         "com.github.ybq:Android-SpinKit:1.0.2",
@@ -371,7 +371,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibToast"                  : [
-                "version"            : "3.7.9",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-toast",
                 "apidependenciesList": ["LibThread","LibText"]
         ],
@@ -386,14 +386,14 @@ ext.moduleInfo = [
                 ]
         ],
         "LibDialog"                 : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}",
                         "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText"]
         ],
         "LibNotification"           : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK", "LibCommonUtils"
@@ -409,7 +409,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibRecycleviewExt"         : [
-                "version"            : "3.7.9",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-recycleview-ext",
                 "apidependenciesList": ["LibRefresh"]
         ],
@@ -427,7 +427,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWebview"                : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-webview",
                 "apidependenciesList": [
                         "com.tencent.tbs.tbssdk:sdk:43697",
@@ -435,7 +435,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibLifecycle"              : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         "android.arch.lifecycle:extensions:${project.android_arch_lifecycle_version}",
@@ -445,7 +445,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK", "LibDeviceNetwork"
@@ -458,7 +458,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibImmersive"              : [
-                "version"            : "3.8.3",
+                "version"            : "3.9.0",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork",
