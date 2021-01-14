@@ -2,7 +2,10 @@ package com.bihe0832.android.lib.ui.view.ext;
 
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.text.method.LinkMovementMethod
+import android.view.View
 import android.widget.TextView
+import com.bihe0832.android.lib.text.TextFactoryUtils
 
 /**
  *
@@ -48,4 +51,9 @@ fun TextView.disableTemporary(mileSecond: Long) {
 fun TextView.disableForOneSecond() {
     isEnabled = false
     postDelayed({ isEnabled = true }, 1000)
+}
+
+fun TextView.addClickActionText(content: String, keyWordsActionMap: HashMap<String, View.OnClickListener>) {
+    setText(TextFactoryUtils.getCharSequenceWithClickAction(content, keyWordsActionMap))
+    setMovementMethod(LinkMovementMethod.getInstance())
 }
