@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.view.ext.addClickActionText
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 object AgreementPrivacy {
@@ -27,12 +28,11 @@ object AgreementPrivacy {
     }
 
     fun setAgreementAndPrivacyText(textview: TextView) {
-        textview.text = TextFactoryUtils.getCharSequenceWithClickAction(
+        textview.addClickActionText(
                 textview.context.resources.getString(R.string.privacy_title).toString() + "和"
                         + textview.context.resources.getString(R.string.agreement_title),
                 getAgreementAndPrivacyClickActionMap(textview.context)
         )
-        textview.movementMethod = LinkMovementMethod.getInstance()
     }
 
     fun showPrivacy(activity: Activity, nextAction: () -> Unit) {
