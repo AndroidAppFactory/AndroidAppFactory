@@ -7,15 +7,16 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
+import java.nio.charset.Charset
 import java.text.DecimalFormat
 import java.text.NumberFormat
+
 
 /**
  *
@@ -130,7 +131,6 @@ object FileUtils {
     fun getFileMD5(filePath: String): String {
         return MD5.getFileMD5(filePath)
     }
-
 
     fun deleteDirectory(dir: File): Boolean {
         try {
@@ -248,5 +248,29 @@ object FileUtils {
             }
         }
         return ""
+    }
+
+    fun getFileContent(filename: String?): String {
+        var res = ""
+        filename?.let { it ->
+            if (checkFileExist(it)) {
+                var fis: FileInputStream? = null
+                try {
+                    fis = FileInputStream(File(it))
+                    val buffer = ByteArray(fis.available())
+                    fis.read(buffer)
+                    res = String(buffer, Charset.defaultCharset())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    try {
+                        fis?.close()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+        return res
     }
 }

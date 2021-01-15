@@ -1,18 +1,15 @@
 package com.bihe0832.android.test.module
 
-import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
-import com.bihe0832.android.common.photos.cropPhoto
-import com.bihe0832.android.common.photos.getDefaultPhoto
-import com.bihe0832.android.common.photos.getPhotosFolder
-import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
@@ -20,7 +17,6 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
-import com.bihe0832.android.lib.ui.photos.Photos
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -232,16 +228,12 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun testFunc() {
-        ZLog.d("test")
+        var file = ZixieContext.getZixieFolder() + "voiceRes.json"
+        ZLog.d("file:$file")
+        ZLog.d("file md5:${FileUtils.getFileMD5(file)}")
+        var content = FileUtils.getFileContent(file)
+        ZLog.d("file content md5 :" + MD5.getMd5(content))
+        ZLog.d("file content :$content")
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        ZLog.d("PhotoChooser", "in PhotoChooser onResult, $this, $requestCode, $resultCode, ${data?.data}")
-        if (requestCode == ZixieActivityRequestCode.TAKE_PHOTO) {
-            Photos.addPicToPhotos(context, activity!!.getDefaultPhoto().absolutePath)
-            activity?.cropPhoto(activity!!.getDefaultPhoto().absolutePath, activity!!.getPhotosFolder() + "a.jpg", 2)
-        }
-    }
 }
