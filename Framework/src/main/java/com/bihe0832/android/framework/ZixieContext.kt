@@ -155,7 +155,7 @@ object ZixieContext {
 
     fun getZixieFolder(): String {
         var path = ZixieFileProvider.getZixieFilePath(applicationContext!!)
-        return getRealFilePath(path)
+        return getRealFileFolder(path)
     }
 
     fun getZixieExtFolder(): String {
@@ -165,14 +165,14 @@ object ZixieContext {
         } else {
             getZixieFolder()
         }
-        return getRealFilePath(path)
+        return getRealFileFolder(path)
     }
 
-    fun getLogPath(): String {
-        return getRealFilePath(getZixieExtFolder() + File.separator + "log" + File.separator)
+    fun getLogFolder(): String {
+        return getRealFileFolder(getZixieExtFolder() + File.separator + "log" + File.separator)
     }
 
-    private fun getRealFilePath(path: String): String {
+    private fun getRealFileFolder(path: String): String {
         try {
             var result = FileUtils.checkAndCreateFolder(path)
             if (!result) {
@@ -181,7 +181,11 @@ object ZixieContext {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return path
+        return if (path.endsWith(File.separator)) {
+            path
+        } else {
+            path + File.separator
+        }
     }
 
     fun getDeviceId(): String {
