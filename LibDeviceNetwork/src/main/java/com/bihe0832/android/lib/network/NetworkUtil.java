@@ -496,7 +496,7 @@ public class NetworkUtil {
     public static boolean isNetworkOnline() {
         Runtime runtime = Runtime.getRuntime();
         try {
-            Process ipProcess = runtime.exec("ping -c 3 www.baidu.com");
+            Process ipProcess = runtime.exec("ping -c 3 weixin.qq.com");
             int exitValue = ipProcess.waitFor();
             ZLog.i("hardy isNetworkOnline exitValue:" + exitValue);
             if (exitValue == 0) {
