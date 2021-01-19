@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author hardyshi code@bihe0832.com
  *         Created on 2020/7/9.
- *         Description: Description
+ *         Description:日志工具类的各类日志打印方式
  */
 public final class ZLog {
 
