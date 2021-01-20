@@ -37,6 +37,9 @@ object LifecycleHelper {
     private var lastStartVersion = 0L
     private var lastStartTime = 0L
     private var mRecordUsedInfo = true
+    private val mCurrentVersion by lazy {
+        APKUtils.getAppVersionCode(applicationContext)
+    }
 
     @Synchronized
     fun init(application: Application) {
@@ -97,10 +100,16 @@ object LifecycleHelper {
         }.toInt()
     }
 
+    fun getCurrentVersionUsedTimes(): Int {
+        return doActionWithCheckReturnLong {
+            Config.readConfig(KEY_USED_TIMES + mCurrentVersion, 0L)
+        }.toInt()
+    }
+
     private fun updateNewVersion() {
         doActionWithCheck{
-            if (APKUtils.getAppVersionCode(applicationContext) != lastStartVersion) {
-                Config.writeConfig(KEY_LAST_STARTED_VERSION, APKUtils.getAppVersionCode(applicationContext))
+            if (mCurrentVersion != lastStartVersion) {
+                Config.writeConfig(KEY_LAST_STARTED_VERSION, mCurrentVersion)
                 Config.writeConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
                 if (lastStartVersion < 1) {
                     Config.writeConfig(KEY_APP_INSTALLED_TIME, System.currentTimeMillis())
@@ -113,6 +122,7 @@ object LifecycleHelper {
         doActionWithCheck{
             Config.writeConfig(KEY_LAST_START_TIME, System.currentTimeMillis())
             addValueOnce(KEY_USED_TIMES)
+            addValueOnce(KEY_USED_TIMES + mCurrentVersion)
             if (DateUtil.getDateEN(lastStartTime, "yyyy-MM-dd") != DateUtil.getDateEN(System.currentTimeMillis(), "yyyy-MM-dd")) {
                 addValueOnce(KEY_USED_DAYS)
             }
@@ -120,7 +130,7 @@ object LifecycleHelper {
     }
 
     val isFirstStart by lazy {
-        if (APKUtils.getAppVersionCode(applicationContext) != lastStartVersion) {
+        if (mCurrentVersion != lastStartVersion) {
             if (lastStartVersion > 0) {
                 INSTALL_TYPE_VERSION_FIRST
             } else {
