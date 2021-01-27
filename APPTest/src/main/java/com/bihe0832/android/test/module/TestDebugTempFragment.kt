@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
+import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -234,6 +235,8 @@ class TestDebugTempFragment : BaseTestFragment() {
         var content = FileUtils.getFileContent(file)
         ZLog.d("file content md5 :" + MD5.getMd5(content))
         ZLog.d("file content :$content")
+
+        BitmapUtil.getViewBitmap(activity!!.window.decorView)
     }
 
 }

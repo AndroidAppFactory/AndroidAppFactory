@@ -1,7 +1,5 @@
 package com.bihe0832.android.lib.ui.image;
 
-import static android.os.Environment.DIRECTORY_PICTURES;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -221,8 +219,8 @@ public class BitmapUtil {
             return null;
         }
 
-        String filePath = null;
         String dir = ZixieFileProvider.getZixieFilePath(context);
+        String filePath = dir + fileName;
         if (!TextUtils.isEmpty(dir)) {
             ZLog.e("BitmapUtil", "filePath = " + filePath);
             try {
@@ -236,10 +234,15 @@ public class BitmapUtil {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
                 outputStream.flush();
                 outputStream.close();
+                return filePath;
             } catch (Exception ignore) {
+                ignore.printStackTrace();
+                return "";
             }
+        } else {
+            return "";
         }
-        return filePath;
+
     }
 
     /**
