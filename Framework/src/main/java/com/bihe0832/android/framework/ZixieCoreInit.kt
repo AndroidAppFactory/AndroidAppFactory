@@ -44,6 +44,9 @@ object ZixieCoreInit {
             initScreenWidthAndHeight()
             // 初始化渠道号
             initZixieLibs(application, !ZixieContext.isOfficial())
+            if(ZixieContext.isDebug()){
+                Config.writeConfig(Constants.CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED, true)
+            }
         }
     }
     private fun initScreenWidthAndHeight(){
