@@ -46,16 +46,26 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowActionBar">false</item>
+        <!--主色调 -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--状态栏颜色-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--控制各个控件被选中时的颜色-->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--各个控制控件的默认颜色 与colorAccent相反-->
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <!--页面背景色-->
+        <item name="android:windowBackground">@color/colorWindowBg</item>
+        <!--控制normal状态下button的颜色-->
         <item name="colorButtonNormal">@color/colorButtonNormal</item>
         <item name="colorControlActivated">@color/colorControlActivated</item>
+        <!--控制所有可点击的View的涟漪效果颜色-->
         <item name="colorControlHighlight">@color/colorControlHighlight</item>
-        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <!--EditText 输入框中字体的颜色-->
+        <item name="editTextColor">@color/colorSecondaryText</item>
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
     </style>
+
 
     <!--    主要用于闪屏 -->
     <style name="fullscreenActivityTheme" parent="activityTheme">

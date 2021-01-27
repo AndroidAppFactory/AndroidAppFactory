@@ -40,7 +40,12 @@ public class ZixieFileProvider extends FileProvider {
     @NotNull
     public static final String getZixieFilePath(@NotNull Context context) {
         File tempFile = context.getExternalFilesDir(context.getString(R.string.lib_bihe0832_file_folder));
-        return tempFile.getAbsolutePath();
+        FileUtils.INSTANCE.checkAndCreateFolder(tempFile.getAbsolutePath());
+        if (!tempFile.getAbsolutePath().endsWith(File.separator)) {
+            return tempFile.getAbsolutePath() + File.separator;
+        } else {
+            return tempFile.getAbsolutePath();
+        }
     }
 
     @NotNull
@@ -49,10 +54,14 @@ public class ZixieFileProvider extends FileProvider {
         File tempFile = null;
         if (!TextUtils.isEmpty(filePath)) {
             tempFile = new File(zixieFileFolder.getAbsolutePath(), filePath);
-        }else {
+        } else {
             tempFile = zixieFileFolder;
         }
         FileUtils.INSTANCE.checkAndCreateFolder(tempFile.getAbsolutePath());
-        return tempFile.getAbsolutePath();
+        if (!tempFile.getAbsolutePath().endsWith(File.separator)) {
+            return tempFile.getAbsolutePath() + File.separator;
+        } else {
+            return tempFile.getAbsolutePath();
+        }
     }
 }

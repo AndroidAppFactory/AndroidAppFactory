@@ -10,20 +10,37 @@
     <color name="text_gray">#999999</color>
 
     <!--    主题相关配色-->
-    <color name="colorPrimary">#03A9F4</color>
-    <color name="colorPrimaryDark">#0288D1</color>
-    <color name="colorPrimaryLight">#B3E5FC</color>
-    <color name="colorAccent">#7C4DFF</color>
-    <color name="colorButtonNormal">#7988b3</color>
-    <color name="colorControlActivated">#7988B3</color>
-    <color name="colorControlHighlight">#FF3AC8EF</color>
-    <color name="colorControlNormal">#7988B3</color>
-    <color name="colorPrimaryText">#212121</color>
-    <color name="colorSecondaryText">#757575</color>
-    <color name="windowBackground">@color/white</color>
+    <!--主色调 -->
+    <color name="colorPrimary">@color/primary</color>
+    <!--状态栏颜色-->
+    <color name="colorPrimaryDark">@color/primary_dark</color>
+    <color name="colorPrimaryLight">@color/primary_light</color>
+
+    <!--控制各个控件被选中时的颜色-->
+    <color name="colorAccent">@color/accent</color>
+    <!--各个控制控件的默认颜色 与colorAccent相反-->
+    <color name="colorControlNormal">@color/divider</color>
+    <!--控制normal状态下button的颜色-->
+    <color name="colorButtonNormal">@color/colorControlNormal</color>
+    <!--控制所有可点击的View的涟漪效果颜色-->
+    <color name="colorControlActivated">@color/colorPrimaryDark</color>
+    <color name="colorControlHighlight">@color/colorPrimaryDark</color>
+    <!--文本颜色-->
+    <color name="colorPrimaryText">@color/primary_text</color>
+    <color name="colorSecondaryText">@color/secondary_text</color>
+    <!--页面背景色-->
+    <color name="colorWindowBg">@color/icons</color>
+    <color name="windowBackground">@color/colorWindowBg</color>
     <color name="navigationBarColor">@color/colorPrimaryText</color>
 
+
+    <!--    https://www.materialpalette.com/indigo/indigo 生成颜色表-->
+    <color name="primary">#3F51B5</color>
+    <color name="primary_dark">#303F9F</color>
+    <color name="primary_light">#C5CAE9</color>
+    <color name="accent">#536DFE</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
-
 </resources>
