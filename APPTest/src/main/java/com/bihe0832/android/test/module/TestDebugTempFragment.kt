@@ -229,14 +229,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun testFunc() {
-        var file = ZixieContext.getZixieFolder() + "voiceRes.json"
-        ZLog.d("file:$file")
-        ZLog.d("file md5:${FileUtils.getFileMD5(file)}")
-        var content = FileUtils.getFileContent(file)
-        ZLog.d("file content md5 :" + MD5.getMd5(content))
-        ZLog.d("file content :$content")
-
-        BitmapUtil.getViewBitmap(activity!!.window.decorView)
+        ToastUtil.showLong(context,"这是一个测试Toast")
     }
 
 }
