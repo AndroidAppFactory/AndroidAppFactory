@@ -5,7 +5,9 @@ import android.os.Build;
 import android.view.View;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.debug.DebugTools;
+import com.bihe0832.android.lib.lifecycle.LifecycleHelper;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.DateUtil;
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -72,6 +74,7 @@ public class ShowDebugClick implements View.OnClickListener {
                 "version: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode()
                         + "\n");
         builder.append("Tag: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
+        builder.append("安装时间: " + DateUtil.getDateEN(LifecycleHelper.INSTANCE.getAPPInstalledTime()) + "\n");
         builder.append("channel: " + ZixieContext.INSTANCE.getChannelID() + "\n");
         builder.append("official: " + ZixieContext.INSTANCE.isOfficial() + "\n\n");
         return builder.toString();
