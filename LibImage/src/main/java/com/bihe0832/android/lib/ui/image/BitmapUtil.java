@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.log.ZLog;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -221,17 +222,8 @@ public class BitmapUtil {
         }
 
         String filePath = null;
-        File externalFilesDir = context.getExternalFilesDir(DIRECTORY_PICTURES);
-        String dir = null;
-        if (null != externalFilesDir) {
-            dir = externalFilesDir.getAbsolutePath();
-        }
+        String dir = ZixieFileProvider.getZixieFilePath(context);
         if (!TextUtils.isEmpty(dir)) {
-            if (!dir.endsWith(File.separator)) {
-                filePath = dir + File.separator + fileName;
-            } else {
-                filePath = dir + fileName;
-            }
             ZLog.e("BitmapUtil", "filePath = " + filePath);
             try {
                 File file = new File(filePath);
