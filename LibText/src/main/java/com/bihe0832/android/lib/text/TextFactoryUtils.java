@@ -5,6 +5,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
@@ -38,6 +39,25 @@ public class TextFactoryUtils {
         dest = m.replaceAll("");
         return dest;
     }
+
+    /**
+     * 过滤字符串两端的引号
+     */
+
+    public static String trimMarks(String source) {
+        if (TextUtils.isEmpty(source)) {
+            return source;
+        }
+        String result = source;
+        if (result.startsWith("\"")) {
+            result = result.substring(1, result.length());
+        }
+        if (result.endsWith("\"")) {
+            result = result.substring(0, result.length() - 1);
+        }
+        return result;
+    }
+
 
     /**
      * 分割字符串
@@ -118,7 +138,8 @@ public class TextFactoryUtils {
         }
     }
 
-    public static final CharSequence getCharSequenceWithClickAction(String content, String title, View.OnClickListener listener) {
+    public static final CharSequence getCharSequenceWithClickAction(String content, String title,
+            View.OnClickListener listener) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getSpannedTextByHtml(content));
         Pattern pattern = Pattern.compile(title);
         Matcher matcher = pattern.matcher(spannableStringBuilder);
@@ -128,7 +149,8 @@ public class TextFactoryUtils {
         return (CharSequence) spannableStringBuilder;
     }
 
-    public static final CharSequence getCharSequenceWithClickAction(String content, HashMap<String, OnClickListener> listenerHashMap) {
+    public static final CharSequence getCharSequenceWithClickAction(String content,
+            HashMap<String, OnClickListener> listenerHashMap) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getSpannedTextByHtml(content));
         for (HashMap.Entry<String, OnClickListener> entry : listenerHashMap.entrySet()) {
             Pattern pattern = Pattern.compile(entry.getKey());

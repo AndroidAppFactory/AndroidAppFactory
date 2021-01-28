@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -229,7 +230,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun testFunc() {
-        ToastUtil.showLong(context,"这是一个测试Toast")
+        ToastUtil.showLong(context,"这是一个测试Toast \"trimMarks\" " + TextFactoryUtils.trimMarks("\"trimMarks\"") )
     }
 
 }
