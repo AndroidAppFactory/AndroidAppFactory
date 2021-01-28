@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.IpUtils
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.network.WifiUtil
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.*
 
@@ -126,12 +127,12 @@ class WifiManagerWrapper private constructor() {
     //Wifi的名称
     fun getSSID(): String {
         mWifiInfo?.let {
-            if (parseWifiSSID(it.ssid).equals(DEFAULT_SSID, ignoreCase = true)) {
+            if (TextFactoryUtils.trimMarks(it.ssid).equals(DEFAULT_SSID, ignoreCase = true)) {
                 getConfiguredByNetworkID(getNetworkId())?.let { wifiConfiguration ->
-                    return parseWifiSSID(wifiConfiguration.SSID)
+                    return TextFactoryUtils.trimMarks(wifiConfiguration.SSID)
                 }
             }else{
-                return parseWifiSSID(it.ssid)
+                return TextFactoryUtils.trimMarks(it.ssid)
             }
         }
         return DEFAULT_SSID
@@ -489,7 +490,7 @@ class WifiManagerWrapper private constructor() {
         getConfigurationList()?.let {
             if(it.isNotEmpty()){
                 for (existingConfig in it) {
-                    if (parseWifiSSID(existingConfig?.SSID) == ssid) {
+                    if (TextFactoryUtils.trimMarks(existingConfig?.SSID) == ssid) {
                         return existingConfig
                     }
                 }
@@ -516,20 +517,6 @@ class WifiManagerWrapper private constructor() {
         return null
     }
 
-
-    fun parseWifiSSID(ssid: String?): String {
-        if (ssid.isNullOrBlank()) {
-            return ""
-        }
-        var result = ssid
-        if (result.startsWith("\"")) {
-            result = result.substring(1, result.length)
-        }
-        if (result.endsWith("\"")) {
-            result = result.substring(0, result.length - 1)
-        }
-        return result
-    }
 
     private fun createWifiInfo(ssid: String, Password: String, Type: Int): WifiConfiguration {
         val config = WifiConfiguration()
