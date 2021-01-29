@@ -80,7 +80,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"     : [
-                "version"            : "3.10.1",
+                "version"            : "3.10.2",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework","CommonPraise", "CommonFeedback", "CommonWebview"
