@@ -251,7 +251,7 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
 }
 
 def isApplicationModule(String projectName) {
-    return projectName == "APPTest" || projectName == "Application"
+    return projectName == "APPTest" || projectName == "Application" || projectName.startsWith("Base")
 }
 
 def isDebugModule(String projectName) {

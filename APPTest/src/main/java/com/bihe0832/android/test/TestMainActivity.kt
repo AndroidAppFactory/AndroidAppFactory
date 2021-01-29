@@ -1,9 +1,7 @@
 package com.bihe0832.android.test
 
 import android.Manifest
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.support.v4.content.ContextCompat
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.update.UpdateManager
@@ -11,7 +9,6 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
@@ -83,7 +80,7 @@ class TestMainActivity : CommonActivity() {
     override fun onResume() {
         super.onResume()
         if (findFragment(TestMainFragment::class.java) == null) {
-            loadRootFragment(R.id.common_fragment_content, TestMainFragment.newInstance(0))
+            loadRootFragment(R.id.common_fragment_content, TestMainFragment())
         }
 //        hideBottomUIMenu()
     }

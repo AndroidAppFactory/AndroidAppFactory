@@ -15,7 +15,8 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibDeviceNetwork"
+ext.developModule = "Application,CommonTest"
+
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +35,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.9.6"
+ext.moduleVersionName = "3.10.1"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -44,12 +45,20 @@ ext.moduleInfo = [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
-                        "Application"
+                        "Application","CommonTest",
+                        "BaseTest"
                 ],
                 "specialdependenciesList": [
                         "kapt": [
                                 "RouterCompiler"
                         ]
+                ]
+        ],
+        "BaseTest"     : [
+                "version"                : "",
+                "artifactId"             : "",
+                "apidependenciesList": [
+                        "Application","CommonTest"
                 ]
         ],
         "Application"               : [
@@ -68,6 +77,13 @@ ext.moduleInfo = [
                         "kapt": [
                                 "RouterCompiler"
                         ]
+                ]
+        ],
+        "CommonTest"     : [
+                "version"            : "3.9.6",
+                "artifactId"         : "common-test",
+                "apidependenciesList": [
+                        "Framework","CommonPraise", "CommonFeedback", "CommonWebview"
                 ]
         ],
         "CommonSplash"              : [
