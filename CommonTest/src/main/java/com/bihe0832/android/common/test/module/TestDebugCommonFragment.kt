@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.test.module
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.view.View
@@ -48,6 +49,19 @@ open class TestDebugCommonFragment : BaseTestFragment() {
                 IntentUtils.startSettings(context, android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
             }))
 
+        }
+    }
+
+    protected fun startActivity(activityName: String) {
+        try {
+            val threadClazz = Class.forName(activityName)
+            val intent = Intent(context, threadClazz)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ZixieContext.showToast("请确认当前运行的测试模块是否包含该应用")
         }
     }
 
