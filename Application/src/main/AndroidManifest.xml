@@ -18,5 +18,6 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/activityTheme" />
+
     </application>
 </manifest>
