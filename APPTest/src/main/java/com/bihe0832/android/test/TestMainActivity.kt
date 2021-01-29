@@ -19,7 +19,7 @@ class TestMainActivity : CommonActivity() {
     val LOG_TAG = "TestHttpActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initToolbar("AndroidAPPFactory", false)
+        initToolbar("TestMainActivity", false)
         CardInfoHelper.getInstance().setAutoAddItem(true)
 
         PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
