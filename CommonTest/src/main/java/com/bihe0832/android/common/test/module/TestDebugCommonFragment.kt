@@ -51,7 +51,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         }
     }
 
-    private fun showMobileInfo() {
+    protected fun showMobileInfo() {
         val builder = StringBuilder()
         builder.append("PackageName: ${context!!.packageName}\n")
         builder.append("deviceId: ${getDeviceId()}\n")
@@ -62,7 +62,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         showInfo("分享设备信息给开发者", builder.toString())
     }
 
-    private fun showAPPInfo() {
+    protected fun showAPPInfo() {
         val builder = StringBuilder()
         var version = ""
         version = if (isDebug()) {
@@ -80,7 +80,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         showInfo("${APKUtils.getAppName(context)} $version 信息", builder.toString())
     }
 
-    private fun showUsedInfo() {
+    protected fun showUsedInfo() {
         val builder = StringBuilder()
 
         builder.append("应用安装时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPInstalledTime())}\n")
@@ -110,7 +110,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         showInfo("应用使用情况", builder.toString())
     }
 
-    private fun showOtherAPPInfo() {
+    protected fun showOtherAPPInfo() {
         val builder = StringBuilder()
         builder.append("第三方应用信息:\n\n")
         addPackageInfo("com.tencent.mobileqq", builder)
@@ -121,7 +121,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         sendInfo("分享第三方应用信息给开发者", builder.toString())
     }
 
-    private fun addPackageInfo(packageName: String, builder: StringBuilder) {
+    protected fun addPackageInfo(packageName: String, builder: StringBuilder) {
         val info = APKUtils.getInstalledPackage(context, packageName)
         builder.append("\n$packageName: ")
         if (null == info) {
