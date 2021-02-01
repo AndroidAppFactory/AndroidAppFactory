@@ -65,7 +65,7 @@ class DownloadByHttp : DownloadWrapper() {
                 mCurrentDownloadList[info.downloadURL]?.let { downloadItem ->
                     downloadItem.downloadNotifyListenerList.forEach {
                         ThreadManager.getInstance().runOnUIThread{
-                            it.onError(-7, "download with exception")
+                            it.onError(-7, "download with exception"  + e.toString())
                         }
                     }
                 }
