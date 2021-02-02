@@ -24,7 +24,7 @@ object DownloadAPK {
         override fun onComplete(filePath: String, item: DownloadItem) {
             ZLog.i("startDownloadApk download installApkPath: $filePath")
             if (!TextUtils.isEmpty(contentTitle) && !TextUtils.isEmpty(contentDesc)) {
-                ThreadManager.getInstance().runOnUIThread{
+                ThreadManager.getInstance().runOnUIThread {
                     CommonDialog(activity).apply {
                         title = contentTitle
                         content = contentDesc
@@ -58,25 +58,30 @@ object DownloadAPK {
     }
 
     //直接下载，不显示进度，4G下载弹框，下载完成自动安装
+    fun startDownload(activity: Activity, url: String) {
+        startDownload(activity, url, "", "")
+    }
+
+    //直接下载，不显示进度，4G下载弹框，下载完成自动安装
     fun startDownload(activity: Activity, url: String, md5: String, packageName: String) {
-        DownloadFile.startDownloadWithCheckAndProcess(
+        startDownload(
                 activity,
                 "", "",
                 url, md5,
-                true, false,
-                null,
-                InstallListener(activity, packageName, "", "", null))
+                packageName
+        )
     }
 
     //直接下载，显示进度，可以取消，4G下载弹框，下载完成自动安装
     fun startDownload(activity: Activity, title: String, msg: String, url: String, md5: String, packageName: String) {
-        DownloadFile.startDownloadWithCheckAndProcess(
+        startDownload(
                 activity,
                 title, msg,
                 url, md5,
+                packageName,
                 true, true,
-                null,
-                InstallListener(activity, packageName, title, msg, null))
+                null
+        )
     }
 
     //直接下载，显示进度，4G下载看参数，下载完成自动安装
