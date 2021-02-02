@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.download.wrapper
 
 import android.app.Activity
+import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.install.InstallUtils
@@ -57,14 +58,14 @@ object DownloadAPK {
         }
     }
 
-    //直接下载，不显示进度，4G下载弹框，下载完成自动安装
-    fun startDownload(activity: Activity, url: String) {
-        startDownload(activity, url, "", "")
+    //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
+    fun startDownloadWithCheckAndProcess(activity: Activity, url: String) {
+        startDownloadWithCheckAndProcess(activity, url, "", "")
     }
 
-    //直接下载，不显示进度，4G下载弹框，下载完成自动安装
-    fun startDownload(activity: Activity, url: String, md5: String, packageName: String) {
-        startDownload(
+    //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
+    fun startDownloadWithCheckAndProcess(activity: Activity, url: String, md5: String, packageName: String) {
+        startDownloadWithCheckAndProcess(
                 activity,
                 "", "",
                 url, md5,
@@ -72,20 +73,31 @@ object DownloadAPK {
         )
     }
 
-    //直接下载，显示进度，可以取消，4G下载弹框，下载完成自动安装
-    fun startDownload(activity: Activity, title: String, msg: String, url: String, md5: String, packageName: String) {
-        startDownload(
+    //直接下载，显示进度，可以取消，4G下载弹框，下载完成自动安装且弹框
+    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, md5: String, packageName: String) {
+        startDownloadWithCheckAndProcess(
                 activity,
                 title, msg,
                 url, md5,
                 packageName,
-                true, true,
-                null
+                true, null
         )
     }
 
-    //直接下载，显示进度，4G下载看参数，下载完成自动安装
-    fun startDownload(activity: Activity, title: String, msg: String, url: String, md5: String, packageName: String, canCancel: Boolean, downloadMobile: Boolean, listener: OnDialogListener?) {
+
+    //直接下载，显示进度，4G下载弹框，下载完成自动安装且弹框
+    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, md5: String, packageName: String, canCancel: Boolean, listener: OnDialogListener?) {
+        DownloadFile.startDownloadWithCheckAndProcess(
+                activity,
+                title, msg,
+                url, md5,
+                canCancel,
+                listener,
+                InstallListener(activity, packageName, title, msg, listener))
+    }
+
+    //直接下载，显示进度，4G下载看参数，下载完成自动安装且弹框
+    fun startDownloadWithProcess(activity: Activity, title: String, msg: String, url: String, md5: String, packageName: String, canCancel: Boolean, downloadMobile: Boolean, listener: OnDialogListener?) {
         DownloadFile.startDownloadWithProcess(
                 activity,
                 title, msg,
@@ -96,12 +108,22 @@ object DownloadAPK {
     }
 
     //直接下载，不显示进度，4G下载不弹框直接下载，下载完成自动安装
-    fun startDownloadWithoutCheck(activity: Activity, url: String, md5: String, packageName: String) {
+    fun startDownload(context: Context, url: String, md5: String, packageName: String) {
         DownloadFile.startDownload(
-                activity,
+                context,
                 "", "",
                 url, md5,
-                true, true,
-                InstallListener(activity, packageName, "", "", null))
+                true, true, object : SimpleDownloadListener() {
+            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+            }
+
+            override fun onComplete(filePath: String, item: DownloadItem) {
+                InstallUtils.installAPP(context, filePath, packageName)
+            }
+
+            override fun onProgress(item: DownloadItem) {
+            }
+
+        })
     }
 }
