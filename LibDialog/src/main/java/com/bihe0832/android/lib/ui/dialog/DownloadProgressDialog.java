@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.ui.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -36,8 +35,9 @@ public class DownloadProgressDialog extends Dialog {
 
     private String mTitleString;
     private String mContentString;
-    private int mAPKSize;
-    private int mCurrentSize;
+    private long mAPKSize;
+    private long mPartSize = 1;
+    private long mCurrentSize;
 
     private boolean shouldCanceledOutside = false;
     private boolean shouldCanceled = true;
@@ -175,8 +175,8 @@ public class DownloadProgressDialog extends Dialog {
                 mProgress.setVisibility(View.INVISIBLE);
             } else {
                 mProgress.setVisibility(View.VISIBLE);
-                mProgress.setMax(mAPKSize);
-                mProgress.setProgress(mCurrentSize);
+                mProgress.setMax(100);
+                mProgress.setProgress((int) (mCurrentSize / mPartSize));
             }
         }
 
@@ -216,8 +216,8 @@ public class DownloadProgressDialog extends Dialog {
         mProgress = (ProgressBar) findViewById(R.id.update_progress_bar);
         mProgressNumber = (TextView) findViewById(R.id.update_progress_number);
         mProgressPercent = (TextView) findViewById(R.id.update_progress_percent);
-        mPositiveButton = (Button) findViewById(R.id.update_progress_cancle);
-        mNegativeButton = (Button) findViewById(R.id.update_progress_positive);
+        mNegativeButton = (Button) findViewById(R.id.update_progress_cancle);
+        mPositiveButton = (Button) findViewById(R.id.update_progress_positive);
         mButtonLine = findViewById(R.id.update_progress_column_line);
     }
 
@@ -260,14 +260,15 @@ public class DownloadProgressDialog extends Dialog {
     }
 
     // setProgress传入的参数以B为单位
-    public void setCurrentSize(int value) {
+    public void setCurrentSize(long value) {
         mCurrentSize = value;
         refreshView();
     }
 
     // setMax传入的参数以B为单位
-    public void setAPKSize(int max) {
+    public void setAPKSize(long max) {
         mAPKSize = max;
+        mPartSize = mAPKSize / 100;
         refreshView();
     }
 }

@@ -30,6 +30,23 @@ public class ZipUtils {
             return false;
         }
     }
+    public static boolean isZipFile(String filePath, boolean justCheckSuffix) {
+        if (TextUtils.isEmpty(filePath)) {
+            return false;
+        }
+        if(justCheckSuffix){
+            return filePath.toLowerCase().endsWith(ZIP_DOWNLOADED_FILE_SUFFIX);
+        }else {
+            try {
+                ZipFile zipFile = new ZipFile(filePath);
+                return zipFile.isValidZipFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+    }
 
     public static void compress(String srcPathName, String targetFilePath) {
         zip(srcPathName, targetFilePath);

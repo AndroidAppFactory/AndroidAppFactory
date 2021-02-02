@@ -1,6 +1,5 @@
 package com.bihe0832.android.base.test.tts
 
-import android.app.DownloadManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +9,8 @@ import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.download.DownloadUtils
+import com.bihe0832.android.lib.download.wrapper.DownloadUtils
+import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.timer.BaseTask
@@ -37,6 +36,7 @@ class TestTTSFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
     }
+
     private fun initView(view: View) {
         LibTTS.init(view.context, Locale.CHINA, "com.iflytek.vflynote", object : LibTTS.TTSInitListener {
             override fun onInitError() {
@@ -111,31 +111,30 @@ class TestTTSFragment : BaseFragment() {
 
         tts_download?.setOnClickListener {
             DownloadItem().apply {
-                notificationVisibility = DownloadManager.Request.VISIBILITY_VISIBLE
-                dowmloadTitle = context!!.getString(R.string.app_name) + ":谷歌TTS下载 "
-                fileName = "com.google.android.tts.apk"
+                downloadTitle = context!!.getString(R.string.app_name) + ":谷歌TTS下载 "
                 downloadURL = "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk"
+                downloadListener = object : SimpleDownloadListener() {
+                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                        ZixieContext.showToast("下载失败（$errorCode）")
+                    }
+
+                    override fun onComplete(filePath: String, item: DownloadItem) {
+                        ZLog.d(TAG, "startDownloadApk download installApkPath: $filePath")
+                        InstallUtils.installAPP(context, filePath)
+                    }
+
+                    override fun onProgress(item: DownloadItem) {
+                        ZLog.d(TAG, "startDownloadApk download onProgress: ${item.processDesc}")
+                    }
+
+                }
             }.let {
-                DownloadUtils.startDownload(context!!, it, object : DownloadListener {
-                    override fun onProgress(total: Long, cur: Long) {
-                        ZLog.d(TAG, "startDownloadApk download onProgress: $cur")
-                    }
-
-                    override fun onSuccess(finalFileName: String) {
-                        ZLog.d(TAG, "startDownloadApk download installApkPath: $finalFileName")
-                        InstallUtils.installAPP(context, finalFileName)
-                    }
-
-                    override fun onError(error: Int, errmsg: String) {
-                        ZixieContext.showToast("下载失败（$error）")
-                    }
-                })
+                DownloadUtils.startDownload(context, it)
             }
-
         }
 
         tts_set?.setOnClickListener {
-            IntentUtils.startSettings(context,"com.android.settings.TTS_SETTINGS")
+            IntentUtils.startSettings(context, "com.android.settings.TTS_SETTINGS")
         }
 
         tts_speak?.setOnClickListener {
@@ -211,6 +210,4 @@ class TestTTSFragment : BaseFragment() {
     private fun updateTTSTitle() {
         tts_title?.text = String.format(FORMAT, LibTTS.getSpeechRate(), LibTTS.getPitch(), times)
     }
-
-
 }

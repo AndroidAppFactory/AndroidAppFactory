@@ -2,49 +2,17 @@ package com.bihe0832.android.framework.update
 
 import android.app.Activity
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.download.DownloadHelper
 
 
 object UpdateHelper {
-    var hasShow =  false
-    fun startUpdate(activity: Activity?, version: String, versionInfo: String?, url: String?, md5: String?, canCancle: Boolean) {
-
-        DownloadHelper.startDownloadAPK(activity,
-                String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), version),
-                versionInfo,
-                url,
-                md5,
-                canCancle,
-                object : OnDialogListener {
-                    override fun onPositiveClick() {
-                        if (!canCancle) {
-                            ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 1)
-                        }
-                        hasShow = false
-                    }
-
-                    override fun onNegativeClick() {
-                        if (!canCancle) {
-                            ZixieContext.exitAPP()
-                        }
-                        hasShow = false
-                    }
-
-                    override fun onCancel() {
-                        if (!canCancle) {
-                            ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 1)
-                        }
-                        hasShow = false
-                    }
-                }, null
-        )
-    }
+    var hasShow = false
 
     fun showUpdate(activity: Activity, checkUpdateByUser: Boolean, info: UpdateDataFromCloud) {
         when (info.updateType) {
@@ -75,7 +43,7 @@ object UpdateHelper {
     }
 
     private fun showUpdateDialog(activity: Activity, versionName: String, desc: String, url: String, md5: String, type: Int) {
-        if(hasShow){
+        if (hasShow) {
             return
         }
         hasShow = true
@@ -85,7 +53,7 @@ object UpdateHelper {
                 setHtmlContent(activity.getString(R.string.dialog_apk_updateinfo) + "<BR>" + desc)
                 positive = "现在更新"
                 negative = "稍后更新"
-                setOnClickBottomListener(object: OnDialogListener {
+                setOnClickBottomListener(object : OnDialogListener {
                     override fun onPositiveClick() {
                         when (type) {
                             UpdateDataFromCloud.UPDATE_TYPE_MUST -> {
@@ -142,4 +110,35 @@ object UpdateHelper {
         }
     }
 
+    fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
+        var dialogListener = object : OnDialogListener {
+            override fun onPositiveClick() {
+                hasShow = false
+                if (!canCancel) {
+                    ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 3000L)
+                }
+            }
+
+            override fun onNegativeClick() {
+                hasShow = false
+                if (!canCancel) {
+                    ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
+                }
+            }
+
+            override fun onCancel() {
+                hasShow = false
+                onPositiveClick()
+            }
+        }
+
+        DownloadAPK.startDownload(
+                activity,
+                String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), version),
+                versionInfo,
+                url, md5,
+                activity.packageName,
+                canCancel, true, dialogListener)
+
+    }
 }

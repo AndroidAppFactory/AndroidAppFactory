@@ -109,8 +109,8 @@ class TestDialogFragment : BaseTestFragment() {
             override fun run() {
                 if (i < 100) {
                     activity!!.runOnUiThread(Runnable {
-                        progressDialog.setAPKSize(10000)
-                        progressDialog.setCurrentSize(100 * i)
+                        progressDialog.setAPKSize(10000L)
+                        progressDialog.setCurrentSize(100L * i)
                     })
                 } else {
                     TaskManager.getInstance().removeTask(taskName)

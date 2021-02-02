@@ -1,8 +1,8 @@
 package com.bihe0832.android.test
 
 import com.bihe0832.android.app.AppFactoryInit
-import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.splash.SplashActivity
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 

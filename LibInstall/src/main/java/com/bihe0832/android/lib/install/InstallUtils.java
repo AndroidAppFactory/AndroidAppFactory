@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
@@ -12,11 +11,9 @@ import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.zip.ZipUtils;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.LinkedList;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -28,6 +25,7 @@ import java.util.LinkedList;
  */
 
 public class InstallUtils {
+
     private static final String TAG = "InstallUtils";
     private static final String APK_FILE_SUFFIX = ".apk";
 
@@ -74,7 +72,8 @@ public class InstallUtils {
         installAPP(context, filePath, packageName, null);
     }
 
-    public static void installAPP(final Context context, final String filePath, final String packageName, final InstallListener listener) {
+    public static void installAPP(final Context context, final String filePath, final String packageName,
+            final InstallListener listener) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
@@ -116,7 +115,8 @@ public class InstallUtils {
     }
 
 
-    static void installAllAPK(final Context context, final String filePath, final String packageName, final InstallListener listener) {
+    static void installAllAPK(final Context context, final String filePath, final String packageName,
+            final InstallListener listener) {
         try {
             final File downloadedFile = new File(filePath);
             ZLog.d(TAG + "installAllApk downloadedFile:" + downloadedFile.getAbsolutePath());
@@ -126,7 +126,7 @@ public class InstallUtils {
             }
             if (isApkFile(filePath)) {
                 APKInstall.installAPK(context, downloadedFile.getAbsolutePath(), listener);
-            } else if (ZipUtils.isZipFile(downloadedFile.getAbsolutePath())) {
+            } else if (ZipUtils.isZipFile(downloadedFile.getAbsolutePath(), true)) {
                 installSpecialAPKByZip(context, filePath, packageName, listener);
             } else {
                 if (!downloadedFile.isDirectory()) {
@@ -142,7 +142,8 @@ public class InstallUtils {
         }
     }
 
-    static void installSpecialAPKByZip(@NotNull Context context, @NonNull String zipFilePath, String packageName, final InstallListener listener) {
+    static void installSpecialAPKByZip(@NotNull Context context, @NonNull String zipFilePath, String packageName,
+            final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByZip:" + zipFilePath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
@@ -166,7 +167,8 @@ public class InstallUtils {
         }
     }
 
-    static void installSpecialAPKByFolder(@NotNull Context context, @NonNull String folderPath, String packageName, final InstallListener listener) {
+    static void installSpecialAPKByFolder(@NotNull Context context, @NonNull String folderPath, String packageName,
+            final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByFolder:" + folderPath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
