@@ -42,36 +42,37 @@ public class APKUtils {
      * 获取APP版本号
      */
     public static long getAppVersionCode(Context context, String packageName) {
-
-        PackageManager pm = context.getPackageManager();
         try {
+            PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
                 return pi == null ? 0 : pi.getLongVersionCode();
             } else {
                 return pi == null ? 0 : pi.versionCode;
             }
-
         } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
 
+    public static String getAppVersionName(Context context) {
+        return getAppVersionName(context, context.getPackageName());
+    }
 
     public static String getAppVersionName(Context context, String packageName) {
-        PackageManager pm = context.getPackageManager();
         try {
+            PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? "" : pi.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "";
-    }
-
-    public static String getAppVersionName(Context context) {
-        return getAppVersionName(context, context.getPackageName());
     }
 
     public static String getAppName(Context context) {
@@ -79,8 +80,8 @@ public class APKUtils {
     }
 
     public static String getAppName(Context context, String packageName) {
-        PackageManager pm = context.getPackageManager();
         try {
+            PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? "" : pi.applicationInfo.loadLabel(pm).toString();
         } catch (PackageManager.NameNotFoundException e) {
@@ -92,15 +93,22 @@ public class APKUtils {
     }
 
     public static List<PackageInfo> getInstalledPackageList(Context ctx) {
-        PackageManager pm = ctx.getPackageManager();
-        return pm.getInstalledPackages(0);
+        try {
+            PackageManager pm = ctx.getPackageManager();
+            return pm.getInstalledPackages(0);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static PackageInfo getInstalledPackage(Context ctx, String pkgName) {
-        PackageManager pm = ctx.getPackageManager();
         try {
+            PackageManager pm = ctx.getPackageManager();
             return pm.getPackageInfo(pkgName.trim(), 0);
         } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -110,23 +118,31 @@ public class APKUtils {
         return startApp(ctx, pkgName, true);
     }
 
-    public static boolean startApp(Context ctx, String pkgName, boolean showTips) {
-        PackageManager pm = ctx.getPackageManager();
-        Intent intent = pm.getLaunchIntentForPackage(pkgName);
-        return startApp(ctx, getAppName(ctx), pkgName, intent, showTips);
-    }
-
     public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass) {
         return startApp(ctx, appName, pkgName, launcerClass, true);
     }
 
+    public static boolean startApp(Context ctx, String pkgName, boolean showTips) {
+        try {
+            PackageManager pm = ctx.getPackageManager();
+            Intent intent = pm.getLaunchIntentForPackage(pkgName);
+            return startApp(ctx, getAppName(ctx), pkgName, intent, showTips);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass, boolean showTips) {
-        Intent intent = new Intent();
-        ComponentName cmp = new ComponentName(pkgName, launcerClass);
-        intent.setComponent(cmp);
-        PackageManager pm = ctx.getPackageManager();
-        intent = pm.getLaunchIntentForPackage(pkgName);
-        return startApp(ctx, appName, pkgName, intent, showTips);
+        try {
+            Intent intent = new Intent();
+            ComponentName cmp = new ComponentName(pkgName, launcerClass);
+            intent.setComponent(cmp);
+            return startApp(ctx, appName, pkgName, intent, showTips);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static boolean startApp(Context ctx, String appName, String pkgName) {
@@ -134,9 +150,14 @@ public class APKUtils {
     }
 
     public static boolean startApp(Context ctx, String appName, String pkgName, boolean showTips) {
-        PackageManager pm = ctx.getPackageManager();
-        Intent intent = pm.getLaunchIntentForPackage(pkgName);
-        return startApp(ctx, appName, pkgName, intent, showTips);
+        try {
+            PackageManager pm = ctx.getPackageManager();
+            Intent intent = pm.getLaunchIntentForPackage(pkgName);
+            return startApp(ctx, appName, pkgName, intent, showTips);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private static boolean startApp(Context ctx, String appName, String pkgName, Intent intent, boolean showTips) {

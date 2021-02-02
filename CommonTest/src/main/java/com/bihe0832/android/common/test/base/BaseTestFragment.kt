@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -68,10 +69,13 @@ open class BaseTestFragment : CommonListFragment() {
 
     protected fun showResult(s: String?) {
         s?.let {
-            ZLog.d(HttpBasicRequest.LOG_TAG, "showResult:$s")
-            view?.findViewById<TextView>(R.id.test_tips)?.apply {
-                this.text = TextFactoryUtils.getSpannedTextByHtml("<B>提示信息</b>:<BR> $s")
-                visibility = View.VISIBLE
+            ThreadManager.getInstance().runOnUIThread {
+                ZLog.d(HttpBasicRequest.LOG_TAG, "showResult:$s")
+                view?.findViewById<TextView>(R.id.test_tips)?.apply {
+                    this.text = TextFactoryUtils.getSpannedTextByHtml("<B>提示信息</b>:<BR> $s")
+                    visibility = View.VISIBLE
+                }
+
             }
         }
     }

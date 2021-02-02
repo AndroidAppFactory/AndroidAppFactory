@@ -3,9 +3,8 @@ package com.bihe0832.android.test
 import android.Manifest
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import com.bihe0832.android.app.router.RouterConstants
-import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
@@ -37,7 +36,7 @@ class TestMainActivity : CommonActivity() {
         })
 
 //        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
-        UpdateManager.checkUpdateAndShowDialog(this, false)
+//        UpdateManager.checkUpdateAndShowDialog(this, false)
         hideBottomUIMenu()
     }
 
@@ -53,6 +52,7 @@ class TestMainActivity : CommonActivity() {
         return ArrayList<String>().apply {
             add(Manifest.permission.CAMERA)
             add(Manifest.permission.RECORD_AUDIO)
+            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             add(Manifest.permission.SYSTEM_ALERT_WINDOW)
         }
     }

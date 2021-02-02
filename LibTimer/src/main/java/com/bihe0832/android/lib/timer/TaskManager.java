@@ -63,12 +63,12 @@ public class TaskManager {
                     ZLog.d(LOG_TAG, "TaskDispatcher stopTimer");
                     stopTimer();
                 } else {
-                    ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
+//                    ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
                     Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
                     while (iter.hasNext()) {
                         Entry<String, BaseTask> entry = iter.next();
                         final BaseTask task = (BaseTask) entry.getValue();
-                        ZLog.d(LOG_TAG, "TaskDispatcher :" + task.getTaskName());
+//                        ZLog.d(LOG_TAG, "TaskDispatcher :" + task.getTaskName());
                         if (task.isDeleted()) {
                             mTaskList.remove(task);
                         } else {
