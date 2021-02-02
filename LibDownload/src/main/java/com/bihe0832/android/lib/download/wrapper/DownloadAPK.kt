@@ -24,33 +24,37 @@ object DownloadAPK {
 
         override fun onComplete(filePath: String, item: DownloadItem) {
             ZLog.i("startDownloadApk download installApkPath: $filePath")
-            if (!TextUtils.isEmpty(contentTitle) && !TextUtils.isEmpty(contentDesc)) {
+            ThreadManager.getInstance().start({
                 ThreadManager.getInstance().runOnUIThread {
-                    CommonDialog(activity).apply {
-                        title = contentTitle
-                        content = contentDesc
-                        positive = "点击安装"
-                        negative = "稍候安装"
-                        setOnClickBottomListener(object : OnDialogListener {
-                            override fun onPositiveClick() {
-                                InstallUtils.installAPP(activity, filePath, packageName)
-                                listener?.onPositiveClick()
-                                dismiss()
-                            }
+                    if (!TextUtils.isEmpty(contentTitle) && !TextUtils.isEmpty(contentDesc)) {
+                        CommonDialog(activity).apply {
+                            title = contentTitle
+                            content = contentDesc
+                            positive = "点击安装"
+                            negative = "稍候安装"
+                            setOnClickBottomListener(object : OnDialogListener {
+                                override fun onPositiveClick() {
+                                    ThreadManager.getInstance().runOnUIThread {
+                                        InstallUtils.installAPP(activity, filePath, packageName)
+                                    }
+                                    listener?.onPositiveClick()
+                                    dismiss()
+                                }
 
-                            override fun onNegativeClick() {
-                                dismiss()
-                                listener?.onNegativeClick()
-                            }
+                                override fun onNegativeClick() {
+                                    dismiss()
+                                    listener?.onNegativeClick()
+                                }
 
-                            override fun onCancel() {
-                                listener?.onCancel()
-                            }
-                        })
-                    }.let { it.show() }
+                                override fun onCancel() {
+                                    listener?.onCancel()
+                                }
+                            })
+                        }.let { it.show() }
+                        InstallUtils.installAPP(activity, filePath, packageName)
+                    }
                 }
-            }
-            InstallUtils.installAPP(activity, filePath, packageName)
+            }, 1)
         }
 
         override fun onProgress(item: DownloadItem) {
@@ -60,18 +64,9 @@ object DownloadAPK {
 
     //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
     fun startDownloadWithCheckAndProcess(activity: Activity, url: String) {
-        startDownloadWithCheckAndProcess(activity, url, "", "")
+        startDownloadWithCheck(activity, url, "", "")
     }
 
-    //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
-    fun startDownloadWithCheckAndProcess(activity: Activity, url: String, md5: String, packageName: String) {
-        startDownloadWithCheckAndProcess(
-                activity,
-                "", "",
-                url, md5,
-                packageName
-        )
-    }
 
     //直接下载，显示进度，可以取消，4G下载弹框，下载完成自动安装且弹框
     fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, md5: String, packageName: String) {
@@ -107,6 +102,30 @@ object DownloadAPK {
                 InstallListener(activity, packageName, title, msg, listener))
     }
 
+    //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
+    fun startDownloadWithCheck(activity: Activity, url: String, md5: String, packageName: String) {
+        DownloadFile.startDownloadWithCheckAndProcess(
+                activity,
+                "", "",
+                url, md5,
+                true, false,
+                null,
+                object : SimpleDownloadListener() {
+                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                    }
+
+                    override fun onComplete(filePath: String, item: DownloadItem) {
+                        ThreadManager.getInstance().runOnUIThread {
+                            InstallUtils.installAPP(activity, filePath, packageName)
+                        }
+                    }
+
+                    override fun onProgress(item: DownloadItem) {
+                    }
+
+                })
+    }
+
     //直接下载，不显示进度，4G下载不弹框直接下载，下载完成自动安装
     fun startDownload(context: Context, url: String, md5: String, packageName: String) {
         DownloadFile.startDownload(
@@ -118,7 +137,9 @@ object DownloadAPK {
             }
 
             override fun onComplete(filePath: String, item: DownloadItem) {
-                InstallUtils.installAPP(context, filePath, packageName)
+                ThreadManager.getInstance().runOnUIThread {
+                    InstallUtils.installAPP(context, filePath, packageName)
+                }
             }
 
             override fun onProgress(item: DownloadItem) {

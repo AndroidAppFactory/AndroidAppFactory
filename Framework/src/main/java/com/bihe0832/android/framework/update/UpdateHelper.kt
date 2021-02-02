@@ -132,7 +132,7 @@ object UpdateHelper {
             }
         }
 
-        DownloadAPK.startDownload(
+        DownloadAPK.startDownloadWithProcess(
                 activity,
                 String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), version),
                 versionInfo,
