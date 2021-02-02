@@ -15,21 +15,6 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 
 object DownloadFile {
 
-    //不检测网络类型，4G自动下载，不使用进度条
-    fun startDownload(activity: Activity, url: String, downloadListener: DownloadListener?) {
-        startDownload(activity, url, "", downloadListener)
-    }
-
-    //不检测网络类型，4G自动下载，不使用进度条
-    fun startDownload(activity: Activity, url: String, md5: String, downloadListener: DownloadListener?) {
-        startDownload(activity, url, md5, true, downloadListener)
-    }
-
-    //不检测网络类型，4G下载参数控制，不使用进度条
-    fun startDownload(activity: Activity, url: String, md5: String, useMobile: Boolean, downloadListener: DownloadListener?) {
-        startDownload(activity, "", "", url, md5, true, useMobile, downloadListener)
-    }
-
     //检测网络类型，并且4G弹框，不使用进度条
     fun startDownloadWithCheck(activity: Activity, url: String, downloadListener: DownloadListener?) {
         startDownloadWithCheck(activity, url, "", false, downloadListener)
@@ -108,16 +93,16 @@ object DownloadFile {
             setMessage(msg)
             setCurrentSize(0)
             setShouldCanceled(canCancel)
-            if (canCancel){
+            if (canCancel) {
                 setPositive("后台下载")
                 setNegative("取消下载")
-            }else{
+            } else {
                 setPositive("取消下载")
             }
 
             setOnClickListener(object : OnDialogListener {
                 override fun onPositiveClick() {
-                    if (canCancel){
+                    if (canCancel) {
                         ToastUtil.showShort(activity, "已切换到后台下载，你可以在通知栏查看下载进度")
                     }
                     dismiss()
@@ -131,7 +116,7 @@ object DownloadFile {
                 }
 
                 override fun onCancel() {
-                    if (canCancel){
+                    if (canCancel) {
                         ToastUtil.showShort(activity, "已切换到后台下载，你可以在通知栏查看下载进度")
                     }
                     dismiss()
@@ -189,11 +174,22 @@ object DownloadFile {
         })
     }
 
+    //不检测网络类型，4G自动下载，不使用进度条
+    fun startDownload(context: Context, url: String, downloadListener: DownloadListener?) {
+        startDownload(context, url, "", downloadListener)
+    }
+
+    //不检测网络类型，4G自动下载，不使用进度条
+    fun startDownload(context: Context, url: String, md5: String, downloadListener: DownloadListener?) {
+        startDownload(context, url, md5, true, downloadListener)
+    }
+
+    //不检测网络类型，4G下载参数控制，不使用进度条
+    fun startDownload(context: Context, url: String, md5: String, useMobile: Boolean, downloadListener: DownloadListener?) {
+        startDownload(context, "", "", url, md5, false, useMobile, downloadListener)
+    }
 
     fun startDownload(context: Context, title: String, msg: String, url: String, md5: String, canPart: Boolean, UseMobile: Boolean, downloadListener: DownloadListener?) {
-        if (url.isNullOrBlank()) {
-            return
-        }
         DownloadUtils.startDownload(context, DownloadItem().apply {
             setNotificationVisibility(true)
             downloadURL = url

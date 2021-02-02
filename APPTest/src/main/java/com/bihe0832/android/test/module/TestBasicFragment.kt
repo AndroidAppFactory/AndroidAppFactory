@@ -30,27 +30,7 @@ class TestBasicFragment : BaseFragment() {
             (activity!! as AppCompatActivity).apply {
                 hideBottomUIMenu()
             }
-
-            UpdateHelper.startUpdate(activity!!, "1.1.1","Fsdfsfsfsd","https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk", "",true)
         }
-
-//            DownloadUtils.startDownload(context, DownloadItem().apply {
-//                downloadURL ="https://cdn.bihe0832.com/app/update/get_apk.json"
-//                downloadListener = object :SimpleDownloadListener(){
-//                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-//                        ZLog.d("onFail")
-//                    }
-//
-//                    override fun onComplete(filePath: String, item: DownloadItem) {
-//                        ZLog.d(FileUtils.getFileContent(filePath))
-//                    }
-//
-//                    override fun onProgress(item: DownloadItem) {
-//                        ZLog.d("onProgress")
-//                    }
-//
-//                }
-//            })
 
         test_basic_button_local_1.setOnClickListener {
             (activity!! as AppCompatActivity).apply {
