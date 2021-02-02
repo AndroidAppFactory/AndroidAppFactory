@@ -6,11 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.framework.update.UpdateHelper
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
+import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.test.R
 import kotlinx.android.synthetic.main.fragment_test_basic.*
 
@@ -30,6 +32,30 @@ class TestBasicFragment : BaseFragment() {
             (activity!! as AppCompatActivity).apply {
                 hideBottomUIMenu()
             }
+
+            DownloadAPK.startDownloadWithProcess(
+                    activity!!,
+                    "fsdfsdfsd",
+                    "fsdfsdfsd",
+                    "http://dldir1.qq.com/INO/assistant/com.google.android.tts.apk", "7DF158960CFC442B4A4EE73D369B1D81D",
+                    "",
+                    false, true, object : OnDialogListener {
+                override fun onPositiveClick() {
+                    if (!false) {
+                        ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 3000L)
+                    }
+                }
+
+                override fun onNegativeClick() {
+                    if (!false) {
+                        ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
+                    }
+                }
+
+                override fun onCancel() {
+                    onPositiveClick()
+                }
+            })
         }
 
         test_basic_button_local_1.setOnClickListener {

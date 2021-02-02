@@ -20,4 +20,5 @@ fun HttpURLConnection.upateRequestInfo() {
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB_MR2) {
         setRequestProperty("Connection", "close")
     }
+    setRequestProperty("Connection", "Keep-Alive")
 }
