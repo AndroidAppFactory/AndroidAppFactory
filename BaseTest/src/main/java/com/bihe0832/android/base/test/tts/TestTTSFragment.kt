@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.wrapper.DownloadUtils
-import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
-import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -110,27 +107,15 @@ class TestTTSFragment : BaseFragment() {
         updateTTSTitle()
 
         tts_download?.setOnClickListener {
-            DownloadItem().apply {
-                downloadTitle = context!!.getString(R.string.app_name) + ":谷歌TTS下载 "
-                downloadURL = "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk"
-                downloadListener = object : SimpleDownloadListener() {
-                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                        ZixieContext.showToast("下载失败（$errorCode）")
-                    }
+            DownloadAPK.startDownloadWithCheckAndProcess(
+                    activity!!,
+                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
+                    "",
+                    ""
+            )
 
-                    override fun onComplete(filePath: String, item: DownloadItem) {
-                        ZLog.d(TAG, "startDownloadApk download installApkPath: $filePath")
-                        InstallUtils.installAPP(context, filePath)
-                    }
-
-                    override fun onProgress(item: DownloadItem) {
-                        ZLog.d(TAG, "startDownloadApk download onProgress: ${item.processDesc}")
-                    }
-
-                }
-            }.let {
-                DownloadUtils.startDownload(context, it)
-            }
         }
 
         tts_set?.setOnClickListener {
