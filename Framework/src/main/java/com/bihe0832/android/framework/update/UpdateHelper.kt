@@ -110,7 +110,7 @@ object UpdateHelper {
         }
     }
 
-    fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
+    private fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
         var dialogListener = object : OnDialogListener {
             override fun onPositiveClick() {
                 hasShow = false
