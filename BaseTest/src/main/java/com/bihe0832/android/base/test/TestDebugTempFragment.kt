@@ -1,9 +1,16 @@
 package com.bihe0832.android.base.test
 
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.base.test.json.JsonTest
+import com.bihe0832.android.base.test.network.TestNetworkActivity
+import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
+import com.bihe0832.android.base.test.touch.TouchRegionActivity
+import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
@@ -12,19 +19,13 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
-import com.bihe0832.android.common.test.base.BaseTestFragment
-import com.bihe0832.android.base.test.json.JsonTest
-import com.bihe0832.android.base.test.network.TestNetworkActivity
-import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
-import com.bihe0832.android.base.test.touch.TouchRegionActivity
-import com.bihe0832.android.common.test.item.TestItemData
 import java.io.File
 
 class TestDebugTempFragment : BaseTestFragment() {
@@ -38,7 +39,9 @@ class TestDebugTempFragment : BaseTestFragment() {
             add(TestItemData("定时任务测试", View.OnClickListener { testTask() }))
             add(TestItemData("默认关于页", View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) }))
             add(TestItemData("网络切换监控", View.OnClickListener { startActivity(TestNetworkActivity::class.java) }))
-
+            add(TestItemData("打开应用安装界面", View.OnClickListener {
+                IntentUtils.startAppSettings(context, android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+            }))
             add(TestItemData("TextView对HTML的支持测试", View.OnClickListener {
                 showInputDialog("TextView对HTML的支持测试",
                         "请在输入框输入需要验证的文本内容，无需特殊编码",
@@ -229,7 +232,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun testFunc() {
-        ToastUtil.showLong(context,"这是一个测试Toast \"trimMarks\" " + TextFactoryUtils.trimMarks("\"trimMarks\"") )
+        IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
     }
 
 }
