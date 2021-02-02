@@ -99,12 +99,12 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         }
                         downloadItem.finished = newFinished
                         downloadItem.finishedLengthBefore = finishedBefore
-                        ZLog.e(TAG, "分片下载汇总 - ${downloadItem.downloadID}：转换前：${FileUtils.getFileLength(newFinished)} ${FileUtils.getFileLength(finishedBefore)}")
+                        ZLog.e(TAG, "分片下载汇总 - ${downloadItem.downloadID}：转换前：${newFinished} ${finishedBefore}")
                         ZLog.e(TAG, "分片下载汇总 - ${downloadItem.downloadID}：" +
-                                "文件长度 :${FileUtils.getFileLength(downloadItem.fileLength)}" +
-                                ";完成长度 :${FileUtils.getFileLength(downloadItem.finished)}" +
-                                ";之前下载长度 :${FileUtils.getFileLength(downloadItem.finishedLengthBefore)}" +
-                                ";本次下载累计长度 :${FileUtils.getFileLength(newFinished - downloadItem.finishedLengthBefore)} ，新增长度: ${FileUtils.getFileLength(downloadItem.lastSpeed)}")
+                                "文件长度 :${downloadItem.fileLength}" +
+                                ";完成长度 :${downloadItem.finished}" +
+                                ";之前下载长度 :${downloadItem.finishedLengthBefore}" +
+                                ";本次下载累计长度 :${newFinished - downloadItem.finishedLengthBefore} ，新增长度: ${downloadItem.lastSpeed}")
                         if (downloadItem.finished >= downloadItem.fileLength) {
                             downloadItem.finished = downloadItem.fileLength
                         }

@@ -87,7 +87,6 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             upateRequestInfo()
             ZLog.d("第${mDownloadPartInfo.partID}分片下载：params bytes=$finalStart-${mDownloadPartInfo.partEnd}")
             setRequestProperty("Range", "bytes=${finalStart}-${mDownloadPartInfo.partEnd}")
-
         }
         connection.connect()
         randomAccessFile.seek(finalStart)
@@ -110,8 +109,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 }
             } else {
-                val inputStream = url.openStream()
-//                val inputStream = connection.inputStream
+                val inputStream = connection.inputStream
                 val partSize = DOWNLOAD_BUFFER_SIZE
                 val data = ByteArray(partSize)
                 var len = -1

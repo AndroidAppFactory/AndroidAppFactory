@@ -146,7 +146,7 @@ object DownloadManager {
                 it.onFail(errorCode, msg, item)
             }
             item.downloadListener?.let {
-                it.onPause(item)
+                it.onFail(errorCode, msg, item)
             }
 
             if (item.notificationVisibility()) {

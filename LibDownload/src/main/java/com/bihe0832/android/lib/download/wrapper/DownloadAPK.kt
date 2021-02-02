@@ -9,6 +9,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.toast.ToastUtil
 
 
 object DownloadAPK {
@@ -20,6 +21,7 @@ object DownloadAPK {
             private val contentDesc: String,
             private val listener: OnDialogListener?) : SimpleDownloadListener() {
         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+            listener?.onNegativeClick()
         }
 
         override fun onComplete(filePath: String, item: DownloadItem) {
