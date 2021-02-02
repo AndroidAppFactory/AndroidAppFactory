@@ -2,6 +2,8 @@ package com.bihe0832.android.lib.install;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.file.FileUtils;
@@ -10,6 +12,8 @@ import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.ui.toast.ToastUtil;
+import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.zip.ZipUtils;
 import java.io.File;
 import java.util.LinkedList;
@@ -74,44 +78,56 @@ public class InstallUtils {
 
     public static void installAPP(final Context context, final String filePath, final String packageName,
             final InstallListener listener) {
-        ThreadManager.getInstance().start(new Runnable() {
-            @Override
-            public void run() {
-                installAllAPK(context, filePath, packageName, new InstallListener() {
-                    @Override
-                    public void onUnCompress() {
-                        ZLog.d(TAG + " installAllApk onUnCompress");
-                        if (listener != null) {
-                            listener.onUnCompress();
-                        }
-                    }
-
-                    @Override
-                    public void onInstallPrepare() {
-                        ZLog.d(TAG + " installAllApk onInstallPrepare");
-                        if (listener != null) {
-                            listener.onInstallPrepare();
-                        }
-                    }
-
-                    @Override
-                    public void onInstallStart() {
-                        ZLog.d(TAG + " installAllApk onInstallStart");
-                        if (listener != null) {
-                            listener.onInstallStart();
-                        }
-                    }
-
-                    @Override
-                    public void onInstallFailed(int errorcode) {
-                        ZLog.d(TAG + " installAllApk onInstallFailed : " + errorcode);
-                        if (listener != null) {
-                            listener.onInstallFailed(errorcode);
-                        }
-                    }
-                });
+        boolean haveInstallPermission = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //先获取是否有安装未知来源应用的权限
+            haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
+            if (!haveInstallPermission) {
+                ToastUtil.showShort(context, "安装应用需要打开未知来源权限，请在设置中开启权限");
+                IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
             }
-        });
+        }
+
+        if (haveInstallPermission) {
+            ThreadManager.getInstance().start(new Runnable() {
+                @Override
+                public void run() {
+                    installAllAPK(context, filePath, packageName, new InstallListener() {
+                        @Override
+                        public void onUnCompress() {
+                            ZLog.d(TAG + " installAllApk onUnCompress");
+                            if (listener != null) {
+                                listener.onUnCompress();
+                            }
+                        }
+
+                        @Override
+                        public void onInstallPrepare() {
+                            ZLog.d(TAG + " installAllApk onInstallPrepare");
+                            if (listener != null) {
+                                listener.onInstallPrepare();
+                            }
+                        }
+
+                        @Override
+                        public void onInstallStart() {
+                            ZLog.d(TAG + " installAllApk onInstallStart");
+                            if (listener != null) {
+                                listener.onInstallStart();
+                            }
+                        }
+
+                        @Override
+                        public void onInstallFailed(int errorcode) {
+                            ZLog.d(TAG + " installAllApk onInstallFailed : " + errorcode);
+                            if (listener != null) {
+                                listener.onInstallFailed(errorcode);
+                            }
+                        }
+                    });
+                }
+            });
+        }
     }
 
 

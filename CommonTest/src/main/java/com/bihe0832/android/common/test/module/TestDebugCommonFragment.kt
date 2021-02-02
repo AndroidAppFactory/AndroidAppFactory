@@ -3,26 +3,26 @@ package com.bihe0832.android.common.test.module
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.view.View
-import com.bihe0832.android.common.feedback.FeedbackActivity
-import com.bihe0832.android.common.feedback.FeedbackActivity.*
+import com.bihe0832.android.common.feedback.FeedbackActivity.MODULE_NAME_FEEDBACK
 import com.bihe0832.android.common.praise.UserPraiseManager
+import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getDeviceId
 import com.bihe0832.android.framework.ZixieContext.getVersionCode
 import com.bihe0832.android.framework.ZixieContext.getVersionName
 import com.bihe0832.android.framework.ZixieContext.isDebug
 import com.bihe0832.android.framework.ZixieContext.isOfficial
+import com.bihe0832.android.framework.router.RouterAction
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.lifecycle.*
 import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.bihe0832.android.common.test.base.BaseTestFragment
-import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.common.test.item.TestTipsData
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -48,6 +48,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItemData("打开开发者模式", View.OnClickListener {
                 IntentUtils.startSettings(context, android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
             }))
+
 
         }
     }
