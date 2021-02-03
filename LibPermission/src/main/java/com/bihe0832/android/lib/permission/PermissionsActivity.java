@@ -1,5 +1,7 @@
 package com.bihe0832.android.lib.permission;
 
+import static com.bihe0832.android.lib.permission.PermissionManager.PERMISSION_REQUEST_CODE;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +15,6 @@ import java.util.ArrayList;
 
 public class PermissionsActivity extends Activity {
 
-    public static final int PERMISSION_REQUEST_CODE = 0; // 系统权限管理页面的参数
     public static final String EXTRA_PERMISSIONS = "com.bihe0832.android.lib.permission.extra_permission"; // 权限参数
     public static final String EXTRA_CAN_CANCEL = "com.bihe0832.android.lib.permission.can.cancel"; // 权限参数
 

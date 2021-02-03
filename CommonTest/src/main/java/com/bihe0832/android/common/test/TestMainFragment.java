@@ -1,6 +1,5 @@
 package com.bihe0832.android.common.test;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.bihe0832.android.common.test.module.TestDebugCommonFragment;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.utils.ConvertUtils;
@@ -53,7 +51,8 @@ public class TestMainFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_test_main, container, false);
         initView(view);
         mTabBar.setCurrentTab(getDefaultTabIndex());

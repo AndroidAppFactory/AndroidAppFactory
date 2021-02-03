@@ -11,6 +11,7 @@ object PermissionManager {
 
     private const val TAG = "PermissionManager"
 
+    const val PERMISSION_REQUEST_CODE = 0 // 系统权限管理页面的参数
 
     private var mContext: Context? = null
     private var mOuterResultListener: OnPermissionResult? = null

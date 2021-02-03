@@ -152,11 +152,11 @@ public class CommonDialog extends Dialog {
                     contentTv.setText(content);
                 } else if (null != charSequenceContent) {
                     contentTv.setText(charSequenceContent);
-                    if (null != movement) {
-                        contentTv.setMovementMethod(movement);
-                    } else {
-                        contentTv.setMovementMethod(new ScrollingMovementMethod());
-                    }
+                }
+                if (null != movement) {
+                    contentTv.setMovementMethod(movement);
+                } else {
+                    contentTv.setMovementMethod(new ScrollingMovementMethod());
                 }
                 contentTv.setVisibility(View.VISIBLE);
                 if (contentColor != -1) {

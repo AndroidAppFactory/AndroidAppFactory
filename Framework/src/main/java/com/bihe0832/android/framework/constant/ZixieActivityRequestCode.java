@@ -1,7 +1,7 @@
 package com.bihe0832.android.framework.constant;
 
 
-import com.bihe0832.android.lib.permission.PermissionsActivity;
+import com.bihe0832.android.lib.permission.PermissionManager;
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -12,7 +12,7 @@ public class ZixieActivityRequestCode {
 
     //文件选择
 
-    public static final int PERMISSION_REQUEST_CODE = PermissionsActivity.PERMISSION_REQUEST_CODE;
+    public static final int PERMISSION_REQUEST_CODE = PermissionManager.PERMISSION_REQUEST_CODE;
 
     public static final int FILE_CHOOSER = 1;
 

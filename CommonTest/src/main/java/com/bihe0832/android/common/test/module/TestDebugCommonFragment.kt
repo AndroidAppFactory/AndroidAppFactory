@@ -1,9 +1,7 @@
 package com.bihe0832.android.common.test.module
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import android.view.View
 import com.bihe0832.android.common.feedback.FeedbackActivity.MODULE_NAME_FEEDBACK
 import com.bihe0832.android.common.praise.UserPraiseManager
@@ -56,10 +54,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
     protected fun startActivity(activityName: String) {
         try {
             val threadClazz = Class.forName(activityName)
-            val intent = Intent(context, threadClazz)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            startActivity(intent)
+            startActivity(threadClazz)
         } catch (e: Exception) {
             e.printStackTrace()
             ZixieContext.showToast("请确认当前运行的测试模块是否包含该应用")
@@ -117,6 +112,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         builder.append("本次启动时间: ${DateUtil.getDateEN(ApplicationObserver.getAPPStartTime())}\n")
         builder.append("累积使用天数: ${LifecycleHelper.getAPPUsedDays()}\n")
         builder.append("累积使用次数: ${LifecycleHelper.getAPPUsedTimes()}\n")
+        builder.append("当前版本使用次数: ${LifecycleHelper.getCurrentVersionUsedTimes()}\n")
 
         builder.append("最后一次退后台: ${DateUtil.getDateEN(ApplicationObserver.getLastPauseTime())}\n")
         builder.append("最后一次回前台: ${DateUtil.getDateEN(ApplicationObserver.getLastResumedTime())}\n")
