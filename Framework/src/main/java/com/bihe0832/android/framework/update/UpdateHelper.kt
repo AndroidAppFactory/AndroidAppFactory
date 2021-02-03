@@ -46,7 +46,7 @@ object UpdateHelper {
         }
     }
 
-    private fun showUpdateDialog(activity: Activity, versionName: String, desc: String, url: String, md5: String, type: Int) {
+    fun showUpdateDialog(activity: Activity, versionName: String, desc: String, url: String, md5: String, type: Int) {
         if (hasShow) {
             return
         }
@@ -114,7 +114,7 @@ object UpdateHelper {
         }
     }
 
-    fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
+    private fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
         val updateTitle = String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), version)
         var dialogListenerWhenDownload = object : OnDialogListener {
             override fun onPositiveClick() {
@@ -135,6 +135,7 @@ object UpdateHelper {
 
 
         var downloadListener = object : SimpleDownloadListener() {
+
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                 hasShow = false
                 if (!canCancel) {
@@ -161,7 +162,7 @@ object UpdateHelper {
                                 override fun onNegativeClick() {
                                     if (!canCancel) {
                                         ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
-                                    }else{
+                                    } else {
                                         dismiss()
                                     }
                                 }
