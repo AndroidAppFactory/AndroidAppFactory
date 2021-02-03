@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.framework.update.UpdateDataFromCloud
+import com.bihe0832.android.framework.update.UpdateHelper
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
@@ -32,22 +34,29 @@ class TestBasicFragment : BaseFragment() {
             (activity!! as AppCompatActivity).apply {
                 hideBottomUIMenu()
             }
-
-            DownloadAPK.startDownloadWithCheckAndProcess(
+            UpdateHelper.showUpdateDialog(
                     activity!!,
+                    "1",
                     "fsdfsdfsd",
-                    "fsdfsdfsd",
-                    "http://dldir1.qq.com/INO/packages/inner/20210106/f6593992b5f24dca84e60874dd68d391_com.riotgames.league.wildrift_372764.zip", "",
-                    "com.riotgames.league.wildrift")
+                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
+                    "",
+                    UpdateDataFromCloud.UPDATE_TYPE_NEED)
         }
 
         test_basic_button_local_1.setOnClickListener {
-            (activity!! as AppCompatActivity).apply {
-                enableActivityImmersive(
-                        ContextCompat.getColor(this, R.color.process_color),
-                        ContextCompat.getColor(this, R.color.dialog_button))
-
-            }
+            UpdateHelper.showUpdateDialog(
+                    activity!!,
+                    "2",
+                    "fsdfsdfsd",
+                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
+                    "",
+                    UpdateDataFromCloud.UPDATE_TYPE_NEED)
+//            (activity!! as AppCompatActivity).apply {
+//                enableActivityImmersive(
+//                        ContextCompat.getColor(this, R.color.process_color),
+//                        ContextCompat.getColor(this, R.color.dialog_button))
+//
+//            }
 //            test_basic_content.loadImage("https://i.17173cdn.com/9ih5jd/YWxqaGBf/forum/201810/18/193421zmhdvfx9plm1mdhx.png")
         }
 
