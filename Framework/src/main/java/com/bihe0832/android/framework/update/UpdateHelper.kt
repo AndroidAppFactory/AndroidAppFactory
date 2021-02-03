@@ -3,7 +3,11 @@ package com.bihe0832.android.framework.update
 import android.app.Activity
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.lib.download.wrapper.DownloadAPK
+import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.wrapper.DownloadFile
+import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -110,35 +114,78 @@ object UpdateHelper {
         }
     }
 
-    private fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
-        var dialogListener = object : OnDialogListener {
+    fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
+        val updateTitle = String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), version)
+        var dialogListenerWhenDownload = object : OnDialogListener {
             override fun onPositiveClick() {
-                hasShow = false
-                if (!canCancel) {
-                    ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 3000L)
-                }
-            }
-
-            override fun onNegativeClick() {
                 hasShow = false
                 if (!canCancel) {
                     ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
                 }
             }
 
+            override fun onNegativeClick() {
+                onPositiveClick()
+            }
+
             override fun onCancel() {
-                hasShow = false
                 onPositiveClick()
             }
         }
 
-        DownloadAPK.startDownloadWithProcess(
+
+        var downloadListener = object : SimpleDownloadListener() {
+            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                hasShow = false
+                if (!canCancel) {
+                    ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 3000L)
+                }
+            }
+
+            override fun onComplete(filePath: String, item: DownloadItem) {
+                ZLog.i("startDownloadApk download installApkPath: $filePath")
+                ThreadManager.getInstance().start({
+                    ThreadManager.getInstance().runOnUIThread {
+                        CommonDialog(activity).apply {
+                            title = updateTitle
+                            content = versionInfo
+                            positive = "点击安装"
+                            negative = "稍候安装"
+                            setOnClickBottomListener(object : OnDialogListener {
+                                override fun onPositiveClick() {
+                                    ThreadManager.getInstance().runOnUIThread {
+                                        InstallUtils.installAPP(activity, filePath)
+                                    }
+                                }
+
+                                override fun onNegativeClick() {
+                                    if (!canCancel) {
+                                        ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
+                                    }else{
+                                        dismiss()
+                                    }
+                                }
+
+                                override fun onCancel() {
+                                    onNegativeClick()
+                                }
+                            })
+                        }.let { it.show() }
+                        InstallUtils.installAPP(activity, filePath)
+                    }
+                }, 1)
+            }
+
+            override fun onProgress(item: DownloadItem) {
+
+            }
+        }
+        DownloadFile.startDownloadWithProcess(
                 activity,
-                String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), version),
+                updateTitle,
                 versionInfo,
                 url, md5,
-                activity.packageName,
-                canCancel, true, dialogListener)
-
+                canCancel, true,
+                dialogListenerWhenDownload, downloadListener)
     }
 }

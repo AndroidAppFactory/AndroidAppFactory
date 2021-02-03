@@ -33,29 +33,12 @@ class TestBasicFragment : BaseFragment() {
                 hideBottomUIMenu()
             }
 
-            DownloadAPK.startDownloadWithProcess(
+            DownloadAPK.startDownloadWithCheckAndProcess(
                     activity!!,
                     "fsdfsdfsd",
                     "fsdfsdfsd",
-                    "http://dldir1.qq.com/INO/assistant/com.google.android.tts.apk", "7DF158960CFC442B4A4EE73D369B1D81D",
-                    "",
-                    false, true, object : OnDialogListener {
-                override fun onPositiveClick() {
-                    if (!false) {
-                        ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 3000L)
-                    }
-                }
-
-                override fun onNegativeClick() {
-                    if (!false) {
-                        ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
-                    }
-                }
-
-                override fun onCancel() {
-                    onPositiveClick()
-                }
-            })
+                    "http://dldir1.qq.com/INO/packages/inner/20210106/f6593992b5f24dca84e60874dd68d391_com.riotgames.league.wildrift_372764.zip", "",
+                    "com.riotgames.league.wildrift")
         }
 
         test_basic_button_local_1.setOnClickListener {

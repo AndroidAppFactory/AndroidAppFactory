@@ -4,65 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.install.InstallUtils.ApkInstallType
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
+import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.toast.ToastUtil
 
 
 object DownloadAPK {
-
-    private class InstallListener(
-            private val activity: Activity,
-            private val packageName: String,
-            private val contentTitle: String,
-            private val contentDesc: String,
-            private val listener: OnDialogListener?) : SimpleDownloadListener() {
-        override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-            listener?.onNegativeClick()
-        }
-
-        override fun onComplete(filePath: String, item: DownloadItem) {
-            ZLog.i("startDownloadApk download installApkPath: $filePath")
-            ThreadManager.getInstance().start({
-                ThreadManager.getInstance().runOnUIThread {
-                    if (!TextUtils.isEmpty(contentTitle) && !TextUtils.isEmpty(contentDesc)) {
-                        CommonDialog(activity).apply {
-                            title = contentTitle
-                            content = contentDesc
-                            positive = "点击安装"
-                            negative = "稍候安装"
-                            setOnClickBottomListener(object : OnDialogListener {
-                                override fun onPositiveClick() {
-                                    ThreadManager.getInstance().runOnUIThread {
-                                        InstallUtils.installAPP(activity, filePath, packageName)
-                                    }
-                                    listener?.onPositiveClick()
-                                    dismiss()
-                                }
-
-                                override fun onNegativeClick() {
-                                    dismiss()
-                                    listener?.onNegativeClick()
-                                }
-
-                                override fun onCancel() {
-                                    listener?.onCancel()
-                                }
-                            })
-                        }.let { it.show() }
-                        InstallUtils.installAPP(activity, filePath, packageName)
-                    }
-                }
-            }, 1)
-        }
-
-        override fun onProgress(item: DownloadItem) {
-
-        }
-    }
 
     //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
     fun startDownloadWithCheckAndProcess(activity: Activity, url: String) {
@@ -77,8 +29,7 @@ object DownloadAPK {
                 title, msg,
                 url, md5,
                 packageName,
-                true, null
-        )
+                true, null)
     }
 
 
@@ -90,7 +41,7 @@ object DownloadAPK {
                 url, md5,
                 canCancel,
                 listener,
-                InstallListener(activity, packageName, title, msg, listener))
+                SimpleInstallListener(activity, packageName, listener))
     }
 
     //直接下载，显示进度，4G下载看参数，下载完成自动安装且弹框
@@ -101,7 +52,7 @@ object DownloadAPK {
                 url, md5,
                 canCancel, downloadMobile,
                 listener,
-                InstallListener(activity, packageName, title, msg, listener))
+                SimpleInstallListener(activity, packageName, listener))
     }
 
     //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
