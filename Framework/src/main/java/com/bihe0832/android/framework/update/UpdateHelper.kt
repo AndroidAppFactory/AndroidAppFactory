@@ -148,7 +148,7 @@ object UpdateHelper {
                     ThreadManager.getInstance().runOnUIThread {
                         CommonDialog(activity).apply {
                             title = updateTitle
-                            content = versionInfo
+                            setHtmlContent(versionInfo)
                             positive = "点击安装"
                             negative = "稍候安装"
                             setOnClickBottomListener(object : OnDialogListener {
