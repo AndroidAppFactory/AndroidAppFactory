@@ -1,9 +1,13 @@
 package com.bihe0832.android.common.test.base
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import android.view.View
+import android.widget.TextView
+import com.bihe0832.android.common.test.R
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.webview.WebPageActivity
 import com.bihe0832.android.framework.router.RouterAction
@@ -13,6 +17,10 @@ import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
+import com.bihe0832.android.lib.http.common.HttpBasicRequest
+import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -45,8 +53,25 @@ abstract class BaseTestActivity : CommonListActivity() {
         return mTestDataLiveData
     }
 
+    protected fun sendInfo(title: String, content: String) {
+        DebugTools.sendInfo(this, title, content, false)
+    }
+
+
+    protected fun showInfo(title: String, content: String) {
+        DebugTools.showInfo(this, title, content, "发送到第三方应用")
+    }
+
     fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: InputDialogCompletedCallback) {
         DebugTools.showInputDialog(this, titleName, msg, defaultValue, listener)
+    }
+
+
+    protected fun startActivity(cls: Class<*>) {
+        val intent = Intent(this, cls)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(intent)
     }
 
     fun openWeb(url: String) {

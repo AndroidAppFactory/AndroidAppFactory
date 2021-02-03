@@ -1,14 +1,8 @@
 package com.bihe0832.android.lib.utils.intent.wrapper;
 
-import android.annotation.TargetApi;
-import android.app.AppOpsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.text.TextUtils;
 
 
 public class PermissionIntent {
