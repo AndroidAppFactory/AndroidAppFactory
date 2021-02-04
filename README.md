@@ -1,5 +1,11 @@
 <img src="https://blog.bihe0832.com/public/img/androidappfactory.png" height="100px" />
 
+[ ![Github](https://img.shields.io/badge/bihe0832-AndroidAppFactory-brightgreen?style=social) ](https://github.com/bihe0832/AndroidAppFactory)
+[ ![Github](https://img.shields.io/github/last-commit/bihe0832/AndroidAppFactory) ](https://github.com/bihe0832/AndroidAppFactory)
+[ ![Github](https://img.shields.io/github/stars/bihe0832/AndroidAppFactory?style=social) ](https://github.com/bihe0832/AndroidAppFactory)
+[ ![Github](https://img.shields.io/bitbucket/issues/bihe0832/AndroidAppFactory) ](https://github.com/bihe0832/AndroidAppFactory)
+
+
 ## 关于 AndroidAppFactory
 
 做酱油的时候发现做开发那么久竟然没有一整套顺手的开发方案，要从头开始一个一个搭建（相当于之前做的就没什么沉淀），因此开始逐渐整理一整套相对全面并且顺手的开发方案。随着这几年逐渐完善，现在基本上具备雏形了，因此逐渐总结一下。
@@ -10,13 +16,14 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 
 #### AAF框架相关
 
+- **框架主页：[https://android.bihe0832.com](https://android.bihe0832.com)**
+
+    主要**介绍框架的使用以及怎么新增，升级组件**
+
 - 方案介绍：[https://blog.bihe0832.com/android-dev-summary.html](https://blog.bihe0832.com/android-dev-summary.html)
 
 	完整AAF的整个技术方案，以及其中一些核心的技术点
 	
-- **框架主页：[https://android.bihe0832.com](https://android.bihe0832.com)**
-
-    主要**介绍框架的使用以及怎么新增，升级组件**
 
 - 框架源码：[https://github.com/bihe0832/AndroidAppFactory](https://github.com/bihe0832/AndroidAppFactory)
 	
@@ -63,6 +70,6 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 		    api 'com.bihe0832.android:lib-wrapper:+'
 		}
 
-关于组件使用更详细的内容点击链接 [https://android.bihe0832.com/#!start.md](https://android.bihe0832.com/#!start.md) 了解
+关于组件使用更详细的内容点击链接 [https://android.bihe0832.com/doc](https://android.bihe0832.com/doc) 了解
 
 

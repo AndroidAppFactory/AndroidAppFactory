@@ -2,43 +2,74 @@ package com.bihe0832.android.lib.download.wrapper
 
 import android.content.Context
 import android.text.TextUtils
+import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest.HttpRespParseError
-import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest.RET_SUCC
-import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.log.ZLog
 
 
 object DownloadConfig {
 
+    interface ResponseHandler {
+        companion object {
+            const val ERROR_CONFIG = -1
+            const val ERROR_CDN_MD5 = -2
+            const val ERROR_EXCEPTION = -3
+            const val ERROR_OTHERS = -3
+            const val ERROR_DATA_EMPTY = -4
+
+            //云端重新拉取
+            const val TYPE_NEW = 1
+
+            //使用本地缓存
+            const val TYPE_NEW_LOCAL = 2
+        }
+
+        fun onSuccess(type: Int, response: String)
+        fun onFailed(errorCode: Int, msg: String)
+    }
+
     //直接下载，不显示进度，4G下载直接下载
-    fun startDownload(context: Context, url: String, md5: String, downloadListener: HttpResponseHandler) {
+    fun startDownload(context: Context, url: String, md5: String, downloadListener: ResponseHandler) {
         startDownloadConfig(context, url, md5, downloadListener)
     }
 
-    private fun startDownloadConfig(context: Context, url: String, md5: String, downloadListener: HttpResponseHandler) {
+    private fun startDownloadConfig(context: Context, url: String, md5: String, downloadListener: ResponseHandler) {
+        if(TextUtils.isEmpty(url)){
+            downloadListener.onFailed(ResponseHandler.ERROR_CONFIG, "url is bad")
+        }
         DownloadUtils.startDownload(context, DownloadItem().apply {
             setNotificationVisibility(true)
             downloadURL = url
-            md5?.let {
-                fileMD5 = it
-            }
+            fileMD5 = md5
             isDownloadWhenUseMobile = true
             setCanDownloadByPart(false)
             isForceDownloadNew = TextUtils.isEmpty(md5)
             this.downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                    downloadListener.onResponse(errorCode, msg)
+                    if(DownloadErrorCode.ERR_MD5_BAD == errorCode){
+                        downloadListener.onFailed(ResponseHandler.ERROR_CDN_MD5, "$errorCode $msg")
+                    }else{
+                        downloadListener.onFailed(ResponseHandler.ERROR_OTHERS, "$errorCode $msg")
+                    }
                 }
 
                 override fun onComplete(filePath: String, item: DownloadItem) {
                     try {
                         FileUtils.getFileContent(filePath).let {
-                            downloadListener.onResponse(RET_SUCC, it)
+                            if (it.isNotEmpty()) {
+                                if (item.status == DownloadStatus.STATUS_HAS_DOWNLOAD) {
+                                    downloadListener.onSuccess(ResponseHandler.TYPE_NEW_LOCAL, it)
+                                } else {
+                                    downloadListener.onSuccess(ResponseHandler.TYPE_NEW, it)
+                                }
+                            } else {
+                                downloadListener.onFailed(ResponseHandler.ERROR_DATA_EMPTY, it)
+                            }
                         }
                     } catch (e: Exception) {
-                        downloadListener.onResponse(HttpRespParseError, e.message)
+                        downloadListener.onFailed(ResponseHandler.ERROR_EXCEPTION, e.message.toString())
                     }
                 }
 

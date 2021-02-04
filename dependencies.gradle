@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
+ext.developModule = "LibAPK,LibDialog,LibPermission,LibDownload"
 
 
 /**
@@ -194,6 +194,12 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-router",
                 "apidependenciesList": [
                         "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
+                ]
+        ],
+        "LibAAF"                    : [
+                "version"            : "3.7.9",
+                "artifactId"         : "lib-aaf-tools",
+                "apidependenciesList": [
                 ]
         ],
         "LibAndroid"                : [
@@ -475,12 +481,6 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK", "LibDeviceNetwork"
-                ]
-        ],
-        "LibAAF"                    : [
-                "version"            : "3.7.9",
-                "artifactId"         : "lib-aaf-tools",
-                "apidependenciesList": [
                 ]
         ],
         "LibImmersive"              : [

@@ -7,6 +7,8 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
+import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
@@ -22,10 +24,27 @@ object UpdateHelper {
         when (info.updateType) {
             //强更、弹框、必弹
             UpdateDataFromCloud.UPDATE_TYPE_MUST,
-            UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP,
+            UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP -> {
+                hasShow = false
+                showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+            }
             UpdateDataFromCloud.UPDATE_TYPE_NEED,
             UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP -> {
-                showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                if (checkUpdateByUser) {
+                    showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                } else {
+                    when {
+                        LifecycleHelper.isFirstStart > INSTALL_TYPE_NOT_FIRST -> {
+                            ZLog.d("skip update by first update")
+                        }
+                        hasShow -> {
+                            ZLog.d("skip update by has show")
+                        }
+                        else -> {
+                            showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                        }
+                    }
+                }
             }
 
             //红点、无状态，用户触发才弹
@@ -72,14 +91,12 @@ object UpdateHelper {
                             UpdateDataFromCloud.UPDATE_TYPE_NEED -> {
                                 ThreadManager.getInstance().run { startUpdate(activity, versionName, desc, url, md5, true) }
                                 dismiss()
-                                hasShow = false
                             }
                             UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP,
                             UpdateDataFromCloud.UPDATE_TYPE_RED_JUMP,
                             UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP -> {
                                 IntentUtils.openWebPage(url, ZixieContext.applicationContext)
                                 dismiss()
-                                hasShow = false
                             }
                         }
                     }
@@ -99,7 +116,6 @@ object UpdateHelper {
                             UpdateDataFromCloud.UPDATE_TYPE_RED_JUMP,
                             UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP -> {
                                 dismiss()
-                                hasShow = false
                             }
                         }
                     }
@@ -118,7 +134,6 @@ object UpdateHelper {
         val updateTitle = String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), version)
         var dialogListenerWhenDownload = object : OnDialogListener {
             override fun onPositiveClick() {
-                hasShow = false
                 if (!canCancel) {
                     ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
                 }
@@ -137,7 +152,6 @@ object UpdateHelper {
         var downloadListener = object : SimpleDownloadListener() {
 
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                hasShow = false
                 if (!canCancel) {
                     ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 3000L)
                 }
