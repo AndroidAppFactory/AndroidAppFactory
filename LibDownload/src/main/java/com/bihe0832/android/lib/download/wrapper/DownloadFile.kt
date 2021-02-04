@@ -4,13 +4,17 @@ import android.app.Activity
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.DownloadProgressDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.lib.utils.apk.APKUtils
 
 
 object DownloadFile {
@@ -191,7 +195,11 @@ object DownloadFile {
 
     fun startDownload(context: Context, title: String, msg: String, url: String, md5: String, canPart: Boolean, UseMobile: Boolean, downloadListener: DownloadListener?) {
         DownloadUtils.startDownload(context, DownloadItem().apply {
-            setNotificationVisibility(true)
+            if(InstallUtils.isApkFile(URLUtils.getFileName(url))){
+                setNotificationVisibility(true)
+            }else{
+                setNotificationVisibility(false)
+            }
             downloadURL = url
             downloadTitle = title
             downloadDesc = msg

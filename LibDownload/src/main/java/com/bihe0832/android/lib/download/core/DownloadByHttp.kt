@@ -402,7 +402,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
         } catch (e: Exception) {
             e.printStackTrace()
-            notifyDownloadFailed(ERR_FILE_RENAME_FAILED, "Sorry! the file can't be renamed", downloadInfo)
+            notifyDownloadFailed(ERR_NOTIFY_EXCEPTION, "Sorry find some exception", downloadInfo)
         }
     }
 }
