@@ -10,6 +10,7 @@ import android.os.Handler;
 
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.network.DeviceInfoManager;
 import com.bihe0832.android.lib.network.NetworkUtil;
 import com.bihe0832.android.lib.network.MobileUtil;
 import com.bihe0832.android.lib.network.WifiManagerWrapper;
@@ -48,6 +49,8 @@ public class NetworkChangeManager {
 
 
     public void init(Context context) {
+        DeviceInfoManager.getInstance().init(context.getApplicationContext());
+
         mBgHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_NORMAL));
         WifiManagerWrapper.Companion.getInstance().init(context, ZixieContext.INSTANCE.isDebug());
         int curNetType = WifiManagerWrapper.Companion.getInstance().getNetType(context);

@@ -76,8 +76,6 @@ public class BaseWebView extends WebView{
         setHTMLSupport(getSettings());
         resetCacheType(getSettings());
 
-
-
         if (getX5WebViewExtension() != null) {
             Bundle data = new Bundle();
             data.putBoolean("standardFullScreen", false);// true表示标准全屏，竖屏Web播放横屏视频不转为横屏，false表示X5全屏，此时竖屏Web播放横屏视频会转为横屏；不设置默认false，
