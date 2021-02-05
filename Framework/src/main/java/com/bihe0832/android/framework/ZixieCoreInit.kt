@@ -57,7 +57,6 @@ object ZixieCoreInit {
     }
 
     private fun initZixieLibs(application: Application, isDebug: Boolean) {
-        DeviceInfoManager.getInstance().init(application)
         LoggerFile.init(application, isDebug)
         LifecycleHelper.init(application)
     }
