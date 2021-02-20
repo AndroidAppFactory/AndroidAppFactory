@@ -14,7 +14,7 @@ public class DownloadPartInfo {
     private long mPartFinishedBefore;
     private int mPartStatus;
     // 是否支持分片下载
-    private boolean canDownloadByPart = true;
+    private boolean canDownloadByPart = false;
 
     public DownloadPartInfo() {
     }

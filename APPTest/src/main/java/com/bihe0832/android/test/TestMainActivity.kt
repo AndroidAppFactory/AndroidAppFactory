@@ -1,7 +1,9 @@
 package com.bihe0832.android.test
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.support.v4.content.ContextCompat
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
@@ -19,8 +21,13 @@ class TestMainActivity : CommonActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initToolbar("TestMainActivity", false)
-        CardInfoHelper.getInstance().setAutoAddItem(true)
 
+        if (Build.VERSION.SDK_INT > 9) {
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
+        }
+
+
+        CardInfoHelper.getInstance().setAutoAddItem(true)
         PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "相机")
             put(Manifest.permission.RECORD_AUDIO, "录音")

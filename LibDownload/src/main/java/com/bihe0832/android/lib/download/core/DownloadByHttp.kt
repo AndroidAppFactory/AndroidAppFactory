@@ -207,7 +207,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         var start = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_start))
                         var end = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_end))
                         var finished = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_finished))
-                        startDownloadPart(id, info, start, end, finished)
+                        startDownloadPart(id, info, start, end, finished, true)
                         cursor.moveToNext()
                     }
                 } catch (e: Exception) {
@@ -288,22 +288,22 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 ZLog.d("分片下载：开始第$i 段")
                 when (i) {
                     0 -> {
-                        startDownloadPart(i, info, 0, newpart + 1, 0)
+                        startDownloadPart(i, info, 0, newpart + 1, 0, true)
                     }
                     threadNum - 1 -> {
-                        startDownloadPart(i, info, start, info.fileLength, 0)
+                        startDownloadPart(i, info, start, info.fileLength, 0, true)
                     }
                     else -> {
-                        startDownloadPart(i, info, start, start + newpart + 1, 0)
+                        startDownloadPart(i, info, start, start + newpart + 1, 0, true)
                     }
                 }
             }
         } else {
-            startDownloadPart(0, info, 0, newpart, 0)
+            startDownloadPart(0, info, 0, newpart, 0, info.canDownloadByPart())
         }
     }
 
-    private fun startDownloadPart(partNo: Int, info: DownloadItem, oldstart: Long, end: Long, finished: Long) {
+    private fun startDownloadPart(partNo: Int, info: DownloadItem, oldstart: Long, end: Long, finished: Long, canDownloadByPart: Boolean) {
         val downloadThreadForPart = DownloadThread(DownloadPartInfo().apply {
             this.partID = partNo
             this.downloadID = info.downloadID
@@ -313,6 +313,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
             this.partEnd = end
             this.partFinished = finished
             this.partFinishedBefore = finished
+            this.setCanDownloadByPart(canDownloadByPart)
         }.also {
             ZLog.d(TAG, "分片下载数据 - ${info.downloadID}：开始第$partNo 段开始:$it")
         })
@@ -376,7 +377,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
             val md5 = MD5.getFileMD5(downloadFile)
             if (TextUtils.isEmpty(downloadInfo.fileMD5) || md5.equals(downloadInfo.fileMD5, ignoreCase = true)) {
                 val newfile = File(finalFileName)
-                if (newfile.exists()) {
+                if (newfile.exists() && !finalFileName.equals(downloadFile)) {
                     newfile.delete()
                 }
                 when {
