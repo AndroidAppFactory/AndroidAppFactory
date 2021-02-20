@@ -2,9 +2,9 @@ package com.bihe0832.android.lib.download.wrapper
 
 import android.app.Activity
 import android.content.Context
+import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
@@ -14,7 +14,6 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.DownloadProgressDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.lib.utils.apk.APKUtils
 
 
 object DownloadFile {
@@ -36,16 +35,25 @@ object DownloadFile {
 
     //检测网络类型，并且4G弹框，不显示进度条
     fun startDownloadWithCheckAndProcess(activity: Activity, url: String, md5: String, canCancle: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        startDownloadWithCheckAndProcess(activity, "", "", url, md5, canCancle, false, listener, downloadListener)
+        startDownloadWithCheckAndProcess(activity, url, "", md5, canCancle, listener, downloadListener)
     }
+
+    fun startDownloadWithCheckAndProcess(activity: Activity, url: String, filePath: String, md5: String, canCancle: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
+        startDownloadWithCheckAndProcess(activity, "", "", url, filePath, md5, canCancle, false, listener, downloadListener)
+    }
+
 
     //检测网络类型，并且4G弹框，显示进度条
     fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        startDownloadWithCheckAndProcess(activity, title, msg, url, md5, canCancel, true, listener, downloadListener)
+        startDownloadWithCheckAndProcess(activity, title, msg, url, "", md5, canCancel, listener, downloadListener)
+    }
+
+    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, filePath: String, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
+        startDownloadWithCheckAndProcess(activity, title, msg, url, filePath, md5, canCancel, true, listener, downloadListener)
     }
 
     //检测网络类型，并且4G弹框，进度条参数控制
-    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, md5: String, canCancel: Boolean, useProcess: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
+    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, filePath: String, md5: String, canCancel: Boolean, useProcess: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
         if (null == activity || url.isNullOrBlank()) {
             return
         }
@@ -61,9 +69,9 @@ object DownloadFile {
                         override fun onPositiveClick() {
                             dismiss()
                             if (useProcess) {
-                                startDownloadWithProcess(activity, title, msg, url, md5, canCancel, true, listener, downloadListener)
+                                startDownloadWithProcess(activity, title, msg, url, filePath, md5, canCancel, true, listener, downloadListener)
                             } else {
-                                startDownload(activity, title, msg, url, md5, true, true, downloadListener)
+                                startDownload(activity, title, msg, url, filePath, md5, true, true, downloadListener)
                             }
                         }
 
@@ -80,9 +88,9 @@ object DownloadFile {
                 }
             } else {
                 if (useProcess) {
-                    startDownloadWithProcess(activity, title, msg, url, md5, canCancel, true, listener, downloadListener)
+                    startDownloadWithProcess(activity, title, msg, url, filePath, md5, canCancel, true, listener, downloadListener)
                 } else {
-                    startDownload(activity, title, msg, url, md5, true, true, downloadListener)
+                    startDownload(activity, title, msg, url, "", md5, true, true, downloadListener)
                 }
             }
         } else {
@@ -91,7 +99,7 @@ object DownloadFile {
     }
 
     //显示进度条
-    fun startDownloadWithProcess(activity: Activity, title: String, msg: String, url: String, md5: String, canCancel: Boolean, useMobile: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
+    fun startDownloadWithProcess(activity: Activity, title: String, msg: String, url: String, filePath: String, md5: String, canCancel: Boolean, useMobile: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
         var progressDialog = DownloadProgressDialog(activity).apply {
             setTitle(title)
             setMessage(msg)
@@ -129,7 +137,7 @@ object DownloadFile {
             })
         }
         ThreadManager.getInstance().runOnUIThread { progressDialog.show() }
-        startDownload(activity.applicationContext, title, msg, url, md5, true, useMobile, object : DownloadListener {
+        startDownload(activity.applicationContext, title, msg, url, filePath, md5, true, useMobile, object : DownloadListener {
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                 ToastUtil.showShort(activity, "应用下载失败（$errorCode）")
                 ThreadManager.getInstance().runOnUIThread {
@@ -183,30 +191,39 @@ object DownloadFile {
         startDownload(context, url, "", downloadListener)
     }
 
+    fun startDownload(context: Context, url: String, filePath: String, downloadListener: DownloadListener?) {
+        startDownload(context, url, filePath, "", downloadListener)
+    }
+
+
     //不检测网络类型，4G自动下载，不使用进度条
-    fun startDownload(context: Context, url: String, md5: String, downloadListener: DownloadListener?) {
-        startDownload(context, url, md5, true, downloadListener)
+    fun startDownload(context: Context, url: String, filePath: String, md5: String, downloadListener: DownloadListener?) {
+        startDownload(context, url, filePath, md5, true, downloadListener)
     }
 
     //不检测网络类型，4G下载参数控制，不使用进度条
-    fun startDownload(context: Context, url: String, md5: String, useMobile: Boolean, downloadListener: DownloadListener?) {
-        startDownload(context, "", "", url, md5, false, useMobile, downloadListener)
+    fun startDownload(context: Context, url: String, filePath: String, md5: String, useMobile: Boolean, downloadListener: DownloadListener?) {
+        startDownload(context, "", "", url, filePath, md5, false, useMobile, downloadListener)
     }
 
-    fun startDownload(context: Context, title: String, msg: String, url: String, md5: String, canPart: Boolean, UseMobile: Boolean, downloadListener: DownloadListener?) {
+    fun startDownload(context: Context, title: String, msg: String, url: String, filePath: String, md5: String, canPart: Boolean, UseMobile: Boolean, downloadListener: DownloadListener?) {
         DownloadUtils.startDownload(context, DownloadItem().apply {
-            if(InstallUtils.isApkFile(URLUtils.getFileName(url))){
+            if (InstallUtils.isApkFile(URLUtils.getFileName(url))) {
                 setNotificationVisibility(true)
-            }else{
+            } else {
                 setNotificationVisibility(false)
             }
             downloadURL = url
             downloadTitle = title
             downloadDesc = msg
             fileMD5 = md5
+            if (!TextUtils.isEmpty(filePath)) {
+                fileNameWithPath = filePath
+            }
+
             isDownloadWhenUseMobile = UseMobile
             setCanDownloadByPart(canPart)
             this.downloadListener = downloadListener
-        })
+        }, true)
     }
 }

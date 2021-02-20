@@ -2,15 +2,9 @@ package com.bihe0832.android.lib.download.wrapper
 
 import android.app.Activity
 import android.content.Context
-import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
-import com.bihe0832.android.lib.install.InstallUtils.ApkInstallType
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 
 
@@ -49,7 +43,7 @@ object DownloadAPK {
         DownloadFile.startDownloadWithProcess(
                 activity,
                 title, msg,
-                url, md5,
+                url, "", md5,
                 canCancel, downloadMobile,
                 listener,
                 SimpleInstallListener(activity, packageName, listener))
@@ -59,7 +53,7 @@ object DownloadAPK {
     fun startDownloadWithCheck(activity: Activity, url: String, md5: String, packageName: String) {
         DownloadFile.startDownloadWithCheckAndProcess(
                 activity,
-                "", "",
+                "", "", "",
                 url, md5,
                 true, false,
                 null,
@@ -84,7 +78,7 @@ object DownloadAPK {
         DownloadFile.startDownload(
                 context,
                 "", "",
-                url, md5,
+                url, "", md5,
                 true, true, object : SimpleDownloadListener() {
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
             }

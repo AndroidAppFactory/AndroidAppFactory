@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.utils.encypt;
 
 public class HexUtils {
+
     private static final char[] digits = new char[]{'0', '1', '2', '3', '4',//
             '5', '6', '7', '8', '9',//
             'A', 'B', 'C', 'D', 'E',//
@@ -83,5 +84,14 @@ public class HexUtils {
             bytes[i] = (byte) (char2Byte(high) * 16 + char2Byte(low));
         }
         return bytes;
+    }
+
+    public static String stringToHex(String str) {
+
+        return bytes2HexStr(str.getBytes());
+    }
+
+    public static String hexToString(String hex) {
+        return new String(hexStr2Bytes(hex));
     }
 }

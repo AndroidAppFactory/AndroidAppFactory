@@ -10,7 +10,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AESUtils {
 
-    // iv同C语言中iv
     private static byte ivBytes[] = new byte[]{0x4D, 0x4E, 0x41, 0x40, 0x32, 0x30, 0x31, 0x37, 0x47, 0x4F, 0x48, 0x45,
             0x41, 0x44, 0x21, 0x21};
 
@@ -37,7 +36,7 @@ public class AESUtils {
         return null;
     }
 
-    public static byte[] doAESEncrypt(byte[] content, byte[] keyBytes, int mode) {
+    public static byte[] doAESEncryptWithDefaultIV(byte[] content, byte[] keyBytes, int mode) {
         try {
             return doAESEncrypt(content, keyBytes, ivBytes, mode);
         } catch (Exception e) {
@@ -46,8 +45,18 @@ public class AESUtils {
         return null;
     }
 
+    public static byte[] doAESEncryptWithoutIV(byte[] content, byte[] keyBytes, int mode) {
+        try {
+            byte[] ivSpec = new byte[16];
+            return doAESEncrypt(content, keyBytes, ivSpec, mode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static byte[] encrypt(byte keyBytes[], byte[] content) {
-        return doAESEncrypt(content, keyBytes, Cipher.ENCRYPT_MODE);
+        return doAESEncryptWithDefaultIV(content, keyBytes, Cipher.ENCRYPT_MODE);
     }
 
     public static byte[] encrypt(byte keyBytes[], String content) {
@@ -57,14 +66,22 @@ public class AESUtils {
         } catch (UnsupportedEncodingException e) {
             return null;
         }
-        return doAESEncrypt(cByte, keyBytes, Cipher.ENCRYPT_MODE);
+        return encrypt(keyBytes, cByte);
+    }
+
+    public static byte[] encryptWithoutIV(byte keyBytes[], byte[] content) {
+        return doAESEncryptWithoutIV(content, keyBytes, Cipher.ENCRYPT_MODE);
     }
 
     public static byte[] decrypt(byte keyBytes[], byte[] content) {
-        return doAESEncrypt(content, keyBytes, Cipher.DECRYPT_MODE);
+        return doAESEncryptWithDefaultIV(content, keyBytes, Cipher.DECRYPT_MODE);
     }
 
-    public static String encryptHex(byte[] data, byte[] key, byte[] ivParaBytes) {
+    public static byte[] decryptWithoutIV(byte keyBytes[], byte[] content) {
+        return doAESEncryptWithoutIV(content, keyBytes, Cipher.DECRYPT_MODE);
+    }
+
+    public static String encryptToHex(byte[] data, byte[] key, byte[] ivParaBytes) {
         try {
             byte[] result = doAESEncrypt(data, key, ivParaBytes, Cipher.ENCRYPT_MODE);
             return HexUtils.bytes2HexStr(result);
@@ -83,11 +100,7 @@ public class AESUtils {
         return null;
     }
 
-    public static String encryptBase64(byte[] data, byte[] key, byte[] ivParaBytes) {
-        return encryptBase64(data, key, ivParaBytes, Base64.URL_SAFE);
-    }
-
-    public static String encryptBase64(byte[] data, byte[] key, byte[] ivParaBytes, int base64Flag) {
+    public static String encryptToBase64(byte[] data, byte[] key, byte[] ivParaBytes, int base64Flag) {
         try {
             byte[] result = doAESEncrypt(data, key, ivParaBytes, Cipher.ENCRYPT_MODE);
             return new String(Base64.encode(result, base64Flag), "UTF-8");
@@ -95,6 +108,10 @@ public class AESUtils {
             ZLog.e("AESUtil", "AES 密文处理异常：" + e);
         }
         return null;
+    }
+
+    public static String encryptToBase64(byte[] data, byte[] key, byte[] ivParaBytes) {
+        return encryptToBase64(data, key, ivParaBytes, Base64.URL_SAFE);
     }
 
     public static byte[] decryptBase64(String data, byte[] key, byte[] ivParaBytes) {

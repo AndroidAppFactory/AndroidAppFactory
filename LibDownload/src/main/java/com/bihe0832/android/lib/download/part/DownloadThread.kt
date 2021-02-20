@@ -85,8 +85,10 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         val url = URL(mDownloadPartInfo.downloadURL)
         val connection = (url.openConnection() as HttpURLConnection).apply {
             upateRequestInfo()
-            ZLog.d("第${mDownloadPartInfo.partID}分片下载：params bytes=$finalStart-${mDownloadPartInfo.partEnd}")
-            setRequestProperty("Range", "bytes=${finalStart}-${mDownloadPartInfo.partEnd}")
+            if(mDownloadPartInfo.canDownloadByPart()){
+                ZLog.d("第${mDownloadPartInfo.partID}分片下载：params bytes=$finalStart-${mDownloadPartInfo.partEnd}")
+                setRequestProperty("Range", "bytes=${finalStart}-${mDownloadPartInfo.partEnd}")
+            }
         }
         connection.connect()
         randomAccessFile.seek(finalStart)
@@ -125,7 +127,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     randomAccessFile.write(data, 0, len)
                     mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
                     hasdownloadLength += len
-                    if (hasdownloadLength % (partSize * 10) < partSize && mDownloadPartInfo.canDownloadByPart()) {
+                    if (mDownloadPartInfo.canDownloadByPart() && hasdownloadLength % (partSize * 10) < partSize ) {
                         //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
                         DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasdownloadLength + mDownloadPartInfo.partFinishedBefore)
                     }
@@ -135,10 +137,15 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 }
                 ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(hasdownloadLength)}")
                 ZLog.e(TAG, "分片下载数据 - ${mDownloadPartInfo.downloadID}：第${mDownloadPartInfo.partID}分片结束：实际下载:${FileUtils.getFileLength(hasdownloadLength)} ;分片完成: ${FileUtils.getFileLength(mDownloadPartInfo.partFinished)}, 计划下载 ${FileUtils.getFileLength(length)},")
-                if (hasdownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
-                    mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart + 1
+                if(mDownloadPartInfo.canDownloadByPart()){
+                    if (hasdownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
+                        mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart + 1
+                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                    }
+                }else{
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                 }
+
                 ZLog.e(TAG, "第${mDownloadPartInfo.partID}分片下载结束：partStatus: ${mDownloadPartInfo.partStatus}")
                 try {
                     inputStream.close()

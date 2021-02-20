@@ -13,9 +13,10 @@ ext.mainProject = "APPTest"
  * 当前设计到Android Support库的有：
  *      LibDeviceNetwork,LibFile,LibViewExt,LibFragmentation_core,LibFlycoTabLayout,LibQRCode,LibAdapter,LibCustomView,LibImmersive
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
+ * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
+ext.developModule = "LibDownload,LibEncrypt"
 
 
 /**
@@ -35,7 +36,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.11.11"
+ext.moduleVersionName = "3.11.12"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -58,7 +59,7 @@ ext.moduleInfo = [
                 "version"            : "",
                 "artifactId"         : "",
                 "apidependenciesList": [
-                        "Application", "CommonTest"
+                        "Application", "CommonTest",
                 ]
         ],
         "Application"               : [

@@ -199,7 +199,7 @@ object UpdateHelper {
                 activity,
                 updateTitle,
                 versionInfo,
-                url, md5,
+                url, "", md5,
                 canCancel, true,
                 dialogListenerWhenDownload, downloadListener)
     }
