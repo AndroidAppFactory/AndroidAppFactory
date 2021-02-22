@@ -46,7 +46,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             } else {
                 mDownloadPartInfo.partFinished = 0
             }
-            var newStart = mDownloadPartInfo.partStart + mDownloadPartInfo.partFinished
+
+            var newStart =  if(mDownloadPartInfo.partEnd < 1){
+                0
+            } else {
+                mDownloadPartInfo.partStart + mDownloadPartInfo.partFinished
+            }
             try {
                 if (!startDownload(newStart)) {
                     break
@@ -75,13 +80,16 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         }
 
         var randomAccessFile = RandomAccessFile(file, "rwd")
-        if (finalStart < mDownloadPartInfo.partEnd) {
-            ZLog.d("分片下载 第${mDownloadPartInfo.partID}：start: $mDownloadPartInfo.start, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
-        } else {
-            ZLog.d("分片下载 第${mDownloadPartInfo.partID}：已经分片结束")
-            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+        if (mDownloadPartInfo.partEnd > 0 ){
+            if (finalStart < mDownloadPartInfo.partEnd) {
+                ZLog.d("分片下载 第${mDownloadPartInfo.partID}：start: $mDownloadPartInfo.start, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
+            } else {
+                ZLog.d("分片下载 第${mDownloadPartInfo.partID}：已经分片结束")
+                mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+            }
+        }else{
+            ZLog.d("分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
-
         val url = URL(mDownloadPartInfo.downloadURL)
         val connection = (url.openConnection() as HttpURLConnection).apply {
             upateRequestInfo()
@@ -103,7 +111,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
         if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL || connection.responseCode == 416) {
             val length = HTTPRequestUtils.getContentLength(connection)
-            if (abs(length - (mDownloadPartInfo.partEnd - finalStart)) > 2) {
+            if (mDownloadPartInfo.partEnd > 0 && abs(length - (mDownloadPartInfo.partEnd - finalStart)) > 2) {
                 ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片长度 错误 ！！！")
                 if (mDownloadPartInfo.partFinished > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
