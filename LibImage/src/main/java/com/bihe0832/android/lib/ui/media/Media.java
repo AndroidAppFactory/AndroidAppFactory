@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.m3u8;
+package com.bihe0832.android.lib.ui.media;
 
 import android.content.ContentValues;
 import android.content.Context;
