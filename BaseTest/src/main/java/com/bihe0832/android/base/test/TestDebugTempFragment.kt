@@ -1,6 +1,9 @@
 package com.bihe0832.android.base.test
 
+import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
+import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -15,6 +18,11 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
+import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.wrapper.DownloadFile
+import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
@@ -27,6 +35,9 @@ import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TestDebugTempFragment : BaseTestFragment() {
     val LOG_TAG = "TestDebugTempFragment"
@@ -232,7 +243,22 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun testFunc() {
-        IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+        val url = "http://1257120875.vod2.myqcloud.com/0ef121cdvodtransgzp1257120875/3055695e5285890780828799271/v.f230.m3u8"
+        val path = ZixieFileProvider.getZixieFilePath(context!!) + MD5.getMd5(url) + File.separator
+        DownloadFile.startDownload(context!!, url, path + FileUtils.getFileName(url), object : SimpleDownloadListener() {
+            override fun onComplete(filePath: String, item: DownloadItem) {
+                ZLog.d(FileUtils.getFileContent(filePath))
+            }
+
+            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                ZLog.d(errorCode.toString())
+            }
+
+            override fun onProgress(item: DownloadItem) {
+                ZLog.d(item.toString())
+            }
+
+        })
     }
 
 }

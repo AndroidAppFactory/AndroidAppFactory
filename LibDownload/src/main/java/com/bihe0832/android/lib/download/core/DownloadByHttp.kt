@@ -113,7 +113,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
                     if (!notFinished) {
                         notifyDownloadAfterFinish(downloadItem)
-                    } else if (downloadItem.finished == downloadItem.fileLength) {
+                    } else if (downloadItem.fileLength > 0 && downloadItem.finished == downloadItem.fileLength) {
                         notifyDownloadAfterFinish(downloadItem)
                     } else if (hasFail) {
                         notifyDownloadFailed(ERR_DOWNLOAD_EXCEPTION, "download part exception", downloadItem)
@@ -152,12 +152,11 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         if (info.canDownloadByPart()) {
                             DownloadInfoDBManager.saveDownloadInfo(info)
                         }
-                        return true
                     } else {
-                        //只要成功且文件长度不对，立即结束
-                        notifyDownloadFailed(ERR_HTTP_FAILED, "download with error file length", info)
-                        return false
+                        //只要成功且文件长度不对，修改为单线程下载
+                        info.setCanDownloadByPart(false)
                     }
+                    return true
                 } else {
                     times++
                     if (times > 3) {
@@ -183,8 +182,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         ZLog.d(TAG, "goDownload:$info")
         // 重新启动，获取文件总长度
         if (info.fileLength < 1) {
-            notifyDownloadFailed(ERR_HTTP_FAILED, "download with error file length", info)
-            return
+            info.setCanDownloadByPart(false)
         }
         info.finishedLengthBefore = 0
         try {
