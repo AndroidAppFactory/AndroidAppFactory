@@ -1,7 +1,9 @@
 package com.bihe0832.android.lib.file;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import java.io.File;
@@ -37,6 +39,15 @@ public class ZixieFileProvider extends FileProvider {
         return FileProvider.getUriForFile(context, context.getPackageName() + ".bihe0832", file);
     }
 
+    public static void setFileUriForIntent(Context context, Intent intent, File file, String mine_type) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            intent.setDataAndType(Uri.fromFile(file), mine_type);
+        } else {
+            intent.setDataAndType(ZixieFileProvider.getZixieFileProvider(context, file), mine_type);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
+    }
     @NotNull
     public static final String getZixieFilePath(@NotNull Context context) {
         File tempFile = context.getExternalFilesDir(context.getString(R.string.lib_bihe0832_file_folder));

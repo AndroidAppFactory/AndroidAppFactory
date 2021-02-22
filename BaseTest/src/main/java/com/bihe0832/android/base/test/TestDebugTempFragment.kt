@@ -1,9 +1,13 @@
 package com.bihe0832.android.base.test
 
+<<<<<<< HEAD
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.text.TextUtils
+=======
+import android.os.Environment
+>>>>>>> 视频、图片添加到相册，uri 兼容
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -30,6 +34,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
+import com.bihe0832.android.lib.ui.media.Media
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils

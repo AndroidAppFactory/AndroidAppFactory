@@ -8,6 +8,7 @@ import android.text.TextUtils
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 fun BaseActivity.onBackPressedSupportAction(autoExit: Boolean) {
     val am = getSystemService(ACTIVITY_SERVICE) as ActivityManager
