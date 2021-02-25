@@ -272,7 +272,11 @@ object DownloadManager {
     }
 
     private fun updateInfo(info: DownloadItem) {
-        var savedInfo = DownloadInfoDBManager.getDownloadInfo(info.downloadURL)
+        var savedInfo = if(info.canDownloadByPart()){
+            DownloadInfoDBManager.getDownloadInfo(info.downloadURL)
+        }else{
+            null
+        }
         if (savedInfo != null) {
             info.finalFilePath = savedInfo.finalFilePath
             info.tempFilePath = savedInfo.tempFilePath
@@ -418,9 +422,7 @@ object DownloadManager {
 
     fun addTask(info: DownloadItem, forceDownload: Boolean) {
         ZLog.d("addTask:$info")
-        if(info.canDownloadByPart()){
-            updateInfo(info)
-        }
+        updateInfo(info)
         if (info.isForceDownloadNew) {
             deleteTask(info.downloadID, false, true)
         }
