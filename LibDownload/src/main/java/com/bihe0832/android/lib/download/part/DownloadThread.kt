@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.download.part
 
+import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
@@ -47,7 +48,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 mDownloadPartInfo.partFinished = 0
             }
 
-            var newStart =  if(mDownloadPartInfo.partEnd < 1){
+            var newStart = if (mDownloadPartInfo.partEnd < 1) {
                 0
             } else {
                 mDownloadPartInfo.partStart + mDownloadPartInfo.partFinished
@@ -73,6 +74,10 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
     //return 是否需要重试
     private fun startDownload(finalStart: Long): Boolean {
+        if (TextUtils.isEmpty(mDownloadPartInfo.finalFileName)) {
+            ZLog.e("分片下载  分片信息错误，错误的本地路径：$mDownloadPartInfo")
+            return false
+        }
 
         val file = File(mDownloadPartInfo.finalFileName)
         if (!file.parentFile.exists()) {
@@ -80,20 +85,20 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         }
 
         var randomAccessFile = RandomAccessFile(file, "rwd")
-        if (mDownloadPartInfo.partEnd > 0 ){
+        if (mDownloadPartInfo.partEnd > 0) {
             if (finalStart < mDownloadPartInfo.partEnd) {
                 ZLog.d("分片下载 第${mDownloadPartInfo.partID}：start: $mDownloadPartInfo.start, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
             } else {
                 ZLog.d("分片下载 第${mDownloadPartInfo.partID}：已经分片结束")
                 mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
             }
-        }else{
+        } else {
             ZLog.d("分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
         val url = URL(mDownloadPartInfo.downloadURL)
         val connection = (url.openConnection() as HttpURLConnection).apply {
             upateRequestInfo()
-            if(mDownloadPartInfo.canDownloadByPart()){
+            if (mDownloadPartInfo.canDownloadByPart()) {
                 ZLog.d("第${mDownloadPartInfo.partID}分片下载：params bytes=$finalStart-${mDownloadPartInfo.partEnd}")
                 setRequestProperty("Range", "bytes=${finalStart}-${mDownloadPartInfo.partEnd}")
             }
@@ -135,7 +140,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     randomAccessFile.write(data, 0, len)
                     mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
                     hasdownloadLength += len
-                    if (mDownloadPartInfo.canDownloadByPart() && hasdownloadLength % (partSize * 10) < partSize ) {
+                    if (mDownloadPartInfo.canDownloadByPart() && hasdownloadLength % (partSize * 10) < partSize) {
                         //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
                         DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasdownloadLength + mDownloadPartInfo.partFinishedBefore)
                     }
@@ -145,12 +150,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 }
                 ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(hasdownloadLength)}")
                 ZLog.e(TAG, "分片下载数据 - ${mDownloadPartInfo.downloadID}：第${mDownloadPartInfo.partID}分片结束：实际下载:${FileUtils.getFileLength(hasdownloadLength)} ;分片完成: ${FileUtils.getFileLength(mDownloadPartInfo.partFinished)}, 计划下载 ${FileUtils.getFileLength(length)},")
-                if(mDownloadPartInfo.canDownloadByPart()){
+                if (mDownloadPartInfo.canDownloadByPart()) {
                     if (hasdownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
                         mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart + 1
                         mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                     }
-                }else{
+                } else {
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                 }
 
