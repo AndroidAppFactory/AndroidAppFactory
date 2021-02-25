@@ -46,7 +46,6 @@ object DownloadInfoDBManager {
         }
     }
 
-
     fun getFinishedBefore(downloadID: Long): Long {
         return DownloadPartInfoTableModel.getFinished(getDownloadInfoDBHelper(), downloadID)
     }
