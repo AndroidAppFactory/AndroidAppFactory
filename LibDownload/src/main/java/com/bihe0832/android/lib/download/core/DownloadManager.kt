@@ -87,7 +87,9 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onWait(item)
             }
-            DownloadInfoDBManager.saveDownloadInfo(item)
+            if(item.canDownloadByPart()){
+                DownloadInfoDBManager.saveDownloadInfo(item)
+            }
         }
 
         override fun onStart(item: DownloadItem) {
@@ -100,7 +102,9 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onStart(item)
             }
-            DownloadInfoDBManager.saveDownloadInfo(item)
+            if(item.canDownloadByPart()){
+                DownloadInfoDBManager.saveDownloadInfo(item)
+            }
         }
 
         override fun onProgress(item: DownloadItem) {
@@ -165,7 +169,9 @@ object DownloadManager {
                     item.packageName = it
                 }
             }
-            DownloadInfoDBManager.saveDownloadInfo(item)
+            if(item.canDownloadByPart()){
+                DownloadInfoDBManager.saveDownloadInfo(item)
+            }
             addDownloadItemToList(item)
             item.finalFilePath = filePath
             addWaitToDownload()
@@ -376,7 +382,9 @@ object DownloadManager {
 
     private fun addDownloadItemToList(info: DownloadItem) {
         ThreadManager.getInstance().start {
-            DownloadInfoDBManager.saveDownloadInfo(info)
+            if(info.canDownloadByPart()){
+                DownloadInfoDBManager.saveDownloadInfo(info)
+            }
             DownloadTaskList.addToDownloadTaskList(info)
         }
     }
@@ -410,7 +418,9 @@ object DownloadManager {
 
     fun addTask(info: DownloadItem, forceDownload: Boolean) {
         ZLog.d("addTask:$info")
-        updateInfo(info)
+        if(info.canDownloadByPart()){
+            updateInfo(info)
+        }
         if (info.isForceDownloadNew) {
             deleteTask(info.downloadID, false, true)
         }

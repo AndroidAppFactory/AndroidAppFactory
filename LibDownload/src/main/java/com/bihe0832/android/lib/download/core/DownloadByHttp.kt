@@ -187,7 +187,11 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         info.finishedLengthBefore = 0
         try {
             val file = File(info.tempFilePath)
-            var hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, DownloadManager.isDebug())
+            var hasDownload = if (info.canDownloadByPart()) {
+                DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, DownloadManager.isDebug())
+            } else {
+                false
+            }
             if (file.exists() && hasDownload && file.length() <= info.fileLength) {
                 ZLog.d(TAG, "断点续传逻辑:$info")
                 //断点续传逻辑
