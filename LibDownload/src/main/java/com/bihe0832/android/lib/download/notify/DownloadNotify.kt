@@ -94,21 +94,23 @@ object DownloadNotify {
     private fun notify(item: DownloadItem, type: Int) {
         ZLog.d(NOTIFY_CHANNEL, "notify: notifyID: type: $type, ${item.downloadTitle},   info $item")
 
-        ThreadManager.getInstance().runOnUIThread {
-            mApplicationContext?.let {
+        if(item.notificationVisibility()){
+            ThreadManager.getInstance().runOnUIThread {
+                mApplicationContext?.let {
 
-                var realID = DownloadNotifyManager.sendDownloadNotify(
-                        it,
-                        item.downloadURL,
-                        item.downloadTitle,
-                        item.downloadIcon,
-                        item.finished,
-                        item.fileLength,
-                        item.lastSpeed,
-                        (item.process * 100).toInt(),
-                        type,
-                        NOTIFY_CHANNEL
-                )
+                    var realID = DownloadNotifyManager.sendDownloadNotify(
+                            it,
+                            item.downloadURL,
+                            item.downloadTitle,
+                            item.downloadIcon,
+                            item.finished,
+                            item.fileLength,
+                            item.lastSpeed,
+                            (item.process * 100).toInt(),
+                            type,
+                            NOTIFY_CHANNEL
+                    )
+                }
             }
         }
     }
