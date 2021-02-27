@@ -12,6 +12,7 @@ import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.encypt.HexUtils;
@@ -52,6 +53,27 @@ public class DeviceIDUtils {
             ZLog.d("getImei error:" + e.getMessage());
         }
         return imei;
+    }
+
+
+    public static String getIMEIList(Context context) {
+        try {
+            TelephonyManager teleMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            int cnt = teleMgr.getPhoneCount();
+            String imei = "";
+            for (int i = 0; i < cnt; i++) {
+                ZLog.i("TelephonyManager id " + i + " of " + cnt + " is  getImei(): " + teleMgr.getImei(i));
+                if (i == 0) {
+                    imei = teleMgr.getImei(i);
+                } else {
+                    imei = imei + "_" + teleMgr.getImei(i);
+                }
+            }
+            ZLog.i( "imei =  " + imei);
+            return imei;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     @SuppressLint("HardwareIds")
@@ -163,25 +185,32 @@ public class DeviceIDUtils {
     /*
      * 获取设备唯一ID AndroidID_内置卡ID()
      */
-    public static String getDeviceId(Context mContext) {
-        String mDeviceId = "";
-        if(mDeviceId == null || mDeviceId.length() == 0) {
-            String androidId = "0";
-            String internalSdcardId = "0";
-            try {
-                if(mContext != null) {
-                    androidId = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-                }
-                String cidString = "/sys/block/mmcblk0/device/cid";
-                Object localOb = new FileReader(cidString); // SD Card ID
-                if(localOb != null) {
-                    internalSdcardId = new BufferedReader((Reader) localOb).readLine();
-                }
-            } catch(Exception e) {
-                ZLog.d("getDeviceId error:" + e.getMessage());
+    public static String getCId(Context mContext) {
+        String internalSdcardId = "0";
+        try {
+            String cidString = "/sys/block/mmcblk0/device/cid";
+            Object localOb = new FileReader(cidString); // SD Card ID
+            if(localOb != null) {
+                internalSdcardId = new BufferedReader((Reader) localOb).readLine();
             }
-            mDeviceId = androidId + "_" + internalSdcardId;
+        } catch(Exception e) {
+            ZLog.d("getDeviceId error:" + e.getMessage());
         }
-        return mDeviceId;
+        return internalSdcardId;
+    }
+
+
+    public static boolean isValidMac(String macStr) {
+        if (macStr == null || macStr.length() <= 0) {
+            return false;
+        }
+        String macAddressRule = "([A-Fa-f0-9]{2}[-,:]){5}[A-Fa-f0-9]{2}";
+        // 这是真正的MAC地址；正则表达式；
+        if (macStr.matches(macAddressRule)) {
+            return true;
+        } else {
+            ZLog.i("it is not a valid MAC address!!!");
+            return false;
+        }
     }
 }

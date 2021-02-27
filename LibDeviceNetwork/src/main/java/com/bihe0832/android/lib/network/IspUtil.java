@@ -2,9 +2,6 @@ package com.bihe0832.android.lib.network;
 
 import java.util.HashMap;
 
-/**
- * Created by jaredhuang on 2017/11/23.
- */
 
 public class IspUtil {
     public static final String CMCC = "中国移动";

@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * 使用InstallUtils的前提是要按照  {@link ZixieFileProvider }的说明 定义好
  * lib_bihe0832_file_folder 和 zixie_file_paths.xml
+ * 或者直接将文件放在  {@link ZixieFileProvider#getZixieFilePath(Context)} 的子目录
+ *
  * 如果不使用库自定义的fileProvider，请使用 {@link InstallUtils#installAPP(Context, Uri, File)} 安装 }，此时无需关注上述两个定义
  */
 

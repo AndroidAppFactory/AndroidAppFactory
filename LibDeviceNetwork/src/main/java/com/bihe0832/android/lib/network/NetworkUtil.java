@@ -470,27 +470,6 @@ public class NetworkUtil {
         }
     }
 
-    /**
-     * 判断是否包含SIM卡
-     *
-     * @return 状态
-     */
-    public static boolean ishasSimCard(Context context) {
-        TelephonyManager telephonyManager = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
-        int simState = telephonyManager.getSimState();
-        boolean result = true;
-        switch (simState) {
-            case TelephonyManager.SIM_STATE_ABSENT:
-                result = false;
-                break;
-            case TelephonyManager.SIM_STATE_UNKNOWN:
-                result = false;
-                break;
-        }
-        ZLog.d(result ? "has SimCard" : "has not SimCard");
-        return result;
-    }
 
     /*判断当前网络是否能够访问网络,ping 3次百度*/
     public static boolean isNetworkOnline() {
@@ -529,20 +508,6 @@ public class NetworkUtil {
             // ignore
         } finally {
             return flag;
-        }
-    }
-
-    public static boolean isValidMac(String macStr) {
-        if (macStr == null || macStr.length() <= 0) {
-            return false;
-        }
-        String macAddressRule = "([A-Fa-f0-9]{2}[-,:]){5}[A-Fa-f0-9]{2}";
-        // 这是真正的MAC地址；正则表达式；
-        if (macStr.matches(macAddressRule)) {
-            return true;
-        } else {
-            ZLog.i("it is not a valid MAC address!!!");
-            return false;
         }
     }
 

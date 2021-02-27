@@ -58,8 +58,11 @@ public class DeviceInfoManager {
                 result = false;
                 break;
         }
+        ZLog.d(result ? "has SimCard" : "has not SimCard");
+
         return result;
     }
+
 
     /*判断数据开关是否打开，不包含SIM卡的判定*/
     public boolean isMobileSwitchOpened() {

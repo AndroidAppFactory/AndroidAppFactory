@@ -266,25 +266,7 @@ public class MobileUtil {
         return 0;
     }
 
-    public static String getIMEI(Context context) {
-        try {
-            TelephonyManager teleMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            int cnt = teleMgr.getPhoneCount();
-            String imei = "";
-            for (int i = 0; i < cnt; i++) {
-                Log.i("wq", "TelephonyManager id " + i + " of " + cnt + " is  getImei(): " + teleMgr.getImei(i));
-                if (i == 0) {
-                    imei = teleMgr.getImei(i);
-                } else {
-                    imei = imei + "_" + teleMgr.getImei(i);
-                }
-            }
-            Log.i("wq", "imei =  " + imei);
-            return imei;
-        } catch (Exception e) {
-            return "";
-        }
-    }
+
 
     /**
      * 获取基站信息 返回mcc_mnc_lac_cid格式
