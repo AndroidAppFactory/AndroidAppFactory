@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.test
 
 
+import android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -237,22 +238,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun testFunc() {
-        val url = "http://1257120875.vod2.myqcloud.com/0ef121cdvodtransgzp1257120875/3055695e5285890780828799271/v.f230.m3u8"
-        val path = ZixieFileProvider.getZixieFilePath(context!!) + MD5.getMd5(url) + File.separator
-        DownloadFile.startDownload(context!!, url, path + FileUtils.getFileName(url), object : SimpleDownloadListener() {
-            override fun onComplete(filePath: String, item: DownloadItem) {
-                ZLog.d(FileUtils.getFileContent(filePath))
-            }
-
-            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                ZLog.d(errorCode.toString())
-            }
-
-            override fun onProgress(item: DownloadItem) {
-                ZLog.d(item.toString())
-            }
-
-        })
+        IntentUtils.startSettings(context!!, ACTION_INPUT_METHOD_SETTINGS)
     }
 
 }
