@@ -15,16 +15,6 @@ import android.widget.TextView
  * Description: Description
  *
  */
-/**
- * 获取一个View的截图Bitmap
- */
-fun View.loadBitmapFromView(): Bitmap? {
-    val screenshot: Bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
-    val c = Canvas(screenshot)
-    c.translate(-this.scrollX.toFloat(), -this.scrollY.toFloat())
-    this.draw(c)
-    return screenshot
-}
 
 /**
  * 设置view高度
