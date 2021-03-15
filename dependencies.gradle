@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibRequest,LibViewExt"
 
 
 /**
@@ -35,7 +35,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "3.11.18"
+ext.moduleVersionName = "3.11.19"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -59,6 +59,7 @@ ext.moduleInfo = [
                 "artifactId"         : "",
                 "apidependenciesList": [
                         "Application", "CommonTest",
+                        "com.android.support:design:${project.android_support_version}",
                 ]
         ],
         "Application"               : [
