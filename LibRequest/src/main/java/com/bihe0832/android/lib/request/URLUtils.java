@@ -1,11 +1,13 @@
 package com.bihe0832.android.lib.request;
 
+import android.net.Uri;
 import android.text.TextUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +19,7 @@ public class URLUtils {
     public static final String HTTP_REQ_ENTITY_START = "?";
     public static final String HTTP_REQ_ENTITY_MERGE = "=";
     public static final String HTTP_REQ_ENTITY_JOIN = "&";
+    public static final String HTTP_REQ_ENTITY_SPECIAL = "#";
 
     /**
      * @param source 传入带参数的url,如:http://www.qq.com/ui/oa/test.html?name=hao&id=123
@@ -50,9 +53,9 @@ public class URLUtils {
             int start = url.lastIndexOf("/");
             int finish = url.indexOf(URLUtils.HTTP_REQ_ENTITY_START);
             if (start != -1) {
-                if(finish != -1){
+                if (finish != -1) {
                     return url.substring(start + 1, finish);
-                }else {
+                } else {
                     return url.substring(start + 1);
                 }
             } else {
@@ -112,15 +115,40 @@ public class URLUtils {
         if (TextUtils.isEmpty(url)) {
             return "";
         }
+        if (TextUtils.isEmpty(para)) {
+            return url;
+        }
+        String resultURL = "";
         if (url.contains(HTTP_REQ_ENTITY_START)) {
-            url += HTTP_REQ_ENTITY_JOIN;
+            if (url.contains(HTTP_REQ_ENTITY_SPECIAL)) {
+                resultURL = url.substring(0, url.indexOf(HTTP_REQ_ENTITY_START) + 1) + para;
+                if (para.endsWith(HTTP_REQ_ENTITY_JOIN)) {
+                    resultURL = resultURL + url.substring(url.indexOf(HTTP_REQ_ENTITY_START) + 1);
+                } else {
+                    resultURL =
+                            resultURL + HTTP_REQ_ENTITY_JOIN + url.substring(url.indexOf(HTTP_REQ_ENTITY_START) + 1);
+                }
+            } else {
+                resultURL = url + HTTP_REQ_ENTITY_JOIN + para;
+            }
         } else {
-            url += HTTP_REQ_ENTITY_START;
+            resultURL = url + HTTP_REQ_ENTITY_START + para;
         }
-        if (!TextUtils.isEmpty(para)) {
-            url += para;
+        return resultURL;
+    }
+
+    public static String marge(String url, HashMap<String, String> para) {
+        if (TextUtils.isEmpty(url)) {
+            return "";
         }
-        return url;
+        if (null == para) {
+            return url;
+        }
+        Uri.Builder builder = Uri.parse(url).buildUpon();
+        for (Map.Entry<String, String> entry : para.entrySet()) {
+            builder.appendQueryParameter(entry.getKey(), entry.getValue());
+        }
+        return builder.toString();
     }
 
     //判断是否url
