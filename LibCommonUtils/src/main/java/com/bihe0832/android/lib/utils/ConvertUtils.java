@@ -99,7 +99,7 @@ public class ConvertUtils {
 
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
+                Pattern pattern = Pattern.compile("^[-+]?[\\d]\\.?[\\d]+$");
                 if (pattern.matcher(str).matches()) {
                     value = Float.parseFloat(str);
                 }
@@ -122,7 +122,7 @@ public class ConvertUtils {
         double value = defaultValue;
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
+                Pattern pattern = Pattern.compile("^[-+]?[\\d]\\.?[\\d]+$");
                 if (pattern.matcher(str).matches()) {
                     value = Double.parseDouble(str);
                 }
