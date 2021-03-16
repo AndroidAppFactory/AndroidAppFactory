@@ -4,10 +4,7 @@ import android.app.Activity
 import android.text.TextUtils
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.wrapper.DownloadFile
-import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
-import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
@@ -44,60 +41,13 @@ object UpdateHelper {
             }
         }
 
-
-        var downloadListener = object : SimpleDownloadListener() {
-
-            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                if (!canCancel) {
-                    ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 3000L)
-                }
-            }
-
-            override fun onComplete(filePath: String, item: DownloadItem) {
-                ZLog.i("startDownloadApk download installApkPath: $filePath")
-                ThreadManager.getInstance().start({
-                    ThreadManager.getInstance().runOnUIThread {
-                        CommonDialog(activity).apply {
-                            title = updateTitle
-                            setHtmlContent(versionInfo)
-                            positive = "点击安装"
-                            negative = "稍候安装"
-                            setOnClickBottomListener(object : OnDialogListener {
-                                override fun onPositiveClick() {
-                                    ThreadManager.getInstance().runOnUIThread {
-                                        InstallUtils.installAPP(activity, filePath)
-                                    }
-                                }
-
-                                override fun onNegativeClick() {
-                                    if (!canCancel) {
-                                        ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
-                                    } else {
-                                        dismiss()
-                                    }
-                                }
-
-                                override fun onCancel() {
-                                    onNegativeClick()
-                                }
-                            })
-                        }.let { it.show() }
-                        InstallUtils.installAPP(activity, filePath)
-                    }
-                }, 1)
-            }
-
-            override fun onProgress(item: DownloadItem) {
-
-            }
-        }
-        DownloadFile.startDownloadWithProcess(
+        DownloadAPK.startDownloadWithProcess(
                 activity,
-                updateTitle,
+                String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), "（$version)"),
                 versionInfo,
-                url, "", md5,
+                url, md5, activity.packageName,
                 canCancel, true,
-                dialogListenerWhenDownload, downloadListener)
+                dialogListenerWhenDownload)
     }
 
     fun showUpdateDialog(activity: Activity, versionName: String, titleString: String, desc: String, url: String, md5: String, type: Int) {
