@@ -19,7 +19,7 @@
     <string name="version_update">版本更新</string>
     <string name="dialog_apk_update">发现新版本：</string>
     <string name="dialog_apk_version">版本号</string>
-    <string name="dialog_apk_updating">版本（ %1$s ）更新中...</string>
+    <string name="dialog_apk_updating">版本 %1$s 更新中...</string>
     <string name="dialog_apk_updateinfo">版本内容：</string>
 
 </resources>
