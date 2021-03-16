@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.test
 
 
+import android.provider.Settings
 import android.provider.Settings.ACTION_INPUT_METHOD_SETTINGS
 import android.view.View
 import android.widget.Toast
@@ -238,7 +239,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun testFunc() {
-        IntentUtils.startSettings(context!!, ACTION_INPUT_METHOD_SETTINGS)
+        IntentUtils.startAppSettings(context!!, Settings.ACTION_APP_NOTIFICATION_SETTINGS)
     }
 
 }

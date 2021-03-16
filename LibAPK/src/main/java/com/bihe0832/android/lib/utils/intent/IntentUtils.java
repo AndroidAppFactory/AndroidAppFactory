@@ -100,6 +100,7 @@ public class IntentUtils {
             ZLog.d("startAppSettings ctx == null");
             return false;
         }
+
         if (TextUtils.isEmpty(data)) {
             ZLog.d("startAppSettings data == null");
             if (showDetail) {
@@ -111,14 +112,15 @@ public class IntentUtils {
 
         Intent intent = new Intent(data);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //8.0及以上
-            intent.setData(Uri.fromParts("package", ctx.getPackageName(), null));
+            intent.putExtra("android.provider.extra.APP_PACKAGE", ctx.getPackageName());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //5.0以上到8.0以下
             intent.putExtra("app_package", ctx.getPackageName());
-            intent.putExtra("app_uid", ctx.getApplicationInfo().uid);
+            if(null != ctx.getApplicationInfo()){
+                intent.putExtra("app_uid", ctx.getApplicationInfo().uid);
+            }
         } else {
-            intent.setData(Uri.parse("package:" + ctx.getPackageName()));
+            intent.setData(Uri.fromParts("package", ctx.getPackageName(), null));
         }
         if (!startIntent(ctx, intent)) {
             if (showDetail) {
