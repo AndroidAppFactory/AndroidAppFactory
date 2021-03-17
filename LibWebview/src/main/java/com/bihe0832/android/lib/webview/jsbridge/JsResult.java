@@ -19,7 +19,7 @@ public class JsResult {
 
 	public static final int Code_Busy = -100;
 	
-	public static final int NOT_SUPPORT = -7; //非BrowserActivity不支持这个调用
+	public static final int NOT_SUPPORT = -7;
 	
 	public static final int NOT_INSTALLED = -8 ; //未安装或未安装特定版本应用
 	
