@@ -145,7 +145,13 @@ public abstract class BaseJsBridgeProxy {
                     mJsBridge.responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_None);
                 }
             }
-        } catch (Exception ex) {
+        } catch (NoSuchMethodException e){
+            ZLog.e(TAG,"JSBridge method 404");
+            ZLog.d(TAG,e.toString());
+            if (!TextUtils.isEmpty(callbackName)) {
+                mJsBridge.responseFail(callbackName, seqid, hostAsMethodName, JsResult.NOT_SUPPORT);
+            }
+        }catch (Exception ex) {
             ZLog.e(TAG,"JSBridge method has error");
             ZLog.d(TAG,ex.toString());
             if (!TextUtils.isEmpty(callbackName)) {
