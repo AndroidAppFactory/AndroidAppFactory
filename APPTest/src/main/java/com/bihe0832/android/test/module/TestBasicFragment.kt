@@ -34,9 +34,10 @@ class TestBasicFragment : BaseFragment() {
             (activity!! as AppCompatActivity).apply {
                 hideBottomUIMenu()
             }
-            UpdateHelper.showUpdateDialog(
+            UpdateHelper.showUpdate(
                     activity!!,
                     "1",
+                    "fsdfsdfsd",
                     "fsdfsdfsd",
                     "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
                     "",
@@ -44,9 +45,10 @@ class TestBasicFragment : BaseFragment() {
         }
 
         test_basic_button_local_1.setOnClickListener {
-            UpdateHelper.showUpdateDialog(
+            UpdateHelper.showUpdate(
                     activity!!,
                     "2",
+                    "fsdfsdfsd",
                     "fsdfsdfsd",
                     "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
                     "",
