@@ -5,8 +5,7 @@
 [ ![Github](https://img.shields.io/github/stars/bihe0832/AndroidAppFactory?style=social) ](https://github.com/bihe0832/AndroidAppFactory)
 [ ![Github](https://img.shields.io/bitbucket/issues/bihe0832/AndroidAppFactory) ](https://github.com/bihe0832/AndroidAppFactory)
 
-
-## 关于 AndroidAppFactory
+## 关于 AAF
 
 做酱油的时候发现做开发那么久竟然没有一整套顺手的开发方案，要从头开始一个一个搭建（相当于之前做的就没什么沉淀），因此开始逐渐整理一整套相对全面并且顺手的开发方案。随着这几年逐渐完善，现在基本上具备雏形了，因此逐渐总结一下。
 
@@ -14,24 +13,23 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 
 ## 相关链接
 
-#### AAF框架相关
+#### AAF 框架相关
 
-- **框架主页：[https://android.bihe0832.com](https://android.bihe0832.com)**
+- **框架文档：[https://android.bihe0832.com/doc/](https://android.bihe0832.com/doc/)**
 
-    主要**介绍框架的使用以及怎么新增，升级组件**
+    主要**介绍相关组件的功能以及整体框架使用相关的内容**
 
-- 方案介绍：[https://blog.bihe0832.com/android-dev-summary.html](https://blog.bihe0832.com/android-dev-summary.html)
+- 方案概述：[https://blog.bihe0832.com/android-dev-summary.html](https://blog.bihe0832.com/android-dev-summary.html)
 
 	完整AAF的整个技术方案，以及其中一些核心的技术点
 	
-
 - 框架源码：[https://github.com/bihe0832/AndroidAppFactory](https://github.com/bihe0832/AndroidAppFactory)
 	
     基础组件和公共组件等可直接复用组件的源码。
 	
 - 框架代码统计：[https://android.bihe0832.com/source/lib/index.html](https://android.bihe0832.com/source/lib/index.html)
 
-#### AAF框架具体实践
+#### AAF Sample 相关
 
 - **AAF Sample：[https://android.bihe0832.com/samples/](https://android.bihe0832.com/samples/)**
 
@@ -42,34 +40,3 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 	具体实践以开源源码
 
 - AAF Sample 代码统计：[https://android.bihe0832.com/source/sample/index.html](https://android.bihe0832.com/source/sample/index.html)
-
-
-## AAF 使用
-
--  添加依赖
-	
-	在根目录添加发布插件的相关依赖
-	
-	    buildscript {  
-	        repositories {  
-	            jcenter()  
-	        }  
-	    }   
-	
-	    allprojects {  
-	        repositories {  
-	            jcenter()  
-	        }  
-	    }
-    
--  import
-
-	直接在项目依赖中添加对应库的依赖：
-	
-		dependencies {
-		    api 'com.bihe0832.android:lib-wrapper:+'
-		}
-
-关于组件使用更详细的内容点击链接 [https://android.bihe0832.com/doc](https://android.bihe0832.com/doc) 了解
-
-
