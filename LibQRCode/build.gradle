@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'//maven插件，用于上传插件到仓库
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -18,19 +21,23 @@ android {
             minifyEnabled false
         }
     }
-
     lintOptions {
         abortOnError false
     }
 }
 
-publish {
-    artifactId = rootProject.zixieModuleInfo[project.name].get("artifactId")
-    repoName = rootProject.zixieRepoName
-    publishVersion = rootProject.zixieModuleInfo[project.name].get("version")
-    userOrg = rootProject.zixieUserOrg
-    groupId = rootProject.zixieGroupId
-    licences = rootProject.zixieLicences
-    desc = 'the qrcode for zixie'//项目描述
-    website = 'https://github.com/bihe0832/AndroidAppFactory'//项目对应网站
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: rootProject.zixieRepositoryURL) {
+                authentication(userName: getProperty("NEXUS_USERNAME") , password: getProperty("NEXUS_PASSWORD") )
+            }
+            pom.groupId = rootProject.zixieGroupId
+            pom.version = rootProject.zixieModuleInfo[project.name].get("version")
+            pom.artifactId = rootProject.zixieModuleInfo[project.name].get("artifactId")
+        }
+    }
 }
