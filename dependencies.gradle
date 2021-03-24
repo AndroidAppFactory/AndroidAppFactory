@@ -181,7 +181,7 @@ ext.moduleInfo = [
                 "apidependenciesList": []
         ],
         "RouterCompiler"            : [
-                "version"            : "3.0.2",
+                "version"            : "4.0.0",
                 "artifactId"         : "lib-router-compiler",
                 "apidependenciesList": [
                         'com.squareup:javapoet:1.8.0',
