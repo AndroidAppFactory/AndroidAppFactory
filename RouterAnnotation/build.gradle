@@ -1,18 +1,19 @@
 apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
 
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-            repository(url: rootProject.zixieRepositoryURL) {
-                authentication(userName: getProperty("NEXUS_USERNAME") , password: getProperty("NEXUS_PASSWORD") )
-            }
-            pom.groupId = rootProject.zixieGroupId
-            pom.version = rootProject.zixieModuleInfo[project.name].get("version")
-            pom.artifactId = rootProject.zixieModuleInfo[project.name].get("artifactId")
-        }
-    }
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
 }
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+apply from: rootDir.toString() + '/build_aar.gradle'
