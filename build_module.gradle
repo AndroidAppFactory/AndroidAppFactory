@@ -7,6 +7,12 @@ ext {
     zixieRepoName = "android"
     zixieUserOrg = 'bihe0832'
     zixieGroupId = "com.bihe0832.android"
+    /**
+     * 发布仓库地址，默认使用正式
+     * RELEASE_REPOSITORY_URL=https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
+     * SNAPSHOT_REPOSITORY_URL=https://s01.oss.sonatype.org/content/repositories/snapshots/
+     */
+    zixieRepositoryURL = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
     zixieLicences = ""
     zixieVersionCode = Integer.parseInt(['sh', '-c', 'git rev-list --all --count'].execute().text.trim())
     zixieVersionName = ext.moduleVersionName
@@ -257,4 +263,3 @@ def isApplicationModule(String projectName) {
 def isDebugModule(String projectName) {
     return false
 }
-

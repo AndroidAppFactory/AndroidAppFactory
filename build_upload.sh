@@ -81,9 +81,9 @@ src="[0-9]*\.[0-9]*\.[0-9]*"
 cat $localPath/dependencies.gradle | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 if [[ $libName == Router* ]]; then
-  ./gradlew clean bintrayUpload -PdryRun=false
+  ./gradlew clean uploadArchives
 else
-  ./gradlew clean bintrayUpload -PdryRun=false -xjavadocRelease -xlint
+  ./gradlew clean uploadArchives
 fi
 checkResult
 git add $localPath/dependencies.gradle
