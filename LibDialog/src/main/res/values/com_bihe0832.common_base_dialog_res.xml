@@ -21,7 +21,7 @@
         <item name="android:textColorHintInverse">@color/dialog_hint</item>
     </style>
 
-    <color name="dialog_bg">#FFFFFF</color>-->
+    <color name="dialog_bg">#FFFFFF</color>
     <color name="dialog_text">#202020</color>
     <color name="dialog_hint">#333333</color>
     <color name="dialog_button">#333333</color>
