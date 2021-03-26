@@ -65,7 +65,7 @@ class TestBasicFragment : BaseFragment() {
         test_basic_button_local_2.setOnClickListener {
             (activity!! as AppCompatActivity).apply {
                 enableActivityImmersive(
-                        ContextCompat.getColor(this, R.color.lib_refresh_spinkit_color),
+                        ContextCompat.getColor(this, R.color.result_point_color),
                         ContextCompat.getColor(this, R.color.result_point_color))
 
             }

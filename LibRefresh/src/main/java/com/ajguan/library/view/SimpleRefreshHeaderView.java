@@ -23,7 +23,6 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
     private TextView textView;
     private View arrowIcon;
     private View successIcon;
-    private View loadingIcon;
 
     public SimpleRefreshHeaderView(Context context) {
         this(context, null);
@@ -42,7 +41,6 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
         textView = (TextView) findViewById(R.id.text);
         arrowIcon = findViewById(R.id.arrowIcon);
         successIcon = findViewById(R.id.successIcon);
-        loadingIcon = findViewById(R.id.loadingIcon);
     }
 
     @Override
@@ -51,8 +49,6 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
         successIcon.setVisibility(INVISIBLE);
         arrowIcon.setVisibility(VISIBLE);
         arrowIcon.clearAnimation();
-        loadingIcon.setVisibility(INVISIBLE);
-        loadingIcon.clearAnimation();
     }
 
     @Override
@@ -63,10 +59,8 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
     @Override
     public void refreshing() {
         arrowIcon.setVisibility(INVISIBLE);
-        loadingIcon.setVisibility(VISIBLE);
         textView.setText(getResources().getText(R.string.header_refreshing));
         arrowIcon.clearAnimation();
-        loadingIcon.startAnimation(rotate_infinite);
     }
 
     @Override
@@ -92,8 +86,6 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
 
     @Override
     public void complete() {
-        loadingIcon.setVisibility(INVISIBLE);
-        loadingIcon.clearAnimation();
         successIcon.setVisibility(VISIBLE);
         textView.setText(getResources().getText(R.string.header_completed));
     }

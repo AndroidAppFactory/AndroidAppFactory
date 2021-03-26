@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "LibDialog"
+ext.developModule = "LibDialog,LibRefresh"
 
 
 /**
@@ -399,7 +399,6 @@ ext.moduleInfo = [
                 "version"            : "4.1.0",
                 "artifactId"         : "lib-refresh",
                 "apidependenciesList": [
-                        "com.github.ybq:Android-SpinKit:1.4.0",
                         "LibAdapter"
                 ]
         ],

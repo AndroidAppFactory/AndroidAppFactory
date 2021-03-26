@@ -37,17 +37,4 @@
         android:src="@drawable/arrow"
         />
 
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/loadingIcon"
-        style="@style/SpinKitView.Small.Circle"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/text"
-        android:padding="3dp"
-        android:visibility="gone"
-        app:SpinKit_Color="@color/lib_refresh_spinkit_color" />
-
 </RelativeLayout>
