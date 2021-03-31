@@ -40,11 +40,13 @@ public class DownloadUtils {
      */
     public static final void startDownload(Context context, @NotNull DownloadItem info, boolean forceDownload) {
         DownloadManager.INSTANCE.init(context);
-        DownloadManager.INSTANCE.addTask(info, forceDownload);
+        info.setForceDownloadNew(forceDownload);
+        DownloadManager.INSTANCE.addTask(info, info.isForceDownloadNew());
     }
 
     public static final void startDownload(Context context, @NotNull DownloadItem info) {
-        startDownload(context, info, true);
+        info.setForceDownloadNew(true);
+        startDownload(context, info, info.isForceDownloadNew());
     }
 
     /**

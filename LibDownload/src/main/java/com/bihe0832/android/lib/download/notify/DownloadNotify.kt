@@ -22,7 +22,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
  */
 object DownloadNotify {
 
-    private const val NOTIFY_CHANNEL = "ZTSDK_DOWNLOAD"
+    private const val NOTIFY_CHANNEL = "DOWNLOAD"
     private val downloadReceiver by lazy {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -35,19 +35,19 @@ object DownloadNotify {
                     when (action) {
                         DownloadNotifyManager.ACTION_RESUME -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, false, item.isDownloadWhenUseMobile, false)
+                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, true, item.isDownloadWhenUseMobile, false)
                             }
                         }
 
                         DownloadNotifyManager.ACTION_PAUSE -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.pauseTask(item.downloadID, false, false)
+                                DownloadManager.pauseTask(item.downloadID, startByUser = true, clearHistory = false)
                             }
                         }
 
                         DownloadNotifyManager.ACTION_DELETE -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.deleteTask(item.downloadID, false, false)
+                                DownloadManager.deleteTask(item.downloadID, startByUser = false, deleteFile = false)
                                 notifyDelete(item)
                             }
 
@@ -67,7 +67,7 @@ object DownloadNotify {
 
                         DownloadNotifyManager.ACTION_RETRY -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, false, true, false)
+                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, startByUser = true, downloadWhenUseMobile = true, forceDownload = false)
                                 notifyDelete(item)
                             }
                         }
