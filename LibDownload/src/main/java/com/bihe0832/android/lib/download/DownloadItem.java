@@ -13,6 +13,8 @@ import kotlin.jvm.Synchronized;
 /**
  * 下载信息结构体
  *
+ * 除 downloadURL ，其余都非必填，默认不支持分片下载，每次下载都会强制重新下载
+ *
  * @author hardyshi code@bihe0832.com Created on 2020/6/3.
  */
 public class DownloadItem implements Serializable {
@@ -27,9 +29,9 @@ public class DownloadItem implements Serializable {
     private boolean forceDownloadNew = false;
     //下载结束是否自动拉起安装，非必填
     private boolean autoInstall = false;
-    //下载过程是否展示到通知栏
+    //下载过程是否展示到通知栏，非必填
     private boolean notificationVisibility = false;
-    // 当前的下载状态，实时同步
+    // 当前的下载状态，实时同步，不填
     private int status = DownloadStatus.STATUS_DOWNLOAD_PAUSED;
     // 4G下是否下载，非必填
     private boolean downloadWhenUseMobile = false;
@@ -214,7 +216,16 @@ public class DownloadItem implements Serializable {
     }
 
     public boolean isForceDownloadNew() {
-        return forceDownloadNew;
+        //强制重新下载，或者不支持分片，就算是不强制重新下载也要强制重新下载
+        if(forceDownloadNew){
+            return true;
+        }else {
+            if(canDownloadByPart()){
+                return false;
+            }else {
+                return true;
+            }
+        }
     }
 
     public void setForceDownloadNew(boolean forceDownloadNew) {

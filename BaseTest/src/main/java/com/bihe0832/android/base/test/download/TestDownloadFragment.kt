@@ -43,8 +43,10 @@ class TestDownloadFragment : BaseTestFragment() {
             setNotificationVisibility(true)
             downloadTitle = getString(R.string.app_name)
             downloadDesc = "ffsf"
-            downloadURL = "https://download.sj.qq.com/upload/connAssitantDownload/upload/MobileAssistant_1.apk"
-            isForceDownloadNew = true
+//            downloadURL = "https://cdn.bihe0832.com/app/release/ZPUZZLE_official.apk"
+            downloadURL = "https://imtt.dd.qq.com/16891/apk/23C6DAF12A8C041F0937AABFCAE70BF6.apk"
+            isForceDownloadNew = false
+            setCanDownloadByPart(true)
             downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     showResult("应用下载失败（$errorCode）")
@@ -86,7 +88,7 @@ class TestDownloadFragment : BaseTestFragment() {
 
             }
         }.let {
-            DownloadUtils.startDownload(context, it)
+            DownloadUtils.startDownload(context, it, it.isForceDownloadNew)
         }
 
     }
