@@ -125,7 +125,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mIntentUrl = Uri.decode(bundle.getString(INTENT_KEY_URL));
+            mIntentUrl = URLDecoder.decode(bundle.getString(INTENT_KEY_URL));
             mRefreshable = bundle.getBoolean(INTENT_KEY_REFRESH, false);
             mPostData = bundle.getString(INTENT_KEY_DATA);
         }
