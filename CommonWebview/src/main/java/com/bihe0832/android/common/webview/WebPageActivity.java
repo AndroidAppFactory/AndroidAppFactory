@@ -8,10 +8,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.router.annotation.Module;
+import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.tencent.smtt.sdk.QbSdk;
+
+import java.net.URLDecoder;
 
 import static com.bihe0832.android.common.webview.WebPageActivity.MODULE_NAME_WEB_PAGE;
 
@@ -54,10 +58,15 @@ public class WebPageActivity extends CommonActivity {
 
     private void handleIntent(Intent intent) {
         if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
-            mURL = Uri.decode(intent.getStringExtra(BaseWebviewFragment.INTENT_KEY_URL));
+            mURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
         } else {
-            ZLog.d("handle intent, but extra is bad");
-            return;
+            if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL)) {
+                String redirectURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
+                IntentUtils.openWebPage(redirectURL, this);
+                finish();
+            } else {
+                ZLog.d("handle intent, but extra is bad");
+            }
         }
     }
 
