@@ -82,6 +82,18 @@ open class BaseActivity : SupportActivity() {
         }
     }
 
+    protected fun updateTitle(titleString: String?){
+        try {
+            titleString?.let {
+                mToolbar?.apply {
+                    title = it
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     override fun onBackPressedSupport() {
         onBackPressedSupportAction(exitAuto())
     }
