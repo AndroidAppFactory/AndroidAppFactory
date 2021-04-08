@@ -21,7 +21,7 @@ class UserPraiseDialog(private val activity: Activity, private val feedbackRoute
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        super.setContentView(R.layout.dialog_user_praise)
+        super.setContentView(R.layout.com_bihe0832_dialog_user_praise)
         initView()
         initEvent()
         initData()

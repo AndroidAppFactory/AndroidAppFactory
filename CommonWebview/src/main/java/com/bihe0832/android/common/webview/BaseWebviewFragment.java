@@ -136,7 +136,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.common_fragment_webview, container, false);
+        View view = inflater.inflate(R.layout.common_zixie_fragment_webview, container, false);
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);
         mRedirect = (TextView) view.findViewById(R.id.web_native_browser);

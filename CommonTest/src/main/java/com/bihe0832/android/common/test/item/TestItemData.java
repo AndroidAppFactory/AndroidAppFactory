@@ -27,7 +27,7 @@ public class TestItemData extends CardBaseModule {
     }
 
     public int getResID() {
-        return R.layout.card_test_item;
+        return R.layout.com_bihe0832_card_test_item;
     }
 
     public Class<? extends CardBaseHolder> getViewHolderClass() {

@@ -1,6 +1,7 @@
 package com.bihe0832.android.framework.constant;
 
 
+import com.bihe0832.android.lib.file.select.FileSelectTools;
 import com.bihe0832.android.lib.permission.PermissionManager;
 
 /**
@@ -14,7 +15,7 @@ public class ZixieActivityRequestCode {
 
     public static final int PERMISSION_REQUEST_CODE = PermissionManager.PERMISSION_REQUEST_CODE;
 
-    public static final int FILE_CHOOSER = 1;
+    public static final int FILE_CHOOSER = FileSelectTools.FILE_CHOOSER;
 
     public static final int TAKE_PHOTO = 2;
 

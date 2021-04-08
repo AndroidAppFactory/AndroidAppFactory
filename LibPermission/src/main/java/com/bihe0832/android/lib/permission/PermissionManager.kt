@@ -102,7 +102,6 @@ object PermissionManager {
                     val intent = Intent(context, PermissionsActivity::class.java)
                     intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissions)
                     intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     ActivityCompat.startActivity(context!!, intent, null)
                 } catch (e: Exception) {

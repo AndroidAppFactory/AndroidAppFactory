@@ -1,4 +1,10 @@
 <resources>
-    <color name="colorPrimaryDark">#0288D1</color>
-    <color name="navigationBarColor">#202020</color>
+
+    <!--    主题相关配色-->
+    <!--主色调 -->
+    <color name="colorPrimary">#3F51B5</color>
+    <!--状态栏颜色-->
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="navigationBarColor">#212121</color>
+
 </resources>

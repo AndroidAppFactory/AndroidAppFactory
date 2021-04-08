@@ -39,7 +39,7 @@ open class BaseTestFragment : CommonListFragment() {
     }
 
     override fun getResID(): Int {
-        return R.layout.fragment_test_tab
+        return R.layout.com_bihe0832_fragment_test_tab
     }
 
     override fun getDataLiveData(): CommonListLiveData {
