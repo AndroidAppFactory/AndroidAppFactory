@@ -169,7 +169,7 @@ object ZixieContext {
     }
 
     fun getLogFolder(): String {
-        return getRealFileFolder(getZixieExtFolder() + File.separator + "log" + File.separator)
+        return getRealFileFolder(getZixieExtFolder() + "log" + File.separator)
     }
 
     private fun getRealFileFolder(path: String): String {

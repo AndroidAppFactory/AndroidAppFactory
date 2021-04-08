@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AndroidAPPFactofy</string>
+    <string name="app_name">子勰Lib</string>
     <string name="app_desc">安卓开发组件 - 子勰</string>
     <string name="router_schema">zixie</string>
 
