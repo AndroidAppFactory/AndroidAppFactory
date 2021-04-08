@@ -14,7 +14,7 @@ import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.permission.PermissionManager
-import kotlinx.android.synthetic.main.dialog_photo_chooser.view.*
+import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
 val takePhotoPermission = arrayOf(Manifest.permission.CAMERA)
@@ -89,7 +89,7 @@ fun Activity.choosePhoto() {
 }
 
 fun Activity.showPhotoChooser() {
-    val view = LayoutInflater.from(this).inflate(R.layout.dialog_photo_chooser, null)
+    val view = LayoutInflater.from(this).inflate(R.layout.com_bihe0832_dialog_photo_chooser, null)
     val diaLog = AlertDialog.Builder(this).setView(view).create()
 
     diaLog.setCanceledOnTouchOutside(true)

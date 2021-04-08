@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:animateLayoutChanges="true">
+
+        <ImageView
+                android:id="@+id/activity_file_btn_back"
+                android:layout_width="22dp"
+                android:layout_height="18dp"
+                android:layout_margin="12dp"
+                android:background="@mipmap/ic_left_arrow_white" />
+
+        <TextView
+                android:id="@+id/activity_file_tv_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="选择文本"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+        <ImageView
+                android:id="@+id/activity_file_btn_close"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:background="@mipmap/close" />
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/divider" />
+
+    <ListView
+            android:id="@+id/activity_file_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:descendantFocusability="blocksDescendants"
+            android:divider="@color/divider"
+            android:dividerHeight="1dp" />
+</LinearLayout>

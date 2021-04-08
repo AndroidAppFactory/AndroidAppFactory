@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.adapter.CardBaseHolder;
 public class TestTipsData extends TestItemData {
 
     public int getResID() {
-        return R.layout.card_test_tips;
+        return R.layout.com_bihe0832_card_test_tips;
     }
 
     public Class<? extends CardBaseHolder> getViewHolderClass() {

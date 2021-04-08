@@ -53,7 +53,7 @@ public class TestMainFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_test_main, container, false);
+        View view = inflater.inflate(R.layout.com_bihe0832_fragment_test_main, container, false);
         initView(view);
         mTabBar.setCurrentTab(getDefaultTabIndex());
         return view;
