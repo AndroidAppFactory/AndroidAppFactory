@@ -2,6 +2,7 @@ package com.bihe0832.android.framework.log
 
 import android.content.Context
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.DateUtil
@@ -61,8 +62,7 @@ object LoggerFile {
     }
 
     private fun getFilePathByName(module: String): String {
-        return mContext?.getExternalFilesDir(mContext?.getString(R.string.lib_bihe0832_file_folder))?.absolutePath + "/${module}_${DateUtil.getDateENyyyyMMdd()}.txt"
-
+        return ZixieContext.getLogFolder() + "/${module}_${DateUtil.getDateENyyyyMMdd()}.txt"
     }
 
     fun log(module: String, msg: String) {
@@ -86,4 +86,5 @@ object LoggerFile {
             e.printStackTrace()
         }
     }
+
 }
