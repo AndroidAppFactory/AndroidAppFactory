@@ -16,6 +16,7 @@ public class FileSelectTools {
     public static void openFileSelect(Activity activity, String url) {
         try {
             Intent intent = new Intent(activity, FileActivity.class);
+            intent.setAction(Intent.ACTION_PICK);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             if (!TextUtils.isEmpty(url)) {
                 intent.putExtra(INTENT_EXTRA_KEY_WEB_URL, url);
@@ -29,5 +30,4 @@ public class FileSelectTools {
     public static void openFileSelect(Activity activity) {
         openFileSelect(activity, "");
     }
-
 }

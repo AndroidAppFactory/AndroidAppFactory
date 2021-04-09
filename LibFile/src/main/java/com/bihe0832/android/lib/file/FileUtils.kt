@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
@@ -104,27 +102,33 @@ object FileUtils {
     /**
      * 仅能打开 [ZixieFileProvider.getZixieFilePath] 对应目录下的文件
      */
-    fun openFile(context: Context, filePath: String, fileType: String) {
+    fun openFile(context: Context, filePath: String, fileType: String): Boolean {
+        return fileAction(context, Intent.ACTION_VIEW, filePath, fileType)
+    }
+
+    fun sendFile(context: Context, filePath: String, fileType: String): Boolean {
+        return fileAction(context, Intent.ACTION_SEND, filePath, fileType)
+    }
+
+    fun fileAction(context: Context, action: String, filePath: String): Boolean {
+        return fileAction(context, action, filePath, "*/*")
+    }
+
+    fun fileAction(context: Context, action: String, filePath: String, fileType: String): Boolean {
         try { //设置intent的data和Type属性
             File(filePath).let { file ->
-                val fileProvider = ZixieFileProvider.getZixieFileProvider(context, file)
-                Intent(Intent.ACTION_VIEW).apply {
+                Intent(action).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     addCategory("android.intent.category.DEFAULT")
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                        setDataAndType(Uri.fromFile(file), fileType)
-                    } else {
-                        setDataAndType(fileProvider, fileType)
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                    }
+                    ZixieFileProvider.setFileUriForIntent(context, this, file, fileType)
                 }.let {
                     context.startActivity(it)
                 }
+                return true
             }
-
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
             e.printStackTrace()
+            return false
         }
     }
 
