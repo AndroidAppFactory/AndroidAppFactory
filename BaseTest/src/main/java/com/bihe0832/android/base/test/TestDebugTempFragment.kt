@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.test
 
 
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -241,7 +242,7 @@ class TestDebugTempFragment : BaseTestFragment() {
 //        ZLog.d("3.6 " + "3.6".toDouble() + " " + ConvertUtils.parseDouble("3.6", 0.0))
 //        ZLog.d("0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
 //        ZLog.d("0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
-        FileSelectTools.openFileSelect(activity, "/storage/emulated/0/Android/data/com.bihe0832.android.app.test/files")
+        IntentUtils.startAppSettings(activity!!, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
     }
 
 }
