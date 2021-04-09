@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.test.module
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.view.View
@@ -17,6 +18,8 @@ import com.bihe0832.android.framework.ZixieContext.isOfficial
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.*
 import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
@@ -34,6 +37,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
             add(TestItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
             add(TestItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
+            add(TestItemData("选择并发送日志文件", View.OnClickListener { sendLog() }))
             add(TestItemData("弹出评分页面", View.OnClickListener {
                 UserPraiseManager.showUserPraiseDialog(activity!!, RouterAction.getFinalURL(MODULE_NAME_FEEDBACK))
             }))
@@ -42,10 +46,10 @@ open class TestDebugCommonFragment : BaseTestFragment() {
                 map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode("https://support.qq.com/product/290858")
                 RouterAction.openPageByRouter(MODULE_NAME_FEEDBACK, map)
             }))
-            add(TestItemData("打开应用设置", { IntentUtils.startAppDetailSettings(context) }))
-            add(TestItemData("打开开发者模式", View.OnClickListener {
+            add(TestItemData("打开应用设置") { IntentUtils.startAppDetailSettings(context) })
+            add(TestItemData("打开开发者模式") {
                 IntentUtils.startSettings(context, android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
-            }))
+            })
 
 
         }
@@ -141,6 +145,23 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             builder.append("\n\tname: ${APKUtils.getAppName(context, packageName)}\n")
             builder.append("	versionName: ${info.versionName}\n")
             builder.append("	versionCode: ${info.versionCode}\n")
+        }
+    }
+
+    protected fun sendLog() {
+        FileSelectTools.openFileSelect(activity!!, ZixieContext.getLogFolder())
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == RESULT_OK) {
+            data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let {filePath->
+                FileUtils.sendFile(activity!!, filePath, "*/*").let {
+                    if(!it){
+                        ZixieContext.showToast("分享文件:$filePath 失败")
+                    }
+                }
+            }
         }
     }
 }
