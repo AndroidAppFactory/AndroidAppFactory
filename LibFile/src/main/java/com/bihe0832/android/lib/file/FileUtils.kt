@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.encypt.MD5
 import java.io.File
 import java.io.FileInputStream
@@ -116,16 +118,32 @@ object FileUtils {
 
     fun fileAction(context: Context, action: String, filePath: String, fileType: String): Boolean {
         try { //设置intent的data和Type属性
-            File(filePath).let { file ->
-                Intent(action).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    addCategory("android.intent.category.DEFAULT")
-                    ZixieFileProvider.setFileUriForIntent(context, this, file, fileType)
-                }.let {
-                    context.startActivity(it)
+            ZLog.d("fileAction sourceFile:$filePath")
+            var sourceFile = File(filePath)
+            var targetFile = sourceFile
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && sourceFile.isFile && sourceFile.exists()) {
+                val fileProvider = try {
+                    ZixieFileProvider.getZixieFileProvider(context, File(filePath))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
                 }
-                return true
+                if (fileProvider == null) {
+                    ZLog.e("fileAction targetFile dont has zixie FileProvider")
+                    targetFile = File(ZixieFileProvider.getZixieFilePath(context) + getFileName(filePath))
+                    copyFile(sourceFile, targetFile)
+                }
             }
+            ZLog.d("fileAction targetFile:${targetFile.absolutePath}")
+            Intent(action).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                addCategory("android.intent.category.DEFAULT")
+                ZixieFileProvider.setFileUriForIntent(context, this, targetFile, fileType)
+            }.let {
+                context.startActivity(it)
+            }
+            return true
+
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
             e.printStackTrace()
             return false
