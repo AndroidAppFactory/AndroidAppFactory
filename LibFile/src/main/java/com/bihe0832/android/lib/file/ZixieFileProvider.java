@@ -43,9 +43,11 @@ public class ZixieFileProvider extends FileProvider {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             intent.setDataAndType(Uri.fromFile(file), mine_type);
         } else {
+            Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, file);
             intent.setDataAndType(ZixieFileProvider.getZixieFileProvider(context, file), mine_type);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, fileProvider);
         }
     }
     @NotNull

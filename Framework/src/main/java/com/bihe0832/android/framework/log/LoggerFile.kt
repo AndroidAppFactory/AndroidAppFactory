@@ -1,9 +1,13 @@
 package com.bihe0832.android.framework.log
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.DateUtil
 import java.io.BufferedWriter
@@ -80,7 +84,21 @@ object LoggerFile {
     fun openLog(module: String) {
         try { //设置intent的data和Type属性
             mContext?.let {
-                FileUtils.openFile(it, getFilePathByName(module), "text/plain")
+                FileUtils.openFile(it, getFilePathByName(module), "*/*")
+            }
+        } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
+            e.printStackTrace()
+        }
+    }
+
+    fun sendLog(module: String) {
+        try { //设置intent的data和Type属性
+            mContext?.let {context->
+                try { //设置intent的data和Type属性
+                    FileUtils.sendFile(context, getFilePathByName(module), "*/*")
+                } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
+                    e.printStackTrace()
+                }
             }
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
             e.printStackTrace()
