@@ -21,6 +21,7 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -230,10 +231,13 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun preTest() {
+        CommonDBManager.getData("sss")
+
 
     }
 
     private fun testFunc() {
+        CommonDBManager.saveData("sss","Fsdfsd")
 //        ZLog.d("3 " + "3".toFloat() + " " + ConvertUtils.parseFloat("3", 0f))
 //        ZLog.d("3 " + "3".toDouble() + " " + ConvertUtils.parseDouble("3", 0.0))
 //        ZLog.d("3.6 " + "3.6".toFloat() + " " + ConvertUtils.parseFloat("3.6", 0f))
@@ -242,7 +246,7 @@ class TestDebugTempFragment : BaseTestFragment() {
 //        ZLog.d("3.6 " + "3.6".toDouble() + " " + ConvertUtils.parseDouble("3.6", 0.0))
 //        ZLog.d("0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
 //        ZLog.d("0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
-        IntentUtils.startAppSettings(activity!!, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+//        IntentUtils.startAppSettings(activity!!, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
     }
 
 }

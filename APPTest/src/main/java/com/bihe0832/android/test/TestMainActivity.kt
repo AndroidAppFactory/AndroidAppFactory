@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.immersion.hideBottomUIMenu
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
@@ -46,6 +47,7 @@ class TestMainActivity : CommonActivity() {
 //        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
 //        UpdateManager.checkUpdateAndShowDialog(this, false)
         hideBottomUIMenu()
+        CommonDBManager.init(this)
     }
 
     override fun getStatusBarColor(): Int {
