@@ -20,7 +20,7 @@ class CommonTableModel extends BaseTableModel {
     static final String TABLE_CREATE_SQL = "CREATE TABLE IF NOT EXISTS ["
             + TABLE_NAME
             + "] ("
-            + "[" + col_id + "] INT  UNIQUE NOT NULL,"
+            + "[" + col_id + "] INTEGER PRIMARY KEY AUTOINCREMENT,"
             + "[" + col_key + "] NVARCHAR(128)  NULL,"
             + "[" + col_value + "] VARCHAR(256)  NULL,"
             + "[" + col_create_at + "] TIMESTAMP  NULL,"
