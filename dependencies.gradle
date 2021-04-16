@@ -6,7 +6,7 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest"
+ext.mainProject = "CommonPhotos"
 
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "Framework"
+ext.developModule = "CommonPhotos"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -80,35 +80,35 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"                : [
-                "version"            : "4.2.3",
+                "version"            : "4.2.4",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonWebview"
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "4.2.3",
+                "version"            : "4.2.4",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "4.2.3",
+                "version"            : "4.2.4",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "4.2.3",
+                "version"            : "4.2.4",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "4.2.3",
+                "version"                : "4.2.4",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -120,7 +120,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "4.2.3",
+                "version"                : "4.2.4",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -132,14 +132,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "4.2.3",
+                "version"            : "4.2.4",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "4.2.3",
+                "version"                : "4.2.4",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
