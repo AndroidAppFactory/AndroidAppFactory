@@ -102,7 +102,7 @@ class TestMainActivity : CommonActivity() {
         if (findFragment(TestMainFragment::class.java) == null) {
             loadRootFragment(R.id.common_fragment_content, TestMainFragment())
         }
-        mIconManager.showIcon()
+//        mIconManager.showIcon()
 //        hideBottomUIMenu()
     }
 
