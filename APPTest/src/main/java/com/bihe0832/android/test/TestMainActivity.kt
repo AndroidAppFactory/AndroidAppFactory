@@ -6,6 +6,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.ContextCompat
+import android.view.View
+import com.bihe0832.android.common.floatview.IconManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.main.CommonActivity
@@ -20,6 +22,14 @@ import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 @Module(RouterConstants.MODULE_NAME_DEBUG)
 class TestMainActivity : CommonActivity() {
     val LOG_TAG = "TestHttpActivity"
+    val mIconManager by lazy {
+        IconManager(this, "").apply {
+            setIconClickListener(View.OnClickListener {
+                ZixieContext.showToast("点了一下Icon")
+            })
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initToolbar("TestMainActivity", false)
@@ -92,6 +102,7 @@ class TestMainActivity : CommonActivity() {
         if (findFragment(TestMainFragment::class.java) == null) {
             loadRootFragment(R.id.common_fragment_content, TestMainFragment())
         }
+        mIconManager.showIcon()
 //        hideBottomUIMenu()
     }
 
