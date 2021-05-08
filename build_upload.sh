@@ -86,6 +86,20 @@ else
   ./gradlew clean uploadArchives
 fi
 checkResult
+
+
+src=" *ext.mainProject *= *\\\""
+dst="ext.mainProject = \\\"APPTest\\\""
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
+checkResult
+
+src=" *ext.developModule *= *\\\""
+dst="ext.developModule = \\\"Application\\\""
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
+checkResult
+
 git add $localPath/dependencies.gradle
 git commit $localPath/dependencies.gradle -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
 checkResult
