@@ -83,12 +83,14 @@ public abstract class BaseApplication extends Application {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+        ZLog.e("Application", "Application onLowMemory");
         Glide.get(this).clearMemory();
     }
 
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
+        ZLog.e("Application", "Application onTrimMemory");
         if (level > TRIM_MEMORY_UI_HIDDEN) {
             Glide.get(this).clearMemory();
         }
