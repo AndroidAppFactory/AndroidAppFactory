@@ -3,7 +3,6 @@ package com.bihe0832.android.base.test
 
 import android.view.View
 import android.widget.Toast
-import com.bihe0832.android.app.card.SettingsData
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.test.json.JsonTest
@@ -25,7 +24,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -231,14 +230,13 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun preTest() {
+        CommonDBManager.saveData("sss", "Fsdfsd")
         CommonDBManager.getData("sss")
 
 
     }
 
     private fun testFunc() {
-        CommonDBManager.saveData("sss", "Fsdfsd")
-
 //        ZLog.d("3 " + "3".toFloat() + " " + ConvertUtils.parseFloat("3", 0f))
 //        ZLog.d("3 " + "3".toDouble() + " " + ConvertUtils.parseDouble("3", 0.0))
 //        ZLog.d("3.6 " + "3.6".toFloat() + " " + ConvertUtils.parseFloat("3.6", 0f))
