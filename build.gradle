@@ -8,7 +8,7 @@ buildscript {
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1017/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1018/content/" }
         jcenter()
     }
 
@@ -30,7 +30,7 @@ allprojects {
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1017/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1018/content/" }
         jcenter()
         flatDir {
             dirs './../libs/'
@@ -51,7 +51,7 @@ allprojects {
                 doLast {
                     System.err.println("\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                     System.err.println("|\n|  AAF 相关信息可以参考文档：")
-                    System.err.println("|\n|    AAF官网：https://android.bihe0832.com/#!doc/dev.md")
+                    System.err.println("|\n|    AAF官网：https://android.bihe0832.com/doc/")
                     System.err.println("|\n|    AAF事例：https://android.bihe0832.com/samples/")
                     System.err.println("|\n >>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 }
