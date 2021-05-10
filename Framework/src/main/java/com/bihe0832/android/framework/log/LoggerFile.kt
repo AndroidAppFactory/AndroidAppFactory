@@ -1,13 +1,8 @@
 package com.bihe0832.android.framework.log
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.DateUtil
 import java.io.BufferedWriter
@@ -57,7 +52,7 @@ object LoggerFile {
 
     private fun bufferSave(fileName: String, msg: String?) {
         try {
-            mBufferedWriters[fileName]?.write("${DateUtil.getDateEN()} $msg")
+            mBufferedWriters[fileName]?.write("${DateUtil.getCurrentDateEN()} $msg")
             mBufferedWriters[fileName]?.newLine()
             mBufferedWriters[fileName]?.flush()
         } catch (e: java.lang.Exception) {
@@ -66,7 +61,7 @@ object LoggerFile {
     }
 
     private fun getFilePathByName(module: String): String {
-        return ZixieContext.getLogFolder() + "/${module}_${DateUtil.getDateENyyyyMMdd()}.txt"
+        return ZixieContext.getLogFolder() + "/${module}_${DateUtil.getCurrentDateEN("yyyyMMdd")}.txt"
     }
 
     fun log(module: String, msg: String) {
@@ -93,7 +88,7 @@ object LoggerFile {
 
     fun sendLog(module: String) {
         try { //设置intent的data和Type属性
-            mContext?.let {context->
+            mContext?.let { context ->
                 try { //设置intent的data和Type属性
                     FileUtils.sendFile(context, getFilePathByName(module), "*/*")
                 } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示

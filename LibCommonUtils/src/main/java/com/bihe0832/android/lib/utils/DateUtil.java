@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.utils;
 
 import com.bihe0832.android.lib.log.ZLog;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,43 +17,27 @@ public class DateUtil {
     private static final String TAG = "DateUtil";
     public static final int ONE_DAY_MILLSEC = 24 * 60 * 60 * 1000;
 
-    public static String getDateEN() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = format.format(new Date(System.currentTimeMillis()));
-        return date;
-    }
-
     public static String getDateEN(long currentTime, String pattern) {
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
         String date = format.format(new Date(currentTime));
-        return date;
-    }
-
-    public static String getDateENHM() {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        String date = format.format(new Date(System.currentTimeMillis()));
         return date;
     }
 
     public static String getDateEN(long currentTime) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = format.format(new Date(currentTime));
-        return date;
+        return getDateEN(currentTime, "yyyy-MM-dd HH:mm:ss");
     }
 
-    public static String getDateENyyyyMMdd() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.US);
-        String date = format.format(new Date(System.currentTimeMillis()));
-        return date;
+    public static String getCurrentDateEN(String pattern) {
+        return getDateEN(System.currentTimeMillis(), pattern);
     }
 
-    public static String getDateENHMS(long currentTime) {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-        String date = format.format(new Date(currentTime));
-        return date;
+
+    public static String getCurrentDateEN() {
+        return getCurrentDateEN("yyyy-MM-dd HH:mm:ss");
     }
 
-    public static int getDateDistance(String date1, String date2) {//单位：s
+    //单位：s
+    public static int getDateDistance(String date1, String date2) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date dt1 = df.parse(date1);
@@ -78,14 +61,13 @@ public class DateUtil {
     }
 
     public static int compareDate(Date date1, String date2) {
-        DateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
         try {
-            Date dt1 = date1;
-            Date dt2 = df.parse(date2);
-            ZLog.d(TAG, "dt1.getTime:" + dt1.getTime() + ",dt2.getTime:" + dt2.getTime());
-            if (dt1.getTime() >= dt2.getTime()) {
+            long dt2 = getTime(date2, "yyyyMMddHHmmss");
+            long dt1 = date1.getTime();
+            ZLog.d(TAG, "dt1.getTime:" + dt1 + ",dt2.getTime:" + dt2);
+            if (dt1 >= dt2) {
                 return 1;
-            } else if (dt1.getTime() < dt2.getTime()) {
+            } else if (dt1 < dt2) {
                 return -1;
             }
         } catch (Exception exception) {
@@ -94,6 +76,7 @@ public class DateUtil {
         return 0;
     }
 
+    //计算时长，结果为例如 61 结果为 1min 1s
     public static String formatElapsedTime(long elapsedSeconds) {
         long hours = 0;
         long minutes = 0;
@@ -115,6 +98,7 @@ public class DateUtil {
         }
     }
 
+    //计算时长，结果为例如 61 结果为01:01
     public static String getDateMMAndSS(long elapsedSeconds) {
         long minutes = 0;
         long seconds = 0;
@@ -201,7 +185,8 @@ public class DateUtil {
         pre.setTimeInMillis(timestamp);
         Calendar cur = Calendar.getInstance();
         cur.setTimeInMillis(System.currentTimeMillis());
-        ZLog.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
+        ZLog.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur
+                .get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
         if (pre.get(Calendar.YEAR) == cur.get(Calendar.YEAR)) {
             int diffDay = cur.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
             if (0 == diffDay) {
