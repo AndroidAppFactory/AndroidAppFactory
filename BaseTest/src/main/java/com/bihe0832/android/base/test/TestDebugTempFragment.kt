@@ -230,13 +230,18 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun preTest() {
-        CommonDBManager.saveData("sss", "Fsdfsd")
-        CommonDBManager.getData("sss")
-
-
+        System.currentTimeMillis().let{
+            CommonDBManager.saveData("sss" + it, "Fsdfsd")
+            CommonDBManager.getData("sss" + it)
+        }
     }
 
     private fun testFunc() {
+
+        CommonDBManager.getAll().forEach {
+            ZLog.d("Hardy" ,it.toString())
+        }
+
 //        ZLog.d("3 " + "3".toFloat() + " " + ConvertUtils.parseFloat("3", 0f))
 //        ZLog.d("3 " + "3".toDouble() + " " + ConvertUtils.parseDouble("3", 0.0))
 //        ZLog.d("3.6 " + "3.6".toFloat() + " " + ConvertUtils.parseFloat("3.6", 0f))
