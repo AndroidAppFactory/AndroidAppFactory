@@ -18,6 +18,16 @@ object CommonDBManager {
         mApplicationContext = context
         commonDBHelperInstance = CommonDBHelper(mApplicationContext)
     }
+    fun getAll():List<CommonDataInfo>{
+        try {
+            commonDBHelperInstance?.let {
+                return CommonTableModel.getAllData(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return mutableListOf()
+    }
 
     fun getData(key: String): String {
         try {
@@ -29,6 +39,19 @@ object CommonDBManager {
         }
 
         return ""
+    }
+
+
+    fun getDataWithTime(key: String): CommonDataInfo? {
+        try {
+            commonDBHelperInstance?.let {
+                return CommonTableModel.getDataWithTime(it, key)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return null
     }
 
     fun saveData(key: String, value: String): Boolean {

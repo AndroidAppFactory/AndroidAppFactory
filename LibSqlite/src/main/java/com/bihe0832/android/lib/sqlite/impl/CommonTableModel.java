@@ -7,6 +7,9 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
 import com.bihe0832.android.lib.sqlite.BaseTableModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class CommonTableModel extends BaseTableModel {
     public static final String TAG = "CommonTableModel";
     static final String TABLE_NAME = "common_info";
@@ -54,6 +57,43 @@ class CommonTableModel extends BaseTableModel {
         }
         return result;
     }
+
+    private static CommonDataInfo getColumnDataWithTime(Cursor cursor) {
+        try {
+            if (null != cursor && cursor.getCount() > 0) {
+                CommonDataInfo info = new CommonDataInfo();
+                cursor.moveToFirst();
+                info.key = getStringByName(cursor, col_key);
+                info.value = getStringByName(cursor, col_value);
+                info.createTime = getLongByName(cursor, col_create_at);
+                info.updateTime = getLongByName(cursor, col_update_at);
+                return info;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    static CommonDataInfo getDataWithTime(BaseDBHelper helper, String key) {
+        String[] columns = null;
+        String selection = " " + col_key + " = ? ";
+        String[] selectionArgs = {key};
+        String groupBy = null;
+        String having = null;
+        String orderBy = " `" + col_update_at + "` DESC ";
+        String limit = " 1 ";
+        Cursor cursor = helper.queryInfo(TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+
+        CommonDataInfo data = getColumnDataWithTime(cursor);
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        return data;
+    }
+
 
     static String getData(BaseDBHelper helper, String key) {
         String[] columns = null;
@@ -126,7 +166,36 @@ class CommonTableModel extends BaseTableModel {
         return success;
     }
 
-    static boolean clearData(BaseDBHelper helper,String key) {
-        return  updateData(helper,key,"");
+    static boolean clearData(BaseDBHelper helper, String key) {
+        return updateData(helper, key, "");
+    }
+
+    static List<CommonDataInfo> getAllData(BaseDBHelper helper) {
+        ArrayList<CommonDataInfo> dataList = new ArrayList<>();
+        String[] columns = null;
+        String selection = null;
+        String[] selectionArgs = null;
+        String groupBy = null;
+        String having = null;
+        String orderBy = " `" + col_update_at + "` DESC ";
+        String limit = null;
+        Cursor cursor = helper.queryInfo(TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+        try {
+            while (cursor.moveToNext()) {
+                CommonDataInfo info = new CommonDataInfo();
+                info.key = getStringByName(cursor, col_key);
+                info.value = getStringByName(cursor, col_value);
+                info.createTime = getLongByName(cursor, col_create_at);
+                info.updateTime = getLongByName(cursor, col_update_at);
+                dataList.add(info);
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return dataList;
     }
 }
