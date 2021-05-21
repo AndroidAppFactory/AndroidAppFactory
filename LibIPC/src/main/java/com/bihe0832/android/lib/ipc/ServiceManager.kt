@@ -1,36 +1,40 @@
-package com.bihe0832.android.common.ipc
+package com.bihe0832.android.lib.ipc
 
+import android.app.Application
 import android.net.Uri
-import android.os.Build
 import android.os.IInterface
-import android.util.ArrayMap
-import androidx.annotation.RequiresApi
-import com.bihe0832.android.common.ipc.annotation.Process
-import com.bihe0832.android.common.ipc.annotation.SupportMultiProcess
-import com.bihe0832.android.common.ipc.iservice.IBinderProvider
-import com.bihe0832.android.common.ipc.iservice.IService
-import com.bihe0832.android.common.ipc.iservice.ServiceModel
-import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.ipc.annotation.Process
+import com.bihe0832.android.lib.ipc.annotation.SupportMultiProcess
+import com.bihe0832.android.lib.ipc.iservice.IBinderProvider
+import com.bihe0832.android.lib.ipc.iservice.IService
+import com.bihe0832.android.lib.ipc.iservice.ServiceModel
 import com.bihe0832.android.lib.log.ZLog
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by hardyshi on 10/28/2020.
  */
 object ServiceManager {
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
-    private val serviceMap = ArrayMap<String, ServiceModel>()
+
+    private val serviceMap = ConcurrentHashMap<String, ServiceModel>()
 
     private val processList = mutableListOf<String>()
 
     private val proxyMap = mutableMapOf<Class<out IService>, Any>()
+
+    private var mApplication: Application? = null
 
     fun attach(binderProvider: IBinderProvider) {
         binderProvider.attach { classname ->
             ZLog.d("ServiceManager", "binderPool getBinder:$classname $serviceMap")
             serviceMap[classname]!!.service.binder!!
         }
+    }
+
+    fun initApplication(application: Application) {
+        mApplication = application
     }
 
     fun registerProcess(process: String) {
@@ -78,7 +82,7 @@ object ServiceManager {
                         }
 
                         ZLog.d("ServiceManager", "binderProxy:$binderProxy")
-                        binderProxy?.let {binderProxyNotNull->
+                        binderProxy?.let { binderProxyNotNull ->
                             val binderMethod = binderProxyNotNull.javaClass.getMethod(method.name, *method.parameterTypes)
                             invokeMethod(
                                     binderProxyNotNull,
@@ -109,10 +113,10 @@ object ServiceManager {
 
     private fun getProxy(process: String, serviceClazz: Class<out IService>, service: IService): IInterface? {
 
-        var uri = "content://" + ZixieContext.applicationContext!!.packageName + ".process_dispatcher_${process}"
+        var uri = "content://" + mApplication!!.packageName + ".process_dispatcher_${process}"
         ZLog.d("ServiceManager", "getProxy:$uri")
         try {
-            val bundle = ZixieContext.application!!.contentResolver.call(
+            val bundle = mApplication!!.contentResolver.call(
                     Uri.parse(uri),
                     "getBinder",
                     serviceClazz.name,

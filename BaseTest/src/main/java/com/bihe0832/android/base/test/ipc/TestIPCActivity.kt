@@ -6,7 +6,7 @@ import com.bihe0832.android.base.test.R
 import com.bihe0832.android.base.test.ipc.iservice.IZixieIPCTestServiceForMain
 import com.bihe0832.android.base.test.ipc.iservice.IZixieIPCTestServiceForTest
 import com.bihe0832.android.base.test.ipc.iservice.impl.ZixieIPCTestServiceForMain
-import com.bihe0832.android.common.ipc.ServiceManager
+import com.bihe0832.android.lib.ipc.ServiceManager
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.log.ZLog
 import kotlinx.android.synthetic.main.activity_test_text.*
