@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.base.test.ipc.TestIPC1Activity
+import com.bihe0832.android.base.test.ipc.TestIPCActivity
 import com.bihe0832.android.base.test.json.JsonTest
 import com.bihe0832.android.base.test.network.TestNetworkActivity
 import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
@@ -75,7 +77,8 @@ class TestDebugTempFragment : BaseTestFragment() {
             add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(TestItemData("配置管理测试", View.OnClickListener { testConfig() }))
             add(TestItemData("应用前后台信息", View.OnClickListener { testAPPObserver() }))
-
+            add(TestItemData("多进程", View.OnClickListener { startActivity(TestIPCActivity::class.java) }))
+            add(TestItemData("多进程1", View.OnClickListener { startActivity(TestIPC1Activity::class.java) }))
 
         }
     }

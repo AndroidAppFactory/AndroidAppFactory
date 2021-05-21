@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibWrapper"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.3.2"
+ext.moduleVersionName = "4.4.0"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -66,7 +66,7 @@ ext.moduleInfo = [
                 "artifactId"             : "",
                 "apidependenciesList"    : [
                         "CommonPraise", "CommonFeedback", "CommonWebview", "CommonNetwork", "CommonSplash",
-                        "CommonPhotos", "CommonFileSelect", "CommonFloatview",
+                        "CommonPhotos", "CommonFileSelect", "CommonFloatview", "CommonIPC",
                         "Framework",
                         'com.squareup.okhttp3:okhttp:3.9.1',
                         'com.squareup.okhttp3:logging-interceptor:3.8.0',
@@ -77,6 +77,13 @@ ext.moduleInfo = [
                         "kapt": [
                                 "RouterCompiler"
                         ]
+                ]
+        ],
+        "CommonIPC"                 : [
+                "version"            : "4.3.2",
+                "artifactId"         : "common-ipc",
+                "apidependenciesList": [
+                        "Framework"
                 ]
         ],
         "CommonTest"                : [
@@ -164,7 +171,7 @@ ext.moduleInfo = [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibCustomView",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
-                        "LibImmersive", "LibFileSelect","LibFloatview"
+                        "LibImmersive", "LibFileSelect", "LibFloatview"
                 ]
         ],
         "LibUtils"                  : [
@@ -504,7 +511,7 @@ ext.moduleInfo = [
                 "version"                : "4.3.1",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
-                        "LibLog", "LibConfig","LibThread","LibOS","LibDialog","LibToast","LibPermission"
+                        "LibLog", "LibConfig", "LibThread", "LibOS", "LibDialog", "LibToast", "LibPermission"
                 ],
                 "specialdependenciesList": [
                         "kapt": [
