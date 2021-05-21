@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.ipc.iservice;
+package com.bihe0832.android.lib.ipc.iservice;
 
 import android.os.IBinder;
 import android.os.IInterface;

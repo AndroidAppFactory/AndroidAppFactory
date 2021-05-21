@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.ipc.annotation;
+package com.bihe0832.android.lib.ipc.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

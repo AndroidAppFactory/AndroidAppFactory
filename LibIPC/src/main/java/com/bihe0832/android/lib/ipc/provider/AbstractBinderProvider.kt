@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.ipc.provider
+package com.bihe0832.android.lib.ipc.provider
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -6,9 +6,9 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
-import com.bihe0832.android.common.ipc.ServiceManager
-import com.bihe0832.android.common.ipc.iservice.IBinderPool
-import com.bihe0832.android.common.ipc.iservice.IBinderProvider
+import com.bihe0832.android.lib.ipc.ServiceManager
+import com.bihe0832.android.lib.ipc.iservice.IBinderPool
+import com.bihe0832.android.lib.ipc.iservice.IBinderProvider
 import com.bihe0832.android.lib.log.ZLog
 
 /**

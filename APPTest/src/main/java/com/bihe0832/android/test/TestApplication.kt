@@ -9,7 +9,7 @@ import com.bihe0832.android.base.test.ipc.iservice.IZixieIPCTestServiceForTest
 import com.bihe0832.android.base.test.ipc.iservice.impl.ZixieIPCTestServiceForMain
 import com.bihe0832.android.base.test.ipc.iservice.impl.ZixieIPCTestServiceForMain.TAG
 import com.bihe0832.android.base.test.ipc.iservice.impl.ZixieIPCTestServiceForTest
-import com.bihe0832.android.common.ipc.ServiceManager
+import com.bihe0832.android.lib.ipc.ServiceManager
 import com.bihe0832.android.lib.log.ZLog
 
 /**
@@ -26,7 +26,7 @@ class TestApplication : Application() {
                 ZLog.e(TAG, "Application initCore process: name:" + it.processName + " and id:" + it.pid)
             }
         }
-
+        ServiceManager.initApplication(this)
         ServiceManager.registerProcess("main")
         ServiceManager.registerProcess("test")
         ServiceManager.registerService(IZixieIPCTestServiceForMain::class.java, ZixieIPCTestServiceForMain())
