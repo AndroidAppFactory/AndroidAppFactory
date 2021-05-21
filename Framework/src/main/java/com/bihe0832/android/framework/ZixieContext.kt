@@ -44,15 +44,19 @@ object ZixieContext {
     private var mTag = "Tag_ZIXIE_1.0.0_1"
 
     @Synchronized
-    fun init(application: Application, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
-        applicationContext = application.applicationContext
+    fun init(app: Application, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
+        application = app
+        applicationContext = app.applicationContext
         mDebug = appIsDebug
         mOfficial = appIsOfficial
         mTag = appTag
-        initModule({ ChannelTools.init(application, "DEBUG") }, false)
+        initModule({ ChannelTools.init(app, "DEBUG") }, false)
     }
 
     var applicationContext: Context? = null
+        private set
+
+    var application: Application? = null
         private set
 
     fun isDebug(): Boolean {
