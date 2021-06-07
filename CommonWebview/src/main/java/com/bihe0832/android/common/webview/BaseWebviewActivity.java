@@ -36,7 +36,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         initToolbar();
     }
 
-    private void handleIntent(Intent intent) {
+    protected void handleIntent(Intent intent) {
         if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
             mURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
         } else {
@@ -50,7 +50,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         }
     }
 
-    private void initToolbar() {
+    protected void initToolbar() {
         mWebViewViewModel.getTitleLiveData().observe(BaseWebviewActivity.this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable final String s) {
