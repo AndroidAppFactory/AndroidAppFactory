@@ -1,5 +1,7 @@
 package com.bihe0832.android.common.webview;
 
+import com.bihe0832.android.common.webview.base.BaseWebviewActivity;
+import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.lib.router.annotation.Module;
 
 import static com.bihe0832.android.common.webview.WebPageActivity.MODULE_NAME_WEB_PAGE;

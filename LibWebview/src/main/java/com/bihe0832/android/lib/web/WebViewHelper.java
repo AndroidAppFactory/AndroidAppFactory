@@ -2,14 +2,13 @@ package com.bihe0832.android.lib.web;
 
 import android.content.Context;
 import android.content.Intent;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
-
 import java.util.HashMap;
 
 public class WebViewHelper {
+
     private static final String TAG = "WebViewHelper";
 
     public static void init(Context context) {
@@ -24,6 +23,7 @@ public class WebViewHelper {
 
     /**
      * 初始化X5
+     *
      * @param context
      */
     private static void initX5(Context context) {
@@ -48,7 +48,7 @@ public class WebViewHelper {
 
             @Override
             public void onCoreInitFinished() {
-                ZLog.d(TAG +  "onCoreInitFinished");
+                ZLog.d(TAG + "onCoreInitFinished");
             }
         };
         //x5内核初始化接口
