@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.webview;
+package com.bihe0832.android.common.webview.base;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;

@@ -4,6 +4,7 @@ package com.bihe0832.android.common.webview;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
 import com.bihe0832.android.lib.log.ZLog;
@@ -78,9 +79,9 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
         }
         String host = uri.getHost().toLowerCase();
         CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.setCookie(url, getSetCookieString(URL_PARAM_VERSION_NAME, ZixieContext.INSTANCE.getVersionName(), host) + "; MAX-Age=" + 60 * 60 * 24);
-        cookieManager.setCookie(url, getSetCookieString(URL_PARAM_VERSION_CODE, String.valueOf(ZixieContext.INSTANCE.getVersionCode()), host) + "; MAX-Age=" + 60 * 60 * 24);
-        cookieManager.setCookie(url, getSetCookieString(URL_PARAM_PLATFORM, Constants.SYSTEM_CONSTANT, host) + "; MAX-Age=" + 60 * 60 * 24);
+        cookieManager.setCookie(url, getCookieString(URL_PARAM_VERSION_NAME, ZixieContext.INSTANCE.getVersionName(), host) + "; MAX-Age=" + 60 * 60 * 24);
+        cookieManager.setCookie(url, getCookieString(URL_PARAM_VERSION_CODE, String.valueOf(ZixieContext.INSTANCE.getVersionCode()), host) + "; MAX-Age=" + 60 * 60 * 24);
+        cookieManager.setCookie(url, getCookieString(URL_PARAM_PLATFORM, Constants.SYSTEM_CONSTANT, host) + "; MAX-Age=" + 60 * 60 * 24);
         CookieSyncManager.getInstance().sync();
     }
 }

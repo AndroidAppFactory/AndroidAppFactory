@@ -140,5 +140,4 @@ public class BaseWebView extends WebView{
         webSetting.setDatabaseEnabled(true);
         webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
     }
-
 }

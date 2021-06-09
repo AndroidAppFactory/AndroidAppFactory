@@ -12,6 +12,8 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebView;
 
 import org.json.JSONArray;
@@ -158,6 +160,10 @@ public abstract class BaseJsBridgeProxy {
                 mJsBridge.responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception);
             }
         }
+    }
+
+    public WebView getWebView() {
+        return mWebView;
     }
 
     public void pageControl(final Uri uri, final int seqid, final String method, final String function) {

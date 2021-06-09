@@ -3,7 +3,7 @@ package com.bihe0832.android.app.router;
 
 import com.bihe0832.android.app.about.AboutActivityKt;
 import com.bihe0832.android.common.feedback.FeedbackActivity;
-import com.bihe0832.android.common.webview.BaseWebviewFragment;
+import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.common.webview.WebPageActivity;
 
 /**

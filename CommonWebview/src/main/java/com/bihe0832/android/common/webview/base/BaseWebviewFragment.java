@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.webview;
+package com.bihe0832.android.common.webview.base;
 
 
 import android.arch.lifecycle.LiveData;
@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterConstants;
@@ -544,15 +545,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         CookieSyncManager.getInstance().sync();
     }
 
-    protected static String getSetCookieString(String name, String value, String domain) {
-        String v = name + "=" + value;
-        if (domain != null) {
-            v += "; path=/";
-            v += "; domain=" + domain;
-        }
-        return v;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -621,5 +613,18 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     public interface WebViewRefreshCallback {
 
         void onRefresh(WebView webView);
+    }
+
+    public static String getCookieString(String name, String value, String domain) {
+        return getCookieString(name, value, "/", domain);
+    }
+
+    public static String getCookieString(String name, String value, String path, String domain) {
+        String v = name + "=" + value;
+        if (domain != null) {
+            v += "; path=" + path;
+            v += "; domain=" + domain;
+        }
+        return v;
     }
 }
