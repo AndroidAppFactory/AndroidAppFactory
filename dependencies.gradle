@@ -501,7 +501,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibFloatview"              : [
-                "version"                : "4.3.1",
+                "version"                : "4.5.5",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         "LibLog", "LibConfig", "LibThread", "LibOS", "LibDialog", "LibToast", "LibPermission"
