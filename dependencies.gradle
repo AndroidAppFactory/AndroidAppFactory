@@ -305,7 +305,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibConfig"]
         ],
         "LibFile"                   : [
-                "version"            : "4.3.1",
+                "version"            : "4.5.5",
                 "artifactId"         : "lib-file",
                 "apidependenciesList": [
                         "com.android.support:support-v4:${project.android_support_version}",
