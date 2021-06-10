@@ -60,9 +60,9 @@ public class DateUtil {
         return -1;
     }
 
-    public static int compareDate(Date date1, String date2) {
+    public static int compareDate(Date date1, String date2, String pattern2) {
         try {
-            long dt2 = getTime(date2, "yyyyMMddHHmmss");
+            long dt2 = getTime(date2, pattern2);
             long dt1 = date1.getTime();
             ZLog.d(TAG, "dt1.getTime:" + dt1 + ",dt2.getTime:" + dt2);
             if (dt1 >= dt2) {
@@ -74,6 +74,10 @@ public class DateUtil {
             exception.printStackTrace();
         }
         return 0;
+    }
+
+    public static int compareDate(Date date1, String date2) {
+        return compareDate(date1, date2, "yyyyMMddHHmmss");
     }
 
     //计算时长，结果为例如 61 结果为 1min 1s
