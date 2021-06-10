@@ -485,7 +485,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibImmersive"              : [
-                "version"            : "4.3.1",
+                "version"            : "4.5.5",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork",
