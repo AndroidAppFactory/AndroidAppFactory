@@ -261,7 +261,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibThread", "LibLog"]
         ],
         "LibHttpAdvanced"           : [
-                "version"            : "4.3.1",
+                "version"            : "4.5.5",
                 "artifactId"         : "lib-http-advanced",
                 "apidependenciesList": ["LibHttpCommon", "LibGson"]
         ],
