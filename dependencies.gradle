@@ -409,7 +409,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibThread", "LibText"]
         ],
         "LibImage"                  : [
-                "version"            : "4.3.1",
+                "version"            : "4.5.5",
                 "artifactId"         : "lib-image",
                 "apidependenciesList": [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
