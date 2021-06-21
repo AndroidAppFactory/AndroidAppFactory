@@ -2,6 +2,7 @@ package com.bihe0832.android.test;
 
 import android.support.v4.app.Fragment;
 import com.bihe0832.android.base.test.TestDebugTempFragment;
+import com.bihe0832.android.base.test.clipboard.TestClipboardFragment;
 import com.bihe0832.android.common.test.module.TestDebugCommonFragment;
 import com.bihe0832.android.test.module.TestBasicFragment;
 import com.bihe0832.android.test.module.TestRouterFragment;
@@ -25,7 +26,7 @@ public class TestMainFragment extends com.bihe0832.android.common.test.TestMainF
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new TestBasicFragment();
+            return new TestClipboardFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new TestDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

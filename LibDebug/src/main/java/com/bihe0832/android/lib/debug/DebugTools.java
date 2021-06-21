@@ -1,15 +1,13 @@
 package com.bihe0832.android.lib.debug;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.text.TextUtils;
 import android.text.method.MovementMethod;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import com.bihe0832.android.lib.text.ClipboardUtil;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
@@ -64,7 +62,8 @@ public class DebugTools {
         dialog.show();
     }
 
-    public static void showInfoWithHTML(final Context context, final String title, final String content, final String positiveText) {
+    public static void showInfoWithHTML(final Context context, final String title, final String content,
+            final String positiveText) {
         showInfoWithCharSequence(context, title, TextFactoryUtils.getSpannedTextByHtml(content), null, positiveText);
     }
 
@@ -125,12 +124,7 @@ public class DebugTools {
     }
 
     public static void copyToClipboard(Context context, String content) {
-        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-            cm.setPrimaryClip(ClipData.newPlainText(null, content));
-        } else {
-            cm.setText(content);
-        }
+        ClipboardUtil.copyToClipboard(context, content);
         ToastUtil.showShort(context, "信息已保存到剪贴板");
     }
 
