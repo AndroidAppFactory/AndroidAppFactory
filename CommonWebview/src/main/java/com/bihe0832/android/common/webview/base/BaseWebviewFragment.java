@@ -18,7 +18,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +66,9 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     public static final String INTENT_KEY_THIRD_PART = "http://localhost";
     public static final String KEY_WX_PAY_PART = "https://wx.tenpay.com";
 
-    HashMap<String, String> globalLocalRes = new HashMap<String, String>();
+    private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
+        put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.js");
+    }};
 
     // 追加业务参数
     protected abstract String getFinalURL(String url);
@@ -111,6 +112,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     private MutableLiveData<Integer> _webViewScrollTopLiveData = new MutableLiveData<>();
     private LiveData<Integer> mWebViewScrollTopLiveData = _webViewScrollTopLiveData;
 
+    private long lastResumeTime = 0L;
+    private long lastPauseTime = 0L;
+
+
     public LiveData<Integer> getWebViewScrollTopLiveData() {
         return mWebViewScrollTopLiveData;
     }
@@ -119,6 +124,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback) {
         mRefreshCallback = callback;
+    }
+
+    public HashMap<String, String> getGlobalLocalRes() {
+        return globalLocalRes;
     }
 
     @Override
@@ -204,7 +213,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
         mWebView.setOnScrollChangedCallback(new BaseWebView.OnScrollChangedCallback() {
             public void onScroll(int l, int t) {
-                Log.d(TAG, "We Scrolled etc..." + l + " t =" + t);
+                ZLog.d(TAG, "We Scrolled etc..." + l + " t =" + t);
                 _webViewScrollTopLiveData.postValue(t);
                 if (t > 0) {
                     //webView不是顶部
@@ -238,7 +247,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         } else {
             loadUrl(mIntentUrl, mPostData);
         }
-        Log.d("time-cost", "cost time: " + (System.currentTimeMillis() - time));
+        ZLog.d(TAG, "time-cost cost time: " + (System.currentTimeMillis() - time));
     }
 
     public void loadUrl(String url, String data) {
@@ -255,11 +264,12 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     protected WebResourceResponse interceptRequestResult(String url) {
 
-        if (globalLocalRes.containsKey(url)) {
+        if (null != getGlobalLocalRes() && getGlobalLocalRes().containsKey(url)) {
             try {
                 String type = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
-                return new WebResourceResponse(type, "utf-8", getContext().getAssets().open(globalLocalRes.get(url)));
+                return new WebResourceResponse(type, "utf-8",
+                        getContext().getAssets().open(getGlobalLocalRes().get(url)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -396,7 +406,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            Log.e("onProgressChanged", newProgress + "");
+            ZLog.d(TAG, "onProgressChanged " + newProgress);
             mProgressBar.setProgress(newProgress);
             if (newProgress == 100) {
                 mProgressBar.setVisibility(View.GONE);
@@ -423,7 +433,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             super.onReceivedTitle(view, title);
 
             mWebViewViewModel.setTitleString(title);
-            Log.d(TAG, "mWebViewViewModel: " + mWebViewViewModel.hashCode());
+            ZLog.d(TAG, "mWebViewViewModel: " + mWebViewViewModel.hashCode());
         }
 
 
@@ -436,26 +446,29 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         @Override
         public boolean onJsPrompt(WebView view, String url, String message, String defaultValue,
                 JsPromptResult result) {
-            Log.e(TAG, "onJsPrompt " + url);
+            ZLog.d(TAG, "onJsPrompt " + url);
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
 
         //处理prompt弹出框
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-            Log.e(TAG, "onJsConfirm " + message);
+            ZLog.d(TAG, "onJsConfirm " + message);
             return super.onJsConfirm(view, url, message, result);
         }
 
         @Override
         public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-            Log.e(TAG, "onJsAlert " + message);
+            ZLog.d(TAG, "onJsAlert " + message);
             result.confirm();
             return true;
         }
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+            ZLog.d(TAG,
+                    "onConsoleMessage  From line " + consoleMessage.lineNumber() + " of " + consoleMessage.sourceId()
+                            + " \n\t" + consoleMessage.message());
             return super.onConsoleMessage(consoleMessage);
         }
 
@@ -547,17 +560,53 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     @Override
     public void onResume() {
+        ZLog.d(TAG, "onResume ");
         super.onResume();
-        if (null != mJSBridgeProxy) {
-            mJSBridgeProxy.onResume();
-        }
+        onJSBridgeResume();
+
     }
 
     @Override
     public void onPause() {
+        ZLog.d(TAG, "onPause ");
         super.onPause();
+        onJSBridgePause();
+    }
+
+    private void onJSBridgeResume() {
         if (null != mJSBridgeProxy) {
+            ZLog.d(TAG, "onJSBridgeResume");
+            if (System.currentTimeMillis() - lastResumeTime < 5 * 1000) {
+                ZLog.d(TAG, "onJSBridgeResume to quick");
+                return;
+            }
+            lastResumeTime = System.currentTimeMillis();
+            lastPauseTime = 0;
+            mJSBridgeProxy.onResume();
+        }
+    }
+
+    private void onJSBridgePause() {
+        if (null != mJSBridgeProxy) {
+            ZLog.d(TAG, "onJSBridgePause");
+            if (System.currentTimeMillis() - lastPauseTime < 5 * 1000) {
+                ZLog.d(TAG, "onJSBridgePause to quick");
+                return;
+            }
+            lastPauseTime = System.currentTimeMillis();
+            lastResumeTime = 0;
             mJSBridgeProxy.onPause();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        ZLog.d(TAG, "setUserVisibleHint " + isVisibleToUser);
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            onJSBridgeResume();
+        } else {
+            onJSBridgePause();
         }
     }
 
