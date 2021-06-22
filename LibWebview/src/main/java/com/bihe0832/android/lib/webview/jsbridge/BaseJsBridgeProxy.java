@@ -218,10 +218,12 @@ public abstract class BaseJsBridgeProxy {
     }
 
     public void onResume() {
+        ZLog.e(TAG,"JSBridge onResume");
         mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, null, "onResume");
     }
 
     public void onPause() {
+        ZLog.e(TAG,"JSBridge onPause");
         mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, null, "onPause");
     }
 
