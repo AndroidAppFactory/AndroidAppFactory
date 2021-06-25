@@ -8,8 +8,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 /**
  *
  * @author hardyshi code@bihe0832.com
- * Created on 2020-03-05.
- * Description: 用户处理特殊日志
+ * Created on 2021-06-25.
+ * Description: 耗时打点跟踪记录
  *
  */
 object LoggerTrace {
