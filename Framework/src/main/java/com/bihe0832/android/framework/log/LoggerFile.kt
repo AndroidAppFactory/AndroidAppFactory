@@ -89,6 +89,7 @@ object LoggerFile {
                 bufferSave(module, msg)
             }
         } catch (e: java.lang.Exception) {
+            ZLog.e("Logger ERROR !!!!")
             e.printStackTrace()
         }
     }
@@ -113,6 +114,7 @@ object LoggerFile {
                 }
             }
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
+            ZLog.e("Logger ERROR !!!!")
             e.printStackTrace()
         }
     }
