@@ -26,7 +26,7 @@ public class TestMainFragment extends BaseFragment {
     private ViewPager mViewPager;
     private SlidingTabLayout mTabBar;
 
-    private String[] mTabString = null;
+    protected String[] mTabString = null;
 
     public TestMainFragment() {
         this(new String[]{

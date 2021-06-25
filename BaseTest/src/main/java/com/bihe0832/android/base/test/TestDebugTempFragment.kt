@@ -26,7 +26,6 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
-import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -79,7 +78,6 @@ class TestDebugTempFragment : BaseTestFragment() {
             add(TestItemData("应用前后台信息", View.OnClickListener { testAPPObserver() }))
             add(TestItemData("多进程", View.OnClickListener { startActivity(TestIPCActivity::class.java) }))
             add(TestItemData("多进程1", View.OnClickListener { startActivity(TestIPC1Activity::class.java) }))
-
         }
     }
 
@@ -233,7 +231,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun preTest() {
-        System.currentTimeMillis().let{
+        System.currentTimeMillis().let {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
             CommonDBManager.getData("sss" + it)
         }
@@ -241,9 +239,9 @@ class TestDebugTempFragment : BaseTestFragment() {
 
     private fun testFunc() {
 
-        CommonDBManager.getAll().forEach {
-            ZLog.d("Hardy" ,it.toString())
-        }
+//        CommonDBManager.getAll().forEach {
+//            ZLog.d("Hardy" ,it.toString())
+//        }
 
 //        ZLog.d("3 " + "3".toFloat() + " " + ConvertUtils.parseFloat("3", 0f))
 //        ZLog.d("3 " + "3".toDouble() + " " + ConvertUtils.parseDouble("3", 0.0))

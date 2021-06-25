@@ -1,6 +1,8 @@
 package com.bihe0832.android.framework.log
 
 import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -9,6 +11,7 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
+import java.util.concurrent.ConcurrentHashMap
 
 
 /**
@@ -19,17 +22,27 @@ import java.io.OutputStreamWriter
  *
  */
 object LoggerFile {
-    private var mContext: Context? = null
     private var mCanSaveSpecialFile = false
-    private val mLogFiles = HashMap<String, File?>()
-    private val mBufferedWriters = HashMap<String, BufferedWriter?>()
+    private var mContext: Context? = null
+    private val mLogFiles = ConcurrentHashMap<String, File?>()
+    private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
 
+    private val mLoggerHandlerThread by lazy {
+        HandlerThread("THREAD_ZIXIE_LOG_FILE", 5).also {
+            it.start()
+        }
+    }
+
+    private val mLoggerFileHandler by lazy { Handler(mLoggerHandlerThread.looper) }
+
+    @Synchronized
     fun init(context: Context, isDebug: Boolean) {
         mContext = context
         mCanSaveSpecialFile = isDebug
         ZLog.setDebug(isDebug)
     }
 
+    @Synchronized
     private fun reset(fileName: String) {
         if (mCanSaveSpecialFile) {
             if (mLogFiles[fileName] != null && mBufferedWriters[fileName] != null) {
@@ -44,6 +57,7 @@ object LoggerFile {
                     mLogFiles[fileName] = file
                     mBufferedWriters[fileName] = bufferedWriter
                 } catch (e: Exception) {
+                    ZLog.e("ZLog FLIE ERROR !!!!")
                     e.printStackTrace()
                 }
             }
@@ -51,12 +65,15 @@ object LoggerFile {
     }
 
     private fun bufferSave(fileName: String, msg: String?) {
-        try {
-            mBufferedWriters[fileName]?.write("${DateUtil.getCurrentDateEN()} $msg")
-            mBufferedWriters[fileName]?.newLine()
-            mBufferedWriters[fileName]?.flush()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+        mLoggerFileHandler.post {
+            try {
+                mBufferedWriters[fileName]?.write("${DateUtil.getCurrentDateEN()} $msg")
+                mBufferedWriters[fileName]?.newLine()
+                mBufferedWriters[fileName]?.flush()
+            } catch (e: java.lang.Exception) {
+                ZLog.e("ZLog FLIE  ERROR !!!!")
+                e.printStackTrace()
+            }
         }
     }
 

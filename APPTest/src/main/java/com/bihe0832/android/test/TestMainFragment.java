@@ -3,6 +3,7 @@ package com.bihe0832.android.test;
 import android.support.v4.app.Fragment;
 import com.bihe0832.android.base.test.TestDebugTempFragment;
 import com.bihe0832.android.base.test.clipboard.TestClipboardFragment;
+import com.bihe0832.android.base.test.log.TestLogFragment;
 import com.bihe0832.android.common.test.module.TestDebugCommonFragment;
 import com.bihe0832.android.test.module.TestBasicFragment;
 import com.bihe0832.android.test.module.TestRouterFragment;
@@ -24,9 +25,10 @@ public class TestMainFragment extends com.bihe0832.android.common.test.TestMainF
         });
     }
 
+    private final boolean isDev = true;
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new TestClipboardFragment();
+            return new TestLogFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new TestDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {
@@ -40,6 +42,10 @@ public class TestMainFragment extends com.bihe0832.android.common.test.TestMainF
 
     @Override
     protected int getDefaultTabIndex() {
-        return 0;
+        if (isDev) {
+            return mTabString.length - 1;
+        } else {
+            return 0;
+        }
     }
 }
