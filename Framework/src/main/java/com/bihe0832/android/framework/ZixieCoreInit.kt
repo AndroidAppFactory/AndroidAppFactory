@@ -4,11 +4,9 @@ import android.app.Application
 import android.util.Log
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
-import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 
@@ -44,12 +42,13 @@ object ZixieCoreInit {
             initScreenWidthAndHeight()
             // 初始化渠道号
             initZixieLibs(application, !ZixieContext.isOfficial())
-            if(ZixieContext.isDebug()){
+            if (ZixieContext.isDebug()) {
                 Config.writeConfig(Constants.CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED, true)
             }
         }
     }
-    private fun initScreenWidthAndHeight(){
+
+    private fun initScreenWidthAndHeight() {
         var width = DisplayUtil.getRealScreenSizeX(ZixieContext.applicationContext)
         var height = DisplayUtil.getRealScreenSizeY(ZixieContext.applicationContext)
         ZixieContext.screenWidth = Math.min(width, height)
@@ -60,6 +59,8 @@ object ZixieCoreInit {
         LoggerFile.init(application, isDebug)
         LifecycleHelper.init(application)
     }
+
+
 
     fun initUserLoginRetBeforeGetUser(platform: Int, openid: String) {
         ZLog.d("initUserLoginRetBeforeGetUser in JYGame:$openid")
