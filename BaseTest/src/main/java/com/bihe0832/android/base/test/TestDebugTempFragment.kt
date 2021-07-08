@@ -8,6 +8,7 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
 import com.bihe0832.android.base.test.ipc.TestIPCActivity
 import com.bihe0832.android.base.test.json.JsonTest
+import com.bihe0832.android.base.test.log.TestLogActivity
 import com.bihe0832.android.base.test.network.TestNetworkActivity
 import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.base.test.touch.TouchRegionActivity
@@ -37,6 +38,9 @@ class TestDebugTempFragment : BaseTestFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
+            add(TestItemData("自定义日志管理", View.OnClickListener {
+                startActivity(TestLogActivity::class.java)
+            }))
             add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
             add(TestItemData("定时任务测试", View.OnClickListener { testTask() }))

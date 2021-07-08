@@ -9,7 +9,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListActivity
+import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
@@ -17,7 +17,7 @@ import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 
 
-class TestLogActivity : CommonListActivity() {
+open class TestLogActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
     var num = 0
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
@@ -67,7 +67,7 @@ class TestLogActivity : CommonListActivity() {
         }
     }
 
-    private fun getTempData(): List<CardBaseModule> {
+    open fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
             add(TestItemData("选择并发送单个日志") { FileSelectTools.openFileSelect(this@TestLogActivity, ZixieContext.getLogFolder()) })
