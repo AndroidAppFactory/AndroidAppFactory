@@ -8,6 +8,7 @@ import com.bihe0832.android.common.test.R;
 import com.bihe0832.android.framework.log.LoggerFile;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -34,7 +35,7 @@ public class SectionHolderContent extends CardBaseHolder {
     @Override
     public void initData(CardBaseModule item) {
         final SectionDataContent data = (SectionDataContent) item;
-        log_title.setText(data.mTitleName);
+        log_title.setText(TextFactoryUtils.getSpannedTextByHtml(data.mTitleName));
 
         log_open.setOnClickListener(new OnClickListener() {
             @Override

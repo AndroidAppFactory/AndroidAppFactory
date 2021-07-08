@@ -17,6 +17,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:text="XX模块日志"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textSize="14dp" />
 
     <TextView
