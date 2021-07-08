@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.bihe0832.android.common.test">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.bihe0832.android.common.test">
+
+    <application>
+        <activity
+                android:name="com.bihe0832.android.common.test.log.TestLogActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+    </application>
 
 </manifest>

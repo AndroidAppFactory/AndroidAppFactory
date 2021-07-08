@@ -3,6 +3,7 @@ package com.bihe0832.android.framework.log
 import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
+import android.text.TextUtils
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -24,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap
 object LoggerFile {
     private var mCanSaveSpecialFile = false
     private var mContext: Context? = null
+
     private val mLogFiles = ConcurrentHashMap<String, File?>()
     private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
 
@@ -49,8 +51,8 @@ object LoggerFile {
 
             } else {
                 try {
-                    var file = File(getFilePathByName(fileName))
-                    if (!FileUtils.checkFileExist(getFilePathByName(fileName))) {
+                    var file = File(fileName)
+                    if (!FileUtils.checkFileExist(fileName)) {
                         file.createNewFile()
                     }
                     val bufferedWriter = BufferedWriter(OutputStreamWriter(FileOutputStream(file), "UTF-8"))
@@ -77,16 +79,16 @@ object LoggerFile {
         }
     }
 
-    private fun getFilePathByName(module: String): String {
-        return ZixieContext.getLogFolder() + "/${module}_${DateUtil.getCurrentDateEN("yyyyMMdd")}.txt"
+    fun getZixieFileLogPathByModule(module: String): String {
+        return ZixieContext.getLogFolder() + "${module}_${DateUtil.getCurrentDateEN("yyyyMMdd")}.txt"
     }
 
-    fun log(module: String, msg: String) {
-        ZLog.info(module, msg)
+    fun log(filePath: String, msg: String) {
+        ZLog.info(filePath, msg)
         try {
             if (mCanSaveSpecialFile) {
-                reset(module)
-                bufferSave(module, msg)
+                reset(filePath)
+                bufferSave(filePath, msg)
             }
         } catch (e: java.lang.Exception) {
             ZLog.e("Logger ERROR !!!!")
@@ -94,21 +96,21 @@ object LoggerFile {
         }
     }
 
-    fun openLog(module: String) {
+    fun openLog(filePath: String) {
         try { //设置intent的data和Type属性
             mContext?.let {
-                FileUtils.openFile(it, getFilePathByName(module), "*/*")
+                FileUtils.openFile(it, filePath, "*/*")
             }
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
             e.printStackTrace()
         }
     }
 
-    fun sendLog(module: String) {
+    fun sendLog(filePath: String) {
         try { //设置intent的data和Type属性
             mContext?.let { context ->
                 try { //设置intent的data和Type属性
-                    FileUtils.sendFile(context, getFilePathByName(module), "*/*")
+                    FileUtils.sendFile(context, filePath, "*/*")
                 } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
                     e.printStackTrace()
                 }

@@ -39,7 +39,7 @@ object LoggerTrace {
         }
 
         if (needFile) {
-            LoggerFile.log(TRACE_MODULE_NAME, "Action at ${currentInfo.logTime} used $duration for ${currentInfo.tag} ,msg is : ${currentInfo.msg}")
+            logToFile("Action at ${currentInfo.logTime} used $duration for ${currentInfo.tag} ,msg is : ${currentInfo.msg}")
         } else {
             if (needDuration) {
                 ZLog.d(TRACE_MODULE_NAME, "Action at ${currentInfo.logTime} used $duration for ${currentInfo.tag} ,msg is : ${currentInfo.msg}")
@@ -49,6 +49,7 @@ object LoggerTrace {
         }
     }
 
+    @Synchronized
     fun tracePoint(tag: String, info: String, needLog: Boolean, needDuration: Boolean, needFile: Boolean) {
         LoggerInfo(tag, info).let {
             mTraceList.add(it)
@@ -85,11 +86,25 @@ object LoggerTrace {
         showResult("", needLog = false, needDuration = false, needFile = true)
     }
 
+    @Synchronized
+    fun reset(tag: String) {
+        showResult(tag, needLog = false, needDuration = false, needFile = true)
+        for (num in mTraceList) {
+            if (num.tag == tag) {
+                mTraceList.remove(num)
+            }
+        }
+    }
+
+    private fun logToFile(msg: String) {
+        LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME), msg)
+    }
+
     fun openLog() {
-        LoggerFile.openLog(TRACE_MODULE_NAME)
+        LoggerFile.openLog(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME))
     }
 
     fun sendLog() {
-        LoggerFile.sendLog(TRACE_MODULE_NAME)
+        LoggerFile.sendLog(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME))
     }
 }

@@ -8,6 +8,7 @@ import com.bihe0832.android.lib.debug.DebugTools;
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.DateUtil;
+import com.bihe0832.android.lib.utils.apk.APKUtils;
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -57,11 +58,11 @@ public class ShowDebugClick implements View.OnClickListener {
     }
 
     private void sendInfo(Context ctx) {
-        String result = getDebugInfo() + "其他信息: \n" + getExtraInfo() + "\n";
+        String result = getDebugInfo(ctx) + "其他信息: \n" + getExtraInfo() + "\n";
         DebugTools.sendInfo(ctx, "请转发给开发者", result, true);
     }
 
-    public static final String getDebugInfo() {
+    public static final String getDebugInfo(Context ctx) {
         StringBuilder builder = new StringBuilder();
         builder.append("设备信息: " + "\n");
         builder.append("厂商&型号: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n");
@@ -76,6 +77,7 @@ public class ShowDebugClick implements View.OnClickListener {
         builder.append("Tag: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
         builder.append("安装时间: " + DateUtil.getDateEN(LifecycleHelper.INSTANCE.getAPPInstalledTime()) + "\n");
         builder.append("channel: " + ZixieContext.INSTANCE.getChannelID() + "\n");
+        builder.append("签名MD5: " + APKUtils.getSigMd5ByPkgName(ctx, ctx.getPackageName()) + "\n");
         builder.append("official: " + ZixieContext.INSTANCE.isOfficial() + "\n\n");
         return builder.toString();
     }

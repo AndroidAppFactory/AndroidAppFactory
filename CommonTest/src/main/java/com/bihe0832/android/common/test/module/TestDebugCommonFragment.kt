@@ -9,6 +9,7 @@ import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.common.test.base.BaseTestFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.item.TestTipsData
+import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getDeviceId
 import com.bihe0832.android.framework.ZixieContext.getVersionCode
@@ -37,7 +38,9 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
             add(TestItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
             add(TestItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
-            add(TestItemData("选择并发送日志文件", View.OnClickListener { sendLog() }))
+            add(TestItemData("日志管理", View.OnClickListener {
+                startActivity(TestLogActivity::class.java)
+            }))
             add(TestItemData("弹出评分页面", View.OnClickListener {
                 UserPraiseManager.showUserPraiseDialog(activity!!, RouterAction.getFinalURL(MODULE_NAME_FEEDBACK))
             }))
@@ -50,8 +53,6 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItemData("打开开发者模式") {
                 IntentUtils.startSettings(context, android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
             })
-
-
         }
     }
 
@@ -91,6 +92,8 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         builder.append("PackageName: ${context!!.packageName}\n")
         builder.append("Version: ${getVersionName()}.${getVersionCode()}\n")
         builder.append("Tag: ${ZixieContext.getVersionTag()}\n")
+        builder.append("渠道号: ${ZixieContext.channelID}\n")
+        builder.append("签名信息: ${APKUtils.getSigMd5ByPkgName(ZixieContext.applicationContext, ZixieContext.applicationContext?.packageName)}\n")
         showInfo("${APKUtils.getAppName(context)} $version 信息", builder.toString())
     }
 
@@ -148,16 +151,13 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         }
     }
 
-    protected fun sendLog() {
-        FileSelectTools.openFileSelect(activity!!, ZixieContext.getLogFolder())
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == RESULT_OK) {
-            data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let {filePath->
+            data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
                 FileUtils.sendFile(activity!!, filePath, "*/*").let {
-                    if(!it){
+                    if (!it) {
                         ZixieContext.showToast("分享文件:$filePath 失败")
                     }
                 }
