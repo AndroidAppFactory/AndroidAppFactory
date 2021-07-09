@@ -77,7 +77,5 @@ public abstract class BaseWebviewActivity extends CommonActivity {
             }
         }
     }
-
-
 }
 
