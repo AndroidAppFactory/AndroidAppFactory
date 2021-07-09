@@ -544,18 +544,25 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         CookieSyncManager.createInstance(mWebView.getContext());
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies(mWebView, true);
         }
-        CookieSyncManager.getInstance().sync();
+        syncCookie();
     }
 
-    private void removeCookie(Context context) {
+    public static void removeCookie(Context context) {
         CookieSyncManager.createInstance(context);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.removeAllCookie();
-        CookieSyncManager.getInstance().sync();
+        syncCookie();
+    }
+
+    public static void syncCookie() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            CookieManager.getInstance().flush();
+        } else {
+            CookieSyncManager.getInstance().sync();
+        }
     }
 
     @Override
@@ -618,7 +625,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             mWebView.clearHistory();
             mWebView.destroy();
         }
-        removeCookie(mWebView.getContext());
         if (Build.VERSION.SDK_INT < 16) {
             try {
                 Field field = WebView.class.getDeclaredField("mWebViewCore");

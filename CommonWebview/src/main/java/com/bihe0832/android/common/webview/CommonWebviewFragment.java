@@ -82,6 +82,6 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
         cookieManager.setCookie(url, getCookieString(URL_PARAM_VERSION_NAME, ZixieContext.INSTANCE.getVersionName(), host) + "; MAX-Age=" + 60 * 60 * 24);
         cookieManager.setCookie(url, getCookieString(URL_PARAM_VERSION_CODE, String.valueOf(ZixieContext.INSTANCE.getVersionCode()), host) + "; MAX-Age=" + 60 * 60 * 24);
         cookieManager.setCookie(url, getCookieString(URL_PARAM_PLATFORM, Constants.SYSTEM_CONSTANT, host) + "; MAX-Age=" + 60 * 60 * 24);
-        CookieSyncManager.getInstance().sync();
+        syncCookie();
     }
 }
