@@ -3,9 +3,11 @@ package com.bihe0832.android.framework.router
 import android.content.Context
 import android.net.Uri
 import com.bihe0832.android.framework.constant.Constants
+import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.RouterContext
+import okhttp3.Route
 
 /**
  * Created by hardyshi on 2017/6/27.
@@ -30,15 +32,15 @@ object RouterInterrupt {
     fun init(process: RouterProcess) {
         RouterContext.setGlobalRouterCallback(object : RouterContext.RouterCallback {
             override fun afterOpen(context: Context, uri: Uri) {
-                ZLog.d(TAG, "：afterOpen ->$uri")
+                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TAG), "afterOpen ->$uri")
             }
 
             //跳转前拦截
             override fun beforeOpen(context: Context, uri: Uri): Boolean {
-                ZLog.d(TAG, "：beforeOpen ->$uri")
+                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TAG), "beforeOpen ->$uri")
                 return if (process.needInterrupt(uri) || process.needLogin(uri)) {
                     //拦截处理结果
-                    ZLog.d(TAG, "：beforeOpen uri ->$uri")
+                    LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TAG), "needInterrupt uri ->$uri")
                     process.doInterrupt(uri)
                 } else {
                     false
@@ -46,11 +48,11 @@ object RouterInterrupt {
             }
 
             override fun error(context: Context, uri: Uri, e: Throwable) {
-                ZLog.d(TAG, " ：error ->$uri")
+                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TAG), "error ->$uri")
             }
 
             override fun notFound(context: Context, uri: Uri) {
-                ZLog.d(TAG, " ：notFound ->$uri")
+                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TAG), "notFound ->$uri")
             }
         })
     }
