@@ -4,9 +4,9 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.common.webview.log.WebviewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
@@ -73,7 +73,8 @@ open class TestLogActivity : CommonListActivity() {
             add(SectionDataHeader("通用日志工具"))
             add(TestItemData("选择并发送单个日志") { FileSelectTools.openFileSelect(this@TestLogActivity, ZixieContext.getLogFolder()) })
             add(SectionDataHeader("基础通用日志"))
-            add(SectionDataContent("路由跳转", LoggerFile.getZixieFileLogPathByModule(RouterInterrupt.MODULE_NAME_ROUTER)))
+            add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath()))
+            add(SectionDataContent("Webview", WebviewLoggerFile.getWebviewLogPath()))
         }
     }
 
