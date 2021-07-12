@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.bihe0832.android.common.webview.R;
+import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterConstants;
@@ -314,7 +315,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            ZLog.d(TAG + "shouldOverrideUrlLoading url:" + url);
+            WebviewLoggerFile.INSTANCE.log(TAG + "shouldOverrideUrlLoading url:" + url);
             if (TextUtils.isEmpty(url)) {
                 return false;
             }

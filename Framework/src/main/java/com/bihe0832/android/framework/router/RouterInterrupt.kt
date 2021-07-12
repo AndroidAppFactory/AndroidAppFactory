@@ -30,15 +30,15 @@ object RouterInterrupt {
     fun init(process: RouterProcess) {
         RouterContext.setGlobalRouterCallback(object : RouterContext.RouterCallback {
             override fun afterOpen(context: Context, uri: Uri) {
-                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(MODULE_NAME_ROUTER), "afterOpen ->$uri")
+                logRouterToFile("afterOpen ->$uri")
             }
 
             //跳转前拦截
             override fun beforeOpen(context: Context, uri: Uri): Boolean {
-                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(MODULE_NAME_ROUTER), "beforeOpen ->$uri")
+                logRouterToFile("beforeOpen ->$uri")
                 return if (process.needInterrupt(uri) || process.needLogin(uri)) {
                     //拦截处理结果
-                    LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(MODULE_NAME_ROUTER), "needInterrupt uri ->$uri")
+                    logRouterToFile("needInterrupt uri ->$uri")
                     process.doInterrupt(uri)
                 } else {
                     false
@@ -46,16 +46,26 @@ object RouterInterrupt {
             }
 
             override fun error(context: Context, uri: Uri, e: Throwable) {
-                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(MODULE_NAME_ROUTER), "error ->$uri")
+                logRouterToFile("error ->$uri")
             }
 
             override fun notFound(context: Context, uri: Uri) {
-                LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(MODULE_NAME_ROUTER), "notFound ->$uri")
+                logRouterToFile("notFound ->$uri")
             }
         })
     }
 
     fun hasAgreedPrivacy(): Boolean {
         return Config.isSwitchEnabled(Constants.CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED, false)
+    }
+
+    fun logRouterToFile(msg: String) {
+        LoggerFile.log(getRouterLogPath(), msg)
+
+    }
+
+    fun getRouterLogPath(): String {
+        return LoggerFile.getZixieFileLogPathByModule(MODULE_NAME_ROUTER)
+
     }
 }
