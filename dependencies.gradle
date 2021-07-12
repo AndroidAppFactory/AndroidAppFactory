@@ -95,7 +95,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "4.6.0",
+                "version"            : "4.6.1",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
