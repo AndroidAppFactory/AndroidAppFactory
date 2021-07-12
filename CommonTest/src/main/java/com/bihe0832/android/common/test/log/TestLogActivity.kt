@@ -7,6 +7,7 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.log.LoggerFile
+import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.framework.ui.list.CardItemForCommonList
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListActivity
@@ -71,8 +72,8 @@ open class TestLogActivity : CommonListActivity() {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
             add(TestItemData("选择并发送单个日志") { FileSelectTools.openFileSelect(this@TestLogActivity, ZixieContext.getLogFolder()) })
-            add(SectionDataHeader("日志测试"))
-            add(SectionDataContent("日志测试", LoggerFile.getZixieFileLogPathByModule("Test")))
+            add(SectionDataHeader("基础模板"))
+            add(SectionDataContent("路由", LoggerFile.getZixieFileLogPathByModule(RouterInterrupt.TAG)))
         }
     }
 
