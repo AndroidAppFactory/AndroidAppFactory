@@ -39,7 +39,7 @@ object RouterHelper {
         //应用前后台检测
         ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
             override fun onForeground() {
-                ZLog.d(RouterInterrupt.TAG, "onForeground")
+                ZLog.d("onForeground")
             }
 
             override fun onBackground() {

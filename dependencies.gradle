@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibWrapper"
+ext.developModule = "Framework"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.5.12"
+ext.moduleVersionName = "4.6.0"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -65,9 +65,7 @@ ext.moduleInfo = [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
-                        "CommonPraise", "CommonFeedback", "CommonWebview", "CommonNetwork", "CommonSplash",
-                        "CommonPhotos", "CommonFileSelect", "CommonFloatview",
-                        "Framework",
+                        "CommonWrapper",
                         'com.squareup.okhttp3:okhttp:3.9.1',
                         'com.squareup.okhttp3:logging-interceptor:3.8.0',
                         'com.squareup.retrofit2:retrofit:2.4.0',
@@ -77,6 +75,15 @@ ext.moduleInfo = [
                         "kapt": [
                                 "RouterCompiler"
                         ]
+                ]
+        ],
+        "CommonWrapper"             : [
+                "version"                : "4.5.12",
+                "artifactId"             : "common-wrapper",
+                "apidependenciesList"    : [
+                        "CommonPraise", "CommonFeedback", "CommonWebview", "CommonNetwork", "CommonSplash",
+                        "CommonPhotos", "CommonFileSelect", "CommonFloatview",
+                        "Framework",
                 ]
         ],
         "CommonTest"                : [
@@ -173,7 +180,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
                         "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
-                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibDebug", "LibOS", "LibZip", "LibLifecycle","LibIPC"
+                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibDebug", "LibOS", "LibZip", "LibLifecycle", "LibIPC"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -512,7 +519,7 @@ ext.moduleInfo = [
                         ]
                 ]
         ],
-        "LibIPC"                 : [
+        "LibIPC"                    : [
                 "version"            : "4.5.0",
                 "artifactId"         : "lib-ipc",
                 "apidependenciesList": [

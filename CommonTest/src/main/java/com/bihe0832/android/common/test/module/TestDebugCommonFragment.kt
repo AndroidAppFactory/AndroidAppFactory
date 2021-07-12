@@ -39,7 +39,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
             add(TestItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
             add(TestItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
             add(TestItemData("日志管理", View.OnClickListener {
-                startActivity(TestLogActivity::class.java)
+                showLog()
             }))
             add(TestItemData("弹出评分页面", View.OnClickListener {
                 UserPraiseManager.showUserPraiseDialog(activity!!, RouterAction.getFinalURL(MODULE_NAME_FEEDBACK))
@@ -66,6 +66,9 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         }
     }
 
+    protected fun showLog() {
+        startActivity(TestLogActivity::class.java)
+    }
     protected fun showMobileInfo() {
         val builder = StringBuilder()
         builder.append("PackageName: ${context!!.packageName}\n")

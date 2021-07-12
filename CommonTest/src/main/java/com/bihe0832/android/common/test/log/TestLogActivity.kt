@@ -72,8 +72,8 @@ open class TestLogActivity : CommonListActivity() {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
             add(TestItemData("选择并发送单个日志") { FileSelectTools.openFileSelect(this@TestLogActivity, ZixieContext.getLogFolder()) })
-            add(SectionDataHeader("基础模板"))
-            add(SectionDataContent("路由", LoggerFile.getZixieFileLogPathByModule(RouterInterrupt.TAG)))
+            add(SectionDataHeader("基础通用日志"))
+            add(SectionDataContent("路由跳转", LoggerFile.getZixieFileLogPathByModule(RouterInterrupt.MODULE_NAME_ROUTER)))
         }
     }
 
