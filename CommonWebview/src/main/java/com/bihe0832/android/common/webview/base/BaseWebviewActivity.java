@@ -6,14 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
+import android.view.View;
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.tencent.smtt.sdk.QbSdk;
-
 import java.net.URLDecoder;
 
 public abstract class BaseWebviewActivity extends CommonActivity {
@@ -34,7 +34,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         mWebViewViewModel = ViewModelProviders.of(this).get(WebViewViewModel.class);
         ZLog.d(TAG + QbSdk.getTbsVersion(this));
         handleIntent(getIntent());
-        initToolbar();
+
     }
 
     protected void handleIntent(Intent intent) {
@@ -42,11 +42,21 @@ public abstract class BaseWebviewActivity extends CommonActivity {
             mURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
         } else {
             if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL)) {
-                String redirectURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
+                String redirectURL = URLDecoder
+                        .decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
                 IntentUtils.openWebPage(redirectURL, this);
                 finish();
             } else {
                 ZLog.d("handle intent, but extra is bad");
+            }
+        }
+        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS)) {
+            int show = ConvertUtils.parseInt(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS),
+                    RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_SHOW);
+            if (RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_SHOW != show) {
+                findViewById(R.id.common_toolbar).setVisibility(View.GONE);
+            } else {
+                initToolbar();
             }
         }
     }
