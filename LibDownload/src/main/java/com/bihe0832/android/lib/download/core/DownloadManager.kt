@@ -87,7 +87,7 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onWait(item)
             }
-            if(item.canDownloadByPart()){
+            if (item.canDownloadByPart()) {
                 DownloadInfoDBManager.saveDownloadInfo(item)
             }
         }
@@ -102,7 +102,7 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onStart(item)
             }
-            if(item.canDownloadByPart()){
+            if (item.canDownloadByPart()) {
                 DownloadInfoDBManager.saveDownloadInfo(item)
             }
         }
@@ -169,7 +169,7 @@ object DownloadManager {
                     item.packageName = it
                 }
             }
-            if(item.canDownloadByPart()){
+            if (item.canDownloadByPart()) {
                 DownloadInfoDBManager.saveDownloadInfo(item)
             }
             addDownloadItemToList(item)
@@ -272,9 +272,9 @@ object DownloadManager {
     }
 
     private fun updateInfo(info: DownloadItem) {
-        var savedInfo = if(info.canDownloadByPart()){
+        var savedInfo = if (info.canDownloadByPart()) {
             DownloadInfoDBManager.getDownloadInfo(info.downloadURL)
-        }else{
+        } else {
             null
         }
         if (savedInfo != null) {
@@ -339,12 +339,6 @@ object DownloadManager {
                 return
             }
 
-            //本地已下载
-            if (checkDownloadBeforeAndNotify(info)) {
-                ZLog.e("has download:$info")
-                return
-            }
-
             //本地已有更高版本
             if (checkIsInstalledAndLocalVersionIsNew(info)) {
                 ZLog.e("no need download:$info")
@@ -360,24 +354,29 @@ object DownloadManager {
             }
 
             addDownloadItemToList(info)
-            if (downloadAfterAdd) {
-                Thread {
-                    var currentTime = System.currentTimeMillis()
-                    if (currentTime - info.pauseTime < 3000L) {
-                        ZLog.e("resume to quick:$info")
-                        innerDownloadListener.onWait(info)
-                        info.isDownloadWhenAdd = true
-                        (info.pauseTime + 3000L - currentTime).let {
-                            if (it > 0) {
-                                Thread.sleep(it)
+            Thread {
+                //本地已下载
+                if (checkDownloadBeforeAndNotify(info)) {
+                    ZLog.e("has download:$info")
+                } else {
+                    if (downloadAfterAdd) {
+                        var currentTime = System.currentTimeMillis()
+                        if (currentTime - info.pauseTime < 3000L) {
+                            ZLog.e("resume to quick:$info")
+                            innerDownloadListener.onWait(info)
+                            info.isDownloadWhenAdd = true
+                            (info.pauseTime + 3000L - currentTime).let {
+                                if (it > 0) {
+                                    Thread.sleep(it)
+                                }
                             }
                         }
+                        mDownloadEngine.startDownload(mContext!!, info, forceDownload)
+                    } else {
+                        info.setPause()
                     }
-                    mDownloadEngine.startDownload(mContext!!, info, forceDownload)
-                }.start()
-            } else {
-                info.setPause()
-            }
+                }
+            }.start()
         } catch (e: Exception) {
             e.printStackTrace()
             ZLog.e("download:$e")
@@ -386,7 +385,7 @@ object DownloadManager {
 
     private fun addDownloadItemToList(info: DownloadItem) {
         ThreadManager.getInstance().start {
-            if(info.canDownloadByPart()){
+            if (info.canDownloadByPart()) {
                 DownloadInfoDBManager.saveDownloadInfo(info)
             }
             DownloadTaskList.addToDownloadTaskList(info)
@@ -424,17 +423,13 @@ object DownloadManager {
         ZLog.d("addTask:$info")
         updateInfo(info)
         if (info.isForceDownloadNew) {
-            deleteTask(info.downloadID, false, true)
+            deleteTask(info.downloadID, false, TextUtils.isEmpty(info.fileMD5))
         }
 
         if (DownloadTaskList.hadAddTask(info)) {
             ZLog.d("mDownloadList contains:$info")
-            if (checkDownloadBeforeAndNotify(info)) {
-                ZLog.d("download before:$info")
-                return
-            } else {
-                resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
-            }
+            DownloadTaskList.updateDownloadTaskListItem(info)
+            resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
         } else {
             startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
         }
@@ -519,14 +514,14 @@ object DownloadManager {
     fun resumeFailedTask(pauseOnMobile: Boolean) {
         ZLog.d("resumeFailedTask")
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_FAILED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener,true, pauseOnMobile, false)
+            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile, false)
         }
     }
 
     fun resumePauseTask(pauseOnMobile: Boolean) {
         ZLog.d("resumePauseTask")
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener,true, pauseOnMobile, false)
+            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile, false)
         }
     }
 

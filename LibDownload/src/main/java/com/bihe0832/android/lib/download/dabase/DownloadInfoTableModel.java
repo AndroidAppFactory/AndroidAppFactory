@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Base64;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadStatus;
 import com.bihe0832.android.lib.download.core.DownloadManager;
@@ -14,6 +15,10 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
 import com.bihe0832.android.lib.sqlite.BaseTableModel;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import kotlin.jvm.Synchronized;
 
 /**
@@ -23,36 +28,20 @@ import kotlin.jvm.Synchronized;
  */
 public class DownloadInfoTableModel extends BaseTableModel {
 
+    static final String TABLE_NAME = "download_info";
+
     public static final String col_id = "id";
     public static final String col_download_id = "download_id";
-    public static final String col_download_extraInfo = "download_extra_info";
-    public static final String col_download_extrakey = "download_extra_key";
     public static final String col_download_package = "download_package";
-    public static final String col_download_url = "download_url";
-    public static final String col_download_icon_url = "download_icon";
-    public static final String col_download_title = "download_title";
-    public static final String col_download_length = "download_length";
-    public static final String col_download_version = "download_version";
-    public static final String col_download_file = "download_file";
-    public static final String col_download_status = "download_status";
-    public static final String col_download_temp_file = "download_temp_file";
-    static final String TABLE_NAME = "download_info";
+    public static final String col_download_content = "download_content";
+
     static final String TABLE_CREATE_SQL = "CREATE TABLE IF NOT EXISTS ["
             + TABLE_NAME
             + "] ("
             + "[" + col_id + "] INTEGER PRIMARY KEY AUTOINCREMENT,"
             + "[" + col_download_id + "] NVARCHAR(128)  NULL,"
-            + "[" + col_download_extraInfo + "] NVARCHAR(128)  NULL,"
-            + "[" + col_download_extrakey + "] NVARCHAR(128)  NULL,"
-            + "[" + col_download_url + "] VARCHAR(256)  NULL,"
             + "[" + col_download_package + "] NVARCHAR(128)  NULL,"
-            + "[" + col_download_title + "] VARCHAR(256)  NULL,"
-            + "[" + col_download_icon_url + "] VARCHAR(256)  NULL,"
-            + "[" + col_download_length + "] VARCHAR(256)  NULL,"
-            + "[" + col_download_version + "] VARCHAR(256)  NULL,"
-            + "[" + col_download_status + "] VARCHAR(256) NULL,"
-            + "[" + col_download_temp_file + "] VARCHAR(256)  NULL,"
-            + "[" + col_download_file + "] VARCHAR(256) NULL"
+            + "[" + col_download_content + "] VARCHAR(102400)  NULL"
             + ")";
     static final String TABLE_DROP_SQL = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -62,49 +51,49 @@ public class DownloadInfoTableModel extends BaseTableModel {
 
     private static ContentValues data2CV(DownloadItem item) {
         ContentValues cv = new ContentValues();
-        putValues(cv, col_download_id, item.getDownloadID());
-        putValues(cv, col_download_extraInfo, item.getExtraInfo());
-        putValues(cv, col_download_extrakey, item.getActionKey());
-        putValues(cv, col_download_url, item.getDownloadURL());
-        putValues(cv, col_download_package, item.getPackageName());
-        putValues(cv, col_download_title, item.getDownloadTitle());
-        putValues(cv, col_download_icon_url, item.getDownloadIcon());
-        putValues(cv, col_download_length, item.getFileLength());
-        putValues(cv, col_download_version, item.getVersionCode());
-        putValues(cv, col_download_status, item.getStatus());
-        putValues(cv, col_download_temp_file, item.getTempFilePath());
-        putValues(cv, col_download_file, item.getFinalFilePath());
+
+        try {
+            putValues(cv, col_download_id, item.getDownloadID());
+            putValues(cv, col_download_package, item.getPackageName());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(item);
+            String res = new String(Base64.encode(baos.toByteArray(), Base64.DEFAULT));
+            oos.close();
+            putValues(cv, col_download_content, res);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return cv;
     }
 
     private static DownloadItem cv2data(Cursor cursor) {
-        DownloadItem item = new DownloadItem();
-        item.setExtraInfo(getStringByName(cursor, col_download_extraInfo));
-        item.setActionKey(getStringByName(cursor, col_download_extrakey));
-        item.setDownloadURL(getStringByName(cursor, col_download_url));
-        item.setPackageName(getStringByName(cursor, col_download_package));
-        item.setDownloadTitle(getStringByName(cursor, col_download_title));
-        item.setDownloadIcon(getStringByName(cursor, col_download_icon_url));
-        item.setFileLength(getLongByName(cursor, col_download_length));
-        item.setVersionCode(getLongByName(cursor, col_download_version));
-        int status = getIntByName(cursor, col_download_status);
-        if (status == DownloadStatus.STATUS_DOWNLOADING || status == DownloadStatus.STATUS_DOWNLOAD_STARTED
-                || status == DownloadStatus.STATUS_DOWNLOAD_WAITING) {
-            item.setStatus(DownloadStatus.STATUS_DOWNLOAD_PAUSED);
-        } else if (status == DownloadStatus.STATUS_HAS_DOWNLOAD || status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED) {
-            PackageInfo info = APKUtils
-                    .getInstalledPackage(DownloadManager.INSTANCE.getContext(), item.getPackageName());
-            if (info != null && info.versionCode == item.getVersionCode()) {
-                item.setStatus(status);
+        try {
+            byte[] data = Base64.decode(getStringByName(cursor, col_download_content), Base64.DEFAULT);
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
+            DownloadItem item = (DownloadItem) ois.readObject();
+            ois.close();
+            int status = item.getStatus();
+            if (status == DownloadStatus.STATUS_DOWNLOADING || status == DownloadStatus.STATUS_DOWNLOAD_STARTED
+                    || status == DownloadStatus.STATUS_DOWNLOAD_WAITING) {
+                item.setStatus(DownloadStatus.STATUS_DOWNLOAD_PAUSED);
+            } else if (status == DownloadStatus.STATUS_HAS_DOWNLOAD
+                    || status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED) {
+                PackageInfo info = APKUtils
+                        .getInstalledPackage(DownloadManager.INSTANCE.getContext(), item.getPackageName());
+                if (info != null && info.versionCode == item.getVersionCode()) {
+                    item.setStatus(status);
+                } else {
+                    item.setStatus(DownloadStatus.NO_DOWNLOAD);
+                }
             } else {
-                item.setStatus(DownloadStatus.NO_DOWNLOAD);
+                item.setStatus(status);
             }
-        } else {
-            item.setStatus(status);
+            return item;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        item.setTempFilePath(getStringByName(cursor, col_download_temp_file));
-        item.setFinalFilePath(getStringByName(cursor, col_download_file));
-        return item;
+        return new DownloadItem();
     }
 
     @Synchronized
@@ -144,7 +133,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
 
     private static boolean updateData(BaseDBHelper helper, DownloadItem item) {
         ContentValues values = data2CV(item);
-        String whereClause = " `" + col_download_url + "` = ? ";
+        String whereClause = " `" + col_download_content + "` = ? ";
         String[] whereArgs = new String[]{item.getDownloadURL()};
         int rows = helper.update(TABLE_NAME, values, whereClause, whereArgs);
         return (rows != 0);
@@ -152,7 +141,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
 
     static boolean hasData(BaseDBHelper helper, String url) {
         String[] columns = null;
-        String selection = " " + col_download_url + " = ? ";
+        String selection = " " + col_download_content + " = ? ";
         String[] selectionArgs = {url};
         String groupBy = null;
         String having = null;
@@ -208,7 +197,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
     }
 
     static DownloadItem getDownloadInfo(BaseDBHelper helper, String url) {
-        String selection = " " + col_download_url + " = ? ";
+        String selection = " " + col_download_content + " = ? ";
         String[] selectionArgs = {String.valueOf(url)};
         return getDownloadInfoFromDBBySection(helper, selection, selectionArgs);
 

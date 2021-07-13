@@ -122,7 +122,7 @@ object DownloadFile {
                 }
 
                 override fun onNegativeClick() {
-                    DownloadUtils.deleteTask(DownloadItem.getDownloadIDByURL(url), true)
+                    DownloadUtils.deleteTask(DownloadUtils.getDownloadIDByURL(url), true)
                     dismiss()
                     listener?.onNegativeClick()
                 }
@@ -224,6 +224,6 @@ object DownloadFile {
             isDownloadWhenUseMobile = UseMobile
             setCanDownloadByPart(canPart)
             this.downloadListener = downloadListener
-        }, true)
+        },  TextUtils.isEmpty(md5))
     }
 }

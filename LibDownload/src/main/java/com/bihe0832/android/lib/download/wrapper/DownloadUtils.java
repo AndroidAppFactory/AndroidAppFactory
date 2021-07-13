@@ -77,6 +77,10 @@ public class DownloadUtils {
         return DownloadTaskList.INSTANCE.getTaskByDownloadURL(downloadURL);
     }
 
+    public static long getDownloadIDByURL(String url) {
+        return DownloadItem.getDownloadIDByURL(url);
+    }
+
     /**
      * 暂停一个下载任务
      *
