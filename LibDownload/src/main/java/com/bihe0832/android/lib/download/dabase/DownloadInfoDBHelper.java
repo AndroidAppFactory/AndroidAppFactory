@@ -15,7 +15,7 @@ class DownloadInfoDBHelper extends BaseDBHelper {
 
     private static final String DB_NAME = "zixie_download";
 
-    private static final int DB_VERSION = 12;
+    private static final int DB_VERSION = 13;
 
     DownloadInfoDBHelper(Context ctx) {
         super(ctx, DB_NAME, DB_VERSION);

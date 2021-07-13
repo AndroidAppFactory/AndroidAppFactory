@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download;
 
 import android.text.TextUtils;
 import android.util.Log;
+import com.bihe0832.android.lib.download.wrapper.DownloadUtils;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -40,7 +41,7 @@ public class DownloadItem implements Serializable {
     // 是否支持分片下载
     private boolean canDownloadByPart = false;
     //内部下载回调
-    private DownloadListener mDownloadListener = null;
+    private transient DownloadListener mDownloadListener = null;
     // 下载信息描述，非必填
     private String downloadDesc = "";
     // 下载内容标题，非必填
@@ -68,11 +69,11 @@ public class DownloadItem implements Serializable {
     // 文件总长度，不填
     private long fileLength = 0;
     // 实时下载速度，不填
-    private long lastSpeed = 0;
+    private transient long lastSpeed = 0;
     //开始下载的时间，不填
-    private long startTime = 0;
+    private transient long startTime = 0;
     //最后暂停时间，不填
-    private long pauseTime = 0;
+    private transient long pauseTime = 0;
 
     public boolean canDownloadByPart() {
         return canDownloadByPart;
@@ -82,23 +83,20 @@ public class DownloadItem implements Serializable {
         this.canDownloadByPart = canDownloadByPart;
     }
 
-    public void setNotificationVisibility(boolean visibility){
+    public void setNotificationVisibility(boolean visibility) {
         notificationVisibility = visibility;
     }
 
-    public boolean notificationVisibility(){
+    public boolean notificationVisibility() {
         return notificationVisibility;
     }
+
     public DownloadListener getDownloadListener() {
         return mDownloadListener;
     }
 
     public void setDownloadListener(DownloadListener listener) {
         mDownloadListener = listener;
-    }
-
-    public static long getDownloadIDByURL(String url) {
-        return ConvertUtils.getUnsignedInt(url.hashCode());
     }
 
     // 平均下载速度
@@ -113,7 +111,7 @@ public class DownloadItem implements Serializable {
 
     //下载ID,一个任务的唯一标示
     public long getDownloadID() {
-        return getDownloadIDByURL(downloadURL);
+        return DownloadUtils.getDownloadIDByURL(downloadURL);
     }
 
     // 下载进度
@@ -217,15 +215,19 @@ public class DownloadItem implements Serializable {
 
     public boolean isForceDownloadNew() {
         //强制重新下载，或者不支持分片，就算是不强制重新下载也要强制重新下载
-        if(forceDownloadNew){
+        if (forceDownloadNew) {
             return true;
-        }else {
-            if(canDownloadByPart()){
+        } else {
+            if (canDownloadByPart()) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         }
+    }
+
+    public static long getDownloadIDByURL(String url) {
+        return ConvertUtils.getUnsignedInt(url.hashCode());
     }
 
     public void setForceDownloadNew(boolean forceDownloadNew) {
@@ -351,6 +353,32 @@ public class DownloadItem implements Serializable {
     public void setActionKey(String actionKey) {
         if (!TextUtils.isEmpty(actionKey)) {
             this.actionKey = actionKey;
+        }
+    }
+
+    public void update(DownloadItem item) {
+        if (item.getDownloadID() == getDownloadID()) {
+            this.downloadURL = item.downloadURL;
+            this.fileMD5 = item.fileMD5;
+            this.forceDownloadNew = item.forceDownloadNew;
+            this.autoInstall = item.autoInstall;
+            this.notificationVisibility = item.notificationVisibility;
+            this.downloadWhenUseMobile = item.downloadWhenUseMobile;
+            this.downloadWhenAdd = item.downloadWhenAdd;
+            this.canDownloadByPart = item.canDownloadByPart;
+            this.mDownloadListener = item.mDownloadListener;
+            this.downloadDesc = item.downloadDesc;
+            this.downloadTitle = item.downloadTitle;
+            this.fileNameWithPath = item.fileNameWithPath;
+            this.finalFilePath = item.finalFilePath;
+            this.actionKey = item.actionKey;
+            this.extraInfo = item.extraInfo;
+            this.packageName = item.packageName;
+            this.versionCode = item.versionCode;
+            this.downloadIcon = item.downloadIcon;
+            this.tempFilePath = item.tempFilePath;
+        } else {
+            Log.e(TAG, "update error , download id is bad ");
         }
     }
 

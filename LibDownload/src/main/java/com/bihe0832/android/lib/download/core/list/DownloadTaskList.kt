@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.download.core.list
 
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -47,7 +48,15 @@ object DownloadTaskList {
             mDownloadList[item.downloadID] = item
             mDownLoadIdList.add(item.downloadID)
         } else {
+            updateDownloadTaskListItem(item)
             mDownloadList[item.downloadID]?.downloadListener = item.downloadListener
+        }
+    }
+
+    @Synchronized
+    fun updateDownloadTaskListItem(item: DownloadItem){
+        if (hadAddTask(item)) {
+            mDownloadList[item.downloadID]?.update(item)
         }
     }
 
@@ -66,6 +75,6 @@ object DownloadTaskList {
 
     @Synchronized
     fun getTaskByDownloadURL(downloadURL: String): DownloadItem? {
-        return mDownloadList[DownloadItem.getDownloadIDByURL(downloadURL)]
+        return mDownloadList[DownloadUtils.getDownloadIDByURL(downloadURL)]
     }
 }
