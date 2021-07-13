@@ -69,8 +69,8 @@ object FileUtils {
             false
         } else {
             val file = File(filePath)
-            var hasMD5 = TextUtils.isEmpty(fileMD5)
-            if (!file.exists() || file.isFile) {
+            var hasMD5 = !TextUtils.isEmpty(fileMD5)
+            if (!file.exists() || !file.isFile) {
                 false
             } else {
                 if (fileLength > 0) {
