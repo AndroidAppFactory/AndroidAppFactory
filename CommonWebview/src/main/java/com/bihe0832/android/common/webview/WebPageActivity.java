@@ -10,7 +10,6 @@ import static com.bihe0832.android.common.webview.WebPageActivity.MODULE_NAME_WE
 public final class WebPageActivity extends BaseWebviewActivity {
     public static final String MODULE_NAME_WEB_PAGE = "web";
 
-
     protected BaseWebviewFragment getWebViewFragment() {
         return CommonWebviewFragment.newInstance(mURL);
     }
@@ -19,7 +18,6 @@ public final class WebPageActivity extends BaseWebviewActivity {
     protected Class getWebViewFragmentClass() {
         return CommonWebviewFragment.class;
     }
-
 
 }
 

@@ -10,17 +10,24 @@ def SNAPSHOT_REPOSITORY_URL = "https://s01.oss.sonatype.org/content/repositories
 def isRelease = true
 
 def sonatypeRepositoryUrl
-def userName = getProperty("NEXUS_USERNAME")
-def password = getProperty("NEXUS_PASSWORD")
+def sonatypeRepositoryVersion
+def userName
+def password
 
-if(null == userName){
+try {
+    userName = getProperty("NEXUS_USERNAME")
+}catch(Exception e){
+    e.printStackTrace()
     userName = ""
 }
 
-if(null == password){
+
+try {
+    password = getProperty("NEXUS_PASSWORD")
+}catch(Exception e){
+    e.printStackTrace()
     password = ""
 }
-
 
 if (isRelease) {
     println 'RELEASE BUILD'
