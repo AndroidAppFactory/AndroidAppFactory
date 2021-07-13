@@ -5,7 +5,7 @@
     <string name="feedback_url">https://support.qq.com/product/290858</string>
     <string name="version_url"></string>
 
-    <string name="update_url"></string>
+    <string name="update_url">https://cdn.bihe0832.com/app/update/get_m3u8.json</string>
 
     <string name="wechat_id">zixie_shi</string>
     <string name="wechat_name">子勰随笔</string>
