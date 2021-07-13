@@ -294,11 +294,11 @@ object DownloadManager {
 
     private fun checkDownloadBeforeAndNotify(info: DownloadItem): Boolean {
         if (!info.isForceDownloadNew) {
-            if (FileUtils.checkFileExist(info.finalFilePath, info.fileMD5)) {
+            if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5)) {
                 info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
                 innerDownloadListener.onComplete(info.finalFilePath, info)
                 return true
-            } else if (!TextUtils.isEmpty(info.fileMD5) && FileUtils.checkFileExist(info.tempFilePath, info.fileMD5)) {
+            } else if (!TextUtils.isEmpty(info.fileMD5) && FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5)) {
                 info.finalFilePath = info.tempFilePath
                 innerDownloadListener.onComplete(info.finalFilePath, info)
                 return true
@@ -309,6 +309,7 @@ object DownloadManager {
 
     @Synchronized
     private fun startTask(info: DownloadItem, downloadAfterAdd: Boolean, downloadWhenUseMobile: Boolean, forceDownload: Boolean) {
+        innerDownloadListener.onWait(info)
         if (downloadAfterAdd) {
             if (!isWifi()) {
                 if (downloadWhenUseMobile) {
@@ -426,12 +427,27 @@ object DownloadManager {
             deleteTask(info.downloadID, false, TextUtils.isEmpty(info.fileMD5))
         }
 
+        innerDownloadListener.onWait(info)
         if (DownloadTaskList.hadAddTask(info)) {
             ZLog.d("mDownloadList contains:$info")
             DownloadTaskList.updateDownloadTaskListItem(info)
             resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
         } else {
             startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
+        }
+    }
+    
+    fun resumeTask(downloadId: Long, downloadListener: DownloadListener?, startByUser: Boolean, downloadWhenUseMobile: Boolean, forceDownload: Boolean) {
+        DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
+            ZLog.d("resumeTask:$info")
+            if (startByUser) {
+                info.isDownloadWhenAdd = true
+            }
+            downloadListener?.let {
+                info.downloadListener = it
+            }
+            innerDownloadListener.onWait(info)
+            startTask(info, startByUser, downloadWhenUseMobile, forceDownload)
         }
     }
 
@@ -446,19 +462,6 @@ object DownloadManager {
             if (startByUser) {
                 innerDownloadListener.onPause(info)
             }
-        }
-    }
-
-    fun resumeTask(downloadId: Long, downloadListener: DownloadListener?, startByUser: Boolean, downloadWhenUseMobile: Boolean, forceDownload: Boolean) {
-        DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            ZLog.d("resumeTask:$info")
-            if (startByUser) {
-                info.isDownloadWhenAdd = true
-            }
-            downloadListener?.let {
-                info.downloadListener = it
-            }
-            startTask(info, startByUser, downloadWhenUseMobile, forceDownload)
         }
     }
 
