@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibFile"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.6.3"
+ext.moduleVersionName = "4.6.4"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -78,14 +78,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"                : [
-                "version"            : "4.6.3",
+                "version"            : "4.6.4",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.6.3",
+                "version"            : "4.6.4",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
@@ -95,28 +95,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "4.6.3",
+                "version"            : "4.6.4",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "4.6.3",
+                "version"            : "4.6.4",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "4.6.3",
+                "version"            : "4.6.4",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "4.6.3",
+                "version"                : "4.6.4",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -128,7 +128,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "4.6.3",
+                "version"                : "4.6.4",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -141,14 +141,14 @@ ext.moduleInfo = [
         ],
 
         "CommonPraise"              : [
-                "version"            : "4.6.3",
+                "version"            : "4.6.4",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "4.6.3",
+                "version"                : "4.6.4",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
@@ -161,12 +161,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "4.6.2",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
-                "version"            : "4.5.7",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -176,7 +176,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "4.6.2",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -313,7 +313,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibConfig"]
         ],
         "LibFile"                   : [
-                "version"            : "4.5.5",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-file",
                 "apidependenciesList": [
                         "com.android.support:support-v4:${project.android_support_version}",
@@ -322,17 +322,17 @@ ext.moduleInfo = [
                 ]
         ],
         "LibZip"                    : [
-                "version"            : "4.5.5",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-zip",
                 "apidependenciesList": ["LibLog", "LibThread", "LibFile"]
         ],
         "LibDownload"               : [
-                "version"            : "4.6.2",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": ["LibFile", "LibRequest", "LibThread", "LibSqlite", "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced"]
         ],
         "LibInstall"                : [
-                "version"            : "4.5.6",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-install",
                 "apidependenciesList": ["LibFile", "LibZip", "LibAPK"]
         ],
@@ -342,12 +342,12 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibAndroid"]
         ],
         "LibSuperAPP"               : [
-                "version"            : "4.5.6",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": ["LibDialog", "LibAPK"]
         ],
         "LibDebug"                  : [
-                "version"            : "4.5.6",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": ["LibDialog", "LibToast"]
         ],
@@ -417,7 +417,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibThread", "LibText"]
         ],
         "LibImage"                  : [
-                "version"            : "4.5.5",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-image",
                 "apidependenciesList": [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
@@ -427,14 +427,14 @@ ext.moduleInfo = [
                 ]
         ],
         "LibDialog"                 : [
-                "version"            : "4.5.6",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}",
                         "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText"]
         ],
         "LibNotification"           : [
-                "version"            : "4.5.6",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK", "LibCommonUtils"
@@ -486,7 +486,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "4.5.6",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK", "LibDeviceNetwork"
@@ -501,7 +501,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibFileSelect"             : [
-                "version"            : "4.5.6",
+                "version"            : "4.6.4",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -509,7 +509,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibFloatview"              : [
-                "version"                : "4.5.6",
+                "version"                : "4.6.4",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         "LibLog", "LibConfig", "LibThread", "LibOS", "LibDialog", "LibToast", "LibPermission"

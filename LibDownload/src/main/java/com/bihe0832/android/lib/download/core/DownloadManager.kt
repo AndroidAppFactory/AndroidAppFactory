@@ -436,7 +436,7 @@ object DownloadManager {
             startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
         }
     }
-    
+
     fun resumeTask(downloadId: Long, downloadListener: DownloadListener?, startByUser: Boolean, downloadWhenUseMobile: Boolean, forceDownload: Boolean) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             ZLog.d("resumeTask:$info")
