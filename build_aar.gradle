@@ -10,7 +10,16 @@ def SNAPSHOT_REPOSITORY_URL = "https://s01.oss.sonatype.org/content/repositories
 def isRelease = true
 
 def sonatypeRepositoryUrl
-def sonatypeRepositoryVersion = ""
+def userName = getProperty("NEXUS_USERNAME")
+def password = getProperty("NEXUS_PASSWORD")
+
+if(null == userName){
+    userName = ""
+}
+
+if(null == password){
+    password = ""
+}
 
 
 if (isRelease) {
@@ -32,7 +41,7 @@ afterEvaluate { project ->
                     signing.signPom(deployment)
                 }
                 repository(url: sonatypeRepositoryUrl) {
-                    authentication(userName: getProperty("NEXUS_USERNAME"), password: getProperty("NEXUS_PASSWORD"))
+                    authentication(userName: userName, password: password)
                 }
                 pom.groupId = rootProject.zixieGroupId
                 pom.version = rootProject.zixieModuleInfo[module.name].get("version") + sonatypeRepositoryVersion
