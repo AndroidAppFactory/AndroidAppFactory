@@ -61,14 +61,35 @@ object FileUtils {
     }
 
     fun checkFileExist(filePath: String, fileMD5: String): Boolean {
+        return checkFileExist(filePath, 0, fileMD5)
+    }
+
+    fun checkFileExist(filePath: String, fileLength: Long, fileMD5: String): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
             false
         } else {
             val file = File(filePath)
-            if (TextUtils.isEmpty(fileMD5)) {
-                file.length() > 0 && file.exists() && file.isFile
+            var hasMD5 = TextUtils.isEmpty(fileMD5)
+            if (!file.exists() || file.isFile) {
+                false
             } else {
-                getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
+                if (fileLength > 0) {
+                    if (fileLength == file.length()) {
+                        if (hasMD5) {
+                            getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
+                        } else {
+                            true
+                        }
+                    } else {
+                        false
+                    }
+                } else {
+                    if (hasMD5) {
+                        getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
+                    } else {
+                        false
+                    }
+                }
             }
         }
     }
