@@ -25,7 +25,7 @@ object ZixieCoreInit {
 
     //目前仅仅主进程和web进程需要初始化
     @Synchronized
-    fun initCore(application: Application, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
+    fun initCore(application: Application, appIsDebug: Boolean, appIsOfficial: Boolean, skipPrivacy: Boolean, appTag: String) {
         ZixieContext.init(application, appIsDebug, appIsOfficial, appTag)
         if (!hasInit) {
             hasInit = true
@@ -36,15 +36,14 @@ object ZixieCoreInit {
             Log.e(TAG, "isDebug: ${ZixieContext.isDebug()} ;isOfficial: ${ZixieContext.isOfficial()}")
             Log.e(TAG, "tag: ${ZixieContext.getVersionTag()}")
             Log.e(TAG, "version: ${ZixieContext.getVersionNameAndCode()}")
-            Log.e(TAG, "DeviceId: ${ZixieContext.getDeviceId()}")
             Log.e(TAG, "APPInstalledTime: ${ZixieContext.getAPPInstalledTime()} ;VersionInstalledTime: ${ZixieContext.getAPPLastVersionInstalledTime()}")
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
+            if (skipPrivacy){
+                Config.writeConfig(Constants.CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED, true)
+            }
             initScreenWidthAndHeight()
             // 初始化渠道号
             initZixieLibs(application, !ZixieContext.isOfficial())
-            if (ZixieContext.isDebug()) {
-                Config.writeConfig(Constants.CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED, true)
-            }
         }
     }
 
@@ -59,7 +58,6 @@ object ZixieCoreInit {
         LoggerFile.init(application, isDebug)
         LifecycleHelper.init(application)
     }
-
 
 
     fun initUserLoginRetBeforeGetUser(platform: Int, openid: String) {

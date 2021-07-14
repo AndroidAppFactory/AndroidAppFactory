@@ -193,6 +193,7 @@ object ZixieContext {
     }
 
     fun getDeviceId(): String {
+        ZLog.e("CHECK","getDeviceId")
         return DeviceIDUtils.getAndroidId(applicationContext) ?: return ""
     }
 
