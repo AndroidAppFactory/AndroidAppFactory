@@ -57,28 +57,40 @@ public class ShowDebugClick implements View.OnClickListener {
         onClickAction();
     }
 
-    private void sendInfo(Context ctx) {
+    protected void sendInfo(Context ctx) {
         String result = getDebugInfo(ctx) + "其他信息: \n" + getExtraInfo() + "\n";
         DebugTools.sendInfo(ctx, "请转发给开发者", result, true);
     }
 
-    public static final String getDebugInfo(Context ctx) {
+    public String getDebugInfo(Context ctx) {
         StringBuilder builder = new StringBuilder();
-        builder.append("设备信息: " + "\n");
-        builder.append("厂商&型号: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n");
-        builder.append("系统版本: " + Build.VERSION.RELEASE + ", " + Build.VERSION.SDK_INT + "\n");
-        builder.append("系统指纹: ${Build.FINGERPRINT}\n");
-        builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n\n");
+        builder.append(getDebugVersionInfo(ctx));
+        builder.append(getDebugDeviceInfo());
+        return builder.toString();
+    }
 
+    public String getDebugVersionInfo(Context ctx) {
+        StringBuilder builder = new StringBuilder();
         builder.append("版本信息: " + "\n");
         builder.append(
                 "version: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode()
                         + "\n");
         builder.append("Tag: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
-        builder.append("安装时间: " + DateUtil.getDateEN(LifecycleHelper.INSTANCE.getAPPInstalledTime()) + "\n");
+        builder.append("安装时间:" + DateUtil.getDateEN(LifecycleHelper.INSTANCE.getVersionInstalledTime()) + "\n");
         builder.append("channel: " + ZixieContext.INSTANCE.getChannelID() + "\n");
         builder.append("签名MD5: " + APKUtils.getSigMd5ByPkgName(ctx, ctx.getPackageName()) + "\n");
         builder.append("official: " + ZixieContext.INSTANCE.isOfficial() + "\n\n");
+        return builder.toString();
+    }
+
+    public String getDebugDeviceInfo() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("设备信息: " + "\n");
+        builder.append("厂商&型号: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n");
+        builder.append("系统版本: " + Build.VERSION.RELEASE + ", " + Build.VERSION.SDK_INT + "\n");
+        builder.append("系统指纹: " + Build.FINGERPRINT + "\n");
+        builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n\n");
+
         return builder.toString();
     }
 }
