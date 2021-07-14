@@ -22,13 +22,16 @@ public abstract class BaseApplication extends Application {
 
     protected abstract boolean isOfficial();
 
+    protected abstract boolean skipPrivacy();
+
+
     protected abstract String versionTag();
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d("Application", "base BaseApplication onCreate start");
-        ZixieCoreInit.INSTANCE.initCore(this, isDebug(), isOfficial(), versionTag());
+        ZixieCoreInit.INSTANCE.initCore(this, isDebug(), isOfficial(), skipPrivacy(), versionTag());
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo it : runningApps) {

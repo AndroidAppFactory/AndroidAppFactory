@@ -32,4 +32,8 @@ class TestApplication : Application() {
         ServiceManager.registerService(IZixieIPCTestServiceForMain::class.java, ZixieIPCTestServiceForMain())
         ServiceManager.registerService(IZixieIPCTestServiceForTest::class.java, ZixieIPCTestServiceForTest())
     }
+
+    override fun skipPrivacy(): Boolean {
+        return true
+    }
 }
