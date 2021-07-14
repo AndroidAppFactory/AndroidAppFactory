@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.download.core.list
 
 import com.bihe0832.android.lib.download.DownloadItem
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  *
@@ -14,15 +15,15 @@ object DownloadingList {
 
     //所有在下载的id列表
     private var mDownloadList = ConcurrentHashMap<String, DownloadItem>()
-    private var mDownLoadIdList = mutableListOf<Long>()
+    private var mDownLoadIdList = CopyOnWriteArrayList<Long>()
 
     private var listHasChanged = false
-    private var lastCachedList = mDownloadList.values.toList()
+    private var lastCachedList = CopyOnWriteArrayList(mDownloadList.values.toList())
 
     @Synchronized
-    fun getDownloadingItemList(): List<DownloadItem> {
+    fun getDownloadingItemList(): CopyOnWriteArrayList<DownloadItem> {
         if (listHasChanged) {
-            lastCachedList = mDownloadList.values.toList()
+            lastCachedList = CopyOnWriteArrayList(mDownloadList.values.toList())
         }
         return lastCachedList
     }
@@ -39,10 +40,11 @@ object DownloadingList {
     @Synchronized
     fun addToDownloadingList(item: DownloadItem) {
         if (!isDownloading(item)) {
+            listHasChanged = true
             mDownLoadIdList.add(item.downloadID)
             mDownloadList[item.downloadID.toString()] = item
+        } else {
             listHasChanged = true
-        }else{
             mDownloadList[item.downloadID.toString()]?.apply {
                 this.downloadListener = item.downloadListener
             }
@@ -51,8 +53,8 @@ object DownloadingList {
 
     @Synchronized
     fun removeFromDownloadingList(downloadId: Long) {
+        listHasChanged = true
         mDownloadList.remove(downloadId.toString())
         mDownLoadIdList.remove(downloadId)
-        listHasChanged = true
     }
 }

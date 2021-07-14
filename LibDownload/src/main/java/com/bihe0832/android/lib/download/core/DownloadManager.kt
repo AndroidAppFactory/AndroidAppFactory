@@ -21,6 +21,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import java.io.File
+import java.util.concurrent.CopyOnWriteArrayList
 
 
 object DownloadManager {
@@ -30,7 +31,7 @@ object DownloadManager {
     }
 
     private var mContext: Context? = null
-    private var mDownloadListenerList = mutableListOf<DownloadListener>()
+    private var mDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
     private const val DEFAULT_MAX_NUM = 5
     private var mMaxNum = DEFAULT_MAX_NUM
     private var mHasInit = false

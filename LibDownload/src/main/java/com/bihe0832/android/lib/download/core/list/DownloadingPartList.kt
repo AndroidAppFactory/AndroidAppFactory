@@ -5,6 +5,7 @@ import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.part.DownloadThread
 import com.bihe0832.android.lib.log.ZLog
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  *
@@ -18,14 +19,14 @@ object DownloadingPartList {
     private var mDownloadThreadForPartList = ConcurrentHashMap<String, DownloadThread>()
 
     @Synchronized
-    fun getPartListById(downloadId: Long): List<DownloadThread> {
+    fun getPartListById(downloadId: Long): CopyOnWriteArrayList<DownloadThread> {
         var dataList = mutableListOf<DownloadThread>()
         mDownloadThreadForPartList.entries.forEach { item ->
             if (item.value.getDownloadPartInfo().downloadID == downloadId) {
                 dataList.add(item.value)
             }
         }
-        return dataList.toList()
+        return CopyOnWriteArrayList(dataList.toList())
     }
 
     @Synchronized

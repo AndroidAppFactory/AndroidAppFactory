@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download.core.list
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  *
@@ -15,16 +16,16 @@ object DownloadTaskList {
 
     //所有在下载的id列表
     private val mDownloadList = ConcurrentHashMap<Long, DownloadItem>()
-    private var mDownLoadIdList = mutableListOf<Long>()
+    private var mDownLoadIdList = CopyOnWriteArrayList<Long>()
 
     private var listHasChanged = false
-    private var lastCachedList = mDownloadList.values.toList()
+    private var lastCachedList = CopyOnWriteArrayList(mDownloadList.values.toList())
 
 
     @Synchronized
-    fun getDownloadTasKList(): List<DownloadItem> {
+    fun getDownloadTasKList(): CopyOnWriteArrayList<DownloadItem> {
         if (listHasChanged) {
-            lastCachedList = mDownloadList.values.toList()
+            lastCachedList = CopyOnWriteArrayList(mDownloadList.values.toList())
         }
         return lastCachedList
     }
@@ -54,24 +55,24 @@ object DownloadTaskList {
     }
 
     @Synchronized
-    fun updateDownloadTaskListItem(item: DownloadItem){
+    fun updateDownloadTaskListItem(item: DownloadItem) {
         if (hadAddTask(item)) {
+            listHasChanged = true
             mDownloadList[item.downloadID]?.update(item)
         }
     }
 
     @Synchronized
     fun removeFromDownloadTaskList(downloadId: Long) {
+        listHasChanged = true
         mDownloadList.remove(downloadId)
         mDownLoadIdList.remove(downloadId)
-        listHasChanged = true
     }
 
     @Synchronized
     fun getTaskByDownloadID(downloadID: Long): DownloadItem? {
         return mDownloadList[downloadID]
     }
-
 
     @Synchronized
     fun getTaskByDownloadURL(downloadURL: String): DownloadItem? {
