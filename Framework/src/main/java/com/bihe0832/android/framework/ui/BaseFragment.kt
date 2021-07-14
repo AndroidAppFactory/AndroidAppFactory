@@ -16,6 +16,12 @@ open class BaseFragment : SwipeBackFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    /**
+     * 仅用于简单的Fragment的setUserVisibleHint设置，
+     * 对于有viewPager等特殊复杂场景的页面，需要自行完成setUserVisibleHint的设置
+     * 如果自行设置 setUserVisibleHint ，不要调用 super.setUserVisibleHint
+     * @param isVisibleToUser
+     */
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isAdded) {

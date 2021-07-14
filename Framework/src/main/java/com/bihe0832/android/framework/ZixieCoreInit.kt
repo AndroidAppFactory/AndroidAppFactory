@@ -29,6 +29,7 @@ object ZixieCoreInit {
         ZixieContext.init(application, appIsDebug, appIsOfficial, appTag)
         if (!hasInit) {
             hasInit = true
+            ZLog.setDebug(!ZixieContext.isOfficial())
             // 初始化配置管理
             Config.init(ZixieContext.applicationContext, Constants.CONFIG_COMMON_FILE_NAME, !ZixieContext.isOfficial())
             Config.loadLoaclFile(application, Constants.CONFIG_SPECIAL_FILE_NAME, !ZixieContext.isOfficial())

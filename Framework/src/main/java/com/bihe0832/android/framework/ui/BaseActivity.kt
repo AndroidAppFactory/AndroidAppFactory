@@ -55,6 +55,22 @@ open class BaseActivity : SupportActivity() {
         return true
     }
 
+    protected fun updateTitle(titleString: String?) {
+        try {
+            titleString?.let {
+                mToolbar?.apply {
+                    title = it
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    protected fun initToolbar(resID: Int, needBack: Boolean) {
+        initToolbar(resID, null, needBack)
+    }
+
     protected fun initToolbar(resID: Int, titleString: String?, needBack: Boolean) {
         initToolbar(resID, titleString, needBack, 0)
     }
@@ -64,8 +80,8 @@ open class BaseActivity : SupportActivity() {
             if (null == mToolbar) {
                 mToolbar = findViewById(resID)
             }
+            updateTitle(titleString)
             mToolbar?.apply {
-                title = titleString
                 if (needBack) {
                     setNavigationOnClickListener { onBackPressedSupport() }
                 } else {
@@ -75,18 +91,6 @@ open class BaseActivity : SupportActivity() {
                         setNavigationIcon(R.mipmap.icon)
                     }
 
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    protected fun updateTitle(titleString: String?){
-        try {
-            titleString?.let {
-                mToolbar?.apply {
-                    title = it
                 }
             }
         } catch (e: Exception) {
