@@ -11,11 +11,6 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.ZixieContext.getDeviceId
-import com.bihe0832.android.framework.ZixieContext.getVersionCode
-import com.bihe0832.android.framework.ZixieContext.getVersionName
-import com.bihe0832.android.framework.ZixieContext.isDebug
-import com.bihe0832.android.framework.ZixieContext.isOfficial
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -59,7 +54,10 @@ open class TestDebugCommonFragment : BaseTestFragment() {
     protected fun startActivity(activityName: String) {
         try {
             val threadClazz = Class.forName(activityName)
-            startActivity(threadClazz)
+            val intent = Intent(context, threadClazz)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
             ZixieContext.showToast("请确认当前运行的测试模块是否包含该应用")
@@ -69,10 +67,11 @@ open class TestDebugCommonFragment : BaseTestFragment() {
     protected fun showLog() {
         startActivity(TestLogActivity::class.java)
     }
+
     protected fun showMobileInfo() {
         val builder = StringBuilder()
         builder.append("PackageName: ${context!!.packageName}\n")
-        builder.append("deviceId: ${getDeviceId()}\n")
+        builder.append("deviceId: ${ZixieContext.getDeviceId()}\n")
         builder.append("厂商&型号: ${Build.MANUFACTURER}, ${Build.MODEL}, ${Build.BRAND}\n")
         builder.append("系统版本: ${Build.VERSION.RELEASE}, ${Build.VERSION.SDK_INT}\n")
         builder.append("系统指纹: ${Build.FINGERPRINT}\n")
@@ -82,22 +81,24 @@ open class TestDebugCommonFragment : BaseTestFragment() {
 
     protected fun showAPPInfo() {
         val builder = StringBuilder()
-        var version = ""
-        version = if (isDebug()) {
+        var version = if (ZixieContext.isDebug()) {
             "内测版"
         } else {
-            if (isOfficial()) {
+            if (ZixieContext.isOfficial()) {
                 "外发版"
             } else {
                 "预发布版"
             }
         }
-        builder.append("PackageName: ${context!!.packageName}\n")
-        builder.append("Version: ${getVersionName()}.${getVersionCode()}\n")
-        builder.append("Tag: ${ZixieContext.getVersionTag()}\n")
-        builder.append("渠道号: ${ZixieContext.channelID}\n")
-        builder.append("签名信息: ${APKUtils.getSigMd5ByPkgName(ZixieContext.applicationContext, ZixieContext.applicationContext?.packageName)}\n")
-        showInfo("${APKUtils.getAppName(context)} $version 信息", builder.toString())
+        builder.append("应用名称: ${APKUtils.getAppName(context)}\n")
+        builder.append("应用包名: ${ZixieContext.applicationContext!!.packageName}\n")
+        builder.append("安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}\n")
+        builder.append("版本类型: $version\n")
+        builder.append("应用版本: ${ZixieContext.getVersionName()}.${ZixieContext.getVersionCode()}\n")
+        builder.append("版本标识: ${ZixieContext.getVersionTag()}\n")
+        builder.append("签名MD5: ${APKUtils.getSigMd5ByPkgName(ZixieContext.applicationContext, ZixieContext.applicationContext?.packageName)}")
+
+        showInfo("应用信息", builder.toString())
     }
 
     protected fun showUsedInfo() {
