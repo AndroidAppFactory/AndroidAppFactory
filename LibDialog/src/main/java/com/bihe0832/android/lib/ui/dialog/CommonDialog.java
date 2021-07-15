@@ -375,6 +375,16 @@ public class CommonDialog extends Dialog {
     @Override
     public void setCancelable(boolean flag) {
         super.setCancelable(flag);
+        shouldCanceledOutside = flag;
+    }
+
+    /**
+     * replaced by {@link #setShouldCanceled(boolean)}
+     */
+    @Deprecated
+    public void setCanceledOnTouchOutside(boolean flag) {
+        super.setCanceledOnTouchOutside(flag);
+        shouldCanceledOutside = flag;
     }
 
     public CommonDialog setShouldCanceled(boolean flag) {

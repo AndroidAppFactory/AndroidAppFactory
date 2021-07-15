@@ -91,6 +91,7 @@ public class DebugTools {
         }
         final String finalContent = tempContent;
         dialog.setTitle(title)
+                .setShouldCanceled(true)
                 .setPositive(positiveText)
                 .setNegative("复制到剪切板")
                 .setOnClickBottomListener(new OnDialogListener() {
