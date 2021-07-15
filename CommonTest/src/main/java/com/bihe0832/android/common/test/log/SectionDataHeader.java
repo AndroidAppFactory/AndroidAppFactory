@@ -25,4 +25,8 @@ public class SectionDataHeader extends CardBaseModule {
         mHeaderText = netType;
     }
 
+    @Override
+    public boolean autoAddItem() {
+        return true;
+    }
 }

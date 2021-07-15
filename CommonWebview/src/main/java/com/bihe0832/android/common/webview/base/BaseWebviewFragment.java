@@ -106,14 +106,13 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     }
 
-    private WebViewClient getWebViewClient() {
+    protected WebViewClient getWebViewClient() {
         return new BaseWebviewFragment.MyWebViewClient(getJsBridgeProxy());
     }
 
-    private WebChromeClient getWebChromeClient() {
+    protected WebChromeClient getWebChromeClient() {
         return new BaseWebviewFragment.MyWebChromeClient();
     }
-
 
     private View mCustomView;
     public BaseWebView mWebView;
@@ -346,11 +345,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             }
         }
 
-        private boolean processOverrideUrlLoading(String url) {
+        protected boolean processOverrideUrlLoading(String url) {
             if (url.startsWith("http") || url.startsWith("https")) {
                 if (loadUseIntent(url)) {
                     IntentUtils.jumpToOtherApp(url, getContext());
-                    return true;
                 } else {
                     if (!url.startsWith(KEY_WX_PAY_PART)) {
                         loadUrl(url, "");
@@ -358,8 +356,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                         Map<String, String> headers = new HashMap<>();
                         mWebView.loadUrl(url, headers);
                     }
-                    return true;
                 }
+                return true;
             } else if (url.startsWith(JsBridge.JS_BRIDGE_SCHEME)) {
                 if (mJSBridgeProxy != null) {
                     mJSBridgeProxy.invoke(url);
@@ -448,7 +446,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             super.onReceivedTitle(view, title);
 
             mWebViewViewModel.setTitleString(title);
-            ZLog.d(TAG, "mWebViewViewModel: " + mWebViewViewModel.hashCode());
+            WebviewLoggerFile.INSTANCE.log("BaseWebviewFragment title：" + title);
+            WebviewLoggerFile.INSTANCE.log("BaseWebviewFragment mWebViewViewModel: " + mWebViewViewModel.hashCode());
         }
 
 

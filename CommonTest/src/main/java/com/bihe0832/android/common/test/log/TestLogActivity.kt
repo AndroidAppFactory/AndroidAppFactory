@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
@@ -32,7 +33,10 @@ open class TestLogActivity : CommonListActivity() {
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
+            add(CardItemForCommonList(SectionDataContent::class.java))
             add(CardItemForCommonList(TestItemData::class.java, true))
+            add(CardItemForCommonList(TestTipsData::class.java, true))
+
         }
     }
 

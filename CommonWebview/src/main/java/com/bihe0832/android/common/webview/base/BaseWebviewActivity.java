@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import com.bihe0832.android.common.webview.R;
+import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
@@ -32,6 +33,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mWebViewViewModel = ViewModelProviders.of(this).get(WebViewViewModel.class);
+        WebviewLoggerFile.INSTANCE.log("BaseWebviewActivity mWebViewViewModel: " + mWebViewViewModel.hashCode());
         ZLog.d(TAG + QbSdk.getTbsVersion(this));
         handleIntent(getIntent());
 
@@ -50,14 +52,13 @@ public abstract class BaseWebviewActivity extends CommonActivity {
                 ZLog.d("handle intent, but extra is bad");
             }
         }
-        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS)) {
-            int show = ConvertUtils.parseInt(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS),
-                    RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_SHOW);
-            if (RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_SHOW != show) {
-                findViewById(R.id.common_toolbar).setVisibility(View.GONE);
-            } else {
-                initToolbar();
-            }
+        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS)
+                && ConvertUtils.parseInt(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS),
+                RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_SHOW)
+                == RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_HIDE) {
+            findViewById(R.id.common_toolbar).setVisibility(View.GONE);
+        } else {
+            initToolbar();
         }
     }
 
