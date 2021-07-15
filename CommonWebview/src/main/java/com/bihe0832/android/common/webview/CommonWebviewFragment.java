@@ -4,6 +4,7 @@ package com.bihe0832.android.common.webview;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.view.View;
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
@@ -12,6 +13,8 @@ import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
 import com.tencent.smtt.sdk.CookieManager;
 import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebViewClient;
 
 public class CommonWebviewFragment extends BaseWebviewFragment {
 
