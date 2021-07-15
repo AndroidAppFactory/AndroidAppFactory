@@ -61,6 +61,8 @@ import java.util.Map;
 public abstract class BaseWebviewFragment extends BaseFragment implements
         ActivityCompat.OnRequestPermissionsResultCallback {
 
+    protected static final String TAG = "WebPageFragment -> :";
+
     public static final String INTENT_KEY_URL = RouterConstants.INTENT_EXTRA_KEY_WEB_URL;
     public static final String INTENT_KEY_REFRESH = "refresh";
     public static final String INTENT_KEY_DATA = "WebviewFragment.data";
@@ -85,7 +87,33 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     protected abstract BaseJsBridgeProxy getJsBridgeProxy();
 
-    protected static final String TAG = "WebPageFragment -> :";
+    public LiveData<Integer> getWebViewScrollTopLiveData() {
+        return mWebViewScrollTopLiveData;
+    }
+
+    private WebViewRefreshCallback mRefreshCallback = null;
+
+    public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback) {
+        mRefreshCallback = callback;
+    }
+
+    public HashMap<String, String> getGlobalLocalRes() {
+        return globalLocalRes;
+    }
+
+    //在页面加载结束之后执行操作
+    protected void actionOnPageFinished(WebView view, String url) {
+
+    }
+
+    private WebViewClient getWebViewClient() {
+        return new BaseWebviewFragment.MyWebViewClient(getJsBridgeProxy());
+    }
+
+    private WebChromeClient getWebChromeClient() {
+        return new BaseWebviewFragment.MyWebChromeClient();
+    }
+
 
     private View mCustomView;
     public BaseWebView mWebView;
@@ -116,20 +144,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     private long lastResumeTime = 0L;
     private long lastPauseTime = 0L;
 
-
-    public LiveData<Integer> getWebViewScrollTopLiveData() {
-        return mWebViewScrollTopLiveData;
-    }
-
-    private WebViewRefreshCallback mRefreshCallback = null;
-
-    public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback) {
-        mRefreshCallback = callback;
-    }
-
-    public HashMap<String, String> getGlobalLocalRes() {
-        return globalLocalRes;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -165,7 +179,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             }
         });
         getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        initWebview(view);
+        initWebview(view, getWebViewClient(), getWebChromeClient());
         return view;
     }
 
@@ -184,7 +198,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         }
     }
 
-    private void initWebview(View view) {
+    protected void initWebview(View view, WebViewClient webViewClient, WebChromeClient webChromeClient) {
         mWebView = new BaseWebView(getContext(), null);
         mNormalPage = (SwipeRefreshLayout) view.findViewById(R.id.app_webview_swipe_container);
         mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
@@ -238,8 +252,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             }
         }
 
-        mWebView.setWebViewClient(new BaseWebviewFragment.MyWebViewClient(getJsBridgeProxy()));
-        mWebView.setWebChromeClient(new BaseWebviewFragment.MyWebChromeClient());
+        mWebView.setWebViewClient(webViewClient);
+        mWebView.setWebChromeClient(webChromeClient);
         setUserAgentSupport(mWebView.getSettings());
         synUserInfoInCookies();
         long time = System.currentTimeMillis();
@@ -279,7 +293,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     }
 
     //WebViewClient就是帮助WebView处理各种通知、请求事件的。
-    class MyWebViewClient extends WebViewClient {
+    protected class MyWebViewClient extends WebViewClient {
 
         public BaseJsBridgeProxy mJSBridgeProxy = null;
 
@@ -370,7 +384,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                 mNormalPage.setVisibility(View.GONE);
                 mErrorPage.setVisibility(View.VISIBLE);
             }
-
+            actionOnPageFinished(view, url);
         }
 
         @Override
@@ -395,7 +409,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     }
 
     //WebChromeClient是辅助WebView处理Javascript的对话框，网站图标，网站title，加载进度等
-    class MyWebChromeClient extends WebChromeClient {
+    protected class MyWebChromeClient extends WebChromeClient {
 
         @Override
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
