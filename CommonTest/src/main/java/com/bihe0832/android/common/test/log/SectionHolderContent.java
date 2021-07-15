@@ -60,4 +60,5 @@ public class SectionHolderContent extends CardBaseHolder {
         });
 
     }
+
 }

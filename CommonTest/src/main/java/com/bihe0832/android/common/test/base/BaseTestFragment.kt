@@ -2,6 +2,7 @@ package com.bihe0832.android.common.test.base
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.test.R
@@ -12,6 +13,7 @@ import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.http.common.HttpBasicRequest
@@ -24,6 +26,10 @@ import kotlin.collections.set
 
 open class BaseTestFragment : CommonListFragment() {
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        CardInfoHelper.getInstance().setAutoAddItem(true)
+    }
     open fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestItemData("test"))

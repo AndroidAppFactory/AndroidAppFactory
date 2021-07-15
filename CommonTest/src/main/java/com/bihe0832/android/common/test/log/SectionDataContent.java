@@ -26,4 +26,9 @@ public class SectionDataContent extends CardBaseModule {
         mTitleName = title;
         mLogFileName = log;
     }
+
+    @Override
+    public boolean autoAddItem() {
+        return true;
+    }
 }

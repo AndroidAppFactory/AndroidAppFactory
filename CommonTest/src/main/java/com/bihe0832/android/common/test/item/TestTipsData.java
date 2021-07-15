@@ -1,14 +1,13 @@
 package com.bihe0832.android.common.test.item;
 
 import android.view.View;
-
 import com.bihe0832.android.common.test.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-11-21.
- * Description: Description
+ *         Created on 2019-11-21.
+ *         Description: Description
  */
 public class TestTipsData extends TestItemData {
 
@@ -27,4 +26,18 @@ public class TestTipsData extends TestItemData {
     public TestTipsData(String netType, View.OnClickListener listener) {
         super(netType, listener);
     }
+
+    public TestTipsData(String netType, boolean background) {
+        super(netType, background);
+    }
+
+    public TestTipsData(String netType, View.OnClickListener listener, View.OnLongClickListener longClickListener) {
+        super(netType, listener, longClickListener);
+    }
+
+    public TestTipsData(String netType, View.OnClickListener listener, View.OnLongClickListener longClickListener,
+            boolean background) {
+        super(netType, listener, longClickListener, background);
+    }
+
 }

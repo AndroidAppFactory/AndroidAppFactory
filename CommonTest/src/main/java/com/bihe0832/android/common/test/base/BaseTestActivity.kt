@@ -5,9 +5,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
-import android.view.View
-import android.widget.TextView
-import com.bihe0832.android.common.test.R
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.webview.WebPageActivity
 import com.bihe0832.android.framework.router.RouterAction
@@ -15,12 +12,9 @@ import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
-import com.bihe0832.android.lib.http.common.HttpBasicRequest
-import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
@@ -32,6 +26,7 @@ abstract class BaseTestActivity : CommonListActivity() {
         if (Build.VERSION.SDK_INT > 9) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         }
+        CardInfoHelper.getInstance().setAutoAddItem(true)
     }
 
 

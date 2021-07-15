@@ -3,8 +3,6 @@ package com.bihe0832.android.common.webview;
 
 import android.net.Uri;
 import android.os.Bundle;
-
-import android.view.View;
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
@@ -12,9 +10,6 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
 import com.tencent.smtt.sdk.CookieManager;
-import com.tencent.smtt.sdk.CookieSyncManager;
-import com.tencent.smtt.sdk.WebChromeClient;
-import com.tencent.smtt.sdk.WebViewClient;
 
 public class CommonWebviewFragment extends BaseWebviewFragment {
 
@@ -48,8 +43,10 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
     protected String getFinalURL(String url) {
         ZLog.d(TAG + url);
         StringBuilder builder = new StringBuilder();
-        builder.append(URL_PARAM_VERSION_NAME).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.INSTANCE.getVersionName());
-        builder.append(URLUtils.HTTP_REQ_ENTITY_JOIN).append(URL_PARAM_VERSION_CODE).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.INSTANCE.getVersionCode());
+        builder.append(URL_PARAM_VERSION_NAME).append(URLUtils.HTTP_REQ_ENTITY_MERGE)
+                .append(ZixieContext.INSTANCE.getVersionName());
+        builder.append(URLUtils.HTTP_REQ_ENTITY_JOIN).append(URL_PARAM_VERSION_CODE)
+                .append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.INSTANCE.getVersionCode());
         String result = URLUtils.marge(url, builder.toString());
         ZLog.d(TAG + result);
         return result;
@@ -82,9 +79,14 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
         }
         String host = uri.getHost().toLowerCase();
         CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.setCookie(url, getCookieString(URL_PARAM_VERSION_NAME, ZixieContext.INSTANCE.getVersionName(), host) + "; MAX-Age=" + 60 * 60 * 24);
-        cookieManager.setCookie(url, getCookieString(URL_PARAM_VERSION_CODE, String.valueOf(ZixieContext.INSTANCE.getVersionCode()), host) + "; MAX-Age=" + 60 * 60 * 24);
-        cookieManager.setCookie(url, getCookieString(URL_PARAM_PLATFORM, Constants.SYSTEM_CONSTANT, host) + "; MAX-Age=" + 60 * 60 * 24);
+        cookieManager.setCookie(url,
+                getCookieString(URL_PARAM_VERSION_NAME, ZixieContext.INSTANCE.getVersionName(), host) + "; MAX-Age="
+                        + 60 * 60 * 24);
+        cookieManager.setCookie(url,
+                getCookieString(URL_PARAM_VERSION_CODE, String.valueOf(ZixieContext.INSTANCE.getVersionCode()), host)
+                        + "; MAX-Age=" + 60 * 60 * 24);
+        cookieManager.setCookie(url,
+                getCookieString(URL_PARAM_PLATFORM, Constants.SYSTEM_CONSTANT, host) + "; MAX-Age=" + 60 * 60 * 24);
         syncCookie();
     }
 }
