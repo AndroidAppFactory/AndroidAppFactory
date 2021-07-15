@@ -78,7 +78,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"                : [
-                "version"            : "4.7.5",
+                "version"            : "4.7.6",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback"
