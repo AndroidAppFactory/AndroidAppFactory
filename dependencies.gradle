@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibWebview"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -78,14 +78,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"                : [
-                "version"            : "4.7.11",
+                "version"            : "4.7.12",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.7.9",
+                "version"            : "4.7.12",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
@@ -95,28 +95,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "4.7.8",
+                "version"            : "4.7.12",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "4.7.8",
+                "version"            : "4.7.12",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "4.7.8",
+                "version"            : "4.7.12",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "4.7.9",
+                "version"                : "4.7.12",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -128,7 +128,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "4.7.9",
+                "version"                : "4.7.12",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -141,14 +141,14 @@ ext.moduleInfo = [
         ],
 
         "CommonPraise"              : [
-                "version"            : "4.7.8",
+                "version"            : "4.7.12",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "4.7.8",
+                "version"                : "4.7.12",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
@@ -161,12 +161,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "4.7.8",
+                "version"            : "4.7.12",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils"]
         ],
         "LibUIUtils"                : [
-                "version"            : "4.7.8",
+                "version"            : "4.7.12",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -468,7 +468,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWebview"                : [
-                "version"            : "4.7.8",
+                "version"            : "4.7.12",
                 "artifactId"         : "lib-webview",
                 "apidependenciesList": [
                         "com.tencent.tbs.tbssdk:sdk:43697",
