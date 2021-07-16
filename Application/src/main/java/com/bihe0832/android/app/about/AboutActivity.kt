@@ -10,7 +10,7 @@ import com.bihe0832.android.lib.router.annotation.Module
 import kotlinx.android.synthetic.main.about_layout.*
 import java.util.*
 
-const val MODULE_NAME_BASE_ABOUT = "babout"
+const val MODULE_NAME_BASE_ABOUT = "zabout"
 
 @Module(MODULE_NAME_BASE_ABOUT)
 class AboutActivity : BaseActivity() {

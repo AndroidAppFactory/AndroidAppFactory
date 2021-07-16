@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.router.annotation.Module;
 @Module(FeedbackActivity.MODULE_NAME_FEEDBACK)
 public final class FeedbackActivity extends BaseWebviewActivity {
 
-    public static final String MODULE_NAME_FEEDBACK = "feedback";
+    public static final String MODULE_NAME_FEEDBACK = "zfeedback";
 
 
     @Override

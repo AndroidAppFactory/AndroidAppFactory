@@ -8,7 +8,7 @@ import static com.bihe0832.android.common.webview.WebPageActivity.MODULE_NAME_WE
 
 @Module(MODULE_NAME_WEB_PAGE)
 public final class WebPageActivity extends BaseWebviewActivity {
-    public static final String MODULE_NAME_WEB_PAGE = "web";
+    public static final String MODULE_NAME_WEB_PAGE = "zweb";
 
     protected BaseWebviewFragment getWebViewFragment() {
         return CommonWebviewFragment.newInstance(mURL);
