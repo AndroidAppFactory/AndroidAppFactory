@@ -61,12 +61,6 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
     }
 
     @Override
-    protected BaseJsBridgeProxy getJsBridgeProxy() {
-        return new BaseJsBridgeProxy(mWebView, getActivity()) {
-        };
-    }
-
-    @Override
     protected boolean loadUseIntent(String url) {
         return false;
     }

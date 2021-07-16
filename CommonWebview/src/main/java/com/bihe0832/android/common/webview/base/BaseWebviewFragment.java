@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.webview.base;
 
 
+import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
@@ -85,7 +86,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     //获取业务内置浏览器的agent头
     protected abstract String getUserAgentString();
 
-    protected abstract BaseJsBridgeProxy getJsBridgeProxy();
 
     public LiveData<Integer> getWebViewScrollTopLiveData() {
         return mWebViewScrollTopLiveData;
@@ -112,6 +112,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     protected WebChromeClient getWebChromeClient() {
         return new BaseWebviewFragment.MyWebChromeClient();
+    }
+
+    protected MyBaseJsBridgeProxy getJsBridgeProxy() {
+        return new MyBaseJsBridgeProxy(mWebView, getActivity());
     }
 
     private View mCustomView;
@@ -294,9 +298,9 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     //WebViewClient就是帮助WebView处理各种通知、请求事件的。
     protected class MyWebViewClient extends WebViewClient {
 
-        public BaseJsBridgeProxy mJSBridgeProxy = null;
+        public MyBaseJsBridgeProxy mJSBridgeProxy = null;
 
-        public MyWebViewClient(BaseJsBridgeProxy jsBridge) {
+        public MyWebViewClient(MyBaseJsBridgeProxy jsBridge) {
             BaseWebviewFragment.this.mJSBridgeProxy = jsBridge;
             this.mJSBridgeProxy = jsBridge;
         }
@@ -526,6 +530,43 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
             mCustomViewCallback.onCustomViewHidden();
             mCustomViewCallback = null;
+        }
+    }
+
+    public class MyBaseJsBridgeProxy extends BaseJsBridgeProxy {
+
+        public MyBaseJsBridgeProxy(WebView webView, Activity activity) {
+            super(webView, activity, new MyJSBridge(mWebView, getActivity()));
+        }
+
+        @Override
+        protected void callAMethod(Uri uri, String hostAsMethodName, int seqid, String callbackName) {
+            WebviewLoggerFile.INSTANCE.log("---------------------- JsBridge call start ----------------------");
+            WebviewLoggerFile.INSTANCE.log("uri:" + URLDecoder.decode(uri.toString()));
+            WebviewLoggerFile.INSTANCE.log("hostAsMethodName:" + hostAsMethodName);
+            WebviewLoggerFile.INSTANCE.log("seqid:" + seqid);
+            WebviewLoggerFile.INSTANCE.log("callbackName:" + callbackName);
+            WebviewLoggerFile.INSTANCE.log("---------------------- JsBridge call end ----------------------");
+            super.callAMethod(uri, hostAsMethodName, seqid, callbackName);
+        }
+    }
+
+
+    protected class MyJSBridge extends JsBridge {
+
+        public MyJSBridge(WebView webView, Context context) {
+            super(webView, context);
+        }
+
+        @Override
+        public void callback(String function, String result, ResponseType type) {
+
+            WebviewLoggerFile.INSTANCE.log("---------------------- JsBridge callback start ----------------------");
+            WebviewLoggerFile.INSTANCE.log("function:" + function);
+            WebviewLoggerFile.INSTANCE.log("result:" + result);
+            WebviewLoggerFile.INSTANCE.log("type:" + type.toString());
+            WebviewLoggerFile.INSTANCE.log("---------------------- JsBridge callback end ----------------------");
+            super.callback(function, result, type);
         }
     }
 

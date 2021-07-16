@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
 import com.bihe0832.android.framework.router.RouterConstants;
@@ -49,7 +50,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
                 IntentUtils.openWebPage(redirectURL, this);
                 finish();
             } else {
-                ZLog.d("handle intent, but extra is bad");
+                WebviewLoggerFile.INSTANCE.log("handle intent, but extra is bad");
             }
         }
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS)
@@ -63,14 +64,20 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     }
 
     protected void initToolbar() {
+        initToolbar(R.id.common_toolbar, "", true);
+        getMToolbar().setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mWebViewViewModel.getTitleLiveData().observe(BaseWebviewActivity.this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable final String s) {
                 if (!s.equals("about:blank")) {
-                    initToolbar(R.id.common_toolbar, s, true);
-
+                    updateTitle(s);
                 }
-                ZLog.d("mWebViewViewModel: " + hashCode() + "  title: " + s);
+                WebviewLoggerFile.INSTANCE.log("mWebViewViewModel: " + hashCode() + "  title: " + s);
             }
         });
     }
@@ -79,7 +86,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     protected void onResume() {
         super.onResume();
         if (TextUtils.isEmpty(mURL)) {
-            ZLog.d(TAG + "handle intent, extra is good, but value is bad");
+            WebviewLoggerFile.INSTANCE.log(TAG + "onResume, extra is good, but value is bad");
             finish();
             return;
         } else {

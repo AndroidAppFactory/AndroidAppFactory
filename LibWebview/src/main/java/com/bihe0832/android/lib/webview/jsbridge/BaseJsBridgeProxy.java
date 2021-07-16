@@ -7,21 +7,16 @@ import android.net.Uri;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
-import com.tencent.smtt.sdk.CookieManager;
-import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebView;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -48,6 +43,12 @@ public abstract class BaseJsBridgeProxy {
         mWebView = webView;
         mActivity = activity;
         this.mJsBridge = new JsBridge(mWebView, mActivity);
+    }
+
+    public BaseJsBridgeProxy(WebView webView, Activity activity, JsBridge jsBridge) {
+        mWebView = webView;
+        mActivity = activity;
+        this.mJsBridge = jsBridge;
     }
 
     /**
@@ -120,7 +121,7 @@ public abstract class BaseJsBridgeProxy {
                     callAMethod(uriForCall, method, seqidOfCall, callback);
                 }
             } catch (Exception ex) {
-                ZLog.d(TAG,ex.toString());
+                ZLog.d(TAG, ex.toString());
                 ex.printStackTrace();
             }
         } else {
@@ -129,17 +130,18 @@ public abstract class BaseJsBridgeProxy {
     }
 
     /**
-     * @param uri              为伪协议的详细内容
+     * @param uri 为伪协议的详细内容
      * @param hostAsMethodName 为函数名称，主要用于回调时返回给web端
-     * @param seqid            为序列号，主要用于回调时返回给web端
-     * @param callbackName     回调方法，回调时回调的web端方法名
+     * @param seqid 为序列号，主要用于回调时返回给web端
+     * @param callbackName 回调方法，回调时回调的web端方法名
      */
-    private void callAMethod(Uri uri, String hostAsMethodName, int seqid, String callbackName) {
+    protected void callAMethod(Uri uri, String hostAsMethodName, int seqid, String callbackName) {
         try {
             if (!TextUtils.isEmpty(hostAsMethodName)) {
                 Object obj = this;
                 ZLog.e(TAG, this.getClass().getName());
-                Method method = this.getClass().getMethod(hostAsMethodName, Uri.class, Integer.TYPE, String.class, String.class);
+                Method method = this.getClass()
+                        .getMethod(hostAsMethodName, Uri.class, Integer.TYPE, String.class, String.class);
                 method.invoke(obj, uri, seqid, hostAsMethodName, callbackName);
 
             } else {
@@ -147,15 +149,15 @@ public abstract class BaseJsBridgeProxy {
                     mJsBridge.responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_None);
                 }
             }
-        } catch (NoSuchMethodException e){
-            ZLog.e(TAG,"JSBridge method 404");
-            ZLog.d(TAG,e.toString());
+        } catch (NoSuchMethodException e) {
+            ZLog.e(TAG, "JSBridge method 404");
+            ZLog.d(TAG, e.toString());
             if (!TextUtils.isEmpty(callbackName)) {
                 mJsBridge.responseFail(callbackName, seqid, hostAsMethodName, JsResult.NOT_SUPPORT);
             }
-        }catch (Exception ex) {
-            ZLog.e(TAG,"JSBridge method has error");
-            ZLog.d(TAG,ex.toString());
+        } catch (Exception ex) {
+            ZLog.e(TAG, "JSBridge method has error");
+            ZLog.d(TAG, ex.toString());
             if (!TextUtils.isEmpty(callbackName)) {
                 mJsBridge.responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception);
             }
@@ -218,12 +220,12 @@ public abstract class BaseJsBridgeProxy {
     }
 
     public void onResume() {
-        ZLog.e(TAG,"JSBridge onResume");
+        ZLog.e(TAG, "JSBridge onResume");
         mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, null, "onResume");
     }
 
     public void onPause() {
-        ZLog.e(TAG,"JSBridge onPause");
+        ZLog.e(TAG, "JSBridge onPause");
         mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, null, "onPause");
     }
 
