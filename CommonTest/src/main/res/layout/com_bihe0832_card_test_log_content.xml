@@ -27,7 +27,7 @@
             android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:background="@drawable/common_toast_corner"
+            android:background="@drawable/button_bg_shape"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -42,7 +42,7 @@
 
     <TextView
             android:id="@+id/log_send"
-            android:background="@drawable/common_toast_corner"
+            android:background="@drawable/button_bg_shape"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:paddingLeft="12dp"
