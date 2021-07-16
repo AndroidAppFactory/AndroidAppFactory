@@ -163,6 +163,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.common_zixie_fragment_webview, container, false);
+        mWebView = new BaseWebView(getContext(), null);
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);
         mRedirect = (TextView) view.findViewById(R.id.web_native_browser);
@@ -200,7 +201,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     }
 
     protected void initWebview(View view, WebViewClient webViewClient, WebChromeClient webChromeClient) {
-        mWebView = new BaseWebView(getContext(), null);
         mNormalPage = (SwipeRefreshLayout) view.findViewById(R.id.app_webview_swipe_container);
         mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
