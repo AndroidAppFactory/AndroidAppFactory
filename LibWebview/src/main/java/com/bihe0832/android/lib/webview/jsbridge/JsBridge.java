@@ -37,8 +37,6 @@ public class JsBridge {
         this.mContext = context;
     }
 
-
-
     public void response(String function, int seqid, String method, String result) {
         response(function, seqid, method, result,null);
     }

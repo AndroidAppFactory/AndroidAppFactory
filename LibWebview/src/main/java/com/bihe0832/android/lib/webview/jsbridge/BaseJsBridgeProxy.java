@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+import com.bihe0832.android.lib.webview.jsbridge.JsBridge.ResponseType;
 import com.tencent.smtt.sdk.WebView;
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -221,12 +222,14 @@ public abstract class BaseJsBridgeProxy {
 
     public void onResume() {
         ZLog.e(TAG, "JSBridge onResume");
-        mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, null, "onResume");
+        mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, ACTIVITY_STATE_CHANGE_CALLBACK, "onResume", null,
+                ResponseType.Event);
     }
 
     public void onPause() {
         ZLog.e(TAG, "JSBridge onPause");
-        mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, null, "onPause");
+        mJsBridge.response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, ACTIVITY_STATE_CHANGE_CALLBACK, "onPause", null,
+                ResponseType.Event);
     }
 
     public void getAppInfo(final Uri uri, final int seqid, final String method, final String callbackFun) {

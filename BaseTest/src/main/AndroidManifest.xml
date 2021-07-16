@@ -20,12 +20,6 @@
                 />
 
         <activity
-            android:name="com.bihe0832.android.base.test.touch.TouchRegionActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/activityTheme"/>
-
-        <activity
                 android:name="com.bihe0832.android.base.test.ipc.TestIPCActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
                 android:screenOrientation="portrait"
@@ -37,6 +31,14 @@
                 android:screenOrientation="portrait"
                 android:process=":test"
                 android:theme="@style/activityTheme" />
+
+        <activity
+            android:name="com.bihe0832.android.base.test.touch.TouchRegionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/activityTheme"/>
+
+
 
         <activity
             android:name="com.bihe0832.android.base.test.request.TestHttpActivity"
