@@ -4,11 +4,11 @@ package com.bihe0832.android.common.webview;
 import android.net.Uri;
 import android.os.Bundle;
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
+import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
-import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
 import com.tencent.smtt.sdk.CookieManager;
 
 public class CommonWebviewFragment extends BaseWebviewFragment {
@@ -63,6 +63,11 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
     @Override
     protected boolean loadUseIntent(String url) {
         return false;
+    }
+
+    @Override
+    protected MyBaseJsBridgeProxy getJsBridgeProxy() {
+        return new MyBaseJsBridgeProxy(mWebView, getActivity());
     }
 
     @Override
