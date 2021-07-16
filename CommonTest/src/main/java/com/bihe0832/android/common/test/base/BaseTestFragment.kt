@@ -66,14 +66,14 @@ open class BaseTestFragment : CommonListFragment() {
     }
 
 
-    protected fun startActivity(cls: Class<*>) {
+    protected open fun startActivity(cls: Class<*>) {
         val intent = Intent(context, cls)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         startActivity(intent)
     }
 
-    protected fun showResult(s: String?) {
+    protected open fun showResult(s: String?) {
         s?.let {
             ThreadManager.getInstance().runOnUIThread {
                 ZLog.d(HttpBasicRequest.LOG_TAG, "showResult:$s")
@@ -87,7 +87,7 @@ open class BaseTestFragment : CommonListFragment() {
     }
 
 
-    fun openWeb(url: String) {
+    open fun openZixieWeb(url: String) {
         val map = HashMap<String, String>()
         map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
         RouterAction.openPageByRouter(WebPageActivity.MODULE_NAME_WEB_PAGE, map)
