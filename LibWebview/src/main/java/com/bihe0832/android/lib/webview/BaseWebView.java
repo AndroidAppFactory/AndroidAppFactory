@@ -123,21 +123,20 @@ public class BaseWebView extends WebView{
     }
 
     private void resetCacheType(WebSettings webSetting) {
-        //设置缓存类型
-        webSetting.setCacheMode(WebSettings.LOAD_DEFAULT);
         //设置缓存位置
         String cacheDirPath = this.getContext().getApplicationContext().getFilesDir().getAbsolutePath() + APP_CACAHE_DIRNAME;
-        //JYLog.d("cacheDirPath=" + cacheDirPath);
+        //设置缓存类型
+        webSetting.setCacheMode(WebSettings.LOAD_DEFAULT);
+        // 开启 DOM storage API 功能
+        webSetting.setDomStorageEnabled(true);
+        //开启 database storage API 功能
+        webSetting.setDatabaseEnabled(true);
         //设置数据库缓存路径
         webSetting.setDatabasePath(cacheDirPath);
         //设置  Application Caches 缓存目录
         webSetting.setAppCachePath(cacheDirPath);
         //开启 Application Caches 功能
         webSetting.setAppCacheEnabled(true);
-        // 开启 DOM storage API 功能
-        webSetting.setDomStorageEnabled(true);
-        //开启 database storage API 功能
-        webSetting.setDatabaseEnabled(true);
         webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
     }
 }
