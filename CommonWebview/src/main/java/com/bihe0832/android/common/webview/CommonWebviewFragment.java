@@ -10,6 +10,7 @@ import com.bihe0832.android.framework.constant.Constants;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.tencent.smtt.sdk.CookieManager;
+import java.util.HashMap;
 
 public class CommonWebviewFragment extends BaseWebviewFragment {
 
@@ -20,6 +21,7 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
 
     private static final String URL_PARAM_VERSION_NAME = URL_USER_AGENT_VERSION + "Name";
     private static final String URL_PARAM_VERSION_CODE = URL_USER_AGENT_VERSION + "Code";
+    private static final String URL_PARAM_CLIENT_TIME = "ClientTime";
     private static final String URL_PARAM_PLATFORM = "OSVersion";
 
     public static CommonWebviewFragment newInstance(String url) {
@@ -42,12 +44,12 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
     @Override
     protected String getFinalURL(String url) {
         ZLog.d(TAG + url);
-        StringBuilder builder = new StringBuilder();
-        builder.append(URL_PARAM_VERSION_NAME).append(URLUtils.HTTP_REQ_ENTITY_MERGE)
-                .append(ZixieContext.INSTANCE.getVersionName());
-        builder.append(URLUtils.HTTP_REQ_ENTITY_JOIN).append(URL_PARAM_VERSION_CODE)
-                .append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.INSTANCE.getVersionCode());
-        String result = URLUtils.marge(url, builder.toString());
+        HashMap<String, String> para = new HashMap<>();
+        para.put(URL_PARAM_VERSION_NAME, ZixieContext.INSTANCE.getVersionName());
+        para.put(URL_PARAM_VERSION_CODE, String.valueOf(ZixieContext.INSTANCE.getVersionCode()));
+        para.put(URL_PARAM_CLIENT_TIME, String.valueOf(System.currentTimeMillis()));
+        para.put(URL_PARAM_PLATFORM, Constants.SYSTEM_CONSTANT);
+        String result = URLUtils.marge(url, para);
         ZLog.d(TAG + result);
         return result;
     }
