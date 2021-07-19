@@ -352,11 +352,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                 if (loadUseIntent(url)) {
                     IntentUtils.jumpToOtherApp(url, getContext());
                 } else {
-                    if (!url.startsWith(KEY_WX_PAY_PART)) {
-                        loadUrl(url, "");
+                    if (url.startsWith(KEY_WX_PAY_PART)) {
+                        mWebView.loadUrl(url, getWechatCertifiedomainList());
                     } else {
-                        Map<String, String> headers = new HashMap<>();
-                        mWebView.loadUrl(url, headers);
+                        loadUrl(url, "");
                     }
                 }
                 return true;
@@ -372,6 +371,11 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                 IntentUtils.jumpToOtherApp(url, getContext());
                 return true;
             }
+        }
+
+        //https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4
+        protected Map<String, String> getWechatCertifiedomainList() {
+            return new HashMap<>();
         }
 
         @Override
