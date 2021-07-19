@@ -24,25 +24,24 @@ abstract class CommonListFragment : BaseListFragment() {
     override fun initView(view: View) {
         super.initView(view)
         mRefresh = view.findViewById(R.id.fragment_list_refresh)
-        if (mDataLiveData.canRefresh()) {
-            mRefresh?.setOnRefreshListener {
+        mRefresh?.apply {
+            setOnRefreshListener {
                 mDataLiveData.clearData()
                 mDataLiveData.fetchData()
             }
-        }
-
-        mRefresh?.setOnChildScrollUpCallback { _, _ ->
-
-            if(mDataLiveData.canRefresh()){
-                var headerNum = mAdapter.headerLayoutCount
-                (mRecyclerView?.childCount ?: 0 > 0
-                        && ((mRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > headerNum || mRecyclerView?.getChildAt(0)
-                        ?.top ?: 0 < mRecyclerView?.paddingTop ?: 0))
-            }else{
-                true
+            setOnChildScrollUpCallback { _, _ ->
+                if (mDataLiveData.canRefresh()) {
+                    var headerNum = mAdapter.headerLayoutCount
+                    (mRecyclerView?.childCount ?: 0 > 0
+                            && ((mRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > headerNum || mRecyclerView?.getChildAt(0)
+                            ?.top ?: 0 < mRecyclerView?.paddingTop ?: 0))
+                } else {
+                    true
+                }
             }
-
         }
+        mRefresh?.isEnabled = mDataLiveData.canRefresh()
+        
         mDataLiveData.fetchData()
 
         mAdapter.setOnLoadMoreListener({

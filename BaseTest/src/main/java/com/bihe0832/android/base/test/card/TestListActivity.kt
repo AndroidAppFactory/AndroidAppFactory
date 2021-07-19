@@ -57,7 +57,7 @@ class TestListActivity : CommonListActivity() {
             }
 
             override fun canRefresh(): Boolean {
-                return true
+                return false
             }
 
             override fun getEmptyText(): String {
