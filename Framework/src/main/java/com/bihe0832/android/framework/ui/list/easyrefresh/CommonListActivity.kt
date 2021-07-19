@@ -36,6 +36,8 @@ abstract class CommonListActivity : BaseListActivity() {
                 mDataLiveData.loadMore()
             }
         })
+
+        mRefresh?.isEnablePullToRefresh = mDataLiveData.canRefresh()
         mDataLiveData.fetchData()
     }
 

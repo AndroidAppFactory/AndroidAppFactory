@@ -22,28 +22,30 @@ abstract class CommonListActivity : BaseListActivity() {
     private var mRefresh: SwipeRefreshLayout? = null
     override fun initView() {
         super.initView()
-        if (mDataLiveData.canRefresh()) {
-            mRefresh = findViewById(R.id.activity_list_refresh)
-            mRefresh?.setOnRefreshListener {
+        mRefresh = findViewById(R.id.activity_list_refresh)
+        mRefresh?.apply {
+            setOnRefreshListener {
                 mDataLiveData.clearData()
                 mDataLiveData.fetchData()
             }
-        }
-        mRefresh?.setOnChildScrollUpCallback { _, _ ->
-            if(mDataLiveData.canRefresh()){
-                var headerNum = mAdapter.headerLayoutCount
-                (mRecyclerView?.childCount ?: 0 > 0
-                        && ((mRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > headerNum || mRecyclerView?.getChildAt(0)
-                        ?.top ?: 0 < mRecyclerView?.paddingTop ?: 0))
-            }else{
-                true
+            setOnChildScrollUpCallback { _, _ ->
+                if (mDataLiveData.canRefresh()) {
+                    var headerNum = mAdapter.headerLayoutCount
+                    (mRecyclerView?.childCount ?: 0 > 0
+                            && ((mRecyclerView?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() > headerNum || mRecyclerView?.getChildAt(0)
+                            ?.top ?: 0 < mRecyclerView?.paddingTop ?: 0))
+                } else {
+                    true
+                }
             }
         }
+        mRefresh?.isEnabled = mDataLiveData.canRefresh()
+
         mDataLiveData.fetchData()
 
         mAdapter.setOnLoadMoreListener({
             mDataLiveData.loadMore()
-        },mRecyclerView)
+        }, mRecyclerView)
     }
 
     override fun updateData(data: List<CardBaseModule>) {
