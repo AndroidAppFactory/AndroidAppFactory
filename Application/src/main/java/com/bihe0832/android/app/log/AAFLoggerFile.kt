@@ -12,6 +12,12 @@ import com.bihe0832.android.framework.log.LoggerFile
  */
 object AAFLoggerFile {
 
+    const val MODULE_UPDATE = "udpate"
+
+    fun logUpdate(msg: String) {
+        log(MODULE_UPDATE, msg)
+    }
+
     fun log(module: String, msg: String) {
         LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(module), msg)
     }
@@ -24,4 +30,8 @@ object AAFLoggerFile {
         LoggerFile.sendLog(LoggerFile.getZixieFileLogPathByModule(module))
     }
 
+
+    fun getLogPathByModuleName(module: String): String{
+        return LoggerFile.getZixieFileLogPathByModule(module)
+    }
 }
