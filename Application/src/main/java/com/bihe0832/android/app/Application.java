@@ -74,5 +74,4 @@ public class Application extends BaseApplication {
         }
         ZLog.d("Application", "MnaApplication onCreate end");
     }
-
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.TextUtils
 import com.bihe0832.android.app.R
 import com.bihe0832.android.app.api.AAFNetWorkApi
+import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateHelper
@@ -49,6 +50,8 @@ object UpdateManager {
 
             override fun getResponseHandler(): HttpResponseHandler {
                 return HttpResponseHandler { statusCode, updateString ->
+                    AAFLoggerFile.logUpdate("statusCode:$statusCode")
+                    AAFLoggerFile.logUpdate("updateString:$updateString")
                     if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(updateString)) {
                         try {
 //                            var updateString = "{\n" +
