@@ -3,10 +3,10 @@ package com.bihe0832.android.framework.log
 import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
-import android.text.TextUtils
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.DateUtil
 import java.io.BufferedWriter
 import java.io.File
@@ -28,7 +28,8 @@ object LoggerFile {
 
     private val mLogFiles = ConcurrentHashMap<String, File?>()
     private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
-
+    private const val DEFAULT_DURATION = 24 * 60 * 60 * 1000L
+    private var mDuration = DEFAULT_DURATION
     private val mLoggerHandlerThread by lazy {
         HandlerThread("THREAD_ZIXIE_LOG_FILE", 5).also {
             it.start()
@@ -38,10 +39,21 @@ object LoggerFile {
     private val mLoggerFileHandler by lazy { Handler(mLoggerHandlerThread.looper) }
 
     @Synchronized
-    fun init(context: Context, isDebug: Boolean) {
+    fun init(context: Context, isDebug: Boolean, duration: Long) {
         mContext = context
         mCanSaveSpecialFile = isDebug
+        mDuration = if (duration > DEFAULT_DURATION) {
+            duration
+        } else {
+            DEFAULT_DURATION
+        }
         ZLog.setDebug(isDebug)
+    }
+
+
+    @Synchronized
+    fun init(context: Context, isDebug: Boolean) {
+        init(context, isDebug, 5 * DEFAULT_DURATION)
     }
 
     @Synchronized
@@ -55,12 +67,28 @@ object LoggerFile {
                     if (!FileUtils.checkFileExist(fileName)) {
                         file.createNewFile()
                     }
+                    checkOldFile(file)
                     val bufferedWriter = BufferedWriter(OutputStreamWriter(FileOutputStream(file), "UTF-8"))
                     mLogFiles[fileName] = file
                     mBufferedWriters[fileName] = bufferedWriter
                 } catch (e: Exception) {
                     ZLog.e("ZLog FLIE ERROR !!!!")
                     e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun checkOldFile(file: File) {
+        ThreadManager.getInstance().start {
+            var path = file.parent
+            file.parentFile.list().toList().forEach {
+                var tempFile = File(path + File.separator + it)
+                var lastModify = tempFile.lastModified()
+                ZLog.e("Hardy", "File $it Date is ${DateUtil.getDateEN(lastModify)}")
+                if (tempFile.exists() && System.currentTimeMillis() - lastModify > mDuration) {
+                    tempFile.delete()
+                    ZLog.e("Hardy", "tempFile has delete")
                 }
             }
         }
