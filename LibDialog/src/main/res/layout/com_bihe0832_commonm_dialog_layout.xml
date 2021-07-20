@@ -54,6 +54,7 @@
             android:textColor="@color/dialog_text"
             android:textSize="15dp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content" />
 

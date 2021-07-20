@@ -26,7 +26,7 @@ import java.util.*
 class TestDialogFragment : BaseTestFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-
+            add(TestItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
             add(TestItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
             add(TestItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(TestItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
@@ -34,16 +34,24 @@ class TestDialogFragment : BaseTestFragment() {
         }
     }
 
+    private fun testCustom(activity: Activity?) {
+        showAlert(TestDialog(activity))
+    }
+
     private fun testAlert(activity: Activity?) {
+        showAlert(CommonDialog(activity))
+    }
+
+    fun showAlert(dialog: CommonDialog) {
         var title = "分享的标题"
         var content = "分享的内容"
-        val dialog = CommonDialog(activity)
         dialog.setTitle(title)
         dialog.setPositive("分享给我们")
         dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
         dialog.setImageContentResId(R.mipmap.debug)
         dialog.setFeedBackContent("我们保证你提供的信息仅用于问题定位")
         dialog.setNegative("复制到剪切板")
+        dialog.setShouldCanceled(true)
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 try {
@@ -75,7 +83,6 @@ class TestDialogFragment : BaseTestFragment() {
         })
         dialog.show()
     }
-
 
     fun testUpdate(activity: Activity?) {
         var taskName = "TEST"
@@ -141,9 +148,10 @@ class TestDialogFragment : BaseTestFragment() {
             it.show("这是一个测试~")
         }
     }
+
     private fun testPermission(activity: Activity?) {
         activity?.let {
-            PermissionDialog(it).show("消息通知","通知",true,object :OnDialogListener{
+            PermissionDialog(it).show("消息通知", "通知", true, object : OnDialogListener {
                 override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
                     NotifyManager.showNotificationsSettings(context!!)

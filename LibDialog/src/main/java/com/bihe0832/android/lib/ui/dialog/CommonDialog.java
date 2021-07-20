@@ -58,6 +58,11 @@ public class CommonDialog extends Dialog {
         super(context, R.style.CommonDialog);
     }
 
+
+    public CommonDialog(Context context, int themeResId) {
+        super(context, themeResId);
+    }
+
     /**
      * 都是内容数据
      */
@@ -83,10 +88,14 @@ public class CommonDialog extends Dialog {
      */
     private boolean isSingle = false;
 
+    protected int getLayoutID() {
+        return R.layout.com_bihe0832_commonm_dialog_layout;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.com_bihe0832_commonm_dialog_layout);
+        setContentView(getLayoutID());
         //初始化界面控件
         initView();
         //初始化界面数据
@@ -131,7 +140,7 @@ public class CommonDialog extends Dialog {
     /**
      * 初始化界面控件的显示数据
      */
-    private void refreshView() {
+    protected void refreshView() {
         //如果用户自定了title和message
         setCanceledOnTouchOutside(shouldCanceledOutside);
         setCancelable(shouldCanceledOutside);
@@ -291,10 +300,10 @@ public class CommonDialog extends Dialog {
     /**
      * 设置确定取消按钮的回调
      */
-    public OnDialogListener onClickBottomListener;
+    protected OnDialogListener onClickBottomListener;
 
-    public CommonDialog setOnClickBottomListener(OnDialogListener onClickBottomListener) {
-        this.onClickBottomListener = onClickBottomListener;
+    public CommonDialog setOnClickBottomListener(OnDialogListener clickBottomListener) {
+        this.onClickBottomListener = clickBottomListener;
         return this;
     }
 
