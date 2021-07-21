@@ -8,12 +8,12 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
 import com.bihe0832.android.base.test.ipc.TestIPCActivity
 import com.bihe0832.android.base.test.json.JsonTest
-import com.bihe0832.android.base.test.log.TestLogActivity
 import com.bihe0832.android.base.test.network.TestNetworkActivity
 import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.base.test.touch.TouchRegionActivity
 import com.bihe0832.android.common.test.base.BaseTestFragment
 import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools

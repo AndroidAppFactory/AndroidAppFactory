@@ -2,11 +2,8 @@ package com.bihe0832.android.test;
 
 import android.support.v4.app.Fragment;
 import com.bihe0832.android.base.test.TestDebugTempFragment;
-import com.bihe0832.android.base.test.clipboard.TestClipboardFragment;
-import com.bihe0832.android.base.test.dialog.TestDialogFragment;
 import com.bihe0832.android.base.test.log.TestLogFragment;
 import com.bihe0832.android.common.test.module.TestDebugCommonFragment;
-import com.bihe0832.android.test.module.TestBasicFragment;
 import com.bihe0832.android.test.module.TestRouterFragment;
 
 

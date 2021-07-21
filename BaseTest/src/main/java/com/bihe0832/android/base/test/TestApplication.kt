@@ -1,4 +1,4 @@
-package com.bihe0832.android.test
+package com.bihe0832.android.base.test
 
 import android.app.ActivityManager
 import android.content.Context
