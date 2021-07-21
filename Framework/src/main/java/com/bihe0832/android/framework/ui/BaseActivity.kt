@@ -106,6 +106,11 @@ open class BaseActivity : SupportActivity() {
         finish()
     }
 
+    override fun finish() {
+        intent = null
+        super.finish()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
