@@ -1,4 +1,4 @@
-package com.bihe0832.android.test.module
+package com.bihe0832.android.base.test.temp
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -6,16 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateHelper
-import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
-import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.test.R
 import kotlinx.android.synthetic.main.fragment_test_basic.*
 
 class TestBasicFragment : BaseFragment() {

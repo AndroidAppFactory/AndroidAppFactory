@@ -54,7 +54,7 @@
 
 
         <activity
-                android:name="com.bihe0832.android.base.test.log.TestLogActivity"
+                android:name="com.bihe0832.android.base.test.com.bihe0832.android.test.module.TestLogActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:screenOrientation="portrait"
                 android:theme="@style/activityTheme"></activity>
