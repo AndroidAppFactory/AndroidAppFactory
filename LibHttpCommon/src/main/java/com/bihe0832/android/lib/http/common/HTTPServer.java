@@ -27,7 +27,6 @@ public class HTTPServer {
             synchronized (HTTPServer.class) {
                 if (instance == null) {
                     instance = new HTTPServer();
-                    instance.init();
                 }
             }
         }
@@ -35,10 +34,6 @@ public class HTTPServer {
     }
 
     private HTTPServer() {
-    }
-
-    private void init() {
-
         mCallHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_HIGHER)) {
             @Override
             public void handleMessage(Message msg) {
