@@ -15,10 +15,28 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
     private const val TAG = "ActivityObserver"
 
     private val mActivityList = mutableListOf<Activity>()
-    private var mSoftReferenceContext: SoftReference<Activity>? = null
+    private var mSoftReferenceOfCurrentActivity: SoftReference<Activity>? = null
+    private var mSoftReferenceOfResumedActivity: SoftReference<Activity>? = null
 
+
+    /**
+     * 返回最后一次创建的Activity
+     */
     fun getCurrentActivity(): Activity? {
-        return mSoftReferenceContext?.get()
+        return mSoftReferenceOfCurrentActivity?.get()
+    }
+
+    /**
+     * 返回当前在前台的Activity
+     *
+     * 他与 getCurrentActivity 的区别在于：如果当前Activity 为 A, 新创建一个Activity为 B，在
+     *  B onResume 之前，getCurrentActivity 为 B，getCurrentResumedActivity 为 A
+     *  B onResume 之后，getCurrentActivity 为 B，getCurrentResumedActivity 为 B
+     *
+     *  在具体的使用中要特别注意
+     */
+    fun getCurrentResumedActivity(): Activity? {
+        return mSoftReferenceOfResumedActivity?.get()
     }
 
     fun getActivityList(): List<Activity> {
@@ -41,7 +59,8 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
     override fun onActivityResumed(activity: Activity?) {
         ZLog.d(TAG, "onActivityResumed: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
         activity?.let {
-            mSoftReferenceContext = SoftReference(activity)
+            mSoftReferenceOfCurrentActivity = SoftReference(activity)
+            mSoftReferenceOfResumedActivity = SoftReference(activity)
         }
         ZLog.d(TAG, "Current Activitty: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
     }
@@ -73,6 +92,7 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
         ZLog.d(TAG, "onActivityCreated: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
         activity?.let {
             mActivityList.add(activity)
+            mSoftReferenceOfCurrentActivity = SoftReference(activity)
         }
     }
 }

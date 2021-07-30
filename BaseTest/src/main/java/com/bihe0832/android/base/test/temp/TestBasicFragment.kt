@@ -1,17 +1,18 @@
 package com.bihe0832.android.base.test.temp
 
+import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.framework.update.UpdateDataFromCloud
-import com.bihe0832.android.framework.update.UpdateHelper
-import com.bihe0832.android.lib.immersion.enableActivityImmersive
-import com.bihe0832.android.lib.immersion.hideBottomUIMenu
+import com.bihe0832.android.lib.ui.image.loadCenterCropImage
+import com.bihe0832.android.lib.ui.image.loadFitCenterImage
+import com.bihe0832.android.lib.ui.image.loadImage
+import com.bihe0832.android.lib.ui.image.loadRoundCropImage
+import com.bihe0832.android.lib.utils.os.DisplayUtil
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.fragment_test_basic.*
 
 class TestBasicFragment : BaseFragment() {
@@ -25,47 +26,22 @@ class TestBasicFragment : BaseFragment() {
     }
 
     fun initView() {
+
+
         test_basic_button.setOnClickListener {
-//            test_basic_content.loadFitCenterImage("http://img.netbian.com/file/2019/0905/8520ae74b84b193f00fd16890778a4bc.jpg")
-            (activity!! as AppCompatActivity).apply {
-                hideBottomUIMenu()
-            }
-            UpdateHelper.showUpdate(
-                    activity!!,
-                    "1",
-                    "fsdfsdfsd",
-                    "fsdfsdfsd",
-                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
-                    "",
-                    UpdateDataFromCloud.UPDATE_TYPE_NEED)
+            test_basic_content.loadFitCenterImage("http://cdn.bihe0832.com/images/cv.png")
         }
 
         test_basic_button_local_1.setOnClickListener {
-            UpdateHelper.showUpdate(
-                    activity!!,
-                    "2",
-                    "fsdfsdfsd",
-                    "fsdfsdfsd",
-                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
-                    "",
-                    UpdateDataFromCloud.UPDATE_TYPE_NEED)
-//            (activity!! as AppCompatActivity).apply {
-//                enableActivityImmersive(
-//                        ContextCompat.getColor(this, R.color.process_color),
-//                        ContextCompat.getColor(this, R.color.dialog_button))
-//
-//            }
-//            test_basic_content.loadImage("https://i.17173cdn.com/9ih5jd/YWxqaGBf/forum/201810/18/193421zmhdvfx9plm1mdhx.png")
+            test_basic_content.loadCenterCropImage("http://cdn.bihe0832.com/images/cv.png")
         }
 
         test_basic_button_local_2.setOnClickListener {
-            (activity!! as AppCompatActivity).apply {
-                enableActivityImmersive(
-                        ContextCompat.getColor(this, R.color.result_point_color),
-                        ContextCompat.getColor(this, R.color.result_point_color))
+            test_basic_content.loadImage("http://cdn.bihe0832.com/images/zixie_32.ico", true, Color.GRAY, Color.GRAY, RequestOptions().optionalCircleCrop())
+        }
 
-            }
-//            test_basic_content.loadImage("https://i.17173cdn.com/9ih5jd/YWxqaGBf/forum/201810/18/193421zmhdvfx9plm1mdhx.png", false)
+        test_basic_button_local_3.setOnClickListener {
+            test_basic_content.loadRoundCropImage("http://cdn.bihe0832.com/images/zixie_32.ico", DisplayUtil.dip2px(context, 3f))
         }
     }
 

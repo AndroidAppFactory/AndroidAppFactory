@@ -16,14 +16,20 @@ fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, er
     loadCircleCropImage(url, true, placeholder, error)
 }
 
+/**
+ * circleCrop():圆形裁剪
+ */
 fun ImageView.loadCircleCropImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().circleCrop())
+    loadImage(url, needFade, placeholder, error, RequestOptions().optionalCircleCrop())
 }
 
 fun ImageView.loadRoundCropImage(url: String, radius: Int, placeholder: Int = Color.GRAY, error: Int = placeholder) {
     loadRoundCropImage(url, radius, true, placeholder, error)
 }
 
+/**
+ * RoundedCorners 圆角
+ */
 fun ImageView.loadRoundCropImage(url: String, radius: Int, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
     loadImage(url, needFade, placeholder, error, RequestOptions.bitmapTransform(RoundedCorners(radius)))
 }
@@ -32,24 +38,33 @@ fun ImageView.loadCenterCropImage(url: String, placeholder: Int = Color.GRAY, er
     loadCenterCropImage(url, true, placeholder, error)
 }
 
+/**
+ * centerCrop()：以填满整个控件为目标,等比缩放,超过控件时将被 裁剪 ( 宽高都要填满 ,所以只要图片宽高比与控件宽高比不同时,一定会被剪裁)
+ */
 fun ImageView.loadCenterCropImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().centerCrop())
+    loadImage(url, needFade, placeholder, error, RequestOptions().optionalCenterCrop())
 }
 
 fun ImageView.loadCenterInsideImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
     loadCenterInsideImage(url, true, placeholder, error)
 }
 
+/**
+ * centerInside()：以完整显示图片为目标, 不剪裁 ,当显示不下的时候将缩放,能够显示的情况下不缩放
+ */
 fun ImageView.loadCenterInsideImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().centerInside())
+    loadImage(url, needFade, placeholder, error, RequestOptions().optionalCenterInside())
 }
 
 fun ImageView.loadFitCenterImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
     loadFitCenterImage(url, true, placeholder, error)
 }
 
+/**
+ * fitCenter()：将图片按照原始的长宽比充满全屏
+ */
 fun ImageView.loadFitCenterImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().fitCenter())
+    loadImage(url, needFade, placeholder, error, RequestOptions().optionalFitCenter())
 }
 
 fun ImageView.loadImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
@@ -104,15 +119,15 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
 }
 
 fun ImageView.loadCircleCropImage(resId: Int) {
-    loadImage(resId, RequestOptions().circleCrop())
+    loadImage(resId, RequestOptions().optionalCircleCrop())
 }
 
 fun ImageView.loadCenterCropImage(resId: Int) {
-    loadImage(resId, RequestOptions().centerCrop())
+    loadImage(resId, RequestOptions().optionalCenterCrop())
 }
 
 fun ImageView.loadCenterInsideImage(resId: Int) {
-    loadImage(resId, RequestOptions().centerInside())
+    loadImage(resId, RequestOptions().optionalCenterInside())
 }
 
 
