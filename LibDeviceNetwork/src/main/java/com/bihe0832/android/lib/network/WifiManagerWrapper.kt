@@ -27,23 +27,6 @@ class WifiManagerWrapper private constructor() {
 
     val TAG = "WifiManager-> "
     val DEFAULT_SSID = "<unknown ssid>"
-    val NETWORK_CLASS_NULL = 0
-    val NETWORK_CLASS_UNKNOWN = 0
-    val NETWORK_CLASS_2G = 1
-    val NETWORK_CLASS_3G = 2
-    val NETWORK_CLASS_4G = 3
-    val NETWORK_CLASS_WIFI = 4
-    val NETWORK_CLASS_WIFI_4G = 5//用于上报
-    val NETWORK_CLASS_WIFI_WIFI = 6//用于上报
-    val NETWORK_CLASS_5G = 7
-    val NETWORK_CLASS_BLUETOOTH = 8
-    val NETWORK_CLASS_ETHERNET = 9
-
-    val NETWORK_NAME_UNKNOWN = "Unknown"
-    val NETWORK_NAME_2G = "2G"
-    val NETWORK_NAME_3G = "3G"
-    val NETWORK_NAME_4G = "4G"
-    val NETWORK_NAME_WIFI = "WiFi"
 
     private var mContext: Context? = null
 
@@ -244,7 +227,7 @@ class WifiManagerWrapper private constructor() {
     }
 
     fun init(context: Context, debug: Boolean) {
-        init(context, debug,false)
+        init(context, debug, false)
     }
 
     fun init(context: Context, debug: Boolean, notifyRSSI: Boolean) {
@@ -403,47 +386,11 @@ class WifiManagerWrapper private constructor() {
     }
 
     fun getNetType(context: Context):Int {
-        var netValue = NETWORK_CLASS_UNKNOWN
-        if (null == context) {
-            return netValue
-        }
-
-        val info = mConnectivityManager?.activeNetworkInfo
-        ZLog.d("getNetType info:$info")
-        if (info == null) {
-            netValue = NETWORK_CLASS_NULL
-        } else if (info.type == ConnectivityManager.TYPE_WIFI) {
-            netValue = NETWORK_CLASS_WIFI
-        } else if (info.type == ConnectivityManager.TYPE_MOBILE) {
-            netValue = NetworkUtil.getMobileNetworkClass(context, info)
-        } else if (info.type == ConnectivityManager.TYPE_ETHERNET) {
-            netValue = NETWORK_CLASS_ETHERNET
-        } else {
-            netValue = NETWORK_CLASS_UNKNOWN
-        }
-        ZLog.d("getNetType netValue:$netValue")
-        return netValue
+        return NetworkUtil.getNetworkState(context)
     }
 
     fun getNetTypeName(context: Context): String {
-        var netValue = "unknow"
-        if (null == context) {
-            return netValue
-        }
-
-        val info = mConnectivityManager?.activeNetworkInfo
-        if (info == null) {
-            netValue = "unknow"
-        } else if (info.type == ConnectivityManager.TYPE_WIFI) {
-            netValue = "wifi"
-        } else if (info.type == ConnectivityManager.TYPE_MOBILE) {
-            netValue = "mobile"
-        } else if (info.type == ConnectivityManager.TYPE_ETHERNET) {
-            netValue = "ethernet"
-        } else {
-            netValue = "unknow"
-        }
-        return netValue
+        return NetworkUtil.getNetworkName(NetworkUtil.getNetworkState(context))
     }
 
     // 主要提供在WiFi下获取移动网络的网络类型，不保证移动网络已连接，仅是信号类型

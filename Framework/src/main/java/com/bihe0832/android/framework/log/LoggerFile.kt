@@ -47,7 +47,6 @@ object LoggerFile {
         } else {
             DEFAULT_DURATION
         }
-        ZLog.setDebug(isDebug)
     }
 
 
