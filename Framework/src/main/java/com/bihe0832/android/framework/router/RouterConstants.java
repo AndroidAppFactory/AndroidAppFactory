@@ -9,6 +9,9 @@ import com.bihe0832.android.lib.file.select.FileSelectTools;
 
 public class RouterConstants {
 
+    public static final String MODULE_NAME_FEEDBACK = "zfeedback";
+
+    public static final String MODULE_NAME_WEB_PAGE = "zweb";
     //webview参数，要打开的URL
     public static final String INTENT_EXTRA_KEY_WEB_URL = FileSelectTools.INTENT_EXTRA_KEY_WEB_URL;
     //是否隐藏webview的标题栏

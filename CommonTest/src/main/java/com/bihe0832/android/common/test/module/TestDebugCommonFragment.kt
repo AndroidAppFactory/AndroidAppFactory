@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.view.View
-import com.bihe0832.android.common.feedback.FeedbackActivity.MODULE_NAME_FEEDBACK
 import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.common.test.base.BaseTestFragment
 import com.bihe0832.android.common.test.item.TestItemData
@@ -13,6 +12,7 @@ import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_FEEDBACK
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools

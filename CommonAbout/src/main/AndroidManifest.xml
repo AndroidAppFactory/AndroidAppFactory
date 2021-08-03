@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.bihe0832.android.common.about">
+
+    <application>
+        <activity
+                android:name="com.bihe0832.android.common.about.AboutActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/activityTheme" />
+    </application>
+</manifest>

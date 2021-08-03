@@ -10,6 +10,7 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.webview.WebPageActivity
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.framework.router.openWebPage
 import com.bihe0832.android.framework.ui.list.CommonListLiveData
 import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -88,8 +89,6 @@ open class BaseTestFragment : CommonListFragment() {
 
 
     open fun openZixieWeb(url: String) {
-        val map = HashMap<String, String>()
-        map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
-        RouterAction.openPageByRouter(WebPageActivity.MODULE_NAME_WEB_PAGE, map)
+        openWebPage(url)
     }
 }

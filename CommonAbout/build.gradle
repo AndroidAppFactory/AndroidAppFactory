@@ -2,41 +2,26 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply  from: rootDir.toString() + '/build_aar.gradle'
+
 
 android {
     compileSdkVersion project.compileSdkVersion
     buildToolsVersion project.buildToolsVersion
 
-
     defaultConfig {
         minSdkVersion project.commonMinSdkVersion
         targetSdkVersion project.targetSdkVersion
-        versionName project.zixieVersionName
         versionCode project.zixieVersionCode
-    }
-
-    packagingOptions {
-        project.doNotStripList.each { item ->
-            doNotStrip item
-        }
-        project.excludeList.each { item ->
-            exclude item
-        }
-    }
-
-    lintOptions {
-        abortOnError false
+        versionName project.zixieVersionName
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-            shrinkResources false
-        }
-
         release {
-            proguardFiles "./../proguard-rules-common.pro"
-            shrinkResources false
+            minifyEnabled false
         }
+    }
+    lintOptions {
+        abortOnError false
     }
 }

@@ -137,6 +137,8 @@
 -keep class com.tencent.tauth.**{*;}
 
 #X5内核
+-dontwarn dalvik.**
+-dontwarn com.tencent.smtt.**
 -keep class com.tencent.smtt.**{*;}
 -keep class com.tencent.mtt.**{*;}
 -keep class com.tencent.tbs.**{*;}

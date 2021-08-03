@@ -72,6 +72,6 @@ abstract class BaseTestActivity : CommonListActivity() {
     fun openWeb(url: String) {
         val map = HashMap<String, String>()
         map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
-        RouterAction.openPageByRouter(WebPageActivity.MODULE_NAME_WEB_PAGE, map)
+        RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
     }
 }
