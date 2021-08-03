@@ -1,4 +1,4 @@
-package com.bihe0832.android.app.card;
+package com.bihe0832.android.common.about.card;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.bihe0832.android.app.R;
+import com.bihe0832.android.common.about.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.text.TextFactoryUtils;

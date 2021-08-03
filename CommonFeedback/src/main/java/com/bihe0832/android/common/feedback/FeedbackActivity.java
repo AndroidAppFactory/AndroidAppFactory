@@ -2,17 +2,15 @@ package com.bihe0832.android.common.feedback;
 
 import android.content.Intent;
 import android.text.TextUtils;
-
 import com.bihe0832.android.common.webview.base.BaseWebviewActivity;
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
+import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.lib.router.annotation.Module;
 
 
-@Module(FeedbackActivity.MODULE_NAME_FEEDBACK)
+@Module(RouterConstants.MODULE_NAME_FEEDBACK)
 public final class FeedbackActivity extends BaseWebviewActivity {
-
-    public static final String MODULE_NAME_FEEDBACK = "zfeedback";
 
 
     @Override

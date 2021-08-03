@@ -1,8 +1,8 @@
-package com.bihe0832.android.app.card;
+package com.bihe0832.android.common.about.card;
 
 import android.view.View;
 
-import com.bihe0832.android.app.R;
+import com.bihe0832.android.common.about.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 
