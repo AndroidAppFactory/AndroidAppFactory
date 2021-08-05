@@ -21,12 +21,15 @@ public abstract class BaseTask {
     //定时任务的名称
     public abstract String getTaskName();
 
+    /**
+     * 定时器定时调用所有任务的计数器, 当任务计数器次数与 {@link BaseTask#getMyInterval()} 一致时，任务运行
+     */
     protected final int getNotifiedTimes() {
         return notifiedTimes;
     }
 
     /**
-     * 每次定时器到时间以后会尝试调用一下所有任务, 任务自身记录是否需要运行, 每次被调用要增加一次notifiedTimes
+     * 定时器定时调用所有任务的计数器, 每次被调用要增加一次notifiedTimes
      */
     protected final void increaseNotifiedTimes() {
         notifiedTimes++;
@@ -38,7 +41,6 @@ public abstract class BaseTask {
     protected final void resetNotifiedTimes() {
         notifiedTimes = 0;
     }
-
 
     /**
      * 任务在添加以后是否立即运行
