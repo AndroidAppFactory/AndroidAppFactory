@@ -27,6 +27,15 @@ ext {
     android_arch_persistence_version = '1.1.1'
     robolectricVersion = '3.3.2'
 
+//签名信息
+    signingConfigs = [
+            keyAlias        : 'androiddebugkey',
+            keyPassword     : 'android',
+            storeFile       : "./../debug.keystore",
+            storePassword   : 'android',
+            v1SigningEnabled: true,
+            v2SigningEnabled: true,
+    ]
 
     excludeList = [
             'META-INF/*.kotlin_module',

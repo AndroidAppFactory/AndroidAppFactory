@@ -8,6 +8,7 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.log.LoggerTrace
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.log.LogImplForLogcat
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 
@@ -16,7 +17,15 @@ class TestLogFragment : BaseTestFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(TestItemData("简单日志", View.OnClickListener { ZLog.d("test") }))
+            add(TestItemData("简单日志", View.OnClickListener {
+                ZLog.i(LOG_TAG, "testi")
+                ZLog.d(LOG_TAG, "testd")
+                ZLog.w(LOG_TAG, "testw")
+                ZLog.e(LOG_TAG, "teste")
+                ZLog.info(LOG_TAG, "testinfo")
+            }))
+            add(TestItemData("关闭Logcat", View.OnClickListener { ZLog.closeLogcat() }))
+            add(TestItemData("开启Logcat", View.OnClickListener { ZLog.addLogImpl(LogImplForLogcat) }))
             add(TestItemData("耗时打点", View.OnClickListener { testTrace() }))
             add(TestItemData("文件日志", View.OnClickListener { testLogFile() }))
             add(TestItemData("打开文件日志", View.OnClickListener { AAFLoggerFile.openLog(LOG_TAG) }))

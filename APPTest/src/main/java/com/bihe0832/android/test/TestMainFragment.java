@@ -24,10 +24,11 @@ public class TestMainFragment extends com.bihe0832.android.common.test.TestMainF
         });
     }
 
+    // 当前是否是开发模式
     private final boolean isDev = true;
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new TestBasicFragment();
+            return new TestLogFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new TestDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {
