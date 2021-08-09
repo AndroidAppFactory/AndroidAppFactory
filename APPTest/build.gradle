@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+
 apply plugin: com.bihe0832.android.plugin.TransformTestPlugin
 // 不同类型的包，仅仅修改下面两项即可，其余内容保持一致
 project.ext.applicationID = "com.bihe0832.android.test"
@@ -41,6 +42,41 @@ android {
     }
 
 
+    signingConfigs {
+        debug {
+            keyAlias project.signingConfigs.keyAlias
+            keyPassword project.signingConfigs.keyPassword
+            storeFile file(project.signingConfigs.storeFile)
+            storePassword project.signingConfigs.storePassword
+            v1SigningEnabled project.signingConfigs.v1SigningEnabled as boolean
+            v2SigningEnabled project.signingConfigs.v2SigningEnabled as boolean
+        }
+
+        release {
+            keyAlias project.signingConfigs.keyAlias
+            keyPassword project.signingConfigs.keyPassword
+            storeFile file(project.signingConfigs.storeFile)
+            storePassword project.signingConfigs.storePassword
+            v1SigningEnabled project.signingConfigs.v1SigningEnabled as boolean
+            v2SigningEnabled project.signingConfigs.v2SigningEnabled as boolean
+        }
+    }
+
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            shrinkResources false
+        }
+
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled project.minifyEnabled as boolean
+            proguardFiles "./../proguard-rules-common.pro"
+            shrinkResources false
+        }
+    }
     android.applicationVariants.all { variant ->
         def finalFileName = applicationPrefix + "_V${defaultConfig.versionName}_${defaultConfig.versionCode}"
         variant.outputs.all {

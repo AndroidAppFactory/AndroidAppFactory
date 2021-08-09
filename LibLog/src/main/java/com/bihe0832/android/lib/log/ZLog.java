@@ -3,10 +3,8 @@ package com.bihe0832.android.lib.log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import kotlin.jvm.Synchronized;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +22,9 @@ public final class ZLog {
     private static final int STACK_TRACE_DEEP = 6;
     private static final int LOG_LENGTH = 3000;
 
-    private static final List<LogImpl> logImplList = new ArrayList<>();
+    private static final ConcurrentHashMap<String, LogImpl> logImplList = new ConcurrentHashMap<String, LogImpl>() {{
+        put(LogImplForLogcat.INSTANCE.getName(), LogImplForLogcat.INSTANCE);
+    }};
 
     private static final String getTag() {
         return getTag(null, STACK_TRACE_DEEP);
@@ -67,7 +67,9 @@ public final class ZLog {
                 }
             }
         } else {
-            Log.w(tag, log);
+            for (LogImpl tpl : logImplList.values()) {
+                tpl.info(tag, log);
+            }
         }
     }
 
@@ -82,51 +84,42 @@ public final class ZLog {
             if (log.length() > LOG_LENGTH) {
                 for (int i = 0; i < log.length(); i += LOG_LENGTH) {
                     if (i + LOG_LENGTH < log.length()) {
-                        Log.i(tag, log.substring(i, i + LOG_LENGTH));
+                        i(tag, log.substring(i, i + LOG_LENGTH));
                     } else {
-                        Log.i(tag, log.substring(i));
+                        i(tag, log);
                     }
                 }
             } else {
-                Log.i(tag, log);
+                for (LogImpl tpl : logImplList.values()) {
+                    tpl.i(tag, log);
+                }
             }
         }
     }
-
 
     private static void debugLog(String tag, String log) {
         if (log.length() > LOG_LENGTH) {
             for (int i = 0; i < log.length(); i += LOG_LENGTH) {
                 if (i + LOG_LENGTH < log.length()) {
-                    Log.d(tag, log.substring(i, i + LOG_LENGTH));
+                    debugLog(tag, log.substring(i, i + LOG_LENGTH));
                 } else {
                     debugLog(tag, log.substring(i));
                 }
             }
         } else {
-            Log.d(tag, log);
-        }
-    }
-
-    public static void d(String log) {
-        if (sDebug) {
-            debugLog(getTag(), log);
-        }
-    }
-
-    public static void d(String tag, String log) {
-        if (sDebug) {
-            debugLog(tag, log);
+            for (LogImpl tpl : logImplList.values()) {
+                tpl.d(tag, log);
+            }
         }
     }
 
     public static void d(String tag, Bundle b) {
-        if (b == null) {
-            debugLog(tag, "empty bundle");
-            return;
-        }
-
         if (sDebug) {
+            if (b == null) {
+                debugLog(tag, "empty bundle");
+                return;
+            }
+
             Set<String> keys = b.keySet();
             for (String key : keys) {
                 if (b.get(key) instanceof byte[]) {
@@ -142,11 +135,6 @@ public final class ZLog {
                 }
             }
         }
-    }
-
-    public static void d(Bundle b) {
-        String tag = getTag(null, STACK_TRACE_DEEP);
-        d(tag, b);
     }
 
     public static void d(String subTag, Intent i) {
@@ -181,14 +169,30 @@ public final class ZLog {
         }
     }
 
-    public static void d(Intent i) {
-        String tag = getTag(null, STACK_TRACE_DEEP);
-        d(tag, i);
+    public static void d(String log) {
+        if (sDebug) {
+            debugLog(getTag(), log);
+        }
     }
 
+    public static void d(String tag, String log) {
+        if (sDebug) {
+            debugLog(tag, log);
+        }
+    }
 
-    public static void w(String log) {
-        w(getTag(), log);
+    public static void d(Bundle b) {
+        if (sDebug) {
+            String tag = getTag(null, STACK_TRACE_DEEP);
+            d(tag, b);
+        }
+    }
+
+    public static void d(Intent i) {
+        if (sDebug) {
+            String tag = getTag(null, STACK_TRACE_DEEP);
+            d(tag, i);
+        }
     }
 
     public static void w(String tag, String log) {
@@ -196,19 +200,23 @@ public final class ZLog {
             if (log.length() > LOG_LENGTH) {
                 for (int i = 0; i < log.length(); i += LOG_LENGTH) {
                     if (i + LOG_LENGTH < log.length()) {
-                        Log.w(tag, log.substring(i, i + LOG_LENGTH));
+                        w(tag, log.substring(i, i + LOG_LENGTH));
                     } else {
-                        Log.w(tag, log.substring(i));
+                        w(tag, log.substring(i));
                     }
                 }
             } else {
-                Log.w(tag, log);
+                for (LogImpl tpl : logImplList.values()) {
+                    tpl.w(tag, log);
+                }
             }
         }
     }
 
-    public static void e(String log) {
-        e(getTag(), log);
+    public static void w(String log) {
+        if (sDebug) {
+            w(getTag(), log);
+        }
     }
 
     public static void e(String tag, String log) {
@@ -216,14 +224,22 @@ public final class ZLog {
             if (log.length() > LOG_LENGTH) {
                 for (int i = 0; i < log.length(); i += LOG_LENGTH) {
                     if (i + LOG_LENGTH < log.length()) {
-                        Log.e(tag, log.substring(i, i + LOG_LENGTH));
+                        e(tag, log.substring(i, i + LOG_LENGTH));
                     } else {
-                        Log.e(tag, log.substring(i));
+                        e(tag, log.substring(i));
                     }
                 }
             } else {
-                Log.e(tag, log);
+                for (LogImpl tpl : logImplList.values()) {
+                    tpl.e(tag, log);
+                }
             }
+        }
+    }
+
+    public static void e(String log) {
+        if (sDebug) {
+            e(getTag(), log);
         }
     }
 
@@ -233,21 +249,14 @@ public final class ZLog {
 
     @Synchronized
     public static final void addLogImpl(@NotNull LogImpl impl) {
-        logImplList.add(impl);
+        if (!logImplList.containsKey(impl.getName())) {
+            logImplList.put(impl.getName(), impl);
+        }
     }
 
     @Synchronized
     public static final void removeImpl(@NotNull String name) {
-        LogImpl temp = null;
-        for (int i = 0; i < logImplList.size(); i++) {
-            if (logImplList.get(i).getName().equals(name)) {
-                temp = logImplList.get(i);
-            }
-        }
-        if (temp != null) {
-            logImplList.remove(temp);
-
-        }
+        logImplList.remove(name);
     }
 
     public static final void closeLogcat() {
