@@ -117,24 +117,36 @@ public class NetworkUtil {
     }
 
     public static int getMobileNetworkClass(Context context, NetworkInfo info) {
-        int defaultNetTypeFormInfo = NETWORK_CLASS_4_G;
-        if (info != null) {
-            int netTypeFormInfo = getMobileNetworkClass(info.getSubtype());
-            ZLog.i("netTypeFormInfo:" + netTypeFormInfo);
-            if (netTypeFormInfo != NETWORK_CLASS_4_G && netTypeFormInfo != NETWORK_CLASS_NONET) {
+        int netTypeFormInfo = NETWORK_CLASS_NONET;
+        if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE) {
+            netTypeFormInfo = getMobileNetworkClass(info.getSubtype());
+            if (netTypeFormInfo == NETWORK_CLASS_NONET &&
+                    info.getState() == NetworkInfo.State.CONNECTED) {
+                // 修正netTypeFormInfo
+                netTypeFormInfo = NETWORK_CLASS_4_G;
+            }
+            if (netTypeFormInfo != NETWORK_CLASS_4_G &&
+                    netTypeFormInfo != NETWORK_CLASS_NONET) {
+                // 适配Android r的无网络不直接返回
                 return netTypeFormInfo;
             }
+            // NetworkInfo的subtype有可能未更新，进一步获取
         }
+
         TelephonyManager telephonyManager = (TelephonyManager)
                 context.getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
             int netTypeFromManager = getMobileNetworkClass(telephonyManager.getNetworkType());
-            ZLog.i("netTypeFromManager:" + netTypeFromManager);
             if (netTypeFromManager != NETWORK_CLASS_NONET) {
                 return netTypeFromManager;
             }
+            if (netTypeFormInfo == NETWORK_CLASS_NONET &&
+                    telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED) {
+                // 再次修正netTypeFormInfo
+                netTypeFormInfo = NETWORK_CLASS_4_G;
+            }
         }
-        return defaultNetTypeFormInfo;
+        return netTypeFormInfo;
     }
 
     private static int getMobileNetworkClass(int networkType) {

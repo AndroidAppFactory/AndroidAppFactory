@@ -131,45 +131,6 @@ public class MobileUtil {
     }
 
     /**
-     * 判断有无可用状态的移动网络，注意关掉设备移动网络不影响此函数。
-     * 也就是即使关掉移动网络，那么移动网络也可能是可用的(彩信等服务)，即返回true。
-     * 以下情况它是不可用的，将返回false：
-     * 1. 设备打开飞行模式
-     * 2. 设备所在区域没有信号覆盖
-     * 3. 设备在漫游区域，且关闭了网络漫游
-     *
-     * @return boolean
-     */
-    public static boolean isMobileAvailable(Context context) {
-        return getMobileSubType(context) > 0;
-    }
-
-    /*
-    * 0无可用的移动网络，1是2G， 2是3G，3是4G， 4是有可用的移动网络但不知道具体网络是2，3，4G
-    */
-    public static int getMobileSubType(Context context) {
-        try {
-            ConnectivityManager connectMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo[] nets = connectMgr != null ? connectMgr.getAllNetworkInfo() : null;
-            if(nets != null) {
-                for(NetworkInfo net : nets) {
-                    if(net.getType() == ConnectivityManager.TYPE_MOBILE) {
-                        if(!net.isAvailable()) {
-                            return 0;
-                        }
-                        int subType = NetworkUtil.getMobileNetworkClass(context, net);
-                        return subType != 0 ? subType : 4;
-                    }
-                }
-            }
-        } catch(Exception e) {
-            ZLog.d("getMobileSubType exception:" + e.getMessage());
-        }
-        return 0;
-    }
-
-
-    /**
      * 获取邻近小区的信息,返回pci_lac_cid_rssi;pci_lac_cid_rssi;...格式
      */
     public static String getNeighboringCellInfo(Context context) {
