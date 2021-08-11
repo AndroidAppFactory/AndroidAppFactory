@@ -10,10 +10,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-
-
 import com.bihe0832.android.lib.log.ZLog;
-
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -29,6 +26,7 @@ import java.util.List;
  * 实现不区分4G、WIFI的网络信息获取方法
  */
 public class NetworkUtil {
+
     public static final int DT_TYPE_BLUETOOTH_AUXILIARY = 1 << 6;
     public static final int DT_TYPE_WIFI_AUXILIARY = 1 << 5;
     public static final int DT_TYPE_BLUETOOTH = 1 << 4;
@@ -96,7 +94,8 @@ public class NetworkUtil {
             return netValue;
         }
         try {
-            ConnectivityManager connectMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager connectMgr = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo info = connectMgr.getActiveNetworkInfo();
             if (info == null) {
                 netValue = NETWORK_CLASS_NONET;
@@ -118,23 +117,24 @@ public class NetworkUtil {
     }
 
     public static int getMobileNetworkClass(Context context, NetworkInfo info) {
-        int netTypeFormInfo = NetworkUtil.NETWORK_CLASS_NONET;
+        int defaultNetTypeFormInfo = NETWORK_CLASS_4_G;
         if (info != null) {
-            netTypeFormInfo = getMobileNetworkClass(info.getSubtype());
-            if (netTypeFormInfo != NetworkUtil.NETWORK_CLASS_4_G && netTypeFormInfo != NetworkUtil.NETWORK_CLASS_NONET) {
+            int netTypeFormInfo = getMobileNetworkClass(info.getSubtype());
+            ZLog.i("netTypeFormInfo:" + netTypeFormInfo);
+            if (netTypeFormInfo != NETWORK_CLASS_4_G && netTypeFormInfo != NETWORK_CLASS_NONET) {
                 return netTypeFormInfo;
             }
-            // NetworkInfo的subtype有可能未更新，进一步获取
         }
         TelephonyManager telephonyManager = (TelephonyManager)
                 context.getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
             int netTypeFromManager = getMobileNetworkClass(telephonyManager.getNetworkType());
-            if (netTypeFromManager != NetworkUtil.NETWORK_CLASS_NONET) {
+            ZLog.i("netTypeFromManager:" + netTypeFromManager);
+            if (netTypeFromManager != NETWORK_CLASS_NONET) {
                 return netTypeFromManager;
             }
         }
-        return netTypeFormInfo;
+        return defaultNetTypeFormInfo;
     }
 
     private static int getMobileNetworkClass(int networkType) {
@@ -388,7 +388,6 @@ public class NetworkUtil {
                 dtTypeinfo.bluetoothAuxiliaryIp = BluetoothConnectService.getInstance().getConnectedBluetoothName();
             }*/
 
-
         } catch (Exception e) {
             ZLog.d("getDtTypeInfo Exception:" + e.toString());
         }
@@ -446,6 +445,7 @@ public class NetworkUtil {
     }
 
     public static class DtTypeInfo {
+
         public int dtType = 0;
         public String vpnIp = "";
         public String ethIp = "";
@@ -502,7 +502,8 @@ public class NetworkUtil {
             InetAddress inetAddress = IpUtils.getNetDomainFirstAddr(domain, netid);
             if (inetAddress != null) {
                 flag = inetAddress.isReachable(SOCKET_TIMEOUT);
-                ZLog.i("is4GReachable flag = " + flag + ";getHostAddress = " + inetAddress.getHostAddress() + ";getHostName = " + inetAddress.getHostName());
+                ZLog.i("is4GReachable flag = " + flag + ";getHostAddress = " + inetAddress.getHostAddress()
+                        + ";getHostName = " + inetAddress.getHostName());
             }
         } catch (Exception e) {
             // ignore
@@ -581,7 +582,8 @@ public class NetworkUtil {
 
     /*需要获取到有效的ipv4的mobile network*/
     public static Network getMobileNetwork(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Network[] nets = cm.getAllNetworks();
             for (Network net : nets) {
@@ -626,20 +628,20 @@ public class NetworkUtil {
     public static String getInternalIp() {
         try {
             Enumeration en = NetworkInterface.getNetworkInterfaces();
-            while(en.hasMoreElements()) {
+            while (en.hasMoreElements()) {
                 NetworkInterface intf = (NetworkInterface) en.nextElement();
-                if(!intf.getDisplayName().contains("wlan")) {
+                if (!intf.getDisplayName().contains("wlan")) {
                     continue;
                 }
                 Enumeration enumIpAddr = intf.getInetAddresses();
-                while(enumIpAddr.hasMoreElements()) {
+                while (enumIpAddr.hasMoreElements()) {
                     InetAddress inetAddress = (InetAddress) enumIpAddr.nextElement();
-                    if(!inetAddress.isLoopbackAddress() && IpUtils.isIpv4Address(inetAddress.getHostAddress())) {
+                    if (!inetAddress.isLoopbackAddress() && IpUtils.isIpv4Address(inetAddress.getHostAddress())) {
                         return inetAddress.getHostAddress().toString();
                     }
                 }
             }
-        } catch(SocketException var4) {
+        } catch (SocketException var4) {
             ZLog.d("getInternalIp failed, " + var4.toString());
         }
         return null;
@@ -652,9 +654,11 @@ public class NetworkUtil {
             if (info.getType() == ConnectivityManager.TYPE_MOBILE) {//当前使用2G/3G/4G网络
                 try {
                     //Enumeration<NetworkInterface> en=NetworkInterface.getNetworkInterfaces();
-                    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+                            en.hasMoreElements(); ) {
                         NetworkInterface intf = en.nextElement();
-                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
+                                enumIpAddr.hasMoreElements(); ) {
                             InetAddress inetAddress = enumIpAddr.nextElement();
                             if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
                                 return inetAddress.getHostAddress();
