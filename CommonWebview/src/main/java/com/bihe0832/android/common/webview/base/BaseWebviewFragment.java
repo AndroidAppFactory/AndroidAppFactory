@@ -4,7 +4,6 @@ package com.bihe0832.android.common.webview.base;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -45,8 +44,6 @@ import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
-import com.tencent.smtt.sdk.CookieManager;
-import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.MimeTypeMap;
 import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -256,7 +253,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         mWebView.setWebViewClient(webViewClient);
         mWebView.setWebChromeClient(webChromeClient);
         setUserAgentSupport(mWebView.getSettings());
-        synUserInfoInCookies();
+        CookieManagerForZixie.INSTANCE.init(mWebView);
         long time = System.currentTimeMillis();
         if (mIntentUrl == null) {
             mIntentUrl = "about:blank;";
@@ -558,34 +555,6 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         webSettings.setUserAgentString(userAgent);
     }
 
-    private void synUserInfoInCookies() {
-        if (null == mWebView) {
-            return;
-        }
-        CookieSyncManager.createInstance(mWebView.getContext());
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.setAcceptCookie(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            cookieManager.setAcceptThirdPartyCookies(mWebView, true);
-        }
-        syncCookie();
-    }
-
-    public static void removeCookie(Context context) {
-        CookieSyncManager.createInstance(context);
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeAllCookie();
-        syncCookie();
-    }
-
-    public static void syncCookie() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            CookieManager.getInstance().flush();
-        } else {
-            CookieSyncManager.getInstance().sync();
-        }
-    }
-
     @Override
     public void onResume() {
         ZLog.d(TAG, "onResume ");
@@ -691,16 +660,15 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         void onRefresh(WebView webView);
     }
 
-    public static String getCookieString(String name, String value, String domain) {
-        return getCookieString(name, value, "/", domain);
+    public void setCookie(String url, String name, String value) {
+        CookieManagerForZixie.INSTANCE.setCookie(url, name, value);
     }
 
-    public static String getCookieString(String name, String value, String path, String domain) {
-        String v = name + "=" + value;
-        if (domain != null) {
-            v += "; path=" + path;
-            v += "; domain=" + domain;
-        }
-        return v;
+    public void syncCookie() {
+        CookieManagerForZixie.INSTANCE.syncCookie();
+    }
+
+    public void removeCookiesForDomain(String url){
+        CookieManagerForZixie.INSTANCE.removeCookiesForDomain(url);
     }
 }
