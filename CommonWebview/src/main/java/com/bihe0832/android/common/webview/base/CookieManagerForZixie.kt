@@ -47,7 +47,7 @@ object CookieManagerForZixie {
         if (uri.host == null) {
             return
         }
-        var domain = uri.host
+        var domain = uri.host.toLowerCase()
 
         /* http://code.google.com/p/android/issues/detail?id=19294 */
         if (Build.VERSION.SDK_INT < 11) {
@@ -72,7 +72,7 @@ object CookieManagerForZixie {
             return
         }
 
-        val cookiesForDomain = getCookieManager().getCookie(uri.host)
+        val cookiesForDomain = getCookieManager().getCookie(uri.host.toLowerCase())
         if (cookiesForDomain != null) {
             val cookies = cookiesForDomain.split(";".toRegex()).toTypedArray()
             for (cookieTuple in cookies) {
