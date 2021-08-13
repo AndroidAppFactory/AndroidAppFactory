@@ -370,42 +370,49 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     private fun notifyDownloadAfterFinish(downloadInfo: DownloadItem) {
         closeDownload(downloadInfo.downloadID, true, false)
         var downloadFile = downloadInfo.tempFilePath
-        var finalFileName = downloadInfo.finalFilePath
-        try {
-            val oldfile = File(downloadFile)
-            ZLog.d(TAG, " oldfile:$oldfile")
-            ZLog.d(TAG, " oldfile length:" + oldfile.length())
-            if (DownloadManager.isDebug()) ZLog.d(TAG, " oldfile:" + MD5.getFileMD5(oldfile))
-            val md5 = MD5.getFileMD5(downloadFile)
-            if (TextUtils.isEmpty(downloadInfo.fileMD5) || md5.equals(downloadInfo.fileMD5, ignoreCase = true)) {
-                val newfile = File(finalFileName)
-                if (newfile.exists() && !finalFileName.equals(downloadFile)) {
-                    newfile.delete()
-                }
-                when {
-                    oldfile.equals(newfile) -> {
-                        if (DownloadManager.isDebug()) ZLog.d(TAG, " finalFile MD5:" + MD5.getFileMD5(finalFileName))
-                        innerDownloadListener.onComplete(finalFileName, downloadInfo)
-                    }
-                    oldfile.renameTo(newfile) -> {
-                        ZLog.d(TAG, " File renamed")
-                        ZLog.d(TAG, " finalFile:$finalFileName")
-                        ZLog.d(TAG, " finalFile length:" + newfile.length())
-                        if (DownloadManager.isDebug()) ZLog.d(TAG, " finalFile MD5:" + MD5.getFileMD5(finalFileName))
-                        innerDownloadListener.onComplete(finalFileName, downloadInfo)
-                    }
-                    else -> {
-                        ZLog.d("Sorry! the file can't be renamed")
-                        innerDownloadListener.onComplete(downloadFile, downloadInfo)
+        ThreadManager.getInstance().start {
+            try {
+                val oldfile = File(downloadFile)
+                ZLog.d(TAG, " oldfile:$oldfile")
+                ZLog.d(TAG, " oldfile length:" + oldfile.length())
+                if (TextUtils.isEmpty(downloadInfo.fileMD5)) {
+                    notifyDownloadSucc(downloadInfo)
+                } else {
+                    val md5 = MD5.getFileMD5(downloadFile)
+                    ZLog.d(TAG, " oldfile md5:$md5")
+                    ZLog.d(TAG, " downloadInfo md5:" + downloadInfo.fileMD5)
+                    if (md5.equals(downloadInfo.fileMD5, ignoreCase = true)) {
+                        notifyDownloadSucc(downloadInfo)
+                    } else {
+                        notifyDownloadFailed(ERR_MD5_BAD, "Sorry! the file md5 is bad", downloadInfo)
                     }
                 }
-            } else {
-                notifyDownloadFailed(ERR_MD5_BAD, "Sorry! the file md5 is bad", downloadInfo)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                notifyDownloadFailed(ERR_FILE_RENAME_FAILED, "Sorry! the file can't be renamed", downloadInfo)
             }
+        }
+    }
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-            notifyDownloadFailed(ERR_NOTIFY_EXCEPTION, "Sorry find some exception", downloadInfo)
+    private fun notifyDownloadSucc(downloadInfo: DownloadItem) {
+        var downloadFile = downloadInfo.tempFilePath
+        var finalFileName = downloadInfo.finalFilePath
+        val oldfile = File(downloadFile)
+        val newfile = File(finalFileName)
+        when {
+            downloadFile.equals(finalFileName) -> {
+                innerDownloadListener.onComplete(finalFileName, downloadInfo)
+            }
+            oldfile.renameTo(newfile) -> {
+                ZLog.d(TAG, " File renamed")
+                ZLog.d(TAG, " finalFile:$finalFileName")
+                ZLog.d(TAG, " finalFile length:" + newfile.length())
+                innerDownloadListener.onComplete(finalFileName, downloadInfo)
+            }
+            else -> {
+                ZLog.d("Sorry! the file can't be renamed")
+                innerDownloadListener.onComplete(downloadFile, downloadInfo)
+            }
         }
     }
 }
