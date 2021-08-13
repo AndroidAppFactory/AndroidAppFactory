@@ -43,6 +43,10 @@ object ZixieContext {
     private var mOfficial = true
     private var mTag = "Tag_ZIXIE_1.0.0_1"
 
+    private val zixieFolderPath by lazy {
+        getRealFileFolder(ZixieFileProvider.getZixieFilePath(applicationContext!!))
+    }
+
     @Synchronized
     fun init(app: Application, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
         application = app
@@ -157,9 +161,9 @@ object ZixieContext {
         return LifecycleHelper.getAPPUsedTimes()
     }
 
+
     fun getZixieFolder(): String {
-        var path = ZixieFileProvider.getZixieFilePath(applicationContext!!)
-        return getRealFileFolder(path)
+        return zixieFolderPath
     }
 
     fun getZixieExtFolder(): String {
@@ -193,7 +197,7 @@ object ZixieContext {
     }
 
     fun getDeviceId(): String {
-        ZLog.e("CHECK","getDeviceId")
+        ZLog.e("CHECK", "getDeviceId")
         return DeviceIDUtils.getAndroidId(applicationContext) ?: return ""
     }
 
