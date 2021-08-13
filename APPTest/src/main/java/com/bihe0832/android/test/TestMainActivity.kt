@@ -70,9 +70,9 @@ class TestMainActivity : CommonActivity() {
 
     override fun getPermissionList(): List<String> {
         return ArrayList<String>().apply {
-//            add(Manifest.permission.CAMERA)
+            add(Manifest.permission.CAMERA)
 //            add(Manifest.permission.RECORD_AUDIO)
-//            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //            add(Manifest.permission.SYSTEM_ALERT_WINDOW)
         }
     }
