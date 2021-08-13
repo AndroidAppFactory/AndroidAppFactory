@@ -50,31 +50,32 @@ public class ZixieFileProvider extends FileProvider {
             intent.putExtra(Intent.EXTRA_STREAM, fileProvider);
         }
     }
+
     @NotNull
     public static final String getZixieFilePath(@NotNull Context context) {
-        File tempFile = context.getExternalFilesDir(context.getString(R.string.lib_bihe0832_file_folder));
-        FileUtils.INSTANCE.checkAndCreateFolder(tempFile.getAbsolutePath());
-        if (!tempFile.getAbsolutePath().endsWith(File.separator)) {
-            return tempFile.getAbsolutePath() + File.separator;
-        } else {
-            return tempFile.getAbsolutePath();
-        }
+        return getZixieFilePath(context, context.getResources().getString(R.string.lib_bihe0832_file_folder));
     }
 
     @NotNull
     public static final String getZixieFilePath(@NotNull Context context, String filePath) {
-        File zixieFileFolder = context.getExternalFilesDir(context.getString(R.string.lib_bihe0832_file_folder));
-        File tempFile = null;
-        if (!TextUtils.isEmpty(filePath)) {
-            tempFile = new File(zixieFileFolder.getAbsolutePath(), filePath);
-        } else {
-            tempFile = zixieFileFolder;
+        String subPath = filePath;
+        if (TextUtils.isEmpty(subPath)) {
+            subPath = context.getResources().getString(R.string.lib_bihe0832_file_folder);
         }
-        FileUtils.INSTANCE.checkAndCreateFolder(tempFile.getAbsolutePath());
-        if (!tempFile.getAbsolutePath().endsWith(File.separator)) {
-            return tempFile.getAbsolutePath() + File.separator;
+
+        String absoluteFilePath = "";
+        File tempFile = context.getExternalFilesDir(subPath);
+        if (tempFile == null) {
+            absoluteFilePath = context.getFilesDir().getAbsolutePath() + File.separator + subPath;
         } else {
-            return tempFile.getAbsolutePath();
+            absoluteFilePath = tempFile.getAbsolutePath();
+        }
+
+        FileUtils.INSTANCE.checkAndCreateFolder(absoluteFilePath);
+        if (!absoluteFilePath.endsWith(File.separator)) {
+            return absoluteFilePath + File.separator;
+        } else {
+            return absoluteFilePath;
         }
     }
 }
