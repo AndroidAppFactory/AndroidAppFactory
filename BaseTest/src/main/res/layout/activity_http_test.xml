@@ -82,6 +82,14 @@
                 android:text="使用Advanced发送POST请求" />
 
             <Button
+                    android:id="@+id/postFile"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/abc_action_button_min_height_material"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="上传文件" />
+
+            <Button
                 android:id="@+id/clearResult"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/abc_action_button_min_height_material"

@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * HttpURLConnection封装基类，网络请求，设置请求协议头、发送请求
@@ -19,11 +20,24 @@ import java.util.Map;
 public abstract class BaseConnection {
 
     private static final String LOG_TAG = "bihe0832 REQUEST";
-    protected static final String HTTP_REQ_PROPERTY_CHARSET = "Accept-Charset";
-    protected static final String HTTP_REQ_VALUE_CHARSET = "UTF-8";
-    protected static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
-    protected static final String HTTP_REQ_VALUE_CONTENT_TYPE = "application/x-www-form-urlencoded";
-    protected static final String HTTP_REQ_PROPERTY_CONTENT_LENGTH = "Content-Length";
+    public static final String HTTP_REQ_PROPERTY_CHARSET = "Accept-Charset";
+    public static final String HTTP_REQ_VALUE_CHARSET = "UTF-8";
+    public static final String HTTP_REQ_PROPERTY_CONTENT_DISPOSITION = "Content-Disposition";
+    public static final String HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
+    public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
+
+    public static final String HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD = "application/x-www-form-urlencoded";
+    public static final String HTTP_REQ_VALUE_CONTENT_TYPE_TEXT = "text/plain";
+    public static final String HTTP_REQ_VALUE_CONTENT_TYPE_FORM = "multipart/form-data";     //内容类型
+    public static final String HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM = "application/octet-stream";     //内容类型
+
+
+    public static final String PREFIX = "--";
+    public static final String BOUNDARY = UUID.randomUUID().toString();
+    public static final String LINE_END = "\r\n";
+
+
+    public static final String HTTP_REQ_PROPERTY_CONTENT_LENGTH = "Content-Length";
     protected static final String HTTP_REQ_METHOD_GET = "GET";
     protected static final String HTTP_REQ_METHOD_POST = "POST";
     protected static final String HTTP_REQ_COOKIE = "Cookie";
@@ -41,7 +55,7 @@ public abstract class BaseConnection {
 
     }
 
-    private void setURLConnectionCommonPara(String contentTypy) {
+    protected void setURLConnectionCommonPara(String contentTypy) {
         HttpURLConnection connection = getURLConnection();
         if (null == connection) {
             return;
@@ -53,7 +67,7 @@ public abstract class BaseConnection {
         connection.setRequestProperty(HTTP_REQ_PROPERTY_CONTENT_TYPE, contentTypy);
     }
 
-    private void setURLConnectionCookie(HashMap<String, String> cookieInfo) {
+    protected void setURLConnectionCookie(HashMap<String, String> cookieInfo) {
         HttpURLConnection connection = getURLConnection();
         if (null == connection) {
             return;
@@ -137,8 +151,8 @@ public abstract class BaseConnection {
         BufferedReader br = null;
         InputStream inptStream = null;
         OutputStream outputStream = null;
+        HttpURLConnection connection = getURLConnection();
         try {
-            HttpURLConnection connection = getURLConnection();
             if (null == connection) {
                 return "";
             }
@@ -147,6 +161,7 @@ public abstract class BaseConnection {
             //获得输出流，向服务器写入数据
             outputStream = connection.getOutputStream();
             outputStream.write(data);
+            outputStream.flush();
 
             int response = connection.getResponseCode();            //获得服务器的响应码
             if (response == HttpURLConnection.HTTP_OK) {
@@ -163,6 +178,13 @@ public abstract class BaseConnection {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            try {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             try {
                 if (outputStream != null) {
                     outputStream.close();
@@ -218,5 +240,6 @@ public abstract class BaseConnection {
     }
 
     protected abstract HttpURLConnection getURLConnection();
+
 
 }

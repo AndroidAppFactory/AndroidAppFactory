@@ -4,17 +4,19 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import com.bihe0832.android.base.test.R
+import com.bihe0832.android.base.test.request.advanced.AdvancedGetRequest
+import com.bihe0832.android.base.test.request.advanced.AdvancedPostRequest
+import com.bihe0832.android.base.test.request.advanced.TestResponse
+import com.bihe0832.android.base.test.request.basic.BasicPostRequest
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.Module
-import com.bihe0832.android.base.test.request.advanced.AdvancedGetRequest
-import com.bihe0832.android.base.test.request.advanced.AdvancedPostRequest
-import com.bihe0832.android.base.test.request.advanced.TestResponse
-import com.bihe0832.android.base.test.request.basic.BasicPostRequest
 import kotlinx.android.synthetic.main.activity_http_test.*
+import java.io.File
 
 const val ROUTRT_NAME_TEST_HTTP = "testhttp"
 
@@ -37,6 +39,20 @@ class TestHttpActivity : BaseActivity() {
         getAdvanced.setOnClickListener { sendGetAdvancedRequest() }
 
         postAdvanced.setOnClickListener { sendPostAdvancedRequest() }
+
+        postFile.setOnClickListener {
+            var a = File("/sdcard/shumei.txt")
+            var b = HashMap<String, String>().apply {
+                put("fsdf", "fsdf")
+            }
+
+            HTTPServer.getInstance().doFileUpload(
+                    "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1", b, a,
+                    "media"
+            ).let {
+                ZLog.d("FileUpload", "restult $it")
+            }
+        }
 
         clearResult.setOnClickListener { result.text = "" }
     }
@@ -115,6 +131,13 @@ class TestHttpActivity : BaseActivity() {
                 init {
                     try {
                         this.data = (Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result).toByteArray(charset("UTF-8"))
+
+                        HashMap<String, String?>().apply {
+                            put(Constants.PARA_PARA, result ?: "")
+                            put("sdfdsf", "dfd")
+                        }.let {
+                            this.data = getFormData(it)
+                        }
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
