@@ -1,20 +1,22 @@
 package com.bihe0832.android.lib.http.common;
 
-import static com.bihe0832.android.lib.http.common.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE;
+import static com.bihe0832.android.lib.http.common.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
 
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import java.io.File;
 import java.net.HttpURLConnection;
+import java.util.Map;
 
 /**
  * 网络请求分发、执行类
  */
 public class HTTPServer {
 
-    private static final String LOG_TAG = "bihe0832 REQUEST";
+    public static final String LOG_TAG = "bihe0832 REQUEST";
 
     //是否为测试版本
     private static final boolean DEBUG = true;
@@ -52,6 +54,10 @@ public class HTTPServer {
         };
     }
 
+    public String doFileUpload(final String requestUrl, final Map<String, String> strParams,
+            final File fileParams, final String type) {
+        return HttpFileUpload.fileUpload(getConnection(requestUrl), strParams, fileParams, type);
+    }
 
     public void doRequestAsync(HttpBasicRequest request) {
         Message msg = mCallHandler.obtainMessage();
@@ -61,7 +67,7 @@ public class HTTPServer {
     }
 
     public String doRequestSync(final String url) {
-        return doRequestSync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE);
+        return doRequestSync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
     }
 
     public String doRequestSync(final String url, final String params) {
@@ -72,18 +78,13 @@ public class HTTPServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if (null == bytes) {
-            return doRequestSync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE);
-        } else {
-            return doRequestSync(url, bytes, HTTP_REQ_VALUE_CONTENT_TYPE);
-        }
+        return doRequestSync(url, bytes, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
     }
 
     public String doRequestSync(final String url, byte[] bytes, final String contentType) {
         final String finalContentType;
         if (TextUtils.isEmpty(contentType)) {
-            finalContentType = HTTP_REQ_VALUE_CONTENT_TYPE;
+            finalContentType = HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
         } else {
             finalContentType = contentType;
         }
@@ -185,4 +186,6 @@ public class HTTPServer {
         }
         return result;
     }
+
+
 }
