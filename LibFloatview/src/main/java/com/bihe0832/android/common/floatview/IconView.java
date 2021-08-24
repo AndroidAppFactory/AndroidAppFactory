@@ -2,7 +2,6 @@ package com.bihe0832.android.common.floatview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -21,8 +20,8 @@ import android.widget.LinearLayout;
 import com.bihe0832.android.lib.config.Config;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.ui.image.BitmapUtil;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
-import java.net.URL;
 
 public class IconView extends LinearLayout implements View.OnClickListener {
 
@@ -47,6 +46,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
     private float yDownInScreen;//手指按下时在屏幕中的y坐标
     private float xInView;//手指按下时在view中的x坐标
     private float yInView;//手指按下时在view中的y坐标
+    private float mSlidePercent = 0.3f;//icon 隐藏时隐藏的比例
     private Animation mIconMovingAnim;//悬浮窗拖动时的动画
     private boolean isLogoAnimRunning;//Icon选中动画是否正在运行
     private Bitmap mIconCache;
@@ -113,6 +113,12 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         mHasRed = isNew;
     }
 
+    public void setSlidePercent(float percent) {
+        if (percent < 0.8f) {
+            mSlidePercent = percent;
+        }
+    }
+
     public void setIconImage(final String iconURL) {
         if (TextUtils.isEmpty(iconURL)) {
             Log.e(TAG, "Icon URL is Empty can`t update");
@@ -127,8 +133,9 @@ public class IconView extends LinearLayout implements View.OnClickListener {
                     @Override
                     public void run() {
                         try {
-                            URL url = new URL(iconURL);
-                            Bitmap bitmap = BitmapFactory.decodeStream(url.openStream());
+                            Log.e(TAG, "Icon URL is ：" + iconURL);
+                            Bitmap bitmap = BitmapUtil.getRemoteBitmap(iconURL, DisplayUtil.dip2px(getContext(), 40),
+                                    DisplayUtil.dip2px(getContext(), 40));
                             if (bitmap != null) {
                                 mIconCache = bitmap;
                                 mView.post(new Runnable() {
@@ -391,7 +398,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         int screenWidth = DisplayUtil.getRealScreenSizeX(getContext());
         boolean isLeft = le < screenWidth / 2;
         Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
-                isLeft ? -0.1f : 0.1f, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
+                isLeft ? 0 - mSlidePercent : mSlidePercent, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
         animation.setDuration(300);
         animation.setFillAfter(true);
         animation.setAnimationListener(new Animation.AnimationListener() {
