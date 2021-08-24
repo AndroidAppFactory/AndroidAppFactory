@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.floatview;
+package com.bihe0832.android.lib.floatview;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.ContextCompat
 import android.view.View
-import com.bihe0832.android.common.floatview.IconManager
+import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.main.CommonActivity
