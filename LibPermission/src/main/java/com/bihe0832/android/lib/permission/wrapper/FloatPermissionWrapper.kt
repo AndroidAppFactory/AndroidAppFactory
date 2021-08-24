@@ -44,7 +44,7 @@ fun checkFloatPermission(context: Context?): Boolean {
             try {
                 val appOpsMgr = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
                 val mode = appOpsMgr.checkOpNoThrow("android:system_alert_window", Process.myUid(), context.getPackageName())
-                Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED || mode == AppOpsManager.MODE_IGNORED
+                Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED
             } catch (e: Exception) {
                 e.printStackTrace()
                 false
