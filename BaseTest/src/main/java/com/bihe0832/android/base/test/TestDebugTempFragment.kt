@@ -11,16 +11,16 @@ import com.bihe0832.android.base.test.json.JsonTest
 import com.bihe0832.android.base.test.network.TestNetworkActivity
 import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.base.test.touch.TouchRegionActivity
+import com.bihe0832.android.common.floatview.IconManager
 import com.bihe0832.android.common.test.base.BaseTestFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.gson.JsonHelper
-import com.bihe0832.android.lib.http.common.HTTPServer
-import com.bihe0832.android.lib.http.common.HttpFileUpload
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
@@ -37,14 +37,24 @@ import java.io.File
 class TestDebugTempFragment : BaseTestFragment() {
     val LOG_TAG = "TestDebugTempFragment"
 
+    val mIconManager by lazy {
+        IconManager(activity!!, "").apply {
+            setIconClickListener(View.OnClickListener {
+                ZixieContext.showToast("点了一下Icon")
+            })
+        }
+    }
+
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
+            add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
+            add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
+            add(TestItemData("展示悬浮窗", View.OnClickListener { showIcon() }))
+            add(TestItemData("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
             add(TestItemData("自定义日志管理", View.OnClickListener {
                 startActivity(TestLogActivity::class.java)
             }))
-            add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
-            add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
             add(TestItemData("定时任务测试", View.OnClickListener { testTask() }))
             add(TestItemData("默认关于页", View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) }))
             add(TestItemData("网络切换监控", View.OnClickListener { startActivity(TestNetworkActivity::class.java) }))
@@ -233,6 +243,14 @@ class TestDebugTempFragment : BaseTestFragment() {
         }
     }
 
+    private fun showIcon() {
+        mIconManager.showIcon()
+    }
+
+    private fun hideIcon() {
+        mIconManager.hideIcon()
+    }
+
     private fun testOneRequest() {
     }
 
@@ -242,6 +260,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             CommonDBManager.getData("sss" + it)
         }
     }
+
 
     private fun testFunc() {
 
