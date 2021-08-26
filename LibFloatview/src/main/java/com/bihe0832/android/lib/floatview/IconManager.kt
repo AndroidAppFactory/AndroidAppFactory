@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -21,7 +22,7 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 
-class IconManager(activity: Activity, iconUrl: String) {
+class IconManager(activity: Activity) {
 
     private val REQUEST_ACTIVITY_FLOAT_PERMISSION = 1010
 
@@ -39,8 +40,21 @@ class IconManager(activity: Activity, iconUrl: String) {
     init {
         mActivity = activity
         mIconView = IconView(mActivity)
-        mIconUrl = iconUrl
     }
+
+    constructor(activity: Activity, view: IconView) : this(activity) {
+        mIconView = view
+    }
+
+    constructor(activity: Activity, ResID: Drawable?) : this(activity) {
+        mIconView = IconView(mActivity, ResID)
+    }
+
+    constructor(activity: Activity, iconUrl: String?) : this(activity) {
+        mIconView = IconView(mActivity)
+        mIconView?.setIconImage(iconUrl)
+    }
+
 
     private var mWindowManager: WindowManager? = null//窗口管理
 
