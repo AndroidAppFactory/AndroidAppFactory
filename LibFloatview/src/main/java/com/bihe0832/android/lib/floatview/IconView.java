@@ -257,13 +257,14 @@ public class IconView extends LinearLayout implements View.OnClickListener {
 
     public void setParams(WindowManager.LayoutParams params) {
         mParams = params;
+        resetParams(mParams);
     }
 
     public int getIconLocationX() {
         if (null != mParams) {
             return mParams.x;
         } else {
-            return 0;
+            return getConfigLocationX();
         }
     }
 
@@ -272,11 +273,15 @@ public class IconView extends LinearLayout implements View.OnClickListener {
             ZLog.d("y:" + mParams.y);
             return mParams.y;
         } else {
-            return getConfigLocation();
+            return getConfigLocationY();
         }
     }
 
-    private int getConfigLocation() {
+    protected int getConfigLocationX() {
+        return 0;
+    }
+
+    protected int getConfigLocationY() {
         //上次该用户放置的位置
         //默认出现的位置
         //如果有额外的配置，则使用额外配置否则默认92dp
@@ -305,8 +310,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
                 clearViewAnimation();
             }
         }
-        moveToRemove(mParams);
-        mWindowManager.updateViewLayout(this, mParams);
+        updateViewLayout();
         updateReddot();
     }
 
@@ -334,12 +338,16 @@ public class IconView extends LinearLayout implements View.OnClickListener {
             mParams.x = (int) screenWidth;
         }
         ZLog.d(TAG + " screenWidth:" + screenWidth);
-        mWindowManager.updateViewLayout(this, mParams);
+        updateViewLayout();
         if (android.os.Build.VERSION.SDK_INT > 10) {
             mView.setAlpha(1.0f);
         }
     }
 
+    private void updateViewLayout(){
+        resetParams(mParams);
+        mWindowManager.updateViewLayout(this, mParams);
+    }
     /**
      * 动画执行完之后开启大悬浮窗
      */
@@ -429,7 +437,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         this.layout.startAnimation(animation);
     }
 
-    protected void moveToRemove(WindowManager.LayoutParams mParams) {
+    protected void resetParams(WindowManager.LayoutParams mParams) {
 
     }
 }

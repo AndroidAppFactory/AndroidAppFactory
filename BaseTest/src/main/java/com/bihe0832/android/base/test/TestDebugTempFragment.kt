@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.base.test.icon.TestIcon
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
 import com.bihe0832.android.base.test.ipc.TestIPCActivity
 import com.bihe0832.android.base.test.json.JsonTest
@@ -38,7 +39,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     val LOG_TAG = "TestDebugTempFragment"
 
     val mIconManager by lazy {
-        IconManager(activity!!, resources.getDrawable(R.mipmap.icon_qq_black)).apply {
+        IconManager(activity!!, TestIcon(activity)).apply {
             setIconClickListener(View.OnClickListener {
                 ZixieContext.showToast("点了一下Icon")
             })
