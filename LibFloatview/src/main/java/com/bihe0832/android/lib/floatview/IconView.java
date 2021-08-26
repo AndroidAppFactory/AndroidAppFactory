@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.floatview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -89,6 +90,11 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         sViewHeight = layout.getLayoutParams().height;
 
         initIconMovingAnim();
+    }
+
+    public IconView(Context context, Drawable drawable) {
+        this(context);
+        mView.setImageDrawable(drawable);
     }
 
     public void updateReddot() {
@@ -374,7 +380,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         mUiHandler.sendEmptyMessageDelayed(MSG_ICON_CHANGE_ICON_WINDOW_SHADOW, TIME_DELAY_SHADOW_ICON);
     }
 
-    private void shadowIcon() {
+    protected void shadowIcon() {
         Animation alphaAnimation = new AlphaAnimation(1.0f, 0.5f);
         alphaAnimation.setDuration(300);
         alphaAnimation.setFillAfter(true);
@@ -389,7 +395,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    private void hideIcon() {
+    protected void hideIcon() {
         if (android.os.Build.VERSION.SDK_INT > 10) {
             mView.setAlpha(0.5f);
         }
@@ -398,7 +404,8 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         int screenWidth = DisplayUtil.getRealScreenSizeX(getContext());
         boolean isLeft = le < screenWidth / 2;
         Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
-                isLeft ? 0 - mSlidePercent : mSlidePercent, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
+                isLeft ? 0 - mSlidePercent : mSlidePercent, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF,
+                0);
         animation.setDuration(300);
         animation.setFillAfter(true);
         animation.setAnimationListener(new Animation.AnimationListener() {
@@ -422,7 +429,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         this.layout.startAnimation(animation);
     }
 
-    private void moveToRemove(WindowManager.LayoutParams mParams) {
+    protected void moveToRemove(WindowManager.LayoutParams mParams) {
 
     }
 }
