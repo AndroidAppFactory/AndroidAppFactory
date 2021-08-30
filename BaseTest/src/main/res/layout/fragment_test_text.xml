@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+            <Button
+                    android:id="@+id/test_basic_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="切换数据"
+                    android:textSize="16dp" />
+
+
+            <com.bihe0832.android.lib.ui.textview.expandable.CommentTextView
+                    android:id="@+id/info_content_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="#222222"
+                    android:gravity="center_vertical|left"
+                    android:textSize="14sp"
+                    app:etv_MaxLinesOnShrink="3"
+                    app:etv_EllipsisHint="……"
+                    app:etv_ToExpandHintColor="@color/corner_color"
+                    app:etv_ToExpandHint="    战力 17000"
+                    tools:text="刺猬索尼克和他的好友强势回归，精彩刺激的跑酷游戏盛大登场！启动速度狂热，再现索尼克传奇。在精彩刺激的平台关卡中奔跑、跳跃、冲刺或飞翔。解锁全新角色，比如塔尔斯、纳克等，每个角色都有其独特技能，你可以将其强化。在4个栩栩如生的场景中对抗蛋头博士，拯救索尼克的星" />
+
+            <com.bihe0832.android.lib.ui.textview.expandable.CommentTextView
+                    android:id="@+id/info_content_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="#222222"
+                    android:gravity="center_vertical|left"
+                    android:textSize="14sp"
+                    app:etv_MaxLinesOnShrink="3"
+                    app:etv_EllipsisHint="……"
+                    app:etv_ToExpandHintColor="@color/corner_color"
+                    app:etv_ToExpandHint="    战力 17000"
+                    tools:text="刺猬索尼克和他的好友强势回归，精彩刺激的跑酷游戏盛大登场！启动速度狂热，再现索尼克传奇。在精彩刺激的平台关卡中奔跑、跳跃、冲刺或飞翔。解锁全新角色，比如塔尔斯、纳克等，每个角色都有其独特技能，你可以将其强化。在4个栩栩如生的场景中对抗蛋头博士，拯救索尼克的星" />
+
+            <com.bihe0832.android.lib.ui.textview.expandable.CommentTextView
+                    android:id="@+id/info_content_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="#222222"
+                    android:gravity="center_vertical|left"
+                    android:textSize="14sp"
+                    app:etv_MaxLinesOnShrink="3"
+                    app:etv_EllipsisHint="……"
+                    app:etv_ToExpandHintColor="@color/corner_color"
+                    app:etv_ToExpandHint="    战力 17000"
+                    tools:text="刺猬索尼克和他的好友强势回归，精彩刺激的跑酷游戏盛大登场！启动速度狂热，再现索尼克传奇。在精彩刺激的平台关卡中奔跑、跳跃、冲刺或飞翔。解锁全新角色，比如塔尔斯、纳克等，每个角色都有其独特技能，你可以将其强化。在4个栩栩如生的场景中对抗蛋头博士，拯救索尼克的星" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>

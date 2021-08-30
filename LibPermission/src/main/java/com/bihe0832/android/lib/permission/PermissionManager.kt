@@ -82,11 +82,11 @@ object PermissionManager {
     }
 
     fun hasPermission(context: Context, permissions: String): Boolean {
-        return PermissionsChecker(context).lacksPermissions(permissions)
+        return !PermissionsChecker(context).lacksPermissions(permissions)
     }
 
     fun hasPermission(context: Context, vararg permissions: String): Boolean {
-        return PermissionsChecker(context).lacksPermissions(*permissions)
+        return !PermissionsChecker(context).lacksPermissions(*permissions)
     }
 
     fun checkPermission(context: Context, vararg permissions: String) {

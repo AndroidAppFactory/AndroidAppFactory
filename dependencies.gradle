@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibViewExt,LibCustomView,LibTextView"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.9.3"
+ext.moduleVersionName = "4.10.0"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -178,7 +178,7 @@ ext.moduleInfo = [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibCustomView",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
-                        "LibImmersive", "LibFileSelect", "LibFloatview"
+                        "LibImmersive", "LibFileSelect", "LibFloatview","LibTextView"
                 ]
         ],
         "LibUtils"                  : [
@@ -451,7 +451,6 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-custom-view",
                 "apidependenciesList": [
                         "com.android.support:support-v4:${project.android_support_version}",
-                        "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}",
                         "LibAndroid"
                 ]
         ],
@@ -532,7 +531,17 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "LibLog"
                 ]
+        ],
+        "LibTextView"                    : [
+                "version"            : "4.8.2",
+                "artifactId"         : "lib-textview",
+                "apidependenciesList": [
+                        "com.android.support.constraint:constraint-layout:${project.android_constraint_layout_version}",
+                        "com.android.support:appcompat-v7:${project.android_support_version}",
+                        "LibText"
+                ]
         ]
+
 ]
 
 

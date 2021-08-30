@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.view;
+package com.bihe0832.android.lib.ui.textview;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
