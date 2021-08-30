@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="to_expand_hint">展开</string>
+    <string name="to_shrink_hint">收起</string>
+    <string name="to_ellipsis_hint">...</string>
+
+    <declare-styleable name="ExpandableTextView">
+
+        <!--  收缩时的最大行数  -->
+        <attr name="etv_MaxLinesOnShrink" format="reference|integer" />
+
+        <!--  省略符号，默认为 to_ellipsis_hint  -->
+        <attr name="etv_EllipsisHint" format="reference|string" />
+        <!--  是否显示缩略的文案  -->
+        <attr name="etv_EllipsisHintShow" format="reference|boolean" />
+
+        <!--  展开的文案，默认为 to_expand_hint  -->
+        <attr name="etv_ToExpandHint" format="reference|string" />
+        <!--  展开文案的颜色  -->
+        <attr name="etv_ToExpandHintColor" format="reference|color" />
+        <!--  是否显示展开的文案  -->
+        <attr name="etv_ToExpandHintShow" format="reference|boolean" />
+        <!--  展开文案的效果  -->
+        <attr name="etv_ToExpandTypeface" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="bold" value="1" />
+            <enum name="italic" value="2" />
+        </attr>
+
+        <!--  收缩的文案，默认为 to_shrink_hint -->
+        <attr name="etv_ToShrinkHint" format="reference|string" />
+        <!--  收起文案的颜色  -->
+        <attr name="etv_ToShrinkHintColor" format="reference|color" />
+        <!--  是否显示收缩的文案  -->
+        <attr name="etv_ToShrinkHintShow" format="reference|boolean" />
+        <!--  收缩文案的效果  -->
+        <attr name="etv_ToShrinkTypeface" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="bold" value="1" />
+            <enum name="italic" value="2" />
+        </attr>
+
+        <!--  点击文本主体是否支持切换 -->
+        <attr name="etv_EnableToggle" format="reference|boolean" />
+
+        <!--  文案的初始状态 -->
+        <attr name="etv_InitState" format="enum">
+            <!--  收起 -->
+            <enum name="shrink" value="0" />
+            <!--  展开 -->
+            <enum name="expand" value="1" />
+        </attr>
+
+    </declare-styleable>
+
+</resources>

@@ -11,7 +11,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.view.ext.addClickActionText
+import com.bihe0832.android.lib.ui.textview.ext.addClickActionText
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 object AgreementPrivacy {

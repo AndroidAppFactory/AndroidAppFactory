@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.view.ext;
+package com.bihe0832.android.lib.ui.textview.ext;
 
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
