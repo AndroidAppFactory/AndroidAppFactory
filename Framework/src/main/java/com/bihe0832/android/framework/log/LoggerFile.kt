@@ -111,7 +111,7 @@ object LoggerFile {
     }
 
     fun log(filePath: String, msg: String) {
-        ZLog.info(filePath, msg)
+        ZLog.info(FileUtils.getFileNameWithoutEx(filePath), msg)
         try {
             if (mCanSaveSpecialFile) {
                 reset(filePath)

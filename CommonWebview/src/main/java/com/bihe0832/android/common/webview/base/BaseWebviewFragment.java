@@ -347,7 +347,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         protected boolean processOverrideUrlLoading(String url) {
             if (url.startsWith("http") || url.startsWith("https")) {
                 if (loadUseIntent(url)) {
-                    IntentUtils.jumpToOtherApp(url, getContext());
+                    IntentUtils.jumpToOtherApp(url, getActivity());
                 } else {
                     if (url.startsWith(KEY_WX_PAY_PART)) {
                         mWebView.loadUrl(url, getWechatCertifiedomainList());

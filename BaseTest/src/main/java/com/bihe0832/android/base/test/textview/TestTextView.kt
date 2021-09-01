@@ -35,6 +35,7 @@ class TestTextView : BaseFragment() {
 
         test_basic_button.setOnClickListener {
             info_content_1.text = testList[index + 0]
+            info_content_1.setExpandText(":fsdfsdfsd")
             info_content_2.text = testList[index + 1]
             info_content_3.text = testList[index + 2]
             index += 3

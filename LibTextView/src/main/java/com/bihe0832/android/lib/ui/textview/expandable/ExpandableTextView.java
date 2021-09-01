@@ -162,15 +162,13 @@ public abstract class ExpandableTextView extends AppCompatTextView {
         setTextInternal(getTextByConfig(), type);
     }
 
-    public void setShrinkText(CharSequence text) {
-        mOriginText = text;
-        mBufferType = BufferType.NORMAL;
+    public void setShrinkText(String text) {
+        mToShrinkHint = text;
         setTextInternal(getTextByConfig(), mBufferType);
     }
 
-    public void setExpandText(CharSequence text) {
-        mOriginText = text;
-        mBufferType = BufferType.NORMAL;
+    public void setExpandText(String text) {
+        mToExpandHint = text;
         setTextInternal(getTextByConfig(), mBufferType);
     }
 
