@@ -12,7 +12,7 @@
         android:layout_height="40dp"
         android:background="@color/colorPrimary"
         app:tl_textSelectColor="@color/white"
-        app:tl_textsize="14dp"
+        app:tl_textsize="12dp"
         app:tl_textBold="SELECT"
         app:tl_underline_color="@color/colorPrimary"
         app:tl_underline_height="1dp" />
