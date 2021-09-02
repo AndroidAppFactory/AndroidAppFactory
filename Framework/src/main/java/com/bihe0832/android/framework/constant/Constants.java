@@ -3,8 +3,8 @@ package com.bihe0832.android.framework.constant;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-11-07.
- * Description: 管理所有加速器相关的常量
+ *         Created on 2019-11-07.
+ *         Description: 管理通用常量
  */
 public class Constants {
 
@@ -18,5 +18,6 @@ public class Constants {
     // 是否同意隐私协议
     public static final String CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED = "KEY_PRIVACY_AGREEMENT_ENABLED";
 
+    public static final float CUSTOM_DENSITY = 360f;
 
 }

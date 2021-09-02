@@ -2,6 +2,8 @@ package com.bihe0832.android.lib.utils.os;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
+import android.content.ComponentCallbacks;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -19,12 +21,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 import com.bihe0832.android.lib.log.ZLog;
-
 import java.lang.reflect.Method;
 
 public class DisplayUtil {
+
     public static final int NAV_GESTURE = 0;
     public static final int NAV_VIRTUAL = 1;
     public static final int NAV_BUTTON = 2;
@@ -34,10 +35,10 @@ public class DisplayUtil {
      */
     public static void hideSoftInput(Activity act) {
         View v = act.getCurrentFocus();
-        if(v != null && v.getWindowToken() != null) {
+        if (v != null && v.getWindowToken() != null) {
             InputMethodManager manager = (InputMethodManager) act.getSystemService(Context.INPUT_METHOD_SERVICE);
             boolean isOpen = manager.isActive();
-            if(isOpen) {
+            if (isOpen) {
                 manager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
@@ -47,10 +48,10 @@ public class DisplayUtil {
      * 判断虚拟导航栏是否显示
      *
      * @param context 上下文对象
-     * @param window  当前窗口
+     * @param window 当前窗口
      * @return true(显示虚拟导航栏)，false(不显示或不支持虚拟导航栏)
      */
-    public static boolean checkNavigationBarShow(Context context,Window window) {
+    public static boolean checkNavigationBarShow(Context context, Window window) {
         boolean show;
         Display display = window.getWindowManager().getDefaultDisplay();
         Point point = new Point();
@@ -116,7 +117,7 @@ public class DisplayUtil {
      * @param context
      * @return
      */
-    public  static int getScreenHeight(Context context) {
+    public static int getScreenHeight(Context context) {
         DisplayMetrics dm = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(dm);
@@ -194,14 +195,15 @@ public class DisplayUtil {
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
-    public static int dip2px(Context context,float dpValue) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+    public static int dip2px(Context context, float dpValue) {
+        return (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
     }
 
     /**
      * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
      */
-    public static int px2dip(Context context,float pxValue) {
+    public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
@@ -212,8 +214,9 @@ public class DisplayUtil {
      * @param spValue （DisplayMetrics类中属性scaledDensity）
      * @return
      */
-    public static int sp2px(Context context,float spValue) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
+    public static int sp2px(Context context, float spValue) {
+        return (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
     }
 
     /**
@@ -223,7 +226,8 @@ public class DisplayUtil {
         float scale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (px / scale + 0.5f);
     }
-    public static int getDimension(Context context,int resourceId) {
+
+    public static int getDimension(Context context, int resourceId) {
         return context.getResources().getDimensionPixelSize(resourceId);
     }
 
@@ -266,11 +270,80 @@ public class DisplayUtil {
             vp.getChildAt(i).getContext().getPackageName();
             if (vp.getChildAt(i).getId() != -1
                     && "navigationBarBackground".equals(resources.getResourceEntryName(vp.getChildAt(i).getId()))
-                    ) {
+            ) {
                 return true;
             }
         }
         return false;
     }
 
+
+    
+    private static float sNoncompatDensity;
+    private static float sNoncompatScaledDensity;
+    /**
+     * 
+     * @
+     */
+
+    /**
+     * 修正显示dpi，统一将页面dpi以基准值修正
+     * @param activity 必须是Activity
+     * @param density 当前设计风格的横向基准dp，例如安卓官方为360dp
+     */
+    public static void resetDensity(final Activity activity, final float density) {
+        if (activity == null) {
+            ZLog.w("resetDensity activity is null");
+            return;
+        }
+        ZLog.w("resetDensity density：" + density);
+        if (density < 1) {
+            return;
+        }
+        final Application application = activity.getApplication();
+        DisplayMetrics appDisplayMetrics = application.getResources().getDisplayMetrics();
+        ZLog.d("sNoncompatDensity: " + sNoncompatDensity);
+        ZLog.d("sNoncompatScaledDensity: " + sNoncompatScaledDensity);
+        if (sNoncompatDensity == 0) {
+            sNoncompatDensity = appDisplayMetrics.density;
+            sNoncompatScaledDensity = appDisplayMetrics.scaledDensity;
+            application.registerComponentCallbacks(new ComponentCallbacks() {
+                @Override
+                public void onConfigurationChanged(Configuration newConfig) {
+                    if (newConfig != null && newConfig.fontScale > 0) {
+                        ZLog.d("onConfigurationChanged sNoncompatScaledDensity: " + sNoncompatScaledDensity);
+                        sNoncompatScaledDensity = application.getResources().getDisplayMetrics().scaledDensity;
+                        ZLog.d("onConfigurationChanged sNoncompatScaledDensity: " + sNoncompatScaledDensity);
+                        resetDensity(activity, density);
+                    }
+                }
+
+                @Override
+                public void onLowMemory() {
+
+                }
+            });
+        }
+        float targetDensity = appDisplayMetrics.widthPixels / density;
+        ZLog.d("targetDensity: " + targetDensity);
+        ZLog.d("appDisplayMetrics.widthPixels: " + appDisplayMetrics.widthPixels);
+        if (targetDensity < 1) {
+            targetDensity = 1;
+        }
+
+        float targetScaledDensity = targetDensity * (sNoncompatScaledDensity / sNoncompatDensity);
+        int targetDensityDpi = (int) (160 * targetDensity);
+        ZLog.d("targetDensity: " + targetDensity);
+        ZLog.d("targetScaledDensity: " + targetScaledDensity);
+        ZLog.d("targetDensityDpi: " + targetDensityDpi);
+
+        appDisplayMetrics.density = targetDensity;
+        appDisplayMetrics.scaledDensity = targetScaledDensity;
+        appDisplayMetrics.densityDpi = targetDensityDpi;
+
+        DisplayMetrics activityDisplayMetrics = activity.getResources().getDisplayMetrics();
+        activityDisplayMetrics.density = targetDensity;
+        activityDisplayMetrics.scaledDensity = targetScaledDensity;
+        activityDisplayMetrics.densityDpi = targetDensityDpi;
+    }
 }
