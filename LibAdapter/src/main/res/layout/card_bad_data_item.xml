@@ -15,5 +15,5 @@
         android:textStyle="bold"
         android:text="暂不支持的数据格式"
         android:textColor="@android:color/white"
-        android:textSize="14dp" />
+        android:textSize="12dp" />
 </RelativeLayout>

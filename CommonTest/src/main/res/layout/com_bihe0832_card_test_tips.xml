@@ -19,6 +19,6 @@
         android:paddingBottom="16dp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:textSize="14dp" />
+        android:textSize="12dp" />
 
 </RelativeLayout>

@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="8dp"
+        android:layout_margin="6dp"
         android:padding="4dp">
 
     <TextView
@@ -19,14 +19,14 @@
             android:text="XX模块日志"
             android:maxLines="2"
             android:ellipsize="end"
-            android:textSize="14dp" />
+            android:textSize="12dp" />
 
     <TextView
             android:id="@+id/log_open"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:background="@drawable/button_bg_shape"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,15 +38,15 @@
             android:layout_marginTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="查看"
-            android:textSize="12dp" />
+            android:textSize="10dp" />
 
     <TextView
             android:id="@+id/log_send"
             android:background="@drawable/button_bg_shape"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -56,6 +56,6 @@
             app:layout_constraintTop_toTopOf="@+id/log_open"
             app:layout_constraintBottom_toBottomOf="@+id/log_open"
             android:text="发送"
-            android:textSize="12dp" />
+            android:textSize="10dp" />
 
 </android.support.constraint.ConstraintLayout>

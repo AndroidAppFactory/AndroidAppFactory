@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.permission.PermissionManager
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
+
 val takePhotoPermission = arrayOf(Manifest.permission.CAMERA)
 val selectPhotoPermission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
@@ -90,28 +91,27 @@ fun Activity.choosePhoto() {
 
 fun Activity.showPhotoChooser() {
     val view = LayoutInflater.from(this).inflate(R.layout.com_bihe0832_dialog_photo_chooser, null)
-    val diaLog = AlertDialog.Builder(this).setView(view).create()
-
-    diaLog.setCanceledOnTouchOutside(true)
-    diaLog.show()
+    val dialog = AlertDialog.Builder(this).setView(view).create()
+    dialog.setCanceledOnTouchOutside(true)
+    dialog.show()
 
     view.takePhotoBtn.setOnClickListener {
         PermissionManager.checkPermission(this, false, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
-                diaLog.dismiss()
+                dialog.dismiss()
             }
 
             override fun onSuccess() {
-                diaLog.dismiss()
+                dialog.dismiss()
                 takePhoto(getDefaultPhoto())
             }
 
             override fun onUserCancel() {
-                diaLog.dismiss()
+                dialog.dismiss()
             }
 
             override fun onUserDeny() {
-                diaLog.dismiss()
+                dialog.dismiss()
             }
 
         }, *takePhotoPermission)
@@ -120,20 +120,20 @@ fun Activity.showPhotoChooser() {
     view.choosePhotoBtn.setOnClickListener {
         PermissionManager.checkPermission(this, false, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
-                diaLog.dismiss()
+                dialog.dismiss()
             }
 
             override fun onSuccess() {
-                diaLog.dismiss()
+                dialog.dismiss()
                 choosePhoto()
             }
 
             override fun onUserCancel() {
-                diaLog.dismiss()
+                dialog.dismiss()
             }
 
             override fun onUserDeny() {
-                diaLog.dismiss()
+                dialog.dismiss()
             }
         }, *selectPhotoPermission)
     }

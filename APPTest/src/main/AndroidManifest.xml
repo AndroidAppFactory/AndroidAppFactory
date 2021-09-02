@@ -30,7 +30,7 @@
         <activity
                 android:name="com.bihe0832.android.test.TestMainActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
+                android:screenOrientation="sensor"
                 android:theme="@style/activityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_bottom_bar_height">56dp</dimen>
+    <dimen name="main_bottom_bar_height">48dp</dimen>
     <color name="tag_background">#12222c</color>
     <color name="tab_unselect">#999999</color>
     <color name="tab_selected">#ffffff</color>
