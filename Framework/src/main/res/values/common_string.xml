@@ -22,4 +22,6 @@
     <string name="dialog_apk_updating">版本 %1$s 更新中...</string>
     <string name="dialog_apk_updateinfo">版本内容：</string>
 
+    <string name="custom_density">360</string>
+
 </resources>

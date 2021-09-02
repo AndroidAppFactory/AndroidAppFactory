@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="加载网络JPG"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
 
             <Button

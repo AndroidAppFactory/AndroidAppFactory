@@ -2,8 +2,13 @@ package com.bihe0832.android.framework.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import com.bihe0832.android.framework.R
+import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 
 /**
@@ -14,6 +19,13 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 open class BaseFragment : SwipeBackFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity?.let {
+            DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(it.resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
+        }
     }
 
     /**
