@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="我的"
+        tools:text="我的"
         android:maxLines="1"
         android:ellipsize="end"
         android:textColor="#ff40f9fc"
@@ -23,7 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="2dp"
         android:src="@drawable/com_bihe0832_ui_red_dot"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/item_red_num"
@@ -39,6 +39,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="2dp"
         android:textSize="10dp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </RelativeLayout>

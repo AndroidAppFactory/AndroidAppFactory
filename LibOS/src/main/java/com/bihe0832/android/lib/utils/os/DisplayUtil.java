@@ -324,9 +324,17 @@ public class DisplayUtil {
                 }
             });
         }
-        float targetDensity = appDisplayMetrics.widthPixels / density;
+        int width = appDisplayMetrics.widthPixels;
+        int height = appDisplayMetrics.heightPixels;
+        int target = width;
+        if(width > height){
+            target = height;
+        }
+        float targetDensity = target / density;
         ZLog.d("targetDensity: " + targetDensity);
         ZLog.d("appDisplayMetrics.widthPixels: " + appDisplayMetrics.widthPixels);
+        ZLog.d("appDisplayMetrics.heightPixels: " + appDisplayMetrics.heightPixels);
+        ZLog.d("target: " + target);
         if (targetDensity < 1) {
             targetDensity = 1;
         }

@@ -13,7 +13,7 @@
             android:layout_marginTop="24dp"
             tools:text="版本更新"
             android:textColor="@color/dialog_text"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
             android:layout_margin="16dp"
             android:lineSpacingMultiplier="1.5"
             android:textColor="@color/dialog_hint"
-            android:textSize="14dp"
+            android:textSize="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/update_title"
@@ -53,7 +53,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/dialog_hint"
-            android:textSize="14dp"
+            android:textSize="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/update_progress_bar"
             tools:text="70%" />
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:textColor="@color/dialog_hint"
-            android:textSize="14dp"
+            android:textSize="12dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/update_progress_percent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="20M/50M" />
@@ -97,7 +97,7 @@
                 android:paddingBottom="16dp"
                 android:singleLine="true"
                 android:textColor="@color/dialog_button"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 tools:text="取消更新" />
 
         <View
@@ -119,7 +119,7 @@
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:textColor="@color/dialog_button"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 tools:text="后台更新" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

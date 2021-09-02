@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/com_bihe0832_lib_icon_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@mipmap/icon"
@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/com_bihe0832_lib_icon_icon_redr"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
+        android:layout_width="2dp"
+        android:layout_height="2dp"
         android:src="@drawable/com_bihe0832_ui_red_dot"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,8 +27,8 @@
 
     <ImageView
         android:id="@+id/com_bihe0832_lib_icon_icon_redl"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
+        android:layout_width="2dp"
+        android:layout_height="2dp"
         android:src="@drawable/com_bihe0832_ui_red_dot"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"

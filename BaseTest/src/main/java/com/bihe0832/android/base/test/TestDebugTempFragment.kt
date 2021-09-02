@@ -12,6 +12,7 @@ import com.bihe0832.android.base.test.json.JsonTest
 import com.bihe0832.android.base.test.network.TestNetworkActivity
 import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.base.test.touch.TouchRegionActivity
+import com.bihe0832.android.common.photos.showPhotoChooser
 import com.bihe0832.android.common.test.base.BaseTestFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
@@ -84,6 +85,10 @@ class TestDebugTempFragment : BaseTestFragment() {
 
             add(TestItemData("文件MD5", View.OnClickListener {
                 testMD5()
+            }))
+
+            add(TestItemData("文件选择", View.OnClickListener {
+                activity?.showPhotoChooser()
             }))
 
             add(TestItemData("JsonHelper", View.OnClickListener { testJson() }))
