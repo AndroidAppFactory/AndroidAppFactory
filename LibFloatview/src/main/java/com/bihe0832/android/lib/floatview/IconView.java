@@ -178,7 +178,11 @@ public class IconView extends LinearLayout implements View.OnClickListener {
     public boolean onInterceptTouchEvent(MotionEvent event) {
         clearIconLayoutAnimation();
         xInScreen = event.getRawX();
-        yInScreen = event.getRawY() - getStatusBarHeight();
+        if (ignoreStatusBar()) {
+            yInScreen = event.getRawY();
+        } else {
+            yInScreen = event.getRawY() - getStatusBarHeight();
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 // Icon开始旋转
@@ -186,7 +190,11 @@ public class IconView extends LinearLayout implements View.OnClickListener {
                 xInView = event.getX();
                 yInView = event.getY();
                 xDownInScreen = event.getRawX();
-                yDownInScreen = event.getRawY() - getStatusBarHeight();
+                if (ignoreStatusBar()) {
+                    yDownInScreen = event.getRawY();
+                } else {
+                    yDownInScreen = event.getRawY() - getStatusBarHeight();
+                }
                 //一旦按下Icon，就需要重新计时，即移除两个message
                 mUiHandler.removeMessages(MSG_ICON_CHANGE_ICON_WINDOW_SHADOW);
                 mUiHandler.removeMessages(MSG_ICON_CHANGE_ICON_WINDOW_HIDE);
@@ -298,7 +306,12 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         mParams.x = (int) (xInScreen - xInView);
         mParams.y = (int) (yInScreen - yInView) - 60;
 
-        int minUnit = (int) DisplayUtil.dip2px(getContext(), 30f);
+        int minUnit = 0;
+        if (ignoreStatusBar()) {
+            minUnit = 0;
+        } else {
+            minUnit = getStatusBarHeight();
+        }
         if (mParams.y < minUnit) {
             mParams.y = minUnit;
         } else if (mParams.y > DisplayUtil.getScreenHeight(getContext()) - minUnit) {
@@ -363,12 +376,13 @@ public class IconView extends LinearLayout implements View.OnClickListener {
 
     }
 
-    private int getStatusBarHeight() {
+    protected boolean ignoreStatusBar() {
+        return false;
+    }
+
+    protected int getStatusBarHeight() {
         if (sStatusBarHeight == 0) {
-            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) {
-                sStatusBarHeight = getResources().getDimensionPixelSize(resourceId);
-            }
+            sStatusBarHeight = DisplayUtil.getStatusBarHeight(getContext());
         }
         return sStatusBarHeight;
     }

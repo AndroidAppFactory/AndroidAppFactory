@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 public abstract class BaseIconView extends ConstraintLayout {
@@ -41,20 +40,32 @@ public abstract class BaseIconView extends ConstraintLayout {
     }
 
     public abstract int getLayoutId();
+
     public abstract int getRootId();
+
     public abstract int getDefaultX();
+
     public abstract int getDefaultY();
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         xInScreen = event.getRawX();
-        yInScreen = event.getRawY() - getStatusBarHeight();
+        if (ignoreStatusBar()) {
+            yInScreen = event.getRawY();
+        } else {
+            yInScreen = event.getRawY() - getStatusBarHeight();
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 // Icon开始旋转
                 xInView = event.getX();
                 yInView = event.getY();
                 xDownInScreen = event.getRawX();
-                yDownInScreen = event.getRawY() - getStatusBarHeight();
+                if (ignoreStatusBar()) {
+                    yDownInScreen = event.getRawY();
+                } else {
+                    yDownInScreen = event.getRawY() - getStatusBarHeight();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (needUpdateViewPosition()) {
@@ -83,7 +94,12 @@ public abstract class BaseIconView extends ConstraintLayout {
         mParams.x = (int) (xInScreen - xInView);
         mParams.y = (int) (yInScreen - yInView) - 60;
 
-        int minUnit = (int) DisplayUtil.dip2px(getContext(), 30f);
+        int minUnit = 0;
+        if (ignoreStatusBar()) {
+            minUnit = 0;
+        } else {
+            minUnit = getStatusBarHeight();
+        }
         if (mParams.y < minUnit) {
             mParams.y = minUnit;
         } else if (mParams.y > DisplayUtil.getScreenHeight(getContext()) - minUnit) {
@@ -92,28 +108,29 @@ public abstract class BaseIconView extends ConstraintLayout {
         mWindowManager.updateViewLayout(this, mParams);
     }
 
-    public int getLocationX(){
-        if(null == mParams){
+    public int getLocationX() {
+        if (null == mParams) {
             return getDefaultX();
-        }else {
+        } else {
             return mParams.x;
         }
     }
 
-    public int getLocationY(){
-        if(null == mParams){
+    public int getLocationY() {
+        if (null == mParams) {
             return getDefaultY();
-        }else {
+        } else {
             return mParams.y;
         }
     }
 
-    private int getStatusBarHeight() {
+    protected boolean ignoreStatusBar() {
+        return false;
+    }
+
+    protected int getStatusBarHeight() {
         if (sStatusBarHeight == 0) {
-            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) {
-                sStatusBarHeight = getResources().getDimensionPixelSize(resourceId);
-            }
+            sStatusBarHeight = DisplayUtil.getStatusBarHeight(getContext());
         }
         return sStatusBarHeight;
     }
