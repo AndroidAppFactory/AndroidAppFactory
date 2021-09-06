@@ -6,9 +6,9 @@ import android.view.View
 import com.bihe0832.android.common.about.card.SettingsData
 import com.bihe0832.android.common.settings.SettingsItem
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.ui.list.CardItemForCommonList
-import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListFragment
+import com.bihe0832.android.common.list.CardItemForCommonList
+import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule

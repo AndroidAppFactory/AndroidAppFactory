@@ -1,6 +1,6 @@
 package com.bihe0832.android.common.test.base
 
-import com.bihe0832.android.framework.ui.list.CommonListLiveData
+import com.bihe0832.android.common.list.CommonListLiveData
 
 /**
  *
