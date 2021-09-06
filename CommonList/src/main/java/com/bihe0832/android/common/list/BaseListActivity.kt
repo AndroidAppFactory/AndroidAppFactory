@@ -1,12 +1,12 @@
-package  com.bihe0832.android.framework.ui.list
+package  com.bihe0832.android.common.list
 
 import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
@@ -27,6 +27,8 @@ abstract class BaseListActivity : BaseActivity() {
 
     abstract fun getResID(): Int
 
+    abstract fun getLayoutManagerForList(): RecyclerView.LayoutManager
+
     open fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf()
     }
@@ -35,8 +37,7 @@ abstract class BaseListActivity : BaseActivity() {
         return false
     }
 
-
-    open fun getLayoutManagerForList(): RecyclerView.LayoutManager {
+    fun getLinearLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeLinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
@@ -67,7 +68,12 @@ abstract class BaseListActivity : BaseActivity() {
             }
         }.apply {
             emptyView = LayoutInflater.from(applicationContext).inflate(R.layout.common_view_list_empty, null, false)
-            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = mDataLiveData.getEmptyText()
+            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = if (getLayoutManagerForList() is GridLayoutManager) {
+                getString(R.string.bad_layoutmanager_empty_tips)
+            } else {
+                mDataLiveData.getEmptyText()
+            }
+
             bindToRecyclerView(mRecyclerView)
             setHeaderFooterEmpty(true, false)
             if (hasHeaderView()) {

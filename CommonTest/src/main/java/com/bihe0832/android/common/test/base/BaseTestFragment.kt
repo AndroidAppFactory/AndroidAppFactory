@@ -1,18 +1,14 @@
 package com.bihe0832.android.common.test.base
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.test.R
 import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.common.webview.WebPageActivity
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.openWebPage
-import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListFragment
+import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
@@ -23,7 +19,6 @@ import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.set
 
 open class BaseTestFragment : CommonListFragment() {
 
@@ -31,6 +26,7 @@ open class BaseTestFragment : CommonListFragment() {
         super.onViewCreated(view, savedInstanceState)
         CardInfoHelper.getInstance().setAutoAddItem(true)
     }
+
     open fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestItemData("test"))

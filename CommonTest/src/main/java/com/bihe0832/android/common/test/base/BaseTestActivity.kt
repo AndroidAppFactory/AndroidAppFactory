@@ -6,11 +6,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.common.webview.WebPageActivity
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListActivity
+import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools

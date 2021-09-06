@@ -7,9 +7,9 @@ import com.bihe0832.android.base.test.card.section.SectionDataContent2
 import com.bihe0832.android.base.test.card.section.SectionDataHeader
 import com.bihe0832.android.base.test.card.section.SectionDataHeader2
 import com.bihe0832.android.framework.R
-import com.bihe0832.android.framework.ui.list.CardItemForCommonList
-import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.easyrefresh.CommonListActivity
+import com.bihe0832.android.common.list.CardItemForCommonList
+import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager

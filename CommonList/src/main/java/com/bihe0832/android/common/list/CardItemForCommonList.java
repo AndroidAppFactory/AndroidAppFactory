@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.ui.list;
+package com.bihe0832.android.common.list;
 
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 

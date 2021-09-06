@@ -1,6 +1,7 @@
-package  com.bihe0832.android.framework.ui.list
+package  com.bihe0832.android.common.list
 
 import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,14 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeLinearLayoutManager
-import java.lang.Exception
 
 /**
  * @author code@bihe0832.com
@@ -29,18 +27,20 @@ abstract class BaseListFragment : BaseFragment() {
 
     abstract fun getResID(): Int
 
-    open fun hasHeaderView(): Boolean{
+    abstract fun getLayoutManagerForList(): RecyclerView.LayoutManager
+
+    open fun hasHeaderView(): Boolean {
         return false
+    }
+
+    fun getLinearLayoutManagerForList(): RecyclerView.LayoutManager {
+        return SafeLinearLayoutManager(context).apply {
+            orientation = LinearLayoutManager.VERTICAL
+        }
     }
 
     open fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf()
-    }
-
-    open fun getLayoutManagerForList(): RecyclerView.LayoutManager {
-        return SafeLinearLayoutManager(context).apply {
-            orientation = LinearLayoutManager.VERTICAL
-        }
     }
 
     protected var mRecyclerView: RecyclerView? = null;
@@ -69,9 +69,14 @@ abstract class BaseListFragment : BaseFragment() {
             }
         }.apply {
             emptyView = LayoutInflater.from(context).inflate(R.layout.common_view_list_empty, null, false)
-            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = mDataLiveData.getEmptyText()
+            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = if (getLayoutManagerForList() is GridLayoutManager) {
+                getString(R.string.bad_layoutmanager_empty_tips)
+            } else {
+                mDataLiveData.getEmptyText()
+            }
+
             setHeaderFooterEmpty(true, false)
-            if(hasHeaderView()){
+            if (hasHeaderView()) {
                 setHeaderView(getListHeader())
             }
             bindToRecyclerView(mRecyclerView)
@@ -90,7 +95,7 @@ abstract class BaseListFragment : BaseFragment() {
 
     open fun initView(view: View) {
         mRecyclerView = view.findViewById(R.id.fragment_list_info_list)
-        if(null == mRecyclerView){
+        if (null == mRecyclerView) {
             throw AAFException("please check recyclerview id name is : fragment_list_info_list")
         }
         mRecyclerView?.apply {

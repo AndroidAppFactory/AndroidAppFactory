@@ -9,9 +9,9 @@ import com.bihe0832.android.common.webview.log.WebviewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterInterrupt
-import com.bihe0832.android.framework.ui.list.CardItemForCommonList
-import com.bihe0832.android.framework.ui.list.CommonListLiveData
-import com.bihe0832.android.framework.ui.list.swiperefresh.CommonListActivity
+import com.bihe0832.android.common.list.CardItemForCommonList
+import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
