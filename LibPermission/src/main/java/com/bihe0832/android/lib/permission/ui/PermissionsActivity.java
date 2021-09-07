@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.permission.R;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PermissionsActivity extends Activity {
@@ -42,10 +43,13 @@ public class PermissionsActivity extends Activity {
 
         mChecker = new PermissionsChecker(this);
         isRequireCheck = true;
-        dialog = getDialog();
     }
 
-    protected PermissionDialog getDialog() {
+    protected PermissionDialog getDialog(String permission) {
+        return new PermissionDialog(this);
+    }
+
+    protected PermissionDialog getDialog(List<String> tempPermissionList) {
         return new PermissionDialog(this);
     }
 
@@ -89,45 +93,93 @@ public class PermissionsActivity extends Activity {
             @NonNull int[] grantResults) {
 
         String tempPermission = "";
+        List<String> tempPermissionList = new ArrayList<>();
         for (String permission : needCheckPermission) {
             if (mChecker.lacksPermission(permission)) {
-                tempPermission = permission;
-                break;
+                tempPermissionList.add(permission);
+                if (!checkAllPermissionsResult()) {
+                    tempPermission = permission;
+                    break;
+                }
             }
         }
         if (!TextUtils.isEmpty(tempPermission)) {
             isRequireCheck = false;
             showMissingPermissionDialog(tempPermission);
+        } else if (tempPermissionList.size() > 0) {
+            isRequireCheck = false;
+            showMissingPermissionDialog(tempPermissionList);
         } else {
             isRequireCheck = true;
             allPermissionsGranted(); // 全部权限都已获取
         }
     }
 
-    private void showMissingPermissionDialog(final String showPermission) {
-        dialog.show(showPermission, canCancel(), new OnDialogListener() {
+    protected boolean checkAllPermissionsResult() {
+        return false;
+    }
+
+    private void showMissingPermissionDialog(final List<String> tempPermissionList) {
+        getDialog(tempPermissionList).show(tempPermissionList, canCancel(), new OnDialogListener() {
             @Override
             public void onPositiveClick() {
-                String permissionSettings = PermissionManager.INSTANCE.getPermissionSettings(showPermission);
-                if (!IntentUtils.startAppSettings(PermissionsActivity.this, permissionSettings, false)) {
-                    if (!IntentUtils.startSettings(PermissionsActivity.this, permissionSettings)) {
-                        IntentUtils.startAppDetailSettings(PermissionsActivity.this);
-                    }
+                onPermissionDialogPositiveClick(tempPermissionList);
+            }
+
+            @Override
+            public void onNegativeClick() {
+                for (String permission : tempPermissionList) {
+                    PermissionManager.INSTANCE.setUserDenyTime(permission);
                 }
+                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(tempPermissionList.get(0));
+                finish();
+            }
+
+            @Override
+            public void onCancel() {
+                for (String permission : tempPermissionList) {
+                    PermissionManager.INSTANCE.setUserDenyTime(permission);
+                }
+                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(tempPermissionList.get(0));
+                finish();
+            }
+        });
+    }
+
+    private void showMissingPermissionDialog(final String showPermission) {
+        getDialog(showPermission).show(showPermission, canCancel(), new OnDialogListener() {
+            @Override
+            public void onPositiveClick() {
+                onPermissionDialogPositiveClick(showPermission);
             }
 
 
             @Override
             public void onNegativeClick() {
+                PermissionManager.INSTANCE.setUserDenyTime(showPermission);
                 PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(showPermission);
                 finish();
             }
 
             @Override
             public void onCancel() {
+                PermissionManager.INSTANCE.setUserDenyTime(showPermission);
                 PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(showPermission);
                 finish();
             }
         });
+    }
+
+    protected void onPermissionDialogPositiveClick(final List<String> tempPermissionList) {
+        IntentUtils.startAppDetailSettings(PermissionsActivity.this);
+    }
+
+    protected void onPermissionDialogPositiveClick(final String showPermission) {
+        String permissionSettings = PermissionManager.INSTANCE.getPermissionSettings(showPermission);
+        if (!IntentUtils.startAppSettings(PermissionsActivity.this, permissionSettings, false)) {
+            if (!IntentUtils.startSettings(PermissionsActivity.this, permissionSettings)) {
+                IntentUtils.startAppDetailSettings(PermissionsActivity.this);
+            }
+        }
     }
 }

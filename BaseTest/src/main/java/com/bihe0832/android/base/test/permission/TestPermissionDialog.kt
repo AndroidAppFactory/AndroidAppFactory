@@ -16,7 +16,6 @@ class TestPermissionDialog : PermissionDialog {
 
     constructor(context: Context) : super(context)
 
-    private var mListener: OnDialogListener? = null
 
     override fun getLayoutID(): Int {
         return R.layout.dialog_test_layout
@@ -25,15 +24,14 @@ class TestPermissionDialog : PermissionDialog {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dialog_content.setOnClickListener {
-            mListener?.onPositiveClick()
+            onClickBottomListener?.onPositiveClick()
         }
         dialog_title.setOnClickListener {
-            mListener?.onNegativeClick()
+            onClickBottomListener?.onNegativeClick()
         }
     }
 
     override fun show(showPermission: String, canCancel: Boolean, listener: OnDialogListener) {
-        mListener = listener
         setShouldCanceled(canCancel)
         setOnClickBottomListener(listener)
         show()

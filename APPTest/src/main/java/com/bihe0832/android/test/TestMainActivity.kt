@@ -71,11 +71,11 @@ class TestMainActivity : CommonActivity() {
 
     override fun getPermissionList(): List<String> {
         return ArrayList<String>().apply {
-            if (System.currentTimeMillis() - PermissionManager.getPermissionDenyTime(Manifest.permission.CAMERA) > 1000L * 30) {
+            if (System.currentTimeMillis() - PermissionManager.getPermissionDenyTime(Manifest.permission.CAMERA) > 1000L * 10) {
                 add(Manifest.permission.CAMERA)
             }
 
-            if (System.currentTimeMillis() - PermissionManager.getPermissionDenyTime(Manifest.permission.WRITE_EXTERNAL_STORAGE) > 1000L * 30) {
+            if (System.currentTimeMillis() - PermissionManager.getPermissionDenyTime(Manifest.permission.WRITE_EXTERNAL_STORAGE) > 1000L * 10) {
                 add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
 
