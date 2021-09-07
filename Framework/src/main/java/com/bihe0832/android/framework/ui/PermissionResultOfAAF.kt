@@ -9,16 +9,16 @@ import com.bihe0832.android.lib.permission.PermissionManager
  */
 class PermissionResultOfAAF : PermissionManager.OnPermissionResult {
     override fun onSuccess() {
-        ZLog.d("用户授权成功")
+        ZLog.d("授权成功")
     }
 
-    override fun onUserCancel() {
-        ZLog.d("用户放弃授权")
+    override fun onUserCancel(permission: String) {
+        ZLog.d("你已放弃授权" + PermissionManager.getPermissionDesc(permission) + "，请手动前往应用设置开启")
         ZixieContext.exitAPP()
     }
 
-    override fun onUserDeny() {
-        ZLog.d("用户拒绝授权")
+    override fun onUserDeny(permission: String) {
+        ZLog.d("你拒绝了" + PermissionManager.getPermissionDesc(permission) + "权限的申请，请手动前往应用设置开启")
         ZixieContext.exitAPP()
     }
 

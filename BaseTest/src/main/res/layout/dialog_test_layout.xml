@@ -7,7 +7,7 @@
         android:background="@drawable/com_bihe0832_commonm_dialog_bg">
 
     <TextView
-            android:id="@+id/title"
+            android:id="@+id/dialog_title"
             android:layout_width="0dp"
             app:layout_constrainedWidth="true"
             android:layout_height="wrap_content"
@@ -22,10 +22,10 @@
             app:layout_constraintRight_toRightOf="parent"
             android:gravity="center"
             android:layout_marginTop="24dp"
-            tools:text="系统消息" />
+            android:text="系统消息" />
 
     <TextView
-            android:id="@+id/content"
+            android:id="@+id/dialog_content"
             android:layout_width="0dp"
             app:layout_constrainedWidth="true"
             android:layout_height="wrap_content"
@@ -36,58 +36,9 @@
             android:scrollbars="vertical"
             android:textSize="14dp"
             android:textColor="@color/corner_color"
-            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            tools:text="提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息" />
+            android:text="提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息提示消息" />
 
-
-
-    <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/content"
-            android:orientation="horizontal">
-
-        <Button
-                android:id="@+id/negtive"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:layout_weight="1"
-                android:background="@color/dialog_bg"
-                android:gravity="center"
-                android:singleLine="true"
-                tools:text="前往"
-                android:textColor="@color/dialog_button"
-                android:textSize="14dp" />
-
-        <View
-                android:id="@+id/column_line"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/dialog_split" />
-
-        <Button
-                android:id="@+id/positive"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:background="@color/dialog_bg"
-                android:gravity="center"
-                android:singleLine="true"
-                android:textStyle="bold"
-                tools:text="确定"
-                android:textColor="@color/dialog_button"
-                android:textSize="14dp" />
-    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

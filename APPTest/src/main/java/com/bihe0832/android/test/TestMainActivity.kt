@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.ContextCompat
 import android.view.View
+import com.bihe0832.android.base.test.permission.TestPermissionsActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.main.CommonActivity
@@ -39,6 +40,7 @@ class TestMainActivity : CommonActivity() {
 
 
         CardInfoHelper.getInstance().setAutoAddItem(true)
+        PermissionManager.setPermissionsActivityClass(TestPermissionsActivity::class.java)
         PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "相机")
             put(Manifest.permission.RECORD_AUDIO, "录音")
@@ -69,9 +71,15 @@ class TestMainActivity : CommonActivity() {
 
     override fun getPermissionList(): List<String> {
         return ArrayList<String>().apply {
-            add(Manifest.permission.CAMERA)
+            if (System.currentTimeMillis() - PermissionManager.getPermissionDenyTime(Manifest.permission.CAMERA) > 1000L * 30) {
+                add(Manifest.permission.CAMERA)
+            }
+
+            if (System.currentTimeMillis() - PermissionManager.getPermissionDenyTime(Manifest.permission.WRITE_EXTERNAL_STORAGE) > 1000L * 30) {
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+
 //            add(Manifest.permission.RECORD_AUDIO)
-            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //            add(Manifest.permission.SYSTEM_ALERT_WINDOW)
         }
     }
@@ -82,12 +90,15 @@ class TestMainActivity : CommonActivity() {
                 ZixieContext.showDebug("用户授权成功")
             }
 
-            override fun onUserCancel() {
-                ZixieContext.showLongToast("用户放弃授权")
+            override fun onUserCancel(permissions: String) {
+                ZixieContext.showLongToast("用户放弃授权:" + PermissionManager.getPermissionDesc(permissions))
+                checkPermission()
+
             }
 
-            override fun onUserDeny() {
-                ZixieContext.showDebug("用户拒绝授权")
+            override fun onUserDeny(permissions: String) {
+                ZixieContext.showDebug("用户拒绝授权" + PermissionManager.getPermissionDesc(permissions))
+                checkPermission()
             }
 
             override fun onFailed(msg: String) {

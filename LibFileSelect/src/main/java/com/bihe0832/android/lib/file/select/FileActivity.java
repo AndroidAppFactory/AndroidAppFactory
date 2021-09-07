@@ -94,14 +94,14 @@ public class FileActivity extends SupportActivity {
             }
 
             @Override
-            public void onUserCancel() {
+            public void onUserCancel(String permission) {
                 ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
                 setResult(RESULT_CANCELED);
                 finish();
             }
 
             @Override
-            public void onUserDeny() {
+            public void onUserDeny(String permission) {
                 ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
                 setResult(RESULT_CANCELED);
                 finish();

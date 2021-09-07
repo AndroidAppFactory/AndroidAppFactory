@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
+import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 
 object PermissionManager {
 
@@ -16,6 +18,7 @@ object PermissionManager {
     private var mContext: Context? = null
     private var mOuterResultListener: OnPermissionResult? = null
 
+    private val USER_DENY_KEY = "UserPermissionDenyKey"
     private val mPermissionDesc = HashMap<String, String>()
     private val mPermissionScene = HashMap<String, String>()
     private val mPermissionContent = HashMap<String, String>()
@@ -28,6 +31,7 @@ object PermissionManager {
         mContext?.getString(R.string.permission_default_scene) ?: "完整"
     }
 
+    private var mPermissionsActivityClass: Class<out PermissionsActivity> = PermissionsActivity::class.java
     private val mDefaultDesc by lazy {
         mContext?.getString(R.string.permission_default_desc) ?: "设备"
     }
@@ -44,15 +48,17 @@ object PermissionManager {
                 mOuterResultListener = null
             }
 
-            override fun onUserCancel() {
+            override fun onUserCancel(permission: String) {
                 ZLog.d(TAG, "onUserCancel")
-                mOuterResultListener?.onUserCancel()
+                Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
+                mOuterResultListener?.onUserCancel(permission)
                 mOuterResultListener = null
             }
 
-            override fun onUserDeny() {
+            override fun onUserDeny(permission: String) {
                 ZLog.d(TAG, "onUserDeny")
-                mOuterResultListener?.onUserDeny()
+                Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
+                mOuterResultListener?.onUserDeny(permission)
                 mOuterResultListener = null
             }
 
@@ -62,6 +68,10 @@ object PermissionManager {
                 mOuterResultListener = null
             }
         }
+    }
+
+    fun setPermissionsActivityClass(permissionsActivityClass: Class<out PermissionsActivity>) {
+        mPermissionsActivityClass = permissionsActivityClass
     }
 
     fun addPermissionScene(permissionScene: HashMap<String, String>) {
@@ -82,8 +92,8 @@ object PermissionManager {
 
     interface OnPermissionResult {
         fun onSuccess()
-        fun onUserCancel()
-        fun onUserDeny()
+        fun onUserCancel(permission: String)
+        fun onUserDeny(permission: String)
         fun onFailed(msg: String)
     }
 
@@ -113,7 +123,7 @@ object PermissionManager {
                 mLastPermissionCheckResultListener.onSuccess()
             } else {
                 try {
-                    val intent = Intent(context, PermissionsActivity::class.java)
+                    val intent = Intent(context, mPermissionsActivityClass)
                     intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissions)
                     intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -148,6 +158,10 @@ object PermissionManager {
         } else {
             mDefaultDesc
         }
+    }
+
+    fun getPermissionDenyTime(permission: String): Long {
+        return Config.readConfig(USER_DENY_KEY + permission, 0L)
     }
 
     fun getPermissionContent(permission: String): String {

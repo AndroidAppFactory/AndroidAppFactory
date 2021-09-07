@@ -11,8 +11,7 @@ import com.bihe0832.android.base.test.R
 import com.bihe0832.android.common.test.base.BaseTestFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.notification.NotifyManager
-import com.bihe0832.android.lib.permission.PermissionDialog
+import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
@@ -159,7 +158,7 @@ class TestDialogFragment : BaseTestFragment() {
             put(Manifest.permission.RECORD_AUDIO, "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！")
         })
         activity?.let { it ->
-            PermissionDialog(it).let {permissionDialog->
+            PermissionDialog(it).let { permissionDialog->
                 permissionDialog.show(Manifest.permission.RECORD_AUDIO, true, object : OnDialogListener {
                     override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
@@ -191,7 +190,7 @@ class TestDialogFragment : BaseTestFragment() {
             put(Manifest.permission.RECORD_AUDIO, "SD卡权限")
         })
         activity?.let { it ->
-            PermissionDialog(it).let {permissionDialog->
+            PermissionDialog(it).let { permissionDialog->
                 permissionDialog.show(Manifest.permission.RECORD_AUDIO, true, object : OnDialogListener {
                     override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
