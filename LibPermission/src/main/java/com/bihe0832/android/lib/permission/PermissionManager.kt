@@ -87,7 +87,7 @@ object PermissionManager {
         fun onFailed(msg: String)
     }
 
-    fun hasPermission(context: Context, permissions: String): Boolean {
+    fun hasPermission(context: Context?, permissions: String): Boolean {
         return !PermissionsChecker(context).lacksPermissions(permissions)
     }
 
