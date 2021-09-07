@@ -1,24 +1,18 @@
 package com.bihe0832.android.lib.floatview;
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.widget.LinearLayout
-import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.permission.wrapper.checkFloatPermission
-import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 
@@ -29,6 +23,7 @@ class IconManager(activity: Activity) {
     private val TAG = "IconManager"
 
     private var mActivity: Activity? = null
+    private var mPermissionReqShow: Boolean = false
 
     //小悬浮窗
     private var mIconView: IconView? = null
@@ -96,10 +91,41 @@ class IconManager(activity: Activity) {
         mIconView?.setClickListener(listener)
     }
 
+
+    fun showIconWithpermission(result: PermissionManager.OnPermissionResult?) {
+        if (mPermissionReqShow) {
+            return
+        }
+        mPermissionReqShow = true
+        PermissionManager.checkPermission(mActivity, true, object : PermissionManager.OnPermissionResult {
+            override fun onFailed(msg: String) {
+                result?.onFailed(msg)
+                mPermissionReqShow = false
+            }
+
+            override fun onSuccess() {
+                result?.onSuccess()
+                showIcon()
+                mPermissionReqShow = false
+            }
+
+            override fun onUserCancel() {
+                result?.onUserCancel()
+                mPermissionReqShow = false
+            }
+
+            override fun onUserDeny() {
+                result?.onUserDeny()
+                mPermissionReqShow = false
+            }
+
+        }, Manifest.permission.SYSTEM_ALERT_WINDOW)
+    }
+
     @Synchronized
     fun showIcon(): Boolean {
-        if (!checkFloatPermission(mActivity)) {
-            Log.d(TAG, "checkFloatPermission is bad")
+        if (!PermissionManager.hasPermission(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+            Log.d(TAG, "showIcon checkFloatPermission is bad")
             return false
         }
         Log.d(TAG, "showIcon")
@@ -178,10 +204,40 @@ class IconManager(activity: Activity) {
         showView(view, getFullScreenFlag(), x, y)
     }
 
+    fun showViewWithpermission(view: View, flag: Int, x: Int?, y: Int?, result: PermissionManager.OnPermissionResult?) {
+        if (mPermissionReqShow) {
+            return
+        }
+        mPermissionReqShow = true
+        PermissionManager.checkPermission(mActivity, true, object : PermissionManager.OnPermissionResult {
+            override fun onFailed(msg: String) {
+                result?.onFailed(msg)
+                mPermissionReqShow = false
+            }
+
+            override fun onSuccess() {
+                result?.onSuccess()
+                showView(view, flag, x, y)
+                mPermissionReqShow = false
+            }
+
+            override fun onUserCancel() {
+                result?.onUserCancel()
+                mPermissionReqShow = false
+            }
+
+            override fun onUserDeny() {
+                result?.onUserDeny()
+                mPermissionReqShow = false
+            }
+
+        }, Manifest.permission.SYSTEM_ALERT_WINDOW)
+    }
+
     private fun showView(view: View, flag: Int, x: Int?, y: Int?) {
         //添加Icon
-        if (!checkFloatPermission(mActivity)) {
-            Log.d(TAG, "checkFloatPermission is bad")
+        if (!PermissionManager.hasPermission(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+            Log.d(TAG, "showView checkFloatPermission is bad")
             return
         }
         val iconWindowParams = getBasicWindowManagerLayoutParams()
@@ -262,63 +318,6 @@ class IconManager(activity: Activity) {
         }
 
         mIconView = null
-    }
-
-    private var mPermissionReqShow: Boolean = false
-
-
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_ACTIVITY_FLOAT_PERMISSION) {
-            if (!checkFloatPermission(mActivity)) {
-                ToastUtil.showShort(mActivity, "悬浮窗权限开启失败")
-            }
-        }
-    }
-
-    fun requestFloatPermission(msg: String) {
-        mActivity?.let {
-            try {
-                if (mPermissionReqShow) {
-                    return
-                }
-                CommonDialog(it).apply {
-                    title = "未开启悬浮窗权限"
-                    setHtmlContent(msg)
-                    setCancelable(false)
-                    positive = "点击开启"
-                    negative = "暂不设置"
-                    setOnClickBottomListener(object : OnDialogListener {
-                        override fun onPositiveClick() {
-                            dismiss()
-                            mPermissionReqShow = false
-                            try {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-                                    intent.data = Uri.parse("package:" + it.packageName)
-                                    it.startActivityForResult(intent, REQUEST_ACTIVITY_FLOAT_PERMISSION)
-                                } else {
-                                    ToastUtil.showShort(it, "当前版本太低,跳转失败,请手动到权限界面打开悬浮窗权限")
-                                }
-                            } catch (e: java.lang.Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-
-                        override fun onNegativeClick() {
-                            dismiss()
-                            mPermissionReqShow = false
-                        }
-
-                        override fun onCancel() {
-                        }
-                    })
-                }.let { dialog ->
-                    dialog.show()
-                }
-            } catch (e: Throwable) {
-                ZLog.e("requestFloatingWindowPermission e:$e")
-            }
-        }
     }
 }
 

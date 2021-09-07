@@ -23,7 +23,7 @@ class PermissionDialog : CommonDialog {
     fun show(showPermission: String, canCancel: Boolean, listener: OnDialogListener) {
         var content = PermissionManager.getPermissionContent(showPermission)
         if (TextUtils.isEmpty(content)) {
-            content = APKUtils.getAppName(context) + "的" + getPermissionScene(showPermission) + "功能需要您开启" + getPermissionDesc(showPermission) + "权限，缺少权限在使用中可能会出现部分功能异常。"
+            content = APKUtils.getAppName(context) + "的" + getPermissionScene(showPermission) + "功能需要手机开启" + getPermissionDesc(showPermission) + "权限，缺少权限可能会在使用中出现功能异常。"
         }
         showWithContent(content, canCancel, listener)
     }

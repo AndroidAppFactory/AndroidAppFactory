@@ -250,7 +250,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     }
 
     private fun showIcon() {
-        mIconManager.showIcon()
+        mIconManager.showIconWithpermission(null)
     }
 
     private fun hideIcon() {
