@@ -54,11 +54,16 @@
 
 
         <activity
-                android:name="com.bihe0832.android.base.test.com.bihe0832.android.test.module.TestLogActivity"
+                android:name="com.bihe0832.android.common.test.log.TestLogActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:screenOrientation="portrait"
                 android:theme="@style/activityTheme"></activity>
 
+        <activity
+                android:name="com.bihe0832.android.base.test.permission.TestPermissionsActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="portrait"
+                android:theme="@style/permissionFullscreen" />
 
         <activity
             android:name="com.bihe0832.android.base.test.card.TestListActivity"

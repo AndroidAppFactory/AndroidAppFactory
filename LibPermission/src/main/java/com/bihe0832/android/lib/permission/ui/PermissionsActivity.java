@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.permission;
+package com.bihe0832.android.lib.permission.ui;
 
 import static com.bihe0832.android.lib.permission.PermissionManager.PERMISSION_REQUEST_CODE;
 
@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import com.bihe0832.android.lib.permission.PermissionManager;
+import com.bihe0832.android.lib.permission.PermissionsChecker;
+import com.bihe0832.android.lib.permission.R;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import java.util.ArrayList;
@@ -39,7 +42,11 @@ public class PermissionsActivity extends Activity {
 
         mChecker = new PermissionsChecker(this);
         isRequireCheck = true;
-        dialog = new PermissionDialog(this);
+        dialog = getDialog();
+    }
+
+    protected PermissionDialog getDialog() {
+        return new PermissionDialog(this);
     }
 
     @Override
@@ -112,13 +119,13 @@ public class PermissionsActivity extends Activity {
 
             @Override
             public void onNegativeClick() {
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel();
+                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(showPermission);
                 finish();
             }
 
             @Override
             public void onCancel() {
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel();
+                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(showPermission);
                 finish();
             }
         });

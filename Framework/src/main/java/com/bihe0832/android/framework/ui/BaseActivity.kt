@@ -41,11 +41,14 @@ open class BaseActivity : SupportActivity() {
 
     override fun onResume() {
         super.onResume()
+        checkPermission()
+    }
+
+    fun checkPermission(){
         if (getPermissionList().isNotEmpty()) {
             PermissionManager.checkPermission(this, false, getPermissionResult(), *getPermissionList().toTypedArray())
         }
     }
-
     override fun onPause() {
         super.onPause()
         for (fragment in supportFragmentManager.fragments) {

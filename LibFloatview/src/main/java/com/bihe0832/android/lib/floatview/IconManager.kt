@@ -109,13 +109,13 @@ class IconManager(activity: Activity) {
                 mPermissionReqShow = false
             }
 
-            override fun onUserCancel() {
-                result?.onUserCancel()
+            override fun onUserCancel(permission: String) {
+                result?.onUserCancel(permission)
                 mPermissionReqShow = false
             }
 
-            override fun onUserDeny() {
-                result?.onUserDeny()
+            override fun onUserDeny(permission: String) {
+                result?.onUserDeny(permission)
                 mPermissionReqShow = false
             }
 
@@ -181,14 +181,14 @@ class IconManager(activity: Activity) {
         return true
     }
 
-    private fun getFullScreenFlag(): Int {
+    fun getFullScreenFlag(): Int {
         return (WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 or WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
                 or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH)
     }
 
-    private fun getInputFlag(): Int {
+    fun getInputFlag(): Int {
         return (WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 or WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
@@ -221,20 +221,20 @@ class IconManager(activity: Activity) {
                 mPermissionReqShow = false
             }
 
-            override fun onUserCancel() {
-                result?.onUserCancel()
+            override fun onUserCancel(permission: String) {
+                result?.onUserCancel(permission)
                 mPermissionReqShow = false
             }
 
-            override fun onUserDeny() {
-                result?.onUserDeny()
+            override fun onUserDeny(permission: String) {
+                result?.onUserDeny(permission)
                 mPermissionReqShow = false
             }
 
         }, Manifest.permission.SYSTEM_ALERT_WINDOW)
     }
 
-    private fun showView(view: View, flag: Int, x: Int?, y: Int?) {
+    fun showView(view: View, flag: Int, x: Int?, y: Int?) {
         //添加Icon
         if (!PermissionManager.hasPermission(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
             Log.d(TAG, "showView checkFloatPermission is bad")

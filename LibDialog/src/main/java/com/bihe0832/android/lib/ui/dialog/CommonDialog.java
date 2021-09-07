@@ -109,23 +109,28 @@ public class CommonDialog extends Dialog {
      */
     private void initEvent() {
         //设置确定按钮被点击后，向外界提供监听
-        positiveBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClickBottomListener != null) {
-                    onClickBottomListener.onPositiveClick();
+        if(positiveBn != null){
+            positiveBn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickBottomListener != null) {
+                        onClickBottomListener.onPositiveClick();
+                    }
                 }
-            }
-        });
-        //设置取消按钮被点击后，向外界提供监听
-        negativeBn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClickBottomListener != null) {
-                    onClickBottomListener.onNegativeClick();
+            });
+        }
+
+        if(negativeBn != null){
+            //设置取消按钮被点击后，向外界提供监听
+            negativeBn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickBottomListener != null) {
+                        onClickBottomListener.onNegativeClick();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         setOnCancelListener(new OnCancelListener() {
             @Override

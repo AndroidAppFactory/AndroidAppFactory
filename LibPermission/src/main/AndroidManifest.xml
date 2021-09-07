@@ -4,7 +4,7 @@
 
     <application>
         <activity
-                android:name=".PermissionsActivity"
+                android:name=".ui.PermissionsActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:screenOrientation="portrait"
                 android:theme="@style/permissionFullscreen" />
