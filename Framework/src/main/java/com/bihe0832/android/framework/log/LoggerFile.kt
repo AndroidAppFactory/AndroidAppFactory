@@ -28,7 +28,7 @@ object LoggerFile {
 
     private val mLogFiles = ConcurrentHashMap<String, File?>()
     private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
-    private const val DEFAULT_DURATION = 24 * 60 * 60 * 1000L
+    private const val DEFAULT_DURATION =  60 * 60 * 1000L
     private var mDuration = DEFAULT_DURATION
     private val mLoggerHandlerThread by lazy {
         HandlerThread("THREAD_ZIXIE_LOG_FILE", 5).also {
@@ -52,7 +52,7 @@ object LoggerFile {
 
     @Synchronized
     fun init(context: Context, isDebug: Boolean) {
-        init(context, isDebug, 5 * DEFAULT_DURATION)
+        init(context, isDebug, 24 * 7 * DEFAULT_DURATION)
     }
 
     @Synchronized
@@ -79,18 +79,8 @@ object LoggerFile {
     }
 
     private fun checkOldFile(file: File) {
-        ThreadManager.getInstance().start {
-            var path = file.parent
-            file.parentFile.list().toList().forEach {
-                var tempFile = File(path + File.separator + it)
-                var lastModify = tempFile.lastModified()
-                ZLog.e("Hardy", "File $it Date is ${DateUtil.getDateEN(lastModify)}")
-                if (tempFile.exists() && System.currentTimeMillis() - lastModify > mDuration) {
-                    tempFile.delete()
-                    ZLog.e("Hardy", "tempFile has delete")
-                }
-            }
-        }
+        FileUtils.deleteOld(file.parentFile, mDuration)
+
     }
 
     private fun bufferSave(fileName: String, msg: String?) {

@@ -8,6 +8,8 @@ import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.encypt.MD5
 import java.io.File
 import java.io.FileInputStream
@@ -173,6 +175,23 @@ object FileUtils {
 
     fun getFileMD5(filePath: String): String {
         return MD5.getFileMD5(filePath)
+    }
+
+    fun deleteOld(dir: File, duration: Long) {
+        ThreadManager.getInstance().start {
+            dir.listFiles().forEach { tempFile ->
+                var lastModify = tempFile.lastModified()
+                ZLog.w("File", "File $tempFile Date is ${DateUtil.getDateEN(lastModify)}")
+                if (tempFile.exists() && System.currentTimeMillis() - lastModify > duration) {
+                    var result = if (tempFile.isDirectory) {
+                        deleteDirectory(tempFile)
+                    } else {
+                        deleteFile(tempFile.absolutePath)
+                    }
+                    ZLog.w("File", "File tempFile has delete: $result")
+                }
+            }
+        }
     }
 
     fun deleteDirectory(dir: File): Boolean {
