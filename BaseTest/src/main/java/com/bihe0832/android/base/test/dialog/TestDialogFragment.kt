@@ -1,5 +1,6 @@
 package com.bihe0832.android.base.test.dialog
 
+import android.Manifest
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -12,6 +13,7 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.permission.PermissionDialog
+import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -22,6 +24,7 @@ import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.util.*
+import kotlin.collections.HashMap
 
 class TestDialogFragment : BaseTestFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -30,7 +33,9 @@ class TestDialogFragment : BaseTestFragment() {
             add(TestItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
             add(TestItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(TestItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
-            add(TestItemData("权限弹框", View.OnClickListener { testPermission(activity) }))
+            add(TestItemData("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
+            add(TestItemData("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
+
         }
     }
 
@@ -149,22 +154,60 @@ class TestDialogFragment : BaseTestFragment() {
         }
     }
 
-    private fun testPermission(activity: Activity?) {
-        activity?.let {
-            PermissionDialog(it).show("消息通知", "通知", true, object : OnDialogListener {
-                override fun onPositiveClick() {
+    private fun testCustomPermission(activity: Activity?) {
+        PermissionManager.addPermissionContent(HashMap<String, String>().apply {
+            put(Manifest.permission.RECORD_AUDIO, "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！")
+        })
+        activity?.let { it ->
+            PermissionDialog(it).let {permissionDialog->
+                permissionDialog.show(Manifest.permission.RECORD_AUDIO, true, object : OnDialogListener {
+                    override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
-                    NotifyManager.showNotificationsSettings(context!!)
-                }
+                        permissionDialog.dismiss()
+                    }
 
-                override fun onNegativeClick() {
+                    override fun onNegativeClick() {
+                        permissionDialog.dismiss()
 
-                }
+                    }
 
-                override fun onCancel() {
+                    override fun onCancel() {
+                        permissionDialog.dismiss()
+                    }
+                })
 
-                }
-            })
+                PermissionManager.addPermissionContent(HashMap<String, String>().apply {
+                    put(Manifest.permission.RECORD_AUDIO, "")
+                })
+            }
+        }
+    }
+
+    private fun testCommonPermission(activity: Activity?) {
+        PermissionManager.addPermissionScene(HashMap<String, String>().apply {
+            put(Manifest.permission.RECORD_AUDIO, "数据存储")
+        })
+        PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
+            put(Manifest.permission.RECORD_AUDIO, "SD卡权限")
+        })
+        activity?.let { it ->
+            PermissionDialog(it).let {permissionDialog->
+                permissionDialog.show(Manifest.permission.RECORD_AUDIO, true, object : OnDialogListener {
+                    override fun onPositiveClick() {
+//                    openFloatPermissionSettings(context)
+                        permissionDialog.dismiss()
+                    }
+
+                    override fun onNegativeClick() {
+                        permissionDialog.dismiss()
+
+                    }
+
+                    override fun onCancel() {
+                        permissionDialog.dismiss()
+                    }
+                })
+            }
         }
     }
 }
