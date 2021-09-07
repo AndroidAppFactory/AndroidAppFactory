@@ -6,6 +6,7 @@
         <activity
                 android:name=".PermissionsActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait" />
+                android:screenOrientation="portrait"
+                android:theme="@style/permissionFullscreen" />
     </application>
 </manifest>
