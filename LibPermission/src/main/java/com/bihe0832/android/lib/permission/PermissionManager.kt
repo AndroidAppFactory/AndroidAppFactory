@@ -50,14 +50,12 @@ object PermissionManager {
 
             override fun onUserCancel(permission: String) {
                 ZLog.d(TAG, "onUserCancel")
-                Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
                 mOuterResultListener?.onUserCancel(permission)
                 mOuterResultListener = null
             }
 
             override fun onUserDeny(permission: String) {
                 ZLog.d(TAG, "onUserDeny")
-                Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
                 mOuterResultListener?.onUserDeny(permission)
                 mOuterResultListener = null
             }
@@ -164,6 +162,9 @@ object PermissionManager {
         return Config.readConfig(USER_DENY_KEY + permission, 0L)
     }
 
+    fun setUserDenyTime(permission: String){
+        Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
+    }
     fun getPermissionContent(permission: String): String {
         if (mPermissionContent.containsKey(permission)) {
             mPermissionContent.get(permission)?.let {
