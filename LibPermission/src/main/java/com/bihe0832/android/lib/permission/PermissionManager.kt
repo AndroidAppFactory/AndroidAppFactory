@@ -18,6 +18,8 @@ object PermissionManager {
 
     private val mPermissionDesc = HashMap<String, String>()
     private val mPermissionScene = HashMap<String, String>()
+    private val mPermissionContent = HashMap<String, String>()
+
     private val mPermissionSettings = HashMap<String, String>().apply {
         put(Manifest.permission.SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
     }
@@ -68,6 +70,10 @@ object PermissionManager {
 
     fun addPermissionDesc(permissionDesc: HashMap<String, String>) {
         mPermissionDesc.putAll(permissionDesc)
+    }
+
+    fun addPermissionContent(permissionDesc: HashMap<String, String>) {
+        mPermissionContent.putAll(permissionDesc)
     }
 
     fun addPermissionSettings(permissionSettings: HashMap<String, String>) {
@@ -142,6 +148,15 @@ object PermissionManager {
         } else {
             mDefaultDesc
         }
+    }
+
+    fun getPermissionContent(permission: String): String {
+        if (mPermissionContent.containsKey(permission)) {
+            mPermissionContent.get(permission)?.let {
+                return it
+            }
+        }
+        return ""
     }
 
     fun getPermissionSettings(permission: String): String {
