@@ -5,4 +5,19 @@
     <string name="permission_negtive">暂不开启</string>
     <string name="permission_positive">前往开启</string>
     <string name="permission_color">#38ADFF</string>
+    <color name="transparent">#00000000</color>
+
+    <style name="permissionFullscreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="colorPrimary">@color/transparent</item>
+        <item name="colorPrimaryDark">@color/transparent</item>
+        <item name="colorAccent">@color/transparent</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>
