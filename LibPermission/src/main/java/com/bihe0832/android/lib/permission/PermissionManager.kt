@@ -31,7 +31,6 @@ object PermissionManager {
         mContext?.getString(R.string.permission_default_scene) ?: "完整"
     }
 
-    private var mPermissionsActivityClass: Class<out PermissionsActivity> = PermissionsActivity::class.java
     private val mDefaultDesc by lazy {
         mContext?.getString(R.string.permission_default_desc) ?: "设备"
     }
@@ -68,10 +67,6 @@ object PermissionManager {
         }
     }
 
-    fun setPermissionsActivityClass(permissionsActivityClass: Class<out PermissionsActivity>) {
-        mPermissionsActivityClass = permissionsActivityClass
-    }
-
     fun addPermissionScene(permissionScene: HashMap<String, String>) {
         mPermissionScene.putAll(permissionScene)
     }
@@ -103,15 +98,19 @@ object PermissionManager {
         return !PermissionsChecker(context).lacksPermissions(*permissions)
     }
 
-    fun checkPermission(context: Context, vararg permissions: String) {
+    fun checkPermission(context: Context?, vararg permissions: String) {
         checkPermission(context, false, *permissions)
     }
 
-    fun checkPermission(context: Context, canCancel: Boolean, vararg permissions: String) {
+    fun checkPermission(context: Context?, canCancel: Boolean, vararg permissions: String) {
         checkPermission(context, canCancel, null, *permissions)
     }
 
     fun checkPermission(context: Context?, canCancel: Boolean, result: OnPermissionResult?, vararg permissions: String) {
+        checkPermission(context, canCancel, PermissionsActivity::class.java, result, *permissions)
+    }
+
+    fun checkPermission(context: Context?, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, vararg permissions: String) {
         mOuterResultListener = result
         if (null == context) {
             mLastPermissionCheckResultListener.onFailed("context is null")
@@ -121,7 +120,7 @@ object PermissionManager {
                 mLastPermissionCheckResultListener.onSuccess()
             } else {
                 try {
-                    val intent = Intent(context, mPermissionsActivityClass)
+                    val intent = Intent(context, permissionsActivityClass)
                     intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissions)
                     intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -162,9 +161,10 @@ object PermissionManager {
         return Config.readConfig(USER_DENY_KEY + permission, 0L)
     }
 
-    fun setUserDenyTime(permission: String){
+    fun setUserDenyTime(permission: String) {
         Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
     }
+
     fun getPermissionContent(permission: String): String {
         if (mPermissionContent.containsKey(permission)) {
             mPermissionContent.get(permission)?.let {

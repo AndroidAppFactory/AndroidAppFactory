@@ -13,6 +13,7 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.widget.LinearLayout
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 
@@ -92,7 +93,7 @@ class IconManager(activity: Activity) {
     }
 
 
-    fun showIconWithpermission(result: PermissionManager.OnPermissionResult?) {
+    fun showIconWithPermissionCheck(result: PermissionManager.OnPermissionResult?) {
         if (mPermissionReqShow) {
             return
         }
@@ -204,7 +205,7 @@ class IconManager(activity: Activity) {
         showView(view, getFullScreenFlag(), x, y)
     }
 
-    fun showViewWithpermission(view: View, flag: Int, x: Int?, y: Int?, result: PermissionManager.OnPermissionResult?) {
+    fun showViewWithPermissionCheck(view: View, flag: Int, x: Int?, y: Int?, result: PermissionManager.OnPermissionResult?) {
         if (mPermissionReqShow) {
             return
         }

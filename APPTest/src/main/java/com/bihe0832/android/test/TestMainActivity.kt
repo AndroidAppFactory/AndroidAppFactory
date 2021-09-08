@@ -15,6 +15,7 @@ import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
@@ -40,7 +41,6 @@ class TestMainActivity : CommonActivity() {
 
 
         CardInfoHelper.getInstance().setAutoAddItem(true)
-        PermissionManager.setPermissionsActivityClass(TestPermissionsActivity::class.java)
         PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
             put(Manifest.permission.CAMERA, "相机")
             put(Manifest.permission.RECORD_AUDIO, "录音")
@@ -105,6 +105,11 @@ class TestMainActivity : CommonActivity() {
                 ZixieContext.showDebug("用户授权失败")
             }
         }
+    }
+
+
+    override fun getPermissionActivityClass(): Class<out PermissionsActivity> {
+        return TestPermissionsActivity::class.java
     }
 
     override fun onResume() {
