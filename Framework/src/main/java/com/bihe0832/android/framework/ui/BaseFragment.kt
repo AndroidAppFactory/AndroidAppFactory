@@ -7,6 +7,7 @@ import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
@@ -23,9 +24,15 @@ open class BaseFragment : SwipeBackFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(it.resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
+        if (resetDensity()) {
+            activity?.let {
+                DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(it.resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
+            }
         }
+    }
+
+    open fun resetDensity(): Boolean {
+        return true
     }
 
     /**
@@ -44,7 +51,7 @@ open class BaseFragment : SwipeBackFragment() {
             }
 
             if (getPermissionList().isNotEmpty()) {
-                PermissionManager.checkPermission(context, false, getPermissionResult(), *getPermissionList().toTypedArray())
+                PermissionManager.checkPermission(context, false, getPermissionActivityClass(), getPermissionResult(), *getPermissionList().toTypedArray())
             }
         }
     }
@@ -55,6 +62,10 @@ open class BaseFragment : SwipeBackFragment() {
 
     open fun getPermissionResult(): PermissionManager.OnPermissionResult {
         return PermissionResultOfAAF()
+    }
+
+    open fun getPermissionActivityClass(): Class<out PermissionsActivity> {
+        return PermissionsActivity::class.java
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
