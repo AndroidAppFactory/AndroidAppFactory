@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.ui.image;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.log.ZLog;
 import java.io.BufferedInputStream;
@@ -212,11 +214,22 @@ public class BitmapUtil {
      * @return
      */
     public static String saveBitmapToSdCard(Context context, Bitmap bitmap, String fileName) {
+        return saveBitmapToSdCard(context, bitmap, Bitmap.CompressFormat.PNG, fileName, true);
+
+    }
+
+    /**
+     * 把bitmap保存到本地
+     *
+     * @return
+     */
+    public static String saveBitmapToSdCard(Context context, Bitmap bitmap, CompressFormat format, String fileName,
+            boolean forceNew) {
         if (null == context) {
-            return null;
+            return "";
         }
         if (null == bitmap) {
-            return null;
+            return "";
         }
 
         String dir = ZixieFileProvider.getZixieFilePath(context);
@@ -226,12 +239,16 @@ public class BitmapUtil {
             try {
                 File file = new File(filePath);
                 if (file.exists()) {
-                    file.delete();
+                    if (forceNew) {
+                        file.delete();
+                        file.createNewFile();
+                    }
+                } else {
+                    FileUtils.INSTANCE.checkAndCreateFolder(file.getParent());
+                    file.createNewFile();
                 }
-                file.createNewFile();
-
                 FileOutputStream outputStream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                bitmap.compress(format, 100, outputStream);
                 outputStream.flush();
                 outputStream.close();
                 return filePath;
