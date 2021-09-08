@@ -234,9 +234,9 @@ public class CommonDialog extends Dialog {
             if (imageView != null && imageView.getVisibility() == View.VISIBLE) {
                 ViewGroup.LayoutParams para = imageView.getLayoutParams();
                 if (para.width > 0) {
-                    para.height = para.width * 1080 / 720;
+                    para.height = para.width * 1920 / 1080;
                 } else {
-                    para.height = (int) ((screenWidth - DisplayUtil.dip2px(getContext(), 88)) * 720 / 1080);
+                    para.height = (int) ((screenWidth - DisplayUtil.dip2px(getContext(), 88)) * 1080 / 1920);
                 }
                 imageView.setLayoutParams(para);
                 if (screenWidth > screenheight) {
