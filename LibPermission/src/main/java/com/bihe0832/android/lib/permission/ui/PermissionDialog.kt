@@ -3,15 +3,12 @@ package com.bihe0832.android.lib.permission.ui
 import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.permission.PermissionManager
-import com.bihe0832.android.lib.permission.PermissionManager.getPermissionCheckResultListener
 import com.bihe0832.android.lib.permission.PermissionManager.getPermissionDesc
 import com.bihe0832.android.lib.permission.PermissionManager.getPermissionScene
-import com.bihe0832.android.lib.permission.PermissionManager.getPermissionSettings
 import com.bihe0832.android.lib.permission.R
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 /**
  *
@@ -30,7 +27,7 @@ open class PermissionDialog : CommonDialog {
         positive = context.resources.getString(R.string.permission_positive)
     }
 
-    open fun show(tempPermissionList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
+    open fun show(scene: String, tempPermissionList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
         var desc = ""
         var scene = ""
         tempPermissionList.forEach {
@@ -43,7 +40,7 @@ open class PermissionDialog : CommonDialog {
         showWithContent(APKUtils.getAppName(context) + "的" + scene + "功能需要手机授予" + desc + "权限，缺少权限可能会在使用中出现功能异常。", canCancel, listener)
     }
 
-    open fun show(showPermission: String, canCancel: Boolean, listener: OnDialogListener) {
+    open fun show(scene: String, showPermission: String, canCancel: Boolean, listener: OnDialogListener) {
         var content = PermissionManager.getPermissionContent(showPermission)
         if (TextUtils.isEmpty(content)) {
             content = APKUtils.getAppName(context) + "的" + getPermissionScene(showPermission) + "功能需要手机开启" + getPermissionDesc(showPermission) + "权限，缺少权限可能会在使用中出现功能异常。"

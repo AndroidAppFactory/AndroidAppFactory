@@ -20,13 +20,15 @@ import java.util.List;
 public class PermissionsActivity extends Activity {
 
     public static final String EXTRA_PERMISSIONS = "com.bihe0832.android.lib.permission.extra_permission"; // 权限参数
+    public static final String EXTRA_SOURCE = "com.bihe0832.android.lib.permission.extra_source"; // 权限参数
     public static final String EXTRA_CAN_CANCEL = "com.bihe0832.android.lib.permission.can.cancel"; // 权限参数
 
 
-    private PermissionsChecker mChecker; // 权限检测器
+    private PermissionsChecker permissionsChecker; // 权限检测器
     private boolean isRequireCheck; // 是否需要系统权限检测, 防止和系统提示框重叠
-    private PermissionDialog dialog = null;
     private String[] needCheckPermission = null;
+    private boolean canCancle = false;
+    private String scene = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,15 +37,31 @@ public class PermissionsActivity extends Activity {
             throw new RuntimeException("PermissionsActivity need check permission");
         }
         setContentView(R.layout.com_bihe0832_lib_permissions_activity);
-        needCheckPermission = getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
+        try {
+            if (getIntent().hasExtra(EXTRA_PERMISSIONS)) {
+                needCheckPermission = getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
+            }
+
+            if (getIntent().hasExtra(EXTRA_CAN_CANCEL)) {
+                canCancle = getIntent().getBooleanExtra(EXTRA_CAN_CANCEL, false);
+            }
+
+            if (getIntent().hasExtra(EXTRA_SOURCE)) {
+                scene = getIntent().getStringExtra(EXTRA_SOURCE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (needCheckPermission == null || needCheckPermission.length < 1) {
             PermissionManager.INSTANCE.getPermissionCheckResultListener().onFailed("permission error");
             finish();
         }
 
-        mChecker = new PermissionsChecker(this);
+        permissionsChecker = new PermissionsChecker(this);
         isRequireCheck = true;
     }
+
 
     protected PermissionDialog getDialog(String permission) {
         return new PermissionDialog(this);
@@ -59,7 +77,7 @@ public class PermissionsActivity extends Activity {
         if (isRequireCheck) {
             ArrayList<String> needCheckList = new ArrayList<>();
             for (String permission : needCheckPermission) {
-                if (mChecker.lacksPermission(permission)) {
+                if (permissionsChecker.lacksPermission(permission)) {
                     needCheckList.add(permission);
                 }
             }
@@ -73,9 +91,6 @@ public class PermissionsActivity extends Activity {
         }
     }
 
-    private boolean canCancel() {
-        return getIntent().getBooleanExtra(EXTRA_CAN_CANCEL, false);
-    }
 
     // 请求权限兼容低版本
     private void requestPermissions(String... permissions) {
@@ -95,7 +110,7 @@ public class PermissionsActivity extends Activity {
         String tempPermission = "";
         List<String> tempPermissionList = new ArrayList<>();
         for (String permission : needCheckPermission) {
-            if (mChecker.lacksPermission(permission)) {
+            if (permissionsChecker.lacksPermission(permission)) {
                 tempPermissionList.add(permission);
                 if (!checkAllPermissionsResult()) {
                     tempPermission = permission;
@@ -120,7 +135,7 @@ public class PermissionsActivity extends Activity {
     }
 
     private void showMissingPermissionDialog(final List<String> tempPermissionList) {
-        getDialog(tempPermissionList).show(tempPermissionList, canCancel(), new OnDialogListener() {
+        getDialog(tempPermissionList).show(scene, tempPermissionList, canCancle, new OnDialogListener() {
             @Override
             public void onPositiveClick() {
                 onPermissionDialogPositiveClick(tempPermissionList);
@@ -131,7 +146,8 @@ public class PermissionsActivity extends Activity {
                 for (String permission : tempPermissionList) {
                     PermissionManager.INSTANCE.setUserDenyTime(permission);
                 }
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(tempPermissionList.get(0));
+                PermissionManager.INSTANCE.getPermissionCheckResultListener()
+                        .onUserCancel(scene, tempPermissionList.get(0));
                 finish();
             }
 
@@ -140,14 +156,15 @@ public class PermissionsActivity extends Activity {
                 for (String permission : tempPermissionList) {
                     PermissionManager.INSTANCE.setUserDenyTime(permission);
                 }
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(tempPermissionList.get(0));
+                PermissionManager.INSTANCE.getPermissionCheckResultListener()
+                        .onUserCancel(scene, tempPermissionList.get(0));
                 finish();
             }
         });
     }
 
     private void showMissingPermissionDialog(final String showPermission) {
-        getDialog(showPermission).show(showPermission, canCancel(), new OnDialogListener() {
+        getDialog(showPermission).show(scene, showPermission, canCancle, new OnDialogListener() {
             @Override
             public void onPositiveClick() {
                 onPermissionDialogPositiveClick(showPermission);
@@ -157,14 +174,14 @@ public class PermissionsActivity extends Activity {
             @Override
             public void onNegativeClick() {
                 PermissionManager.INSTANCE.setUserDenyTime(showPermission);
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(showPermission);
+                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(scene, showPermission);
                 finish();
             }
 
             @Override
             public void onCancel() {
                 PermissionManager.INSTANCE.setUserDenyTime(showPermission);
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(showPermission);
+                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(scene, showPermission);
                 finish();
             }
         });

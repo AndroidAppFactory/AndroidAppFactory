@@ -47,15 +47,15 @@ object PermissionManager {
                 mOuterResultListener = null
             }
 
-            override fun onUserCancel(permission: String) {
+            override fun onUserCancel(scene: String, permission: String) {
                 ZLog.d(TAG, "onUserCancel")
-                mOuterResultListener?.onUserCancel(permission)
+                mOuterResultListener?.onUserCancel(scene, permission)
                 mOuterResultListener = null
             }
 
-            override fun onUserDeny(permission: String) {
+            override fun onUserDeny(scene: String, permission: String) {
                 ZLog.d(TAG, "onUserDeny")
-                mOuterResultListener?.onUserDeny(permission)
+                mOuterResultListener?.onUserDeny(scene, permission)
                 mOuterResultListener = null
             }
 
@@ -65,6 +65,25 @@ object PermissionManager {
                 mOuterResultListener = null
             }
         }
+    }
+
+    fun getPermissionKey(sceneid: String?, permission: String): String {
+        sceneid?.let {
+            return permission + sceneid
+        }
+        return permission
+    }
+
+    fun addPermissionScene(sceneid: String, permission: String, sceneDesc: String) {
+        mPermissionScene.put(getPermissionKey(sceneid, permission), sceneDesc)
+    }
+
+    fun addPermissionDesc(sceneid: String, permission: String, permissionDesc: String) {
+        mPermissionDesc.put(getPermissionKey(sceneid, permission), permissionDesc)
+    }
+
+    fun addPermissionContent(sceneid: String, permission: String, permissionDesc: String) {
+        mPermissionContent.put(getPermissionKey(sceneid, permission), permissionDesc)
     }
 
     fun addPermissionScene(permissionScene: HashMap<String, String>) {
@@ -85,8 +104,8 @@ object PermissionManager {
 
     interface OnPermissionResult {
         fun onSuccess()
-        fun onUserCancel(permission: String)
-        fun onUserDeny(permission: String)
+        fun onUserCancel(scene: String, permission: String)
+        fun onUserDeny(scene: String, permission: String)
         fun onFailed(msg: String)
     }
 
@@ -133,6 +152,15 @@ object PermissionManager {
         }
     }
 
+    fun getPermissionScene(scene: String, permission: String): String {
+        return if (mPermissionScene.containsKey(getPermissionKey(scene, permission))) {
+            return getPermissionScene(getPermissionKey(scene, permission))
+        } else {
+            getPermissionScene(permission)
+        }
+    }
+
+
     fun getPermissionScene(permission: String): String {
         return if (mPermissionScene.containsKey(permission)) {
             if (mPermissionScene.get(permission) != null) {
@@ -142,6 +170,14 @@ object PermissionManager {
             }
         } else {
             mDefaultScene
+        }
+    }
+
+    fun getPermissionDesc(scene: String, permission: String): String {
+        return if (mPermissionDesc.containsKey(getPermissionKey(scene, permission))) {
+            return getPermissionDesc(getPermissionKey(scene, permission))
+        } else {
+            getPermissionDesc(permission)
         }
     }
 
@@ -157,12 +193,12 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionDenyTime(permission: String): Long {
-        return Config.readConfig(USER_DENY_KEY + permission, 0L)
-    }
-
-    fun setUserDenyTime(permission: String) {
-        Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
+    fun getPermissionContent(scene: String, permission: String): String {
+        return if (mPermissionContent.containsKey(getPermissionKey(scene, permission))) {
+            return getPermissionContent(getPermissionKey(scene, permission))
+        } else {
+            getPermissionContent(permission)
+        }
     }
 
     fun getPermissionContent(permission: String): String {
@@ -173,6 +209,15 @@ object PermissionManager {
         }
         return ""
     }
+
+    fun getPermissionDenyTime(permission: String): Long {
+        return Config.readConfig(USER_DENY_KEY + permission, 0L)
+    }
+
+    fun setUserDenyTime(permission: String) {
+        Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
+    }
+
 
     fun getPermissionSettings(permission: String): String {
         mPermissionSettings.get(permission)?.let {

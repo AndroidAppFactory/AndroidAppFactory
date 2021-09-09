@@ -13,7 +13,6 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.widget.LinearLayout
 import com.bihe0832.android.lib.permission.PermissionManager
-import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 
@@ -110,13 +109,13 @@ class IconManager(activity: Activity) {
                 mPermissionReqShow = false
             }
 
-            override fun onUserCancel(permission: String) {
-                result?.onUserCancel(permission)
+            override fun onUserCancel(scene: String, permission: String) {
+                result?.onUserCancel(scene, permission)
                 mPermissionReqShow = false
             }
 
-            override fun onUserDeny(permission: String) {
-                result?.onUserDeny(permission)
+            override fun onUserDeny(scene: String, permission: String) {
+                result?.onUserDeny(scene, permission)
                 mPermissionReqShow = false
             }
 
@@ -222,13 +221,13 @@ class IconManager(activity: Activity) {
                 mPermissionReqShow = false
             }
 
-            override fun onUserCancel(permission: String) {
-                result?.onUserCancel(permission)
+            override fun onUserCancel(scene: String, permission: String) {
+                result?.onUserCancel(scene, permission)
                 mPermissionReqShow = false
             }
 
-            override fun onUserDeny(permission: String) {
-                result?.onUserDeny(permission)
+            override fun onUserDeny(scene: String, permission: String) {
+                result?.onUserDeny(scene, permission)
                 mPermissionReqShow = false
             }
 
