@@ -11,19 +11,18 @@ public class TestPermissionsActivity extends PermissionsActivity {
 
     @Override
     protected PermissionDialog getDialog(String permission) {
-//        if (permission.equals(Manifest.permission.CAMERA)) {
+        if (permission.equals(Manifest.permission.CAMERA)) {
             return new TestPermissionDialog(this);
-//        } else {
-//            return super.getDialog(permission);
-//        }
+        } else {
+            return super.getDialog(permission);
+        }
     }
 
 
     @Override
     protected PermissionDialog getDialog(List<String> tempPermissionList) {
-//        return super.getDialog(tempPermissionList);
-        return new TestPermissionDialog(this);
-
+        return super.getDialog(tempPermissionList);
+//        return new TestPermissionDialog(this);
     }
 
     @Override

@@ -215,6 +215,18 @@ object PermissionManager {
         return Config.readConfig(USER_DENY_KEY + permission, 0L)
     }
 
+    fun getTitle(context: Context): String {
+        return context.resources.getString(R.string.permission_title)
+    }
+
+    fun getNegtiveText(context: Context): String {
+        return context.resources.getString(R.string.permission_negtive)
+    }
+
+    fun getPositiveText(context: Context): String {
+        return context.resources.getString(R.string.permission_positive)
+    }
+
     fun setUserDenyTime(permission: String) {
         Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
     }

@@ -91,13 +91,16 @@ class IconManager(activity: Activity) {
         mIconView?.setClickListener(listener)
     }
 
-
     fun showIconWithPermissionCheck(result: PermissionManager.OnPermissionResult?) {
+        showIconWithPermissionCheck("IconManager", result)
+    }
+
+    fun showIconWithPermissionCheck(scene: String, result: PermissionManager.OnPermissionResult?) {
         if (mPermissionReqShow) {
             return
         }
         mPermissionReqShow = true
-        PermissionManager.checkPermission(mActivity, "IconManager", true, object : PermissionManager.OnPermissionResult {
+        PermissionManager.checkPermission(mActivity, scene, true, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
                 result?.onFailed(msg)
                 mPermissionReqShow = false
@@ -209,11 +212,15 @@ class IconManager(activity: Activity) {
     }
 
     fun showViewWithPermissionCheck(view: View, flag: Int, x: Int?, y: Int?, result: PermissionManager.OnPermissionResult?) {
+        showViewWithPermissionCheck(view, "IconManager", flag, x, y, result)
+    }
+
+    fun showViewWithPermissionCheck(view: View, scene: String, flag: Int, x: Int?, y: Int?, result: PermissionManager.OnPermissionResult?) {
         if (mPermissionReqShow) {
             return
         }
         mPermissionReqShow = true
-        PermissionManager.checkPermission(mActivity, "IconManager", true, object : PermissionManager.OnPermissionResult {
+        PermissionManager.checkPermission(mActivity, scene, true, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
                 result?.onFailed(msg)
                 mPermissionReqShow = false

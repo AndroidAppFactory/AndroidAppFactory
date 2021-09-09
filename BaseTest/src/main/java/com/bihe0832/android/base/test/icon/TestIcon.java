@@ -16,12 +16,14 @@ public class TestIcon extends IconView {
 
     @Override
     public int getIconLocationX() {
-        return 800;
+//        return 800;
+        return super.getIconLocationX();
     }
 
     @Override
     public int getIconLocationY() {
-        return 1080;
+//        return 1080;
+        return super.getIconLocationY();
     }
 
 
