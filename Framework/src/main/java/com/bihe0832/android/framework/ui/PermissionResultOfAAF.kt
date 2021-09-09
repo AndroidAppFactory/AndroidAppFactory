@@ -12,13 +12,13 @@ class PermissionResultOfAAF : PermissionManager.OnPermissionResult {
         ZLog.d("授权成功")
     }
 
-    override fun onUserCancel(permission: String) {
-        ZLog.d("你已放弃授权" + PermissionManager.getPermissionDesc(permission) + "，请手动前往应用设置开启")
+    override fun onUserCancel(scene: String, permission: String) {
+        ZLog.d("你已放弃授权" + PermissionManager.getPermissionDesc(scene, permission) +"权限，将会影响" + PermissionManager.getPermissionScene(scene, permission) + "，如有需要请手动前往应用设置开启")
         ZixieContext.exitAPP()
     }
 
-    override fun onUserDeny(permission: String) {
-        ZLog.d("你拒绝了" + PermissionManager.getPermissionDesc(permission) + "权限的申请，请手动前往应用设置开启")
+    override fun onUserDeny(scene: String, permission: String) {
+        ZLog.d("你拒绝授权" + PermissionManager.getPermissionDesc(scene, permission) +"权限，将会影响" + PermissionManager.getPermissionScene(scene, permission) + "，如有需要请手动前往应用设置开启")
         ZixieContext.exitAPP()
     }
 
