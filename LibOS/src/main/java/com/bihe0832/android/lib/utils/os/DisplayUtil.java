@@ -278,16 +278,12 @@ public class DisplayUtil {
     }
 
 
-    
     private static float sNoncompatDensity;
     private static float sNoncompatScaledDensity;
-    /**
-     * 
-     * @
-     */
 
     /**
      * 修正显示dpi，统一将页面dpi以基准值修正
+     *
      * @param activity 必须是Activity
      * @param density 当前设计风格的横向基准dp，例如安卓官方为360dp
      */
@@ -327,29 +323,43 @@ public class DisplayUtil {
         int width = appDisplayMetrics.widthPixels;
         int height = appDisplayMetrics.heightPixels;
         int target = width;
-        if(width > height){
+        if (width > height) {
             target = height;
         }
         float targetDensity = target / density;
-        ZLog.d("targetDensity: " + targetDensity);
-        ZLog.d("appDisplayMetrics.widthPixels: " + appDisplayMetrics.widthPixels);
-        ZLog.d("appDisplayMetrics.heightPixels: " + appDisplayMetrics.heightPixels);
+        DisplayMetrics activityDisplayMetrics = activity.getResources().getDisplayMetrics();
+
+        ZLog.d("--------------------------------");
         ZLog.d("target: " + target);
+        ZLog.d("targetDensity: " + targetDensity);
+        ZLog.d("--------------------------------");
+        ZLog.d("appDisplayMetrics.density: " + appDisplayMetrics.density);
+        ZLog.d("appDisplayMetrics.scaledDensity: " + appDisplayMetrics.scaledDensity);
+        ZLog.d("appDisplayMetrics.densityDpi: " + appDisplayMetrics.densityDpi);
+        ZLog.d("appDisplayMetrics.widthPixels: " + appDisplayMetrics.widthPixels);
+        ZLog.d("appDisplayMetrics.heightPixels: " + appDisplayMetrics.heightPixels + "\n");
+        ZLog.d("activityDisplayMetrics.density: " + activityDisplayMetrics.density);
+        ZLog.d("activityDisplayMetrics.scaledDensity: " + activityDisplayMetrics.scaledDensity);
+        ZLog.d("activityDisplayMetrics.densityDpi: " + activityDisplayMetrics.densityDpi);
+        ZLog.d("--------------------------------");
+
         if (targetDensity < 1) {
             targetDensity = 1;
         }
 
         float targetScaledDensity = targetDensity * (sNoncompatScaledDensity / sNoncompatDensity);
         int targetDensityDpi = (int) (160 * targetDensity);
+
+        ZLog.d("--------------------------------");
         ZLog.d("targetDensity: " + targetDensity);
         ZLog.d("targetScaledDensity: " + targetScaledDensity);
         ZLog.d("targetDensityDpi: " + targetDensityDpi);
+        ZLog.d("--------------------------------");
 
         appDisplayMetrics.density = targetDensity;
         appDisplayMetrics.scaledDensity = targetScaledDensity;
         appDisplayMetrics.densityDpi = targetDensityDpi;
 
-        DisplayMetrics activityDisplayMetrics = activity.getResources().getDisplayMetrics();
         activityDisplayMetrics.density = targetDensity;
         activityDisplayMetrics.scaledDensity = targetScaledDensity;
         activityDisplayMetrics.densityDpi = targetDensityDpi;

@@ -61,7 +61,7 @@ open class BaseFragment : SwipeBackFragment() {
     }
 
     open fun getPermissionResult(): PermissionManager.OnPermissionResult {
-        return PermissionResultOfAAF()
+        return PermissionResultOfAAF(true)
     }
 
     open fun getPermissionActivityClass(): Class<out PermissionsActivity> {
