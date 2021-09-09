@@ -141,7 +141,7 @@ class TestDebugTempFragment : BaseTestFragment() {
 //            var end = System.currentTimeMillis()
 //            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //        }
-        var result = JsonHelper.fromJsonList<JsonTest>("[{\"key\": 1111,\"value\": [1222,2222]},{\"key\": 2222,\"value\": [1222,2222]}]", JsonTest::class.java)
+        var result = JsonHelper.fromJsonList<JsonTest>("[{\"key\": 1111,\"value1\": [1222,2222],\"value2\":true},{\"key\": 2222,\"value1\": [1222,2222],\"value2\":false}]", JsonTest::class.java)
         ZLog.d(LOG_TAG, "result:" + result)
         JsonTest().apply {
             key = 1212
@@ -252,10 +252,13 @@ class TestDebugTempFragment : BaseTestFragment() {
 
     private fun showIcon() {
         mIconManager.showIconWithPermissionCheck(null)
+        DebugLogTips.append("<B>提示信息</B>:<BR>    ")
+
     }
 
     private fun hideIcon() {
         mIconManager.hideIcon()
+        DebugLogTips.show("")
     }
 
     private fun testOneRequest() {
@@ -266,12 +269,10 @@ class TestDebugTempFragment : BaseTestFragment() {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
             CommonDBManager.getData("sss" + it)
         }
-        DebugLogTips.show("")
     }
 
 
     private fun testFunc() {
-        DebugLogTips.append("<B>提示信息</B>:<BR>    ")
 
 //        CommonDBManager.getAll().forEach {
 //            ZLog.d("Hardy" ,it.toString())
