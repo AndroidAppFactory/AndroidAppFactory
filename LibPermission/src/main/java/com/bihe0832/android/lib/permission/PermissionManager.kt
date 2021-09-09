@@ -122,14 +122,14 @@ object PermissionManager {
     }
 
     fun checkPermission(context: Context?, canCancel: Boolean, vararg permissions: String) {
-        checkPermission(context, canCancel, null, *permissions)
+        checkPermission(context, canCancel, null, "", *permissions)
     }
 
-    fun checkPermission(context: Context?, canCancel: Boolean, result: OnPermissionResult?, vararg permissions: String) {
-        checkPermission(context, canCancel, PermissionsActivity::class.java, result, *permissions)
+    fun checkPermission(context: Context?, canCancel: Boolean, result: OnPermissionResult?, scene: String, vararg permissions: String) {
+        checkPermission(context, canCancel, PermissionsActivity::class.java, result, scene, *permissions)
     }
 
-    fun checkPermission(context: Context?, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, vararg permissions: String) {
+    fun checkPermission(context: Context?, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, scene: String, vararg permissions: String) {
         mOuterResultListener = result
         if (null == context) {
             mLastPermissionCheckResultListener.onFailed("context is null")
@@ -142,6 +142,7 @@ object PermissionManager {
                     val intent = Intent(context, permissionsActivityClass)
                     intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissions)
                     intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
+                    intent.putExtra(PermissionsActivity.EXTRA_SOURCE, scene)
                     intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     ActivityCompat.startActivity(context!!, intent, null)
                 } catch (e: Exception) {

@@ -13,6 +13,7 @@ class PermissionResultOfAAF(private val exist: Boolean) : PermissionManager.OnPe
     }
 
     override fun onUserCancel(scene: String, permission: String) {
+        ZLog.d("onUserCancel scene:$scene, permission:$permission")
         ZLog.d("你已放弃授权" + PermissionManager.getPermissionDesc(scene, permission) + "权限，将会影响" + PermissionManager.getPermissionScene(scene, permission) + "，如有需要请手动前往应用设置开启")
         if (exist) {
             ZixieContext.exitAPP()
@@ -20,6 +21,7 @@ class PermissionResultOfAAF(private val exist: Boolean) : PermissionManager.OnPe
     }
 
     override fun onUserDeny(scene: String, permission: String) {
+        ZLog.d("onUserCancel scene:$scene, permission:$permission")
         ZLog.d("你拒绝授权" + PermissionManager.getPermissionDesc(scene, permission) + "权限，将会影响" + PermissionManager.getPermissionScene(scene, permission) + "，如有需要请手动前往应用设置开启")
         if (exist) {
             ZixieContext.exitAPP()

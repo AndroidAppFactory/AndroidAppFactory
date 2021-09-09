@@ -114,7 +114,7 @@ fun Activity.showPhotoChooser() {
                 dialog.dismiss()
             }
 
-        }, *takePhotoPermission)
+        }, "PhotoSelect", *takePhotoPermission)
     }
 
     view.choosePhotoBtn.setOnClickListener {
@@ -135,7 +135,7 @@ fun Activity.showPhotoChooser() {
             override fun onUserDeny(scene: String, permission: String) {
                 dialog.dismiss()
             }
-        }, *selectPhotoPermission)
+        }, "PhotoSelect", *selectPhotoPermission)
     }
 }
 
