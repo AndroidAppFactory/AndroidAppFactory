@@ -47,7 +47,7 @@ open class BaseActivity : SupportActivity() {
     }
 
     open fun getPermissionResult(): PermissionManager.OnPermissionResult {
-        return PermissionResultOfAAF()
+        return PermissionResultOfAAF(true)
     }
 
     override fun onResume() {

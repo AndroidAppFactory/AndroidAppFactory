@@ -86,7 +86,7 @@ class TestMainActivity : CommonActivity() {
     }
 
     override fun getPermissionResult(): PermissionManager.OnPermissionResult {
-        return PermissionResultOfAAF()
+        return PermissionResultOfAAF(false)
     }
 
 
