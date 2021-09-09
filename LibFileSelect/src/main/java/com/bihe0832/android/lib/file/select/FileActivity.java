@@ -87,7 +87,7 @@ public class FileActivity extends SupportActivity {
         });
         String[] permission = new String[1];
         permission[0] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        PermissionManager.INSTANCE.checkPermission(this, false, new OnPermissionResult() {
+        PermissionManager.INSTANCE.checkPermission(this, "FileSelect", false, new OnPermissionResult() {
             @Override
             public void onSuccess() {
 //                ToastUtil.showShort(FileActivity.this, "用户授权成功");
@@ -113,7 +113,7 @@ public class FileActivity extends SupportActivity {
                 setResult(RESULT_CANCELED);
                 finish();
             }
-        }, "FileSelect", permission);
+        }, permission);
     }
 
     @Override

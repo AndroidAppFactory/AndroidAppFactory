@@ -97,7 +97,7 @@ class IconManager(activity: Activity) {
             return
         }
         mPermissionReqShow = true
-        PermissionManager.checkPermission(mActivity, true, object : PermissionManager.OnPermissionResult {
+        PermissionManager.checkPermission(mActivity, "IconManager", true, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
                 result?.onFailed(msg)
                 mPermissionReqShow = false
@@ -196,9 +196,10 @@ class IconManager(activity: Activity) {
                 or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    fun getNoTouchFlag(): Int{
+    fun getNoTouchFlag(): Int {
         return WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
     }
+
     fun showViewCanInput(view: View, x: Int?, y: Int?) {
         showView(view, getInputFlag(), x, y)
     }
@@ -212,7 +213,7 @@ class IconManager(activity: Activity) {
             return
         }
         mPermissionReqShow = true
-        PermissionManager.checkPermission(mActivity, true, object : PermissionManager.OnPermissionResult {
+        PermissionManager.checkPermission(mActivity, "IconManager", true, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
                 result?.onFailed(msg)
                 mPermissionReqShow = false
