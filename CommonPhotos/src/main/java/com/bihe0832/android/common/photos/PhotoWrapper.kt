@@ -106,11 +106,11 @@ fun Activity.showPhotoChooser() {
                 takePhoto(getDefaultPhoto())
             }
 
-            override fun onUserCancel(permission: String) {
+            override fun onUserCancel(scene: String, permission: String) {
                 dialog.dismiss()
             }
 
-            override fun onUserDeny(permission: String) {
+            override fun onUserDeny(scene: String, permission: String) {
                 dialog.dismiss()
             }
 
@@ -128,11 +128,11 @@ fun Activity.showPhotoChooser() {
                 choosePhoto()
             }
 
-            override fun onUserCancel(permission: String) {
+            override fun onUserCancel(scene: String, permission: String) {
                 dialog.dismiss()
             }
 
-            override fun onUserDeny(permission: String) {
+            override fun onUserDeny(scene: String, permission: String) {
                 dialog.dismiss()
             }
         }, *selectPhotoPermission)

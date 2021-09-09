@@ -10,6 +10,7 @@ import android.view.View
 import com.bihe0832.android.base.test.permission.TestPermissionsActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.framework.ui.PermissionResultOfAAF
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.floatview.IconManager
@@ -85,26 +86,7 @@ class TestMainActivity : CommonActivity() {
     }
 
     override fun getPermissionResult(): PermissionManager.OnPermissionResult {
-        return object : PermissionManager.OnPermissionResult {
-            override fun onSuccess() {
-                ZixieContext.showDebug("用户授权成功")
-            }
-
-            override fun onUserCancel(permissions: String) {
-                ZixieContext.showLongToast("用户放弃授权:" + PermissionManager.getPermissionDesc(permissions))
-                checkPermission()
-
-            }
-
-            override fun onUserDeny(permissions: String) {
-                ZixieContext.showDebug("用户拒绝授权" + PermissionManager.getPermissionDesc(permissions))
-                checkPermission()
-            }
-
-            override fun onFailed(msg: String) {
-                ZixieContext.showDebug("用户授权失败")
-            }
-        }
+        return PermissionResultOfAAF()
     }
 
 
