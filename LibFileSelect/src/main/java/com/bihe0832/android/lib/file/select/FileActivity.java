@@ -113,7 +113,7 @@ public class FileActivity extends SupportActivity {
                 setResult(RESULT_CANCELED);
                 finish();
             }
-        }, permission);
+        }, "FileSelect", permission);
     }
 
     @Override

@@ -30,6 +30,8 @@ public class PermissionsActivity extends Activity {
     private boolean canCancle = false;
     private String scene = "";
 
+    private PermissionDialog dialog = null;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,32 +137,39 @@ public class PermissionsActivity extends Activity {
     }
 
     private void showMissingPermissionDialog(final List<String> tempPermissionList) {
-        getDialog(tempPermissionList).show(scene, tempPermissionList, canCancle, new OnDialogListener() {
-            @Override
-            public void onPositiveClick() {
-                onPermissionDialogPositiveClick(tempPermissionList);
-            }
-
-            @Override
-            public void onNegativeClick() {
-                for (String permission : tempPermissionList) {
-                    PermissionManager.INSTANCE.setUserDenyTime(permission);
+        if (dialog == null) {
+            dialog = getDialog(tempPermissionList);
+        }
+        if (!dialog.isShowing()) {
+            dialog.show(scene, tempPermissionList, canCancle, new OnDialogListener() {
+                @Override
+                public void onPositiveClick() {
+                    onPermissionDialogPositiveClick(tempPermissionList);
                 }
-                PermissionManager.INSTANCE.getPermissionCheckResultListener()
-                        .onUserCancel(scene, tempPermissionList.get(0));
-                finish();
-            }
 
-            @Override
-            public void onCancel() {
-                for (String permission : tempPermissionList) {
-                    PermissionManager.INSTANCE.setUserDenyTime(permission);
+                @Override
+                public void onNegativeClick() {
+                    for (String permission : tempPermissionList) {
+                        PermissionManager.INSTANCE.setUserDenyTime(permission);
+                    }
+                    PermissionManager.INSTANCE.getPermissionCheckResultListener()
+                            .onUserCancel(scene, tempPermissionList.get(0));
+                    dialog.dismiss();
+                    finish();
                 }
-                PermissionManager.INSTANCE.getPermissionCheckResultListener()
-                        .onUserCancel(scene, tempPermissionList.get(0));
-                finish();
-            }
-        });
+
+                @Override
+                public void onCancel() {
+                    for (String permission : tempPermissionList) {
+                        PermissionManager.INSTANCE.setUserDenyTime(permission);
+                    }
+                    PermissionManager.INSTANCE.getPermissionCheckResultListener()
+                            .onUserCancel(scene, tempPermissionList.get(0));
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+        }
     }
 
     private void showMissingPermissionDialog(final String showPermission) {
@@ -199,4 +208,12 @@ public class PermissionsActivity extends Activity {
             }
         }
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if (dialog != null && dialog.isShowing()) {
+//            dialog.cancel();
+//        }
+//    }
 }

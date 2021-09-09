@@ -51,7 +51,7 @@ open class BaseFragment : SwipeBackFragment() {
             }
 
             if (getPermissionList().isNotEmpty()) {
-                PermissionManager.checkPermission(context, false, getPermissionActivityClass(), getPermissionResult(), *getPermissionList().toTypedArray())
+                PermissionManager.checkPermission(context, false, getPermissionActivityClass(), getPermissionResult(), javaClass.simpleName, *getPermissionList().toTypedArray())
             }
         }
     }
