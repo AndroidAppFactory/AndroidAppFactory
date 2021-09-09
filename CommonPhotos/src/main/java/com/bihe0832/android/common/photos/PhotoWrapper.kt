@@ -96,7 +96,7 @@ fun Activity.showPhotoChooser() {
     dialog.show()
 
     view.takePhotoBtn.setOnClickListener {
-        PermissionManager.checkPermission(this, false, object : PermissionManager.OnPermissionResult {
+        PermissionManager.checkPermission(this, "PhotoSelect", false, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
                 dialog.dismiss()
             }
@@ -114,11 +114,11 @@ fun Activity.showPhotoChooser() {
                 dialog.dismiss()
             }
 
-        }, "PhotoSelect", *takePhotoPermission)
+        }, *takePhotoPermission)
     }
 
     view.choosePhotoBtn.setOnClickListener {
-        PermissionManager.checkPermission(this, false, object : PermissionManager.OnPermissionResult {
+        PermissionManager.checkPermission(this, "PhotoSelect", false, object : PermissionManager.OnPermissionResult {
             override fun onFailed(msg: String) {
                 dialog.dismiss()
             }
@@ -135,7 +135,7 @@ fun Activity.showPhotoChooser() {
             override fun onUserDeny(scene: String, permission: String) {
                 dialog.dismiss()
             }
-        }, "PhotoSelect", *selectPhotoPermission)
+        }, *selectPhotoPermission)
     }
 }
 

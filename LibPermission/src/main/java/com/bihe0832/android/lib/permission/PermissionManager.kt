@@ -122,14 +122,14 @@ object PermissionManager {
     }
 
     fun checkPermission(context: Context?, canCancel: Boolean, vararg permissions: String) {
-        checkPermission(context, canCancel, null, "", *permissions)
+        checkPermission(context, "", canCancel, null, *permissions)
     }
 
-    fun checkPermission(context: Context?, canCancel: Boolean, result: OnPermissionResult?, scene: String, vararg permissions: String) {
-        checkPermission(context, canCancel, PermissionsActivity::class.java, result, scene, *permissions)
+    fun checkPermission(context: Context?, scene: String, canCancel: Boolean, result: OnPermissionResult?, vararg permissions: String) {
+        checkPermission(context, scene, canCancel, PermissionsActivity::class.java, result, *permissions)
     }
 
-    fun checkPermission(context: Context?, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, scene: String, vararg permissions: String) {
+    fun checkPermission(context: Context?, scene: String, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, vararg permissions: String) {
         mOuterResultListener = result
         if (null == context) {
             mLastPermissionCheckResultListener.onFailed("context is null")
