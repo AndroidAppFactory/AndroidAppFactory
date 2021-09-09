@@ -13,6 +13,7 @@ import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.PermissionResultOfAAF
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.adapter.CardInfoHelper
+import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -58,6 +59,7 @@ class TestMainActivity : CommonActivity() {
 
 //        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
 //        UpdateManager.checkUpdateAndShowDialog(this, false)
+        DebugLogTips.initModule(this)
         hideBottomUIMenu()
         CommonDBManager.init(this)
     }
