@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibImage,LibFileSelect,LibOS"
+ext.developModule = "LibDebug,LibFloatview"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -80,7 +80,7 @@ ext.moduleInfo = [
                 "version"            : "4.12.7",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
-                        "Framework", "CommonPraise", "CommonFeedback","CommonList"
+                        "Framework", "CommonPraise", "CommonFeedback", "CommonList"
                 ]
         ],
         "CommonWrapper"             : [
@@ -89,18 +89,18 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
                         "CommonSplash", "CommonPhotos",
-                        "CommonNetwork","CommonPraise","CommonAbout","CommonList"
+                        "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList"
                 ]
         ],
 
-        "CommonAbout"              : [
+        "CommonAbout"               : [
                 "version"            : "4.12.7",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
-                        "Framework","CommonList"
+                        "Framework", "CommonList"
                 ]
         ],
-        "CommonList"              : [
+        "CommonList"                : [
                 "version"            : "4.12.7",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
@@ -176,7 +176,7 @@ ext.moduleInfo = [
         "LibWrapper"                : [
                 "version"            : "4.12.7",
                 "artifactId"         : "lib-wrapper",
-                "apidependenciesList": ["LibUtils", "LibUIUtils"]
+                "apidependenciesList": ["LibUtils", "LibUIUtils", "LibDebug"]
         ],
         "LibUIUtils"                : [
                 "version"            : "4.12.7",
@@ -185,7 +185,7 @@ ext.moduleInfo = [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibCustomView",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
-                        "LibImmersive", "LibFileSelect", "LibFloatview","LibTextView"
+                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView"
                 ]
         ],
         "LibUtils"                  : [
@@ -194,7 +194,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
                         "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
-                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibDebug", "LibOS", "LibZip", "LibLifecycle", "LibIPC"
+                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -238,7 +238,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibAndroid"]
         ],
         "LibOS"                     : [
-                "version"            : "4.11.0",
+                "version"            : "4.12.7",
                 "artifactId"         : "lib-android-os",
                 "apidependenciesList": ["LibLog"]
         ],
@@ -279,7 +279,7 @@ ext.moduleInfo = [
         "LibHttpCommon"             : [
                 "version"            : "4.8.9",
                 "artifactId"         : "lib-http-common",
-                "apidependenciesList": ["LibThread", "LibLog","LibCommonUtils"]
+                "apidependenciesList": ["LibThread", "LibLog", "LibCommonUtils"]
         ],
         "LibHttpAdvanced"           : [
                 "version"            : "4.8.9",
@@ -363,7 +363,7 @@ ext.moduleInfo = [
         "LibDebug"                  : [
                 "version"            : "4.12.7",
                 "artifactId"         : "lib-debug",
-                "apidependenciesList": ["LibDialog", "LibToast"]
+                "apidependenciesList": ["LibDialog", "LibToast", "LibFloatview"]
         ],
         "LibCommonUIUtils"          : [
                 "version"            : "4.8.2",
@@ -468,7 +468,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibRefresh"]
         ],
         "LibTouchRegion"            : [
-                "version"            : "4.11.0",
+                "version"            : "4.12.7",
                 "artifactId"         : "lib-touchregion",
                 "apidependenciesList": ["LibCommonUIUtils", "LibOS"]
         ],
@@ -502,7 +502,7 @@ ext.moduleInfo = [
                 "version"            : "4.12.7",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
-                        "LibConfig","LibDialog", "LibAPK", "LibDeviceNetwork"
+                        "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork"
                 ]
         ],
         "LibImmersive"              : [
@@ -540,7 +540,7 @@ ext.moduleInfo = [
                         "LibLog"
                 ]
         ],
-        "LibTextView"                    : [
+        "LibTextView"               : [
                 "version"            : "4.11.0",
                 "artifactId"         : "lib-textview",
                 "apidependenciesList": [

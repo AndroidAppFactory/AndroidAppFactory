@@ -27,7 +27,7 @@ public class TestIcon extends IconView {
 
     @Override
     protected void resetParams(WindowManager.LayoutParams mParams) {
-        mParams.x = getIconLocationX();
-        mParams.y = getIconLocationY();
+//        mParams.x = getIconLocationX();
+//        mParams.y = getIconLocationY();
     }
 }

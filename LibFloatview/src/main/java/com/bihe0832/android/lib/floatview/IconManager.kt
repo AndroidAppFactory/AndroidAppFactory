@@ -196,6 +196,9 @@ class IconManager(activity: Activity) {
                 or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
+    fun getNoTouchFlag(): Int{
+        return WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+    }
     fun showViewCanInput(view: View, x: Int?, y: Int?) {
         showView(view, getInputFlag(), x, y)
     }

@@ -21,6 +21,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
+import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -265,10 +266,12 @@ class TestDebugTempFragment : BaseTestFragment() {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
             CommonDBManager.getData("sss" + it)
         }
+        DebugLogTips.show("")
     }
 
 
     private fun testFunc() {
+        DebugLogTips.append("<B>提示信息</B>:<BR>    ")
 
 //        CommonDBManager.getAll().forEach {
 //            ZLog.d("Hardy" ,it.toString())
