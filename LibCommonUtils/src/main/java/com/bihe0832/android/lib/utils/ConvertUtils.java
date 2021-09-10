@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.utils;
 
 import android.text.TextUtils;
-
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -78,9 +77,11 @@ public class ConvertUtils {
     public static boolean parseBoolean(String str, boolean defaultValue) {
         boolean value = defaultValue;
         if (!android.text.TextUtils.isEmpty(str)) {
-            if ("true".equalsIgnoreCase(str) || "1".equalsIgnoreCase(str)) {
+            if ("true".equalsIgnoreCase(str)) {
                 return true;
-            } else {
+            } else if ("0".equalsIgnoreCase(str)) {
+                return false;
+            } else if ("false".equalsIgnoreCase(str)) {
                 return false;
             }
         }

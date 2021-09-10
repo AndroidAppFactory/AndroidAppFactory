@@ -32,6 +32,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.encypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -53,6 +54,7 @@ class TestDebugTempFragment : BaseTestFragment() {
             add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
             add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
+            add(TestItemData("数据转换", View.OnClickListener { testConvert() }))
             add(TestItemData("展示悬浮窗", View.OnClickListener { showIcon() }))
             add(TestItemData("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
             add(TestItemData("自定义日志管理", View.OnClickListener {
@@ -259,6 +261,22 @@ class TestDebugTempFragment : BaseTestFragment() {
     private fun hideIcon() {
         mIconManager.hideIcon()
         DebugLogTips.show("")
+    }
+
+    fun testConvert() {
+        getConvertString("1")
+        getConvertString("-1")
+        getConvertString("0")
+        getConvertString("233")
+        getConvertString("true")
+        getConvertString("tRUe")
+        getConvertString("false")
+        getConvertString("False")
+    }
+
+    private fun getConvertString(data: String) {
+        ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, false))
+        ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, true))
     }
 
     private fun testOneRequest() {
