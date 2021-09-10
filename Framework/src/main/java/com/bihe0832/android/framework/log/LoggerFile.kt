@@ -79,7 +79,7 @@ object LoggerFile {
     }
 
     private fun checkOldFile(file: File) {
-        FileUtils.deleteOld(file.parentFile, mDuration)
+        FileUtils.deleteOldAsync(file.parentFile, mDuration)
 
     }
 
