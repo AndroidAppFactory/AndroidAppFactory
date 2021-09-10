@@ -56,7 +56,7 @@ public class PermissionsActivity extends Activity {
         }
 
         if (needCheckPermission == null || needCheckPermission.length < 1) {
-            PermissionManager.INSTANCE.getPermissionCheckResultListener().onFailed("permission error");
+            PermissionManager.INSTANCE.getPermissionCheckResultListener().onFailed(scene, "permission error");
             finish();
         }
 
@@ -101,7 +101,7 @@ public class PermissionsActivity extends Activity {
 
     // 全部权限均已获取
     private void allPermissionsGranted() {
-        PermissionManager.INSTANCE.getPermissionCheckResultListener().onSuccess();
+        PermissionManager.INSTANCE.getPermissionCheckResultListener().onSuccess(scene);
         finish();
     }
 

@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
+import java.util.concurrent.ConcurrentHashMap
 
 object PermissionManager {
 
@@ -16,15 +17,22 @@ object PermissionManager {
     const val PERMISSION_REQUEST_CODE = 0 // 系统权限管理页面的参数
 
     private var mContext: Context? = null
-    private var mOuterResultListener: OnPermissionResult? = null
+//    private var mOuterResultListener: OnPermissionResult? = null
+
 
     private val USER_DENY_KEY = "UserPermissionDenyKey"
-    private val mPermissionDesc = HashMap<String, String>()
-    private val mPermissionScene = HashMap<String, String>()
-    private val mPermissionContent = HashMap<String, String>()
+    private val mPermissionDesc = ConcurrentHashMap<String, String>()
+    private val mPermissionScene = ConcurrentHashMap<String, String>()
+    private val mPermissionContent = ConcurrentHashMap<String, String>()
 
-    private val mPermissionSettings = HashMap<String, String>().apply {
+    private val mPermissionSettings = ConcurrentHashMap<String, String>().apply {
         put(Manifest.permission.SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+    }
+
+    private val mOuterResultListenerList = ConcurrentHashMap<String, OnPermissionResult>()
+
+    private fun getOuterPermissionResultListener(scene: String): OnPermissionResult? {
+        return mOuterResultListenerList.get(scene)
     }
 
     private val mDefaultScene by lazy {
@@ -35,34 +43,34 @@ object PermissionManager {
         mContext?.getString(R.string.permission_default_desc) ?: "设备"
     }
 
-    fun getPermissionCheckResultListener(): OnPermissionResult {
-        return mLastPermissionCheckResultListener
+    fun getPermissionCheckResultListener(): InnerOnPermissionResult {
+        return mPermissionCheckResultListener
     }
 
-    private val mLastPermissionCheckResultListener by lazy {
-        object : OnPermissionResult {
-            override fun onSuccess() {
+    private val mPermissionCheckResultListener by lazy {
+        object : InnerOnPermissionResult {
+            override fun onSuccess(scene: String) {
                 ZLog.d(TAG, "onSuccess")
-                mOuterResultListener?.onSuccess()
-                mOuterResultListener = null
+                getOuterPermissionResultListener(scene)?.onSuccess()
+                mOuterResultListenerList.remove(scene)
             }
 
             override fun onUserCancel(scene: String, permission: String) {
                 ZLog.d(TAG, "onUserCancel")
-                mOuterResultListener?.onUserCancel(scene, permission)
-                mOuterResultListener = null
+                getOuterPermissionResultListener(scene)?.onUserCancel(scene, permission)
+                mOuterResultListenerList.remove(scene)
             }
 
             override fun onUserDeny(scene: String, permission: String) {
                 ZLog.d(TAG, "onUserDeny")
-                mOuterResultListener?.onUserDeny(scene, permission)
-                mOuterResultListener = null
+                getOuterPermissionResultListener(scene)?.onUserDeny(scene, permission)
+                mOuterResultListenerList.remove(scene)
             }
 
-            override fun onFailed(msg: String) {
+            override fun onFailed(scene: String, msg: String) {
                 ZLog.d(TAG, "onFailed:$msg")
-                mOuterResultListener?.onFailed(msg)
-                mOuterResultListener = null
+                getOuterPermissionResultListener(scene)?.onFailed(msg)
+                mOuterResultListenerList.remove(scene)
             }
         }
     }
@@ -109,6 +117,13 @@ object PermissionManager {
         fun onFailed(msg: String)
     }
 
+    interface InnerOnPermissionResult {
+        fun onSuccess(scene: String)
+        fun onUserCancel(scene: String, permission: String)
+        fun onUserDeny(scene: String, permission: String)
+        fun onFailed(scene: String, msg: String)
+    }
+
     fun hasPermission(context: Context?, permissions: String): Boolean {
         return !PermissionsChecker(context).lacksPermissions(permissions)
     }
@@ -130,13 +145,15 @@ object PermissionManager {
     }
 
     fun checkPermission(context: Context?, scene: String, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, vararg permissions: String) {
-        mOuterResultListener = result
+        result?.let {
+            mOuterResultListenerList.put(scene, it)
+        }
         if (null == context) {
-            mLastPermissionCheckResultListener.onFailed("context is null")
+            mPermissionCheckResultListener.onFailed(scene, "context is null")
         } else {
             mContext = context.applicationContext
             if (!PermissionsChecker(context).lacksPermissions(*permissions)) {
-                mLastPermissionCheckResultListener.onSuccess()
+                mPermissionCheckResultListener.onSuccess(scene)
             } else {
                 try {
                     val intent = Intent(context, permissionsActivityClass)
@@ -147,7 +164,7 @@ object PermissionManager {
                     ActivityCompat.startActivity(context!!, intent, null)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    mLastPermissionCheckResultListener.onFailed("start permission activity failed")
+                    mPermissionCheckResultListener.onFailed(scene, "start permission activity failed")
                 }
             }
         }
