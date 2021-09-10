@@ -3,16 +3,23 @@
 
     <style name="BaseDialog" parent="@android:style/Theme.Dialog">
         <!--背景颜色及和透明程度-->
+        <!-- 设置这个属性后，dialog周边的一圈黑边就可以消失了-->
         <item name="android:windowBackground">@android:color/transparent</item>
+        <!--  对话框的背景颜色 -->
         <item name="android:background">@android:color/transparent</item>
+        <!--是否允许对话框的背景变暗-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 遮罩层, 对话框的背景变暗的程度，值越大，背景就越暗 -->
+        <item name="android:backgroundDimAmount">0.5</item>
         <!--是否去除标题 -->
         <item name="android:windowNoTitle">true</item>
         <!--是否去除边框-->
         <item name="android:windowFrame">@null</item>
-        <!--是否浮现在activity之上-->
+        <!--是否浮现在activity之上，true 居中展示-->
         <item name="android:windowIsFloating">true</item>
-        <!--是否模糊-->
-        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+
         <!--输入框适配-->
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
         <item name="android:textColorPrimary">@color/dialog_text</item>
