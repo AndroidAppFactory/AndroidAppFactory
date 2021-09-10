@@ -177,19 +177,23 @@ object FileUtils {
         return MD5.getFileMD5(filePath)
     }
 
-    fun deleteOld(dir: File, duration: Long) {
+    fun deleteOldAsync(dir: File, duration: Long) {
         ThreadManager.getInstance().start {
-            dir.listFiles().forEach { tempFile ->
-                var lastModify = tempFile.lastModified()
-                ZLog.w("File", "File $tempFile Date is ${DateUtil.getDateEN(lastModify)}")
-                if (tempFile.exists() && System.currentTimeMillis() - lastModify > duration) {
-                    var result = if (tempFile.isDirectory) {
-                        deleteDirectory(tempFile)
-                    } else {
-                        deleteFile(tempFile.absolutePath)
-                    }
-                    ZLog.w("File", "File tempFile has delete: $result")
+            deleteOld(dir, duration)
+        }
+    }
+
+    fun deleteOld(dir: File, duration: Long) {
+        dir.listFiles().forEach { tempFile ->
+            var lastModify = tempFile.lastModified()
+            ZLog.w("File", "File $tempFile Date is ${DateUtil.getDateEN(lastModify)}")
+            if (tempFile.exists() && System.currentTimeMillis() - lastModify > duration) {
+                var result = if (tempFile.isDirectory) {
+                    deleteDirectory(tempFile)
+                } else {
+                    deleteFile(tempFile.absolutePath)
                 }
+                ZLog.w("File", "File tempFile has delete: $result")
             }
         }
     }
