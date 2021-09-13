@@ -1,11 +1,13 @@
 package com.bihe0832.android.base.test
 
 
+import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.test.icon.TestIcon
+import com.bihe0832.android.base.test.icon.TestTipsIcon
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
 import com.bihe0832.android.base.test.ipc.TestIPCActivity
 import com.bihe0832.android.base.test.json.JsonTest
@@ -47,6 +49,15 @@ class TestDebugTempFragment : BaseTestFragment() {
                 ZixieContext.showToast("点了一下Icon")
             })
         }
+    }
+
+    val mDebugTips by lazy {
+        TestTipsIcon(activity!!)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        DebugLogTips.showView(mDebugTips, false)
     }
 
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -254,12 +265,13 @@ class TestDebugTempFragment : BaseTestFragment() {
 
     private fun showIcon() {
         mIconManager.showIconWithPermissionCheck(null)
+        mDebugTips.append("<B>提示信息</B>:<BR>    ")
         DebugLogTips.append("<B>提示信息</B>:<BR>    ")
-
     }
 
     private fun hideIcon() {
         mIconManager.hideIcon()
+        mDebugTips.show("")
         DebugLogTips.show("")
     }
 
