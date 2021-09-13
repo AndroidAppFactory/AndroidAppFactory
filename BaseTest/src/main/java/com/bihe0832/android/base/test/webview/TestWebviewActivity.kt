@@ -37,6 +37,11 @@ class TestWebviewActivity : BaseTestActivity() {
         }
     }
 
+    override fun initView() {
+        super.initView()
+        mToolbar?.visibility = View.GONE
+    }
+
     override fun getTitleText(): String {
         return "Webviewl测试"
     }
