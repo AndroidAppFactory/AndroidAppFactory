@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import com.bihe0832.android.lib.log.ZLog;
 import java.lang.reflect.Method;
+import kotlin.ReplaceWith;
 
 public class DisplayUtil {
 
@@ -126,7 +127,7 @@ public class DisplayUtil {
 
     /**
      * 获得屏幕宽度
-     *
+     * @Deprecated Use {@link DisplayUtil#getRealScreenSizeX(Context)} instead.
      * @param context
      * @return
      */
