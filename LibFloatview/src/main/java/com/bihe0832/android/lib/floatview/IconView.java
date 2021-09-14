@@ -173,7 +173,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
         return super.onInterceptTouchEvent(event);
     }
 
-    private boolean needUpdateViewPosition() {
+    protected boolean needUpdateViewPosition() {
         return Math.abs(xInScreen - xDownInScreen) > 12 || Math.abs(yInScreen - yDownInScreen) > 12;
     }
 
@@ -240,7 +240,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
     /**
      * 更新悬浮窗的位置
      */
-    void updateViewPosition() {
+    protected void updateViewPosition() {
         mParams.x = (int) (xInScreen - xInView);
         mParams.y = (int) (yInScreen - yInView) - 60;
 
@@ -294,7 +294,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
         }
     }
 
-    private void updateViewLayout() {
+    protected void updateViewLayout() {
         resetParams(mParams);
         mWindowManager.updateViewLayout(this, mParams);
     }
@@ -336,7 +336,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
         setVisibility(View.VISIBLE);
     }
 
-    private void startShadowIcon() {
+    protected void startShadowIcon() {
         mUiHandler.sendEmptyMessageDelayed(MSG_ICON_CHANGE_ICON_WINDOW_SHADOW, TIME_DELAY_SHADOW_ICON);
     }
 
@@ -347,7 +347,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
         getIconView().startAnimation(alphaAnimation);
     }
 
-    private void startHideIcon(int time) {
+    protected void startHideIcon(int time) {
         if (time > 0) {
             mUiHandler.sendEmptyMessageDelayed(MSG_ICON_CHANGE_ICON_WINDOW_HIDE, time);
         } else {
