@@ -57,7 +57,7 @@ class TestDebugTempFragment : BaseTestFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DebugLogTips.showView(mDebugTips, false)
+//        DebugLogTips.showView(mDebugTips, false)
     }
 
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -266,7 +266,7 @@ class TestDebugTempFragment : BaseTestFragment() {
     private fun showIcon() {
         mIconManager.showIconWithPermissionCheck(null)
         mDebugTips.append("<B>提示信息</B>:<BR>    ")
-        DebugLogTips.append("<B>提示信息</B>:<BR>    ")
+        DebugLogTips.append("<B>提示信息</B> fs df d fsdf:     ")
     }
 
     private fun hideIcon() {
