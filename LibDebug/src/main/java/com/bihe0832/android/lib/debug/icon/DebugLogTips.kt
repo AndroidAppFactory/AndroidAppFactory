@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.debug.icon
 
 import android.Manifest
 import android.app.Activity
+import android.view.Gravity
 import android.view.View
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -16,7 +17,15 @@ object DebugLogTips {
     private var mIconManager: IconManager? = null
     private var mLogView: DebugLogTipsIcon? = null
 
+    fun initModule(activity: Activity) {
+        initModule(activity, true)
+    }
+
     fun initModule(activity: Activity, useDefault: Boolean) {
+        initModule(activity, useDefault, Gravity.RIGHT)
+    }
+
+    fun initModule(activity: Activity, useDefault: Boolean, gravity: Int) {
         PermissionManager.addPermissionContent(
                 SCENE_NAME_DEBUG,
                 Manifest.permission.SYSTEM_ALERT_WINDOW,
@@ -29,10 +38,12 @@ object DebugLogTips {
                 mIconManager?.let {
                     mLogView?.let {
                         it.visibility = View.VISIBLE
+                        it.getTextView()?.gravity = gravity
+                        it.layoutParams = it.findViewById<View>(it.rootId).layoutParams
                         mIconManager!!.showViewWithPermissionCheck(
                                 it,
                                 SCENE_NAME_DEBUG,
-                                mIconManager!!.getFullScreenFlag(),
+                                mIconManager!!.getNoTouchFlag(),
                                 it.locationX,
                                 it.locationY, null)
                     }
@@ -62,12 +73,28 @@ object DebugLogTips {
     }
 
     fun show(text: String) {
-        mLogView?.show(text)
+        mLogView?.let {
+            it.show(text)
+            mIconManager!!.showViewWithPermissionCheck(
+                    it,
+                    SCENE_NAME_DEBUG,
+                    mIconManager!!.getNoTouchFlag(),
+                    it.locationX,
+                    it.locationY, null)
+        }
+
     }
 
-
     fun append(text: String) {
-        mLogView?.append(text)
+        mLogView?.let {
+            it.append(text)
+            mIconManager!!.showViewWithPermissionCheck(
+                    it,
+                    SCENE_NAME_DEBUG,
+                    mIconManager!!.getNoTouchFlag(),
+                    it.locationX,
+                    it.locationY, null)
+        }
     }
 
 }

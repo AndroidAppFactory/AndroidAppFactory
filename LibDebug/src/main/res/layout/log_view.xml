@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:background="#A6000000">
+        android:id="@+id/log_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
 
-    <TextView
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/log_view_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="4dp"
+            tools:gravity="right|bottom"
+            android:lineHeight="16dp"
             android:textColor="#EC4C40"
             android:textSize="10dp"
             tools:text="sliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfijsliewsjlfij" />
 
-</ScrollView>
+</LinearLayout>

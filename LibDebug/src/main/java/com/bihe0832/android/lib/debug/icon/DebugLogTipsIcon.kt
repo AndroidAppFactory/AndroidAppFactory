@@ -2,8 +2,8 @@ package com.bihe0832.android.lib.debug.icon
 
 import android.content.Context
 import android.text.TextUtils
-import android.view.MotionEvent
 import android.view.View
+import android.widget.TextView
 import com.bihe0832.android.lib.debug.R
 import com.bihe0832.android.lib.floatview.BaseIconView
 import com.bihe0832.android.lib.text.TextFactoryUtils
@@ -14,16 +14,24 @@ open class DebugLogTipsIcon(context: Context) : BaseIconView(context) {
     private var currentText = ""
 
     private fun updateText(text: String) {
-        log_view_text.text = TextFactoryUtils.getSpannedTextByHtml(text)
+        getTextView()?.text = TextFactoryUtils.getSpannedTextByHtml(text)
     }
 
+
+    fun getTextView(): TextView? {
+        return log_view_text
+    }
+
+    override fun ignoreStatusBar(): Boolean {
+        return true
+    }
 
     override fun getLayoutId(): Int {
         return R.layout.log_view
     }
 
     override fun getRootId(): Int {
-        return R.id.log_view_text
+        return R.id.log_root
     }
 
     override fun getDefaultX(): Int {

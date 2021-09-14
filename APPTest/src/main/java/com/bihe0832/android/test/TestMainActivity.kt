@@ -6,8 +6,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.ContextCompat
+import android.view.Gravity
 import android.view.View
-import com.bihe0832.android.base.test.icon.TestTipsIcon
 import com.bihe0832.android.base.test.permission.TestPermissionsActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
@@ -60,7 +60,7 @@ class TestMainActivity : CommonActivity() {
 
 //        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
 //        UpdateManager.checkUpdateAndShowDialog(this, false)
-        DebugLogTips.initModule(this,false)
+        DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
         hideBottomUIMenu()
         CommonDBManager.init(this)
     }

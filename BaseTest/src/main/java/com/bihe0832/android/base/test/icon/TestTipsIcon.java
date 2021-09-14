@@ -17,7 +17,8 @@ public class TestTipsIcon extends DebugLogTipsIcon {
 
     @Override
     public int getLocationX() {
-        return DisplayUtil.getRealScreenSizeX(this.getContext()) - DisplayUtil.dip2px(this.getContext(), 300);
+        return 0;
+//        return DisplayUtil.getRealScreenSizeX(this.getContext()) - DisplayUtil.dip2px(this.getContext(), 300);
     }
 
     @Override
