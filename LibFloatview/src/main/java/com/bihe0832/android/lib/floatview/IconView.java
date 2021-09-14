@@ -1,12 +1,8 @@
 package com.bihe0832.android.lib.floatview;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,15 +14,25 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.config.Config;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
-import com.bihe0832.android.lib.ui.image.BitmapUtil;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
-public class IconView extends LinearLayout implements View.OnClickListener {
+public abstract class IconView extends LinearLayout implements View.OnClickListener {
 
-    private static final String TAG = "ICON_VIEW";
+    public static final String TAG = "ICON_VIEW";
+
+
+    public abstract ImageView getIconView();//小图标正常态
+
+    public abstract View getIconLayout();//小图标外层布局
+
+    public abstract int getLayoutId();//小图标正常态
+
+    public abstract void initView();//小图标正常态
+
 
     public static final int TIME_DELAY_SHADOW_ICON = 3000;
     public static final int TIME_DELAY_HIDE_ICON = 2000;
@@ -50,15 +56,8 @@ public class IconView extends LinearLayout implements View.OnClickListener {
     private float mSlidePercent = 0.3f;//icon 隐藏时隐藏的比例
     private Animation mIconMovingAnim;//悬浮窗拖动时的动画
     private boolean isLogoAnimRunning;//Icon选中动画是否正在运行
-    private Bitmap mIconCache;
-    public ImageView mView;//小图标正常态
-    private ImageView mRedViewL;//Icon上左边的红点，用于Icon在屏幕右侧时展示
-    private ImageView mRedViewR;//Icon上右边的红点，用于Icon在屏幕左侧时展示
-    private View layout;//小图标外层布局
     public volatile boolean hasBeenAdded = false;
     private OnClickListener mOnClickListener = null;
-    private boolean mHasRed = false;
-
 
     Handler mUiHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_ANDROID_MAIN)) {
         @Override
@@ -74,89 +73,30 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         }
     };
 
-    public IconView(Context context) {
+    public IconView(Context context) throws AAFException {
         super(context);
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        LayoutInflater.from(context).inflate(R.layout.com_bihe0832_icon_view, this);
-        layout = findViewById(R.id.com_bihe0832_lib_icon_layout);
+        LayoutInflater.from(context).inflate(getLayoutId(), this);
 
-        mView = (ImageView) findViewById(R.id.com_bihe0832_lib_icon_icon);
-        mRedViewL = (ImageView) findViewById(R.id.com_bihe0832_lib_icon_icon_redl);
-        mRedViewR = (ImageView) findViewById(R.id.com_bihe0832_lib_icon_icon_redr);
+        initView();
+        if (null == getIconView()) {
+            throw new AAFException("IconView must have IconView");
+        }
 
-        mView.setOnClickListener(this);
+        if (null == getIconLayout()) {
+            throw new AAFException("IconView must have IconLayout");
+        }
 
-        sViewWidth = layout.getLayoutParams().width;
-        sViewHeight = layout.getLayoutParams().height;
-
+        getIconView().setOnClickListener(this);
+        sViewWidth = getIconLayout().getLayoutParams().width;
+        sViewHeight = getIconLayout().getLayoutParams().height;
         initIconMovingAnim();
     }
 
-    public IconView(Context context, Drawable drawable) {
-        this(context);
-        mView.setImageDrawable(drawable);
-    }
-
-    public void updateReddot() {
-        int screenWidth = DisplayUtil.getRealScreenSizeX(getContext());
-        boolean iconLocationIsLeft = mParams.x < screenWidth / 2;
-        Log.d(TAG, "Icon updateViewRed point " + mHasRed);
-        if (mHasRed) {
-            if (iconLocationIsLeft) {
-                mRedViewL.setVisibility(INVISIBLE);
-                mRedViewR.setVisibility(VISIBLE);
-            } else {
-                mRedViewL.setVisibility(VISIBLE);
-                mRedViewR.setVisibility(INVISIBLE);
-            }
-        } else {
-            mRedViewR.setVisibility(INVISIBLE);
-            mRedViewL.setVisibility(INVISIBLE);
-        }
-    }
-
-    public void setHasNew(boolean isNew) {
-        mHasRed = isNew;
-    }
 
     public void setSlidePercent(float percent) {
         if (percent < 0.8f) {
             mSlidePercent = percent;
-        }
-    }
-
-    public void setIconImage(final String iconURL) {
-        if (TextUtils.isEmpty(iconURL)) {
-            Log.e(TAG, "Icon URL is Empty can`t update");
-            return;
-        }
-        if (null != mIconCache) {
-            mView.setImageBitmap(mIconCache);
-            return;
-        } else {
-            if (!TextUtils.isEmpty(iconURL)) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Log.e(TAG, "Icon URL is ：" + iconURL);
-                            Bitmap bitmap = BitmapUtil.getRemoteBitmap(iconURL, DisplayUtil.dip2px(getContext(), 40),
-                                    DisplayUtil.dip2px(getContext(), 40));
-                            if (bitmap != null) {
-                                mIconCache = bitmap;
-                                mView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mView.setImageBitmap(mIconCache);
-                                    }
-                                });
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-            }
         }
     }
 
@@ -186,7 +126,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 // Icon开始旋转
-                mView.startAnimation(mIconMovingAnim);
+                getIconView().startAnimation(mIconMovingAnim);
                 xInView = event.getX();
                 yInView = event.getY();
                 xDownInScreen = event.getRawX();
@@ -199,7 +139,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
                 mUiHandler.removeMessages(MSG_ICON_CHANGE_ICON_WINDOW_SHADOW);
                 mUiHandler.removeMessages(MSG_ICON_CHANGE_ICON_WINDOW_HIDE);
                 if (android.os.Build.VERSION.SDK_INT > 10) {
-                    mView.setAlpha(1.0f);
+                    getIconView().setAlpha(1.0f);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -240,8 +180,6 @@ public class IconView extends LinearLayout implements View.OnClickListener {
     @Override
     public void onClick(final View v) {
         //先把Icon的红点置为0，然后开启大悬浮
-        mHasRed = false;
-        updateReddot();
         doIconClickAnimation(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -302,7 +240,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
     /**
      * 更新悬浮窗的位置
      */
-    private void updateViewPosition() {
+    void updateViewPosition() {
         mParams.x = (int) (xInScreen - xInView);
         mParams.y = (int) (yInScreen - yInView) - 60;
 
@@ -324,19 +262,18 @@ public class IconView extends LinearLayout implements View.OnClickListener {
             }
         }
         updateViewLayout();
-        updateReddot();
     }
 
     //停止icon的旋转
     public void clearViewAnimation() {
-        mView.clearAnimation();
+        getIconView().clearAnimation();
         isLogoAnimRunning = false;
     }
 
     // 删除整个icon的隐藏等效果
     public void clearIconLayoutAnimation() {
-        if (layout.getAnimation() != null) {
-            layout.clearAnimation();
+        if (getIconLayout().getAnimation() != null) {
+            getIconLayout().clearAnimation();
         }
     }
 
@@ -353,14 +290,15 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         ZLog.d(TAG + " screenWidth:" + screenWidth);
         updateViewLayout();
         if (android.os.Build.VERSION.SDK_INT > 10) {
-            mView.setAlpha(1.0f);
+            getIconView().setAlpha(1.0f);
         }
     }
 
-    private void updateViewLayout(){
+    private void updateViewLayout() {
         resetParams(mParams);
         mWindowManager.updateViewLayout(this, mParams);
     }
+
     /**
      * 动画执行完之后开启大悬浮窗
      */
@@ -371,8 +309,8 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         rotateAnimation.setDuration(300l);
         rotateAnimation.setFillAfter(true);
         rotateAnimation.setAnimationListener(listener);
-        mView.setAnimation(rotateAnimation);
-        mView.startAnimation(rotateAnimation);
+        getIconView().setAnimation(rotateAnimation);
+        getIconView().startAnimation(rotateAnimation);
 
     }
 
@@ -406,7 +344,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
         Animation alphaAnimation = new AlphaAnimation(1.0f, 0.5f);
         alphaAnimation.setDuration(300);
         alphaAnimation.setFillAfter(true);
-        mView.startAnimation(alphaAnimation);
+        getIconView().startAnimation(alphaAnimation);
     }
 
     private void startHideIcon(int time) {
@@ -419,7 +357,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
 
     protected void hideIcon() {
         if (android.os.Build.VERSION.SDK_INT > 10) {
-            mView.setAlpha(0.5f);
+            getIconView().setAlpha(0.5f);
         }
 
         int le = getIconLocationX();
@@ -439,7 +377,7 @@ public class IconView extends LinearLayout implements View.OnClickListener {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (android.os.Build.VERSION.SDK_INT > 10) {
-                    mView.setAlpha(1.0f);
+                    getIconView().setAlpha(1.0f);
                 }
             }
 
@@ -448,10 +386,16 @@ public class IconView extends LinearLayout implements View.OnClickListener {
 
             }
         });
-        this.layout.startAnimation(animation);
+        getIconLayout().startAnimation(animation);
     }
 
     protected void resetParams(WindowManager.LayoutParams mParams) {
 
+    }
+
+    protected boolean iconLocationIsLeft() {
+        int screenWidth = DisplayUtil.getRealScreenSizeX(getContext());
+        boolean iconLocationIsLeft = mParams.x < screenWidth / 2;
+        return iconLocationIsLeft;
     }
 }

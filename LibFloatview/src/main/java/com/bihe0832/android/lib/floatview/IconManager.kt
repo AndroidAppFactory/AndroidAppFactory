@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.graphics.PixelFormat
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import android.view.Gravity
@@ -34,22 +33,12 @@ class IconManager(activity: Activity) {
 
     init {
         mActivity = activity
-        mIconView = IconView(mActivity)
+        mIconView = IconViewWithRedDot(mActivity)
     }
 
     constructor(activity: Activity, view: IconView) : this(activity) {
         mIconView = view
     }
-
-    constructor(activity: Activity, ResID: Drawable?) : this(activity) {
-        mIconView = IconView(mActivity, ResID)
-    }
-
-    constructor(activity: Activity, iconUrl: String?) : this(activity) {
-        mIconView = IconView(mActivity)
-        mIconView?.setIconImage(iconUrl)
-    }
-
 
     private var mWindowManager: WindowManager? = null//窗口管理
 
@@ -81,10 +70,6 @@ class IconManager(activity: Activity) {
             mWindowManager = mActivity!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         }
         return mWindowManager!!
-    }
-
-    fun setIconHasNew(isNew: Boolean) {
-        mIconView?.setHasNew(isNew)
     }
 
     fun setIconClickListener(listener: View.OnClickListener) {
@@ -171,15 +156,10 @@ class IconManager(activity: Activity) {
             } else {
                 getWindowManager().addView(mIconView, mIconView!!.layoutParams)
             }
-            //更新&缓存icon图标
-            if (mIconUrl.isNotEmpty()) {
-                mIconView!!.setIconImage(mIconUrl)
-            }
         }
         mIconView!!.hasBeenAdded = true
         mIconView!!.visibility = View.VISIBLE
         mIconViewIsShowing = true
-        mIconView!!.updateReddot()
         mIconView!!.showIcon()
         return true
     }

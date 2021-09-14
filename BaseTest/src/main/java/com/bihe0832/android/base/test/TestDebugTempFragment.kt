@@ -43,8 +43,11 @@ import java.io.File
 class TestDebugTempFragment : BaseTestFragment() {
     val LOG_TAG = "TestDebugTempFragment"
 
+    val mIcon by lazy {
+        TestIcon(activity)
+    }
     val mIconManager by lazy {
-        IconManager(activity!!, TestIcon(activity)).apply {
+        IconManager(activity!!, mIcon).apply {
             setIconClickListener(View.OnClickListener {
                 ZixieContext.showToast("点了一下Icon")
             })
@@ -267,6 +270,7 @@ class TestDebugTempFragment : BaseTestFragment() {
         mIconManager.showIconWithPermissionCheck(null)
         mDebugTips.append("<B>提示信息</B>:<BR>    ")
         DebugLogTips.append("<B>提示信息</B> fs df d fsdf:     ")
+        mIcon.setHasNew(true)
     }
 
     private fun hideIcon() {
