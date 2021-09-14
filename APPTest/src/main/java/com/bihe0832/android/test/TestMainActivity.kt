@@ -27,13 +27,6 @@ import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 @Module(RouterConstants.MODULE_NAME_DEBUG)
 class TestMainActivity : CommonActivity() {
     val LOG_TAG = "TestHttpActivity"
-    val mIconManager by lazy {
-        IconManager(this, "").apply {
-            setIconClickListener(View.OnClickListener {
-                ZixieContext.showToast("点了一下Icon")
-            })
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
