@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.utils.encypt;
+package com.bihe0832.android.lib.utils.encrypt;
 
 
 import android.util.Base64;

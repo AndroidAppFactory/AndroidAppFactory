@@ -12,8 +12,8 @@ import android.text.TextUtils;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
-import com.bihe0832.android.lib.utils.encypt.HexUtils;
-import com.bihe0832.android.lib.utils.encypt.MD5;
+import com.bihe0832.android.lib.utils.encrypt.HexUtils;
+import com.bihe0832.android.lib.utils.encrypt.MD5;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
