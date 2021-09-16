@@ -35,7 +35,7 @@ import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
-import com.bihe0832.android.lib.utils.encypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
