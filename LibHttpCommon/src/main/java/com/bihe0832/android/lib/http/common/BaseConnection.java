@@ -55,7 +55,7 @@ public abstract class BaseConnection {
 
     }
 
-    protected void setURLConnectionCommonPara(String contentTypy) {
+    protected void setURLConnectionCommonPara() {
         HttpURLConnection connection = getURLConnection();
         if (null == connection) {
             return;
@@ -63,8 +63,18 @@ public abstract class BaseConnection {
         connection.setConnectTimeout(CONNECT_TIMEOUT);
         connection.setReadTimeout(DEFAULT_READ_TIMEOUT);
         connection.setUseCaches(false);
-        connection.setRequestProperty(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
-        connection.setRequestProperty(HTTP_REQ_PROPERTY_CONTENT_TYPE, contentTypy);
+    }
+
+
+    protected void setURLConnectionRequestProperty(HashMap<String, String> requestProperty) {
+        HttpURLConnection connection = getURLConnection();
+        for (Map.Entry<String, String> entry : requestProperty.entrySet()) {
+            if (TextUtils.isEmpty(entry.getKey()) || TextUtils.isEmpty(entry.getValue())) {
+                ZLog.d(LOG_TAG, "requestProperty is bad");
+            } else {
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     protected void setURLConnectionCookie(HashMap<String, String> cookieInfo) {
@@ -94,7 +104,15 @@ public abstract class BaseConnection {
             ZLog.e(LOG_TAG, "URLConnection is null");
             return "";
         }
-        setURLConnectionCommonPara(request.getContentType());
+        setURLConnectionCommonPara();
+        HashMap<String, String> requestProperty = new HashMap<>();
+        if (request.getRequestProperties() != null) {
+            requestProperty.putAll(request.getRequestProperties());
+        }
+        requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
+        requestProperty.put(HTTP_REQ_PROPERTY_CONTENT_TYPE, request.getContentType());
+        setURLConnectionRequestProperty(requestProperty);
+
         //检查cookie
         if (null != request.cookieInfo && request.cookieInfo.size() > 0) {
             setURLConnectionCookie(request.cookieInfo);

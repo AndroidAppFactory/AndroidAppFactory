@@ -30,6 +30,10 @@ public abstract class HttpBasicRequest {
         return BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
     }
 
+    public Map<String, String> getRequestProperties() {
+        return new HashMap<String, String>();
+    }
+
     public byte[] getFormData(Map<String, String> strParams) {
         StringBuffer stringBuffer = new StringBuffer();
         for (Map.Entry<String, String> entry : strParams.entrySet()) {

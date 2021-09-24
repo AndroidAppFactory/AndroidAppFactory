@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.http.common;
 
 import static com.bihe0832.android.lib.http.common.BaseConnection.BOUNDARY;
+import static com.bihe0832.android.lib.http.common.BaseConnection.HTTP_REQ_PROPERTY_CHARSET;
+import static com.bihe0832.android.lib.http.common.BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE;
 import static com.bihe0832.android.lib.http.common.BaseConnection.HTTP_REQ_VALUE_CHARSET;
 import static com.bihe0832.android.lib.http.common.BaseConnection.LINE_END;
 import static com.bihe0832.android.lib.http.common.BaseConnection.PREFIX;
@@ -16,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +32,11 @@ public class HttpFileUpload {
     public static String fileUpload(final BaseConnection baseConnection, final Map<String, String> strParams,
             final File file, final String fileDataType) {
 
-        baseConnection.setURLConnectionCommonPara(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_FORM);
+        baseConnection.setURLConnectionCommonPara();
+        HashMap<String, String> requestProperty = new HashMap<>();
+        requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
+        requestProperty.put(HTTP_REQ_PROPERTY_CONTENT_TYPE, BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_FORM);
+        baseConnection.setURLConnectionRequestProperty(requestProperty);
         HttpURLConnection urlConnection = baseConnection.getURLConnection();
         DataOutputStream paramDataOutputStream = null;
         InputStream paramInputStream = null;
@@ -40,7 +47,7 @@ public class HttpFileUpload {
             urlConnection.setDoOutput(true);
             urlConnection.setDoInput(true);
             urlConnection.setRequestProperty("Connection", "Keep-Alive");
-            urlConnection.setRequestProperty(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE,
+            urlConnection.setRequestProperty(HTTP_REQ_PROPERTY_CONTENT_TYPE,
                     BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_FORM + ";boundary=" + BOUNDARY);
 
             paramDataOutputStream = new DataOutputStream(urlConnection.getOutputStream());
@@ -135,7 +142,7 @@ public class HttpFileUpload {
                 .append("\"")
                 .append("\"; filelength").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(filelength).append("\"")
                 .append(BaseConnection.LINE_END)
-                .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE)
+                .append(HTTP_REQ_PROPERTY_CONTENT_TYPE)
                 .append(": ").append(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM)
                 .append(BaseConnection.LINE_END)
                 .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING).append(": 8bit")
@@ -163,9 +170,9 @@ public class HttpFileUpload {
                         .append(HTTP_REQ_ENTITY_MERGE).append("\"").append(entry.getKey())
                         .append("\"")
                         .append(BaseConnection.LINE_END)
-                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE)
+                        .append(HTTP_REQ_PROPERTY_CONTENT_TYPE)
                         .append(": ").append(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_TEXT).append("; ")
-                        .append(BaseConnection.HTTP_REQ_PROPERTY_CHARSET).append(HTTP_REQ_ENTITY_MERGE)
+                        .append(HTTP_REQ_PROPERTY_CHARSET).append(HTTP_REQ_ENTITY_MERGE)
                         .append(BaseConnection.HTTP_REQ_VALUE_CHARSET).append(BaseConnection.LINE_END)
                         .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING).append(": 8bit")
                         .append(BaseConnection.LINE_END)
