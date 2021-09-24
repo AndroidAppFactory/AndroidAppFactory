@@ -35,9 +35,9 @@ abstract class SplashActivity : CommonActivity() {
 
     private fun initView() {
         if (!hasAgreedPrivacy()) {
-            AgreementPrivacy.showPrivacy(this, {
+            AgreementPrivacy.showPrivacy(this) {
                 doAgreement()
-            })
+            }
         } else {
             doNext()
         }
@@ -62,7 +62,7 @@ abstract class SplashActivity : CommonActivity() {
         doNext()
     }
 
-    protected fun doNext() {
+    open protected fun doNext() {
         Handler().postDelayed({ enterMainActivity() }, 1500)
     }
 }
