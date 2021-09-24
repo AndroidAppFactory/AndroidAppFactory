@@ -48,7 +48,7 @@ abstract class SplashActivity : CommonActivity() {
         hideBottomUIMenu()
     }
 
-    private fun enterMainActivity() {
+    protected fun enterMainActivity() {
         ZLog.d("enterMainActivity")
         if (TextUtils.isEmpty(nextRouter)) {
             openPageByRouter(getMainRouter())
