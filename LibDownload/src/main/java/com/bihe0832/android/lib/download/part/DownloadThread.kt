@@ -143,11 +143,11 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     }
                     if (mDownloadPartInfo.partStatus != DownloadStatus.STATUS_DOWNLOADING) {
                         mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOADING
-                        if (retryTimes > 0) {
-                            ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
-                        }
-                        retryTimes = 0
                     }
+                    if (retryTimes > 0) {
+                        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
+                    }
+                    retryTimes = 0
                     // 读取成功,写入文件
                     randomAccessFile.write(data, 0, len)
                     mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
