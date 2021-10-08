@@ -36,12 +36,13 @@ const val DOWNLOAD_PART_SIZE = 1024 * 1024 * 2
 
 class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread() {
 
+    private var retryTimes = 0
+
     fun getDownloadPartInfo(): DownloadPartInfo {
         return mDownloadPartInfo
     }
 
     override fun run() {
-        var times = 0
         do {
             ZLog.e(TAG, "run:$mDownloadPartInfo")
             if (mDownloadPartInfo.partFinished > DOWNLOAD_BUFFER_SIZE) {
@@ -63,8 +64,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 e.printStackTrace()
                 ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载异常！！！！: $e")
                 sleep(3)
-                if (times < 3) {
-                    times++
+                if (retryTimes < 3) {
+                    retryTimes++
                 } else {
                     ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载失败！！！！: $e")
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
@@ -107,8 +108,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         }
         var time = System.currentTimeMillis()
         connection.connect()
-        ZLog.d(TAG,"分片下载 第${mDownloadPartInfo.partID}分片，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~")
-        if(DownloadManager.isDebug()){
+        ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}分片，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~")
+        if (DownloadManager.isDebug()) {
             connection.logHeaderFields("分片下载 第${mDownloadPartInfo.partID}分片")
         }
         randomAccessFile.seek(finalStart)
@@ -142,6 +143,10 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     }
                     if (mDownloadPartInfo.partStatus != DownloadStatus.STATUS_DOWNLOADING) {
                         mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOADING
+                        if (retryTimes > 0) {
+                            ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
+                        }
+                        retryTimes = 0
                     }
                     // 读取成功,写入文件
                     randomAccessFile.write(data, 0, len)
