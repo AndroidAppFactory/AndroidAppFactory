@@ -125,7 +125,7 @@ object ZixieContext {
     fun getVersionNameAndCode(): String {
         return getVersionName() + "." + getVersionCode()
     }
-    
+
     fun getVersionName(): String {
         if (TextUtils.isEmpty(versionName)) {
             versionName = APKUtils.getAppVersionName(applicationContext)
