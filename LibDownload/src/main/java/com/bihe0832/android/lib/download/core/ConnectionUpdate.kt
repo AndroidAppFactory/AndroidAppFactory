@@ -18,6 +18,7 @@ fun HttpURLConnection.upateRequestInfo() {
     readTimeout = 15000
     requestMethod = "GET"
     useCaches = false
+    setRequestProperty("Connection", "Keep-Alive")
     setRequestProperty("Content-Type", "application/octet-stream; charset=UTF-8")
     setRequestProperty("Accept-Encoding", "identity")
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB_MR2) {
