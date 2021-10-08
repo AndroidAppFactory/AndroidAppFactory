@@ -16,6 +16,12 @@
 -dontwarn java.nio.file.Path
 -dontwarn java.nio.file.OpenOption
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn android.support.**
+-dontwarn android.telephony.**
+-dontwarn android.graphics.**
+-dontwarn android.view.**
+-dontwarn **ConcurrentHashMap**
+-dontwarn **KeySetView
 
 -repackageclasses
 

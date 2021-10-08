@@ -61,7 +61,7 @@ class RomType {
     //MIUI V6对应的versionCode是4
     //MIUI V7对应的versionCode是5
     private static boolean isMIUIV6OrAbove() {
-        return ManufacturerUtil.getMiuiVersionCode() >= 4;
+        return ManufacturerUtil.INSTANCE.getMiuiVersionCode() >= 4;
     }
 
     //Android Api 23以上

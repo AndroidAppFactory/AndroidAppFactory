@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.download.core
 
 import android.os.Build
+import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.log.ZLog
 import java.net.HttpURLConnection
 
 /**
@@ -15,10 +17,20 @@ fun HttpURLConnection.upateRequestInfo() {
     connectTimeout = 30000
     readTimeout = 15000
     requestMethod = "GET"
+    useCaches = false
     setRequestProperty("Content-Type", "application/octet-stream; charset=UTF-8")
     setRequestProperty("Accept-Encoding", "identity")
     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB_MR2) {
         setRequestProperty("Connection", "close")
     }
-    setRequestProperty("Connection", "Keep-Alive")
+}
+
+fun HttpURLConnection.logHeaderFields(msg: String) {
+    for ((key, value1) in headerFields.entries) {
+        var values = ""
+        for (value in value1) {
+            values += "$value,"
+        }
+        ZLog.w(DownloadItem.TAG, "$msg 返回头：Response:${key} - $values ")
+    }
 }

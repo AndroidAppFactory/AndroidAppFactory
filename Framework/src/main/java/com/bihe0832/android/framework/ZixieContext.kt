@@ -78,6 +78,9 @@ object ZixieContext {
     val channelID: String
         get() = ChannelTools.getChannel()
 
+    val deviceId: String
+        get() = DeviceIDUtils.getAndroidId(applicationContext) ?: ""
+
     fun showDebugEditionToast() {
         if (!isOfficial()) {
             showToast("测试版本，请勿外泄~")
@@ -122,7 +125,7 @@ object ZixieContext {
     fun getVersionNameAndCode(): String {
         return getVersionName() + "." + getVersionCode()
     }
-
+    
     fun getVersionName(): String {
         if (TextUtils.isEmpty(versionName)) {
             versionName = APKUtils.getAppVersionName(applicationContext)
@@ -196,10 +199,6 @@ object ZixieContext {
         }
     }
 
-    fun getDeviceId(): String {
-        ZLog.e("CHECK", "getDeviceId")
-        return DeviceIDUtils.getAndroidId(applicationContext) ?: return ""
-    }
 
     fun initModule(action: () -> Unit, canInitWithBackgroundThread: Boolean) {
         try {

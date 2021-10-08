@@ -71,7 +71,7 @@ open class TestDebugCommonFragment : BaseTestFragment() {
     protected fun showMobileInfo() {
         val builder = StringBuilder()
         builder.append("PackageName: ${context!!.packageName}\n")
-        builder.append("deviceId: ${ZixieContext.getDeviceId()}\n")
+        builder.append("deviceId: ${ZixieContext.deviceId}\n")
         builder.append("厂商&型号: ${Build.MANUFACTURER}, ${Build.MODEL}, ${Build.BRAND}\n")
         builder.append("系统版本: ${Build.VERSION.RELEASE}, ${Build.VERSION.SDK_INT}\n")
         builder.append("系统指纹: ${Build.FINGERPRINT}\n")
