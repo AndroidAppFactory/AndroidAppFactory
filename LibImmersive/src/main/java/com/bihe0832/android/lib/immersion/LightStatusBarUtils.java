@@ -17,7 +17,7 @@ public class LightStatusBarUtils {
     public static void setLightStatusBar(Activity activity, boolean dark) {
         switch (RomType.getRomType()) {
             case RomType.MIUI:
-                if (ManufacturerUtil.getMiuiVersionCode() >= 7) {
+                if (ManufacturerUtil.INSTANCE.getMiuiVersionCode() >= 7) {
                     setAndroidNativeLightStatusBar(activity, dark);
                 } else {
                     setMIUILightStatusBar(activity, dark);

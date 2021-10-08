@@ -74,11 +74,11 @@ public class IntentUtils {
     // 启动应用的设置
     public static boolean startAppDetailSettings(Context ctx) {
         boolean result = false;
-        if (ManufacturerUtil.isXiaomi()) {
+        if (ManufacturerUtil.INSTANCE.isXiaomi()) {
             result = PermissionIntent.gotoMiuiPermission(ctx);
-        } else if (ManufacturerUtil.isMeizu()) {
+        } else if (ManufacturerUtil.INSTANCE.isMeizu()) {
             result = PermissionIntent.gotoMeizuPermission(ctx);
-        } else if (ManufacturerUtil.isHuawei()) {
+        } else if (ManufacturerUtil.INSTANCE.isHuawei()) {
             result = PermissionIntent.gotoHuaweiPermission(ctx);
         }
         if (result) {

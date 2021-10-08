@@ -57,7 +57,7 @@ object AAFNetWorkApi {
 
     fun getCommonURL(url: String, param: String): String {
         val publicPara = StringBuffer()
-        publicPara.append(REQUEST_PARAM_DEVKEY).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.getDeviceId())
+        publicPara.append(REQUEST_PARAM_DEVKEY).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.deviceId)
         publicPara.append(URLUtils.HTTP_REQ_ENTITY_JOIN).append(REQUEST_PARAM_OS).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(Constants.SYSTEM_CONSTANT)
         publicPara.append(URLUtils.HTTP_REQ_ENTITY_JOIN).append(REQUEST_PARAM_APP_VERSION).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.getVersionCode())
         publicPara.append(URLUtils.HTTP_REQ_ENTITY_JOIN).append(REQUEST_PARAM_PACKAGE_NAME).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.applicationContext?.packageName)
@@ -82,7 +82,7 @@ object AAFNetWorkApi {
     fun getRequestPara(): JSONObject {
         val result = JSONObject()
         try {
-            result.put(REQUEST_PARAM_DEVKEY, ZixieContext.getDeviceId())
+            result.put(REQUEST_PARAM_DEVKEY, ZixieContext.deviceId)
             result.put(REQUEST_PARAM_APP_VERSION, ZixieContext.getVersionCode().toString())
             result.put(REQUEST_PARAM_OS, Constants.SYSTEM_CONSTANT)
             result.put(REQUEST_PARAM_PACKAGE_NAME, ZixieContext.applicationContext?.packageName)

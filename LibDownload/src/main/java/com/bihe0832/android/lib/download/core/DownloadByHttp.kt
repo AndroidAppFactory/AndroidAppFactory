@@ -140,11 +140,16 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 val connection = (url.openConnection() as HttpURLConnection).apply {
                     upateRequestInfo()
                 }
+                var time = System.currentTimeMillis()
                 connection.connect()
+                ZLog.e(TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~")
+                if (DownloadManager.isDebug()) {
+                    connection.logHeaderFields("获取文件长度")
+                }
                 var contentLength = HTTPRequestUtils.getContentLength(connection)
-                ZLog.d("获取文件长度 getContentType:${connection.contentType}")
-                ZLog.d("获取文件长度 getContentLength:${contentLength}")
-                ZLog.d("获取文件长度 responseCode:${connection.responseCode}")
+                ZLog.d(TAG, "获取文件长度 getContentType:${connection.contentType}")
+                ZLog.d(TAG, "获取文件长度 getContentLength:${contentLength}")
+                ZLog.d(TAG, "获取文件长度 responseCode:${connection.responseCode}")
                 if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL) {
                     if (contentLength > 0) {
                         info.fileLength = contentLength
