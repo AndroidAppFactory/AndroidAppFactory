@@ -99,12 +99,12 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         }
                         downloadItem.finished = newFinished
                         downloadItem.finishedLengthBefore = finishedBefore
-                        ZLog.e(TAG, "分片下载汇总 - ${downloadItem.downloadID}：转换前：${newFinished} ${finishedBefore}")
-                        ZLog.e(TAG, "分片下载汇总 - ${downloadItem.downloadID}：" +
-                                "文件长度 :${downloadItem.fileLength}" +
-                                ";完成长度 :${downloadItem.finished}" +
-                                ";之前下载长度 :${downloadItem.finishedLengthBefore}" +
-                                ";本次下载累计长度 :${newFinished - downloadItem.finishedLengthBefore} ，新增长度: ${downloadItem.lastSpeed}")
+                        if (DownloadManager.isDebug()) ZLog.w(TAG, "分片下载汇总 - ${downloadItem.downloadID}: 完成长度:${FileUtils.getFileLength(newFinished)} 之前下载长度:${FileUtils.getFileLength(finishedBefore)}")
+                        if (DownloadManager.isDebug()) ZLog.w(TAG, "分片下载汇总 - ${downloadItem.downloadID}: " +
+                                "文件长度 :${FileUtils.getFileLength(downloadItem.fileLength)}" +
+                                ";完成长度 :${FileUtils.getFileLength(downloadItem.finished)}" +
+                                ";之前下载长度 :${FileUtils.getFileLength(downloadItem.finishedLengthBefore)}" +
+                                ";本次下载累计长度 :${FileUtils.getFileLength(newFinished - downloadItem.finishedLengthBefore)} ，新增长度: ${FileUtils.getFileLength(downloadItem.lastSpeed)}")
                         if (downloadItem.finished >= downloadItem.fileLength) {
                             downloadItem.finished = downloadItem.fileLength
                         }
@@ -198,15 +198,15 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 false
             }
             if (file.exists() && hasDownload && file.length() <= info.fileLength) {
-                ZLog.d(TAG, "断点续传逻辑:$info")
+                ZLog.e(TAG, "断点续传逻辑:$info")
                 //断点续传逻辑
-                ZLog.d(TAG, "分片下载数据 - ${info.downloadID} 历史下载计算前: 之前已完成${FileUtils.getFileLength(info.finishedLengthBefore)}，累积已完成：${FileUtils.getFileLength(info.finished)}")
+                ZLog.e(TAG, "分片下载数据 - ${info.downloadID} 历史下载计算前: 之前已完成${FileUtils.getFileLength(info.finishedLengthBefore)}，累积已完成: ${FileUtils.getFileLength(info.finished)}")
                 info.finishedLengthBefore = DownloadInfoDBManager.getFinishedBefore(info.downloadID)
                 info.finished = info.finishedLengthBefore
-                ZLog.d(TAG, "分片下载数据 - ${info.downloadID} 历史下载计算后: 之前已完成${FileUtils.getFileLength(info.finishedLengthBefore)}，累积已完成：${FileUtils.getFileLength(info.finished)}")
-                ZLog.e(TAG, "分片下载数据: file length:${FileUtils.getFileLength(info.fileLength)}, finished before: ${FileUtils.getFileLength(info.finishedLengthBefore)}, need download ${FileUtils.getFileLength(info.fileLength - info.finishedLengthBefore)}")
+                ZLog.e(TAG, "分片下载数据 - ${info.downloadID} 历史下载计算后: 之前已完成${FileUtils.getFileLength(info.finishedLengthBefore)}，累积已完成: ${FileUtils.getFileLength(info.finished)}")
+                ZLog.e(TAG, "分片下载数据 - ${info.downloadID} : file length:${FileUtils.getFileLength(info.fileLength)}, finished before: ${FileUtils.getFileLength(info.finishedLengthBefore)}, need download ${FileUtils.getFileLength(info.fileLength - info.finishedLengthBefore)}")
                 var cursor = DownloadInfoDBManager.getDownloadPartInfo(info.downloadID)
-                ZLog.d(TAG, "分片下载数据 - 已有分片:${cursor.count}")
+                ZLog.e(TAG, "分片下载数据 - ${info.downloadID} - 已有分片:${cursor.count}")
                 try {
                     cursor.moveToFirst()
                     while (!cursor.isAfterLast) {
@@ -247,7 +247,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         if (info.canDownloadByPart() && info.fileLength > DOWNLOAD_PART_SIZE) {
             // 先分大片
             threadNum = (info.fileLength / DOWNLOAD_PART_SIZE).toInt().let {
-                ZLog.e(TAG, "分片下载：文件长度：${info.fileLength}，分片大小${DOWNLOAD_PART_SIZE}，一次分片${it}")
+                ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，默认分片大小：${DOWNLOAD_PART_SIZE}，按默认分片可分片：${it}")
                 when {
                     it > 10 -> {
                         5
@@ -263,13 +263,13 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                     }
                 }
             }
-            ZLog.e(TAG, "分片下载：文件长度：${info.fileLength}，二次分片数量${threadNum}，并行下载量数量${maxNum}")
+            ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，二次分片数量：${threadNum}，并行下载量数量：${maxNum}")
             if (threadNum < 1) {
                 threadNum = 1
             } else if (threadNum > 5) {
                 threadNum = 5
             }
-            ZLog.e(TAG, "分片下载：文件长度：${info.fileLength}，三次分片数量${threadNum}，并行下载量数量${maxNum}")
+            ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，三次分片数量：${threadNum}，并行下载量数量：${maxNum}")
             //太小的文件分小片
             if (info.fileLength / threadNum < DOWNLOAD_MIN_SIZE) {
                 threadNum = (info.fileLength / DOWNLOAD_MIN_SIZE).toInt()
@@ -286,22 +286,21 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 threadNum -= 1
             }
         }
-
-        ZLog.e(TAG, "分片下载：文件长度：${info.fileLength}，四次分片数量${threadNum}")
-        ZLog.e(TAG, "分片下载：最后一片长度：${info.fileLength - newpart * threadNum}")
+        ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，最终分片数量：${threadNum}")
+        ZLog.e(TAG, "分片下载: 最后一片长度: ${info.fileLength - newpart * (threadNum - 1)}")
         if (threadNum > 1) {
             for (i in 0 until threadNum) {
                 var start = i * newpart
                 ZLog.d("分片下载：开始第$i 段")
                 when (i) {
                     0 -> {
-                        startDownloadPart(i, info, 0, newpart + 1, 0, true)
+                        startDownloadPart(i, info, 0, newpart, 0, true)
                     }
                     threadNum - 1 -> {
-                        startDownloadPart(i, info, start, info.fileLength, 0, true)
+                        startDownloadPart(i, info, start + 1, info.fileLength, 0, true)
                     }
                     else -> {
-                        startDownloadPart(i, info, start, start + newpart + 1, 0, true)
+                        startDownloadPart(i, info, start + 1, start + newpart, 0, true)
                     }
                 }
             }
@@ -311,6 +310,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     }
 
     private fun startDownloadPart(partNo: Int, info: DownloadItem, oldstart: Long, end: Long, finished: Long, canDownloadByPart: Boolean) {
+        ZLog.e(TAG, "分片下载数据 第${partNo}分片 start: $oldstart, end:$end,length :${end - oldstart}, 文件长度:${info.fileLength} ")
         val downloadThreadForPart = DownloadThread(DownloadPartInfo().apply {
             this.partID = partNo
             this.downloadID = info.downloadID
@@ -322,7 +322,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
             this.partFinishedBefore = finished
             this.setCanDownloadByPart(canDownloadByPart)
         }.also {
-            ZLog.d(TAG, "分片下载数据 - ${info.downloadID}：开始第$partNo 段开始:$it")
+            ZLog.d(TAG, "分片下载数据 - ${info.downloadID}: 开始第$partNo 段开始:$it")
         })
         DownloadingPartList.addDownloadingPart(downloadThreadForPart)
         if (info.canDownloadByPart()) {
@@ -343,16 +343,16 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     }
 
     fun closeDownload(downloadID: Long, isFinished: Boolean, clearHistory: Boolean) {
-        ZLog.d(TAG, "closeDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
-        ZLog.d(TAG, "closeDownload downloadList:" + DownloadingList.getDownloadingNum())
+        ZLog.d(TAG, "cancelDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
+        ZLog.d(TAG, "cancelDownload downloadList:" + DownloadingList.getDownloadingNum())
 
         DownloadingPartList.removeItem(downloadID, isFinished)
         if (clearHistory) {
             DownloadInfoDBManager.clearDownloadPartByID(downloadID)
         }
         DownloadingList.removeFromDownloadingList(downloadID)
-        ZLog.d(TAG, "closeDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
-        ZLog.d(TAG, "closeDownload downloadList:" + DownloadingList.getDownloadingNum())
+        ZLog.d(TAG, "cancelDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
+        ZLog.d(TAG, "cancelDownload downloadList:" + DownloadingList.getDownloadingNum())
     }
 
 
