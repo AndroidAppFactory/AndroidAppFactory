@@ -89,12 +89,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
         var randomAccessFile = RandomAccessFile(file, "rwd")
         if (mDownloadPartInfo.partEnd > 0) {
-            if (finalStart < mDownloadPartInfo.partEnd) {
-                ZLog.d("分片下载 第${mDownloadPartInfo.partID}：start: $mDownloadPartInfo.start, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
-            } else {
-                ZLog.d("分片下载 第${mDownloadPartInfo.partID}：已经分片结束")
-                mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-            }
+        if (finalStart < mDownloadPartInfo.partEnd) {
+            ZLog.e(TAG,"分片下载 第${mDownloadPartInfo.partID}分片: start: ${mDownloadPartInfo.partStart}, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
+        } else {
+            ZLog.e(TAG,"分片下载 第${mDownloadPartInfo.partID}分片: 分片已经下载结束")
+            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+        }
         } else {
             ZLog.d("分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
@@ -114,12 +114,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         }
         randomAccessFile.seek(finalStart)
         var contentLength = HTTPRequestUtils.getContentLength(connection)
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片：getContentType:${connection.contentType}")
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片：params bytes=$finalStart-${mDownloadPartInfo.partEnd} getContentLength:${contentLength}")
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片：responseCode:${connection.responseCode}")
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片：contentLength: start ${finalStart}, end ${mDownloadPartInfo.partEnd} ")
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片：contentLength from server ${contentLength}, local ${mDownloadPartInfo.partEnd - finalStart} ")
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片：finished ${mDownloadPartInfo.partFinished}, finished before: ${mDownloadPartInfo.partFinishedBefore} ")
+        ZLog.e(TAG,"~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.partID}分片 ~~~~~~~~~~~~~")
+        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: getContentType:${connection.contentType}")
+        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: responseCode:${connection.responseCode}")
+        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: start ${finalStart}, end ${mDownloadPartInfo.partEnd}, bytes=$finalStart-${mDownloadPartInfo.partEnd}")
+        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: from server ${contentLength}, local ${mDownloadPartInfo.partEnd - finalStart} ")
+        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: finished ${mDownloadPartInfo.partFinished}, finished before: ${mDownloadPartInfo.partFinishedBefore} \n")
 
 
         if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL || connection.responseCode == 416) {
