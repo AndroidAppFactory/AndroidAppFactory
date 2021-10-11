@@ -297,10 +297,10 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         startDownloadPart(i, info, 0, newpart, 0, true)
                     }
                     threadNum - 1 -> {
-                        startDownloadPart(i, info, start + 1, info.fileLength, 0, true)
+                        startDownloadPart(i, info, start, info.fileLength, 0, true)
                     }
                     else -> {
-                        startDownloadPart(i, info, start + 1, start + newpart, 0, true)
+                        startDownloadPart(i, info, start, start + newpart, 0, true)
                     }
                 }
             }
