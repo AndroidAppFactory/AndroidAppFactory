@@ -32,7 +32,7 @@ const val DOWNLOAD_MIN_SIZE = 1024 * 50
 const val DOWNLOAD_BUFFER_SIZE = 1024 * 8
 
 //默认分片长度
-const val DOWNLOAD_PART_SIZE = 1024 * 1024 * 2
+const val DOWNLOAD_PART_SIZE = 1024 * 1024 * 10
 
 class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread() {
 
@@ -89,12 +89,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
         var randomAccessFile = RandomAccessFile(file, "rwd")
         if (mDownloadPartInfo.partEnd > 0) {
-        if (finalStart < mDownloadPartInfo.partEnd) {
-            ZLog.e(TAG,"分片下载 第${mDownloadPartInfo.partID}分片: start: ${mDownloadPartInfo.partStart}, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
-        } else {
-            ZLog.e(TAG,"分片下载 第${mDownloadPartInfo.partID}分片: 分片已经下载结束")
-            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-        }
+            if (finalStart < mDownloadPartInfo.partEnd) {
+                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片: start: ${mDownloadPartInfo.partStart}, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
+            } else {
+                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片: 分片已经下载结束")
+                mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+            }
         } else {
             ZLog.d("分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
@@ -110,21 +110,20 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         connection.connect()
         ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}分片，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~")
         if (DownloadManager.isDebug()) {
-            connection.logHeaderFields("分片下载 第${mDownloadPartInfo.partID}分片")
+            connection.logHeaderFields("分片下载数据 第${mDownloadPartInfo.partID}分片")
         }
         randomAccessFile.seek(finalStart)
-        var contentLength = HTTPRequestUtils.getContentLength(connection)
-        ZLog.e(TAG,"~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.partID}分片 ~~~~~~~~~~~~~")
+        var serverContentLength = HTTPRequestUtils.getContentLength(connection)
+        ZLog.e(TAG, "~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.partID}分片 ~~~~~~~~~~~~~")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: getContentType:${connection.contentType}")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: responseCode:${connection.responseCode}")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: start ${finalStart}, end ${mDownloadPartInfo.partEnd}, bytes=$finalStart-${mDownloadPartInfo.partEnd}")
-        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: from server ${contentLength}, local ${mDownloadPartInfo.partEnd - finalStart} ")
+        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: from server ${serverContentLength}, local ${mDownloadPartInfo.partEnd - finalStart} ")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: finished ${mDownloadPartInfo.partFinished}, finished before: ${mDownloadPartInfo.partFinishedBefore} \n")
 
 
         if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL || connection.responseCode == 416) {
-            val length = HTTPRequestUtils.getContentLength(connection)
-            if (mDownloadPartInfo.partEnd > 0 && abs(length - (mDownloadPartInfo.partEnd - finalStart)) > 2) {
+            if (mDownloadPartInfo.partEnd > 0 && abs(serverContentLength - (mDownloadPartInfo.partEnd - finalStart)) > 2) {
                 ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片长度 错误 ！！！")
                 if (mDownloadPartInfo.partFinished > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
@@ -152,7 +151,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     randomAccessFile.write(data, 0, len)
                     mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
                     hasdownloadLength += len
-                    if (mDownloadPartInfo.canDownloadByPart() && hasdownloadLength % (partSize * 10) < partSize) {
+                    if (mDownloadPartInfo.canDownloadByPart() && hasdownloadLength % (partSize * 3) < partSize) {
                         //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
                         DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasdownloadLength + mDownloadPartInfo.partFinishedBefore)
                     }
@@ -161,17 +160,21 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasdownloadLength + mDownloadPartInfo.partFinishedBefore)
                 }
                 ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(hasdownloadLength)}")
-                ZLog.e(TAG, "分片下载数据 - ${mDownloadPartInfo.downloadID}：第${mDownloadPartInfo.partID}分片结束：实际下载:${FileUtils.getFileLength(hasdownloadLength)} ;分片完成: ${FileUtils.getFileLength(mDownloadPartInfo.partFinished)}, 计划下载 ${FileUtils.getFileLength(length)},")
+                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次本地计算长度:${mDownloadPartInfo.partEnd - finalStart} ;本次服务器下发长度: $serverContentLength")
+                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次下载长度:${hasdownloadLength} ;累积下载长度: ${mDownloadPartInfo.partFinished}")
+
                 if (mDownloadPartInfo.canDownloadByPart()) {
                     if (hasdownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
-                        mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart + 1
+                        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载数据修正: 本次实际下载：$hasdownloadLength 本次计划下载大小：${mDownloadPartInfo.partEnd - finalStart}")
+                        mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart
                         mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                     }
                 } else {
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                 }
+                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
 
-                ZLog.e(TAG, "第${mDownloadPartInfo.partID}分片下载结束：partStatus: ${mDownloadPartInfo.partStatus}")
+                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载结束: $mDownloadPartInfo")
                 try {
                     inputStream.close()
                     connection.disconnect()
