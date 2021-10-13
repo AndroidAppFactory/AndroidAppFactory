@@ -6,11 +6,10 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
-
-
 import com.bihe0832.android.lib.log.ZLog;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -63,10 +62,11 @@ public class WifiUtil {
     private static int sLastTerminalCount = -1;
 
     public static int getSecurity(WifiConfiguration config) {
-        if(config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
+        if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
             return SECURITY_PSK;
         }
-        if(config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_EAP) || config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.IEEE8021X)) {
+        if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_EAP) || config.allowedKeyManagement
+                .get(WifiConfiguration.KeyMgmt.IEEE8021X)) {
             return SECURITY_EAP;
         }
         return (config.wepKeys[0] != null) ? SECURITY_WEP : SECURITY_NONE;
@@ -110,19 +110,19 @@ public class WifiUtil {
 
     public static int getWifiSignalLevel(Context context) {
         int strength = -1;
-        if(context == null) {
+        if (context == null) {
             return strength;
         }
         try {
             WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if(wm != null) {
+            if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
-                if(info.getBSSID() != null) {
+                if (info.getBSSID() != null) {
                     // 链接信号强度
                     strength = WifiManager.calculateSignalLevel(info.getRssi(), 5);
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // ignore
         }
         return strength;
@@ -251,10 +251,10 @@ public class WifiUtil {
     private static void sendArpReqPacket(String ipStr) {
         try {
             InetAddress inetAddress = IpUtils.getDomainFirstAddr(ipStr);
-            if(inetAddress != null) {
+            if (inetAddress != null) {
                 inetAddress.isReachable(SOCKET_TIMEOUT);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // ignore
         }
     }
@@ -276,21 +276,48 @@ public class WifiUtil {
     public static Map<String, String> getLanMacAddr(Set<String> ipList) {
         Map<String, String> ipMacMap = new HashMap<>();
         BufferedReader bufferedReader = null;
+        String line;
         try {
             if (null != ipList && ipList.size() != 0) {
-                bufferedReader = new BufferedReader(
-                        new InputStreamReader(new FileInputStream("/proc/net/arp"), Charset.forName("UTF-8")), WifiUtil.IO_BUFFER_SIZE);
-                String line;
+                if (VERSION.SDK_INT > VERSION_CODES.P) {
+                    Process proc = Runtime.getRuntime().exec("ip neigh show");
+                    proc.waitFor();
+                    bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                } else {
+                    bufferedReader = new BufferedReader(
+                            new InputStreamReader(new FileInputStream("/proc/net/arp"), Charset.forName("UTF-8")),
+                            WifiUtil.IO_BUFFER_SIZE);
+                }
+
                 while ((line = bufferedReader.readLine()) != null) {
                     ZLog.d("getLanMacAddr1 lien:" + line);
 
                     String[] lineSegments = line.split(" +");
-                    if (lineSegments.length > 4) {
-                        String ip = lineSegments[0];
-                        //if (!ipList.contains(ip)) {
-                        if (false) {
-                            continue;
-                        } else {
+                    if (VERSION.SDK_INT > VERSION_CODES.P) {
+                        if (lineSegments.length > 4) {
+                            String ip = lineSegments[0];
+                            String macAddr = lineSegments[4];
+                            /*
+                             * 有些时候同一网段下多个ip可能拥有相同的mac地址，
+                             * 因此我们反向维护这个映射，去除mac相同的ip，同时
+                             * 我们在ip最后加上" 重复次数"
+                             */
+                            if (!macAddr.equals(INVALID_MAC)) {
+                                ZLog.d("putLanMacAddr:" + ip + " " + macAddr);
+                                String macIP = ipMacMap.get(macAddr);
+                                if (macIP == null) {
+                                    ipMacMap.put(macAddr, ip + " 1");
+                                } else {
+                                    int dup = Integer.parseInt(macIP.split(" ")[1]);
+                                    ipMacMap.put(macAddr, macIP.split(" ")[0] + " " + String.valueOf(dup + 1));
+                                }
+                                //ipMacMap.put(ip, macAddr);
+                            }
+
+                        }
+                    } else {
+                        if (lineSegments.length > 4) {
+                            String ip = lineSegments[0];
                             String macAddr = lineSegments[3];
                             /*
                              * 有些时候同一网段下多个ip可能拥有相同的mac地址，
@@ -308,8 +335,11 @@ public class WifiUtil {
                                 }
                                 //ipMacMap.put(ip, macAddr);
                             }
+
                         }
                     }
+
+
                 }
             }
         } catch (Exception e) {
@@ -380,6 +410,7 @@ public class WifiUtil {
     }
 
     public static class RouterInfo {
+
         // terminals > 0: 终端数
         // terminals = -1: 未完成终端数计算
         // terminals = -2: context为空
@@ -388,6 +419,7 @@ public class WifiUtil {
         public final int terminals;
         public final int availableIps;
         public final Map<String, String> ipMacMap;
+
         public RouterInfo(int terminals, int availableIps, Map<String, String> ipMacMap) {
             this.terminals = terminals;
             this.availableIps = availableIps;
@@ -401,16 +433,16 @@ public class WifiUtil {
 
     public static String getGatewayIp(Context context) {
         String ret = IpUtils.INVALID_IP;
-        if(context == null) {
+        if (context == null) {
             return ret;
         }
         try {
             WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if(wm != null) {
+            if (wm != null) {
                 DhcpInfo dhcpInfo = wm.getDhcpInfo();
                 ret = IpUtils.ipn2s(dhcpInfo.gateway);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // ignore
         }
         return ret;
@@ -420,16 +452,16 @@ public class WifiUtil {
         String ret = "0";
         try {
             int netType = NetworkUtil.getNetworkState(ctx);
-            if(netType == NetworkUtil.NETWORK_CLASS_WIFI) {
+            if (netType == NetworkUtil.NETWORK_CLASS_WIFI) {
                 WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                if(wm != null) {
+                if (wm != null) {
                     WifiInfo info = wm.getConnectionInfo();
-                    if(info != null) {
+                    if (info != null) {
                         ret = info.getBSSID();
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             ZLog.d("getRouterMac, exception:" + e.getMessage());
         }
         return ret;
@@ -439,14 +471,14 @@ public class WifiUtil {
         int linkSpeed = -1;
         try {
             WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if(wm != null) {
+            if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
-                if(info.getBSSID() != null) {
+                if (info.getBSSID() != null) {
                     // 链接信号强度
                     linkSpeed = info.getLinkSpeed();
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // ignore
         }
         return linkSpeed;
@@ -456,14 +488,14 @@ public class WifiUtil {
         int signalValue = 1;
         try {
             WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if(wm != null) {
+            if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
-                if(info.getBSSID() != null) {
+                if (info.getBSSID() != null) {
                     // 链接信号强度
                     signalValue = info.getRssi();
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // ignore
         }
         return signalValue;
@@ -471,31 +503,31 @@ public class WifiUtil {
 
     /**
      * @return int
-     * -1   当前非WiFi或未知信道
-     * 0    无权限
+     *         -1   当前非WiFi或未知信道
+     *         0    无权限
      */
     public static int getWifiChannel(Context ctx) {
-        if(NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
+        if (NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
             return -1;
         }
         int curChannel = 0;
         try {
             WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if(wm != null) {
+            if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
                 List<ScanResult> scanResults = wm.getScanResults();
-                if(scanResults == null || scanResults.size() <= 0) {
+                if (scanResults == null || scanResults.size() <= 0) {
                     ZLog.d("channel scanResult is 0, for location switch or permission denied");
                     return curChannel;
                 }
-                for(ScanResult result : scanResults) {
+                for (ScanResult result : scanResults) {
                     int channel = getWifiChannelByFrequency(result.frequency);
-                    if(result.BSSID.equalsIgnoreCase(info.getBSSID())) {
+                    if (result.BSSID.equalsIgnoreCase(info.getBSSID())) {
                         curChannel = channel;
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // ignore
         }
         return curChannel;
@@ -543,28 +575,28 @@ public class WifiUtil {
     }
 
     public static String getWifiSignal(Context ctx) {
-        if(NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
+        if (NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
             return VOID_SIGNAL_INFO;
         }
         try {
             WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if(wm == null) {
+            if (wm == null) {
                 return VOID_SIGNAL_INFO;
             }
             WifiInfo info = wm.getConnectionInfo();
             int curChannel = 0;
             HashMap<Integer, Integer> channelCount = new HashMap<Integer, Integer>();
             List<ScanResult> scanResults = wm.getScanResults();
-            if(scanResults.size() <= 0) {
+            if (scanResults.size() <= 0) {
                 ZLog.d("scanResult is 0");
             }
-            for(ScanResult result : scanResults) {
+            for (ScanResult result : scanResults) {
 
                 int channel = getWifiChannelByFrequency(result.frequency);
-                if(result.BSSID.equalsIgnoreCase(info.getBSSID())) {
+                if (result.BSSID.equalsIgnoreCase(info.getBSSID())) {
                     curChannel = channel;
                 }
-                if(channelCount.containsKey(channel)) {
+                if (channelCount.containsKey(channel)) {
                     channelCount.put(channel, channelCount.get(channel) + 1);
                 } else {
                     channelCount.put(channel, 1);
@@ -573,19 +605,19 @@ public class WifiUtil {
             int curCount = 0;
             int neibCount = 0;
             int sum = 0;
-            for(HashMap.Entry<Integer, Integer> entry : channelCount.entrySet()) {
+            for (HashMap.Entry<Integer, Integer> entry : channelCount.entrySet()) {
                 int chn = entry.getKey();
                 int num = entry.getValue();
                 sum += num;
-                if(curChannel == chn) {
+                if (curChannel == chn) {
                     curCount = num;
-                } else if(chn >= curChannel - 2 && chn <= curChannel + 2) {
+                } else if (chn >= curChannel - 2 && chn <= curChannel + 2) {
                     neibCount += num;
                 }
             }
 
             return "" + curChannel + "_" + curCount + "_" + neibCount + "_" + sum;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return VOID_SIGNAL_INFO;
         }
     }
@@ -594,13 +626,13 @@ public class WifiUtil {
         String ret = "";
         try {
             WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if(wm != null) {
+            if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
-                if(info != null) {
+                if (info != null) {
                     ret = info.getSSID();
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             ZLog.d("getRouterSSID, exception:" + e.getMessage());
         }
         return ret;
@@ -618,20 +650,20 @@ public class WifiUtil {
     public static int getWifiCode(Context context) {
         try {
             Context applicationContext = context.getApplicationContext();
-            if(NetworkUtil.getNetworkState(context) == NetworkUtil.NETWORK_CLASS_WIFI) {
+            if (NetworkUtil.getNetworkState(context) == NetworkUtil.NETWORK_CLASS_WIFI) {
                 WifiManager wm = (WifiManager) applicationContext.getSystemService(Context.WIFI_SERVICE);
-                if(wm != null) {
+                if (wm != null) {
                     // 得到配置好的网络连接
                     List<WifiConfiguration> wifiConfigList = wm.getConfiguredNetworks();
-                    for(WifiConfiguration wifiConfiguration : wifiConfigList) {
+                    for (WifiConfiguration wifiConfiguration : wifiConfigList) {
                         //比较networkId，防止配置网络保存相同的SSID
-                        if(wifiConfiguration.status == WifiConfiguration.Status.CURRENT) {
+                        if (wifiConfiguration.status == WifiConfiguration.Status.CURRENT) {
                             return getSecurity(wifiConfiguration);
                         }
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             ZLog.d("getWifiCode exception:" + e.getMessage());
         }
         return -1;
@@ -658,7 +690,8 @@ public class WifiUtil {
                 List<ScanResult> scanResults = wm.getScanResults();
                 wifiChannelInfos = new ArrayList<>(scanResults.size());
                 for (ScanResult scanResult : scanResults) {
-                    wifiChannelInfos.add(new WifiChannelInfo(scanResult.BSSID, scanResult.SSID, scanResult.level, scanResult.frequency));
+                    wifiChannelInfos.add(new WifiChannelInfo(scanResult.BSSID, scanResult.SSID, scanResult.level,
+                            scanResult.frequency));
                 }
             }
         } catch (Exception e) {
@@ -761,7 +794,7 @@ public class WifiUtil {
      * ###耗时操作，慎用###
      */
     public static int getCurrentRouterDevices(Context mContext) {
-        if(mContext == null) {
+        if (mContext == null) {
             return -1;
         }
         WifiManager wm = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -769,7 +802,7 @@ public class WifiUtil {
         int netipaddr = dhcpInfo.ipAddress;
         int netmask = dhcpInfo.netmask;
         // 如果子网掩码为0直接返回
-        if(netmask == 0) {
+        if (netmask == 0) {
             netmask = 16777215;
             ZLog.e("netmask is null");
         }
@@ -777,11 +810,11 @@ public class WifiUtil {
         String str_ipaddr = IpUtils.ipn2s(netipaddr);
         try {
             // 判断是否是IPv4地址
-            if(!(InetAddress.getByName(str_ipaddr) instanceof Inet4Address)) {
+            if (!(InetAddress.getByName(str_ipaddr) instanceof Inet4Address)) {
                 ZLog.e("current host ip is not valid ipv4 address");
                 return -1;
             }
-        } catch(UnknownHostException e) {
+        } catch (UnknownHostException e) {
             ZLog.w("reverseIpMultiThread UnknownHostException error:" + e.getMessage());
         }
         int hostIpAddr = IpUtils.ips2h(str_ipaddr);
@@ -801,9 +834,9 @@ public class WifiUtil {
         // 最多不能超过254个
         int count = 0;
         Vector<String> ipList = new Vector<String>();
-        for(int i = startIp; i < endIp; i++) {
+        for (int i = startIp; i < endIp; i++) {
             count++;
-            if(count > 255) {
+            if (count > 255) {
                 break;
             }
             String tmpIp = IpUtils.iph2s(i);
@@ -813,11 +846,12 @@ public class WifiUtil {
         // 很多情况下2S后才会有返回，因此不如固定在这里sleep2秒后执行
         try {
             Thread.sleep(2000);
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
         }
         HashMap<String, String> ipmacMap = getHardwareAddress(ipList);
         int total = ipmacMap != null ? ipmacMap.size() : 0;
-        ZLog.d("neighborPhones wifis:" + (endIp - startIp) + ",valid host:" + total + ",iplists:" + ipList.size() + ",count:" + count);
+        ZLog.d("neighborPhones wifis:" + (endIp - startIp) + ",valid host:" + total + ",iplists:" + ipList.size()
+                + ",count:" + count);
         return total;
     }
 
@@ -897,25 +931,25 @@ public class WifiUtil {
         HashMap<String, String> mapList = new HashMap<String, String>();
         BufferedReader bufferedReader = null;
         try {
-            if(ipList != null && ipList.size() != 0) {
+            if (ipList != null && ipList.size() != 0) {
                 bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"), BUF);
                 String line;
                 Matcher matcher;
-                while((line = bufferedReader.readLine()) != null) {
-                    if(line.contains(INVALID_MAC)) {
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (line.contains(INVALID_MAC)) {
                         continue;
                     }
                     boolean flag = false;
-                    for(String ip : ipList) {
-                        if(!line.contains(ip)) {
+                    for (String ip : ipList) {
+                        if (!line.contains(ip)) {
                             continue;
                         }
                         String ptrn = String.format(MAC_RE, ip.replace(".", "\\."));
                         Pattern pattern = Pattern.compile(ptrn);
                         matcher = pattern.matcher(line);
-                        if(matcher.matches()) {
+                        if (matcher.matches()) {
                             hw = matcher.group(1);
-                            if(!hw.equals(INVALID_MAC)) {
+                            if (!hw.equals(INVALID_MAC)) {
                                 // ZLog.debug("neighborPhones ip:" + ip + ",mac:"
                                 // + hw);
                                 mapList.put(ip, hw);
@@ -926,13 +960,13 @@ public class WifiUtil {
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             return mapList;
         } finally {
-            if(bufferedReader != null) {
+            if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     ZLog.e("getHardwareAddress, error:" + e.getMessage());
                 }
             }
@@ -942,7 +976,7 @@ public class WifiUtil {
 
     public static int getWifiChannelByFrequency(int frequency) {
         int channel = -1;
-        switch(frequency) {
+        switch (frequency) {
             case 2412:
                 channel = 1;
                 break;
