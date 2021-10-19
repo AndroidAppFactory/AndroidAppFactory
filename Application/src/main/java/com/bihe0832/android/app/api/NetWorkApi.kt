@@ -39,6 +39,7 @@ object AAFNetWorkApi {
                         .connectTimeout(TIME_OUT_CONNECTION, TimeUnit.MILLISECONDS)
                         .readTimeout(TIME_OUT_READ, TimeUnit.MILLISECONDS)
                         .writeTimeout(TIME_OUT_WRITE, TimeUnit.MILLISECONDS)
+                        .retryOnConnectionFailure(true)
                         .addNetworkInterceptor(
                                 HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
                                     //打印retrofit日志

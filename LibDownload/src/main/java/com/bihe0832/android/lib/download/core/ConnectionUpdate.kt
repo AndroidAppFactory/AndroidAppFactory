@@ -1,6 +1,5 @@
 package com.bihe0832.android.lib.download.core
 
-import android.os.Build
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
@@ -19,12 +18,9 @@ fun HttpURLConnection.upateRequestInfo() {
     readTimeout = 15000
     requestMethod = "GET"
     useCaches = false
-    setRequestProperty("Connection", "Keep-Alive")
+    setRequestProperty("Connection", "close")
     setRequestProperty("Content-Type", "application/octet-stream; charset=UTF-8")
     setRequestProperty("Accept-Encoding", "identity")
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB_MR2) {
-        setRequestProperty("Connection", "close")
-    }
 }
 
 fun HttpURLConnection.logHeaderFields(msg: String) {
