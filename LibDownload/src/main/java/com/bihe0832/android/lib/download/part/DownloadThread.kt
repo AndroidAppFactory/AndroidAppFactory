@@ -44,16 +44,16 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
     override fun run() {
         do {
             ZLog.e(TAG, "run:$mDownloadPartInfo")
-            if (mDownloadPartInfo.partFinished > DOWNLOAD_BUFFER_SIZE) {
-                mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished - DOWNLOAD_BUFFER_SIZE
-            } else {
-                mDownloadPartInfo.partFinished = 0
-            }
-
-            var newStart = if (mDownloadPartInfo.partEnd < 1) {
-                0
-            } else {
-                mDownloadPartInfo.partStart + mDownloadPartInfo.partFinished
+            var newStart = when {
+                mDownloadPartInfo.partEnd < 1 -> {
+                    0
+                }
+                mDownloadPartInfo.partFinished > DOWNLOAD_BUFFER_SIZE -> {
+                    mDownloadPartInfo.partStart +  mDownloadPartInfo.partFinished - DOWNLOAD_BUFFER_SIZE
+                }
+                else -> {
+                    mDownloadPartInfo.partStart
+                }
             }
             try {
                 if (!startDownload(newStart)) {
