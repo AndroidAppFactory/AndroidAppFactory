@@ -5,6 +5,7 @@ package com.bihe0832.android.lib.timer;
  */
 public abstract class BaseTask {
 
+    //任务计数器记录的轮训次数
     protected int notifiedTimes = runAfterAdd() ? getMyInterval() : 0;
 
     private boolean isDeleted = false;
@@ -22,7 +23,7 @@ public abstract class BaseTask {
     public abstract String getTaskName();
 
     /**
-     * 定时器定时调用所有任务的计数器, 当任务计数器次数与 {@link BaseTask#getMyInterval()} 一致时，任务运行
+     * 定时器定时调用所有任务的计数器, 当任务计数器记录的轮训次数与 {@link BaseTask#getMyInterval()} 一致时，任务运行
      */
     protected final int getNotifiedTimes() {
         return notifiedTimes;
@@ -59,5 +60,15 @@ public abstract class BaseTask {
 
     protected boolean isDeleted() {
         return isDeleted;
+    }
+
+    @Override
+    public String toString() {
+        return "BaseTask{" +
+                "notifiedTimes=" + notifiedTimes +
+                ", isDeleted=" + isDeleted +
+                ", myInterval=" + getMyInterval() +
+                ", runAfterAdd=" + runAfterAdd() +
+                '}';
     }
 }

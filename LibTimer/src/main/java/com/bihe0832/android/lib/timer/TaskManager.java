@@ -3,11 +3,13 @@ package com.bihe0832.android.lib.timer;
 
 import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.thread.ThreadManager;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import kotlin.jvm.Synchronized;
 
 public class TaskManager {
@@ -15,9 +17,9 @@ public class TaskManager {
     //定时任务检查的时间粒度
     private static final String LOG_TAG = "TaskManager";
     protected static final int PERIOD = 500;
-    private Timer timer = null;
     private boolean started = false;
     private ConcurrentHashMap<String, BaseTask> mTaskList = new ConcurrentHashMap<String, BaseTask>();
+    ScheduledExecutorService scheduledExecutorService = null;
 
     private static volatile TaskManager instance;
 
@@ -37,53 +39,58 @@ public class TaskManager {
     }
 
     private void startTimer() {
-        if (started == true) {
-            return;
+        stopTimer();
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        if (scheduledExecutorService != null) {
+            scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
+                @Override
+                public void run() {
+                    runAll();
+                }
+            }, 1, PERIOD, TimeUnit.MILLISECONDS);
+            started = true;
         }
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TaskDispatcher(), 0, PERIOD);
-        started = true;
     }
 
     private void stopTimer() {
-        if (timer != null && started == true) {
-            timer.cancel();
-            timer = null;
-            started = false;
+        started = false;
+        if (scheduledExecutorService != null) {
+            scheduledExecutorService.shutdownNow();
+            scheduledExecutorService = null;
         }
     }
 
-    private class TaskDispatcher extends TimerTask {
-
-        @Override
-        @Synchronized
-        public void run() {
-            try {
-                if (mTaskList.isEmpty()) {
-                    ZLog.d(LOG_TAG, "TaskDispatcher stopTimer");
-                    stopTimer();
-                } else {
-//                    ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
-                    Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
-                    while (iter.hasNext()) {
-                        Entry<String, BaseTask> entry = iter.next();
-                        final BaseTask task = (BaseTask) entry.getValue();
-//                        ZLog.d(LOG_TAG, "TaskDispatcher :" + task.getTaskName());
-                        if (task.isDeleted()) {
-                            mTaskList.remove(task);
-                        } else {
-                            if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
-                                task.resetNotifiedTimes();
-                                task.run();
+    private void runAll() {
+        ThreadManager.getInstance().start(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (mTaskList.isEmpty()) {
+                        ZLog.d(LOG_TAG, "TaskDispatcher stopTimer");
+                        stopTimer();
+                    } else {
+                        ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
+                        Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
+                        while (iter.hasNext()) {
+                            Entry<String, BaseTask> entry = iter.next();
+                            final BaseTask task = (BaseTask) entry.getValue();
+                            ZLog.d(LOG_TAG, "TaskDispatcher :" + task);
+                            if (task.isDeleted()) {
+                                mTaskList.remove(task);
+                            } else {
+                                if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
+                                    task.resetNotifiedTimes();
+                                    task.run();
+                                }
+                                task.increaseNotifiedTimes();
                             }
-                            task.increaseNotifiedTimes();
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
+        });
     }
 
     @Synchronized
