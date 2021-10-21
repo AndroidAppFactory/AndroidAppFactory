@@ -17,7 +17,7 @@ object ManufacturerUtil {
 
     private var mSystemProperties = ConcurrentHashMap<String, String>()
 
-    private fun getValueByKey(key: String, getDefaultValue: () -> String): String {
+    fun getValueByKey(key: String, getDefaultValue: () -> String): String {
         if (!mSystemProperties.contains(key)) {
             mSystemProperties[key] = SystemProperties.get(key, getDefaultValue())
         }
