@@ -248,8 +248,11 @@ class TestDebugTempFragment : BaseTestFragment() {
                         return 0
                     }
 
+                    override fun runAfterAdd(): Boolean {
+                        return false
+                    }
                     override fun run() {
-                        ZLog.d("TaskManager", "TASK_NAME $i")
+                        ZLog.d("TaskManager", "TASK_NAME $i ${this.hashCode()}")
                     }
 
                     override fun getTaskName(): String {
@@ -264,6 +267,12 @@ class TestDebugTempFragment : BaseTestFragment() {
             }, i * 2 + 2700L)
 
         }
+
+        ThreadManager.getInstance().start({
+            TaskManager.getInstance().removeTask(TASK_NAME)
+        }, 60)
+
+
     }
 
     private fun showIcon() {
