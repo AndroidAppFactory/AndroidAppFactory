@@ -18,7 +18,7 @@ object ManufacturerUtil {
     private var mSystemProperties = ConcurrentHashMap<String, String>()
 
     fun getValueByKey(key: String, getDefaultValue: () -> String): String {
-        if (!mSystemProperties.contains(key)) {
+        if (!mSystemProperties.containsKey(key)) {
             mSystemProperties[key] = SystemProperties.get(key, getDefaultValue())
         }
         return mSystemProperties[key] ?: ""
@@ -32,6 +32,7 @@ object ManufacturerUtil {
     val deviceBrand: String
         get() {
             return getValueByKey("ro.product.brand") { Build.BRAND }
+            return getValueByKey("com.mna.wifi.mac") { Build.BRAND }
         }
 
     /**
@@ -39,7 +40,7 @@ object ManufacturerUtil {
      *
      * @return 型号
      */
-    val deviceModel: String
+    val model: String
         get() {
             return getValueByKey("ro.product.model") { Build.MODEL }
         }
@@ -52,6 +53,17 @@ object ManufacturerUtil {
     val manufacturer: String
         get() {
             return getValueByKey("ro.product.manufacturer") { Build.MANUFACTURER }
+        }
+
+
+    val product: String
+        get() {
+            return getValueByKey("ro.product.name") { Build.PRODUCT }
+        }
+
+    val device: String
+        get() {
+            return getValueByKey("ro.product.device") { Build.DEVICE }
         }
 
     val commonRomVersion: String
