@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.test
 
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -24,6 +25,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
+import com.bihe0832.android.lib.device.ManufacturerUtil
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -251,6 +253,7 @@ class TestDebugTempFragment : BaseTestFragment() {
                     override fun runAfterAdd(): Boolean {
                         return false
                     }
+
                     override fun run() {
                         ZLog.d("TaskManager", "TASK_NAME $i ${this.hashCode()}")
                     }

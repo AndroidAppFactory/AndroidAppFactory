@@ -8,7 +8,7 @@ buildscript {
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1116/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1117/content/" }
     }
 
     dependencies {
@@ -29,7 +29,7 @@ allprojects {
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1116/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1117/content/" }
         flatDir {
             dirs './../libs/'
         }
