@@ -96,7 +96,7 @@ object ManufacturerUtil {
 
     val isXiaomi: Boolean
         get() {
-            val manufacturerModel = "$manufacturer-$deviceModel"
+            val manufacturerModel = "$manufacturer-$device"
             return (TextFactoryUtils.trimSpace(manufacturerModel.toLowerCase()).contains("xiaomi")
                     || TextFactoryUtils.trimSpace(manufacturerModel.toLowerCase()).contains("redmi"))
         }
@@ -160,7 +160,7 @@ object ManufacturerUtil {
 
     val isVivo: Boolean
         get() {
-            return TextFactoryUtils.trimSpace("$manufacturer-$deviceModel".toLowerCase()).contains("vivo")
+            return TextFactoryUtils.trimSpace("$manufacturer-$device".toLowerCase()).contains("vivo")
         }
 
     val isSmartisan: Boolean
