@@ -6,7 +6,7 @@ import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.lib.router.annotation.Module;
 
 @Module(RouterConstants.MODULE_NAME_WEB_PAGE)
-public final class WebPageActivity extends BaseWebviewActivity {
+public class WebPageActivity extends BaseWebviewActivity {
 
     protected BaseWebviewFragment getWebViewFragment() {
         return CommonWebviewFragment.newInstance(mURL);

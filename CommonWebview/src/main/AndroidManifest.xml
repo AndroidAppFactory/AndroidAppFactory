@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.bihe0832.android.common.webview"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.bihe0832.android.common.webview">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application>
-        <activity
-            android:name="com.bihe0832.android.common.webview.WebPageActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/activityTheme"
-            android:hardwareAccelerated="true"
-            android:process=":web"
-            android:screenOrientation="portrait"></activity>
+        <!--        <activity-->
+        <!--                android:name="com.bihe0832.android.common.webview.WebPageActivity"-->
+        <!--                android:configChanges="orientation|screenSize|keyboardHidden"-->
+        <!--                android:theme="@style/activityTheme"-->
+        <!--                android:hardwareAccelerated="true"-->
+        <!--                android:launchMode="singleInstance"-->
+        <!--                android:process=":web"-->
+        <!--                android:screenOrientation="portrait">-->
+
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
+
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+        <!--                <data android:scheme="http" />-->
+        <!--                <data android:scheme="https" />-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
     </application>
 </manifest>

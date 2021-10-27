@@ -21,6 +21,25 @@
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:screenOrientation="portrait"
                 android:theme="@style/activityTheme" />
+        <activity
+                android:name="com.bihe0832.android.common.webview.WebPageActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:theme="@style/activityTheme"
+                android:hardwareAccelerated="true"
+                android:launchMode="singleInstance"
+                android:process=":web"
+                android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
 
     </application>
 </manifest>
