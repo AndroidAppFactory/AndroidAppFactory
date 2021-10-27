@@ -37,10 +37,20 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         WebviewLoggerFile.INSTANCE.log("BaseWebviewActivity mWebViewViewModel: " + mWebViewViewModel.hashCode());
         ZLog.d(TAG + QbSdk.getTbsVersion(this));
         handleIntent(getIntent());
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        try {
+            handleIntent(intent);
+            ((BaseWebviewFragment) findFragment(getWebViewFragmentClass())).loadUrl(mURL, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void handleIntent(Intent intent) {
+
         if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
             mURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
         } else {
@@ -49,6 +59,8 @@ public abstract class BaseWebviewActivity extends CommonActivity {
                         .decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
                 IntentUtils.openWebPage(redirectURL, this);
                 finish();
+            } else if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+                mURL = intent.getData().toString();
             } else {
                 WebviewLoggerFile.INSTANCE.log("handle intent, but extra is bad");
             }
@@ -90,6 +102,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
             finish();
             return;
         } else {
+            WebviewLoggerFile.INSTANCE.log(TAG + "onResume:" + mURL);
             if (findFragment(getWebViewFragmentClass()) == null) {
                 loadRootFragment(R.id.common_fragment_content, getWebViewFragment());
             }

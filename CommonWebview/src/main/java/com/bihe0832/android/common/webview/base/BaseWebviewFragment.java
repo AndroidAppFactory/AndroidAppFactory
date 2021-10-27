@@ -329,44 +329,51 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             WebviewLoggerFile.INSTANCE.log(TAG + "shouldOverrideUrlLoading url:" + url);
             if (TextUtils.isEmpty(url)) {
-                return false;
+                return super.shouldOverrideUrlLoading(view, url);
             }
             if (url.startsWith(INTENT_KEY_THIRD_PART)) {
                 String value = URLUtils.getValueByName(url, "value");
                 try {
-                    return processOverrideUrlLoading(URLDecoder.decode(value, "UTF-8"));
+                    return processOverrideUrlLoading(view, URLDecoder.decode(value, "UTF-8"));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return false;
+                    return super.shouldOverrideUrlLoading(view, url);
                 }
             } else {
-                return processOverrideUrlLoading(url);
+                return processOverrideUrlLoading(view, url);
             }
         }
 
-        protected boolean processOverrideUrlLoading(String url) {
-            if (url.startsWith("http") || url.startsWith("https")) {
-                if (loadUseIntent(url)) {
-                    IntentUtils.jumpToOtherApp(url, getActivity());
-                } else {
-                    if (url.startsWith(KEY_WX_PAY_PART)) {
-                        mWebView.loadUrl(url, getWechatCertifiedomainList());
-                    } else {
-                        loadUrl(url, "");
+        protected boolean processOverrideUrlLoading(WebView view, String url) {
+            try {
+                if (url.startsWith(JsBridge.JS_BRIDGE_SCHEME)) {
+                    if (mJSBridgeProxy != null) {
+                        mJSBridgeProxy.invoke(url);
                     }
+                    return true;
+                } else if (url.equals("about:blank;") || url.equals("about:blank")) {
+                    // 3.0及以下的webview调用jsb时会调用同时call起的空白页面，将这个页面屏蔽掉不出来
+                    return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
+                } else if (url.startsWith("http") || url.startsWith("https")) {
+                    if (loadUseIntent(url)) {
+                        IntentUtils.jumpToOtherApp(url, getActivity());
+                    } else {
+                        if (url.startsWith(KEY_WX_PAY_PART)) {
+                            mWebView.loadUrl(url, getWechatCertifiedomainList());
+                        } else {
+                            mWebView.loadUrl(url, null);
+                        }
+                    }
+                    return true;
+                } else {
+                    Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(mIntent);
+                    mWebView.loadUrl(url, null);
+                    return true;
                 }
-                return true;
-            } else if (url.startsWith(JsBridge.JS_BRIDGE_SCHEME)) {
-                if (mJSBridgeProxy != null) {
-                    mJSBridgeProxy.invoke(url);
-                }
-                return true;
-            } else if (url.equals("about:blank;") || url.equals("about:blank")) {
-                // 3.0及以下的webview调用jsb时会调用同时call起的空白页面，将这个页面屏蔽掉不出来
-                return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
-            } else {
-                IntentUtils.jumpToOtherApp(url, getContext());
-                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return super.shouldOverrideUrlLoading(view, url);
             }
         }
 
@@ -668,7 +675,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         CookieManagerForZixie.INSTANCE.syncCookie();
     }
 
-    public void removeCookiesForDomain(String url){
+    public void removeCookiesForDomain(String url) {
         CookieManagerForZixie.INSTANCE.removeCookiesForDomain(url);
     }
 }
