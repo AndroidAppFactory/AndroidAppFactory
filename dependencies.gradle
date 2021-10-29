@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibDownload"
+ext.developModule = "Application"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -77,14 +77,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"                : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
@@ -94,42 +94,42 @@ ext.moduleInfo = [
         ],
 
         "CommonAbout"               : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "Framework", "CommonList"
                 ]
         ],
         "CommonList"                : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "4.13.18",
+                "version"                : "4.13.19",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -141,7 +141,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "4.13.18",
+                "version"                : "4.13.19",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -154,14 +154,14 @@ ext.moduleInfo = [
         ],
 
         "CommonPraise"              : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "4.13.18",
+                "version"                : "4.13.19",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
@@ -174,7 +174,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "4.13.18",
+                "version"            : "4.13.19",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils", "LibDebug"]
         ],
@@ -189,7 +189,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "4.13.17",
+                "version"            : "4.13.19",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -341,7 +341,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibLog", "LibThread", "LibFile"]
         ],
         "LibDownload"               : [
-                "version"            : "4.13.17",
+                "version"            : "4.13.19",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": ["LibFile", "LibRequest", "LibThread", "LibSqlite", "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced"]
         ],
