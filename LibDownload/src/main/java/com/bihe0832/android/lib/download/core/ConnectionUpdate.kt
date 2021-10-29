@@ -14,8 +14,8 @@ import java.net.HttpURLConnection
  */
 
 fun HttpURLConnection.upateRequestInfo() {
-    connectTimeout = 30000
-    readTimeout = 15000
+    connectTimeout = 5000
+    readTimeout = 10000
     requestMethod = "GET"
     useCaches = false
     setRequestProperty("Connection", "close")

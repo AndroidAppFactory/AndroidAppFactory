@@ -288,7 +288,7 @@ public class DownloadItem implements Serializable {
     }
 
     public void setLastSpeed(long lastSpeed) {
-        if (lastSpeed > 0) {
+        if (lastSpeed >= 0) {
             this.lastSpeed = lastSpeed;
         }
     }

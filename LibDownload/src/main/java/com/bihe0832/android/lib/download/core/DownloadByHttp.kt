@@ -172,10 +172,11 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                ZLog.d("获取文件长度 异常:${e}")
+                ZLog.d(TAG, "获取文件长度 异常 $times :${e}")
                 times++
                 if (times > 3) {
                     //累积请求三次都失败在结束
+                    ZLog.e(TAG, "获取文件长度 异常: download with exception after three times")
                     notifyDownloadFailed(ERR_HTTP_FAILED, "download with exception after three times", info)
                     return false
                 }
@@ -189,7 +190,6 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         if (info.fileLength < 1) {
             info.setCanDownloadByPart(false)
         }
-        info.finishedLengthBefore = 0
         try {
             val file = File(info.tempFilePath)
             var hasDownload = if (info.canDownloadByPart()) {
@@ -202,7 +202,9 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 //断点续传逻辑
                 ZLog.e(TAG, "分片下载数据 - ${info.downloadID} 历史下载计算前: 之前已完成${FileUtils.getFileLength(info.finishedLengthBefore)}，累积已完成: ${FileUtils.getFileLength(info.finished)}")
                 info.finishedLengthBefore = DownloadInfoDBManager.getFinishedBefore(info.downloadID)
-                info.finished = info.finishedLengthBefore
+                if (info.finishedLengthBefore > info.finished) {
+                    info.finished = info.finishedLengthBefore
+                }
                 ZLog.e(TAG, "分片下载数据 - ${info.downloadID} 历史下载计算后: 之前已完成${FileUtils.getFileLength(info.finishedLengthBefore)}，累积已完成: ${FileUtils.getFileLength(info.finished)}")
                 ZLog.e(TAG, "分片下载数据 - ${info.downloadID} : file length:${FileUtils.getFileLength(info.fileLength)}, finished before: ${FileUtils.getFileLength(info.finishedLengthBefore)}, need download ${FileUtils.getFileLength(info.fileLength - info.finishedLengthBefore)}")
                 var cursor = DownloadInfoDBManager.getDownloadPartInfo(info.downloadID)
