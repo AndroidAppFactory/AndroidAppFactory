@@ -366,9 +366,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                     }
                     return true;
                 } else {
-                    Intent mIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(mIntent);
-                    mWebView.loadUrl(url, null);
+                    IntentUtils.jumpToOtherApp(url, getActivity());
                     return true;
                 }
             } catch (Exception e) {

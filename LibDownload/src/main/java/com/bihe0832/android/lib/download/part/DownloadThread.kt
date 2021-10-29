@@ -49,7 +49,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     0
                 }
                 mDownloadPartInfo.partFinished > DOWNLOAD_BUFFER_SIZE -> {
-                    mDownloadPartInfo.partStart +  mDownloadPartInfo.partFinished - DOWNLOAD_BUFFER_SIZE
+                    if (retryTimes == 0) {
+                        ZLog.e(TAG, "分片下载回退进度 第${mDownloadPartInfo.partID}分片: $mDownloadPartInfo")
+                        mDownloadPartInfo.partStart + mDownloadPartInfo.partFinished - DOWNLOAD_BUFFER_SIZE
+                    } else {
+                        mDownloadPartInfo.partStart + mDownloadPartInfo.partFinished
+                    }
                 }
                 else -> {
                     mDownloadPartInfo.partStart
@@ -61,12 +66,13 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载异常！！！！: $e")
+                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载异常 $retryTimes！！！！: $e")
+                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
                 sleep(3)
                 if (retryTimes < 3) {
                     retryTimes++
                 } else {
-                    ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载失败！！！！: $e")
+                    ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载失败 $retryTimes！！！！: $e")
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                     break
                 }
@@ -89,19 +95,19 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         var randomAccessFile = RandomAccessFile(file, "rwd")
         if (mDownloadPartInfo.partEnd > 0) {
             if (finalStart < mDownloadPartInfo.partEnd) {
-                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片: start: ${mDownloadPartInfo.partStart}, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
+                ZLog.e(TAG, "分片下载开始 第${mDownloadPartInfo.partID}分片: start: ${mDownloadPartInfo.partStart}, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
             } else {
-                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片: 分片已经下载结束")
+                ZLog.e(TAG, "分片下载开始 第${mDownloadPartInfo.partID}分片: 分片已经下载结束")
                 mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
             }
         } else {
-            ZLog.d("分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
+            ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
         val url = URL(mDownloadPartInfo.downloadURL)
         val connection = (url.openConnection() as HttpURLConnection).apply {
             upateRequestInfo()
             if (mDownloadPartInfo.canDownloadByPart()) {
-                ZLog.d("第${mDownloadPartInfo.partID}分片下载：params bytes=$finalStart-${mDownloadPartInfo.partEnd}")
+                ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载：params bytes=$finalStart-${mDownloadPartInfo.partEnd}")
                 setRequestProperty("Range", "bytes=${finalStart}-${mDownloadPartInfo.partEnd}")
             }
         }

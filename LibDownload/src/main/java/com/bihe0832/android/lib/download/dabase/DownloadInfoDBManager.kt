@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.download.DownloadPartInfo
  */
 object DownloadInfoDBManager {
 
+    public const val TAG = "DownloadInfoDBManager"
     private var mApplicationContext: Context? = null
     private var commonDBHelperInstance: DownloadInfoDBHelper? = null
 

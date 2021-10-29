@@ -95,6 +95,7 @@ object DownloadManager {
 
         override fun onStart(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_STARTED
+            item.lastSpeed = 0
             DownloadNotify.notifyProcess(item)
             item.startTime = System.currentTimeMillis()
             mDownloadListenerList.forEach {
