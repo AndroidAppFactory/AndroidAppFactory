@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
 import com.bihe0832.android.lib.sqlite.BaseTableModel;
@@ -150,7 +151,9 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
         ContentValues cv = new ContentValues();
         putValues(cv, col_download_part_id, downloadPartID);
         putValues(cv, col_finished, finished);
-        ZLog.e(DownloadInfoDBManager.TAG, "分片下载数据 - " + downloadPartID + " DB 数据更新，累积下载：:" + finished);
+        ZLog.e(DownloadInfoDBManager.TAG,
+                "分片下载数据 - " + downloadPartID + " DB 数据更新，累积下载:" + finished + ", " + FileUtils.INSTANCE
+                        .getFileLength(finished));
 
         String whereClause = " `" + col_download_part_id + "` = ? ";
         String[] whereArgs = new String[]{downloadPartID};

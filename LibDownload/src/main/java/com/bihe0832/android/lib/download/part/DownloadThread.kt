@@ -8,6 +8,7 @@ import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.logHeaderFields
 import com.bihe0832.android.lib.download.core.upateRequestInfo
 import com.bihe0832.android.lib.download.dabase.DownloadInfoDBManager
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
 import java.io.File
@@ -92,6 +93,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             file.parentFile.mkdirs()
         }
 
+        var availableSpace = FileUtils.getDirectoryAvailableSpace(file.parentFile.absolutePath)
+        if (mDownloadPartInfo.partEnd - finalStart > availableSpace) {
+            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
+            ZLog.e(TAG, "分片下载失败 第${mDownloadPartInfo.partID}分片下载异常 $retryTimes！！！！存储空间不足, availableSpace: $availableSpace, need: ${mDownloadPartInfo.partEnd - finalStart} ")
+            return false
+        }
         var randomAccessFile = RandomAccessFile(file, "rwd")
         if (mDownloadPartInfo.partEnd > 0) {
             if (finalStart < mDownloadPartInfo.partEnd) {
@@ -141,17 +148,21 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 val data = ByteArray(partSize)
                 var len = -1
                 var hasDownloadLength = 0L
+                var lastUpdateTime = 0L
                 while (inputStream.read(data).also { len = it } !== -1) {
-                    if (mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
+                    if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
+                        DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
                         break
                     }
                     if (mDownloadPartInfo.partStatus != DownloadStatus.STATUS_DOWNLOADING) {
                         mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOADING
                     }
-                    if (retryTimes > 0) {
+
+                    if (retryTimes > 0 && hasDownloadLength > 0) {
                         ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
+                        retryTimes = 0
                     }
-                    retryTimes = 0
+
                     // 读取成功,写入文件
                     randomAccessFile.write(data, 0, len)
                     hasDownloadLength += len
@@ -160,9 +171,10 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！${mDownloadPartInfo}")
                     } else {
                         mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
-                        if (mDownloadPartInfo.canDownloadByPart() && hasDownloadLength % (partSize * 3) < partSize) {
+                        if (mDownloadPartInfo.canDownloadByPart() && System.currentTimeMillis() - lastUpdateTime > 10 * 1000) {
                             //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
                             DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
+                            lastUpdateTime = System.currentTimeMillis()
                         }
                     }
                 }
