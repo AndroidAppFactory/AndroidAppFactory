@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.StatFs
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -121,6 +122,18 @@ object FileUtils {
             }
         } catch (e: java.lang.Exception) {
             "$sizeInBytes B"
+        }
+    }
+
+    fun getDirectoryAvailableSpace(filePath: String): Long {
+        return try {
+            val mStatFs = StatFs(filePath)
+            val blockSize = mStatFs.blockSize
+            val availableBlocks = mStatFs.availableBlocks
+            (availableBlocks * blockSize).toLong()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            0L
         }
     }
 
