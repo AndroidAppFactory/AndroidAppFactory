@@ -128,9 +128,9 @@ object FileUtils {
     fun getDirectoryAvailableSpace(filePath: String): Long {
         return try {
             val mStatFs = StatFs(filePath)
-            val blockSize = mStatFs.blockSize
-            val availableBlocks = mStatFs.availableBlocks
-            (availableBlocks * blockSize).toLong()
+            val blockSize = mStatFs.blockSizeLong
+            val availableBlocks = mStatFs.availableBlocksLong
+            (availableBlocks * blockSize)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             0L
