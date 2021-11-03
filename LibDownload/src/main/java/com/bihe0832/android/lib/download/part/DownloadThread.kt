@@ -44,7 +44,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
     override fun run() {
         do {
-            ZLog.e(TAG, "run:$mDownloadPartInfo")
+            ZLog.e(TAG, "分片下载 分片信息:$mDownloadPartInfo")
             var newStart = when {
                 mDownloadPartInfo.partEnd < 1 -> {
                     0
@@ -94,12 +94,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         }
 
         var availableSpace = FileUtils.getDirectoryAvailableSpace(file.parentFile.absolutePath)
+        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片存储空间检查, path: ${file.parentFile.absolutePath}, availableSpace: $availableSpace, need: ${mDownloadPartInfo.partEnd - finalStart} ")
         if (mDownloadPartInfo.partEnd - finalStart > availableSpace) {
             mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
             ZLog.e(TAG, "分片下载失败 第${mDownloadPartInfo.partID}分片下载异常 $retryTimes！！！！存储空间不足, availableSpace: $availableSpace, need: ${mDownloadPartInfo.partEnd - finalStart} ")
             return false
         }
-        var randomAccessFile = RandomAccessFile(file, "rwd")
         if (mDownloadPartInfo.partEnd > 0) {
             if (finalStart < mDownloadPartInfo.partEnd) {
                 ZLog.e(TAG, "分片下载开始 第${mDownloadPartInfo.partID}分片: start: ${mDownloadPartInfo.partStart}, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
@@ -110,6 +110,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         } else {
             ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
+
+        //下载失败是否重试
+        var needRetry = false
+        var randomAccessFile = RandomAccessFile(file, "rwd")
+        randomAccessFile.seek(finalStart)
+
         val url = URL(mDownloadPartInfo.downloadURL)
         val connection = (url.openConnection() as HttpURLConnection).apply {
             upateRequestInfo()
@@ -124,7 +130,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         if (DownloadManager.isDebug()) {
             connection.logHeaderFields("分片下载数据 第${mDownloadPartInfo.partID}分片")
         }
-        randomAccessFile.seek(finalStart)
+        val inputStream = connection.inputStream
+
         var serverContentLength = HTTPRequestUtils.getContentLength(connection)
         ZLog.e(TAG, "~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.partID}分片 ~~~~~~~~~~~~~")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: getContentType:${connection.contentType}")
@@ -132,7 +139,6 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: start ${finalStart}, end ${mDownloadPartInfo.partEnd}, bytes=$finalStart-${mDownloadPartInfo.partEnd}")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: from server ${serverContentLength}, local ${mDownloadPartInfo.partEnd - finalStart} ")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: finished ${mDownloadPartInfo.partFinished}, finished before: ${mDownloadPartInfo.partFinishedBefore} \n")
-
 
         if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL || connection.responseCode == 416) {
             if (mDownloadPartInfo.partEnd > 0 && abs(serverContentLength - (mDownloadPartInfo.partEnd - finalStart)) > 2) {
@@ -149,65 +155,80 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 var len = -1
                 var hasDownloadLength = 0L
                 var lastUpdateTime = 0L
-                while (inputStream.read(data).also { len = it } !== -1) {
-                    if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
-                        DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
-                        break
-                    }
-                    if (mDownloadPartInfo.partStatus != DownloadStatus.STATUS_DOWNLOADING) {
-                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOADING
-                    }
-
-                    if (retryTimes > 0 && hasDownloadLength > 0) {
-                        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
-                        retryTimes = 0
-                    }
-
-                    // 读取成功,写入文件
-                    randomAccessFile.write(data, 0, len)
-                    hasDownloadLength += len
-                    if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partFinished + len > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
-                        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 累积下载长度：${mDownloadPartInfo.partFinished + len}")
-                        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！${mDownloadPartInfo}")
-                    } else {
-                        mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
-                        if (mDownloadPartInfo.canDownloadByPart() && System.currentTimeMillis() - lastUpdateTime > 10 * 1000) {
-                            //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
+                try {
+                    while (inputStream.read(data).also { len = it } !== -1) {
+                        if (mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
                             DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
-                            lastUpdateTime = System.currentTimeMillis()
+                            break
+                        }
+                        if (mDownloadPartInfo.partStatus != DownloadStatus.STATUS_DOWNLOADING) {
+                            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOADING
+                        }
+
+                        // 读取成功,写入文件
+                        randomAccessFile.write(data, 0, len)
+                        hasDownloadLength += len
+
+                        if (retryTimes > 0) {
+                            ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
+                            retryTimes = 0
+                        }
+
+                        if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partFinished + len > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
+                            ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 累积下载长度：${mDownloadPartInfo.partFinished + len}")
+                            ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！${mDownloadPartInfo}")
+                        } else {
+                            mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
+                            if (mDownloadPartInfo.canDownloadByPart() && System.currentTimeMillis() - lastUpdateTime > 10 * 1000) {
+                                //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
+                                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
+                                lastUpdateTime = System.currentTimeMillis()
+                            }
                         }
                     }
-                }
-                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次本地计算长度:${mDownloadPartInfo.partEnd - finalStart} ;本次服务器下发长度: $serverContentLength")
-                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次实际下载长度:${hasDownloadLength} ;累积下载长度: ${mDownloadPartInfo.partFinished}")
-                if (mDownloadPartInfo.canDownloadByPart()) {
-                    DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
-                }
-                if (mDownloadPartInfo.canDownloadByPart()) {
-                    if (hasDownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
-                        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载数据修正: 本次实际下载：$hasDownloadLength 本次计划下载大小：${mDownloadPartInfo.partEnd - finalStart}")
-                        mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart
-                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-                    } else {
-                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
+                    ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次本地计算长度:${mDownloadPartInfo.partEnd - finalStart} ;本次服务器下发长度: $serverContentLength")
+                    ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次实际下载长度:${hasDownloadLength} ;累积下载长度: ${mDownloadPartInfo.partFinished}")
+                    if (mDownloadPartInfo.canDownloadByPart()) {
+                        DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
                     }
-                } else {
-                    mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-                }
-                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
+                    if (mDownloadPartInfo.canDownloadByPart()) {
+                        if (hasDownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
+                            ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载数据修正: 本次实际下载：$hasDownloadLength 本次计划下载大小：${mDownloadPartInfo.partEnd - finalStart}")
+                            mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart
+                            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                        } else {
+                            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
+                        }
+                    } else {
+                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                    }
+                    DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
 
-                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载结束: $mDownloadPartInfo")
-                try {
-                    inputStream.close()
-                    connection.disconnect()
-                    randomAccessFile.close()
+                    ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载结束: $mDownloadPartInfo")
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         } else {
-            return true
+            needRetry = true
         }
-        return false
+        try {
+            inputStream.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+
+        try {
+            connection.disconnect()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        try {
+            randomAccessFile.close()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        return needRetry
     }
 }
