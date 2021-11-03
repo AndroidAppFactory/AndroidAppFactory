@@ -111,8 +111,6 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
 
-        //下载失败是否重试
-        var needRetry = false
         var randomAccessFile = RandomAccessFile(file, "rwd")
         randomAccessFile.seek(finalStart)
 
@@ -130,7 +128,6 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         if (DownloadManager.isDebug()) {
             connection.logHeaderFields("分片下载数据 第${mDownloadPartInfo.partID}分片")
         }
-        val inputStream = connection.inputStream
 
         var serverContentLength = HTTPRequestUtils.getContentLength(connection)
         ZLog.e(TAG, "~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.partID}分片 ~~~~~~~~~~~~~")
@@ -155,80 +152,77 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 var len = -1
                 var hasDownloadLength = 0L
                 var lastUpdateTime = 0L
-                try {
-                    while (inputStream.read(data).also { len = it } !== -1) {
-                        if (mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
-                            DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
-                            break
-                        }
-                        if (mDownloadPartInfo.partStatus != DownloadStatus.STATUS_DOWNLOADING) {
-                            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOADING
-                        }
-
-                        // 读取成功,写入文件
-                        randomAccessFile.write(data, 0, len)
-                        hasDownloadLength += len
-
-                        if (retryTimes > 0) {
-                            ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
-                            retryTimes = 0
-                        }
-
-                        if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partFinished + len > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
-                            ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 累积下载长度：${mDownloadPartInfo.partFinished + len}")
-                            ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！${mDownloadPartInfo}")
-                        } else {
-                            mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
-                            if (mDownloadPartInfo.canDownloadByPart() && System.currentTimeMillis() - lastUpdateTime > 10 * 1000) {
-                                //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
-                                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
-                                lastUpdateTime = System.currentTimeMillis()
-                            }
-                        }
-                    }
-                    ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次本地计算长度:${mDownloadPartInfo.partEnd - finalStart} ;本次服务器下发长度: $serverContentLength")
-                    ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次实际下载长度:${hasDownloadLength} ;累积下载长度: ${mDownloadPartInfo.partFinished}")
-                    if (mDownloadPartInfo.canDownloadByPart()) {
+                while (inputStream.read(data).also { len = it } !== -1) {
+                    if (mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
                         DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
+                        break
                     }
-                    if (mDownloadPartInfo.canDownloadByPart()) {
-                        if (hasDownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
-                            ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载数据修正: 本次实际下载：$hasDownloadLength 本次计划下载大小：${mDownloadPartInfo.partEnd - finalStart}")
-                            mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart
-                            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-                        } else {
-                            mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
-                        }
+                    if (mDownloadPartInfo.partStatus != DownloadStatus.STATUS_DOWNLOADING) {
+                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOADING
+                    }
+
+                    // 读取成功,写入文件
+                    randomAccessFile.write(data, 0, len)
+                    hasDownloadLength += len
+
+                    if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partFinished + len > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
+                        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 累积下载长度：${mDownloadPartInfo.partFinished + len}")
+                        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！${mDownloadPartInfo}")
                     } else {
-                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                        mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
+                        if (mDownloadPartInfo.canDownloadByPart() && System.currentTimeMillis() - lastUpdateTime > 10 * 1000) {
+                            //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
+                            DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
+                            lastUpdateTime = System.currentTimeMillis()
+                        }
                     }
-                    DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
 
-                    ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载结束: $mDownloadPartInfo")
+                    if (retryTimes > 0) {
+                        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片重试次数将被重置")
+                        retryTimes = 0
+                    }
+                }
+                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次本地计算长度:${mDownloadPartInfo.partEnd - finalStart} ;本次服务器下发长度: $serverContentLength")
+                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次实际下载长度:${hasDownloadLength} ;累积下载长度: ${mDownloadPartInfo.partFinished}")
+                if (mDownloadPartInfo.canDownloadByPart()) {
+                    DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
+                }
+                if (mDownloadPartInfo.canDownloadByPart()) {
+                    if (hasDownloadLength >= mDownloadPartInfo.partEnd - finalStart) {
+                        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载数据修正: 本次实际下载：$hasDownloadLength 本次计划下载大小：${mDownloadPartInfo.partEnd - finalStart}")
+                        mDownloadPartInfo.partFinished = mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart
+                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                    } else {
+                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
+                    }
+                } else {
+                    mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+                }
+                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
 
-                } catch (e: Exception) {
+                ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载结束: $mDownloadPartInfo")
+
+                try {
+                    inputStream.close()
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+
+                try {
+                    connection.disconnect()
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+                try {
+                    randomAccessFile.close()
+                } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
             }
         } else {
-            needRetry = true
-        }
-        try {
-            inputStream.close()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+            return true
         }
 
-        try {
-            connection.disconnect()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-        try {
-            randomAccessFile.close()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-        return needRetry
+        return false
     }
 }
