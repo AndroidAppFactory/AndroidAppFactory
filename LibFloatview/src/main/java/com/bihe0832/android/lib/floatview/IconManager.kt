@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.view.animation.Animation
 import android.widget.LinearLayout
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 
@@ -142,7 +143,7 @@ class IconManager(activity: Activity) {
                     or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH)
 
             //总是出现在应用程序窗口之上
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
                 iconWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {
                 iconWindowParams.type = WindowManager.LayoutParams.TYPE_PHONE
@@ -242,7 +243,7 @@ class IconManager(activity: Activity) {
         iconWindowParams.flags = flag
 
         //总是出现在应用程序窗口之上
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
             iconWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
             iconWindowParams.type = WindowManager.LayoutParams.TYPE_PHONE

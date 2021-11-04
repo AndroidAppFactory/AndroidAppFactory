@@ -3,7 +3,7 @@ package com.bihe0832.android.base.test.log
 
 import android.view.View
 import com.bihe0832.android.app.log.AAFLoggerFile
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.log.LoggerTrace
@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.log.LogImplForLogcat
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 
-class TestLogFragment : BaseTestFragment() {
+class TestLogFragment : BaseTestListFragment() {
     val LOG_TAG = "Test"
 
     override fun getDataList(): ArrayList<CardBaseModule> {

@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import com.bihe0832.android.lib.ui.textview.R;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
  * 在RecyclerView下使用时设置Text请直接使用setShrinkText()或者setExpandText()
@@ -95,7 +96,7 @@ public abstract class ExpandableTextView extends AppCompatTextView {
             @Override
             public void onGlobalLayout() {
                 ViewTreeObserver obs = getViewTreeObserver();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN) {
                     obs.removeOnGlobalLayoutListener(this);
                 } else {
                     obs.removeGlobalOnLayoutListener(this);

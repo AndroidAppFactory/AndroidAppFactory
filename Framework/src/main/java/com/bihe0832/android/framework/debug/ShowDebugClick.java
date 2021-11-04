@@ -1,10 +1,11 @@
 package com.bihe0832.android.framework.debug;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.debug.DebugTools;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.DateUtil;
@@ -86,9 +87,9 @@ public class ShowDebugClick implements View.OnClickListener {
     public String getDebugDeviceInfo() {
         StringBuilder builder = new StringBuilder();
         builder.append("设备信息: " + "\n");
-        builder.append("厂商&型号: " + Build.MANUFACTURER + ", " + Build.MODEL + "\n");
-        builder.append("系统版本: " + Build.VERSION.RELEASE + ", " + Build.VERSION.SDK_INT + "\n");
-        builder.append("系统指纹: " + Build.FINGERPRINT + "\n");
+        builder.append("厂商&型号: " + ManufacturerUtil.INSTANCE.getMANUFACTURER() + ", " + ManufacturerUtil.INSTANCE.getMODEL() + "\n");
+        builder.append("系统版本: " + BuildUtils.INSTANCE.getRELEASE() + ", " + BuildUtils.INSTANCE.getSDK_INT() + "\n");
+        builder.append("系统指纹: " + ManufacturerUtil.INSTANCE.getFINGERPRINT() + "\n");
         builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n\n");
 
         return builder.toString();

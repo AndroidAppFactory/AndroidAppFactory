@@ -6,9 +6,8 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.bihe0832.android.lib.device.ManufacturerUtil;
-
+import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -95,7 +94,7 @@ public class LightStatusBarUtils {
 
         try {
             Window window = activity.getWindow();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
                 if (isDarkStatusBarIcon) {
                     window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE

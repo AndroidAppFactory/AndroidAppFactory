@@ -6,9 +6,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
-import com.bihe0832.android.lib.device.ManufacturerUtil;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.intent.wrapper.PermissionIntent;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 
 
 public class IntentUtils {
@@ -84,7 +85,7 @@ public class IntentUtils {
         if (result) {
             return true;
         } else {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (BuildUtils.INSTANCE.getSDK_INT() <= Build.VERSION_CODES.LOLLIPOP_MR1) {
                 return startAppSettings(ctx, Settings.ACTION_SETTINGS, false);
             } else {
                 return startAppSettings(ctx, Settings.ACTION_APPLICATION_DETAILS_SETTINGS, false);
@@ -114,9 +115,9 @@ public class IntentUtils {
         }
 
         Intent intent = new Intent(data);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
             intent.putExtra("android.provider.extra.APP_PACKAGE", ctx.getPackageName());
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        } else if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
             //5.0以上到8.0以下
             intent.putExtra("app_package", ctx.getPackageName());
             if (null != ctx.getApplicationInfo()) {

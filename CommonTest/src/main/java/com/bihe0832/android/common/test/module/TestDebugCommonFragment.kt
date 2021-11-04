@@ -2,10 +2,9 @@ package com.bihe0832.android.common.test.module
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.view.View
 import com.bihe0832.android.common.praise.UserPraiseManager
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.common.test.log.TestLogActivity
@@ -14,6 +13,8 @@ import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_FEEDBACK
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.*
@@ -24,7 +25,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.set
 
-open class TestDebugCommonFragment : BaseTestFragment() {
+open class TestDebugCommonFragment : BaseTestListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
@@ -72,9 +73,9 @@ open class TestDebugCommonFragment : BaseTestFragment() {
         val builder = StringBuilder()
         builder.append("PackageName: ${context!!.packageName}\n")
         builder.append("deviceId: ${ZixieContext.deviceId}\n")
-        builder.append("厂商&型号: ${Build.MANUFACTURER}, ${Build.MODEL}, ${Build.BRAND}\n")
-        builder.append("系统版本: ${Build.VERSION.RELEASE}, ${Build.VERSION.SDK_INT}\n")
-        builder.append("系统指纹: ${Build.FINGERPRINT}\n")
+        builder.append("厂商&型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}\n")
+        builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}\n")
+        builder.append("系统指纹: ${ManufacturerUtil.FINGERPRINT}\n")
 
         showInfo("分享设备信息给开发者", builder.toString())
     }

@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 
 public class BottomBarTab extends FrameLayout {
@@ -68,7 +69,7 @@ public class BottomBarTab extends FrameLayout {
         paramsTv.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
         mTvTitle.setTextSize(9);
         mTvTitle.setAlpha(0.5f);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
             mTvTitle.setLetterSpacing(0.19f);
         }
         mTvTitle.setTextColor(ContextCompat.getColor(context, R.color.tab_unselect));

@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Process
 import android.provider.Settings
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 
@@ -20,9 +21,9 @@ fun checkFloatPermission(context: Context?): Boolean {
     if(context == null){
         return false
     }
-    ZLog.d("CheckFloatPermissionUtil sdk_int:" + Build.VERSION.SDK_INT)
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return true
-    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+    ZLog.d("CheckFloatPermissionUtil sdk_int:" + BuildUtils.SDK_INT)
+    if (BuildUtils.SDK_INT < Build.VERSION_CODES.KITKAT) return true
+    return if (BuildUtils.SDK_INT < Build.VERSION_CODES.M) {
         try {
             var cls = Class.forName("android.content.Context")
             val declaredField: Field = cls.getDeclaredField("APP_OPS_SERVICE")
@@ -40,7 +41,7 @@ fun checkFloatPermission(context: Context?): Boolean {
             false
         }
     } else {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
             try {
                 val appOpsMgr = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
                 val mode = appOpsMgr.checkOpNoThrow("android:system_alert_window", Process.myUid(), context.getPackageName())

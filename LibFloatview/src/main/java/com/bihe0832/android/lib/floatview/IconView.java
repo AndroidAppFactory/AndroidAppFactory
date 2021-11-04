@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.floatview;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.config.Config;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 public abstract class IconView extends LinearLayout implements View.OnClickListener {
@@ -138,7 +141,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
                 //一旦按下Icon，就需要重新计时，即移除两个message
                 mUiHandler.removeMessages(MSG_ICON_CHANGE_ICON_WINDOW_SHADOW);
                 mUiHandler.removeMessages(MSG_ICON_CHANGE_ICON_WINDOW_HIDE);
-                if (android.os.Build.VERSION.SDK_INT > 10) {
+                if (BuildUtils.INSTANCE.getSDK_INT() > VERSION_CODES.GINGERBREAD_MR1) {
                     getIconView().setAlpha(1.0f);
                 }
                 break;
@@ -289,7 +292,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
         }
         ZLog.d(TAG + " screenWidth:" + screenWidth);
         updateViewLayout();
-        if (android.os.Build.VERSION.SDK_INT > 10) {
+        if (BuildUtils.INSTANCE.getSDK_INT() > VERSION_CODES.GINGERBREAD_MR1) {
             getIconView().setAlpha(1.0f);
         }
     }
@@ -356,7 +359,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
     }
 
     protected void hideIcon() {
-        if (android.os.Build.VERSION.SDK_INT > 10) {
+        if (BuildUtils.INSTANCE.getSDK_INT() > VERSION_CODES.GINGERBREAD_MR1) {
             getIconView().setAlpha(0.5f);
         }
 
@@ -376,7 +379,7 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (android.os.Build.VERSION.SDK_INT > 10) {
+                if (BuildUtils.INSTANCE.getSDK_INT() > VERSION_CODES.GINGERBREAD_MR1) {
                     getIconView().setAlpha(1.0f);
                 }
             }

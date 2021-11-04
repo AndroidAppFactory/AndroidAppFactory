@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -157,7 +158,7 @@ object FileUtils {
             ZLog.d("fileAction sourceFile:$filePath")
             var sourceFile = File(filePath)
             var targetFile = sourceFile
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && sourceFile.isFile && sourceFile.exists()) {
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.N && sourceFile.isFile && sourceFile.exists()) {
                 val fileProvider = try {
                     ZixieFileProvider.getZixieFileProvider(context, File(filePath))
                 } catch (e: Exception) {

@@ -1,13 +1,13 @@
 package com.bihe0832.android.common.test.module
 
 import android.view.View
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.router.Routers
 
-open class TestDebugRouterFragment : BaseTestFragment() {
+open class TestDebugRouterFragment : BaseTestListFragment() {
 
     inner class RouterItem(url: String) : TestItemData(
             url,

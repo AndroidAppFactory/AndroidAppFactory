@@ -3,7 +3,7 @@ package com.bihe0832.android.base.test.download
 import android.support.v4.content.FileProvider
 import android.view.View
 import com.bihe0832.android.base.test.R
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
@@ -16,7 +16,7 @@ import com.bihe0832.android.lib.log.ZLog
 import java.io.File
 import java.util.*
 
-class TestDownloadFragment : BaseTestFragment() {
+class TestDownloadFragment : BaseTestListFragment() {
     val LOG_TAG = "TestDownloadFragment"
 
     override fun getDataList(): ArrayList<CardBaseModule> {

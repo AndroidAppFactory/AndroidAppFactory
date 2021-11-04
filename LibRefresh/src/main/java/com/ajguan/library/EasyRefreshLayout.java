@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 
 import android.support.v4.view.MotionEventCompat;
@@ -26,6 +27,7 @@ import android.widget.Scroller;
 import com.ajguan.library.exception.ERVHRuntimeException;
 import com.ajguan.library.view.SimpleLoadMoreView;
 import com.ajguan.library.view.SimpleRefreshHeaderView;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 
@@ -493,7 +495,7 @@ public class EasyRefreshLayout extends ViewGroup {
             }
         }
 
-        if (android.os.Build.VERSION.SDK_INT < 14) {
+        if (BuildUtils.INSTANCE.getSDK_INT() < VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (contentView instanceof AbsListView) {
                 final AbsListView absListView = (AbsListView) contentView;
                 return absListView.getChildCount() > 0

@@ -45,7 +45,7 @@ public class OSUtils {
     }
 
     public static boolean isAndroidQVersion() {
-        return Build.VERSION.SDK_INT > Build.VERSION_CODES.P;
+        return BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.P;
     }
 
     public static boolean isAirplaneMode(Context context) {
@@ -61,11 +61,11 @@ public class OSUtils {
      * @return 系统版本号
      */
     public static String getSystemVersion() {
-        return android.os.Build.VERSION.RELEASE;
+        return BuildUtils.INSTANCE.getRELEASE();
     }
 
     public static int getApiLevel() {
-        return android.os.Build.VERSION.SDK_INT;
+        return BuildUtils.INSTANCE.getSDK_INT();
     }
 
 }

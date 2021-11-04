@@ -1,14 +1,14 @@
 package com.bihe0832.android.base.test.clipboard
 
 import android.view.View
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.text.ClipboardUtil
 import java.util.*
 
-class TestClipboardFragment : BaseTestFragment() {
+class TestClipboardFragment : BaseTestListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestItemData("复制到剪切板", View.OnClickListener {

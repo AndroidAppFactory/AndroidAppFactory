@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
@@ -33,6 +34,7 @@ import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.webview.BaseWebView;
 import com.bihe0832.android.lib.webview.jsbridge.BaseJsBridgeProxy;
 import com.bihe0832.android.lib.webview.jsbridge.JsBridge;
@@ -242,7 +244,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             }
         });
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+        if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.KITKAT) {
             if (!ZixieContext.INSTANCE.isOfficial()) {
                 mWebView.setWebContentsDebuggingEnabled(true);
             } else {
@@ -303,7 +305,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             ZLog.d(TAG + "shouldInterceptRequest url:" + url);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.LOLLIPOP) {
                 WebResourceResponse res = interceptRequestResult(url);
                 if (null != res) {
                     return res;
@@ -315,7 +317,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
             ZLog.d(TAG + "shouldInterceptRequest url:" + request.getUrl().toString());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
                 String url = request.getUrl().toString();
                 WebResourceResponse res = interceptRequestResult(url);
                 if (null != res) {
@@ -353,7 +355,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                     return true;
                 } else if (url.equals("about:blank;") || url.equals("about:blank")) {
                     // 3.0及以下的webview调用jsb时会调用同时call起的空白页面，将这个页面屏蔽掉不出来
-                    return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
+                    return BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.HONEYCOMB;
                 } else if (url.startsWith("http") || url.startsWith("https")) {
                     if (loadUseIntent(url)) {
                         IntentUtils.jumpToOtherApp(url, getActivity());
@@ -620,7 +622,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             mWebView.clearHistory();
             mWebView.destroy();
         }
-        if (Build.VERSION.SDK_INT < 16) {
+        if (BuildUtils.INSTANCE.getSDK_INT() < VERSION_CODES.JELLY_BEAN) {
             try {
                 Field field = WebView.class.getDeclaredField("mWebViewCore");
                 field = field.getType().getDeclaredField("mBrowserFrame");

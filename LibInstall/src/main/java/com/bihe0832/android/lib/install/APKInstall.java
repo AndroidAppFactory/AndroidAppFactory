@@ -11,6 +11,7 @@ import android.util.Log;
 import com.bihe0832.android.lib.file.FileUtils;
 
 import com.bihe0832.android.lib.file.ZixieFileProvider;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
 
 import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
@@ -45,14 +46,14 @@ class APKInstall {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.N) {
                     intent.setDataAndType(Uri.fromFile(file), INSTALL_TYPE);
                 } else {
                     intent.setDataAndType(fileProvider, INSTALL_TYPE);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 }
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O && !context.getPackageManager().canRequestPackageInstalls()) {
+                if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.O && !context.getPackageManager().canRequestPackageInstalls()) {
                     Log.e("InstallUtils", "app don't hava install permission");
                     Log.e("InstallUtils", "app don't hava install permission");
                     Log.e("InstallUtils", "app don't hava install permission");

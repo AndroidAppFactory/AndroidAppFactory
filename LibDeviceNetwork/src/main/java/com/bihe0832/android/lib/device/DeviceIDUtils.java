@@ -9,6 +9,7 @@ import android.telephony.TelephonyManager;
 
 import com.bihe0832.android.lib.log.ZLog;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -124,7 +125,7 @@ public class DeviceIDUtils {
                 if(nif.getName().equalsIgnoreCase("wlan0")) {
                     byte[] macBytes = new byte[0];
                     // SDK 9才支持
-                    if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
+                    if(BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.GINGERBREAD) {
                         macBytes = nif.getHardwareAddress();
                     }
                     if(macBytes == null || macBytes.length <= 0) {

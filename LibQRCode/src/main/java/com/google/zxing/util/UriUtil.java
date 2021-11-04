@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
  * Uri路径工具
@@ -23,7 +24,7 @@ public class UriUtil {
      * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
      */
     public static String getRealPathFromUri(Context context, Uri uri) {
-        int sdkVersion = Build.VERSION.SDK_INT;
+        int sdkVersion = BuildUtils.INSTANCE.getSDK_INT();
         if (sdkVersion < 11) return getRealPathFromUri_BelowApi11(context, uri);
         if (sdkVersion < 19) return getRealPathFromUri_Api11To18(context, uri);
         else return getRealPathFromUri_AboveApi19(context, uri);

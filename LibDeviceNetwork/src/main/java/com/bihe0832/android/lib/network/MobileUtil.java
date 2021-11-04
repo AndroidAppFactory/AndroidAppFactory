@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Looper;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
@@ -30,6 +31,7 @@ import android.util.Log;
 
 import com.bihe0832.android.lib.log.ZLog;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -105,7 +107,7 @@ public class MobileUtil {
             // signalLevel
             try {
                 int level;
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.M) {
                     Method method = SignalStrength.class.getMethod("getLevel");
                     method.setAccessible(true);
                     level = (Integer) method.invoke(signalStrength);
@@ -143,7 +145,7 @@ public class MobileUtil {
         try {
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             if(tm != null) {
-                if(Build.VERSION.SDK_INT >= 19) {
+                if(BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.KITKAT) {
                     List<CellInfo> infos = tm.getAllCellInfo();
                     for(CellInfo info : infos) {
                         pci = lac = cid = rssi = 0;

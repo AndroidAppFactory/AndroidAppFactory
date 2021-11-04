@@ -12,6 +12,7 @@ import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ZixieCoreInit;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.web.WebViewHelper;
 import com.bumptech.glide.Glide;
 import java.util.List;
@@ -41,7 +42,7 @@ public abstract class BaseApplication extends Application {
                 if (it.processName.equalsIgnoreCase(getPackageName())) {
                     ZixieContext.INSTANCE.showDebugEditionToast();
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.P) {
                         WebView.setDataDirectorySuffix(it.processName);
                     }
                     if (it.processName.equalsIgnoreCase(getPackageName() + ":web")) {

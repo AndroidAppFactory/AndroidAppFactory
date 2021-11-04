@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.request;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -84,7 +85,7 @@ public class HTTPRequestUtils {
 
     public static long getContentLength(URLConnection conn) {
         try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.N) {
                 return conn.getContentLengthLong();
             } else {
                 return conn.getContentLength();

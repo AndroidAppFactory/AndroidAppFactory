@@ -11,6 +11,7 @@ import android.telephony.TelephonyManager;
 
 import com.bihe0832.android.lib.log.ZLog;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -81,7 +82,7 @@ public class DeviceInfoManager {
             // Android 5.0.0：http://androidxref.com/5.0.0_r2/xref/frameworks/base/core/java/android/net/ConnectivityManager.java
             conMgrClass = Class.forName(connectivityManager.getClass().getName());
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.LOLLIPOP) {
                 Field iConnectivityManagerField = conMgrClass.getDeclaredField("mService");
                 iConnectivityManagerField.setAccessible(true);
 

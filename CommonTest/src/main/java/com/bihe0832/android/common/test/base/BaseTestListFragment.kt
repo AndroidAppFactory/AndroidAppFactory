@@ -20,7 +20,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.*
 import kotlin.collections.ArrayList
 
-open class BaseTestFragment : CommonListFragment() {
+open class BaseTestListFragment : CommonListFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

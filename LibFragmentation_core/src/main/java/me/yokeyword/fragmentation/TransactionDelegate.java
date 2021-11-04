@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -528,7 +529,7 @@ class TransactionDelegate {
         from.getSupportDelegate().mLockAnim = true;
 
         // Compatible with flicker on pre-L when calling popTo()
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.LOLLIPOP) {
             if (preF != targetF) {
                 if (preF != null && preF.getView() instanceof ViewGroup) {
                     preViewGroup = (ViewGroup) preF.getView();
@@ -561,7 +562,7 @@ class TransactionDelegate {
         long delay = exitAnim.getDuration();
         if (afterRunnable) {
             long duration = exitAnim.getDuration();
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.LOLLIPOP) {
                 duration = duration + BUFFER_TIME * 2;
                 delay = duration + BUFFER_TIME;
             } else {

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +41,7 @@ public class ZixieFileProvider extends FileProvider {
     }
 
     public static void setFileUriForIntent(Context context, Intent intent, File file, String mine_type) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.N) {
             intent.setDataAndType(Uri.fromFile(file), mine_type);
         } else {
             Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, file);
