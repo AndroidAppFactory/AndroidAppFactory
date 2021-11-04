@@ -11,6 +11,8 @@ import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import com.bihe0832.android.lib.utils.TextFactoryCore;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,14 +32,7 @@ public class TextFactoryUtils {
      * 过滤字符串的空格
      */
     public static String trimSpace(String str) {
-        if (null == str) {
-            return null;
-        }
-        String dest = "";
-        Pattern p = Pattern.compile("\\s*|\t|\r|\n");
-        Matcher m = p.matcher(str);
-        dest = m.replaceAll("");
-        return dest;
+        return TextFactoryCore.trimSpace(str);
     }
 
     /**
@@ -131,7 +126,7 @@ public class TextFactoryUtils {
     }
 
     public static Spanned getSpannedTextByHtml(String text) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.N) {
             return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY);
         } else {
             return Html.fromHtml(text);

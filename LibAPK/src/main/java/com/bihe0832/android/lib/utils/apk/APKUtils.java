@@ -15,6 +15,7 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import com.bihe0832.android.lib.utils.encrypt.MD5;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -45,7 +46,7 @@ public class APKUtils {
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+            if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.O_MR1) {
                 return pi == null ? 0 : pi.getLongVersionCode();
             } else {
                 return pi == null ? 0 : pi.versionCode;

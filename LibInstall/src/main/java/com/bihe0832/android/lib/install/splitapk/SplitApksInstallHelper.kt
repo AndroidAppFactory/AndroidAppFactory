@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.install.InstallErrorCode
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -83,11 +84,11 @@ object SplitApksInstallHelper {
             listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND)
         } else {
             val files = ArrayList<String>()
-            addApkToFilesList(fileDir,files)
-            if(files.size > 0){
+            addApkToFilesList(fileDir, files)
+            if (files.size > 0) {
                 installApk(files, packageName, listener)
 
-            }else{
+            } else {
                 listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE)
             }
         }
@@ -240,7 +241,7 @@ object SplitApksInstallHelper {
 
     private fun makeSessionParams(totalSize: Long, packageName: String): SessionParams {
         val sessionParams = SessionParams(SessionParams.MODE_FULL_INSTALL)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
             sessionParams.setInstallReason(PackageManager.INSTALL_REASON_USER)
         }
         sessionParams.setAppPackageName(packageName)

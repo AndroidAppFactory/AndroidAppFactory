@@ -3,6 +3,7 @@ package com.bihe0832.android.common.webview.base
 import android.net.Uri
 import android.os.Build
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.tencent.smtt.sdk.CookieManager
 import com.tencent.smtt.sdk.CookieSyncManager
 import com.tencent.smtt.sdk.WebView
@@ -19,7 +20,7 @@ object CookieManagerForZixie {
         }
         CookieSyncManager.createInstance(mWebView.context)
         getCookieManager().setAcceptCookie(true)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getCookieManager().setAcceptThirdPartyCookies(mWebView, true)
         }
         syncCookie()
@@ -30,7 +31,7 @@ object CookieManagerForZixie {
     }
 
     fun syncCookie() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             CookieManager.getInstance().flush()
         } else {
             CookieSyncManager.getInstance().sync()
@@ -50,7 +51,7 @@ object CookieManagerForZixie {
         var domain = uri.host.toLowerCase()
 
         /* http://code.google.com/p/android/issues/detail?id=19294 */
-        if (Build.VERSION.SDK_INT < 11) {
+        if (BuildUtils.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             /* Trim leading '.'s */
             if (domain.startsWith(".")) domain = domain.substring(1)
         }

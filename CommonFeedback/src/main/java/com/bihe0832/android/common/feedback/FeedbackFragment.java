@@ -1,11 +1,12 @@
 package com.bihe0832.android.common.feedback;
 
 
-import android.os.Build;
 import android.os.Bundle;
 
 import com.bihe0832.android.common.webview.CommonWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 import com.bihe0832.android.lib.request.URLUtils;
 
 /**
@@ -41,14 +42,15 @@ public class FeedbackFragment extends CommonWebviewFragment {
         if(!ZixieContext.INSTANCE.isOfficial()){
             builder.append("内部版本").append("/");
         }
-        builder.append(android.os.Build.MANUFACTURER).append("/").append(Build.BOARD).append("/").append(android.os.Build.MODEL);
+        builder.append(ManufacturerUtil.INSTANCE.getMANUFACTURER()).append("/").append(ManufacturerUtil.INSTANCE.getBRAND()).append("/").append(
+                ManufacturerUtil.INSTANCE.getMODEL());
         builder.append("&clientVersion=");
         builder.append(ZixieContext.INSTANCE.getVersionName())
                 .append("/").append(ZixieContext.INSTANCE.getVersionCode())
                 .append("/").append(ZixieContext.INSTANCE.getVersionTag())
                 .append("/").append(ZixieContext.INSTANCE.getChannelID());
         builder.append("&os=");
-        builder.append("Android").append("/").append(Build.VERSION.RELEASE).append("/").append(Build.VERSION.SDK_INT);
+        builder.append("Android").append("/").append(BuildUtils.INSTANCE.getRELEASE()).append("/").append(BuildUtils.INSTANCE.getSDK_INT());
         builder.append("&imei=").append(ZixieContext.INSTANCE.getDeviceId());
         builder.append("&customInfo=");
         return builder.toString();

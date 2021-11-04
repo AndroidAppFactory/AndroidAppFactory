@@ -8,6 +8,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -230,7 +231,7 @@ public abstract class SimpleClickListener implements RecyclerView.OnItemTouchLis
     }
 
     private void setPressViewHotSpot(final MotionEvent e, final View mPressedView) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
             /**
              * when   click   Outside the region  ,mPressedView is null
              */

@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
  * @author hardyshi code@bihe0832.com Created on 6/21/21.
@@ -18,7 +19,7 @@ public class ClipboardUtil {
      */
     public static void copyToClipboard(Context context, String content) {
         ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+        if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.GINGERBREAD_MR1) {
             cm.setPrimaryClip(ClipData.newPlainText(null, content));
         } else {
             cm.setText(content);

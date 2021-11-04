@@ -2,8 +2,9 @@ package com.bihe0832.android.lib.immersion;
 
 import android.os.Build;
 import android.text.TextUtils;
-import com.bihe0832.android.lib.device.ManufacturerUtil;
 import com.bihe0832.android.lib.utils.ConvertUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 
 class RomType {
 
@@ -45,7 +46,7 @@ class RomType {
     //Flyme V4的displayId格式为 [Flyme OS 4.x.x.xA]
     //Flyme V5的displayId格式为 [Flyme 5.x.x.x beta]
     protected static int getFlymeVersion() {
-        String displayId = Build.DISPLAY;
+        String displayId = ManufacturerUtil.INSTANCE.getDISPLAY();
         if (!TextUtils.isEmpty(displayId) && displayId.contains("Flyme")) {
             displayId = displayId.replaceAll("Flyme", "");
             displayId = displayId.replaceAll("OS", "");
@@ -66,6 +67,6 @@ class RomType {
 
     //Android Api 23以上
     private static boolean isAndroid5OrAbove() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+        return BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP;
     }
 }

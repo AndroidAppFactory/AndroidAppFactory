@@ -38,6 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -211,7 +212,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * Alpha between 0-1.
      */
     public BaseViewHolder setAlpha(@IdRes int viewId, float value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.HONEYCOMB) {
             getView(viewId).setAlpha(value);
         } else {
             // Pre-honeycomb hack to set Alpha value

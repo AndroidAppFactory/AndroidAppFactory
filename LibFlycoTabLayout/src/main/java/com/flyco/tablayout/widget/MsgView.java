@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.flyco.tablayout.R;
 
 /** 用于需要圆角矩形框背景的TextView的情况,减少直接使用TextView时引入的shape资源文件 */
@@ -147,7 +148,7 @@ public class MsgView extends TextView {
         setDrawable(gd_background, backgroundColor, strokeColor);
         bg.addState(new int[]{-android.R.attr.state_pressed}, gd_background);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {//16
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN) {//16
             setBackground(bg);
         } else {
             //noinspection deprecation

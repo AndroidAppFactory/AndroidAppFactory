@@ -1,7 +1,6 @@
 package com.bihe0832.android.base.test
 
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -16,7 +15,7 @@ import com.bihe0832.android.base.test.network.TestNetworkActivity
 import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.base.test.touch.TouchRegionActivity
 import com.bihe0832.android.common.photos.showPhotoChooser
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
@@ -25,7 +24,6 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
-import com.bihe0832.android.lib.device.ManufacturerUtil
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -42,7 +40,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
-class TestDebugTempFragment : BaseTestFragment() {
+class TestDebugTempFragment : BaseTestListFragment() {
     val LOG_TAG = "TestDebugTempFragment"
 
     val mIcon by lazy {

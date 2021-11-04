@@ -75,7 +75,7 @@ public class DisplayUtil {
 
     public static boolean checkDeviceHasNavigationBar(Context context, Window window) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             Display display = window.getWindowManager().getDefaultDisplay();
             Point size = new Point();
             Point realSize = new Point();
@@ -163,7 +163,7 @@ public class DisplayUtil {
      * @return 屏幕宽度
      */
     public static int getRealScreenSizeX(Context context) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             Display display = windowManager.getDefaultDisplay();
             Point outSize = new Point();
@@ -181,7 +181,7 @@ public class DisplayUtil {
      * @return 屏幕高度
      */
     public static int getRealScreenSizeY(Context context) {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             Display display = windowManager.getDefaultDisplay();
             Point outSize = new Point();

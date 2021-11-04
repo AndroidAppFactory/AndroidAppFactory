@@ -8,6 +8,7 @@ import com.bihe0832.android.base.test.request.advanced.AdvancedGetRequest
 import com.bihe0832.android.base.test.request.advanced.AdvancedPostRequest
 import com.bihe0832.android.base.test.request.advanced.TestResponse
 import com.bihe0832.android.base.test.request.basic.BasicPostRequest
+import com.bihe0832.android.common.test.base.BaseTestActivity
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
@@ -21,15 +22,11 @@ import java.io.File
 const val ROUTRT_NAME_TEST_HTTP = "testhttp"
 
 @Module(ROUTRT_NAME_TEST_HTTP)
-class TestHttpActivity : BaseActivity() {
+class TestHttpActivity : BaseTestActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_http_test)
-
-        if (Build.VERSION.SDK_INT > 9) {
-            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
-        }
 
         common_toolbar.setNavigationOnClickListener { onBackPressedSupport() }
         getBasic.setOnClickListener { sendGetBasicRequest() }

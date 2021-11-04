@@ -10,6 +10,7 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -47,7 +48,7 @@ public class WechatOfficialAccount {
             public void onPositiveClick() {
                 try {
                     ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+                    if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.GINGERBREAD_MR1) {
                         cm.setPrimaryClip(ClipData.newPlainText(null, data.mAccountID));
                     } else {
                         cm.setText(data.mAccountID);

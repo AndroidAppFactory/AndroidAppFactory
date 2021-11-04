@@ -11,6 +11,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -315,7 +316,7 @@ public class NetworkUtil {
                 return dtTypeinfo;
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
                 Network[] nets = cm.getAllNetworks();
                 for (Network net : nets) {
                     NetworkInfo netInfo = cm.getNetworkInfo(net);
@@ -533,7 +534,7 @@ public class NetworkUtil {
                 return "";
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
                 Network[] nets = cm.getAllNetworks();
                 for (Network net : nets) {
                     NetworkInfo netInfo = cm.getNetworkInfo(net);
@@ -596,7 +597,7 @@ public class NetworkUtil {
     public static Network getMobileNetwork(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (cm != null && BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
             Network[] nets = cm.getAllNetworks();
             for (Network net : nets) {
                 NetworkInfo info = cm.getNetworkInfo(net);

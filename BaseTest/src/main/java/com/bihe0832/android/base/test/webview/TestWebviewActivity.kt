@@ -6,13 +6,13 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.router.annotation.Module
-import com.bihe0832.android.common.test.base.BaseTestActivity
+import com.bihe0832.android.common.test.base.BaseTestListActivity
 import com.bihe0832.android.common.test.item.TestItemData
 
 const val ROUTRT_NAME_TEST_WEBVIEW = "testweb"
 
 @Module(ROUTRT_NAME_TEST_WEBVIEW)
-class TestWebviewActivity : BaseTestActivity() {
+class TestWebviewActivity : BaseTestListActivity() {
 
     private var lastUrl = "https://blog.bihe0832.com"
 

@@ -15,6 +15,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.*
 
 
@@ -26,7 +27,7 @@ object NotifyManager {
     fun createNotificationChannel(context: Context, channelName: CharSequence, channelId: String): NotificationChannel? {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, channelName, importance)
             channel.setSound(null, null)
@@ -85,7 +86,7 @@ object NotifyManager {
     }
 
     fun sendNotifyNow(context: Context, channelID: String, notification: Notification, notifyID: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
             if (!mNotificationChannel.contains(channelID)) {
                 createNotificationChannel(context, APKUtils.getAppName(context) + channelID, channelId = channelID)?.let {
                     mNotificationChannel.put(channelID, it)

@@ -22,6 +22,7 @@ import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
+import com.bihe0832.android.lib.utils.os.BuildUtils
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
@@ -31,7 +32,7 @@ class TestMainActivity : CommonActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initToolbar("TestMainActivity", false)
-        if (Build.VERSION.SDK_INT > 9) {
+        if (BuildUtils.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         }
 

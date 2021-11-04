@@ -14,6 +14,7 @@ import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
@@ -66,7 +67,7 @@ fun Activity.cropPhoto(sourceFile: Uri, targetFile: String, aspectX: Int = 1, as
 fun Activity.takePhoto(outputFile: File) {
     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
     val outputUri = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
+        BuildUtils.SDK_INT >= Build.VERSION_CODES.N -> {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             ZixieFileProvider.getZixieFileProvider(this, outputFile)
         }

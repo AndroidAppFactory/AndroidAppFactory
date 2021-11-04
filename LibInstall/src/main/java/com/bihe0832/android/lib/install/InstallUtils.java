@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.zip.ZipUtils;
 import java.io.File;
 import java.util.LinkedList;
@@ -81,7 +82,7 @@ public class InstallUtils {
     public static void installAPP(final Context context, final String filePath, final String packageName,
             final InstallListener listener) {
         boolean haveInstallPermission = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
             //先获取是否有安装未知来源应用的权限
             haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
             if (!haveInstallPermission) {

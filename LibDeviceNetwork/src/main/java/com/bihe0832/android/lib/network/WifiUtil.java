@@ -10,6 +10,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -279,7 +280,7 @@ public class WifiUtil {
         String line;
         try {
             if (null != ipList && ipList.size() != 0) {
-                if (VERSION.SDK_INT > VERSION_CODES.P) {
+                if (BuildUtils.INSTANCE.getSDK_INT() > VERSION_CODES.P) {
                     Process proc = Runtime.getRuntime().exec("ip neigh show");
                     proc.waitFor();
                     bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -293,7 +294,7 @@ public class WifiUtil {
                     ZLog.d("getLanMacAddr1 lien:" + line);
 
                     String[] lineSegments = line.split(" +");
-                    if (VERSION.SDK_INT > VERSION_CODES.P) {
+                    if (BuildUtils.INSTANCE.getSDK_INT() > VERSION_CODES.P) {
                         if (lineSegments.length > 4) {
                             String ip = lineSegments[0];
                             String macAddr = lineSegments[4];

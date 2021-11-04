@@ -8,7 +8,7 @@ import android.content.Context
 import android.os.Build
 import android.view.View
 import com.bihe0832.android.base.test.R
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -22,10 +22,11 @@ import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.*
 import kotlin.collections.HashMap
 
-class TestDialogFragment : BaseTestFragment() {
+class TestDialogFragment : BaseTestListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
@@ -69,7 +70,7 @@ class TestDialogFragment : BaseTestFragment() {
             override fun onNegativeClick() {
                 try {
                     val cm = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as (ClipboardManager)
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+                    if (BuildUtils.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
                         cm.primaryClip = ClipData.newPlainText(null, content)
                     } else {
                         cm.text = content

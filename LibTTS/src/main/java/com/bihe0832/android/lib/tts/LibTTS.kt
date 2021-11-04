@@ -10,6 +10,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.File
 import java.lang.reflect.Field
 import java.math.RoundingMode
@@ -153,7 +154,7 @@ object LibTTS {
             }, enginePackageName)
             setPitch(Config.readConfig(CONFIG_KEY_PITCH, getDefaultPitch()))
             setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, getDefaultSpeechRate()))
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            if (BuildUtils.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                 mSpeech?.setOnUtteranceCompletedListener { utteranceId ->
                     mTTSResultListener.onUtteranceDone(utteranceId ?: "")
                 }
@@ -303,7 +304,7 @@ object LibTTS {
     private fun speak(tempStr: String) {
         mUtteranceId++
         ZLog.e(TAG, "mUtteranceId: $mUtteranceId $tempStr")
-        var result = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        var result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null)
         } else {
             mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null, mUtteranceId.toString())
@@ -322,7 +323,7 @@ object LibTTS {
         }
         mUtteranceId++
         var result = TextToSpeech.ERROR
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             HashMap<String, String>().apply {
                 put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, mUtteranceId.toString())
             }.let {

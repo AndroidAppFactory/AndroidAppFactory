@@ -8,10 +8,10 @@ import com.bihe0832.android.lib.notification.DownloadNotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
-import com.bihe0832.android.common.test.base.BaseTestFragment
+import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 
-class TestNotifyFragment : BaseTestFragment() {
+class TestNotifyFragment : BaseTestListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
