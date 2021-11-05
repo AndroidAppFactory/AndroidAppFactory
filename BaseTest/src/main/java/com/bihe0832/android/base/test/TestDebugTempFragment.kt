@@ -60,7 +60,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        DebugLogTips.showView(mDebugTips, false)
+        DebugLogTips.showView(mDebugTips, false)
     }
 
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -157,7 +157,16 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //            var end = System.currentTimeMillis()
 //            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //        }
-        var result = JsonHelper.fromJsonList<JsonTest>("[{\"key\": 1111,\"value1\": [1222,2222],\"value2\":true},{\"key\": 2222,\"value1\": [1222,2222],\"value2\":false}]", JsonTest::class.java)
+        var result = JsonHelper.fromJsonList<JsonTest>("[" +
+                "{\"key\": 1,\"value1\": [1222,2222],\"value2\":true}," +
+                "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
+                "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
+                "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
+                "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
+                "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
+                "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
+                "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
+                "]", JsonTest::class.java)
         ZLog.d(LOG_TAG, "result:" + result)
         JsonTest().apply {
             key = 1212
@@ -173,17 +182,17 @@ class TestDebugTempFragment : BaseTestListFragment() {
         var duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration")
 
-        startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis()
         ZipUtils.unCompress("/sdcard/Download/com.garena.game.kgtw.zip", "/sdcard/Download/com.garena.game.kgtw")
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.garena.game.kgtw.zip cost:$duration")
 
-        startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis()
         ZipUtils.unCompress("/sdcard/Download/com.supercell.brawlstars.zip", "/sdcard/Download/com.supercell.brawlstars")
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.supercell.brawlstars.zip cost:$duration")
 
-        startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis()
         ZipUtils.unCompress("/sdcard/Download/jp.co.sumzap.pj0007.zip", "/sdcard/Download/jp.co.sumzap.pj0007")
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")

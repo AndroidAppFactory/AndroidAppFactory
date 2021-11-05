@@ -1,5 +1,6 @@
 package com.bihe0832.android.base.test.json;
 
+import com.bihe0832.android.lib.gson.adapter.BooleanDefaultAdapter;
 import com.bihe0832.android.lib.gson.adapter.BooleanTypeAdapter;
 import com.bihe0832.android.lib.gson.adapter.RawStringJsonAdapter;
 import com.google.gson.annotations.JsonAdapter;
@@ -15,7 +16,7 @@ public class JsonTest {
 	private String data1 = "";
 
 	@SerializedName("value2")
-	@JsonAdapter(BooleanTypeAdapter.class)
+	@JsonAdapter(BooleanDefaultAdapter.class)
 	private boolean data2 = false;
 
 	public int getKey(){
