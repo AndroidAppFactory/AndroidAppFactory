@@ -36,6 +36,10 @@ const val DOWNLOAD_PART_SIZE = 1024 * 1024 * 10
 
 class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread() {
 
+    //10秒（弱网）或 10M(高速网络)保存策略
+    private val DOWNLOAD_SVAE_TIMER = 10 * 1000
+    private val DOWNLOAD_SVAE_SIZE = DOWNLOAD_BUFFER_SIZE * 125 * 10
+
     private var retryTimes = 0
 
     fun getDownloadPartInfo(): DownloadPartInfo {
@@ -154,6 +158,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 var lastUpdateTime = 0L
                 while (inputStream.read(data).also { len = it } !== -1) {
                     if (mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
+                        //下载完成或者失败
                         DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
                         break
                     }
@@ -170,8 +175,9 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！${mDownloadPartInfo}")
                     } else {
                         mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
-                        if (mDownloadPartInfo.canDownloadByPart() && System.currentTimeMillis() - lastUpdateTime > 10 * 1000) {
-                            //  if(isDebug) ZLog.e("分片下载数据保存 - ${mDownloadPartInfo.downloadPartID}：实际下载:${FileUtils.getFileLength(len.toLong())}")
+                        //10秒（弱网）或 2M(高速网络)保存策略
+                        if (mDownloadPartInfo.canDownloadByPart() && (System.currentTimeMillis() - lastUpdateTime > DOWNLOAD_SVAE_TIMER || hasDownloadLength % DOWNLOAD_SVAE_SIZE == 0L)) {
+                            ZLog.e(DownloadInfoDBManager.TAG, "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储：${System.currentTimeMillis() - lastUpdateTime} $hasDownloadLength ${hasDownloadLength % DOWNLOAD_SVAE_SIZE}")
                             DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
                             lastUpdateTime = System.currentTimeMillis()
                         }
@@ -185,6 +191,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次本地计算长度:${mDownloadPartInfo.partEnd - finalStart} ;本次服务器下发长度: $serverContentLength")
                 ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片结束：分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 本次实际下载长度:${hasDownloadLength} ;累积下载长度: ${mDownloadPartInfo.partFinished}")
                 if (mDownloadPartInfo.canDownloadByPart()) {
+                    //下载结束
                     DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
                 }
                 if (mDownloadPartInfo.canDownloadByPart()) {
@@ -198,6 +205,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 } else {
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                 }
+                // 数据修正后存储
                 DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
 
                 ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片下载结束: $mDownloadPartInfo")
