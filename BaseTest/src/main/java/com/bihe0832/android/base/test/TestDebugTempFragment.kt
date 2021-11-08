@@ -18,12 +18,15 @@ import com.bihe0832.android.common.photos.showPhotoChooser
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
+import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
+import com.bihe0832.android.lib.download.wrapper.DownloadAPK
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -33,6 +36,7 @@ import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
@@ -327,6 +331,8 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
     private fun testFunc() {
 
+
+        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())
 //        CommonDBManager.getAll().forEach {
 //            ZLog.d("Hardy" ,it.toString())
 //        }

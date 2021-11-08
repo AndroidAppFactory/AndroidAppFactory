@@ -10,7 +10,6 @@ import android.text.format.Formatter;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
@@ -25,9 +24,9 @@ public class DownloadProgressDialog extends Dialog {
     private ProgressBar mProgress;
     private TextView mProgressPercent;
     private TextView mProgressNumber;
-    private Button mNegativeButton;
+    private TextView mNegativeButton;
     private View mButtonLine;
-    private Button mPositiveButton;
+    private TextView mPositiveButton;
 
     public DownloadProgressDialog(Context context) {
         super(context, R.style.CommonProgressDialogStyle);
@@ -216,8 +215,8 @@ public class DownloadProgressDialog extends Dialog {
         mProgress = (ProgressBar) findViewById(R.id.update_progress_bar);
         mProgressNumber = (TextView) findViewById(R.id.update_progress_number);
         mProgressPercent = (TextView) findViewById(R.id.update_progress_percent);
-        mNegativeButton = (Button) findViewById(R.id.update_progress_cancle);
-        mPositiveButton = (Button) findViewById(R.id.update_progress_positive);
+        mNegativeButton = (TextView) findViewById(R.id.update_progress_cancle);
+        mPositiveButton = (TextView) findViewById(R.id.update_progress_positive);
         mButtonLine = findViewById(R.id.update_progress_column_line);
     }
 

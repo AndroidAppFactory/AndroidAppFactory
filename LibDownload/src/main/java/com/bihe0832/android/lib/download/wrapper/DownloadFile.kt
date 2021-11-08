@@ -103,7 +103,7 @@ object DownloadFile {
         var progressDialog = DownloadProgressDialog(activity).apply {
             setTitle(title)
             setMessage(msg)
-            setCurrentSize(0)
+            setCurrentSize(1)
             setShouldCanceled(canCancel)
             if (canCancel) {
                 setPositive("后台下载")
