@@ -7,7 +7,7 @@ import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
-import java.net.URLEncoder
+import com.bihe0832.android.lib.request.URLUtils
 import java.util.*
 
 
@@ -77,7 +77,7 @@ object RouterHelper {
     private fun goSplash(uri: Uri?) {
         HashMap<String, String>().apply {
             uri?.let {
-                this[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLEncoder.encode(uri.toString())
+                this[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(uri.toString())
             }
         }.let {
             RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_SPLASH, it)

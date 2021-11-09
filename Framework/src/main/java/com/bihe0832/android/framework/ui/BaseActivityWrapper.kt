@@ -15,9 +15,9 @@ fun BaseActivity.onBackPressedSupportAction(autoExit: Boolean) {
     var topActivity = ""
     var activityNum = 0
     for (i in taskInfoList.indices) {
-        if (taskInfoList[i].baseActivity.packageName.equals(packageName, ignoreCase = true)) {
+        if (taskInfoList[i].baseActivity?.packageName.equals(packageName, ignoreCase = true)) {
             if (TextUtils.isEmpty(topActivity)) {
-                topActivity = taskInfoList[i].topActivity.className
+                topActivity = taskInfoList[i].topActivity?.className ?: ""
             }
             activityNum += taskInfoList[i].numActivities
         } else if (i > 0) {

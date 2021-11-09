@@ -2,10 +2,6 @@ package com.bihe0832.android.base.test.dialog
 
 import android.Manifest
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.os.Build
 import android.view.View
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.common.test.base.BaseTestListFragment
@@ -13,6 +9,7 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
+import com.bihe0832.android.lib.text.ClipboardUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -22,7 +19,6 @@ import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -69,12 +65,7 @@ class TestDialogFragment : BaseTestListFragment() {
 
             override fun onNegativeClick() {
                 try {
-                    val cm = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as (ClipboardManager)
-                    if (BuildUtils.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-                        cm.primaryClip = ClipData.newPlainText(null, content)
-                    } else {
-                        cm.text = content
-                    }
+                    ClipboardUtil.copyToClipboard(activity, content)
                     dialog.dismiss()
                     ToastUtil.showShort(activity, "信息已保存到剪贴板")
                 } catch (e: Exception) {

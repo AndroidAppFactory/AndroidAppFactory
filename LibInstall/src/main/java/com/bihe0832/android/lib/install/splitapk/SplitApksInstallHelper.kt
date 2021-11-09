@@ -148,17 +148,18 @@ object SplitApksInstallHelper {
     }
 
     private fun runInstallCreate(sessionParams: SessionParams): Int {
+        if (sessionParams == null) {
+            ZLog.d(TAG, "doCreateSession: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!param is null")
+            return 0
+        }
         val sessionId = doCreateSession(sessionParams)
         ZLog.d("$TAG Success: created install session [$sessionId]")
         return sessionId
     }
 
-    private fun doCreateSession(params: SessionParams?): Int {
+    private fun doCreateSession(params: SessionParams): Int {
         var sessionId = 0
         try {
-            if (params == null) {
-                ZLog.d(TAG, "doCreateSession: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!param is null")
-            }
             sessionId = mPackageInstaller!!.createSession(params)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -201,7 +202,10 @@ object SplitApksInstallHelper {
                 total += c
                 out?.write(buffer, 0, c)
             }
-            session?.fsync(out)
+            out?.let {
+                session?.fsync(it)
+            }
+
             ZLog.d("$TAG Success: streamed $total bytes")
             PackageInstaller.STATUS_SUCCESS
         } catch (e: IOException) {
