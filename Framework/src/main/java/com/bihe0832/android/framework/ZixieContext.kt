@@ -6,6 +6,7 @@ import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.*
 import android.os.Build
 import android.os.Environment
 import android.support.v4.content.ContextCompat
@@ -171,7 +172,7 @@ object ZixieContext {
     }
 
     fun getZixieExtFolder(): String {
-        var path = if (PackageManager.PERMISSION_GRANTED ==
+        var path = if (BuildUtils.SDK_INT < 29 && PERMISSION_GRANTED ==
                 ContextCompat.checkSelfPermission(applicationContext!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}zixie${File.separator}"
         } else {
@@ -181,7 +182,7 @@ object ZixieContext {
     }
 
     fun getLogFolder(): String {
-        return getRealFileFolder(getZixieExtFolder() + "log" + File.separator)
+        return getRealFileFolder(getZixieFolder() + "log" + File.separator)
     }
 
     private fun getRealFileFolder(path: String): String {

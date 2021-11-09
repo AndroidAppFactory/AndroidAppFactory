@@ -3,7 +3,6 @@ package com.bihe0832.android.common.splash
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
-import android.view.View
 import com.bihe0832.android.framework.router.RouterAction.openFinalURL
 import com.bihe0832.android.framework.router.RouterAction.openPageByRouter
 import com.bihe0832.android.framework.router.RouterConstants
@@ -11,8 +10,6 @@ import com.bihe0832.android.framework.router.RouterInterrupt.hasAgreedPrivacy
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.utils.intent.IntentUtils
-import java.util.*
 
 abstract class SplashActivity : CommonActivity() {
 
@@ -28,7 +25,7 @@ abstract class SplashActivity : CommonActivity() {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutID())
         if (null != intent && intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL)) {
-            nextRouter = intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL)
+            nextRouter = intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL) ?: ""
         }
         initView()
     }

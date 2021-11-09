@@ -31,6 +31,7 @@ object DownloadNotify {
                     val notificationId = it.getIntExtra(DownloadNotifyManager.NOTIFICATION_ID_KEY, -1)
                     val action = it.getStringExtra(DownloadNotifyManager.ACTION_KEY)
                     val downloadURL = it.getStringExtra(DownloadNotifyManager.NOTIFICATION_URL_KEY)
+                            ?: ""
                     ZLog.d(TAG, "[DownloadNotificationsManager] onReceive: $action")
                     when (action) {
                         DownloadNotifyManager.ACTION_RESUME -> {
@@ -94,7 +95,7 @@ object DownloadNotify {
     private fun notify(item: DownloadItem, type: Int) {
         ZLog.d(NOTIFY_CHANNEL, "notify: notifyID: type: $type, ${item.downloadTitle},   info $item")
 
-        if(item.notificationVisibility()){
+        if (item.notificationVisibility()) {
             ThreadManager.getInstance().runOnUIThread {
                 mApplicationContext?.let {
 

@@ -48,7 +48,7 @@ object CookieManagerForZixie {
         if (uri.host == null) {
             return
         }
-        var domain = uri.host.toLowerCase()
+        var domain = uri.host?.toLowerCase() ?: ""
 
         /* http://code.google.com/p/android/issues/detail?id=19294 */
         if (BuildUtils.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -73,7 +73,7 @@ object CookieManagerForZixie {
             return
         }
 
-        val cookiesForDomain = getCookieManager().getCookie(uri.host.toLowerCase())
+        val cookiesForDomain = getCookieManager().getCookie(uri.host?.toLowerCase())
         if (cookiesForDomain != null) {
             val cookies = cookiesForDomain.split(";".toRegex()).toTypedArray()
             for (cookieTuple in cookies) {
@@ -96,7 +96,7 @@ object CookieManagerForZixie {
         return v
     }
 
-    fun setCookie(url: String, name: String, value: String, path: String, domain: String, time: Long) {
+    fun setCookie(url: String, name: String, value: String, path: String, domain: String?, time: Long) {
         getCookieManager().setCookie(url, getCookieString(name, value, path, domain) + "; MAX-Age=" + time)
     }
 
@@ -105,7 +105,7 @@ object CookieManagerForZixie {
         if (uri.host == null) {
             return
         }
-        setCookie(url, name, value, path, uri.host.toLowerCase(), time)
+        setCookie(url, name, value, path, uri.host?.toLowerCase(), time)
     }
 
     fun setCookie(url: String, name: String, value: String, time: Long) {
