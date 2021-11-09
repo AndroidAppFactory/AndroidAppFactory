@@ -164,7 +164,7 @@ public class APKUtils {
         try {
             if (getInstalledPackage(ctx, pkgName) == null) {
                 if (showTips) {
-                    ToastUtil.showShort(ctx, appName + "未安装，请安装后重试");
+                    ToastUtil.showShort(ctx, "应用未安装，请安装后重试");
                 }
                 return false;
             }
