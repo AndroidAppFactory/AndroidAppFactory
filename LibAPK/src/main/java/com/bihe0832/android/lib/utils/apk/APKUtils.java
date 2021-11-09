@@ -9,12 +9,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import com.bihe0832.android.lib.utils.encrypt.MD5;
-
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -39,6 +37,7 @@ public class APKUtils {
     public static long getAppVersionCode(Context context) {
         return getAppVersionCode(context, context.getPackageName());
     }
+
     /**
      * 获取APP版本号
      */
@@ -127,7 +126,7 @@ public class APKUtils {
         try {
             PackageManager pm = ctx.getPackageManager();
             Intent intent = pm.getLaunchIntentForPackage(pkgName);
-            return startApp(ctx, getAppName(ctx), pkgName, intent, showTips);
+            return startApp(ctx, getAppName(ctx, pkgName), pkgName, intent, showTips);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -164,7 +163,9 @@ public class APKUtils {
     private static boolean startApp(Context ctx, String appName, String pkgName, Intent intent, boolean showTips) {
         try {
             if (getInstalledPackage(ctx, pkgName) == null) {
-                if (showTips) ToastUtil.showShort(ctx, appName + "未安装，请安装后重试");
+                if (showTips) {
+                    ToastUtil.showShort(ctx, appName + "未安装，请安装后重试");
+                }
                 return false;
             }
             intent.setAction(Intent.ACTION_MAIN);
@@ -174,7 +175,9 @@ public class APKUtils {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            if (showTips) ToastUtil.showShort(ctx, "拉起" + appName + "失败，请手动尝试");
+            if (showTips) {
+                ToastUtil.showShort(ctx, "拉起" + appName + "失败，请手动尝试");
+            }
             return false;
         }
     }
@@ -221,7 +224,8 @@ public class APKUtils {
                         }
                     }
                 }
-                ZLog.d("APKUtils", "getTcpCountOfRunningTask app: ${packageName}, uid:${uid}, result:${ports.toTypedArray().contentToString()}");
+                ZLog.d("APKUtils",
+                        "getTcpCountOfRunningTask app: ${packageName}, uid:${uid}, result:${ports.toTypedArray().contentToString()}");
                 return ports.contains(uid);
             } catch (Exception e) {
                 ZLog.d("APKUtils", "getTcpCountOfRunningTask, execNetStat IP failed." + e.getStackTrace());
@@ -245,19 +249,26 @@ public class APKUtils {
     public static String getSigMd5ByPkgName(Context context, String pkgName, boolean showTips) {
         if (null != pkgName && pkgName.length() > 0) {
             try {
-                Signature sig = context.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_SIGNATURES).signatures[0];
+                Signature sig = context.getPackageManager()
+                        .getPackageInfo(pkgName, PackageManager.GET_SIGNATURES).signatures[0];
                 String result = MD5.getMd5(sig.toByteArray());
                 if (null != result && result.length() > 0) {
                     return result;
                 } else {
-                    if (showTips) ToastUtil.showShort(context, "读取失败，请重试或者检查应用是否有签名！");
+                    if (showTips) {
+                        ToastUtil.showShort(context, "读取失败，请重试或者检查应用是否有签名！");
+                    }
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
-                if (showTips) ToastUtil.showShort(context, "应用未安装，请检查输入的包名是否正确！");
+                if (showTips) {
+                    ToastUtil.showShort(context, "应用未安装，请检查输入的包名是否正确！");
+                }
             }
         } else {
-            if (showTips) ToastUtil.showShort(context, "请先在输入框输入需要查询签名应用的包名！");
+            if (showTips) {
+                ToastUtil.showShort(context, "请先在输入框输入需要查询签名应用的包名！");
+            }
         }
         return "";
     }
@@ -265,7 +276,8 @@ public class APKUtils {
     public static String getSigFingerprint(Context context, String packageName) {
         String hexString = "";
         try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
             Signature[] signatures = packageInfo.signatures;
             byte[] cert = signatures[0].toByteArray();
             InputStream input = new ByteArrayInputStream(cert);
