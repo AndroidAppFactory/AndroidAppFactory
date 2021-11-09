@@ -24,13 +24,25 @@ object RouterInterrupt {
 
         //拦截后操作
         fun doInterrupt(uri: Uri): Boolean
+
+        fun afterOpen(context: Context, uri: Uri) {
+            logRouterToFile("afterOpen ->$uri")
+        }
+
+        fun notFound(context: Context, uri: Uri) {
+            logRouterToFile("notFound ->$uri")
+        }
+
+        fun error(context: Context, uri: Uri, e: Throwable) {
+            logRouterToFile("error ->$uri")
+        }
     }
 
     @Synchronized
     fun init(process: RouterProcess) {
         RouterContext.setGlobalRouterCallback(object : RouterContext.RouterCallback {
             override fun afterOpen(context: Context, uri: Uri) {
-                logRouterToFile("afterOpen ->$uri")
+                process.afterOpen(context, uri)
             }
 
             //跳转前拦截
@@ -46,11 +58,11 @@ object RouterInterrupt {
             }
 
             override fun error(context: Context, uri: Uri, e: Throwable) {
-                logRouterToFile("error ->$uri")
+                process.error(context, uri, e)
             }
 
             override fun notFound(context: Context, uri: Uri) {
-                logRouterToFile("notFound ->$uri")
+                process.notFound(context, uri)
             }
         })
     }
