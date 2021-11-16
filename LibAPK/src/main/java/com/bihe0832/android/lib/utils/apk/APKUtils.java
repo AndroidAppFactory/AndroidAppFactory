@@ -9,8 +9,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.text.TextUtils;
+import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
+import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import com.bihe0832.android.lib.utils.encrypt.MD5;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
@@ -75,6 +77,44 @@ public class APKUtils {
         return "";
     }
 
+    public static int compareVersion(String oldVersion, String newVersion) throws AAFException {
+        ZLog.d("testVerion", "oldVersion:" + oldVersion + "； oldVersion:" + newVersion);
+        if (TextUtils.isEmpty(oldVersion) || TextUtils.isEmpty(newVersion)) {
+            return -1;
+        }
+        if (oldVersion.equals(newVersion)) {
+            return 0; //版本相同
+        }
+        String[] v1Array = oldVersion.split("\\.");
+        String[] v2Array = newVersion.split("\\.");
+        int v1Len = v1Array.length;
+        int v2Len = v2Array.length;
+        int baseLen = 0;
+        if (v1Len > v2Len) {
+            baseLen = v2Len;
+        } else {
+            baseLen = v1Len;
+        }
+        //基础版本号比较
+        for (int i = 0; i < baseLen; i++) {
+            //同位版本号相同
+            if (v1Array[i].equals(v2Array[i])) {
+                //比较下一位
+                continue;
+            } else {
+                return ConvertUtils.parseInt(v1Array[i]) > ConvertUtils.parseInt(v2Array[i]) ? 1 : -1;
+            }
+        }
+        //基础版本相同，再比较子版本号
+        if (v1Len != v2Len) {
+            return v1Len > v2Len ? 1 : 2;
+        } else {
+            //基础版本相同，无子版本号
+            return 0;
+        }
+    }
+
+
     public static String getAppName(Context context) {
         return getAppName(context, context.getPackageName());
     }
@@ -113,7 +153,6 @@ public class APKUtils {
         }
     }
 
-
     public static boolean startApp(Context ctx, String pkgName) {
         return startApp(ctx, pkgName, true);
     }
@@ -133,7 +172,8 @@ public class APKUtils {
         }
     }
 
-    public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass, boolean showTips) {
+    public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass,
+            boolean showTips) {
         try {
             Intent intent = new Intent();
             ComponentName cmp = new ComponentName(pkgName, launcerClass);
@@ -198,7 +238,6 @@ public class APKUtils {
         return "";
     }
 
-
     public static boolean isRunningTask(Context context, String packageName) {
         if (context == null || TextUtils.isEmpty(packageName)) {
             ZLog.d("APKUtils", "getTcpCountOfRunningTask context or packageName is null");
@@ -206,7 +245,8 @@ public class APKUtils {
         } else {
             BufferedReader bufferReader = (BufferedReader) null;
             try {
-                bufferReader = new BufferedReader(new InputStreamReader(new FileInputStream("/proc/net/tcp"), "UTF-8"));
+                bufferReader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream("/proc/net/tcp"), "UTF-8"));
                 String line = null;
                 String uid = getUid(context, packageName);
                 HashSet ports = new HashSet<String>();
