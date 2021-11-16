@@ -39,6 +39,7 @@ import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -332,7 +333,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
     private fun testFunc() {
 
 
-        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())
+//        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())
 //        CommonDBManager.getAll().forEach {
 //            ZLog.d("Hardy" ,it.toString())
 //        }
@@ -346,6 +347,22 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //        ZLog.d("0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
 //        ZLog.d("0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
 //        IntentUtils.startAppSettings(activity!!, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+
+
+        val v1 = "1.0.1"
+        val v2 = "1.0.02"
+        val v2_1 = "1.0.002.1"
+        val v2_2 = "1.0.2.02"
+        val v3 = "1.0.3"
+
+        ZLog.d("testVerion","v1 VS v1:" + APKUtils.compareVersion(v1, v1))
+        ZLog.d("testVerion","v1 VS v2:" + APKUtils.compareVersion(v1, v2))
+        ZLog.d("testVerion","v2 VS v1:" + APKUtils.compareVersion(v2, v1))
+        ZLog.d("testVerion","v2_1 VS v1:" + APKUtils.compareVersion(v2_1, v1))
+        ZLog.d("testVerion","v2_1 VS v2:" + APKUtils.compareVersion(v2_1, v2))
+        ZLog.d("testVerion","v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
+        ZLog.d("testVerion","v3 VS v2:" + APKUtils.compareVersion(v3, v2))
+        ZLog.d("testVerion","v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
     }
 
 }
