@@ -2,8 +2,8 @@ package com.bihe0832.android.framework.request
 
 
 import com.bihe0832.android.lib.http.common.HTTPServer
-import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
+import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 
 /**
  * @author hardyshi code@bihe0832.com

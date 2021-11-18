@@ -1,23 +1,20 @@
 package com.bihe0832.android.base.test.request
 
-import android.os.Build
 import android.os.Bundle
-import android.os.StrictMode
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.base.test.request.advanced.AdvancedGetRequest
 import com.bihe0832.android.base.test.request.advanced.AdvancedPostRequest
 import com.bihe0832.android.base.test.request.advanced.TestResponse
 import com.bihe0832.android.base.test.request.basic.BasicPostRequest
 import com.bihe0832.android.common.test.base.BaseTestActivity
-import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
-import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
+import com.bihe0832.android.lib.http.common.core.BaseConnection
+import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.Module
 import kotlinx.android.synthetic.main.activity_http_test.*
-import java.io.File
 
 const val ROUTRT_NAME_TEST_HTTP = "testhttp"
 
@@ -38,16 +35,19 @@ class TestHttpActivity : BaseTestActivity() {
         postAdvanced.setOnClickListener { sendPostAdvancedRequest() }
 
         postFile.setOnClickListener {
-            var a = File("/sdcard/shumei.txt")
+            var filePath = "/sdcard/shumei.txt"
+
             var b = HashMap<String, String>().apply {
                 put("fsdf", "fsdf")
             }
 
             HTTPServer.getInstance().doFileUpload(
-                    "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1", b, a,
-                    "media"
+                    "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1", b, filePath,
+                    "media",
+                    BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM
             ).let {
-                ZLog.d("FileUpload", "restult $it")
+                ZLog.d(HTTPServer.LOG_TAG, "restult $it")
+                runOnUiThread { result.text = it }
             }
         }
 

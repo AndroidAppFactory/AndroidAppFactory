@@ -1,7 +1,7 @@
 package com.bihe0832.android.base.test.request.basic;
 
 
-import com.bihe0832.android.lib.http.common.HttpRequest;
+import com.bihe0832.android.lib.http.common.core.HttpRequest;
 import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 import com.bihe0832.android.base.test.request.Constants;
 

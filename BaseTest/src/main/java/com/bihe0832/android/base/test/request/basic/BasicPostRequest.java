@@ -1,7 +1,7 @@
 package com.bihe0832.android.base.test.request.basic;
 
 
-import com.bihe0832.android.lib.http.common.HttpRequest;
+import com.bihe0832.android.lib.http.common.core.HttpRequest;
 import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 import com.bihe0832.android.base.test.request.Constants;
 
@@ -24,6 +24,7 @@ public class BasicPostRequest extends HttpRequest {
 	public String getUrl() {
         return Constants.HTTP_DOMAIN + Constants.PATH_POST;
 	}
+
 
     @Override
     protected void onResponse(int statusCode, String result) {

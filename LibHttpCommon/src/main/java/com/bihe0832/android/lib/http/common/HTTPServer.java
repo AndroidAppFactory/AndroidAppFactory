@@ -1,15 +1,23 @@
 package com.bihe0832.android.lib.http.common;
 
-import static com.bihe0832.android.lib.http.common.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
+import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
 
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import com.bihe0832.android.lib.http.common.core.BaseConnection;
+import com.bihe0832.android.lib.http.common.core.FileInfo;
+import com.bihe0832.android.lib.http.common.core.HTTPConnection;
+import com.bihe0832.android.lib.http.common.core.HTTPSConnection;
+import com.bihe0832.android.lib.http.common.core.HttpBasicRequest;
+import com.bihe0832.android.lib.http.common.core.HttpFileUpload;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
-import java.io.File;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * 网络请求分发、执行类
@@ -17,6 +25,7 @@ import java.util.Map;
 public class HTTPServer {
 
     public static final String LOG_TAG = "bihe0832 REQUEST";
+    public static final String BOUNDARY = UUID.randomUUID().toString();  //边界标识 随机生成
 
     //是否为测试版本
     private static final boolean DEBUG = true;
@@ -55,9 +64,17 @@ public class HTTPServer {
     }
 
     public String doFileUpload(final String requestUrl, final Map<String, String> strParams,
-            final File fileParams, final String type) {
-        return HttpFileUpload.fileUpload(getConnection(requestUrl), strParams, fileParams, type);
+            final List<FileInfo> fileParams) {
+        return HttpFileUpload.postRequest(HTTPServer.getInstance().getConnection(requestUrl), strParams, fileParams);
     }
+
+    public String doFileUpload(final String requestUrl, final Map<String, String> strParams,
+            final String filePath, final String keyName, final String fileDataType) {
+        ArrayList<FileInfo> fileInfos = new ArrayList<>();
+        fileInfos.add(new FileInfo(filePath, keyName, fileDataType));
+        return HttpFileUpload.postRequest(HTTPServer.getInstance().getConnection(requestUrl), strParams, fileInfos);
+    }
+
 
     public void doRequestAsync(HttpBasicRequest request) {
         Message msg = mCallHandler.obtainMessage();
@@ -153,7 +170,7 @@ public class HTTPServer {
         }
     }
 
-    private BaseConnection getConnection(String url) {
+    public BaseConnection getConnection(String url) {
         BaseConnection connection = null;
         if (url.startsWith("https:")) {
             connection = new HTTPSConnection(url);
