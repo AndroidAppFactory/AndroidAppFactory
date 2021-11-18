@@ -1,7 +1,9 @@
-package com.bihe0832.android.lib.http.common;
+package com.bihe0832.android.lib.http.common.core;
 
 
 import android.text.TextUtils;
+import com.bihe0832.android.lib.http.common.HTTPServer;
+import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 import com.bihe0832.android.lib.log.ZLog;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +13,8 @@ public abstract class HttpBasicRequest {
 
     public static final String LOG_TAG = HTTPServer.LOG_TAG;
 
-    public static final String HTTP_REQ_ENTITY_MERGE = "=";
-    public static final String HTTP_REQ_ENTITY_JOIN = "&";
+    public static final String HTTP_REQ_ENTITY_MERGE = BaseConnection.HTTP_REQ_ENTITY_MERGE;
+    public static final String HTTP_REQ_ENTITY_JOIN = BaseConnection.HTTP_REQ_ENTITY_JOIN;
 
     protected long requestTime = 0;
     public byte[] data = null;

@@ -4,21 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.common.test.R
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.framework.router.openWebPage
-import com.bihe0832.android.common.list.CommonListLiveData
-import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
-import com.bihe0832.android.lib.http.common.HttpBasicRequest
+import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
-import java.util.*
-import kotlin.collections.ArrayList
 
 open class BaseTestListFragment : CommonListFragment() {
 
@@ -73,7 +71,7 @@ open class BaseTestListFragment : CommonListFragment() {
     protected open fun showResult(s: String?) {
         s?.let {
             ThreadManager.getInstance().runOnUIThread {
-                ZLog.d(HttpBasicRequest.LOG_TAG, "showResult:$s")
+                ZLog.d(HTTPServer.LOG_TAG, "showResult:$s")
                 view?.findViewById<TextView>(R.id.test_tips)?.apply {
                     this.text = TextFactoryUtils.getSpannedTextByHtml("<B>提示信息</b>:<BR> $s")
                     visibility = View.VISIBLE

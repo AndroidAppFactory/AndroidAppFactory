@@ -1,9 +1,9 @@
 package com.bihe0832.android.base.test.notify
 
 import android.view.View
+import com.bihe0832.android.app.api.AAFNetWorkApi.LOG_TAG
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.http.common.HttpBasicRequest.LOG_TAG
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.timer.BaseTask

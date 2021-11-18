@@ -1,5 +1,7 @@
-package com.bihe0832.android.lib.http.common;
+package com.bihe0832.android.lib.http.common.core;
 
+
+import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 
 public abstract class HttpRequest extends HttpBasicRequest {
 

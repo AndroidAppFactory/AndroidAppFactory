@@ -12,8 +12,8 @@ import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.framework.update.setUpdateType
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.http.common.HTTPServer
-import com.bihe0832.android.lib.http.common.HttpBasicRequest
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
+import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager.getInstance
 import java.net.HttpURLConnection

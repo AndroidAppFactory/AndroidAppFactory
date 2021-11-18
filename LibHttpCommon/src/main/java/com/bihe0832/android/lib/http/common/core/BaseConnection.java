@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.http.common;
+package com.bihe0832.android.lib.http.common.core;
 
 import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * HttpURLConnection封装基类，网络请求，设置请求协议头、发送请求
@@ -20,7 +19,7 @@ import java.util.UUID;
 public abstract class BaseConnection {
 
     private static final String LOG_TAG = "bihe0832 REQUEST";
-    public static final String HTTP_REQ_PROPERTY_CHARSET = "Accept-Charset";
+    public static final String HTTP_REQ_PROPERTY_CHARSET = "Charset";
     public static final String HTTP_REQ_VALUE_CHARSET = "UTF-8";
     public static final String HTTP_REQ_PROPERTY_CONTENT_DISPOSITION = "Content-Disposition";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
@@ -31,10 +30,11 @@ public abstract class BaseConnection {
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_FORM = "multipart/form-data";     //内容类型
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM = "application/octet-stream";     //内容类型
 
+    public static final String HTTP_REQ_ENTITY_MERGE = "=";
+    public static final String HTTP_REQ_ENTITY_JOIN = "&";
 
-    public static final String PREFIX = "--";
-    public static final String BOUNDARY = UUID.randomUUID().toString();
-    public static final String LINE_END = "\r\n";
+    public static final String HTTP_REQ_ENTITY_PREFIX = "--";
+    public static final String HTTP_REQ_ENTITY_LINE_END = "\r\n";
 
 
     public static final String HTTP_REQ_PROPERTY_CONTENT_LENGTH = "Content-Length";

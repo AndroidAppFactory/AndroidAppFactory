@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.http.common;
+package com.bihe0832.android.lib.http.common.core;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

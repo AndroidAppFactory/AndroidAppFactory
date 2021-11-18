@@ -18,15 +18,12 @@ import com.bihe0832.android.common.photos.showPhotoChooser
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
-import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
-import com.bihe0832.android.lib.download.wrapper.DownloadAPK
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -36,10 +33,8 @@ import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
-import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -178,6 +173,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
         }.let {
             ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
         }
+
     }
 
     private fun testZIP() {
@@ -349,20 +345,21 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //        IntentUtils.startAppSettings(activity!!, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
 
 
-        val v1 = "1.0.1"
-        val v2 = "1.0.02"
-        val v2_1 = "1.0.002.1"
-        val v2_2 = "1.0.2.02"
-        val v3 = "1.0.3"
+//        val v1 = "1.0.1"
+//        val v2 = "1.0.02"
+//        val v2_1 = "1.0.002.1"
+//        val v2_2 = "1.0.2.02"
+//        val v3 = "1.0.3"
+//
+//        ZLog.d("testVerion","v1 VS v1:" + APKUtils.compareVersion(v1, v1))
+//        ZLog.d("testVerion","v1 VS v2:" + APKUtils.compareVersion(v1, v2))
+//        ZLog.d("testVerion","v2 VS v1:" + APKUtils.compareVersion(v2, v1))
+//        ZLog.d("testVerion","v2_1 VS v1:" + APKUtils.compareVersion(v2_1, v1))
+//        ZLog.d("testVerion","v2_1 VS v2:" + APKUtils.compareVersion(v2_1, v2))
+//        ZLog.d("testVerion","v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
+//        ZLog.d("testVerion","v3 VS v2:" + APKUtils.compareVersion(v3, v2))
+//        ZLog.d("testVerion","v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
 
-        ZLog.d("testVerion","v1 VS v1:" + APKUtils.compareVersion(v1, v1))
-        ZLog.d("testVerion","v1 VS v2:" + APKUtils.compareVersion(v1, v2))
-        ZLog.d("testVerion","v2 VS v1:" + APKUtils.compareVersion(v2, v1))
-        ZLog.d("testVerion","v2_1 VS v1:" + APKUtils.compareVersion(v2_1, v1))
-        ZLog.d("testVerion","v2_1 VS v2:" + APKUtils.compareVersion(v2_1, v2))
-        ZLog.d("testVerion","v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
-        ZLog.d("testVerion","v3 VS v2:" + APKUtils.compareVersion(v3, v2))
-        ZLog.d("testVerion","v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
     }
 
 }

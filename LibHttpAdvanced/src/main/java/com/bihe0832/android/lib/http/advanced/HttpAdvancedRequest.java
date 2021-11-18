@@ -1,15 +1,11 @@
 package com.bihe0832.android.lib.http.advanced;
 
 
-import android.text.TextUtils;
 import com.bihe0832.android.lib.gson.JsonHelper;
-import com.bihe0832.android.lib.http.common.BaseConnection;
-import com.bihe0832.android.lib.http.common.HttpBasicRequest;
+import com.bihe0832.android.lib.http.common.core.HttpBasicRequest;
 import com.bihe0832.android.lib.http.common.HttpResponseHandler;
-import com.bihe0832.android.lib.log.ZLog;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
 
