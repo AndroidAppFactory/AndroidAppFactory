@@ -65,14 +65,15 @@ public class HTTPServer {
 
     public String doFileUpload(final String requestUrl, final Map<String, String> strParams,
             final List<FileInfo> fileParams) {
-        return HttpFileUpload.postRequest(HTTPServer.getInstance().getConnection(requestUrl), strParams, fileParams);
+        return new HttpFileUpload()
+                .postRequest(HTTPServer.getInstance().getConnection(requestUrl), strParams, fileParams);
     }
 
     public String doFileUpload(final String requestUrl, final Map<String, String> strParams,
             final String filePath, final String keyName, final String fileDataType) {
         ArrayList<FileInfo> fileInfos = new ArrayList<>();
         fileInfos.add(new FileInfo(filePath, keyName, fileDataType));
-        return HttpFileUpload.postRequest(HTTPServer.getInstance().getConnection(requestUrl), strParams, fileInfos);
+        return doFileUpload(requestUrl, strParams, fileInfos);
     }
 
 

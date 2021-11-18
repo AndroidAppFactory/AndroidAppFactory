@@ -28,7 +28,7 @@ public class HttpFileUpload {
     /**
      * post请求方法
      */
-    public static String postRequest(final BaseConnection baseConnection, final Map<String, String> strParams,
+    public String postRequest(final BaseConnection baseConnection, final Map<String, String> strParams,
             final List<FileInfo> fileParams) {
 
         baseConnection.setURLConnectionCommonPara();
@@ -122,7 +122,7 @@ public class HttpFileUpload {
     /**
      * 对post参数进行编码处理
      */
-    public static String getFormDataString(Map<String, String> strParams) {
+    public String getFormDataString(Map<String, String> strParams) {
         StringBuffer stringBuffer = new StringBuffer();
         for (Map.Entry<String, String> entry : strParams.entrySet()) {
             if (TextUtils.isEmpty(entry.getKey()) && TextUtils.isEmpty(entry.getValue())) {
