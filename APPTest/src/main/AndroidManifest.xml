@@ -38,37 +38,8 @@
             </intent-filter>
         </activity>
 
-        <activity
-                android:name="com.bihe0832.android.base.test.touch.TouchRegionActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/activityTheme">
 
-        </activity>
 
-        <activity
-                android:name="com.bihe0832.android.base.test.request.TestHttpActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/activityTheme"></activity>
-
-        <activity
-                android:name="com.bihe0832.android.base.test.network.TestNetworkActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/activityTheme"></activity>
-
-        <activity
-                android:name="com.bihe0832.android.base.test.card.TestListActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/activityTheme"></activity>
-
-        <activity
-                android:name="com.bihe0832.android.base.test.webview.TestWebviewActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/activityTheme"></activity>
 
     </application>
 

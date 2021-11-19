@@ -33,7 +33,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.14.10"
+ext.moduleVersionName = "4.14.13"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -77,14 +77,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"                : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
@@ -94,42 +94,42 @@ ext.moduleInfo = [
         ],
 
         "CommonAbout"               : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "Framework", "CommonList"
                 ]
         ],
         "CommonList"                : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "4.14.10",
+                "version"                : "4.14.12",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -141,7 +141,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "4.14.10",
+                "version"                : "4.14.12",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -154,14 +154,14 @@ ext.moduleInfo = [
         ],
 
         "CommonPraise"              : [
-                "version"            : "4.14.10",
+                "version"            : "4.14.12",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "4.14.10",
+                "version"                : "4.14.12",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
