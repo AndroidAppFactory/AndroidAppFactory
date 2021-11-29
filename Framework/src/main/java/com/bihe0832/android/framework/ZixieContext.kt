@@ -5,12 +5,12 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
-import android.content.pm.PackageManager
-import android.content.pm.PackageManager.*
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build
 import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
+import android.widget.Toast
 import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.device.DeviceIDUtils
 import com.bihe0832.android.lib.file.FileUtils
@@ -90,26 +90,40 @@ object ZixieContext {
     }
 
     //任何时候都弹
+    fun showToast(msg: String, duration: Int) {
+        if (BuildUtils.SDK_INT >= 30) {
+            //大于等于 30
+            if (ApplicationObserver.isAPPBackground()) {
+                Toast.makeText(applicationContext, msg, duration).show()
+            } else {
+                ToastUtil.show(applicationContext, msg, duration)
+            }
+        } else {
+            ToastUtil.show(applicationContext, msg, duration)
+        }
+    }
+
+    //任何时候都弹
     fun showToast(msg: String) {
-        ToastUtil.showShort(applicationContext, msg)
+        showToast(msg, Toast.LENGTH_SHORT)
     }
 
     //任何时候都弹
     fun showLongToast(msg: String) {
-        ToastUtil.showLong(applicationContext, msg)
+        showToast(msg, Toast.LENGTH_LONG)
     }
 
     //仅APP在前台弹
     fun showLongToastJustAPPFront(msg: String) {
         if (!ApplicationObserver.isAPPBackground()) {
-            ToastUtil.showLong(applicationContext, msg)
+            showLongToast(msg)
         }
     }
 
     //仅APP在前台弹
     fun showToastJustAPPFront(msg: String) {
         if (!ApplicationObserver.isAPPBackground()) {
-            ToastUtil.showShort(applicationContext, msg)
+            showToast(msg)
         }
     }
 
@@ -173,7 +187,11 @@ object ZixieContext {
 
     fun getZixieExtFolder(): String {
         var path = if (BuildUtils.SDK_INT < 29 && PERMISSION_GRANTED ==
-                ContextCompat.checkSelfPermission(applicationContext!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            ContextCompat.checkSelfPermission(
+                applicationContext!!,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        ) {
             "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}zixie${File.separator}"
         } else {
             getZixieFolder()
@@ -250,7 +268,10 @@ object ZixieContext {
     fun exitAPP(callbackListener: OnDialogListener?) {
         CommonDialog(getCurrentActivity()).apply {
             title = applicationContext!!.resources.getString(R.string.common_reminder_title)
-            content = String.format(applicationContext!!.resources.getString(R.string.exist_msg), applicationContext!!.resources.getString(R.string.app_name))
+            content = String.format(
+                applicationContext!!.resources.getString(R.string.exist_msg),
+                applicationContext!!.resources.getString(R.string.app_name)
+            )
 
 
             setCancelable(true)
