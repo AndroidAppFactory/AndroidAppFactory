@@ -86,7 +86,7 @@ public class ZixieFileProvider extends FileProvider {
 
     public static final String getZixiePhotosPath(@NotNull Context context) {
         String filePath = getZixieFilePath(context) + "pictures" + File.separator;
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= 30) {
             //android 11以上，将文件创建在公有目录
             filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
         }
