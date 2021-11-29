@@ -1,12 +1,15 @@
 package com.bihe0832.android.test;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
 import com.bihe0832.android.base.test.TestDebugTempFragment;
 import com.bihe0832.android.base.test.card.TestListFragment;
 import com.bihe0832.android.base.test.dialog.TestDialogFragment;
 import com.bihe0832.android.base.test.download.TestDownloadFragment;
 import com.bihe0832.android.base.test.log.TestLogFragment;
 import com.bihe0832.android.base.test.notify.TestNotifyFragment;
+import com.bihe0832.android.base.test.photos.TestPhotosFragment;
 import com.bihe0832.android.base.test.temp.TestBasicFragment;
 import com.bihe0832.android.base.test.textview.TestTextView;
 import com.bihe0832.android.common.test.module.TestDebugCommonFragment;
@@ -33,7 +36,7 @@ public class TestMainFragment extends com.bihe0832.android.common.test.TestMainF
     private final boolean isDev = true;
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new TestDialogFragment();
+            return new TestPhotosFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new TestDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

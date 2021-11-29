@@ -1,7 +1,9 @@
 package com.bihe0832.android.base.test
 
 
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -24,6 +26,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -75,21 +78,37 @@ class TestDebugTempFragment : BaseTestListFragment() {
                 startActivity(TestLogActivity::class.java)
             }))
             add(TestItemData("定时任务测试", View.OnClickListener { testTask() }))
-            add(TestItemData("默认关于页", View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) }))
-            add(TestItemData("网络切换监控", View.OnClickListener { startActivity(TestNetworkActivity::class.java) }))
+            add(
+                TestItemData(
+                    "默认关于页",
+                    View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) })
+            )
+            add(
+                TestItemData(
+                    "网络切换监控",
+                    View.OnClickListener { startActivity(TestNetworkActivity::class.java) })
+            )
             add(TestItemData("打开应用安装界面", View.OnClickListener {
-                IntentUtils.startAppSettings(context, android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                IntentUtils.startAppSettings(
+                    context,
+                    android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+                )
             }))
             add(TestItemData("TextView对HTML的支持测试", View.OnClickListener {
                 showInputDialog("TextView对HTML的支持测试",
-                        "请在输入框输入需要验证的文本内容，无需特殊编码",
-                        "<font color='#428bca'>测试文字加粗</font> <BR> 正常的文字效果<BR> <b>测试文字加粗</b> <em>文字斜体</em> <p><font color='#428bca'>修改文字颜色</font></p>",
-                        object : InputDialogCompletedCallback {
-                            override fun onInputCompleted(result: String?) {
-                                DebugTools.showInfoWithHTML(context, "TextView对HTML的支持测试", result, "分享给我们")
-                            }
+                    "请在输入框输入需要验证的文本内容，无需特殊编码",
+                    "<font color='#428bca'>测试文字加粗</font> <BR> 正常的文字效果<BR> <b>测试文字加粗</b> <em>文字斜体</em> <p><font color='#428bca'>修改文字颜色</font></p>",
+                    object : InputDialogCompletedCallback {
+                        override fun onInputCompleted(result: String?) {
+                            DebugTools.showInfoWithHTML(
+                                context,
+                                "TextView对HTML的支持测试",
+                                result,
+                                "分享给我们"
+                            )
+                        }
 
-                        })
+                    })
             }))
 
             add(TestItemData("点击区扩大Demo", View.OnClickListener {
@@ -110,13 +129,25 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
             add(TestItemData("JsonHelper", View.OnClickListener { testJson() }))
             add(TestItemData("Toast测试", View.OnClickListener {
-                ToastUtil.showTop(context, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
+                ToastUtil.showTop(
+                    context,
+                    "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>",
+                    Toast.LENGTH_LONG
+                )
             }))
             add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(TestItemData("配置管理测试", View.OnClickListener { testConfig() }))
             add(TestItemData("应用前后台信息", View.OnClickListener { testAPPObserver() }))
-            add(TestItemData("多进程", View.OnClickListener { startActivity(TestIPCActivity::class.java) }))
-            add(TestItemData("多进程1", View.OnClickListener { startActivity(TestIPC1Activity::class.java) }))
+            add(
+                TestItemData(
+                    "多进程",
+                    View.OnClickListener { startActivity(TestIPCActivity::class.java) })
+            )
+            add(
+                TestItemData(
+                    "多进程1",
+                    View.OnClickListener { startActivity(TestIPC1Activity::class.java) })
+            )
         }
     }
 
@@ -157,16 +188,18 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //            var end = System.currentTimeMillis()
 //            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //        }
-        var result = JsonHelper.fromJsonList<JsonTest>("[" +
-                "{\"key\": 1,\"value1\": [1222,2222],\"value2\":true}," +
-                "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
-                "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
-                "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
-                "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
-                "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
-                "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
-                "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
-                "]", JsonTest::class.java)
+        var result = JsonHelper.fromJsonList<JsonTest>(
+            "[" +
+                    "{\"key\": 1,\"value1\": [1222,2222],\"value2\":true}," +
+                    "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
+                    "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
+                    "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
+                    "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
+                    "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
+                    "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
+                    "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
+                    "]", JsonTest::class.java
+        )
         ZLog.d(LOG_TAG, "result:" + result)
         JsonTest().apply {
             key = 1212
@@ -179,22 +212,37 @@ class TestDebugTempFragment : BaseTestListFragment() {
     private fun testZIP() {
 
         var startTime = System.currentTimeMillis()
-        ZipUtils.unCompress("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip", "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927")
+        ZipUtils.unCompress(
+            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
+            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927"
+        )
         var duration = System.currentTimeMillis() - startTime
-        ZLog.d(LOG_TAG, "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration")
+        ZLog.d(
+            LOG_TAG,
+            "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration"
+        )
 
         startTime = System.currentTimeMillis()
-        ZipUtils.unCompress("/sdcard/Download/com.garena.game.kgtw.zip", "/sdcard/Download/com.garena.game.kgtw")
+        ZipUtils.unCompress(
+            "/sdcard/Download/com.garena.game.kgtw.zip",
+            "/sdcard/Download/com.garena.game.kgtw"
+        )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.garena.game.kgtw.zip cost:$duration")
 
         startTime = System.currentTimeMillis()
-        ZipUtils.unCompress("/sdcard/Download/com.supercell.brawlstars.zip", "/sdcard/Download/com.supercell.brawlstars")
+        ZipUtils.unCompress(
+            "/sdcard/Download/com.supercell.brawlstars.zip",
+            "/sdcard/Download/com.supercell.brawlstars"
+        )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.supercell.brawlstars.zip cost:$duration")
 
         startTime = System.currentTimeMillis()
-        ZipUtils.unCompress("/sdcard/Download/jp.co.sumzap.pj0007.zip", "/sdcard/Download/jp.co.sumzap.pj0007")
+        ZipUtils.unCompress(
+            "/sdcard/Download/jp.co.sumzap.pj0007.zip",
+            "/sdcard/Download/jp.co.sumzap.pj0007"
+        )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
     }
@@ -240,7 +288,10 @@ class TestDebugTempFragment : BaseTestListFragment() {
     private fun testAPPObserver() {
         ZLog.d("testAPPObserver", "getAPPStartTime ： ${ApplicationObserver.getAPPStartTime()}")
         ZLog.d("testAPPObserver", "getLastPauseTime ： ${ApplicationObserver.getLastPauseTime()}")
-        ZLog.d("testAPPObserver", "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}")
+        ZLog.d(
+            "testAPPObserver",
+            "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}"
+        )
         ZLog.d("testAPPObserver", "getCurrentActivity ： ${ActivityObserver.getCurrentActivity()}")
     }
 
@@ -359,6 +410,17 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //        ZLog.d("testVerion","v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
 //        ZLog.d("testVerion","v3 VS v2:" + APKUtils.compareVersion(v3, v2))
 //        ZLog.d("testVerion","v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
+
+        //android 11以上，将文件创建在公有目录
+        var targetFile =
+            ZixieContext.getZixieFolder() + File.separator + "pictures" + File.separator + "sss.jpg"
+        val path: String =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
+        //storage/emulated/0/Pictures
+        var a = Uri.parse("file://" + File(path, FileUtils.getFileName(targetFile)).absolutePath)
+
+
+        var b = Uri.fromFile(File(path, FileUtils.getFileName(targetFile)))
 
     }
 

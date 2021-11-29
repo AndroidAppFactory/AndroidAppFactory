@@ -24,20 +24,19 @@ val selectPhotoPermission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 
 fun Activity.getDefaultPhoto(): File {
-    return File(getPhotosFolder(), "temp.jpg")
+    return File(getPhotosFolder(), "zixie_" + System.currentTimeMillis() + ".jpg")
 }
 
 fun Activity.getPhotosFolder(): String {
-    var filePath = ZixieContext.getZixieFolder() + File.separator + "pictures" + File.separator
-    return if (FileUtils.checkAndCreateFolder(filePath)) {
-        filePath
-    } else {
-        ""
-    }
+    return ZixieFileProvider.getZixiePhotosPath(this)
 }
 
+/**
+ * TargetFile 建议使用 [getPhotosFolder] 获取
+ */
 fun Activity.cropPhoto(sourceFile: String, targetFile: String, aspectX: Int = 1, aspectY: Int = 1) {
-    var sourceFileProvider = ZixieFileProvider.getZixieFileProvider(this@cropPhoto, File(sourceFile))
+    var sourceFileProvider =
+        ZixieFileProvider.getZixieFileProvider(this@cropPhoto, File(sourceFile))
     cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
 }
 
@@ -97,46 +96,58 @@ fun Activity.showPhotoChooser() {
     dialog.show()
 
     view.takePhotoBtn.setOnClickListener {
-        PermissionManager.checkPermission(this, "PhotoSelect", false, object : PermissionManager.OnPermissionResult {
-            override fun onFailed(msg: String) {
-                dialog.dismiss()
-            }
+        PermissionManager.checkPermission(
+            this,
+            "PhotoSelect",
+            false,
+            object : PermissionManager.OnPermissionResult {
+                override fun onFailed(msg: String) {
+                    dialog.dismiss()
+                }
 
-            override fun onSuccess() {
-                dialog.dismiss()
-                takePhoto(getDefaultPhoto())
-            }
+                override fun onSuccess() {
+                    dialog.dismiss()
+                    takePhoto(getDefaultPhoto())
+                }
 
-            override fun onUserCancel(scene: String, permission: String) {
-                dialog.dismiss()
-            }
+                override fun onUserCancel(scene: String, permission: String) {
+                    dialog.dismiss()
+                }
 
-            override fun onUserDeny(scene: String, permission: String) {
-                dialog.dismiss()
-            }
+                override fun onUserDeny(scene: String, permission: String) {
+                    dialog.dismiss()
+                }
 
-        }, *takePhotoPermission)
+            },
+            *takePhotoPermission
+        )
     }
 
     view.choosePhotoBtn.setOnClickListener {
-        PermissionManager.checkPermission(this, "PhotoSelect", false, object : PermissionManager.OnPermissionResult {
-            override fun onFailed(msg: String) {
-                dialog.dismiss()
-            }
+        PermissionManager.checkPermission(
+            this,
+            "PhotoSelect",
+            false,
+            object : PermissionManager.OnPermissionResult {
+                override fun onFailed(msg: String) {
+                    dialog.dismiss()
+                }
 
-            override fun onSuccess() {
-                dialog.dismiss()
-                choosePhoto()
-            }
+                override fun onSuccess() {
+                    dialog.dismiss()
+                    choosePhoto()
+                }
 
-            override fun onUserCancel(scene: String, permission: String) {
-                dialog.dismiss()
-            }
+                override fun onUserCancel(scene: String, permission: String) {
+                    dialog.dismiss()
+                }
 
-            override fun onUserDeny(scene: String, permission: String) {
-                dialog.dismiss()
-            }
-        }, *selectPhotoPermission)
+                override fun onUserDeny(scene: String, permission: String) {
+                    dialog.dismiss()
+                }
+            },
+            *selectPhotoPermission
+        )
     }
 }
 
