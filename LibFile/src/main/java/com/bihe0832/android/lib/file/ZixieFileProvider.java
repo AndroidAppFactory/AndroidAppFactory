@@ -1,9 +1,13 @@
 package com.bihe0832.android.lib.file;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
@@ -77,6 +81,46 @@ public class ZixieFileProvider extends FileProvider {
             return absoluteFilePath + File.separator;
         } else {
             return absoluteFilePath;
+        }
+    }
+
+    public static final String getZixiePhotosPath(@NotNull Context context) {
+        String filePath = getZixieFilePath(context) + "pictures" + File.separator;
+        if (Build.VERSION.SDK_INT >= 30) {
+            //android 11以上，将文件创建在公有目录
+            filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
+        }
+
+        FileUtils.INSTANCE.checkAndCreateFolder(filePath);
+        if (filePath.endsWith(File.separator)) {
+            return filePath;
+        } else {
+            return filePath + File.separator;
+        }
+    }
+
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
         }
     }
 }

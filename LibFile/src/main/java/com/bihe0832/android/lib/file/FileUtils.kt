@@ -1,11 +1,15 @@
 package com.bihe0832.android.lib.file
 
 import android.Manifest
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.StatFs
+import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -61,7 +65,10 @@ object FileUtils {
 
     fun checkStoragePermissions(context: Context): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
-                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
     }
 
     fun checkFileExist(filePath: String, fileMD5: String): Boolean {
@@ -167,7 +174,8 @@ object FileUtils {
                 }
                 if (fileProvider == null) {
                     ZLog.e("fileAction targetFile dont has zixie FileProvider")
-                    targetFile = File(ZixieFileProvider.getZixieFilePath(context) + getFileName(filePath))
+                    targetFile =
+                        File(ZixieFileProvider.getZixieFilePath(context) + getFileName(filePath))
                     copyFile(sourceFile, targetFile)
                 }
             }
@@ -352,5 +360,36 @@ object FileUtils {
             }
         }
         return res
+    }
+
+    fun getRealFilePath(context: Context, uri: Uri?): String {
+        if (null == uri) {
+            return ""
+        }
+        val scheme: String = uri.getScheme()
+        var data: String? = null
+
+        try {
+            if (scheme == null) {
+                data = uri.getPath()
+            } else if (ContentResolver.SCHEME_FILE == scheme) {
+                data = uri.getPath()
+            } else if (ContentResolver.SCHEME_CONTENT == scheme) {
+                val cursor: Cursor = context.getContentResolver()
+                    .query(uri, arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
+                if (null != cursor) {
+                    if (cursor.moveToFirst()) {
+                        val index: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                        if (index > -1) {
+                            data = cursor.getString(index)
+                        }
+                    }
+                    cursor.close()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return data ?: ""
     }
 }
