@@ -1,9 +1,7 @@
 package com.bihe0832.android.base.test
 
 
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -26,7 +24,6 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -410,17 +407,6 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //        ZLog.d("testVerion","v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
 //        ZLog.d("testVerion","v3 VS v2:" + APKUtils.compareVersion(v3, v2))
 //        ZLog.d("testVerion","v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
-
-        //android 11以上，将文件创建在公有目录
-        var targetFile =
-            ZixieContext.getZixieFolder() + File.separator + "pictures" + File.separator + "sss.jpg"
-        val path: String =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
-        //storage/emulated/0/Pictures
-        var a = Uri.parse("file://" + File(path, FileUtils.getFileName(targetFile)).absolutePath)
-
-
-        var b = Uri.fromFile(File(path, FileUtils.getFileName(targetFile)))
 
     }
 

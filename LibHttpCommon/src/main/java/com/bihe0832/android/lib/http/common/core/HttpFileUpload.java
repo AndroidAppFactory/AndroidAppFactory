@@ -7,6 +7,7 @@ import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.LOG_TAG;
 
+import android.content.Context;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.http.common.HTTPServer;
 import com.bihe0832.android.lib.log.ZLog;
@@ -28,7 +29,8 @@ public class HttpFileUpload {
     /**
      * post请求方法
      */
-    public String postRequest(final BaseConnection baseConnection, final Map<String, String> strParams,
+    public String postRequest(final Context context, final BaseConnection baseConnection,
+            final Map<String, String> strParams,
             final List<FileInfo> fileParams) {
 
         baseConnection.setURLConnectionCommonPara();
@@ -53,16 +55,26 @@ public class HttpFileUpload {
             paramDataOutputStream.writeBytes(getFormDataString(strParams).toString());
             paramDataOutputStream.flush();
 
-            for (FileInfo file : fileParams) {
-                paramDataOutputStream.writeBytes(file.getRequesetData(HTTPServer.BOUNDARY));
+            for (FileInfo fileInfo : fileParams) {
+                paramDataOutputStream.writeBytes(fileInfo.getRequesetData(HTTPServer.BOUNDARY));
                 paramDataOutputStream.flush();
-                InputStream paramInputStream = new FileInputStream(file.getFile());
-                byte[] buffer = new byte[1024];
-                int len = 0;
-                while ((len = paramInputStream.read(buffer)) != -1) {
-                    paramDataOutputStream.write(buffer, 0, len);
+                InputStream paramInputStream = null;
+
+                if (fileInfo.getFileUri() != null) {
+                    paramInputStream =
+                            context.getContentResolver().openInputStream(fileInfo.getFileUri());
+                } else {
+                    paramInputStream = new FileInputStream(fileInfo.getFile());
                 }
-                paramInputStream.close();
+                if (paramInputStream != null) {
+                    byte[] buffer = new byte[1024];
+                    int len = 0;
+                    while ((len = paramInputStream.read(buffer)) != -1) {
+                        paramDataOutputStream.write(buffer, 0, len);
+                    }
+                    paramInputStream.close();
+                }
+
                 paramDataOutputStream.writeBytes(BaseConnection.HTTP_REQ_ENTITY_LINE_END);
             }
             //请求结束标志

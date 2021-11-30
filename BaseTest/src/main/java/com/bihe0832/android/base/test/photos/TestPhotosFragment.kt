@@ -8,9 +8,9 @@ import android.view.View
 import com.bihe0832.android.common.photos.*
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import java.io.File
@@ -21,13 +21,18 @@ class TestPhotosFragment : BaseTestListFragment() {
 
     var needCrop = false
 
-    private fun getFile(): File {
-        return File(activity!!.getPhotosFolder() + System.currentTimeMillis() + "_crop_mna_hippy.jpg")
-    }
+    var takePhosUri: Uri? = null
+    var cropUri: Uri? = null
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(TestItemData("拍照", View.OnClickListener { activity?.takePhoto(getFile()) }))
+            add(
+                TestTipsData("当前图片地址： ")
+            )
+            add(TestItemData("拍照", View.OnClickListener {
+                takePhosUri = activity!!.getAutoChangedPhotoUri()
+                activity?.takePhoto(takePhosUri)
+            }))
             add(TestItemData("选择图片", View.OnClickListener {
                 needCrop = false
                 activity?.choosePhoto()
@@ -39,23 +44,48 @@ class TestPhotosFragment : BaseTestListFragment() {
         }
     }
 
+    private fun cropPhotos(sourceUri: Uri?) {
+        cropUri = activity!!.getAutoChangedPhotoUri()
+        activity!!.cropPhoto(
+            sourceUri,
+            cropUri
+        )
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (Activity.RESULT_OK == resultCode) {
             ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：$requestCode；resultCode：$resultCode")
             when (requestCode) {
-                ZixieActivityRequestCode.TAKE_PHOTO -> activity!!.cropPhoto(
-                    activity!!.getDefaultPhoto().absolutePath,
-                    getFile().absolutePath
-                )
+                ZixieActivityRequestCode.TAKE_PHOTO ->
+                    cropPhotos(takePhosUri)
                 ZixieActivityRequestCode.CHOOSE_PHOTO -> if (data != null && data.data != null) {
+                    ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：$requestCode；resultCode：$resultCode $data")
                     if (needCrop) {
-                        activity?.cropPhoto(data.getData(), getFile().absolutePath)
+                        cropPhotos(data.getData())
+                    } else {
+                        showResult(
+                            "图片地址:" +
+                                    ZixieFileProvider.uriToFile(
+                                        activity!!,
+                                        data.getData()
+                                    ).absolutePath
+                        )
                     }
                 } else {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：$requestCode；resultCode：$resultCode")
                 }
                 ZixieActivityRequestCode.CROP_PHOTO -> {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
+                    ZixieFileProvider.uriToFile(
+                        activity!!,
+                        cropUri
+                    ).absolutePath.let {
+                        showResult(
+                            "图片地址:$it"
+                        )
+                        ZLog.d("PhotoChooser in cropUri：$it")
+                    }
+
                 }
                 else -> {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())

@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibFile"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -33,7 +33,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.14.16"
+ext.moduleVersionName = "4.14.17"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -279,7 +279,7 @@ ext.moduleInfo = [
         "LibHttpCommon"             : [
                 "version"            : "4.14.10",
                 "artifactId"         : "lib-http-common",
-                "apidependenciesList": ["LibThread", "LibLog", "LibCommonUtils"]
+                "apidependenciesList": ["LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"]
         ],
         "LibHttpAdvanced"           : [
                 "version"            : "4.14.10",
@@ -333,7 +333,8 @@ ext.moduleInfo = [
                         "LibEncrypt",
                         "LibCommonUtils",
                         "LibThread",
-                        "LibOS"
+                        "LibOS",
+                        "LibLog"
                 ]
         ],
         "LibZip"                    : [
