@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.http.common;
 
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -14,7 +15,6 @@ import com.bihe0832.android.lib.http.common.core.HttpFileUpload;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -63,19 +63,11 @@ public class HTTPServer {
         };
     }
 
-    public String doFileUpload(final String requestUrl, final Map<String, String> strParams,
+    public String doFileUpload(Context context, final String requestUrl, final Map<String, String> strParams,
             final List<FileInfo> fileParams) {
         return new HttpFileUpload()
-                .postRequest(HTTPServer.getInstance().getConnection(requestUrl), strParams, fileParams);
+                .postRequest(context, HTTPServer.getInstance().getConnection(requestUrl), strParams, fileParams);
     }
-
-    public String doFileUpload(final String requestUrl, final Map<String, String> strParams,
-            final String filePath, final String keyName, final String fileDataType) {
-        ArrayList<FileInfo> fileInfos = new ArrayList<>();
-        fileInfos.add(new FileInfo(filePath, keyName, fileDataType));
-        return doFileUpload(requestUrl, strParams, fileInfos);
-    }
-
 
     public void doRequestAsync(HttpBasicRequest request) {
         Message msg = mCallHandler.obtainMessage();

@@ -2,8 +2,13 @@
 <paths>
     <external-files-path name="zixie_download" path="Download/"/>
     <external-files-path name="download" path="Download/"/>
+    <external-files-path name="images" path="."/>
+
     <files-path name="zixie_download" path="Download/"/>
     <files-path name="download" path="Download/"/>
+    <files-path name="images" path="."/>
+
     <external-path name="zixie_download" path="Download/"/>
     <external-path name="download" path="Download/"/>
+    <external-path name="images" path="."/>
 </paths>

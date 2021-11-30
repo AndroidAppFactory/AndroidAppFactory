@@ -13,4 +13,8 @@
     <external-files-path name="OuterExtImg" path="zixie/pictures/" />
     <files-path name="InnerImg" path="zixie/pictures/" />
 
+    <external-path name="images" path="." />
+    <external-files-path name="images" path="."/>
+    <files-path name="images" path="." />
+
 </paths>

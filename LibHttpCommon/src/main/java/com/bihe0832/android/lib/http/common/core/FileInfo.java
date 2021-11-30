@@ -4,6 +4,7 @@ import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.LOG_TAG;
 
+import android.net.Uri;
 import com.bihe0832.android.lib.log.ZLog;
 import java.io.File;
 
@@ -13,6 +14,7 @@ import java.io.File;
 public class FileInfo {
 
     private File file = null;
+    private Uri fileUri = null;
     private String keyName = "";
     private String fileDataType = "";
 
@@ -22,8 +24,19 @@ public class FileInfo {
         this.fileDataType = fileType;
     }
 
+
+    public FileInfo(Uri uri, String key, String fileType) {
+        this.fileUri = uri;
+        this.keyName = key;
+        this.fileDataType = fileType;
+    }
+
     public File getFile() {
         return file;
+    }
+
+    public Uri getFileUri() {
+        return fileUri;
     }
 
     public String getRequesetData(String uuid) {

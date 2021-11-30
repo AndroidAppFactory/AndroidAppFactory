@@ -366,7 +366,7 @@ object FileUtils {
         if (null == uri) {
             return ""
         }
-        val scheme: String = uri.getScheme()
+        val scheme: String? = uri.getScheme()
         var data: String? = null
 
         try {
@@ -375,7 +375,7 @@ object FileUtils {
             } else if (ContentResolver.SCHEME_FILE == scheme) {
                 data = uri.getPath()
             } else if (ContentResolver.SCHEME_CONTENT == scheme) {
-                val cursor: Cursor = context.getContentResolver()
+                val cursor: Cursor? = context.getContentResolver()
                     .query(uri, arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
                 if (null != cursor) {
                     if (cursor.moveToFirst()) {

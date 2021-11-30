@@ -6,15 +6,16 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
-import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.ui.media.Media
+import com.bihe0832.android.lib.utils.os.OSUtils
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
@@ -23,64 +24,87 @@ val takePhotoPermission = arrayOf(Manifest.permission.CAMERA)
 val selectPhotoPermission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 
-fun Activity.getDefaultPhoto(): File {
-    return File(getPhotosFolder(), "zixie_" + System.currentTimeMillis() + ".jpg")
+fun getAutoChangedPhotoName(): String {
+    return "zixie_" + System.currentTimeMillis() + ".jpg"
 }
 
 fun Activity.getPhotosFolder(): String {
-    return ZixieFileProvider.getZixiePhotosPath(this)
+    return Media.getZixiePhotosPath(this)
+}
+
+fun Activity.getAutoChangedPhotoUri(): Uri? {
+    return getPhotosUri(getAutoChangedPhotoName())
+}
+
+fun Activity.getPhotosUri(fileName: String): Uri? {
+    return if (OSUtils.isAndroidQVersion()) {
+        Media.createImageUriAboveAndroidQ(
+            this,
+            "",
+            fileName
+        )
+    } else {
+        Media.createImageUriForCameraBelowAndroidQ(
+            this,
+            "",
+            fileName
+        )
+    }
 }
 
 /**
  * TargetFile 建议使用 [getPhotosFolder] 获取
  */
-fun Activity.cropPhoto(sourceFile: String, targetFile: String, aspectX: Int = 1, aspectY: Int = 1) {
+fun Activity.cropPhoto(sourceFile: String, targetFile: Uri, aspectX: Int = 1, aspectY: Int = 1) {
     var sourceFileProvider =
         ZixieFileProvider.getZixieFileProvider(this@cropPhoto, File(sourceFile))
     cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
 }
 
-fun Activity.cropPhoto(sourceFile: Uri, targetFile: String, aspectX: Int = 1, aspectY: Int = 1) {
-    File(targetFile).let {
-        FileUtils.checkAndCreateFolder(it.parent)
-        var outSizePerPart = 1080 / aspectX.coerceAtLeast(aspectY)
-        // 开始切割
-        val intent = Intent("com.android.camera.action.CROP").apply {
-            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            setDataAndType(sourceFile, "image/*")
-            putExtra("crop", "true")
-            putExtra("aspectX", aspectX) // 裁剪框比例
-            putExtra("aspectY", aspectY)
-            putExtra("outputX", outSizePerPart * aspectX) // 输出图片大小
-            putExtra("outputY", outSizePerPart * aspectY)
-            putExtra("scale", true)
-            putExtra("circleCrop", true)
-            putExtra("return-data", false) // 不直接返回数据
-            putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(it)) // 返回一个文件
-            putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
-        }
-        startActivityForResult(intent, ZixieActivityRequestCode.CROP_PHOTO)
+fun Activity.cropPhoto(
+    sourceFile: Uri?,
+    targetFile: Uri?,
+    aspectX: Int = 1,
+    aspectY: Int = 1
+) {
+    ZLog.d("Activity cropPhoto targetFile ：$targetFile")
+
+    val file = ZixieFileProvider.uriToFile(this, targetFile)
+    if (file != null) {
+        FileUtils.checkAndCreateFolder(file.parent)
     }
+
+    var outSizePerPart = 1080 / aspectX.coerceAtLeast(aspectY)
+    // 开始切割
+    val intent = Intent("com.android.camera.action.CROP").apply {
+        addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        setDataAndType(sourceFile, "image/*")
+        putExtra("crop", "true")
+        putExtra("aspectX", aspectX) // 裁剪框比例
+        putExtra("aspectY", aspectY)
+        putExtra("outputX", outSizePerPart * aspectX) // 输出图片大小
+        putExtra("outputY", outSizePerPart * aspectY)
+        putExtra("scale", true)
+        putExtra("circleCrop", true)
+        putExtra("return-data", false) // 不直接返回数据
+        putExtra(MediaStore.EXTRA_OUTPUT, targetFile) // 返回一个文件
+        putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
+    }
+    startActivityForResult(intent, ZixieActivityRequestCode.CROP_PHOTO)
+
 }
 
-fun Activity.takePhoto(outputFile: File) {
+fun Activity.takePhoto(outputUri: Uri?) {
     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-    val outputUri = when {
-        BuildUtils.SDK_INT >= Build.VERSION_CODES.N -> {
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            ZixieFileProvider.getZixieFileProvider(this, outputFile)
-        }
-        else -> Uri.fromFile(outputFile)
-    }
-    // 去拍照
     intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri)
+    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     startActivityForResult(intent, ZixieActivityRequestCode.TAKE_PHOTO)
 }
 
 fun Activity.choosePhoto() {
 
     val intent = Intent(Intent.ACTION_PICK)
-    intent.type = "image/*"
+    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
     // 判断系统中是否有处理该 Intent 的 Activity
     if (intent.resolveActivity(packageManager) != null) {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
@@ -107,7 +131,7 @@ fun Activity.showPhotoChooser() {
 
                 override fun onSuccess() {
                     dialog.dismiss()
-                    takePhoto(getDefaultPhoto())
+                    takePhoto(getAutoChangedPhotoUri())
                 }
 
                 override fun onUserCancel(scene: String, permission: String) {
@@ -150,6 +174,4 @@ fun Activity.showPhotoChooser() {
         )
     }
 }
-
-
 
