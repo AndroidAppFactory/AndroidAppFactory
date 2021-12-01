@@ -36,6 +36,26 @@ fun Activity.getAutoChangedPhotoUri(): Uri? {
     return getPhotosUri(getAutoChangedPhotoName())
 }
 
+fun Activity.getAutoChangedCropUri(): Uri? {
+    return getCropUri(getAutoChangedPhotoName())
+}
+
+fun Activity.getCropUri(fileName: String): Uri? {
+    return if (OSUtils.isAndroidQVersion()) {
+        Media.createImageUriAboveAndroidQ(
+            this,
+            "",
+            fileName
+        )
+    } else {
+        Media.createImageUriForCropBelowAndroidQ(
+            this,
+            "",
+            fileName
+        )
+    }
+}
+
 fun Activity.getPhotosUri(fileName: String): Uri? {
     return if (OSUtils.isAndroidQVersion()) {
         Media.createImageUriAboveAndroidQ(

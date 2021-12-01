@@ -13,7 +13,6 @@ import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
-import java.io.File
 
 
 class TestPhotosFragment : BaseTestListFragment() {
@@ -29,7 +28,13 @@ class TestPhotosFragment : BaseTestListFragment() {
             add(
                 TestTipsData("当前图片地址： ")
             )
-            add(TestItemData("拍照", View.OnClickListener {
+            add(TestItemData("仅拍照", View.OnClickListener {
+                needCrop = false
+                takePhosUri = activity!!.getAutoChangedPhotoUri()
+                activity?.takePhoto(takePhosUri)
+            }))
+            add(TestItemData("拍照并裁剪", View.OnClickListener {
+                needCrop = true
                 takePhosUri = activity!!.getAutoChangedPhotoUri()
                 activity?.takePhoto(takePhosUri)
             }))
@@ -45,7 +50,7 @@ class TestPhotosFragment : BaseTestListFragment() {
     }
 
     private fun cropPhotos(sourceUri: Uri?) {
-        cropUri = activity!!.getAutoChangedPhotoUri()
+        cropUri = activity!!.getAutoChangedCropUri()
         activity!!.cropPhoto(
             sourceUri,
             cropUri
@@ -56,8 +61,21 @@ class TestPhotosFragment : BaseTestListFragment() {
         if (Activity.RESULT_OK == resultCode) {
             ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：$requestCode；resultCode：$resultCode")
             when (requestCode) {
-                ZixieActivityRequestCode.TAKE_PHOTO ->
-                    cropPhotos(takePhosUri)
+                ZixieActivityRequestCode.TAKE_PHOTO -> {
+
+                    if (needCrop) {
+                        cropPhotos(takePhosUri)
+                    } else {
+                        showResult(
+                            "图片地址:" +
+                                    ZixieFileProvider.uriToFile(
+                                        activity!!,
+                                        takePhosUri
+                                    ).absolutePath
+                        )
+                    }
+                }
+
                 ZixieActivityRequestCode.CHOOSE_PHOTO -> if (data != null && data.data != null) {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：$requestCode；resultCode：$resultCode $data")
                     if (needCrop) {
