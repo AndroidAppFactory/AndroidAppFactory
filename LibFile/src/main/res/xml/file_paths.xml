@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-files-path name="zixie_download" path="Download/"/>
-    <external-files-path name="download" path="Download/"/>
-    <external-files-path name="images" path="."/>
+    <external-files-path name="zixie_download" path="Download"/>
+    <external-files-path name="download" path="Download"/>
+    <external-files-path name="base" path="."/>
+    <external-files-path name="images" path="Pictures"/>
+    <external-files-path name="movies" path="Movies"/>
 
-    <files-path name="zixie_download" path="Download/"/>
-    <files-path name="download" path="Download/"/>
-    <files-path name="images" path="."/>
+    <files-path name="zixie_download" path="Download"/>
+    <files-path name="download" path="Download"/>
+    <files-path name="base" path="." />
+    <files-path name="images" path="Pictures" />
+    <files-path name="movies" path="Movies" />
 
-    <external-path name="zixie_download" path="Download/"/>
-    <external-path name="download" path="Download/"/>
-    <external-path name="images" path="."/>
+    <external-path name="zixie_download" path="Download"/>
+    <external-path name="download" path="Download"/>
+    <external-path name="base" path="." />
+    <external-path name="images" path="Pictures" />
+    <external-path name="movies" path="Movies" />
+
 </paths>

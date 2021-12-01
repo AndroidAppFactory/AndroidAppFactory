@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public class Media {
 
     public static final String getZixiePhotosPath(@NotNull Context context) {
-        String filePath = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator;
+        String filePath = ZixieFileProvider.getZixieFilePath(context) + File.separator + Environment.DIRECTORY_PICTURES;
         if (BuildUtils.INSTANCE.getSDK_INT() >= 30) {
             //android 11以上，将文件创建在公有目录
             filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
@@ -123,6 +123,26 @@ public class Media {
                 //Android7以下，该方法得到的uri为file类型的
                 return Uri.fromFile(picture);
             }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * AndroidQ以下创建用于保存裁剪的uri，(沙盒目录/pictures/filePath)
+     * 裁剪传入intent的uri跟拍照不同
+     * 在AndroidQ以下统一使用file类型的uri，所以统一用Uri.fromFile()方法返回
+     *
+     * @param Context context
+     * @param name 文件名
+     * @param filePath 子文件夹
+     * @return file uri
+     */
+    public static Uri createImageUriForCropBelowAndroidQ(Context context, String filePath, String name) {
+        File childDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + filePath);
+        if (FileUtils.INSTANCE.checkAndCreateFolder(childDir.getAbsolutePath())) {
+            File picture = new File(childDir, name);
+            return Uri.fromFile(picture);
         } else {
             return null;
         }
