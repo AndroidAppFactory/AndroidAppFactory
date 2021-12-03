@@ -1,7 +1,9 @@
 package com.bihe0832.android.base.test
 
 
+import android.Manifest
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -29,6 +31,7 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
@@ -37,6 +40,7 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
@@ -375,7 +379,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
 
     private fun testFunc() {
-
+        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())
 //        CommonDBManager.getAll().forEach {
@@ -409,5 +413,6 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //        ZLog.d("testVerion","v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
 
     }
+
 
 }
