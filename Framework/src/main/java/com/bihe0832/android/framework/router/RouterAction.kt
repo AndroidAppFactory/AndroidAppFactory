@@ -1,10 +1,11 @@
 package com.bihe0832.android.framework.router
 
 import android.app.Activity
+import android.content.Intent
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.Routers
-import com.bihe0832.android.framework.ZixieContext
 
 
 /**
@@ -62,23 +63,51 @@ object RouterAction {
 
 
     fun open(schema: String, path: String) {
-        Routers.open(ZixieContext.applicationContext, "${schema}://$path")
+        Routers.open(
+            ZixieContext.applicationContext,
+            "${schema}://$path",
+            Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
     }
 
     fun open(schema: String, path: String, para: Map<String, String>?) {
-        Routers.open(ZixieContext.applicationContext, getFinalURL(schema, path, para))
+        Routers.open(
+            ZixieContext.applicationContext,
+            getFinalURL(schema, path, para),
+            Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
     }
 
     fun openFinalURL(path: String) {
-        Routers.open(ZixieContext.applicationContext, path)
+        openFinalURL(path, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+    }
+
+    fun openFinalURL(path: String, startFlag: Int) {
+        Routers.open(ZixieContext.applicationContext, path, startFlag)
     }
 
     fun openForResult(schema: String, activity: Activity, path: String, requestCode: Int) {
-        Routers.openForResult(activity, getFinalURL(schema, path), requestCode)
+        Routers.openForResult(
+            activity,
+            getFinalURL(schema, path),
+            requestCode,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
     }
 
-    fun openForResult(schema: String, activity: Activity, path: String, para: Map<String, String>?, requestCode: Int) {
-        Routers.openForResult(activity, getFinalURL(schema, path, para), requestCode)
+    fun openForResult(
+        schema: String,
+        activity: Activity,
+        path: String,
+        para: Map<String, String>?,
+        requestCode: Int
+    ) {
+        Routers.openForResult(
+            activity,
+            getFinalURL(schema, path, para),
+            requestCode,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
     }
 
     fun openPageByRouter(pathHost: String, para: Map<String, String>?) {

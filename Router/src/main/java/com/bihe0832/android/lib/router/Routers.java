@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,53 +12,62 @@ import java.util.Set;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2019-07-19.
- * Description: Description
+ *         Created on 2019-07-19.
+ *         Description: Description
  */
 public class Routers {
 
     public static final String ROUTERS_KEY_RAW_URL = "com.bihe0832.router.URI";
 
     private static void initIfNeed(String format) {
-        if (!RouterMappingManager.getInstance().getMappings().isEmpty() && RouterMappingManager.getInstance().getMappings().containsKey(format)) {
+        if (!RouterMappingManager.getInstance().getMappings().isEmpty() && RouterMappingManager.getInstance()
+                .getMappings().containsKey(format)) {
             return;
         }
         RouterMappingManager.getInstance().initMapping(format);
     }
 
     public static boolean open(Context context, String url) {
-        return open(context, Uri.parse(url));
+        return open(context, Uri.parse(url), Intent.FLAG_ACTIVITY_SINGLE_TOP);
     }
 
-    public static boolean open(Context context, String url, RouterContext.RouterCallback callback) {
-        return open(context, Uri.parse(url), callback);
+    public static boolean open(Context context, String url, int startFlag) {
+        return open(context, Uri.parse(url), startFlag);
     }
 
-    public static boolean open(Context context, Uri uri) {
-        return open(context, uri, RouterContext.INSTANCE.getGlobalRouterCallback());
+
+    public static boolean open(Context context, String url, int startFlag, RouterContext.RouterCallback callback) {
+        return open(context, Uri.parse(url), startFlag, callback);
     }
 
-    public static boolean open(Context context, Uri uri, RouterContext.RouterCallback callback) {
-        return open(context, uri, -1, callback);
+    public static boolean open(Context context, Uri uri, int startFlag) {
+        return open(context, uri, startFlag, RouterContext.INSTANCE.getGlobalRouterCallback());
     }
 
-    public static boolean openForResult(Activity activity, String url, int requestCode) {
-        return openForResult(activity, Uri.parse(url), requestCode);
+    public static boolean open(Context context, Uri uri, int startFlag, RouterContext.RouterCallback callback) {
+        return open(context, uri, -1, startFlag, callback);
     }
 
-    public static boolean openForResult(Activity activity, String url, int requestCode, RouterContext.RouterCallback callback) {
-        return openForResult(activity, Uri.parse(url), requestCode, callback);
+    public static boolean openForResult(Activity activity, String url, int requestCode, int startFlag) {
+        return openForResult(activity, Uri.parse(url), requestCode, startFlag);
     }
 
-    public static boolean openForResult(Activity activity, Uri uri, int requestCode) {
-        return openForResult(activity, uri, requestCode, RouterContext.INSTANCE.getGlobalRouterCallback());
+    public static boolean openForResult(Activity activity, String url, int requestCode, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return openForResult(activity, Uri.parse(url), requestCode, startFlag, callback);
     }
 
-    public static boolean openForResult(Activity activity, Uri uri, int requestCode, RouterContext.RouterCallback callback) {
-        return open(activity, uri, requestCode, callback);
+    public static boolean openForResult(Activity activity, Uri uri, int requestCode, int startFlag) {
+        return openForResult(activity, uri, requestCode, startFlag, RouterContext.INSTANCE.getGlobalRouterCallback());
     }
 
-    private static boolean open(Context context, Uri uri, int requestCode, RouterContext.RouterCallback callback) {
+    public static boolean openForResult(Activity activity, Uri uri, int requestCode, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(activity, uri, requestCode, startFlag, callback);
+    }
+
+    private static boolean open(Context context, Uri uri, int requestCode, int startFlag,
+            RouterContext.RouterCallback callback) {
         boolean success = false;
         if (callback != null) {
             if (callback.beforeOpen(context, uri)) {
@@ -68,7 +76,7 @@ public class Routers {
         }
 
         try {
-            success = doOpen(context, uri, requestCode);
+            success = doOpen(context, uri, requestCode, startFlag);
         } catch (Throwable e) {
             e.printStackTrace();
             if (callback != null) {
@@ -92,7 +100,8 @@ public class Routers {
 
     public static Intent resolve(Context context, Uri uri) {
         initIfNeed(uri.getHost());
-        for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getMappings().entrySet()) {
+        for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getMappings()
+                .entrySet()) {
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
             if (entry.getKey().equalsIgnoreCase(uri.getHost()) && null != entry.getValue()) {
                 Intent intent = new Intent(context, entry.getValue());
@@ -104,10 +113,11 @@ public class Routers {
         return null;
     }
 
-    private static boolean doOpen(Context context, Uri uri, int requestCode) {
+    private static boolean doOpen(Context context, Uri uri, int requestCode, int startFlag) {
         initIfNeed(uri.getHost());
         if (RouterMappingManager.getInstance().getMappings().containsKey(uri.getHost())) {
-            Class<? extends Activity> activityClass = RouterMappingManager.getInstance().getMappings().get(uri.getHost());
+            Class<? extends Activity> activityClass = RouterMappingManager.getInstance().getMappings()
+                    .get(uri.getHost());
             if (null != activityClass) {
                 try {
                     Intent intent = new Intent(context, activityClass);
@@ -115,7 +125,7 @@ public class Routers {
                     intent.putExtra(ROUTERS_KEY_RAW_URL, uri.toString());
                     if (!(context instanceof Activity)) {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.addFlags(startFlag);
                     }
                     if (requestCode >= 0) {
                         if (context instanceof Activity) {
@@ -137,7 +147,7 @@ public class Routers {
                 System.out.println("jumpToOtherApp url:" + uri.toString() + ",intent:" + intent.toString());
                 if (!(context instanceof Activity)) {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.addFlags(startFlag);
                 }
                 if (requestCode >= 0) {
                     if (context instanceof Activity) {
