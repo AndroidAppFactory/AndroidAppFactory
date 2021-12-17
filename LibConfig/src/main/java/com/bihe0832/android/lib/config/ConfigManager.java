@@ -174,11 +174,15 @@ class ConfigManager {
             ZLog.d(TAG, "read local value");
             value = readLocalConfig(key);
         }
+        if(value != null){
+            mConfigInfoInCache.put(key, value);
+        }
+
         ZLog.d(TAG, "read cloud value");
         if (value == null) {
             value = defValue;
         }
-        mConfigInfoInCache.put(key, value);
+
         ZLog.d(TAG, "readConfig: key=" + key + ";value=" + value);
         return value;
     }
