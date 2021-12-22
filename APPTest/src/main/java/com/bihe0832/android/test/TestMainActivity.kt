@@ -7,16 +7,15 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
-import android.view.View
 import com.bihe0832.android.base.test.permission.TestPermissionsActivity
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.PermissionResultOfAAF
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
-import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
+import com.bihe0832.android.lib.lifecycle.ApplicationObserver
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.router.annotation.APPMain
@@ -57,6 +56,13 @@ class TestMainActivity : CommonActivity() {
         DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
         hideBottomUIMenu()
         CommonDBManager.init(this)
+
+        ApplicationObserver.addDestoryListener(object : ApplicationObserver.APPDestroyListener {
+
+            override fun onAllActivityDestroyed() {
+                ZLog.d("onAllActivityDestroyed")
+            }
+        })
     }
 
     override fun getStatusBarColor(): Int {

@@ -241,26 +241,28 @@ object ZixieContext {
 
     fun exitAPP() {
         ThreadManager.getInstance().start({
-            ActivityObserver.getCurrentActivity()?.let { context ->
-                (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)?.let {
-                    it.killBackgroundProcesses(context.packageName)
-                    if (BuildUtils.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-                        for (appTask in it.appTasks) {
-                            appTask.finishAndRemoveTask()
+            ThreadManager.getInstance().runOnUIThread {
+                ActivityObserver.getCurrentActivity()?.let { context ->
+                    (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)?.let {
+                        it.killBackgroundProcesses(context.packageName)
+                        if (BuildUtils.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+                            for (appTask in it.appTasks) {
+                                appTask.finishAndRemoveTask()
+                            }
+                            context.finishAndRemoveTask()
+                        } else {
+                            context.finish()
                         }
-                        context.finishAndRemoveTask()
-                    } else {
-                        context.finish()
                     }
                 }
-            }
+                ActivityObserver.getActivityList().forEach {
+                    it.finish()
+                }
+                ApplicationObserver.onAllActivityDestroyed()
 
-            ActivityObserver.getActivityList().forEach {
-                it.finish()
+                android.os.Process.killProcess(android.os.Process.myPid())//获取PID
+                exitProcess(1)//常规java、c#的标准退出法，返回值为0代表正常退出**
             }
-
-            android.os.Process.killProcess(android.os.Process.myPid())//获取PID
-            exitProcess(1)//常规java、c#的标准退出法，返回值为0代表正常退出**
         }, 200L)
     }
 
