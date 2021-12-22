@@ -21,10 +21,16 @@ object ApplicationObserver : LifecycleObserver {
     private var mLastResumeTime = 0L
     private var mIsAPPBackground = true
     private val mAPPStatusChangeListenerList = mutableListOf<APPStatusChangeListener>()
+    private val mAPPDestroyChangeListenerList = mutableListOf<APPDestroyListener>()
+
 
     interface APPStatusChangeListener {
         fun onForeground()
         fun onBackground()
+    }
+
+    interface APPDestroyListener {
+        fun onAllActivityDestroyed()
     }
 
     init {
@@ -32,11 +38,28 @@ object ApplicationObserver : LifecycleObserver {
     }
 
     fun addStatusChangeListener(listener: APPStatusChangeListener) {
-        mAPPStatusChangeListenerList.add(listener)
+        if (!mAPPStatusChangeListenerList.contains(listener)) {
+            mAPPStatusChangeListenerList.add(listener)
+        }
     }
 
     fun removeStatusChangeListener(listener: APPStatusChangeListener) {
-        mAPPStatusChangeListenerList.remove(listener)
+        if (mAPPStatusChangeListenerList.contains(listener)) {
+            mAPPStatusChangeListenerList.remove(listener)
+        }
+    }
+
+    fun addDestoryListener(listener: APPDestroyListener) {
+        if (!mAPPDestroyChangeListenerList.contains(listener)) {
+            mAPPDestroyChangeListenerList.add(listener)
+        }
+
+    }
+
+    fun removeDestoryListener(listener: APPDestroyListener) {
+        if (mAPPDestroyChangeListenerList.contains(listener)) {
+            mAPPDestroyChangeListenerList.remove(listener)
+        }
     }
 
     fun isAPPBackground(): Boolean {
@@ -44,11 +67,12 @@ object ApplicationObserver : LifecycleObserver {
     }
 
     fun getLastPauseTime(): Long {
-        (LifecycleHelper.applicationContext!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses?.find { it.pid == Process.myPid() }.let {
-            if (it?.processName.equals(LifecycleHelper.applicationContext!!.packageName)) {
-                return mLastPauseTime
+        (LifecycleHelper.applicationContext!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses?.find { it.pid == Process.myPid() }
+            .let {
+                if (it?.processName.equals(LifecycleHelper.applicationContext!!.packageName)) {
+                    return mLastPauseTime
+                }
             }
-        }
         return System.currentTimeMillis()
     }
 
@@ -77,6 +101,13 @@ object ApplicationObserver : LifecycleObserver {
         mIsAPPBackground = true
         mAPPStatusChangeListenerList.forEach {
             it.onBackground()
+        }
+    }
+
+    fun onAllActivityDestroyed() {
+        ZLog.d(TAG, "onAllActivityDestroy!")
+        mAPPDestroyChangeListenerList.forEach {
+            it.onAllActivityDestroyed()
         }
     }
 }

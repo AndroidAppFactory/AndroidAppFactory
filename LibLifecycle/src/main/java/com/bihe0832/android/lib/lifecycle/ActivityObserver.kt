@@ -75,6 +75,11 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
             activity?.let {
                 mActivityList.remove(it)
             }
+
+            if(mActivityList.size == 0){
+                ZLog.d(TAG, "app has no activity after onActivityDestroyed: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+                ApplicationObserver.onAllActivityDestroyed()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
