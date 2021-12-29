@@ -79,7 +79,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     }
 
     private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
-        put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.js");
+        put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.new.js");
     }};
 
     // 追加业务参数
