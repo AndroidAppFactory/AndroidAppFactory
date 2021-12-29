@@ -2,25 +2,22 @@ package com.bihe0832.android.common.feedback;
 
 
 import android.os.Bundle;
-
 import com.bihe0832.android.common.webview.CommonWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
+import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
-import com.bihe0832.android.lib.request.URLUtils;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-07-26.
- * Description: Description
+ *         Created on 2019-07-26.
+ *         Description: Description
  */
 public class FeedbackFragment extends CommonWebviewFragment {
 
     public static FeedbackFragment newInstance(String url) {
         FeedbackFragment fragment = new FeedbackFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(INTENT_KEY_URL, url);
-        bundle.putString(INTENT_KEY_DATA, fragment.getPostData());
+        Bundle bundle = getWebviewDataBundle(url, fragment.getPostData());
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -39,10 +36,11 @@ public class FeedbackFragment extends CommonWebviewFragment {
     private String getPostData() {
         StringBuilder builder = new StringBuilder();
         builder.append("clientInfo=");
-        if(!ZixieContext.INSTANCE.isOfficial()){
+        if (!ZixieContext.INSTANCE.isOfficial()) {
             builder.append("内部版本").append("/");
         }
-        builder.append(ManufacturerUtil.INSTANCE.getMANUFACTURER()).append("/").append(ManufacturerUtil.INSTANCE.getBRAND()).append("/").append(
+        builder.append(ManufacturerUtil.INSTANCE.getMANUFACTURER()).append("/")
+                .append(ManufacturerUtil.INSTANCE.getBRAND()).append("/").append(
                 ManufacturerUtil.INSTANCE.getMODEL());
         builder.append("&clientVersion=");
         builder.append(ZixieContext.INSTANCE.getVersionName())
@@ -50,7 +48,8 @@ public class FeedbackFragment extends CommonWebviewFragment {
                 .append("/").append(ZixieContext.INSTANCE.getVersionTag())
                 .append("/").append(ZixieContext.INSTANCE.getChannelID());
         builder.append("&os=");
-        builder.append("Android").append("/").append(BuildUtils.INSTANCE.getRELEASE()).append("/").append(BuildUtils.INSTANCE.getSDK_INT());
+        builder.append("Android").append("/").append(BuildUtils.INSTANCE.getRELEASE()).append("/")
+                .append(BuildUtils.INSTANCE.getSDK_INT());
         builder.append("&imei=").append(ZixieContext.INSTANCE.getDeviceId());
         builder.append("&customInfo=");
         return builder.toString();

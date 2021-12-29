@@ -1,23 +1,18 @@
 package com.bihe0832.android.common.test.base
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
-import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
+import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.framework.router.openWebPage
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.set
 
 abstract class BaseTestListActivity : CommonListActivity() {
 
@@ -57,7 +52,12 @@ abstract class BaseTestListActivity : CommonListActivity() {
         DebugTools.showInfo(this, title, content, "发送到第三方应用")
     }
 
-    fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: InputDialogCompletedCallback) {
+    fun showInputDialog(
+        titleName: String,
+        msg: String,
+        defaultValue: String,
+        listener: InputDialogCompletedCallback
+    ) {
         DebugTools.showInputDialog(this, titleName, msg, defaultValue, listener)
     }
 
@@ -70,8 +70,6 @@ abstract class BaseTestListActivity : CommonListActivity() {
     }
 
     fun openWeb(url: String) {
-        val map = HashMap<String, String>()
-        map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
-        RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
+        openWebPage(url)
     }
 }

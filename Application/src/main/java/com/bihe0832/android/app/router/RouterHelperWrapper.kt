@@ -1,6 +1,7 @@
 package com.bihe0832.android.app.router
 
 import android.net.Uri
+import com.bihe0832.android.lib.request.URLUtils
 import java.util.*
 
 
@@ -31,6 +32,6 @@ fun getSkipListHostList(): List<String> {
 
 fun openWebPage(url: String) {
     val map = HashMap<String, String>()
-    map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(url)
+    map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(url)
     RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
 }

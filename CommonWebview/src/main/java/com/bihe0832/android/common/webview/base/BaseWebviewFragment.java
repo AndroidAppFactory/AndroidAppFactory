@@ -69,6 +69,15 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     public static final String INTENT_KEY_THIRD_PART = "http://localhost";
     public static final String KEY_WX_PAY_PART = "https://wx.tenpay.com";
 
+    public static Bundle getWebviewDataBundle(String url,String data){
+        Bundle bundle = new Bundle();
+        bundle.putString(INTENT_KEY_URL, URLUtils.encode(url));
+        if(!TextUtils.isEmpty(data)){
+            bundle.putString(INTENT_KEY_DATA, data);
+        }
+        return bundle;
+    }
+
     private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
         put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.js");
     }};

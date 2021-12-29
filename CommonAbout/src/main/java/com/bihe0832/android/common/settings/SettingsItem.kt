@@ -9,6 +9,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.openWebPage
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.superapp.QQHelper
 import com.bihe0832.android.lib.superapp.WechatOfficialAccount
 import java.util.*
@@ -57,7 +58,7 @@ object SettingsItem {
             mShowGo = true
             mHeaderListener = View.OnClickListener {
                 val map = HashMap<String, String>()
-                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode(ZixieContext.applicationContext!!.resources.getString(R.string.feedback_url))
+                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(ZixieContext.applicationContext!!.resources.getString(R.string.feedback_url))
                 RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_FEEDBACK, map)
             }
         }

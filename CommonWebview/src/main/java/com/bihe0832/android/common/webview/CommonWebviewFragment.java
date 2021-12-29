@@ -2,8 +2,8 @@ package com.bihe0832.android.common.webview;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
-import com.bihe0832.android.common.webview.base.CookieManagerForZixie;
 import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
@@ -25,20 +25,20 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
 
     public static CommonWebviewFragment newInstance(String url) {
         CommonWebviewFragment fragment = new CommonWebviewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(INTENT_KEY_URL, url);
+        Bundle bundle = getWebviewDataBundle(url,"");
         fragment.setArguments(bundle);
         return fragment;
     }
 
     public static CommonWebviewFragment newInstance(String url, boolean refreshable) {
         CommonWebviewFragment fragment = new CommonWebviewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(INTENT_KEY_URL, url);
+        Bundle bundle = getWebviewDataBundle(url,"");
         bundle.putBoolean(INTENT_KEY_REFRESH, refreshable);
         fragment.setArguments(bundle);
         return fragment;
     }
+
+
 
     @Override
     protected String getFinalURL(String url) {

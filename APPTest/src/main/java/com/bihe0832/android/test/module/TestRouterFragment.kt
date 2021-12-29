@@ -16,7 +16,6 @@ class TestRouterFragment : TestDebugRouterFragment() {
             add(RouterItem("zixie://zweb?url=https%3A%2F%2Fblog.bihe0832.com"))
             add(RouterItem("zixie://zfeedback?url=https%3A%2F%2Fsupport.qq.com%2Fproduct%2F290858"))
             add(RouterItem("zixie://zweb?url=" + URLUtils.encode("https://play.google.com/store/apps/details?id=com.pubg.newstate")))
-            add(RouterItem("zixie://zweb?url=" + URLUtils.encode("https://v.qq.com")))
 
         }
     }
