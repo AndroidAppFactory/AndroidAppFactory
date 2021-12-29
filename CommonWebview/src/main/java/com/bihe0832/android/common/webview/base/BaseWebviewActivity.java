@@ -98,11 +98,11 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     protected void onResume() {
         super.onResume();
         if (TextUtils.isEmpty(mURL)) {
-            WebviewLoggerFile.INSTANCE.log(TAG + "onResume, extra is good, but value is bad");
+            WebviewLoggerFile.INSTANCE.log(TAG + " onResume, extra is good, but value is bad");
             finish();
             return;
         } else {
-            WebviewLoggerFile.INSTANCE.log(TAG + "onResume:" + mURL);
+            WebviewLoggerFile.INSTANCE.log(TAG + " onResume:" + mURL);
             if (findFragment(getWebViewFragmentClass()) == null) {
                 loadRootFragment(R.id.common_fragment_content, getWebViewFragment());
             }

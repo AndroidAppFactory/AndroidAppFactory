@@ -18,6 +18,7 @@ import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.*
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.utils.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
@@ -42,7 +43,7 @@ open class TestDebugCommonFragment : BaseTestListFragment() {
             }))
             add(TestItemData("打开反馈页面", View.OnClickListener {
                 val map = HashMap<String, String>()
-                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = Uri.encode("https://support.qq.com/product/290858")
+                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode("https://support.qq.com/product/290858")
                 RouterAction.openPageByRouter(MODULE_NAME_FEEDBACK, map)
             }))
             add(TestItemData("打开应用设置") { IntentUtils.startAppDetailSettings(context) })
