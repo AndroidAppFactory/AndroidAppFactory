@@ -18,6 +18,9 @@ ext {
 
     //使用kotlin版本
     kotlin_version = '1.3.71'
+    kotlinx_version = '1.3.9'
+
+
     glide_version = "4.6.1"
     gson_version = "2.8.2"
     //使用Android Support库版本
@@ -39,7 +42,8 @@ ext {
 
     excludeList = [
             'META-INF/*.kotlin_module',
-            'META-INF/proguard/androidx-annotations.pro'
+            'META-INF/proguard/androidx-annotations.pro',
+            'META-INF/proguard/coroutines.pro'
     ]
 
     doNotStripList = [

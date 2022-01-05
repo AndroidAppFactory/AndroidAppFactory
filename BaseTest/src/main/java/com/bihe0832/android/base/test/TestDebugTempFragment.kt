@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.base.test.icon.TestIcon
 import com.bihe0832.android.base.test.icon.TestTipsIcon
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
