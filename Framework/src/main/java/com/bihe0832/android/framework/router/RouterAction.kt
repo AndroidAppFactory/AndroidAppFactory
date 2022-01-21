@@ -110,6 +110,19 @@ object RouterAction {
         )
     }
 
+    fun openForResult(
+        activity: Activity,
+        url: String,
+        requestCode: Int
+    ) {
+        Routers.openForResult(
+            activity,
+            url,
+            requestCode,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+    }
+
     fun openPageByRouter(pathHost: String, para: Map<String, String>?) {
         open(SCHEME, pathHost, para)
     }
