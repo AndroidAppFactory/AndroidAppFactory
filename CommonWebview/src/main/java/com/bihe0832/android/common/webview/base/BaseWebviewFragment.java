@@ -124,6 +124,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         return new BaseWebviewFragment.MyWebChromeClient();
     }
 
+    protected BaseWebView createWebView(){
+        return new BaseWebView(getContext(), null);
+    }
+
     private View mCustomView;
     public BaseWebView mWebView;
     private IX5WebChromeClient.CustomViewCallback mCustomViewCallback;
@@ -171,7 +175,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.common_zixie_fragment_webview, container, false);
-        mWebView = new BaseWebView(getContext(), null);
+        mWebView = createWebView();
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);
         mRedirect = (TextView) view.findViewById(R.id.web_native_browser);
@@ -372,7 +376,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                         if (url.startsWith(KEY_WX_PAY_PART)) {
                             mWebView.loadUrl(url, getWechatCertifiedomainList());
                         } else {
-                            mWebView.loadUrl(url, null);
+                            mWebView.loadUrl(url);
                         }
                     }
                     return true;
