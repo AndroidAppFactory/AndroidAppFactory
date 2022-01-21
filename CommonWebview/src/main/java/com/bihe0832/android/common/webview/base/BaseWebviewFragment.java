@@ -31,6 +31,7 @@ import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.BaseFragment;
+import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
@@ -67,12 +68,13 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     public static final String INTENT_KEY_REFRESH = "refresh";
     public static final String INTENT_KEY_DATA = "WebviewFragment.data";
     public static final String INTENT_KEY_THIRD_PART = "http://localhost";
-    public static final String KEY_WX_PAY_PART = "https://wx.tenpay.com";
 
-    public static Bundle getWebviewDataBundle(String url,String data){
+    private static final String HEADER_NAME_REFERER = "Referer";
+
+    public static Bundle getWebviewDataBundle(String url, String data) {
         Bundle bundle = new Bundle();
         bundle.putString(INTENT_KEY_URL, URLUtils.encode(url));
-        if(!TextUtils.isEmpty(data)){
+        if (!TextUtils.isEmpty(data)) {
             bundle.putString(INTENT_KEY_DATA, data);
         }
         return bundle;
@@ -124,7 +126,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         return new BaseWebviewFragment.MyWebChromeClient();
     }
 
-    protected BaseWebView createWebView(){
+    protected BaseWebView createWebView() {
         return new BaseWebView(getContext(), null);
     }
 
@@ -296,7 +298,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             try {
                 String type = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
-                return new WebResourceResponse(type, "utf-8",
+                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET,
                         getContext().getAssets().open(getGlobalLocalRes().get(url)));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -309,6 +311,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     protected class MyWebViewClient extends WebViewClient {
 
         public MyBaseJsBridgeProxy mJSBridgeProxy = null;
+
+        private String mRefererString = "";
 
         public MyWebViewClient(MyBaseJsBridgeProxy jsBridge) {
             BaseWebviewFragment.this.mJSBridgeProxy = jsBridge;
@@ -332,6 +336,13 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             ZLog.d(TAG + "shouldInterceptRequest url:" + request.getUrl().toString());
             if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
                 String url = request.getUrl().toString();
+
+                ///获取RequestHeader中的所有 key value
+                Map<String, String> headerHashMap = request.getRequestHeaders();
+                if (headerHashMap.containsKey(HEADER_NAME_REFERER)) {
+                    mRefererString = headerHashMap.get(HEADER_NAME_REFERER);
+                }
+
                 WebResourceResponse res = interceptRequestResult(url);
                 if (null != res) {
                     return res;
@@ -349,7 +360,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             if (url.startsWith(INTENT_KEY_THIRD_PART)) {
                 String value = URLUtils.getValueByName(url, "value");
                 try {
-                    return processOverrideUrlLoading(view, URLDecoder.decode(value, "UTF-8"));
+                    return processOverrideUrlLoading(view, URLDecoder.decode(value,
+                            BaseConnection.HTTP_REQ_VALUE_CHARSET));
                 } catch (Exception e) {
                     e.printStackTrace();
                     return super.shouldOverrideUrlLoading(view, url);
@@ -373,8 +385,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                     if (loadUseIntent(url)) {
                         IntentUtils.jumpToOtherApp(url, getActivity());
                     } else {
-                        if (url.startsWith(KEY_WX_PAY_PART)) {
-                            mWebView.loadUrl(url, getWechatCertifiedomainList());
+                        if (!TextUtils.isEmpty(mRefererString)) {
+                            HashMap<String, String> headerHashMap = new HashMap<>();
+                            headerHashMap.put(HEADER_NAME_REFERER, mRefererString);
+                            mWebView.loadUrl(url, headerHashMap);
                         } else {
                             mWebView.loadUrl(url);
                         }
