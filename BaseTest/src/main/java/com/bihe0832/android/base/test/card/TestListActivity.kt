@@ -2,17 +2,20 @@ package com.bihe0832.android.base.test.card
 
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import com.bihe0832.android.base.test.card.section.SectionDataContent
 import com.bihe0832.android.base.test.card.section.SectionDataContent2
 import com.bihe0832.android.base.test.card.section.SectionDataHeader
 import com.bihe0832.android.base.test.card.section.SectionDataHeader2
-import com.bihe0832.android.framework.R
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
+import com.bihe0832.android.framework.R
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 const val ROUTRT_NAME_TEST_SECTION = "testlist"
 
@@ -20,6 +23,23 @@ const val ROUTRT_NAME_TEST_SECTION = "testlist"
 class TestListActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
     var num = 0
+
+
+    override fun initView() {
+        super.initView()
+        mRecyclerView?.apply {
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addItemDecoration(
+                GridDividerItemDecoration.Builder(context).apply {
+                    setShowLastLine(true)
+                    setColor(com.bihe0832.android.common.test.R.color.result_point_color)
+                    setHorizontalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
+//                    setVerticalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
+                }.build()
+            )
+        }
+    }
+
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeGridLayoutManager(this, 4)
     }
@@ -47,7 +67,7 @@ class TestListActivity : CommonListActivity() {
             }
 
             override fun loadMore() {
-                num ++
+                num++
                 mDataList.addAll(getTempData())
                 postValue(mDataList)
             }
@@ -69,17 +89,21 @@ class TestListActivity : CommonListActivity() {
     private fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             for (i in 0..2) {
-                add(if (i < 2) {
-                    SectionDataHeader("标题1:${System.currentTimeMillis()}")
-                } else {
-                    SectionDataHeader2("标题2:${System.currentTimeMillis()}")
-                })
-                for (j in 0..3) {
-                    add(if (i < 2) {
-                        SectionDataContent("内容1:${System.currentTimeMillis()}")
+                add(
+                    if (i < 2) {
+                        SectionDataHeader("标题1:${System.currentTimeMillis()}")
                     } else {
-                        SectionDataContent2("内容2:${System.currentTimeMillis()}")
-                    })
+                        SectionDataHeader2("标题2:${System.currentTimeMillis()}")
+                    }
+                )
+                for (j in 0..3) {
+                    add(
+                        if (i < 2) {
+                            SectionDataContent("内容1:${System.currentTimeMillis()}")
+                        } else {
+                            SectionDataContent2("内容2:${System.currentTimeMillis()}")
+                        }
+                    )
                 }
             }
         }

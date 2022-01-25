@@ -2,6 +2,7 @@ package com.bihe0832.android.common.test.base
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -17,12 +18,24 @@ import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 open class BaseTestListFragment : CommonListFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CardInfoHelper.getInstance().setAutoAddItem(true)
+        mRecyclerView?.apply {
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addItemDecoration(
+                GridDividerItemDecoration.Builder(context).apply {
+                    setShowLastLine(false)
+                    setColor(R.color.activity_test_bg)
+                    setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
+                }.build()
+            )
+        }
     }
 
     open fun getDataList(): ArrayList<CardBaseModule> {
@@ -56,7 +69,12 @@ open class BaseTestListFragment : CommonListFragment() {
         DebugTools.showInfo(context, title, content, "发送到第三方应用")
     }
 
-    fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: InputDialogCompletedCallback) {
+    fun showInputDialog(
+        titleName: String,
+        msg: String,
+        defaultValue: String,
+        listener: InputDialogCompletedCallback
+    ) {
         DebugTools.showInputDialog(context, titleName, msg, defaultValue, listener)
     }
 

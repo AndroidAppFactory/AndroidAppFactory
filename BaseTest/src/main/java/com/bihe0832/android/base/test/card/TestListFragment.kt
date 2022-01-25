@@ -1,17 +1,35 @@
 package com.bihe0832.android.base.test.card
 
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
+import android.view.View
 import com.bihe0832.android.base.test.card.section.SectionDataHeader
 import com.bihe0832.android.base.test.card.section.SectionDataHeader2
 import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
+import com.bihe0832.android.common.test.R
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 class TestListFragment : CommonListFragment() {
     val mDataList = ArrayList<CardBaseModule>()
 
+    override fun initView(view: View) {
+        super.initView(view)
+        mRecyclerView?.apply {
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addItemDecoration(
+                GridDividerItemDecoration.Builder(context).apply {
+                    setShowLastLine(false)
+                    setColor(R.color.activity_test_bg)
+                    setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
+                }.build()
+            )
+        }
+    }
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
 //        return SafeGridLayoutManager(context, 3)
         return getLinearLayoutManagerForList()

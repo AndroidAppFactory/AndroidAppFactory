@@ -8,11 +8,10 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.*
 import android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION
+import android.os.Build
+import android.support.annotation.RequiresApi
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.network.IpUtils
-import com.bihe0832.android.lib.network.NetworkUtil
-import com.bihe0832.android.lib.network.WifiUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.*
@@ -23,7 +22,7 @@ import java.util.*
  * Description: Description
  */
 
-class WifiManagerWrapper private constructor() {
+object WifiManagerWrapper {
 
     val TAG = "WifiManager-> "
     val DEFAULT_SSID = "<unknown ssid>"
@@ -32,19 +31,83 @@ class WifiManagerWrapper private constructor() {
 
     private var mWifiManager: WifiManager? = null
     private var mConnectivityManager: ConnectivityManager? = null
-    private var mWifiReceiver: NetworkBroadcastReceiver? = null
+
+    private val mWifiReceiver by lazy {
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val action = intent.action
+                if (action == WIFI_STATE_CHANGED_ACTION) {
+                    if (isDebug) ZLog.d("$TAG---------------------- ")
+                    //上一次的wifi状态
+                    //                    int wifiStatePre = intent.getIntExtra(WifiManager.EXTRA_PREVIOUS_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);
+                    //新的wifi状态
+                    wifiState = intent.getIntExtra(
+                        WifiManager.EXTRA_WIFI_STATE,
+                        WifiManager.WIFI_STATE_DISABLED
+                    )
+                    mWifiChangeListener?.onStateChanged(wifiState)
+                    //处理各种wifi状态
+                    if (WifiManager.WIFI_STATE_ENABLED == wifiState || WifiManager.WIFI_STATE_ENABLING == wifiState) {
+                        startScan()
+                    }
+                    if (isDebug) ZLog.d("$TAG WIFI_STATE_CHANGED_ACTION ${getInfoString()}")
+                    if (isDebug) ZLog.d("$TAG---------------------- ")
+                } else if (action == WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION) {
+                    if (isDebug) ZLog.d("$TAG---------------------- ")
+                    if (isDebug) ZLog.d("$TAG SUPPLICANT_CONNECTION_CHANGE_ACTION ${getInfoString()}")
+                    checkBaseInfoNotify()
+                    if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)) {
+                        //TODO: 建立新连接
+                    } else {
+                        //TODO: 现有连接丢失
+                    }
+
+                    if (isDebug) ZLog.d("$TAG---------------------- ")
+                } else if (action == WifiManager.NETWORK_STATE_CHANGED_ACTION) {
+                    if (isDebug) ZLog.d("$TAG---------------------- ")
+                    checkConfiguredInfoNotify()
+                    checkBaseInfoNotify()
+                    if (isDebug) ZLog.d("$TAG NETWORK_STATE_CHANGED_ACTION ${getInfoString()}")
+                    if (isDebug) ZLog.d("$TAG---------------------- ")
+                } else if (action == WifiManager.RSSI_CHANGED_ACTION) {
+                    if (isDebug || mNotifyRSSI) {
+                        if (isDebug) ZLog.d("$TAG---------------------- ")
+                        updateBaseInfo()
+                        if (isDebug) ZLog.d("$TAG RSSI_CHANGED_ACTION ${getInfoString()}")
+                        if (isDebug) ZLog.d("$TAG---------------------- ")
+                    }
+                } else if (action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
+                    if (isDebug || mCanScanWifi) {
+                        updateScanListInfo()
+                        mWifiChangeListener?.onScanUpdate(mWifiList)
+                    }
+                }
+            }
+        }
+    }
+
     private var mWifiChangeListener: OnWifiChangerListener? = null
 
     private var isDebug = false
+    private var hasInit = false
+
+    // 是否通知 Wi-Fi 强度
     private var mNotifyRSSI = false
+
+    // 可以扫描周边Wi-Fi
+    private var mCanScanWifi = false
+
     // 扫描出的网络连接列表
     private var mWifiList: List<ScanResult>? = null
+
     // 已经连接的网络连接列表
     private var mWifiConfigurationList: List<WifiConfiguration>? = null
+
     // 当前wifi的状态
     //获取wifi状态，开启关闭等
     var wifiState = WifiManager.WIFI_STATE_DISABLED
         internal set
+
     // 当前连接热点的信息
     private var mWifiInfo: WifiInfo? = null
     private var mWiFiNetworkInfo: NetworkInfo? = null
@@ -76,9 +139,9 @@ class WifiManagerWrapper private constructor() {
     }
 
     fun setWifiChangedListener(listener: OnWifiChangerListener?) {
-        if(null == listener){
+        if (null == listener) {
             mWifiChangeListener = null
-        }else{
+        } else {
             mWifiChangeListener = listener
             updateBaseInfo()
             updateScanListInfo()
@@ -114,7 +177,7 @@ class WifiManagerWrapper private constructor() {
                 getConfiguredByNetworkID(getNetworkId())?.let { wifiConfiguration ->
                     return TextFactoryUtils.trimMarks(wifiConfiguration.SSID)
                 }
-            }else{
+            } else {
                 return TextFactoryUtils.trimMarks(it.ssid)
             }
         }
@@ -124,7 +187,7 @@ class WifiManagerWrapper private constructor() {
     // 得到接入点的BSSID
     fun getBSSID(): String {
         mWifiInfo?.let {
-            if(it.bssid?.isNotBlank() == true){
+            if (it.bssid?.isNotBlank() == true) {
                 return it.bssid
             }
         }
@@ -182,6 +245,7 @@ class WifiManagerWrapper private constructor() {
     }
 
     // 得到连接的ID
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun getFrequency(): Int {
         mWifiInfo?.let {
             return it.frequency
@@ -222,25 +286,34 @@ class WifiManagerWrapper private constructor() {
             buffer.append("\n\tWifiConfiguration-> ").append(getWifiConfigurationString(it))
         }
         buffer.append("\n\twifi state-> $wifiState").append(";network state-> ${isWifiAvailable()}")
-        buffer.append("\n\tmWifiList-> " + getScanResultList().size).append(";mWifiConfigurationList-> " + getConfigurationList().size)
+        buffer.append("\n\tmWifiList-> " + getScanResultList().size)
+            .append(";mWifiConfigurationList-> " + getConfigurationList().size)
         return buffer.toString()
     }
 
     fun init(context: Context, debug: Boolean) {
-        init(context, debug, false)
+        init(context, debug, notifyRSSI = false, canScanWifi = false)
     }
 
-    fun init(context: Context, debug: Boolean, notifyRSSI: Boolean) {
+    fun init(context: Context, debug: Boolean, notifyRSSI: Boolean, canScanWifi: Boolean) {
         // 取得WifiManager对象
-        mContext = context;
+        mContext = context
         isDebug = debug
-        mWifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        mConnectivityManager = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        mNotifyRSSI = notifyRSSI
+        mCanScanWifi = canScanWifi
+        if (hasInit) {
+            return
+        }
+        hasInit = true
+
+        mWifiManager =
+            context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        mConnectivityManager =
+            context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         // 取得WifiInfo对象
         updateBaseInfo()
         updateConfiguredListInfo()
         updateScanListInfo()
-        mWifiReceiver = NetworkBroadcastReceiver()
         //需要过滤多个动作，则调用IntentFilter对象的addAction添加新动作
         val foundFilter = IntentFilter()
         //监听Wifi当前网络状态
@@ -249,13 +322,10 @@ class WifiManagerWrapper private constructor() {
         foundFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
         //监听与接入点之间的连接状态(新连接建立或者现有连接丢失)
         foundFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)
+        //监听Wifi信号强度变化
+        foundFilter.addAction(WifiManager.RSSI_CHANGED_ACTION)
         //监听Wifi发现新的接入点
         foundFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        //监听Wifi信号强度变化
-        mNotifyRSSI = notifyRSSI
-        if(mNotifyRSSI){
-            foundFilter.addAction(WifiManager.RSSI_CHANGED_ACTION)
-        }
         context.applicationContext.registerReceiver(mWifiReceiver, foundFilter)
     }
 
@@ -292,13 +362,14 @@ class WifiManagerWrapper private constructor() {
 
     //更新wifi列表信息
     private fun updateScanListInfo() {
-        // 得到扫描结果
-        try {
-            mWifiList = mWifiManager?.scanResults
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (mCanScanWifi){
+            // 得到扫描结果
+            try {
+                mWifiList = mWifiManager?.scanResults
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
-
     }
 
     private fun updateConfiguredListInfo() {
@@ -338,7 +409,7 @@ class WifiManagerWrapper private constructor() {
         updateConfiguredListInfo()
         if (isDebug) ZLog.d(TAG + " size $size ;size  + ${getConfigurationList().size}")
         mWifiChangeListener?.let {
-            if(getConfigurationList().isNotEmpty() && getConfigurationList().size != size){
+            if (getConfigurationList().isNotEmpty() && getConfigurationList().size != size) {
                 it.onConnectUpdate(getConfigurationList())
             }
         }
@@ -358,7 +429,7 @@ class WifiManagerWrapper private constructor() {
             tempConfig.networkId
         } else {
             val wcg = createWifiInfo(ssid, password, type)
-            mWifiManager?.addNetwork(wcg)?:-1
+            mWifiManager?.addNetwork(wcg) ?: -1
         }
 
         connectWifi(networkId)
@@ -385,7 +456,7 @@ class WifiManagerWrapper private constructor() {
         return false
     }
 
-    fun getNetType(context: Context):Int {
+    fun getNetType(context: Context): Int {
         return NetworkUtil.getNetworkState(context)
     }
 
@@ -431,11 +502,11 @@ class WifiManagerWrapper private constructor() {
     }
 
     fun getConfiguredBySSID(ssid: String): WifiConfiguration? {
-        if(TextUtils.isEmpty(ssid)){
+        if (TextUtils.isEmpty(ssid)) {
             return null
         }
         getConfigurationList()?.let {
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 for (existingConfig in it) {
                     if (TextFactoryUtils.trimMarks(existingConfig?.SSID) == ssid) {
                         return existingConfig
@@ -507,70 +578,6 @@ class WifiManagerWrapper private constructor() {
             }
         }
         return config
-    }
-
-    inner class NetworkBroadcastReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            if (action == WIFI_STATE_CHANGED_ACTION) {
-                if (isDebug) ZLog.d("$TAG---------------------- ")
-                //上一次的wifi状态
-                //                    int wifiStatePre = intent.getIntExtra(WifiManager.EXTRA_PREVIOUS_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);
-                //新的wifi状态
-                wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED)
-                mWifiChangeListener?.onStateChanged(wifiState)
-                //处理各种wifi状态
-                if (WifiManager.WIFI_STATE_ENABLED == wifiState || WifiManager.WIFI_STATE_ENABLING == wifiState) {
-                    startScan()
-                }
-                if (isDebug) ZLog.d("$TAG WIFI_STATE_CHANGED_ACTION ${getInfoString()}")
-                if (isDebug) ZLog.d("$TAG---------------------- ")
-            } else if (action == WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION) {
-                if (isDebug) ZLog.d("$TAG---------------------- ")
-                if (isDebug) ZLog.d("$TAG SUPPLICANT_CONNECTION_CHANGE_ACTION ${getInfoString()}")
-                checkBaseInfoNotify()
-                if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)) {
-                    //TODO: 建立新连接
-                } else {
-                    //TODO: 现有连接丢失
-                }
-
-                if (isDebug) ZLog.d("$TAG---------------------- ")
-            } else if (action == WifiManager.NETWORK_STATE_CHANGED_ACTION) {
-                if (isDebug) ZLog.d("$TAG---------------------- ")
-                checkConfiguredInfoNotify()
-                checkBaseInfoNotify()
-                if (isDebug) ZLog.d("$TAG NETWORK_STATE_CHANGED_ACTION ${getInfoString()}")
-                if (isDebug) ZLog.d("$TAG---------------------- ")
-            } else if (action == WifiManager.RSSI_CHANGED_ACTION) {
-                if (isDebug || mNotifyRSSI) {
-                    if (isDebug) ZLog.d("$TAG---------------------- ")
-                    updateBaseInfo()
-                    if (isDebug) ZLog.d("$TAG RSSI_CHANGED_ACTION ${getInfoString()}")
-                    if (isDebug) ZLog.d("$TAG---------------------- ")
-                }
-            } else if (action == WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) {
-                updateScanListInfo()
-                mWifiChangeListener?.onScanUpdate(mWifiList)
-            }
-        }
-    }
-
-    companion object {
-
-        @Volatile
-        private var instance: WifiManagerWrapper? = null
-
-        fun getInstance(): WifiManagerWrapper {
-            if (instance == null) {
-                synchronized(WifiManagerWrapper::class.java) {
-                    if (instance == null) {
-                        instance = WifiManagerWrapper()
-                    }
-                }
-            }
-            return instance!!
-        }
     }
 
 }

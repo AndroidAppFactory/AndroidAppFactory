@@ -38,7 +38,7 @@ public class NetworkUtil {
 
     // 0: 无网络, 0:unknown, 1: 2G, 2: 3G, 3: 4G, 4: wifi
     public static final int NETWORK_CLASS_NONET = 0;
-    private static final int NETWORK_CLASS_UNKNOWN = 0;
+    public static final int NETWORK_CLASS_UNKNOWN = 0;
     public static final int NETWORK_CLASS_2_G = 1;
     public static final int NETWORK_CLASS_3_G = 2;
     public static final int NETWORK_CLASS_4_G = 3;
@@ -72,7 +72,7 @@ public class NetworkUtil {
                 name = "4G";
                 break;
             case NETWORK_CLASS_WIFI:
-                name = "wifi";
+                name = "Wi-Fi";
                 break;
             case NETWORK_CLASS_ETHERNET:
                 name = "ethernet";

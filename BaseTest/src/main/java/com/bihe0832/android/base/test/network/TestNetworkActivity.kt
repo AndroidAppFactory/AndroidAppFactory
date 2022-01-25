@@ -34,12 +34,12 @@ class TestNetworkActivity : BaseActivity() {
     }
 
     private fun updateContent() {
-        val builder = StringBuffer().append("当前网络信息：\n\n")
+        val builder = StringBuffer().append("当前网络信息：(${NetworkChangeManager.getInstance().networkName})\n\n")
         if (NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_WIFI) {
             builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n")
-                    .append("    SSID(").append(WifiManagerWrapper.getInstance().getSSID())
-                    .append(");\n    BSSID(").append(WifiManagerWrapper.getInstance().getBSSID())
-                    .append(");\n    强度(").append(WifiManagerWrapper.getInstance().getSignalLevel())
+                    .append("    SSID(").append(WifiManagerWrapper.getSSID())
+                    .append(");\n    BSSID(").append(WifiManagerWrapper.getBSSID())
+                    .append(");\n    强度(").append(WifiManagerWrapper.getSignalLevel())
                     .append(");\n    IP(").append(NetworkUtil.getDtTypeInfo(this).wifiIp).append(")\n")
         }
 

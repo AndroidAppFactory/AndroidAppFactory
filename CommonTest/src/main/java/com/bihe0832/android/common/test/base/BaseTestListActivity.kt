@@ -1,9 +1,13 @@
 package com.bihe0832.android.common.test.base
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
+import android.view.View
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.common.test.item.TestItemData
@@ -13,6 +17,8 @@ import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.utils.os.DisplayUtil
+import kotlinx.android.synthetic.main.com_bihe0832_fragment_test_tab.*
 
 abstract class BaseTestListActivity : CommonListActivity() {
 
@@ -22,6 +28,20 @@ abstract class BaseTestListActivity : CommonListActivity() {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         }
         CardInfoHelper.getInstance().setAutoAddItem(true)
+        fragment_list_info_list.apply {
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    outRect.set(0, DisplayUtil.dip2px(context!!, 10f), 0, 0)
+                }
+            })
+        }
     }
 
 
