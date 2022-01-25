@@ -18,6 +18,7 @@ object ManufacturerUtil {
 
     fun getValueByKey(key: String, getDefaultValue: () -> String): String {
         if (!mSystemProperties.containsKey(key)) {
+            ZLog.d("ManufacturerUtil", "ManufacturerUtil read system key $key")
             mSystemProperties[key] = android.os.SystemProperties.get(key, getDefaultValue())
         }
         return mSystemProperties[key] ?: ""
@@ -148,7 +149,8 @@ object ManufacturerUtil {
         }
     }
 
-    val isVivo: Boolean = TextFactoryCore.trimSpace("$MANUFACTURER-$DEVICE".toLowerCase()).contains("vivo")
+    val isVivo: Boolean =
+        TextFactoryCore.trimSpace("$MANUFACTURER-$DEVICE".toLowerCase()).contains("vivo")
 
     val isSmartisan: Boolean = TextFactoryCore.trimSpace(BRAND.toLowerCase()).contains("smartisan")
 
@@ -158,7 +160,8 @@ object ManufacturerUtil {
         getValueByKey("ro.vivo.android.os.version") { "" }
     }
 
-    val isSumsung: Boolean = TextFactoryCore.trimSpace(MANUFACTURER.toLowerCase()).contains("samsung")
+    val isSumsung: Boolean =
+        TextFactoryCore.trimSpace(MANUFACTURER.toLowerCase()).contains("samsung")
 
     val sumsungRomVersion: String by lazy {
         val version = getValueByKey("ro.build.display.id") { "" }
