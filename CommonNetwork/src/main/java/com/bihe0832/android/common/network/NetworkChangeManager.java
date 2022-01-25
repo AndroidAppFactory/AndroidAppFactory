@@ -7,25 +7,26 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
-
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.network.DeviceInfoManager;
-import com.bihe0832.android.lib.network.NetworkUtil;
 import com.bihe0832.android.lib.network.MobileUtil;
+import com.bihe0832.android.lib.network.NetworkUtil;
 import com.bihe0832.android.lib.network.WifiManagerWrapper;
 import com.bihe0832.android.lib.thread.ThreadManager;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
 
 public class NetworkChangeManager {
 
     private static final String TAG = "NetworkChangeManager";
-    private int sPreNetType = 0;
-    private String sPreBssId = "";
-    private String sPreCellID = "";
+    private int mNetType = NetworkUtil.NETWORK_CLASS_UNKNOWN;
+    private boolean canGetNetType = false;
+    private boolean canGetBSSID = false;
+    private boolean canGetCELLID = false;
+
+    private String mWifiBssId = "unknown";
+    private String mCellID = "-1_-1_-1_-1";
 
     private BroadcastReceiver mNetReceiver = null;
     private Handler mBgHandler = null;
@@ -48,28 +49,26 @@ public class NetworkChangeManager {
     }
 
 
-    public void init(Context context) {
+    public void init(Context context, boolean getNetType) {
+        init(context, getNetType, false, false);
+    }
+
+    public void init(Context context, boolean getNetType, boolean getBssID, boolean curCellId) {
         DeviceInfoManager.getInstance().init(context.getApplicationContext());
+        canGetNetType = getNetType;
+        canGetBSSID = getBssID;
+        canGetCELLID = curCellId;
 
         mBgHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_NORMAL));
-        WifiManagerWrapper.Companion.getInstance().init(context, ZixieContext.INSTANCE.isDebug());
-        int curNetType = WifiManagerWrapper.Companion.getInstance().getNetType(context);
-        String curBssid = "unknown";
-        String curCellId = "-1_-1_-1_-1";
-        if (NetworkUtil.isWifiNet(curNetType)) {
-            curBssid = WifiManagerWrapper.Companion.getInstance().getBSSID();
-        } else if (NetworkUtil.isMobileNet(curNetType)) {
-            curCellId = MobileUtil.getPhoneCellInfo(context);
-        }
 
-        sPreNetType = curNetType;
-        sPreCellID = curCellId;
-        sPreBssId = curBssid;
-        if (sPreBssId == null) {
-            sPreBssId = "";
+        WifiManagerWrapper.INSTANCE.init(context, ZixieContext.INSTANCE.isDebug());
+        if (canGetNetType) {
+            mNetType = WifiManagerWrapper.INSTANCE.getNetType(context);
         }
-        if (sPreCellID == null) {
-            sPreCellID = "";
+        if (NetworkUtil.isWifiNet(mNetType) && canGetBSSID) {
+            mWifiBssId = WifiManagerWrapper.INSTANCE.getBSSID();
+        } else if (NetworkUtil.isMobileNet(mNetType) && canGetCELLID) {
+            mCellID = MobileUtil.getPhoneCellInfo(context);
         }
         listenNetChange(context);
     }
@@ -90,50 +89,53 @@ public class NetworkChangeManager {
     private void change(final Context context, final Intent intent) {
         ZLog.d(TAG, "change");
         if (mBgHandler == null) {
-            init(context);
+            init(context, canGetNetType, canGetBSSID, canGetCELLID);
             return;
         }
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
-                int curNetType = WifiManagerWrapper.Companion.getInstance().getNetType(context);
-                ZLog.d(TAG, "network change >> netType: " + curNetType + ", sPreNetType: " + sPreNetType);
+                int curNetType = WifiManagerWrapper.INSTANCE.getNetType(context);
+                ZLog.d(TAG, "network change >> netType: " + curNetType + ", sPreNetType: " + mNetType);
                 String curBssid = "unknown";
                 String curCellId = "-1_-1_-1_-1";
                 String curWifiSsid = "";
                 int curWifiSignal = 0;
                 boolean needPost = false;
-                ZLog.d(TAG, "network change >> netType correctAfter: " + curNetType + ",intent.getAction():" + intent.getAction());
-                if (NetworkUtil.isWifiNet(curNetType)) {
-                    curBssid = WifiManagerWrapper.Companion.getInstance().getBSSID();
-                    curWifiSsid = WifiManagerWrapper.Companion.getInstance().getSSID();
-                    curWifiSignal = WifiManagerWrapper.Companion.getInstance().getSignalLevel();
-                    if (curNetType != sPreNetType || (sPreBssId != null && !sPreBssId.equals(curBssid))) {
+                ZLog.d(TAG, "network change >> netType correctAfter: " + curNetType + ",intent.getAction():" + intent
+                        .getAction());
+                if (NetworkUtil.isWifiNet(curNetType) && canGetBSSID) {
+                    curBssid = WifiManagerWrapper.INSTANCE.getBSSID();
+                    curWifiSsid = WifiManagerWrapper.INSTANCE.getSSID();
+                    curWifiSignal = WifiManagerWrapper.INSTANCE.getSignalLevel();
+                    if (curNetType != mNetType || (mWifiBssId != null && !mWifiBssId.equals(curBssid))) {
                         needPost = true;
                     }
-                } else if (NetworkUtil.isMobileNet(curNetType)) {
+                } else if (NetworkUtil.isMobileNet(curNetType) && canGetCELLID) {
                     curCellId = MobileUtil.getPhoneCellInfo(context);
-                    if (curNetType != sPreNetType || (sPreCellID != null && !sPreCellID.equals(curCellId))) {
+                    if (curNetType != mNetType || (mCellID != null && !mCellID.equals(curCellId))) {
                         needPost = true;
                     }
                 } else {
-                    if (curNetType != sPreNetType) {
+                    if (curNetType != mNetType) {
                         needPost = true;
                     }
                 }
                 if (needPost) {
-                    ZLog.e(TAG, "notify change: preNetType:" + sPreNetType + " curNetType:" + curNetType + " curWifiSsid:" + curWifiSsid + " preBssId:" + sPreBssId
-                            + " bssId:" + curBssid + " curWifiSignal:" + curWifiSignal + " curCellId:" + curCellId );
-                    postNetworkChangeEvent(sPreNetType, curNetType, intent);
-                    sPreBssId = curBssid;
-                    sPreCellID = curCellId;
-                    sPreNetType = curNetType;
+                    ZLog.e(TAG, "notify change: preNetType:" + mNetType + " curNetType:" + curNetType + " curWifiSsid:"
+                            + curWifiSsid + " preBssId:" + mWifiBssId
+                            + " bssId:" + curBssid + " curWifiSignal:" + curWifiSignal + " curCellId:" + curCellId);
+                    postNetworkChangeEvent(mNetType, curNetType, intent);
+                    mWifiBssId = curBssid;
+                    mCellID = curCellId;
+                    mNetType = curNetType;
                 }
             }
         });
     }
 
     public interface NetworkChangeListener {
+
         void onNetworkChange(final int sPreNetType, final int curNetType, Intent intent);
     }
 
@@ -153,5 +155,21 @@ public class NetworkChangeManager {
         for (NetworkChangeListener networkChangeListener : networkChangeListeners) {
             networkChangeListener.onNetworkChange(sPreNetType, curNetType, intent);
         }
+    }
+
+    public String getNetworkName(){
+        return NetworkUtil.getNetworkName(mNetType);
+    }
+
+    public int getCachedNetType() {
+        return mNetType;
+    }
+
+    public String getCachedWifiBssId() {
+        return mWifiBssId;
+    }
+
+    public String getCachedCellID() {
+        return mCellID;
     }
 }

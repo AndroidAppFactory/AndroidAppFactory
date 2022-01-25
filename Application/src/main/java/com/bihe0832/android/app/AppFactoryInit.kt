@@ -6,6 +6,7 @@ import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.network.MobileUtil
+import com.bihe0832.android.lib.network.WifiManagerWrapper
 
 /**
  *
@@ -33,7 +34,8 @@ object AppFactoryInit {
     @Synchronized
     fun initExtra(ctx: Context) {
         // 初始化网络变量和监听
-        NetworkChangeManager.getInstance().init(ctx)
+        NetworkChangeManager.getInstance().init(ctx, true)
+        WifiManagerWrapper.init(ctx, !ZixieContext.isOfficial())
         // 监听信号变化，统一到MobileUtil
         MobileUtil.registerMobileSignalListener(ctx)
     }
