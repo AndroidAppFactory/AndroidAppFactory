@@ -143,12 +143,14 @@ object WifiManagerWrapper {
             mWifiChangeListener = null
         } else {
             mWifiChangeListener = listener
-            updateBaseInfo()
-            updateScanListInfo()
-            updateConfiguredListInfo()
-            listener.onWifiInfoChanged()
-            listener.onScanUpdate(getScanResultList())
-            listener.onConnectUpdate(getConfigurationList())
+            if(hasInit){
+                updateBaseInfo()
+                updateScanListInfo()
+                updateConfiguredListInfo()
+                listener.onWifiInfoChanged()
+                listener.onScanUpdate(getScanResultList())
+                listener.onConnectUpdate(getConfigurationList())
+            }
         }
     }
 
@@ -302,6 +304,8 @@ object WifiManagerWrapper {
         mNotifyRSSI = notifyRSSI
         mCanScanWifi = canScanWifi
         if (hasInit) {
+            context.applicationContext.unregisterReceiver(mWifiReceiver)
+            register(context)
             return
         }
         hasInit = true
@@ -314,6 +318,11 @@ object WifiManagerWrapper {
         updateBaseInfo()
         updateConfiguredListInfo()
         updateScanListInfo()
+        register(context)
+    }
+
+
+    fun register(context: Context){
         //需要过滤多个动作，则调用IntentFilter对象的addAction添加新动作
         val foundFilter = IntentFilter()
         //监听Wifi当前网络状态
@@ -322,14 +331,18 @@ object WifiManagerWrapper {
         foundFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
         //监听与接入点之间的连接状态(新连接建立或者现有连接丢失)
         foundFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)
-        //监听Wifi信号强度变化
-        foundFilter.addAction(WifiManager.RSSI_CHANGED_ACTION)
-        //监听Wifi发现新的接入点
-        foundFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        if(mNotifyRSSI){
+            //监听Wifi信号强度变化
+            foundFilter.addAction(WifiManager.RSSI_CHANGED_ACTION)
+        }
+
+        if(mCanScanWifi){
+            //监听Wifi发现新的接入点
+            foundFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        }
+
         context.applicationContext.registerReceiver(mWifiReceiver, foundFilter)
     }
-
-
     // 打开WIFI
     fun openWifi() {
         mConnectivityManager?.activeNetworkInfo?.let {
