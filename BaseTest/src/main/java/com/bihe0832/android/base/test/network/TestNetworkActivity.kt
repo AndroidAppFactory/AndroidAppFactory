@@ -13,12 +13,17 @@ import kotlinx.android.synthetic.main.activity_test_text.*
 
 class TestNetworkActivity : BaseActivity() {
 
-    private val networkChangeListener = NetworkChangeManager.NetworkChangeListener { sPreNetType, curNetType, intent ->
-        if (sPreNetType != curNetType) {
-            ZixieContext.showToast("网络切换：从 " + NetworkUtil.getNetworkName(sPreNetType) + " 切换到" + NetworkUtil.getNetworkName(curNetType))
+    private val networkChangeListener =
+        NetworkChangeManager.NetworkChangeListener { sPreNetType, curNetType, intent ->
+            if (sPreNetType != curNetType) {
+                ZixieContext.showToast(
+                    "网络切换：从 " + NetworkUtil.getNetworkName(sPreNetType) + " 切换到" + NetworkUtil.getNetworkName(
+                        curNetType
+                    )
+                )
+            }
+            updateContent()
         }
-        updateContent()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,8 @@ class TestNetworkActivity : BaseActivity() {
         common_toolbar.setNavigationOnClickListener { onBackPressedSupport() }
         NetworkChangeManager.getInstance().addListener(networkChangeListener)
         updateContent()
+        WifiManagerWrapper.init(this, !ZixieContext.isOfficial(), true, true)
+
     }
 
     override fun onDestroy() {
@@ -34,25 +41,28 @@ class TestNetworkActivity : BaseActivity() {
     }
 
     private fun updateContent() {
-        val builder = StringBuffer().append("当前网络信息：(${NetworkChangeManager.getInstance().networkName})\n\n")
+        val builder =
+            StringBuffer().append("当前网络信息：(${NetworkChangeManager.getInstance().networkName})\n\n")
         if (NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_WIFI) {
             builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n")
-                    .append("    SSID(").append(WifiManagerWrapper.getSSID())
-                    .append(");\n    BSSID(").append(WifiManagerWrapper.getBSSID())
-                    .append(");\n    强度(").append(WifiManagerWrapper.getSignalLevel())
-                    .append(");\n    IP(").append(NetworkUtil.getDtTypeInfo(this).wifiIp).append(")\n")
+                .append("    SSID(").append(WifiManagerWrapper.getSSID())
+                .append(");\n    BSSID(").append(WifiManagerWrapper.getBSSID())
+                .append(");\n    强度(").append(WifiManagerWrapper.getSignalLevel())
+                .append(");\n    IP(").append(NetworkUtil.getDtTypeInfo(this).wifiIp)
+                .append(");\n    周边数量(").append(WifiManagerWrapper.getScanResultList().size) .append(");\n");
         }
 
-        if(NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_2_G
-                || NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_3_G
-                || NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_4_G
-                || NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_5_G
-        ){
+        if (NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_2_G
+            || NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_3_G
+            || NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_4_G
+            || NetworkUtil.getNetworkState(this) == NetworkUtil.NETWORK_CLASS_5_G
+        ) {
             builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n")
-                    .append("    CellInfo(").append(MobileUtil.getPhoneCellInfo(this))
-                    .append(");\n    运营商(").append(DeviceInfoManager.getInstance().getMobileOperatorType())
-                    .append(");\n    强度(").append(MobileUtil.getSignalLevel())
-                    .append(");\n    IP(").append(NetworkUtil.getDtTypeInfo(this).mobileIp).append(")")
+                .append("    CellInfo(").append(MobileUtil.getPhoneCellInfo(this))
+                .append(");\n    运营商(")
+                .append(DeviceInfoManager.getInstance().getMobileOperatorType())
+                .append(");\n    强度(").append(MobileUtil.getSignalLevel())
+                .append(");\n    IP(").append(NetworkUtil.getDtTypeInfo(this).mobileIp).append(")")
         }
         runOnUiThread { result.text = builder.toString() }
     }
