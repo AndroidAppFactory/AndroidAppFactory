@@ -5,7 +5,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:paddingRight="16dp"
+        android:background="@color/common_test_bg">
 
     <TextView
             android:id="@+id/test_title"
@@ -13,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             tools:text="fsdfdsf"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/common_test_text"
             android:textSize="12dp" />
 
 </RelativeLayout>
