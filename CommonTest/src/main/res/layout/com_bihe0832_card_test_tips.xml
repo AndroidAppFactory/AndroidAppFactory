@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/colorAccent">
+    android:background="@color/common_test_tips_bg">
 
     <TextView
         android:id="@+id/test_title"
@@ -18,7 +18,7 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="@color/common_test_tips_text"
         android:textSize="12dp" />
 
 </RelativeLayout>
