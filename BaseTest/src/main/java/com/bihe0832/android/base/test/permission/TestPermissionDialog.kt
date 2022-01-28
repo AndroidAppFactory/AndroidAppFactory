@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import kotlinx.android.synthetic.main.dialog_test_layout.*
+import kotlinx.android.synthetic.main.dialog_test_permission.*
 
 /**
  *
@@ -18,7 +18,7 @@ class TestPermissionDialog : PermissionDialog {
 
 
     override fun getLayoutID(): Int {
-        return R.layout.dialog_test_layout
+        return R.layout.dialog_test_permission
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

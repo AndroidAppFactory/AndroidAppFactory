@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:state_enabled="true"
+            android:state_checked="true"
+            android:drawable="@drawable/com_bihe0832_common_radio_selctor_selected"
+            />
+
+    <item
+            android:state_enabled="true"
+            android:state_checked="false"
+            android:drawable="@drawable/com_bihe0832_common_radio_selctor_default"
+            />
+
+</selector>

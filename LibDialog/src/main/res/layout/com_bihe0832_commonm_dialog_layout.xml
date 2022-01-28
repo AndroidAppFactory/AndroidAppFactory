@@ -4,7 +4,7 @@
         android:id="@+id/dialog_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/com_bihe0832_commonm_dialog_bg">
+        android:background="@drawable/com_bihe0832_common_dialog_bg">
 
     <TextView
             android:id="@+id/title"
@@ -125,7 +125,7 @@
                 android:gravity="center"
                 android:singleLine="true"
                 tools:text="前往"
-                android:textColor="@color/dialog_button"
+                android:textColor="@drawable/com_bihe0832_common_select_color"
                 android:textSize="12dp" />
 
         <View
@@ -148,7 +148,7 @@
                 android:singleLine="true"
                 android:textStyle="bold"
                 tools:text="确定"
-                android:textColor="@color/dialog_button"
+                android:textColor="@drawable/com_bihe0832_common_select_color"
                 android:textSize="12dp" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -32,6 +32,7 @@
     <color name="dialog_text">#202020</color>
     <color name="dialog_hint">#333333</color>
     <color name="dialog_button">#333333</color>
-    <color name="dialog_tips">#F44C36</color>
+    <color name="dialog_tips">@color/select_state_pressed</color>
     <color name="dialog_split">#EEEEEE</color>
+
 </resources>

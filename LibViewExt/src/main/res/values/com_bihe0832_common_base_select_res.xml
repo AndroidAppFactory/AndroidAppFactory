@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="select_default">#333333</color>
+    <color name="select_state_checked">#F44C36</color>
+    <color name="select_state_pressed">@color/select_state_checked</color>
+    <color name="select_state_focused">@color/select_default</color>
+    <color name="select_bg">#FFFFFF</color>
+
+    <dimen name="select_item_width">18dp</dimen>
+    <dimen name="select_border_width">2dp</dimen>
+
+</resources>
