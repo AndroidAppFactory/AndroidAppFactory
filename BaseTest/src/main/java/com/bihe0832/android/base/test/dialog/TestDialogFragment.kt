@@ -4,8 +4,11 @@ import android.Manifest
 import android.app.Activity
 import android.view.View
 import com.bihe0832.android.base.test.R
+import com.bihe0832.android.base.test.permission.TestPermissionDialog
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
@@ -13,30 +16,107 @@ import com.bihe0832.android.lib.text.ClipboardUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
-import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.DownloadProgressDialog
-import com.bihe0832.android.lib.ui.dialog.LoadingDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.*
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class TestDialogFragment : BaseTestListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(TestItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))
             add(TestItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
             add(TestItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
             add(TestItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(TestItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
             add(TestItemData("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
             add(TestItemData("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
-
         }
     }
 
+    private fun testRadio(activity: Activity?){
+        var dialog = RadioDialog(activity)
+
+        var title = "分享的标题"
+        var content = "调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们"
+        dialog.setTitle(title)
+        dialog.setContent(content)
+        dialog.setPositive("分享给我们")
+        dialog.setNegative("复制到剪切板")
+        dialog.setShouldCanceled(true)
+
+        dialog.setRadioData(mutableListOf<String>().apply {
+            add("RadioButton 0")
+            add("RadioButton 1")
+            add("RadioButton 2")
+            add("RadioButton 3")
+        },1
+        ) { which -> showToast("RadioButton  $which") }
+        dialog.setOnClickBottomListener(object : OnDialogListener {
+            override fun onPositiveClick() {
+                try {
+                    IntentUtils.sendTextInfo(activity, title, content)
+                    dialog.dismiss()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onNegativeClick() {
+                try {
+                    ClipboardUtil.copyToClipboard(activity, content)
+                    dialog.dismiss()
+                    ToastUtil.showShort(activity, "信息已保存到剪贴板")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onCancel() {
+
+            }
+        })
+        dialog.show()
+    }
     private fun testCustom(activity: Activity?) {
-        showAlert(TestDialog(activity))
+        var dialog = TestDialog(activity)
+
+        var title = "分享的标题"
+        var content = "分享的内容"
+        dialog.setTitle(title)
+        dialog.setImageContentResId(R.mipmap.debug)
+        dialog.setFeedBackContent("我们承诺你提供的信息仅用于问题定位")
+        dialog.setPositive("分享给我们")
+        dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
+        dialog.setNegative("复制到剪切板")
+        dialog.setShouldCanceled(true)
+        dialog.setOnClickBottomListener(object : OnDialogListener {
+            override fun onPositiveClick() {
+                try {
+                    IntentUtils.sendTextInfo(activity, title, content)
+                    dialog.dismiss()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onNegativeClick() {
+                try {
+                    ClipboardUtil.copyToClipboard(activity, content)
+                    dialog.dismiss()
+                    ToastUtil.showShort(activity, "信息已保存到剪贴板")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onCancel() {
+
+            }
+        })
+        dialog.show()
     }
 
     private fun testAlert(activity: Activity?) {
@@ -50,7 +130,7 @@ class TestDialogFragment : BaseTestListFragment() {
         dialog.setPositive("分享给我们")
         dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
         dialog.setImageContentResId(R.mipmap.debug)
-        dialog.setFeedBackContent("我们保证你提供的信息仅用于问题定位")
+        dialog.setFeedBackContent("我们承诺你提供的信息仅用于问题定位")
         dialog.setNegative("复制到剪切板")
         dialog.setShouldCanceled(true)
         dialog.setOnClickBottomListener(object : OnDialogListener {
@@ -150,7 +230,7 @@ class TestDialogFragment : BaseTestListFragment() {
             put(Manifest.permission.RECORD_AUDIO, "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！")
         })
         activity?.let { it ->
-            PermissionDialog(it).let { permissionDialog ->
+            TestPermissionDialog(it).let { permissionDialog ->
                 permissionDialog.show("", Manifest.permission.RECORD_AUDIO, true, object : OnDialogListener {
                     override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)

@@ -31,7 +31,7 @@ public class DebugTools {
         dialog.setPositive("分享给我们");
         dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们");
         dialog.setImageContentResId(R.mipmap.debug);
-        dialog.setFeedBackContent("我们保证你提供的信息仅用于问题定位");
+        dialog.setFeedBackContent("我们承诺你提供的信息仅用于问题定位");
         dialog.setNegative("复制到剪切板");
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override
