@@ -8,7 +8,7 @@
     <color name="select_state_focused">@color/select_default</color>
     <color name="select_bg">#FFFFFF</color>
 
-    <dimen name="select_item_width">18dp</dimen>
-    <dimen name="select_border_width">2dp</dimen>
+    <dimen name="select_item_width">12dp</dimen>
+    <dimen name="select_border_width">1dp</dimen>
 
 </resources>

@@ -2,6 +2,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/dialog_layout"
+        android:layout_margin="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/com_bihe0832_common_dialog_bg">
@@ -14,7 +15,7 @@
             android:textColor="@color/dialog_text"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:textSize="16dp"
+            android:textSize="@dimen/dialog_title_text_size"
             android:textStyle="bold"
             android:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +35,7 @@
             android:layout_marginRight="16dp"
             android:lineSpacingMultiplier="1.75"
             android:scrollbars="vertical"
-            android:textSize="12dp"
+            android:textSize="@dimen/dialog_content_text_size"
             android:textColor="@color/dialog_text"
             app:layout_constraintTop_toBottomOf="@+id/title"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -52,7 +53,7 @@
             android:scaleY="0.8"
             android:text=" 不再提醒我"
             android:textColor="@color/dialog_text"
-            android:textSize="10dp"
+            android:textSize="@dimen/dialog_tips_text_size"
             android:visibility="gone"
             tools:visibility="visible"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -85,7 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="10dp"
+            android:textSize="@dimen/dialog_tips_text_size"
             android:layout_marginTop="12dp"
             android:visibility="visible"
             android:textColor="@color/dialog_tips"
@@ -126,7 +127,8 @@
                 android:singleLine="true"
                 tools:text="前往"
                 android:textColor="@drawable/com_bihe0832_common_select_color"
-                android:textSize="12dp" />
+                android:textSize="@dimen/dialog_button_text_size"
+                />
 
         <View
                 android:id="@+id/column_line"
@@ -149,6 +151,7 @@
                 android:textStyle="bold"
                 tools:text="确定"
                 android:textColor="@drawable/com_bihe0832_common_select_color"
-                android:textSize="12dp" />
+                android:textSize="@dimen/dialog_button_text_size"
+                />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

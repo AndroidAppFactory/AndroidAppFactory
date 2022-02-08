@@ -27,7 +27,7 @@
         android:layout_marginTop="10dp"
         android:text="Loading..."
         android:textColor="@android:color/white"
-        android:textSize="14dp"
+        android:textSize="@dimen/dialog_title_text_size"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

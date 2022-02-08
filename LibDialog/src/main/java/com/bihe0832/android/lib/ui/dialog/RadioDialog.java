@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.ui.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -46,7 +47,7 @@ public class RadioDialog extends CommonDialog {
     @Override
     protected void refreshView() {
         super.refreshView();
-        if(mCheckedIndex < mDataList.size() && null != mRadioGroup){
+        if (mCheckedIndex < mDataList.size() && null != mRadioGroup) {
             mRadioGroup.check(mCheckedIndex);
         }
     }
@@ -65,8 +66,8 @@ public class RadioDialog extends CommonDialog {
                     DisplayUtil.dip2px(getContext(), 8f));
             //设置文字
             radioButton.setText(mDataList.get(i));
-            radioButton.setTextColor(
-                    getContext().getResources().getColorStateList(R.drawable.com_bihe0832_common_select_color));
+            radioButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.dialog_content_text_size));
+            radioButton.setTextColor(getContext().getResources().getColorStateList(R.drawable.com_bihe0832_common_select_color));
             final int index = i;
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,7 +82,7 @@ public class RadioDialog extends CommonDialog {
         }
     }
 
-    public void setRadioData(List<String> data,int index, final OnSelectedListener listener) {
+    public void setRadioData(List<String> data, int index, final OnSelectedListener listener) {
         mDataList.clear();
         mCheckedIndex = index;
         mDataList.addAll(data);
