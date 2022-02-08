@@ -14,7 +14,7 @@
             android:gravity="center"
             tools:text="版本更新"
             android:textColor="@color/dialog_text"
-            android:textSize="16dp"
+            android:textSize="@dimen/dialog_title_text_size"
             android:textStyle="bold" />
 
     <TextView
@@ -24,6 +24,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:lineSpacingMultiplier="1.5"
+            android:textSize="@dimen/dialog_content_text_size"
             android:textColor="@color/dialog_hint"
             tools:text="1. 适配Android Q \n2. 修复若干bug" />
 
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:textColor="@color/dialog_hint"
-                android:textSize="12dp"
+                android:textSize="@dimen/dialog_content_text_size"
                 android:layout_alignParentLeft="true"
                 tools:text="70%" />
 
@@ -59,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:textColor="@color/dialog_hint"
-                android:textSize="12dp"
+                android:textSize="@dimen/dialog_content_text_size"
                 android:layout_alignParentRight="true"
                 tools:text="20M/50M" />
 
@@ -88,7 +89,7 @@
                 android:paddingBottom="16dp"
                 android:singleLine="true"
                 android:textColor="@color/dialog_button"
-                android:textSize="12dp"
+                android:textSize="@dimen/dialog_button_text_size"
                 tools:text="取消更新" />
 
         <View
@@ -109,7 +110,7 @@
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:textColor="@color/dialog_button"
-                android:textSize="12dp"
+                android:textSize="@dimen/dialog_button_text_size"
                 tools:text="后台更新" />
     </LinearLayout>
 </LinearLayout>
