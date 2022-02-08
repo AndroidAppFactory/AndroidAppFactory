@@ -17,8 +17,11 @@ import android.view.View;
 
 /**
  * @author hardyshi code@bihe0832.com
- * Created on 2019-06-04.
- * Description: Description
+ *         Created on 2019-06-04.
+ *         Description:
+ *          该分隔符仅支持单一类型卡片的场景，如果存在不同的Section，会导致计数异常，请使用自定义的分隔符。
+ *          同时通过设置setHorizontalSpan 或者 setVerticalSpan ，可以使GridDivider变为 LineDivider
+ *
  */
 public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -27,7 +30,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
     private int mHorizonSpan;
     private int mVerticalSpan;
 
-    private GridDividerItemDecoration(int horizonSpan,int verticalSpan,int color,boolean showLastLine) {
+    private GridDividerItemDecoration(int horizonSpan, int verticalSpan, int color, boolean showLastLine) {
         this.mHorizonSpan = horizonSpan;
         this.mShowLastLine = showLastLine;
         this.mVerticalSpan = verticalSpan;
@@ -47,7 +50,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
             View child = parent.getChildAt(i);
 
             //最后一行底部横线不绘制
-            if (isLastRaw(parent,i,getSpanCount(parent),childCount) && !mShowLastLine){
+            if (isLastRaw(parent, i, getSpanCount(parent), childCount) && !mShowLastLine) {
                 continue;
             }
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
@@ -65,7 +68,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
-            if((parent.getChildViewHolder(child).getAdapterPosition() + 1) % getSpanCount(parent) == 0){
+            if ((parent.getChildViewHolder(child).getAdapterPosition() + 1) % getSpanCount(parent) == 0) {
                 continue;
             }
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
@@ -74,7 +77,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
             final int left = child.getRight() + params.rightMargin;
             int right = left + mVerticalSpan;
 //            //满足条件( 最后一行 && 不绘制 ) 将vertical多出的一部分去掉;
-            if (i==childCount-1) {
+            if (i == childCount - 1 && !mShowLastLine) {
                 right -= mVerticalSpan;
             }
             mDivider.setBounds(left, top, right, bottom);
@@ -84,14 +87,14 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 计算偏移量
-     * */
+     */
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int spanCount = getSpanCount(parent);
         int childCount = parent.getAdapter().getItemCount();
         int itemPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
 
-        if (itemPosition < 0){
+        if (itemPosition < 0) {
             return;
         }
 
@@ -101,13 +104,13 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
         int left = column * mVerticalSpan / spanCount;
         int right = mVerticalSpan - (column + 1) * mVerticalSpan / spanCount;
 
-        if (isLastRaw(parent, itemPosition, spanCount, childCount)){
-            if (mShowLastLine){
+        if (isLastRaw(parent, itemPosition, spanCount, childCount)) {
+            if (mShowLastLine) {
                 bottom = mHorizonSpan;
-            }else{
+            } else {
                 bottom = 0;
             }
-        }else{
+        } else {
             bottom = mHorizonSpan;
         }
         outRect.set(left, 0, right, bottom);
@@ -115,7 +118,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 获取列数
-     * */
+     */
     private int getSpanCount(RecyclerView parent) {
         // 列数
         int mSpanCount = -1;
@@ -130,21 +133,22 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 是否最后一行
-     * @param parent     RecyclerView
-     * @param pos        当前item的位置
-     * @param spanCount  每行显示的item个数
+     *
+     * @param parent RecyclerView
+     * @param pos 当前item的位置
+     * @param spanCount 每行显示的item个数
      * @param childCount child个数
-     * */
+     */
     private boolean isLastRaw(RecyclerView parent, int pos, int spanCount, int childCount) {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
 
         if (layoutManager instanceof GridLayoutManager) {
-            return getResult(pos,spanCount,childCount);
+            return getResult(pos, spanCount, childCount);
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             int orientation = ((StaggeredGridLayoutManager) layoutManager).getOrientation();
             if (orientation == StaggeredGridLayoutManager.VERTICAL) {
                 // StaggeredGridLayoutManager 且纵向滚动
-                return getResult(pos,spanCount,childCount);
+                return getResult(pos, spanCount, childCount);
             } else {
                 // StaggeredGridLayoutManager 且横向滚动
                 if ((pos + 1) % spanCount == 0) {
@@ -155,15 +159,15 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
         return false;
     }
 
-    private boolean getResult(int pos,int spanCount,int childCount){
+    private boolean getResult(int pos, int spanCount, int childCount) {
         int remainCount = childCount % spanCount;//获取余数
         //如果正好最后一行完整;
-        if (remainCount == 0){
-            if(pos >= childCount - spanCount){
+        if (remainCount == 0) {
+            if (pos >= childCount - spanCount) {
                 return true; //最后一行全部不绘制;
             }
-        }else{
-            if (pos >= childCount - childCount % spanCount){
+        } else {
+            if (pos >= childCount - childCount % spanCount) {
                 return true;
             }
         }
@@ -172,8 +176,9 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 使用Builder构造
-     * */
+     */
     public static class Builder {
+
         private Context mContext;
         private Resources mResources;
         private boolean mShowLastLine;
@@ -208,7 +213,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
         /**
          * 通过dp设置垂直间距
-         * */
+         */
         public Builder setVerticalSpan(int vertical) {
             this.mVerticalSpan = mResources.getDimensionPixelSize(vertical);
             return this;
@@ -216,15 +221,16 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
         /**
          * 通过px设置垂直间距
-         * */
+         */
         public Builder setVerticalSpan(float mVertical) {
-            this.mVerticalSpan = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, mVertical, mResources.getDisplayMetrics());
+            this.mVerticalSpan = (int) TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_PX, mVertical, mResources.getDisplayMetrics());
             return this;
         }
 
         /**
          * 通过dp设置水平间距
-         * */
+         */
         public Builder setHorizontalSpan(int horizontal) {
             this.mHorizonSpan = mResources.getDimensionPixelSize(horizontal);
             return this;
@@ -232,22 +238,23 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
         /**
          * 通过px设置水平间距
-         * */
+         */
         public Builder setHorizontalSpan(float horizontal) {
-            this.mHorizonSpan = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, horizontal, mResources.getDisplayMetrics());
+            this.mHorizonSpan = (int) TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_PX, horizontal, mResources.getDisplayMetrics());
             return this;
         }
 
         /**
          * 是否最后一条显示分割线
-         * */
-        public Builder setShowLastLine(boolean show){
+         */
+        public Builder setShowLastLine(boolean show) {
             mShowLastLine = show;
             return this;
         }
 
         public GridDividerItemDecoration build() {
-            return new GridDividerItemDecoration(mHorizonSpan, mVerticalSpan, mColor,mShowLastLine);
+            return new GridDividerItemDecoration(mHorizonSpan, mVerticalSpan, mColor, mShowLastLine);
         }
     }
 }

@@ -23,7 +23,7 @@ public class RadioDialog extends CommonDialog {
     private RadioGroup mRadioGroup = null;
     private List<String> mDataList = new ArrayList<>();
     private OnSelectedListener mOnSelectedListener = null;
-    private int mCheckedIndex = 0;
+    private int mCheckedIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class RadioDialog extends CommonDialog {
         mRadioGroup.removeAllViews();
         for (int i = 0; i < mDataList.size(); i++) {
             RadioButton radioButton = new RadioButton(getContext());
+            radioButton.setId(i);
             radioButton.setButtonDrawable(
                     getContext().getResources().getDrawable(R.drawable.com_bihe0832_common_radio_selctor));
             radioButton.setPadding(DisplayUtil.dip2px(getContext(), 8f), DisplayUtil.dip2px(getContext(), 8f), 0,
