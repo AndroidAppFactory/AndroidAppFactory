@@ -11,7 +11,7 @@
 
     <application>
         <service android:name="com.bihe0832.android.lib.web.WebViewService"
-            android:process=":web"
+            android:process="@string/web_process_name"
             android:exported="false">
         </service>
 

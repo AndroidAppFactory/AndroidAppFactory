@@ -11,10 +11,9 @@ public class WebViewHelper {
 
     private static final String TAG = "WebViewHelper";
 
-    public static void init(Context context) {
+    public static void init(Context context, boolean needPreLauncher) {
         initX5(context);
-
-        if (null != context) {
+        if (needPreLauncher && null != context) {
             Intent intent = new Intent();
             intent.setClass(context, WebViewService.class);
             context.startService(intent);
