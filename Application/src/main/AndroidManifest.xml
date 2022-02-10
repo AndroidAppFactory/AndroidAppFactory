@@ -21,14 +21,8 @@
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:screenOrientation="portrait"
                 android:theme="@style/activityTheme" />
-        <activity
-                android:name="com.bihe0832.android.common.webview.WebPageActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:theme="@style/activityTheme"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleInstance"
-                android:process=":web"
-                android:screenOrientation="portrait">
+        
+        <activity android:name="com.bihe0832.android.common.webview.WebPageActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

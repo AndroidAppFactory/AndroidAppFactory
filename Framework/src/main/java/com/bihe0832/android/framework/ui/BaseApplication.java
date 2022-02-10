@@ -45,13 +45,8 @@ public abstract class BaseApplication extends Application {
                     if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.P) {
                         WebView.setDataDirectorySuffix(it.processName);
                     }
-                    if (it.processName.equalsIgnoreCase(getPackageName() + ":web")) {
-                        //WEb进程
-                        initWeb(getApplicationContext(), it.processName);
-                    } else {
-                        ZixieContext.INSTANCE.showDebug("独立进程初始化：" + it.processName);
-                        ZLog.e("Application skip initCore process: name:" + it.processName + " and id:" + it.pid);
-                    }
+                    ZixieContext.INSTANCE.showDebug("独立进程初始化：" + it.processName);
+                    ZLog.e("Application process: name:" + it.processName + " and id:" + it.pid);
                 }
             }
         }
@@ -62,26 +57,6 @@ public abstract class BaseApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-    }
-
-    protected void initWeb(final Context context, final String name) {
-        ZLog.e("Application process: name:" + name + " initCore web");
-        int delay = 0;
-        if (!TextUtils.isEmpty(name) && name.equalsIgnoreCase(getPackageName())) {
-            delay = 5;
-        }
-        ThreadManager.getInstance().start(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ZLog.e("Application process: name::" + name + " initCore web start");
-                    WebViewHelper.init(context);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }, delay);
     }
 
     @Override

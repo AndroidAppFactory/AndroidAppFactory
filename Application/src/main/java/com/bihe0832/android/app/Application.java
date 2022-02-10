@@ -64,12 +64,12 @@ public class Application extends BaseApplication {
                     .contains(getPackageName())) {
                 ZLog.e("Application initCore process: name:" + it.processName + " and id:" + it.pid);
                 final String processName = it.processName;
-                if (processName.equalsIgnoreCase(getPackageName())) {
-                    AppFactoryInit.INSTANCE.initCore(getApplicationContext());
-                    if(RouterInterrupt.INSTANCE.hasAgreedPrivacy()){
+//                if (processName.equalsIgnoreCase(getPackageName())) {
+                    AppFactoryInit.INSTANCE.initCore(getApplicationContext(), processName);
+                    if (RouterInterrupt.INSTANCE.hasAgreedPrivacy()) {
                         AppFactoryInit.INSTANCE.initExtra(getApplicationContext());
                     }
-                }
+//                }
             }
         }
         ZLog.d("Application", "MnaApplication onCreate end");

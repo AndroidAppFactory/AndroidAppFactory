@@ -5,8 +5,12 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.WifiManagerWrapper
+import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil
+import com.bihe0832.android.lib.web.WebViewHelper
 
 /**
  *
@@ -22,12 +26,17 @@ object AppFactoryInit {
 
     //目前仅仅主进程和web进程需要初始化
     @Synchronized
-    fun initCore(ctx: Context) {
+    fun initCore(ctx: Context, processName: String) {
         if (!hasInit) {
             hasInit = true
             RouterHelper.initRouter()
             initPermission()
             DownloadUtils.init(ctx, 3, null, ZixieContext.isDebug())
+            ThreadManager.getInstance().start({
+                ZLog.e("Application process initCore web start")
+                WebViewHelper.init(ctx, true)
+            }, 5)
+            ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)
         }
     }
 
