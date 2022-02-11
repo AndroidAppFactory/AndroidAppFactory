@@ -7,7 +7,6 @@ import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.TextFactoryCore
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.regex.Pattern
 
 /**
  * Created by hardyshi on 2017/10/31.
@@ -42,29 +41,40 @@ object ManufacturerUtil {
         getValueByKey("ro.product.model") { Build.MODEL }
     }
 
+    /**
+     * 设备唯一识别码（FINGERPRINT）
+     */
     val FINGERPRINT: String by lazy {
         getValueByKey("ro.build.fingerprint") { Build.FINGERPRINT }
     }
 
+    /**
+     * 硬件制造商（MANUFACTURER）
+     */
     val MANUFACTURER: String by lazy {
         getValueByKey("ro.product.manufacturer") { Build.MANUFACTURER }
     }
 
+    /**
+     * 产品名称（PRODUCT）：即手机厂商
+
+     */
     val PRODUCT: String by lazy {
         getValueByKey("ro.product.name") { Build.PRODUCT }
     }
 
+    /**
+     * 设备名 （DEVICE)
+     */
     val DEVICE: String by lazy {
         getValueByKey("ro.product.device") { Build.DEVICE }
     }
 
+    /**
+     * 显示屏参数（DISPLAY)
+     */
     val DISPLAY: String by lazy {
         getValueByKey("ro.build.display.id") { Build.DISPLAY }
-    }
-
-
-    val commonRomVersion: String by lazy {
-        getValueByKey("ro.build.display.id") { "" }
     }
 
     fun isCurrentLanguageSimpleChinese(): Boolean {
@@ -173,19 +183,5 @@ object ManufacturerUtil {
             var2.printStackTrace()
         }
         return@lazy version
-    }
-
-    /**
-     * 过滤字符串的空格
-     */
-    private fun trimSpace(str: String?): String? {
-        if (null == str) {
-            return null
-        }
-        var dest = ""
-        val p = Pattern.compile("\\s*|\t|\r|\n")
-        val m = p.matcher(str)
-        dest = m.replaceAll("")
-        return dest
     }
 }

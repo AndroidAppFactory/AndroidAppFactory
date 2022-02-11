@@ -1,6 +1,7 @@
 package com.bihe0832.android.app
 
 import android.content.Context
+import android.os.Bundle
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
@@ -11,6 +12,7 @@ import com.bihe0832.android.lib.network.WifiManagerWrapper
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.web.WebViewHelper
+import com.tencent.smtt.sdk.TbsPrivacyAccess
 
 /**
  *
@@ -34,7 +36,20 @@ object AppFactoryInit {
             DownloadUtils.init(ctx, 3, null, ZixieContext.isDebug())
             ThreadManager.getInstance().start({
                 ZLog.e("Application process initCore web start")
-                WebViewHelper.init(ctx, true)
+                WebViewHelper.init(ctx, null, Bundle().apply {
+                    putString(
+                        TbsPrivacyAccess.ConfigurablePrivacy.MODEL.name,
+                        ManufacturerUtil.MODEL
+                    )
+                    putString(
+                        TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name,
+                        ZixieContext.deviceId
+                    )
+                    putString(
+                        TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name,
+                        ZixieContext.deviceId
+                    )
+                }, true)
             }, 5)
             ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)
         }
