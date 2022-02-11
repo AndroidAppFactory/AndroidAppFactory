@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.web;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import com.bihe0832.android.lib.log.ZLog;
 import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
@@ -11,8 +12,9 @@ public class WebViewHelper {
 
     private static final String TAG = "WebViewHelper";
 
-    public static void init(Context context, boolean needPreLauncher) {
-        initX5(context);
+    public static void init(Context context, HashMap<String, Object> initSettings, Bundle userIDBundleData,
+            boolean needPreLauncher) {
+        initX5(context, initSettings, userIDBundleData);
         if (needPreLauncher && null != context) {
             Intent intent = new Intent();
             intent.setClass(context, WebViewService.class);
@@ -25,19 +27,24 @@ public class WebViewHelper {
      *
      * @param context
      */
-    private static void initX5(Context context) {
+    private static void initX5(Context context, HashMap<String, Object> initSettings, Bundle userIDBundleData) {
         if (null == context) {
             throw new IllegalArgumentException("initX5 error, context is null!");
         }
+        QbSdk.setUserID(context, userIDBundleData);
 
-        HashMap<String, Object> map = new HashMap<String, Object>();
+        HashMap<String, Object> paramMap = new HashMap<String, Object>();
+        if (null != initSettings) {
+            paramMap.putAll(initSettings);
+        }
         // 启用X5私有ClassLoader
-        map.put(TbsCoreSettings.TBS_SETTINGS_USE_PRIVATE_CLASSLOADER, true);
+        paramMap.put(TbsCoreSettings.TBS_SETTINGS_USE_PRIVATE_CLASSLOADER, true);
         // 启用X5多进程dex2oat模式
-        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
-        QbSdk.initTbsSettings(map);
+        paramMap.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        QbSdk.initTbsSettings(paramMap);
 
-        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+        //x5内核初始化接口
+        QbSdk.initX5Environment(context.getApplicationContext(), new QbSdk.PreInitCallback() {
 
             @Override
             public void onViewInitFinished(boolean arg0) {
@@ -49,8 +56,6 @@ public class WebViewHelper {
             public void onCoreInitFinished() {
                 ZLog.d(TAG + "onCoreInitFinished");
             }
-        };
-        //x5内核初始化接口
-        QbSdk.initX5Environment(context.getApplicationContext(), cb);
+        });
     }
 }
