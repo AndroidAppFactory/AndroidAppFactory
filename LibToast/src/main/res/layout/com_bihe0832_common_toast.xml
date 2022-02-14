@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:background="@drawable/common_toast_corner"
+    android:background="@drawable/com_bihe0832_common_toast_corner"
     android:padding="@dimen/bihe0832_common_toast_padding" >
 
     <ImageView

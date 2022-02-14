@@ -13,8 +13,8 @@
             android:layout_margin="24dp"
             android:gravity="center"
             tools:text="版本更新"
-            android:textColor="@color/dialog_text"
-            android:textSize="@dimen/dialog_title_text_size"
+            android:textColor="@color/com_bihe0832_dialog_text"
+            android:textSize="@dimen/com_bihe0832_dialog_title_text_size"
             android:textStyle="bold" />
 
     <TextView
@@ -24,8 +24,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:lineSpacingMultiplier="1.5"
-            android:textSize="@dimen/dialog_content_text_size"
-            android:textColor="@color/dialog_hint"
+            android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
+            android:textColor="@color/com_bihe0832_dialog_hint"
             tools:text="1. 适配Android Q \n2. 修复若干bug" />
 
     <ProgressBar
@@ -49,8 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/dialog_hint"
-                android:textSize="@dimen/dialog_content_text_size"
+                android:textColor="@color/com_bihe0832_dialog_hint"
+                android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
                 android:layout_alignParentLeft="true"
                 tools:text="70%" />
 
@@ -59,8 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
-                android:textColor="@color/dialog_hint"
-                android:textSize="@dimen/dialog_content_text_size"
+                android:textColor="@color/com_bihe0832_dialog_hint"
+                android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
                 android:layout_alignParentRight="true"
                 tools:text="20M/50M" />
 
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
-            android:background="@color/dialog_split" />
+            android:background="@color/com_bihe0832_dialog_split" />
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -88,15 +88,15 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
                 android:singleLine="true"
-                android:textColor="@color/dialog_button"
-                android:textSize="@dimen/dialog_button_text_size"
+                android:textColor="@color/com_bihe0832_dialog_button"
+                android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
                 tools:text="取消更新" />
 
         <View
                 android:id="@+id/update_progress_column_line"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/dialog_split" />
+                android:background="@color/com_bihe0832_dialog_split" />
 
         <TextView
                 android:id="@+id/update_progress_positive"
@@ -109,8 +109,8 @@
                 android:paddingBottom="16dp"
                 android:textStyle="bold"
                 android:singleLine="true"
-                android:textColor="@color/dialog_button"
-                android:textSize="@dimen/dialog_button_text_size"
+                android:textColor="@color/com_bihe0832_dialog_button"
+                android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
                 tools:text="后台更新" />
     </LinearLayout>
 </LinearLayout>

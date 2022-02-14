@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="com_bihe0832_select_default">#333333</color>
+    <color name="com_bihe0832_select_state_checked">#F44C36</color>
+    <color name="com_bihe0832_select_state_pressed">@color/com_bihe0832_select_state_checked</color>
+    <color name="com_bihe0832_select_state_focused">@color/com_bihe0832_select_default</color>
+    <color name="com_bihe0832_select_bg">#FFFFFF</color>
 
-    <color name="select_default">#333333</color>
-    <color name="select_state_checked">#F44C36</color>
-    <color name="select_state_pressed">@color/select_state_checked</color>
-    <color name="select_state_focused">@color/select_default</color>
-    <color name="select_bg">#FFFFFF</color>
-
-    <dimen name="select_item_width">12dp</dimen>
-    <dimen name="select_border_width">1dp</dimen>
+    <dimen name="com_bihe0832_select_item_width">12dp</dimen>
+    <dimen name="com_bihe0832_select_border_width">1dp</dimen>
 
 </resources>

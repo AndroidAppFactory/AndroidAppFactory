@@ -60,7 +60,7 @@ public class BottomBarTab extends FrameLayout {
         mIcon.setImageResource(icon);
         mIcon.setLayoutParams(params);
         mIcon.setAlpha(0.5f);
-        mIcon.setColorFilter(ContextCompat.getColor(context, R.color.tab_unselect));
+        mIcon.setColorFilter(ContextCompat.getColor(context, R.color.com_bihe0832_tab_unselect));
         lLContainer.addView(mIcon);
 
         mTvTitle = new TextView(context);
@@ -72,7 +72,7 @@ public class BottomBarTab extends FrameLayout {
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
             mTvTitle.setLetterSpacing(0.19f);
         }
-        mTvTitle.setTextColor(ContextCompat.getColor(context, R.color.tab_unselect));
+        mTvTitle.setTextColor(ContextCompat.getColor(context, R.color.com_bihe0832_tab_unselect));
         mTvTitle.setLayoutParams(paramsTv);
         lLContainer.addView(mTvTitle);
 
@@ -111,14 +111,14 @@ public class BottomBarTab extends FrameLayout {
         super.setSelected(selected);
         if (selected) {
             mIcon.setAlpha(1.0f);
-            mIcon.setColorFilter(ContextCompat.getColor(mContext,R.color.tab_selected));
+            mIcon.setColorFilter(ContextCompat.getColor(mContext,R.color.com_bihe0832_tab_selected));
             mTvTitle.setAlpha(1.0f);
-            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.tab_selected));
+            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.com_bihe0832_tab_selected));
         } else {
             mIcon.setAlpha(0.5f);
-            mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.tab_unselect));
+            mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.com_bihe0832_tab_unselect));
             mTvTitle.setAlpha(0.5f);
-            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.tab_unselect));
+            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.com_bihe0832_tab_unselect));
         }
     }
 

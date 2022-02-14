@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="16dp"
-    android:background="@color/lib_refresh_bg_color"
+    android:background="@color/com_bihe0832_refresh_bg_color"
     android:paddingTop="16dp">
 
 
@@ -14,5 +14,5 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="正在加载..."
-        android:textColor="@color/lib_refresh_text_color" />
+        android:textColor="@color/com_bihe0832_refresh_text_color" />
 </RelativeLayout>

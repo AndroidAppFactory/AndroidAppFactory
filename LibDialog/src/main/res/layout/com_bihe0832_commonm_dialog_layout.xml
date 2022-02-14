@@ -12,10 +12,10 @@
             android:layout_width="0dp"
             app:layout_constrainedWidth="true"
             android:layout_height="wrap_content"
-            android:textColor="@color/dialog_text"
+            android:textColor="@color/com_bihe0832_dialog_text"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:textSize="@dimen/dialog_title_text_size"
+            android:textSize="@dimen/com_bihe0832_dialog_title_text_size"
             android:textStyle="bold"
             android:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,8 +35,8 @@
             android:layout_marginRight="16dp"
             android:lineSpacingMultiplier="1.75"
             android:scrollbars="vertical"
-            android:textSize="@dimen/dialog_content_text_size"
-            android:textColor="@color/dialog_text"
+            android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
+            android:textColor="@color/com_bihe0832_dialog_text"
             app:layout_constraintTop_toBottomOf="@+id/title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -52,8 +52,8 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:text=" 不再提醒我"
-            android:textColor="@color/dialog_text"
-            android:textSize="@dimen/dialog_tips_text_size"
+            android:textColor="@color/com_bihe0832_dialog_text"
+            android:textSize="@dimen/com_bihe0832_dialog_tips_text_size"
             android:visibility="gone"
             tools:visibility="visible"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -86,10 +86,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="@dimen/dialog_tips_text_size"
+            android:textSize="@dimen/com_bihe0832_dialog_tips_text_size"
             android:layout_marginTop="12dp"
             android:visibility="visible"
-            android:textColor="@color/dialog_tips"
+            android:textColor="@color/com_bihe0832_dialog_tips"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content_layout"
@@ -103,7 +103,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/feedback"
-            android:background="@color/dialog_split" />
+            android:background="@color/com_bihe0832_dialog_split" />
 
     <LinearLayout
             android:layout_width="0dp"
@@ -122,19 +122,19 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
                 android:layout_weight="1"
-                android:background="@color/dialog_bg"
+                android:background="@color/com_bihe0832_dialog_bg"
                 android:gravity="center"
                 android:singleLine="true"
                 tools:text="前往"
                 android:textColor="@drawable/com_bihe0832_common_select_color"
-                android:textSize="@dimen/dialog_button_text_size"
+                android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
                 />
 
         <View
                 android:id="@+id/column_line"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/dialog_split" />
+                android:background="@color/com_bihe0832_dialog_split" />
 
         <Button
                 android:id="@+id/positive"
@@ -145,13 +145,13 @@
                 android:layout_weight="1"
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp"
-                android:background="@color/dialog_bg"
+                android:background="@color/com_bihe0832_dialog_bg"
                 android:gravity="center"
                 android:singleLine="true"
                 android:textStyle="bold"
                 tools:text="确定"
                 android:textColor="@drawable/com_bihe0832_common_select_color"
-                android:textSize="@dimen/dialog_button_text_size"
+                android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
                 />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

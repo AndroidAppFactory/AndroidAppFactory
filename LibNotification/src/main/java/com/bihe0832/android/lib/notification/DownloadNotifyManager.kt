@@ -72,7 +72,7 @@ object DownloadNotifyManager {
         }
         ThreadManager.getInstance().runOnUIThread {
             context.applicationContext.let { context ->
-                val remoteViews = RemoteViews(context.getPackageName(), R.layout.download_notification)
+                val remoteViews = RemoteViews(context.getPackageName(), R.layout.com_bihe0832_download_notification)
                 updateContent(remoteViews, context, downloadURL, appName, iconURL, finished, total, speed, process, downloadType, channelID, notifyID)
             }
         }

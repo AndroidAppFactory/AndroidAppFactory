@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/lib_refresh_bg_color"
+    android:background="@color/com_bihe0832_refresh_bg_color"
     android:layout_height="60dp">
 
 
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@color/lib_refresh_text_color"
+        android:textColor="@color/com_bihe0832_refresh_text_color"
         tools:text="下拉刷新" />
 
     <View

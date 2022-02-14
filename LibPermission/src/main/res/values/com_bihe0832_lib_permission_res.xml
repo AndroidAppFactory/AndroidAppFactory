@@ -1,10 +1,10 @@
 <resources>
-    <string name="permission_title">权限申请</string>
-    <string name="permission_default_scene">完整</string>
-    <string name="permission_default_desc">部分设备</string>
-    <string name="permission_negtive">暂不开启</string>
-    <string name="permission_positive">点击开启</string>
-    <string name="permission_color">#38ADFF</string>
+    <string name="com_bihe0832_permission_title">权限申请</string>
+    <string name="com_bihe0832_permission_default_scene">完整</string>
+    <string name="com_bihe0832_permission_default_desc">部分设备</string>
+    <string name="com_bihe0832_permission_negtive">暂不开启</string>
+    <string name="com_bihe0832_permission_positive">点击开启</string>
+    <string name="com_bihe0832_permission_color">#38ADFF</string>
     <color name="transparent">#00000000</color>
 
     <style name="permissionFullscreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">

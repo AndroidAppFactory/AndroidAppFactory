@@ -8,7 +8,7 @@
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:theme="@style/activityTheme"
                 android:hardwareAccelerated="true"
-                android:process="@string/web_process_name"
+                android:process="@string/com_bihe0832_web_process_name"
                 android:screenOrientation="portrait"></activity>
     </application>
 </manifest>

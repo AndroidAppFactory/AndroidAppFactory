@@ -7,8 +7,8 @@
         <item name="android:maxHeight">10dp</item>
         <item name="android:minHeight">5dp</item>
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:indeterminateDrawable">@drawable/simple_progress_bar_bg</item>
-        <item name="android:progressDrawable">@drawable/common_progress_bar_bg</item>
+        <item name="android:indeterminateDrawable">@drawable/com_bihe0832_simple_progress_bar_bg</item>
+        <item name="android:progressDrawable">@drawable/com_bihe0832_common_progress_bar_bg</item>
     </style>
 
     <color name="process_color">#FDCE5A</color>
