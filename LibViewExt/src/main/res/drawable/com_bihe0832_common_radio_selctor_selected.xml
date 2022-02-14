@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners
-            android:radius="@dimen/select_item_width"/>
+            android:radius="@dimen/com_bihe0832_select_item_width"/>
 
     <solid
-            android:color="@color/select_state_checked"/>
+            android:color="@color/com_bihe0832_select_state_checked"/>
 
     <size
-            android:height="@dimen/select_item_width"
-            android:width="@dimen/select_item_width"/>
+            android:height="@dimen/com_bihe0832_select_item_width"
+            android:width="@dimen/com_bihe0832_select_item_width"/>
 
     <stroke
-            android:width="@dimen/select_border_width"
-            android:color="@color/select_state_checked"/>
+            android:width="@dimen/com_bihe0832_select_border_width"
+            android:color="@color/com_bihe0832_select_state_checked"/>
 
 
 </shape>

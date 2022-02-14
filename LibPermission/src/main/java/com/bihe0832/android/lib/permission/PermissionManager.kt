@@ -36,11 +36,11 @@ object PermissionManager {
     }
 
     private val mDefaultScene by lazy {
-        mContext?.getString(R.string.permission_default_scene) ?: "完整"
+        mContext?.getString(R.string.com_bihe0832_permission_default_scene) ?: "完整"
     }
 
     private val mDefaultDesc by lazy {
-        mContext?.getString(R.string.permission_default_desc) ?: "设备"
+        mContext?.getString(R.string.com_bihe0832_permission_default_desc) ?: "设备"
     }
 
     fun getPermissionCheckResultListener(): InnerOnPermissionResult {
@@ -233,15 +233,15 @@ object PermissionManager {
     }
 
     fun getTitle(context: Context): String {
-        return context.resources.getString(R.string.permission_title)
+        return context.resources.getString(R.string.com_bihe0832_permission_title)
     }
 
     fun getNegtiveText(context: Context): String {
-        return context.resources.getString(R.string.permission_negtive)
+        return context.resources.getString(R.string.com_bihe0832_permission_negtive)
     }
 
     fun getPositiveText(context: Context): String {
-        return context.resources.getString(R.string.permission_positive)
+        return context.resources.getString(R.string.com_bihe0832_permission_positive)
     }
 
     fun setUserDenyTime(permission: String) {
@@ -257,7 +257,7 @@ object PermissionManager {
     }
 
     private fun addHtmlWrapper(content: String): String {
-        return "<font color ='" + (mContext?.resources?.getString(R.string.permission_color)
+        return "<font color ='" + (mContext?.resources?.getString(R.string.com_bihe0832_permission_color)
                 ?: "#38ADFF") + "'><b> $content </b></font> "
     }
 

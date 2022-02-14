@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:background="@color/dialog_bg"
+        android:background="@color/com_bihe0832_dialog_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -10,7 +10,7 @@
             android:id="@+id/takePhotoBtn"
             android:text="拍照"
             android:textSize="14sp"
-            android:textColor="@color/dialog_text"
+            android:textColor="@color/com_bihe0832_dialog_text"
             android:paddingLeft="24dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
@@ -28,7 +28,7 @@
             android:text="从相册选择"
             android:textSize="14sp"
             android:paddingLeft="24dp"
-            android:textColor="@color/dialog_text"
+            android:textColor="@color/com_bihe0832_dialog_text"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:layout_width="match_parent"

@@ -163,8 +163,8 @@ public class DebugTools {
         params.setMargins(50, 10, 50, 10);
         editText.setLayoutParams(params);
         editText.setSingleLine();
-        editText.setBackgroundColor(context.getResources().getColor(R.color.dialog_text));
-        editText.setTextColor(context.getResources().getColor(R.color.dialog_bg));
+        editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_text));
+        editText.setTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_bg));
         editText.setHint(hint);
         if (!TextUtils.isEmpty(defaultValue)) {
             editText.requestFocus();

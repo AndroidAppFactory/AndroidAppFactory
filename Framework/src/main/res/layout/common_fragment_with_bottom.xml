@@ -16,9 +16,9 @@
     <com.bihe0832.android.lib.ui.view.BottomBar
         android:id="@+id/main_fragment_bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/main_bottom_bar_height"
+        android:layout_height="@dimen/com_bihe0832_main_bottom_bar_height"
         android:layout_gravity="bottom"
-        android:background="@color/tag_background"
+        android:background="@color/com_bihe0832_tag_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

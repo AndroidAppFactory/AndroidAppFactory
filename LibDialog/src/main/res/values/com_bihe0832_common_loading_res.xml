@@ -4,7 +4,7 @@
     </style>
 
     <style name="LoadingProcessStyle" parent="@android:style/Widget.ProgressBar.Small.Inverse">
-        <item name="android:indeterminateDrawable">@anim/loading_animation</item>
+        <item name="android:indeterminateDrawable">@anim/com_bihe0832_loading_animation</item>
         <item name="android:minWidth">24dp</item>
         <item name="android:maxWidth">24dp</item>
         <item name="android:minHeight">24dp</item>
