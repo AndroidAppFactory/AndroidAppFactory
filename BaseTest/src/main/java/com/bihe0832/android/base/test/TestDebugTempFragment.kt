@@ -388,7 +388,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
     }
 
     private fun testFunc() {
-        openZixieWeb("https://m.gamematrix.qq.com/v2/game?tk=C4Qw5gvAHATArgdwKwE8Bsw5qWAnGuAWwDIAjASwBNoAWAYQCEAxZ3BqAUQEYao0ZiAZyoQAagAcAGgHsAmgAsASgEF5ABQDig6QBUA6hyA&pcc=1")
+//        openZixieWeb("https://www.qq.com")
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())
