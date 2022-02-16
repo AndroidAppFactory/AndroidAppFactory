@@ -1,5 +1,6 @@
 package com.bihe0832.android.framework.router
 
+import android.content.Intent
 import com.bihe0832.android.lib.request.URLUtils
 import java.util.*
 
@@ -9,9 +10,11 @@ import java.util.*
  *
  */
 
-
 fun openWebPage(url: String) {
     val map = HashMap<String, String>()
     map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(url)
-    RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
+    RouterAction.openFinalURL(
+        RouterAction.getFinalURL(RouterConstants.MODULE_NAME_WEB_PAGE, map),
+        Intent.FLAG_ACTIVITY_NEW_TASK
+    )
 }

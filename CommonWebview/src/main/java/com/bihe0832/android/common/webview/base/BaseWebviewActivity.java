@@ -42,8 +42,10 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         try {
-            handleIntent(intent);
-            ((BaseWebviewFragment) findFragment(getWebViewFragmentClass())).loadUrl(mURL, null);
+            if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+                handleIntent(intent);
+                ((BaseWebviewFragment) findFragment(getWebViewFragmentClass())).loadUrl(mURL, null);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,7 +53,9 @@ public abstract class BaseWebviewActivity extends CommonActivity {
 
     protected void handleIntent(Intent intent) {
 
-        if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+            mURL = intent.getData().toString();
+        } else if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
             mURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
         } else {
             if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL)) {
@@ -59,8 +63,6 @@ public abstract class BaseWebviewActivity extends CommonActivity {
                         .decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
                 IntentUtils.openWebPage(redirectURL, this);
                 finish();
-            } else if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
-                mURL = intent.getData().toString();
             } else {
                 WebviewLoggerFile.INSTANCE.log("handle intent, but extra is bad");
             }
