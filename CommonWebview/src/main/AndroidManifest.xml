@@ -6,22 +6,48 @@
     <application>
         <activity
                 android:name="com.bihe0832.android.common.webview.WebPageActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
                 android:theme="@style/activityTheme"
                 android:hardwareAccelerated="true"
-                android:launchMode="singleInstance"
+                android:launchMode="singleTask"
+                android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:windowSoftInputMode="adjustPan|stateHidden"
+                android:exported="true"
                 android:process="@string/com_bihe0832_web_process_name"
-                android:screenOrientation="portrait" />
+                android:screenOrientation="portrait">
 
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.VIEW" />-->
+            <!-- 两个 intent-filter 二选一，一个只打开指定域名，一个打开所有的网络请求 -->
 
-        <!--                <category android:name="android.intent.category.DEFAULT" />-->
-        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.VIEW" />-->
 
-        <!--                <data android:scheme="http" />-->
-        <!--                <data android:scheme="https" />-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
+            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+
+            <!--                <data-->
+            <!--                        android:scheme="https"-->
+            <!--                        android:host="*.ptlogin2.qq.com" />-->
+
+            <!--                <data-->
+            <!--                        android:host="*"-->
+            <!--                        android:scheme="http" />-->
+            <!--                <data-->
+            <!--                        android:host="*"-->
+            <!--                        android:scheme="https" />-->
+            <!--            </intent-filter>-->
+
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.VIEW" />-->
+
+            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+            <!--                <data android:scheme="http" />-->
+            <!--                <data android:scheme="https" />-->
+            <!--                <data android:scheme="about" />-->
+            <!--                <data android:scheme="javascript" />-->
+
+            <!--            </intent-filter>-->
+
+        </activity>
     </application>
 </manifest>

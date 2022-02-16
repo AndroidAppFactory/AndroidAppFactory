@@ -2,6 +2,7 @@ package com.bihe0832.android.common.webview;
 
 import com.bihe0832.android.common.webview.base.BaseWebviewActivity;
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
+import com.bihe0832.android.common.webview.base.CookieManagerForZixie;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.lib.router.annotation.Module;
 
@@ -17,5 +18,10 @@ public class WebPageActivity extends BaseWebviewActivity {
         return CommonWebviewFragment.class;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CookieManagerForZixie.INSTANCE.removeAllCookie();
+    }
 }
 

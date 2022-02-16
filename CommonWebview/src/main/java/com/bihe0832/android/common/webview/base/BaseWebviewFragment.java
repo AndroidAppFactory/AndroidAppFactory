@@ -4,6 +4,7 @@ package com.bihe0832.android.common.webview.base;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -383,7 +384,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                     return BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.HONEYCOMB;
                 } else if (url.startsWith("http") || url.startsWith("https")) {
                     if (loadUseIntent(url)) {
-                        IntentUtils.jumpToOtherApp(url, getActivity());
+                        return jumpToOtherApp(url, getActivity());
                     } else {
                         if (!TextUtils.isEmpty(mRefererString)) {
                             HashMap<String, String> headerHashMap = new HashMap<>();
@@ -395,12 +396,26 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                     }
                     return true;
                 } else {
-                    IntentUtils.jumpToOtherApp(url, getActivity());
-                    return true;
+                    return jumpToOtherApp(url, getActivity());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 return super.shouldOverrideUrlLoading(view, url);
+            }
+        }
+
+        public boolean jumpToOtherApp(String url, Context context) {
+            if (context != null && !TextUtils.isEmpty(url)) {
+                try {
+                    ZLog.e(TAG, "jumpToOtherApp url:" + url);
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                } catch (Exception var4) {
+                    ZLog.e(TAG, "jumpToOtherApp failed:" + var4.getMessage());
+                    return false;
+                }
+            } else {
+                return false;
             }
         }
 

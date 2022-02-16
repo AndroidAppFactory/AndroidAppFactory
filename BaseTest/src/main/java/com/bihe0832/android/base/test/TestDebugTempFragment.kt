@@ -1,14 +1,14 @@
 package com.bihe0832.android.base.test
 
 
-import android.Manifest
+import android.content.ComponentName
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
-import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.base.test.icon.TestIcon
 import com.bihe0832.android.base.test.icon.TestTipsIcon
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
@@ -21,6 +21,7 @@ import com.bihe0832.android.common.photos.showPhotoChooser
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
+import com.bihe0832.android.common.webview.WebPageActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
@@ -32,7 +33,7 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
@@ -41,9 +42,9 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
+
 
 class TestDebugTempFragment : BaseTestListFragment() {
     val LOG_TAG = "TestDebugTempFragment"
@@ -376,11 +377,19 @@ class TestDebugTempFragment : BaseTestListFragment() {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
             CommonDBManager.getData("sss" + it)
         }
+
+        val intent = Intent(context, WebPageActivity::class.java)
+        intent.setAction(Intent.ACTION_VIEW)
+        intent.putExtra(
+            com.bihe0832.android.framework.router.RouterConstants.INTENT_EXTRA_KEY_WEB_URL,
+            URLUtils.encode("https://www.qq.com")
+        )
+        startActivity(intent)
     }
 
-
     private fun testFunc() {
-        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
+        openZixieWeb("https://m.gamematrix.qq.com/v2/game?tk=C4Qw5gvAHATArgdwKwE8Bsw5qWAnGuAWwDIAjASwBNoAWAYQCEAxZ3BqAUQEYao0ZiAZyoQAagAcAGgHsAmgAsASgEF5ABQDig6QBUA6hyA&pcc=1")
+//        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())
 //        CommonDBManager.getAll().forEach {
