@@ -15,17 +15,24 @@
                 android:process="@string/com_bihe0832_web_process_name"
                 android:screenOrientation="portrait">
 
-            <!-- 两个 intent-filter 二选一，一个只打开指定域名，一个打开所有的网络请求 -->
+            <!-- 两个 intent-filter 二选一，一个只打开指定域名，一个直接支持设为默认浏览器 -->
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https" android:host="*.ptlogin2.qq.com" />
+
+            </intent-filter>
+
 
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.VIEW" />-->
 
             <!--                <category android:name="android.intent.category.BROWSABLE" />-->
             <!--                <category android:name="android.intent.category.DEFAULT" />-->
-
-            <!--                <data-->
-            <!--                        android:scheme="https"-->
-            <!--                        android:host="*.ptlogin2.qq.com" />-->
 
             <!--                <data-->
             <!--                        android:host="*"-->
