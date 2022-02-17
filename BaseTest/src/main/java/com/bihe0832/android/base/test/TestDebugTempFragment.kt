@@ -1,9 +1,6 @@
 package com.bihe0832.android.base.test
 
 
-import android.content.ComponentName
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -21,8 +18,8 @@ import com.bihe0832.android.common.photos.showPhotoChooser
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
-import com.bihe0832.android.common.webview.WebPageActivity
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
@@ -33,7 +30,6 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
@@ -377,18 +373,10 @@ class TestDebugTempFragment : BaseTestListFragment() {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
             CommonDBManager.getData("sss" + it)
         }
-
-        val intent = Intent(context, WebPageActivity::class.java)
-        intent.setAction(Intent.ACTION_VIEW)
-        intent.putExtra(
-            com.bihe0832.android.framework.router.RouterConstants.INTENT_EXTRA_KEY_WEB_URL,
-            URLUtils.encode("https://www.qq.com")
-        )
-        startActivity(intent)
     }
 
     private fun testFunc() {
-//        openZixieWeb("https://www.qq.com")
+        openZixieWeb("https://www.qq.com")
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())

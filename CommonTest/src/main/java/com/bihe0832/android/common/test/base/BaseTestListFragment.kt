@@ -9,7 +9,6 @@ import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
 import com.bihe0832.android.common.test.R
 import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.framework.router.openWebPage
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
@@ -97,10 +96,5 @@ open class BaseTestListFragment : CommonListFragment() {
 
             }
         }
-    }
-
-
-    open fun openZixieWeb(url: String) {
-        openWebPage(url)
     }
 }

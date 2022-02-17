@@ -11,7 +11,7 @@ import android.view.View
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.framework.router.openWebPage
+import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
@@ -90,6 +90,6 @@ abstract class BaseTestListActivity : CommonListActivity() {
     }
 
     fun openWeb(url: String) {
-        openWebPage(url)
+        openZixieWeb(url)
     }
 }
