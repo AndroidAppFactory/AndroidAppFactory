@@ -1,14 +1,13 @@
 package com.bihe0832.android.common.settings
 
 import android.app.Activity
-import android.net.Uri
 import android.view.View
 import com.bihe0832.android.common.about.R
 import com.bihe0832.android.common.about.card.SettingsData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.framework.router.openWebPage
+import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.superapp.QQHelper
 import com.bihe0832.android.lib.superapp.WechatOfficialAccount
@@ -32,7 +31,7 @@ object SettingsItem {
                     if (url.isNullOrEmpty()) {
                         ZixieContext.showWaiting()
                     } else {
-                        openWebPage(url)
+                        openZixieWeb(url)
                     }
                 }
             }
@@ -115,7 +114,7 @@ object SettingsItem {
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
-                openWebPage("file:///android_asset/web/author.html")
+                openZixieWeb("file:///android_asset/web/author.html")
             }
         }
     }

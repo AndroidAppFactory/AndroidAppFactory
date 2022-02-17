@@ -10,7 +10,7 @@ import java.util.*
  *
  */
 
-fun openWebPage(url: String) {
+fun openZixieWeb(url: String) {
     val map = HashMap<String, String>()
     map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(url)
     RouterAction.openFinalURL(
