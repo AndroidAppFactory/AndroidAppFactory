@@ -8,7 +8,12 @@ ext {
     zixieUserOrg = 'bihe0832'
     zixieGroupId = "com.bihe0832.android"
     zixieLicences = ""
-    zixieVersionCode = Integer.parseInt(['sh', '-c', 'git rev-list --all --count'].execute().text.trim())
+    try{
+        zixieVersionCode = Integer.parseInt(['sh', '-c', 'git rev-list --all --count'].execute().text.trim())
+    }catch(NumberFormatException ex){
+        System.out.println("not a number" + ex)
+        zixieVersionCode = 0
+    }
     zixieVersionName = ext.moduleVersionName
     zixieModuleInfo = ext.moduleInfo
     zixieModules = new ArrayList<>()
