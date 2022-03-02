@@ -54,8 +54,8 @@ class TestImageFragment : BaseFragment() {
                             test_image_remote_source.setImageBitmap(it)
                             BitmapUtil.compress(it, 20).let { aa ->
                                 test_image_local_target.setImageBitmap(aa)
-                                var fileSource = BitmapUtil.saveBitmapToSdCard(context!!, it)
-                                var fileTarget = BitmapUtil.saveBitmapToSdCard(context!!, aa)
+                                var fileSource = BitmapUtil.saveBitmap(context!!, it)
+                                var fileTarget = BitmapUtil.saveBitmap(context!!, aa)
                                 ZLog.e(
                                     "BitmapUtil",
                                     "onComplete filePath:$filePath : " + File(filePath).length()
