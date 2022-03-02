@@ -363,14 +363,14 @@ class TestDebugTempFragment : BaseTestListFragment() {
             1645772904115,
             1645772404116
         ).forEach { data ->
-//            ZLog.d(
-//                "testDateUtil",
-//                "$data trans result is:" + DateUtil.getDateCompareResult(data.toLong())
-//            )
-//            ZLog.d(
-//                "testDateUtil",
-//                "$data trans result is:" + DateUtil.getDateCompareResult1(data.toLong())
-//            )
+            ZLog.d(
+                "testDateUtil",
+                "$data trans result is:" + DateUtil.getDateCompareResult(data.toLong())
+            )
+            ZLog.d(
+                "testDateUtil",
+                "$data trans result is:" + DateUtil.getDateCompareResult1(data.toLong())
+            )
             ZLog.d("testDateUtil", "$data trans result is:" + DateUtil.getDateCompareResult2(data))
         }
 
@@ -392,10 +392,10 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
         mutableListOf(1, 37, 67, 2434, 24064, 2403564).forEach {
             ZLog.d(
-                "testDateAndTime", "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
+                "formatSecondsTo00", "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
             )
             ZLog.d(
-                "testDateAndTime", "Value $it trans to :" + TimeUtil.formatSecondsTo00(
+                "formatSecondsTo00", "Value $it trans to :" + TimeUtil.formatSecondsTo00(
                     it.toLong(),
                     false,
                     false,
@@ -403,16 +403,22 @@ class TestDebugTempFragment : BaseTestListFragment() {
                 )
             )
             ZLog.d(
-                "testDateAndTime",
+                "formatSecondsTo00",
                 "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true)
             )
             ZLog.d(
-                "testDateAndTime",
+                "formatSecondsTo00",
                 "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false)
             )
             ZLog.d(
-                "testDateAndTime",
+                "formatSecondsTo00",
                 "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
+            )
+        }
+        mutableListOf(1, 37, 67, 2434, 3600, 3602, 24064, 86400,86440, 2403564).forEach {
+            ZLog.d(
+                "formatSecondsToDurationDesc",
+                "Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong())
             )
         }
     }
