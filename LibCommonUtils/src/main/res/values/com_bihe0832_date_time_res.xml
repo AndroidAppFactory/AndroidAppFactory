@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="date_year_short">年</string>
+    <string name="date_month_short">月</string>
+    <string name="date_day_short">天</string>
+    <string name="date_hour_short">小时</string>
+    <string name="date_minute_short">分</string>
+    <string name="date_second_short">秒</string>
+</resources>
