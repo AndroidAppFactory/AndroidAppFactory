@@ -22,10 +22,6 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 
-        ndk {
-            abiFilters "armeabi-v7a"
-            stl "stlport_static"
-        }
     }
 
     packagingOptions {
