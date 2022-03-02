@@ -8,7 +8,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.utils.DateUtil;
+import com.bihe0832.android.lib.utils.time.DateUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
 
 /**
