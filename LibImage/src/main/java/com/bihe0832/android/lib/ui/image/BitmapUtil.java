@@ -185,7 +185,7 @@ public class BitmapUtil {
                 .createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas chartCanvas = new Canvas(mAccBitmap);
         view.draw(chartCanvas);
-        filePath = BitmapUtil.saveBitmapToSdCard(view.getContext(), mAccBitmap);
+        filePath = BitmapUtil.saveBitmap(view.getContext(), mAccBitmap);
         return filePath;
     }
 
@@ -267,7 +267,7 @@ public class BitmapUtil {
         try {
             stream.reset();
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return BitmapFactory.decodeStream(stream, null, options);
     }
@@ -307,10 +307,10 @@ public class BitmapUtil {
      *
      * @return
      */
-    public static String saveBitmapToSdCard(Context context, Bitmap bitmap) {
+    public static String saveBitmap(Context context, Bitmap bitmap) {
         String packageName = context.getPackageName();
         String filePath = packageName + "_pic_" + System.currentTimeMillis() + ".png";
-        return saveBitmapToSdCard(context, bitmap, filePath);
+        return saveBitmapWithName(context, bitmap, filePath);
     }
 
     /**
@@ -318,8 +318,8 @@ public class BitmapUtil {
      *
      * @return
      */
-    public static String saveBitmapToSdCard(Context context, Bitmap bitmap, String fileName) {
-        return saveBitmapToSdCard(context, bitmap, CompressFormat.PNG, fileName, true);
+    public static String saveBitmapWithName(Context context, Bitmap bitmap, String fileName) {
+        return saveBitmapWithName(context, bitmap, CompressFormat.PNG, fileName, true);
 
     }
 
@@ -328,7 +328,26 @@ public class BitmapUtil {
      *
      * @return
      */
-    public static String saveBitmapToSdCard(Context context, Bitmap bitmap, CompressFormat format, String fileName,
+    public static String saveBitmapWithName(Context context, Bitmap bitmap, CompressFormat format, String fileName,
+            boolean forceNew) {
+        if (null == context) {
+            return "";
+        }
+        String filePath = ZixieFileProvider.getZixieFilePath(context) + "temp" + File.separator + fileName;
+        return saveBitmapWithPath(context, bitmap, format, filePath, forceNew);
+    }
+
+
+    public static String saveBitmapWithPath(Context context, Bitmap bitmap, String filePath) {
+        return saveBitmapWithPath(context, bitmap, CompressFormat.PNG,filePath,true);
+        
+    }
+    /**
+     * 把bitmap保存到本地
+     *
+     * @return
+     */
+    public static String saveBitmapWithPath(Context context, Bitmap bitmap, CompressFormat format, String filePath,
             boolean forceNew) {
         if (null == context) {
             return "";
@@ -337,9 +356,7 @@ public class BitmapUtil {
             return "";
         }
 
-        String dir = ZixieFileProvider.getZixieFilePath(context);
-        String filePath = dir + fileName;
-        if (!TextUtils.isEmpty(dir)) {
+        if (!TextUtils.isEmpty(filePath)) {
             ZLog.e(TAG, "filePath = " + filePath);
             try {
                 File file = new File(filePath);
@@ -364,7 +381,6 @@ public class BitmapUtil {
         } else {
             return "";
         }
-
     }
 
     /**
@@ -457,17 +473,19 @@ public class BitmapUtil {
         //循环判断如果压缩后图片是否大于100kb,大于继续压缩
         while (options > 1 && baos.toByteArray().length > size_length * targetSize) {
             options = (int) (size_length * targetSize * 100f / baos.toByteArray().length);
-            if(options < 0){
+            if (options < 0) {
                 options = 0;
             }
-            ZLog.d(TAG, "compress start source length " + baos.toByteArray().length  + "; target length:" + size_length * targetSize
+            ZLog.d(TAG, "compress start source length " + baos.toByteArray().length + "; target length:"
+                    + size_length * targetSize
                     + "; options:" + options);
             //重置baos即清空baos
             baos.reset();
             //第一个参数 ：图片格式 ，第二个参数： 图片质量，100为最高，0为最差  ，第三个参数：保存压缩后的数据的流
             //这里压缩options%，把压缩后的数据存放到baos中
             image.compress(CompressFormat.JPEG, options, baos);
-            ZLog.d(TAG, "compress end source length " + baos.toByteArray().length  + "; target length:" + size_length * targetSize
+            ZLog.d(TAG, "compress end source length " + baos.toByteArray().length + "; target length:"
+                    + size_length * targetSize
                     + "; options:" + options);
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
