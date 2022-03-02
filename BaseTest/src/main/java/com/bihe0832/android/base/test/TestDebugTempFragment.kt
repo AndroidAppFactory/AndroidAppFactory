@@ -30,12 +30,14 @@ import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.time.TimeUtil
@@ -71,6 +73,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
             add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
             add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
+            add(TestItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(TestItemData("数据时间转换", View.OnClickListener { testConvert() }))
             add(TestItemData("展示悬浮窗", View.OnClickListener { showIcon() }))
             add(TestItemData("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
@@ -412,6 +415,23 @@ class TestDebugTempFragment : BaseTestListFragment() {
                 "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
             )
         }
+    }
+
+
+    private fun testZlib() {
+        val builder = StringBuilder()
+        for (i in 0..50) {
+            builder.append('a' + (TextFactoryUtils.getRandomString(26)))
+        }
+        val text = builder.toString()
+        val compres = ZlibUtil.compress(text.toByteArray())
+        ZLog.d("testZlib", "compres 前后： " + compres.size + " : " + text.toByteArray().size)
+
+        val res = String(ZlibUtil.uncompress(compres))
+        ZLog.d("testZlib", "压缩再解压一致性确认：")
+        ZLog.d("testZlib", "text：\n$text\n\n")
+        ZLog.d("testZlib", "result：\n$res\n\n")
+
     }
 
     private fun testOneRequest() {
