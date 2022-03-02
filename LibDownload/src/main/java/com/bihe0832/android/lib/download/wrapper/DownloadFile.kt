@@ -19,41 +19,141 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 object DownloadFile {
 
     //检测网络类型，并且4G弹框，不使用进度条
-    fun startDownloadWithCheck(activity: Activity, url: String, downloadListener: DownloadListener?) {
+    fun startDownloadWithCheck(
+        activity: Activity,
+        url: String,
+        downloadListener: DownloadListener?
+    ) {
         startDownloadWithCheck(activity, url, "", false, downloadListener)
     }
 
     //检测网络类型，并且4G弹框，不使用进度条
-    fun startDownloadWithCheck(activity: Activity, url: String, md5: String, downloadListener: DownloadListener?) {
+    fun startDownloadWithCheck(
+        activity: Activity,
+        url: String,
+        md5: String,
+        downloadListener: DownloadListener?
+    ) {
         startDownloadWithCheck(activity, url, md5, false, downloadListener)
     }
 
     //检测网络类型，并且4G弹框，不使用进度条
-    fun startDownloadWithCheck(activity: Activity, url: String, md5: String, canCancel: Boolean, downloadListener: DownloadListener?) {
+    fun startDownloadWithCheck(
+        activity: Activity,
+        url: String,
+        md5: String,
+        canCancel: Boolean,
+        downloadListener: DownloadListener?
+    ) {
         startDownloadWithCheckAndProcess(activity, url, md5, canCancel, null, downloadListener)
     }
 
     //检测网络类型，并且4G弹框，不显示进度条
-    fun startDownloadWithCheckAndProcess(activity: Activity, url: String, md5: String, canCancle: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        startDownloadWithCheckAndProcess(activity, url, "", md5, canCancle, listener, downloadListener)
+    fun startDownloadWithCheckAndProcess(
+        activity: Activity,
+        url: String,
+        md5: String,
+        canCancle: Boolean,
+        listener: OnDialogListener?,
+        downloadListener: DownloadListener?
+    ) {
+        startDownloadWithCheckAndProcess(
+            activity,
+            url,
+            "",
+            md5,
+            canCancle,
+            listener,
+            downloadListener
+        )
     }
 
-    fun startDownloadWithCheckAndProcess(activity: Activity, url: String, filePath: String, md5: String, canCancle: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        startDownloadWithCheckAndProcess(activity, "", "", url, filePath, md5, canCancle, false, listener, downloadListener)
+    fun startDownloadWithCheckAndProcess(
+        activity: Activity,
+        url: String,
+        filePath: String,
+        md5: String,
+        canCancle: Boolean,
+        listener: OnDialogListener?,
+        downloadListener: DownloadListener?
+    ) {
+        startDownloadWithCheckAndProcess(
+            activity,
+            "",
+            "",
+            url,
+            filePath,
+            md5,
+            canCancle,
+            false,
+            listener,
+            downloadListener
+        )
     }
 
 
     //检测网络类型，并且4G弹框，显示进度条
-    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        startDownloadWithCheckAndProcess(activity, title, msg, url, "", md5, canCancel, listener, downloadListener)
+    fun startDownloadWithCheckAndProcess(
+        activity: Activity,
+        title: String,
+        msg: String,
+        url: String,
+        md5: String,
+        canCancel: Boolean,
+        listener: OnDialogListener?,
+        downloadListener: DownloadListener?
+    ) {
+        startDownloadWithCheckAndProcess(
+            activity,
+            title,
+            msg,
+            url,
+            "",
+            md5,
+            canCancel,
+            listener,
+            downloadListener
+        )
     }
 
-    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, filePath: String, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        startDownloadWithCheckAndProcess(activity, title, msg, url, filePath, md5, canCancel, true, listener, downloadListener)
+    fun startDownloadWithCheckAndProcess(
+        activity: Activity,
+        title: String,
+        msg: String,
+        url: String,
+        filePath: String,
+        md5: String,
+        canCancel: Boolean,
+        listener: OnDialogListener?,
+        downloadListener: DownloadListener?
+    ) {
+        startDownloadWithCheckAndProcess(
+            activity,
+            title,
+            msg,
+            url,
+            filePath,
+            md5,
+            canCancel,
+            true,
+            listener,
+            downloadListener
+        )
     }
 
     //检测网络类型，并且4G弹框，进度条参数控制
-    fun startDownloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, filePath: String, md5: String, canCancel: Boolean, useProcess: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
+    fun startDownloadWithCheckAndProcess(
+        activity: Activity,
+        title: String,
+        msg: String,
+        url: String,
+        filePath: String,
+        md5: String,
+        canCancel: Boolean,
+        useProcess: Boolean,
+        listener: OnDialogListener?,
+        downloadListener: DownloadListener?
+    ) {
         if (null == activity || url.isNullOrBlank()) {
             return
         }
@@ -69,9 +169,32 @@ object DownloadFile {
                         override fun onPositiveClick() {
                             dismiss()
                             if (useProcess) {
-                                startDownloadWithProcess(activity, title, msg, url, filePath, md5, canCancel, true, listener, downloadListener)
+                                startDownloadWithProcess(
+                                    activity,
+                                    title,
+                                    msg,
+                                    url,
+                                    filePath,
+                                    md5,
+                                    canCancel,
+                                    forceDownload = false,
+                                    useMobile = true,
+                                    listener = listener,
+                                    downloadListener = downloadListener
+                                )
                             } else {
-                                startDownload(activity, title, msg, url, filePath, md5, true, true, downloadListener)
+                                startDownload(
+                                    activity,
+                                    title,
+                                    msg,
+                                    url,
+                                    filePath,
+                                    md5,
+                                    forceDownload = false,
+                                    canPart = true,
+                                    UseMobile = true,
+                                    downloadListener = downloadListener
+                                )
                             }
                         }
 
@@ -88,9 +211,27 @@ object DownloadFile {
                 }
             } else {
                 if (useProcess) {
-                    startDownloadWithProcess(activity, title, msg, url, filePath, md5, canCancel, true, listener, downloadListener)
+                    startDownloadWithProcess(
+                        activity,
+                        title,
+                        msg,
+                        url,
+                        filePath,
+                        md5,
+                        canCancel,
+                        forceDownload = false,
+                        useMobile = true,
+                        listener = listener,
+                        downloadListener = downloadListener
+                    )
                 } else {
-                    startDownload(activity, title, msg, url, "", md5, true, true, downloadListener)
+                    startDownload(
+                        activity, title, msg, url, "", md5,
+                        forceDownload = false,
+                        canPart = true,
+                        UseMobile = true,
+                        downloadListener = downloadListener
+                    )
                 }
             }
         } else {
@@ -99,7 +240,19 @@ object DownloadFile {
     }
 
     //显示进度条
-    fun startDownloadWithProcess(activity: Activity, title: String, msg: String, url: String, filePath: String, md5: String, canCancel: Boolean, useMobile: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
+    fun startDownloadWithProcess(
+        activity: Activity,
+        title: String,
+        msg: String,
+        url: String,
+        filePath: String,
+        md5: String,
+        canCancel: Boolean,
+        forceDownload: Boolean,
+        useMobile: Boolean,
+        listener: OnDialogListener?,
+        downloadListener: DownloadListener?
+    ) {
         var progressDialog = DownloadProgressDialog(activity).apply {
             setTitle(title)
             setMessage(msg)
@@ -137,53 +290,79 @@ object DownloadFile {
             })
         }
         ThreadManager.getInstance().runOnUIThread { progressDialog.show() }
-        startDownload(activity.applicationContext, title, msg, url, filePath, md5, true, useMobile, object : DownloadListener {
-            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                ToastUtil.showShort(activity, "应用下载失败（$errorCode）")
-                ThreadManager.getInstance().runOnUIThread {
-                    progressDialog.dismiss()
+        startDownload(
+            activity.applicationContext,
+            title,
+            msg,
+            url,
+            filePath,
+            md5,
+            forceDownload,
+            true,
+            useMobile,
+            object : DownloadListener {
+                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                    ToastUtil.showShort(activity, "应用下载失败（$errorCode）")
+                    ThreadManager.getInstance().runOnUIThread {
+                        progressDialog.dismiss()
+                    }
+                    downloadListener?.onFail(errorCode, msg, item)
                 }
-                downloadListener?.onFail(errorCode, msg, item)
-            }
 
-            override fun onComplete(filePath: String, item: DownloadItem) {
-                ZLog.i("startDownloadApk download installApkPath: $filePath")
-                ThreadManager.getInstance().runOnUIThread {
-                    progressDialog.dismiss()
+                override fun onComplete(filePath: String, item: DownloadItem) {
+                    ZLog.i("startDownloadApk download installApkPath: $filePath")
+                    ThreadManager.getInstance().runOnUIThread {
+                        progressDialog.dismiss()
+                    }
+                    downloadListener?.onComplete(filePath, item)
                 }
-                downloadListener?.onComplete(filePath, item)
-            }
 
-            override fun onDelete(item: DownloadItem) {
-                downloadListener?.onDelete(item)
-                ThreadManager.getInstance().runOnUIThread {
-                    progressDialog.dismiss()
+                override fun onDelete(item: DownloadItem) {
+                    downloadListener?.onDelete(item)
+                    ThreadManager.getInstance().runOnUIThread {
+                        progressDialog.dismiss()
+                    }
                 }
-            }
 
-            override fun onWait(item: DownloadItem) {
-                downloadListener?.onWait(item)
-            }
-
-            override fun onStart(item: DownloadItem) {
-                downloadListener?.onWait(item)
-            }
-
-            override fun onProgress(item: DownloadItem) {
-                activity.runOnUiThread(Runnable {
-                    progressDialog.setAPKSize(item.fileLength)
-                    progressDialog.setCurrentSize(item.finished)
-                })
-                downloadListener?.onProgress(item)
-            }
-
-            override fun onPause(item: DownloadItem) {
-                ThreadManager.getInstance().runOnUIThread {
-                    progressDialog.dismiss()
+                override fun onWait(item: DownloadItem) {
+                    downloadListener?.onWait(item)
                 }
-                downloadListener?.onPause(item)
-            }
-        })
+
+                override fun onStart(item: DownloadItem) {
+                    downloadListener?.onWait(item)
+                }
+
+                override fun onProgress(item: DownloadItem) {
+                    activity.runOnUiThread(Runnable {
+                        progressDialog.setAPKSize(item.fileLength)
+                        progressDialog.setCurrentSize(item.finished)
+                    })
+                    downloadListener?.onProgress(item)
+                }
+
+                override fun onPause(item: DownloadItem) {
+                    ThreadManager.getInstance().runOnUIThread {
+                        progressDialog.dismiss()
+                    }
+                    downloadListener?.onPause(item)
+                }
+            })
+    }
+
+    //不检测网络类型，4G自动下载，不使用进度条
+    fun startDownload(
+        context: Context,
+        url: String,
+        forceDownload: Boolean,
+        downloadListener: DownloadListener?
+    ) {
+        startDownload(
+            context, "", "", url, "", "",
+            forceDownload,
+            canPart = false,
+            UseMobile = true,
+            downloadListener = downloadListener
+        )
     }
 
     //不检测网络类型，4G自动下载，不使用进度条
@@ -191,22 +370,57 @@ object DownloadFile {
         startDownload(context, url, "", downloadListener)
     }
 
-    fun startDownload(context: Context, url: String, filePath: String, downloadListener: DownloadListener?) {
+    fun startDownload(
+        context: Context,
+        url: String,
+        filePath: String,
+        downloadListener: DownloadListener?
+    ) {
         startDownload(context, url, filePath, "", downloadListener)
     }
 
 
     //不检测网络类型，4G自动下载，不使用进度条
-    fun startDownload(context: Context, url: String, filePath: String, md5: String, downloadListener: DownloadListener?) {
+    fun startDownload(
+        context: Context,
+        url: String,
+        filePath: String,
+        md5: String,
+        downloadListener: DownloadListener?
+    ) {
         startDownload(context, url, filePath, md5, true, downloadListener)
     }
 
     //不检测网络类型，4G下载参数控制，不使用进度条
-    fun startDownload(context: Context, url: String, filePath: String, md5: String, useMobile: Boolean, downloadListener: DownloadListener?) {
-        startDownload(context, "", "", url, filePath, md5, false, useMobile, downloadListener)
+    fun startDownload(
+        context: Context,
+        url: String,
+        filePath: String,
+        md5: String,
+        useMobile: Boolean,
+        downloadListener: DownloadListener?
+    ) {
+        startDownload(
+            context, "", "", url, filePath, md5,
+            forceDownload = false,
+            canPart = false,
+            UseMobile = useMobile,
+            downloadListener = downloadListener
+        )
     }
 
-    fun startDownload(context: Context, title: String, msg: String, url: String, filePath: String, md5: String, canPart: Boolean, UseMobile: Boolean, downloadListener: DownloadListener?) {
+    fun startDownload(
+        context: Context,
+        title: String,
+        msg: String,
+        url: String,
+        filePath: String,
+        md5: String,
+        forceDownload: Boolean,
+        canPart: Boolean,
+        UseMobile: Boolean,
+        downloadListener: DownloadListener?
+    ) {
         DownloadUtils.startDownload(context, DownloadItem().apply {
             if (InstallUtils.isApkFile(URLUtils.getFileName(url))) {
                 setNotificationVisibility(true)
@@ -217,6 +431,7 @@ object DownloadFile {
             downloadTitle = title
             downloadDesc = msg
             fileMD5 = md5
+            isForceDownloadNew = forceDownload
             if (!TextUtils.isEmpty(filePath)) {
                 fileNameWithPath = filePath
             }
@@ -224,6 +439,6 @@ object DownloadFile {
             isDownloadWhenUseMobile = UseMobile
             setCanDownloadByPart(canPart)
             this.downloadListener = downloadListener
-        },  TextUtils.isEmpty(md5))
+        }, TextUtils.isEmpty(md5))
     }
 }
