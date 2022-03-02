@@ -44,7 +44,11 @@ public class ZixieFileProvider extends FileProvider {
 
     @NotNull
     public static final Uri getZixieFileProvider(@NotNull Context context, @NotNull File file) {
-        return FileProvider.getUriForFile(context, context.getPackageName() + ".bihe0832", file);
+        return FileProvider.getUriForFile(context, getZixieFileProviderName(context), file);
+    }
+
+    public static final String getZixieFileProviderName(@NotNull Context context) {
+        return context.getPackageName() + ".bihe0832";
     }
 
     public static void setFileUriForIntent(Context context, Intent intent, File file, String mine_type) {

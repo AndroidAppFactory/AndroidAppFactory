@@ -1,7 +1,6 @@
 package com.bihe0832.android.common.test.module
 
 import android.content.Intent
-import android.net.Uri
 import android.view.View
 import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.common.test.base.BaseTestListFragment
@@ -19,7 +18,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.*
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.utils.DateUtil
+import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.util.*

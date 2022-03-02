@@ -5,7 +5,7 @@ import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.config.Config
-import com.bihe0832.android.lib.utils.DateUtil
+import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 
 /**

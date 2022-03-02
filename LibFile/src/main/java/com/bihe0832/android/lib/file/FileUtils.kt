@@ -14,7 +14,7 @@ import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.utils.DateUtil
+import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.File

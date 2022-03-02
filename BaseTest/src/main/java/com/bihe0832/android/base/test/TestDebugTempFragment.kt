@@ -19,7 +19,6 @@ import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
@@ -38,6 +37,8 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.utils.time.DateUtil
+import com.bihe0832.android.lib.utils.time.TimeUtil
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
@@ -70,7 +71,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
             add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
             add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
-            add(TestItemData("数据转换", View.OnClickListener { testConvert() }))
+            add(TestItemData("数据时间转换", View.OnClickListener { testConvert() }))
             add(TestItemData("展示悬浮窗", View.OnClickListener { showIcon() }))
             add(TestItemData("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
             add(TestItemData("自定义日志管理", View.OnClickListener {
@@ -350,22 +351,71 @@ class TestDebugTempFragment : BaseTestListFragment() {
     }
 
     fun testConvert() {
-        getConvertString("1")
-        getConvertString("-1")
-        getConvertString("0")
-        getConvertString("233")
-        getConvertString("true")
-        getConvertString("tRUe")
-        getConvertString("false")
-        getConvertString("False")
-    }
 
-    private fun getConvertString(data: String) {
-        ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, false))
-        ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, true))
+        mutableListOf(
+            1645771904111,
+            1345775904112,
+            1625775904313,
+            1645775304114,
+            1645772904115,
+            1645772404116
+        ).forEach { data ->
+//            ZLog.d(
+//                "testDateUtil",
+//                "$data trans result is:" + DateUtil.getDateCompareResult(data.toLong())
+//            )
+//            ZLog.d(
+//                "testDateUtil",
+//                "$data trans result is:" + DateUtil.getDateCompareResult1(data.toLong())
+//            )
+            ZLog.d("testDateUtil", "$data trans result is:" + DateUtil.getDateCompareResult2(data))
+        }
+
+
+        mutableListOf(
+            "1",
+            "-1",
+            "-1",
+            "0",
+            "233",
+            "true",
+            "tRUe",
+            "false",
+            "False"
+        ).forEach { data ->
+            ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, false))
+            ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, true))
+        }
+
+        mutableListOf(1, 37, 67, 2434, 24064, 2403564).forEach {
+            ZLog.d(
+                "testDateAndTime", "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
+            )
+            ZLog.d(
+                "testDateAndTime", "Value $it trans to :" + TimeUtil.formatSecondsTo00(
+                    it.toLong(),
+                    false,
+                    false,
+                    false
+                )
+            )
+            ZLog.d(
+                "testDateAndTime",
+                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true)
+            )
+            ZLog.d(
+                "testDateAndTime",
+                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false)
+            )
+            ZLog.d(
+                "testDateAndTime",
+                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
+            )
+        }
     }
 
     private fun testOneRequest() {
+
     }
 
     private fun preTest() {
@@ -375,8 +425,11 @@ class TestDebugTempFragment : BaseTestListFragment() {
         }
     }
 
+
     private fun testFunc() {
-        openZixieWeb("https://www.qq.com")
+
+
+//        openZixieWeb("https://www.qq.com")
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())

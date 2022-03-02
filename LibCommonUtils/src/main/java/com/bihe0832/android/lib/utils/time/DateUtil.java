@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.utils;
+package com.bihe0832.android.lib.utils.time;
 
 import com.bihe0832.android.lib.log.ZLog;
 import java.text.DateFormat;
@@ -10,11 +10,17 @@ import java.util.Locale;
 
 /**
  * Created by zixie on 2017/11/10.
- * 各式时间转换
+ * 各式日期转换
  */
 public class DateUtil {
 
     private static final String TAG = "DateUtil";
+    public static final long MILLISECOND_OF_MINUTE = 60 * 1000;
+    public static final long MILLISECOND_OF_HOUR = MILLISECOND_OF_MINUTE * 60;
+    public static final long MILLISECOND_OF_DAY = MILLISECOND_OF_HOUR * 24;
+    public static final long MILLISECOND_OF_MONTH = MILLISECOND_OF_DAY * 30;
+    public static final long MILLISECOND_OF_YEAR = MILLISECOND_OF_MONTH * 12;
+
     public static final int ONE_DAY_MILLSEC = 24 * 60 * 60 * 1000;
 
     public static String getDateEN(long currentTime, String pattern) {
@@ -80,66 +86,23 @@ public class DateUtil {
         return compareDate(date1, date2, "yyyyMMddHHmmss");
     }
 
-    //计算时长，结果为例如 61 结果为 1min 1s
-    public static String formatElapsedTime(long elapsedSeconds) {
-        long hours = 0;
-        long minutes = 0;
-        long seconds = 0;
-        if (elapsedSeconds >= 3600) {
-            hours = elapsedSeconds / 3600;
-            elapsedSeconds -= hours * 3600;
-        }
-        if (elapsedSeconds >= 60) {
-            minutes = elapsedSeconds / 60;
-            elapsedSeconds -= minutes * 60;
-        }
-        seconds = elapsedSeconds;
-
-        if (hours > 0) {
-            return hours + "hour " + minutes + "min " + seconds + "s";
-        } else {
-            return minutes + "min " + seconds + "s";
-        }
-    }
-
-    //计算时长，结果为例如 61 结果为01:01
-    public static String getDateMMAndSS(long elapsedSeconds) {
-        long minutes = 0;
-        long seconds = 0;
-        if (elapsedSeconds >= 60) {
-            minutes = elapsedSeconds / 60;
-            elapsedSeconds -= minutes * 60;
-        }
-        seconds = elapsedSeconds;
-        return String.format("%02d", minutes) + " : " + String.format("%02d", seconds);
-    }
-
-
     public static String getDateCompareResult(long oldTimestamp) {
-        long minute = 1000 * 60;
-        long hour = minute * 60;
-        long day = hour * 24;
-        long month = day * 30;
-        long year = month * 12;
         long currentTimestamp = System.currentTimeMillis();
         long diffValue = currentTimestamp - oldTimestamp;
-        long yearC = diffValue / year;
-        long monthC = diffValue / month;
-        long weekC = diffValue / (7 * day);
-        long dayC = diffValue / day;
-        long hourC = diffValue / hour;
-        long minC = diffValue / minute;
+        long yearC = diffValue / MILLISECOND_OF_YEAR;
+        long monthC = diffValue / MILLISECOND_OF_MONTH;
+        long weekC = diffValue / (7 * MILLISECOND_OF_DAY);
+        long dayC = diffValue / MILLISECOND_OF_DAY;
+        long hourC = diffValue / MILLISECOND_OF_HOUR;
+        long minC = diffValue / MILLISECOND_OF_MINUTE;
         if (yearC > 0) {
-            return new SimpleDateFormat("yyyy年M月d日").format(new Date(oldTimestamp));
-//            return yearC + "年前";
+            return getDateEN(oldTimestamp, "yyyy年M月d日");
         } else if (monthC > 0) {
-            return new SimpleDateFormat("M月d日").format(new Date(oldTimestamp));
-//            return monthC + "月前";
+            return getDateEN(oldTimestamp, "M月d日");
         } else if (weekC > 0) {
-            return new SimpleDateFormat("M月d日").format(new Date(oldTimestamp));
-//            return weekC + "周前";
+            return getDateEN(oldTimestamp, "M月d日");
         } else if (dayC > 1) {
-            return new SimpleDateFormat("M月d日").format(new Date(oldTimestamp));
+            return getDateEN(oldTimestamp, "M月d日");
         } else if (dayC > 0) {
             return "昨天";
         } else if (hourC > 0) {
@@ -152,19 +115,14 @@ public class DateUtil {
     }
 
     public static String getDateCompareResult1(long oldTimestamp) {
-        long minute = 1000 * 60;
-        long hour = minute * 60;
-        long day = hour * 24;
-        long month = day * 30;
-        long year = month * 12;
         long currentTimestamp = System.currentTimeMillis();
         long diffValue = currentTimestamp - oldTimestamp;
-        long yearC = diffValue / year;
-        long monthC = diffValue / month;
-        long weekC = diffValue / (7 * day);
-        long dayC = diffValue / day;
-        long hourC = diffValue / hour;
-        long minC = diffValue / minute;
+        long yearC = diffValue / MILLISECOND_OF_YEAR;
+        long monthC = diffValue / MILLISECOND_OF_MONTH;
+        long weekC = diffValue / (7 * MILLISECOND_OF_DAY);
+        long dayC = diffValue / MILLISECOND_OF_DAY;
+        long hourC = diffValue / MILLISECOND_OF_HOUR;
+        long minC = diffValue / MILLISECOND_OF_MINUTE;
         if (yearC > 0) {
             return yearC + "年前";
         } else if (monthC > 0) {
@@ -172,9 +130,29 @@ public class DateUtil {
         } else if (weekC > 0) {
             return weekC + "周前";
         } else if (dayC > 1) {
-            return new SimpleDateFormat("M月d日").format(new Date(oldTimestamp));
+            return getDateEN(oldTimestamp, "M月d日");
         } else if (dayC > 0) {
             return "昨天";
+        } else if (hourC > 0) {
+            return hourC + "小时前";
+        } else if (minC > 0) {
+            return minC + "分钟前";
+        } else {
+            return "刚刚";
+        }
+    }
+
+    public static String getDateCompareResult2(long oldTimestamp) {
+        long currentTimestamp = System.currentTimeMillis();
+        long diffValue = currentTimestamp - oldTimestamp;
+        long yearC = diffValue / MILLISECOND_OF_YEAR;
+        long dayC = diffValue / MILLISECOND_OF_DAY;
+        long hourC = diffValue / MILLISECOND_OF_HOUR;
+        long minC = diffValue / MILLISECOND_OF_MINUTE;
+        if (yearC > 0) {
+            return getDateEN(oldTimestamp, "yyyy-MM-dd");
+        } else if (dayC > 0) {
+            return getDateEN(oldTimestamp, "MM-dd HH:mm");
         } else if (hourC > 0) {
             return hourC + "小时前";
         } else if (minC > 0) {
