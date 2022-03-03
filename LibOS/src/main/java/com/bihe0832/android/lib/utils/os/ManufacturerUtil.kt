@@ -8,6 +8,7 @@ import com.bihe0832.android.lib.utils.TextFactoryCore
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
+
 /**
  * Created by hardyshi on 2017/10/31.
  */
@@ -183,5 +184,36 @@ object ManufacturerUtil {
             var2.printStackTrace()
         }
         return@lazy version
+    }
+
+    /**
+     * 是否为鸿蒙系统
+     *
+     * @return true为鸿蒙系统
+     */
+    fun isHarmonyOs(): Boolean {
+
+
+        val version = getValueByKey("com.huawei.system.BuildEx") {
+            try {
+                val buildExClass = Class.forName("com.huawei.system.BuildEx")
+                val osBrand = buildExClass.getMethod("getOsBrand").invoke(buildExClass)
+                return@getValueByKey osBrand.toString()
+            }catch (e:java.lang.Exception){
+                e.printStackTrace()
+                return@getValueByKey ""
+            }
+        }
+
+        return "Harmony".equals(version, ignoreCase = true)
+    }
+
+    /**
+     * 获取鸿蒙系统版本号
+     *
+     * @return 版本号
+     */
+    fun getHarmonyVersion(): String {
+        return getValueByKey("hw_sc.build.platform.version") { BuildUtils.DISPLAY }
     }
 }

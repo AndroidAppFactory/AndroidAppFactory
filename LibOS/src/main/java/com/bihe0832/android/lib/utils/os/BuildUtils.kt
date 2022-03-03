@@ -28,4 +28,8 @@ object BuildUtils {
     val SDK_INT: Int by lazy {
         ConvertUtils.parseInt(SDK, 0)
     }
+
+    val DISPLAY : String by lazy {
+        ManufacturerUtil.getValueByKey("ro.build.display.id") { Build.DISPLAY }
+    }
 }

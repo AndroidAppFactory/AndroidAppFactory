@@ -12,17 +12,16 @@ import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_FEEDBACK
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.utils.os.BuildUtils
-import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.*
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil
+import com.bihe0832.android.lib.utils.time.DateUtil
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 open class TestDebugCommonFragment : BaseTestListFragment() {
@@ -74,9 +73,12 @@ open class TestDebugCommonFragment : BaseTestListFragment() {
         builder.append("PackageName: ${context!!.packageName}\n")
         builder.append("deviceId: ${ZixieContext.deviceId}\n")
         builder.append("厂商&型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}\n")
-        builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}\n")
+        if (ManufacturerUtil.isHarmonyOs()) {
+            builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})")
+        } else {
+            builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}\n")
+        }
         builder.append("系统指纹: ${ManufacturerUtil.FINGERPRINT}\n")
-
         showInfo("分享设备信息给开发者", builder.toString())
     }
 
