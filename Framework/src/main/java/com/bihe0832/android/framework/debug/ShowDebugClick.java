@@ -88,7 +88,11 @@ public class ShowDebugClick implements View.OnClickListener {
         StringBuilder builder = new StringBuilder();
         builder.append("设备信息: " + "\n");
         builder.append("厂商&型号: " + ManufacturerUtil.INSTANCE.getMANUFACTURER() + ", " + ManufacturerUtil.INSTANCE.getMODEL() + "\n");
-        builder.append("系统版本: " + BuildUtils.INSTANCE.getRELEASE() + ", " + BuildUtils.INSTANCE.getSDK_INT() + "\n");
+        if(ManufacturerUtil.INSTANCE.isHarmonyOs()){
+            builder.append("系统版本: " + BuildUtils.INSTANCE.getRELEASE() + ", " + BuildUtils.INSTANCE.getSDK_INT()+ ", Harmony(" + ManufacturerUtil.INSTANCE.getHarmonyVersion() + ")\n");
+        }else {
+            builder.append("系统版本: " + BuildUtils.INSTANCE.getRELEASE() + ", " + BuildUtils.INSTANCE.getSDK_INT() + "\n");
+        }
         builder.append("系统指纹: " + ManufacturerUtil.INSTANCE.getFINGERPRINT() + "\n");
         builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n\n");
 
