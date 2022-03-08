@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.test.image
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,11 @@ import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.image.BitmapUtil
+import com.bihe0832.android.lib.ui.image.HeadIconBuilder
+import com.bihe0832.android.lib.ui.image.loadCircleCropImage
 import kotlinx.android.synthetic.main.fragment_test_image.*
 import java.io.File
 
@@ -38,7 +42,7 @@ class TestImageFragment : BaseFragment() {
             )
         )
 
-
+        var path = ""
         DownloadFile.startDownload(
             context!!,
             "http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg", true,
@@ -49,6 +53,7 @@ class TestImageFragment : BaseFragment() {
                 }
 
                 override fun onComplete(filePath: String, item: DownloadItem) {
+                    path = filePath
                     BitmapUtil.getLocalBitmap(filePath).let {
                         test_image_remote_source.post {
                             test_image_remote_source.setImageBitmap(it)
@@ -82,8 +87,31 @@ class TestImageFragment : BaseFragment() {
 
             })
 
+        var num = 0
         test_basic_button.setOnClickListener {
-            test_image_local_target.setImageBitmap(BitmapUtil.getRemoteBitmap("http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg", 720,720))
+            var headIconBuilder = HeadIconBuilder(context!!).apply {
+                setImageUrls(mutableListOf<Any>().apply {
+                    for (i in 0..num) {
+                        if (TextUtils.isEmpty(path)) {
+                            add("http://cdn.bihe0832.com/images/head.jpg")
+                        } else {
+                            add(
+                                ZixieFileProvider.getZixieFileProvider(
+                                    context!!,
+                                    File(path)
+                                )
+                            )
+                        }
+                    }
+                } as List<String>)
+                setItemWidth(720)
+            }
+            headIconBuilder.generateBitmap { bitmap, filePath ->
+                test_image_local_target.loadCircleCropImage(filePath)
+                test_image_local_source.setImageBitmap(bitmap)
+            }
+            num++
+//            test_image_local_target.setImageBitmap(BitmapUtil.getRemoteBitmap("http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg", 720,720))
         }
     }
 
