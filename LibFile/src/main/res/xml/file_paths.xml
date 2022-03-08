@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
+    <root-path name="name" path="" />
+
     <!--内置SD卡 Context.getExternalFilesDir(null) .表示共享所有的目录，也可以指定共享的目录-->
     <external-files-path name="zixie_download" path="Download"/>
     <external-files-path name="download" path="Download"/>

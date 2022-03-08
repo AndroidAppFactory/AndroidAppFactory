@@ -55,7 +55,7 @@ class TestDownloadFragment : BaseTestListFragment() {
                 override fun onComplete(filePath: String, item: DownloadItem) {
                     showResult("startDownloadApk download installApkPath: $filePath")
                     if (type == INSTALL_BY_CUSTOMER) {
-                        var photoURI = FileProvider.getUriForFile(context!!, "com.bihe0832.android.test.bihe0832.test", File(filePath))
+                        var photoURI = ZixieFileProvider.getZixieFileProvider(context!!, File(filePath))
                         InstallUtils.installAPP(context, photoURI, File(filePath))
                     }
 
