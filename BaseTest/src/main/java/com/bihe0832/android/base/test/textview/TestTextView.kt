@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
 class TestTextView : BaseFragment() {
@@ -32,6 +33,7 @@ class TestTextView : BaseFragment() {
     var index = 6
     fun initView() {
 
+        info_content_0.setText(TextFactoryUtils.getSpannedTextByHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
 
         test_basic_button.setOnClickListener {
             info_content_1.text = testList[index + 0]

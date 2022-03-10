@@ -24,6 +24,10 @@
                     android:text="切换数据"
                     android:textSize="16dp" />
 
+            <TextView
+                    android:id="@+id/info_content_0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
             <com.bihe0832.android.lib.ui.textview.expandable.CommentTextView
                     android:id="@+id/info_content_1"
