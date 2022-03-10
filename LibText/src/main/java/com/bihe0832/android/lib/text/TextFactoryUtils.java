@@ -125,6 +125,10 @@ public class TextFactoryUtils {
         return s;
     }
 
+    public static Spanned getSpannedTextByHtmlAfterTransform(String text) {
+        return getSpannedTextByHtml(text.replaceAll(" ","&nbsp;").replaceAll("\n","<BR>"));
+    }
+
     public static Spanned getSpannedTextByHtml(String text) {
         if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.N) {
             return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY);
