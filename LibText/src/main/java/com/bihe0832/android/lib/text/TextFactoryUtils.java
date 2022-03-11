@@ -113,6 +113,10 @@ public class TextFactoryUtils {
         return "<font color='" + color + "'>" + text + "</font>";
     }
 
+    public static String getTextHtmlAfterTransform(String text) {
+        return text.replaceAll(" ", STRING_HTML_SPACE).replaceAll("\n", "<BR>");
+    }
+
     public static Spannable getLinkText(String text) {
         Spannable s = (Spannable) TextFactoryUtils.getSpannedTextByHtml(text);
         for (URLSpan u : s.getSpans(0, s.length(), URLSpan.class)) {
@@ -125,9 +129,6 @@ public class TextFactoryUtils {
         return s;
     }
 
-    public static Spanned getSpannedTextByHtmlAfterTransform(String text) {
-        return getSpannedTextByHtml(text.replaceAll(" ","&nbsp;").replaceAll("\n","<BR>"));
-    }
 
     public static Spanned getSpannedTextByHtml(String text) {
         if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.N) {
