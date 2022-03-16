@@ -66,25 +66,27 @@ public class LoadingDialog extends Dialog {
         refreshView();
     }
 
-    @Override
-    public void show() {
-        ThreadManager.getInstance().runOnUIThread(new Runnable() {
-            @Override
-            public void run() {
-                showAction();
-            }
-        });
-    }
-
-    public void show(String msg) {
-        title = msg;
+    public void showOnUIThread(){
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
                 show();
             }
         });
+    }
+    @Override
+    public void show() {
+        showAction();
+    }
 
+    public void show(String msg) {
+        title = msg;
+        show();
+    }
+
+    public void showOnUIThread(String msg) {
+        title = msg;
+        showOnUIThread();
     }
 
     /**
