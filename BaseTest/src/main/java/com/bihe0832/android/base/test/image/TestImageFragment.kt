@@ -34,13 +34,15 @@ class TestImageFragment : BaseFragment() {
 
     fun initView() {
 
-        test_image_local_source.setImageBitmap(
-            BitmapUtil.getLocalBitmap(
-                context,
-                R.mipmap.icon_author,
-                1
-            )
-        )
+//        test_image_local_source.setImageBitmap(
+//            BitmapUtil.getLocalBitmap(
+//                context,
+//                R.mipmap.icon_author,
+//                1
+//            )
+//        )
+
+//        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author,20)
 
         var path = ""
         DownloadFile.startDownload(
