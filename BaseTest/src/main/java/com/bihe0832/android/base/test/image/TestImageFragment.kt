@@ -43,7 +43,7 @@ class TestImageFragment : BaseFragment() {
 //            )
 //        )
 
-        test_image_local_source.loadRoundCropImage(R.mipmap.a,120)
+        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author,120)
 
         var path = ""
         DownloadFile.startDownload(
