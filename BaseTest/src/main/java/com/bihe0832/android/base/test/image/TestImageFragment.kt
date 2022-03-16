@@ -15,6 +15,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.ui.image.HeadIconBuilder
 import com.bihe0832.android.lib.ui.image.loadCircleCropImage
+import com.bihe0832.android.lib.ui.image.loadRoundCropImage
 import kotlinx.android.synthetic.main.fragment_test_image.*
 import java.io.File
 
@@ -42,7 +43,7 @@ class TestImageFragment : BaseFragment() {
 //            )
 //        )
 
-//        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author,20)
+        test_image_local_source.loadRoundCropImage(R.mipmap.a,120)
 
         var path = ""
         DownloadFile.startDownload(
