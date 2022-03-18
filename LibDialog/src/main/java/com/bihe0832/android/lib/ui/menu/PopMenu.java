@@ -30,7 +30,7 @@ public class PopMenu {
     private int mWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
     private Drawable mBackgroundDrawable = null;
     private int gravity = Gravity.RIGHT;
-    //横向偏移量（向与graviry对齐的方向移动移可用负数，例如gravity 为left，继续左移用负数）
+    //横向偏移量（向与graviry对齐的方向移动移可用负数，例如gravity 为right，左移用负数）
     private int xOffset = 0;
     //下移偏移量（上移可用负数）
     private int yOffset = 0;
@@ -41,7 +41,7 @@ public class PopMenu {
         mAttachView = attach;
         mWidth = (int) mActivity.getResources().getDimension(R.dimen.com_bihe0832_pop_menu_width);
         mBackgroundDrawable = mActivity.getResources().getDrawable(R.drawable.com_bihe0832_pop_menu_bg);
-        xOffset = DisplayUtil.dip2px(activity, 0);
+        xOffset = DisplayUtil.dip2px(activity, -8);
         yOffset = DisplayUtil.dip2px(activity, 8);
     }
 
@@ -68,7 +68,15 @@ public class PopMenu {
     }
 
     public void setOffset(int xOffset, int yOffset) {
+        setXOffset(xOffset);
+        setYOffset(yOffset);
+    }
+
+    public void setXOffset(int xOffset) {
         this.xOffset = xOffset;
+    }
+
+    public void setYOffset(int yOffset) {
         this.yOffset = yOffset;
     }
 
