@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="com_bihe0832_pop_menu_bg_color">@color/com_bihe0832_dialog_bg</color>
+    <dimen name="com_bihe0832_pop_menu_bg_radius">4dp</dimen>
+    <dimen name="com_bihe0832_pop_menu_width">160dp</dimen>
+    <color name="com_bihe0832_pop_menu_divider_color">@color/com_bihe0832_dialog_hint</color>
+
+    <color name="com_bihe0832_pop_menu_text_color">@color/com_bihe0832_dialog_text</color>
+    <dimen name="com_bihe0832_pop_menu_text_size">14dp</dimen>
+
+</resources>
