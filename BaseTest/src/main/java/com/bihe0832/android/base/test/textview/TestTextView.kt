@@ -47,7 +47,7 @@ class TestTextView : BaseFragment() {
 //        info_content_0.setText(TextFactoryUtils.getSpannedTextByHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
 
         test_basic_button.setOnClickListener {
-            showPopList()
+            showMenu()
 //            info_content_1.text = testList[index + 0]
 //            info_content_1.setExpandText(":fsdfsdfsd")
 //            info_content_2.text = testList[index + 1]
