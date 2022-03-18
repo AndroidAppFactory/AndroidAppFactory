@@ -29,7 +29,7 @@ public class PopMenu {
     private View mAttachView;
     private int mWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
     private Drawable mBackgroundDrawable = null;
-    private int gravity = Gravity.LEFT;
+    private int gravity = Gravity.RIGHT;
     //横向偏移量（向与graviry对齐的方向移动移可用负数，例如gravity 为left，继续左移用负数）
     private int xOffset = 0;
     //下移偏移量（上移可用负数）
