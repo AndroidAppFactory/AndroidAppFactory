@@ -16,19 +16,27 @@ public class ZixieTextImageSpan extends ImageSpan {
         super(context, drawableRes);
     }
 
+    public ZixieTextImageSpan(Context context, final Bitmap map) {
+        super(context, map);
+    }
+
     @Override
     public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
 
-        Paint.FontMetricsInt paintFm = paint.getFontMetricsInt();
-        int textHeight = paintFm.descent - paintFm.ascent;
+        try {
+            Paint.FontMetricsInt paintFm = paint.getFontMetricsInt();
+            int textHeight = paintFm.descent - paintFm.ascent;
 
-        Drawable b = getDrawable();
+            Drawable b = getDrawable();
 
-        int sourceBitmapWidth =  b.getBounds().width();
-        int sourceBitmapHeight =  b.getBounds().height();
-        int newBitmapWidth = sourceBitmapWidth * textHeight/ sourceBitmapHeight;
+            int sourceBitmapWidth = b.getBounds().width();
+            int sourceBitmapHeight = b.getBounds().height();
+            int newBitmapWidth = sourceBitmapWidth * textHeight / sourceBitmapHeight;
 
-        return newBitmapWidth + 1 + PADDING * 2;
+            return newBitmapWidth + 1 + PADDING * 2;
+        } catch (Exception e) {
+            return super.getSize(paint, text, start, end, fm);
+        }
     }
 
 
@@ -54,10 +62,10 @@ public class ZixieTextImageSpan extends ImageSpan {
             Bitmap b = ((BitmapDrawable) drawable).getBitmap();
             Paint.FontMetricsInt fm = paint.getFontMetricsInt();
             int textHeight = fm.descent - fm.ascent;
-            int sourceBitmapWidth =  b.getWidth();
-            int sourceBitmapHeight =  b.getHeight();
+            int sourceBitmapWidth = b.getWidth();
+            int sourceBitmapHeight = b.getHeight();
 
-            int newBitmapWidth = sourceBitmapWidth * textHeight/ sourceBitmapHeight;
+            int newBitmapWidth = sourceBitmapWidth * textHeight / sourceBitmapHeight;
             Bitmap bitmapResized = Bitmap.createScaledBitmap(b, newBitmapWidth, textHeight, false);
             canvas.save();
             float transY = y + (fm.descent + fm.ascent) / 2 - textHeight / 2;

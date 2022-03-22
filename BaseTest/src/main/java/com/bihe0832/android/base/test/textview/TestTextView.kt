@@ -99,7 +99,6 @@ class TestTextView : BaseFragment() {
 
         info_content_0.setText(spanString)
 
-        info_content_0.setMovementMethod(LinkMovementMethod.getInstance());
         SpannableStringBuilder("文字holder文字").apply {
             setSpan(
                 ZixieTextImageSpan(
@@ -110,8 +109,29 @@ class TestTextView : BaseFragment() {
                 1,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
+            setSpan(
+                ZixieTextImageSpan(
+                    context!!,
+                    com.bihe0832.android.lib.ui.image.BitmapUtil.getLocalBitmap(context!!,
+                        R.mipmap.icon_author,1)
+                ),
+                3,
+                4,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            setSpan(
+                ZixieTextClickableSpan(object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        ZixieContext.showToast("文字")
+                    }
+
+                }), 3,
+                4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
         }.let {
             info_content_0.append(it)
+            info_content_0.setMovementMethod(LinkMovementMethod.getInstance());
+
         }
 
         info_content_0.append(
