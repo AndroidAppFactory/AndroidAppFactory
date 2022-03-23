@@ -32,17 +32,16 @@ public class ZixieTextRadiusBackgroundSpan extends ReplacementSpan {
         this(bgColor, radius, 0);
     }
 
-    public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int textColor) {
-        this(bgColor, radius, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, 0, textColor, null);
-    }
-
-    public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int textColor, Typeface mTypeface) {
-        this(bgColor, radius, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, 0, textColor, mTypeface);
+    public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int textSize) {
+        this(bgColor, radius, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, textSize, 0, null);
     }
 
     public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int paddingLeft, int paddingTop) {
         this(bgColor, radius, paddingLeft, paddingTop, 0, 0, null);
+    }
 
+    public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int textSize, int textColor, Typeface mTypeface) {
+        this(bgColor, radius, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, textSize, textColor, mTypeface);
     }
 
     public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int paddingLeft, int paddingTop, int textSize, int textColor, Typeface typeface) {
@@ -94,9 +93,9 @@ public class ZixieTextRadiusBackgroundSpan extends ReplacementSpan {
         }
 
         canvas.save();
-        canvas.drawLine(x + mRadius + mPaddingLeft, borderMinTop, 100, borderMinTop, paint);
-        paint.setColor(Color.BLUE);
-        canvas.drawLine(x + mRadius + mPaddingLeft, borderMaxBottom, 100, borderMaxBottom, paint);
+//        canvas.drawLine(x + mRadius + mPaddingLeft, borderMinTop, 100, borderMinTop, paint);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawLine(x + mRadius + mPaddingLeft, borderMaxBottom, 100, borderMaxBottom, paint);
 
         if (mTextSize > 0 && paint.getTextSize() >= mTextSize) {
             paint.setTextSize(mTextSize);
