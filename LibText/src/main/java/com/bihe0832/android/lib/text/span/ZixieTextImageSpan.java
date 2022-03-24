@@ -10,15 +10,29 @@ import android.text.style.ImageSpan;
 
 
 public class ZixieTextImageSpan extends ImageSpan {
-    private static final int PADDING = 12;
+
+    private final static int DEFAULT_MARGIN = 12;
+    private int mMargin = DEFAULT_MARGIN;
 
     public ZixieTextImageSpan(Context context, final int drawableRes) {
         super(context, drawableRes);
     }
 
+    public ZixieTextImageSpan(Context context, final int drawableRes, int margin) {
+        super(context, drawableRes);
+        mMargin = margin;
+    }
+
+
     public ZixieTextImageSpan(Context context, final Bitmap map) {
         super(context, map);
     }
+
+    public ZixieTextImageSpan(Context context, final Bitmap map, int margin) {
+        super(context, map);
+        mMargin = margin;
+    }
+
 
     @Override
     public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
@@ -33,7 +47,7 @@ public class ZixieTextImageSpan extends ImageSpan {
             int sourceBitmapHeight = b.getBounds().height();
             int newBitmapWidth = sourceBitmapWidth * textHeight / sourceBitmapHeight;
 
-            return newBitmapWidth + 1 + PADDING * 2;
+            return newBitmapWidth + 1 + mMargin * 2;
         } catch (Exception e) {
             return super.getSize(paint, text, start, end, fm);
         }
@@ -56,7 +70,8 @@ public class ZixieTextImageSpan extends ImageSpan {
      * 最后把目标坐标传递给canvas.translate函数就可以了，至于这个函数的理解先不管了
      */
     @Override
-    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
+    public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom,
+            Paint paint) {
         try {
             Drawable drawable = getDrawable();
             Bitmap b = ((BitmapDrawable) drawable).getBitmap();
@@ -69,7 +84,7 @@ public class ZixieTextImageSpan extends ImageSpan {
             Bitmap bitmapResized = Bitmap.createScaledBitmap(b, newBitmapWidth, textHeight, false);
             canvas.save();
             float transY = y + (fm.descent + fm.ascent) / 2 - textHeight / 2;
-            canvas.drawBitmap(bitmapResized, (int) x + PADDING, transY, paint);
+            canvas.drawBitmap(bitmapResized, (int) x + mMargin, transY, paint);
             canvas.save();
             canvas.restore();
         } catch (Exception e) {
