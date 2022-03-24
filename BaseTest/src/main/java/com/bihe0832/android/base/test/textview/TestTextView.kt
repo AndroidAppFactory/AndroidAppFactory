@@ -3,8 +3,10 @@ package com.bihe0832.android.base.test.textview
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.*
-import android.text.method.LinkMovementMethod
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +14,7 @@ import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction.openFinalURL
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.text.span.ZixieTextClickableSpan
-import com.bihe0832.android.lib.text.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.text.span.ZixieTextRadiusBackgroundSpan
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
@@ -52,7 +52,7 @@ class TestTextView : BaseFragment() {
     fun initView() {
 
 //        info_content_0.setText(TextFactoryUtils.getSpannedTextByHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
-        testSpecialText(testList[5])
+        testSpecialText(testList[1])
 
 //        test_basic_button.setOnClickListener {
 ////            showMenu()
@@ -75,9 +75,13 @@ class TestTextView : BaseFragment() {
         var end = start + "测试".length
         spanString.setSpan(
             ZixieTextRadiusBackgroundSpan(
-                Color.GREEN,
-                20,
                 Color.RED,
+                10,
+                8,
+                12,
+                8,
+                info_content_0.textSize * 3 / 5,
+                0,
                 Typeface.DEFAULT_BOLD
             ),
             start,
@@ -99,48 +103,48 @@ class TestTextView : BaseFragment() {
 
         info_content_0.setText(spanString)
 
-        SpannableStringBuilder("文字holder文字").apply {
-            setSpan(
-                ZixieTextImageSpan(
-                    context!!,
-                    R.mipmap.ic_left_arrow_white
-                ),
-                0,
-                1,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-            )
-            setSpan(
-                ZixieTextImageSpan(
-                    context!!,
-                    com.bihe0832.android.lib.ui.image.BitmapUtil.getLocalBitmap(context!!,
-                        R.mipmap.icon_author,1)
-                ),
-                3,
-                4,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-            )
-            setSpan(
-                ZixieTextClickableSpan(object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        ZixieContext.showToast("文字")
-                    }
-
-                }), 3,
-                4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-            )
-        }.let {
-            info_content_0.append(it)
-            info_content_0.setMovementMethod(LinkMovementMethod.getInstance());
-
-        }
-
-        info_content_0.append(
-            TextFactoryUtils.getSpannedTextByHtml(
-                TextFactoryUtils.getTextHtmlAfterTransform(
-                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
-                )
-            )
-        )
+//        SpannableStringBuilder("文字holder文字").apply {
+//            setSpan(
+//                ZixieTextImageSpan(
+//                    context!!,
+//                    R.mipmap.ic_left_arrow_white
+//                ),
+//                0,
+//                1,
+//                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+//            )
+//            setSpan(
+//                ZixieTextImageSpan(
+//                    context!!,
+//                    com.bihe0832.android.lib.ui.image.BitmapUtil.getLocalBitmap(context!!,
+//                        R.mipmap.icon_author,1)
+//                ),
+//                3,
+//                4,
+//                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+//            )
+//            setSpan(
+//                ZixieTextClickableSpan(object : View.OnClickListener {
+//                    override fun onClick(v: View?) {
+//                        ZixieContext.showToast("文字")
+//                    }
+//
+//                }), 3,
+//                4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+//            )
+//        }.let {
+//            info_content_0.append(it)
+//            info_content_0.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//        }
+//
+//        info_content_0.append(
+//            TextFactoryUtils.getSpannedTextByHtml(
+//                TextFactoryUtils.getTextHtmlAfterTransform(
+//                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+//                )
+//            )
+//        )
     }
 
     override fun onResume() {
