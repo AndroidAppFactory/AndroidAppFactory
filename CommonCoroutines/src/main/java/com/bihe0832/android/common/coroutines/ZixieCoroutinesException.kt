@@ -6,7 +6,7 @@ package com.bihe0832.android.common.coroutines
 const val Coroutines_ERROR_CODE_EXCEPTION = -1
 const val Coroutines_ERROR_DATA_NULL = -2
 
-class ZixieCoroutinesException : Exception {
+open class ZixieCoroutinesException : Exception {
 
     private var code = Coroutines_ERROR_CODE_EXCEPTION
 
