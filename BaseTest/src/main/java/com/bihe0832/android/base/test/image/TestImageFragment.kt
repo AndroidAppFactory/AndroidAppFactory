@@ -1,5 +1,6 @@
 package com.bihe0832.android.base.test.image
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -14,10 +15,10 @@ import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.ui.image.HeadIconBuilder
+import java.io.File
 import com.bihe0832.android.lib.ui.image.loadCircleCropImage
 import com.bihe0832.android.lib.ui.image.loadRoundCropImage
 import kotlinx.android.synthetic.main.fragment_test_image.*
-import java.io.File
 
 class TestImageFragment : BaseFragment() {
 
@@ -43,7 +44,7 @@ class TestImageFragment : BaseFragment() {
 //            )
 //        )
 
-        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author,120)
+        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author, 120)
 
         var path = ""
         DownloadFile.startDownload(
@@ -52,7 +53,6 @@ class TestImageFragment : BaseFragment() {
             object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     ZLog.e(item.toString())
-
                 }
 
                 override fun onComplete(filePath: String, item: DownloadItem) {
@@ -111,7 +111,13 @@ class TestImageFragment : BaseFragment() {
             }
             headIconBuilder.generateBitmap { bitmap, filePath ->
                 test_image_local_target.loadCircleCropImage(filePath)
-                test_image_local_source.setImageBitmap(bitmap)
+                test_image_local_source.setImageBitmap(
+                    BitmapUtil.getBitmapWithLayer(
+                        bitmap,
+                        Color.RED,
+                        true
+                    )
+                )
             }
             num++
 //            test_image_local_target.setImageBitmap(BitmapUtil.getRemoteBitmap("http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg", 720,720))
