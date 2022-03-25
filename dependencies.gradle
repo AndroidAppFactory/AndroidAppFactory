@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "CommonCoroutines"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.17.0"
+ext.moduleVersionName = "4.17.1"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -96,14 +96,14 @@ ext.moduleInfo = [
         ],
         "CommonDataCenter"          : [
                 "version"            : "4.17.0",
-                "artifactId"         : "lib-data-center",
+                "artifactId"         : "common-data-center",
                 "apidependenciesList": [
                         "CommonCoroutines"
                 ]
         ],
         "CommonCoroutines"          : [
                 "version"            : "4.17.0",
-                "artifactId"         : "lib-coroutines",
+                "artifactId"         : "common-coroutines",
                 "apidependenciesList": [
                         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_version}",
                         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.kotlinx_version}",
