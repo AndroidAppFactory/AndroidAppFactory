@@ -65,6 +65,14 @@ class TestHttpActivity : BaseTestActivity() {
             }
         }
 
+        testGzip.setOnClickListener {
+            HTTPServer.getInstance()
+                .doRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+                .let {
+                    showResult("同步请求结果：$it")
+                }
+
+        }
         clearResult.setOnClickListener { result.text = "" }
     }
 
