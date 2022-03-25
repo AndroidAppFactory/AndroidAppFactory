@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "CommonCoroutines"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.16.17"
+ext.moduleVersionName = "4.17.0"
 
 /************************************ 组件化开发常用配置 ************************************/
 
@@ -66,8 +66,6 @@ ext.moduleInfo = [
                 "artifactId"             : "",
                 "apidependenciesList"    : [
                         "CommonWrapper",
-                        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_version}",
-                        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.kotlinx_version}",
                         'com.squareup.okhttp3:okhttp:3.9.1',
                         'com.squareup.okhttp3:logging-interceptor:3.8.0',
                         'com.squareup.retrofit2:retrofit:2.4.0',
@@ -92,7 +90,24 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
                         "CommonSplash", "CommonPhotos",
-                        "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList"
+                        "CommonNetwork", "CommonPraise", "CommonAbout",
+                        "CommonList", "CommonCoroutines", "CommonDataCenter"
+                ]
+        ],
+        "CommonDataCenter"          : [
+                "version"            : "4.16.17",
+                "artifactId"         : "lib-data-center",
+                "apidependenciesList": [
+                        "CommonCoroutines"
+                ]
+        ],
+        "CommonCoroutines"          : [
+                "version"            : "4.16.17",
+                "artifactId"         : "lib-coroutines",
+                "apidependenciesList": [
+                        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_version}",
+                        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.kotlinx_version}",
+                        "Framework"
                 ]
         ],
 
