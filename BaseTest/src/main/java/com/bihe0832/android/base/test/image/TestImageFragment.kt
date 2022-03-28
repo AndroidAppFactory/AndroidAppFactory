@@ -7,17 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bihe0832.android.base.test.R
+import com.bihe0832.android.common.image.blur.BlurTransformation
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.ui.image.BitmapUtil
-import com.bihe0832.android.lib.ui.image.HeadIconBuilder
+import com.bihe0832.android.lib.ui.image.*
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+
 import java.io.File
-import com.bihe0832.android.lib.ui.image.loadCircleCropImage
-import com.bihe0832.android.lib.ui.image.loadRoundCropImage
 import kotlinx.android.synthetic.main.fragment_test_image.*
 
 class TestImageFragment : BaseFragment() {
@@ -44,7 +46,27 @@ class TestImageFragment : BaseFragment() {
 //            )
 //        )
 
-        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author, 120)
+
+
+
+//        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author, 120)
+
+        test_image_local_source.loadImage(
+            "http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg",
+            false,
+            R.mipmap.icon_author,
+            R.mipmap.icon_author,
+            RequestOptions.bitmapTransform(
+                MultiTransformation(
+                    CenterInside(),
+                    BlurTransformation(
+                        context!!,
+                        1
+                    )
+
+                )
+            )
+        )
 
         var path = ""
         DownloadFile.startDownload(

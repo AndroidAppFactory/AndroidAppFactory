@@ -2,6 +2,7 @@ package com.bihe0832.android.base.test
 
 
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
@@ -433,8 +434,13 @@ class TestDebugTempFragment : BaseTestListFragment() {
             builder.append('a' + (TextFactoryUtils.getRandomString(26)))
         }
         val text = builder.toString()
+
         val compres = ZlibUtil.compress(text.toByteArray())
         ZLog.d("testZlib", "compres 前后： " + compres.size + " : " + text.toByteArray().size)
+
+        val b =  Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
+        val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
+
 
         val res = String(ZlibUtil.uncompress(compres))
         ZLog.d("testZlib", "压缩再解压一致性确认：")
