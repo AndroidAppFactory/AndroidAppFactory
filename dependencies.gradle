@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "CommonPhotos"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -85,7 +85,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.17.3",
+                "version"            : "4.17.4",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
@@ -133,7 +133,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "4.17.3",
+                "version"            : "4.17.4",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
