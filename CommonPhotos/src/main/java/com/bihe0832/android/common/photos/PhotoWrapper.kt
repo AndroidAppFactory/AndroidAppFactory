@@ -22,6 +22,7 @@ import java.io.File
 
 val takePhotoPermission = arrayOf(Manifest.permission.CAMERA)
 val selectPhotoPermission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
 
 
 fun getAutoChangedPhotoName(): String {
@@ -77,9 +78,11 @@ fun Activity.getPhotosUri(fileName: String): Uri? {
  */
 fun Activity.cropPhoto(sourceFile: String, targetFile: Uri, aspectX: Int = 1, aspectY: Int = 1) {
     var sourceFileProvider =
-        ZixieFileProvider.getZixieFileProvider(this@cropPhoto, File(sourceFile))
+        ZixieFileProvider.getZixieFileProvider(this, File(sourceFile))
     cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
 }
+
+
 
 fun Activity.cropPhoto(
     sourceFile: Uri?,
@@ -87,8 +90,14 @@ fun Activity.cropPhoto(
     aspectX: Int = 1,
     aspectY: Int = 1
 ) {
+    ZLog.d("Activity cropPhoto sourceFile ：$sourceFile")
     ZLog.d("Activity cropPhoto targetFile ：$targetFile")
 
+    var finalSourceFile:Uri? = if(sourceFile.toString().startsWith(GOOGLE_PHOTO_PREFIX, true)){
+        ZixieFileProvider.getZixieFileProvider(this, ZixieFileProvider.uriToFile(this,sourceFile))
+    }else{
+        sourceFile
+    }
     val file = ZixieFileProvider.uriToFile(this, targetFile)
     if (file != null) {
         FileUtils.checkAndCreateFolder(file.parent)
@@ -98,7 +107,7 @@ fun Activity.cropPhoto(
     // 开始切割
     val intent = Intent("com.android.camera.action.CROP").apply {
         addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        setDataAndType(sourceFile, "image/*")
+        setDataAndType(finalSourceFile, "image/*")
         putExtra("crop", "true")
         putExtra("aspectX", aspectX) // 裁剪框比例
         putExtra("aspectY", aspectY)
