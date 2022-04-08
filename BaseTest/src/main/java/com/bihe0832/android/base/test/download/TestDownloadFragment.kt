@@ -43,8 +43,8 @@ class TestDownloadFragment : BaseTestListFragment() {
             setNotificationVisibility(true)
             downloadTitle = getString(R.string.app_name)
             downloadDesc = "ffsf"
-//            downloadURL = "https://cdn.bihe0832.com/app/release/ZPUZZLE_official.apk"
-            downloadURL = "https://imtt.dd.qq.com/16891/apk/23C6DAF12A8C041F0937AABFCAE70BF6.apk"
+            downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
+//            downloadURL = "https://imtt.dd.qq.com/16891/apk/23C6DAF12A8C041F0937AABFCAE70BF6.apk"
             isForceDownloadNew = false
             setCanDownloadByPart(true)
             downloadListener = object : SimpleDownloadListener() {
@@ -141,7 +141,7 @@ class TestDownloadFragment : BaseTestListFragment() {
     }
 
     private fun testInstallSplitByFolder() {
-        testInstallSplit(ZixieFileProvider.getZixieFilePath(context!!) + "/com.supercell.brawlstars", "com.supercell.brawlstars")
+        testInstallSplit(ZixieFileProvider.getZixieFilePath(context!!) + "", "com.supercell.brawlstars")
     }
 
     private fun testInstallSplit(filePath: String, packangeName: String) {

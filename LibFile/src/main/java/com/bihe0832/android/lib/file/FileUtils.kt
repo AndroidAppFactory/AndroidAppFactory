@@ -37,7 +37,6 @@ object FileUtils {
     const val SPACE_MB = 1024 * SPACE_KB
     const val SPACE_GB = 1024 * SPACE_MB
     const val SPACE_TB = 1024 * SPACE_GB
-    const val APK_FILE_SUFFIX = ".apk"
 
     fun checkFileExist(filePath: String): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
