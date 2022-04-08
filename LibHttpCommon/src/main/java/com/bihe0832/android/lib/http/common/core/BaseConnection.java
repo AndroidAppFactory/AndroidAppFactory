@@ -6,12 +6,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 /**
  * HttpURLConnection封装基类，网络请求，设置请求协议头、发送请求
@@ -23,12 +21,9 @@ public abstract class BaseConnection {
     private static final String LOG_TAG = "bihe0832 REQUEST";
     public static final String HTTP_REQ_PROPERTY_CHARSET = "Charset";
     public static final String HTTP_REQ_VALUE_CHARSET = "UTF-8";
-    public static final String HTTP_REQ_ENCODE_GZIP = "gzip";
-
     public static final String HTTP_REQ_PROPERTY_CONTENT_DISPOSITION = "Content-Disposition";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
-    public static final String HTTP_REQ_PROPERTY_CONTENT_ENCODING = "content-encoding";
 
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD = "application/x-www-form-urlencoded";
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_TEXT = "text/plain";
@@ -115,7 +110,6 @@ public abstract class BaseConnection {
             requestProperty.putAll(request.getRequestProperties());
         }
         requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
-        requestProperty.put(HTTP_REQ_PROPERTY_CONTENT_ENCODING, HTTP_REQ_ENCODE_GZIP);
         requestProperty.put(HTTP_REQ_PROPERTY_CONTENT_TYPE, request.getContentType());
         setURLConnectionRequestProperty(requestProperty);
 
@@ -134,40 +128,30 @@ public abstract class BaseConnection {
     protected String doGetRequest() {
         String result = "";
         InputStream is = null;
-        BufferedReader bufferedReader = null;
+        BufferedReader br = null;
         try {
-            StringBuffer stringBuffer = new StringBuffer();
             HttpURLConnection connection = getURLConnection();
             if (null == connection) {
                 return "";
             }
-
-            String reqEncoding = connection.getRequestProperty(HTTP_REQ_PROPERTY_CONTENT_ENCODING);
             connection.setRequestMethod(HTTP_REQ_METHOD_GET);
             is = connection.getInputStream();
-            String rspEncoding = connection.getContentEncoding();
-
-            if (HTTP_REQ_ENCODE_GZIP.equals(reqEncoding) || HTTP_REQ_ENCODE_GZIP.equals(rspEncoding)) {
-                bufferedReader = new BufferedReader(new InputStreamReader(new GZIPInputStream(is)));
-            } else {
-                bufferedReader = new BufferedReader(new InputStreamReader(is));
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = is.read(buffer)) != -1) {
+                os.write(buffer, 0, len);
             }
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                //转化为UTF-8的编码格式
-                line = new String(line.getBytes(HTTP_REQ_VALUE_CHARSET));
-                stringBuffer.append(line);
-            }
-            bufferedReader.close();
-            result = stringBuffer.toString();
+            is.close();
+            result = os.toString(HTTP_REQ_VALUE_CHARSET);
         } catch (javax.net.ssl.SSLHandshakeException ee) {
             ZLog.e(LOG_TAG, "javax.net.ssl.SSLPeerUnverifiedException");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
+                if (br != null) {
+                    br.close();
                 }
             } catch (IOException e) {
             }
