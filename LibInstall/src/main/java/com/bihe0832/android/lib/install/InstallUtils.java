@@ -6,6 +6,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
@@ -16,9 +17,11 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.zip.ZipUtils;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.LinkedList;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -27,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * 使用InstallUtils的前提是要按照  {@link ZixieFileProvider }的说明 定义好
  * lib_bihe0832_file_folder 和 zixie_file_paths.xml
  * 或者直接将文件放在  {@link ZixieFileProvider#getZixieFilePath(Context)} 的子目录
- *
+ * <p>
  * 如果不使用库自定义的fileProvider，请使用 {@link InstallUtils#installAPP(Context, Uri, File)} 安装 }，此时无需关注上述两个定义
  */
 
@@ -80,7 +83,7 @@ public class InstallUtils {
     }
 
     public static void installAPP(final Context context, final String filePath, final String packageName,
-            final InstallListener listener) {
+                                  final InstallListener listener) {
         boolean haveInstallPermission = true;
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
             //先获取是否有安装未知来源应用的权限
@@ -135,7 +138,7 @@ public class InstallUtils {
 
 
     static void installAllAPK(final Context context, final String filePath, final String packageName,
-            final InstallListener listener) {
+                              final InstallListener listener) {
         try {
             final File downloadedFile = new File(filePath);
             ZLog.d(TAG + "installAllApk downloadedFile:" + downloadedFile.getAbsolutePath());
@@ -162,7 +165,7 @@ public class InstallUtils {
     }
 
     static void installSpecialAPKByZip(@NotNull Context context, @NonNull String zipFilePath, String packageName,
-            final InstallListener listener) {
+                                       final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByZip:" + zipFilePath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
@@ -181,13 +184,20 @@ public class InstallUtils {
             ZipUtils.unCompress(zipFilePath, fileDir);
             ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
             SplitApksInstallHelper.INSTANCE.installApk(context, new File(fileDir), finalPackageName, listener);
+        } else if (apkInstallType == ApkInstallType.APK) {
+            String fileDir = ZixieFileProvider.getZixieFilePath(context) + "/" + packageName;
+            ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
+            listener.onUnCompress();
+            ZipUtils.unCompress(zipFilePath, fileDir);
+            ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
+            installSpecialAPKByFolder(context, fileDir, finalPackageName, listener);
         } else {
             listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE);
         }
     }
 
     static void installSpecialAPKByFolder(@NotNull Context context, @NonNull String folderPath, String packageName,
-            final InstallListener listener) {
+                                          final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByFolder:" + folderPath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
@@ -202,6 +212,18 @@ public class InstallUtils {
             ObbFileInstall.installObbAPKByFile(context, folderPath, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
             SplitApksInstallHelper.INSTANCE.installApk(context, new File(folderPath), finalPackageName, listener);
+        } else if (apkInstallType == ApkInstallType.APK) {
+            boolean hasInstall = false;
+            for (File file2 : new File(folderPath).listFiles()) {
+                if (InstallUtils.isApkFile(file2.getAbsolutePath())) {
+                    hasInstall = true;
+                    APKInstall.installAPK(context, file2.getAbsolutePath(), listener);
+                    break;
+                }
+            }
+            if (!hasInstall) {
+                listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE);
+            }
         } else {
             listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE);
         }

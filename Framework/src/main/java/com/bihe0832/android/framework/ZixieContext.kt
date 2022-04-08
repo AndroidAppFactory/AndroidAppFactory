@@ -94,7 +94,9 @@ object ZixieContext {
         if (BuildUtils.SDK_INT >= 30) {
             //大于等于 30
             if (ApplicationObserver.isAPPBackground()) {
-                Toast.makeText(applicationContext, msg, duration).show()
+                ThreadManager.getInstance().runOnUIThread{
+                    Toast.makeText(applicationContext, msg, duration).show()
+                }
             } else {
                 ToastUtil.show(applicationContext, msg, duration)
             }

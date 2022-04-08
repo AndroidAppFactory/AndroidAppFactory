@@ -141,13 +141,13 @@ class TestTextView : BaseFragment() {
 
         }
 
-        info_content_0.append(
-                com.bihe0832.android.lib.text.TextFactoryUtils.getSpannedTextByHtml(
-                        com.bihe0832.android.lib.text.TextFactoryUtils.getTextHtmlAfterTransform(
-                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
-                )
-            )
-        )
+//        info_content_0.append(
+//                com.bihe0832.android.lib.text.TextFactoryUtils.getSpannedTextByHtml(
+//                        com.bihe0832.android.lib.text.TextFactoryUtils.getTextHtmlAfterTransform(
+//                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+//                )
+//            )
+//        )
     }
 
     override fun onResume() {
