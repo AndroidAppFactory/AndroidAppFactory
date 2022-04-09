@@ -2,7 +2,7 @@ package com.bihe0832.android.lib.http.common.core;
 
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CHARSET;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE;
-import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CHARSET;
+import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_FORM;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.LOG_TAG;
@@ -35,7 +35,7 @@ public class HttpFileUpload {
 
         baseConnection.setURLConnectionCommonPara();
         HashMap<String, String> requestProperty = new HashMap<>();
-        requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
+        requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET_UTF8);
         requestProperty.put(HTTP_REQ_PROPERTY_CONTENT_TYPE, HTTP_REQ_VALUE_CONTENT_TYPE_FORM);
         baseConnection.setURLConnectionRequestProperty(requestProperty);
         HttpURLConnection urlConnection = baseConnection.getURLConnection();
@@ -47,7 +47,7 @@ public class HttpFileUpload {
             urlConnection.setDoOutput(true);
             urlConnection.setDoInput(true);
             urlConnection.setRequestProperty("Connection", "Keep-Alive");
-            urlConnection.setRequestProperty(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
+            urlConnection.setRequestProperty(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET_UTF8);
             urlConnection.setRequestProperty(HTTP_REQ_PROPERTY_CONTENT_TYPE,
                     HTTP_REQ_VALUE_CONTENT_TYPE_FORM + ";boundary=" + HTTPServer.BOUNDARY);
 
@@ -94,7 +94,7 @@ public class HttpFileUpload {
                     byteArrayOutputStream.write(resultBuffer, 0, resultLen);
                 }
                 resultInptStream.close();
-                return byteArrayOutputStream.toString(HTTP_REQ_VALUE_CHARSET);
+                return byteArrayOutputStream.toString(HTTP_REQ_VALUE_CHARSET_UTF8);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +150,7 @@ public class HttpFileUpload {
                         .append(HTTP_REQ_PROPERTY_CONTENT_TYPE).append(": ")
                         .append(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_TEXT).append("; ")
                         .append(HTTP_REQ_PROPERTY_CHARSET).append(HTTP_REQ_ENTITY_MERGE)
-                        .append(HTTP_REQ_VALUE_CHARSET).append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
+                        .append(HTTP_REQ_VALUE_CHARSET_UTF8).append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                         .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING).append(": 8bit")
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)// 参数头设置完以后需要两个换行，然后才是参数内容

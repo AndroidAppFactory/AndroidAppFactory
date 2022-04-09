@@ -16,25 +16,41 @@ object ZixieRequestHttp {
         return HTTPServer.getInstance().doRequestSync(url)
     }
 
+    fun getOrigin(url: String): String {
+        return HTTPServer.getInstance().doOriginRequestSync(url)
+    }
+
     fun post(url: String, params: String): String {
         return HTTPServer.getInstance().doRequestSync(url, params)
     }
 
-    fun get(url: String, responseHandler: HttpResponseHandler) {
-        object : HttpBasicRequest() {
-            override fun getUrl(): String {
-                return url
-            }
 
-            override fun getResponseHandler(): HttpResponseHandler {
-                return responseHandler
-            }
-        }.let {
-            HTTPServer.getInstance().doRequestAsync(it)
-        }
+    fun postOrigin(url: String, params: String): String {
+        return HTTPServer.getInstance().doOriginRequestSync(url, params)
+    }
+    fun get(url: String, responseHandler: HttpResponseHandler) {
+        innerRequest(url, null, responseHandler, false)
     }
 
+    fun getOrigin(url: String, responseHandler: HttpResponseHandler) {
+        innerRequest(url, null, responseHandler, true)
+    }
+
+
     fun post(url: String, postData: ByteArray, responseHandler: HttpResponseHandler) {
+        innerRequest(url, postData, responseHandler, false)
+    }
+
+    fun postOrigin(url: String, postData: ByteArray, responseHandler: HttpResponseHandler) {
+        innerRequest(url, postData, responseHandler, true)
+    }
+
+    private fun innerRequest(
+        url: String,
+        postData: ByteArray?,
+        responseHandler: HttpResponseHandler,
+        isOrigin: Boolean
+    ) {
         object : HttpBasicRequest() {
             override fun getUrl(): String {
                 return url
@@ -44,9 +60,15 @@ object ZixieRequestHttp {
                 return responseHandler
             }
         }.apply {
-            data = postData
+            postData?.let {
+                data = postData
+            }
         }.let {
-            HTTPServer.getInstance().doRequestAsync(it)
+            if (isOrigin) {
+                HTTPServer.getInstance().doOriginRequestAsync(it)
+            } else {
+                HTTPServer.getInstance().doRequestAsync(it)
+            }
         }
     }
 }

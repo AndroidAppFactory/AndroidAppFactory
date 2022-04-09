@@ -299,7 +299,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             try {
                 String type = MimeTypeMap.getSingleton()
                         .getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
-                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET,
+                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8,
                         getContext().getAssets().open(getGlobalLocalRes().get(url)));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -362,7 +362,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                 String value = URLUtils.getValueByName(url, "value");
                 try {
                     return processOverrideUrlLoading(view, URLDecoder.decode(value,
-                            BaseConnection.HTTP_REQ_VALUE_CHARSET));
+                            BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8));
                 } catch (Exception e) {
                     e.printStackTrace();
                     return super.shouldOverrideUrlLoading(view, url);
