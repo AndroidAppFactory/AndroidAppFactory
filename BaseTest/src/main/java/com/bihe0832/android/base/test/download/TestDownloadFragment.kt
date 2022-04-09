@@ -2,14 +2,19 @@ package com.bihe0832.android.base.test.download
 
 import android.support.v4.content.FileProvider
 import android.view.View
+import android.widget.Toast
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -21,16 +26,40 @@ class TestDownloadFragment : BaseTestListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(TestItemData("卸载应用", View.OnClickListener { InstallUtils.uninstallAPP(context, "com.google.android.tts") }))
-            add(TestItemData("自定义Provider安装", View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) }))
-            add(TestItemData("默认Provider安装", View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) }))
+            add(
+                TestItemData(
+                    "卸载应用",
+                    View.OnClickListener {
+                        InstallUtils.uninstallAPP(
+                            context,
+                            "com.google.android.tts"
+                        )
+                    })
+            )
+            add(
+                TestItemData(
+                    "自定义Provider安装",
+                    View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) })
+            )
+            add(
+                TestItemData(
+                    "默认Provider安装",
+                    View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) })
+            )
             add(TestItemData("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))
             add(TestItemData("通过ZIP安装超大OBB", View.OnClickListener { testInstallOOBByBigZip() }))
             add(TestItemData("通过文件夹安装OBB", View.OnClickListener { testInstallOOBByFolder() }))
             add(TestItemData("通过文件夹安装超大OBB", View.OnClickListener { testInstallBigOOBByFolder() }))
             add(TestItemData("通过ZIP安装Split", View.OnClickListener { testInstallSplitByGoodZip() }))
-            add(TestItemData("通过非标准Split格式的ZIP安装Split", View.OnClickListener { testInstallSplitByBadZip() }))
+            add(
+                TestItemData(
+                    "通过非标准Split格式的ZIP安装Split",
+                    View.OnClickListener { testInstallSplitByBadZip() })
+            )
             add(TestItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
+            add(TestItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
+
+
         }
     }
 
@@ -43,8 +72,8 @@ class TestDownloadFragment : BaseTestListFragment() {
             setNotificationVisibility(true)
             downloadTitle = getString(R.string.app_name)
             downloadDesc = "ffsf"
-//            downloadURL = "https://cdn.bihe0832.com/app/release/ZPUZZLE_official.apk"
-            downloadURL = "https://imtt.dd.qq.com/16891/apk/23C6DAF12A8C041F0937AABFCAE70BF6.apk"
+            downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
+//            downloadURL = "https://imtt.dd.qq.com/16891/apk/23C6DAF12A8C041F0937AABFCAE70BF6.apk"
             isForceDownloadNew = false
             setCanDownloadByPart(true)
             downloadListener = object : SimpleDownloadListener() {
@@ -55,7 +84,8 @@ class TestDownloadFragment : BaseTestListFragment() {
                 override fun onComplete(filePath: String, item: DownloadItem) {
                     showResult("startDownloadApk download installApkPath: $filePath")
                     if (type == INSTALL_BY_CUSTOMER) {
-                        var photoURI = ZixieFileProvider.getZixieFileProvider(context!!, File(filePath))
+                        var photoURI =
+                            ZixieFileProvider.getZixieFileProvider(context!!, File(filePath))
                         InstallUtils.installAPP(context, photoURI, File(filePath))
                     }
 
@@ -98,15 +128,24 @@ class TestDownloadFragment : BaseTestListFragment() {
     }
 
     private fun testInstallOOBByBigZip() {
-        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip", "com.herogame.gplay.lastdayrulessurvival")
+        testInstallOOB(
+            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
+            "com.herogame.gplay.lastdayrulessurvival"
+        )
     }
 
     private fun testInstallOOBByFolder() {
-        testInstallOOB(ZixieFileProvider.getZixieFilePath(context!!) + "/test/", "jp.co.sumzap.pj0007")
+        testInstallOOB(
+            ZixieFileProvider.getZixieFilePath(context!!) + "/test/",
+            "jp.co.sumzap.pj0007"
+        )
     }
 
     private fun testInstallBigOOBByFolder() {
-        testInstallOOB("/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927", "com.herogame.gplay.lastdayrulessurvival")
+        testInstallOOB(
+            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927",
+            "com.herogame.gplay.lastdayrulessurvival"
+        )
     }
 
 
@@ -133,15 +172,24 @@ class TestDownloadFragment : BaseTestListFragment() {
     }
 
     private fun testInstallSplitByGoodZip() {
-        testInstallSplit("/sdcard/Download/com.supercell.brawlstars.zip", "com.supercell.brawlstars")
+        testInstallSplit(
+            "/sdcard/Download/com.supercell.brawlstars.zip",
+            "com.supercell.brawlstars"
+        )
     }
 
     private fun testInstallSplitByBadZip() {
-        testInstallSplit("/sdcard/Download/a3469c6189204495bc0283e909eb94a6_com.riotgames.legendsofruneterratw_113012.zip", "com.riotgames.legendsofruneterratw")
+        testInstallSplit(
+            "/sdcard/Download/a3469c6189204495bc0283e909eb94a6_com.riotgames.legendsofruneterratw_113012.zip",
+            "com.riotgames.legendsofruneterratw"
+        )
     }
 
     private fun testInstallSplitByFolder() {
-        testInstallSplit(ZixieFileProvider.getZixieFilePath(context!!) + "/com.supercell.brawlstars", "com.supercell.brawlstars")
+        testInstallSplit(
+            ZixieFileProvider.getZixieFilePath(context!!) + "/com.supercell.brawlstars",
+            "com.supercell.brawlstars"
+        )
     }
 
     private fun testInstallSplit(filePath: String, packangeName: String) {
@@ -164,5 +212,26 @@ class TestDownloadFragment : BaseTestListFragment() {
             }
 
         })
+    }
+
+    private fun testDownloadGzip() {
+        DownloadFile.startDownload(context!!,
+            "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
+            object : SimpleDownloadListener() {
+                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                }
+
+                override fun onComplete(filePath: String, item: DownloadItem) {
+                    ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, true))
+                    ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, false))
+
+                }
+
+
+                override fun onProgress(item: DownloadItem) {
+                }
+
+            })
+
     }
 }

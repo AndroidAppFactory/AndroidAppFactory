@@ -14,16 +14,15 @@ import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.os.BuildUtils
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import com.bihe0832.android.lib.utils.time.DateUtil
+import java.io.*
 import java.nio.channels.FileChannel
 import java.nio.charset.Charset
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.util.zip.GZIPInputStream
 
 
 /**
@@ -37,7 +36,6 @@ object FileUtils {
     const val SPACE_MB = 1024 * SPACE_KB
     const val SPACE_GB = 1024 * SPACE_MB
     const val SPACE_TB = 1024 * SPACE_GB
-    const val APK_FILE_SUFFIX = ".apk"
 
     fun checkFileExist(filePath: String): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
@@ -339,15 +337,27 @@ object FileUtils {
     }
 
     fun getFileContent(filename: String?): String {
-        var res = ""
+        return getFileContent(filename, false)
+    }
+
+    fun getFileContent(filename: String?, isGzip: Boolean): String {
+        val sb = StringBuffer()
         filename?.let { it ->
             if (checkFileExist(it)) {
-                var fis: FileInputStream? = null
+                var fis: InputStream? = null
+                var br: BufferedReader? = null
                 try {
-                    fis = FileInputStream(File(it))
-                    val buffer = ByteArray(fis.available())
-                    fis.read(buffer)
-                    res = String(buffer, Charset.defaultCharset())
+                    fis = if (isGzip) {
+                        GZIPInputStream(FileInputStream(File(it)))
+                    } else {
+                        FileInputStream(File(it))
+                    }
+
+                    br = BufferedReader(InputStreamReader(fis))
+                    var line: String?
+                    while (br.readLine().also { line = it } != null) {
+                        sb.append(line + System.lineSeparator())
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 } finally {
@@ -356,11 +366,17 @@ object FileUtils {
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
+                    try {
+                        br?.close()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
-        return res
+        return sb.toString()
     }
+
 
     fun getRealFilePath(context: Context, uri: Uri?): String {
         if (null == uri) {

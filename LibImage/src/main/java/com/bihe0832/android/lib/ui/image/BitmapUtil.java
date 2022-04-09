@@ -224,22 +224,29 @@ public class BitmapUtil {
      * @param color
      * @return
      */
-    public static Bitmap getImageBitmapWithLayer(ImageView view, int color) {
+    public static Bitmap getImageBitmapWithLayer(ImageView view, int color, boolean isBackground) {
         Bitmap originalBitmap = ((BitmapDrawable) (view).getDrawable()).getBitmap();
-        return getBitmapWithLayer(originalBitmap, color);
+        return getBitmapWithLayer(originalBitmap, color, isBackground);
     }
 
-    public static Bitmap getBitmapWithLayer(Bitmap originalBitmap, int color) {
+    public static Bitmap getBitmapWithLayer(Bitmap originalBitmap, int color, boolean isBackground) {
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
         Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(updatedBitmap);
 
-        canvas.drawBitmap(originalBitmap, 0, 0, null);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(color);
-        canvas.drawRect(0, 0, width, width, paint);
+
+        if (isBackground) {
+            canvas.drawRect(0, 0, width, width, paint);
+        }
+        canvas.drawBitmap(originalBitmap, 0, 0, null);
+        if (!isBackground) {
+            canvas.drawRect(0, 0, width, width, paint);
+        }
+
         return updatedBitmap;
     }
 
@@ -339,9 +346,10 @@ public class BitmapUtil {
 
 
     public static String saveBitmapWithPath(Context context, Bitmap bitmap, String filePath) {
-        return saveBitmapWithPath(context, bitmap, CompressFormat.PNG,filePath,true);
-        
+        return saveBitmapWithPath(context, bitmap, CompressFormat.PNG, filePath, true);
+
     }
+
     /**
      * 把bitmap保存到本地
      *
