@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <ListView
+        android:id="@+id/conversation_pop_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/com_bihe0832_pop_menu_divider_color"
+        android:dividerHeight="1px"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

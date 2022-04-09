@@ -2,10 +2,12 @@ package com.bihe0832.android.base.test
 
 
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.base.test.cache.TestInfoCacheManager
 import com.bihe0832.android.base.test.icon.TestIcon
 import com.bihe0832.android.base.test.icon.TestTipsIcon
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
@@ -73,6 +75,8 @@ class TestDebugTempFragment : BaseTestListFragment() {
             add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
             add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
+            add(TestItemData("数据读取缓存", View.OnClickListener { testCache() }))
+
             add(TestItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(TestItemData("数据时间转换", View.OnClickListener { testConvert() }))
             add(TestItemData("展示悬浮窗", View.OnClickListener { showIcon() }))
@@ -430,14 +434,23 @@ class TestDebugTempFragment : BaseTestListFragment() {
             builder.append('a' + (TextFactoryUtils.getRandomString(26)))
         }
         val text = builder.toString()
+
         val compres = ZlibUtil.compress(text.toByteArray())
         ZLog.d("testZlib", "compres 前后： " + compres.size + " : " + text.toByteArray().size)
+
+        val b =  Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
+        val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
+
 
         val res = String(ZlibUtil.uncompress(compres))
         ZLog.d("testZlib", "压缩再解压一致性确认：")
         ZLog.d("testZlib", "text：\n$text\n\n")
         ZLog.d("testZlib", "result：\n$res\n\n")
 
+    }
+
+    fun testCache(){
+        TestInfoCacheManager.loggerData()
     }
 
     private fun testOneRequest() {

@@ -31,13 +31,15 @@ public class TestMainFragment extends com.bihe0832.android.common.test.TestMainF
         super(new String[]{
                 TAB_FOR_DEV_COMMON, TAB_FOR_DEV_TEMP, TAB_FOR_ROUTER, TAB_FOR_DEV
         });
+
+
     }
 
     // 当前是否是开发模式
     private final boolean isDev = true;
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new TestTextView();
+            return new TestDownloadFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new TestDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

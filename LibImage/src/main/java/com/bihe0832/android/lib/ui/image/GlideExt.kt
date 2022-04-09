@@ -136,6 +136,10 @@ fun ImageView.loadImage(resId: Int) {
 }
 
 
+fun ImageView.loadRoundCropImage(resId: Int, radius: Int) {
+    loadImage(resId, RequestOptions.bitmapTransform(RoundedCorners(radius)))
+}
+
 fun ImageView.loadImage(resId: Int, requestOptions: RequestOptions = RequestOptions()) {
     requestOptions.dontAnimate()
     try {
