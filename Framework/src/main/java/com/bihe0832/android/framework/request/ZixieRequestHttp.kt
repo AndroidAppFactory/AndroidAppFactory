@@ -24,10 +24,10 @@ object ZixieRequestHttp {
         return HTTPServer.getInstance().doRequestSync(url, params)
     }
 
-
     fun postOrigin(url: String, params: String): String {
         return HTTPServer.getInstance().doOriginRequestSync(url, params)
     }
+
     fun get(url: String, responseHandler: HttpResponseHandler) {
         innerRequest(url, null, responseHandler, false)
     }

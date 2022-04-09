@@ -19,7 +19,6 @@ import com.bihe0832.android.lib.thread.ThreadManager;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -97,7 +96,7 @@ public class HTTPServer {
         mCallHandler.sendMessage(msg);
     }
 
-    private String convertData(String source) {
+    public String convertOriginToUTF8Data(String source) {
 
         try {
             return new String(source.getBytes(Charset.forName(BaseConnection.HTTP_REQ_VALUE_CHARSET_ISO_8599_1)), BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8);
@@ -110,7 +109,7 @@ public class HTTPServer {
     }
 
     public String doRequestSync(final String url) {
-        return convertData(doOriginRequestSync(url));
+        return convertOriginToUTF8Data(doOriginRequestSync(url));
     }
 
     public String doOriginRequestSync(final String url) {
@@ -118,7 +117,7 @@ public class HTTPServer {
     }
 
     public String doRequestSync(final String url, final String params) {
-        return convertData(doOriginRequestSync(url, params));
+        return convertOriginToUTF8Data(doOriginRequestSync(url, params));
     }
 
     public String doOriginRequestSync(final String url, final String params) {
@@ -133,7 +132,7 @@ public class HTTPServer {
     }
 
     public String doRequestSync(final String url, byte[] bytes, final String contentType) {
-        return convertData(doOriginRequestSync(url, bytes, contentType));
+        return convertOriginToUTF8Data(doOriginRequestSync(url, bytes, contentType));
     }
 
     public String doOriginRequestSync(final String url, byte[] bytes, final String contentType) {
@@ -189,7 +188,7 @@ public class HTTPServer {
         BaseConnection connection = getConnection(url);
         String result;
         if (needConvert) {
-            result = convertData(executeOriginRequest(request, connection));
+            result = convertOriginToUTF8Data(executeOriginRequest(request, connection));
         } else {
             result = executeOriginRequest(request, connection);
         }
