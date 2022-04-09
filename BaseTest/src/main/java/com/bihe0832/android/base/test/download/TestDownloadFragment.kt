@@ -1,12 +1,10 @@
 package com.bihe0832.android.base.test.download
 
-import android.support.v4.content.FileProvider
 import android.view.View
-import android.widget.Toast
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
@@ -14,11 +12,13 @@ import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
-import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
-import java.io.File
+import com.bihe0832.android.lib.utils.encrypt.GzipUtils
+import com.bihe0832.android.lib.utils.encrypt.MD5
+import java.io.*
+import java.nio.charset.Charset
 import java.util.*
 
 class TestDownloadFragment : BaseTestListFragment() {
@@ -214,6 +214,7 @@ class TestDownloadFragment : BaseTestListFragment() {
         })
     }
 
+
     private fun testDownloadGzip() {
         DownloadFile.startDownload(context!!,
             "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
@@ -222,9 +223,9 @@ class TestDownloadFragment : BaseTestListFragment() {
                 }
 
                 override fun onComplete(filePath: String, item: DownloadItem) {
-                    ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, true))
-                    ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, false))
+                    ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
 
+                    ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, true))
                 }
 
 
@@ -232,6 +233,25 @@ class TestDownloadFragment : BaseTestListFragment() {
                 }
 
             })
+
+
+        ZixieRequestHttp.getOrigin("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+            .let {
+                val filePath =
+                    "/storage/emulated/0/Android/data/com.bihe0832.android.test/files/zixie/new_${System.currentTimeMillis()}.json.gzip"
+
+                FileUtils.writeToFile(filePath, it, false)
+                ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
+                ZLog.d(LOG_TAG, "hhh 1" + GzipUtils.decompress(it))
+                ZLog.d(LOG_TAG, "hhh 2" + FileUtils.getFileContent(filePath, true))
+
+            }
+
+
+        ZixieRequestHttp.get("https://cdn.bihe0832.com/app/update/get_apk.json").let {
+            ZLog.d(LOG_TAG, "result 1 :$it")
+        }
+
 
     }
 }

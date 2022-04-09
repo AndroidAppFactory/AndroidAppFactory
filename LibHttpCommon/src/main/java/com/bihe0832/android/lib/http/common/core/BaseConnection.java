@@ -20,7 +20,9 @@ public abstract class BaseConnection {
 
     private static final String LOG_TAG = "bihe0832 REQUEST";
     public static final String HTTP_REQ_PROPERTY_CHARSET = "Charset";
-    public static final String HTTP_REQ_VALUE_CHARSET = "UTF-8";
+    public static final String HTTP_REQ_VALUE_CHARSET_UTF8 = "UTF-8";
+    public static final String HTTP_REQ_VALUE_CHARSET_ISO_8599_1 = "ISO-8859-1";
+
     public static final String HTTP_REQ_PROPERTY_CONTENT_DISPOSITION = "Content-Disposition";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
@@ -109,7 +111,7 @@ public abstract class BaseConnection {
         if (request.getRequestProperties() != null) {
             requestProperty.putAll(request.getRequestProperties());
         }
-        requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET);
+        requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET_UTF8);
         requestProperty.put(HTTP_REQ_PROPERTY_CONTENT_TYPE, request.getContentType());
         setURLConnectionRequestProperty(requestProperty);
 
@@ -143,7 +145,7 @@ public abstract class BaseConnection {
                 os.write(buffer, 0, len);
             }
             is.close();
-            result = os.toString(HTTP_REQ_VALUE_CHARSET);
+            result = os.toString("ISO-8859-1");
         } catch (javax.net.ssl.SSLHandshakeException ee) {
             ZLog.e(LOG_TAG, "javax.net.ssl.SSLPeerUnverifiedException");
         } catch (Exception e) {
@@ -191,7 +193,7 @@ public abstract class BaseConnection {
                     os.write(buffer, 0, len);
                 }
                 inptStream.close();
-                return os.toString(HTTP_REQ_VALUE_CHARSET);
+                return os.toString(HTTP_REQ_VALUE_CHARSET_ISO_8599_1);
             }
         } catch (Exception e) {
             e.printStackTrace();

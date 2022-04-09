@@ -52,7 +52,7 @@ public abstract class HttpBasicRequest {
         String result = stringBuffer.toString();
         ZLog.e(LOG_TAG, "getFormDataString = " + result);
         try {
-            return stringBuffer.toString().getBytes(BaseConnection.HTTP_REQ_VALUE_CHARSET);
+            return stringBuffer.toString().getBytes(BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

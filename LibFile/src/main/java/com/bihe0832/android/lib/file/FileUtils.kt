@@ -336,13 +336,36 @@ object FileUtils {
         return ""
     }
 
-    fun getFileContent(filename: String?): String {
-        return getFileContent(filename, false)
+    fun getFileContent(filePath: String?): String {
+        return getFileContent(filePath, false)
     }
 
-    fun getFileContent(filename: String?, isGzip: Boolean): String {
+
+    fun writeToFile(filePath: String, data: String, append: Boolean) {
+        var fileOutputStream: FileOutputStream? = null
+        try {
+            val file = File(filePath)
+            if (!checkFileExist(filePath)) {
+                file.createNewFile()
+            }
+
+            //建立数据的输出通道
+            fileOutputStream = FileOutputStream(file, append)
+            fileOutputStream.write(data.toByteArray(Charset.forName("ISO-8859-1")))
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fileOutputStream?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getFileContent(filePath: String?, isGzip: Boolean): String {
         val sb = StringBuffer()
-        filename?.let { it ->
+        filePath?.let { it ->
             if (checkFileExist(it)) {
                 var fis: InputStream? = null
                 var br: BufferedReader? = null
@@ -377,6 +400,32 @@ object FileUtils {
         return sb.toString()
     }
 
+    fun getFileBytes(filePath: String?): ByteArray? {
+
+        filePath?.let { it ->
+            if (checkFileExist(it)) {
+                var buf: BufferedInputStream? = null
+                try {
+                    val file = File(filePath)
+                    val size: Int = file.length().toInt()
+                    val bytes = ByteArray(size)
+                    buf = BufferedInputStream(FileInputStream(file))
+                    buf.read(bytes, 0, bytes.size)
+                    return bytes
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    try {
+                        buf?.close()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+        return null
+
+    }
 
     fun getRealFilePath(context: Context, uri: Uri?): String {
         if (null == uri) {
