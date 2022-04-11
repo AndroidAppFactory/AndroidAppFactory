@@ -36,7 +36,6 @@ object JsonHelper {
                 .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
                 .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
                 .registerTypeAdapter(String::class.java, StringNullAdapter())
-                .excludeFieldsWithoutExposeAnnotation()
                 .create()
     }
 

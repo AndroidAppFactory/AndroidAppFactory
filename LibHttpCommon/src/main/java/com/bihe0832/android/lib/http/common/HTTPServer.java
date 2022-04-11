@@ -97,16 +97,20 @@ public class HTTPServer {
     }
 
     public String convertOriginToUTF8Data(String source) {
+        return convertOriginData(source, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8);
+    }
+
+    public String convertOriginData(String source, String charsetName) {
 
         try {
-            return new String(source.getBytes(Charset.forName(BaseConnection.HTTP_REQ_VALUE_CHARSET_ISO_8599_1)), BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8);
+            return new String(source.getBytes(Charset.forName(BaseConnection.HTTP_REQ_VALUE_CHARSET_ISO_8599_1)), charsetName);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             ZLog.e(LOG_TAG, "convertData data error" + e.toString());
             return "";
         }
-
     }
+
 
     public String doRequestSync(final String url) {
         return convertOriginToUTF8Data(doOriginRequestSync(url));
