@@ -24,34 +24,32 @@ class TestTTSFragment : BaseFragment() {
 
     private var times = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_test_tts, container, false)
-        return view
+    override fun getLayoutID(): Int {
+        return R.layout.fragment_test_tts
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView(view)
-    }
+    override fun initView(view: View) {
+        LibTTS.init(
+            view.context,
+            Locale.CHINA,
+            "com.iflytek.vflynote",
+            object : LibTTS.TTSInitListener {
+                override fun onInitError() {
+                    showGuide()
+                }
 
-    private fun initView(view: View) {
-        LibTTS.init(view.context, Locale.CHINA, "com.iflytek.vflynote", object : LibTTS.TTSInitListener {
-            override fun onInitError() {
-                showGuide()
-            }
+                override fun onLangUnAvailable() {
+                    showGuide()
+                }
 
-            override fun onLangUnAvailable() {
-                showGuide()
-            }
+                override fun onLangAvailable() {
+                    hideGuide()
+                }
 
-            override fun onLangAvailable() {
-                hideGuide()
-            }
-
-            override fun onTTSError() {
-                ZixieContext.showToast("TTS引擎异常，正在重新初始化")
-            }
-        })
+                override fun onTTSError() {
+                    ZixieContext.showToast("TTS引擎异常，正在重新初始化")
+                }
+            })
 
         LibTTS.addTTSSpeakListener(object : LibTTS.TTSSpeakListener {
 
@@ -108,12 +106,12 @@ class TestTTSFragment : BaseFragment() {
 
         tts_download?.setOnClickListener {
             DownloadAPK.startDownloadWithCheckAndProcess(
-                    activity!!,
-                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
-                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
-                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
-                    "",
-                    ""
+                activity!!,
+                context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
+                "",
+                ""
             )
 
         }
@@ -127,7 +125,10 @@ class TestTTSFragment : BaseFragment() {
         }
 
         tts_save?.setOnClickListener {
-            LibTTS.save(getMsg(), context!!.filesDir.absolutePath + "/audio_" + System.currentTimeMillis() + ".wav")
+            LibTTS.save(
+                getMsg(),
+                context!!.filesDir.absolutePath + "/audio_" + System.currentTimeMillis() + ".wav"
+            )
         }
 
         tts_voice_incre?.setOnClickListener {

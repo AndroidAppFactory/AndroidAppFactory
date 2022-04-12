@@ -22,8 +22,8 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 open class BaseTestListFragment : CommonListFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView(view: View) {
+        super.initView(view)
         CardInfoHelper.getInstance().setAutoAddItem(true)
         mRecyclerView?.apply {
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false

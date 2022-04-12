@@ -164,13 +164,15 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mIntentUrl = URLDecoder.decode(bundle.getString(INTENT_KEY_URL));
-            mRefreshable = bundle.getBoolean(INTENT_KEY_REFRESH, false);
-            mPostData = bundle.getString(INTENT_KEY_DATA);
-        }
         mWebViewViewModel = ViewModelProviders.of(getActivity()).get(WebViewViewModel.class);
+    }
+
+    @Override
+    protected void parseData(Bundle bundle) {
+        super.parseData(bundle);
+        mIntentUrl = URLDecoder.decode(bundle.getString(INTENT_KEY_URL));
+        mRefreshable = bundle.getBoolean(INTENT_KEY_REFRESH, false);
+        mPostData = bundle.getString(INTENT_KEY_DATA);
     }
 
     @Nullable

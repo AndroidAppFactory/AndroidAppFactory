@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.bihe0832.android.app.router.RouterHelper;
 import com.bihe0832.android.base.test.R;
 import com.bihe0832.android.base.test.card.section.SectionDataContent;
@@ -19,6 +20,7 @@ import com.bihe0832.android.common.test.item.TestTipsData;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+
 import java.util.ArrayList;
 
 
@@ -31,22 +33,13 @@ public class TestCustomSectionFragment extends BaseFragment {
     private ArrayList<CardBaseModule> mDataList = new ArrayList<>();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected int getLayoutID() {
+        return R.layout.activity_test_card;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        View mView = inflater.inflate(R.layout.activity_test_card, container, false);
-
+    protected void initView(View mView) {
         initList();
-        initView(mView);
-        return mView;
-    }
-
-    void initView(View mView) {
         mRecycleView = (RecyclerView) mView.findViewById(R.id.card_list);
         mRecycleAdapter = new TestSectionAdapterForCustom(this.getContext(), mDataList);
         mRecycleView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
