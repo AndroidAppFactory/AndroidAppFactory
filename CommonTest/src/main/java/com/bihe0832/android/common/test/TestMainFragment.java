@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.bihe0832.android.common.test.module.TestDebugCommonFragment;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.utils.ConvertUtils;
@@ -49,17 +50,14 @@ public class TestMainFragment extends BaseFragment {
     }
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.com_bihe0832_fragment_test_main, container, false);
-        initView(view);
-        mTabBar.setCurrentTab(getDefaultTabIndex());
-        return view;
+    protected int getLayoutID() {
+        return R.layout.com_bihe0832_fragment_test_main;
     }
 
-    private void initView(View view) {
+    @Override
+    protected void initView(View view) {
+        super.initView(view);
         mViewPager = view.findViewById(R.id.framework_viewPager);
         mViewPager.setAdapter(new MyTaskPagerFragmentAdapter(getChildFragmentManager()));
         mViewPager.setOffscreenPageLimit(mTabString.length);
@@ -87,6 +85,7 @@ public class TestMainFragment extends BaseFragment {
 
             }
         });
+        mTabBar.setCurrentTab(getDefaultTabIndex());
     }
 
     private class MyTaskPagerFragmentAdapter extends FragmentPagerAdapter {

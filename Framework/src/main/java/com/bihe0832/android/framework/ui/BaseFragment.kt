@@ -2,7 +2,9 @@ package com.bihe0832.android.framework.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.log.ZLog
@@ -18,17 +20,54 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
  * Description: 所有的Fragment的基类，目前暂时没有特殊逻辑
  */
 open class BaseFragment : SwipeBackFragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+    override open fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(getLayoutID(), container, false)
+    }
+
+    protected open fun getLayoutID(): Int {
+        return -1
+    }
+
+    override open fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val bundle: Bundle? = getArguments()
+        bundle?.let {
+            parseData(it)
+        }
+    }
+
+    protected open fun parseData(bundle: Bundle) {
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (resetDensity()) {
             activity?.let {
-                DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(it.resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
+                DisplayUtil.resetDensity(
+                    it,
+                    ConvertUtils.parseFloat(
+                        it.resources.getString(R.string.custom_density),
+                        Constants.CUSTOM_DENSITY
+                    )
+                )
             }
         }
+        initView(view)
+        initData()
+    }
+
+    protected open fun initView(view: View) {
+
+    }
+
+    protected open fun initData() {
+
     }
 
     open fun resetDensity(): Boolean {
@@ -51,7 +90,14 @@ open class BaseFragment : SwipeBackFragment() {
             }
 
             if (getPermissionList().isNotEmpty()) {
-                PermissionManager.checkPermission(context, javaClass.simpleName, false, getPermissionActivityClass(), getPermissionResult(), *getPermissionList().toTypedArray())
+                PermissionManager.checkPermission(
+                    context,
+                    javaClass.simpleName,
+                    false,
+                    getPermissionActivityClass(),
+                    getPermissionResult(),
+                    *getPermissionList().toTypedArray()
+                )
             }
         }
     }

@@ -49,7 +49,10 @@ abstract class BaseListFragment : BaseFragment() {
     private val mHeadView by lazy {
         LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
     }
 
@@ -68,12 +71,14 @@ abstract class BaseListFragment : BaseFragment() {
                 }
             }
         }.apply {
-            emptyView = LayoutInflater.from(context).inflate(R.layout.common_view_list_empty, null, false)
-            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = if (getLayoutManagerForList() is GridLayoutManager) {
-                getString(R.string.bad_layoutmanager_empty_tips)
-            } else {
-                mDataLiveData.getEmptyText()
-            }
+            emptyView =
+                LayoutInflater.from(context).inflate(R.layout.common_view_list_empty, null, false)
+            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text =
+                if (getLayoutManagerForList() is GridLayoutManager) {
+                    getString(R.string.bad_layoutmanager_empty_tips)
+                } else {
+                    mDataLiveData.getEmptyText()
+                }
 
             setHeaderFooterEmpty(true, false)
             if (hasHeaderView()) {
@@ -84,16 +89,12 @@ abstract class BaseListFragment : BaseFragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getResID(), container, false)
+    override fun getLayoutID(): Int {
+        return getResID()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView(view)
-    }
-
-    open fun initView(view: View) {
+    override fun initView(view: View) {
+        super.initView(view)
         mRecyclerView = view.findViewById(R.id.fragment_list_info_list)
         if (null == mRecyclerView) {
             throw AAFException("please check recyclerview id name is : fragment_list_info_list")
