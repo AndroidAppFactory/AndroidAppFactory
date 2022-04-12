@@ -37,11 +37,11 @@ open class BaseFragment : SwipeBackFragment() {
         super.onCreate(savedInstanceState)
         val bundle: Bundle? = getArguments()
         bundle?.let {
-            parseData(it)
+            parseBundle(it)
         }
     }
 
-    protected open fun parseData(bundle: Bundle) {
+    protected open fun parseBundle(bundle: Bundle) {
 
     }
 
@@ -117,16 +117,16 @@ open class BaseFragment : SwipeBackFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
-        if (needDispatchAnActivityResult()) {
-            dispatchAnActivityResult(requestCode, resultCode, data)
+        if (needDispatchActivityResult()) {
+            dispatchActivityResult(requestCode, resultCode, data)
         }
     }
 
-    fun needDispatchAnActivityResult(): Boolean {
+    fun needDispatchActivityResult(): Boolean {
         return true
     }
 
-    fun dispatchAnActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun dispatchActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
         try {
             for (fragment in childFragmentManager.fragments) {
