@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.text.span;
+package com.bihe0832.android.lib.ui.textview.span;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
