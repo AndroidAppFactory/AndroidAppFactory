@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.*
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,14 @@ import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction.openFinalURL
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.text.span.ZixieTextClickableSpan
-import com.bihe0832.android.lib.text.span.ZixieTextImageSpan
+import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 
-import com.bihe0832.android.lib.text.span.ZixieTextRadiusBackgroundSpan
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
 import com.bihe0832.android.lib.ui.menu.PopupList
+import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
+import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
@@ -51,52 +51,52 @@ class TestTextView : BaseFragment() {
     var index = 6
     fun initView() {
 
-//        info_content_0.setText(TextFactoryUtils.getSpannedTextByHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
-        testSpecialText(testList[1])
+        info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
+        testSpecialText(testList[5])
 
-//        test_basic_button.setOnClickListener {
-////            showMenu()
-////            info_content_1.text = testList[index + 0]
-////            info_content_1.setExpandText(":fsdfsdfsd")
-////            info_content_2.text = testList[index + 1]
-////            info_content_3.text = testList[index + 2]
-////            index += 3
-////            if (index > 7) {
-////                index = 0
-////            }
-//        }
+        test_basic_button.setOnClickListener {
+            showMenu()
+//            info_content_1.text = testList[index + 0]
+//            info_content_1.setExpandText(":fsdfsdfsd")
+//            info_content_2.text = testList[index + 1]
+//            info_content_3.text = testList[index + 2]
+//            index += 3
+//            if (index > 7) {
+//                index = 0
+//            }
+        }
     }
 
     fun testSpecialText(content: String) {
-//        val spanString = SpannableString(content)
-//        var startIndex = 0
-////        while (content.indexOf("测试", startIndex, true) > 0) {
-//        var start: Int = content.indexOf("测试", startIndex, true)
-//        var end = start + "测试".length
-//        spanString.setSpan(
-//            ZixieTextRadiusBackgroundSpan(
-//                Color.RED,
-//                10,
-//                8,
-//                12,
-//                8,
-//                info_content_0.textSize * 3 / 5,
-//                0,
-//                Typeface.DEFAULT_BOLD
-//            ),
-//            start,
-//            end,
-//            Spannable.SPAN_INCLUSIVE_INCLUSIVE
-//        )
-//
-//        spanString.setSpan(
-//            ZixieTextClickableSpan(object : View.OnClickListener {
-//                override fun onClick(v: View?) {
-//                    ZixieContext.showToast("test")
-//                }
-//
-//            }), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-//        );
+        val spanString = SpannableString(content)
+        var startIndex = 0
+//        while (content.indexOf("测试", startIndex, true) > 0) {
+        var start: Int = content.indexOf("测试", startIndex, true)
+        var end = start + "测试".length
+        spanString.setSpan(
+            ZixieTextRadiusBackgroundSpan(
+                Color.RED,
+                10,
+                8,
+                12,
+                8,
+                info_content_0.textSize * 3 / 5,
+                0,
+                Typeface.DEFAULT_BOLD
+            ),
+            start,
+            end,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+        )
+
+        spanString.setSpan(
+            ZixieTextClickableSpan(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    ZixieContext.showToast("test")
+                }
+
+            }), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+        );
 
 //        }
 
@@ -126,28 +126,28 @@ class TestTextView : BaseFragment() {
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             append("Fsdfsdfd")
-//            setSpan(
-//                ZixieTextClickableSpan(object : View.OnClickListener {
-//                    override fun onClick(v: View?) {
-//                        ZixieContext.showToast("文字")
-//                    }
-//
-//                }), 3,
-//                4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-//            )
+            setSpan(
+                ZixieTextClickableSpan(object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        ZixieContext.showToast("文字")
+                    }
+
+                }), 3,
+                4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+            )
         }.let {
             info_content_0.append(it)
 //            info_content_0.setMovementMethod(LinkMovementMethod.getInstance());
 
         }
 
-//        info_content_0.append(
-//                com.bihe0832.android.lib.text.TextFactoryUtils.getSpannedTextByHtml(
-//                        com.bihe0832.android.lib.text.TextFactoryUtils.getTextHtmlAfterTransform(
-//                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
-//                )
-//            )
-//        )
+        info_content_0.append(
+                com.bihe0832.android.lib.text.TextFactoryUtils.getSpannedTextByHtml(
+                        com.bihe0832.android.lib.text.TextFactoryUtils.getTextHtmlAfterTransform(
+                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+                )
+            )
+        )
     }
 
     override fun onResume() {
