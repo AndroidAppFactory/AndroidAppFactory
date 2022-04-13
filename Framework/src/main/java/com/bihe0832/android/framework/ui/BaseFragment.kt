@@ -21,6 +21,11 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
  */
 open class BaseFragment : SwipeBackFragment() {
 
+    /**
+     * View 是否已经创建，有些时候处理
+     */
+    private var hasCreateView = false
+
     override open fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,6 +34,10 @@ open class BaseFragment : SwipeBackFragment() {
         return inflater.inflate(getLayoutID(), container, false)
     }
 
+    /**
+     * 布局layout
+     * @return
+     */
     protected open fun getLayoutID(): Int {
         return -1
     }
@@ -41,6 +50,10 @@ open class BaseFragment : SwipeBackFragment() {
         }
     }
 
+    /**
+     * 解析intent 传递的参数
+     * @param bundle
+     */
     protected open fun parseBundle(bundle: Bundle) {
 
     }
@@ -58,14 +71,22 @@ open class BaseFragment : SwipeBackFragment() {
                 )
             }
         }
+        hasCreateView = true
         initView(view)
         initData()
     }
 
+    /**
+     * view 初始化
+     * @param view
+     */
     protected open fun initView(view: View) {
 
     }
 
+    /**
+     * 数据读取
+     */
     protected open fun initData() {
 
     }
@@ -82,6 +103,7 @@ open class BaseFragment : SwipeBackFragment() {
      */
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
+        setUserVisibleHint(isVisibleToUser, hasCreateView)
         if (isAdded) {
             for (fragment in childFragmentManager.fragments) {
                 if (fragment.isAdded) {
@@ -100,6 +122,10 @@ open class BaseFragment : SwipeBackFragment() {
                 )
             }
         }
+    }
+
+    open fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
+
     }
 
     open fun getPermissionList(): List<String> {
