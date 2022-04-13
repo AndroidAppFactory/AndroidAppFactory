@@ -85,7 +85,7 @@ object ZixieContext {
 
     fun showDebugEditionToast() {
         if (!isOfficial()) {
-            showToast("测试版本，请勿外泄~")
+            showLongToast("测试版本，请勿外泄~")
         }
     }
 
