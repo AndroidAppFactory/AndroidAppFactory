@@ -1,5 +1,8 @@
 package com.bihe0832.android.lib.utils;
 
+
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Random;
 
 /**
@@ -53,5 +56,41 @@ public class MathUtils {
             }
         }
         return max;
+    }
+
+    public static float getFormatPercent(int fenzi, int fenmu, int scale) {
+        return getFormatPercent((double) fenzi, (double) fenmu, scale);
+    }
+
+    public static float getFormatPercent(long fenzi, long fenmu, int scale) {
+        return getFormatPercent((double) fenzi, (double) fenmu, scale);
+    }
+
+    public static float getFormatPercent(double fenzi, double fenmu, int scale) {
+        float percent = 0f;
+        if (fenmu > 0) {
+            try {
+                percent = new BigDecimal(fenzi).divide(new BigDecimal(fenmu), scale, BigDecimal.ROUND_HALF_UP).floatValue();
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    percent = (float) (fenzi / fenmu);
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                }
+            }
+        }
+        if (percent < 0) {
+            percent = 0f;
+        }
+        return percent;
+    }
+
+    public static String getFormatPercentDesc(double fenzi, double fenmu, int scale) {
+        return NumberFormat.getPercentInstance().format(getFormatPercent(fenzi, fenmu, scale));
+    }
+
+    public static String getFormatPercentDesc(float percent) {
+        return NumberFormat.getPercentInstance().format(percent);
     }
 }

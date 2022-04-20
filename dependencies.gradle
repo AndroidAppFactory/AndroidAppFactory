@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibText"
+ext.developModule = "LibCommonUtils,LibTextView"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -369,7 +369,11 @@ ext.moduleInfo = [
         "LibDownload"               : [
                 "version"            : "4.19.0",
                 "artifactId"         : "lib-download",
-                "apidependenciesList": ["LibFile", "LibRequest", "LibThread", "LibSqlite", "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced"]
+                "apidependenciesList": [
+                        "LibFile", "LibRequest", "LibThread", "LibSqlite",
+                        "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced",
+                        "LibCommonUIUtils"
+                ]
         ],
         "LibInstall"                : [
                 "version"            : "4.19.0",
