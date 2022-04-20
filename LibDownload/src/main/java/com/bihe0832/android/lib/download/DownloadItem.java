@@ -3,11 +3,14 @@ package com.bihe0832.android.lib.download;
 
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils;
 import com.bihe0832.android.lib.utils.ConvertUtils;
+import com.bihe0832.android.lib.utils.MathUtils;
+
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.NumberFormat;
+
 import kotlin.jvm.Synchronized;
 
 
@@ -114,18 +117,7 @@ public class DownloadItem implements Serializable {
         return DownloadUtils.getDownloadIDByURL(downloadURL);
     }
 
-    // 下载进度
-    public String getProcessDesc() {
-        NumberFormat mProgressPercentFormat = NumberFormat.getPercentInstance();
-        double percent = 0;
-        if (fileLength > 0) {
-            percent = ((double) finishedLength) / fileLength;
-        }
-        if (percent < 0.01) {
-            percent = 0.01;
-        }
-        return mProgressPercentFormat.format(percent);
-    }
+
 
     public String getDownloadDesc() {
         return downloadDesc;
@@ -134,19 +126,14 @@ public class DownloadItem implements Serializable {
     public void setDownloadDesc(String desc) {
         downloadDesc = desc;
     }
+    // 下载进度
+    public String getProcessDesc() {
+        return MathUtils.getFormatPercentDesc(getProcess());
+    }
 
     //下载进度
     public float getProcess() {
-        double percent = 0;
-        if (fileLength > 0) {
-            percent = ((double) finishedLength) / fileLength;
-        }
-        if (percent < 0.01) {
-            percent = 0.01;
-        }
-        BigDecimal bd = new BigDecimal(percent);
-        double d1 = bd.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
-        return (float) d1;
+        return MathUtils.getFormatPercent(finishedLength,fileLength, 4);
     }
 
     public boolean isDownloadWhenUseMobile() {

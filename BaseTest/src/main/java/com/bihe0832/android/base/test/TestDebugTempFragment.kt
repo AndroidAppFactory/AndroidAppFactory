@@ -16,7 +16,6 @@ import com.bihe0832.android.base.test.json.JsonTest
 import com.bihe0832.android.base.test.network.TestNetworkActivity
 import com.bihe0832.android.base.test.request.ROUTRT_NAME_TEST_HTTP
 import com.bihe0832.android.base.test.touch.TouchRegionActivity
-import com.bihe0832.android.common.photos.showPhotoChooser
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
@@ -38,6 +37,7 @@ import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
@@ -79,6 +79,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
             add(TestItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(TestItemData("数据时间转换", View.OnClickListener { testConvert() }))
+            add(TestItemData("数据百分比转化", View.OnClickListener { testPercent() }))
             add(TestItemData("展示悬浮窗", View.OnClickListener { showIcon() }))
             add(TestItemData("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
             add(TestItemData("自定义日志管理", View.OnClickListener {
@@ -131,7 +132,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
             }))
 
             add(TestItemData("文件选择", View.OnClickListener {
-                activity?.showPhotoChooser()
+//                activity?.showPhotoChooser()
             }))
 
             add(TestItemData("JsonHelper", View.OnClickListener { testJson() }))
@@ -396,7 +397,8 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
         mutableListOf(1, 37, 67, 2434, 24064, 2403564).forEach {
             ZLog.d(
-                "formatSecondsTo00", "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
+                "formatSecondsTo00",
+                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
             )
             ZLog.d(
                 "formatSecondsTo00", "Value $it trans to :" + TimeUtil.formatSecondsTo00(
@@ -419,7 +421,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
                 "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
             )
         }
-        mutableListOf(1, 37, 67, 2434, 3600, 3602, 24064, 86400,86440, 2403564).forEach {
+        mutableListOf(1, 37, 67, 2434, 3600, 3602, 24064, 86400, 86440, 2403564).forEach {
             ZLog.d(
                 "formatSecondsToDurationDesc",
                 "Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong())
@@ -438,7 +440,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
         val compres = ZlibUtil.compress(text.toByteArray())
         ZLog.d("testZlib", "compres 前后： " + compres.size + " : " + text.toByteArray().size)
 
-        val b =  Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
+        val b = Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
         val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
 
 
@@ -449,8 +451,25 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
     }
 
-    fun testCache(){
+    fun testCache() {
         TestInfoCacheManager.loggerData()
+    }
+
+    fun testPercent() {
+        testPercentItem(MathUtils.getFormatPercent(1, 1, 4))
+        testPercentItem(MathUtils.getFormatPercent(3, 1, 4))
+        testPercentItem(MathUtils.getFormatPercent(3, 0, 4))
+        testPercentItem(MathUtils.getFormatPercent(0, 3, 4))
+        testPercentItem(MathUtils.getFormatPercent(1L, 3L, 4))
+        testPercentItem(MathUtils.getFormatPercent(212121212121212121, 32121212121212121, 4))
+        testPercentItem(MathUtils.getFormatPercent(4344343.43434, 4344343.43434, 4))
+        testPercentItem(MathUtils.getFormatPercent(43443434343434343.43434, 434434343434343.43434, 4))
+    }
+
+    private fun testPercentItem(data: Float){
+        data.let {
+            ZLog.d("testPercent", data.toString() + " " + MathUtils.getFormatPercentDesc(data))
+        }
     }
 
     private fun testOneRequest() {

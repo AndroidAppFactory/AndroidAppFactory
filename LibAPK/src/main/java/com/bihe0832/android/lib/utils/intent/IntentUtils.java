@@ -4,12 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.intent.wrapper.PermissionIntent;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
+
+import org.json.JSONObject;
+
+import java.util.Set;
 
 
 public class IntentUtils {
@@ -164,5 +170,29 @@ public class IntentUtils {
             }
         }
     }
+
+
+    // 启动手机的设置
+    public static String convertIntentToJson(Intent intent) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            if (null != intent && !intent.getExtras().isEmpty()){
+                Bundle b = intent.getExtras();
+                Set<String> keys = b.keySet();
+                for (String key : keys) {
+                    try {
+                        jsonObject.put(key, b.get(key));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
 
 }
