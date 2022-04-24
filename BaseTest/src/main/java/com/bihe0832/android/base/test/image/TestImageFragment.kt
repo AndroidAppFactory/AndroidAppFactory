@@ -60,10 +60,8 @@ class TestImageFragment : BaseFragment() {
                 MultiTransformation(
                     CenterInside(),
                     BlurTransformation(
-                        context!!,
-                        1
+                        context!!, 150
                     )
-
                 )
             )
         )
