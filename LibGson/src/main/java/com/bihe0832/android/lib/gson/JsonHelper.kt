@@ -3,8 +3,10 @@ package com.bihe0832.android.lib.gson
 import android.util.Log
 import com.bihe0832.android.lib.gson.adapter.*
 import com.bihe0832.android.lib.gson.type.ParameterizedTypeImpl
+import com.bihe0832.android.lib.log.ZLog
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import org.json.JSONArray
 import java.lang.reflect.Type
 
 
@@ -72,7 +74,11 @@ object JsonHelper {
         try {
             return getGson().fromJson(json, beanClass)
         } catch (e: Exception) {
-            Log.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
+            ZLog.e("JsonHelper", "------------------------------------")
+            ZLog.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
+            ZLog.e("JsonHelper", "JsonParserWrapper json:$json")
+            ZLog.e("JsonHelper", "JsonParserWrapper beanClass:$beanClass")
+            ZLog.e("JsonHelper", "------------------------------------")
         }
 
         return null
@@ -88,12 +94,44 @@ object JsonHelper {
      *
      * i.e: List<BeanClass>  beanClass = JsonHelper.fromJsonList(json, BeanClass.class);
      */
-    fun <T> fromJsonList(json: String, clazz: Class<*>?): List<T>? {
+    fun <T> fromJsonList(json: String, clazz: Class<T>): List<T>? {
         try {
             val type: Type = ParameterizedTypeImpl(clazz)
             return Gson().fromJson(json, type)
         } catch (e: Exception) {
-            Log.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
+            ZLog.e("JsonHelper", "------------------------------------")
+            ZLog.e("JsonHelper", "JsonParserWrapper list fromJson Exception:\n")
+            ZLog.e("JsonHelper", "\t $e \n")
+            ZLog.e("JsonHelper", "JsonParserWrapper list json:$json")
+            ZLog.e("JsonHelper", "JsonParserWrapper list beanClass:$clazz")
+            ZLog.e("JsonHelper", "------------------------------------")
+            try {
+                ZLog.e("JsonHelper", "------------------------------------")
+                ZLog.e("JsonHelper", "JsonParserWrapper start parse list fromJsonArray")
+                val result = mutableListOf<T>()
+                var jsonArray = JSONArray(json)
+                for (i in 0 until jsonArray.length()) {
+                    fromJson(jsonArray.get(i).toString(), clazz).let {
+                        if (null == it) {
+                            ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null")
+                            ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null:" + jsonArray.get(i).toString())
+                            ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null:$clazz")
+                        } else {
+                            result.add(it)
+                        }
+                    }
+                }
+                ZLog.e("JsonHelper", "------------------------------------")
+                if(result.size != jsonArray.length()){
+                    ZLog.e("JsonHelper", "JsonParserWrapper parse list :result is ${result.size}, but jsonArray is ${jsonArray.length()}")
+                }
+                return result
+            } catch (e: java.lang.Exception) {
+                ZLog.e("JsonHelper", "------------------------------------")
+                ZLog.e("JsonHelper", "JsonParserWrapper start parse list fromJsonArray Exception:\n")
+                ZLog.e("JsonHelper", "\t $e \n")
+                ZLog.e("JsonHelper", "------------------------------------")
+            }
         }
         return mutableListOf()
     }
