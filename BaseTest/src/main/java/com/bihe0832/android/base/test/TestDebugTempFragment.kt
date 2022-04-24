@@ -198,7 +198,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //        }
         var result = JsonHelper.fromJsonList<JsonTest>(
             "[" +
-                    "{\"key\": 1,\"value1\": [1222,2222],\"value2\":true}," +
+                    "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," +
                     "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
                     "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
                     "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
