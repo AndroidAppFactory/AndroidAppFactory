@@ -55,9 +55,9 @@ public class PopupList {
     private View mIndicatorView;
     private List<String> mPopupItemList;
     private PopupListListener mPopupListListener;
-    private int mContextPosition;
-    private float mOffsetX;
-    private float mOffsetY;
+    private int mContextPosition = 0;
+    private float mOffsetX = 0;
+    private float mOffsetY = 0;
     private StateListDrawable mLeftItemBackground;
     private StateListDrawable mRightItemBackground;
     private StateListDrawable mCornerItemBackground;
@@ -120,13 +120,13 @@ public class PopupList {
         this.mPopupListListener = popupListListener;
         this.mPopupWindow = null;
         mOffsetX = anchorView.getX() + anchorView.getWidth() / 2;
-        mOffsetY = anchorView.getY();
-        if (mPopupListListener != null && !mPopupListListener.showPopupList(anchorView, anchorView, 0)) {
+        mOffsetY = 0;
+        if (mPopupListListener != null && !mPopupListListener.onPopupListShow(anchorView, anchorView, 0)) {
             return;
         }
         mContextView = anchorView;
         mContextPosition = 0;
-        showPopupListWindow(mOffsetX, 0);
+        showPopupListWindow(mOffsetX, mOffsetY);
     }
 
     /**
@@ -148,12 +148,10 @@ public class PopupList {
         mPopupWindow = null;
         mContextView = anchorView;
         if (mPopupListListener != null
-                && !mPopupListListener.showPopupList(mContextView, mContextView, contextPosition)) {
+                && !mPopupListListener.onPopupListShow(mContextView, mContextView, contextPosition)) {
             return;
         }
-        int[] location = new int[2];
-        mAnchorView.getLocationOnScreen(location);
-        showPopupListWindow(rawX - location[0], rawY - location[1]);
+        showPopupListWindow(rawX, rawY);
     }
 
     private void showPopupListWindow(float offsetX, float offsetY) {
@@ -254,7 +252,7 @@ public class PopupList {
             mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
         }
         int[] location = new int[2];
-        mAnchorView.getLocationOnScreen(location);
+        mAnchorView.getLocationInWindow(location);
         if (mIndicatorView != null) {
             float leftTranslationLimit = mIndicatorWidth / 2f + mBackgroundCornerRadius - mPopupWindowWidth / 2f;
             float rightTranslationLimit = mPopupWindowWidth / 2f - mIndicatorWidth / 2f - mBackgroundCornerRadius;
@@ -582,7 +580,7 @@ public class PopupList {
          * @param contextPosition The position of the view in the list
          * @return true if the view should show the PopupList, false otherwise
          */
-        boolean showPopupList(View adapterView, View contextView, int contextPosition);
+        boolean onPopupListShow(View adapterView, View contextView, int contextPosition);
 
         /**
          * The callback to be invoked with an item in this PopupList has
