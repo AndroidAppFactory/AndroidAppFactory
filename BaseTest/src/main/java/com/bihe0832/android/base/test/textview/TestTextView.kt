@@ -55,7 +55,7 @@ class TestTextView : BaseFragment() {
         testSpecialText(testList[5])
 
         test_basic_button.setOnClickListener {
-            showMenu()
+            showPopList()
 //            info_content_1.text = testList[index + 0]
 //            info_content_1.setExpandText(":fsdfsdfsd")
 //            info_content_2.text = testList[index + 1]
@@ -164,8 +164,8 @@ class TestTextView : BaseFragment() {
         }.let {
             PopupList(activity!!).apply {
                 textSize = DisplayUtil.dip2px(context!!, 12f).toFloat()
-            }.show(test_basic_button, it, object : PopupList.PopupListListener {
-                override fun showPopupList(
+            }.showPopupListWindow(test_basic_button,0,600f,0f, it, object : PopupList.PopupListListener {
+                override fun onPopupListShow(
                     adapterView: View?,
                     contextView: View?,
                     contextPosition: Int
