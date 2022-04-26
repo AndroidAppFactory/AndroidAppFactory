@@ -37,6 +37,10 @@ abstract class BaseListActivity : BaseActivity() {
         return false
     }
 
+    protected open fun parseBundle(bundle: Bundle) {
+
+    }
+
     fun getLinearLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeLinearLayoutManager(this).apply {
             orientation = LinearLayoutManager.VERTICAL
@@ -85,6 +89,9 @@ abstract class BaseListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getResID())
+        intent?.extras?.let {
+            parseBundle(it)
+        }
         mToolbar = findViewById(R.id.common_activity_list_toolbar)
         if (null == mToolbar) {
             throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
@@ -99,6 +106,7 @@ abstract class BaseListActivity : BaseActivity() {
         }
         initView()
     }
+
 
     protected open fun initView() {
 
