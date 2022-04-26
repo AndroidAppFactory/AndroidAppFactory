@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "CommonList"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.19.7"
+ext.moduleVersionName = "4.19.8"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -77,14 +77,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonTest"                : [
-                "version"            : "4.19.7",
+                "version"            : "4.19.8",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.19.7",
+                "version"            : "4.19.8",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview",
@@ -118,14 +118,14 @@ ext.moduleInfo = [
         ],
 
         "CommonAbout"               : [
-                "version"            : "4.19.7",
+                "version"            : "4.19.8",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "Framework", "CommonList"
                 ]
         ],
         "CommonList"                : [
-                "version"            : "4.19.7",
+                "version"            : "4.19.8",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         "Framework"
