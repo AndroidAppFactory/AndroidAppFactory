@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibImage"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.19.8"
+ext.moduleVersionName = "4.19.9"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -261,16 +261,15 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-log",
                 "apidependenciesList": ["LibAndroid"]
         ],
-        "LibOS"                     : [
-                "version"            : "4.19.4",
-                "artifactId"         : "lib-android-os",
-                "apidependenciesList": ["LibLog", "LibCommonUtils"]
-        ],
-
         "LibCommonUtils"            : [
                 "version"            : "4.19.4",
                 "artifactId"         : "lib-utils-common",
                 "apidependenciesList": ["LibAndroid", "LibLog"]
+        ],
+        "LibOS"                     : [
+                "version"            : "4.19.4",
+                "artifactId"         : "lib-android-os",
+                "apidependenciesList": ["LibLog", "LibCommonUtils"]
         ],
         "LibThread"                 : [
                 "version"            : "4.19.0",
@@ -370,7 +369,7 @@ ext.moduleInfo = [
                 "version"            : "4.19.7",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
-                        "LibFile", "LibRequest", "LibThread", "LibSqlite",
+                        "LibDialog","LibFile", "LibRequest", "LibThread", "LibSqlite",
                         "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced",
                         "LibCommonUIUtils"
                 ]
@@ -481,7 +480,7 @@ ext.moduleInfo = [
                 "version"            : "4.19.7",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
-                        "LibDialog", "LibAPK", "LibCommonUtils"
+                        "LibImage", "LibAPK", "LibCommonUtils"
                 ]
         ],
         "LibCustomView"             : [

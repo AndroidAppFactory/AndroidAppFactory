@@ -72,6 +72,7 @@ class TestDownloadFragment : BaseTestListFragment() {
             setNotificationVisibility(true)
             downloadTitle = getString(R.string.app_name)
             downloadDesc = "ffsf"
+            downloadIcon = "https://cdn.bihe0832.com/images/zixie_32.ico"
             downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
 //            downloadURL = "https://imtt.dd.qq.com/16891/apk/23C6DAF12A8C041F0937AABFCAE70BF6.apk"
             isForceDownloadNew = false
