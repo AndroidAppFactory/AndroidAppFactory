@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-apply plugin: com.bihe0832.android.plugin.TransformTestPlugin
+//apply plugin: com.bihe0832.android.plugin.TransformTestPlugin
 // 不同类型的包，仅仅修改下面两项即可，其余内容保持一致
 project.ext.applicationID = "com.bihe0832.android.test"
 project.ext.applicationName="子勰Lib"

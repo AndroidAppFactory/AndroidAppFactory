@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,9 +17,11 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.log.ZLog;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -134,7 +138,7 @@ public class BitmapUtil {
     }
 
     public static Bitmap getLocalBitmap(ContentResolver context, Uri uri, int reqWidth, int reqHeight,
-            boolean centerInside) {
+                                        boolean centerInside) {
         Bitmap bitmap = null;
         InputStream input = null;
         try {
@@ -202,7 +206,7 @@ public class BitmapUtil {
     }
 
     public static Bitmap getBitmapWithCircleLayer(Bitmap originalBitmap, int color, float startAngle,
-            float sweepAngle) {
+                                                  float sweepAngle) {
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
         Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -280,14 +284,14 @@ public class BitmapUtil {
     }
 
     private static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options,
-            boolean centerInside) {
+                                              boolean centerInside) {
         calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight, options,
                 centerInside);
     }
 
     //根据width 和 height 与 reqWidth 和 reqHeight 的差异，计算出如果缩放到一样大，使用的 BitmapFactory.Options
     public static void calculateInSampleSize(int reqWidth, int reqHeight, int width, int height,
-            BitmapFactory.Options options, boolean centerInside) {
+                                             BitmapFactory.Options options, boolean centerInside) {
         int sampleSize = 1;
         if (height > reqHeight || width > reqWidth) {
             final int heightRatio;
@@ -336,7 +340,7 @@ public class BitmapUtil {
      * @return
      */
     public static String saveBitmapWithName(Context context, Bitmap bitmap, CompressFormat format, String fileName,
-            boolean forceNew) {
+                                            boolean forceNew) {
         if (null == context) {
             return "";
         }
@@ -356,7 +360,7 @@ public class BitmapUtil {
      * @return
      */
     public static String saveBitmapWithPath(Context context, Bitmap bitmap, CompressFormat format, String filePath,
-            boolean forceNew) {
+                                            boolean forceNew) {
         if (null == context) {
             return "";
         }
@@ -504,7 +508,7 @@ public class BitmapUtil {
     /**
      * 将图片按照某个角度进行旋转
      *
-     * @param bm 需要旋转的图片
+     * @param bm     需要旋转的图片
      * @param degree 旋转角度
      * @return 旋转后的图片
      */
@@ -529,4 +533,27 @@ public class BitmapUtil {
         }
         return resultBitmap;
     }
+
+    public static Bitmap getBitmapWithRound(Bitmap mBitmap, float roundIndex) {
+        Bitmap bitmap = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+
+        //设置矩形大小
+        Rect rect = new Rect(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
+        RectF rectf = new RectF(rect);
+
+        // 相当于清屏
+        canvas.drawARGB(0, 0, 0, 0);
+        //画圆角
+        canvas.drawRoundRect(rectf, roundIndex, roundIndex, paint);
+        // 取两层绘制，显示上层
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+        // 把原生的图片放到这个画布上，使之带有画布的效果
+        canvas.drawBitmap(mBitmap, rect, rect, paint);
+        return bitmap;
+    }
+
 }

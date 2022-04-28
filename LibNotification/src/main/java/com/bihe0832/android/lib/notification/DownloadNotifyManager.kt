@@ -3,16 +3,16 @@ package com.bihe0832.android.lib.notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.support.v4.app.NotificationCompat
 import android.text.TextUtils
 import android.text.format.Formatter
 import android.view.View
 import android.widget.RemoteViews
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.utils.IdGenerator
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.NotificationTarget
-import java.util.*
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 object DownloadNotifyManager {
 
@@ -141,6 +141,31 @@ object DownloadNotifyManager {
             }
         }
 
+        if (!TextUtils.isEmpty(iconURL)) {
+            ThreadManager.getInstance().start {
+                var bitmap = BitmapUtil.getRemoteBitmap(iconURL, DisplayUtil.dip2px(context.applicationContext, 40f), DisplayUtil.dip2px(context.applicationContext, 40f))
+                if (null == bitmap) {
+                    try {
+                        bitmap = BitmapFactory.decodeResource(context.applicationContext.resources, R.mipmap.icon)
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                bitmap?.let { bitmap ->
+                    ThreadManager.getInstance().runOnUIThread {
+                        remoteViews.setImageViewBitmap(R.id.iv_logo, BitmapUtil.getBitmapWithRound(bitmap, bitmap.width * 0.15f))
+                        sendNotify(remoteViews, context, channelID, notifyID)
+                    }
+                }
+            }
+        } else {
+            remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
+            sendNotify(remoteViews, context, channelID, notifyID)
+        }
+    }
+
+    private fun sendNotify(remoteViews: RemoteViews, context: Context, channelID: String, notifyID: Int) {
         var notification = NotificationCompat.Builder(context, channelID).apply {
             setOnlyAlertOnce(true)
             setContent(remoteViews)
@@ -148,18 +173,11 @@ object DownloadNotifyManager {
             setSmallIcon(R.mipmap.icon)
             //禁止用户点击删除按钮删除
             setAutoCancel(false)
+            //禁止滑动删除
+            setOngoing(false)
             //取消右上角的时间显示
             setShowWhen(false)
         }.build()
-
-        if (!TextUtils.isEmpty(iconURL)) {
-            Glide.with(context.applicationContext)
-                    .asBitmap()
-                    .load(iconURL)
-                    .into(NotificationTarget(context, R.id.iv_logo, remoteViews, notification, notifyID))
-        } else {
-            remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
-        }
 
         NotifyManager.sendNotifyNow(context, channelID, notification, notifyID)
     }
