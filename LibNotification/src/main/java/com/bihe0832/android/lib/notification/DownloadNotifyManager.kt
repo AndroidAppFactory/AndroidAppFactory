@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.v4.app.NotificationCompat
 import android.text.TextUtils
@@ -13,6 +14,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import java.util.concurrent.ConcurrentHashMap
 
 object DownloadNotifyManager {
 
@@ -34,13 +36,20 @@ object DownloadNotifyManager {
     const val DOWNLOAD_TYPE_FINISHED = 4
 
     private val mListID by lazy {
-        HashMap<Int, String>()
+        ConcurrentHashMap<Int, String>()
     }
+
+    private val mIconList by lazy {
+        ConcurrentHashMap<Int, Bitmap>()
+    }
+
+
     private val mNotifyID = IdGenerator(1)
     private val mIntentID = IdGenerator(1)
 
     fun cancleNotify(context: Context, noticeID: Int) {
         NotifyManager.cancleNotify(context, noticeID)
+        mIconList.remove(noticeID)
     }
 
     @Synchronized
@@ -142,21 +151,29 @@ object DownloadNotifyManager {
         }
 
         if (!TextUtils.isEmpty(iconURL)) {
-            ThreadManager.getInstance().start {
-                var bitmap = BitmapUtil.getRemoteBitmap(iconURL, DisplayUtil.dip2px(context.applicationContext, 40f), DisplayUtil.dip2px(context.applicationContext, 40f))
-                if (null == bitmap) {
-                    try {
-                        bitmap = BitmapFactory.decodeResource(context.applicationContext.resources, R.mipmap.icon)
-                    } catch (e: java.lang.Exception) {
-                        e.printStackTrace()
+            if (mIconList[notifyID] == null) {
+                ThreadManager.getInstance().start {
+                    var bitmap = BitmapUtil.getRemoteBitmap(iconURL, DisplayUtil.dip2px(context.applicationContext, 40f), DisplayUtil.dip2px(context.applicationContext, 40f))
+                    if (null == bitmap) {
+                        try {
+                            bitmap = BitmapFactory.decodeResource(context.applicationContext.resources, R.mipmap.icon)
+                        } catch (e: java.lang.Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+
+                    bitmap?.let { bitmap ->
+                        mIconList[notifyID] = bitmap
+                        ThreadManager.getInstance().runOnUIThread {
+                            remoteViews.setImageViewBitmap(R.id.iv_logo, BitmapUtil.getBitmapWithRound(bitmap, bitmap.width * 0.15f))
+                            sendNotify(remoteViews, context, channelID, notifyID)
+                        }
                     }
                 }
-
-                bitmap?.let { bitmap ->
-                    ThreadManager.getInstance().runOnUIThread {
-                        remoteViews.setImageViewBitmap(R.id.iv_logo, BitmapUtil.getBitmapWithRound(bitmap, bitmap.width * 0.15f))
-                        sendNotify(remoteViews, context, channelID, notifyID)
-                    }
+            } else {
+                mIconList[notifyID]?.let {
+                    remoteViews.setImageViewBitmap(R.id.iv_logo, BitmapUtil.getBitmapWithRound(it, it.width * 0.15f))
+                    sendNotify(remoteViews, context, channelID, notifyID)
                 }
             }
         } else {

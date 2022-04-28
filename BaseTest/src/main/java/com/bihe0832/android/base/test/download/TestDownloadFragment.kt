@@ -17,9 +17,7 @@ import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.encrypt.GzipUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
-import java.io.*
-import java.nio.charset.Charset
-import java.util.*
+import java.io.File
 
 class TestDownloadFragment : BaseTestListFragment() {
     val LOG_TAG = "TestDownloadFragment"
@@ -27,24 +25,24 @@ class TestDownloadFragment : BaseTestListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(
-                TestItemData(
-                    "卸载应用",
-                    View.OnClickListener {
-                        InstallUtils.uninstallAPP(
-                            context,
-                            "com.google.android.tts"
-                        )
-                    })
+                    TestItemData(
+                            "卸载应用",
+                            View.OnClickListener {
+                                InstallUtils.uninstallAPP(
+                                        context,
+                                        "com.google.android.tts"
+                                )
+                            })
             )
             add(
-                TestItemData(
-                    "自定义Provider安装",
-                    View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) })
+                    TestItemData(
+                            "自定义Provider安装",
+                            View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) })
             )
             add(
-                TestItemData(
-                    "默认Provider安装",
-                    View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) })
+                    TestItemData(
+                            "默认Provider安装",
+                            View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) })
             )
             add(TestItemData("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))
             add(TestItemData("通过ZIP安装超大OBB", View.OnClickListener { testInstallOOBByBigZip() }))
@@ -52,9 +50,9 @@ class TestDownloadFragment : BaseTestListFragment() {
             add(TestItemData("通过文件夹安装超大OBB", View.OnClickListener { testInstallBigOOBByFolder() }))
             add(TestItemData("通过ZIP安装Split", View.OnClickListener { testInstallSplitByGoodZip() }))
             add(
-                TestItemData(
-                    "通过非标准Split格式的ZIP安装Split",
-                    View.OnClickListener { testInstallSplitByBadZip() })
+                    TestItemData(
+                            "通过非标准Split格式的ZIP安装Split",
+                            View.OnClickListener { testInstallSplitByBadZip() })
             )
             add(TestItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
             add(TestItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
@@ -72,10 +70,19 @@ class TestDownloadFragment : BaseTestListFragment() {
             setNotificationVisibility(true)
             downloadTitle = getString(R.string.app_name)
             downloadDesc = "ffsf"
-            downloadIcon = "https://cdn.bihe0832.com/images/zixie_32.ico"
-            downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
-//            downloadURL = "https://imtt.dd.qq.com/16891/apk/23C6DAF12A8C041F0937AABFCAE70BF6.apk"
-            isForceDownloadNew = false
+            downloadIcon = if (type == INSTALL_BY_CUSTOMER) {
+                "https://cdn.bihe0832.com/images/zixie_32.ico"
+            } else {
+                "https://cdn.bihe0832.com/images/head.jpg"
+            }
+//            downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
+
+            downloadURL = if (type == INSTALL_BY_CUSTOMER) {
+                "https://imtt.dd.qq.com/sjy.10001/16891/apk/E2F59135FAE358442D2137E446AB59DE.apk"
+            } else {
+                "https://imtt.dd.qq.com/sjy.10001/16891/apk/2A5BC6AA4E69DCE13C6D5D3FB820706E.apk"
+            }
+            isForceDownloadNew = true
             setCanDownloadByPart(true)
             downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
@@ -86,7 +93,7 @@ class TestDownloadFragment : BaseTestListFragment() {
                     showResult("startDownloadApk download installApkPath: $filePath")
                     if (type == INSTALL_BY_CUSTOMER) {
                         var photoURI =
-                            ZixieFileProvider.getZixieFileProvider(context!!, File(filePath))
+                                ZixieFileProvider.getZixieFileProvider(context!!, File(filePath))
                         InstallUtils.installAPP(context, photoURI, File(filePath))
                     }
 
@@ -130,22 +137,22 @@ class TestDownloadFragment : BaseTestListFragment() {
 
     private fun testInstallOOBByBigZip() {
         testInstallOOB(
-            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
-            "com.herogame.gplay.lastdayrulessurvival"
+                "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
+                "com.herogame.gplay.lastdayrulessurvival"
         )
     }
 
     private fun testInstallOOBByFolder() {
         testInstallOOB(
-            ZixieFileProvider.getZixieFilePath(context!!) + "/test/",
-            "jp.co.sumzap.pj0007"
+                ZixieFileProvider.getZixieFilePath(context!!) + "/test/",
+                "jp.co.sumzap.pj0007"
         )
     }
 
     private fun testInstallBigOOBByFolder() {
         testInstallOOB(
-            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927",
-            "com.herogame.gplay.lastdayrulessurvival"
+                "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927",
+                "com.herogame.gplay.lastdayrulessurvival"
         )
     }
 
@@ -174,22 +181,22 @@ class TestDownloadFragment : BaseTestListFragment() {
 
     private fun testInstallSplitByGoodZip() {
         testInstallSplit(
-            "/sdcard/Download/com.supercell.brawlstars.zip",
-            "com.supercell.brawlstars"
+                "/sdcard/Download/com.supercell.brawlstars.zip",
+                "com.supercell.brawlstars"
         )
     }
 
     private fun testInstallSplitByBadZip() {
         testInstallSplit(
-            "/sdcard/Download/a3469c6189204495bc0283e909eb94a6_com.riotgames.legendsofruneterratw_113012.zip",
-            "com.riotgames.legendsofruneterratw"
+                "/sdcard/Download/a3469c6189204495bc0283e909eb94a6_com.riotgames.legendsofruneterratw_113012.zip",
+                "com.riotgames.legendsofruneterratw"
         )
     }
 
     private fun testInstallSplitByFolder() {
         testInstallSplit(
-            ZixieFileProvider.getZixieFilePath(context!!) + "/com.supercell.brawlstars",
-            "com.supercell.brawlstars"
+                ZixieFileProvider.getZixieFilePath(context!!) + "/com.supercell.brawlstars",
+                "com.supercell.brawlstars"
         )
     }
 
@@ -218,35 +225,35 @@ class TestDownloadFragment : BaseTestListFragment() {
 
     private fun testDownloadGzip() {
         DownloadFile.startDownload(context!!,
-            "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
-            object : SimpleDownloadListener() {
-                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                }
+                "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
+                object : SimpleDownloadListener() {
+                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                    }
 
-                override fun onComplete(filePath: String, item: DownloadItem) {
-                    ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
+                    override fun onComplete(filePath: String, item: DownloadItem) {
+                        ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
 
-                    ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, true))
-                }
+                        ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, true))
+                    }
 
 
-                override fun onProgress(item: DownloadItem) {
-                }
+                    override fun onProgress(item: DownloadItem) {
+                    }
 
-            })
+                })
 
 
         ZixieRequestHttp.getOrigin("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
-            .let {
-                val filePath =
-                    "/storage/emulated/0/Android/data/com.bihe0832.android.test/files/zixie/new_${System.currentTimeMillis()}.json.gzip"
+                .let {
+                    val filePath =
+                            "/storage/emulated/0/Android/data/com.bihe0832.android.test/files/zixie/new_${System.currentTimeMillis()}.json.gzip"
 
-                FileUtils.writeToFile(filePath, it, false)
-                ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
-                ZLog.d(LOG_TAG, "hhh 1" + GzipUtils.decompress(it))
-                ZLog.d(LOG_TAG, "hhh 2" + FileUtils.getFileContent(filePath, true))
+                    FileUtils.writeToFile(filePath, it, false)
+                    ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
+                    ZLog.d(LOG_TAG, "hhh 1" + GzipUtils.decompress(it))
+                    ZLog.d(LOG_TAG, "hhh 2" + FileUtils.getFileContent(filePath, true))
 
-            }
+                }
 
 
         ZixieRequestHttp.get("https://cdn.bihe0832.com/app/update/get_apk.json").let {

@@ -2,14 +2,19 @@ package com.bihe0832.android.base.test.notify
 
 import android.view.View
 import com.bihe0832.android.app.api.AAFNetWorkApi.LOG_TAG
+import com.bihe0832.android.common.test.base.BaseTestListFragment
+import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.wrapper.DownloadFile
+import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
-import com.bihe0832.android.common.test.base.BaseTestListFragment
-import com.bihe0832.android.common.test.item.TestItemData
+import com.bihe0832.android.lib.ui.image.BitmapUtil
 
 class TestNotifyFragment : BaseTestListFragment() {
 
