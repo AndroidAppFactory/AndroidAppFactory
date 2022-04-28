@@ -33,7 +33,7 @@ object AppFactoryInit {
             hasInit = true
             RouterHelper.initRouter()
             initPermission()
-            DownloadUtils.init(ctx, 3, null, ZixieContext.isDebug())
+            DownloadUtils.init(ctx, 5, null, ZixieContext.isDebug())
             ThreadManager.getInstance().start({
                 ZLog.e("Application process initCore web start")
                 WebViewHelper.init(ctx, null, Bundle().apply {
