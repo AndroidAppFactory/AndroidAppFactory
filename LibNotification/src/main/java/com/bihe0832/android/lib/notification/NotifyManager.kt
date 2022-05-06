@@ -97,14 +97,18 @@ object NotifyManager {
     }
 
     fun areNotificationsEnabled(context: Context): Boolean {
-        return NotificationManagerCompat.from(context).areNotificationsEnabled()
+        return if (BuildUtils.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+        }else{
+            false
+        }
     }
 
     fun showNotificationsSettings(context: Context): Boolean {
-        return if (IntentUtils.startSettings(context, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) {
+        return if (IntentUtils.startAppDetailSettings(context)) {
             true
         } else {
-            return IntentUtils.startAppDetailSettings(context)
+            return IntentUtils.startSettings(context, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
         }
     }
 }
