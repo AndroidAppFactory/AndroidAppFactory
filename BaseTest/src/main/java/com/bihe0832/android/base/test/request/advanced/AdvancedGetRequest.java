@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.test.request.advanced;
 
 
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback;
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest;
 import com.bihe0832.android.base.test.request.Constants;
 
@@ -11,16 +12,16 @@ public class AdvancedGetRequest extends HttpAdvancedRequest<TestResponse> {
 
     private String mPara = "";
 
-    private AdvancedResponseHandler mAdvancedResponseHandlerHandler;
+    private AAFDataCallback mAdvancedResponseHandlerHandler;
 
-	public AdvancedGetRequest(String para, AdvancedResponseHandler<TestResponse> handler) {
+	public AdvancedGetRequest(String para, AAFDataCallback<TestResponse> handler) {
         this.mPara = para;
         this.mAdvancedResponseHandlerHandler = handler;
     }
 
     @NotNull
     @Override
-    public AdvancedResponseHandler getAdvancedResponseHandler() {
+    public AAFDataCallback getAdvancedResponseHandler() {
         return mAdvancedResponseHandlerHandler;
     }
 

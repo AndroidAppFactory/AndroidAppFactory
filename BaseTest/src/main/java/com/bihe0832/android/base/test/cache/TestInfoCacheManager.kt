@@ -2,6 +2,7 @@ package com.bihe0832.android.base.test.cache
 
 import com.bihe0832.android.common.coroutines.ZixieCoroutinesException
 import com.bihe0832.android.common.data.center.InfoCacheManager
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.log.ZLog
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +17,7 @@ object TestInfoCacheManager {
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 
     private val mTestInfoCacheManagerImpl = object : InfoCacheManager<Any?>() {
-        override fun getRemoteData(key: String, listener: FetchDataListener<Any?>) {
+        override fun getRemoteData(key: String, listener: AAFDataCallback<Any?>) {
             TestCacheData().apply {
                 this.key = key
             }.let {

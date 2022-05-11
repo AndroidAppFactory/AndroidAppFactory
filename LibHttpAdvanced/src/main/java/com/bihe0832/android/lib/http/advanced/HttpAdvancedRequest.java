@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.http.advanced;
 
 
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback;
 import com.bihe0832.android.lib.gson.JsonHelper;
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest;
 import com.bihe0832.android.lib.http.common.HttpResponseHandler;
@@ -28,16 +29,9 @@ public abstract class HttpAdvancedRequest<T> extends HttpBasicRequest {
     public final static int HttpRespNull = 100103;      //HTTP响应为空
     public final static int HttpRespParseError = 100104;//HTTP响应解析错误
 
-    public interface AdvancedResponseHandler<T> {
-
-        @NotNull
-        void onRequestSuccess(T response);
-
-        void onRequestFailure(int statusCode, String response);
-    }
 
     @NotNull
-    public abstract AdvancedResponseHandler getAdvancedResponseHandler();
+    public abstract AAFDataCallback getAdvancedResponseHandler();
 
     private Class<T> getTClass() {
         try {
@@ -63,24 +57,24 @@ public abstract class HttpAdvancedRequest<T> extends HttpBasicRequest {
             int code = NetWorkException;
             if (statusCode == 0) {
                 code = NetWorkException;
-                getAdvancedResponseHandler().onRequestFailure(code, response);
+                getAdvancedResponseHandler().onError(code, response);
             } else if (statusCode == -1) {
                 code = NetWorkException;
-                getAdvancedResponseHandler().onRequestFailure(code, response);
+                getAdvancedResponseHandler().onError(code, response);
             } else if (statusCode > 300) {
                 code = HttpSatutsError;
-                getAdvancedResponseHandler().onRequestFailure(code, response);
+                getAdvancedResponseHandler().onError(code, response);
             } else {
                 try {
                     T resultObj = JsonHelper.INSTANCE.fromJson(response, getTClass());
                     if (resultObj != null) {
-                        getAdvancedResponseHandler().onRequestSuccess(resultObj);
+                        getAdvancedResponseHandler().onSuccess(resultObj);
                     } else {
-                        getAdvancedResponseHandler().onRequestFailure(HttpRespParseError, response);
+                        getAdvancedResponseHandler().onError(HttpRespParseError, response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    getAdvancedResponseHandler().onRequestFailure(HttpRespParseError, response);
+                    getAdvancedResponseHandler().onError(HttpRespParseError, response);
                 }
             }
         }
