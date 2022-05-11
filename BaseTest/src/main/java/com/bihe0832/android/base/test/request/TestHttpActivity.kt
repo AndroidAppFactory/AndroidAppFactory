@@ -8,6 +8,7 @@ import com.bihe0832.android.base.test.request.advanced.AdvancedPostRequest
 import com.bihe0832.android.base.test.request.advanced.TestResponse
 import com.bihe0832.android.base.test.request.basic.BasicPostRequest
 import com.bihe0832.android.common.test.base.BaseTestActivity
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
@@ -47,18 +48,18 @@ class TestHttpActivity : BaseTestActivity() {
 
             var files = mutableListOf<FileInfo>()
             files.add(
-                FileInfo(
-                    Uri.fromFile(File(filePath)),
-                    "media",
-                    BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM
-                )
+                    FileInfo(
+                            Uri.fromFile(File(filePath)),
+                            "media",
+                            BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM
+                    )
             )
 
             HTTPServer.getInstance().doFileUpload(
-                this,
-                "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1",
-                b,
-                files
+                    this,
+                    "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1",
+                    b,
+                    files
             ).let {
                 ZLog.d(HTTPServer.LOG_TAG, "restult $it")
                 runOnUiThread { result.text = it }
@@ -67,10 +68,10 @@ class TestHttpActivity : BaseTestActivity() {
 
         testGzip.setOnClickListener {
             HTTPServer.getInstance()
-                .doRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
-                .let {
-                    showResult("同步请求结果：$it")
-                }
+                    .doRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+                    .let {
+                        showResult("同步请求结果：$it")
+                    }
 
         }
         clearResult.setOnClickListener { result.text = "" }
@@ -88,10 +89,10 @@ class TestHttpActivity : BaseTestActivity() {
 //            HTTPServer.getInstance().doRequest(request)
 
             HTTPServer.getInstance()
-                .doRequestSync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result)
-                .let {
-                    showResult("同步请求结果：$it")
-                }
+                    .doRequestSync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result)
+                    .let {
+                        showResult("同步请求结果：$it")
+                    }
         } else {
             showResult("请在输入框输入请求内容！")
         }
@@ -102,13 +103,13 @@ class TestHttpActivity : BaseTestActivity() {
         if (result?.length ?: 0 > 0) {
 
             HTTPServer.getInstance().doRequestAsync(object : HttpAdvancedRequest<TestResponse>() {
-                var res = object : AdvancedResponseHandler<TestResponse> {
-                    override fun onRequestSuccess(response: TestResponse) {
-                        showResult(response.toString())
+                var res = object : AAFDataCallback<TestResponse>() {
+                    override fun onSuccess(result: TestResponse?) {
+                        showResult(result.toString())
                     }
 
-                    override fun onRequestFailure(statusCode: Int, response: String?) {
-                        showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$response")
+                    override fun onError(statusCode: Int, msg: String) {
+                        showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$msg")
                     }
                 }
 
@@ -118,7 +119,7 @@ class TestHttpActivity : BaseTestActivity() {
                     return Constants.HTTP_DOMAIN + Constants.PATH_GET + "?" + builder.toString()
                 }
 
-                override fun getAdvancedResponseHandler(): AdvancedResponseHandler<*> {
+                override fun getAdvancedResponseHandler(): AAFDataCallback<*> {
                     return res
                 }
             })
@@ -152,9 +153,9 @@ class TestHttpActivity : BaseTestActivity() {
                 init {
                     try {
                         this.data =
-                            (Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result).toByteArray(
-                                charset("UTF-8")
-                            )
+                                (Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result).toByteArray(
+                                        charset("UTF-8")
+                                )
 
                         HashMap<String, String?>().apply {
                             put(Constants.PARA_PARA, result ?: "")
@@ -167,13 +168,13 @@ class TestHttpActivity : BaseTestActivity() {
                     }
                 }
 
-                var res = object : AdvancedResponseHandler<TestResponse> {
-                    override fun onRequestSuccess(response: TestResponse) {
+                var res = object : AAFDataCallback<TestResponse>() {
+                    override fun onSuccess(response: TestResponse?) {
                         showResult(response.toString())
                     }
 
-                    override fun onRequestFailure(statusCode: Int, response: String?) {
-                        showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$response")
+                    override fun onError(statusCode: Int, msg: String) {
+                        showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$msg")
                     }
                 }
 
@@ -181,7 +182,7 @@ class TestHttpActivity : BaseTestActivity() {
                     return Constants.HTTP_DOMAIN + Constants.PATH_POST
                 }
 
-                override fun getAdvancedResponseHandler(): AdvancedResponseHandler<*> {
+                override fun getAdvancedResponseHandler(): AAFDataCallback<*> {
                     return res
                 }
             })
@@ -198,19 +199,19 @@ class TestHttpActivity : BaseTestActivity() {
 
         override fun onResponse(statusCode: Int, response: String) {
             showResult(
-                "HTTP状态码：\n\t" + statusCode + " \n " +
-                        "网络请求内容：\n\t" + response
+                    "HTTP状态码：\n\t" + statusCode + " \n " +
+                            "网络请求内容：\n\t" + response
             )
         }
     }
 
     private inner class TestAdvancedResponseHandler :
-        HttpAdvancedRequest.AdvancedResponseHandler<TestResponse> {
-        override fun onRequestSuccess(response: TestResponse) {
+            AAFDataCallback<TestResponse>() {
+        override fun onSuccess(response: TestResponse?) {
             showResult(response.toString())
         }
 
-        override fun onRequestFailure(statusCode: Int, response: String?) {
+        override fun onError(statusCode: Int, response: String) {
             showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$response")
         }
     }

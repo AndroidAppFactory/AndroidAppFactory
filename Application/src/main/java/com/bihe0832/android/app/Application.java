@@ -2,6 +2,8 @@ package com.bihe0832.android.app;
 
 import android.app.ActivityManager;
 import android.content.Context;
+
+import com.bihe0832.android.framework.privacy.AgreementPrivacy;
 import com.bihe0832.android.framework.router.RouterInterrupt;
 import com.bihe0832.android.framework.ui.BaseApplication;
 import com.bihe0832.android.lib.log.ZLog;
@@ -66,7 +68,7 @@ public class Application extends BaseApplication {
                 final String processName = it.processName;
 //                if (processName.equalsIgnoreCase(getPackageName())) {
                     AppFactoryInit.INSTANCE.initCore(getApplicationContext(), processName);
-                    if (RouterInterrupt.INSTANCE.hasAgreedPrivacy()) {
+                    if (AgreementPrivacy.INSTANCE.hasAgreedPrivacy()) {
                         AppFactoryInit.INSTANCE.initExtra(getApplicationContext());
                     }
 //                }

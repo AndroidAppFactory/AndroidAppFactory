@@ -1,14 +1,14 @@
 ext {
     //Android编译SDK版本
-    compileSdkVersion = 30
+    compileSdkVersion = 29
     //Android编译工具版本
-    buildToolsVersion = "30.0.3"
+    buildToolsVersion = "29.0.3"
     //Lib 最低适配Android 版本
     commonMinSdkVersion  = 16
     //APK 最低适配Android 版本
     appMinSdkVersion = 21
     //Android 最佳适配Android 版本
-    targetSdkVersion = 30
+    targetSdkVersion = 29
     //版本号，正式版本会由自动构建替换
     versionCode = 1
     //版本名，正式版本会由自动构建替换

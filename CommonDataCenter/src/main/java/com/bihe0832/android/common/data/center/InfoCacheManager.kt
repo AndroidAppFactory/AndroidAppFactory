@@ -2,6 +2,7 @@ package com.bihe0832.android.common.data.center
 
 import com.bihe0832.android.common.coroutines.Coroutines_ERROR_DATA_NULL
 import com.bihe0832.android.common.coroutines.ZixieCoroutinesException
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.log.ZLog
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.Continuation
@@ -18,33 +19,28 @@ abstract class InfoCacheManager<T> {
 
     val TAG = "InfoCacheManager"
 
-    abstract fun getRemoteData(key: String, listener: FetchDataListener<T>)
+    abstract fun getRemoteData(key: String, listener: AAFDataCallback<T>)
 
     private val mDataList: ConcurrentHashMap<String, InfoItem<T>> = ConcurrentHashMap()
 
-    public interface FetchDataListener<T> {
-        fun onSuccess(data: T?)
-        fun onError(errorCode: Int, msg: String)
-    }
-
     inner class InfoItem<T>(
-        var key: String = "",
-        var updateTime: Long = 0L,
-        var dataItem: T? = null
+            var key: String = "",
+            var updateTime: Long = 0L,
+            var dataItem: T? = null
     )
 
     inner class ContinuationCallbackForFetchDataListener<T>(private var continuation: Continuation<T>) :
-        FetchDataListener<T> {
+            AAFDataCallback<T>() {
 
         override fun onSuccess(result: T?) {
             if (result != null) {
                 continuation.resume(result)
             } else {
                 continuation.resumeWithException(
-                    ZixieCoroutinesException(
-                        Coroutines_ERROR_DATA_NULL,
-                        ""
-                    )
+                        ZixieCoroutinesException(
+                                Coroutines_ERROR_DATA_NULL,
+                                ""
+                        )
                 )
             }
         }
@@ -58,17 +54,17 @@ abstract class InfoCacheManager<T> {
     suspend fun getData(key: String): T? = getData(key, -1)
 
     suspend fun getData(key: String, duration: Long): T? =
-        suspendCoroutine { cont ->
-            getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
-        }
+            suspendCoroutine { cont ->
+                getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
+            }
 
-    fun getData(key: String, listener: FetchDataListener<T>) {
+    fun getData(key: String, listener: AAFDataCallback<T>) {
         getData(key, -1, listener)
     }
 
-    fun getData(key: String, duration: Long, listener: FetchDataListener<T>) {
+    fun getData(key: String, duration: Long, listener: AAFDataCallback<T>) {
 
-        val mFetchDataListener = object : FetchDataListener<T> {
+        val mFetchDataListener = object : AAFDataCallback<T>() {
             override fun onSuccess(data: T?) {
                 data?.let {
                     mDataList.put(key, InfoItem(key, System.currentTimeMillis(), it))

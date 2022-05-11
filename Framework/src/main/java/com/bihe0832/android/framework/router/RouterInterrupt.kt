@@ -2,9 +2,7 @@ package com.bihe0832.android.framework.router
 
 import android.content.Context
 import android.net.Uri
-import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
-import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.router.RouterContext
 
 /**
@@ -66,11 +64,7 @@ object RouterInterrupt {
             }
         })
     }
-
-    fun hasAgreedPrivacy(): Boolean {
-        return Config.isSwitchEnabled(Constants.CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED, false)
-    }
-
+    
     fun logRouterToFile(msg: String) {
         LoggerFile.log(getRouterLogPath(), msg)
 

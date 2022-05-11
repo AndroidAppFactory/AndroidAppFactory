@@ -4,6 +4,8 @@ import android.app.Application
 import android.util.Log
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
+import com.bihe0832.android.framework.privacy.AgreementPrivacy
+import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
@@ -42,7 +44,7 @@ object ZixieCoreInit {
             Log.e(TAG, "APPInstalledTime: ${ZixieContext.getAPPInstalledTime()} ;VersionInstalledTime: ${ZixieContext.getAPPLastVersionInstalledTime()}")
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
             if (skipPrivacy){
-                Config.writeConfig(Constants.CONFIG_KEY_PRIVACY_AGREEMENT_ENABLED, true)
+                AgreementPrivacy.doAgreedPrivacy()
             }
             initScreenWidthAndHeight()
             // 初始化渠道号

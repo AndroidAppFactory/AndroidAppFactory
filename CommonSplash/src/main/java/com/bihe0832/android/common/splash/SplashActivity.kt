@@ -3,10 +3,10 @@ package com.bihe0832.android.common.splash
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
+import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction.openFinalURL
 import com.bihe0832.android.framework.router.RouterAction.openPageByRouter
 import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.framework.router.RouterInterrupt.hasAgreedPrivacy
 import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
 import com.bihe0832.android.lib.log.ZLog
@@ -31,7 +31,7 @@ abstract class SplashActivity : CommonActivity() {
     }
 
     private fun initView() {
-        if (!hasAgreedPrivacy()) {
+        if (!AgreementPrivacy.hasAgreedPrivacy()) {
             AgreementPrivacy.showPrivacy(this) {
                 doAgreement()
             }
