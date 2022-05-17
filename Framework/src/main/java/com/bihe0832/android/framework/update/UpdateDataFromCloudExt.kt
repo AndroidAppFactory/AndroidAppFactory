@@ -1,8 +1,8 @@
 package com.bihe0832.android.framework.update
 
 import android.text.TextUtils
-import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.utils.ConvertUtils
 
 /**
  *
@@ -19,9 +19,27 @@ fun UpdateDataFromCloud.setUpdateType() {
 
     updateType =
             if (!TextUtils.isEmpty(newVersionURL)) {
-                if (ZixieContext.getVersionCode() < newVersionCode) {
+                if (isSpecialVersion(forceUpdateList)) {
+                    // 是否强更
+                    if (isApk && hasMd5) {
+                        UpdateDataFromCloud.UPDATE_TYPE_MUST
+                    } else if (!isApk) {
+                        UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP
+                    } else {
+                        UpdateDataFromCloud.UPDATE_TYPE_NEW
+                    }
+                } else if (isSpecialVersion(needUpdateList)) {
+                    // 是否弹窗
+                    if (isApk && hasMd5) {
+                        UpdateDataFromCloud.UPDATE_TYPE_NEED
+                    } else if (!isApk) {
+                        UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP
+                    } else {
+                        UpdateDataFromCloud.UPDATE_TYPE_NEW
+                    }
+                } else if (ZixieContext.getVersionCode() < newVersionCode) {
                     when {
-                        // 是否强更
+                        // 是否特殊强更
                         ZixieContext.getVersionCode() <= forceUpdateMinVersionCode -> {
                             if (isApk && hasMd5) {
                                 UpdateDataFromCloud.UPDATE_TYPE_MUST
@@ -31,28 +49,8 @@ fun UpdateDataFromCloud.setUpdateType() {
                                 UpdateDataFromCloud.UPDATE_TYPE_NEW
                             }
                         }
-                        // 是否强更
-                        isSpecialVersion(forceUpdateList) -> {
-                            if (isApk && hasMd5) {
-                                UpdateDataFromCloud.UPDATE_TYPE_MUST
-                            } else if (!isApk) {
-                                UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP
-                            } else {
-                                UpdateDataFromCloud.UPDATE_TYPE_NEW
-                            }
-                        }
-                        // 是否弹窗
+                        // 是否特殊弹窗
                         ZixieContext.getVersionCode() <= needUpdateMinVersionCode -> {
-                            if (isApk && hasMd5) {
-                                UpdateDataFromCloud.UPDATE_TYPE_NEED
-                            } else if (!isApk) {
-                                UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP
-                            } else {
-                                UpdateDataFromCloud.UPDATE_TYPE_NEW
-                            }
-                        }
-                        // 是否弹窗
-                        isSpecialVersion(needUpdateList) -> {
                             if (isApk && hasMd5) {
                                 UpdateDataFromCloud.UPDATE_TYPE_NEED
                             } else if (!isApk) {
@@ -71,7 +69,7 @@ fun UpdateDataFromCloud.setUpdateType() {
                                 UpdateDataFromCloud.UPDATE_TYPE_NEW
                             }
                         }
-                        //无任何提示
+                        // 无任何提示
                         else -> {
                             if (isApk && hasMd5) {
                                 UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW

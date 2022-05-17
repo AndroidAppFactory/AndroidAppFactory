@@ -45,6 +45,10 @@ public class UpdateDataFromCloud {
     @SerializedName("newVersionName")
     private String newVersionName = "";
 
+    //新版本版本介绍标题、非必填项
+    @SerializedName("newVersionTitle")
+    private String newVersionTitle = "";
+
     //新版本版本介绍、必填项
     @SerializedName("newVersionInfo")
     private String newVersionInfo = "";
@@ -131,6 +135,15 @@ public class UpdateDataFromCloud {
 
     public String getNewVersionInfo() {
         return newVersionInfo;
+    }
+
+
+    public String getNewVersionTitle() {
+        return newVersionTitle;
+    }
+
+    public void setNewVersionTitle(String newVersionTitle) {
+        this.newVersionTitle = newVersionTitle;
     }
 
     public int getUpdateType() {

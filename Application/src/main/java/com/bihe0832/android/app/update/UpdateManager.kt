@@ -66,6 +66,7 @@ object UpdateManager {
 //                                    "  \"newVersionMD5\": \"7a413381aa84c837cc5de1577aec23a9\",\n" +
 //                                    "  \"newVersionURL\": \"https://github.com/bihe0832/AndroidAppFactory-Sample/releases/download/V1.0.0.1/ZAPK_V1.0.0_1_release.apk\"\n" +
 //                                    "}"
+
                             var updateInfo = JsonHelper.fromJson(updateString, UpdateDataFromCloud::class.java)
                             if (null == updateInfo) {
                                 ZLog.d("${TAG}:updateInfo null:")

@@ -18,7 +18,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 object UpdateHelper {
     var hasShow = false
 
-    private fun startUpdate(activity: Activity, version: String, versionInfo: String, url: String, md5: String, canCancel: Boolean) {
+    private fun startUpdate(activity: Activity, version: String, desc: String, url: String, md5: String, canCancel: Boolean) {
         if (TextUtils.isEmpty(url)) {
             ToastUtil.showLong(activity, "版本更新异常，请稍候重试")
             return
@@ -43,13 +43,13 @@ object UpdateHelper {
         DownloadAPK.startDownloadWithProcess(
                 activity,
                 String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), "（$version)"),
-                versionInfo,
+                desc,
                 url, md5, activity.packageName,
                 canCancel, true,
                 dialogListenerWhenDownload)
     }
 
-    fun showUpdateDialog(activity: Activity, versionName: String, titleString: String, desc: String, url: String, md5: String, type: Int) {
+    private fun showUpdateDialogWithTitle(activity: Activity, versionName: String, titleString: String, desc: String, url: String, md5: String, type: Int) {
         if (hasShow) {
             return
         }
@@ -116,16 +116,20 @@ object UpdateHelper {
         }
     }
 
-    private fun showUpdateDialog(activity: Activity, versionName: String, desc: String, url: String, md5: String, type: Int) {
+    fun showUpdateDialog(activity: Activity, versionName: String, titleString: String, desc: String, url: String, md5: String, type: Int) {
         hasShow = false
-        showUpdateDialog(
+        var title = if (TextUtils.isEmpty(titleString)) {
+            activity.resources.getString(R.string.dialog_apk_update_title) + versionName
+        } else {
+            titleString
+        }
+        showUpdateDialogWithTitle(
                 activity,
                 versionName,
-                activity.resources.getString(R.string.dialog_apk_update) + versionName,
-                activity.getString(R.string.dialog_apk_updateinfo) + ":<BR>" + desc,
+                title,
+                activity.getString(R.string.dialog_apk_update_info_pre) + desc,
                 url, md5, type
         )
-
     }
 
     fun showUpdate(activity: Activity, checkUpdateByUser: Boolean, info: UpdateDataFromCloud) {
@@ -134,13 +138,13 @@ object UpdateHelper {
             UpdateDataFromCloud.UPDATE_TYPE_MUST,
             UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP
             -> {
-                showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                showUpdateDialog(activity, info.newVersionName, info.newVersionTitle, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
             }
             UpdateDataFromCloud.UPDATE_TYPE_NEED,
             UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP
             -> {
                 if (checkUpdateByUser) {
-                    showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                    showUpdateDialog(activity, info.newVersionName, info.newVersionTitle, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
                 } else {
                     when {
                         LifecycleHelper.isFirstStart > INSTALL_TYPE_NOT_FIRST -> {
@@ -150,7 +154,7 @@ object UpdateHelper {
                             ZLog.d("skip update by has show")
                         }
                         else -> {
-                            showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                            showUpdateDialog(activity, info.newVersionName, info.newVersionTitle, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
                         }
                     }
                 }
@@ -163,7 +167,7 @@ object UpdateHelper {
             UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP
             -> {
                 if (checkUpdateByUser) {
-                    showUpdateDialog(activity, info.newVersionName, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                    showUpdateDialog(activity, info.newVersionName, info.newVersionTitle, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
                 }
             }
 
