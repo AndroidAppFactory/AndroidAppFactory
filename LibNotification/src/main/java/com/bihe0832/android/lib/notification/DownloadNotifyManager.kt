@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.support.v4.app.NotificationCompat
 import android.text.TextUtils
 import android.text.format.Formatter
 import android.view.View
@@ -35,38 +34,26 @@ object DownloadNotifyManager {
     const val DOWNLOAD_TYPE_FAILED = 3
     const val DOWNLOAD_TYPE_FINISHED = 4
 
-    private val mListID by lazy {
-        ConcurrentHashMap<Int, String>()
-    }
-
     private val mIconList by lazy {
         ConcurrentHashMap<Int, Bitmap>()
     }
 
-
-    private val mNotifyID = IdGenerator(1)
     private val mIntentID = IdGenerator(1)
 
     fun cancleNotify(context: Context, noticeID: Int) {
-        NotifyManager.cancleNotify(context, noticeID)
+        NotifyManager.cancelNotify(context, noticeID)
         mIconList.remove(noticeID)
     }
 
     @Synchronized
     fun getNotifyIDByURL(url: String): Int {
-        var id = try {
-            if (mListID.containsValue(url)) {
-                mListID.filter { it.value == url }.keys.first()
-            } else {
-                mNotifyID.generate()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            mNotifyID.generate()
+        return if (TextUtils.isEmpty(url)) {
+            NotifyManager.getNotifyIDByKey("")
+        } else {
+            NotifyManager.getNotifyIDByKey("DownloadNotifyManager$url")
         }
-        mListID[id] = url
-        return id
     }
+
 
     fun sendDownloadNotify(context: Context, downloadURL: String, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String): Int {
         return sendDownloadNotify(context, downloadURL, appName, iconURL, finished, total, speed, process, downloadType, channelID, 0)
@@ -90,20 +77,20 @@ object DownloadNotifyManager {
 
     private fun updateContent(remoteViews: RemoteViews, context: Context, downloadURL: String, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
 
-        remoteViews.setTextViewText(R.id.tv_download_progress, Formatter.formatFileSize(context, finished) + "/" + Formatter.formatFileSize(context, total))
-        remoteViews.setProgressBar(R.id.progress_bar_download, 100, process, false)
+        remoteViews.setTextViewText(R.id.download_notification_download_progress, Formatter.formatFileSize(context, finished) + "/" + Formatter.formatFileSize(context, total))
+        remoteViews.setProgressBar(R.id.download_notification_progress_bar, 100, process, false)
 
         when (downloadType) {
 
             DOWNLOAD_TYPE_DOWNLOADING -> {
-                remoteViews.setTextViewText(R.id.tv_title, "正在下载" + appName)
-                remoteViews.setTextViewText(R.id.tv_download_speed, Formatter.formatFileSize(context, speed) + "/s")
-                R.id.btn_restart.let {
+                remoteViews.setTextViewText(R.id.download_notification_title, "正在下载" + appName)
+                remoteViews.setTextViewText(R.id.download_notification_desc, Formatter.formatFileSize(context, speed) + "/s")
+                R.id.download_notification_btn_restart.let {
                     remoteViews.setImageViewResource(it, R.mipmap.btn_pause)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_PAUSE))
                 }
-                R.id.btn_cancel.let {
+                R.id.download_notification_btn_cancel.let {
                     remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
@@ -111,14 +98,14 @@ object DownloadNotifyManager {
             }
 
             DOWNLOAD_TYPE_PAUSED -> {
-                remoteViews.setTextViewText(R.id.tv_title, appName + "下载已暂停")
-                remoteViews.setTextViewText(R.id.tv_download_speed, "")
-                R.id.btn_restart.let {
+                remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载已暂停")
+                remoteViews.setTextViewText(R.id.download_notification_desc, "")
+                R.id.download_notification_btn_restart.let {
                     remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_RESUME))
                 }
-                R.id.btn_cancel.let {
+                R.id.download_notification_btn_cancel.let {
                     remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
@@ -126,14 +113,14 @@ object DownloadNotifyManager {
             }
 
             DOWNLOAD_TYPE_FAILED -> {
-                remoteViews.setTextViewText(R.id.tv_title, appName + "下载失败")
-                remoteViews.setTextViewText(R.id.tv_download_speed, "")
-                R.id.btn_restart.let {
+                remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载失败")
+                remoteViews.setTextViewText(R.id.download_notification_desc, "")
+                R.id.download_notification_btn_restart.let {
                     remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_RETRY))
                 }
-                R.id.btn_cancel.let {
+                R.id.download_notification_btn_cancel.let {
                     remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
@@ -141,12 +128,12 @@ object DownloadNotifyManager {
             }
 
             DOWNLOAD_TYPE_FINISHED -> {
-                remoteViews.setTextViewText(R.id.tv_title, appName + "下载完成")
-                remoteViews.setTextViewText(R.id.tv_download_speed, "")
-                remoteViews.setViewVisibility(R.id.btn_restart, View.GONE)
-                remoteViews.setOnClickPendingIntent(R.id.iv_layout, getPendingIntent(context, downloadURL, notifyID, ACTION_INSTALL))
-                remoteViews.setViewVisibility(R.id.btn_cancel, View.GONE)
-                remoteViews.setViewVisibility(R.id.btn_restart, View.GONE)
+                remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载完成")
+                remoteViews.setTextViewText(R.id.download_notification_desc, "")
+                remoteViews.setViewVisibility(R.id.download_notification_btn_restart, View.GONE)
+                remoteViews.setOnClickPendingIntent(R.id.download_notification_layout, getPendingIntent(context, downloadURL, notifyID, ACTION_INSTALL))
+                remoteViews.setViewVisibility(R.id.download_notification_btn_cancel, View.GONE)
+                remoteViews.setViewVisibility(R.id.download_notification_btn_restart, View.GONE)
             }
         }
 
@@ -165,39 +152,23 @@ object DownloadNotifyManager {
                     bitmap?.let { bitmap ->
                         mIconList[notifyID] = bitmap
                         ThreadManager.getInstance().runOnUIThread {
-                            remoteViews.setImageViewBitmap(R.id.iv_logo, BitmapUtil.getBitmapWithRound(bitmap, bitmap.width * 0.15f))
-                            sendNotify(remoteViews, context, channelID, notifyID)
+                            remoteViews.setImageViewBitmap(R.id.download_notification_logo, BitmapUtil.getBitmapWithRound(bitmap, bitmap.width * 0.15f))
+                            NotifyManager.sendNotifyNow(context, remoteViews, channelID, notifyID)
                         }
                     }
                 }
             } else {
                 mIconList[notifyID]?.let {
-                    remoteViews.setImageViewBitmap(R.id.iv_logo, BitmapUtil.getBitmapWithRound(it, it.width * 0.15f))
-                    sendNotify(remoteViews, context, channelID, notifyID)
+                    remoteViews.setImageViewBitmap(R.id.download_notification_logo, BitmapUtil.getBitmapWithRound(it, it.width * 0.15f))
+                    NotifyManager.sendNotifyNow(context, remoteViews, channelID, notifyID)
                 }
             }
         } else {
-            remoteViews.setImageViewResource(R.id.iv_logo, R.mipmap.icon)
-            sendNotify(remoteViews, context, channelID, notifyID)
+            remoteViews.setImageViewResource(R.id.download_notification_logo, R.mipmap.icon)
+            NotifyManager.sendNotifyNow(context, remoteViews, channelID, notifyID)
         }
     }
 
-    private fun sendNotify(remoteViews: RemoteViews, context: Context, channelID: String, notifyID: Int) {
-        var notification = NotificationCompat.Builder(context, channelID).apply {
-            setOnlyAlertOnce(true)
-            setContent(remoteViews)
-            //设置小图标
-            setSmallIcon(R.mipmap.icon)
-            //禁止用户点击删除按钮删除
-            setAutoCancel(false)
-            //禁止滑动删除
-            setOngoing(false)
-            //取消右上角的时间显示
-            setShowWhen(false)
-        }.build()
-
-        NotifyManager.sendNotifyNow(context, channelID, notification, notifyID)
-    }
 
     fun getDownloadBroadcastFilter(context: Context): String {
         return context.packageName + "." + NOTIFICATION_BROADCAST_ACTION
