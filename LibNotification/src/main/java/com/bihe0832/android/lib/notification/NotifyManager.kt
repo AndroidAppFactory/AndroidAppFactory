@@ -12,17 +12,46 @@ import android.provider.Settings
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.text.TextUtils
+import android.widget.RemoteViews
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
-import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 
 object NotifyManager {
 
     private val mNotificationChannel = HashMap<String, NotificationChannel>()
-    private val mNotifyID = IdGenerator(1)
+    private val mNotifyIDGenerator = IdGenerator(1)
+
+    private val mListID by lazy {
+        ConcurrentHashMap<Int, String>()
+    }
+
+    @Synchronized
+    fun getNotifyIDByKey(key: String): Int {
+        var id = try {
+            if (TextUtils.isEmpty(key)) {
+                generatorNoticeID()
+            } else {
+                if (mListID.containsValue(key)) {
+                    mListID.filter { it.value == key }.keys.first()
+                } else {
+                    generatorNoticeID()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            generatorNoticeID()
+        }
+        mListID[id] = key
+        return id
+    }
+
+    fun generatorNoticeID(): Int {
+        return mNotifyIDGenerator.generate()
+    }
 
     fun createNotificationChannel(context: Context, channelName: CharSequence, channelId: String): NotificationChannel? {
         // Create the NotificationChannel, but only on API 26+ because
@@ -41,8 +70,28 @@ object NotifyManager {
         return null
     }
 
+    fun getPendingIntent(context: Context, action: String?): PendingIntent? {
+        var intent = if (!TextUtils.isEmpty(action)) {
+            try {
+                Intent(Intent.ACTION_VIEW, Uri.parse(action))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                context.packageManager.getLaunchIntentForPackage(context.packageName)
+            }
+        } else {
+            context.packageManager.getLaunchIntentForPackage(context.packageName)
+        }
+
+        try {
+            return PendingIntent.getActivity(context, generatorNoticeID(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
     fun sendNotifyNow(context: Context, title: String, subTitle: String?, content: String?, action: String?, channelID: String): Int {
-        var noticeID = mNotifyID.generate()
+        var noticeID = generatorNoticeID()
         context.applicationContext.let { context ->
             NotificationCompat.Builder(context, channelID).apply {
                 setContentTitle(title)
@@ -61,19 +110,7 @@ object NotifyManager {
                 setWhen(System.currentTimeMillis())
                 //设置通知方式，声音，震动，呼吸灯等效果，这里通知方式为声音
                 setDefaults(Notification.DEFAULT_SOUND)
-                if (!TextUtils.isEmpty(action)) {
-                    try {
-                        val uri = Uri.parse(action)
-                        val intent = Intent(Intent.ACTION_VIEW, uri)
-                        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                        setContentIntent(pendingIntent)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                } else {
-                    APKUtils.startApp(context, context.packageName, APKUtils.getAppName(context))
-                }
-
+                setContentIntent(getPendingIntent(context, action))
             }.build().let {
                 sendNotifyNow(context, channelID, it, noticeID)
             }
@@ -81,8 +118,25 @@ object NotifyManager {
         return noticeID
     }
 
-    fun cancleNotify(context: Context, noticeID: Int) {
-        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(noticeID)
+    fun sendNotifyNow(context: Context, remoteViews: RemoteViews, channelID: String, notifyID: Int) {
+        context.applicationContext.let { context ->
+            NotificationCompat.Builder(context, channelID).apply {
+                setOnlyAlertOnce(true)
+                setContent(remoteViews)
+                //设置小图标
+                setSmallIcon(R.mipmap.icon)
+                //禁止用户点击删除按钮删除
+                setAutoCancel(false)
+                //禁止滑动删除
+                setOngoing(false)
+                //设置通知时间
+                setWhen(System.currentTimeMillis())
+                //设置通知方式，声音，震动，呼吸灯等效果，这里通知方式为声音
+                setDefaults(Notification.DEFAULT_SOUND)
+            }.build().let {
+                sendNotifyNow(context, channelID, it, notifyID)
+            }
+        }
     }
 
     fun sendNotifyNow(context: Context, channelID: String, notification: Notification, notifyID: Int) {
@@ -96,10 +150,14 @@ object NotifyManager {
         (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(notifyID, notification)
     }
 
+    fun cancelNotify(context: Context, noticeID: Int) {
+        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(noticeID)
+    }
+
     fun areNotificationsEnabled(context: Context): Boolean {
         return if (BuildUtils.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             NotificationManagerCompat.from(context).areNotificationsEnabled()
-        }else{
+        } else {
             false
         }
     }

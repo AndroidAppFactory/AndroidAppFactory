@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/iv_layout"
+    android:id="@+id/download_notification_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="6dp"
     android:paddingBottom="6dp">
 
     <ImageView
-        android:id="@+id/iv_logo"
+        android:id="@+id/download_notification_logo"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
@@ -21,11 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/btn_list"
-        android:layout_toRightOf="@+id/iv_logo">
+        android:layout_toLeftOf="@+id/download_notification_btn_list"
+        android:layout_toRightOf="@+id/download_notification_logo">
 
         <TextView
-            android:id="@+id/tv_title"
+            android:id="@+id/download_notification_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="3dp"
@@ -35,36 +35,36 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_download_speed"
+            android:id="@+id/download_notification_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_title"
+            android:layout_below="@id/download_notification_title"
             android:layout_marginTop="5dp"
             android:text="2333KB/s"
             android:textSize="10dp" />
 
         <TextView
-            android:id="@+id/tv_download_progress"
+            android:id="@+id/download_notification_download_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_title"
+            android:layout_below="@id/download_notification_title"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5dp"
             android:text="233.3MB/1.8GB"
             android:textSize="10dp" />
 
         <ProgressBar
-            android:id="@+id/progress_bar_download"
+            android:id="@+id/download_notification_progress_bar"
             style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_download_progress"
+            android:layout_below="@id/download_notification_download_progress"
             android:max="100"
             android:progress="23" />
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/btn_list"
+        android:id="@+id/download_notification_btn_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -75,7 +75,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/btn_restart"
+            android:id="@+id/download_notification_btn_restart"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
@@ -88,7 +88,7 @@
             tools:src="@mipmap/btn_pause" />
 
         <ImageButton
-            android:id="@+id/btn_cancel"
+            android:id="@+id/download_notification_btn_cancel"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
