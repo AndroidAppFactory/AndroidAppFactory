@@ -39,6 +39,7 @@ public class TestCustomSectionFragment extends BaseFragment {
 
     @Override
     protected void initView(View mView) {
+        super.initView(mView);
         initList();
         mRecycleView = (RecyclerView) mView.findViewById(R.id.card_list);
         mRecycleAdapter = new TestSectionAdapterForCustom(this.getContext(), mDataList);

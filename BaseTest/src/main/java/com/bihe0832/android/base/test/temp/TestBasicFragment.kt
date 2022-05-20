@@ -1,10 +1,7 @@
 package com.bihe0832.android.base.test.temp
 
 import android.graphics.Color
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.ui.image.loadCenterCropImage
@@ -17,15 +14,12 @@ import kotlinx.android.synthetic.main.fragment_test_basic.*
 
 class TestBasicFragment : BaseFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun getLayoutID(): Int {
+        return R.layout.fragment_test_basic
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_test_basic, container, false)
-    }
-
-    fun initView() {
+    override fun initView(view: View) {
+        super.initView(view)
 
 
         test_basic_button.setOnClickListener {
@@ -43,11 +37,6 @@ class TestBasicFragment : BaseFragment() {
         test_basic_button_local_3.setOnClickListener {
             test_basic_content.loadRoundCropImage("http://cdn.bihe0832.com/images/zixie_32.ico", DisplayUtil.dip2px(context, 3f))
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initView()
     }
 
     companion object {

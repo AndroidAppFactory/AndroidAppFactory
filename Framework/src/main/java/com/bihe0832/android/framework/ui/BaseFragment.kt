@@ -26,23 +26,15 @@ open class BaseFragment : SwipeBackFragment() {
      */
     private var hasCreateView = false
 
-    override open fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    final override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(getLayoutID(), container, false)
     }
 
-    /**
-     * 布局layout
-     * @return
-     */
-    protected open fun getLayoutID(): Int {
-        return -1
-    }
-
-    override open fun onCreate(savedInstanceState: Bundle?) {
+    final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle: Bundle? = getArguments()
         bundle?.let {
@@ -50,24 +42,16 @@ open class BaseFragment : SwipeBackFragment() {
         }
     }
 
-    /**
-     * 解析intent 传递的参数
-     * @param bundle
-     */
-    protected open fun parseBundle(bundle: Bundle) {
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (resetDensity()) {
             activity?.let {
                 DisplayUtil.resetDensity(
-                    it,
-                    ConvertUtils.parseFloat(
-                        it.resources.getString(R.string.custom_density),
-                        Constants.CUSTOM_DENSITY
-                    )
+                        it,
+                        ConvertUtils.parseFloat(
+                                it.resources.getString(R.string.custom_density),
+                                Constants.CUSTOM_DENSITY
+                        )
                 )
             }
         }
@@ -77,31 +61,12 @@ open class BaseFragment : SwipeBackFragment() {
     }
 
     /**
-     * view 初始化
-     * @param view
-     */
-    protected open fun initView(view: View) {
-
-    }
-
-    /**
-     * 数据读取
-     */
-    protected open fun initData() {
-
-    }
-
-    open fun resetDensity(): Boolean {
-        return true
-    }
-
-    /**
      * 仅用于简单的Fragment的setUserVisibleHint设置，
      * 对于有viewPager等特殊复杂场景的页面，需要自行完成setUserVisibleHint的设置
      * 如果自行设置 setUserVisibleHint ，不要调用 super.setUserVisibleHint
      * @param isVisibleToUser
      */
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+    final override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         setUserVisibleHint(isVisibleToUser, hasCreateView)
         if (isAdded) {
@@ -113,19 +78,54 @@ open class BaseFragment : SwipeBackFragment() {
 
             if (getPermissionList().isNotEmpty()) {
                 PermissionManager.checkPermission(
-                    context,
-                    javaClass.simpleName,
-                    false,
-                    getPermissionActivityClass(),
-                    getPermissionResult(),
-                    *getPermissionList().toTypedArray()
+                        context,
+                        javaClass.simpleName,
+                        false,
+                        getPermissionActivityClass(),
+                        getPermissionResult(),
+                        *getPermissionList().toTypedArray()
                 )
             }
         }
     }
 
+    /**
+     * 布局layout
+     * @return
+     */
+    protected open fun getLayoutID(): Int {
+        return -1
+    }
+
+    /**
+     * 解析intent 传递的参数
+     * @param bundle
+     */
+    protected open fun parseBundle(bundle: Bundle) {
+
+    }
+
+    /**
+     * view 初始化
+     * @param view
+     */
+    protected open fun initView(view: View) {
+
+    }
+
+    /**
+     * 数据加载
+     */
+    protected open fun initData() {
+
+    }
+
     open fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
 
+    }
+
+    open fun resetDensity(): Boolean {
+        return true
     }
 
     open fun getPermissionList(): List<String> {
