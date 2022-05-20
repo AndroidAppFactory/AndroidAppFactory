@@ -41,7 +41,7 @@ open class TestDebugCommonFragment : BaseTestListFragment() {
             }))
             add(TestItemData("打开反馈页面", View.OnClickListener {
                 val map = HashMap<String, String>()
-                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode("https://support.qq.com/product/290858")
+                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode("https://support.qq.com/embed/phone/290858/large/")
                 RouterAction.openPageByRouter(MODULE_NAME_FEEDBACK, map)
             }))
             add(TestItemData("打开应用设置") { IntentUtils.startAppDetailSettings(context) })

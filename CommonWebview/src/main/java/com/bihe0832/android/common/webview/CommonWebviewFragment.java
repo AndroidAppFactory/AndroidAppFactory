@@ -2,13 +2,14 @@ package com.bihe0832.android.common.webview;
 
 
 import android.os.Bundle;
-import android.text.TextUtils;
+
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
+
 import java.util.HashMap;
 
 public class CommonWebviewFragment extends BaseWebviewFragment {
@@ -25,19 +26,18 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
 
     public static CommonWebviewFragment newInstance(String url) {
         CommonWebviewFragment fragment = new CommonWebviewFragment();
-        Bundle bundle = getWebviewDataBundle(url,"");
+        Bundle bundle = getWebviewDataBundle(url, "");
         fragment.setArguments(bundle);
         return fragment;
     }
 
     public static CommonWebviewFragment newInstance(String url, boolean refreshable) {
         CommonWebviewFragment fragment = new CommonWebviewFragment();
-        Bundle bundle = getWebviewDataBundle(url,"");
+        Bundle bundle = getWebviewDataBundle(url, "");
         bundle.putBoolean(INTENT_KEY_REFRESH, refreshable);
         fragment.setArguments(bundle);
         return fragment;
     }
-
 
 
     @Override
