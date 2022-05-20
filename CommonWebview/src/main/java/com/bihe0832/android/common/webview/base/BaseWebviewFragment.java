@@ -14,17 +14,18 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
@@ -54,6 +55,7 @@ import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
@@ -160,26 +162,10 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     private long lastResumeTime = 0L;
     private long lastPauseTime = 0L;
 
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initView(@NonNull View view) {
+        super.initView(view);
         mWebViewViewModel = ViewModelProviders.of(getActivity()).get(WebViewViewModel.class);
-    }
-
-    @Override
-    protected void parseBundle(Bundle bundle) {
-        super.parseBundle(bundle);
-        mIntentUrl = URLDecoder.decode(bundle.getString(INTENT_KEY_URL));
-        mRefreshable = bundle.getBoolean(INTENT_KEY_REFRESH, false);
-        mPostData = bundle.getString(INTENT_KEY_DATA);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.common_zixie_fragment_webview, container, false);
         mWebView = createWebView();
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);
@@ -199,7 +185,19 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         });
         getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
         initWebview(view, getWebViewClient(), getWebChromeClient());
-        return view;
+    }
+
+    @Override
+    protected void parseBundle(Bundle bundle) {
+        super.parseBundle(bundle);
+        mIntentUrl = URLDecoder.decode(bundle.getString(INTENT_KEY_URL));
+        mRefreshable = bundle.getBoolean(INTENT_KEY_REFRESH, false);
+        mPostData = bundle.getString(INTENT_KEY_DATA);
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.common_zixie_fragment_webview;
     }
 
     @Override
@@ -455,7 +453,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
         @Override
         public void onReceivedSslError(WebView view,
-                SslErrorHandler handler, SslError error) {
+                                       SslErrorHandler handler, SslError error) {
             handler.proceed();// 接受所有网站的证书
         }
     }
@@ -465,7 +463,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
         @Override
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-                FileChooserParams fileChooserParams) {
+                                         FileChooserParams fileChooserParams) {
             BaseWebviewFragment.this.mPicUploadCallback = filePathCallback;
             openImageChooserActivity();
             return true;
@@ -513,7 +511,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         //处理confirm弹出框
         @Override
         public boolean onJsPrompt(WebView view, String url, String message, String defaultValue,
-                JsPromptResult result) {
+                                  JsPromptResult result) {
             ZLog.d(TAG, "onJsPrompt " + url);
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
@@ -648,9 +646,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
+    public void setUserVisibleHint(boolean isVisibleToUser, boolean hasCreateView) {
         ZLog.d(TAG, "setUserVisibleHint " + isVisibleToUser);
-        super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             onJSBridgeResume();
         } else {

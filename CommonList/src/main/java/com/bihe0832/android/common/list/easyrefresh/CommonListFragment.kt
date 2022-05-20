@@ -38,9 +38,12 @@ abstract class CommonListFragment : BaseListFragment() {
             }
         })
         mRefresh?.isEnablePullToRefresh = mDataLiveData.canRefresh()
-        mDataLiveData.fetchData()
+
     }
 
+    override fun initData() {
+        mDataLiveData.fetchData()
+    }
 
     override fun updateData(data: List<CardBaseModule>) {
         super.updateData(data)

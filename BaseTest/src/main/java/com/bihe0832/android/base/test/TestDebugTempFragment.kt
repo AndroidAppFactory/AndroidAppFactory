@@ -1,7 +1,6 @@
 package com.bihe0832.android.base.test
 
 
-import android.os.Bundle
 import android.util.Base64
 import android.view.View
 import android.widget.Toast
@@ -65,8 +64,8 @@ class TestDebugTempFragment : BaseTestListFragment() {
         TestTipsIcon(activity!!)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView(view: View) {
+        super.initView(view)
         DebugLogTips.showView(mDebugTips, false)
     }
 

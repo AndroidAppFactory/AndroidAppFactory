@@ -25,32 +25,23 @@ import kotlinx.android.synthetic.main.fragment_test_text.*
 
 class TestTextView : BaseFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_test_text, container, false)
+    override fun getLayoutID(): Int {
+        return R.layout.fragment_test_text
     }
 
     var testList = mutableListOf<String>(
-        "这是一个测试测试0",
-        "这是一个测试测试这是一个测试测试这是一个测试1",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试3",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试测试4",
-        "这是一个两个个三个四个五测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是测试5",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这试测试6",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试试这是这是一个测试测7",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个试测这是一个试测这是一个试测这是一个试测试这是一个测试测试8"
+            "这是一个测试测试0",
+            "这是一个测试测试这是一个测试测试这是一个测试1",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试3",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试测试4",
+            "这是一个两个个三个四个五测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是测试5",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这试测试6",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试试这是这是一个测试测7",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个试测这是一个试测这是一个试测这是一个试测试这是一个测试测试8"
     )
-    var index = 6
-    fun initView() {
 
+    override fun initView(view: View) {
         info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
         testSpecialText(testList[5])
 
@@ -66,6 +57,8 @@ class TestTextView : BaseFragment() {
 //            }
         }
     }
+
+
 
     fun testSpecialText(content: String) {
         val spanString = SpannableString(content)
@@ -142,19 +135,13 @@ class TestTextView : BaseFragment() {
         }
 
         info_content_0.append(
-                com.bihe0832.android.lib.text.TextFactoryUtils.getSpannedTextByHtml(
-                        com.bihe0832.android.lib.text.TextFactoryUtils.getTextHtmlAfterTransform(
+                TextFactoryUtils.getSpannedTextByHtml(
+                        TextFactoryUtils.getTextHtmlAfterTransform(
                     "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
                 )
             )
         )
     }
-
-    override fun onResume() {
-        super.onResume()
-        initView()
-    }
-
 
     private fun showPopList() {
         mutableListOf<String>().apply {
