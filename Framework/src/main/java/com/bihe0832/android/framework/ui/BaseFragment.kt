@@ -51,14 +51,22 @@ open class BaseFragment : SwipeBackFragment() {
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            parseBundle(it, true)
+            try {
+                parseBundle(it, true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
     final override fun onNewBundle(args: Bundle?) {
         super.onNewBundle(args)
         args?.let {
-            parseBundle(it, false)
+            try {
+                parseBundle(it, false)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
