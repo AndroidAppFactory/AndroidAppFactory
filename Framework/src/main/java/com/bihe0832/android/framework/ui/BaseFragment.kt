@@ -31,10 +31,13 @@ open class BaseFragment : SwipeBackFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
+        getCustomRootView()?.let {
+            return it
+        }
         return inflater.inflate(getLayoutID(), container, false)
     }
 
-    final override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle: Bundle? = getArguments()
         bundle?.let {
@@ -103,6 +106,14 @@ open class BaseFragment : SwipeBackFragment() {
      */
     protected open fun parseBundle(bundle: Bundle) {
 
+    }
+
+    /**
+     *
+     * 返回自定义的根目录View
+     */
+    protected open fun getCustomRootView(): View? {
+        return null
     }
 
     /**
