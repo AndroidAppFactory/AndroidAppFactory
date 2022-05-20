@@ -31,17 +31,34 @@ open class BaseFragment : SwipeBackFragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        getCustomRootView()?.let {
-            return it
+        getLayoutID().let {
+            if (it > 0) {
+                return inflater.inflate(getLayoutID(), container, false)
+            } else {
+                getCustomRootView()?.let { view ->
+                    return view
+                }
+
+                getCustomRootView(inflater, container, savedInstanceState)?.let { view ->
+                    return view
+                }
+
+                return null
+            }
         }
-        return inflater.inflate(getLayoutID(), container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle: Bundle? = getArguments()
-        bundle?.let {
-            parseBundle(it)
+        arguments?.let {
+            parseBundle(it, true)
+        }
+    }
+
+    final override fun onNewBundle(args: Bundle?) {
+        super.onNewBundle(args)
+        args?.let {
+            parseBundle(it, false)
         }
     }
 
@@ -60,6 +77,10 @@ open class BaseFragment : SwipeBackFragment() {
         }
         hasCreateView = true
         initView(view)
+    }
+
+    final override fun onLazyInitView(savedInstanceState: Bundle?) {
+        super.onLazyInitView(savedInstanceState)
         initData()
     }
 
@@ -79,7 +100,7 @@ open class BaseFragment : SwipeBackFragment() {
                 }
             }
 
-            if (getPermissionList().isNotEmpty()) {
+            if (isVisibleToUser && hasCreateView && getPermissionList().isNotEmpty()) {
                 PermissionManager.checkPermission(
                         context,
                         javaClass.simpleName,
@@ -92,6 +113,15 @@ open class BaseFragment : SwipeBackFragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
+        if (needDispatchActivityResult()) {
+            dispatchActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+
     /**
      * 布局layout
      * @return
@@ -101,19 +131,27 @@ open class BaseFragment : SwipeBackFragment() {
     }
 
     /**
-     * 解析intent 传递的参数
-     * @param bundle
-     */
-    protected open fun parseBundle(bundle: Bundle) {
-
-    }
-
-    /**
      *
      * 返回自定义的根目录View
      */
     protected open fun getCustomRootView(): View? {
         return null
+    }
+
+    protected open fun getCustomRootView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        return null
+    }
+
+    /**
+     * 解析intent 传递的参数
+     * @param bundle
+     */
+    protected open fun parseBundle(bundle: Bundle, isOnCreate: Boolean) {
+
     }
 
     /**
@@ -125,12 +163,18 @@ open class BaseFragment : SwipeBackFragment() {
     }
 
     /**
-     * 数据加载
+     * 数据加载，此时View已经准备好，如果有预加载就放在initView
      */
     protected open fun initData() {
 
     }
 
+    /**
+     * 前后台切换
+     *
+     * @param isVisibleToUser 当前是前台或者后台
+     * @param hasCreateView 当前View 是否已经创建好
+     */
     open fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
 
     }
@@ -149,14 +193,6 @@ open class BaseFragment : SwipeBackFragment() {
 
     open fun getPermissionActivityClass(): Class<out PermissionsActivity> {
         return PermissionsActivity::class.java
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
-        if (needDispatchActivityResult()) {
-            dispatchActivityResult(requestCode, resultCode, data)
-        }
     }
 
     fun needDispatchActivityResult(): Boolean {
