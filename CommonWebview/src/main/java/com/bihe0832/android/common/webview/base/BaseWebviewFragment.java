@@ -188,8 +188,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     }
 
     @Override
-    protected void parseBundle(Bundle bundle) {
-        super.parseBundle(bundle);
+    protected void parseBundle(Bundle bundle, boolean isOnCreate) {
         mIntentUrl = URLDecoder.decode(bundle.getString(INTENT_KEY_URL));
         mRefreshable = bundle.getBoolean(INTENT_KEY_REFRESH, false);
         mPostData = bundle.getString(INTENT_KEY_DATA);
