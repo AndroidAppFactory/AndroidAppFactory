@@ -1,10 +1,14 @@
 package com.bihe0832.android.app
 
+import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
+import android.os.Process
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.ZixieCoreInit
+import com.bihe0832.android.framework.privacy.AgreementPrivacy.hasAgreedPrivacy
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
@@ -28,9 +32,12 @@ object AppFactoryInit {
 
     //目前仅仅主进程和web进程需要初始化
     @Synchronized
-    fun initCore(ctx: Context, processName: String) {
+    private fun initCore(application: android.app.Application, processName: String) {
+        val ctx = application.applicationContext
         if (!hasInit) {
             hasInit = true
+            ZixieCoreInit.initAfterAgreePrivacy(application)
+
             RouterHelper.initRouter()
             initPermission()
             DownloadUtils.init(ctx, 5, null, ZixieContext.isDebug())
@@ -38,16 +45,16 @@ object AppFactoryInit {
                 ZLog.e("Application process initCore web start")
                 WebViewHelper.init(ctx, null, Bundle().apply {
                     putString(
-                        TbsPrivacyAccess.ConfigurablePrivacy.MODEL.name,
-                        ManufacturerUtil.MODEL
+                            TbsPrivacyAccess.ConfigurablePrivacy.MODEL.name,
+                            ManufacturerUtil.MODEL
                     )
                     putString(
-                        TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name,
-                        ZixieContext.deviceId
+                            TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name,
+                            ZixieContext.deviceId
                     )
                     putString(
-                        TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name,
-                        ZixieContext.deviceId
+                            TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name,
+                            ZixieContext.deviceId
                     )
                 }, true)
             }, 5)
@@ -56,12 +63,30 @@ object AppFactoryInit {
     }
 
     @Synchronized
-    fun initExtra(ctx: Context) {
+    private fun initExtra(application: android.app.Application) {
         // 初始化网络变量和监听
-        NetworkChangeManager.getInstance().init(ctx, true)
-        WifiManagerWrapper.init(ctx, !ZixieContext.isOfficial())
+        NetworkChangeManager.getInstance().init(application.applicationContext, true)
+        WifiManagerWrapper.init(application.applicationContext, !ZixieContext.isOfficial())
         // 监听信号变化，统一到MobileUtil
-        MobileUtil.registerMobileSignalListener(ctx)
+        MobileUtil.registerMobileSignalListener(application.applicationContext)
+    }
+
+    fun initAll(application: android.app.Application) {
+        if (hasAgreedPrivacy()) {
+            val am = application.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val runningApps = am.runningAppProcesses
+            for (it in runningApps) {
+                if (it.pid == Process.myPid() && it.processName != null &&
+                        it.processName.contains(application.getPackageName())) {
+                    ZLog.e("Application initCore process: name:" + it.processName + " and id:" + it.pid)
+                    val processName = it.processName
+                    initCore(application, processName)
+                    if (processName.equals(application.packageName, ignoreCase = true)) {
+                        initExtra(application)
+                    }
+                }
+            }
+        }
     }
 
     fun initUserLoginRetBeforeGetUser(openid: String) {

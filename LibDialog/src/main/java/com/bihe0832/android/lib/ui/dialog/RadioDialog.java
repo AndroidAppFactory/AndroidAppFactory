@@ -8,7 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.LayoutParams;
+
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class RadioDialog extends CommonDialog {
         LinearLayout.LayoutParams radioGroupLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT);
         int margin = DisplayUtil.dip2px(getContext(), 16f);
-        radioGroupLayoutParams.setMargins(margin, margin / 2, margin, margin / 2);
+        radioGroupLayoutParams.setMargins(0, margin / 2, 0, margin / 2);
         mRadioGroup.setLayoutParams(radioGroupLayoutParams);
         addViewToContent(mRadioGroup);
         initView();

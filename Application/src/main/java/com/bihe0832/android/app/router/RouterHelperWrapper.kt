@@ -33,3 +33,7 @@ fun openWebPage(url: String) {
     map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(url)
     RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
 }
+
+fun openFeedback(){
+    openWebPage("https://support.qq.com/embed/phone/290858/large/")
+}

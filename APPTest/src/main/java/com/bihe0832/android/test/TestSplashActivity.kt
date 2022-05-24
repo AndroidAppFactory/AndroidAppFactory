@@ -16,7 +16,7 @@ class TestSplashActivity : SplashActivity() {
     }
 
     override fun doNext() {
-        AppFactoryInit.initExtra(applicationContext)
+        AppFactoryInit.initAll(application)
         super.doNext()
     }
 
