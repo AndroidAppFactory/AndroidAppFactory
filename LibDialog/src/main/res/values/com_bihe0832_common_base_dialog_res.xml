@@ -38,6 +38,8 @@
     <dimen name="com_bihe0832_dialog_title_text_size">16dp</dimen>
     <dimen name="com_bihe0832_dialog_content_text_size">12dp</dimen>
     <dimen name="com_bihe0832_dialog_tips_text_size">10dp</dimen>
-    <dimen name="com_bihe0832_dialog_button_text_size">@dimen/com_bihe0832_dialog_content_text_size</dimen>
+    <dimen name="com_bihe0832_dialog_button_text_size">
+        @dimen/com_bihe0832_dialog_content_text_size
+    </dimen>
 
 </resources>

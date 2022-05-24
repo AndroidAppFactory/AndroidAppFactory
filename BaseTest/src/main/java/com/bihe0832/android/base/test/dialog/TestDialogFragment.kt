@@ -5,6 +5,7 @@ import android.app.Activity
 import android.view.View
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.base.test.permission.TestPermissionDialog
+import com.bihe0832.android.base.textedit.main.dialog.ChangeTheme
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.framework.ZixieContext
@@ -19,6 +20,7 @@ import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.dialog.*
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.jecelyin.editor.v2.Pref
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -129,9 +131,9 @@ class TestDialogFragment : BaseTestListFragment() {
         dialog.setTitle(title)
         dialog.setPositive("分享给我们")
         dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
-        dialog.setImageContentResId(R.mipmap.debug)
-        dialog.setFeedBackContent("我们承诺你提供的信息仅用于问题定位")
-        dialog.setNegative("复制到剪切板")
+//        dialog.setImageContentResId(R.mipmap.debug)
+//        dialog.setFeedBackContent("我们承诺你提供的信息仅用于问题定位")
+//        dialog.setNegative("复制到剪切板")
         dialog.setShouldCanceled(true)
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {

@@ -5,16 +5,15 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.support.multidex.MultiDex;
-import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebView;
+
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ZixieCoreInit;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
-import com.bihe0832.android.lib.web.WebViewHelper;
 import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public abstract class BaseApplication extends Application {
