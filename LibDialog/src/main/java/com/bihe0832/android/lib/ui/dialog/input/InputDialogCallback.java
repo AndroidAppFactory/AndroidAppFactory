@@ -6,7 +6,7 @@
  *
  */
 
-package com.bihe0832.android.lib.ui.dialog.impl.input;
+package com.bihe0832.android.lib.ui.dialog.input;
 
 public interface InputDialogCallback {
     void onPositiveClick(String result);

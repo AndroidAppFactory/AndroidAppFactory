@@ -1,12 +1,8 @@
 package com.bihe0832.android.lib.ui.view.ext;
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.text.InputType
+import android.app.Activity
+import android.content.ContextWrapper
 import android.view.View
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
 
 /**
  *
@@ -44,4 +40,15 @@ fun View.rotateView(degree: Float, specifiedHeight: Int, specifiedWidth: Int) {
     lp.height = w
     lp.width = h
     this.requestLayout()
+}
+
+fun View.getActivity(): Activity? {
+    var context = context
+    while (context is ContextWrapper) {
+        if (context is Activity) {
+            return context
+        }
+        context = context.baseContext
+    }
+    return null
 }

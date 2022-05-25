@@ -5,9 +5,11 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 import com.bihe0832.android.common.test.R;
+import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
+import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 
 /**
  * @author hardyshi code@bihe0832.com

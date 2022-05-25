@@ -4,16 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.MovementMethod;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 
 import com.bihe0832.android.lib.text.ClipboardUtil;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
-import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -82,6 +79,7 @@ public class DebugTools {
 
     public static void showInfo(final Context context, final String title, final String content,
                                 CharSequence charSequence, MovementMethod method, final String positiveText) {
+
         final CommonDialog dialog = new CommonDialog(context);
         String tempContent = "";
         if (!TextUtils.isEmpty(content)) {
@@ -148,85 +146,5 @@ public class DebugTools {
                 ee.printStackTrace();
             }
         }
-    }
-
-    public static void showInputDialog(final Context context, String titleName, String msg, String positive,
-                                       String negtive, Boolean canCanceledOnTouchOutside, String defaultValue, String hint,
-                                       final InputDialogCallback listener) {
-        final CommonDialog dialog = new CommonDialog(context);
-        dialog.setTitle(titleName);
-        dialog.setHtmlContent(msg);
-        dialog.setPositive(positive);
-        dialog.setNegative(negtive);
-        dialog.setCanceledOnTouchOutside(canCanceledOnTouchOutside);
-        final EditText editText = new EditText(context);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        editText.setLayoutParams(params);
-        editText.setSingleLine();
-        editText.setTextSize(9);
-        editText.setPadding(
-                DisplayUtil.dip2px(context, 4f),
-                DisplayUtil.dip2px(context, 8f),
-                DisplayUtil.dip2px(context, 4f),
-                DisplayUtil.dip2px(context, 4f)
-        );
-        editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_hint));
-        editText.setTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_bg));
-        editText.setHint(hint);
-        if (!TextUtils.isEmpty(defaultValue)) {
-            editText.requestFocus();
-            editText.setText(defaultValue);
-            editText.selectAll();
-        }
-
-        dialog.addViewToContent(editText);
-        dialog.setOnClickBottomListener(new OnDialogListener() {
-            @Override
-            public void onPositiveClick() {
-                try {
-                    listener.onPositiveClick(editText.getText().toString());
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onNegativeClick() {
-                try {
-                    listener.onNegtiveClick(editText.getText().toString());
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-        dialog.show();
-    }
-
-    public static void showInputDialog(final Context context, String titleName, String msg, String defaultValue,
-                                       final InputDialogCompletedCallback listener) {
-        showInputDialog(context, titleName, msg, "确定", "", true, defaultValue, "输入完成后点击确定~", new InputDialogCallback() {
-            @Override
-            public void onPositiveClick(String result) {
-                listener.onInputCompleted(result);
-            }
-
-            @Override
-            public void onNegtiveClick(String result) {
-
-            }
-
-            @Override
-            public void onCloseClick(String result) {
-
-            }
-        });
     }
 }

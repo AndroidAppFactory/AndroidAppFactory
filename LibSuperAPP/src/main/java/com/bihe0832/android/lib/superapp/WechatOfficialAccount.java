@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
@@ -14,8 +15,8 @@ import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
  * @author hardyshi code@bihe0832.com
- *         Created on 2019-11-01.
- *         Description: Description
+ * Created on 2019-11-01.
+ * Description: Description
  */
 public class WechatOfficialAccount {
 
@@ -42,7 +43,7 @@ public class WechatOfficialAccount {
         dialog.setFeedBackContent("点击「前往关注」会自动复制微信公众号ID并拉起微信");
         dialog.setPositive("前往关注");
         dialog.setNegative("已经关注");
-        dialog.setCancelable(false);
+        dialog.setShouldCanceled(false);
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override
             public void onPositiveClick() {
