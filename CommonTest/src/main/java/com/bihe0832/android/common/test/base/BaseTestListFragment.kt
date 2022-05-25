@@ -74,7 +74,7 @@ open class BaseTestListFragment : CommonListFragment() {
         defaultValue: String,
         listener: InputDialogCompletedCallback
     ) {
-        DialogUtils.showInputDialog(context, titleName, msg, defaultValue, listener)
+        DialogUtils.showInputDialog(context!!, titleName, msg, defaultValue, listener)
     }
 
 

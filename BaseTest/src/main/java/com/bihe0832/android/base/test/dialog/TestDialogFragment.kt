@@ -27,7 +27,7 @@ class TestDialogFragment : BaseTestListFragment() {
             add(TestItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))
             add(TestItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
             add(TestItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
-            add(TestItemData("带输入弹框", View.OnClickListener { tesInput(activity) }))
+            add(TestItemData("带输入弹框", View.OnClickListener { tesInput(activity!!) }))
 
             add(TestItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(TestItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
@@ -283,7 +283,7 @@ class TestDialogFragment : BaseTestListFragment() {
         }
     }
 
-    fun tesInput(activity: Activity?) {
+    fun tesInput(activity: Activity) {
         DialogUtils.showInputDialog(
                 activity,
                 "测试标题",

@@ -57,3 +57,7 @@ fun TextView.addClickActionText(content: String, keyWordsActionMap: HashMap<Stri
     setText(TextFactoryUtils.getCharSequenceWithClickAction(content, keyWordsActionMap))
     setMovementMethod(LinkMovementMethod.getInstance())
 }
+
+fun TextView.setText(format: String, vararg args: Any?) {
+    setText(String.format(format, *args))
+}

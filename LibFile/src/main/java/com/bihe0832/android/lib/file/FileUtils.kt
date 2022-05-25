@@ -22,6 +22,7 @@ import java.nio.channels.FileChannel
 import java.nio.charset.Charset
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.util.*
 import java.util.zip.GZIPInputStream
 
 
@@ -31,6 +32,10 @@ import java.util.zip.GZIPInputStream
  * Created on 2020-01-10.
  */
 object FileUtils {
+
+    val ILLEGAL_FILENAME_CHARS = charArrayOf(34.toChar(), 60.toChar(), 62.toChar(), 124.toChar(), 0.toChar(), 1.toChar(), 2.toChar(), 3.toChar(), 4.toChar(), 5.toChar(), 6.toChar(), 7.toChar(), 8.toChar(), 9.toChar(), 10.toChar(), 11.toChar(), 12.toChar(), 13.toChar(),
+            14.toChar(), 15.toChar(), 16.toChar(), 17.toChar(), 18.toChar(), 19.toChar(), 20.toChar(), 21.toChar(), 22.toChar(), 23.toChar(), 24.toChar(), 25.toChar(), 26.toChar(), 27.toChar(), 28.toChar(), 29.toChar(), 30.toChar(), 31.toChar(), 58.toChar(), 42.toChar(), 63.toChar(), 92.toChar(), 47.toChar())
+
 
     const val SPACE_KB = 1024.0
     const val SPACE_MB = 1024 * SPACE_KB
@@ -64,8 +69,8 @@ object FileUtils {
     fun checkStoragePermissions(context: Context): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
                 ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
     }
 
@@ -173,7 +178,7 @@ object FileUtils {
                 if (fileProvider == null) {
                     ZLog.e("fileAction targetFile dont has zixie FileProvider")
                     targetFile =
-                        File(ZixieFileProvider.getZixieFilePath(context) + getFileName(filePath))
+                            File(ZixieFileProvider.getZixieFilePath(context) + getFileName(filePath))
                     copyFile(sourceFile, targetFile)
                 }
             }
@@ -251,15 +256,17 @@ object FileUtils {
     }
 
 
-    fun copyFile(source: File, dest: File) {
+    fun copyFile(source: File, dest: File): Boolean {
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
         try {
             inputChannel = FileInputStream(source).getChannel()
             outputChannel = FileOutputStream(dest).getChannel()
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size())
+            return true
         } catch (e: Exception) {
             e.printStackTrace()
+            return false
         } finally {
             try {
                 inputChannel?.close()
@@ -336,8 +343,31 @@ object FileUtils {
         return ""
     }
 
+    fun isInvalidFilename(fileName: String): Boolean {
+        if (TextUtils.isEmpty(fileName)) {
+            return false
+        }
+        val size = fileName.length
+        var c: Char
+        for (i in 0 until size) {
+            c = fileName[i]
+            if (Arrays.binarySearch(ILLEGAL_FILENAME_CHARS, c) >= 0) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun getFileContent(filePath: String?): String {
-        return getFileContent(filePath, false)
+        return getFileContent(filePath, "UTF-8")
+    }
+
+    fun getFileContent(filePath: String?, isGzip: Boolean): String {
+        return getFileContent(filePath, "UTF-8", isGzip)
+    }
+
+    fun getFileContent(filePath: String?, encoding: String): String {
+        return getFileContent(filePath, encoding, false)
     }
 
 
@@ -363,7 +393,7 @@ object FileUtils {
         }
     }
 
-    fun getFileContent(filePath: String?, isGzip: Boolean): String {
+    fun getFileContent(filePath: String?, encoding: String, isGzip: Boolean): String {
         val sb = StringBuffer()
         filePath?.let { it ->
             if (checkFileExist(it)) {
@@ -376,7 +406,7 @@ object FileUtils {
                         FileInputStream(File(it))
                     }
 
-                    br = BufferedReader(InputStreamReader(fis))
+                    br = BufferedReader(InputStreamReader(fis, encoding))
                     var line: String?
                     while (br.readLine().also { line = it } != null) {
                         sb.append(line + System.lineSeparator())
@@ -441,7 +471,7 @@ object FileUtils {
                 data = uri.getPath()
             } else if (ContentResolver.SCHEME_CONTENT == scheme) {
                 val cursor: Cursor? = context.getContentResolver()
-                    .query(uri, arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
+                        .query(uri, arrayOf(MediaStore.Images.ImageColumns.DATA), null, null, null)
                 if (null != cursor) {
                     if (cursor.moveToFirst()) {
                         val index: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
@@ -457,4 +487,16 @@ object FileUtils {
         }
         return data ?: ""
     }
+
+    fun isBinaryFile(filePath: String): Boolean {
+        getFileBytes(filePath)?.let {
+            for (b in it) {
+                if (b < 0x09) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
 }

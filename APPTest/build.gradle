@@ -37,6 +37,9 @@ android {
         abortOnError false
     }
 
+    dataBinding {
+        enabled = true
+    }
 
     signingConfigs {
         debug {

@@ -11,7 +11,6 @@ package com.bihe0832.android.lib.ui.dialog.input;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -34,7 +33,7 @@ public class InputDialog {
         dialog.setHtmlContent(msg);
         dialog.setPositive(positive);
         dialog.setNegative(negtive);
-        dialog.setCanceledOnTouchOutside(canCanceledOnTouchOutside);
+        dialog.setShouldCanceled(canCanceledOnTouchOutside);
         final EditText editText = new EditText(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -91,29 +90,5 @@ public class InputDialog {
             }
         });
         dialog.show();
-    }
-
-    public static void showInputDialog(final Context context, String titleName, String msg, String defaultValue,
-                                       final InputDialogCompletedCallback listener) {
-        showInputDialog(
-                context, titleName, msg,
-                context.getString(R.string.dialog_button_ok), "",
-                true, EditorInfo.TYPE_CLASS_TEXT, defaultValue, context.getString(R.string.dialog_input_hint),
-                new InputDialogCallback() {
-                    @Override
-                    public void onPositiveClick(String result) {
-                        listener.onInputCompleted(result);
-                    }
-
-                    @Override
-                    public void onNegativeClick(String result) {
-
-                    }
-
-                    @Override
-                    public void onCancel(String result) {
-
-                    }
-                });
     }
 }

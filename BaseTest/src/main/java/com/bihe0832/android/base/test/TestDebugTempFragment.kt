@@ -45,6 +45,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.time.TimeUtil
 import com.bihe0832.android.lib.zip.ZipUtils
+import com.jecelyin.editor.v2.ui.AboutActivity
 import java.io.File
 
 
@@ -489,6 +490,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
     private fun testFunc() {
 
+        startActivity(AboutActivity::class.java)
 
 //        openZixieWeb("https://www.qq.com")
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
