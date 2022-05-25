@@ -5,10 +5,8 @@ import android.app.Activity
 import android.view.View
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.base.test.permission.TestPermissionDialog
-import com.bihe0832.android.base.textedit.main.dialog.ChangeTheme
 import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -18,12 +16,10 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.dialog.*
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.jecelyin.editor.v2.Pref
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class TestDialogFragment : BaseTestListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -31,6 +27,8 @@ class TestDialogFragment : BaseTestListFragment() {
             add(TestItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))
             add(TestItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
             add(TestItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
+            add(TestItemData("带输入弹框", View.OnClickListener { tesInput(activity) }))
+
             add(TestItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(TestItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
             add(TestItemData("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
@@ -38,7 +36,7 @@ class TestDialogFragment : BaseTestListFragment() {
         }
     }
 
-    private fun testRadio(activity: Activity?){
+    private fun testRadio(activity: Activity?) {
         var dialog = RadioDialog(activity)
 
         var title = "分享的标题"
@@ -47,14 +45,14 @@ class TestDialogFragment : BaseTestListFragment() {
         dialog.setContent(content)
         dialog.setPositive("分享给我们")
         dialog.setNegative("复制到剪切板")
+        dialog.setFeedBackContent(getString(R.string.theme_change_tips))
         dialog.setShouldCanceled(true)
 
         dialog.setRadioData(mutableListOf<String>().apply {
-            add("RadioButton 0")
-            add("RadioButton 1")
-            add("RadioButton 2")
-            add("RadioButton 3")
-        },1
+            for (i in 0..100) {
+                add("RadioButton $i")
+            }
+        }, 1
         ) { which -> showToast("RadioButton  $which") }
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
@@ -82,6 +80,7 @@ class TestDialogFragment : BaseTestListFragment() {
         })
         dialog.show()
     }
+
     private fun testCustom(activity: Activity?) {
         var dialog = TestDialog(activity)
 
@@ -283,4 +282,18 @@ class TestDialogFragment : BaseTestListFragment() {
             }
         }
     }
+
+    fun tesInput(activity: Activity?) {
+        DialogUtils.showInputDialog(
+                activity,
+                "测试标题",
+                "",
+                "默认值",
+                InputDialogCompletedCallback {
+                    showToast(it)
+                }
+
+        )
+    }
+
 }

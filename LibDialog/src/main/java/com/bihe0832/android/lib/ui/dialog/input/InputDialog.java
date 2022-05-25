@@ -40,7 +40,6 @@ public class InputDialog {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         editText.setLayoutParams(params);
         editText.setSingleLine();
-        editText.setTextSize(9);
         editText.setInputType(inputType);
         editText.setPadding(
                 DisplayUtil.dip2px(context, 4f),
@@ -49,7 +48,9 @@ public class InputDialog {
                 DisplayUtil.dip2px(context, 8f)
         );
         editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_hint));
+        editText.setTextSize(10);
         editText.setTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_bg));
+        editText.setHintTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_split));
         editText.setHint(hint);
         if (!TextUtils.isEmpty(defaultValue)) {
             editText.requestFocus();

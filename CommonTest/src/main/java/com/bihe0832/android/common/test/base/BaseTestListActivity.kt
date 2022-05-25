@@ -15,7 +15,8 @@ import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
-import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.com_bihe0832_fragment_test_tab.*
@@ -78,7 +79,7 @@ abstract class BaseTestListActivity : CommonListActivity() {
         defaultValue: String,
         listener: InputDialogCompletedCallback
     ) {
-        DebugTools.showInputDialog(this, titleName, msg, defaultValue, listener)
+        DialogUtils.showInputDialog(this, titleName, msg, defaultValue, listener)
     }
 
 

@@ -1,7 +1,6 @@
 package com.bihe0832.android.common.test.base
 
 import android.content.Intent
-import android.os.Bundle
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import android.widget.TextView
@@ -12,11 +11,12 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.debug.DebugTools
-import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
@@ -74,7 +74,7 @@ open class BaseTestListFragment : CommonListFragment() {
         defaultValue: String,
         listener: InputDialogCompletedCallback
     ) {
-        DebugTools.showInputDialog(context, titleName, msg, defaultValue, listener)
+        DialogUtils.showInputDialog(context, titleName, msg, defaultValue, listener)
     }
 
 

@@ -19,10 +19,10 @@ import com.bihe0832.android.common.test.base.BaseTestListFragment
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.debug.DebugTools
-import com.bihe0832.android.lib.debug.InputDialogCompletedCallback
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
@@ -34,7 +34,9 @@ import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.lib.ui.view.ext.getActivity
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
@@ -72,7 +74,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(TestItemData("简单测试函数", View.OnClickListener { testFunc() }))
-            add(TestItemData("通用测试预处理", View.OnClickListener { preTest() }))
+            add(TestItemData("通用测试预处理", View.OnClickListener { preTest(it) }))
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
             add(TestItemData("数据读取缓存", View.OnClickListener { testCache() }))
 
@@ -86,36 +88,36 @@ class TestDebugTempFragment : BaseTestListFragment() {
             }))
             add(TestItemData("定时任务测试", View.OnClickListener { testTask() }))
             add(
-                TestItemData(
-                    "默认关于页",
-                    View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) })
+                    TestItemData(
+                            "默认关于页",
+                            View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) })
             )
             add(
-                TestItemData(
-                    "网络切换监控",
-                    View.OnClickListener { startActivity(TestNetworkActivity::class.java) })
+                    TestItemData(
+                            "网络切换监控",
+                            View.OnClickListener { startActivity(TestNetworkActivity::class.java) })
             )
             add(TestItemData("打开应用安装界面", View.OnClickListener {
                 IntentUtils.startAppSettings(
-                    context,
-                    android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+                        context,
+                        android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
                 )
             }))
             add(TestItemData("TextView对HTML的支持测试", View.OnClickListener {
                 showInputDialog("TextView对HTML的支持测试",
-                    "请在输入框输入需要验证的文本内容，无需特殊编码",
-                    "<font color='#428bca'>测试文字加粗</font> <BR> 正常的文字效果<BR> <b>测试文字加粗</b> <em>文字斜体</em> <p><font color='#428bca'>修改文字颜色</font></p>",
-                    object : InputDialogCompletedCallback {
-                        override fun onInputCompleted(result: String?) {
-                            DebugTools.showInfoWithHTML(
-                                context,
-                                "TextView对HTML的支持测试",
-                                result,
-                                "分享给我们"
-                            )
-                        }
+                        "请在输入框输入需要验证的文本内容，无需特殊编码",
+                        "<font color='#428bca'>测试文字加粗</font> <BR> 正常的文字效果<BR> <b>测试文字加粗</b> <em>文字斜体</em> <p><font color='#428bca'>修改文字颜色</font></p>",
+                        object : InputDialogCompletedCallback {
+                            override fun onInputCompleted(result: String?) {
+                                DebugTools.showInfoWithHTML(
+                                        context,
+                                        "TextView对HTML的支持测试",
+                                        result,
+                                        "分享给我们"
+                                )
+                            }
 
-                    })
+                        })
             }))
 
             add(TestItemData("点击区扩大Demo", View.OnClickListener {
@@ -137,23 +139,23 @@ class TestDebugTempFragment : BaseTestListFragment() {
             add(TestItemData("JsonHelper", View.OnClickListener { testJson() }))
             add(TestItemData("Toast测试", View.OnClickListener {
                 ToastUtil.showTop(
-                    context,
-                    "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>",
-                    Toast.LENGTH_LONG
+                        context,
+                        "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>",
+                        Toast.LENGTH_LONG
                 )
             }))
             add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(TestItemData("配置管理测试", View.OnClickListener { testConfig() }))
             add(TestItemData("应用前后台信息", View.OnClickListener { testAPPObserver() }))
             add(
-                TestItemData(
-                    "多进程",
-                    View.OnClickListener { startActivity(TestIPCActivity::class.java) })
+                    TestItemData(
+                            "多进程",
+                            View.OnClickListener { startActivity(TestIPCActivity::class.java) })
             )
             add(
-                TestItemData(
-                    "多进程1",
-                    View.OnClickListener { startActivity(TestIPC1Activity::class.java) })
+                    TestItemData(
+                            "多进程1",
+                            View.OnClickListener { startActivity(TestIPC1Activity::class.java) })
             )
         }
     }
@@ -196,16 +198,16 @@ class TestDebugTempFragment : BaseTestListFragment() {
 //            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //        }
         var result = JsonHelper.fromJsonList<JsonTest>(
-            "[" +
-                    "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," +
-                    "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
-                    "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
-                    "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
-                    "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
-                    "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
-                    "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
-                    "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
-                    "]", JsonTest::class.java
+                "[" +
+                        "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," +
+                        "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
+                        "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
+                        "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
+                        "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
+                        "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
+                        "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
+                        "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
+                        "]", JsonTest::class.java
         )
         ZLog.d(LOG_TAG, "result:" + result)
         JsonTest().apply {
@@ -220,35 +222,35 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
         var startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
-            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927"
+                "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
+                "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927"
         )
         var duration = System.currentTimeMillis() - startTime
         ZLog.d(
-            LOG_TAG,
-            "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration"
+                LOG_TAG,
+                "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration"
         )
 
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-            "/sdcard/Download/com.garena.game.kgtw.zip",
-            "/sdcard/Download/com.garena.game.kgtw"
+                "/sdcard/Download/com.garena.game.kgtw.zip",
+                "/sdcard/Download/com.garena.game.kgtw"
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.garena.game.kgtw.zip cost:$duration")
 
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-            "/sdcard/Download/com.supercell.brawlstars.zip",
-            "/sdcard/Download/com.supercell.brawlstars"
+                "/sdcard/Download/com.supercell.brawlstars.zip",
+                "/sdcard/Download/com.supercell.brawlstars"
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.supercell.brawlstars.zip cost:$duration")
 
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-            "/sdcard/Download/jp.co.sumzap.pj0007.zip",
-            "/sdcard/Download/jp.co.sumzap.pj0007"
+                "/sdcard/Download/jp.co.sumzap.pj0007.zip",
+                "/sdcard/Download/jp.co.sumzap.pj0007"
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
@@ -296,8 +298,8 @@ class TestDebugTempFragment : BaseTestListFragment() {
         ZLog.d("testAPPObserver", "getAPPStartTime ： ${ApplicationObserver.getAPPStartTime()}")
         ZLog.d("testAPPObserver", "getLastPauseTime ： ${ApplicationObserver.getLastPauseTime()}")
         ZLog.d(
-            "testAPPObserver",
-            "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}"
+                "testAPPObserver",
+                "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}"
         )
         ZLog.d("testAPPObserver", "getCurrentActivity ： ${ActivityObserver.getCurrentActivity()}")
     }
@@ -360,35 +362,35 @@ class TestDebugTempFragment : BaseTestListFragment() {
     fun testConvert() {
 
         mutableListOf(
-            1645771904111,
-            1345775904112,
-            1625775904313,
-            1645775304114,
-            1645772904115,
-            1645772404116
+                1645771904111,
+                1345775904112,
+                1625775904313,
+                1645775304114,
+                1645772904115,
+                1645772404116
         ).forEach { data ->
             ZLog.d(
-                "testDateUtil",
-                "$data trans result is:" + DateUtil.getDateCompareResult(data.toLong())
+                    "testDateUtil",
+                    "$data trans result is:" + DateUtil.getDateCompareResult(data.toLong())
             )
             ZLog.d(
-                "testDateUtil",
-                "$data trans result is:" + DateUtil.getDateCompareResult1(data.toLong())
+                    "testDateUtil",
+                    "$data trans result is:" + DateUtil.getDateCompareResult1(data.toLong())
             )
             ZLog.d("testDateUtil", "$data trans result is:" + DateUtil.getDateCompareResult2(data))
         }
 
 
         mutableListOf(
-            "1",
-            "-1",
-            "-1",
-            "0",
-            "233",
-            "true",
-            "tRUe",
-            "false",
-            "False"
+                "1",
+                "-1",
+                "-1",
+                "0",
+                "233",
+                "true",
+                "tRUe",
+                "false",
+                "False"
         ).forEach { data ->
             ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, false))
             ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, true))
@@ -396,34 +398,34 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
         mutableListOf(1, 37, 67, 2434, 24064, 2403564).forEach {
             ZLog.d(
-                "formatSecondsTo00",
-                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
+                    "formatSecondsTo00",
+                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
             )
             ZLog.d(
-                "formatSecondsTo00", "Value $it trans to :" + TimeUtil.formatSecondsTo00(
+                    "formatSecondsTo00", "Value $it trans to :" + TimeUtil.formatSecondsTo00(
                     it.toLong(),
                     false,
                     false,
                     false
-                )
+            )
             )
             ZLog.d(
-                "formatSecondsTo00",
-                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true)
+                    "formatSecondsTo00",
+                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true)
             )
             ZLog.d(
-                "formatSecondsTo00",
-                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false)
+                    "formatSecondsTo00",
+                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false)
             )
             ZLog.d(
-                "formatSecondsTo00",
-                "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
+                    "formatSecondsTo00",
+                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
             )
         }
         mutableListOf(1, 37, 67, 2434, 3600, 3602, 24064, 86400, 86440, 2403564).forEach {
             ZLog.d(
-                "formatSecondsToDurationDesc",
-                "Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong())
+                    "formatSecondsToDurationDesc",
+                    "Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong())
             )
         }
     }
@@ -465,7 +467,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
         testPercentItem(MathUtils.getFormatPercent(43443434343434343.43434, 434434343434343.43434, 4))
     }
 
-    private fun testPercentItem(data: Float){
+    private fun testPercentItem(data: Float) {
         data.let {
             ZLog.d("testPercent", data.toString() + " " + MathUtils.getFormatPercentDesc(data))
         }
@@ -475,7 +477,9 @@ class TestDebugTempFragment : BaseTestListFragment() {
 
     }
 
-    private fun preTest() {
+    private fun preTest(itemView: View) {
+        showToast(itemView.getActivity()?.getLocalClassName() ?: "")
+
         System.currentTimeMillis().let {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
             CommonDBManager.getData("sss" + it)
