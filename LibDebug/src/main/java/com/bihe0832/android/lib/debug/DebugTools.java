@@ -7,21 +7,23 @@ import android.text.method.MovementMethod;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+
 import com.bihe0832.android.lib.text.ClipboardUtil;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * @author hardyshi code@bihe0832.com
- *         Created on 2019-09-26.
- *         Description: Description
+ * Created on 2019-09-26.
+ * Description: Description
  */
 public class DebugTools {
 
     public static void sendInfo(final Context context, final String title, final String content,
-            final boolean showDialog) {
+                                final boolean showDialog) {
         if (!showDialog) {
             sendInfo(context, title, content);
             return;
@@ -63,23 +65,23 @@ public class DebugTools {
     }
 
     public static void showInfoWithHTML(final Context context, final String title, final String content,
-            final String positiveText) {
+                                        final String positiveText) {
         showInfoWithCharSequence(context, title, TextFactoryUtils.getSpannedTextByHtml(content), null, positiveText);
     }
 
     public static void showInfo(final Context context, final String title, final String content,
-            final String positiveText) {
+                                final String positiveText) {
         showInfo(context, title, content, null, null, positiveText);
     }
 
     public static void showInfoWithCharSequence(final Context context, final String title, CharSequence content,
-            MovementMethod method, final String positiveText) {
+                                                MovementMethod method, final String positiveText) {
         showInfo(context, title, "", content, method, positiveText);
     }
 
 
     public static void showInfo(final Context context, final String title, final String content,
-            CharSequence charSequence, MovementMethod method, final String positiveText) {
+                                CharSequence charSequence, MovementMethod method, final String positiveText) {
         final CommonDialog dialog = new CommonDialog(context);
         String tempContent = "";
         if (!TextUtils.isEmpty(content)) {
@@ -149,8 +151,8 @@ public class DebugTools {
     }
 
     public static void showInputDialog(final Context context, String titleName, String msg, String positive,
-            String negtive, Boolean canCanceledOnTouchOutside, String defaultValue, String hint,
-            final InputDialogCallback listener) {
+                                       String negtive, Boolean canCanceledOnTouchOutside, String defaultValue, String hint,
+                                       final InputDialogCallback listener) {
         final CommonDialog dialog = new CommonDialog(context);
         dialog.setTitle(titleName);
         dialog.setHtmlContent(msg);
@@ -160,10 +162,16 @@ public class DebugTools {
         final EditText editText = new EditText(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(50, 10, 50, 10);
         editText.setLayoutParams(params);
         editText.setSingleLine();
-        editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_text));
+        editText.setTextSize(9);
+        editText.setPadding(
+                DisplayUtil.dip2px(context, 4f),
+                DisplayUtil.dip2px(context, 8f),
+                DisplayUtil.dip2px(context, 4f),
+                DisplayUtil.dip2px(context, 4f)
+        );
+        editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_hint));
         editText.setTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_bg));
         editText.setHint(hint);
         if (!TextUtils.isEmpty(defaultValue)) {
@@ -203,7 +211,7 @@ public class DebugTools {
     }
 
     public static void showInputDialog(final Context context, String titleName, String msg, String defaultValue,
-            final InputDialogCompletedCallback listener) {
+                                       final InputDialogCompletedCallback listener) {
         showInputDialog(context, titleName, msg, "确定", "", true, defaultValue, "输入完成后点击确定~", new InputDialogCallback() {
             @Override
             public void onPositiveClick(String result) {
