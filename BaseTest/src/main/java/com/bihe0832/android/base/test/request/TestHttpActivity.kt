@@ -16,9 +16,11 @@ import com.bihe0832.android.lib.http.common.core.BaseConnection
 import com.bihe0832.android.lib.http.common.core.FileInfo
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.router.annotation.Module
 import kotlinx.android.synthetic.main.activity_http_test.*
 import java.io.File
+import java.net.URLDecoder
 
 const val ROUTRT_NAME_TEST_HTTP = "testhttp"
 
@@ -79,6 +81,22 @@ class TestHttpActivity : BaseTestActivity() {
 
     private fun showResult(tips: String) {
         runOnUiThread { result.text = tips }
+    }
+
+    fun testURL() {
+        mutableListOf<String>().apply {
+            add("https://www.qq.com 1")
+            add("https://www.google.com/search 1?q=android+studio+%E5%BF%AB%E9%80%9F%E6%B7%BB%E5%8A%A0+%E4%BD%9C%E8%80%85&newwindow=1&sxsrf=ALiCzsazI_7umVmoDpgf7Kqm3Zlmv8IfnQ%3A1653400792696&ei=2OSMYu-RKrWFr7wP372bqAw&ved=0ahUKEwjv3a33pfj3AhW1wosBHd_eBsUQ4dUDCA4&uact=5&oq=android+studio+%E5%BF%AB%E9%80%9F%E6%B7%BB%E5%8A%A0+%E4%BD%9C%E8%80%85&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABOgcIABBHELADOgQIIxAnOgQIABBDOgUIABCABDoFCAAQywE6BAgAEB46BggAEB4QBEoECEEYAEoECEYYAFDrA1i-wxBgksUQaA9wAXgBgAGZAogB4BKSAQYyMS40LjGYAQCgAQHIAQrAAQE&sclient=gws-wiz")
+            add("https%3A%2F%2Fsupport.qq.com%2Fproduct%2F290858 1")
+        }.forEach {
+            ZLog.d("----------------------------")
+            ZLog.d("Source: ${it}")
+            ZLog.d("Zixie: ${URLUtils.encode(it)}")
+            ZLog.d("Zixie: ${URLDecoder.decode(URLUtils.encode(it))})")
+            ZLog.d("Zixie: ${URLDecoder.decode(URLUtils.encode(it)).equals(it)}")
+            ZLog.d("----------------------------")
+
+        }
     }
 
     private fun sendGetBasicRequest() {

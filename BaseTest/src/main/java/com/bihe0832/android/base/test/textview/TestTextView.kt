@@ -56,6 +56,10 @@ class TestTextView : BaseFragment() {
 //                index = 0
 //            }
         }
+
+        checkbox1.setOnClickListener {
+            checkbox1.toggle()
+        }
     }
 
 
