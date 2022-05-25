@@ -16,6 +16,7 @@ object ManufacturerUtil {
 
     private var mSystemProperties = ConcurrentHashMap<String, String>()
 
+    @Synchronized
     fun getValueByKey(key: String, getDefaultValue: () -> String): String {
         if (!mSystemProperties.containsKey(key)) {
             ZLog.d("ManufacturerUtil", "ManufacturerUtil read system key $key")
