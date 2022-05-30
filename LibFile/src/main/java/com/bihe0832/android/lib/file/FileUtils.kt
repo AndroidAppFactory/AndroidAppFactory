@@ -282,7 +282,19 @@ object FileUtils {
         }
     }
 
+    fun copyFile(srcFile: File, dstFile: File, isMove: Boolean): Boolean {
+        return if (isMove) {
+            srcFile.renameTo(dstFile)
+        } else {
+            copyFile(srcFile, dstFile)
+        }
+    }
+
     fun copyDirectory(src: File, dest: File) {
+        copyDirectory(src, dest, false)
+    }
+
+    fun copyDirectory(src: File, dest: File, isMove: Boolean) {
         try {
             if (src.isDirectory) {
                 if (!dest.exists()) {
@@ -293,10 +305,10 @@ object FileUtils {
                     val srcFile = File(src, file)
                     val destFile = File(dest, file)
                     // 递归复制
-                    copyDirectory(srcFile, destFile)
+                    copyDirectory(srcFile, destFile, isMove)
                 }
             } else {
-                copyFile(src, dest)
+                copyFile(src, dest, isMove)
             }
         } catch (e: Exception) {
             e.printStackTrace()

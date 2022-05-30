@@ -1,8 +1,10 @@
 package com.bihe0832.android.lib.config;
 
 import android.content.Context;
-import java.util.Map;
+
 import org.json.JSONObject;
+
+import java.util.Map;
 
 /**
  * @author code@bihe0832.com
@@ -17,6 +19,14 @@ public class Config {
 
     public static void init(Context ctx, String file, boolean isDebug) {
         ConfigManager.getInstance().init(ctx, file, isDebug);
+    }
+
+    public static void addOnConfigChangedListener(OnConfigChangedListener listener) {
+        ConfigManager.getInstance().addOnConfigChangedListener(listener);
+    }
+
+    public static void removeOnConfigChangedListener(OnConfigChangedListener listener) {
+        ConfigManager.getInstance().removeOnConfigChangedListener(listener);
     }
 
     public static boolean hasInit() {

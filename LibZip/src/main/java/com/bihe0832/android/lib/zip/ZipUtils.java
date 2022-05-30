@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.zip;
 
 import android.text.TextUtils;
 
+import com.bihe0832.android.lib.file.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -16,7 +17,6 @@ import java.util.List;
 
 public class ZipUtils {
     private static final int BUFFER = 8 * 1024;
-    private static final String ZIP_DOWNLOADED_FILE_SUFFIX = ".zip";
 
     public static boolean isZipFile(String filePath) {
         if (TextUtils.isEmpty(filePath)) {
@@ -35,7 +35,7 @@ public class ZipUtils {
             return false;
         }
         if(justCheckSuffix){
-            return filePath.toLowerCase().endsWith(ZIP_DOWNLOADED_FILE_SUFFIX);
+            return FileMimeTypes.INSTANCE.isArchive(filePath);
         }else {
             try {
                 ZipFile zipFile = new ZipFile(filePath);
