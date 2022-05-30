@@ -221,8 +221,9 @@ class TestDialogFragment : BaseTestListFragment() {
         LoadingDialog(activity).apply {
             setIsFullScreen(true)
             setCanCanceled(false)
+            setLoadingType(LoadingDialog.LOADING_TYPE_DOTS)
         }.let {
-            it.show("这是一个测试~")
+            it.show("加载中 请稍候")
         }
     }
 

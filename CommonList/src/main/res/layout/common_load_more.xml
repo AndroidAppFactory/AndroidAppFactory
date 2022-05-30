@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
-        android:id="@+id/loading_bar"
+        android:id="@+id/circle_loading_bar"
         style="@style/LoadingProcessStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

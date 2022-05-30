@@ -7,6 +7,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.bihe0832.android.lib.file.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
@@ -37,7 +38,6 @@ import java.util.LinkedList;
 public class InstallUtils {
 
     private static final String TAG = "InstallUtils";
-    private static final String APK_FILE_SUFFIX = ".apk";
 
     public enum ApkInstallType {
         NULL,
@@ -50,7 +50,7 @@ public class InstallUtils {
     public static ApkInstallType getFileType(String filepath) {
         if (TextUtils.isEmpty(filepath)) {
             return ApkInstallType.NULL;
-        } else if (isApkFile(filepath)) {
+        } else if (FileMimeTypes.INSTANCE.isApkFile(filepath)) {
             return ApkInstallType.APK;
         } else {
             File apkFile = new File(filepath);
@@ -60,10 +60,6 @@ public class InstallUtils {
                 return getApkInstallTypeByZip(filepath);
             }
         }
-    }
-
-    public static boolean isApkFile(String filename) {
-        return filename.endsWith(APK_FILE_SUFFIX);
     }
 
     public static void uninstallAPP(final Context context, final String packageName) {
@@ -146,7 +142,7 @@ public class InstallUtils {
                 listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND);
                 return;
             }
-            if (isApkFile(filePath)) {
+            if (FileMimeTypes.INSTANCE.isApkFile(filePath)) {
                 APKInstall.installAPK(context, downloadedFile.getAbsolutePath(), listener);
             } else if (ZipUtils.isZipFile(downloadedFile.getAbsolutePath(), true)) {
                 installSpecialAPKByZip(context, filePath, packageName, listener);
@@ -215,7 +211,7 @@ public class InstallUtils {
         } else if (apkInstallType == ApkInstallType.APK) {
             boolean hasInstall = false;
             for (File file2 : new File(folderPath).listFiles()) {
-                if (InstallUtils.isApkFile(file2.getAbsolutePath())) {
+                if (FileMimeTypes.INSTANCE.isApkFile(file2.getAbsolutePath())) {
                     hasInstall = true;
                     APKInstall.installAPK(context, file2.getAbsolutePath(), listener);
                     break;
@@ -237,7 +233,7 @@ public class InstallUtils {
         for (String fileName : ZipUtils.getFileList(zipFile)) {
             if (OBBFormats.isObbFile(fileName)) {
                 return ApkInstallType.OBB;
-            } else if (isApkFile(fileName)) {
+            } else if (FileMimeTypes.INSTANCE.isApkFile(fileName)) {
                 if (apkFileCount > 0) {
                     return ApkInstallType.SPLIT_APKS;
                 } else {
@@ -268,7 +264,7 @@ public class InstallUtils {
             } else {
                 if (OBBFormats.isObbFile(file2.getAbsolutePath())) {
                     return ApkInstallType.OBB;
-                } else if (isApkFile(file2.getAbsolutePath())) {
+                } else if (FileMimeTypes.INSTANCE.isApkFile(file2.getAbsolutePath())) {
                     if (apkFileCount > 0) {
                         return ApkInstallType.SPLIT_APKS;
                     } else {
@@ -286,7 +282,7 @@ public class InstallUtils {
                 } else {
                     if (OBBFormats.isObbFile(file2.getAbsolutePath())) {
                         return ApkInstallType.OBB;
-                    } else if (isApkFile(file2.getAbsolutePath())) {
+                    } else if (FileMimeTypes.INSTANCE.isApkFile(file2.getAbsolutePath())) {
                         if (apkFileCount > 0) {
                             return ApkInstallType.SPLIT_APKS;
                         } else {

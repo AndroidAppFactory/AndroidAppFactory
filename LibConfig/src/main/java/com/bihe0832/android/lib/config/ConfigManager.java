@@ -19,6 +19,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import kotlin.jvm.Synchronized;
 
 /**
  * @author code@bihe0832.com
@@ -33,6 +36,7 @@ class ConfigManager {
     //内存中的配置
     private ConcurrentHashMap<String, String> mConfigInfoInCache = new ConcurrentHashMap<>();
 
+    private CopyOnWriteArrayList<OnConfigChangedListener> mConfigChangedListenerList = new CopyOnWriteArrayList<>();
     private MMKV mMMKVInstance = null;
 
     protected static ConfigManager getInstance() {
@@ -47,7 +51,7 @@ class ConfigManager {
     }
 
     protected void init(Context ctx, String file, boolean isDebug) {
-        if(isDebug){
+        if (isDebug) {
             ZLog.setDebug(true);
         }
         if (ctx == null) {
@@ -77,6 +81,18 @@ class ConfigManager {
             ZLog.d(TAG, "ERROR: config file");
         }
 
+    }
+
+    protected void addOnConfigChangedListener(OnConfigChangedListener listener) {
+        if (listener != null) {
+            mConfigChangedListenerList.add(listener);
+        }
+    }
+
+    protected void removeOnConfigChangedListener(OnConfigChangedListener listener) {
+        if (mConfigChangedListenerList.contains(listener)) {
+            mConfigChangedListenerList.remove(listener);
+        }
     }
 
     protected boolean hasInit() {
@@ -174,7 +190,7 @@ class ConfigManager {
             ZLog.d(TAG, "read local value");
             value = readLocalConfig(key);
         }
-        if(value != null){
+        if (value != null) {
             mConfigInfoInCache.put(key, value);
         }
 
@@ -226,10 +242,10 @@ class ConfigManager {
         return writeConfig(key, value ? Config.VALUE_SWITCH_ON : Config.VALUE_SWITCH_OFF, saveToLocal);
     }
 
+    @Synchronized
     protected boolean writeConfig(String key, String value, boolean saveToLocal) {
         ZLog.d(TAG, "writeConfig, key is :" + key + ";value is:" + value);
         try {
-
             if (TextUtils.isEmpty(key)) {
                 ZLog.d(TAG, "writeConfig, key is null:" + key);
                 return false;
@@ -239,8 +255,14 @@ class ConfigManager {
                 ZLog.d(TAG, "writeConfig, value is null:" + key);
                 value = "";
             }
+
             if (null != mConfigInfoInCache) {
+                String preData = "";
+                if (mConfigInfoInCache.containsKey(key)) {
+                    preData = mConfigInfoInCache.get(key);
+                }
                 mConfigInfoInCache.put(key, value);
+                notifyValueChange(key, preData, value);
             }
 
             if (!saveToLocal) {
@@ -333,6 +355,19 @@ class ConfigManager {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private void notifyValueChange(String key, String preData, String newData) {
+        if (mConfigChangedListenerList.size() > 0) {
+            boolean isSame = preData.equals(newData);
+            for (OnConfigChangedListener listener : mConfigChangedListenerList) {
+                if (isSame) {
+                    listener.onValueAgain(key, newData);
+                } else {
+                    listener.onValueChanged(key, newData);
+                }
+            }
         }
     }
 }

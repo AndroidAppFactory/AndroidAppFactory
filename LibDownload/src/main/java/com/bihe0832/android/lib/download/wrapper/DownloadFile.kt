@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.file.FileMimeTypes
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
@@ -413,7 +414,7 @@ object DownloadFile {
             downloadListener: DownloadListener?
     ) {
         DownloadUtils.startDownload(context, DownloadItem().apply {
-            if (InstallUtils.isApkFile(URLUtils.getFileName(url))) {
+            if (FileMimeTypes.isApkFile(URLUtils.getFileName(url))) {
                 setNotificationVisibility(true)
             } else {
                 setNotificationVisibility(false)

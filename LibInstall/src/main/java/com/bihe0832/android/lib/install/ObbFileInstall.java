@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.bihe0832.android.lib.file.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
@@ -85,7 +86,7 @@ class ObbFileInstall {
                         listener.onInstallFailed(UNZIP_FAILED);
                         return "";
                     }
-                } else if (InstallUtils.isApkFile(file2.getAbsolutePath())) {
+                } else if (FileMimeTypes.INSTANCE.isApkFile(file2.getAbsolutePath())) {
                     dstApkFilePath = file2.getAbsolutePath();
                 }
             }
@@ -125,7 +126,7 @@ class ObbFileInstall {
                         listener.onInstallFailed(UNZIP_FAILED);
                         return;
                     }
-                } else if (InstallUtils.isApkFile(fileName)) {
+                } else if (FileMimeTypes.INSTANCE.isApkFile(fileName)) {
                     ZLog.d(TAG + " installObbAPKByZip unCompress apk start");
                     listener.onUnCompress();
                     ZipUtils.unCompressWithOutPath(zipFile, fileName, targetAPKFolder.getAbsolutePath());

@@ -1,12 +1,9 @@
-package com.bihe0832.android.base.test.textview
+package com.bihe0832.android.base.test.view
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Bundle
 import android.text.*
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.bihe0832.android.base.test.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction.openFinalURL
@@ -23,7 +20,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
 
-class TestTextView : BaseFragment() {
+class TestViewFragment : BaseFragment() {
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_test_text

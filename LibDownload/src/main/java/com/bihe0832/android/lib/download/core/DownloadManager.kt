@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.download.core.list.DownloadTaskList
 import com.bihe0832.android.lib.download.core.list.DownloadingList
 import com.bihe0832.android.lib.download.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.notify.DownloadNotify
+import com.bihe0832.android.lib.file.FileMimeTypes
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallUtils
@@ -166,7 +167,7 @@ object DownloadManager {
                 item.fileLength = File(filePath).length()
             }
             item.finished = item.fileLength
-            if (InstallUtils.isApkFile(filePath)) {
+            if (FileMimeTypes.isApkFile(filePath)) {
                 mContext?.packageManager?.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES)?.packageName?.let {
                     item.packageName = it
                 }

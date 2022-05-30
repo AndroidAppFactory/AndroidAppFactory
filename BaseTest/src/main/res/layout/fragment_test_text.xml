@@ -16,6 +16,13 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <com.bihe0832.android.lib.ui.dialog.view.ProgressIndicatorView
+            android:id="@+id/dots_loading_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
+
+
         <Button
             android:id="@+id/test_basic_button"
             android:layout_width="match_parent"
@@ -97,8 +104,8 @@
             android:id="@+id/checkbox2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
             android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
             android:src="@drawable/test_selector"
             android:visibility="visible" />
 

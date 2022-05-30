@@ -21,18 +21,23 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.bihe0832.android.lib.file.FileMimeTypes;
 import com.bihe0832.android.lib.immersion.AppCompatActivityImmersiveExtKt;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.PermissionManager.OnPermissionResult;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.ui.touchregion.ViewExtForTouchRegionKt;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+
 import me.yokeyword.fragmentation.SupportActivity;
-import org.jetbrains.annotations.NotNull;
 
 public class FileActivity extends SupportActivity {
 
@@ -182,7 +187,11 @@ public class FileActivity extends SupportActivity {
                             mFSTask.execute(mTempFile);
                         }
                     } else {
-                        mSelectedPath = mSelectedPath == null ? mTempFile.getAbsolutePath() : null;
+                        if (mSelectedPath != mTempFile.getAbsolutePath()) {
+                            mSelectedPath = mTempFile.getAbsolutePath();
+                        } else {
+                            mSelectedPath = mSelectedPath == null ? mTempFile.getAbsolutePath() : null;
+                        }
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -314,12 +323,26 @@ public class FileActivity extends SupportActivity {
 
             File mTempFile = mFileArr[position];
             if (mTempFile.isDirectory()) {
-                mHolder.iv_icon.setImageResource(R.mipmap.ic_folder);
-                mHolder.iv_icon.setColorFilter(getResources().getColor(R.color.primary_text));
+                mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_folder);
             } else {
-                mHolder.iv_icon.setImageResource(R.mipmap.ic_file);
-                mHolder.iv_icon.setColorFilter(getResources().getColor(R.color.primary_text));
+                if (FileMimeTypes.INSTANCE.isTextFile(mTempFile.getName())) {
+                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_text);
+                } else if (FileMimeTypes.INSTANCE.isApkFile(mTempFile.getName())) {
+                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_apk);
+                } else if (FileMimeTypes.INSTANCE.isImageFile(mTempFile.getName())) {
+                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_image);
+                } else if (FileMimeTypes.INSTANCE.isArchive(mTempFile.getName())) {
+                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_archive);
+                } else if (FileMimeTypes.INSTANCE.isVideoFile(mTempFile)) {
+                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_video);
+                } else if (FileMimeTypes.INSTANCE.isAudioFile(mTempFile)) {
+                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_audio);
+                } else {
+                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_file);
+                }
             }
+            mHolder.iv_icon.setColorFilter(getResources().getColor(R.color.primary_text));
+
             mHolder.cb_selected.setVisibility(View.VISIBLE);
             mHolder.cb_selected.setTag(position);
             if (mSelectedPath != null && mTempFile.getAbsolutePath().equals(mSelectedPath)) {

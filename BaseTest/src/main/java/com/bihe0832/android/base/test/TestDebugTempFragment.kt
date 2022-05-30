@@ -20,8 +20,10 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
+import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.config.OnConfigChangedListener
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.floatview.IconManager
@@ -45,31 +47,33 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.time.TimeUtil
 import com.bihe0832.android.lib.zip.ZipUtils
-import com.jecelyin.editor.v2.ui.AboutActivity
+import com.jecelyin.editor.v2.ui.MainActivity
 import java.io.File
 
 
 class TestDebugTempFragment : BaseTestListFragment() {
     val LOG_TAG = "TestDebugTempFragment"
 
-    val mIcon by lazy {
-        TestIcon(activity)
-    }
-    val mIconManager by lazy {
-        IconManager(activity!!, mIcon).apply {
-            setIconClickListener(View.OnClickListener {
-                ZixieContext.showToast("点了一下Icon")
-            })
+    val configListener = object : OnConfigChangedListener {
+        override fun onValueChanged(key: String?, value: String?) {
+            ZLog.d("hardy", "onNewValue config key: $key value: $value")
         }
-    }
 
-    val mDebugTips by lazy {
-        TestTipsIcon(activity!!)
+        override fun onValueAgain(key: String?, value: String?) {
+            ZLog.d("hardy", "onValueSetted config key: $key value: $value")
+        }
+
     }
 
     override fun initView(view: View) {
         super.initView(view)
         DebugLogTips.showView(mDebugTips, false)
+        Config.addOnConfigChangedListener(configListener)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Config.removeOnConfigChangedListener(configListener)
     }
 
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -146,7 +150,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
                 )
             }))
             add(TestItemData("ZIP测试", View.OnClickListener { testZIP() }))
-            add(TestItemData("配置管理测试", View.OnClickListener { testConfig() }))
+            add(TestItemData("配置 Config 管理测试", View.OnClickListener { testConfig() }))
             add(TestItemData("应用前后台信息", View.OnClickListener { testAPPObserver() }))
             add(
                     TestItemData(
@@ -160,6 +164,23 @@ class TestDebugTempFragment : BaseTestListFragment() {
             )
         }
     }
+
+
+    val mIcon by lazy {
+        TestIcon(activity)
+    }
+    val mIconManager by lazy {
+        IconManager(activity!!, mIcon).apply {
+            setIconClickListener(View.OnClickListener {
+                ZixieContext.showToast("点了一下Icon")
+            })
+        }
+    }
+
+    val mDebugTips by lazy {
+        TestTipsIcon(activity!!)
+    }
+
 
     private fun testMD5() {
         File("/sdcard/screen.png").let {
@@ -290,6 +311,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
             ZLog.d(LOG_TAG, "readConfig A::${Config.isSwitchEnabled(key, false)}")
             Config.writeConfig(key, false)
             ZLog.d(LOG_TAG, "readConfig A::${Config.isSwitchEnabled(key, false)}")
+            Config.writeConfig(key, Config.isSwitchEnabled(key, false))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -487,12 +509,9 @@ class TestDebugTempFragment : BaseTestListFragment() {
         }
     }
 
-
     private fun testFunc() {
 
-        startActivity(AboutActivity::class.java)
-
-//        openZixieWeb("https://www.qq.com")
+        startActivity(MainActivity::class.java)
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())

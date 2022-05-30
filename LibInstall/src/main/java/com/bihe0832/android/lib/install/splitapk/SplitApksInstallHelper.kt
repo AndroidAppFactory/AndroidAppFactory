@@ -9,6 +9,7 @@ import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.RemoteException
+import com.bihe0832.android.lib.file.FileMimeTypes
 import com.bihe0832.android.lib.install.InstallErrorCode
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
@@ -102,7 +103,7 @@ object SplitApksInstallHelper {
                     addApkToFilesList(file, files)
                 }
             } else {
-                if (InstallUtils.isApkFile(fileDir.name)) {
+                if (FileMimeTypes.isApkFile(fileDir.name)) {
                     files.add(fileDir.absolutePath)
                 }
             }

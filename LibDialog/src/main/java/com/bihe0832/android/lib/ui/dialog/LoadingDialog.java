@@ -4,14 +4,20 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
+
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.ui.dialog.view.ProgressIndicatorView;
 
 
 public class LoadingDialog extends Dialog {
+
+    public static final int LOADING_TYPE_CIRCLE = 1;
+    public static final int LOADING_TYPE_DOTS = 2;
 
     /**
      * 显示的文字
@@ -20,6 +26,7 @@ public class LoadingDialog extends Dialog {
     private String title;
     private boolean shouldCanceledOutside = true;
     private boolean isFullScreen = false;
+    private int loadingType = LOADING_TYPE_DOTS;
 
     public LoadingDialog(Context context) {
         super(context, R.style.LoadingProgressDialog);
@@ -40,6 +47,14 @@ public class LoadingDialog extends Dialog {
      */
     private void refreshView() {
         //如果用户自定了title和message
+        if (loadingType == LOADING_TYPE_CIRCLE) {
+            findViewById(R.id.circle_loading_bar).setVisibility(View.VISIBLE);
+            findViewById(R.id.dots_loading_bar).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.circle_loading_bar).setVisibility(View.GONE);
+            findViewById(R.id.dots_loading_bar).setVisibility(View.VISIBLE);
+        }
+
         setCanceledOnTouchOutside(shouldCanceledOutside);
         if (titleTv != null) {
             if (TextUtils.isEmpty(title)) {
@@ -66,7 +81,7 @@ public class LoadingDialog extends Dialog {
         refreshView();
     }
 
-    public void showOnUIThread(){
+    public void showOnUIThread() {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
@@ -74,6 +89,7 @@ public class LoadingDialog extends Dialog {
             }
         });
     }
+
     @Override
     public void show() {
         showAction();
@@ -94,6 +110,7 @@ public class LoadingDialog extends Dialog {
      */
     private void initView() {
         titleTv = (TextView) findViewById(R.id.loading_label);
+        ((ProgressIndicatorView)findViewById(R.id.dots_loading_bar)).setAnimationNum(3);
     }
 
     public LoadingDialog setHtmlTitle(String content) {
@@ -113,5 +130,10 @@ public class LoadingDialog extends Dialog {
     public LoadingDialog setIsFullScreen(boolean flag) {
         isFullScreen = flag;
         return this;
+    }
+
+    public void setLoadingType(int loadingType) {
+        this.loadingType = loadingType;
+
     }
 }
