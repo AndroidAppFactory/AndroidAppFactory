@@ -2,9 +2,10 @@ package com.bihe0832.android.framework
 
 import android.app.Application
 import android.util.Log
-import com.bihe0832.android.framework.constant.Constants
-import com.bihe0832.android.framework.leakcanary.LeakCanaryManager
 import com.bihe0832.android.framework.log.LoggerFile
+import com.bihe0832.android.framework.constant.Constants;
+
+
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
@@ -69,8 +70,6 @@ object ZixieCoreInit {
     }
 
     fun initAfterAgreePrivacy(application: Application) {
-        if (ZixieContext.isDebug()) {
-            LeakCanaryManager.init(application)
-        }
+
     }
 }

@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
-import com.bihe0832.android.framework.leakcanary.LeakCanaryManager
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -120,7 +119,6 @@ open class BaseActivity : SupportActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LeakCanaryManager.addWatch(this)
     }
 
     override fun onBackPressedSupport() {
