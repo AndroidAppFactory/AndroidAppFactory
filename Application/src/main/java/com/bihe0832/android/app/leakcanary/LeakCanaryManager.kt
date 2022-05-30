@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.leakcanary
+package com.bihe0832.android.app.leakcanary
 
 import android.app.Application
 import android.os.StrictMode

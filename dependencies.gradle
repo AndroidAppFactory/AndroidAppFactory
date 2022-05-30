@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "Framework"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.20.9"
+ext.moduleVersionName = "4.20.10"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -57,7 +57,7 @@ ext.moduleInfo = [
                 "artifactId"         : "",
                 "apidependenciesList": [
                         "Application", "CommonTest",
-                        "com.android.support:design:${project.android_support_version}"
+                        "com.android.support:design:${project.android_support_version}",
                 ]
         ],
         "Application"               : [
@@ -71,9 +71,9 @@ ext.moduleInfo = [
                         'com.squareup.retrofit2:converter-gson:2.4.0',
                 ],
                 "specialdependenciesList": [
-                        "kapt": [
-                                "RouterCompiler"
-                        ]
+                        "kapt"      : ["RouterCompiler"],
+                        "debugApi"  : ["com.squareup.leakcanary:leakcanary-android:1.5.1"],
+                        "releaseApi": ["com.squareup.leakcanary:leakcanary-android-no-op:1.5.1"]
                 ]
         ],
         "CommonTest"                : [
@@ -192,9 +192,7 @@ ext.moduleInfo = [
                         "LibWrapper", "LibLifecycle"
                 ],
                 "specialdependenciesList": [
-                        "kapt"      : ["com.github.bumptech.glide:compiler:${project.glide_version}"],
-                        "debugApi"  : ["com.squareup.leakcanary:leakcanary-android:1.5.1"],
-                        "releaseApi": ["com.squareup.leakcanary:leakcanary-android-no-op:1.5.1"]
+                        "kapt": ["com.github.bumptech.glide:compiler:${project.glide_version}"]
 
                 ]
         ],
@@ -578,7 +576,7 @@ ext.moduleInfo = [
                         "com.android.support:appcompat-v7:${project.android_support_version}",
                         "LibText"
                 ]
-        ]
+        ],
 
 ]
 
