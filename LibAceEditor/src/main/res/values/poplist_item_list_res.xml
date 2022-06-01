@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="poplist_item_list">
+        <item>@android:string/cut</item>
+        <item>@android:string/copy</item>
+        <item>@android:string/paste</item>
+        <item>@android:string/selectAll</item>
+    </string-array>
+
+    <style name="PopListTextTheme">
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingLeft">18dp</item>
+        <item name="android:paddingRight">18dp</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+</resources>

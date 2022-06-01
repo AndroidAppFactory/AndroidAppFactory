@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /**
+  ~  * Created by zixie <code@bihe0832.com> on 2022/5/31 下午10:19
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 2022/5/31 下午8:05
+  ~  */
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <com.bihe0832.android.lib.ace.editor.AceEditorView
+        android:id="@+id/main_ace_editor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

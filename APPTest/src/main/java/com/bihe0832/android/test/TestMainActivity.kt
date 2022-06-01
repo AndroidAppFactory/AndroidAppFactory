@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
+import com.bihe0832.android.app.leakcanary.LeakCanaryManager.addWatch
+import com.bihe0832.android.app.theme.ThemeManager
 import com.bihe0832.android.base.test.permission.TestPermissionsActivity
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.PermissionResultOfAAF
@@ -63,6 +65,14 @@ class TestMainActivity : CommonActivity() {
                 ZLog.d("onAllActivityDestroyed")
             }
         })
+//        ThemeManager.getThemeInfo()?.let {
+//            setTheme(if (it.isDark) R.style.DarkTheme else R.style.DefaultTheme)
+//        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        addWatch(this)
     }
 
     override fun getStatusBarColor(): Int {

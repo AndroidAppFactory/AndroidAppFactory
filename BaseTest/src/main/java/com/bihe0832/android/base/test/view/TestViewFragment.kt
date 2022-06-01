@@ -9,12 +9,11 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction.openFinalURL
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
-
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
 import com.bihe0832.android.lib.ui.menu.PopupList
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
+import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
@@ -60,7 +59,6 @@ class TestViewFragment : BaseFragment() {
     }
 
 
-
     fun testSpecialText(content: String) {
         val spanString = SpannableString(content)
         var startIndex = 0
@@ -68,28 +66,28 @@ class TestViewFragment : BaseFragment() {
         var start: Int = content.indexOf("测试", startIndex, true)
         var end = start + "测试".length
         spanString.setSpan(
-            ZixieTextRadiusBackgroundSpan(
-                Color.RED,
-                10,
-                8,
-                12,
-                8,
-                info_content_0.textSize * 3 / 5,
-                0,
-                Typeface.DEFAULT_BOLD
-            ),
-            start,
-            end,
-            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                ZixieTextRadiusBackgroundSpan(
+                        Color.RED,
+                        10,
+                        8,
+                        12,
+                        8,
+                        info_content_0.textSize * 3 / 5,
+                        0,
+                        Typeface.DEFAULT_BOLD
+                ),
+                start,
+                end,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
         )
 
         spanString.setSpan(
-            ZixieTextClickableSpan(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    ZixieContext.showToast("test")
-                }
+                ZixieTextClickableSpan(object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        ZixieContext.showToast("test")
+                    }
 
-            }), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+                }), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         );
 
 //        }
@@ -110,24 +108,24 @@ class TestViewFragment : BaseFragment() {
 //                Spannable.SPAN_INCLUSIVE_INCLUSIVE
 //            )
             setSpan(
-                ZixieTextImageSpan(
-                    context!!,
-                        com.bihe0832.android.lib.ui.image.BitmapUtil.getLocalBitmap(context!!,
-                        R.mipmap.icon_author,1)
-                ),
-                0,
-                1,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    ZixieTextImageSpan(
+                            context!!,
+                            com.bihe0832.android.lib.ui.image.BitmapUtil.getLocalBitmap(context!!,
+                                    R.mipmap.icon_author, 1)
+                    ),
+                    0,
+                    1,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             append("Fsdfsdfd")
             setSpan(
-                ZixieTextClickableSpan(object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        ZixieContext.showToast("文字")
-                    }
+                    ZixieTextClickableSpan(object : View.OnClickListener {
+                        override fun onClick(v: View?) {
+                            ZixieContext.showToast("文字")
+                        }
 
-                }), 3,
-                4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+                    }), 3,
+                    4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
             )
         }.let {
             info_content_0.append(it)
@@ -138,9 +136,9 @@ class TestViewFragment : BaseFragment() {
         info_content_0.append(
                 TextFactoryUtils.getSpannedTextByHtml(
                         TextFactoryUtils.getTextHtmlAfterTransform(
-                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+                                "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+                        )
                 )
-            )
         )
     }
 

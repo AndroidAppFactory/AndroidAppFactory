@@ -102,30 +102,38 @@ object DialogUtils {
         showConfirmDialog(context, context.getString(R.string.dialog_title), message, context.getString(R.string.dialog_button_ok), context.getString(R.string.dialog_button_cancel), canCancel, callback)
     }
 
-    fun showAlertDialog(context: Context, title: String?, message: String?) {
+    fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean, callback: OnDialogListener?) {
         val dialog = CommonDialog(context)
         dialog.title = title
         dialog.setHtmlContent(message)
         dialog.positive = context.getString(R.string.dialog_button_ok)
+        dialog.setShouldCanceled(canCancel)
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 dialog.dismiss()
+                callback?.onPositiveClick()
             }
 
             override fun onNegativeClick() {
                 dialog.dismiss()
+                callback?.onNegativeClick()
             }
 
             override fun onCancel() {
                 dialog.dismiss()
+                callback?.onCancel()
             }
         })
         dialog.setShouldCanceled(true)
         dialog.show()
     }
 
+    fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean) {
+        showAlertDialog(context, title, message, canCancel, null)
+    }
+
     fun showAlertDialog(context: Context, message: String?) {
-        showAlertDialog(context, context.getString(R.string.dialog_title), message)
+        showAlertDialog(context, context.getString(R.string.dialog_title), message, true)
     }
 
 }

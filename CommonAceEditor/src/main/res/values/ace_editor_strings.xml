@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="custom_density">360</string>
+
+    <string name="ace_editor_load_file_empty">你尚未选择要查看的文件，请选择后重试</string>
+    <string name="ace_editor_load_file_not_found">你选择的文件不存在，请重新选择</string>
+</resources>

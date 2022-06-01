@@ -58,6 +58,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/activityTheme"></activity>
 
+
         <activity
             android:name="com.bihe0832.android.base.test.webview.TestWebviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

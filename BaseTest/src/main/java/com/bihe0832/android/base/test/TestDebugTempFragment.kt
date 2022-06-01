@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.app.theme.ThemeManager
 import com.bihe0832.android.base.test.cache.TestInfoCacheManager
+import com.bihe0832.android.common.ace.editor.AceEditActivity
 import com.bihe0832.android.base.test.icon.TestIcon
 import com.bihe0832.android.base.test.icon.TestTipsIcon
 import com.bihe0832.android.base.test.ipc.TestIPC1Activity
@@ -20,7 +22,6 @@ import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.log.TestLogActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
-import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.config.OnConfigChangedListener
@@ -47,7 +48,6 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.time.TimeUtil
 import com.bihe0832.android.lib.zip.ZipUtils
-import com.jecelyin.editor.v2.ui.MainActivity
 import java.io.File
 
 
@@ -83,6 +83,7 @@ class TestDebugTempFragment : BaseTestListFragment() {
             add(TestItemData("测试自定义请求", View.OnClickListener { testOneRequest() }))
             add(TestItemData("数据读取缓存", View.OnClickListener { testCache() }))
 
+            add(TestItemData("文本查看器", View.OnClickListener { testEdit() }))
             add(TestItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(TestItemData("数据时间转换", View.OnClickListener { testConvert() }))
             add(TestItemData("数据百分比转化", View.OnClickListener { testPercent() }))
@@ -509,9 +510,11 @@ class TestDebugTempFragment : BaseTestListFragment() {
         }
     }
 
-    private fun testFunc() {
+    fun testEdit() {
+        RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_EDITOR)
+    }
 
-        startActivity(MainActivity::class.java)
+    private fun testFunc() {
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())

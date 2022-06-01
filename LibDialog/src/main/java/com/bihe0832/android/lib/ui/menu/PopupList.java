@@ -478,6 +478,11 @@ public class PopupList {
         this.mTextPaddingBottom = textPaddingBottom;
     }
 
+    int getDefaultHeight() {
+        return mPopupWindowHeight;
+    }
+
+
     /**
      * @param left   the left padding in pixels
      * @param top    the top padding in pixels
@@ -568,6 +573,10 @@ public class PopupList {
     public int sp2px(float value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 value, getResources().getDisplayMetrics());
+    }
+
+    public boolean isShowing() {
+        return mPopupWindow != null && mPopupWindow.isShowing();
     }
 
     public interface PopupListListener {
