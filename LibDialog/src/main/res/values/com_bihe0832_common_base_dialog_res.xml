@@ -45,6 +45,7 @@
     <string name="dialog_title">温馨提示</string>
     <string name="dialog_button_cancel">取消</string>
     <string name="dialog_button_settings">设置</string>
+    <string name="dialog_button_retry">重试</string>
     <string name="dialog_button_close">关闭</string>
     <string name="dialog_button_ok">确认</string>
     <string name="dialog_input_hint">输入完成后点击确认提交</string>

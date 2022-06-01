@@ -3,15 +3,16 @@ package com.bihe0832.android.common.test.log;
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import com.bihe0832.android.common.list.CardItemForCommonList
+import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.common.test.item.TestItemData
 import com.bihe0832.android.common.test.item.TestTipsData
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.router.RouterInterrupt
-import com.bihe0832.android.common.list.CardItemForCommonList
-import com.bihe0832.android.common.list.CommonListLiveData
-import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
@@ -22,6 +23,7 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 open class TestLogActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
     var num = 0
+    var isView = true
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeGridLayoutManager(this, 3)
     }
@@ -75,7 +77,15 @@ open class TestLogActivity : CommonListActivity() {
     open fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
-            add(TestItemData("选择并发送单个日志") { FileSelectTools.openFileSelect(this@TestLogActivity, ZixieContext.getLogFolder()) })
+            add(TestItemData("选择并发送日志") {
+                isView = false
+                FileSelectTools.openFileSelect(this@TestLogActivity, ZixieContext.getLogFolder())
+            })
+            add(TestItemData("选择并查看日志") {
+                isView = true
+                FileSelectTools.openFileSelect(this@TestLogActivity, ZixieContext.getLogFolder())
+            })
+
             add(SectionDataHeader("基础通用日志"))
             add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath()))
             add(SectionDataContent("Webview", WebviewLoggerFile.getWebviewLogPath()))
@@ -89,9 +99,13 @@ open class TestLogActivity : CommonListActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
-                FileUtils.sendFile(this@TestLogActivity, filePath, "*/*").let {
-                    if (!it) {
-                        ZixieContext.showToast("分享文件:$filePath 失败")
+                if (isView) {
+                    LoggerFile.openLog(filePath)
+                } else {
+                    FileUtils.sendFile(this@TestLogActivity, filePath, "*/*").let {
+                        if (!it) {
+                            ZixieContext.showToast("分享文件:$filePath 失败")
+                        }
                     }
                 }
             }

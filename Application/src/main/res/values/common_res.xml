@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /**
+  ~  * Created by zixie <code@bihe0832.com> on 2022/5/30 下午5:05
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 2022/5/30 下午5:05
+  ~  */
+  -->
+
+<resources>
+    <string name="commont_dialog_title">温馨提示</string>
+
+    <string name="theme_change_title">切换主题</string>
+    <string name="theme_change_tips">你可上下滑动主题列表查看更多主题</string>
+    <string name="theme_type_dark">暗夜模式</string>
+    <string name="theme_change_confirm_message">改变主题不会自动保存当前文档, 确认放弃文档改变而改变主题?</string>
+</resources>

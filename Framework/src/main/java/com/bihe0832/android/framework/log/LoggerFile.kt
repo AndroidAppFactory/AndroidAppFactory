@@ -1,11 +1,15 @@
 package com.bihe0832.android.framework.log
 
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.HandlerThread
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.router.RouterAction
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.BufferedWriter
 import java.io.File
@@ -27,7 +31,7 @@ object LoggerFile {
 
     private val mLogFiles = ConcurrentHashMap<String, File?>()
     private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
-    private const val DEFAULT_DURATION =  60 * 60 * 1000L
+    private const val DEFAULT_DURATION = 60 * 60 * 1000L
     private var mDuration = DEFAULT_DURATION
     private val mLoggerHandlerThread by lazy {
         HandlerThread("THREAD_ZIXIE_LOG_FILE", 5).also {
@@ -113,10 +117,13 @@ object LoggerFile {
     }
 
     fun openLog(filePath: String) {
-        try { //设置intent的data和Type属性
-            mContext?.let {
-                FileUtils.openFile(it, filePath, "*/*")
-            }
+        try {
+            val map = HashMap<String, String>()
+            map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(filePath)
+            RouterAction.openFinalURL(
+                    RouterAction.getFinalURL(RouterConstants.MODULE_NAME_EDITOR, map),
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+            )
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
             e.printStackTrace()
         }

@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibDialog"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.20.10"
+ext.moduleVersionName = "4.20.11"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -58,6 +58,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "Application", "CommonTest",
                         "com.android.support:design:${project.android_support_version}",
+                        "aceeditor"
                 ]
         ],
         "Application"               : [
@@ -80,17 +81,23 @@ ext.moduleInfo = [
                 "version"            : "4.20.10",
                 "artifactId"         : "common-test",
                 "apidependenciesList": [
-                        "Framework", "CommonPraise", "CommonFeedback", "CommonList"
+                        "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
                 ]
         ],
         "CommonWrapper"             : [
                 "version"            : "4.20.10",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
-                        "CommonFeedback", "CommonWebview",
-                        "CommonSplash", "CommonPhotos",
-                        "CommonNetwork", "CommonPraise", "CommonAbout",
-                        "CommonList", "CommonCoroutines", "CommonDataCenter", "CommonImage"
+                        "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
+                        "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList",
+                        "CommonCoroutines", "CommonDataCenter", "CommonImage", "CommonAceEditor"
+                ]
+        ],
+        "CommonAceEditor"           : [
+                "version"            : "4.20.10",
+                "artifactId"         : "common-ace-editor",
+                "apidependenciesList": [
+                        "Framework"
                 ]
         ],
         "CommonImage"               : [
@@ -176,7 +183,6 @@ ext.moduleInfo = [
                         ]
                 ]
         ],
-
         "CommonPraise"              : [
                 "version"            : "4.20.10",
                 "artifactId"         : "common-praise",
@@ -208,7 +214,7 @@ ext.moduleInfo = [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibCustomView",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
-                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView"
+                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView", "LibAceEditor"
                 ]
         ],
         "LibUtils"                  : [
@@ -577,7 +583,13 @@ ext.moduleInfo = [
                         "LibText"
                 ]
         ],
-
+        "LibAceEditor"              : [
+                "version"            : "4.20.8",
+                "artifactId"         : "lib-ace-editor",
+                "apidependenciesList": [
+                        "LibFileSelect","LibOS","LibDialog"
+                ]
+        ]
 ]
 
 
