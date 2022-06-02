@@ -1,6 +1,8 @@
 package com.bihe0832.android.common.debug.base
 
+import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.list.CommonListLiveData
+import com.bihe0832.android.framework.ZixieContext
 
 /**
  *
@@ -26,6 +28,6 @@ abstract class DebugListLiveData : CommonListLiveData() {
     }
 
     override fun getEmptyText(): String {
-        return "当前数据为空，请稍候再试"
+        return ZixieContext.applicationContext?.getString(R.string.common_debug_empty_tips) ?: ""
     }
 }
