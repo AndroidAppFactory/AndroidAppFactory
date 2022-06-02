@@ -8,8 +8,8 @@ import android.os.StrictMode
 import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager.addWatch
-import com.bihe0832.android.app.theme.ThemeManager
-import com.bihe0832.android.base.test.permission.TestPermissionsActivity
+import com.bihe0832.android.base.debug.permission.DebugPermissionsActivity
+import com.bihe0832.android.common.debug.DebugMainFragment
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.PermissionResultOfAAF
 import com.bihe0832.android.framework.ui.main.CommonActivity
@@ -28,7 +28,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
 class TestMainActivity : CommonActivity() {
-    val LOG_TAG = "TestHttpActivity"
+    val LOG_TAG = "DebugHttpActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +104,7 @@ class TestMainActivity : CommonActivity() {
 
 
     override fun getPermissionActivityClass(): Class<out PermissionsActivity> {
-        return TestPermissionsActivity::class.java
+        return DebugPermissionsActivity::class.java
     }
 
     override fun onResume() {
