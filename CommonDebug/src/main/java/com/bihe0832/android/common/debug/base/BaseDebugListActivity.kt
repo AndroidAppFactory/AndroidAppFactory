@@ -29,20 +29,6 @@ abstract class BaseDebugListActivity : CommonListActivity() {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
         }
         CardInfoHelper.getInstance().setAutoAddItem(true)
-        fragment_list_info_list.apply {
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-            addItemDecoration(object : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect,
-                    view: View,
-                    parent: RecyclerView,
-                    state: RecyclerView.State
-                ) {
-                    super.getItemOffsets(outRect, view, parent, state)
-                    outRect.set(0, DisplayUtil.dip2px(context!!, 10f), 0, 0)
-                }
-            })
-        }
     }
 
 

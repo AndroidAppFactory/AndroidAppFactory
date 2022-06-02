@@ -61,12 +61,17 @@ import androidx.annotation.RequiresApi;
 import com.bihe0832.android.lib.ace.poplist.AceSelectionActionModeHelper;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.ConvertUtils;
+import com.bihe0832.android.lib.utils.apk.APKUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
+/**
+ *
+ * https://ace.c9.io/#nav=api&api=document
+ *
+ * https://segmentfault.com/a/1190000021386202
+ */
 class AceWebView extends WebView implements NestedScrollingChild {
-
-    private static final String APP_CACAHE_DIRNAME = "/acewebcache";
 
 
     private int[] mLastTouch = new int[2];
@@ -171,6 +176,28 @@ class AceWebView extends WebView implements NestedScrollingChild {
         }
         super.setWebChromeClient(mWebChromeClient);
         super.setWebViewClient(mWebViewClient);
+        setUserAgentSupport(this.getSettings());
+    }
+
+    private void setUserAgentSupport(WebSettings webSettings) {
+        String userAgent = webSettings.getUserAgentString();
+        String myAgent = " " + getUserAgentString();
+        if (TextUtils.isEmpty(userAgent)) {
+            userAgent = myAgent;
+        } else {
+            if (userAgent.endsWith("/")) {
+                userAgent = userAgent + myAgent;
+            } else {
+                userAgent = userAgent + "/" + myAgent;
+            }
+        }
+        webSettings.setUserAgentString(userAgent);
+    }
+
+    protected String getUserAgentString() {
+        return " " + AceConstants.URL_USER_AGENT_VERSION
+                + "/" + APKUtils.getAppVersionName(getContext())
+                + "/" + APKUtils.getAppVersionCode(getContext()) + "/" + AceConstants.SYSTEM_CONSTANT + "/";
     }
 
     private void setHTMLSupport(WebSettings webSetting) {
@@ -205,7 +232,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
 
     private void resetCacheType(WebSettings webSetting) {
         //设置缓存位置
-        String cacheDirPath = this.getContext().getApplicationContext().getFilesDir().getAbsolutePath() + APP_CACAHE_DIRNAME;
+        String cacheDirPath = this.getContext().getApplicationContext().getFilesDir().getAbsolutePath() + AceConstants.APP_CACAHE_DIRNAME;
         //设置缓存类型
         webSetting.setCacheMode(WebSettings.LOAD_DEFAULT);
         // 开启 DOM storage API 功能

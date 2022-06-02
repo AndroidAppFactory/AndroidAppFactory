@@ -9,7 +9,9 @@
 package com.bihe0832.android.common.ace.editor
 
 import android.view.View
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.ace.editor.AceConstants
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -54,6 +56,7 @@ class AceEditFragment : BaseFragment() {
         main_ace_editor?.apply {
             isReadOnly = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
             isWrap = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
+            setDebug(!ZixieContext.isOfficial())
         }
         mLoadingDialog = LoadingDialog(context).apply {
             setIsFullScreen(true)

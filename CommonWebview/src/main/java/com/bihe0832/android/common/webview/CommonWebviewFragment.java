@@ -7,6 +7,8 @@ import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
+import com.bihe0832.android.lib.ace.editor.AceConstants;
+import com.bihe0832.android.lib.ace.editor.AceEditorView;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 
@@ -14,13 +16,12 @@ import java.util.HashMap;
 
 public class CommonWebviewFragment extends BaseWebviewFragment {
 
-    private static final String URL_USER_AGENT_VERSION = "ZixieVersion";
-    private static final String URL_USER_AGENT_JS_BRIDGE_VERSION = "JSVersion";
+
     public static final String VERSION_NAME = "1.0.0";
     public static final int VERSION_CODE = 1;
 
-    private static final String URL_PARAM_VERSION_NAME = URL_USER_AGENT_VERSION + "Name";
-    private static final String URL_PARAM_VERSION_CODE = URL_USER_AGENT_VERSION + "Code";
+    private static final String URL_PARAM_VERSION_NAME = AceConstants.URL_USER_AGENT_VERSION + "Name";
+    private static final String URL_PARAM_VERSION_CODE = AceConstants.URL_USER_AGENT_VERSION + "Code";
     private static final String URL_PARAM_CLIENT_TIME = "ClientTime";
     private static final String URL_PARAM_PLATFORM = "OSVersion";
 
@@ -55,10 +56,10 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
 
     @Override
     protected String getUserAgentString() {
-        return " " + URL_USER_AGENT_VERSION
+        return " " + AceConstants.URL_USER_AGENT_VERSION
                 + "/" + ZixieContext.INSTANCE.getVersionName()
                 + "/" + ZixieContext.INSTANCE.getVersionCode() + "/" + Constants.SYSTEM_CONSTANT + "/" +
-                URL_USER_AGENT_JS_BRIDGE_VERSION + "/" + VERSION_NAME + "/" + VERSION_CODE;
+                AceConstants.URL_USER_AGENT_JS_BRIDGE_VERSION + "/" + VERSION_NAME + "/" + VERSION_CODE;
     }
 
     @Override
