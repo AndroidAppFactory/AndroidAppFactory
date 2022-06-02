@@ -10,6 +10,7 @@ package com.bihe0832.android.common.ace.editor
 
 import android.view.View
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.LoadingDialog
@@ -18,12 +19,8 @@ import kotlinx.android.synthetic.main.fragment_ace_edit.*
 
 class AceEditFragment : BaseFragment() {
     private var filePath = ""
-    private val mLoadingDialog by lazy {
-        LoadingDialog(context).apply {
-            setIsFullScreen(true)
-            setLoadingType(LoadingDialog.LOADING_TYPE_DOTS)
-        }
-    }
+
+    private var mLoadingDialog: LoadingDialog? = null
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_ace_edit
@@ -33,25 +30,55 @@ class AceEditFragment : BaseFragment() {
         this.filePath = filePath
     }
 
+    fun setReadOnly(readOnly: Boolean) {
+        Config.writeConfig(AceConstants.KEY_LAST_IS_READ_ONLY, readOnly)
+        main_ace_editor?.isReadOnly = readOnly
+    }
+
+    fun isReadOnly(): Boolean {
+        return main_ace_editor?.isReadOnly ?: true
+    }
+
+    fun setAutoWrap(autoWrap: Boolean) {
+        Config.writeConfig(AceConstants.KEY_LAST_IS_AUTO_WRAP, autoWrap)
+        main_ace_editor?.setWrap(autoWrap)
+    }
+
+    fun isAutoWrap(): Boolean {
+        return main_ace_editor?.isWrap ?: true
+    }
+
 
     override fun initView(view: View) {
         super.initView(view)
-        main_ace_editor?.setReadOnly(true)
+        main_ace_editor?.apply {
+            isReadOnly = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
+            isWrap = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
+        }
+        mLoadingDialog = LoadingDialog(context).apply {
+            setIsFullScreen(true)
+            setLoadingType(LoadingDialog.LOADING_TYPE_DOTS)
+        }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser, hasCreateView)
+        if (hasCreateView && isVisibleToUser) {
+            main_ace_editor?.isReadOnly = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
+            main_ace_editor?.isWrap = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
+        }
     }
 
     override fun initData() {
         super.initData()
         if (FileUtils.checkFileExist(filePath)) {
-            mLoadingDialog.show("文件加载中，请稍候")
+            mLoadingDialog?.show(getString(R.string.ace_editor_load_file_tips))
             ThreadManager.getInstance().start {
                 FileUtils.getFileBytes(filePath).let {
                     main_ace_editor?.loadContent(filePath, it)
-                    mLoadingDialog.dismiss()
+                    mLoadingDialog?.dismiss()
                 }
             }
-
-        } else {
-            activity?.finish()
         }
     }
 }

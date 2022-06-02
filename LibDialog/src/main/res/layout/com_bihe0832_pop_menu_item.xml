@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <ImageView
             android:id="@+id/pop_menu_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="8dp"
             android:scaleType="centerInside"
-            tools:src="@mipmap/icon"
-            android:layout_marginRight="12dp" />
+            tools:src="@mipmap/icon" />
 
         <TextView
             android:id="@+id/pop_menu_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/com_bihe0832_pop_menu_text_color"
             android:textSize="@dimen/com_bihe0832_pop_menu_text_size"
-            tools:text="fsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfd"
-            android:textColor="@color/com_bihe0832_pop_menu_text_color" />
+            tools:text="fsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfdfsfd" />
 
     </LinearLayout>
 

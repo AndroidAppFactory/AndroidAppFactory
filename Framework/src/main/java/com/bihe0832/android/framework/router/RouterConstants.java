@@ -9,8 +9,10 @@ import com.bihe0832.android.lib.file.select.FileSelectTools;
 
 public class RouterConstants {
 
+    //内置反馈
     public static final String MODULE_NAME_FEEDBACK = "zfeedback";
 
+    //内置文本编辑器
     public static final String MODULE_NAME_EDITOR = "zeditor";
 
     public static final String MODULE_NAME_WEB_PAGE = "zweb";

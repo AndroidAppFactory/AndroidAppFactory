@@ -1,7 +1,6 @@
 package com.bihe0832.android.app.file
 
 import android.net.Uri
-import com.bihe0832.android.app.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.ZixieFileProvider
@@ -24,7 +23,7 @@ object AAFFileUtils {
     }
 
     fun getFolder(): String {
-        val file = ZixieContext.getZixieFolder() + ZixieContext.applicationContext!!.getString(R.string.lib_bihe0832_file_folder) + File.separator
+        val file = ZixieContext.getZixieFolder() + File.separator
         FileUtils.checkAndCreateFolder(file)
         return file
     }
