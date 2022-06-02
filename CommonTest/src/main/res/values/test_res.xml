@@ -7,6 +7,6 @@
     <color name="common_test_tips_bg">@color/colorAccent</color>
 
     <color name="common_test_text">@color/black</color>
-    <color name="common_test_bg">@color/colorAccent</color>
+    <color name="common_test_bg">@color/white</color>
 
 </resources>
