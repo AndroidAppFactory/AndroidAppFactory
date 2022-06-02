@@ -29,12 +29,15 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.StringRes;
 
+import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 
 public class AceEditorView extends FrameLayout {
+
 
     public interface OnReadContentReadyListener {
         void onReadContentReady(byte[] content, String mimeType);
@@ -225,7 +228,14 @@ public class AceEditorView extends FrameLayout {
                 System.currentTimeMillis(),
                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN));
         webview.loadUrl(url);
+
         return webview;
+    }
+
+    public void setDebug(boolean isDebug) {
+        if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.KITKAT) {
+            mWebView.setWebContentsDebuggingEnabled(isDebug);
+        }
     }
 
     public boolean isWrap() {
@@ -252,6 +262,7 @@ public class AceEditorView extends FrameLayout {
         }
         return this;
     }
+
 
     public int getTextSize() {
         return mTextSize;
