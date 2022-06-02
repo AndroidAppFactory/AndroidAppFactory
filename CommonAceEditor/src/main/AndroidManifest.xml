@@ -6,6 +6,6 @@
         <activity
             android:name="com.bihe0832.android.common.ace.editor.AceEditActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/fullscreenActivityTheme" />
+            android:theme="@style/activityTheme" />
     </application>
 </manifest>

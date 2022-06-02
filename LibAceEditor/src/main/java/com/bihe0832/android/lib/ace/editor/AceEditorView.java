@@ -27,17 +27,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
+import androidx.annotation.StringRes;
+
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 
-import androidx.annotation.StringRes;
-
 public class AceEditorView extends FrameLayout {
 
     public interface OnReadContentReadyListener {
         void onReadContentReady(byte[] content, String mimeType);
+
         void onContentUnchanged();
     }
 
@@ -47,6 +48,7 @@ public class AceEditorView extends FrameLayout {
 
     public interface OnMessageListener {
         void onErrorMessage(@StringRes int msg);
+
         void onWarnMessage(@StringRes int msg);
     }
 
@@ -57,7 +59,7 @@ public class AceEditorView extends FrameLayout {
 
     private final Pattern mPattern = Pattern.compile("edt:(\\d)+:[pfm]:");
 
-    private boolean mReadOnly = false;
+    private boolean mReadOnly = true;
     private boolean mWrap = true;
     private int mTextSize = 10;
     private boolean mNotifyMimeTypeChanges;
@@ -94,7 +96,8 @@ public class AceEditorView extends FrameLayout {
             int attr = a.getIndex(i);
             if (attr == R.styleable.AceEditorView_locked) {
                 mReadOnly = a.getBoolean(attr, mReadOnly);
-            } if (attr == R.styleable.AceEditorView_wrap) {
+            }
+            if (attr == R.styleable.AceEditorView_wrap) {
                 mWrap = a.getBoolean(attr, mWrap);
             }
         }
@@ -346,7 +349,7 @@ public class AceEditorView extends FrameLayout {
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         //begin boilerplate code so parent classes can restore state
-        if(!(state instanceof SavedState)) {
+        if (!(state instanceof SavedState)) {
             super.onRestoreInstanceState(state);
             return;
         }
@@ -369,16 +372,26 @@ public class AceEditorView extends FrameLayout {
     public static String resolveExtensionFromMimeType(String mimeType) {
         if (mimeType != null) {
             switch (mimeType) {
-            case "text/javascript": return "js";
-            case "text/x-c": return "c";
-            case "text/x-c++": return "cpp";
-            case "text/x-python": return "py";
-            case "text/x-java": return "java";
-            case "text/html": return "html";
-            case "text/css": return "css";
-            case "text/x-ruby": return "rb";
-            case "text/x-go": return "go";
-            case "text/x-php": return "php";
+                case "text/javascript":
+                    return "js";
+                case "text/x-c":
+                    return "c";
+                case "text/x-c++":
+                    return "cpp";
+                case "text/x-python":
+                    return "py";
+                case "text/x-java":
+                    return "java";
+                case "text/html":
+                    return "html";
+                case "text/css":
+                    return "css";
+                case "text/x-ruby":
+                    return "rb";
+                case "text/x-go":
+                    return "go";
+                case "text/x-php":
+                    return "php";
             }
         }
         return "txt";
@@ -417,6 +430,7 @@ public class AceEditorView extends FrameLayout {
                     public SavedState createFromParcel(Parcel in) {
                         return new SavedState(in);
                     }
+
                     public SavedState[] newArray(int size) {
                         return new SavedState[size];
                     }

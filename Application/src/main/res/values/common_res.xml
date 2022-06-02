@@ -13,4 +13,7 @@
     <string name="theme_change_tips">你可上下滑动主题列表查看更多主题</string>
     <string name="theme_type_dark">暗夜模式</string>
     <string name="theme_change_confirm_message">改变主题不会自动保存当前文档, 确认放弃文档改变而改变主题?</string>
+
+
+
 </resources>
