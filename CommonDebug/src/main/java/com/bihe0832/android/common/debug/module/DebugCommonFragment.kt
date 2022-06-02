@@ -25,7 +25,7 @@ import com.bihe0832.android.lib.utils.time.DateUtil
 import java.util.*
 import kotlin.collections.set
 
-open class DebugDebugCommonFragment : BaseDebugListFragment() {
+open class DebugCommonFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
