@@ -2,18 +2,17 @@ package com.bihe0832.android.test;
 
 import android.support.v4.app.Fragment;
 
-import com.bihe0832.android.base.test.TestDebugTempFragment;
-import com.bihe0832.android.base.test.dialog.TestDialogFragment;
-import com.bihe0832.android.base.test.view.TestViewFragment;
-import com.bihe0832.android.common.ace.editor.AceEditFragment;
-import com.bihe0832.android.common.test.module.TestDebugCommonFragment;
-import com.bihe0832.android.test.module.TestRouterFragment;
+import com.bihe0832.android.base.debug.DebugTempFragment;
+import com.bihe0832.android.base.debug.view.DebugTextViewFragment;
+import com.bihe0832.android.common.debug.DebugMainFragment;
+import com.bihe0832.android.common.debug.module.DebugDebugCommonFragment;
+import com.bihe0832.android.test.module.DebugRouterFragment;
 
 
 /**
  * Created by hardyshi on 16/6/30.
  */
-public class TestMainFragment extends com.bihe0832.android.common.test.TestMainFragment {
+public class TestMainFragment extends DebugMainFragment {
 
     private static final String TAB_FOR_DEV_COMMON = "通用调试";
     private static final String TAB_FOR_DEV_TEMP = "临时调试";
@@ -31,15 +30,15 @@ public class TestMainFragment extends com.bihe0832.android.common.test.TestMainF
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new TestViewFragment();
+            return new DebugTextViewFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
-            return new TestDebugTempFragment();
+            return new DebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {
-            return new TestDebugCommonFragment();
+            return new DebugDebugCommonFragment();
         } else if (title.equals(TAB_FOR_ROUTER)) {
-            return new TestRouterFragment();
+            return new DebugRouterFragment();
         } else {
-            return new TestDebugCommonFragment();
+            return new DebugDebugCommonFragment();
         }
     }
 
