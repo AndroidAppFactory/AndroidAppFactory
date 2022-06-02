@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "Application,CommonDebug,CommonList"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.20.14"
+ext.moduleVersionName = "4.20.15"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -43,8 +43,8 @@ ext.moduleInfo = [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
-                        "Application", "CommonTest",
-                        "BaseTest"
+                        "Application", "CommonDebug",
+                        "BaseDebug"
                 ],
                 "specialdependenciesList": [
                         "kapt": [
@@ -52,11 +52,11 @@ ext.moduleInfo = [
                         ]
                 ]
         ],
-        "BaseTest"                  : [
+        "BaseDebug"                  : [
                 "version"            : "",
                 "artifactId"         : "",
                 "apidependenciesList": [
-                        "Application", "CommonTest",
+                        "Application", "CommonDebug",
                         "com.android.support:design:${project.android_support_version}",
                         "aceeditor"
                 ]
@@ -77,9 +77,9 @@ ext.moduleInfo = [
                         "releaseApi": ["com.squareup.leakcanary:leakcanary-android-no-op:1.5.1"]
                 ]
         ],
-        "CommonTest"                : [
+        "CommonDebug"                : [
                 "version"            : "4.20.14",
-                "artifactId"         : "common-test",
+                "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
                 ]
