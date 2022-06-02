@@ -7,7 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.bihe0832.android.common.debug.module.DebugDebugCommonFragment;
+import com.bihe0832.android.common.debug.module.DebugCommonFragment;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -37,7 +37,7 @@ public class DebugMainFragment extends BaseFragment {
     }
 
     protected Fragment getFragmentByIndex(String title) {
-        return new DebugDebugCommonFragment();
+        return new DebugCommonFragment();
     }
 
 

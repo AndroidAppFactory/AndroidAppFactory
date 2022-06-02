@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import com.bihe0832.android.base.debug.DebugTempFragment;
 import com.bihe0832.android.base.debug.view.DebugTextViewFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
-import com.bihe0832.android.common.debug.module.DebugDebugCommonFragment;
+import com.bihe0832.android.common.debug.module.DebugCommonFragment;
 import com.bihe0832.android.test.module.DebugRouterFragment;
 
 
@@ -34,11 +34,11 @@ public class TestMainFragment extends DebugMainFragment {
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new DebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {
-            return new DebugDebugCommonFragment();
+            return new DebugCommonFragment();
         } else if (title.equals(TAB_FOR_ROUTER)) {
             return new DebugRouterFragment();
         } else {
-            return new DebugDebugCommonFragment();
+            return new DebugCommonFragment();
         }
     }
 
