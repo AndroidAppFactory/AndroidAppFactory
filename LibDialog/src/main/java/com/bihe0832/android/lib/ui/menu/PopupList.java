@@ -19,12 +19,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 import java.util.List;
 
@@ -47,17 +47,13 @@ public class PopupList {
     public static final float DEFAULT_DIVIDER_WIDTH_DP = 0.5f;
     public static final float DEFAULT_DIVIDER_HEIGHT_DP = 40.0f;
 
-    private Context mContext;
+    private final Context mContext;
     private PopupWindow mPopupWindow;
     private View mAnchorView;
-    private View mAdapterView;
     private View mContextView;
     private View mIndicatorView;
     private List<String> mPopupItemList;
     private PopupListListener mPopupListListener;
-    private int mContextPosition = 0;
-    private float mOffsetX = 0;
-    private float mOffsetY = 0;
     private StateListDrawable mLeftItemBackground;
     private StateListDrawable mRightItemBackground;
     private StateListDrawable mCornerItemBackground;
@@ -85,80 +81,44 @@ public class PopupList {
         this.mContext = context;
         this.mNormalTextColor = DEFAULT_NORMAL_TEXT_COLOR;
         this.mPressedTextColor = DEFAULT_PRESSED_TEXT_COLOR;
-        this.mTextSize = dp2px(DEFAULT_TEXT_SIZE_DP);
-        this.mTextPaddingLeft = dp2px(DEFAULT_TEXT_PADDING_LEFT_DP);
-        this.mTextPaddingTop = dp2px(DEFAULT_TEXT_PADDING_TOP_DP);
-        this.mTextPaddingRight = dp2px(DEFAULT_TEXT_PADDING_RIGHT_DP);
-        this.mTextPaddingBottom = dp2px(DEFAULT_TEXT_PADDING_BOTTOM_DP);
+        this.mTextSize = DisplayUtil.dip2px(context, DEFAULT_TEXT_SIZE_DP);
+        this.mTextPaddingLeft = DisplayUtil.dip2px(context, DEFAULT_TEXT_PADDING_LEFT_DP);
+        this.mTextPaddingTop = DisplayUtil.dip2px(context, DEFAULT_TEXT_PADDING_TOP_DP);
+        this.mTextPaddingRight = DisplayUtil.dip2px(context, DEFAULT_TEXT_PADDING_RIGHT_DP);
+        this.mTextPaddingBottom = DisplayUtil.dip2px(context, DEFAULT_TEXT_PADDING_BOTTOM_DP);
         this.mNormalBackgroundColor = DEFAULT_NORMAL_BACKGROUND_COLOR;
         this.mPressedBackgroundColor = DEFAULT_PRESSED_BACKGROUND_COLOR;
-        this.mBackgroundCornerRadius = dp2px(DEFAULT_BACKGROUND_RADIUS_DP);
+        this.mBackgroundCornerRadius = DisplayUtil.dip2px(context, DEFAULT_BACKGROUND_RADIUS_DP);
         this.mDividerColor = DEFAULT_DIVIDER_COLOR;
-        this.mDividerWidth = dp2px(DEFAULT_DIVIDER_WIDTH_DP);
-        this.mDividerHeight = dp2px(DEFAULT_DIVIDER_HEIGHT_DP);
-        this.mIndicatorView = getDefaultIndicatorView(mContext);
+        this.mDividerWidth = DisplayUtil.dip2px(context, DEFAULT_DIVIDER_WIDTH_DP);
+        this.mDividerHeight = DisplayUtil.dip2px(context, DEFAULT_DIVIDER_HEIGHT_DP);
         refreshBackgroundOrRadiusStateList();
         refreshTextColorStateList(mPressedTextColor, mNormalTextColor);
     }
 
-    /**
-     * Popup a window when anchorView is clicked and held.
-     * That method will call {@link View#setOnTouchListener(View.OnTouchListener)} and
-     * {@link View#setOnLongClickListener(View.OnLongClickListener)}(or
-     * {@link AbsListView#setOnItemLongClickListener(AdapterView.OnItemLongClickListener)}
-     * if anchorView is a instance of AbsListView), so you can only use
-     * {@link PopupList#showPopupListWindow(View, int, float, float, List, PopupListListener)}
-     * if you called those method before.
-     *
-     * @param anchorView        the view on which to pin the popup window
-     * @param popupItemList     the list of the popup menu
-     * @param popupListListener the Listener
-     */
+
     public void show(View anchorView, List<String> popupItemList, PopupListListener popupListListener) {
-        this.mAnchorView = anchorView;
-        this.mPopupItemList = popupItemList;
-        this.mPopupListListener = popupListListener;
-        this.mPopupWindow = null;
-        mOffsetX = anchorView.getX() + anchorView.getWidth() / 2;
-        mOffsetY = 0;
-        if (mPopupListListener != null && !mPopupListListener.onPopupListShow(anchorView, anchorView, 0)) {
-            return;
-        }
-        mContextView = anchorView;
-        mContextPosition = 0;
-        showPopupListWindow(mOffsetX, mOffsetY);
+        show(anchorView, anchorView.getX() + anchorView.getWidth() / 2, 0, true, popupItemList, popupListListener);
     }
 
-    /**
-     * show a popup window in a bubble style.
-     *
-     * @param anchorView        the view on which to pin the popup window
-     * @param contextPosition   context position
-     * @param rawX              the original raw X coordinate
-     * @param rawY              the original raw Y coordinate
-     * @param popupItemList     the list of the popup menu
-     * @param popupListListener the Listener
-     */
-    public void showPopupListWindow(View anchorView, int contextPosition, float rawX, float rawY,
-                                    List<String> popupItemList, PopupListListener popupListListener) {
+    public void show(View anchorView, float rawX, float rawY, boolean useIndicator,
+                     List<String> popupItemList, PopupListListener popupListListener) {
         mAnchorView = anchorView;
-        mContextPosition = contextPosition;
         mPopupItemList = popupItemList;
         mPopupListListener = popupListListener;
         mPopupWindow = null;
         mContextView = anchorView;
-        if (mPopupListListener != null
-                && !mPopupListListener.onPopupListShow(mContextView, mContextView, contextPosition)) {
-            return;
+        if (useIndicator && mIndicatorView == null) {
+            this.mIndicatorView = getDefaultIndicatorView(mContext);
         }
-        showPopupListWindow(rawX, rawY);
+        show(rawX, rawY);
     }
 
-    private void showPopupListWindow(float offsetX, float offsetY) {
+    private void show(float offsetX, float offsetY) {
         if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
             return;
         }
-        if (mPopupWindow == null || mPopupListListener instanceof AdapterPopupListListener) {
+        if (mPopupWindow == null) {
             LinearLayout contentView = new LinearLayout(mContext);
             contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             contentView.setOrientation(LinearLayout.VERTICAL);
@@ -192,22 +152,18 @@ public class PopupList {
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
                 textView.setPadding(mTextPaddingLeft, mTextPaddingTop, mTextPaddingRight, mTextPaddingBottom);
                 textView.setClickable(true);
+                textView.setText(mPopupItemList.get(i));
                 final int finalI = i;
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (mPopupListListener != null) {
-                            mPopupListListener.onPopupListClick(mContextView, mContextPosition, finalI);
+                            mPopupListListener.onPopupListClick(mContextView, finalI, mPopupItemList.get(finalI));
                             hidePopupListWindow();
                         }
                     }
                 });
-                if (mPopupListListener instanceof AdapterPopupListListener) {
-                    AdapterPopupListListener adapterPopupListListener = (AdapterPopupListListener) mPopupListListener;
-                    textView.setText(adapterPopupListListener.formatText(mAdapterView, mContextView, mContextPosition, i, mPopupItemList.get(i)));
-                } else {
-                    textView.setText(mPopupItemList.get(i));
-                }
+
                 if (mPopupItemList.size() > 1 && i == 0) {
                     textView.setBackgroundDrawable(mLeftItemBackground);
                 } else if (mPopupItemList.size() > 1 && i == mPopupItemList.size() - 1) {
@@ -361,7 +317,7 @@ public class PopupList {
     }
 
     public View getDefaultIndicatorView(Context context) {
-        return getTriangleIndicatorView(context, dp2px(16), dp2px(8), DEFAULT_NORMAL_BACKGROUND_COLOR);
+        return getTriangleIndicatorView(context, DisplayUtil.dip2px(context, 16), DisplayUtil.dip2px(context, 8), mNormalBackgroundColor);
     }
 
     public View getTriangleIndicatorView(Context context, final float widthPixel, final float heightPixel,
@@ -565,45 +521,12 @@ public class PopupList {
         return view.getMeasuredHeight();
     }
 
-    public int dp2px(float value) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                value, getResources().getDisplayMetrics());
-    }
-
-    public int sp2px(float value) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                value, getResources().getDisplayMetrics());
-    }
-
     public boolean isShowing() {
         return mPopupWindow != null && mPopupWindow.isShowing();
     }
 
     public interface PopupListListener {
-
-        /**
-         * Whether the PopupList should be bound to the special view
-         *
-         * @param adapterView     The context view(The AbsListView where the click happened or normal view).
-         * @param contextView     The view within the AbsListView that was clicked or normal view
-         * @param contextPosition The position of the view in the list
-         * @return true if the view should show the PopupList, false otherwise
-         */
-        boolean onPopupListShow(View adapterView, View contextView, int contextPosition);
-
-        /**
-         * The callback to be invoked with an item in this PopupList has
-         * been clicked
-         *
-         * @param contextView     The context view(The AbsListView where the click happened or normal view).
-         * @param contextPosition The position of the view in the list
-         * @param position        The position of the view in the PopupList
-         */
-        void onPopupListClick(View contextView, int contextPosition, int position);
-    }
-
-    public interface AdapterPopupListListener extends PopupListListener {
-        String formatText(View adapterView, View contextView, int contextPosition, int position, String text);
+        void onPopupListClick(View contextView, int position, String label);
     }
 }
 

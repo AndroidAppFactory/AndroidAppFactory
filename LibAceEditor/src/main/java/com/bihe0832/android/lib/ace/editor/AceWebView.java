@@ -58,7 +58,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.bihe0832.android.lib.ace.poplist.AceSelectionActionModeHelper;
+import com.bihe0832.android.lib.text.ClipboardUtil;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
@@ -66,9 +66,8 @@ import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
- *
  * https://ace.c9.io/#nav=api&api=document
- *
+ * <p>
  * https://segmentfault.com/a/1190000021386202
  */
 class AceWebView extends WebView implements NestedScrollingChild {
@@ -89,7 +88,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
     private WebChromeClient mWrappedWebChromeClient = new WebChromeClient();
     private WebViewClient mWrappedWebViewClient = new WebViewClient();
 
-    private AceSelectionActionModeHelper mSelectionHelper;
+    private AceSelectionActionHelper mSelectionHelper;
     private final DisplayMetrics mMetrics;
     private final ClipboardManager mClipboard;
 
@@ -253,45 +252,36 @@ class AceWebView extends WebView implements NestedScrollingChild {
         setClickable(false);
         setLongClickable(false);
         setHapticFeedbackEnabled(false);
+        mSelectionHelper = new AceSelectionActionHelper(ViewExtKt.getActivity(this));
+//        mSelectionHelper = new AceSelectionActionModeHelper(getContext(), getContext().getResources().getStringArray(R.array.poplist_item_list));
 
-        mSelectionHelper = new AceSelectionActionModeHelper(getContext(), getContext().getResources().getStringArray(R.array.poplist_item_list));
-        mSelectionHelper.listenOn(new AceSelectionActionModeHelper.OnSelectionItemPressed() {
+        mSelectionHelper.setOnSelectionItemPressedListener(new AceSelectionActionHelper.OnSelectionItemPressed() {
             @Override
-            public boolean onSelectionItemPressed(int itemId, String label) {
-                switch (itemId) {
-                    case AceSelectionActionModeHelper.OPTION_CUT:
-                        // On old Android versions, cut doesn't work. Just use our own implementation.
-                        loadUrl("javascript: ace_copy(true);");
-                        mHasPaste = true;
-                        break;
-                    case AceSelectionActionModeHelper.OPTION_COPY:
-                        // On old Android versions, copy doesn't work. Just use our own implementation.
-                        loadUrl("javascript: ace_copy(false);");
-                        mHasPaste = true;
-                        break;
-                    case AceSelectionActionModeHelper.OPTION_PASTE:
-                        // On old Android versions, paste doesn't work. Just use our own implementation.
-                        String text = "";
-                        if (mClipboard.hasPrimaryClip()
-                                && mClipboard.getPrimaryClip() != null
-                                && mClipboard.getPrimaryClip().getItemCount() > 0
-                                && mClipboard.getPrimaryClipDescription() != null
-                                && mClipboard.getPrimaryClipDescription().hasMimeType("text/*")) {
-                            text = mClipboard.getPrimaryClip().getItemAt(0).getText().toString();
-                        }
-                        final String s = new String(Base64.encode(text.getBytes(), Base64.NO_WRAP));
-                        loadUrl("javascript: ace_paste('" + s + "');");
-                        break;
-                    case AceSelectionActionModeHelper.OPTION_SELECT_ALL:
-                        // On old Android versions, select all doesn't work. Just use our
-                        // own implementation.
-                        loadUrl("javascript: ace_select_all();");
-                        return false;
-                    default:
-                        loadUrl("javascript: ace_get_selected_text('" + itemId + "');");
-                        break;
-                }
-                return true;
+            public void onSearchClick() {
+                loadUrl("javascript: ace_get_selected_text('');");
+            }
+
+            @Override
+            public void onSelectAllClick() {
+                loadUrl("javascript: ace_select_all();");
+            }
+
+            @Override
+            public void onPasteClick() {
+                final String s = new String(Base64.encode(ClipboardUtil.pasteFromClipboard(getContext()).getBytes(), Base64.NO_WRAP));
+                loadUrl("javascript: ace_paste('" + s + "');");
+            }
+
+            @Override
+            public void onCopyClick() {
+                loadUrl("javascript: ace_copy(false);");
+                mHasPaste = true;
+            }
+
+            @Override
+            public void onCutClick() {
+                loadUrl("javascript: ace_copy(true);");
+                mHasPaste = true;
             }
         });
         super.setOnLongClickListener(new View.OnLongClickListener() {

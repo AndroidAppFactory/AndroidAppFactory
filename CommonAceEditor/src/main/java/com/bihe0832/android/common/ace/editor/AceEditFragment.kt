@@ -56,6 +56,7 @@ class AceEditFragment : BaseFragment() {
         main_ace_editor?.apply {
             isReadOnly = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
             isWrap = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
+            textSize = Config.readConfig(AceConstants.KEY_LAST_TEXT_SIZE, AceConstants.VALUE_LAST_TEXT_SIZE)
             setDebug(!ZixieContext.isOfficial())
         }
         mLoadingDialog = LoadingDialog(context).apply {

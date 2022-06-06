@@ -22,7 +22,8 @@ public class AceConstants {
     public static final String KEY_LAST_IS_AUTO_WRAP = "ace.last.auto.wrap";
     public static final boolean VALUE_LAST_IS_AUTO_WRAP = true;
 
-
+    public static final String KEY_LAST_TEXT_SIZE = "ace.last.text.size";
+    public static final int VALUE_LAST_TEXT_SIZE = 12;
 
     public static final String URL_USER_AGENT_VERSION = "ZixieVersion";
     public static final String URL_USER_AGENT_JS_BRIDGE_VERSION = "JSVersion";
