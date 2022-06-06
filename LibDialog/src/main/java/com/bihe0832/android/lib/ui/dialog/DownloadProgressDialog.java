@@ -57,7 +57,7 @@ public class DownloadProgressDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.common_progress_dialog);
+        setContentView(R.layout.com_bihe0832_common_progress_dialog);
         //初始化界面控件
         initView();
         //初始化界面数据

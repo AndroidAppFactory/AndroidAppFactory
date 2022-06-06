@@ -15,6 +15,7 @@
 
     <com.bihe0832.android.lib.ace.editor.AceEditorView
         android:id="@+id/main_ace_editor"
+        android:paddingBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

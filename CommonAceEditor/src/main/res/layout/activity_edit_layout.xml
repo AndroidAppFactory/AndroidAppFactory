@@ -10,7 +10,6 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/common_toolbar"
         style="@style/frameWorkAppTheme.Toolbar.Light"
-        android:paddingRight="16dp"
         app:title="">
 
         <ImageView

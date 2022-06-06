@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibAceEditor"
+ext.developModule = "LibAceEditor,LibDialog"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -587,7 +587,7 @@ ext.moduleInfo = [
                 "version"            : "4.20.14",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
-                        "LibFileSelect","LibOS","LibDialog"
+                        "LibFileSelect","LibOS","LibDialog","LibText"
                 ]
         ]
 ]

@@ -62,9 +62,9 @@ public class AceEditorView extends FrameLayout {
 
     private final Pattern mPattern = Pattern.compile("edt:(\\d)+:[pfm]:");
 
-    private boolean mReadOnly = true;
-    private boolean mWrap = true;
-    private int mTextSize = 10;
+    private boolean mReadOnly = AceConstants.VALUE_LAST_IS_READ_ONLY;
+    private boolean mWrap = AceConstants.VALUE_LAST_IS_AUTO_WRAP;
+    private int mTextSize = AceConstants.VALUE_LAST_TEXT_SIZE;
     private boolean mNotifyMimeTypeChanges;
     private boolean mIsDirty;
     private boolean mInitialLoad = true;
