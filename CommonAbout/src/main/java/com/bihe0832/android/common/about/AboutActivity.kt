@@ -1,6 +1,8 @@
 package com.bihe0832.android.common.about
 
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.debug.ShowDebugClick
 import com.bihe0832.android.framework.ui.BaseActivity
@@ -28,14 +30,33 @@ open class AboutActivity : BaseActivity() {
         }
     }
 
-    private fun initView() {
-        about_version_info.text = "当前版本：" + ZixieContext.getVersionName()
-        about_app_icon.setOnClickListener(object : ShowDebugClick() {
+    protected open fun initView() {
+        getVersionTextView().text = "当前版本：" + ZixieContext.getVersionName()
+        getVersionIcon().setOnClickListener(object : ShowDebugClick() {
             override fun onClickAction() {
-                about_version_info.text = "当前版本：" + ZixieContext.getVersionNameAndCode()
+                showVersionDetail()
+            }
+
+            override fun onDebugAction() {
+
             }
         })
-        about_copyright.text = "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " ZIXIE.All Rights Reserved"
+        getCopyRightTextView().text = "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " ZIXIE.All Rights Reserved"
     }
 
+    protected fun showVersionDetail() {
+        getVersionTextView().text = "当前版本：" + ZixieContext.getVersionNameAndCode()
+    }
+
+    protected fun getVersionIcon(): ImageView {
+        return about_app_icon
+    }
+
+    protected fun getVersionTextView(): TextView {
+        return about_version_info
+    }
+
+    protected fun getCopyRightTextView(): TextView {
+        return about_copyright
+    }
 }

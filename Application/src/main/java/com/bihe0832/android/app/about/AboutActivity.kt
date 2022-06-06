@@ -3,6 +3,7 @@ package com.bihe0832.android.app.about
 import android.os.Bundle
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.update.UpdateManager
+import com.bihe0832.android.framework.debug.ShowDebugClick
 import com.bihe0832.android.lib.router.annotation.Module
 
 
@@ -20,5 +21,18 @@ open class AboutActivity : com.bihe0832.android.common.about.AboutActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         UpdateManager.checkUpdateAndShowDialog(this, false)
+    }
+
+    override fun initView() {
+        super.initView()
+        getVersionIcon().setOnClickListener(object : ShowDebugClick() {
+            override fun onClickAction() {
+                showVersionDetail()
+            }
+
+            override fun onDebugAction() {
+
+            }
+        })
     }
 }
