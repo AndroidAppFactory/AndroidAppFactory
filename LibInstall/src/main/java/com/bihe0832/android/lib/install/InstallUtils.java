@@ -83,7 +83,12 @@ public class InstallUtils {
         boolean haveInstallPermission = true;
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
             //先获取是否有安装未知来源应用的权限
-            haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
+            try {
+                haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
+            } catch (Exception e) {
+                haveInstallPermission = false;
+                e.printStackTrace();
+            }
             if (!haveInstallPermission) {
                 ToastUtil.showShort(context, "安装应用需要打开未知来源权限，请在设置中开启权限");
                 IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
