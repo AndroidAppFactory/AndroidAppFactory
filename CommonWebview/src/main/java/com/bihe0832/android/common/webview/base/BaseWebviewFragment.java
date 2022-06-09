@@ -33,6 +33,8 @@ import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.BaseFragment;
+import com.bihe0832.android.lib.file.FileMimeTypes;
+import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
@@ -297,7 +299,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         if (null != getGlobalLocalRes() && getGlobalLocalRes().containsKey(url)) {
             try {
                 String type = MimeTypeMap.getSingleton()
-                        .getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
+                        .getMimeTypeFromExtension(FileUtils.INSTANCE.getExtensionName(url));
                 return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8,
                         getContext().getAssets().open(getGlobalLocalRes().get(url)));
             } catch (IOException e) {
@@ -382,7 +384,9 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                     // 3.0及以下的webview调用jsb时会调用同时call起的空白页面，将这个页面屏蔽掉不出来
                     return BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.HONEYCOMB;
                 } else if (url.startsWith("http") || url.startsWith("https")) {
-                    if (loadUseIntent(url)) {
+                    if (FileMimeTypes.INSTANCE.isApkFile(url) || FileMimeTypes.INSTANCE.isArchive(url)) {
+                        return jumpToOtherApp(url, getActivity());
+                    } else if (loadUseIntent(url)) {
                         return jumpToOtherApp(url, getActivity());
                     } else {
                         if (!TextUtils.isEmpty(mRefererString)) {
