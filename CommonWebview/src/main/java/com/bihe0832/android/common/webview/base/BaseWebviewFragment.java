@@ -411,7 +411,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                     return true;
                 } catch (Exception var4) {
                     ZLog.e(TAG, "jumpToOtherApp failed:" + var4.getMessage());
-                    return false;
+                    // TODO 兼容主流的应用schema打开方式，一般是call schema的同时，会跳转到下载页面，如果返回false就会报错
+                    return true;
                 }
             } else {
                 return false;
