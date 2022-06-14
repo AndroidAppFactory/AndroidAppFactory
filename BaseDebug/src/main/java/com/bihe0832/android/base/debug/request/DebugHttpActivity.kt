@@ -31,7 +31,7 @@ class DebugHttpActivity : BaseDebugActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_http_test)
 
-        common_toolbar.setNavigationOnClickListener { onBackPressedSupport() }
+        common_toolbar.setNavigationOnClickListener { onBackPressed() }
         getBasic.setOnClickListener { sendGetBasicRequest() }
 
         postBasic.setOnClickListener { sendPostBasicRequest() }

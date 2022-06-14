@@ -97,7 +97,7 @@ abstract class BaseListActivity : BaseActivity() {
             throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
         }
         mToolbar?.apply {
-            setNavigationOnClickListener { onBackPressedSupport() }
+            setNavigationOnClickListener { onBackPressed() }
             title = getTitleText()
         }
         mRecyclerView = findViewById(R.id.activity_list_info_list)

@@ -28,7 +28,7 @@ class DebugNetworkActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_text)
-        common_toolbar.setNavigationOnClickListener { onBackPressedSupport() }
+        common_toolbar.setNavigationOnClickListener { onBackPressed() }
         NetworkChangeManager.getInstance().addListener(networkChangeListener)
         updateContent()
         WifiManagerWrapper.init(this, !ZixieContext.isOfficial(), true, true)
