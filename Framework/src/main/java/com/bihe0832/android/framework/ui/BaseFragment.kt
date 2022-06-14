@@ -105,22 +105,24 @@ open class BaseFragment : SwipeBackFragment() {
     final override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         setUserVisibleHint(isVisibleToUser, hasCreateView)
+        if (isVisibleToUser && hasCreateView && getPermissionList().isNotEmpty()) {
+            PermissionManager.checkPermission(
+                    context,
+                    javaClass.simpleName,
+                    false,
+                    getPermissionActivityClass(),
+                    getPermissionResult(),
+                    *getPermissionList().toTypedArray()
+            )
+        }
+    }
+
+    fun setChildUserVisibleHint(isVisibleToUser: Boolean) {
         if (isAdded) {
             for (fragment in childFragmentManager.fragments) {
                 if (fragment.isAdded) {
                     fragment.userVisibleHint = isVisibleToUser
                 }
-            }
-
-            if (isVisibleToUser && hasCreateView && getPermissionList().isNotEmpty()) {
-                PermissionManager.checkPermission(
-                        context,
-                        javaClass.simpleName,
-                        false,
-                        getPermissionActivityClass(),
-                        getPermissionResult(),
-                        *getPermissionList().toTypedArray()
-                )
             }
         }
     }
