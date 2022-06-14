@@ -102,7 +102,7 @@ open class BaseActivity : SupportActivity() {
             updateTitle(titleString)
             mToolbar?.apply {
                 if (needBack) {
-                    setNavigationOnClickListener { onBackPressedSupport() }
+                    setNavigationOnClickListener { onBackPressed() }
                 } else {
                     if (iconRes > 0) {
                         setNavigationIcon(iconRes)
@@ -121,6 +121,9 @@ open class BaseActivity : SupportActivity() {
         super.onDestroy()
     }
 
+    /**
+     * 页面返回时的特殊处理，例如检查是否是唯一页面，如果是需要跳转到main
+     */
     override fun onBackPressedSupport() {
         onBackPressedSupportAction(exitAuto())
     }

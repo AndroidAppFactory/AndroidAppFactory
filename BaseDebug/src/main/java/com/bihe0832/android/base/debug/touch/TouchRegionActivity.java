@@ -42,7 +42,8 @@ public class TouchRegionActivity extends BaseActivity implements View.OnClickLis
         ((Toolbar) findViewById(R.id.common_toolbar)).setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressedSupport();
+                onBackPressed();
+                onBackPressed();
             }
         });
 

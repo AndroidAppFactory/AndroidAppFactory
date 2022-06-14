@@ -9,7 +9,13 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.utils.apk.APKUtils
 
-fun BaseActivity.onBackPressedSupportAction(autoExit: Boolean) {
+/**
+ * @param autoShowExitDialog 是否自动弹出退出弹框，如果：
+ *
+ *      为 true ，会弹出是否退出应用弹框
+ *      为 false, 会直接调用 onBack()
+ */
+fun BaseActivity.onBackPressedSupportAction(autoShowExitDialog: Boolean) {
     val am = getSystemService(ACTIVITY_SERVICE) as ActivityManager
     val taskInfoList = am.getRunningTasks(Int.MAX_VALUE)
     var topActivity = ""
@@ -27,7 +33,7 @@ fun BaseActivity.onBackPressedSupportAction(autoExit: Boolean) {
 
     if (activityNum < 2) {
         if (isMain(topActivity)) {
-            if (autoExit) {
+            if (autoShowExitDialog) {
                 ZixieContext.exitAPP(null)
             } else {
                 onBack()
@@ -37,7 +43,7 @@ fun BaseActivity.onBackPressedSupportAction(autoExit: Boolean) {
         }
     } else {
         if (isMain(topActivity)) {
-            if (autoExit) {
+            if (autoShowExitDialog) {
                 ZixieContext.exitAPP(null)
             } else {
                 onBack()
