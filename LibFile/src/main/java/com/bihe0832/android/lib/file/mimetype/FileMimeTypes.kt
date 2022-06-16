@@ -1,14 +1,15 @@
 /*
  * *
- *  * Created by zixie < code@bihe0832.com > on 2022/5/26 下午5:08
+ *  * Created by zixie <code@bihe0832.com> on 2022/6/16 下午3:08
  *  * Copyright (c) 2022 . All rights reserved.
- *  * Last modified 2022/5/26 下午5:07
+ *  * Last modified 2022/5/26 下午5:42
  *
  */
-package com.bihe0832.android.lib.file
+package com.bihe0832.android.lib.file.mimetype
 
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
+import com.bihe0832.android.lib.file.FileUtils
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 

@@ -89,10 +89,6 @@ open class BaseFragment : SwipeBackFragment() {
         }
         hasCreateView = true
         initView(view)
-    }
-
-    final override fun onLazyInitView(savedInstanceState: Bundle?) {
-        super.onLazyInitView(savedInstanceState)
         initData()
     }
 

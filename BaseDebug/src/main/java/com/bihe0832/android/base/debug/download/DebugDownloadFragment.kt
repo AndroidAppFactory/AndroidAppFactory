@@ -4,17 +4,20 @@ import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.utils.encrypt.GzipUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import java.io.File
@@ -56,13 +59,33 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             )
             add(DebugItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
             add(DebugItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
-
-
+            add(DebugItemData("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
         }
     }
 
     val INSTALL_BY_DEFAULT = 0
     val INSTALL_BY_CUSTOMER = 1
+
+    fun testDownloadProcess() {
+        DownloadAPK.startDownloadWithProcess(
+                activity!!,
+                String.format(ZixieContext.applicationContext!!.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating), "（V.2.2.21)"),
+                "这是一个Desc测试",
+                "http://dldir1.qq.com/INO/Android/tmga/6.5.0_105785_0614/MNA_V6.5.0_105785_0614_official_legu_20035.apk",
+                "2edab141ebf9903a3f8abc4f071699ac",
+                "com.tencent.cmocmna",
+                canCancel = true, downloadMobile = true,
+                listener = object : OnDialogListener {
+                    override fun onPositiveClick() {
+                    }
+
+                    override fun onNegativeClick() {
+                    }
+
+                    override fun onCancel() {
+                    }
+                })
+    }
 
     fun startDownload(type: Int) {
 

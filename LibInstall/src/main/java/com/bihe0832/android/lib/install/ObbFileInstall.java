@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.bihe0832.android.lib.file.FileMimeTypes;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
-import com.bihe0832.android.lib.file.ZixieFileProvider;
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.zip.ZipUtils;

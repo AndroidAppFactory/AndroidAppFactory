@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.format.Formatter;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.bihe0832.android.lib.file.format.Formatter;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
+
 import java.text.NumberFormat;
 
 
@@ -35,8 +37,7 @@ public class DownloadProgressDialog extends Dialog {
     private String mTitleString;
     private String mContentString;
     private long mAPKSize;
-    private long mPartSize = 1;
-    private long mCurrentSize;
+    private long mCurrentSize = 0;
 
     private boolean shouldCanceledOutside = false;
     private boolean shouldCanceled = true;
@@ -170,12 +171,12 @@ public class DownloadProgressDialog extends Dialog {
             }
         }
         if (null != mProgress) {
+            mProgress.setProgress(0);
             if (mAPKSize < 1) {
                 mProgress.setVisibility(View.INVISIBLE);
             } else {
+                mProgress.setProgress((int) (mCurrentSize * 100 / mAPKSize));
                 mProgress.setVisibility(View.VISIBLE);
-                mProgress.setMax(100);
-                mProgress.setProgress((int) (mCurrentSize / mPartSize));
             }
         }
 
@@ -213,6 +214,7 @@ public class DownloadProgressDialog extends Dialog {
         mTitleView = (TextView) findViewById(R.id.update_title);
         mContentView = (TextView) findViewById(R.id.update_message);
         mProgress = (ProgressBar) findViewById(R.id.update_progress_bar);
+        mProgress.setMax(100);
         mProgressNumber = (TextView) findViewById(R.id.update_progress_number);
         mProgressPercent = (TextView) findViewById(R.id.update_progress_percent);
         mNegativeButton = (TextView) findViewById(R.id.update_progress_cancle);
@@ -267,7 +269,6 @@ public class DownloadProgressDialog extends Dialog {
     // setMax传入的参数以B为单位
     public void setAPKSize(long max) {
         mAPKSize = max;
-        mPartSize = mAPKSize / 100;
         refreshView();
     }
 }

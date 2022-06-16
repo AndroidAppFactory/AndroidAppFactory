@@ -7,9 +7,9 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.bihe0832.android.lib.file.FileMimeTypes;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
-import com.bihe0832.android.lib.file.ZixieFileProvider;
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
@@ -62,6 +62,28 @@ public class InstallUtils {
         }
     }
 
+    public static boolean hasInstallAPPPermission(final Context context, boolean showToast, boolean autoSettings) {
+        boolean haveInstallPermission = true;
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
+            //先获取是否有安装未知来源应用的权限
+            try {
+                haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
+            } catch (Exception e) {
+                haveInstallPermission = false;
+                e.printStackTrace();
+            }
+            if (!haveInstallPermission) {
+                if (showToast) {
+                    ToastUtil.showShort(context, "安装应用需要打开未知来源权限，请在设置中开启权限");
+                }
+                if (autoSettings) {
+                    IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                }
+            }
+        }
+        return haveInstallPermission;
+    }
+
     public static void uninstallAPP(final Context context, final String packageName) {
         APKInstall.unInstallAPK(context, packageName);
     }
@@ -80,22 +102,7 @@ public class InstallUtils {
 
     public static void installAPP(final Context context, final String filePath, final String packageName,
                                   final InstallListener listener) {
-        boolean haveInstallPermission = true;
-        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
-            //先获取是否有安装未知来源应用的权限
-            try {
-                haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
-            } catch (Exception e) {
-                haveInstallPermission = false;
-                e.printStackTrace();
-            }
-            if (!haveInstallPermission) {
-                ToastUtil.showShort(context, "安装应用需要打开未知来源权限，请在设置中开启权限");
-                IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-            }
-        }
-
-        if (haveInstallPermission) {
+        if (hasInstallAPPPermission(context, true, true)) {
             ThreadManager.getInstance().start(new Runnable() {
                 @Override
                 public void run() {

@@ -6,9 +6,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.TextUtils
-import android.text.format.Formatter
 import android.view.View
 import android.widget.RemoteViews
+import com.bihe0832.android.lib.file.format.Formatter
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.utils.IdGenerator

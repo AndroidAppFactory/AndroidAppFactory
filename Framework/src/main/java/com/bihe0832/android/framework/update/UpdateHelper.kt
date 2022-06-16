@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
+import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
@@ -75,7 +76,9 @@ object UpdateHelper {
                             UpdateDataFromCloud.UPDATE_TYPE_NEED
                             -> {
                                 ThreadManager.getInstance().run { startUpdate(activity, versionName, desc, url, md5, true) }
-                                dismiss()
+                                if (InstallUtils.hasInstallAPPPermission(context, false, false)) {
+                                    dismiss()
+                                }
                             }
                             UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP,
                             UpdateDataFromCloud.UPDATE_TYPE_RED_JUMP,

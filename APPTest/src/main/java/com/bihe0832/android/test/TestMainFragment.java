@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 
 import com.bihe0832.android.base.debug.DebugTempFragment;
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment;
+import com.bihe0832.android.base.debug.download.DebugDownloadFragment;
 import com.bihe0832.android.base.debug.temp.DebugBasicFragment;
 import com.bihe0832.android.base.debug.view.DebugTextViewFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
@@ -32,7 +33,7 @@ public class TestMainFragment extends DebugMainFragment {
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new DebugBasicFragment();
+            return new DebugDownloadFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new DebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

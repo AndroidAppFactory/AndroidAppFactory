@@ -94,7 +94,7 @@ class TestMainActivity : CommonActivity() {
             }
 
 //            add(Manifest.permission.RECORD_AUDIO)
-            add(Manifest.permission.SYSTEM_ALERT_WINDOW)
+//            add(Manifest.permission.SYSTEM_ALERT_WINDOW)
         }
     }
 

@@ -11,7 +11,7 @@ import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 
 

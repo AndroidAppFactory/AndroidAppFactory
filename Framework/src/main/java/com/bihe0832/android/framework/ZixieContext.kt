@@ -15,11 +15,10 @@ import android.widget.Toast
 import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.device.DeviceIDUtils
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -47,7 +46,7 @@ object ZixieContext {
     private var mTag = "Tag_ZIXIE_1.0.0_1"
 
     private val zixieFolderPath by lazy {
-        getRealFileFolder(ZixieFileProvider.getZixieFilePath(applicationContext!!))
+        FileUtils.getFolderPathWithSeparator(ZixieFileProvider.getZixieFilePath(applicationContext!!))
     }
 
     @Synchronized
@@ -199,27 +198,12 @@ object ZixieContext {
         } else {
             getZixieFolder()
         }
-        return getRealFileFolder(path)
+        return FileUtils.getFolderPathWithSeparator(path)
     }
 
     fun getLogFolder(): String {
-        return getRealFileFolder(getZixieFolder() + "log" + File.separator)
-    }
 
-    private fun getRealFileFolder(path: String): String {
-        try {
-            var result = FileUtils.checkAndCreateFolder(path)
-            if (!result) {
-                ZLog.e("file $path is bad !!!")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return if (path.endsWith(File.separator)) {
-            path
-        } else {
-            path + File.separator
-        }
+        return FileUtils.getFolderPathWithSeparator(getZixieFolder() + "log" + File.separator)
     }
 
 

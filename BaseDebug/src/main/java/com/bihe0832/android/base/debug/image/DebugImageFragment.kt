@@ -9,7 +9,7 @@ import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
-import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.ui.image.HeadIconBuilder

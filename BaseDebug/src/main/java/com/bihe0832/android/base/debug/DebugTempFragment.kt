@@ -19,6 +19,7 @@ import com.bihe0832.android.base.debug.touch.TouchRegionActivity
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.log.DebugLogActivity
+import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -50,7 +51,7 @@ import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
 
-class DebugTempFragment : BaseDebugListFragment() {
+class DebugTempFragment : DebugEnvFragment() {
     val LOG_TAG = "DebugTempFragment"
 
     val configListener = object : OnConfigChangedListener {
@@ -162,6 +163,20 @@ class DebugTempFragment : BaseDebugListFragment() {
                             "多进程1",
                             View.OnClickListener { startActivity(TestIPC1Activity::class.java) })
             )
+            add(DebugItemData("模拟环境切换", View.OnClickListener {
+                mutableListOf<String>().apply {
+                    add("测试环境1")
+                    add("测试环境2")
+                }.let {data->
+                    getChangeEnvSelectDialog("查看应用版本及环境", data,0,object :DebugEnvFragment.OnEnvChangedListener{
+                        override fun onChanged(index: Int) {
+                            showChangeEnvDialog("环境切换",data.get(index))
+                        }
+                    }).let {
+                        it.show()
+                    }
+                }
+            }))
         }
     }
 

@@ -16,7 +16,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.BaseActivity
-import com.bihe0832.android.lib.file.FileMimeTypes
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.router.annotation.Module
