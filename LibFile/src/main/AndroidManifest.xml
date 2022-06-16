@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.bihe0832.android.lib.file"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bihe0832.android.lib.file">
+
     <application>
         <provider
-            android:name="com.bihe0832.android.lib.file.ZixieFileProvider"
+            android:name="com.bihe0832.android.lib.file.provider.ZixieFileProvider"
             android:authorities="${applicationId}.bihe0832"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
+        </provider>
+        <provider
+            android:name="com.bihe0832.android.lib.file.provider.AAFInnerFileProvider"
+            android:authorities="${applicationId}.aaf.inner"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/aaf_inner_file_paths" />
         </provider>
     </application>
 </manifest>

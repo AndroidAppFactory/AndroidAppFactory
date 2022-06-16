@@ -3,7 +3,7 @@ package com.bihe0832.android.app.file
 import android.net.Uri
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import java.io.File
 
 /**

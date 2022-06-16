@@ -2,7 +2,7 @@ package com.bihe0832.android.lib.zip;
 
 import android.text.TextUtils;
 
-import com.bihe0832.android.lib.file.FileMimeTypes;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
 
 import net.lingala.zip4j.core.ZipFile;

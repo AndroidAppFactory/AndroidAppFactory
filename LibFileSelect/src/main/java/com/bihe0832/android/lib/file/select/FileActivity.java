@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bihe0832.android.lib.file.FileMimeTypes;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.immersion.AppCompatActivityImmersiveExtKt;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.PermissionManager.OnPermissionResult;

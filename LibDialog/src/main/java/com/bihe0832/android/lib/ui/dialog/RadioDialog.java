@@ -74,14 +74,18 @@ public class RadioDialog extends CommonDialog {
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mCheckedIndex = index;
                     if (null != mOnSelectedListener) {
-                        mCheckedIndex = index;
                         mOnSelectedListener.onSelect(mCheckedIndex);
                     }
                 }
             });
             mRadioGroup.addView(radioButton);
         }
+    }
+
+    public int getCheckedIndex() {
+        return mCheckedIndex;
     }
 
     public void setRadioData(List<String> data, int index, final OnSelectedListener listener) {

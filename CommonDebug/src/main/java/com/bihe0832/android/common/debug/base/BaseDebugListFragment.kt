@@ -38,7 +38,6 @@ open class BaseDebugListFragment : CommonListFragment() {
         CardInfoHelper.getInstance().setAutoAddItem(true)
     }
 
-
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(DebugTipsData::class.java, true))

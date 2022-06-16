@@ -22,10 +22,11 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
+import java.io.File
 import java.util.*
 import kotlin.collections.set
 
-open class DebugCommonFragment : BaseDebugListFragment() {
+open class DebugCommonFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
@@ -48,6 +49,10 @@ open class DebugCommonFragment : BaseDebugListFragment() {
             add(DebugItemData("打开应用设置") { IntentUtils.startAppDetailSettings(context) })
             add(DebugItemData("打开开发者模式") {
                 IntentUtils.startSettings(context, Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
+            })
+            add(DebugItemData("清除AAF缓存") {
+                FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
+                ZixieContext.restartApp()
             })
         }
     }

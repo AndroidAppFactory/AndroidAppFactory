@@ -9,10 +9,9 @@ import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.RemoteException
-import com.bihe0832.android.lib.file.FileMimeTypes
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.install.InstallErrorCode
 import com.bihe0832.android.lib.install.InstallListener
-import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.*

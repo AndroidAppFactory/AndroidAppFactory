@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.ui.media.Media

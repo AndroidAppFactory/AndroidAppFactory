@@ -12,6 +12,7 @@ import android.os.StatFs
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.encrypt.MD5
@@ -65,6 +66,24 @@ object FileUtils {
         }
         return false
     }
+
+
+    fun getFolderPathWithSeparator(path: String): String {
+        try {
+            var result = checkAndCreateFolder(path)
+            if (!result) {
+                ZLog.e("file $path is bad !!!")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return if (path.endsWith(File.separator)) {
+            path
+        } else {
+            path + File.separator
+        }
+    }
+
 
     fun checkStoragePermissions(context: Context): Boolean {
         return PackageManager.PERMISSION_GRANTED ==

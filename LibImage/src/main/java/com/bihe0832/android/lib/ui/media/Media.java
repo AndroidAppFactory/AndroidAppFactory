@@ -11,7 +11,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import com.bihe0832.android.lib.file.FileUtils;
-import com.bihe0832.android.lib.file.ZixieFileProvider;
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
 import org.jetbrains.annotations.NotNull;
@@ -30,12 +30,7 @@ public class Media {
             filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
         }
 
-        FileUtils.INSTANCE.checkAndCreateFolder(filePath);
-        if (filePath.endsWith(File.separator)) {
-            return filePath;
-        } else {
-            return filePath + File.separator;
-        }
+        return FileUtils.INSTANCE.getFolderPathWithSeparator(filePath);
     }
 
 

@@ -5,8 +5,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.file.FileMimeTypes
-import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.request.URLUtils
@@ -248,7 +247,7 @@ object DownloadFile {
         var progressDialog = DownloadProgressDialog(activity).apply {
             setTitle(title)
             setMessage(msg)
-            setCurrentSize(1)
+            setCurrentSize(0)
             setShouldCanceled(canCancel)
             if (canCancel) {
                 setPositive("后台下载")

@@ -11,9 +11,9 @@ import com.bihe0832.android.lib.download.core.list.DownloadTaskList
 import com.bihe0832.android.lib.download.core.list.DownloadingList
 import com.bihe0832.android.lib.download.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.notify.DownloadNotify
-import com.bihe0832.android.lib.file.FileMimeTypes
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.ZixieFileProvider
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
@@ -295,19 +295,14 @@ object DownloadManager {
     }
 
 
-    private fun checkDownloadBeforeAndNotify(info: DownloadItem): Boolean {
-        if (!info.isForceDownloadNew) {
-            if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5)) {
-                info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
-                innerDownloadListener.onComplete(info.finalFilePath, info)
-                return true
-            } else if (!TextUtils.isEmpty(info.fileMD5) && FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5)) {
-                info.finalFilePath = info.tempFilePath
-                innerDownloadListener.onComplete(info.finalFilePath, info)
-                return true
-            }
+    private fun checkBeforeDownloadFile(info: DownloadItem): String {
+        if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5)) {
+            return info.finalFilePath
+        } else if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5)) {
+            info.finalFilePath = info.tempFilePath
+            return info.finalFilePath
         }
-        return false
+        return ""
     }
 
     @Synchronized
@@ -360,8 +355,11 @@ object DownloadManager {
             addDownloadItemToList(info)
             Thread {
                 //本地已下载
-                if (checkDownloadBeforeAndNotify(info)) {
+                var filePath = checkBeforeDownloadFile(info)
+                if (!TextUtils.isEmpty(filePath)) {
                     ZLog.e("has download:$info")
+                    info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
+                    innerDownloadListener.onComplete(info.finalFilePath, info)
                 } else {
                     if (downloadAfterAdd) {
                         var currentTime = System.currentTimeMillis()
@@ -426,11 +424,13 @@ object DownloadManager {
     fun addTask(info: DownloadItem, forceDownload: Boolean) {
         ZLog.d("addTask:$info")
         updateInfo(info)
-        if (info.isForceDownloadNew) {
-            deleteTask(info.downloadID, false, TextUtils.isEmpty(info.fileMD5))
-        }
-
         innerDownloadListener.onWait(info)
+        if (info.isForceDownloadNew) {
+            // 此前下载的文件不完整
+            if (TextUtils.isEmpty(checkBeforeDownloadFile(info))) {
+                deleteTask(info.downloadID, startByUser = false, deleteFile = true)
+            }
+        }
         if (DownloadTaskList.hadAddTask(info)) {
             ZLog.d("mDownloadList contains:$info")
             DownloadTaskList.updateDownloadTaskListItem(info)

@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bihe0832.android.lib.file.FileUtils;
-import com.bihe0832.android.lib.file.ZixieFileProvider;
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.log.ZLog;
 
 import java.io.BufferedInputStream;

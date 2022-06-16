@@ -8,9 +8,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.bihe0832.android.lib.file.FileUtils;
-
-import com.bihe0832.android.lib.file.ZixieFileProvider;
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
 
