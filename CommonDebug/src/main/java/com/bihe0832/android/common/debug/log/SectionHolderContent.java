@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+
 import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.framework.log.LoggerFile;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
@@ -37,25 +38,36 @@ public class SectionHolderContent extends CardBaseHolder {
         final SectionDataContent data = (SectionDataContent) item;
         log_title.setText(TextFactoryUtils.getSpannedTextByHtml(data.mTitleName));
 
+
         log_open.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                try { //设置intent的data和Type属性
-                    LoggerFile.INSTANCE.openLog(data.mLogFileName);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (data.mActionListener != null) {
+                    data.mActionListener.onClick(v, SectionDataContent.TYPE_OPEN);
+                } else {
+                    try {
+                        LoggerFile.INSTANCE.openLog(data.mLogFileName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
         });
 
         log_send.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                try { //设置intent的data和Type属性
-                    LoggerFile.INSTANCE.sendLog(data.mLogFileName);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (data.mActionListener != null) {
+                    data.mActionListener.onClick(v, SectionDataContent.TYPE_SEND);
+                } else {
+                    try {
+                        LoggerFile.INSTANCE.sendLog(data.mLogFileName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
         });
 
