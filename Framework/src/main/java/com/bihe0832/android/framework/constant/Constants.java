@@ -3,6 +3,8 @@ package com.bihe0832.android.framework.constant;
 
 import com.bihe0832.android.lib.ace.editor.AceConstants;
 
+import java.nio.charset.Charset;
+
 /**
  * @author hardyshi code@bihe0832.com
  *         Created on 2019-11-07.
@@ -16,7 +18,9 @@ public class Constants {
 
     public static final String SYSTEM_CONSTANT = AceConstants.SYSTEM_CONSTANT;
 
-    public static final String CHAR_SET = "UTF-8";
+    public static final String CHAR_SET_NAME = "UTF-8";
+
+    public static Charset CHAR_SET_UTF8 = Charset.forName(CHAR_SET_NAME);
 
 
     public static final float CUSTOM_DENSITY = 360f;

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import com.bihe0832.android.base.debug.DebugTempFragment;
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment;
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment;
+import com.bihe0832.android.base.debug.photos.DebugPhotosFragment;
 import com.bihe0832.android.base.debug.temp.DebugBasicFragment;
 import com.bihe0832.android.base.debug.view.DebugTextViewFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
@@ -20,7 +21,7 @@ public class TestMainFragment extends DebugMainFragment {
     private static final String TAB_FOR_DEV_COMMON = "通用调试";
     private static final String TAB_FOR_DEV_TEMP = "临时调试";
     private static final String TAB_FOR_ROUTER = "路由测试";
-    private static final String TAB_FOR_DEV = "开发测试";
+    private static final String TAB_FOR_DEV = "开发测1试";
 
     public TestMainFragment() {
         super(new String[]{
@@ -33,7 +34,7 @@ public class TestMainFragment extends DebugMainFragment {
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new DebugDownloadFragment();
+            return new DebugPhotosFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new DebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

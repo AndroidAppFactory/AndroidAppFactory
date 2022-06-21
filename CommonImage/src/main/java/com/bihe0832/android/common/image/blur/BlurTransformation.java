@@ -25,7 +25,6 @@ public class BlurTransformation extends BitmapTransformation {
     private static final int VERSION = 1;
 
     private static final String ID = "com.bihe0832.android.common.image.blur.BlurTransformation." + VERSION;
-    private static Charset CHARSET = Charset.forName("UTF-8");
 
     private static int DEFAULT_RADIUS = 25;
     private static int DEFAULT_DOWN_SAMPLING = 1;
