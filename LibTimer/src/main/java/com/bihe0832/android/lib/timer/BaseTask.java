@@ -65,6 +65,7 @@ public abstract class BaseTask {
     @Override
     public String toString() {
         return "BaseTask{" +
+                "name=" + getTaskName() +
                 "notifiedTimes=" + notifiedTimes +
                 ", isDeleted=" + isDeleted +
                 ", myInterval=" + getMyInterval() +

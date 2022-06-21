@@ -226,7 +226,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
         webSetting.setNeedInitialFocus(true); //当webview调用requestFocus时为webview设置节点
         webSetting.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
         webSetting.setLoadsImagesAutomatically(true);  //支持自动加载图片
-        webSetting.setDefaultTextEncodingName("utf-8");//设置编码格式
+        webSetting.setDefaultTextEncodingName(Constants.CHAR_SET_NAME);//设置编码格式
     }
 
     private void resetCacheType(WebSettings webSetting) {

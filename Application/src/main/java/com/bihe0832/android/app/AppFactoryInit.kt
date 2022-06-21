@@ -4,11 +4,10 @@ import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Process
+import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
-import com.bihe0832.android.framework.constant.Constants
-
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.privacy.AgreementPrivacy.hasAgreedPrivacy
@@ -40,11 +39,10 @@ object AppFactoryInit {
         if (!hasInit) {
             hasInit = true
             ZixieCoreInit.initAfterAgreePrivacy(application)
-            
+
             if (ZixieContext.isDebug()) {
                 LeakCanaryManager.init(application)
             }
-
             RouterHelper.initRouter()
             initPermission()
             DownloadUtils.init(ctx, 5, null, ZixieContext.isDebug())
