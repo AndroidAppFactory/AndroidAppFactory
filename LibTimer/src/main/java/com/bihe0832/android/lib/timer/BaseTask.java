@@ -66,7 +66,7 @@ public abstract class BaseTask {
     public String toString() {
         return "BaseTask{" +
                 "name=" + getTaskName() +
-                "notifiedTimes=" + notifiedTimes +
+                ", notifiedTimes=" + notifiedTimes +
                 ", isDeleted=" + isDeleted +
                 ", myInterval=" + getMyInterval() +
                 ", runAfterAdd=" + runAfterAdd() +
