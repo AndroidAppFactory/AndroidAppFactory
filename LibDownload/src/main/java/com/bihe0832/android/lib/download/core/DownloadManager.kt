@@ -56,7 +56,6 @@ object DownloadManager {
         mIsDebug = isDebug
         if (!mHasInit) {
             mHasInit = true
-            ZLog.setDebug(isDebug)
             DownloadNotify.init(context)
             DownloadInfoDBManager.init(context)
         }

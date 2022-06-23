@@ -12,12 +12,12 @@ import java.lang.ref.SoftReference
  * Description: Description
  */
 object ActivityObserver : Application.ActivityLifecycleCallbacks {
-    private const val TAG = "ActivityObserver"
 
+    const val TAG = "ActivityObserver"
     private val mActivityList = mutableListOf<Activity>()
     private var mSoftReferenceOfCurrentActivity: SoftReference<Activity>? = null
     private var mSoftReferenceOfResumedActivity: SoftReference<Activity>? = null
-
+    private var mAAFActivityLifecycleChangedListener: AAFActivityLifecycleChangedListener? = null
 
     /**
      * 返回最后一次创建的Activity
@@ -52,52 +52,57 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
         return false
     }
 
-    override fun onActivityPaused(activity: Activity) {
-        ZLog.d(TAG, "onActivityPaused: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+    fun setActivityLifecycleChangedListener(changedListener: AAFActivityLifecycleChangedListener?) {
+        mAAFActivityLifecycleChangedListener = changedListener
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        ZLog.d(TAG, "onActivityCreated: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        mActivityList.add(activity)
+        mSoftReferenceOfCurrentActivity = SoftReference(activity)
+        mAAFActivityLifecycleChangedListener?.onActivityCreated(activity, savedInstanceState)
     }
 
     override fun onActivityResumed(activity: Activity) {
-        ZLog.d(TAG, "onActivityResumed: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
-        activity?.let {
-            mSoftReferenceOfCurrentActivity = SoftReference(activity)
-            mSoftReferenceOfResumedActivity = SoftReference(activity)
-        }
-        ZLog.d(TAG, "Current Activitty: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityResumed: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        mSoftReferenceOfCurrentActivity = SoftReference(activity)
+        mSoftReferenceOfResumedActivity = SoftReference(activity)
+        mAAFActivityLifecycleChangedListener?.onActivityResumed(activity)
+    }
+
+    override fun onActivityPaused(activity: Activity) {
+        ZLog.d(TAG, "onActivityPaused: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        mAAFActivityLifecycleChangedListener?.onActivityPaused(activity)
     }
 
     override fun onActivityStarted(activity: Activity) {
-        ZLog.d(TAG, "onActivityStarted: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityStarted: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        mAAFActivityLifecycleChangedListener?.onActivityStarted(activity)
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        ZLog.d(TAG, "onActivityDestroyed: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityDestroyed: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
         try {
-            activity?.let {
-                mActivityList.remove(it)
-            }
-
-            if(mActivityList.size == 0){
-                ZLog.d(TAG, "app has no activity after onActivityDestroyed: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+            mActivityList.remove(activity)
+            if (mActivityList.size == 0) {
+                ZLog.d(TAG, "app has no activity after onActivityDestroyed: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
                 ApplicationObserver.onAllActivityDestroyed()
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        mAAFActivityLifecycleChangedListener?.onActivityDestroyed(activity)
+
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        ZLog.d(TAG, "onActivitySaveInstanceState: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivitySaveInstanceState: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        mAAFActivityLifecycleChangedListener?.onActivitySaveInstanceState(activity, outState)
+
     }
 
     override fun onActivityStopped(activity: Activity) {
-        ZLog.d(TAG, "onActivityStopped: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
-    }
-
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        ZLog.d(TAG, "onActivityCreated: ${activity?.javaClass?.simpleName}(${System.identityHashCode(activity)})")
-        activity?.let {
-            mActivityList.add(activity)
-            mSoftReferenceOfCurrentActivity = SoftReference(activity)
-        }
+        ZLog.d(TAG, "onActivityStopped: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        mAAFActivityLifecycleChangedListener?.onActivityStopped(activity)
     }
 }

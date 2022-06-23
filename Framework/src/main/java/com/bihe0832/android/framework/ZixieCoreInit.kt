@@ -1,13 +1,13 @@
 package com.bihe0832.android.framework
 
+
 import android.app.Application
 import android.util.Log
+import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
-import com.bihe0832.android.framework.constant.Constants;
-
-
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -32,9 +32,7 @@ object ZixieCoreInit {
         ZixieContext.init(application, appIsDebug, appIsOfficial, appTag)
         if (!hasInit) {
             hasInit = true
-            ZLog.setDebug(!ZixieContext.isOfficial())
-            LoggerFile.init(application, !ZixieContext.isOfficial())
-
+            initLog(application, !ZixieContext.isOfficial())
             // 初始化配置管理
             Config.init(ZixieContext.applicationContext, Constants.CONFIG_COMMON_FILE_NAME, !ZixieContext.isOfficial())
             Config.loadLoaclFile(application, Constants.CONFIG_SPECIAL_FILE_NAME, !ZixieContext.isOfficial())
@@ -51,6 +49,14 @@ object ZixieCoreInit {
             // 初始化渠道号
             initZixieLibs(application, !ZixieContext.isOfficial())
         }
+    }
+
+    private fun initLog(application: Application, openLog: Boolean) {
+        val filePath = ZixieContext.getZixieExtFolder()
+        val logEnable = openLog || FileUtils.checkFileExist(filePath + "log.enable")
+        Log.e(TAG, "log enable: $filePath $openLog $logEnable")
+        ZLog.setDebug(logEnable)
+        LoggerFile.init(application, logEnable)
     }
 
     private fun initScreenWidthAndHeight() {

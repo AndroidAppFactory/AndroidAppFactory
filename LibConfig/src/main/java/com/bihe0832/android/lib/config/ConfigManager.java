@@ -51,9 +51,6 @@ class ConfigManager {
     }
 
     protected void init(Context ctx, String file, boolean isDebug) {
-        if (isDebug) {
-            ZLog.setDebug(true);
-        }
         if (ctx == null) {
             ZLog.w(TAG, "context is null");
             return;
