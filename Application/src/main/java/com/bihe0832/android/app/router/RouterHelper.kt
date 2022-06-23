@@ -1,15 +1,19 @@
 package com.bihe0832.android.app.router
 
+import android.app.Activity
 import android.net.Uri
+import android.text.TextUtils
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterAction.SCHEME
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterInterrupt
+import com.bihe0832.android.lib.lifecycle.AAFActivityLifecycleChangedListener
+import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
-import java.util.*
+import com.bihe0832.android.lib.router.RouterMappingManager
 
 
 /**
@@ -45,6 +49,17 @@ object RouterHelper {
 
             override fun onBackground() {
 
+            }
+        })
+
+        ActivityObserver.setActivityLifecycleChangedListener(object : AAFActivityLifecycleChangedListener() {
+
+            override fun onActivityResumed(activity: Activity) {
+                RouterMappingManager.getInstance().getRouterHost(activity::class.java).let {
+                    if (!TextUtils.isEmpty(it)) {
+                        ZLog.d("Activity ：${activity.javaClass} 对应 Router 为：" + it)
+                    }
+                }
             }
         })
 

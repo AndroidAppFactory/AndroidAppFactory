@@ -5,8 +5,8 @@ import android.arch.lifecycle.ProcessLifecycleOwner
 import android.content.Context
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.config.Config
-import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.lib.utils.time.DateUtil
 
 /**
  *
@@ -107,7 +107,7 @@ object LifecycleHelper {
     }
 
     private fun updateNewVersion() {
-        doActionWithCheck{
+        doActionWithCheck {
             if (mCurrentVersion != lastStartVersion) {
                 Config.writeConfig(KEY_LAST_STARTED_VERSION, mCurrentVersion)
                 Config.writeConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
@@ -119,7 +119,7 @@ object LifecycleHelper {
     }
 
     private fun updateUsedInfo() {
-        doActionWithCheck{
+        doActionWithCheck {
             Config.writeConfig(KEY_LAST_START_TIME, System.currentTimeMillis())
             addValueOnce(KEY_USED_TIMES)
             addValueOnce(KEY_USED_TIMES + mCurrentVersion)

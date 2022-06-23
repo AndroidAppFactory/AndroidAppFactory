@@ -18,7 +18,7 @@ public class Constants {
 
     public static final String SYSTEM_CONSTANT = AceConstants.SYSTEM_CONSTANT;
 
-    public static final String CHAR_SET_NAME = "UTF-8";
+    public static final String CHAR_SET_NAME = AceConstants.CHAR_SET_NAME;
 
     public static Charset CHAR_SET_UTF8 = Charset.forName(CHAR_SET_NAME);
 

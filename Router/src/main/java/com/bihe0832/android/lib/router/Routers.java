@@ -5,23 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import java.util.ArrayList;
-import java.util.HashMap;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2019-07-19.
- *         Description: Description
+ * Created on 2019-07-19.
+ * Description: Description
  */
 public class Routers {
 
     public static final String ROUTERS_KEY_RAW_URL = "com.bihe0832.router.URI";
 
     private static void initIfNeed(String format) {
-        if (!RouterMappingManager.getInstance().getMappings().isEmpty() && RouterMappingManager.getInstance()
-                .getMappings().containsKey(format)) {
+        if (!RouterMappingManager.getInstance().getRouterMapping().isEmpty() && RouterMappingManager.getInstance()
+                .getRouterMapping().containsKey(format)) {
             return;
         }
         RouterMappingManager.getInstance().initMapping(format);
@@ -53,7 +54,7 @@ public class Routers {
     }
 
     public static boolean openForResult(Activity activity, String url, int requestCode, int startFlag,
-            RouterContext.RouterCallback callback) {
+                                        RouterContext.RouterCallback callback) {
         return openForResult(activity, Uri.parse(url), requestCode, startFlag, callback);
     }
 
@@ -62,12 +63,12 @@ public class Routers {
     }
 
     public static boolean openForResult(Activity activity, Uri uri, int requestCode, int startFlag,
-            RouterContext.RouterCallback callback) {
+                                        RouterContext.RouterCallback callback) {
         return open(activity, uri, requestCode, startFlag, callback);
     }
 
     private static boolean open(Context context, Uri uri, int requestCode, int startFlag,
-            RouterContext.RouterCallback callback) {
+                                RouterContext.RouterCallback callback) {
         boolean success = false;
         if (callback != null) {
             if (callback.beforeOpen(context, uri)) {
@@ -100,7 +101,7 @@ public class Routers {
 
     public static Intent resolve(Context context, Uri uri) {
         initIfNeed(uri.getHost());
-        for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getMappings()
+        for (Map.Entry<String, Class<? extends Activity>> entry : RouterMappingManager.getInstance().getRouterMapping()
                 .entrySet()) {
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
             if (entry.getKey().equalsIgnoreCase(uri.getHost()) && null != entry.getValue()) {
@@ -115,8 +116,8 @@ public class Routers {
 
     private static boolean doOpen(Context context, Uri uri, int requestCode, int startFlag) {
         initIfNeed(uri.getHost());
-        if (RouterMappingManager.getInstance().getMappings().containsKey(uri.getHost())) {
-            Class<? extends Activity> activityClass = RouterMappingManager.getInstance().getMappings()
+        if (RouterMappingManager.getInstance().getRouterMapping().containsKey(uri.getHost())) {
+            Class<? extends Activity> activityClass = RouterMappingManager.getInstance().getRouterMapping()
                     .get(uri.getHost());
             if (null != activityClass) {
                 try {
@@ -177,11 +178,11 @@ public class Routers {
         return bundle;
     }
 
-    public static ArrayList<Class<? extends Activity>> getMainActivityList() {
+    public static List<Class<? extends Activity>> getMainActivityList() {
         return RouterMappingManager.getInstance().getActivityIsMain();
     }
 
-    public static HashMap<String, Class<? extends Activity>> getRouterMappings() {
-        return RouterMappingManager.getInstance().getMappings();
+    public static ConcurrentHashMap<String, Class<? extends Activity>> getRouterMappings() {
+        return RouterMappingManager.getInstance().getRouterMapping();
     }
 }

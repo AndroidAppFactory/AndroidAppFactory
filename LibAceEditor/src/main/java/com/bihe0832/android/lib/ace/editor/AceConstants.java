@@ -29,6 +29,8 @@ public class AceConstants {
     public static final String URL_USER_AGENT_JS_BRIDGE_VERSION = "JSVersion";
     public static final String SYSTEM_CONSTANT = "android";
 
+    public static final String CHAR_SET_NAME = "UTF-8";
+
     public static final String APP_CACAHE_DIRNAME = "/acewebcache";
 
 }

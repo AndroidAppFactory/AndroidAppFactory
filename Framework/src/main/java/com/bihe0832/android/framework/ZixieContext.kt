@@ -1,3 +1,11 @@
+/*
+ * *
+ *  * Created by zixie <code@bihe0832.com> on 2022/6/23 下午8:07
+ *  * Copyright (c) 2022 . All rights reserved.
+ *  * Last modified 2022/6/23 下午8:01
+ *
+ */
+
 package com.bihe0832.android.framework
 
 import android.Manifest
@@ -188,12 +196,7 @@ object ZixieContext {
     }
 
     fun getZixieExtFolder(): String {
-        var path = if (BuildUtils.SDK_INT < 29 && PERMISSION_GRANTED ==
-                ContextCompat.checkSelfPermission(
-                        applicationContext!!,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-        ) {
+        var path = if (FileUtils.checkStoragePermissions(applicationContext)) {
             "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}zixie${File.separator}"
         } else {
             getZixieFolder()
@@ -202,10 +205,8 @@ object ZixieContext {
     }
 
     fun getLogFolder(): String {
-
         return FileUtils.getFolderPathWithSeparator(getZixieFolder() + "log" + File.separator)
     }
-
 
     fun initModule(action: () -> Unit, canInitWithBackgroundThread: Boolean) {
         try {
