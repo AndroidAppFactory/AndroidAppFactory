@@ -92,10 +92,19 @@ object FileUtils {
     }
 
     fun checkFileExist(filePath: String, fileMD5: String): Boolean {
-        return checkFileExist(filePath, 0, fileMD5)
+        return checkFileExist(filePath, 0, fileMD5, true)
     }
 
-    fun checkFileExist(filePath: String, fileLength: Long, fileMD5: String): Boolean {
+    /**
+     *
+     * 检查文件是否存在，只有校验通过才算存在
+     *
+     * @param ignoreWhenMd5IsBad 当fileMD5 为空时，认为文件存在还是不存在
+     *
+     *  true 文件存在
+     *  false 文件不存在
+     */
+    fun checkFileExist(filePath: String, fileLength: Long, fileMD5: String, ignoreWhenMd5IsBad: Boolean): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
             false
         } else {
@@ -118,7 +127,7 @@ object FileUtils {
                     if (hasMD5) {
                         getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
                     } else {
-                        true
+                        ignoreWhenMd5IsBad
                     }
                 }
             }

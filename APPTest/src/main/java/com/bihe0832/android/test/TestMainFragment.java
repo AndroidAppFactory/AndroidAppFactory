@@ -34,7 +34,7 @@ public class TestMainFragment extends DebugMainFragment {
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new DebugPhotosFragment();
+            return new DebugDownloadFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new DebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

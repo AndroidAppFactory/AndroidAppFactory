@@ -25,13 +25,13 @@ import kotlin.math.abs
  * Description: 下载引擎的具体实现
  *
  */
-//最小分片长度
+//最小分片长度, 50K
 const val DOWNLOAD_MIN_SIZE = 1024 * 50
 
-//回调长度
+//回调长度 8K
 const val DOWNLOAD_BUFFER_SIZE = 1024 * 8
 
-//默认分片长度
+//默认分片长度, 10M
 const val DOWNLOAD_PART_SIZE = 1024 * 1024 * 10
 
 class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread() {

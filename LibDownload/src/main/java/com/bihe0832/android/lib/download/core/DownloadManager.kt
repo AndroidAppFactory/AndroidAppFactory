@@ -11,8 +11,8 @@ import com.bihe0832.android.lib.download.core.list.DownloadTaskList
 import com.bihe0832.android.lib.download.core.list.DownloadingList
 import com.bihe0832.android.lib.download.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.notify.DownloadNotify
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -295,9 +295,9 @@ object DownloadManager {
 
 
     private fun checkBeforeDownloadFile(info: DownloadItem): String {
-        if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5)) {
+        if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5, false)) {
             return info.finalFilePath
-        } else if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5)) {
+        } else if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5, false)) {
             info.finalFilePath = info.tempFilePath
             return info.finalFilePath
         }
