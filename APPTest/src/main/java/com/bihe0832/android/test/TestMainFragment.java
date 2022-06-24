@@ -21,7 +21,7 @@ public class TestMainFragment extends DebugMainFragment {
     private static final String TAB_FOR_DEV_COMMON = "通用调试";
     private static final String TAB_FOR_DEV_TEMP = "临时调试";
     private static final String TAB_FOR_ROUTER = "路由测试";
-    private static final String TAB_FOR_DEV = "开发测1试";
+    private static final String TAB_FOR_DEV = "开发测试";
 
     public TestMainFragment() {
         super(new String[]{
