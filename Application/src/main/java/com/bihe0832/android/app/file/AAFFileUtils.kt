@@ -23,83 +23,57 @@ object AAFFileUtils {
     }
 
     fun getFolder(): String {
-        val file = ZixieContext.getZixieFolder() + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(ZixieContext.getZixieFolder())
     }
 
     fun getCacheFolder(): String {
-        val file = getFolder() + "cache" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getFolder() + "cache")
     }
 
 
     fun getTempFolder(): String {
-        val file = getFolder() + "temp" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getFolder() + "temp")
     }
 
 
     fun getMediaTempFolder(): String {
-        val file = getTempFolder() + "media" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getTempFolder() + "media")
     }
 
     fun getMediaCacheFolder(): String {
-        val file = getCacheFolder() + "media" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "media")
     }
 
     fun getFileTempFolder(): String {
-        val file = getTempFolder() + "file" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getTempFolder() + "file")
     }
 
     fun getFileCacheFolder(): String {
-        val file = getCacheFolder() + "file" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "file")
     }
 
     fun getSoundTempFolder(): String {
-        val file = getCacheFolder() + "sound" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "sound")
     }
 
     fun getSoundCacheFolder(): String {
-        val file = getCacheFolder() + "sound" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "sound")
     }
 
     fun getImageTempFolder(): String {
-        val file = getCacheFolder() + "image" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "image")
     }
 
     fun getImageCacheFolder(): String {
-        val file = getCacheFolder() + "image" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "image")
     }
 
     fun getVideoTempFolder(): String {
-        val file = getCacheFolder() + "video" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "video")
     }
 
     fun getVideoCacheFolder(): String {
-        val file = getCacheFolder() + "video" + File.separator
-        FileUtils.checkAndCreateFolder(file)
-        return file
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "video" + File.separator)
     }
 
     fun getPathFromUri(uri: Uri?): String {
