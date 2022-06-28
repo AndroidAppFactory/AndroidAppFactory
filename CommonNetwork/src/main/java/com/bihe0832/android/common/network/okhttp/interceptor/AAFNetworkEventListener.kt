@@ -21,7 +21,7 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-internal class AAFNetworkEventListener(private val isDebug: Boolean = false, private val listener: EventListener?) : EventListener() {
+open class AAFNetworkEventListener(private val isDebug: Boolean = false, private val listener: EventListener?) : EventListener() {
 
     private val mRequestIdGenerator by lazy {
         IdGenerator(0)
