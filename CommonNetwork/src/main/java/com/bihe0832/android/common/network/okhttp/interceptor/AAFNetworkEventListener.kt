@@ -20,7 +20,7 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-open class AAFNetworkEventListener(private val isDebug: Boolean = false, private val listener: EventListener?) : EventListener() {
+open class AAFNetworkEventListener(protected val isDebug: Boolean = false, protected val listener: EventListener?) : EventListener() {
 
 
     private var mNetworkTraceTimeRecord: NetworkTraceTimeRecord? = null
