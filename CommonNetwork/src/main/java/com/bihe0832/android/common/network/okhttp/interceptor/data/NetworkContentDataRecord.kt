@@ -22,7 +22,7 @@ class NetworkContentDataRecord : Serializable {
     var requestHeadersMap: Headers? = null
     var requestBody: String = ""
 
-    var status = 0
+    var status = -1
     var errorMsg: String = ""
 
     var responseBodyLength: String = ""
