@@ -22,7 +22,7 @@ import com.tencent.smtt.sdk.TbsPrivacyAccess
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-07-09.
  * Description: 加速器相关的初始化
  *

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 7/20/21.
+ * @author zixie code@bihe0832.com Created on 7/20/21.
  */
 public class RadioDialog extends CommonDialog {
 

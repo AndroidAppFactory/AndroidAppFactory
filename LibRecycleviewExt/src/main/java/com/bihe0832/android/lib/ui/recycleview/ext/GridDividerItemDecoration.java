@@ -16,7 +16,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  *         Created on 2019-06-04.
  *         Description:
  *          该分隔符仅支持单一类型卡片的场景，如果存在不同的Section，会导致计数异常，请使用自定义的分隔符。

@@ -14,7 +14,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 
 
 /**
- * Created by hardyshi on 16/6/30.
+ * Created by zixie on 16/6/30.
  */
 public class DebugMainFragment extends BaseFragment {
 

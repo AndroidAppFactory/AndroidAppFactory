@@ -6,7 +6,7 @@ import com.bihe0832.android.lib.ace.editor.AceConstants;
 import java.nio.charset.Charset;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  *         Created on 2019-11-07.
  *         Description: 管理通用常量
  */

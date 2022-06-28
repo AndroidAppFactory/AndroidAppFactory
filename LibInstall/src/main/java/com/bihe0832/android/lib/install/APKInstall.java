@@ -16,7 +16,7 @@ import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
 import static com.bihe0832.android.lib.install.InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020/9/25.
  * Description: Description
  */

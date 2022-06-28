@@ -21,7 +21,7 @@ import static com.bihe0832.android.lib.install.InstallErrorCode.UNKNOWN_EXCEPTIO
 import static com.bihe0832.android.lib.install.InstallErrorCode.UNZIP_FAILED;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020/9/25.
  * Description: Description
  */

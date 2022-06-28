@@ -1,7 +1,7 @@
 package com.bihe0832.android.common.coroutines
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2022/2/10.
+ * @author zixie code@bihe0832.com Created on 2022/2/10.
  */
 const val Coroutines_ERROR_CODE_EXCEPTION = -1
 const val Coroutines_ERROR_DATA_NULL = -2

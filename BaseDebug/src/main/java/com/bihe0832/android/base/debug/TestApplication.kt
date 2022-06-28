@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.ipc.ServiceManager
 import com.bihe0832.android.lib.log.ZLog
 
 /**
- * @author hardyshi code@bihe0832.com Created on 5/20/21.
+ * @author zixie code@bihe0832.com Created on 5/20/21.
  */
 class TestApplication : Application() {
     private val TAG = "TestApplication"

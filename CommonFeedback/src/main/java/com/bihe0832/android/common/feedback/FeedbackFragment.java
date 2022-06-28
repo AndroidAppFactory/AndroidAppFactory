@@ -9,7 +9,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  *         Created on 2019-07-26.
  *         Description: Description
  */

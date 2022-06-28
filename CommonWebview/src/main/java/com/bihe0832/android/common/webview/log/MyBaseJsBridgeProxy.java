@@ -8,7 +8,7 @@ import com.tencent.smtt.sdk.WebView;
 import java.net.URLDecoder;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 7/16/21.
+ * @author zixie code@bihe0832.com Created on 7/16/21.
  */
 public class MyBaseJsBridgeProxy extends BaseJsBridgeProxy {
 

@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.utils.time.DateUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  *         Created on 2019-11-12.
  *         Description: Description
  */

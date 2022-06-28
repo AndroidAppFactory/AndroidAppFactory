@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.floatview.IconViewWithRedDot;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 8/26/21.
+ * @author zixie code@bihe0832.com Created on 8/26/21.
  */
 public class DebugIcon extends IconViewWithRedDot {
 

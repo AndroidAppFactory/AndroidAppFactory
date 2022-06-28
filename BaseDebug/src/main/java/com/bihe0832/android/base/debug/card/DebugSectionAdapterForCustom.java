@@ -10,7 +10,7 @@ import com.bihe0832.android.lib.adapter.CardBaseAdapter;
 import java.util.List;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-11-21.
  * <p>
  * Description: Description

@@ -9,7 +9,7 @@ import com.bihe0832.android.lib.ui.dialog.RadioDialog
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 
 /**
- * @author hardyshi code@bihe0832.com Created on 7/16/21.
+ * @author zixie code@bihe0832.com Created on 7/16/21.
  */
 open class DebugEnvFragment : BaseDebugListFragment() {
 

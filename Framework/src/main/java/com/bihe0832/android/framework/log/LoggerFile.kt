@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020-03-05.
  * Description: 用户处理特殊日志
  *

@@ -9,7 +9,7 @@ import kotlin.jvm.Synchronized;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  *         Created on 2020/7/9.
  *         Description:日志工具类的各类日志打印方式
  */

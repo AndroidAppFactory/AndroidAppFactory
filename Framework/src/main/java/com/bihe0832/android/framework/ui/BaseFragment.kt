@@ -15,7 +15,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-07-08.
  * Description: 所有的Fragment的基类，目前暂时没有特殊逻辑
  */

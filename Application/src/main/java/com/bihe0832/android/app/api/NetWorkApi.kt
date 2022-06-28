@@ -1,59 +1,26 @@
 package com.bihe0832.android.app.api
 
+import com.bihe0832.android.common.network.okhttp.OkHttpWrapper
+import com.bihe0832.android.common.network.okhttp.getRequestBodyByJsonString
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
-import com.bihe0832.android.framework.request.api.getOkHttpClientBuilder
-import com.bihe0832.android.framework.request.api.getRequestBodyByJsonString
-import com.bihe0832.android.framework.request.api.getRequestParams
-import com.bihe0832.android.framework.request.api.getResponseData
 import com.bihe0832.android.lib.gson.JsonHelper
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
- * Created by hardyshi on 2018/2/5.
+ * Created by zixie on 2018/2/5.
  */
 
 object AAFNetWorkApi {
 
     private val mHttpClient: OkHttpClient by lazy {
-        getOkHttpClientBuilder().apply {
-            addNetworkInterceptor(
-                    HttpLoggingInterceptor { message ->
-                        //打印retrofit日志
-                        ZLog.d(LOG_TAG, "retrofitMsg-> $message")
-                    }.apply {
-                        level = if (!ZixieContext.isOfficial()) {
-                            HttpLoggingInterceptor.Level.BODY
-                        } else {
-                            HttpLoggingInterceptor.Level.NONE
-                        }
-                    }
-            )
-
-            if (!ZixieContext.isOfficial()) {
-                addInterceptor { chain ->
-                    val request: Request = chain.request()
-                    val response: Response = chain.proceed(request)
-                    ZLog.e("$LOG_TAG->", " \n\n____________________________\n" +
-                            request.url() + "\n" +
-                            request.getRequestParams() + "\n" +
-                            response.getResponseData() + "\n" +
-                            "____________________________\n"
-                    )
-                    response
-                }
-            }
-        }.build()
+        OkHttpWrapper.getOkHttpClientBuilderWithInterceptor(!ZixieContext.isOfficial()).build()
     }
 
     const val LOG_TAG = "RetrofitLog"

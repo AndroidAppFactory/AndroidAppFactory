@@ -3,7 +3,7 @@ package com.bihe0832.android.common.list;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020/11/14.
  * Description: Description
  */

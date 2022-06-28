@@ -1,7 +1,7 @@
 package com.bihe0832.android.base.debug.request;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019/5/13.
  * Description: Description
  */

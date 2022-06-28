@@ -49,6 +49,14 @@
                 android:text="test" />
 
             <Button
+                android:id="@+id/postOkHttp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/abc_action_button_min_height_material"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="使用OkHttp库发送POST请求" />
+
+            <Button
                 android:id="@+id/getBasic"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/abc_action_button_min_height_material"

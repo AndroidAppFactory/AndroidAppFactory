@@ -4,7 +4,7 @@ import android.os.Process
 
 /**
  *
- * @author hardyshi code@bihe0832.com Created on 5/20/21.
+ * @author zixie code@bihe0832.com Created on 5/20/21.
  *
  */
 object TestForIPC {

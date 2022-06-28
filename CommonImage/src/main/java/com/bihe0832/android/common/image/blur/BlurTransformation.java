@@ -17,7 +17,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2022/3/28.
+ * @author zixie code@bihe0832.com Created on 2022/3/28.
  */
 public class BlurTransformation extends BitmapTransformation {
 

@@ -13,7 +13,7 @@ import android.renderscript.RenderScript.RSMessageHandler;
 import android.renderscript.ScriptIntrinsicBlur;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2022/3/28.
+ * @author zixie code@bihe0832.com Created on 2022/3/28.
  */
 public class RSBlur {
     public RSBlur() {

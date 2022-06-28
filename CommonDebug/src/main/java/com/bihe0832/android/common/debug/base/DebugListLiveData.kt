@@ -6,7 +6,7 @@ import com.bihe0832.android.framework.ZixieContext
 
 /**
  *
- * @author hardyshi code@bihe0832.com Created on 2020/12/1.
+ * @author zixie code@bihe0832.com Created on 2020/12/1.
  *
  */
 abstract class DebugListLiveData : CommonListLiveData() {

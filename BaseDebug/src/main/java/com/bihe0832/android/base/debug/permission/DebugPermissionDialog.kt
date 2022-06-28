@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.dialog_test_permission.*
 
 /**
  *
- * @author hardyshi code@bihe0832.com Created on 12/24/20.
+ * @author zixie code@bihe0832.com Created on 12/24/20.
  *
  */
 class DebugPermissionDialog : PermissionDialog {

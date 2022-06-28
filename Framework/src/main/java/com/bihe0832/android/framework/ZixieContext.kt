@@ -8,16 +8,13 @@
 
 package com.bihe0832.android.framework
 
-import android.Manifest
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build
 import android.os.Environment
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.widget.Toast
 import com.bihe0832.android.lib.channel.ChannelTools
@@ -38,7 +35,7 @@ import kotlin.system.exitProcess
 
 
 /**
- * Created by hardyshi on 2017/6/27.
+ * Created by zixie on 2017/6/27.
  *
  * 核心内容
  */

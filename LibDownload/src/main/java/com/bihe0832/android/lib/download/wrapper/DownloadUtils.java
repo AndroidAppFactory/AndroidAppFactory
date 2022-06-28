@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * ZTSDKApiForDownload
  *
- * @author hardyshi code@bihe0832.com Created on 2020/9/23.
+ * @author zixie code@bihe0832.com Created on 2020/9/23.
  */
 
 public class DownloadUtils {

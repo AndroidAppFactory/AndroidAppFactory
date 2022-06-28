@@ -1,5 +1,5 @@
 #!/bin/sh
-# author hardyshi
+# author zixie
 
 #函数定义，检测执行结果
 function checkResult() {

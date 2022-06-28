@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.ipc.iservice.IBinderProvider
 import com.bihe0832.android.lib.log.ZLog
 
 /**
- * Created by hardyshi on 10/27/2020.
+ * Created by zixie on 10/27/2020.
  */
 abstract class AbstractBinderProvider : ContentProvider(),
         IBinderProvider {

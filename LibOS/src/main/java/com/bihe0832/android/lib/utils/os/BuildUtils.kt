@@ -4,7 +4,7 @@ import android.os.Build
 import com.bihe0832.android.lib.utils.ConvertUtils
 
 /**
- * Created by hardyshi on 2017/10/31.
+ * Created by zixie on 2017/10/31.
  */
 object BuildUtils {
 

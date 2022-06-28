@@ -6,7 +6,7 @@ import com.bihe0832.android.lib.debug.icon.DebugLogTipsIcon;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 8/26/21.
+ * @author zixie code@bihe0832.com Created on 8/26/21.
  */
 public class DebugTipsIcon extends DebugLogTipsIcon {
 
