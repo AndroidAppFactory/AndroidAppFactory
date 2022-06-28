@@ -58,23 +58,23 @@ object OkHttpWrapper {
         }
     }
 
-    fun getOkHttpClientBuilderWithInterceptor(isDebug: Boolean): OkHttpClient.Builder {
+    fun getOkHttpClientBuilderWithInterceptor(enableTraceAndIntercept: Boolean): OkHttpClient.Builder {
         return getOkHttpClientBuilder().apply {
-            addNetworkInterceptor(generateNetworkInterceptor(isDebug))
-            eventListenerFactory(generateNetworkEventListener(isDebug))
+            addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
+            eventListenerFactory(generateNetworkEventListener(enableTraceAndIntercept, enableTraceAndIntercept, null))
         }
     }
 
-    fun generateNetworkInterceptor(isDebug: Boolean): Interceptor {
-        return AAFOKHttpInterceptor(isDebug)
+    fun generateNetworkInterceptor(enableIntercept: Boolean): Interceptor {
+        return AAFOKHttpInterceptor(enableIntercept)
     }
 
-    fun generateNetworkEventListener(isDebug: Boolean): EventListener.Factory {
-        return generateNetworkEventListener(isDebug, null)
+    fun generateNetworkEventListener(enableTrace: Boolean): EventListener.Factory {
+        return generateNetworkEventListener(enableTrace, enableTrace, null)
     }
 
-    fun generateNetworkEventListener(isDebug: Boolean, listener: EventListener?): EventListener.Factory {
-        return EventListener.Factory { AAFNetworkEventListener(isDebug, listener) }
+    fun generateNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?): EventListener.Factory {
+        return EventListener.Factory { AAFNetworkEventListener(enableTrace, enableLog, listener) }
     }
 
     fun generateRequestID(): String {

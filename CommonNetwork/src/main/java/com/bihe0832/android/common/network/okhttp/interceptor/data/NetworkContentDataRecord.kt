@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.network.okhttp.interceptor.data
 
+import com.bihe0832.android.lib.http.common.core.BaseConnection
 import okhttp3.Headers
 import okhttp3.MediaType
 import okhttp3.Protocol
@@ -31,13 +32,24 @@ class NetworkContentDataRecord : Serializable {
     var responseBody: String = ""
 
     override fun toString(): String {
-        return "NetworkFeedBean{" +
-                "mRequestId='" + contentRequestId + '\'' +
-                ", mUrl='" + url + '\'' +
-                ", mMethod='" + method + '\'' +
-                ", mRequestHeadersMap=" + requestHeadersMap +
-                ", mStatus=" + status +
-                ", mResponseHeadersMap=" + responseHeadersMap +
-                '}'
+
+        StringBuffer().apply {
+            append("\n \n")
+            append("--> $method $url ${protocol}\n")
+            append("${requestHeadersMap.toString()}\n")
+            append("${requestBody}\n")
+            if (method.equals(BaseConnection.HTTP_REQ_METHOD_POST, ignoreCase = true)) {
+                append("--> END $method (${requestBodyLength} - byte body) \n")
+            } else {
+                append("--> END $method \n")
+            }
+            append("<-- ${status} $url")
+            append("${errorMsg}\n")
+            append("${responseHeadersMap.toString()}\n")
+            append("${responseBody}\n\n")
+            append("<-- END HTTP (${responseBodyLength} - byte body) \n")
+        }.let {
+            return it.toString()
+        }
     }
 }

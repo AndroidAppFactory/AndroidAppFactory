@@ -23,7 +23,7 @@ import okhttp3.Response
  * Created on 2022/6/27.
  * Description: Description
  */
-open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Interceptor {
+open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false) : Interceptor {
 
     private val HTTP_REQ_PROPERTY_CONTENT_ENCODING = "Content-Encoding"
 
@@ -39,7 +39,7 @@ open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Intercep
         val requestId = generateRequestID()
         var networkContentDataRecord: NetworkContentDataRecord? = null
         val request = interceptRequest(requestId, chain.request().newBuilder().header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID, requestId).build())
-        if (isDebug) {
+        if (enableIntercept) {
             networkContentDataRecord = getNetworkContentDataRecordByContentID(requestId)
             val connection = chain.connection()
             val protocol = connection?.protocol() ?: Protocol.HTTP_1_1
@@ -62,13 +62,13 @@ open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Intercep
         try {
             response = interceptResponse(requestId, chain.proceed(request))
         } catch (var25: Exception) {
-            if (isDebug) {
+            if (enableIntercept) {
                 networkContentDataRecord?.errorMsg = var25.toString()
             }
             throw var25
         }
 
-        if (isDebug) {
+        if (enableIntercept) {
             networkContentDataRecord?.responseHeadersMap = response.headers()
             networkContentDataRecord?.status = response.code()
             networkContentDataRecord?.errorMsg = response.message() ?: ""
