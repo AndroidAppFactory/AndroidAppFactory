@@ -28,7 +28,7 @@ class NetworkRecord(
             append("\n \n")
             append("--> $method $url ${contentData.protocol}\n")
             append("${contentData.requestHeadersMap.toString()}\n")
-            append("${contentData.requestBody}\n")
+            append("${contentData.requestBody}\n\n")
             if (method.equals(BaseConnection.HTTP_REQ_METHOD_POST, ignoreCase = true)) {
                 append("--> END $method (${contentData.requestBodyLength} - byte body)   Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms\n")
             } else {

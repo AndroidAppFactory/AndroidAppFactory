@@ -37,7 +37,7 @@ class NetworkContentDataRecord : Serializable {
             append("\n \n")
             append("--> $method $url ${protocol}\n")
             append("${requestHeadersMap.toString()}\n")
-            append("${requestBody}\n")
+            append("${requestBody}\n\n")
             if (method.equals(BaseConnection.HTTP_REQ_METHOD_POST, ignoreCase = true)) {
                 append("--> END $method (${requestBodyLength} - byte body) \n")
             } else {
