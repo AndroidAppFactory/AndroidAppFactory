@@ -7,14 +7,16 @@
  */
 package com.bihe0832.android.common.network.okhttp.interceptor
 
-import android.text.TextUtils
 import com.bihe0832.android.common.network.okhttp.OkHttpWrapper
 import com.bihe0832.android.common.network.okhttp.OkHttpWrapper.generateRequestID
 import com.bihe0832.android.common.network.okhttp.getRequestParams
 import com.bihe0832.android.common.network.okhttp.getResponseData
 import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
 import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkContentDataRecord
-import okhttp3.*
+import okhttp3.Interceptor
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.Response
 
 /**
  * @author zixie code@bihe0832.com
@@ -44,6 +46,7 @@ open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Intercep
             networkContentDataRecord.url = request.url().toString()
             networkContentDataRecord.method = request.method()
             networkContentDataRecord.protocol = protocol
+            networkContentDataRecord.requestHeadersMap = request.headers()
             val requestBody = request.body()
             if (requestBody != null) {
                 val contentLength = requestBody.contentLength()
@@ -53,7 +56,6 @@ open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Intercep
                 }
                 networkContentDataRecord.requestBody = request.getRequestParams()
             }
-            networkContentDataRecord.requestHeadersMap = request.headers()
         }
 
         val response: Response
@@ -69,7 +71,7 @@ open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Intercep
         if (isDebug) {
             networkContentDataRecord?.responseHeadersMap = response.headers()
             networkContentDataRecord?.status = response.code()
-            networkContentDataRecord?.errorMsg = response.message()
+            networkContentDataRecord?.errorMsg = response.message() ?: ""
             val responseBody = response.body()
             if (responseBody != null) {
                 val contentLength = responseBody.contentLength()
@@ -77,19 +79,9 @@ open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Intercep
                 if (responseBody.contentType() != null) {
                     networkContentDataRecord?.responseContentType = responseBody.contentType()
                 }
-                if (bodyEncoded(request.headers())) {
-                    networkContentDataRecord?.responseBody = "encoded body omitted"
-                } else {
-                    networkContentDataRecord?.responseBody = response.getResponseData()
-                }
+                networkContentDataRecord?.responseBody = response.getResponseData()
             }
         }
         return response
-    }
-
-    private fun bodyEncoded(headers: Headers): Boolean {
-        headers.get(HTTP_REQ_PROPERTY_CONTENT_ENCODING).let {
-            return TextUtils.isEmpty(it) || it.equals("identity", ignoreCase = true)
-        }
     }
 }

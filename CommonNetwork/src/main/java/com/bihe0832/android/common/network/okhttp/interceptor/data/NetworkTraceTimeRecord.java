@@ -44,14 +44,14 @@ public class NetworkTraceTimeRecord implements Serializable {
     public static String TRACE_NAME_RESPONSE_HEADERS = "Response Headers";
     public static String TRACE_NAME_RESPONSE_BODY = "Response Body";
 
-    private String mRequestId;
+    private String mTraceRequestId;
     private String mContentRequestId;
     private String mUrl;
     private Map<String, Long> mNetworkEventTimeMap = new HashMap<>();
     private Map<String, Long> mTtraceDataItemList = new HashMap<>();
 
-    public String getRequestId() {
-        return mRequestId;
+    public String getTraceRequestId() {
+        return mTraceRequestId;
     }
 
     public String getContentRequestId() {
@@ -62,8 +62,8 @@ public class NetworkTraceTimeRecord implements Serializable {
         this.mContentRequestId = mContentRequestId;
     }
 
-    public void setRequestId(String mRequestId) {
-        this.mRequestId = mRequestId;
+    public void setTraceRequestId(String mRequestId) {
+        this.mTraceRequestId = mRequestId;
     }
 
     public String getUrl() {

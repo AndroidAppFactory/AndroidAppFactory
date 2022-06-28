@@ -16,7 +16,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
@@ -26,7 +25,6 @@ import retrofit2.http.POST
  */
 interface ApiService {
 
-    @Headers("Cache-Control: max-age=640000")
     @POST("/AndroidHTTP/post.php")
     fun getData(@Body body: RequestBody): Call<ResponseBody>
 
@@ -39,13 +37,6 @@ fun debugOKHttp() {
             .create(ApiService::class.java).getData(AAFNetWorkApi.getRequestBody()).apply {
 
             }.enqueue(ResultCall<ResponseBody>())
-
-//    AAFNetWorkApi.getRequestPara().apply {
-//        put("k", "Android")
-//    }.let {
-//        AAFNetWorkApi.getRetrofit("https://www.wanandroid.com")
-//                .create(ApiService::class.java).getNewData(getRequestBodyByJsonString(it.toString())).enqueue(ResultCall<ResponseBody>())
-//    }
 }
 
 private class ResultCall<T> : Callback<T> {

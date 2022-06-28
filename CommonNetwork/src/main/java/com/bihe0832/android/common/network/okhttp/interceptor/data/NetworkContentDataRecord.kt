@@ -10,7 +10,7 @@ import java.io.Serializable
  */
 class NetworkContentDataRecord : Serializable {
 
-    var requestId: String = ""
+    var contentRequestId: String = ""
     var mTraceRequestId: String = ""
 
     var url: String = ""
@@ -32,7 +32,7 @@ class NetworkContentDataRecord : Serializable {
 
     override fun toString(): String {
         return "NetworkFeedBean{" +
-                "mRequestId='" + requestId + '\'' +
+                "mRequestId='" + contentRequestId + '\'' +
                 ", mUrl='" + url + '\'' +
                 ", mMethod='" + method + '\'' +
                 ", mRequestHeadersMap=" + requestHeadersMap +

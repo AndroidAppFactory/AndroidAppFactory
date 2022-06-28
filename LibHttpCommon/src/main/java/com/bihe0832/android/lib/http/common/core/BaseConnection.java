@@ -40,9 +40,9 @@ public abstract class BaseConnection {
 
 
     public static final String HTTP_REQ_PROPERTY_CONTENT_LENGTH = "Content-Length";
-    protected static final String HTTP_REQ_METHOD_GET = "GET";
-    protected static final String HTTP_REQ_METHOD_POST = "POST";
-    protected static final String HTTP_REQ_COOKIE = "Cookie";
+    public static final String HTTP_REQ_METHOD_GET = "GET";
+    public static final String HTTP_REQ_METHOD_POST = "POST";
+    public static final String HTTP_REQ_COOKIE = "Cookie";
 
     /**
      * 建立连接的超时时间
