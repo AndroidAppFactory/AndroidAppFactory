@@ -6,14 +6,16 @@
  *
  */
 
-package com.bihe0832.android.framework.request.api
+package com.bihe0832.android.common.network.okhttp
 
 import com.bihe0832.android.framework.constant.Constants
-import okhttp3.*
+import okhttp3.MediaType
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.Reader
-import java.util.concurrent.TimeUnit
 
 /**
  *
@@ -23,17 +25,13 @@ import java.util.concurrent.TimeUnit
  *
  */
 
-const val TIME_OUT_READ = 5000L
-const val TIME_OUT_CONNECTION = 5000L
-const val TIME_OUT_WRITE = 5000L
-
-
 fun Response.getResponseData(): String {
     var jsonReader: Reader? = null
     var reader: BufferedReader? = null
     try {
         val responseBody = peekBody(Long.MAX_VALUE)
-        jsonReader = InputStreamReader(responseBody.byteStream(), Constants.CHAR_SET_UTF8)
+        val charset = responseBody.contentType()?.charset() ?: Constants.CHAR_SET_UTF8
+        jsonReader = InputStreamReader(responseBody.byteStream(), charset)
         reader = BufferedReader(jsonReader)
         val result = StringBuffer()
         var line: String? = reader.readLine()
@@ -79,14 +77,6 @@ fun Request.getRequestParams(): String {
     return ""
 }
 
-fun getOkHttpClientBuilder(): OkHttpClient.Builder {
-    return OkHttpClient.Builder().apply {
-        connectTimeout(TIME_OUT_CONNECTION, TimeUnit.MILLISECONDS)
-        readTimeout(TIME_OUT_READ, TimeUnit.MILLISECONDS)
-        writeTimeout(TIME_OUT_WRITE, TimeUnit.MILLISECONDS)
-        retryOnConnectionFailure(true)
-    }
-}
 
 fun getRequestBodyByJsonString(jsonString: String): RequestBody {
     return RequestBody.create(MediaType.parse("application/json"), jsonString)

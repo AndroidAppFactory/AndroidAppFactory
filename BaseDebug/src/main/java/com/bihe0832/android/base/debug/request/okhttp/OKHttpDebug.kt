@@ -9,13 +9,14 @@ package com.bihe0832.android.base.debug.request.okhttp
 
 import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.base.debug.request.Constants
-import com.bihe0832.android.base.debug.request.advanced.TestResponse
 import com.bihe0832.android.lib.log.ZLog
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
@@ -24,20 +25,35 @@ import retrofit2.http.POST
  * Description: Description
  */
 interface ApiService {
+
+    @Headers("Cache-Control: max-age=640000")
     @POST("/AndroidHTTP/post.php")
-    fun getData(@Body body: RequestBody): Call<TestResponse>
+    fun getData(@Body body: RequestBody): Call<ResponseBody>
+
+    @POST("/article/query/0/json")
+    fun getNewData(@Body body: RequestBody): Call<ResponseBody>
 }
 
 fun debugOKHttp() {
     AAFNetWorkApi.getRetrofit(Constants.HTTP_DOMAIN)
-            .create(ApiService::class.java).getData(AAFNetWorkApi.getRequestBody()).enqueue(object : Callback<TestResponse> {
-                override fun onResponse(p0: Call<TestResponse>, p1: Response<TestResponse>) {
-                    ZLog.d(p1.body().toString())
-                }
+            .create(ApiService::class.java).getData(AAFNetWorkApi.getRequestBody()).apply {
 
-                override fun onFailure(p0: Call<TestResponse>, p1: Throwable) {
-                    ZLog.d(p1.toString())
-                }
+            }.enqueue(ResultCall<ResponseBody>())
 
-            })
+//    AAFNetWorkApi.getRequestPara().apply {
+//        put("k", "Android")
+//    }.let {
+//        AAFNetWorkApi.getRetrofit("https://www.wanandroid.com")
+//                .create(ApiService::class.java).getNewData(getRequestBodyByJsonString(it.toString())).enqueue(ResultCall<ResponseBody>())
+//    }
+}
+
+private class ResultCall<T> : Callback<T> {
+    override fun onResponse(p0: Call<T>, p1: Response<T>) {
+        ZLog.d("NetworkResult", (p1.body() as ResponseBody).source().toString())
+    }
+
+    override fun onFailure(p0: Call<T>, p1: Throwable) {
+        ZLog.d("NetworkResult", p1.toString())
+    }
 }

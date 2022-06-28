@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 6/21/21.
+ * @author zixie code@bihe0832.com Created on 6/21/21.
  */
 public class ClipboardUtil {
 

@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * HttpURLConnection封装基类，网络请求，设置请求协议头、发送请求
  *
- * Created by hardyshi on 16/11/22.
+ * Created by zixie on 16/11/22.
  */
 public abstract class BaseConnection {
 

@@ -5,7 +5,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2020/12/1.
+ * @author zixie code@bihe0832.com Created on 2020/12/1.
  */
 class PermissionResultOfAAF(private val exist: Boolean) : PermissionManager.OnPermissionResult {
     override fun onSuccess() {

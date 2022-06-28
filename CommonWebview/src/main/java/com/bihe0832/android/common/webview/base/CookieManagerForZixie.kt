@@ -9,7 +9,7 @@ import com.tencent.smtt.sdk.CookieSyncManager
 import com.tencent.smtt.sdk.WebView
 
 /**
- * @author hardyshi code@bihe0832.com Created on 8/12/21.
+ * @author zixie code@bihe0832.com Created on 8/12/21.
  */
 object CookieManagerForZixie {
 

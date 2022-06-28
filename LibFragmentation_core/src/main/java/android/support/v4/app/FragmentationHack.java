@@ -71,7 +71,7 @@ public class FragmentationHack {
         // For pre-25.4.0
         if (sSupportLessThan25dot4) return fragmentManager.getFragments();
 
-        //TODO hardy check compat version
+        //TODO zixie check compat version
         // For compat 25.4.0+
         try {
             FragmentManagerImpl fragmentManagerImpl = (FragmentManagerImpl) fragmentManager;

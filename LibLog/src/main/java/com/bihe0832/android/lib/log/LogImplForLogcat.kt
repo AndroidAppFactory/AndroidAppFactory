@@ -3,7 +3,7 @@ package com.bihe0832.android.lib.log
 import android.util.Log
 
 /**
- * Created by hardyshi on 2017/8/31.
+ * Created by zixie on 2017/8/31.
  */
 object LogImplForLogcat : LogImpl {
 

@@ -4,7 +4,7 @@ import com.bihe0832.android.lib.request.URLUtils
 
 
 /**
- * Created by hardyshi on 2017/6/27.
+ * Created by zixie on 2017/6/27.
  *
  */
 //需要拥有权限才能进入的特权，前提是已经登录了

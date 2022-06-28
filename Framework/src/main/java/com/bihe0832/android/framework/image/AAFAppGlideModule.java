@@ -22,7 +22,7 @@ import com.bumptech.glide.module.AppGlideModule;
 import com.bumptech.glide.request.RequestOptions;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2020/12/9.
+ * @author zixie code@bihe0832.com Created on 2020/12/9.
  */
 @GlideModule
 public class AAFAppGlideModule extends AppGlideModule {

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 5/19/21.
+ * @author zixie code@bihe0832.com Created on 5/19/21.
  */
 public class TestObjectForIPC implements Parcelable {
 

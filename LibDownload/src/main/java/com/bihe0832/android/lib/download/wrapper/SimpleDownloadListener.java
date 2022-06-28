@@ -6,7 +6,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2/1/21.
+ * @author zixie code@bihe0832.com Created on 2/1/21.
  */
 public abstract class SimpleDownloadListener implements DownloadListener {
 

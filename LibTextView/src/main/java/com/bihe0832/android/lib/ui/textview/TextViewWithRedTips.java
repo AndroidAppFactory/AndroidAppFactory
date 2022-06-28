@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-12-05.
  * Description: Description
  */

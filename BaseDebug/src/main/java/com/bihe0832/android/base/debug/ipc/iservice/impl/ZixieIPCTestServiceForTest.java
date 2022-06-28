@@ -10,7 +10,7 @@ import com.bihe0832.android.base.debug.ipc.iservice.IZixieIPCTestServiceForTest;
 import com.bihe0832.android.lib.log.ZLog;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 5/19/21.
+ * @author zixie code@bihe0832.com Created on 5/19/21.
  */
 public class ZixieIPCTestServiceForTest extends IZixieIPCForTestInterface.Stub implements IZixieIPCTestServiceForTest {
 

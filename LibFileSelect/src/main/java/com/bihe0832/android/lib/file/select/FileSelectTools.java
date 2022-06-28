@@ -6,7 +6,7 @@ import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 4/8/21.
+ * @author zixie code@bihe0832.com Created on 4/8/21.
  */
 public class FileSelectTools {
 

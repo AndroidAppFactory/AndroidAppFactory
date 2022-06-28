@@ -14,7 +14,7 @@ import java.lang.reflect.Proxy
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * Created by hardyshi on 10/28/2020.
+ * Created by zixie on 10/28/2020.
  */
 object ServiceManager {
 

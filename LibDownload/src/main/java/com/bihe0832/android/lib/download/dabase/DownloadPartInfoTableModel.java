@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.sqlite.BaseTableModel;
 /**
  * DownloadPartInfoTableModel
  *
- * @author hardyshi code@bihe0832.com Created on 2020/6/12.
+ * @author zixie code@bihe0832.com Created on 2020/6/12.
  */
 public class DownloadPartInfoTableModel extends BaseTableModel {
 

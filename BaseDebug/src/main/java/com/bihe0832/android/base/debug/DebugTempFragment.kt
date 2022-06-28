@@ -56,11 +56,11 @@ class DebugTempFragment : DebugEnvFragment() {
 
     val configListener = object : OnConfigChangedListener {
         override fun onValueChanged(key: String?, value: String?) {
-            ZLog.d("hardy", "onNewValue config key: $key value: $value")
+            ZLog.d("zixie", "onNewValue config key: $key value: $value")
         }
 
         override fun onValueAgain(key: String?, value: String?) {
-            ZLog.d("hardy", "onValueSetted config key: $key value: $value")
+            ZLog.d("zixie", "onValueSetted config key: $key value: $value")
         }
 
     }

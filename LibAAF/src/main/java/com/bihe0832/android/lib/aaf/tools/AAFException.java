@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.aaf.tools;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2020/12/10.
+ * @author zixie code@bihe0832.com Created on 2020/12/10.
  */
 public class AAFException extends Exception {
 

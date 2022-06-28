@@ -17,7 +17,7 @@ import com.bihe0832.android.lib.router.RouterMappingManager
 
 
 /**
- * Created by hardyshi on 2017/6/27.
+ * Created by zixie on 2017/6/27.
  *
  */
 object RouterHelper {

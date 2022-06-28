@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 9/10/21.
+ * @author zixie code@bihe0832.com Created on 9/10/21.
  *
  * true TRUE 1 为 true
  */

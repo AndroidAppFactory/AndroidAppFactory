@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by hardyshi on 16/11/21.
+ * Created by zixie on 16/11/21.
  */
 public class TextFactoryUtils {
 

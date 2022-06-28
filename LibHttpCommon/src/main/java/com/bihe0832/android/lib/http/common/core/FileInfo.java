@@ -9,7 +9,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import java.io.File;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2021/11/18.
+ * @author zixie code@bihe0832.com Created on 2021/11/18.
  */
 public class FileInfo {
 

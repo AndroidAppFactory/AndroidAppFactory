@@ -19,7 +19,7 @@ import kotlin.jvm.Synchronized;
  *
  * 除 downloadURL ，其余都非必填，默认不支持分片下载，每次下载都会强制重新下载
  *
- * @author hardyshi code@bihe0832.com Created on 2020/6/3.
+ * @author zixie code@bihe0832.com Created on 2020/6/3.
  */
 public class DownloadItem implements Serializable {
 

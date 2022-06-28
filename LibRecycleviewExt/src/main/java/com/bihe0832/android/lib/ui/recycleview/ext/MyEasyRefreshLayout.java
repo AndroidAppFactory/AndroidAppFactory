@@ -10,7 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-09-25.
  * Description: Description
  */

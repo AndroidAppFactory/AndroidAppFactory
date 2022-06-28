@@ -6,7 +6,7 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadPartInfo
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020/6/12.
  * Description: Description
  */

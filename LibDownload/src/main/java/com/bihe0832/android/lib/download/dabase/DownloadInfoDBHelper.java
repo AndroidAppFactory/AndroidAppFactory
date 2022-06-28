@@ -9,7 +9,7 @@ import com.bihe0832.android.lib.sqlite.BaseDBHelper;
 /**
  * 下载进度保存
  *
- * @author hardyshi code@bihe0832.com Created on 2020/6/12.
+ * @author zixie code@bihe0832.com Created on 2020/6/12.
  */
 class DownloadInfoDBHelper extends BaseDBHelper {
 

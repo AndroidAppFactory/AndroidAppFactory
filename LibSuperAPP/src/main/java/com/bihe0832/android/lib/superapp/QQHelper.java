@@ -8,7 +8,7 @@ import android.net.Uri;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-12-16.
  * Description: Description
  */

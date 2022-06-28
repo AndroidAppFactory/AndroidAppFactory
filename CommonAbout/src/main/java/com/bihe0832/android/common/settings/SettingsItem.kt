@@ -15,7 +15,7 @@ import java.util.*
 
 /**
  *
- * @author hardyshi code@bihe0832.com Created on 8/3/21.
+ * @author zixie code@bihe0832.com Created on 8/3/21.
  *
  */
 object SettingsItem {

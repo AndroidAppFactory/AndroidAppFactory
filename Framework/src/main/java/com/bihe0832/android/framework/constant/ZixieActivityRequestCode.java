@@ -5,7 +5,7 @@ import com.bihe0832.android.lib.file.select.FileSelectTools;
 import com.bihe0832.android.lib.permission.PermissionManager;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2019-11-07.
  * Description: 管理所有加速器相关的常量
  */

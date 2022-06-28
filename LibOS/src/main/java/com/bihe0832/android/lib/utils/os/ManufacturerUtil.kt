@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 
 /**
- * Created by hardyshi on 2017/10/31.
+ * Created by zixie on 2017/10/31.
  */
 object ManufacturerUtil {
 

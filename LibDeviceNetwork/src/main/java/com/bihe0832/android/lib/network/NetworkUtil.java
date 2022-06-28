@@ -490,7 +490,7 @@ public class NetworkUtil {
         try {
             Process ipProcess = runtime.exec("ping -c 3 weixin.qq.com");
             int exitValue = ipProcess.waitFor();
-            ZLog.i("hardy isNetworkOnline exitValue:" + exitValue);
+            ZLog.i("zixie isNetworkOnline exitValue:" + exitValue);
             if (exitValue == 0) {
                 return true;
             } else {
@@ -498,7 +498,7 @@ public class NetworkUtil {
                 if ((len = ipProcess.getErrorStream().available()) > 0) {
                     byte[] buf = new byte[len];
                     ipProcess.getErrorStream().read(buf);
-                    ZLog.i("hardy " + new String(buf));
+                    ZLog.i("zixie " + new String(buf));
                 }
                 return false;
             }

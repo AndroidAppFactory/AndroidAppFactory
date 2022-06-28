@@ -6,7 +6,7 @@ import com.bihe0832.android.lib.utils.ConvertUtils
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020/5/14.
  * Description: Description
  *

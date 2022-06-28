@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2022/3/25.
+ * @author zixie code@bihe0832.com Created on 2022/3/25.
  */
 
 object DebugInfoCacheManager {
@@ -43,12 +43,12 @@ object DebugInfoCacheManager {
         try {
             CoroutineScope(defaultDispatcher).launch {
                 mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).let {
-                    ZLog.d("hardy", it.toString())
+                    ZLog.d("zixie", it.toString())
                 }
             }
         } catch (e: ZixieCoroutinesException) {
             e.printStackTrace()
-            ZLog.d("hardy", e.toString())
+            ZLog.d("zixie", e.toString())
         }
 
     }

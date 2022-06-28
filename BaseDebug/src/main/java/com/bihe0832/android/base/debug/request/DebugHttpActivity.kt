@@ -2,7 +2,6 @@ package com.bihe0832.android.base.debug.request
 
 import android.net.Uri
 import android.os.Bundle
-import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.request.advanced.AdvancedGetRequest
 import com.bihe0832.android.base.debug.request.advanced.AdvancedPostRequest
@@ -21,12 +20,6 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.router.annotation.Module
 import kotlinx.android.synthetic.main.activity_http_test.*
-import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
 import java.io.File
 import java.net.URLDecoder
 
@@ -40,11 +33,15 @@ class DebugHttpActivity : BaseDebugActivity() {
         setContentView(R.layout.activity_http_test)
 
         common_toolbar.setNavigationOnClickListener { onBackPressed() }
+
+        postOkHttp.setOnClickListener {
+            debugOKHttp()
+        }
+
         getBasic.setOnClickListener { sendGetBasicRequest() }
 
         postBasic.setOnClickListener {
-//            sendPostBasicRequest()
-            debugOKHttp()
+            sendPostBasicRequest()
         }
 
         getAdvanced.setOnClickListener { sendGetAdvancedRequest() }

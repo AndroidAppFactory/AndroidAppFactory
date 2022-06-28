@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.sqlite.impl;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2021/2/20.
  * Description: Description
  */

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2021/11/18.
+ * @author zixie code@bihe0832.com Created on 2021/11/18.
  */
 public class HttpFileUpload {
 

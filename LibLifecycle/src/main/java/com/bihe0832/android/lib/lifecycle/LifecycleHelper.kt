@@ -10,7 +10,7 @@ import com.bihe0832.android.lib.utils.time.DateUtil
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020/10/30.
  * Description: Description
  *

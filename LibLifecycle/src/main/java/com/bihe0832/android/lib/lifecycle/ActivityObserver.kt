@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.log.ZLog
 import java.lang.ref.SoftReference
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020/5/19.
  * Description: Description
  */

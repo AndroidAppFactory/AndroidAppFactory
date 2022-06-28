@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by hardyshi on 16/11/21.
+ * Created by zixie on 16/11/21.
  */
 public class TextFactoryCore {
 
