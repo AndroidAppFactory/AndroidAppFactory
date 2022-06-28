@@ -30,7 +30,7 @@ class NetworkRecord(
             append("${contentData.requestHeadersMap.toString()}\n")
             append("${contentData.requestBody}\n")
             if (method.equals(BaseConnection.HTTP_REQ_METHOD_POST, ignoreCase = true)) {
-                append("--> END $method (${contentData.requestBodyLength} - byte body) ,Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms)\n")
+                append("--> END $method (${contentData.requestBodyLength} - byte body)   Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms\n")
             } else {
                 append("--> END $method Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms)\n")
             }
@@ -38,7 +38,7 @@ class NetworkRecord(
             append("${contentData.errorMsg}\n")
             append("${contentData.responseHeadersMap.toString()}\n")
             append("${contentData.responseBody}\n\n")
-            append("<-- END HTTP (${contentData.responseBodyLength} - byte body) ,Total Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_CALL_END)}ms\n")
+            append("<-- END HTTP (${contentData.responseBodyLength} - byte body)   Total Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_CALL_END)}ms\n")
         }.let {
             return it.toString()
         }
