@@ -12,8 +12,8 @@ import com.bihe0832.android.common.network.okhttp.OkHttpWrapper
 import com.bihe0832.android.common.network.okhttp.OkHttpWrapper.generateRequestID
 import com.bihe0832.android.common.network.okhttp.getRequestParams
 import com.bihe0832.android.common.network.okhttp.getResponseData
-import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkContentDataRecord
 import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
+import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkContentDataRecord
 import okhttp3.*
 
 /**
@@ -21,7 +21,7 @@ import okhttp3.*
  * Created on 2022/6/27.
  * Description: Description
  */
-class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Interceptor {
+open class AAFOKHttpInterceptor(private var isDebug: Boolean = false) : Interceptor {
 
     private val HTTP_REQ_PROPERTY_CONTENT_ENCODING = "Content-Encoding"
 
