@@ -11,9 +11,11 @@ object AAFRequestDataRepository {
     // 网络请求实际结果
     private val mNetworkContentDataRecord: ConcurrentHashMap<String, NetworkContentDataRecord> = ConcurrentHashMap()
 
-    fun clearData() {
-        mNetworkTraceTimeRecord.clear()
-        mNetworkContentDataRecord.clear()
+    fun removeData(traceID: String) {
+        getNetworkContentDataRecordByTraceID(traceID).contentRequestId.let {
+            mNetworkContentDataRecord.remove(it)
+        }
+        mNetworkTraceTimeRecord.remove(traceID)
     }
 
     fun getNetworkContentDataRecordByContentID(requestId: String): NetworkContentDataRecord {
@@ -22,9 +24,8 @@ object AAFRequestDataRepository {
         if (networkFeedBean == null) {
             //则存储该数据到map集合中
             networkFeedBean = NetworkContentDataRecord().apply {
-                this.requestId = requestId
+                this.contentRequestId = requestId
             }
-
             mNetworkContentDataRecord.put(requestId, networkFeedBean)
         }
         return networkFeedBean
@@ -39,7 +40,7 @@ object AAFRequestDataRepository {
         var networkFeedBean = mNetworkTraceTimeRecord.get(requestId)
         if (networkFeedBean == null) {
             networkFeedBean = NetworkTraceTimeRecord().apply {
-                this.setRequestId(requestId)
+                this.setTraceRequestId(requestId)
             }
             mNetworkTraceTimeRecord[requestId] = networkFeedBean
         }

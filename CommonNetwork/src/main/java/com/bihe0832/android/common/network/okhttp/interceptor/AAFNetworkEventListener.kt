@@ -10,11 +10,10 @@ package com.bihe0832.android.common.network.okhttp.interceptor
 
 import android.text.TextUtils
 import com.bihe0832.android.common.network.okhttp.OkHttpWrapper
+import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkRecord
 import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkTraceTimeRecord
-import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.utils.IdGenerator
 import okhttp3.*
 import java.io.IOException
 import java.net.InetAddress
@@ -23,17 +22,18 @@ import java.net.Proxy
 
 open class AAFNetworkEventListener(private val isDebug: Boolean = false, private val listener: EventListener?) : EventListener() {
 
-    private val mRequestIdGenerator by lazy {
-        IdGenerator(0)
-    }
 
     private var mNetworkTraceTimeRecord: NetworkTraceTimeRecord? = null
 
+    open fun needTrace(call: Call): Boolean {
+        return isDebug
+    }
+
     override fun callStart(call: Call) {
         super.callStart(call)
-        if (isDebug) {
+        if (needTrace(call)) {
             mNetworkTraceTimeRecord = OkHttpWrapper.getRecord(
-                    mRequestIdGenerator.generate().toString(),
+                    OkHttpWrapper.generateRequestID(),
                     call.request().url().toString(),
                     call.request().method()
             ).getRecordTraceTimeData()
@@ -94,12 +94,12 @@ open class AAFNetworkEventListener(private val isDebug: Boolean = false, private
         saveEvent(NetworkTraceTimeRecord.EVENT_REQUEST_HEADERS_END)
         request.header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID)?.let { contentRequesetID ->
             if (!TextUtils.isEmpty(contentRequesetID)) {
+                ZLog.d("NetworkSaveEvent", "Request ID bind contentRequestId:$contentRequesetID, traceID:${mNetworkTraceTimeRecord?.traceRequestId}")
                 mNetworkTraceTimeRecord?.contentRequestId = contentRequesetID
-                AAFRequestDataRepository.getNetworkContentDataRecordByContentID(contentRequesetID).mTraceRequestId = mNetworkTraceTimeRecord?.requestId
+                AAFRequestDataRepository.getNetworkContentDataRecordByContentID(contentRequesetID).mTraceRequestId = mNetworkTraceTimeRecord?.traceRequestId
                         ?: ""
                                 ?: ""
             }
-
         }
         listener?.requestHeadersEnd(call, request)
     }
@@ -144,7 +144,9 @@ open class AAFNetworkEventListener(private val isDebug: Boolean = false, private
         super.callEnd(call)
         saveEvent(NetworkTraceTimeRecord.EVENT_CALL_END)
         listener?.callEnd(call)
-        logRequest(OkHttpWrapper.getRecord(mNetworkTraceTimeRecord?.requestId))
+        if (needTrace(call)) {
+            logRequest(OkHttpWrapper.getRecord(mNetworkTraceTimeRecord?.traceRequestId))
+        }
     }
 
     open fun logRequest(record: NetworkRecord?) {

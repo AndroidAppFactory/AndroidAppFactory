@@ -11,6 +11,7 @@ package com.bihe0832.android.common.network.okhttp
 import android.os.SystemClock
 import com.bihe0832.android.common.network.okhttp.interceptor.AAFNetworkEventListener
 import com.bihe0832.android.common.network.okhttp.interceptor.AAFOKHttpInterceptor
+import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkRecord
 import com.bihe0832.android.lib.utils.IdGenerator
 import okhttp3.EventListener
@@ -25,26 +26,28 @@ const val TIME_OUT_CONNECTION = 5000L
 const val TIME_OUT_WRITE = 5000L
 
 
-
 object OkHttpWrapper {
 
     const val HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID = "AAF-Content-Request-Id"
-    private const val MAX_SIZE = 100
 
     private val mRequestIdGenerator by lazy {
         IdGenerator(0)
     }
+
 
     private val mRequestRecords: CopyOnWriteArrayList<NetworkRecord> by lazy {
         CopyOnWriteArrayList<NetworkRecord>()
     }
 
     private fun addRecord(record: NetworkRecord) {
-        if (mRequestRecords.size > MAX_SIZE) {
+        if (mRequestRecords.size > maxRequestListSize) {
+            AAFRequestDataRepository.removeData(mRequestRecords[0].traceRequestId)
             mRequestRecords.removeAt(0)
         }
         mRequestRecords.add(record)
     }
+
+    var maxRequestListSize = 100
 
     fun getOkHttpClientBuilder(): OkHttpClient.Builder {
         return OkHttpClient.Builder().apply {

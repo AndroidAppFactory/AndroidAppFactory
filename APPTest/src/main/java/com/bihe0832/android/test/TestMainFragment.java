@@ -30,7 +30,7 @@ public class TestMainFragment extends DebugMainFragment {
     }
 
     // 当前是否是开发模式
-    private final boolean isDev = true;
+    private final boolean isDev = false;
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
@@ -51,7 +51,7 @@ public class TestMainFragment extends DebugMainFragment {
         if (isDev) {
             return mTabString.length - 1;
         } else {
-            return 0;
+            return 1;
         }
     }
 }

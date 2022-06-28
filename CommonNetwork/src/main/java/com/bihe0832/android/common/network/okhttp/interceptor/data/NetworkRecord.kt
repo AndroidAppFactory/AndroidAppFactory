@@ -9,6 +9,7 @@ package com.bihe0832.android.common.network.okhttp.interceptor.data
 
 import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByTraceID
 import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository.getNetworkTraceTimeRecordByRequestID
+import com.bihe0832.android.lib.http.common.core.BaseConnection
 
 /**
  * @desc: 一条网络请求记录
@@ -27,12 +28,17 @@ class NetworkRecord(
             append("\n \n")
             append("--> $method $url ${contentData.protocol}\n")
             append("${contentData.requestHeadersMap.toString()}\n")
-            append("${contentData.requestBody}\n\n")
-            append("--> END GET (${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)})\n")
-            append("<--${contentData.status} $url ${contentData.errorMsg}")
+            append("${contentData.requestBody}\n")
+            if (method.equals(BaseConnection.HTTP_REQ_METHOD_POST, ignoreCase = true)) {
+                append("--> END $method (${contentData.requestBodyLength} - byte body) ,Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms)\n")
+            } else {
+                append("--> END $method Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms)\n")
+            }
+            append("<-- ${contentData.status} $url")
+            append("${contentData.errorMsg}\n")
             append("${contentData.responseHeadersMap.toString()}\n")
             append("${contentData.responseBody}\n\n")
-            append("<--END HTTP (${contentData.responseBodyLength} - byte body) Total Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_CALL_END)}\n")
+            append("<-- END HTTP (${contentData.responseBodyLength} - byte body) ,Total Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_CALL_END)}ms\n")
         }.let {
             return it.toString()
         }

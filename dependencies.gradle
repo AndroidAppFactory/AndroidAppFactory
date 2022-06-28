@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibHttpCommon"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.20.35"
+ext.moduleVersionName = "4.20.36"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -65,11 +65,7 @@ ext.moduleInfo = [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
-                        "CommonWrapper",
-                        'com.squareup.okhttp3:okhttp:3.9.1',
-                        'com.squareup.okhttp3:logging-interceptor:3.8.0',
-                        'com.squareup.retrofit2:retrofit:2.4.0',
-                        'com.squareup.retrofit2:converter-gson:2.4.0',
+                        "CommonWrapper"
                 ],
                 "specialdependenciesList": [
                         "kapt"      : ["RouterCompiler"],
@@ -156,7 +152,11 @@ ext.moduleInfo = [
                 "version"            : "4.20.35",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
-                        "Framework"
+                        "Framework",
+                        'com.squareup.okhttp3:okhttp:3.9.1',
+                        'com.squareup.okhttp3:logging-interceptor:3.8.0',
+                        'com.squareup.retrofit2:retrofit:2.4.0',
+                        'com.squareup.retrofit2:converter-gson:2.4.0',
                 ]
         ],
         "CommonWebview"             : [
