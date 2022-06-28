@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "CommonNetwork"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -81,7 +81,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.20.36",
+                "version"            : "4.20.37",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -149,7 +149,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "4.20.36",
+                "version"            : "4.20.37",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework",
