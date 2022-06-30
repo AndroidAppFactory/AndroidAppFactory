@@ -9,6 +9,7 @@ import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.debug.log.DebugLogActivity
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_FEEDBACK
@@ -52,6 +53,10 @@ open class DebugCommonFragment : DebugEnvFragment() {
             })
             add(DebugItemData("清除AAF缓存") {
                 FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
+                ZixieContext.restartApp()
+            })
+            add(DebugItemData("清除用户信息授权") {
+               AgreementPrivacy.resetPrivacy()
                 ZixieContext.restartApp()
             })
         }

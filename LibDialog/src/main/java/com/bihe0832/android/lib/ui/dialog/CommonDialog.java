@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.image.GlideExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
@@ -78,9 +79,6 @@ public class CommonDialog extends Dialog {
     private boolean shouldCanceledOutside = false;
     private int imageContentResId = -1;
     private int imageResId = -1;
-    private int maxLine = -1;
-    private static final int MAX_LINES_LANDSCAPE = 3;
-    private static final int MAX_LINES_PORTRAIT = 8;
     private View extraView;
 
     /**
@@ -109,7 +107,7 @@ public class CommonDialog extends Dialog {
      */
     private void initEvent() {
         //设置确定按钮被点击后，向外界提供监听
-        if(positiveBn != null){
+        if (positiveBn != null) {
             positiveBn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,7 +118,7 @@ public class CommonDialog extends Dialog {
             });
         }
 
-        if(negativeBn != null){
+        if (negativeBn != null) {
             //设置取消按钮被点击后，向外界提供监听
             negativeBn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -175,27 +173,6 @@ public class CommonDialog extends Dialog {
                 contentTv.setVisibility(View.VISIBLE);
                 if (contentColor != -1) {
                     contentTv.setTextColor(contentColor);
-                }
-                if (screenWidth > screenheight) {
-                    if (maxLine > 0) {
-                        if (maxLine > MAX_LINES_LANDSCAPE) {
-                            contentTv.setMaxLines(MAX_LINES_LANDSCAPE);
-                        } else {
-                            contentTv.setMaxLines(maxLine);
-                        }
-                    } else {
-                        contentTv.setMaxLines(MAX_LINES_LANDSCAPE);
-                    }
-                } else {
-                    if (maxLine > 0) {
-                        if (maxLine > MAX_LINES_PORTRAIT) {
-                            contentTv.setMaxLines(MAX_LINES_PORTRAIT);
-                        } else {
-                            contentTv.setMaxLines(maxLine);
-                        }
-                    } else {
-                        contentTv.setMaxLines(MAX_LINES_PORTRAIT);
-                    }
                 }
             } else {
                 contentTv.setVisibility(View.GONE);
@@ -450,11 +427,6 @@ public class CommonDialog extends Dialog {
 
     public CommonDialog setLoadImgWithFade(boolean needFade) {
         this.loadImgWithFade = needFade;
-        return this;
-    }
-
-    public CommonDialog setContentMaxLine(int maxLine) {
-        this.maxLine = maxLine;
         return this;
     }
 

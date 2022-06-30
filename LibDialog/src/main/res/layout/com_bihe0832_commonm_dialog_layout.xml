@@ -45,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:lineSpacingMultiplier="1.25"
-                android:scrollbars="vertical"
                 android:textColor="@color/com_bihe0832_dialog_text"
                 android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
                 tools:text="提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息" />
