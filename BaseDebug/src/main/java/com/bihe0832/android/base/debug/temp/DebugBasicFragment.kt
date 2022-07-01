@@ -126,8 +126,4 @@ class DebugBasicFragment : BaseFragment() {
         })
         return action
     }
-
-    companion object {
-        private const val TAG = "TestCardActivity-> "
-    }
 }

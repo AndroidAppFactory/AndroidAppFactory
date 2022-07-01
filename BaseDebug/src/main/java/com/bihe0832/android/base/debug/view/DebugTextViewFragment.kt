@@ -2,10 +2,13 @@ package com.bihe0832.android.base.debug.view
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.util.SparseIntArray
+import android.view.Surface
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
@@ -137,12 +140,5 @@ class DebugTextViewFragment : BaseFragment() {
                         )
                 )
         )
-    }
-
-
-
-
-    companion object {
-        private const val TAG = "TestCardActivity-> "
     }
 }
