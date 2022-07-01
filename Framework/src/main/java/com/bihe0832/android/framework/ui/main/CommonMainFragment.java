@@ -97,6 +97,6 @@ public abstract class CommonMainFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mFragments = getFragments();
-        loadMultipleRootFragmentByResId(R.id.main_fragment_content);
+        loadMultipleRootFragmentByResId(R.id.fragment_content);
     }
 }

@@ -10,6 +10,7 @@ import com.bihe0832.android.base.debug.temp.DebugBasicFragment;
 import com.bihe0832.android.base.debug.view.DebugTextViewFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
 import com.bihe0832.android.common.debug.module.DebugCommonFragment;
+import com.bihe0832.android.framework.ui.main.CommonEmptyFragment;
 import com.bihe0832.android.test.module.DebugRouterFragment;
 
 
@@ -34,7 +35,7 @@ public class TestMainFragment extends DebugMainFragment {
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new DebugDialogFragment();
+            return CommonEmptyFragment.Companion.newInstance("这是一个空白测试页");
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new DebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

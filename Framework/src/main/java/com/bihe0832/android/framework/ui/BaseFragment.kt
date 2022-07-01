@@ -92,6 +92,9 @@ open class BaseFragment : SwipeBackFragment() {
         initData()
     }
 
+    fun isRootViewCreated(): Boolean {
+        return hasCreateView
+    }
     /**
      * 仅用于简单的Fragment的setUserVisibleHint设置，
      * 对于有viewPager等特殊复杂场景的页面，需要自行完成setUserVisibleHint的设置
