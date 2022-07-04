@@ -45,7 +45,7 @@ object AgreementPrivacy {
 
     fun setAgreementAndPrivacyText(textview: TextView) {
         textview.addClickActionText(
-                textview.context.resources.getString(R.string.privacy_title).toString() + "和"
+                textview.context.resources.getString(R.string.privacy_title) + "和"
                         + textview.context.resources.getString(R.string.agreement_title),
                 getAgreementAndPrivacyClickActionMap(textview.context)
         )
@@ -53,15 +53,15 @@ object AgreementPrivacy {
 
     fun showPrivacy(activity: Activity, nextAction: () -> Unit) {
         CommonDialog(activity).apply {
-            title = "用户协议和隐私政策"
+            title = activity.getString(R.string.dialog_title_privacy_and_agreement)
             setHtmlContent(
                     TextFactoryUtils.getCharSequenceWithClickAction(
                             activity.resources.getString(R.string.privacy_agreement_content),
                             getAgreementAndPrivacyClickActionMap(activity)),
                     LinkMovementMethod.getInstance()
             )
-            positive = "同意"
-            negative = "暂不使用"
+            positive = activity.getString(R.string.agreement_positive)
+            negative = activity.getString(R.string.agreement_negative)
             setOnClickBottomListener(object : OnDialogListener {
                 override fun onPositiveClick() {
                     dismiss()

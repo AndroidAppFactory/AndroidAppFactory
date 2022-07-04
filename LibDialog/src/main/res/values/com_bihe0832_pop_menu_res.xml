@@ -6,7 +6,7 @@
     <dimen name="com_bihe0832_pop_menu_width">120dp</dimen>
     <color name="com_bihe0832_pop_menu_divider_color">@color/com_bihe0832_dialog_hint</color>
 
-    <color name="com_bihe0832_pop_menu_text_color">@color/com_bihe0832_dialog_text</color>
+    <color name="com_bihe0832_pop_menu_text_color">@color/com_bihe0832_dialog_title</color>
     <dimen name="com_bihe0832_pop_menu_text_size">12dp</dimen>
 
 </resources>

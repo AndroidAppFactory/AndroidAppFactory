@@ -14,9 +14,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingLeft="32dp"
-        android:paddingTop="24dp"
+        android:paddingTop="18dp"
         android:paddingRight="32dp"
-        android:textColor="@color/com_bihe0832_dialog_text"
+        android:textColor="@color/com_bihe0832_dialog_title"
         android:textSize="@dimen/com_bihe0832_dialog_title_text_size"
         android:textStyle="bold"
         android:visibility="visible"
@@ -29,7 +29,7 @@
         android:layout_gravity="top"
         android:layout_weight="1"
         android:paddingLeft="16dp"
-        android:paddingTop="12dp"
+        android:paddingTop="18dp"
         android:paddingRight="16dp"
         android:paddingBottom="6dp"
         android:scrollbars="none">
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:lineSpacingMultiplier="1.25"
-                android:textColor="@color/com_bihe0832_dialog_text"
+                android:textColor="@color/com_bihe0832_dialog_content"
                 android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
                 tools:text="提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息" />
 
@@ -58,7 +58,7 @@
                 android:scaleX="0.8"
                 android:scaleY="0.8"
                 android:text=" 不再提醒我"
-                android:textColor="@color/com_bihe0832_dialog_text"
+                android:textColor="@color/com_bihe0832_dialog_content"
                 android:textSize="@dimen/com_bihe0832_dialog_tips_text_size"
                 android:visibility="gone"
                 tools:visibility="visible" />
@@ -129,7 +129,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:singleLine="true"
-            android:textColor="@drawable/com_bihe0832_common_select_color"
+            android:textColor="@drawable/com_bihe0832_common_dialog_negative_style"
             android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
             tools:text="前往"
             tools:visibility="visible" />
@@ -152,7 +152,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:singleLine="true"
-            android:textColor="@drawable/com_bihe0832_common_select_color"
+            android:textColor="@drawable/com_bihe0832_common_dialog_positive_style"
             android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
             android:textStyle="bold"
             tools:text="确定" />

@@ -1,6 +1,8 @@
 <resources>
     <string name="dialog_title_privacy_and_agreement">用户协议和隐私政策</string>
     <string name="agreement_title">「用户协议」</string>
+    <string name="agreement_positive">同意</string>
+    <string name="agreement_negative">暂不使用</string>
     <string name="privacy_title">「隐私政策」</string>
     <string name="agreement_url"></string>
     <string name="privacy_url"></string>

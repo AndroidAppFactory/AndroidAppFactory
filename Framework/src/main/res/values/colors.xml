@@ -33,6 +33,8 @@
     <color name="windowBackground">@color/colorWindowBg</color>
     <color name="navigationBarColor">@color/colorPrimaryText</color>
 
+    <color name="com_bihe0832_select_default">@color/colorPrimaryText</color>
+    <color name="com_bihe0832_select_state_checked">@color/colorAccent</color>
 
     <!--    https://www.materialpalette.com/indigo/indigo 生成颜色表-->
     <color name="primary">#3F51B5</color>
@@ -43,4 +45,7 @@
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+
+
+
 </resources>
