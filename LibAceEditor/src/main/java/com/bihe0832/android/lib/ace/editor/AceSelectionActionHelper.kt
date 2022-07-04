@@ -33,7 +33,7 @@ class AceSelectionActionHelper(private val mContext: Activity) {
     private var mPopup: PopupList = PopupList(mContext).apply {
         normalBackgroundColor = resources.getColor(R.color.com_bihe0832_dialog_bg)
         pressedBackgroundColor = resources.getColor(R.color.com_bihe0832_dialog_bg)
-        normalTextColor = resources.getColor(R.color.com_bihe0832_dialog_text)
+        normalTextColor = resources.getColor(R.color.com_bihe0832_pop_menu_text_color)
         pressedTextColor = resources.getColor(R.color.com_bihe0832_select_state_pressed)
         dividerColor = resources.getColor(R.color.com_bihe0832_dialog_split)
     }

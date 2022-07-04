@@ -22,14 +22,15 @@
 
         <!--输入框适配-->
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-        <item name="android:textColorPrimary">@color/com_bihe0832_dialog_text</item>
-        <item name="android:textColorSecondary">@color/com_bihe0832_dialog_text</item>
+        <item name="android:textColorPrimary">@color/com_bihe0832_dialog_title</item>
+        <item name="android:textColorSecondary">@color/com_bihe0832_dialog_content</item>
         <item name="android:textColorHint">@color/com_bihe0832_dialog_hint</item>
         <item name="android:textColorHintInverse">@color/com_bihe0832_dialog_hint</item>
     </style>
 
     <color name="com_bihe0832_dialog_bg">#FFFFFF</color>
-    <color name="com_bihe0832_dialog_text">#202020</color>
+    <color name="com_bihe0832_dialog_title">#202020</color>
+    <color name="com_bihe0832_dialog_content">#666666</color>
     <color name="com_bihe0832_dialog_hint">#333333</color>
     <color name="com_bihe0832_dialog_button">#333333</color>
     <color name="com_bihe0832_dialog_tips">@color/com_bihe0832_select_state_pressed</color>
@@ -38,9 +39,7 @@
     <dimen name="com_bihe0832_dialog_title_text_size">16dp</dimen>
     <dimen name="com_bihe0832_dialog_content_text_size">12dp</dimen>
     <dimen name="com_bihe0832_dialog_tips_text_size">10dp</dimen>
-    <dimen name="com_bihe0832_dialog_button_text_size">
-        @dimen/com_bihe0832_dialog_content_text_size
-    </dimen>
+    <dimen name="com_bihe0832_dialog_button_text_size">14dp</dimen>
 
     <string name="dialog_title">温馨提示</string>
     <string name="dialog_button_cancel">取消</string>

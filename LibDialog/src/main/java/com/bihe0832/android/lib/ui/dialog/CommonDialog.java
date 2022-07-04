@@ -185,15 +185,15 @@ public class CommonDialog extends Dialog {
         //如果设置按钮的文字
         if (positiveBn != null) {
             if (!TextUtils.isEmpty(positiveString)) {
-                positiveBn.setText(positiveString);
+                positiveBn.setText(TextFactoryUtils.getSpannedTextByHtml(positiveString));
             } else {
-                positiveBn.setText("确定");
+                positiveBn.setText(getContext().getString(R.string.dialog_button_ok));
             }
         }
 
         if (negativeBn != null) {
             if (!TextUtils.isEmpty(negativeString)) {
-                negativeBn.setText(negativeString);
+                negativeBn.setText(TextFactoryUtils.getSpannedTextByHtml(negativeString));
             }
         }
 

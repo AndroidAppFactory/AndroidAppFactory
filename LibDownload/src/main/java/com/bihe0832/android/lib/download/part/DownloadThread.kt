@@ -150,6 +150,10 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 }
             } else {
+                mDownloadPartInfo.partFinishedBefore =  finalStart - mDownloadPartInfo.partStart
+                mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinishedBefore
+                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
+
                 val inputStream = connection.inputStream
                 val partSize = DOWNLOAD_BUFFER_SIZE
                 val data = ByteArray(partSize)

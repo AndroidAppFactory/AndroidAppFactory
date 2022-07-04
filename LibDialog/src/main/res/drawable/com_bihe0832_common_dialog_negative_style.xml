@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /**
+  ~  * Created by zixie <code@bihe0832.com> on 2022/7/4 下午8:28
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 2022/7/4 下午8:28
+  ~  */
+  -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/com_bihe0832_select_state_pressed" android:state_pressed="true" />
+    <item android:color="@color/com_bihe0832_select_state_checked" android:state_checked="true" />
+    <item android:color="@color/com_bihe0832_select_state_focused" android:state_focused="true" />
+    <item android:color="@color/com_bihe0832_dialog_content" />
+</selector>
