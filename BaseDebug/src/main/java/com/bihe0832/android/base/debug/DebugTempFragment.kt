@@ -15,9 +15,7 @@ import com.bihe0832.android.base.debug.ipc.TestIPCActivity
 import com.bihe0832.android.base.debug.json.JsonTest
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.request.ROUTRT_NAME_TEST_HTTP
-import com.bihe0832.android.base.debug.request.okhttp.debugOKHttp
 import com.bihe0832.android.base.debug.touch.TouchRegionActivity
-import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.log.DebugLogActivity
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -168,10 +166,10 @@ class DebugTempFragment : DebugEnvFragment() {
                 mutableListOf<String>().apply {
                     add("测试环境1")
                     add("测试环境2")
-                }.let {data->
-                    getChangeEnvSelectDialog("查看应用版本及环境", data,0,object :DebugEnvFragment.OnEnvChangedListener{
+                }.let { data ->
+                    getChangeEnvSelectDialog("查看应用版本及环境", data, 0, object : DebugEnvFragment.OnEnvChangedListener {
                         override fun onChanged(index: Int) {
-                            showChangeEnvDialog("环境切换",data.get(index))
+                            showChangeEnvDialog("环境切换", data.get(index))
                         }
                     }).let {
                         it.show()
@@ -530,7 +528,7 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
     private fun testFunc() {
-        debugOKHttp()
+
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())

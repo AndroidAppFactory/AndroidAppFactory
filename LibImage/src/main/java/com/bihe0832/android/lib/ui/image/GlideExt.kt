@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.widget.ImageView
 import com.bihe0832.android.lib.log.ZLog
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -81,17 +80,20 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, requestOption
 }
 
 fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
-    loadImage(url, placeholder, error, 0, 0, needFade, DiskCacheStrategy.RESOURCE, requestOptions)
+    loadImage(url, placeholder, error, 0, 0, needFade, DiskCacheStrategy.RESOURCE, true, requestOptions)
 }
 
 
-fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, height: Int, needFade: Boolean, strategy: DiskCacheStrategy, requestOptions: RequestOptions = RequestOptions()) {
+fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, height: Int, needFade: Boolean, strategy: DiskCacheStrategy, skipMemoryCache: Boolean, requestOptions: RequestOptions = RequestOptions()) {
     ZLog.d("Glide", "load image:$url")
-    requestOptions
-            .downsample(DownsampleStrategy.CENTER_INSIDE)//将图片缩小至目标大小
-            .diskCacheStrategy(strategy)//换成变换后的图片
-            .placeholder(placeholder)
-            .error(error)
+    requestOptions.apply {
+        downsample(DownsampleStrategy.CENTER_INSIDE)//将图片缩小至目标大小
+        diskCacheStrategy(strategy)//换成变换后的图片
+        skipMemoryCache(skipMemoryCache)
+        placeholder(placeholder)
+        error(error)
+    }
+
     if (width > 0) {
         if (height > 0) {
             requestOptions.override(width, height)

@@ -5,23 +5,27 @@ import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.image.blur.BlurTransformation
+import com.bihe0832.android.common.photos.HeadIconBuildFactory
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.ui.image.HeadIconBuilder
-import com.bihe0832.android.lib.ui.image.loadCircleCropImage
 import com.bihe0832.android.lib.ui.image.loadImage
+import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.fragment_test_image.*
 import java.io.File
 
-class DebugImageFragment : BaseFragment() {
+public class DebugImageFragment : BaseFragment() {
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_test_image
@@ -101,7 +105,9 @@ class DebugImageFragment : BaseFragment() {
 
         var num = 0
         test_basic_button.setOnClickListener {
-            var headIconBuilder = HeadIconBuilder(context!!).apply {
+
+            val filepath = ZixieContext.getLogFolder() + "aaa.jpg"
+            val headIconBuilder = HeadIconBuilder(context!!).apply {
                 setImageUrls(mutableListOf<Any>().apply {
                     for (i in 0..num) {
                         if (TextUtils.isEmpty(path)) {
@@ -118,18 +124,17 @@ class DebugImageFragment : BaseFragment() {
                 } as List<String>)
                 setItemWidth(720)
             }
-            headIconBuilder.generateBitmap { bitmap, filePath ->
-                test_image_local_target.loadCircleCropImage(filePath)
-                test_image_local_source.setImageBitmap(
-                        BitmapUtil.getBitmapWithLayer(
-                                bitmap,
-                                Color.RED,
-                                true
-                        )
-                )
+            for (i in 0..50) {
+                ThreadManager.getInstance().start {
+                    HeadIconBuildFactory.generateBitmap(headIconBuilder, filepath, 10 * 1000,
+                            call = HeadIconBuilder.GenerateBitmapCallback { p0, source ->
+                                ZLog.d("zixieheadIconBuilder", "new:" + File(source).lastModified() + " " + DateUtil.getDateEN(File(source).lastModified()))
+//                                test_image_local_source.setImageBitmap(BitmapUtil.getLocalBitmap(source))
+                                test_image_local_source.loadImage(source, Color.RED, Color.RED, 720, 720, true, DiskCacheStrategy.NONE, true, RequestOptions().circleCrop())
+                            })
+                }
             }
             num++
-//            test_image_local_target.setImageBitmap(BitmapUtil.getRemoteBitmap("http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg", 720,720))
         }
     }
 }
