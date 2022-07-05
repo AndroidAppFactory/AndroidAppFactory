@@ -52,14 +52,23 @@ object AgreementPrivacy {
     }
 
     fun showPrivacy(activity: Activity, nextAction: () -> Unit) {
+        showPrivacy(activity, getAgreementAndPrivacyClickActionMap(activity), nextAction)
+    }
+
+    fun showPrivacy(activity: Activity, linkList: HashMap<String, View.OnClickListener>, nextAction: () -> Unit) {
+        showPrivacy(
+                activity,
+                activity.getString(R.string.dialog_title_privacy_and_agreement),
+                activity.resources.getString(R.string.privacy_agreement_content),
+                linkList, nextAction
+        )
+    }
+
+
+    fun showPrivacy(activity: Activity, title: String, content: String, linkList: HashMap<String, View.OnClickListener>, nextAction: () -> Unit) {
         CommonDialog(activity).apply {
-            title = activity.getString(R.string.dialog_title_privacy_and_agreement)
-            setHtmlContent(
-                    TextFactoryUtils.getCharSequenceWithClickAction(
-                            activity.resources.getString(R.string.privacy_agreement_content),
-                            getAgreementAndPrivacyClickActionMap(activity)),
-                    LinkMovementMethod.getInstance()
-            )
+            this.title = title
+            setHtmlContent(TextFactoryUtils.getCharSequenceWithClickAction(content, linkList), LinkMovementMethod.getInstance())
             positive = activity.getString(R.string.agreement_positive)
             negative = activity.getString(R.string.agreement_negative)
             setOnClickBottomListener(object : OnDialogListener {
