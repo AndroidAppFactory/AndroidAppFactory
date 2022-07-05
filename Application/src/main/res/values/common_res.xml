@@ -9,6 +9,8 @@
 <resources>
     <string name="commont_dialog_title">温馨提示</string>
 
+
+
     <string name="theme_change_title">切换主题</string>
     <string name="theme_change_tips">你可上下滑动主题列表查看更多主题</string>
     <string name="theme_type_dark">暗夜模式</string>

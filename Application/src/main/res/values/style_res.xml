@@ -10,4 +10,6 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
+    <dimen name="com_bihe0832_dialog_button_text_size">16dp</dimen>
+
 </resources>
