@@ -30,13 +30,17 @@ abstract class SplashActivity : CommonActivity() {
         initView()
     }
 
-    private fun initView() {
+    protected open fun initView() {
         if (!AgreementPrivacy.hasAgreedPrivacy()) {
-            AgreementPrivacy.showPrivacy(this) {
-                doAgreement()
-            }
+            showPrivacy()
         } else {
             doNext()
+        }
+    }
+
+    protected open fun showPrivacy() {
+        AgreementPrivacy.showPrivacy(this) {
+            doAgreement()
         }
     }
 
