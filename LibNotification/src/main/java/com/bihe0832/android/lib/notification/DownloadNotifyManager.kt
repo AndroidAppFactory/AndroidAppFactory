@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.text.TextUtils
 import android.view.View
 import android.widget.RemoteViews
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.format.Formatter
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.image.BitmapUtil
@@ -77,13 +78,13 @@ object DownloadNotifyManager {
 
     private fun updateContent(remoteViews: RemoteViews, context: Context, downloadURL: String, appName: String, iconURL: String, finished: Long, total: Long, speed: Long, process: Int, downloadType: Int, channelID: String, notifyID: Int) {
 
-        remoteViews.setTextViewText(R.id.download_notification_download_progress, Formatter.formatFileSize(context, finished) + "/" + Formatter.formatFileSize(context, total))
+        remoteViews.setTextViewText(R.id.download_notification_download_progress, FileUtils.getFileLength(finished) + "/" + FileUtils.getFileLength(total))
         remoteViews.setProgressBar(R.id.download_notification_progress_bar, 100, process, false)
 
         when (downloadType) {
 
             DOWNLOAD_TYPE_DOWNLOADING -> {
-                remoteViews.setTextViewText(R.id.download_notification_title, "正在下载" + appName)
+                remoteViews.setTextViewText(R.id.download_notification_title, "正在下载$appName")
                 remoteViews.setTextViewText(R.id.download_notification_desc, Formatter.formatFileSize(context, speed) + "/s")
                 R.id.download_notification_btn_restart.let {
                     remoteViews.setImageViewResource(it, R.mipmap.btn_pause)

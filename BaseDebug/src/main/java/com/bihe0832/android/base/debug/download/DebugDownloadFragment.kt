@@ -27,6 +27,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
             add(
                     DebugItemData(
                             "卸载应用",
@@ -59,7 +60,6 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             )
             add(DebugItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
             add(DebugItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
-            add(DebugItemData("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
         }
     }
 
