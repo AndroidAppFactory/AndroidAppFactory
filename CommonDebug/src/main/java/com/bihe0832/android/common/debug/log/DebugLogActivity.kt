@@ -23,7 +23,7 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 open class DebugLogActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
     var num = 0
-    var isView = true
+    protected var isView = true
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeGridLayoutManager(this, 3)
     }
@@ -77,6 +77,7 @@ open class DebugLogActivity : CommonListActivity() {
     open fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
+            add(DebugItemData("日志路径：<BR><small>${ZixieContext.getLogFolder()}</small>"))
             add(DebugItemData("选择并发送日志") {
                 isView = false
                 FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())

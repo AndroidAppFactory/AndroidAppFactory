@@ -3,13 +3,13 @@ package com.bihe0832.android.base.debug.card
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
-import com.bihe0832.android.base.debug.card.section.SectionDataHeader
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
 import com.bihe0832.android.common.debug.R
+import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.utils.os.DisplayUtil

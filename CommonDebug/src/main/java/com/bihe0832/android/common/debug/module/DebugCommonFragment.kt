@@ -36,7 +36,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add(DebugItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
             add(DebugItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
             add(DebugItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
-            add(DebugItemData("日志管理", View.OnClickListener {
+            add(DebugItemData("<font color ='#3AC8EF'><b>日志管理</b></font>", View.OnClickListener {
                 showLog()
             }))
             add(DebugItemData("弹出评分页面", View.OnClickListener {
@@ -75,7 +75,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
         }
     }
 
-    protected fun showLog() {
+    protected open fun showLog() {
         startActivity(DebugLogActivity::class.java)
     }
 
