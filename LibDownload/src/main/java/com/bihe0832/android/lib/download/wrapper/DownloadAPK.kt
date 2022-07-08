@@ -72,7 +72,7 @@ object DownloadAPK {
                 activity,
                 title, msg,
                 url, "", md5,
-                canCancel, true, downloadMobile,
+                canCancel, false, downloadMobile,
                 listener,
                 SimpleInstallListener(activity, packageName, listener)
         )
@@ -107,7 +107,7 @@ object DownloadAPK {
         DownloadFile.startDownload(
                 context,
                 "", "",
-                url, "", md5, forceDownload = false,
+                url, "", md5, forceDownloadNew = false,
                 canPart = true, UseMobile = true, downloadListener = object : SimpleDownloadListener() {
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
             }

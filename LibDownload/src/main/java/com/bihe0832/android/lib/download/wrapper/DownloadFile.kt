@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
@@ -178,7 +179,7 @@ object DownloadFile {
                                             filePath,
                                             md5,
                                             canCancel,
-                                            forceDownload = false,
+                                            forceDownloadNew = false,
                                             useMobile = true,
                                             listener = listener,
                                             downloadListener = downloadListener
@@ -191,7 +192,7 @@ object DownloadFile {
                                             url,
                                             filePath,
                                             md5,
-                                            forceDownload = false,
+                                            forceDownloadNew = false,
                                             canPart = true,
                                             UseMobile = true,
                                             downloadListener = downloadListener
@@ -210,7 +211,7 @@ object DownloadFile {
                             filePath,
                             md5,
                             canCancel,
-                            forceDownload = false,
+                            forceDownloadNew = false,
                             useMobile = true,
                             listener = listener,
                             downloadListener = downloadListener
@@ -218,7 +219,7 @@ object DownloadFile {
                 } else {
                     startDownload(
                             activity, title, msg, url, "", md5,
-                            forceDownload = false,
+                            forceDownloadNew = false,
                             canPart = true,
                             UseMobile = true,
                             downloadListener = downloadListener
@@ -239,7 +240,7 @@ object DownloadFile {
             filePath: String,
             md5: String,
             canCancel: Boolean,
-            forceDownload: Boolean,
+            forceDownloadNew: Boolean,
             useMobile: Boolean,
             listener: OnDialogListener?,
             downloadListener: DownloadListener?
@@ -288,23 +289,27 @@ object DownloadFile {
                 url,
                 filePath,
                 md5,
-                forceDownload,
+                forceDownloadNew,
                 true,
                 useMobile,
                 object : DownloadListener {
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                         ToastUtil.showShort(activity, "应用下载失败（$errorCode）")
-                        ThreadManager.getInstance().runOnUIThread {
-                            progressDialog.dismiss()
-                        }
+                        ThreadManager.getInstance().start({
+                            ThreadManager.getInstance().runOnUIThread {
+                                progressDialog.dismiss()
+                            }
+                        }, 2)
                         downloadListener?.onFail(errorCode, msg, item)
                     }
 
                     override fun onComplete(filePath: String, item: DownloadItem) {
                         ZLog.i("startDownloadApk download installApkPath: $filePath")
-                        ThreadManager.getInstance().runOnUIThread {
-                            progressDialog.dismiss()
-                        }
+                        ThreadManager.getInstance().start({
+                            ThreadManager.getInstance().runOnUIThread {
+                                progressDialog.dismiss()
+                            }
+                        }, 2)
                         downloadListener?.onComplete(filePath, item)
                     }
 
@@ -393,7 +398,7 @@ object DownloadFile {
     ) {
         startDownload(
                 context, "", "", url, filePath, md5,
-                forceDownload = false,
+                forceDownloadNew = false,
                 canPart = false,
                 UseMobile = useMobile,
                 downloadListener = downloadListener
@@ -407,7 +412,7 @@ object DownloadFile {
             url: String,
             filePath: String,
             md5: String,
-            forceDownload: Boolean,
+            forceDownloadNew: Boolean,
             canPart: Boolean,
             UseMobile: Boolean,
             downloadListener: DownloadListener?
@@ -422,7 +427,7 @@ object DownloadFile {
             downloadTitle = title
             downloadDesc = msg
             fileMD5 = md5
-            isForceDownloadNew = forceDownload
+            isForceDownloadNew = forceDownloadNew
             if (!TextUtils.isEmpty(filePath)) {
                 fileNameWithPath = filePath
             }

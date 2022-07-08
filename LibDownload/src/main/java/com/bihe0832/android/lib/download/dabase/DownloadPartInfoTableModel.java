@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
@@ -42,7 +43,7 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
     }
 
     private static ContentValues data2CV(String download_part_id, int partID, long download_id, long start, long end,
-            long finished) {
+                                         long finished) {
         ContentValues cv = new ContentValues();
         putValues(cv, col_download_part_id, download_part_id);
         putValues(cv, col_part_id, partID);
@@ -54,14 +55,14 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
     }
 
     static boolean insertData(BaseDBHelper helper, String download_part_id, int partID, long download_id, long start,
-            long end, long finished) {
+                              long end, long finished) {
         ContentValues values = data2CV(download_part_id, partID, download_id, start, end, finished);
         long id = helper.insert(TABLE_NAME, null, values);
         return (id != -1);
     }
 
     static boolean updateData(BaseDBHelper helper, String download_part_id, int partID, long download_id, long start,
-            long end, long finished) {
+                              long end, long finished) {
         ContentValues values = data2CV(download_part_id, partID, download_id, start, end, finished);
         String whereClause = " `" + col_download_part_id + "` = ? ";
         String[] whereArgs = new String[]{download_part_id};
@@ -87,6 +88,14 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -108,10 +117,14 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
             find = (cursor != null && cursor.getCount() > 0);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        if (cursor != null) {
-            cursor.close();
+        } finally {
+            try {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return find;
     }
@@ -123,16 +136,21 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
             find = (cursor != null && cursor.getCount() > 0);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        if (cursor != null) {
-            cursor.close();
-        }
         return find;
     }
 
     static boolean saveData(BaseDBHelper helper, String download_part_id, int partID, long download_id, long start,
-            long end, long finished) {
+                            long end, long finished) {
         if (TextUtils.isEmpty(download_part_id)) {
             return false;
         }
@@ -183,7 +201,6 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
         String having = null;
         String orderBy = null;
         String limit = null;
-        boolean find = false;
         Cursor cursor = helper.queryInfo(TABLE_NAME, columns,
                 selection, selectionArgs, groupBy, having, orderBy, limit);
         long finished = 0;
@@ -199,11 +216,16 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        if (cursor != null) {
-            cursor.close();
-        }
         return finished;
     }
 

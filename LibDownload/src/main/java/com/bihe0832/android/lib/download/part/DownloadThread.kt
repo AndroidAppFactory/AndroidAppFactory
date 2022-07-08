@@ -65,38 +65,48 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     mDownloadPartInfo.partStart
                 }
             }
-            try {
-                if (!startDownload(newStart)) {
-                    break
+            if (TextUtils.isEmpty(mDownloadPartInfo.finalFileName)) {
+                ZLog.e("分片下载  分片信息错误，错误的本地路径：$mDownloadPartInfo")
+                mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
+                break
+            } else {
+
+                val file = File(mDownloadPartInfo.finalFileName)
+                if (!file.parentFile.exists()) {
+                    file.parentFile.mkdirs()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载异常 $retryTimes！！！！: $e")
-                DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
-                sleep(3)
-                if (retryTimes < 3) {
-                    retryTimes++
-                } else {
-                    ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载失败 $retryTimes！！！！: $e")
-                    mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
-                    break
+
+                var randomAccessFile = RandomAccessFile(file, "rwd")
+                randomAccessFile.seek(newStart)
+
+                try {
+                    if (!startDownload(file, randomAccessFile, newStart)) {
+                        break
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载异常 $retryTimes！！！！: $e")
+                    DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
+                    sleep(3)
+                    if (retryTimes < 3) {
+                        retryTimes++
+                    } else {
+                        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载失败 $retryTimes！！！！: $e")
+                        mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
+                        break
+                    }
+                }
+                try {
+                    randomAccessFile.close()
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
                 }
             }
         } while (true)
     }
 
     //return 是否需要重试
-    private fun startDownload(finalStart: Long): Boolean {
-        if (TextUtils.isEmpty(mDownloadPartInfo.finalFileName)) {
-            ZLog.e("分片下载  分片信息错误，错误的本地路径：$mDownloadPartInfo")
-            return false
-        }
-
-        val file = File(mDownloadPartInfo.finalFileName)
-        if (!file.parentFile.exists()) {
-            file.parentFile.mkdirs()
-        }
-
+    private fun startDownload(file: File, randomAccessFile: RandomAccessFile, finalStart: Long): Boolean {
         var availableSpace = FileUtils.getDirectoryAvailableSpace(file.parentFile.absolutePath)
         ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片存储空间检查, path: ${file.parentFile.absolutePath}, availableSpace: $availableSpace, need: ${mDownloadPartInfo.partEnd - finalStart} ")
         if (mDownloadPartInfo.partEnd - finalStart > availableSpace) {
@@ -114,9 +124,6 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         } else {
             ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
-
-        var randomAccessFile = RandomAccessFile(file, "rwd")
-        randomAccessFile.seek(finalStart)
 
         val url = URL(mDownloadPartInfo.downloadURL)
         val connection = (url.openConnection() as HttpURLConnection).apply {
@@ -150,7 +157,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 }
             } else {
-                mDownloadPartInfo.partFinishedBefore =  finalStart - mDownloadPartInfo.partStart
+                mDownloadPartInfo.partFinishedBefore = finalStart - mDownloadPartInfo.partStart
                 mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinishedBefore
                 DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
 
@@ -160,6 +167,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 var len = -1
                 var hasDownloadLength = 0L
                 var lastUpdateTime = 0L
+                var lastUpdateLength = 0L
                 while (inputStream.read(data).also { len = it } !== -1) {
                     if (mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
                         //下载完成或者失败
@@ -174,16 +182,17 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     randomAccessFile.write(data, 0, len)
                     hasDownloadLength += len
 
-                    if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partFinished + len > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
+                    if (mDownloadPartInfo.canDownloadByPart() && mDownloadPartInfo.partFinished + len - 1 > mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart) {
                         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！分片长度：${mDownloadPartInfo.partEnd - mDownloadPartInfo.partStart}, 累积下载长度：${mDownloadPartInfo.partFinished + len}")
                         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片累积下载超长！！！${mDownloadPartInfo}")
                     } else {
                         mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
                         //10秒（弱网）或 2M(高速网络)保存策略
-                        if (mDownloadPartInfo.canDownloadByPart() && (System.currentTimeMillis() - lastUpdateTime > DOWNLOAD_SVAE_TIMER || hasDownloadLength % DOWNLOAD_SVAE_SIZE == 0L)) {
-                            ZLog.e(DownloadInfoDBManager.TAG, "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储：${System.currentTimeMillis() - lastUpdateTime} $hasDownloadLength ${hasDownloadLength % DOWNLOAD_SVAE_SIZE}")
+                        if (mDownloadPartInfo.canDownloadByPart() && (System.currentTimeMillis() - lastUpdateTime > DOWNLOAD_SVAE_TIMER || hasDownloadLength - lastUpdateLength > DOWNLOAD_SVAE_SIZE)) {
+                            ZLog.e(DownloadInfoDBManager.TAG, "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储：${System.currentTimeMillis() - lastUpdateTime} $hasDownloadLength $lastUpdateLength")
                             DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
                             lastUpdateTime = System.currentTimeMillis()
+                            lastUpdateLength = hasDownloadLength
                         }
                     }
 
@@ -222,11 +231,6 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
 
                 try {
                     connection.disconnect()
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
-                }
-                try {
-                    randomAccessFile.close()
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
