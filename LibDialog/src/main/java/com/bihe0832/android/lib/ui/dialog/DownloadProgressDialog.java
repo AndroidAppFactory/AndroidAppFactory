@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bihe0832.android.lib.file.format.Formatter;
+import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
@@ -149,8 +149,8 @@ public class DownloadProgressDialog extends Dialog {
             } else {
                 mProgressNumber.setVisibility(View.VISIBLE);
                 mProgressNumber.setText(
-                        Formatter.formatFileSize(getContext(), mCurrentSize) + "/"
-                                + Formatter.formatFileSize(getContext(), mAPKSize));
+                        FileUtils.INSTANCE.getFileLength(mCurrentSize) + "/"
+                                + FileUtils.INSTANCE.getFileLength(mAPKSize));
             }
         }
 
