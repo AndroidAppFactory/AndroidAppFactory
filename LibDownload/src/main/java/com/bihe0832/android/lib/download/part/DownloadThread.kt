@@ -144,7 +144,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         ZLog.e(TAG, "~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.partID}分片 ~~~~~~~~~~~~~")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: getContentType:${connection.contentType}")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: responseCode:${connection.responseCode}")
-        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: start ${finalStart}, end ${mDownloadPartInfo.partEnd}, bytes=$finalStart-${mDownloadPartInfo.partEnd}")
+        ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: origin start ${mDownloadPartInfo.partStart}, final start ${finalStart}, end ${mDownloadPartInfo.partEnd}, bytes=$finalStart-${mDownloadPartInfo.partEnd}")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: contentLength: from server ${serverContentLength}, local ${mDownloadPartInfo.partEnd - finalStart} ")
         ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.partID}分片: finished ${mDownloadPartInfo.partFinished}, finished before: ${mDownloadPartInfo.partFinishedBefore} \n")
 
@@ -162,8 +162,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, mDownloadPartInfo.partFinished)
 
                 val inputStream = connection.inputStream
-                val partSize = DOWNLOAD_BUFFER_SIZE
-                val data = ByteArray(partSize)
+                val data = ByteArray(DOWNLOAD_BUFFER_SIZE)
                 var len = -1
                 var hasDownloadLength = 0L
                 var lastUpdateTime = 0L
