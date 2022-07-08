@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Base64;
+
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadStatus;
 import com.bihe0832.android.lib.download.core.DownloadManager;
@@ -15,10 +16,12 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
 import com.bihe0832.android.lib.sqlite.BaseTableModel;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import kotlin.jvm.Synchronized;
 
 /**
@@ -119,6 +122,14 @@ public class DownloadInfoTableModel extends BaseTableModel {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,10 +165,14 @@ public class DownloadInfoTableModel extends BaseTableModel {
             find = (cursor != null && cursor.getCount() > 0);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        if (cursor != null) {
-            cursor.close();
+        } finally {
+            try {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return find;
     }
@@ -176,24 +191,25 @@ public class DownloadInfoTableModel extends BaseTableModel {
         String limit = null;
         Cursor cursor = helper
                 .queryInfo(TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
-        if (cursor.getCount() < 1) {
-            return null;
-        } else {
-            try {
+        DownloadItem dataItem = null;
+        try {
+            if (cursor.getCount() < 1) {
+                dataItem = null;
+            } else {
                 cursor.moveToFirst();
-                return cv2data(cursor);
+                dataItem = cv2data(cursor);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                cursor.close();
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    cursor.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
             }
         }
-        return null;
+
+        return dataItem;
     }
 
     static DownloadItem getDownloadInfo(BaseDBHelper helper, String url) {

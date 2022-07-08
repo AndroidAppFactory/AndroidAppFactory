@@ -71,9 +71,9 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 activity!!,
                 String.format(ZixieContext.applicationContext!!.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating), "（V.2.2.21)"),
                 "这是一个Desc测试",
-                "http://dldir1.qq.com/INO/Android/tmga/6.5.0_105785_0614/MNA_V6.5.0_105785_0614_official_legu_20035.apk",
-                "2edab141ebf9903a3f8abc4f071699ac",
-                "com.tencent.cmocmna",
+                "https://imtt.dd.qq.com/16891/apk/340190503EE8DACBF2FE8DCC133C304E.apk?fsname=com.tencent.mobileqq_8.3.6_1406.apk",
+                "340190503EE8DACBF2FE8DCC133C304E",
+                "",
                 canCancel = true, downloadMobile = true,
                 listener = object : OnDialogListener {
                     override fun onPositiveClick() {
