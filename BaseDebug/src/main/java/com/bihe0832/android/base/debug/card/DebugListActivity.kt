@@ -3,10 +3,10 @@ package com.bihe0832.android.base.debug.card
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
-import com.bihe0832.android.base.debug.card.section.SectionDataContent
 import com.bihe0832.android.base.debug.card.section.SectionDataContent2
-import com.bihe0832.android.base.debug.card.section.SectionDataHeader
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
+import com.bihe0832.android.common.debug.log.SectionDataContent
+import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
@@ -30,12 +30,12 @@ class TestListActivity : CommonListActivity() {
         mRecyclerView?.apply {
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             addItemDecoration(
-                GridDividerItemDecoration.Builder(context).apply {
-                    setShowLastLine(true)
-                    setColor(com.bihe0832.android.common.debug.R.color.result_point_color)
-                    setHorizontalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
+                    GridDividerItemDecoration.Builder(context).apply {
+                        setShowLastLine(true)
+                        setColor(com.bihe0832.android.common.debug.R.color.result_point_color)
+                        setHorizontalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
 //                    setVerticalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
-                }.build()
+                    }.build()
             )
         }
     }
@@ -90,19 +90,19 @@ class TestListActivity : CommonListActivity() {
         return mutableListOf<CardBaseModule>().apply {
             for (i in 0..2) {
                 add(
-                    if (i < 2) {
-                        SectionDataHeader("标题1:${System.currentTimeMillis()}")
-                    } else {
-                        SectionDataHeader2("标题2:${System.currentTimeMillis()}")
-                    }
+                        if (i < 2) {
+                            SectionDataHeader("标题1:${System.currentTimeMillis()}")
+                        } else {
+                            SectionDataHeader2("标题2:${System.currentTimeMillis()}")
+                        }
                 )
                 for (j in 0..3) {
                     add(
-                        if (i < 2) {
-                            SectionDataContent("内容1:${System.currentTimeMillis()}")
-                        } else {
-                            SectionDataContent2("内容2:${System.currentTimeMillis()}")
-                        }
+                            if (i < 2) {
+                                SectionDataContent("内容1:${System.currentTimeMillis()}", "")
+                            } else {
+                                SectionDataContent2("内容2:${System.currentTimeMillis()}")
+                            }
                     )
                 }
             }

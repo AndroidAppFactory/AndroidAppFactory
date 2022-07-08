@@ -2,17 +2,12 @@ package com.bihe0832.android.test;
 
 import android.support.v4.app.Fragment;
 
-import com.bihe0832.android.base.debug.DebugTempFragment;
-import com.bihe0832.android.base.debug.dialog.DebugDialogFragment;
-import com.bihe0832.android.base.debug.download.DebugDownloadFragment;
+import com.bihe0832.android.base.debug.AAFDebugTempFragment;
 import com.bihe0832.android.base.debug.image.DebugImageFragment;
-import com.bihe0832.android.base.debug.photos.DebugPhotosFragment;
-import com.bihe0832.android.base.debug.temp.DebugBasicFragment;
-import com.bihe0832.android.base.debug.view.DebugTextViewFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
 import com.bihe0832.android.common.debug.module.DebugCommonFragment;
-import com.bihe0832.android.framework.ui.main.CommonEmptyFragment;
-import com.bihe0832.android.test.module.DebugRouterFragment;
+import com.bihe0832.android.test.module.AAFDebugCommonFragment;
+import com.bihe0832.android.test.module.AAFDebugRouterFragment;
 
 
 /**
@@ -38,11 +33,11 @@ public class TestMainFragment extends DebugMainFragment {
         if (title.equals(TAB_FOR_DEV)) {
             return new DebugImageFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
-            return new DebugTempFragment();
+            return new AAFDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {
-            return new DebugCommonFragment();
+            return new AAFDebugCommonFragment();
         } else if (title.equals(TAB_FOR_ROUTER)) {
-            return new DebugRouterFragment();
+            return new AAFDebugRouterFragment();
         } else {
             return new DebugCommonFragment();
         }

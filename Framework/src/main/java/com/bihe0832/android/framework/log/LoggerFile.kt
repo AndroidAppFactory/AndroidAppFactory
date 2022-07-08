@@ -31,7 +31,7 @@ object LoggerFile {
 
     private val mLogFiles = ConcurrentHashMap<String, File?>()
     private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
-    private const val DEFAULT_DURATION = 60 * 60 * 1000L
+    private const val DEFAULT_DURATION = 24 * 60 * 60 * 1000L
     private var mDuration = DEFAULT_DURATION
     private val mLoggerHandlerThread by lazy {
         HandlerThread("THREAD_ZIXIE_LOG_FILE", 5).also {
@@ -70,7 +70,7 @@ object LoggerFile {
                         file.createNewFile()
                     }
                     checkOldFile(file)
-                    val bufferedWriter = BufferedWriter(OutputStreamWriter(FileOutputStream(file), "UTF-8"))
+                    val bufferedWriter = BufferedWriter(OutputStreamWriter(FileOutputStream(file, true), "UTF-8"))
                     mLogFiles[fileName] = file
                     mBufferedWriters[fileName] = bufferedWriter
                 } catch (e: Exception) {

@@ -14,16 +14,19 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
 
-class DebugLogActivity : DebugLogActivity() {
+class AAFDebugLogActivity : DebugLogActivity() {
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
-        return SafeGridLayoutManager(this, 2)
+        return SafeGridLayoutManager(this, 3)
     }
 
     override fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
-            add(DebugItemData("选择并发送单个日志") { FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder()) })
-            add(DebugItemData("上传日志") { })
+            add(DebugItemData("日志文件：<BR><small>${AAFLoggerFile.getLogPathByModuleName("*")}</small>"))
+            add(DebugItemData("选择并查看单个日志") {
+                isView = true
+                FileSelectTools.openFileSelect(this@AAFDebugLogActivity, ZixieContext.getLogFolder())
+            })
             add(SectionDataHeader("基础通用日志"))
             add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath()))
             add(SectionDataContent("Webview", WebviewLoggerFile.getWebviewLogPath()))

@@ -8,11 +8,11 @@ import android.view.View;
 
 import com.bihe0832.android.app.router.RouterHelper;
 import com.bihe0832.android.base.debug.R;
-import com.bihe0832.android.base.debug.card.section.SectionDataContent;
 import com.bihe0832.android.base.debug.card.section.SectionDataContent2;
-import com.bihe0832.android.base.debug.card.section.SectionDataHeader;
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2;
 import com.bihe0832.android.common.debug.item.DebugTipsData;
+import com.bihe0832.android.common.debug.log.SectionDataContent;
+import com.bihe0832.android.common.debug.log.SectionDataHeader;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -69,7 +69,7 @@ public class DebugCustomSectionFragment extends BaseFragment {
             for (int j = 0; j < 15; j++) {
                 CardBaseModule section;
                 if (i < 2) {
-                    section = new SectionDataContent("内容1:" + j);
+                    section = new SectionDataContent("内容1:" + j, "");
                 } else {
                     section = new SectionDataContent2("内容2:" + j);
                 }

@@ -1,3 +1,11 @@
+/*
+ * *
+ *  * Created by zixie <code@bihe0832.com> on 2022/7/8 下午10:09
+ *  * Copyright (c) 2022 . All rights reserved.
+ *  * Last modified 2022/7/8 下午10:05
+ *
+ */
+
 package com.bihe0832.android.base.debug
 
 
@@ -5,6 +13,7 @@ import android.provider.Settings
 import android.util.Base64
 import android.view.View
 import android.widget.Toast
+import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.cache.DebugInfoCacheManager
@@ -50,8 +59,8 @@ import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
 
-class DebugTempFragment : DebugEnvFragment() {
-    val LOG_TAG = "DebugTempFragment"
+class AAFDebugTempFragment : DebugEnvFragment() {
+    val LOG_TAG = "AAFDebugTempFragment"
 
     val configListener = object : OnConfigChangedListener {
         override fun onValueChanged(key: String?, value: String?) {
@@ -528,7 +537,7 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
     private fun testFunc() {
-
+        AAFLoggerFile.log("Test0", "This is a test log for Test by ${Thread.currentThread().id}")
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())

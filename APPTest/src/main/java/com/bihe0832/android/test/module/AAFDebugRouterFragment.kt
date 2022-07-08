@@ -2,7 +2,7 @@ package com.bihe0832.android.test.module
 
 import com.bihe0832.android.lib.request.URLUtils
 
-class DebugRouterFragment : com.bihe0832.android.common.debug.module.DebugRouterFragment() {
+class AAFDebugRouterFragment : com.bihe0832.android.common.debug.module.DebugRouterFragment() {
 
     override fun getRouterList(): ArrayList<RouterItem> {
         return ArrayList<RouterItem>().apply {
