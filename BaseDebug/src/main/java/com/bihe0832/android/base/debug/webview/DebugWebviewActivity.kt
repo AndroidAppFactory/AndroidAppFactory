@@ -2,12 +2,12 @@ package com.bihe0832.android.base.debug.webview
 
 import android.text.TextUtils
 import android.view.View
-import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
-import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.common.debug.base.BaseDebugListActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 
 const val ROUTRT_NAME_TEST_WEBVIEW = "testweb"
 
@@ -33,7 +33,7 @@ class DebugWebviewActivity : BaseDebugListActivity() {
             }))
             add(DebugItemData("打开JSbridge调试页面", View.OnClickListener { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
             add(DebugItemData("打开TBS调试页面", View.OnClickListener { openWeb("http://debugtbs.qq.com/") }))
-
+            add(DebugItemData("打开本地调试页", View.OnClickListener { openWeb("file:///android_asset/index.html") }))
         }
     }
 
