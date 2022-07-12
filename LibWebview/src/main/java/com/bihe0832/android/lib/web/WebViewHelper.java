@@ -3,9 +3,11 @@ package com.bihe0832.android.lib.web;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.bihe0832.android.lib.log.ZLog;
 import com.tencent.smtt.export.external.TbsCoreSettings;
 import com.tencent.smtt.sdk.QbSdk;
+
 import java.util.HashMap;
 
 public class WebViewHelper {
@@ -13,7 +15,7 @@ public class WebViewHelper {
     private static final String TAG = "WebViewHelper";
 
     public static void init(Context context, HashMap<String, Object> initSettings, Bundle userIDBundleData,
-            boolean needPreLauncher) {
+                            boolean needPreLauncher) {
         initX5(context, initSettings, userIDBundleData);
         if (needPreLauncher && null != context) {
             Intent intent = new Intent();
@@ -37,8 +39,6 @@ public class WebViewHelper {
         if (null != initSettings) {
             paramMap.putAll(initSettings);
         }
-        // 启用X5私有ClassLoader
-        paramMap.put(TbsCoreSettings.TBS_SETTINGS_USE_PRIVATE_CLASSLOADER, true);
         // 启用X5多进程dex2oat模式
         paramMap.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
         QbSdk.initTbsSettings(paramMap);
