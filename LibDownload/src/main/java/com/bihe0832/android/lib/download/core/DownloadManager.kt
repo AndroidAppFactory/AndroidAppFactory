@@ -295,11 +295,14 @@ object DownloadManager {
 
 
     private fun checkBeforeDownloadFile(info: DownloadItem): String {
+
         if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5, false)) {
             return info.finalFilePath
-        } else if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5, false)) {
+        }
+
+        if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5, false)) {
             info.finalFilePath = info.tempFilePath
-            return info.finalFilePath
+            return info.tempFilePath
         }
         return ""
     }

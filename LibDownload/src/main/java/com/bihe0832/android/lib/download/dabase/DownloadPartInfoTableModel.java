@@ -169,7 +169,7 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
         ContentValues cv = new ContentValues();
         putValues(cv, col_download_part_id, downloadPartID);
         putValues(cv, col_finished, finished);
-        ZLog.e(DownloadInfoDBManager.TAG,
+        ZLog.d(DownloadInfoDBManager.TAG,
                 "分片下载数据 - " + downloadPartID + " DB 数据更新，累积下载:" + finished + ", " + FileUtils.INSTANCE
                         .getFileLength(finished));
 
@@ -211,7 +211,7 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
                 String partID = getStringByName(cursor, col_download_part_id);
                 ZLog.d("getFinished:" + partINfo + "of id :" + partID);
                 finished += partINfo;
-                ZLog.e(DownloadInfoDBManager.TAG, "分片下载数据 - " + partID + " DB数据读取，累积下载:" + partINfo);
+                ZLog.d(DownloadInfoDBManager.TAG, "分片下载数据 - " + partID + " DB数据读取，累积下载:" + partINfo);
                 cursor.moveToNext();
             }
         } catch (Exception e) {

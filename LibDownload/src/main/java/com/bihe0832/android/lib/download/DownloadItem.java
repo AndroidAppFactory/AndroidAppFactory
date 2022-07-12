@@ -31,6 +31,8 @@ public class DownloadItem implements Serializable {
     private String fileMD5 = "";
     // 如果本地有同名文件是否重新下载，非必填
     private boolean forceDownloadNew = false;
+    // 如果本地有同名文件但是下载完判断MD5不一致，是否自动删除，非必填
+    private boolean forceDeleteBad = true;
     //下载结束是否自动拉起安装，非必填
     private boolean autoInstall = false;
     //下载过程是否展示到通知栏，非必填
@@ -117,7 +119,13 @@ public class DownloadItem implements Serializable {
         return DownloadUtils.getDownloadIDByURL(downloadURL);
     }
 
+    public boolean isForceDeleteBad() {
+        return forceDeleteBad;
+    }
 
+    public void setForceDeleteBad(boolean forceDeleteBad) {
+        this.forceDeleteBad = forceDeleteBad;
+    }
 
     public String getDownloadDesc() {
         return downloadDesc;

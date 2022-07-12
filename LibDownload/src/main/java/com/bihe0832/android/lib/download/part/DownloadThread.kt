@@ -208,7 +208,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                         mDownloadPartInfo.partFinished = mDownloadPartInfo.partFinished + len
                         //10秒（弱网）或 2M(高速网络)保存策略
                         if (mDownloadPartInfo.canDownloadByPart() && (System.currentTimeMillis() - lastUpdateTime > DOWNLOAD_SVAE_TIMER || hasDownloadLength - lastUpdateLength > DOWNLOAD_SVAE_SIZE)) {
-                            ZLog.e(DownloadInfoDBManager.TAG, "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储：${System.currentTimeMillis() - lastUpdateTime} $hasDownloadLength $lastUpdateLength")
+                            ZLog.d(DownloadInfoDBManager.TAG, "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储：${System.currentTimeMillis() - lastUpdateTime} $hasDownloadLength $lastUpdateLength")
                             DownloadInfoDBManager.updateDownloadFinished(mDownloadPartInfo.downloadPartID, hasDownloadLength + mDownloadPartInfo.partFinishedBefore)
                             lastUpdateTime = System.currentTimeMillis()
                             lastUpdateLength = hasDownloadLength

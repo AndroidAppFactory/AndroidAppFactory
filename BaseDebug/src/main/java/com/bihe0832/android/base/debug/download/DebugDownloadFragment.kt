@@ -72,7 +72,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 String.format(ZixieContext.applicationContext!!.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating), "（V.2.2.21)"),
                 "这是一个Desc测试",
                 "https://imtt.dd.qq.com/16891/apk/340190503EE8DACBF2FE8DCC133C304E.apk?fsname=com.tencent.mobileqq_8.3.6_1406.apk",
-                "340190503EE8DACBF2FE8DCC133C304E",
+                "340190503EE8DACB1F2FE8DCC133C304E",
                 "",
                 canCancel = true, downloadMobile = true,
                 listener = object : OnDialogListener {
