@@ -165,10 +165,10 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     return false
                 }
             } else {
-                if (serverContentLength == 0L) {
+                if (serverContentLength < 1L) {
                     if (mDownloadPartInfo.canDownloadByPart()) {
                         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片长度为0 ！！！ $retryTimes")
+                        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片长度为 $serverContentLength ！！！ $retryTimes")
                         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                         mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                         return false
