@@ -157,9 +157,6 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         if (info.canDownloadByPart()) {
                             DownloadInfoDBManager.saveDownloadInfo(info)
                         }
-                    } else {
-                        //只要成功且文件长度不对，修改为单线程下载
-                        info.setCanDownloadByPart(false)
                     }
                     return true
                 } else {
