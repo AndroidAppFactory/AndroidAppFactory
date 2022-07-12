@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download.wrapper
 import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
+import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.file.FileUtils

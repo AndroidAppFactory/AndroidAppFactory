@@ -99,8 +99,8 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         }
                         downloadItem.finished = newFinished
                         downloadItem.finishedLengthBefore = finishedBefore
-                        if (DownloadManager.isDebug()) ZLog.w(TAG, "分片下载汇总 - ${downloadItem.downloadID}: 完成长度:${FileUtils.getFileLength(newFinished)} 之前下载长度:${FileUtils.getFileLength(finishedBefore)}")
-                        if (DownloadManager.isDebug()) ZLog.w(TAG, "分片下载汇总 - ${downloadItem.downloadID}: " +
+                        if (DownloadManager.isDebug()) ZLog.d(TAG, "分片下载汇总 - ${downloadItem.downloadID}: 完成长度:${FileUtils.getFileLength(newFinished)} 之前下载长度:${FileUtils.getFileLength(finishedBefore)}")
+                        if (DownloadManager.isDebug()) ZLog.d(TAG, "分片下载汇总 - ${downloadItem.downloadID}: " +
                                 "文件长度 :${FileUtils.getFileLength(downloadItem.fileLength)}" +
                                 ";完成长度 :${FileUtils.getFileLength(downloadItem.finished)}" +
                                 ";之前下载长度 :${FileUtils.getFileLength(downloadItem.finishedLengthBefore)}" +
@@ -364,7 +364,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
 
     private fun notifyDownloadFailed(errorCode: Int, msg: String, item: DownloadItem) {
-        ZLog.d(TAG, "notifyDownloadFailed errorCode $errorCode, msg: $msg, item: $item")
+        ZLog.e(TAG, "notifyDownloadFailed errorCode $errorCode, msg: $msg, item: $item")
         closeDownload(item.downloadID, false, false)
         if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
             innerDownloadListener.onFail(errorCode, msg, item)
@@ -377,18 +377,21 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         ThreadManager.getInstance().start {
             try {
                 val oldfile = File(downloadFile)
-                ZLog.d(TAG, " oldfile:$oldfile")
-                ZLog.d(TAG, " oldfile length:" + oldfile.length())
+                ZLog.w(TAG, " oldfile:$oldfile")
+                ZLog.w(TAG, " oldfile length:" + oldfile.length())
                 if (TextUtils.isEmpty(downloadInfo.fileMD5)) {
                     notifyDownloadSucc(downloadInfo)
                 } else {
                     val md5 = MD5.getFileMD5(downloadFile)
-                    ZLog.d(TAG, " oldfile md5:$md5")
-                    ZLog.d(TAG, " downloadInfo md5:" + downloadInfo.fileMD5)
+                    ZLog.w(TAG, " oldfile md5:$md5")
+                    ZLog.w(TAG, " downloadInfo md5:" + downloadInfo.fileMD5)
                     if (md5.equals(downloadInfo.fileMD5, ignoreCase = true)) {
                         notifyDownloadSucc(downloadInfo)
                     } else {
                         notifyDownloadFailed(ERR_MD5_BAD, "Sorry! the file md5 is bad", downloadInfo)
+                        if (downloadInfo.isForceDeleteBad) {
+                            deleteFile(downloadInfo)
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -408,13 +411,13 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 innerDownloadListener.onComplete(finalFileName, downloadInfo)
             }
             oldfile.renameTo(newfile) -> {
-                ZLog.d(TAG, " File renamed")
-                ZLog.d(TAG, " finalFile:$finalFileName")
-                ZLog.d(TAG, " finalFile length:" + newfile.length())
+                ZLog.w(TAG, " File renamed")
+                ZLog.w(TAG, " finalFile:$finalFileName")
+                ZLog.w(TAG, " finalFile length:" + newfile.length())
                 innerDownloadListener.onComplete(finalFileName, downloadInfo)
             }
             else -> {
-                ZLog.d("Sorry! the file can't be renamed")
+                ZLog.e("Sorry! the file can't be renamed")
                 innerDownloadListener.onComplete(downloadFile, downloadInfo)
             }
         }
