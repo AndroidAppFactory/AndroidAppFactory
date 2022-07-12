@@ -31,10 +31,11 @@ import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
+import com.bihe0832.android.framework.router.RouterAction;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.BaseFragment;
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
@@ -380,6 +381,9 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
                         mJSBridgeProxy.invoke(url);
                     }
                     return true;
+                } else if (url.startsWith(RouterAction.INSTANCE.getSCHEME())) {
+                    RouterAction.INSTANCE.openFinalURL(url, Intent.FLAG_ACTIVITY_NEW_TASK);
+                    return true;
                 } else if (url.equals("about:blank;") || url.equals("about:blank")) {
                     // 3.0及以下的webview调用jsb时会调用同时call起的空白页面，将这个页面屏蔽掉不出来
                     return BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.HONEYCOMB;
@@ -411,7 +415,9 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
             if (context != null && !TextUtils.isEmpty(url)) {
                 try {
                     ZLog.e(TAG, "jumpToOtherApp url:" + url);
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                     return true;
                 } catch (Exception var4) {
                     ZLog.e(TAG, "jumpToOtherApp failed:" + var4.getMessage());

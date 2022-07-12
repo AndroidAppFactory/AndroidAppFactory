@@ -1,0 +1,137 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" CONTENT="子勰(bihe0832), code@bihe0832.com"/>
+    <meta name="keywords" content="腾讯手游加速器,加速"/>
+    <meta name="description" content="腾讯手游加速器"/>
+    <title>Zixie Webview测试页面</title>
+    <style type="text/css">
+        body {
+          background: #293553;
+        }
+        /* 未被访问的链接 */
+        a:link {
+            color:#FFFFFF;
+            font-size:0.4rem
+        }
+        /* 已被访问的链接 */
+        a:visited {
+            background:#DDDDDD;
+            color:gray;
+        }
+        /* 鼠标指针移动到链接上 */
+        a:hover {
+            background:#DDDDDD;
+            font-size:0.5rem
+        }
+        /* 正在被点击的链接 */
+        a:active {
+            background:#00F3F8;
+        }
+
+        button{
+            padding: 0.2rem 0.5rem;
+        }
+
+        p{
+            padding-left: 0.5rem;
+            padding-top: 0.5rem;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+<p><a href="market://details?id=com.tencent.mm">open app with market</a></p>
+<p><a href="zixie://about">open app with Uri Scheme</a></p>
+<p><a href="intent:#Intent;action=android.media.action.STILL_IMAGE_CAMERA;end">打开相机</a></p>
+<p><a href="intent:#Intent;action=android.settings.SETTINGS;end">打开系统设置</a></p>
+
+<p>
+    <a href="zixie://zweb?url=https%3A%2F%2Fblog.bihe0832.com">zixie://zweb?url=https%3A%2F%2Fblog.bihe0832.com</a>
+</p>
+
+<p>
+    <button id="btn_copy">点我复制</button>
+</p>
+<p>
+    <button onclick="showToast()">弹Toast</button>
+</p>
+<p>
+    <button id="testClosePage" onclick="closePage()">关闭Webview</button>
+</p>
+<p>
+    <button onclick="reload()">重新加载</button>
+</p>
+<script language="JavaScript" type="text/JavaScript">
+
+         document.querySelector('#btn_copy').addEventListener('click',() => {
+            const input = document.createElement('input');
+            document.body.appendChild(input);
+            input.setAttribute('value', 'testClip');
+            input.select();
+            if (document.execCommand('copy')) {
+                document.execCommand('copy');
+                window.location.href = "intent:#Intent;component=com.miui.securitycenter/com.miui.securityscan.MainActivity;end"
+            }
+            document.body.removeChild(input);
+        })
+
+        function showToast(params) {
+            call('toast', {text:"这是一个来自webview的toat",duration:1}, (res) => {
+                console.log("lwtor, showToast")
+                console.log(res)
+            })
+        }
+
+        function closePage(params) {
+            call('closePage', {}, (res) => {
+                console.log(res)
+            })
+        }
+
+        function reload(params) {
+            call('pageControl', {type:0}, (res) => {
+                console.log(res)
+            })
+        }
+
+        function goBack(params) {
+            call('pageControl', {type:1}, (res) => {
+                console.log(res)
+            })
+        }
+
+
+        function goNext(params) {
+            call('pageControl', {type:2}, (res) => {
+                console.log(res)
+            })
+        }
+
+        function getNewCode(params) {
+            call('getNewCode',{ timeStamp:1234,}, (res) => {
+                console.log(res)
+              }
+            )
+        }
+
+        function startWechatAPP(params) {
+              call('startWechatAPP', {name:"gh_74d2c3f0e7d3",path:"pages/index/index",type:"0"}, (res) => {
+              console.log(res)
+              }
+             )
+        }
+
+
+</script>
+</body>
+</html>
