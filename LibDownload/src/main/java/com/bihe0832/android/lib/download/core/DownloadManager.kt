@@ -282,6 +282,9 @@ object DownloadManager {
         if (savedInfo != null) {
             info.finalFilePath = savedInfo.finalFilePath
             info.tempFilePath = savedInfo.tempFilePath
+            if (!TextUtils.isEmpty(savedInfo.realURL)) {
+                info.realURL = savedInfo.realURL
+            }
             if (savedInfo.fileLength > 0) {
                 info.fileLength = savedInfo.fileLength
                 info.finishedLengthBefore = DownloadInfoDBManager.getFinishedBefore(info.downloadID)

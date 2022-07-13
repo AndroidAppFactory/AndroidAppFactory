@@ -1,6 +1,9 @@
 package com.bihe0832.android.lib.request;
 
+import android.text.TextUtils;
+
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,8 +16,8 @@ import java.util.regex.Pattern;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2019-08-01.
- *         Description: 根据URL获取当前HTTP网页的title
+ * Created on 2019-08-01.
+ * Description: 根据URL获取当前HTTP网页的title
  */
 public class HTTPRequestUtils {
 
@@ -46,7 +49,7 @@ public class HTTPRequestUtils {
                 StringBuilder content;
                 int n1;
                 for (content = new StringBuilder(); /*totalRead < 2048 &&*/
-                        (n1 = reader.read(buf, 0, buf.length)) != -1; totalRead += n1) {
+                     (n1 = reader.read(buf, 0, buf.length)) != -1; totalRead += n1) {
                     content.append(buf, 0, n1);
                 }
 
@@ -94,6 +97,23 @@ public class HTTPRequestUtils {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    //   可能第一步得获取重定向的url
+    public static String getRedirectUrl(String url) {
+        try {
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setInstanceFollowRedirects(false);
+            conn.setConnectTimeout(5000);
+            String redirectUrl = conn.getHeaderField("Location");
+            if (TextUtils.isEmpty(redirectUrl)) {
+                return url;
+            }
+            return getRedirectUrl(redirectUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return url;
     }
 
     public static Charset getCharset(HTTPRequestUtils.ContentType contentType) {
