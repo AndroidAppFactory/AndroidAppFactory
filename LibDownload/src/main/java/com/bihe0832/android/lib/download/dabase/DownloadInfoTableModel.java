@@ -144,16 +144,16 @@ public class DownloadInfoTableModel extends BaseTableModel {
 
     private static boolean updateData(BaseDBHelper helper, DownloadItem item) {
         ContentValues values = data2CV(item);
-        String whereClause = " `" + col_download_content + "` = ? ";
-        String[] whereArgs = new String[]{item.getDownloadURL()};
+        String whereClause = " `" + col_download_id + "` = ? ";
+        String[] whereArgs = new String[]{String.valueOf(item.getDownloadID())};
         int rows = helper.update(TABLE_NAME, values, whereClause, whereArgs);
         return (rows != 0);
     }
 
     static boolean hasData(BaseDBHelper helper, String url) {
         String[] columns = null;
-        String selection = " " + col_download_content + " = ? ";
-        String[] selectionArgs = {url};
+        String selection = " " + col_download_id + " = ? ";
+        String[] selectionArgs = {String.valueOf(DownloadItem.getDownloadIDByURL(url))};
         String groupBy = null;
         String having = null;
         String orderBy = null;
@@ -213,8 +213,8 @@ public class DownloadInfoTableModel extends BaseTableModel {
     }
 
     static DownloadItem getDownloadInfo(BaseDBHelper helper, String url) {
-        String selection = " " + col_download_content + " = ? ";
-        String[] selectionArgs = {String.valueOf(url)};
+        String selection = " " + col_download_id + " = ? ";
+        String[] selectionArgs = {String.valueOf(DownloadItem.getDownloadIDByURL(url))};
         return getDownloadInfoFromDBBySection(helper, selection, selectionArgs);
 
     }

@@ -73,12 +73,15 @@ public class DownloadItem implements Serializable {
     private long finishedLengthBefore = 0;
     // 文件总长度，不填
     private long fileLength = 0;
+    // 最终实际下载的URL，不填
+    private String realURL = "";
     // 实时下载速度，不填
     private transient long lastSpeed = 0;
     //开始下载的时间，不填
     private transient long startTime = 0;
     //最后暂停时间，不填
     private transient long pauseTime = 0;
+
 
     public boolean canDownloadByPart() {
         return canDownloadByPart;
@@ -150,6 +153,14 @@ public class DownloadItem implements Serializable {
 
     public void setDownloadWhenUseMobile(boolean downloadWhenUseMobile) {
         this.downloadWhenUseMobile = downloadWhenUseMobile;
+    }
+
+    public String getRealURL() {
+        return realURL;
+    }
+
+    public void setRealURL(String realURL) {
+        this.realURL = realURL;
     }
 
     public boolean isDownloadWhenAdd() {

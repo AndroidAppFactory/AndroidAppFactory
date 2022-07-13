@@ -15,6 +15,7 @@ import java.io.File
 import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 import kotlin.math.abs
 
 
@@ -126,8 +127,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}：分片长度异常，从头下载")
         }
 
-        val url = URL(mDownloadPartInfo.downloadURL)
-        val connection = (url.openConnection() as HttpURLConnection).apply {
+        val url = URL(mDownloadPartInfo.realDownloadURL)
+        val connection = (url.openConnection() as HttpsURLConnection).apply {
             upateRequestInfo()
             if (mDownloadPartInfo.canDownloadByPart()) {
                 ZLog.d(TAG, "分片下载 第${mDownloadPartInfo.partID}分片下载：params bytes=$finalStart-${mDownloadPartInfo.partEnd}")
@@ -156,7 +157,6 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片已下载")
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                     return false
-
                 } else {
                     ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                     ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.partID}分片长度 错误 ！！！ $retryTimes")

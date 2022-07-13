@@ -23,6 +23,7 @@ import com.bihe0832.android.lib.utils.encrypt.MD5
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 
 /**
@@ -130,14 +131,21 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         }.start()
     }
 
+    //返回资源可以下载
     private fun updateDownItemByServerInfo(info: DownloadItem): Boolean {
         ZLog.d(TAG, "updateDownItemByServerInfo:$info")
         // 重新启动，获取文件总长度
-        val url = URL(info.downloadURL)
         var times = 0
         do {
             try {
-                val connection = (url.openConnection() as HttpURLConnection).apply {
+
+                val realURL = if (TextUtils.isEmpty(info.realURL)) {
+                    HTTPRequestUtils.getRedirectUrl(info.downloadURL)
+                } else {
+                    info.realURL
+                }
+                val url = URL(realURL)
+                val connection = (url.openConnection() as HttpsURLConnection).apply {
                     upateRequestInfo()
                 }
                 var time = System.currentTimeMillis()
@@ -151,12 +159,13 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 ZLog.d(TAG, "获取文件长度 getContentLength:${contentLength}")
                 ZLog.d(TAG, "获取文件长度 responseCode:${connection.responseCode}")
                 if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL) {
+                    info.realURL = realURL
                     if (contentLength > 0) {
                         info.fileLength = contentLength
-                        ZLog.d("获取文件长度 保存信息:${info}")
-                        if (info.canDownloadByPart()) {
-                            DownloadInfoDBManager.saveDownloadInfo(info)
-                        }
+                    }
+                    ZLog.d("获取文件长度 保存信息:${info}")
+                    if (info.canDownloadByPart()) {
+                        DownloadInfoDBManager.saveDownloadInfo(info)
                     }
                     return true
                 } else {
@@ -313,7 +322,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         val downloadThreadForPart = DownloadThread(DownloadPartInfo().apply {
             this.partID = partNo
             this.downloadID = info.downloadID
-            this.downloadURL = info.downloadURL
+            this.realDownloadURL = info.realURL
             this.finalFileName = info.tempFilePath
             this.partStart = oldstart
             this.partEnd = end

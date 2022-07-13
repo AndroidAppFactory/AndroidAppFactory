@@ -6,7 +6,7 @@ public class DownloadPartInfo {
 
     private int mPartID;
     private long mDownloadID;
-    private String mDownloadURL;
+    private String mRealDownloadURL;
     private String mFinalFileName;
     private long mPartStart;
     private long mPartEnd;
@@ -76,12 +76,12 @@ public class DownloadPartInfo {
         this.mPartID = mPartID;
     }
 
-    public String getDownloadURL() {
-        return mDownloadURL;
+    public String getRealDownloadURL() {
+        return mRealDownloadURL;
     }
 
-    public void setDownloadURL(String mDownloadURL) {
-        this.mDownloadURL = mDownloadURL;
+    public void setRealDownloadURL(String mDownloadURL) {
+        this.mRealDownloadURL = mDownloadURL;
     }
 
     public long getPartStart() {
@@ -113,7 +113,7 @@ public class DownloadPartInfo {
         return "DownloadPartInfo{"
                 + "mPartID=" + mPartID
                 + ", mDownloadID=" + mDownloadID
-                + ", mDownloadURL='" + mDownloadURL + '\''
+                + ", mDownloadURL='" + mRealDownloadURL + '\''
                 + ", mFinalFileName='" + mFinalFileName + '\''
                 + ", mPartStart=" + mPartStart
                 + ", mPartEnd=" + mPartEnd
