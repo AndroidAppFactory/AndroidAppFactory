@@ -3,15 +3,14 @@ package com.bihe0832.android.lib.file.action
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.text.TextUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io.*
 import java.nio.channels.FileChannel
 
 
@@ -180,4 +179,101 @@ object FileAction {
             e.printStackTrace()
         }
     }
+
+    private fun copyStream(input: InputStream, output: OutputStream) {
+        val buff = ByteArray(1024)
+        var read = 0
+        do {
+            read = input.read(buff)
+            if (read > 0) {
+                output.write(buff, 0, read)
+            }
+        } while (read > 0)
+    }
+
+    fun copyAssetsFileToPath(context: Context?, fromFileName: String, targetPath: String): Boolean {
+        if (context == null) {
+            ZLog.e("copyAssetsToSdcard context is null")
+            return false
+        }
+        try {
+            FileUtils.checkAndCreateFolder(File(targetPath).parentFile.absolutePath)
+            FileUtils.deleteFile(targetPath)
+            context.assets.open(fromFileName).use { input ->
+                FileOutputStream(targetPath).use { output ->
+                    copyStream(input, output)
+                    input.close()
+                    output.close()
+                }
+            }
+            return true
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            ZLog.e("copyAssets2Sdcard exception:$e")
+            return false
+        }
+
+    }
+
+    fun copyAssetsFolderToFolder(context: Context?, fromAssetPath: String, targetFolder: String): Boolean {
+        if (context == null) {
+            ZLog.e("copyAssetsFolder context is null")
+            return false
+        }
+        try {
+            var source = if (TextUtils.isEmpty(fromAssetPath)) {
+                fromAssetPath
+            } else {
+                fromAssetPath + File.separator
+            }
+
+            var target = FileUtils.getFolderPathWithSeparator(targetFolder)
+            var res = true
+            context.assets.list(fromAssetPath)?.forEach { file: String ->
+                var dataArray = context.assets.list(file) ?: emptyArray()
+                res = if (dataArray.isNotEmpty()) {
+                    res && copyAssetsFolderToFolder(context, "$source$file", "$target$file")
+                } else {
+                    if (isAssetsExists(context, "$source$file")) {
+                        res && copyAssetsFileToPath(context, "$source$file", "$target$file")
+                    } else {
+                        res
+                    }
+                }
+            }
+            return res
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            ZLog.e("copyAssetsFolder exception:$e")
+            return false
+        }
+    }
+
+    fun isAssetsExists(context: Context?, filePath: String): Boolean {
+        if (context == null) {
+            ZLog.e("isAssetExists context is null")
+            return false
+        }
+        var inputStream: InputStream? = null
+        try {
+            inputStream = context.assets.open(filePath)
+            if (null != inputStream) {
+                return true
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return false
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            return false
+        } finally {
+            try {
+                inputStream?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return false
+    }
+
 }

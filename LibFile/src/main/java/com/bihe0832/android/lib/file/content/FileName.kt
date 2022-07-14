@@ -28,7 +28,7 @@ object FileName {
 
     fun getFileName(filePath: String?): String {
         filePath?.let {
-            val split = filePath.lastIndexOf('/')
+            val split = filePath.lastIndexOf(File.separator)
             return if (split > -1) {
                 filePath.substring(split + 1)
             } else {
@@ -41,7 +41,7 @@ object FileName {
     fun getFileNameWithoutEx(filename: String?): String {
         filename?.let {
             val dot = filename.lastIndexOf('.')
-            val split = filename.lastIndexOf('/')
+            val split = filename.lastIndexOf(File.separator)
             if (split < dot) {
                 if (dot > -1 && dot < filename.length) {
                     return if (split > -1) {

@@ -35,6 +35,8 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.config.OnConfigChangedListener
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
+import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -92,6 +94,7 @@ class AAFDebugTempFragment : DebugEnvFragment() {
             add(DebugItemData("数据读取缓存", View.OnClickListener { testCache() }))
 
             add(DebugItemData("文本查看器", View.OnClickListener { testEdit() }))
+            add(DebugItemData("Assets 操作", View.OnClickListener { testAssets() }))
             add(DebugItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(DebugItemData("数据时间转换", View.OnClickListener { testConvert() }))
             add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
@@ -536,13 +539,35 @@ class AAFDebugTempFragment : DebugEnvFragment() {
         RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_EDITOR)
     }
 
+    private fun testAssets() {
+        File(ZixieContext.getLogFolder()).listFiles().forEach { file ->
+            ZLog.d("testAssets", file.absolutePath)
+        }
+
+        ZLog.d("testAssets", ZixieContext.getLogFolder())
+        var path = ZixieContext.getLogFolder() + "config.default"
+        FileAction.copyAssetsFileToPath(context, "config.default", path).let {
+            ZLog.d("testAssets", " $it")
+            ZLog.d("testAssets", " " + FileUtils.checkFileExist(path))
+            FileUtils.deleteFile(path)
+        }
+
+        FileAction.copyAssetsFolderToFolder(context, "", ZixieContext.getLogFolder()).let {
+            ZLog.d("testAssets", " ")
+            File(ZixieContext.getLogFolder()).listFiles().forEach { file ->
+                ZLog.d("testAssets", file.absolutePath)
+            }
+        }
+    }
+
     private fun testFunc() {
         AAFLoggerFile.log("Test0", "This is a test log for Test by ${Thread.currentThread().id}")
+
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
 //        FileUtils.checkAndCreateFolder(ZixieContext.getZixieExtFolder() + "pictures" + File.separator + "m3u8" + File.separator + System.currentTimeMillis())
 //        CommonDBManager.getAll().forEach {
-//            ZLog.d("Hardy" ,it.toString())
+//            ZLog.d("zixie" ,it.toString())
 //        }
 
 //        ZLog.d("3 " + "3".toFloat() + " " + ConvertUtils.parseFloat("3", 0f))

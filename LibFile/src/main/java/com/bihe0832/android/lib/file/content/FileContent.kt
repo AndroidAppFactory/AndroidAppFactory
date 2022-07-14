@@ -18,23 +18,17 @@ object FileContent {
     }
 
     fun getFileContent(filePath: String?, encoding: String, isGzip: Boolean): String {
-        val sb = StringBuffer()
+        var content = ""
         filePath?.let { it ->
             if (FileUtils.checkFileExist(it)) {
                 var fis: InputStream? = null
-                var br: BufferedReader? = null
                 try {
                     fis = if (isGzip) {
                         GZIPInputStream(FileInputStream(File(it)))
                     } else {
                         FileInputStream(File(it))
                     }
-
-                    br = BufferedReader(InputStreamReader(fis, encoding))
-                    var line: String?
-                    while (br.readLine().also { line = it } != null) {
-                        sb.append(line + System.lineSeparator())
-                    }
+                    content = getFileContent(fis, encoding)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 } finally {
@@ -43,11 +37,30 @@ object FileContent {
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
-                    try {
-                        br?.close()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                }
+            }
+        }
+        return content
+    }
+
+
+    fun getFileContent(fis: InputStream?, encoding: String): String {
+        val sb = StringBuffer()
+        fis.let {
+            var br: BufferedReader? = null
+            try {
+                br = BufferedReader(InputStreamReader(fis, encoding))
+                var line: String?
+                while (br.readLine().also { line = it } != null) {
+                    sb.append(line + System.lineSeparator())
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                try {
+                    br?.close()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
