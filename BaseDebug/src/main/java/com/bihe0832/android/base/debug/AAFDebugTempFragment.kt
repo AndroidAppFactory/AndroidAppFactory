@@ -547,6 +547,8 @@ class AAFDebugTempFragment : DebugEnvFragment() {
         ZLog.d("testAssets", ZixieContext.getLogFolder())
         var path = ZixieContext.getLogFolder() + "config.default"
         FileAction.copyAssetsFileToPath(context, "config.default", path).let {
+            ZLog.d("testAssets", " ${FileUtils.getAssetFileContent(context!!,"config.default")}")
+            ZLog.d("testAssets", " ${FileUtils.getFileContent(path)}")
             ZLog.d("testAssets", " $it")
             ZLog.d("testAssets", " " + FileUtils.checkFileExist(path))
             FileUtils.deleteFile(path)
