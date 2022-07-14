@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import java.io.File
+import java.io.InputStream
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
@@ -205,6 +206,18 @@ object FileUtils {
         FileAction.copyDirectory(src, dest, isMove)
     }
 
+    fun copyAssetsFileToPath(context: Context?, fromFileName: String, targetPath: String): Boolean {
+        return FileAction.copyAssetsFileToPath(context, fromFileName, targetPath)
+    }
+
+    fun copyAssetsFolderToFolder(context: Context?, fromAssetPath: String, targetFolder: String): Boolean {
+        return FileAction.copyAssetsFolderToFolder(context, fromAssetPath, targetFolder)
+    }
+
+    fun isAssetsExists(context: Context?, filePath: String): Boolean {
+        return FileAction.isAssetsExists(context, filePath)
+    }
+
     fun getFileMD5(filePath: String): String {
         return MD5.getFileMD5(filePath)
     }
@@ -235,6 +248,14 @@ object FileUtils {
 
     fun getFileContent(filePath: String?, encoding: String): String {
         return FileContent.getFileContent(filePath, encoding, false)
+    }
+
+    fun getFileContent(filePath: InputStream?, encoding: String): String {
+        return FileContent.getFileContent(filePath, encoding)
+    }
+
+    fun getAssetFileContent(context: Context, filePath: String): String {
+        return FileContent.getFileContent(context.resources.assets.open(filePath), "UTF-8")
     }
 
     fun getFileContent(filePath: String?, encoding: String, isGzip: Boolean): String {
