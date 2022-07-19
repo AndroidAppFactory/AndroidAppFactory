@@ -24,12 +24,13 @@ public class HTTPRequestUtils {
     private static final Pattern TITLE_TAG = Pattern
             .compile("\\<title>(.*)\\</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
+    public static final String USER_AGENT_COMMON_ZIXIE = "Mozilla/5.0 (Linux; Android 10; UNKnown) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 Mobile Safari/537.36/ ";
+
     public static String getPageTitle(String url) {
         try {
             URL e = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) e.openConnection();
-            conn.addRequestProperty("User-Agent",
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36");
+            conn.addRequestProperty("User-Agent", USER_AGENT_COMMON_ZIXIE);
             conn.setConnectTimeout(1000);
             conn.setReadTimeout(1000);
 
@@ -64,6 +65,8 @@ public class HTTPRequestUtils {
             return "unknown(-3)";
         }
     }
+
+    public static String
 
     public static HTTPRequestUtils.ContentType getContentTypeHeader(URLConnection conn) {
         try {
