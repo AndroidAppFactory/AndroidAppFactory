@@ -312,7 +312,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     }
 
     private fun startDownloadPart(partNo: Int, info: DownloadItem, oldstart: Long, end: Long, finished: Long) {
-        ZLog.e(TAG, "分片下载数据 第${partNo}分片 start: $oldstart, end:$end,length :${end - oldstart}, 文件长度:${info.fileLength} ")
+        ZLog.e(TAG, "分片下载数据 第${partNo}分片 start: $oldstart, end:$end,finished: $finished ,length :${end - oldstart}, 文件长度:${info.fileLength} ")
         val downloadThreadForPart = DownloadThread(DownloadPartInfo().apply {
             this.partID = partNo
             this.downloadID = info.downloadID
