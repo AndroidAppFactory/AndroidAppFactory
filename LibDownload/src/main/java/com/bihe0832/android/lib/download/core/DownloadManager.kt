@@ -88,9 +88,7 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onWait(item)
             }
-            if (item.canDownloadByPart()) {
-                DownloadInfoDBManager.saveDownloadInfo(item)
-            }
+            DownloadInfoDBManager.saveDownloadInfo(item)
         }
 
         override fun onStart(item: DownloadItem) {
@@ -104,9 +102,7 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onStart(item)
             }
-            if (item.canDownloadByPart()) {
-                DownloadInfoDBManager.saveDownloadInfo(item)
-            }
+            DownloadInfoDBManager.saveDownloadInfo(item)
         }
 
         override fun onProgress(item: DownloadItem) {
@@ -171,9 +167,7 @@ object DownloadManager {
                     item.packageName = it
                 }
             }
-            if (item.canDownloadByPart()) {
-                DownloadInfoDBManager.saveDownloadInfo(item)
-            }
+            DownloadInfoDBManager.saveDownloadInfo(item)
             addDownloadItemToList(item)
             item.finalFilePath = filePath
             addWaitToDownload()
@@ -274,11 +268,7 @@ object DownloadManager {
     }
 
     private fun updateInfo(info: DownloadItem) {
-        var savedInfo = if (info.canDownloadByPart()) {
-            DownloadInfoDBManager.getDownloadInfo(info.downloadURL)
-        } else {
-            null
-        }
+        var savedInfo = DownloadInfoDBManager.getDownloadInfo(info.downloadURL)
         if (savedInfo != null) {
             info.finalFilePath = savedInfo.finalFilePath
             info.tempFilePath = savedInfo.tempFilePath
@@ -392,9 +382,7 @@ object DownloadManager {
 
     private fun addDownloadItemToList(info: DownloadItem) {
         ThreadManager.getInstance().start {
-            if (info.canDownloadByPart()) {
-                DownloadInfoDBManager.saveDownloadInfo(info)
-            }
+            DownloadInfoDBManager.saveDownloadInfo(info)
             DownloadTaskList.addToDownloadTaskList(info)
         }
     }

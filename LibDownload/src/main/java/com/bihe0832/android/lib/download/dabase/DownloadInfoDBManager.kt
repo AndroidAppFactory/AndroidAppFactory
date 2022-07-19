@@ -40,11 +40,7 @@ object DownloadInfoDBManager {
     }
 
     fun saveDownloadInfo(item: DownloadItem): Boolean {
-        return if(item.canDownloadByPart()){
-            DownloadInfoTableModel.saveData(getDownloadInfoDBHelper(), item)
-        }else{
-            false
-        }
+        return DownloadInfoTableModel.saveData(getDownloadInfoDBHelper(), item)
     }
 
     fun getFinishedBefore(downloadID: Long): Long {

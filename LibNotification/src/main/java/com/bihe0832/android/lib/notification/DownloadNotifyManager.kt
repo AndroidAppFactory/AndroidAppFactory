@@ -85,7 +85,7 @@ object DownloadNotifyManager {
 
             DOWNLOAD_TYPE_DOWNLOADING -> {
                 remoteViews.setTextViewText(R.id.download_notification_title, "正在下载$appName")
-                if (total > 0) {
+                if (speed > 0) {
                     remoteViews.setTextViewText(R.id.download_notification_desc, Formatter.formatFileSize(context, speed) + "/s")
                 }
                 R.id.download_notification_btn_restart.let {
