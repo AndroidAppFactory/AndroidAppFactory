@@ -21,7 +21,7 @@ fun HttpsURLConnection.upateRequestInfo() {
     requestMethod = "GET"
     useCaches = false
     setRequestProperty("Connection", "close")
-    setRequestProperty("User-Agent", " Mozilla/5.0 (Linux; Android 10; UNKnown) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 Mobile Safari/537.36/ Zixie Download/1}")
+    setRequestProperty("User-Agent", HTTPRequestUtils.USER_AGENT_COMMON_ZIXIE + "Zixie Download/1}")
     setRequestProperty("Content-Type", "application/octet-stream; charset=UTF-8")
     setRequestProperty("Accept-Encoding", "identity")
     //用户指定IP的场景
