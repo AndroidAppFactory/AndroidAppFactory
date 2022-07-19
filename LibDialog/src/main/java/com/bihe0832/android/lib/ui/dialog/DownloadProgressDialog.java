@@ -144,39 +144,37 @@ public class DownloadProgressDialog extends Dialog {
         }
 
         if (null != mProgressNumber) {
+            String process = FileUtils.INSTANCE.getFileLength(mCurrentSize) + "/";
             if (mAPKSize < 1) {
-                mProgressNumber.setVisibility(View.GONE);
+                process = process + "0";
             } else {
-                mProgressNumber.setVisibility(View.VISIBLE);
-                mProgressNumber.setText(
-                        FileUtils.INSTANCE.getFileLength(mCurrentSize) + "/"
-                                + FileUtils.INSTANCE.getFileLength(mAPKSize));
+                process = process + FileUtils.INSTANCE.getFileLength(mAPKSize);
             }
+            mProgressNumber.setText(process);
         }
 
         if (null != mProgressPercent) {
-            if (mAPKSize < 1) {
-                mProgressPercent.setVisibility(View.GONE);
-            } else {
-                mProgressPercent.setVisibility(View.VISIBLE);
-                if (mProgressPercentFormat != null) {
+            mProgressPercent.setVisibility(View.VISIBLE);
+            if (mProgressPercentFormat != null) {
+                if (mAPKSize < 1) {
+
+                } else {
                     double percent = mCurrentSize * 1d / mAPKSize;
                     SpannableString tmp = new SpannableString(mProgressPercentFormat.format(percent));
                     tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
                             0, tmp.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     mProgressPercent.setText(tmp);
-                } else {
-                    mProgressPercent.setText("");
                 }
+            } else {
+                mProgressPercent.setText("");
             }
         }
         if (null != mProgress) {
             mProgress.setProgress(0);
             if (mAPKSize < 1) {
-                mProgress.setVisibility(View.INVISIBLE);
+                mProgress.setProgress((int) (100));
             } else {
                 mProgress.setProgress((int) (mCurrentSize * 100 / mAPKSize));
-                mProgress.setVisibility(View.VISIBLE);
             }
         }
 

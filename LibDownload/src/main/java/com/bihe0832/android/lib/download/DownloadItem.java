@@ -9,14 +9,13 @@ import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.MathUtils;
 
 import java.io.Serializable;
-import java.text.NumberFormat;
 
 import kotlin.jvm.Synchronized;
 
 
 /**
  * 下载信息结构体
- *
+ * <p>
  * 除 downloadURL ，其余都非必填，默认不支持分片下载，每次下载都会强制重新下载
  *
  * @author zixie code@bihe0832.com Created on 2020/6/3.
@@ -137,6 +136,7 @@ public class DownloadItem implements Serializable {
     public void setDownloadDesc(String desc) {
         downloadDesc = desc;
     }
+
     // 下载进度
     public String getProcessDesc() {
         return MathUtils.getFormatPercentDesc(getProcess());
@@ -144,7 +144,7 @@ public class DownloadItem implements Serializable {
 
     //下载进度
     public float getProcess() {
-        return MathUtils.getFormatPercent(finishedLength,fileLength, 4);
+        return MathUtils.getFormatPercent(finishedLength, fileLength, 4);
     }
 
     public boolean isDownloadWhenUseMobile() {
@@ -221,15 +221,7 @@ public class DownloadItem implements Serializable {
 
     public boolean isForceDownloadNew() {
         //强制重新下载，或者不支持分片，就算是不强制重新下载也要强制重新下载
-        if (forceDownloadNew) {
-            return true;
-        } else {
-            if (canDownloadByPart()) {
-                return false;
-            } else {
-                return true;
-            }
-        }
+        return forceDownloadNew;
     }
 
     public static long getDownloadIDByURL(String url) {

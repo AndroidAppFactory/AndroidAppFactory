@@ -13,20 +13,11 @@ public class DownloadPartInfo {
     private long mPartFinished;
     private long mPartFinishedBefore;
     private int mPartStatus;
-    // 是否支持分片下载
-    private boolean canDownloadByPart = false;
+
 
     public DownloadPartInfo() {
     }
-
-    public void setCanDownloadByPart(boolean canDownloadByPart) {
-        this.canDownloadByPart = canDownloadByPart;
-    }
-
-    public boolean canDownloadByPart() {
-        return canDownloadByPart;
-    }
-
+    
     public String getFinalFileName() {
         return mFinalFileName;
     }
