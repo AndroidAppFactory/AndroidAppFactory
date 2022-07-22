@@ -25,6 +25,10 @@ public @interface DownloadErrorCode {
     int ERR_NEED_WAITING = -4;
     // 下载时创建HTTP请求异常
     int ERR_HTTP_FAILED = -5;
+    int ERR_HTTP_LENGTH_FAILED = -10;
+    // HTTP 请求成功，但是返回长度错误
+    // 下载分片时HTTP 异常
+    int ERR_HTTP_EXCEPTION = -11;
     // 下载时异常
     int ERR_DOWNLOAD_EXCEPTION = -6;
     // 文件MD5不一致
@@ -33,7 +37,8 @@ public @interface DownloadErrorCode {
     int ERR_FILE_RENAME_FAILED = -8;
     // 回调业务时异常
     int ERR_NOTIFY_EXCEPTION = -9;
-    // 如果业务使用自定义的错误码 ,与SDK的错误码区分
-    int ERROR_APP = -100;
-
+    // 下分片载时异常
+    int ERR_DOWNLOAD_PART_EXCEPTION = -12;
+    // 启动分片下载时异常
+    int ERR_DOWNLOAD_PART_START_EXCEPTION = -13;
 }

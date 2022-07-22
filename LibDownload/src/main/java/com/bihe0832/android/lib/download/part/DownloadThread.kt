@@ -118,7 +118,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 randomAccessFile.seek(newStart)
             } catch (e: Exception) {
                 e.printStackTrace()
-                ZLog.e(TAG, "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片 文件移动异常 $e")
+                ZLog.e(TAG, "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片 文件移动异常 :${e.javaClass.name}")
                 mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                 break
             }
@@ -129,7 +129,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载异常 $retryTimes！！！！: $e")
+                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载异常 $retryTimes！！！！:${e.javaClass.name}")
                 DownloadInfoDBManager.updateDownloadFinished(
                         mDownloadPartInfo.downloadPartID,
                         mDownloadPartInfo.partFinished
@@ -138,7 +138,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 if (retryTimes < DOWNLOAD_RETRY_TIMES) {
                     retryTimes++
                 } else {
-                    ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载失败 $retryTimes！！！！: $e")
+                    ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片下载失败 $retryTimes！！！！:${e.javaClass.name}")
                     mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
                     break
                 }
