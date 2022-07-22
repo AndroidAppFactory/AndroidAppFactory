@@ -38,10 +38,12 @@ import javax.net.ssl.HttpsURLConnection
 class DownloadByHttp(private var applicationContext: Context, private var maxNum: Int, private val innerDownloadListener: DownloadListener) {
 
     private var hasStart = false
+    private val MAX_RETRY_TIMES = 2
     private val MAX_DOWNLOAD_THREAD = 5
 
+
     fun startDownload(context: Context, info: DownloadItem, forceDownload: Boolean) {
-        ZLog.e(TAG, "start info:${info}")
+        ZLog.e(TAG, "开始下载:${info}")
         if (applicationContext == null) {
             applicationContext = context.applicationContext
         }
@@ -62,6 +64,8 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
             } else {
                 innerDownloadListener.onWait(info)
             }
+        } else {
+            ZLog.d(TAG, "has notify in updateDownItemByServerInfo")
         }
     }
 
@@ -78,6 +82,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
                     var notFinished = false
                     var hasFail = false
+                    var errorInfo = ""
                     if (downloadItem.status == DownloadStatus.STATUS_DOWNLOADING) {
                         var newFinished = 0L
                         var finishedBefore = 0L
@@ -92,6 +97,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
                             if (downloadPartItem.getDownloadPartInfo().partStatus == DownloadStatus.STATUS_DOWNLOAD_FAILED) {
                                 hasFail = true
+                                errorInfo = "download part exception: ${downloadPartItem.getDownloadPartInfo().downloadPartID}"
                             }
                         }
                         if (newFinished - finishedBefore < 1) {
@@ -118,7 +124,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                     } else if (downloadItem.fileLength > 0 && downloadItem.finished == downloadItem.fileLength) {
                         notifyDownloadAfterFinish(downloadItem)
                     } else if (hasFail) {
-                        notifyDownloadFailed(ERR_DOWNLOAD_EXCEPTION, "download part exception", downloadItem)
+                        notifyDownloadFailed(ERR_DOWNLOAD_PART_EXCEPTION, errorInfo, downloadItem)
                     }
                 }
 
@@ -137,14 +143,15 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         ZLog.d(TAG, "updateDownItemByServerInfo:$info")
         // 重新启动，获取文件总长度
         var times = 0
+        var realURL = if (TextUtils.isEmpty(info.realURL)) {
+            HTTPRequestUtils.getRedirectUrl(info.downloadURL)
+        } else {
+            info.realURL
+        }
         do {
+            times++
             try {
-
-                val realURL = if (TextUtils.isEmpty(info.realURL)) {
-                    HTTPRequestUtils.getRedirectUrl(info.downloadURL)
-                } else {
-                    info.realURL
-                }
+                ZLog.e(TAG, "获取文件长度 $times:$realURL")
                 val url = URL(realURL)
                 val connection = (url.openConnection() as HttpsURLConnection).apply {
                     upateRequestInfo()
@@ -156,35 +163,43 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                     connection.logHeaderFields("获取文件长度")
                 }
                 var contentLength = HTTPRequestUtils.getContentLength(connection)
-                ZLog.d(TAG, "获取文件长度 getContentType:${connection.contentType}")
-                ZLog.d(TAG, "获取文件长度 getContentLength:${contentLength}")
-                ZLog.d(TAG, "获取文件长度 responseCode:${connection.responseCode}")
+                ZLog.e(TAG, "获取文件长度 getContentType:${connection.contentType}")
+                ZLog.e(TAG, "获取文件长度 getContentLength:${contentLength}")
+                ZLog.e(TAG, "获取文件长度 responseCode:${connection.responseCode}")
                 if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL) {
                     info.realURL = realURL
                     if (contentLength > 0) {
                         info.fileLength = contentLength
+                        ZLog.d(TAG, "获取文件长度 保存信息:${info}")
+                        DownloadInfoDBManager.saveDownloadInfo(info)
+                        return true
                     } else {
-                        info.fileLength = 0
+                        ZLog.e(TAG, "获取文件长度 长度为0: $times ${info.downloadID}")
+                        if (times > MAX_RETRY_TIMES) {
+                            info.fileLength = 0
+                            return true
+                        } else {
+                            realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
+                        }
                     }
-                    ZLog.d("获取文件长度 保存信息:${info}")
-                    DownloadInfoDBManager.saveDownloadInfo(info)
-                    return true
                 } else {
-                    times++
-                    if (times > 3) {
+                    if (times > MAX_RETRY_TIMES) {
+                        ZLog.e(TAG, "download with error file length after max times:${connection.responseCode} "+info)
                         //请求三次都失败在结束
-                        notifyDownloadFailed(ERR_HTTP_FAILED, "download with error file length after three times", info)
+                        notifyDownloadFailed(ERR_HTTP_LENGTH_FAILED, "download with error file length after max times", info)
                         return false
+                    } else {
+                        ZLog.e(TAG, "download with error file length :${connection.responseCode} " + info)
+                        realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                ZLog.e(TAG, "获取文件长度 异常 $times :${e}")
-                times++
-                if (times > 3) {
+                ZLog.e(TAG, "获取文件长度 异常: download with exception: $times ${e.javaClass.name}")
+                if (times > MAX_RETRY_TIMES) {
                     //累积请求三次都失败在结束
-                    ZLog.e(TAG, "获取文件长度 异常: download with exception after three times")
-                    notifyDownloadFailed(ERR_HTTP_FAILED, "download with exception after three times", info)
+                    notifyDownloadFailed(ERR_HTTP_EXCEPTION, "download with exception after three times:${e.javaClass.name}", info)
+                    ZLog.e(TAG, "获取文件长度 异常: download with exception after three times:${e.javaClass.name}")
                     return false
                 }
             }
@@ -333,7 +348,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
             downloadThreadForPart.start()
         } catch (e: Throwable) {
             e.printStackTrace()
-            notifyDownloadFailed(ERR_DOWNLOAD_EXCEPTION, "download with exception:$e", info)
+            notifyDownloadFailed(ERR_DOWNLOAD_PART_START_EXCEPTION, "download with exception:$e", info)
         }
     }
 

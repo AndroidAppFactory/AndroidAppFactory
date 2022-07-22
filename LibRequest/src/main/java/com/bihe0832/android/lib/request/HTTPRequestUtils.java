@@ -66,8 +66,6 @@ public class HTTPRequestUtils {
         }
     }
 
-    public static String
-
     public static HTTPRequestUtils.ContentType getContentTypeHeader(URLConnection conn) {
         try {
             int e = 0;
