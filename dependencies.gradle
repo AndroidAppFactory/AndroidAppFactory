@@ -191,7 +191,7 @@ ext.moduleInfo = [
                 ]
         ],
         "Framework"                 : [
-                "version"                : "4.20.59",
+                "version"                : "4.20.60",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "com.android.support:multidex:1.0.0",
