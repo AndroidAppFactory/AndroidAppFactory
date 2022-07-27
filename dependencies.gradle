@@ -184,7 +184,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "4.20.59",
+                "version"            : "4.20.60",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
