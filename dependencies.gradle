@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "LibFlycoTabLayout"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -425,7 +425,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibFragmentation"]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "4.20.22",
+                "version"            : "4.20.60",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         "com.android.support:support-v4:${project.android_support_version}",
