@@ -203,7 +203,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "4.20.59",
+                "version"            : "4.20.60",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils", "LibDebug"]
         ],
