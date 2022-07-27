@@ -10,12 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/colorPrimary"
-        app:tl_tab_space_equal="true"
+        app:tl_iconVisible="false"
+        app:tl_tab_padding="8dp"
+        app:tl_tab_width="60dp"
+        app:tl_tab_space_equal="false"
         app:tl_textBold="SELECT"
         app:tl_textSelectColor="@color/white"
+        app:tl_textUnselectColor="#9A000000"
         app:tl_textsize="12dp"
         app:tl_underline_color="@color/colorPrimary"
-        app:tl_underline_height="1dp" />
+        app:tl_underline_height="0dp" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/framework_viewPager"

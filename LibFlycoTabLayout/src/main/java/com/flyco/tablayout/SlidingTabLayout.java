@@ -287,7 +287,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
             }
             if (tv_tab_title_image != null) {
                 tv_tab_title_image.setVisibility(View.VISIBLE);
-                GlideExtKt.loadCenterInsideImage(tv_tab_title_image, title.toString(), Color.TRANSPARENT, Color.TRANSPARENT);
+                GlideExtKt.loadCircleCropImage(tv_tab_title_image, title.toString(), Color.TRANSPARENT, Color.TRANSPARENT);
             }
         } else {
             if (tv_tab_title_text != null) {
@@ -322,7 +322,6 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         if (mTabWidth > 0) {
             lp_tab = new LinearLayout.LayoutParams((int) mTabWidth, LayoutParams.MATCH_PARENT);
         }
-
         mTabsContainer.addView(tabView, position, lp_tab);
     }
 
