@@ -97,7 +97,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonImage"               : [
-                "version"            : "4.20.59",
+                "version"            : "4.20.60",
                 "artifactId"         : "common-image",
                 "apidependenciesList": [
                         "Framework"
