@@ -160,7 +160,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "4.20.59",
+                "version"                : "4.20.60",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
