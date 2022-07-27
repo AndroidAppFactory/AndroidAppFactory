@@ -208,7 +208,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibUtils", "LibUIUtils", "LibDebug"]
         ],
         "LibUIUtils"                : [
-                "version"            : "4.20.57",
+                "version"            : "4.20.60",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
