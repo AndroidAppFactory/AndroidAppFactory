@@ -81,7 +81,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.20.59",
+                "version"            : "4.20.60",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
