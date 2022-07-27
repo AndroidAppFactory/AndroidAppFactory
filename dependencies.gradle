@@ -149,7 +149,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "4.20.59",
+                "version"            : "4.20.60",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework",
