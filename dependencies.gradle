@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibFlycoTabLayout"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.20.59"
+ext.moduleVersionName = "4.20.60"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -430,7 +430,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "com.android.support:support-v4:${project.android_support_version}",
                         "com.android.support:support-annotations:$project.android_support_version",
-                        "LibCommonUIUtils", "LibOS"
+                        "LibCommonUIUtils", "LibOS", "LibRequest", "LibImage"
                 ]
         ],
         "LibQRCode"                 : [

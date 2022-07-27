@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mv="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
@@ -12,20 +13,31 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        tools:text="文字" />
+
+    <ImageView
+        android:id="@+id/tv_tab_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:scaleType="centerInside"
+        tools:src="@mipmap/share_link" />
 
     <com.flyco.tablayout.widget.MsgView
         android:id="@+id/rtv_msg_tip"
-        xmlns:mv="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="#ffffff"
         android:textSize="11.5sp"
         android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="3"
         mv:mv_backgroundColor="#FD481F"
         mv:mv_isRadiusHalfHeight="true"
         mv:mv_strokeColor="#ffffff"
-        mv:mv_strokeWidth="1dp"/>
+        mv:mv_strokeWidth="1dp" />
 
 </RelativeLayout>

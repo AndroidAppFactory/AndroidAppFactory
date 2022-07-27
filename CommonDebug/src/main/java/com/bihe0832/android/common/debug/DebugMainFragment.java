@@ -11,6 +11,7 @@ import com.bihe0832.android.common.debug.module.DebugCommonFragment;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 
 /**
@@ -22,6 +23,7 @@ public class DebugMainFragment extends BaseFragment {
 
     private ViewPager mViewPager;
     private SlidingTabLayout mTabBar;
+    private int lastTab = getDefaultTabIndex();
 
     protected String[] mTabString = null;
 
@@ -68,16 +70,30 @@ public class DebugMainFragment extends BaseFragment {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mTabBar.hideMsg(position);
             }
 
             @Override
             public void onPageSelected(int position) {
-                mTabBar.hideMsg(position);
+
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mTabBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelect(int position) {
+                mTabBar.hideMsg(position);
+//                mTabBar.getItemView(lastTab).setBackground(null);
+//                mTabBar.getItemView(position).setBackground(getContext().getDrawable(R.mipmap.btn_pause));
+                lastTab = position;
+            }
+
+            @Override
+            public void onTabReselect(int position) {
 
             }
         });
