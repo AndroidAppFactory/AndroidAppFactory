@@ -23,7 +23,7 @@ public class DebugMainFragment extends BaseFragment {
 
     private ViewPager mViewPager;
     private SlidingTabLayout mTabBar;
-    private int lastTab = getDefaultTabIndex();
+    private int lastTab = 0;
 
     protected String[] mTabString = null;
 
@@ -36,6 +36,7 @@ public class DebugMainFragment extends BaseFragment {
     public DebugMainFragment(String[] tabString) {
         super();
         mTabString = tabString;
+        lastTab = getDefaultTabIndex();
     }
 
     protected Fragment getFragmentByIndex(String title) {
