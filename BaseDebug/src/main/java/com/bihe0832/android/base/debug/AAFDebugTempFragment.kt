@@ -42,6 +42,7 @@ import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.sqlite.BaseDBHelper
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -95,6 +96,9 @@ class AAFDebugTempFragment : DebugEnvFragment() {
 
             add(DebugItemData("文本查看器", View.OnClickListener { testEdit() }))
             add(DebugItemData("Assets 操作", View.OnClickListener { testAssets() }))
+
+
+            add(DebugItemData("Sqlite测试", View.OnClickListener { testDB() }))
             add(DebugItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(DebugItemData("数据时间转换", View.OnClickListener { testConvert() }))
             add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
@@ -529,9 +533,18 @@ class AAFDebugTempFragment : DebugEnvFragment() {
     private fun preTest(itemView: View) {
         showToast(itemView.getActivity()?.getLocalClassName() ?: "")
 
+
+    }
+
+    private fun testDB(){
         System.currentTimeMillis().let {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
-            CommonDBManager.getData("sss" + it)
+            CommonDBManager.getData("sss" + it).let {
+                ZLog.d(BaseDBHelper.TAG, it.toString())
+            }
+            CommonDBManager.getAll().forEach {
+                ZLog.d(BaseDBHelper.TAG, it.toString())
+            }
         }
     }
 

@@ -172,14 +172,7 @@ class CommonTableModel extends BaseTableModel {
 
     static List<CommonDataInfo> getAllData(BaseDBHelper helper) {
         ArrayList<CommonDataInfo> dataList = new ArrayList<>();
-        String[] columns = null;
-        String selection = null;
-        String[] selectionArgs = null;
-        String groupBy = null;
-        String having = null;
-        String orderBy = " `" + col_update_at + "` DESC ";
-        String limit = null;
-        Cursor cursor = helper.queryInfo(TABLE_NAME, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+        Cursor cursor = helper.queryInfo("SELECT * FROM " + TABLE_NAME + " ORDER BY " + col_update_at + " DESC;");
         try {
             while (cursor.moveToNext()) {
                 CommonDataInfo info = new CommonDataInfo();
