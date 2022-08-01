@@ -43,7 +43,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
     private Context mContext;
     private ViewPager mViewPager;
     private ArrayList<String> mTitles;
-    private LinearLayout mTabsContainer;
+    protected LinearLayout mTabsContainer;
     private int mCurrentTab;
     private float mCurrentPositionOffset;
     private int mTabCount;
@@ -54,7 +54,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
     /**
      * 用于实现滚动居中
      */
-    private Rect mTabRect = new Rect();
+    protected Rect mTabRect = new Rect();
     private GradientDrawable mIndicatorDrawable = new GradientDrawable();
 
     private Paint mRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -130,8 +130,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         setClipToPadding(false);
 
         this.mContext = context;
-        mTabsContainer = new LinearLayout(context);
-        addView(mTabsContainer);
+        initView(context);
 
         obtainAttributes(context, attrs);
 
@@ -148,6 +147,10 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         }
     }
 
+    protected void initView(Context context){
+        mTabsContainer = new LinearLayout(context);
+        addView(mTabsContainer);
+    }
     private void obtainAttributes(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SlidingTabLayout);
 

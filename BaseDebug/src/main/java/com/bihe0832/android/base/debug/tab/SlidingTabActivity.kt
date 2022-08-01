@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.widget.Toast
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
-import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment.Companion.newInstance
+import com.bihe0832.android.lib.ui.image.loadCircleCropImage
 import com.flyco.tablayout.SlidingTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.activity_sliding_tab.*
@@ -18,8 +18,12 @@ import kotlinx.android.synthetic.main.activity_sliding_tab.*
 class SlidingTabActivity : BaseActivity(), OnTabSelectListener {
     private val mContext: Context = this
     private val mFragments = ArrayList<Fragment>()
+
+    //    private val mTitles = arrayOf(
+//            "热门", "iOS", "Android", "前端", "后端", "设计", "工具资源"
+//    )
     private val mTitles = arrayOf(
-            "热门", "iOS", "Android", "前端", "后端", "设计", "工具资源"
+            "https://cdn.bihe0832.com/images/zixie_32.ico", "https://cdn.bihe0832.com/images/head.jpg", "https://cdn.bihe0832.com/images/head.jpg", "https://cdn.bihe0832.com/images/zixie_32.ico", "https://cdn.bihe0832.com/images/head.jpg", "https://cdn.bihe0832.com/images/zixie_32.ico", "https://cdn.bihe0832.com/images/android_favicon.png"
     )
     private var mAdapter: MyPagerAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +74,7 @@ class SlidingTabActivity : BaseActivity(), OnTabSelectListener {
         tabLayout_8.setViewPager(vp, mTitles, this, mFragments)
         tabLayout_9.setViewPager(vp)
         tabLayout_10.setViewPager(vp)
+        tl_11.setViewPager(vp)
         vp.currentItem = 4
         tabLayout_1.showDot(4)
         tabLayout_3.showDot(4)
@@ -100,6 +105,11 @@ class SlidingTabActivity : BaseActivity(), OnTabSelectListener {
 
     override fun onTabSelect(position: Int) {
         Toast.makeText(mContext, "onTabSelect&position--->$position", Toast.LENGTH_SHORT).show()
+        tl_11.backgroundImageView.loadCircleCropImage(if (position == 0){
+            "https://alifei01.cfp.cn/creative/vcg/nowater800/new/VCG21ba1a56cfe.jpg"
+        }else{
+            "https://alifei01.cfp.cn/creative/vcg/nowarter800/new/VCG211154718095.jpg"
+        })
     }
 
     override fun onTabReselect(position: Int) {
