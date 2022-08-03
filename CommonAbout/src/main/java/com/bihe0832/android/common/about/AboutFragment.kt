@@ -80,10 +80,6 @@ open class AboutFragment : CommonListFragment() {
             override fun canRefresh(): Boolean {
                 return false
             }
-
-            override fun getEmptyText(): String {
-                return ""
-            }
         }
     }
 

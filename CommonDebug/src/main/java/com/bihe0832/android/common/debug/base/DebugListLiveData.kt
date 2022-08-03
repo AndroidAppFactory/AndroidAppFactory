@@ -26,8 +26,4 @@ abstract class DebugListLiveData : CommonListLiveData() {
     override fun canRefresh(): Boolean {
         return false
     }
-
-    override fun getEmptyText(): String {
-        return ZixieContext.applicationContext?.getString(R.string.common_debug_empty_tips) ?: ""
-    }
 }

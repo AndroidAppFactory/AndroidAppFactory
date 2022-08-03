@@ -60,6 +60,9 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugTools.sendInfo(context, title, content, false)
     }
 
+    override fun getEmptyText(): String {
+        return ZixieContext.applicationContext?.getString(R.string.common_debug_empty_tips) ?: ""
+    }
 
     protected fun showInfo(title: String, content: String) {
         DebugTools.showInfo(context, title, content, "发送到第三方应用")

@@ -42,7 +42,6 @@ abstract class CommonListActivity : BaseListActivity() {
         mDataLiveData.fetchData()
     }
 
-
     override fun updateData(data: List<CardBaseModule>) {
         super.updateData(data)
         mRefresh?.closeLoadView()
