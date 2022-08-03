@@ -75,10 +75,12 @@ class DebugListFragment : CommonListFragment() {
                 return true
             }
 
-            override fun getEmptyText(): String {
-                return "当前数据为空，请稍候再试"
-            }
+
         }
+    }
+
+    override fun getEmptyText(): String {
+        return "当前数据为空，请稍候再试"
     }
 
     override fun hasHeaderView(): Boolean {

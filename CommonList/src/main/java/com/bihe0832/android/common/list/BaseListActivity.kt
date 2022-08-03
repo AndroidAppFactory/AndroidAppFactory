@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bihe0832.android.framework.ui.BaseActivity
@@ -71,13 +72,7 @@ abstract class BaseListActivity : BaseActivity() {
                 }
             }
         }.apply {
-            emptyView = LayoutInflater.from(applicationContext).inflate(R.layout.common_view_list_empty, null, false)
-            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text = if (getLayoutManagerForList() is GridLayoutManager) {
-                getString(R.string.bad_layoutmanager_empty_tips)
-            } else {
-                mDataLiveData.getEmptyText()
-            }
-
+            emptyView = getBaseEmptyView()
             bindToRecyclerView(mRecyclerView)
             setHeaderFooterEmpty(true, false)
             if (hasHeaderView()) {
@@ -131,6 +126,22 @@ abstract class BaseListActivity : BaseActivity() {
     fun getAdapter(): CardBaseAdapter {
         return mAdapter
     }
+
+    protected open fun getEmptyText(): String {
+        return ""
+    }
+
+    protected open fun getBaseEmptyView(): View {
+        val emptyView = LayoutInflater.from(this).inflate(R.layout.common_view_list_empty, null, false)
+        emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text =
+                if (getLayoutManagerForList() is GridLayoutManager) {
+                    getString(R.string.bad_layoutmanager_empty_tips)
+                } else {
+                    getEmptyText()
+                }
+        return emptyView
+    }
+
 
     protected open fun updateData(data: List<CardBaseModule>) {
         mAdapter.apply {

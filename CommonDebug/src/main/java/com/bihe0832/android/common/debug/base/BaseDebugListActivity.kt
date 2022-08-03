@@ -8,9 +8,11 @@ import android.os.StrictMode
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
+import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
@@ -44,6 +46,10 @@ abstract class BaseDebugListActivity : CommonListActivity() {
                 postValue(getDataList())
             }
         }
+    }
+
+    override fun getEmptyText(): String {
+        return ZixieContext.applicationContext?.getString(R.string.common_debug_empty_tips) ?: ""
     }
 
     override fun getDataLiveData(): CommonListLiveData {

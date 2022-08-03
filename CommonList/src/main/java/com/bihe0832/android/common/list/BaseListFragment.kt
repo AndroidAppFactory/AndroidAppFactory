@@ -65,19 +65,10 @@ abstract class BaseListFragment : BaseFragment() {
                     item.getmCardItemClass()?.let {
                         addItemToAdapter(it, item.isHeader)
                     }
-
                 }
             }
         }.apply {
-            emptyView =
-                LayoutInflater.from(context).inflate(R.layout.common_view_list_empty, null, false)
-            emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text =
-                if (getLayoutManagerForList() is GridLayoutManager) {
-                    getString(R.string.bad_layoutmanager_empty_tips)
-                } else {
-                    mDataLiveData.getEmptyText()
-                }
-
+            emptyView = getBaseEmptyView()
             setHeaderFooterEmpty(true, false)
             if (hasHeaderView()) {
                 setHeaderView(getListHeader())
@@ -86,6 +77,20 @@ abstract class BaseListFragment : BaseFragment() {
         }
     }
 
+    protected open fun getEmptyText(): String {
+            return ""
+    }
+
+    protected open fun getBaseEmptyView(): View {
+        val emptyView = LayoutInflater.from(context).inflate(R.layout.common_view_list_empty, null, false)
+        emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text =
+                if (getLayoutManagerForList() is GridLayoutManager) {
+                    getString(R.string.bad_layoutmanager_empty_tips)
+                } else {
+                    getEmptyText()
+                }
+        return emptyView
+    }
 
     override fun getLayoutID(): Int {
         return getResID()

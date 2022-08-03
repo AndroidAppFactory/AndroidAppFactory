@@ -1,6 +1,11 @@
 package  com.bihe0832.android.common.list
 
 import android.arch.lifecycle.MediatorLiveData
+import android.content.Context
+import android.support.v7.widget.GridLayoutManager
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 /**
@@ -21,6 +26,4 @@ abstract class CommonListLiveData : MediatorLiveData<List<CardBaseModule>>() {
     abstract fun hasMore(): Boolean
     //是否支持下拉刷新
     abstract fun canRefresh(): Boolean
-    //列表为空时返回数据
-    abstract fun getEmptyText() : String
 }
