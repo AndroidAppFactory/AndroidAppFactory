@@ -15,7 +15,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
  */
 abstract class CommonListFragment : BaseListFragment() {
 
-    private var mRefresh: SwipeRefreshLayout? = null
+    protected var mRefresh: SwipeRefreshLayout? = null
 
 
     override fun getResID(): Int {

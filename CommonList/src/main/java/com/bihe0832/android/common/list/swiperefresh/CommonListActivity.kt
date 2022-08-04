@@ -20,7 +20,7 @@ abstract class CommonListActivity : BaseListActivity() {
         return R.layout.common_activity_list_swipe
     }
 
-    private var mRefresh: SwipeRefreshLayout? = null
+    protected var mRefresh: SwipeRefreshLayout? = null
     override fun initView() {
         super.initView()
         mRefresh = findViewById(R.id.activity_list_refresh)
