@@ -27,17 +27,17 @@ class RecyclerViewItemActiveHelper(
     private val dimenRect by lazy { Rect() }
 
     private val itemsPositionGetter by lazy {
-        if(recyclerView.layoutManager is SafeLinearLayoutManager){
+        if (recyclerView.layoutManager is SafeLinearLayoutManager) {
             RecyclerViewItemPositionGetterForLinearLayoutManager(
                     recyclerView,
                     recyclerView.layoutManager as SafeLinearLayoutManager
             )
-        }else if(recyclerView.layoutManager is SafeGridLayoutManager){
+        } else if (recyclerView.layoutManager is SafeGridLayoutManager) {
             RecyclerViewItemPositionGetterForGridLayoutManager(
                     recyclerView,
                     recyclerView.layoutManager as SafeGridLayoutManager
             )
-        }else{
+        } else {
             null
         }
 
@@ -51,7 +51,7 @@ class RecyclerViewItemActiveHelper(
 
     fun onScrollStateIdle(forceNotify: Boolean = false) {
         itemsPositionGetter?.let {
-            calculateFirstVisibleItem(it,forceNotify)
+            calculateFirstVisibleItem(it, forceNotify)
         }
     }
 
@@ -213,7 +213,7 @@ class RecyclerViewItemActiveHelper(
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         scrollState = newState
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            onScrollStateIdle()
+            onScrollStateIdle(true)
         }
 
     }
@@ -221,7 +221,6 @@ class RecyclerViewItemActiveHelper(
 //    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 //        onScrolled(itemsPositionGetter, scrollState)
 //    }
-
 
 
     abstract class ActiveCallback {

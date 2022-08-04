@@ -3,18 +3,18 @@ package com.bihe0832.android.base.debug.card
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
-import com.bihe0832.android.base.debug.card.section.SectionDataContent2
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
-import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
-import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
+import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
-import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
+import com.bihe0832.android.lib.ui.recycleview.ext.RecyclerViewItemActiveHelper
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 const val ROUTRT_NAME_TEST_SECTION = "testlist"
@@ -37,12 +37,55 @@ class TestListActivity : CommonListActivity() {
 //                    setVerticalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
                     }.build()
             )
+
+            recyclerViewItemActiveHelper?.let {
+                addOnScrollListener(it)
+            }
+        }
+        mAdapter.isUpFetchEnable = true
+        mAdapter.setUpFetchListener {
+            num++
+            if (num < 5){
+                ThreadManager.getInstance().start(
+                        {
+                            var data = getTempData(true)
+                            mAdapter.data.addAll(0, data)
+                            mAdapter.notifyItemRangeInserted(0,data.size)
+                        },500L
+                )
+            }
         }
     }
 
-    override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
-        return SafeGridLayoutManager(this, 4)
+    protected val recyclerViewItemActiveHelper by lazy {
+        mRecyclerView?.let {
+            RecyclerViewItemActiveHelper(it, object : RecyclerViewItemActiveHelper.ActiveCallback() {
+                override fun onActive(recyclerView: RecyclerView, position: Int) {
+                    val newposition = if (getListHeader() == null) {
+                        position
+                    } else {
+                        position - 1
+                    }
+                    super.onActive(recyclerView, newposition )
+                    ZixieContext.showDebug("Test onActive:" + newposition)
+                    if (num > 4){
+                        mRefresh?.isEnabled = true
+                    }
+
+                }
+
+                override fun onDeactive(recyclerView: RecyclerView, position: Int) {
+                    super.onDeactive(recyclerView, position)
+                    ZixieContext.showDebug("Test onDeactive:" + position)
+
+                }
+            })
+        }
     }
+//
+//    override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
+//        return SafeGridLayoutManager(this, 4)
+//    }
 
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
@@ -57,50 +100,50 @@ class TestListActivity : CommonListActivity() {
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
             override fun fetchData() {
-                mDataList.addAll(getTempData())
+                mDataList.addAll(getTempData(false))
                 postValue(mDataList)
             }
 
             override fun clearData() {
                 mDataList.clear()
                 num = 0
+
             }
 
             override fun loadMore() {
                 num++
-                mDataList.addAll(getTempData())
+                mDataList.addAll(getTempData(false))
                 postValue(mDataList)
             }
 
             override fun hasMore(): Boolean {
-                return num < 5;
+                return num < 5
             }
 
             override fun canRefresh(): Boolean {
-                return false
+                return num > 4
             }
         }
     }
-
-    private fun getTempData(): List<CardBaseModule> {
+    private fun getTempData(isUpper: Boolean): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
-            for (i in 0..2) {
+            for (i in 0..19) {
                 add(
-                        if (i < 2) {
-                            SectionDataHeader("标题1:${System.currentTimeMillis()}")
-                        } else {
-                            SectionDataHeader2("标题2:${System.currentTimeMillis()}")
-                        }
+//                        if (i < 2) {
+//                            SectionDataHeader("标题1 - $i:${System.currentTimeMillis()}")
+//                        } else {
+                            SectionDataHeader2("标题2 - $i $isUpper:${System.currentTimeMillis()}")
+//                        }
                 )
-                for (j in 0..3) {
-                    add(
-                            if (i < 2) {
-                                SectionDataContent("内容1:${System.currentTimeMillis()}", "")
-                            } else {
-                                SectionDataContent2("内容2:${System.currentTimeMillis()}")
-                            }
-                    )
-                }
+//                for (j in 0..3) {
+//                    add(
+//                            if (i < 2) {
+//                                SectionDataContent("内容1 - $i $j:${System.currentTimeMillis()}", "")
+//                            } else {
+//                                SectionDataContent2("内容2 - $i $j:${System.currentTimeMillis()}")
+//                            }
+//                    )
+//                }
             }
         }
     }

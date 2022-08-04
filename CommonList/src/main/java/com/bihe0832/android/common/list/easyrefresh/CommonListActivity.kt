@@ -21,7 +21,8 @@ abstract class CommonListActivity : BaseListActivity() {
         return R.layout.common_activity_list
     }
 
-    private var mRefresh: MyEasyRefreshLayout? = null
+    protected var mRefresh: MyEasyRefreshLayout? = null
+
     override fun initView() {
         super.initView()
         mRefresh = findViewById(R.id.activity_list_refresh)

@@ -16,7 +16,7 @@ import com.bihe0832.android.lib.ui.recycleview.ext.MyEasyRefreshLayout
  */
 abstract class CommonListFragment : BaseListFragment() {
 
-    private var mRefresh: MyEasyRefreshLayout? = null
+    protected var mRefresh: MyEasyRefreshLayout? = null
 
     override fun getResID(): Int {
         return R.layout.common_fragment_list
