@@ -1,6 +1,7 @@
 package com.bihe0832.android.framework.ui
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
@@ -10,6 +11,7 @@ import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
+import com.bihe0832.android.lib.ui.common.ColorTools
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation.SupportActivity
@@ -23,7 +25,13 @@ open class BaseActivity : SupportActivity() {
         if (resetDensity()) {
             DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
         }
+        if (getStatusBarColor() == Color.TRANSPARENT) {
+            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ContextCompat.getColor(this, R.color.primary)), getNavigationBarColor())
+        } else {
+            enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
+        }
     }
+
 
     open fun resetDensity(): Boolean {
         return true
@@ -51,7 +59,6 @@ open class BaseActivity : SupportActivity() {
 
     override fun onResume() {
         super.onResume()
-        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         checkPermission()
     }
 
