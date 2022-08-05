@@ -2,12 +2,11 @@ package com.bihe0832.android.lib.immersion
 
 import android.graphics.Color
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.ui.common.ColorTools
 import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.utils.os.BuildUtils
 
@@ -28,7 +27,7 @@ fun AppCompatActivity.getStatusBarColorBySpecialPostion(): String {
 }
 
 fun AppCompatActivity.enableActivityImmersive(statusBarColor: Int, navigationBarColor: Int) {
-    enableActivityImmersive(statusBarColor, navigationBarColor, isLightColor(statusBarColor))
+    enableActivityImmersive(statusBarColor, navigationBarColor, ColorTools.isLightColor(statusBarColor))
 }
 
 /**
@@ -57,16 +56,11 @@ fun AppCompatActivity.enableActivityImmersive(statusBarColor: Int, navigationBar
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             }
 
-            LightStatusBarUtils.setLightStatusBar(this, isLightColor(statusBarColor))
+            LightStatusBarUtils.setLightStatusBar(this, ColorTools.isLightColor(statusBarColor))
         }
     } catch (e: Exception) {
         e.printStackTrace()
     }
-}
-
-
-private fun isLightColor(@ColorInt color: Int): Boolean {
-    return ColorUtils.calculateLuminance(color) >= 0.5
 }
 
 fun AppCompatActivity.hideBottomUIMenu() {
