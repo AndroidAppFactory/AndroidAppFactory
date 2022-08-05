@@ -153,7 +153,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
             try {
                 ZLog.e(TAG, "获取文件长度 $times:$realURL")
                 val url = URL(realURL)
-                val connection = (url.openConnection() as HttpsURLConnection).apply {
+                val connection = (url.openConnection() as HttpURLConnection).apply {
                     upateRequestInfo()
                 }
                 var time = System.currentTimeMillis()

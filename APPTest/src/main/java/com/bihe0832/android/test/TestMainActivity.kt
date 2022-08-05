@@ -2,6 +2,7 @@ package com.bihe0832.android.test
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
@@ -27,7 +28,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
-class TestMainActivity : CommonActivity() {
+open class TestMainActivity : CommonActivity() {
     val LOG_TAG = "DebugHttpActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +57,7 @@ class TestMainActivity : CommonActivity() {
 //        PermissionManager.checkPermission(this, true, getPermissionResult(), Manifest.permission.CAMERA)
 //        UpdateManager.checkUpdateAndShowDialog(this, false)
         DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
-        hideBottomUIMenu()
+
         CommonDBManager.init(this)
 
         ApplicationObserver.addDestoryListener(object : ApplicationObserver.APPDestroyListener {
@@ -75,13 +76,13 @@ class TestMainActivity : CommonActivity() {
         addWatch(this)
     }
 
-    override fun getStatusBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.white)
-    }
-
-    override fun getNavigationBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.result_point_color)
-    }
+//    override fun getStatusBarColor(): Int {
+//        return Color.WHITE
+//    }
+//
+//    override fun getNavigationBarColor(): Int {
+//        return ContextCompat.getColor(this, R.color.result_point_color)
+//    }
 
     override fun getPermissionList(): List<String> {
         return ArrayList<String>().apply {
@@ -112,6 +113,7 @@ class TestMainActivity : CommonActivity() {
         if (findFragment(TestMainFragment::class.java) == null) {
             loadRootFragment(R.id.common_fragment_content, TestMainFragment())
         }
+        hideBottomUIMenu()
 //        mIconManager.showIcon()
 //        hideBottomUIMenu()
     }

@@ -58,7 +58,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/activityTheme" />
 
-
+        <activity
+            android:name="com.bihe0832.android.base.debug.immersion.DebugImmersionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/activityTheme" />
         <activity
             android:name="com.bihe0832.android.base.debug.webview.DebugWebviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

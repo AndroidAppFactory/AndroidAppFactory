@@ -7,15 +7,37 @@ import android.support.v4.graphics.ColorUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
+import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.utils.os.BuildUtils
 
+
+fun AppCompatActivity.getStatusBarColorBySpecialPostion(): String {
+    BitmapUtil.getViewBitmapData(window.decorView)?.let { bitmap ->
+        val pixel = bitmap.getPixel(100, 5)
+        ZLog.d("Immersion", "x:100 y:5 【颜色值】:$pixel")
+        ("#" + Integer.toHexString(pixel).toUpperCase()).let {
+            ZLog.d("immersion", "【颜色值】:$it")
+            ZLog.d("immersion", "【颜色值】:$pixel")
+            ZLog.d("immersion", "【颜色值】:${Color.parseColor(it)}")
+            return it
+        }
+    }
+
+    return ""
+}
+
+fun AppCompatActivity.enableActivityImmersive(statusBarColor: Int, navigationBarColor: Int) {
+    enableActivityImmersive(statusBarColor, navigationBarColor, isLightColor(statusBarColor))
+}
 
 /**
  * @param colorPrimaryDark 状态栏的颜色
  * @param navigationBarColor 导航栏的颜色
  * @param isDark 文字是否深色
  */
-fun AppCompatActivity.enableActivityImmersive(colorPrimaryDark: Int, navigationBarColor: Int) {
+fun AppCompatActivity.enableActivityImmersive(statusBarColor: Int, navigationBarColor: Int, isDark: Boolean) {
+    ZLog.d("Immersion", "Activity: $this statusBarColor: ${"#" + Integer.toHexString(statusBarColor).toUpperCase()}, navigationBarColor:${"#" + Integer.toHexString(navigationBarColor).toUpperCase()} isDark: $isDark")
     try {
         val window = window
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.KITKAT
@@ -28,19 +50,20 @@ fun AppCompatActivity.enableActivityImmersive(colorPrimaryDark: Int, navigationB
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     or WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = colorPrimaryDark
+            window.statusBarColor = statusBarColor
             if (Color.TRANSPARENT != navigationBarColor) {
                 window.navigationBarColor = navigationBarColor
             } else {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             }
 
-            LightStatusBarUtils.setLightStatusBar(this, isLightColor(colorPrimaryDark))
+            LightStatusBarUtils.setLightStatusBar(this, isLightColor(statusBarColor))
         }
     } catch (e: Exception) {
         e.printStackTrace()
     }
 }
+
 
 private fun isLightColor(@ColorInt color: Int): Boolean {
     return ColorUtils.calculateLuminance(color) >= 0.5
@@ -52,12 +75,14 @@ fun AppCompatActivity.hideBottomUIMenu() {
         this.window.decorView?.systemUiVisibility = View.GONE
     } else if (BuildUtils.SDK_INT >= Build.VERSION_CODES.KITKAT) {
         val decorView = window.decorView
-        val uiOptions = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                or View.SYSTEM_UI_FLAG_IMMERSIVE)
-        decorView.systemUiVisibility = uiOptions
+        val uiOptions = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE
+                )
+        decorView.systemUiVisibility = uiOptions or decorView.systemUiVisibility
 
     }
 }

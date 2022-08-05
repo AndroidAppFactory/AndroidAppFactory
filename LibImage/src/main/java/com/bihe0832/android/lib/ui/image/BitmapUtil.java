@@ -182,14 +182,20 @@ public class BitmapUtil {
         return bitmap;
     }
 
+    public static Bitmap getViewBitmapData(View view) {
+        if (view.getMeasuredWidth() > 0 && view.getMeasuredHeight() > 0) {
+            Bitmap mAccBitmap = Bitmap
+                    .createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+            Canvas chartCanvas = new Canvas(mAccBitmap);
+            view.draw(chartCanvas);
+            return mAccBitmap;
+        }
+        return null;
+    }
+
 
     public static String getViewBitmap(View view) {
-        String filePath = "";
-        Bitmap mAccBitmap = Bitmap
-                .createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-        Canvas chartCanvas = new Canvas(mAccBitmap);
-        view.draw(chartCanvas);
-        filePath = BitmapUtil.saveBitmap(view.getContext(), mAccBitmap);
+        String filePath = BitmapUtil.saveBitmap(view.getContext(), getViewBitmapData(view));
         return filePath;
     }
 

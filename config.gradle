@@ -1,6 +1,6 @@
 ext {
     //Android编译SDK版本
-    compileSdkVersion = 29
+    compileSdkVersion = 31
     //Android编译工具版本
     buildToolsVersion = "29.0.3"
     //Lib 最低适配Android 版本
