@@ -23,7 +23,6 @@ open class BaseActivity : SupportActivity() {
         if (resetDensity()) {
             DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
         }
-        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
     }
 
     open fun resetDensity(): Boolean {
@@ -52,6 +51,7 @@ open class BaseActivity : SupportActivity() {
 
     override fun onResume() {
         super.onResume()
+        enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         checkPermission()
     }
 

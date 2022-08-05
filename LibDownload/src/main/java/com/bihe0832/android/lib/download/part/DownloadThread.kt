@@ -14,7 +14,6 @@ import java.io.File
 import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import kotlin.math.abs
 
 
@@ -158,7 +157,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
     ): Boolean {
         ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: 开始start: ${mDownloadPartInfo.partStart}, finalStart : $finalStart end: ${mDownloadPartInfo.partEnd}")
         val url = URL(mDownloadPartInfo.realDownloadURL)
-        val connection = (url.openConnection() as HttpsURLConnection).apply {
+        val connection = (url.openConnection() as HttpURLConnection).apply {
             upateRequestInfo()
             if (mDownloadPartInfo.partEnd > 0) {
                 ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: 下载params bytes=$finalStart-${mDownloadPartInfo.partEnd}")

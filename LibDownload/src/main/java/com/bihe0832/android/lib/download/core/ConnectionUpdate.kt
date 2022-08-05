@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download.core
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
+import java.net.HttpURLConnection
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLSession
@@ -15,7 +16,7 @@ import javax.net.ssl.SSLSession
  *
  */
 
-fun HttpsURLConnection.upateRequestInfo() {
+fun HttpURLConnection.upateRequestInfo() {
     connectTimeout = 5000
     readTimeout = 10000
     requestMethod = "GET"
@@ -26,14 +27,16 @@ fun HttpsURLConnection.upateRequestInfo() {
     setRequestProperty("Accept-Encoding", "identity")
     //用户指定IP的场景
     setRequestProperty("Host", url.host)
-    hostnameVerifier = object : HostnameVerifier {
-        override fun verify(hostname: String?, session: SSLSession?): Boolean {
-            return HttpsURLConnection.getDefaultHostnameVerifier().verify(url.host, session)
+    if (this is HttpsURLConnection) {
+        hostnameVerifier = object : HostnameVerifier {
+            override fun verify(hostname: String, session: SSLSession): Boolean {
+                return HttpsURLConnection.getDefaultHostnameVerifier().verify(url.host, session)
+            }
         }
     }
 }
 
-fun HttpsURLConnection.logHeaderFields(msg: String) {
+fun HttpURLConnection.logHeaderFields(msg: String) {
 
     ZLog.w(DownloadItem.TAG, "$msg  Response - responseCode:$responseCode ")
     ZLog.w(DownloadItem.TAG, "$msg  Response - contentType:$contentType ")

@@ -19,6 +19,7 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.cache.DebugInfoCacheManager
 import com.bihe0832.android.base.debug.icon.DebugIcon
 import com.bihe0832.android.base.debug.icon.DebugTipsIcon
+import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
 import com.bihe0832.android.base.debug.ipc.TestIPC1Activity
 import com.bihe0832.android.base.debug.ipc.TestIPCActivity
 import com.bihe0832.android.base.debug.json.JsonTest
@@ -577,6 +578,7 @@ class AAFDebugTempFragment : DebugEnvFragment() {
 
     private fun testFunc() {
         AAFLoggerFile.log("Test0", "This is a test log for Test by ${Thread.currentThread().id}")
+        startActivity(DebugImmersionActivity::class.java)
 
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
