@@ -53,7 +53,6 @@ object LifecycleHelper {
         init(application, true, null)
     }
 
-
     @Synchronized
     fun init(application: Application, timeInterface: ZixieTimeInterface?) {
         init(application, true, timeInterface)
@@ -65,7 +64,7 @@ object LifecycleHelper {
         currentTimeInterface = timeInterface
         recordUsedInfo = needRecord
         if (!hasInit) {
-            currentStartTime = timeInterface.getCurrentTime()
+            currentStartTime = getCurrentTime()
             ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
             application.registerActivityLifecycleCallbacks(ActivityObserver)
             if (this.recordUsedInfo) {
@@ -154,7 +153,7 @@ object LifecycleHelper {
 
     private fun updateUsedInfo() {
         doActionWithCheck {
-            Config.writeConfig(KEY_LAST_START_TIME, getCurrentTime())
+            Config.writeConfig(KEY_LAST_START_TIME, currentStartTime)
             addValueOnce(KEY_USED_TIMES)
             addValueOnce(KEY_USED_TIMES + currentVersion)
             if (DateUtil.getDateEN(lastStartTime, "yyyy-MM-dd") != DateUtil.getDateEN(getCurrentTime(), "yyyy-MM-dd")) {
