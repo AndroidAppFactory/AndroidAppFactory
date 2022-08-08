@@ -44,22 +44,28 @@ object LifecycleHelper {
 
     private var currentTimeInterface: ZixieTimeInterface? = null
 
-    @Synchronized
-    fun init(application: Application, timeInterface: ZixieTimeInterface) {
-        init(application, true, timeInterface)
-    }
-
     interface ZixieTimeInterface {
         fun getCurrentTime(): Long
     }
 
     @Synchronized
-    fun init(application: Application, needRecord: Boolean, timeInterface: ZixieTimeInterface) {
+    fun init(application: Application) {
+        init(application, true, null)
+    }
+
+
+    @Synchronized
+    fun init(application: Application, timeInterface: ZixieTimeInterface?) {
+        init(application, true, timeInterface)
+    }
+
+    @Synchronized
+    fun init(application: Application, needRecord: Boolean, timeInterface: ZixieTimeInterface?) {
         applicationContext = application.applicationContext
         currentTimeInterface = timeInterface
         recordUsedInfo = needRecord
-        currentStartTime = timeInterface.getCurrentTime()
         if (!hasInit) {
+            currentStartTime = timeInterface.getCurrentTime()
             ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
             application.registerActivityLifecycleCallbacks(ActivityObserver)
             if (this.recordUsedInfo) {
@@ -83,8 +89,13 @@ object LifecycleHelper {
         return currentStartTime
     }
 
-    fun updateAPPCurrentStartTime() {
-        currentStartTime = getCurrentTime()
+    private var hasUpdatedStartTime = false
+    fun updateAPPCurrentStartTime(offset: Long) {
+        currentStartTime += offset
+        hasUpdatedStartTime = true
+        if (hasUpdatedStartTime) {
+            throw AAFException("please check start time has updated more once")
+        }
     }
 
     fun getAPPInstalledTime(): Long {
