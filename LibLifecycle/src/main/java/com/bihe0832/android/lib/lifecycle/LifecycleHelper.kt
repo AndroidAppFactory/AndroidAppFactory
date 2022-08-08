@@ -31,37 +31,60 @@ const val INSTALL_TYPE_APP_FIRST = 3
 
 object LifecycleHelper {
 
-    var applicationContext: Context? = null
-        private set
+    private var applicationContext: Context? = null
+    private var hasInit = false
 
     private var lastStartVersion = 0L
     private var lastStartTime = 0L
-    private var mRecordUsedInfo = true
-    private val mCurrentVersion by lazy {
+    private var currentStartTime = 0L
+    private var recordUsedInfo = true
+    private val currentVersion by lazy {
         APKUtils.getAppVersionCode(applicationContext)
     }
 
+    private var currentTimeInterface: ZixieTimeInterface? = null
+
     @Synchronized
-    fun init(application: Application) {
-        init(application, true)
+    fun init(application: Application, timeInterface: ZixieTimeInterface) {
+        init(application, true, timeInterface)
+    }
+
+    interface ZixieTimeInterface {
+        fun getCurrentTime(): Long
     }
 
     @Synchronized
-    fun init(application: Application, recordUsedInfo: Boolean) {
+    fun init(application: Application, needRecord: Boolean, timeInterface: ZixieTimeInterface) {
         applicationContext = application.applicationContext
-        ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
-        application.registerActivityLifecycleCallbacks(ActivityObserver)
-        mRecordUsedInfo = recordUsedInfo
-        if (mRecordUsedInfo) {
-            if (Config.hasInit()) {
-                lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
-                lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
-                updateNewVersion()
-                updateUsedInfo()
-            } else {
-                throw AAFException("please please init Config module first")
+        currentTimeInterface = timeInterface
+        recordUsedInfo = needRecord
+        currentStartTime = timeInterface.getCurrentTime()
+        if (!hasInit) {
+            ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationObserver)
+            application.registerActivityLifecycleCallbacks(ActivityObserver)
+            if (this.recordUsedInfo) {
+                if (Config.hasInit()) {
+                    lastStartVersion = Config.readConfig(KEY_LAST_STARTED_VERSION, 0L)
+                    lastStartTime = Config.readConfig(KEY_LAST_START_TIME, 0L)
+                    updateNewVersion()
+                    updateUsedInfo()
+                } else {
+                    throw AAFException("please please init Config module first")
+                }
             }
         }
+    }
+
+    fun getCurrentTime(): Long {
+        return currentTimeInterface?.getCurrentTime() ?: System.currentTimeMillis()
+    }
+
+    fun getAPPCurrentStartTime(): Long {
+        return currentStartTime
+    }
+
+    fun updateAPPCurrentStartTime() {
+        currentStartTime = getCurrentTime()
     }
 
     fun getAPPInstalledTime(): Long {
@@ -72,7 +95,7 @@ object LifecycleHelper {
 
     fun getVersionInstalledTime(): Long {
         return doActionWithCheckReturnLong {
-            Config.readConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
+            Config.readConfig(KEY_VERSION_INSTALL_TIME, getCurrentTime())
         }
     }
 
@@ -102,17 +125,17 @@ object LifecycleHelper {
 
     fun getCurrentVersionUsedTimes(): Int {
         return doActionWithCheckReturnLong {
-            Config.readConfig(KEY_USED_TIMES + mCurrentVersion, 0L)
+            Config.readConfig(KEY_USED_TIMES + currentVersion, 0L)
         }.toInt()
     }
 
     private fun updateNewVersion() {
         doActionWithCheck {
-            if (mCurrentVersion != lastStartVersion) {
-                Config.writeConfig(KEY_LAST_STARTED_VERSION, mCurrentVersion)
-                Config.writeConfig(KEY_VERSION_INSTALL_TIME, System.currentTimeMillis())
+            if (currentVersion != lastStartVersion) {
+                Config.writeConfig(KEY_LAST_STARTED_VERSION, currentVersion)
+                Config.writeConfig(KEY_VERSION_INSTALL_TIME, getCurrentTime())
                 if (lastStartVersion < 1) {
-                    Config.writeConfig(KEY_APP_INSTALLED_TIME, System.currentTimeMillis())
+                    Config.writeConfig(KEY_APP_INSTALLED_TIME, getCurrentTime())
                 }
             }
         }
@@ -120,17 +143,17 @@ object LifecycleHelper {
 
     private fun updateUsedInfo() {
         doActionWithCheck {
-            Config.writeConfig(KEY_LAST_START_TIME, System.currentTimeMillis())
+            Config.writeConfig(KEY_LAST_START_TIME, getCurrentTime())
             addValueOnce(KEY_USED_TIMES)
-            addValueOnce(KEY_USED_TIMES + mCurrentVersion)
-            if (DateUtil.getDateEN(lastStartTime, "yyyy-MM-dd") != DateUtil.getDateEN(System.currentTimeMillis(), "yyyy-MM-dd")) {
+            addValueOnce(KEY_USED_TIMES + currentVersion)
+            if (DateUtil.getDateEN(lastStartTime, "yyyy-MM-dd") != DateUtil.getDateEN(getCurrentTime(), "yyyy-MM-dd")) {
                 addValueOnce(KEY_USED_DAYS)
             }
         }
     }
 
     val isFirstStart by lazy {
-        if (mCurrentVersion != lastStartVersion) {
+        if (currentVersion != lastStartVersion) {
             if (lastStartVersion > 0) {
                 INSTALL_TYPE_VERSION_FIRST
             } else {
@@ -147,7 +170,7 @@ object LifecycleHelper {
     }
 
     private fun doActionWithCheck(action: () -> Unit) {
-        if (mRecordUsedInfo) {
+        if (recordUsedInfo) {
             action()
         } else {
             throw AAFException("LifecycleHelper has closed record used info")
@@ -155,7 +178,7 @@ object LifecycleHelper {
     }
 
     private fun doActionWithCheckReturnLong(action: () -> Long): Long {
-        if (mRecordUsedInfo) {
+        if (recordUsedInfo) {
             return action()
         } else {
             throw AAFException("LifecycleHelper has closed record used info")

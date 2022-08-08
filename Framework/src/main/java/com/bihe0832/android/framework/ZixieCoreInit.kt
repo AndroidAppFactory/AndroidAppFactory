@@ -67,9 +67,12 @@ object ZixieCoreInit {
     }
 
     private fun initZixieLibs(application: Application, isDebug: Boolean) {
-        LifecycleHelper.init(application)
+        LifecycleHelper.init(application, object : LifecycleHelper.ZixieTimeInterface {
+            override fun getCurrentTime(): Long {
+                return System.currentTimeMillis()
+            }
+        })
     }
-
 
     fun initUserLoginRetBeforeGetUser(platform: Int, openid: String) {
         ZLog.d("initUserLoginRetBeforeGetUser in JYGame:$openid")

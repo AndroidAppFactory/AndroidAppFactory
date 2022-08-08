@@ -578,7 +578,7 @@ class AAFDebugTempFragment : DebugEnvFragment() {
 
     private fun testFunc() {
         AAFLoggerFile.log("Test0", "This is a test log for Test by ${Thread.currentThread().id}")
-        startActivity(DebugImmersionActivity::class.java)
+
 
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 

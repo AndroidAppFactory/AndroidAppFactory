@@ -1,11 +1,8 @@
 package com.bihe0832.android.lib.lifecycle
 
-import android.app.ActivityManager
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import android.content.Context
-import android.os.Process
 import com.bihe0832.android.lib.log.ZLog
 
 /**
@@ -67,13 +64,7 @@ object ApplicationObserver : LifecycleObserver {
     }
 
     fun getLastPauseTime(): Long {
-        (LifecycleHelper.applicationContext!!.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses?.find { it.pid == Process.myPid() }
-            .let {
-                if (it?.processName.equals(LifecycleHelper.applicationContext!!.packageName)) {
-                    return mLastPauseTime
-                }
-            }
-        return System.currentTimeMillis()
+        return mLastPauseTime
     }
 
     fun getLastResumedTime(): Long {
