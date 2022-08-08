@@ -175,6 +175,10 @@ object ZixieContext {
         return LifecycleHelper.getAPPInstalledTime()
     }
 
+    fun getAPPCurrentStartTime(): Long {
+        return LifecycleHelper.getAPPCurrentStartTime()
+    }
+
     fun getAPPLastStartTime(): Long {
         return LifecycleHelper.getAPPLastStartTime()
     }
