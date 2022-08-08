@@ -91,10 +91,10 @@ object LifecycleHelper {
     private var hasUpdatedStartTime = false
     fun updateAPPCurrentStartTime(offset: Long) {
         currentStartTime += offset
-        hasUpdatedStartTime = true
         if (hasUpdatedStartTime) {
             throw AAFException("please check start time has updated more once")
         }
+        hasUpdatedStartTime = true
     }
 
     fun getAPPInstalledTime(): Long {
