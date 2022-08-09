@@ -19,6 +19,16 @@ open class BottomDialog : CommonDialog {
         super.onCreate(savedInstanceState)
         getWindow()!!.getDecorView().setSystemUiVisibility(View.INVISIBLE)
         showAnimation()
+        getRootView()?.setOnClickListener {
+            if (shouldCanceled) {
+                dismiss()
+                getOnClickBottomListener().onCancel()
+            }
+        }
+    }
+
+    open fun getRootView(): View? {
+        return getContentView().parent as View
     }
 
     open fun getContentView(): View {
