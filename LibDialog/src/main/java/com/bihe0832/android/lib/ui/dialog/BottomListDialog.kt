@@ -37,7 +37,6 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
             }
 
             override fun onNegativeClick() {
-                dismiss()
                 itemClickListener?.invoke(-1)
             }
 
@@ -68,7 +67,6 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
                 this.text = text
                 setTextColor(getContext().getResources().getColorStateList(R.drawable.com_bihe0832_common_dialog_positive_style));
                 setOnClickListener {
-                    dismiss()
                     itemClickListener?.invoke(textList.indexOf(text))
                 }
                 setPadding(0, paddingValue, 0, paddingValue)
