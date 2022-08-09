@@ -268,7 +268,7 @@ public class CommonDialog extends Dialog {
      * 初始化界面控件
      */
     private void initView() {
-        negativeBn = (Button) findViewById(R.id.negtive);
+        negativeBn = (Button) findViewById(R.id.negative);
         positiveBn = (Button) findViewById(R.id.positive);
         titleTv = (TextView) findViewById(R.id.title);
         content_layout = findViewById(R.id.content_layout);
