@@ -8,6 +8,7 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.permission.DebugPermissionDialog
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -26,9 +27,11 @@ class DebugDialogFragment : BaseDebugListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
+            add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
+            add(DebugItemData("底部弹框", View.OnClickListener { showAlert(BottomDialog(activity!!)) }))
+            add(DebugItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
             add(DebugItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))
             add(DebugItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
-            add(DebugItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
             add(DebugItemData("带输入弹框", View.OnClickListener { tesInput(activity!!) }))
 
             add(DebugItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
@@ -123,7 +126,7 @@ class DebugDialogFragment : BaseDebugListFragment() {
     }
 
     private fun testAlert(activity: Activity?) {
-        showAlert(BottomDialog(activity!!))
+        showAlert(CommonDialog(activity!!))
     }
 
     fun showAlert(dialog: CommonDialog) {
@@ -284,6 +287,19 @@ class DebugDialogFragment : BaseDebugListFragment() {
                 })
             }
         }
+    }
+
+    fun showBottomDialog(activity: Activity) {
+
+        BottomListDialog(activity).apply {
+            setItemList(mutableListOf<String>("Item 1", "Item 2", "Item 3"))
+            setOnItemClickListener {
+                ZixieContext.showToast("Item" + it)
+            }
+        }.let {
+            it.show()
+        }
+
     }
 
     fun tesInput(activity: Activity) {
