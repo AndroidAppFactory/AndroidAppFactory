@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 
 
-class BottomDialog : CommonDialog {
+open class BottomDialog : CommonDialog {
     constructor(context: Context?) : super(context, R.style.BottomInAndOutStyle)
 
     constructor(context: Context?, themeResId: Int) : super(context, themeResId)
@@ -21,7 +21,7 @@ class BottomDialog : CommonDialog {
         showAnimation()
     }
 
-    fun getContentView(): View {
+    open fun getContentView(): View {
         return findViewById(R.id.dialog_layout)
     }
 
