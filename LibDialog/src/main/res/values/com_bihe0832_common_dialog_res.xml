@@ -5,4 +5,8 @@
         <item name="android:windowMinWidthMajor">65%</item>
         <item name="android:windowMinWidthMinor">80%</item>
     </style>
+
+    <style name="BottomInAndOutStyle" parent="CommonDialog">
+        <item name="android:windowIsFloating">false</item>
+    </style>
 </resources>

@@ -1,0 +1,162 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/dialog_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/com_bihe0832_common_bottom_dialog_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="32dp"
+            android:paddingTop="18dp"
+            android:paddingRight="32dp"
+            android:textColor="@color/com_bihe0832_dialog_title"
+            android:textSize="@dimen/com_bihe0832_dialog_title_text_size"
+            android:textStyle="bold"
+            android:visibility="visible"
+            tools:text="系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息系统消息" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/content_layout_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_weight="1"
+            android:paddingLeft="16dp"
+            android:paddingTop="18dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="6dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:lineSpacingMultiplier="1.25"
+                    android:textColor="@color/com_bihe0832_dialog_content"
+                    android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
+                    tools:text="提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息提示消息提消息提示消息提示消息提示消息提示消息提示消息" />
+
+                <CheckBox
+                    android:id="@+id/nomore_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:text=" 不再提醒我"
+                    android:textColor="@color/com_bihe0832_dialog_content"
+                    android:textSize="@dimen/com_bihe0832_dialog_tips_text_size"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/content_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nomore_cb"
+                    tools:src="@mipmap/debug"
+                    tools:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/content_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <TextView
+            android:id="@+id/feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:gravity="center"
+            android:textColor="@color/com_bihe0832_dialog_tips"
+            android:textSize="@dimen/com_bihe0832_dialog_tips_text_size"
+            android:visibility="visible"
+            tools:text="提示消息提示消息提示消息提示消息"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/com_bihe0832_dialog_split"
+            app:layout_constraintBottom_toTopOf="@+id/button_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/button_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/negtive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/com_bihe0832_dialog_bg"
+                android:gravity="center"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:singleLine="true"
+                android:textColor="@drawable/com_bihe0832_common_dialog_negative_style"
+                android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
+                tools:text="前往"
+                tools:visibility="visible" />
+
+            <View
+                android:id="@+id/column_line"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/com_bihe0832_dialog_split" />
+
+            <Button
+                android:id="@+id/positive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/com_bihe0832_dialog_bg"
+                android:gravity="center"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:singleLine="true"
+                android:textColor="@drawable/com_bihe0832_common_dialog_positive_style"
+                android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
+                android:textStyle="bold"
+                tools:text="确定" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

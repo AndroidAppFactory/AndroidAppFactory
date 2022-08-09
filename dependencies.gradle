@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibDialog"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.22.15"
+ext.moduleVersionName = "4.22.16"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -86,8 +86,7 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
                         "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList",
-                        "CommonCoroutines", "CommonDataCenter", "CommonImage", "CommonAceEditor",
-                        "CommonDialog"
+                        "CommonCoroutines", "CommonDataCenter", "CommonImage", "CommonAceEditor"
                 ]
         ],
         "CommonAceEditor"           : [

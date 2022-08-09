@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/com_bihe0832_dialog_bg" />
-    <stroke
-        android:width="0.8dp"
-        android:color="@color/com_bihe0832_dialog_bg" />
-    <!-- 圆角 -->
-    <corners android:radius="8dp" />
-</shape>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="12dp"
+    android:insetTop="16dp"
+    android:insetRight="12dp"
+    android:insetBottom="16dp">
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="@color/com_bihe0832_dialog_bg" />
+        <stroke
+            android:width="0.8dp"
+            android:color="@color/com_bihe0832_dialog_bg" />
+        <!-- 圆角 -->
+        <corners android:radius="8dp" />
+    </shape>
+</inset>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/com_bihe0832_dialog_bg" />
+    <stroke
+        android:width="0.8dp"
+        android:color="@color/com_bihe0832_dialog_bg" />
+    <!-- 圆角 -->
+    <corners
+        android:bottomLeftRadius="1dp"
+        android:bottomRightRadius="1dp"
+        android:topLeftRadius="8dp"
+        android:topRightRadius="8dp" />/>
+
+</shape>

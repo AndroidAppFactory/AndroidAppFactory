@@ -87,7 +87,7 @@ public class CommonDialog extends Dialog {
     private boolean isSingle = false;
 
     protected int getLayoutID() {
-        return R.layout.com_bihe0832_commonm_dialog_layout;
+        return R.layout.com_bihe0832_common_dialog_layout;
     }
 
     @Override
