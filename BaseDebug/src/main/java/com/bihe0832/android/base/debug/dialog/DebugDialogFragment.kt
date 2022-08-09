@@ -295,6 +295,7 @@ class DebugDialogFragment : BaseDebugListFragment() {
             setItemList(mutableListOf<String>("Item 1", "Item 2", "Item 3"))
             setOnItemClickListener {
                 ZixieContext.showToast("Item" + it)
+                dismiss()
             }
         }.let {
             it.show()
