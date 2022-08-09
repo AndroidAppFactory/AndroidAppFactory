@@ -3,6 +3,7 @@ package com.bihe0832.android.test;
 import android.support.v4.app.Fragment;
 
 import com.bihe0832.android.base.debug.AAFDebugTempFragment;
+import com.bihe0832.android.base.debug.dialog.DebugDialogFragment;
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment;
 import com.bihe0832.android.base.debug.image.DebugImageFragment;
 import com.bihe0832.android.base.debug.tab.DebugTabFragment;
@@ -33,7 +34,7 @@ public class TestMainFragment extends DebugMainFragment {
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new DebugDownloadFragment();
+            return new DebugDialogFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new AAFDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

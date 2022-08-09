@@ -3,6 +3,7 @@ package com.bihe0832.android.base.debug.dialog
 import android.Manifest
 import android.app.Activity
 import android.view.View
+import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.permission.DebugPermissionDialog
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
@@ -24,6 +25,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 class DebugDialogFragment : BaseDebugListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
             add(DebugItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))
             add(DebugItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
             add(DebugItemData("通用弹框", View.OnClickListener { testAlert(activity) }))
@@ -295,6 +297,12 @@ class DebugDialogFragment : BaseDebugListFragment() {
                 }
 
         )
+    }
+
+    fun testUnique() {
+        for (i in 0 until 3) {
+            AAFUniqueDialogManager.tipsUniqueDialogManager.showUniqueDialog(activity!!, "212", "这是内容 ${System.currentTimeMillis()}", "OK")
+        }
     }
 
 }
