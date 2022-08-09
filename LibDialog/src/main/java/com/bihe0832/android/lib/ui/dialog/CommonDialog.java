@@ -387,6 +387,9 @@ public class CommonDialog extends Dialog {
         return this;
     }
 
+    public boolean getShouldCanceled(){
+        return shouldCanceledOutside;
+    }
     public CommonDialog setNegative(String negtive) {
         this.negativeString = negtive;
         return this;

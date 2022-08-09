@@ -8,11 +8,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.PermissionsChecker;
 import com.bihe0832.android.lib.permission.R;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,19 +97,19 @@ public class PermissionsActivity extends Activity {
 
 
     // 请求权限兼容低版本
-    private void requestPermissions(String... permissions) {
+    protected void requestPermissions(String... permissions) {
         ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
     }
 
     // 全部权限均已获取
-    private void allPermissionsGranted() {
+    protected void allPermissionsGranted() {
         PermissionManager.INSTANCE.getPermissionCheckResultListener().onSuccess(scene);
         finish();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
 
         String tempPermission = "";
         List<String> tempPermissionList = new ArrayList<>();
@@ -136,7 +138,7 @@ public class PermissionsActivity extends Activity {
         return false;
     }
 
-    private void showMissingPermissionDialog(final List<String> tempPermissionList) {
+    protected void showMissingPermissionDialog(final List<String> tempPermissionList) {
         if (dialog == null) {
             dialog = getDialog(tempPermissionList);
         }
@@ -172,7 +174,7 @@ public class PermissionsActivity extends Activity {
         }
     }
 
-    private void showMissingPermissionDialog(final String showPermission) {
+    protected void showMissingPermissionDialog(final String showPermission) {
         getDialog(showPermission).show(scene, showPermission, canCancle, new OnDialogListener() {
             @Override
             public void onPositiveClick() {
@@ -208,12 +210,4 @@ public class PermissionsActivity extends Activity {
             }
         }
     }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (dialog != null && dialog.isShowing()) {
-//            dialog.cancel();
-//        }
-//    }
 }

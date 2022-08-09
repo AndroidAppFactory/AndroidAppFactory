@@ -87,9 +87,4 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
     override fun getLayoutID(): Int {
         return R.layout.com_bihe0832_common_bottom_list_dialog_layout
     }
-
-    override fun getContentView(): View {
-        return layout_List
-    }
-
 }

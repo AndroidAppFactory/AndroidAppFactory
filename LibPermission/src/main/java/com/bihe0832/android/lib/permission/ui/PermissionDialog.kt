@@ -20,7 +20,15 @@ open class PermissionDialog : CommonDialog {
         return super.getLayoutID()
     }
 
+    constructor(context: Context, themeResId: Int) : super(context, themeResId) {
+        initContent()
+    }
+
     constructor(context: Context) : super(context) {
+        initContent()
+    }
+
+    private fun initContent() {
         title = PermissionManager.getTitle(context)
         negative = PermissionManager.getNegtiveText(context)
         positive = PermissionManager.getPositiveText(context)
