@@ -23,6 +23,10 @@ public class RadioDialog extends CommonDialog {
         super(context);
     }
 
+    public RadioDialog(Context context, int themeResId) {
+        super(context, themeResId);
+    }
+
     private RadioGroup mRadioGroup = null;
     private List<String> mDataList = new ArrayList<>();
     private OnSelectedListener mOnSelectedListener = null;
