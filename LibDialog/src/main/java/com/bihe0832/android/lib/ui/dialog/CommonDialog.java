@@ -289,6 +289,10 @@ public class CommonDialog extends Dialog {
         return this;
     }
 
+    public OnDialogListener getOnClickBottomListener() {
+        return onClickBottomListener;
+    }
+
     public CommonDialog setOnCheckedListener(OnCheckedListener onCheckedListener) {
         this.onCheckedListener = onCheckedListener;
         return this;

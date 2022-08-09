@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibDialog"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.21.14"
+ext.moduleVersionName = "4.22.15"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -86,7 +86,8 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
                         "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList",
-                        "CommonCoroutines", "CommonDataCenter", "CommonImage", "CommonAceEditor"
+                        "CommonCoroutines", "CommonDataCenter", "CommonImage", "CommonAceEditor",
+                        "CommonDialog"
                 ]
         ],
         "CommonAceEditor"           : [
@@ -214,7 +215,7 @@ ext.moduleInfo = [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibCustomView",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
-                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView", "LibAceEditor","LibViewPager"
+                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager"
                 ]
         ],
         "LibUtils"                  : [
@@ -514,7 +515,7 @@ ext.moduleInfo = [
                         "LibCommonUIUtils", "LibText"
                 ]
         ],
-        "LibViewPager"                : [
+        "LibViewPager"              : [
                 "version"            : "4.21.0",
                 "artifactId"         : "lib-view-pager",
                 "apidependenciesList": [
@@ -550,7 +551,7 @@ ext.moduleInfo = [
                 "version"            : "4.21.11",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
-                        "LibDeviceNetwork","LibImage","LibCommonUIUtils",
+                        "LibDeviceNetwork", "LibImage", "LibCommonUIUtils",
                         "com.android.support:appcompat-v7:${project.android_support_version}"
                 ]
         ],
