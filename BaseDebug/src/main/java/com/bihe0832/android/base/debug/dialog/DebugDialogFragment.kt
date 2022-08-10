@@ -13,6 +13,7 @@ import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
+import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.text.ClipboardUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
@@ -38,6 +39,7 @@ class DebugDialogFragment : BaseDebugListFragment() {
             add(DebugItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
             add(DebugItemData("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
             add(DebugItemData("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
+            add(DebugItemData("通用权限弹框V2", View.OnClickListener { testCommonPermissionV2(activity) }))
         }
     }
 
@@ -287,6 +289,16 @@ class DebugDialogFragment : BaseDebugListFragment() {
                 })
             }
         }
+    }
+
+    private fun testCommonPermissionV2(activity: Activity?) {
+        PermissionManager.addPermissionScene(HashMap<String, String>().apply {
+            put(Manifest.permission.RECORD_AUDIO, "发送语音动态、个人语音介绍、开黑房间语音互动、聊天语音消息等")
+        })
+        PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
+            put(Manifest.permission.RECORD_AUDIO, "麦克风")
+        })
+        PermissionManager.checkPermission(activity, "", true, PermissionsActivityV2::class.java, null, Manifest.permission.RECORD_AUDIO)
     }
 
     fun showBottomDialog(activity: Activity) {

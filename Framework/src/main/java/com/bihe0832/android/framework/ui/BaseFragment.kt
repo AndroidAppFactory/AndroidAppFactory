@@ -10,6 +10,7 @@ import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
+import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
@@ -208,7 +209,7 @@ open class BaseFragment : SwipeBackFragment() {
     }
 
     open fun getPermissionActivityClass(): Class<out PermissionsActivity> {
-        return PermissionsActivity::class.java
+        return PermissionsActivityV2::class.java
     }
 
     fun needDispatchActivityResult(): Boolean {

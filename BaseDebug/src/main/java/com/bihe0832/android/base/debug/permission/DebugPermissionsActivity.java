@@ -4,10 +4,12 @@ import android.Manifest;
 import android.Manifest.permission;
 import com.bihe0832.android.lib.permission.ui.PermissionDialog;
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity;
+import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2;
+
 import java.util.List;
 
 
-public class DebugPermissionsActivity extends PermissionsActivity {
+public class DebugPermissionsActivity extends PermissionsActivityV2 {
 
     @Override
     protected PermissionDialog getDialog(String permission) {
