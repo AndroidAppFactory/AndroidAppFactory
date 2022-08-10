@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.permission.PermissionManager
 /**
  * @author zixie code@bihe0832.com Created on 2020/12/1.
  */
-class PermissionResultOfAAF(private val exist: Boolean) : PermissionManager.OnPermissionResult {
+open class PermissionResultOfAAF(private val exist: Boolean) : PermissionManager.OnPermissionResult {
     override fun onSuccess() {
         ZLog.d("授权成功")
     }

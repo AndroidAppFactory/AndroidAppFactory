@@ -63,7 +63,7 @@ open class BaseActivity : SupportActivity() {
         checkPermission()
     }
 
-    fun checkPermission() {
+    open fun checkPermission() {
         if (getPermissionList().isNotEmpty()) {
             PermissionManager.checkPermission(this, javaClass.simpleName, false, getPermissionActivityClass(), getPermissionResult(), *getPermissionList().toTypedArray())
         }
