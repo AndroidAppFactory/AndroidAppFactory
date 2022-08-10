@@ -180,6 +180,7 @@ public class CommonDialog extends Dialog {
         }
 
         if (extraView != null && content_layout != null && extraView.getParent() == null) {
+            content_layout.removeAllViews();
             content_layout.addView(extraView);
         }
         //如果设置按钮的文字

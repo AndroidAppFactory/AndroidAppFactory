@@ -28,9 +28,9 @@ public class PermissionsActivity extends Activity {
 
     private PermissionsChecker permissionsChecker; // 权限检测器
     private boolean isRequireCheck; // 是否需要系统权限检测, 防止和系统提示框重叠
-    private String[] needCheckPermission = null;
-    private boolean canCancle = false;
-    private String scene = "";
+    protected String[] needCheckPermission = null;
+    protected boolean canCancle = false;
+    protected String scene = "";
 
     private PermissionDialog dialog = null;
 

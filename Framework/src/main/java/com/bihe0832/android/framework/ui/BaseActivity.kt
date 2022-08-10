@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
+import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.ui.common.ColorTools
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -50,7 +51,7 @@ open class BaseActivity : SupportActivity() {
     }
 
     open fun getPermissionActivityClass(): Class<out PermissionsActivity> {
-        return PermissionsActivity::class.java
+        return PermissionsActivityV2::class.java
     }
 
     open fun getPermissionResult(): PermissionManager.OnPermissionResult {

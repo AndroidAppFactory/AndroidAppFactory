@@ -1,12 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-        package="com.bihe0832.android.lib.permission">
+    package="com.bihe0832.android.lib.permission">
 
     <application>
         <activity
-                android:name=".ui.PermissionsActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/permissionFullscreen" />
+            android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/permissionFullscreen" />
+        <activity
+            android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivityV2"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/permissionFullscreen" />
     </application>
 </manifest>

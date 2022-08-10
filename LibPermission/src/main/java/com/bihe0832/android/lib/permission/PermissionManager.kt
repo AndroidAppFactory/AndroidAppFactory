@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
+import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
+import com.bihe0832.android.lib.utils.apk.APKUtils
 import java.util.concurrent.ConcurrentHashMap
 
 object PermissionManager {
@@ -24,6 +26,7 @@ object PermissionManager {
     private val mPermissionDesc = ConcurrentHashMap<String, String>()
     private val mPermissionScene = ConcurrentHashMap<String, String>()
     private val mPermissionContent = ConcurrentHashMap<String, String>()
+    private val mPermissionIcon = ConcurrentHashMap<String, Int>()
 
     private val mPermissionSettings = ConcurrentHashMap<String, String>().apply {
         put(Manifest.permission.SYSTEM_ALERT_WINDOW, Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
@@ -94,6 +97,10 @@ object PermissionManager {
         mPermissionContent.put(getPermissionKey(sceneid, permission), permissionDesc)
     }
 
+    fun addPermissionIcon(sceneid: String, permission: String, icon: Int) {
+        mPermissionIcon.put(getPermissionKey(sceneid, permission), icon)
+    }
+
     fun addPermissionScene(permissionScene: HashMap<String, String>) {
         mPermissionScene.putAll(permissionScene)
     }
@@ -104,6 +111,10 @@ object PermissionManager {
 
     fun addPermissionContent(permissionDesc: HashMap<String, String>) {
         mPermissionContent.putAll(permissionDesc)
+    }
+
+    fun addPermissionIcon(permissionScene: HashMap<String, Int>) {
+        mPermissionIcon.putAll(permissionScene)
     }
 
     fun addPermissionSettings(permissionSettings: HashMap<String, String>) {
@@ -141,7 +152,7 @@ object PermissionManager {
     }
 
     fun checkPermission(context: Context?, scene: String, canCancel: Boolean, result: OnPermissionResult?, vararg permissions: String) {
-        checkPermission(context, scene, canCancel, PermissionsActivity::class.java, result, *permissions)
+        checkPermission(context, scene, canCancel, PermissionsActivityV2::class.java, result, *permissions)
     }
 
     fun checkPermission(context: Context?, scene: String, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, vararg permissions: String) {
@@ -170,19 +181,39 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionScene(scene: String, permission: String): String {
-        return if (mPermissionScene.containsKey(getPermissionKey(scene, permission))) {
-            return getPermissionScene(getPermissionKey(scene, permission))
+
+    fun getPermissionIcon(scene: String, permission: String): Int {
+        return if (mPermissionIcon.containsKey(getPermissionKey(scene, permission))) {
+            return getPermissionIcon(getPermissionKey(scene, permission));
         } else {
-            getPermissionScene(permission)
+            getPermissionIcon(permission)
         }
     }
 
+    fun getPermissionIcon(permission: String): Int {
+        return if (mPermissionIcon.containsKey(permission)) {
+            return mPermissionIcon.get(permission) ?: R.mipmap.icon
+        } else {
+            R.mipmap.icon
+        }
+    }
 
-    fun getPermissionScene(permission: String): String {
+    fun getPermissionScene(scene: String, permission: String, needSpecial: Boolean): String {
+        return if (mPermissionScene.containsKey(getPermissionKey(scene, permission))) {
+            return getPermissionScene(getPermissionKey(scene, permission), needSpecial)
+        } else {
+            getPermissionScene(permission, needSpecial)
+        }
+    }
+
+    fun getPermissionScene(permission: String, needSpecial: Boolean): String {
         return if (mPermissionScene.containsKey(permission)) {
             if (mPermissionScene.get(permission) != null) {
-                return addHtmlWrapper(mPermissionScene.get(permission)!!)
+                return if (needSpecial) {
+                    addHtmlWrapper(mPermissionScene.get(permission)!!)
+                } else {
+                    mPermissionScene.get(permission)!!
+                }
             } else {
                 mDefaultScene
             }
@@ -191,18 +222,22 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionDesc(scene: String, permission: String): String {
+    fun getPermissionDesc(scene: String, permission: String, needSpecial: Boolean): String {
         return if (mPermissionDesc.containsKey(getPermissionKey(scene, permission))) {
-            return getPermissionDesc(getPermissionKey(scene, permission))
+            return getPermissionDesc(getPermissionKey(scene, permission), needSpecial)
         } else {
-            getPermissionDesc(permission)
+            getPermissionDesc(permission, needSpecial)
         }
     }
 
-    fun getPermissionDesc(permission: String): String {
+    fun getPermissionDesc(permission: String, needSpecial: Boolean): String {
         return if (mPermissionDesc.containsKey(permission)) {
             if (mPermissionDesc.get(permission) != null) {
-                return addHtmlWrapper(mPermissionDesc.get(permission)!!)
+                return if (needSpecial) {
+                    addHtmlWrapper(mPermissionDesc.get(permission)!!)
+                } else {
+                    mPermissionDesc.get(permission)!!
+                }
             } else {
                 mDefaultDesc
             }
@@ -211,25 +246,59 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionContent(scene: String, permission: String): String {
+    fun getPermissionContent(context: Context, scene: String, permission: String, needSpecial: Boolean): String {
         return if (mPermissionContent.containsKey(getPermissionKey(scene, permission))) {
-            return getPermissionContent(getPermissionKey(scene, permission))
+            return getPermissionContent(context, getPermissionKey(scene, permission), needSpecial)
         } else {
-            getPermissionContent(permission)
+            getPermissionContent(context, permission, needSpecial)
         }
     }
 
-    fun getPermissionContent(permission: String): String {
+    fun getPermissionContent(context: Context, permission: String, needSpecial: Boolean): String {
         if (mPermissionContent.containsKey(permission)) {
             mPermissionContent.get(permission)?.let {
                 return it
             }
         }
-        return ""
+        return getDefaultPermissionContent(context, permission, needSpecial)
     }
 
-    fun getPermissionDenyTime(permission: String): Long {
-        return Config.readConfig(USER_DENY_KEY + permission, 0L)
+    fun getPermissionScene(sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
+        var scene = ""
+        tempPermissionList.forEach {
+            scene = scene + getPermissionScene(sceneID, it, needSpecial) + "、"
+        }
+        scene = scene.substring(0, scene.length - 1)
+
+        return scene
+    }
+
+    fun getPermissionDesc(sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
+        var desc = ""
+        tempPermissionList.forEach {
+            desc = desc + getPermissionDesc(sceneID, it, needSpecial) + "、"
+        }
+        desc = desc.substring(0, desc.length - 1)
+
+        return desc
+    }
+
+    fun getPermissionContent(context: Context, sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
+        return if (tempPermissionList.size > 1) {
+            getDefaultPermissionContent(context, getPermissionScene(sceneID, tempPermissionList, needSpecial), getPermissionDesc(sceneID, tempPermissionList, needSpecial))
+        } else if (tempPermissionList.size > 0) {
+            getPermissionContent(context, sceneID, tempPermissionList.get(0), needSpecial)
+        } else {
+            ""
+        }
+    }
+
+    fun getDefaultPermissionContent(context: Context, showPermission: String, needSpecial: Boolean): String {
+        return getDefaultPermissionContent(context, getPermissionScene(showPermission, needSpecial), getPermissionDesc(showPermission, needSpecial))
+    }
+
+    fun getDefaultPermissionContent(context: Context, sceneText: String, permissionDesc: String): String {
+        return String.format(context.getString(R.string.com_bihe0832_permission_default_content), APKUtils.getAppName(context), sceneText, permissionDesc)
     }
 
     fun getTitle(context: Context): String {
@@ -242,6 +311,10 @@ object PermissionManager {
 
     fun getPositiveText(context: Context): String {
         return context.resources.getString(R.string.com_bihe0832_permission_positive)
+    }
+
+    fun getPermissionDenyTime(permission: String): Long {
+        return Config.readConfig(USER_DENY_KEY + permission, 0L)
     }
 
     fun setUserDenyTime(permission: String) {
@@ -258,7 +331,8 @@ object PermissionManager {
 
     private fun addHtmlWrapper(content: String): String {
         return "<font color ='" + (mContext?.resources?.getString(R.string.com_bihe0832_permission_color)
-                ?: "#38ADFF") + "'><b> $content </b></font> "
+                ?: "#38ADFF") + "'><b>$content</b></font>"
     }
+
 
 }
