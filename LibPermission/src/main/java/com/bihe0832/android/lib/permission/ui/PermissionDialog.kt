@@ -26,7 +26,7 @@ open class PermissionDialog : CommonDialog {
 
     private fun initContent() {
         title = PermissionManager.getTitle(context)
-        negative = PermissionManager.getNegtiveText(context)
+        negative = PermissionManager.getNegativeText(context)
         positive = PermissionManager.getPositiveText(context)
     }
 

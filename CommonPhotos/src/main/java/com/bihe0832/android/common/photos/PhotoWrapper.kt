@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
 
-val takePhotoPermission = arrayOf(Manifest.permission.CAMERA)
-val selectPhotoPermission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+val takePhotoPermission = mutableListOf(Manifest.permission.CAMERA)
+val selectPhotoPermission = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
 
 
@@ -44,15 +44,15 @@ fun Activity.getAutoChangedCropUri(): Uri? {
 fun Activity.getCropUri(fileName: String): Uri? {
     return if (OSUtils.isAndroidQVersion()) {
         Media.createImageUriAboveAndroidQ(
-            this,
-            "",
-            fileName
+                this,
+                "",
+                fileName
         )
     } else {
         Media.createImageUriForCropBelowAndroidQ(
-            this,
-            "",
-            fileName
+                this,
+                "",
+                fileName
         )
     }
 }
@@ -60,15 +60,15 @@ fun Activity.getCropUri(fileName: String): Uri? {
 fun Activity.getPhotosUri(fileName: String): Uri? {
     return if (OSUtils.isAndroidQVersion()) {
         Media.createImageUriAboveAndroidQ(
-            this,
-            "",
-            fileName
+                this,
+                "",
+                fileName
         )
     } else {
         Media.createImageUriForCameraBelowAndroidQ(
-            this,
-            "",
-            fileName
+                this,
+                "",
+                fileName
         )
     }
 }
@@ -78,24 +78,23 @@ fun Activity.getPhotosUri(fileName: String): Uri? {
  */
 fun Activity.cropPhoto(sourceFile: String, targetFile: Uri, aspectX: Int = 1, aspectY: Int = 1) {
     var sourceFileProvider =
-        ZixieFileProvider.getZixieFileProvider(this, File(sourceFile))
+            ZixieFileProvider.getZixieFileProvider(this, File(sourceFile))
     cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
 }
 
 
-
 fun Activity.cropPhoto(
-    sourceFile: Uri?,
-    targetFile: Uri?,
-    aspectX: Int = 1,
-    aspectY: Int = 1
+        sourceFile: Uri?,
+        targetFile: Uri?,
+        aspectX: Int = 1,
+        aspectY: Int = 1
 ) {
     ZLog.d("Activity cropPhoto sourceFile ：$sourceFile")
     ZLog.d("Activity cropPhoto targetFile ：$targetFile")
 
-    var finalSourceFile:Uri? = if(sourceFile.toString().startsWith(GOOGLE_PHOTO_PREFIX, true)){
-        ZixieFileProvider.getZixieFileProvider(this, ZixieFileProvider.uriToFile(this,sourceFile))
-    }else{
+    var finalSourceFile: Uri? = if (sourceFile.toString().startsWith(GOOGLE_PHOTO_PREFIX, true)) {
+        ZixieFileProvider.getZixieFileProvider(this, ZixieFileProvider.uriToFile(this, sourceFile))
+    } else {
         sourceFile
     }
     val file = ZixieFileProvider.uriToFile(this, targetFile)
@@ -150,56 +149,56 @@ fun Activity.showPhotoChooser() {
 
     view.takePhotoBtn.setOnClickListener {
         PermissionManager.checkPermission(
-            this,
-            "PhotoSelect",
-            false,
-            object : PermissionManager.OnPermissionResult {
-                override fun onFailed(msg: String) {
-                    dialog.dismiss()
-                }
+                this,
+                "PhotoSelect",
+                false,
+                object : PermissionManager.OnPermissionResult {
+                    override fun onFailed(msg: String) {
+                        dialog.dismiss()
+                    }
 
-                override fun onSuccess() {
-                    dialog.dismiss()
-                    takePhoto(getAutoChangedPhotoUri())
-                }
+                    override fun onSuccess() {
+                        dialog.dismiss()
+                        takePhoto(getAutoChangedPhotoUri())
+                    }
 
-                override fun onUserCancel(scene: String, permission: String) {
-                    dialog.dismiss()
-                }
+                    override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                        dialog.dismiss()
+                    }
 
-                override fun onUserDeny(scene: String, permission: String) {
-                    dialog.dismiss()
-                }
+                    override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                        dialog.dismiss()
+                    }
 
-            },
-            *takePhotoPermission
+                },
+                takePhotoPermission
         )
     }
 
     view.choosePhotoBtn.setOnClickListener {
         PermissionManager.checkPermission(
-            this,
-            "PhotoSelect",
-            false,
-            object : PermissionManager.OnPermissionResult {
-                override fun onFailed(msg: String) {
-                    dialog.dismiss()
-                }
+                this,
+                "PhotoSelect",
+                false,
+                object : PermissionManager.OnPermissionResult {
+                    override fun onFailed(msg: String) {
+                        dialog.dismiss()
+                    }
 
-                override fun onSuccess() {
-                    dialog.dismiss()
-                    choosePhoto()
-                }
+                    override fun onSuccess() {
+                        dialog.dismiss()
+                        choosePhoto()
+                    }
 
-                override fun onUserCancel(scene: String, permission: String) {
-                    dialog.dismiss()
-                }
+                    override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                        dialog.dismiss()
+                    }
 
-                override fun onUserDeny(scene: String, permission: String) {
-                    dialog.dismiss()
-                }
-            },
-            *selectPhotoPermission
+                    override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                        dialog.dismiss()
+                    }
+                },
+                selectPhotoPermission
         )
     }
 }

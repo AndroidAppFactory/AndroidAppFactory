@@ -98,22 +98,24 @@ class IconManager(activity: Activity) {
                 mPermissionReqShow = false
             }
 
-            override fun onUserCancel(scene: String, permission: String) {
-                result?.onUserCancel(scene, permission)
+            override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                result?.onUserCancel(scene, permissionGroupID, permission)
                 mPermissionReqShow = false
             }
 
-            override fun onUserDeny(scene: String, permission: String) {
-                result?.onUserDeny(scene, permission)
+            override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                result?.onUserDeny(scene, permissionGroupID, permission)
                 mPermissionReqShow = false
             }
 
-        }, Manifest.permission.SYSTEM_ALERT_WINDOW)
+        }, mutableListOf<String>().apply {
+            add(Manifest.permission.SYSTEM_ALERT_WINDOW)
+        })
     }
 
     @Synchronized
     fun showIcon(): Boolean {
-        if (!PermissionManager.hasPermission(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+        if (!PermissionManager.hasPermissionGroup(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
             Log.d(TAG, "showIcon checkFloatPermission is bad")
             return false
         }
@@ -213,22 +215,24 @@ class IconManager(activity: Activity) {
                 mPermissionReqShow = false
             }
 
-            override fun onUserCancel(scene: String, permission: String) {
-                result?.onUserCancel(scene, permission)
+            override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                result?.onUserCancel(scene, permissionGroupID, permission)
                 mPermissionReqShow = false
             }
 
-            override fun onUserDeny(scene: String, permission: String) {
-                result?.onUserDeny(scene, permission)
+            override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                result?.onUserDeny(scene, permissionGroupID, permission)
                 mPermissionReqShow = false
             }
 
-        }, Manifest.permission.SYSTEM_ALERT_WINDOW)
+        }, mutableListOf<String>().apply {
+            add(Manifest.permission.SYSTEM_ALERT_WINDOW)
+        })
     }
 
     fun showView(view: View, flag: Int, x: Int?, y: Int?) {
         //添加Icon
-        if (!PermissionManager.hasPermission(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+        if (!PermissionManager.hasPermissionGroup(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
             Log.d(TAG, "showView checkFloatPermission is bad")
             return
         }

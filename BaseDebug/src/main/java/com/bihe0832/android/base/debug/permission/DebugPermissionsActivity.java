@@ -11,14 +11,14 @@ import java.util.List;
 
 public class DebugPermissionsActivity extends PermissionsActivityV2 {
 
-    @Override
-    protected PermissionDialog getDialog(String permission) {
-        if (permission.equals(Manifest.permission.CAMERA)) {
-            return new DebugPermissionDialog(this);
-        } else {
-            return super.getDialog(permission);
-        }
-    }
+//    @Override
+//    protected PermissionDialog getDialog(String permission) {
+//        if (permission.equals(Manifest.permission.CAMERA)) {
+//            return new DebugPermissionDialog(this);
+//        } else {
+//            return super.getDialog(permission);
+//        }
+//    }
 
 
     @Override

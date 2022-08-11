@@ -19,7 +19,6 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.cache.DebugInfoCacheManager
 import com.bihe0832.android.base.debug.icon.DebugIcon
 import com.bihe0832.android.base.debug.icon.DebugTipsIcon
-import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
 import com.bihe0832.android.base.debug.ipc.TestIPC1Activity
 import com.bihe0832.android.base.debug.ipc.TestIPCActivity
 import com.bihe0832.android.base.debug.json.JsonTest
@@ -537,7 +536,7 @@ class AAFDebugTempFragment : DebugEnvFragment() {
 
     }
 
-    private fun testDB(){
+    private fun testDB() {
         System.currentTimeMillis().let {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")
             CommonDBManager.getData("sss" + it).let {
@@ -561,7 +560,7 @@ class AAFDebugTempFragment : DebugEnvFragment() {
         ZLog.d("testAssets", ZixieContext.getLogFolder())
         var path = ZixieContext.getLogFolder() + "config.default"
         FileAction.copyAssetsFileToPath(context, "config.default", path).let {
-            ZLog.d("testAssets", " ${FileUtils.getAssetFileContent(context!!,"config.default")}")
+            ZLog.d("testAssets", " ${FileUtils.getAssetFileContent(context!!, "config.default")}")
             ZLog.d("testAssets", " ${FileUtils.getFileContent(path)}")
             ZLog.d("testAssets", " $it")
             ZLog.d("testAssets", " " + FileUtils.checkFileExist(path))
@@ -578,7 +577,6 @@ class AAFDebugTempFragment : DebugEnvFragment() {
 
     private fun testFunc() {
         AAFLoggerFile.log("Test0", "This is a test log for Test by ${Thread.currentThread().id}")
-
 
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 

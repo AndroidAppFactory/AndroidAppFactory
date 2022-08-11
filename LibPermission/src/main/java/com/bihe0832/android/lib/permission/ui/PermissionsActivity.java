@@ -28,11 +28,13 @@ public class PermissionsActivity extends Activity {
 
     private PermissionsChecker permissionsChecker; // 权限检测器
     private boolean isRequireCheck; // 是否需要系统权限检测, 防止和系统提示框重叠
-    protected String[] needCheckPermission = null;
+    protected String[] needCheckPermissionGroup = null;
     protected boolean canCancle = false;
     protected String scene = "";
 
     private PermissionDialog dialog = null;
+    private long lastCheckTime = 0L;
+    protected boolean autoDeny = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class PermissionsActivity extends Activity {
         setContentView(R.layout.com_bihe0832_lib_permissions_activity);
         try {
             if (getIntent().hasExtra(EXTRA_PERMISSIONS)) {
-                needCheckPermission = getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
+                needCheckPermissionGroup = getIntent().getStringArrayExtra(EXTRA_PERMISSIONS);
             }
 
             if (getIntent().hasExtra(EXTRA_CAN_CANCEL)) {
@@ -57,18 +59,13 @@ public class PermissionsActivity extends Activity {
             e.printStackTrace();
         }
 
-        if (needCheckPermission == null || needCheckPermission.length < 1) {
+        if (needCheckPermissionGroup == null || needCheckPermissionGroup.length < 1) {
             PermissionManager.INSTANCE.getPermissionCheckResultListener().onFailed(scene, "permission error");
             finish();
         }
 
         permissionsChecker = new PermissionsChecker(this);
         isRequireCheck = true;
-    }
-
-
-    protected PermissionDialog getDialog(String permission) {
-        return new PermissionDialog(this);
     }
 
     protected PermissionDialog getDialog(List<String> tempPermissionList) {
@@ -80,9 +77,12 @@ public class PermissionsActivity extends Activity {
         super.onResume();
         if (isRequireCheck) {
             ArrayList<String> needCheckList = new ArrayList<>();
-            for (String permission : needCheckPermission) {
-                if (permissionsChecker.lacksPermission(permission)) {
-                    needCheckList.add(permission);
+            for (String permissionGroupID : needCheckPermissionGroup) {
+                List<String> permissions = PermissionManager.INSTANCE.getPermissionGroup(scene, permissionGroupID);
+                for (String permission : permissions) {
+                    if (permissionsChecker.lacksPermission(permission)) {
+                        needCheckList.add(permission);
+                    }
                 }
             }
             if (needCheckList.size() > 0) {
@@ -98,6 +98,7 @@ public class PermissionsActivity extends Activity {
 
     // 请求权限兼容低版本
     protected void requestPermissions(String... permissions) {
+        lastCheckTime = System.currentTimeMillis();
         ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
     }
 
@@ -110,22 +111,21 @@ public class PermissionsActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
+        long time = System.currentTimeMillis() - lastCheckTime;
+        if (time < 500) {
+            autoDeny = true;
+        }
 
-        String tempPermission = "";
         List<String> tempPermissionList = new ArrayList<>();
-        for (String permission : needCheckPermission) {
+        for (String permission : needCheckPermissionGroup) {
             if (permissionsChecker.lacksPermission(permission)) {
                 tempPermissionList.add(permission);
                 if (!checkAllPermissionsResult()) {
-                    tempPermission = permission;
                     break;
                 }
             }
         }
-        if (!TextUtils.isEmpty(tempPermission)) {
-            isRequireCheck = false;
-            showMissingPermissionDialog(tempPermission);
-        } else if (tempPermissionList.size() > 0) {
+        if (tempPermissionList.size() > 0) {
             isRequireCheck = false;
             showMissingPermissionDialog(tempPermissionList);
         } else {
@@ -139,10 +139,32 @@ public class PermissionsActivity extends Activity {
     }
 
     protected void showMissingPermissionDialog(final List<String> tempPermissionList) {
+
+        for (String permission : tempPermissionList) {
+            PermissionManager.INSTANCE.setUserDenyTime(permission);
+        }
+
+        final String firstPermission = tempPermissionList.get(0);
+
+        String firstPermissionGroupID = "";
+        for (String permissionGroupID : needCheckPermissionGroup) {
+            List<String> permissions = PermissionManager.INSTANCE.getPermissionGroup(scene, permissionGroupID);
+            if (permissions.contains(firstPermission)) {
+                firstPermissionGroupID = permissionGroupID;
+                break;
+            }
+        }
+
+        if (TextUtils.isEmpty(firstPermissionGroupID)) {
+            firstPermissionGroupID = firstPermission;
+        }
+
         if (dialog == null) {
             dialog = getDialog(tempPermissionList);
         }
-        if (!dialog.isShowing()) {
+
+        if (null != dialog && !dialog.isShowing()) {
+            final String finalFirstPermissionGroupID = firstPermissionGroupID;
             dialog.show(scene, tempPermissionList, canCancle, new OnDialogListener() {
                 @Override
                 public void onPositiveClick() {
@@ -151,51 +173,30 @@ public class PermissionsActivity extends Activity {
 
                 @Override
                 public void onNegativeClick() {
-                    for (String permission : tempPermissionList) {
-                        PermissionManager.INSTANCE.setUserDenyTime(permission);
-                    }
-                    PermissionManager.INSTANCE.getPermissionCheckResultListener()
-                            .onUserCancel(scene, tempPermissionList.get(0));
+                    notifyUserCancle(finalFirstPermissionGroupID, firstPermission);
                     dialog.dismiss();
                     finish();
                 }
 
                 @Override
                 public void onCancel() {
-                    for (String permission : tempPermissionList) {
-                        PermissionManager.INSTANCE.setUserDenyTime(permission);
-                    }
-                    PermissionManager.INSTANCE.getPermissionCheckResultListener()
-                            .onUserCancel(scene, tempPermissionList.get(0));
+                    notifyUserCancle(finalFirstPermissionGroupID, firstPermission);
                     dialog.dismiss();
                     finish();
                 }
             });
+        } else {
+            if (null != dialog) {
+                dialog.dismiss();
+            }
+            notifyUserCancle(firstPermissionGroupID, firstPermission);
+            finish();
         }
     }
 
-    protected void showMissingPermissionDialog(final String showPermission) {
-        getDialog(showPermission).show(scene, showPermission, canCancle, new OnDialogListener() {
-            @Override
-            public void onPositiveClick() {
-                onPermissionDialogPositiveClick(showPermission);
-            }
-
-
-            @Override
-            public void onNegativeClick() {
-                PermissionManager.INSTANCE.setUserDenyTime(showPermission);
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(scene, showPermission);
-                finish();
-            }
-
-            @Override
-            public void onCancel() {
-                PermissionManager.INSTANCE.setUserDenyTime(showPermission);
-                PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(scene, showPermission);
-                finish();
-            }
-        });
+    protected void notifyUserCancle(String firstPermissionGroupID, String firstPermission) {
+        PermissionManager.INSTANCE.getPermissionCheckResultListener()
+                .onUserCancel(scene, firstPermissionGroupID, firstPermission);
     }
 
     protected void onPermissionDialogPositiveClick(final List<String> tempPermissionList) {

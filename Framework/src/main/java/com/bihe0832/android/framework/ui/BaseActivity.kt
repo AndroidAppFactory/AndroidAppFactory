@@ -46,29 +46,6 @@ open class BaseActivity : SupportActivity() {
         return ContextCompat.getColor(this, R.color.navigationBarColor)
     }
 
-    open fun getPermissionList(): List<String> {
-        return ArrayList()
-    }
-
-    open fun getPermissionActivityClass(): Class<out PermissionsActivity> {
-        return PermissionsActivityV2::class.java
-    }
-
-    open fun getPermissionResult(): PermissionManager.OnPermissionResult {
-        return PermissionResultOfAAF(true)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkPermission()
-    }
-
-    open fun checkPermission() {
-        if (getPermissionList().isNotEmpty()) {
-            PermissionManager.checkPermission(this, javaClass.simpleName, false, getPermissionActivityClass(), getPermissionResult(), *getPermissionList().toTypedArray())
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         for (fragment in supportFragmentManager.fragments) {

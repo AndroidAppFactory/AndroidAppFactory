@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.permission.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class PermissionsActivityV2 extends PermissionsActivity {
 
+
     @Override
     protected void onCreate(@Nullable @androidx.annotation.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,15 +27,24 @@ public class PermissionsActivityV2 extends PermissionsActivity {
     }
 
     protected void showTips() {
+        findViewById(R.id.permission_layout).setVisibility(View.VISIBLE);
         GlideExtKt.loadImage((ImageView) findViewById(R.id.permission_icon), PermissionManager.INSTANCE.getPermissionIcon(scene, ""));
         List<String> tempPermissionList = new ArrayList<>();
-        for (String permission : needCheckPermission) {
+        for (String permission : needCheckPermissionGroup) {
             tempPermissionList.add(permission);
         }
-        ((TextView) findViewById(R.id.permission_title)).setText(TextFactoryUtils.getSpannedTextByHtml(PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, false) + "权限使用说明"));
-        ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, false)));
-    }
 
+        String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, false);
+        String permissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, false);
+
+        if (!TextUtils.isEmpty(permissionDesc) && !TextUtils.isEmpty(permissionScene)) {
+            ((TextView) findViewById(R.id.permission_title)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionDesc + "权限使用说明"));
+            ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionScene));
+        } else {
+            hideTips();
+        }
+
+    }
 
     protected void hideTips() {
         try {
@@ -44,14 +55,17 @@ public class PermissionsActivityV2 extends PermissionsActivity {
     }
 
     @Override
-    protected void showMissingPermissionDialog(String showPermission) {
-        super.showMissingPermissionDialog(showPermission);
-        hideTips();
+    protected PermissionDialog getDialog(List<String> tempPermissionList) {
+        if (autoDeny) {
+            return super.getDialog(tempPermissionList);
+        } else {
+            return null;
+        }
     }
 
     @Override
     protected void showMissingPermissionDialog(List<String> tempPermissionList) {
-        super.showMissingPermissionDialog(tempPermissionList);
         hideTips();
+        super.showMissingPermissionDialog(tempPermissionList);
     }
 }
