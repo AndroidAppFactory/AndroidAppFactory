@@ -13,7 +13,6 @@ import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
-import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.text.ClipboardUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
@@ -25,6 +24,10 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 class DebugDialogFragment : BaseDebugListFragment() {
+    init {
+
+    }
+
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
@@ -235,7 +238,7 @@ class DebugDialogFragment : BaseDebugListFragment() {
     }
 
     private fun testCustomPermission(activity: Activity?) {
-        PermissionManager.addPermissionContent(HashMap<String, String>().apply {
+        PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {
             put(Manifest.permission.RECORD_AUDIO, "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！")
         })
         activity?.let { it ->
@@ -256,7 +259,7 @@ class DebugDialogFragment : BaseDebugListFragment() {
                     }
                 })
 
-                PermissionManager.addPermissionContent(HashMap<String, String>().apply {
+                PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {
                     put(Manifest.permission.RECORD_AUDIO, "")
                 })
             }
@@ -264,10 +267,10 @@ class DebugDialogFragment : BaseDebugListFragment() {
     }
 
     private fun testCommonPermission(activity: Activity?) {
-        PermissionManager.addPermissionScene(HashMap<String, String>().apply {
+        PermissionManager.addPermissionGroupScene(HashMap<String, String>().apply {
             put(Manifest.permission.RECORD_AUDIO, "数据存储")
         })
-        PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
+        PermissionManager.addPermissionGroupDesc(HashMap<String, String>().apply {
             put(Manifest.permission.RECORD_AUDIO, "SD卡权限")
         })
         activity?.let { it ->
@@ -292,13 +295,9 @@ class DebugDialogFragment : BaseDebugListFragment() {
     }
 
     private fun testCommonPermissionV2(activity: Activity?) {
-        PermissionManager.addPermissionScene(HashMap<String, String>().apply {
-            put(Manifest.permission.RECORD_AUDIO, "发送语音动态、个人语音介绍、开黑房间语音互动、聊天语音消息等")
+        PermissionManager.checkPermission(activity, mutableListOf<String>().apply {
+            add(Manifest.permission.ACCESS_COARSE_LOCATION)
         })
-        PermissionManager.addPermissionDesc(HashMap<String, String>().apply {
-            put(Manifest.permission.RECORD_AUDIO, "麦克风")
-        })
-        PermissionManager.checkPermission(activity, "", true, PermissionsActivityV2::class.java, null, Manifest.permission.RECORD_AUDIO)
     }
 
     fun showBottomDialog(activity: Activity) {

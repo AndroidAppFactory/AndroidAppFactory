@@ -1,5 +1,6 @@
 package com.bihe0832.android.app
 
+import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
@@ -15,6 +16,7 @@ import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.WifiManagerWrapper
+import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.web.WebViewHelper
@@ -98,6 +100,34 @@ object AppFactoryInit {
     }
 
     fun initPermission() {
+
+        PermissionManager.addPermissionGroup(
+                "",
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                mutableListOf<String>().apply {
+                    add(Manifest.permission.ACCESS_COARSE_LOCATION)
+                    add(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+        )
+
+        PermissionManager.addPermissionGroupDesc(
+                HashMap<String, String>().apply {
+                    put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡")
+                    put(Manifest.permission.RECORD_AUDIO, "麦克风")
+                    put(Manifest.permission.ACCESS_COARSE_LOCATION, "位置")
+                    put(Manifest.permission.READ_PHONE_STATE, "电话信息")
+                    put(Manifest.permission.CAMERA, "相机")
+                }
+        )
+
+        PermissionManager.addPermissionGroupScene(
+                HashMap<String, String>().apply {
+                    put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "动态发布、个人/群头像设置、性别认证、聊天发送图片消息等")
+                    put(Manifest.permission.RECORD_AUDIO, "发送语音动态、个人语音介绍、开黑房间语音互动、聊天语音消息等")
+                    put(Manifest.permission.ACCESS_COARSE_LOCATION, "附近的人、开黑房间、个人主页等")
+                    put(Manifest.permission.CAMERA, "动态发布、个人/群头像设置、性别认证、聊天发送图片消息等")
+                }
+        )
 
     }
 

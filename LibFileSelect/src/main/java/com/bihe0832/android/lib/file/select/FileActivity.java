@@ -33,6 +33,7 @@ import com.bihe0832.android.lib.ui.touchregion.ViewExtForTouchRegionKt;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -79,19 +80,19 @@ public class FileActivity extends SupportActivity {
 
 
     private void init() {
-        PermissionManager.INSTANCE.addPermissionDesc(new HashMap<String, String>() {
+        PermissionManager.INSTANCE.addPermissionGroupDesc(new HashMap<String, String>() {
             {
-                put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储卡");
+                put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡");
             }
         });
 
-        PermissionManager.INSTANCE.addPermissionScene(new HashMap<String, String>() {
+        PermissionManager.INSTANCE.addPermissionGroupScene(new HashMap<String, String>() {
             {
                 put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "选择文件");
             }
         });
-        String[] permission = new String[1];
-        permission[0] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        ArrayList permission = new ArrayList();
+        permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         PermissionManager.INSTANCE.checkPermission(this, "FileSelect", false, new OnPermissionResult() {
             @Override
             public void onSuccess() {
@@ -99,14 +100,14 @@ public class FileActivity extends SupportActivity {
             }
 
             @Override
-            public void onUserCancel(String scene, String permission) {
+            public void onUserCancel(String scene, String permissionGroupID, String permission) {
                 ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
                 setResult(RESULT_CANCELED);
                 finish();
             }
 
             @Override
-            public void onUserDeny(String scene, String permission) {
+            public void onUserDeny(String scene, String permissionGroupID, String permission) {
                 ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
                 setResult(RESULT_CANCELED);
                 finish();

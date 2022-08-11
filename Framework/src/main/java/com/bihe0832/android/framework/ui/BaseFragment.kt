@@ -8,9 +8,6 @@ import android.view.ViewGroup
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.permission.PermissionManager
-import com.bihe0832.android.lib.permission.ui.PermissionsActivity
-import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
@@ -108,16 +105,6 @@ open class BaseFragment : SwipeBackFragment() {
     final override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         setUserVisibleHint(isVisibleToUser, hasCreateView)
-        if (isVisibleToUser && hasCreateView && getPermissionList().isNotEmpty()) {
-            PermissionManager.checkPermission(
-                    context,
-                    javaClass.simpleName,
-                    false,
-                    getPermissionActivityClass(),
-                    getPermissionResult(),
-                    *getPermissionList().toTypedArray()
-            )
-        }
     }
 
     fun setChildUserVisibleHint(isVisibleToUser: Boolean) {
@@ -198,18 +185,6 @@ open class BaseFragment : SwipeBackFragment() {
 
     open fun resetDensity(): Boolean {
         return true
-    }
-
-    open fun getPermissionList(): List<String> {
-        return ArrayList()
-    }
-
-    open fun getPermissionResult(): PermissionManager.OnPermissionResult {
-        return PermissionResultOfAAF(true)
-    }
-
-    open fun getPermissionActivityClass(): Class<out PermissionsActivity> {
-        return PermissionsActivityV2::class.java
     }
 
     fun needDispatchActivityResult(): Boolean {

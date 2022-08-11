@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibPermission,LibRequest,Router"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.22.20"
+ext.moduleVersionName = "4.22.21"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -294,7 +294,7 @@ ext.moduleInfo = [
         "LibRequest"                : [
                 "version"            : "4.20.59",
                 "artifactId"         : "lib-request",
-                "apidependenciesList": ["LibOS"]
+                "apidependenciesList": ["LibOS", "Router"]
         ],
         "LibGson"                   : [
                 "version"            : "4.20.22",

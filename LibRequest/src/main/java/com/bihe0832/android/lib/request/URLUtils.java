@@ -2,10 +2,11 @@ package com.bihe0832.android.lib.request;
 
 import android.net.Uri;
 import android.text.TextUtils;
-import java.io.UnsupportedEncodingException;
+
+import com.bihe0832.android.lib.router.Routers;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -46,6 +47,10 @@ public class URLUtils {
 
     }
 
+    public static String encode(String origValue) {
+        return Routers.encode(origValue);
+    }
+
     public static String getFileName(String url) {
         if (TextUtils.isEmpty(url)) {
             return "";
@@ -62,32 +67,6 @@ public class URLUtils {
                 return "";
             }
         }
-    }
-
-    public static String encode(String value) {
-        String encoded = "";
-        try {
-            encoded = URLEncoder.encode(value, "UTF-8");
-        } catch (UnsupportedEncodingException ignore) {
-        }
-        StringBuffer buf = new StringBuffer(encoded.length());
-        char focus;
-        for (int i = 0; i < encoded.length(); i++) {
-            focus = encoded.charAt(i);
-            if (focus == '*') {
-                buf.append("%2A");
-            } else if (focus == '+') {
-                buf.append("%20");
-            } else if (focus == '%' && (i + 1) < encoded.length()
-                    && encoded.charAt(i + 1) == '7'
-                    && encoded.charAt(i + 2) == 'E') {
-                buf.append('~');
-                i += 2;
-            } else {
-                buf.append(focus);
-            }
-        }
-        return buf.toString();
     }
 
     /**

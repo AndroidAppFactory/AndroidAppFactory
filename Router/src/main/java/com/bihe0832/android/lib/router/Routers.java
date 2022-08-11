@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -170,13 +172,41 @@ public class Routers {
 
     public static Bundle parseExtras(Uri uri) {
         Bundle bundle = new Bundle();
-        Set<String> names = UriCompact.getQueryParameterNames(uri);
+        Set<String> names = uri.getQueryParameterNames();
         for (String name : names) {
             String value = uri.getQueryParameter(name);
-            bundle.putString(name.toLowerCase(), value);
+            bundle.putString(name.toLowerCase(), encode(value));
         }
         return bundle;
     }
+
+    public static String encode(String value) {
+        String encoded = "";
+
+        try {
+            encoded = URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException var5) {
+        }
+
+        StringBuffer buf = new StringBuffer(encoded.length());
+
+        for (int i = 0; i < encoded.length(); ++i) {
+            char focus = encoded.charAt(i);
+            if (focus == '*') {
+                buf.append("%2A");
+            } else if (focus == '+') {
+                buf.append("%20");
+            } else if (focus == '%' && i + 1 < encoded.length() && encoded.charAt(i + 1) == '7' && encoded.charAt(i + 2) == 'E') {
+                buf.append('~');
+                i += 2;
+            } else {
+                buf.append(focus);
+            }
+        }
+
+        return buf.toString();
+    }
+
 
     public static List<Class<? extends Activity>> getMainActivityList() {
         return RouterMappingManager.getInstance().getActivityIsMain();

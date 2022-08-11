@@ -3,7 +3,10 @@ package com.bihe0832.android.lib.permission;
 import android.Manifest;
 import android.content.Context;
 import android.support.v4.content.PermissionChecker;
+
 import com.bihe0832.android.lib.permission.wrapper.FloatPermissionWrapperKt;
+
+import java.util.List;
 
 public class PermissionsChecker {
 
@@ -14,7 +17,10 @@ public class PermissionsChecker {
     }
 
     // 判断权限集合
-    public boolean lacksPermissions(String... permissions) {
+    public boolean lacksPermissions(List<String> permissions) {
+        if (permissions == null) {
+            return false;
+        }
         for (String permission : permissions) {
             if (lacksPermission(permission)) {
                 return true;
