@@ -3,10 +3,10 @@ package com.bihe0832.android.lib.request;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.bihe0832.android.lib.router.Routers;
-
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
  * Created by zixie on 16/11/21.
  */
 public class URLUtils {
-
     public static final String HTTP_REQ_ENTITY_START = "?";
     public static final String HTTP_REQ_ENTITY_MERGE = "=";
     public static final String HTTP_REQ_ENTITY_JOIN = "&";
@@ -47,8 +46,77 @@ public class URLUtils {
 
     }
 
-    public static String encode(String origValue) {
-        return Routers.encode(origValue);
+    public static String encode(String value) {
+        String encoded = "";
+
+        try {
+            encoded = URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException var5) {
+        }
+
+        StringBuffer buf = new StringBuffer(encoded.length());
+
+        for (int i = 0; i < encoded.length(); ++i) {
+            char focus = encoded.charAt(i);
+            if (focus == '*') {
+                buf.append("%2A");
+            } else if (focus == '+') {
+                buf.append("%20");
+            } else if (focus == '%' && i + 1 < encoded.length() && encoded.charAt(i + 1) == '7' && encoded.charAt(i + 2) == 'E') {
+                buf.append('~');
+                i += 2;
+            } else {
+                buf.append(focus);
+            }
+        }
+
+        return buf.toString();
+    }
+
+    /**
+     * 获取url 指定name的value;
+     *
+     * @param url
+     * @param name
+     * @return
+     */
+    public String getValueByName(String url, String name) {
+        try {
+            Uri uri = Uri.parse(url);
+            final String query = uri.getEncodedQuery();
+            if (TextUtils.isEmpty(query)) {
+                return "";
+            }
+            final String encodedKey = uri.encode(name, null);
+            final int length = query.length();
+            int start = 0;
+            do {
+                int nextAmpersand = query.indexOf(URLUtils.HTTP_REQ_ENTITY_JOIN, start);
+                int end = nextAmpersand != -1 ? nextAmpersand : length;
+                int separator = query.indexOf(URLUtils.HTTP_REQ_ENTITY_MERGE, start);
+                if (separator > end || separator == -1) {
+                    separator = end;
+                }
+                if (separator - start == encodedKey.length()
+                        && query.regionMatches(start, encodedKey, 0, encodedKey.length())) {
+                    if (separator == end) {
+                        return "";
+                    } else {
+                        return query.substring(separator + 1, end);
+                    }
+                }
+                // Move start to end of name.
+                if (nextAmpersand != -1) {
+                    start = nextAmpersand + 1;
+                } else {
+                    break;
+                }
+            } while (true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 
     public static String getFileName(String url) {
@@ -67,27 +135,6 @@ public class URLUtils {
                 return "";
             }
         }
-    }
-
-    /**
-     * 获取url 指定name的value;
-     *
-     * @param url
-     * @param name
-     * @return
-     */
-    public static String getValueByName(String url, String name) {
-        String result = "";
-        int index = url.indexOf("?");
-        String temp = url.substring(index + 1);
-        String[] keyValue = temp.split("&");
-        for (String str : keyValue) {
-            if (str.contains(name)) {
-                result = str.replace(name + "=", "");
-                break;
-            }
-        }
-        return result;
     }
 
     public static String marge(String url, String para) {

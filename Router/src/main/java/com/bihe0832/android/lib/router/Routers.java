@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -21,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Routers {
 
     public static final String ROUTERS_KEY_RAW_URL = "com.bihe0832.router.URI";
+    public static final String HTTP_REQ_ENTITY_MERGE = "=";
+    public static final String HTTP_REQ_ENTITY_JOIN = "&";
 
     private static void initIfNeed(String format) {
         if (!RouterMappingManager.getInstance().getRouterMapping().isEmpty() && RouterMappingManager.getInstance()
@@ -172,39 +172,31 @@ public class Routers {
 
     public static Bundle parseExtras(Uri uri) {
         Bundle bundle = new Bundle();
-        Set<String> names = uri.getQueryParameterNames();
-        for (String name : names) {
-            String value = uri.getQueryParameter(name);
-            bundle.putString(name.toLowerCase(), encode(value));
+
+        String query = uri.getEncodedQuery();
+        if (TextUtils.isEmpty(query)) {
+            return bundle;
         }
-        return bundle;
-    }
-
-    public static String encode(String value) {
-        String encoded = "";
-
-        try {
-            encoded = URLEncoder.encode(value, "UTF-8");
-        } catch (UnsupportedEncodingException var5) {
-        }
-
-        StringBuffer buf = new StringBuffer(encoded.length());
-
-        for (int i = 0; i < encoded.length(); ++i) {
-            char focus = encoded.charAt(i);
-            if (focus == '*') {
-                buf.append("%2A");
-            } else if (focus == '+') {
-                buf.append("%20");
-            } else if (focus == '%' && i + 1 < encoded.length() && encoded.charAt(i + 1) == '7' && encoded.charAt(i + 2) == 'E') {
-                buf.append('~');
-                i += 2;
-            } else {
-                buf.append(focus);
+        int start = 0;
+        do {
+            int next = query.indexOf(HTTP_REQ_ENTITY_JOIN, start);
+            int end = (next == -1) ? query.length() : next;
+            int separator = query.indexOf(HTTP_REQ_ENTITY_MERGE, start);
+            if (separator > end || separator == -1) {
+                separator = end;
             }
-        }
+            String name = query.substring(start, separator);
+            if (separator - start == name.length() && query.regionMatches(start, name, 0, name.length())) {
+                if (separator == end) {
+                    bundle.putString(name, "");
+                } else {
+                    bundle.putString(name, query.substring(separator + 1, end));
+                }
+                start = end + 1;
+            }
+        } while (start < query.length());
 
-        return buf.toString();
+        return bundle;
     }
 
 
