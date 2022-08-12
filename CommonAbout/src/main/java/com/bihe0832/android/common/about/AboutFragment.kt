@@ -61,11 +61,11 @@ open class AboutFragment : CommonListFragment() {
 
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
-            override fun fetchData() {
+            override fun initData() {
                 postValue(mDataList)
             }
 
-            override fun clearData() {
+            override fun refresh() {
 
             }
 

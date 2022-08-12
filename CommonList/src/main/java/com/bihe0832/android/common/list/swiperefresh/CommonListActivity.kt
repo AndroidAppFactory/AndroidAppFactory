@@ -26,8 +26,7 @@ abstract class CommonListActivity : BaseListActivity() {
         mRefresh = findViewById(R.id.activity_list_refresh)
         mRefresh?.apply {
             setOnRefreshListener {
-                mDataLiveData.clearData()
-                mDataLiveData.fetchData()
+                mDataLiveData.refresh()
             }
             setOnChildScrollUpCallback { _, _ ->
                 if (mDataLiveData.canRefresh()) {
@@ -42,7 +41,7 @@ abstract class CommonListActivity : BaseListActivity() {
         }
         mRefresh?.isEnabled = mDataLiveData.canRefresh()
 
-        mDataLiveData.fetchData()
+        mDataLiveData.initData()
 
         mAdapter.setOnLoadMoreListener({
             mDataLiveData.loadMore()

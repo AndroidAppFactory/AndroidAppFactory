@@ -4,12 +4,12 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
+import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
-import com.bihe0832.android.common.debug.R
-import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -26,14 +26,15 @@ class DebugListFragment : CommonListFragment() {
         mRecyclerView?.apply {
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             addItemDecoration(
-                GridDividerItemDecoration.Builder(context).apply {
-                    setShowLastLine(false)
-                    setColor(R.color.common_debug_activity_split_bg)
-                    setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
-                }.build()
+                    GridDividerItemDecoration.Builder(context).apply {
+                        setShowLastLine(false)
+                        setColor(R.color.common_debug_activity_split_bg)
+                        setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
+                    }.build()
             )
         }
     }
+
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
 //        return SafeGridLayoutManager(context, 3)
         return getLinearLayoutManagerForList()
@@ -50,16 +51,14 @@ class DebugListFragment : CommonListFragment() {
 
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
-            override fun fetchData() {
-//                mDataList.add(
-//                        TestTipsData("点击打开List 测试Activity") { RouterHelper.openPageByRouter(ROUTRT_NAME_TEST_SECTION) }
-//                )
+            override fun initData() {
                 mDataList.addAll(getTempData())
                 postValue(mDataList)
             }
 
-            override fun clearData() {
+            override fun refresh() {
                 mDataList.clear()
+                initData()
             }
 
             override fun loadMore() {

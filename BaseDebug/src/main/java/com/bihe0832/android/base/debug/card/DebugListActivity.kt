@@ -45,13 +45,13 @@ class TestListActivity : CommonListActivity() {
         mAdapter.isUpFetchEnable = true
         mAdapter.setUpFetchListener {
             num++
-            if (num < 5){
+            if (num < 5) {
                 ThreadManager.getInstance().start(
                         {
                             var data = getTempData(true)
                             mAdapter.data.addAll(0, data)
-                            mAdapter.notifyItemRangeInserted(0,data.size)
-                        },500L
+                            mAdapter.notifyItemRangeInserted(0, data.size)
+                        }, 500L
                 )
             }
         }
@@ -66,9 +66,9 @@ class TestListActivity : CommonListActivity() {
                     } else {
                         position - 1
                     }
-                    super.onActive(recyclerView, newposition )
+                    super.onActive(recyclerView, newposition)
                     ZixieContext.showDebug("Test onActive:" + newposition)
-                    if (num > 4){
+                    if (num > 4) {
                         mRefresh?.isEnabled = true
                     }
 
@@ -99,15 +99,15 @@ class TestListActivity : CommonListActivity() {
 
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
-            override fun fetchData() {
+            override fun initData() {
                 mDataList.addAll(getTempData(false))
                 postValue(mDataList)
             }
 
-            override fun clearData() {
+            override fun refresh() {
                 mDataList.clear()
                 num = 0
-
+                initData()
             }
 
             override fun loadMore() {
@@ -125,6 +125,7 @@ class TestListActivity : CommonListActivity() {
             }
         }
     }
+
     private fun getTempData(isUpper: Boolean): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             for (i in 0..19) {
@@ -132,7 +133,7 @@ class TestListActivity : CommonListActivity() {
 //                        if (i < 2) {
 //                            SectionDataHeader("标题1 - $i:${System.currentTimeMillis()}")
 //                        } else {
-                            SectionDataHeader2("标题2 - $i $isUpper:${System.currentTimeMillis()}")
+                        SectionDataHeader2("标题2 - $i $isUpper:${System.currentTimeMillis()}")
 //                        }
                 )
 //                for (j in 0..3) {

@@ -3,11 +3,11 @@ package com.bihe0832.android.common.debug.log;
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
-import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
@@ -44,20 +44,15 @@ open class DebugLogActivity : CommonListActivity() {
 
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
-            override fun fetchData() {
+            override fun initData() {
                 mDataList.addAll(getTempData())
                 postValue(mDataList)
             }
 
-            override fun clearData() {
-                mDataList.clear()
-                num = 0
+            override fun refresh() {
             }
 
             override fun loadMore() {
-                num++
-                mDataList.addAll(getTempData())
-                postValue(mDataList)
             }
 
             override fun hasMore(): Boolean {
