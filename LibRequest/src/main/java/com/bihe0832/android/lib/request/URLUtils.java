@@ -80,7 +80,7 @@ public class URLUtils {
      * @param name
      * @return
      */
-    public String getValueByName(String url, String name) {
+    public static String getValueByName(String url, String name) {
         try {
             Uri uri = Uri.parse(url);
             final String query = uri.getEncodedQuery();
