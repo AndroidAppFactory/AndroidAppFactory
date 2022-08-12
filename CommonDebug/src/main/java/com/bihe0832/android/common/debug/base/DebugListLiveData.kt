@@ -1,8 +1,6 @@
 package com.bihe0832.android.common.debug.base
 
-import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.list.CommonListLiveData
-import com.bihe0832.android.framework.ZixieContext
 
 /**
  *
@@ -11,8 +9,8 @@ import com.bihe0832.android.framework.ZixieContext
  */
 abstract class DebugListLiveData : CommonListLiveData() {
 
-    override fun clearData() {
-        postValue(ArrayList())
+    override fun refresh() {
+
     }
 
     override fun loadMore() {

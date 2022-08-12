@@ -28,9 +28,7 @@ abstract class CommonListFragment : BaseListFragment() {
         mRefresh?.addEasyEvent(object : EasyRefreshLayout.EasyEvent {
             override fun onRefreshing() {
                 mRefresh?.loadMoreModel = LoadModel.COMMON_MODEL
-                mDataLiveData.clearData()
-                mDataLiveData.fetchData()
-                mRefresh?.refreshComplete()
+                mDataLiveData.refresh()
             }
 
             override fun onLoadMore() {
@@ -42,7 +40,7 @@ abstract class CommonListFragment : BaseListFragment() {
     }
 
     override fun initData() {
-        mDataLiveData.fetchData()
+        mDataLiveData.initData()
     }
 
     override fun updateData(data: List<CardBaseModule>) {

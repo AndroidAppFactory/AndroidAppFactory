@@ -17,7 +17,6 @@ abstract class CommonListFragment : BaseListFragment() {
 
     protected var mRefresh: SwipeRefreshLayout? = null
 
-
     override fun getResID(): Int {
         return R.layout.common_fragment_list_swipe
     }
@@ -27,8 +26,7 @@ abstract class CommonListFragment : BaseListFragment() {
         mRefresh = view.findViewById(R.id.fragment_list_refresh)
         mRefresh?.apply {
             setOnRefreshListener {
-                mDataLiveData.clearData()
-                mDataLiveData.fetchData()
+                mDataLiveData.refresh()
             }
             setOnChildScrollUpCallback { _, _ ->
                 if (mDataLiveData.canRefresh()) {
@@ -42,12 +40,14 @@ abstract class CommonListFragment : BaseListFragment() {
             }
         }
         mRefresh?.isEnabled = mDataLiveData.canRefresh()
-        
-        mDataLiveData.fetchData()
-
         mAdapter.setOnLoadMoreListener({
             mDataLiveData.loadMore()
         }, mRecyclerView)
+    }
+
+    override fun initData() {
+        super.initData()
+        mDataLiveData.initData()
     }
 
     override fun updateData(data: List<CardBaseModule>) {

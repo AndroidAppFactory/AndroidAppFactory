@@ -29,9 +29,7 @@ abstract class CommonListActivity : BaseListActivity() {
         mRefresh?.addEasyEvent(object : EasyRefreshLayout.EasyEvent {
             override fun onRefreshing() {
                 mRefresh?.loadMoreModel = LoadModel.COMMON_MODEL
-                mDataLiveData.clearData()
-                mDataLiveData.fetchData()
-                mRefresh?.refreshComplete()
+                mDataLiveData.refresh()
             }
 
             override fun onLoadMore() {
@@ -40,7 +38,7 @@ abstract class CommonListActivity : BaseListActivity() {
         })
 
         mRefresh?.isEnablePullToRefresh = mDataLiveData.canRefresh()
-        mDataLiveData.fetchData()
+        mDataLiveData.initData()
     }
 
     override fun updateData(data: List<CardBaseModule>) {

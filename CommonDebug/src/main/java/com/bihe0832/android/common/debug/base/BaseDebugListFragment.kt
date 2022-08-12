@@ -24,7 +24,7 @@ open class BaseDebugListFragment : CommonListFragment() {
 
     private val mTestDataLiveData by lazy {
         object : DebugListLiveData() {
-            override fun fetchData() {
+            override fun initData() {
                 postValue(getDataList())
             }
         }
