@@ -24,6 +24,13 @@ class NetworkRecord(
 
         var contentData = getRecordContentData()
         var traceTimeRecord = getRecordTraceTimeData()
+        val totalCost = traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_CALL_END).let {
+            if (it > 0) {
+                it
+            } else {
+                traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_RESPONSE_BODY_END)
+            }
+        }
         StringBuffer().apply {
             append("\n \n")
             append("--> $method $url ${contentData.protocol}\n")
@@ -38,7 +45,7 @@ class NetworkRecord(
             append("${contentData.errorMsg}\n")
             append("${contentData.responseHeadersMap.toString()}\n")
             append("${contentData.responseBody}\n\n")
-            append("<-- END HTTP (${contentData.responseBodyLength} - byte body)   Total Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_CALL_END)}ms\n")
+            append("<-- END HTTP (${contentData.responseBodyLength} - byte body)   Total Cost: ${totalCost}ms\n")
         }.let {
             return it.toString()
         }

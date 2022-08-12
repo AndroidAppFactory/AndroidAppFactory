@@ -15,6 +15,7 @@ import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkConten
 import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkRecord
 import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkTraceTimeRecord
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
 import okhttp3.*
 import java.io.IOException
 import java.net.InetAddress
@@ -27,10 +28,20 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
     private var mNetworkTraceTimeRecord: NetworkTraceTimeRecord? = null
     private var mNetworkTraceRequestID: String = ""
     private var mNetworkContentRequestID: String = ""
+    private var hasLog = false
 
     open fun canTrace(call: Call): Boolean {
         return enableTrace
     }
+
+    fun getNetworkTraceRequestID(): String {
+        return mNetworkTraceRequestID
+    }
+
+    fun getNetworkContentRequestID(): String {
+        return mNetworkContentRequestID
+    }
+
 
     override fun callStart(call: Call) {
         super.callStart(call)
@@ -143,26 +154,38 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
         super.responseBodyEnd(call, byteCount)
         saveEvent(NetworkTraceTimeRecord.EVENT_RESPONSE_BODY_END)
         listener?.responseBodyEnd(call, byteCount)
+        ThreadManager.getInstance().start({
+            doLogAction()
+        }, 500L)
+
     }
 
     override fun callEnd(call: Call) {
         super.callEnd(call)
         saveEvent(NetworkTraceTimeRecord.EVENT_CALL_END)
         listener?.callEnd(call)
-        if (enableLog) {
-            if (enableTrace) {
-                logRequest(OkHttpWrapper.getRecord(mNetworkTraceRequestID))
-            } else {
-                logRequest(AAFRequestDataRepository.getNetworkContentDataRecordByContentID(mNetworkContentRequestID))
+        doLogAction()
+    }
+
+    fun doLogAction() {
+        if (!hasLog) {
+            if (enableLog) {
+                if (enableTrace) {
+                    logRequest(OkHttpWrapper.getRecord(mNetworkTraceRequestID))
+                } else {
+                    logRequest(AAFRequestDataRepository.getNetworkContentDataRecordByContentID(mNetworkContentRequestID))
+                }
             }
         }
     }
 
     open fun logRequest(record: NetworkContentDataRecord) {
+        hasLog = true
         ZLog.d(TAG, record.toString())
     }
 
     open fun logRequest(record: NetworkRecord?) {
+        hasLog = true
         ZLog.d(TAG, record.toString())
     }
 
