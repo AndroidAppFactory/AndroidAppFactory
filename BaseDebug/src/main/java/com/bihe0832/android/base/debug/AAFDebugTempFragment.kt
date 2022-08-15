@@ -54,6 +54,8 @@ import com.bihe0832.android.lib.ui.view.ext.getActivity
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
+import com.bihe0832.android.lib.utils.encrypt.SHA256
 import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
@@ -577,6 +579,27 @@ class AAFDebugTempFragment : DebugEnvFragment() {
 
     private fun testFunc() {
         AAFLoggerFile.log("Test0", "This is a test log for Test by ${Thread.currentThread().id}")
+
+        "123456".let {
+            MD5.getMd5(it).let { data ->
+                ZLog.d("testAssets", "$it MD5 is: $data")
+                ZLog.d("testAssets", "$it MD5 length is: ${data.length}")
+            }
+            MessageDigestUtils.getDigestData(it, "MD5").let { data ->
+                ZLog.d("testAssets", "$it MD5 is: $data")
+                ZLog.d("testAssets", "$it MD5 length is: ${data.length}")
+            }
+            SHA256.getSHA256(it).let { data ->
+                ZLog.d("testAssets", "$it SHA256 is: $data")
+                ZLog.d("testAssets", "$it SHA256 length is: ${data.length}")
+            }
+            MessageDigestUtils.getDigestData(it, "SHA-256").let { data ->
+                ZLog.d("testAssets", "$it SHA256 is: $data")
+                ZLog.d("testAssets", "$it SHA256 length is: ${data.length}")
+            }
+
+        }
+
 
 //        PermissionManager.checkPermission(activity, Manifest.permission.RECORD_AUDIO)
 
