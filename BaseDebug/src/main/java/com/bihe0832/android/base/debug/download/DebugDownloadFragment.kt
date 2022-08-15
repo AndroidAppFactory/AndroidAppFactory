@@ -20,6 +20,8 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.utils.encrypt.GzipUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
+import com.bihe0832.android.lib.utils.encrypt.SHA256
 import java.io.File
 
 class DebugDownloadFragment : BaseDebugListFragment() {
@@ -238,6 +240,23 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
 
                         ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, true))
+
+                        MD5.getFileMD5(filePath).let { data ->
+                            ZLog.d(LOG_TAG, "$filePath MD5 is: $data")
+                            ZLog.d(LOG_TAG, "$filePath MD5 length is: ${data.length}")
+                        }
+                        MessageDigestUtils.getFileDigestData(filePath, "MD5").let { data ->
+                            ZLog.d(LOG_TAG, "$filePath MD5 is: $data")
+                            ZLog.d(LOG_TAG, "$filePath MD5 length is: ${data.length}")
+                        }
+                        SHA256.getFileSHA256(filePath).let { data ->
+                            ZLog.d(LOG_TAG, "$filePath SHA256 is: $data")
+                            ZLog.d(LOG_TAG, "$filePath SHA256 length is: ${data.length}")
+                        }
+                        MessageDigestUtils.getFileDigestData(filePath, "SHA-256").let { data ->
+                            ZLog.d(LOG_TAG, "$filePath SHA256 is: $data")
+                            ZLog.d(LOG_TAG, "$filePath SHA256 length is: ${data.length}")
+                        }
                     }
 
 

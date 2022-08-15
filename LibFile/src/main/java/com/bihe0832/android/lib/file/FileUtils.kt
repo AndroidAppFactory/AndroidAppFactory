@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.file.content.FileName
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.SHA256
 import java.io.File
 import java.io.InputStream
 import java.text.DecimalFormat
@@ -220,6 +221,10 @@ object FileUtils {
 
     fun getFileMD5(filePath: String): String {
         return MD5.getFileMD5(filePath)
+    }
+
+    fun getFileSHA256(filePath: String): String {
+        return SHA256.getFileSHA256(filePath)
     }
 
     fun getExtensionName(filename: String?): String {
