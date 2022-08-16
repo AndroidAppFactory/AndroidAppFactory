@@ -41,8 +41,7 @@ class NetworkRecord(
             } else {
                 append("--> END $method Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms)\n")
             }
-            append("<-- ${contentData.status} $url")
-            append("${contentData.errorMsg}\n")
+            append("<-- ${contentData.status} $url ${contentData.errorMsg}\n")
             append("${contentData.responseHeadersMap.toString()}\n")
             append("${contentData.responseBody}\n\n")
             append("<-- END HTTP (${contentData.responseBodyLength} - byte body)   Total Cost: ${totalCost}ms\n")
