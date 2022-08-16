@@ -43,8 +43,7 @@ class NetworkContentDataRecord : Serializable {
             } else {
                 append("--> END $method \n")
             }
-            append("<-- ${status} $url")
-            append("${errorMsg}\n")
+            append("<-- ${status} $url ${errorMsg}\n")
             append("${responseHeadersMap.toString()}\n")
             append("${responseBody}\n\n")
             append("<-- END HTTP (${responseBodyLength} - byte body) \n")
