@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.utils.encrypt.GzipUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
@@ -62,12 +63,13 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             )
             add(DebugItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
             add(DebugItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
+            add(DebugItemData("多位置触发下载", View.OnClickListener { testDownloadMoreThanOnce() }))
+
         }
     }
 
     val INSTALL_BY_DEFAULT = 0
     val INSTALL_BY_CUSTOMER = 1
-
 
 
     fun startDownload(type: Int) {
@@ -305,5 +307,36 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                     override fun onCancel() {
                     }
                 })
+    }
+
+    fun testDownloadMoreThanOnce() {
+
+        var url = "https://c5ea82c62f3216ea883c2d99c8d55e0d.rdt.tfogc.com:49156/imtt.dd.qq.com/sjy.20002/sjy.00001/16891/apk/717B4E2AED4A487A68D81C9976E48E20.apk"
+        for (i in 0..3) {
+            ThreadManager.getInstance().start({
+                DownloadFile.startDownload(
+                        activity!!,
+                        url, "", "fsdfdsffd$i", object : SimpleDownloadListener() {
+                    private fun getString(): String {
+                        return "SimpleDownloadListener" + this.hashCode() + "-" + i
+                    }
+
+                    override fun onComplete(filePath: String, item: DownloadItem) {
+                        ZLog.d("testDownloadMoreThanOnce", "onComplete : ${getString()} ${filePath}")
+                    }
+
+                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                        ZLog.d("testDownloadMoreThanOnce", "onFail : ${getString()} ${errorCode} ${msg}")
+                    }
+
+                    override fun onProgress(item: DownloadItem) {
+                        ZLog.d("testDownloadMoreThanOnce", "testDownloadMoreThanOnce : ${getString()} ${item.process}")
+                    }
+
+                })
+
+            }, 10 * i)
+        }
+
     }
 }

@@ -9,37 +9,37 @@ import java.io.InputStream;
 
 public class MD5 {
 
-    private static final String MESSAGE_DIGEST_TYPE = "MD5";
+    public static final String MESSAGE_DIGEST_TYPE_MD5 = "MD5";
 
     public static String getMd5(String string) {
-        return MessageDigestUtils.getDigestData(string, MESSAGE_DIGEST_TYPE);
+        return MessageDigestUtils.getDigestData(string, MESSAGE_DIGEST_TYPE_MD5);
     }
 
     public static String getMd5(byte[] bytes) {
-        return MessageDigestUtils.getDigestData(bytes, MESSAGE_DIGEST_TYPE);
+        return MessageDigestUtils.getDigestData(bytes, MESSAGE_DIGEST_TYPE_MD5);
     }
 
     public static String getFileMD5(String fileName) {
-        return MessageDigestUtils.getFileDigestData(fileName, MESSAGE_DIGEST_TYPE);
+        return MessageDigestUtils.getFileDigestData(fileName, MESSAGE_DIGEST_TYPE_MD5);
     }
 
     public static String getFileMD5(File sourceFile) {
-        return MessageDigestUtils.getFileDigestData(sourceFile, MESSAGE_DIGEST_TYPE);
+        return MessageDigestUtils.getFileDigestData(sourceFile, MESSAGE_DIGEST_TYPE_MD5);
     }
 
     public static String getInputStreamMd5(InputStream is) {
-        return MessageDigestUtils.getInputStreamDigestData(is, MESSAGE_DIGEST_TYPE);
+        return MessageDigestUtils.getInputStreamDigestData(is, MESSAGE_DIGEST_TYPE_MD5);
     }
 
     public static String getFileMD5(String fileName, long start, long end) {
-        return MessageDigestUtils.getFileDigestData(fileName, MESSAGE_DIGEST_TYPE, start, end);
+        return MessageDigestUtils.getFileDigestData(fileName, MESSAGE_DIGEST_TYPE_MD5, start, end);
     }
 
     public static String getFileMD5(File sourceFile, long start, long end) {
-        return MessageDigestUtils.getFileDigestData(sourceFile, MESSAGE_DIGEST_TYPE, start, end);
+        return MessageDigestUtils.getFileDigestData(sourceFile, MESSAGE_DIGEST_TYPE_MD5, start, end);
     }
 
     public static String getInputStreamMd5(InputStream bis, long start, long end) {
-        return MessageDigestUtils.getInputStreamDigestData(bis, MESSAGE_DIGEST_TYPE, start, end);
+        return MessageDigestUtils.getInputStreamDigestData(bis, MESSAGE_DIGEST_TYPE_MD5, start, end);
     }
 }

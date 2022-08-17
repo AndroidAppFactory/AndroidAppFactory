@@ -28,6 +28,8 @@ public class DownloadItem implements Serializable {
     private String downloadURL = "";
     // 文件MD5，非必填
     private String fileMD5 = "";
+    // 文件SHA256，非必填
+    private String fileSHA256 = "";
     // 如果本地有同名文件是否重新下载，非必填
     private boolean forceDownloadNew = false;
     // 如果本地有同名文件但是下载完判断MD5不一致，是否自动删除，非必填
@@ -191,8 +193,16 @@ public class DownloadItem implements Serializable {
         return fileMD5;
     }
 
+    public String getFileSHA256() {
+        return fileSHA256;
+    }
+
     public void setFileMD5(String fileMD5) {
         this.fileMD5 = fileMD5;
+    }
+
+    public void setFileSHA256(String fileSHA256) {
+        this.fileSHA256 = fileSHA256;
     }
 
     public String getPackageName() {
@@ -358,6 +368,7 @@ public class DownloadItem implements Serializable {
         if (item.getDownloadID() == getDownloadID()) {
             this.downloadURL = item.downloadURL;
             this.fileMD5 = item.fileMD5;
+            this.fileSHA256 = item.fileSHA256;
             this.forceDownloadNew = item.forceDownloadNew;
             this.autoInstall = item.autoInstall;
             this.notificationVisibility = item.notificationVisibility;
@@ -395,6 +406,7 @@ public class DownloadItem implements Serializable {
                 + ", finalFilePath='" + finalFilePath + '\''
                 + ", tempFilePath='" + tempFilePath + '\''
                 + ", fileMD5='" + fileMD5 + '\''
+                + ", fileSHA256='" + fileSHA256 + '\''
                 + ", forceDownloadNew=" + forceDownloadNew
                 + ", finishedLength=" + finishedLength
                 + ", finishedLengthBefore=" + finishedLengthBefore

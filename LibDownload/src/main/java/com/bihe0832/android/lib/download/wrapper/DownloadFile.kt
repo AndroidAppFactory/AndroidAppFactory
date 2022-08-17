@@ -3,10 +3,8 @@ package com.bihe0832.android.lib.download.wrapper
 import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
-import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
@@ -56,7 +54,7 @@ object DownloadFile {
             activity: Activity,
             url: String,
             md5: String,
-            canCancle: Boolean,
+            canCancel: Boolean,
             listener: OnDialogListener?,
             downloadListener: DownloadListener?
     ) {
@@ -65,7 +63,7 @@ object DownloadFile {
                 url,
                 "",
                 md5,
-                canCancle,
+                canCancel,
                 listener,
                 downloadListener
         )
@@ -76,7 +74,7 @@ object DownloadFile {
             url: String,
             filePath: String,
             md5: String,
-            canCancle: Boolean,
+            canCancel: Boolean,
             listener: OnDialogListener?,
             downloadListener: DownloadListener?
     ) {
@@ -87,7 +85,8 @@ object DownloadFile {
                 url,
                 filePath,
                 md5,
-                canCancle,
+                "",
+                canCancel,
                 false,
                 listener,
                 downloadListener
@@ -137,6 +136,7 @@ object DownloadFile {
                 url,
                 filePath,
                 md5,
+                "",
                 canCancel,
                 true,
                 listener,
@@ -152,6 +152,7 @@ object DownloadFile {
             url: String,
             filePath: String,
             md5: String,
+            sha256: String,
             canCancel: Boolean,
             useProcess: Boolean,
             listener: OnDialogListener?,
@@ -179,6 +180,7 @@ object DownloadFile {
                                             url,
                                             filePath,
                                             md5,
+                                            sha256,
                                             canCancel,
                                             forceDownloadNew = false,
                                             useMobile = true,
@@ -193,6 +195,7 @@ object DownloadFile {
                                             url,
                                             filePath,
                                             md5,
+                                            sha256,
                                             forceDownloadNew = false,
                                             canPart = true,
                                             UseMobile = true,
@@ -211,6 +214,7 @@ object DownloadFile {
                             url,
                             filePath,
                             md5,
+                            sha256,
                             canCancel,
                             forceDownloadNew = false,
                             useMobile = true,
@@ -219,7 +223,7 @@ object DownloadFile {
                     )
                 } else {
                     startDownload(
-                            activity, title, msg, url, "", md5,
+                            activity, title, msg, url, "", md5, sha256,
                             forceDownloadNew = false,
                             canPart = true,
                             UseMobile = true,
@@ -240,6 +244,7 @@ object DownloadFile {
             url: String,
             filePath: String,
             md5: String,
+            sha256: String,
             canCancel: Boolean,
             forceDownloadNew: Boolean,
             useMobile: Boolean,
@@ -290,6 +295,7 @@ object DownloadFile {
                 url,
                 filePath,
                 md5,
+                sha256,
                 forceDownloadNew,
                 true,
                 useMobile,
@@ -354,7 +360,7 @@ object DownloadFile {
             downloadListener: DownloadListener?
     ) {
         startDownload(
-                context, "", "", url, "", "",
+                context, "", "", url, "", "", "",
                 forceDownload,
                 canPart = false,
                 UseMobile = true,
@@ -398,7 +404,7 @@ object DownloadFile {
             downloadListener: DownloadListener?
     ) {
         startDownload(
-                context, "", "", url, filePath, md5,
+                context, "", "", url, filePath, md5, "",
                 forceDownloadNew = false,
                 canPart = false,
                 UseMobile = useMobile,
@@ -413,6 +419,7 @@ object DownloadFile {
             url: String,
             filePath: String,
             md5: String,
+            sha256: String,
             forceDownloadNew: Boolean,
             canPart: Boolean,
             UseMobile: Boolean,
@@ -428,6 +435,7 @@ object DownloadFile {
             downloadTitle = title
             downloadDesc = msg
             fileMD5 = md5
+            fileSHA256 = sha256
             isForceDownloadNew = forceDownloadNew
             if (!TextUtils.isEmpty(filePath)) {
                 fileNameWithPath = filePath
