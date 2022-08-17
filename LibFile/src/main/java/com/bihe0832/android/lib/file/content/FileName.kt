@@ -2,11 +2,9 @@ package com.bihe0832.android.lib.file.content
 
 import android.text.TextUtils
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.utils.encrypt.MD5
-import java.io.*
-import java.nio.charset.Charset
+import com.bihe0832.android.lib.request.URLUtils
+import java.io.File
 import java.util.*
-import java.util.zip.GZIPInputStream
 
 
 /**
@@ -16,30 +14,34 @@ import java.util.zip.GZIPInputStream
  */
 object FileName {
 
-    fun getExtensionName(filename: String?): String {
-        filename?.let {
-            val dot = filename.lastIndexOf('.')
-            if (dot > -1 && dot < filename.length - 1) {
-                return filename.substring(dot + 1)
-            }
-        }
-        return ""
-    }
-
     fun getFileName(filePath: String?): String {
-        filePath?.let {
-            val split = filePath.lastIndexOf(File.separator)
+        var noQueryURL = URLUtils.getNoQueryUrl(filePath)
+        if (TextUtils.isEmpty(noQueryURL)) {
+            noQueryURL = filePath
+        }
+        noQueryURL?.let {
+            val split = noQueryURL.lastIndexOf(File.separator)
             return if (split > -1) {
-                filePath.substring(split + 1)
+                noQueryURL.substring(split + 1)
             } else {
-                filePath
+                noQueryURL
             }
         }
         return ""
     }
 
-    fun getFileNameWithoutEx(filename: String?): String {
-        filename?.let {
+    fun getExtensionName(filename: String?): String {
+        getFileName(filename).let { noQueryURL ->
+            val dot = noQueryURL.lastIndexOf('.')
+            if (dot > -1 && dot < noQueryURL.length - 1) {
+                return noQueryURL.substring(dot + 1)
+            }
+        }
+        return ""
+    }
+
+    fun getFileNameWithoutEx(source: String?): String {
+        getFileName(source)?.let { filename ->
             val dot = filename.lastIndexOf('.')
             val split = filename.lastIndexOf(File.separator)
             if (split < dot) {
