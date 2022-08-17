@@ -6,12 +6,10 @@
         <activity
             android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
             android:theme="@style/permissionFullscreen" />
         <activity
             android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivityV2"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
             android:theme="@style/permissionFullscreen" />
     </application>
 </manifest>

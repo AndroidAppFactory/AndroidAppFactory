@@ -34,7 +34,7 @@ public class TestMainFragment extends DebugMainFragment {
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new DebugDownloadFragment();
+            return new DebugDialogFragment();
         } else if (title.equals(TAB_FOR_DEV_TEMP)) {
             return new AAFDebugTempFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {
