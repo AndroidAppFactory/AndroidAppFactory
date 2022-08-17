@@ -26,7 +26,7 @@ public class URLUtils {
      * @return 去掉参数的url, 如:http://www.qq.com/ui/oa/test.html
      */
     public static String getNoQueryUrl(String source) {
-        String dest = null;
+        String dest = "";
         try {
             URL sUrl = new URL(source);
             URL dUrl = new URL(sUrl.getProtocol(), sUrl.getHost(),
