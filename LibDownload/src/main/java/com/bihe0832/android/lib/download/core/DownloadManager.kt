@@ -22,6 +22,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 
@@ -32,7 +33,8 @@ object DownloadManager {
     }
 
     private var mContext: Context? = null
-    private var mDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
+    private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
+    private var mTempDownloadListenerList = ConcurrentHashMap<Long, ArrayList<DownloadListener>>()
     private const val DEFAULT_MAX_NUM = 5
     private var mMaxNum = DEFAULT_MAX_NUM
     private var mHasInit = false
@@ -60,8 +62,8 @@ object DownloadManager {
             DownloadInfoDBManager.init(context)
         }
         listener?.let {
-            if (!mDownloadListenerList.contains(it)) {
-                mDownloadListenerList.add(it)
+            if (!mGlobalDownloadListenerList.contains(it)) {
+                mGlobalDownloadListenerList.add(it)
             }
         }
     }
@@ -75,17 +77,21 @@ object DownloadManager {
     fun onDestroy() {
         pauseAllTask(false)
         DownloadNotify.destroy()
-        mDownloadListenerList.clear()
+        mGlobalDownloadListenerList.clear()
     }
 
     private val innerDownloadListener = object : DownloadListener {
         override fun onWait(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_WAITING
             DownloadNotify.notifyProcess(item)
-            mDownloadListenerList.forEach {
+            mGlobalDownloadListenerList.forEach {
                 it.onWait(item)
             }
             item.downloadListener?.let {
+                it.onWait(item)
+            }
+
+            mTempDownloadListenerList[item.downloadID]?.forEach {
                 it.onWait(item)
             }
             DownloadInfoDBManager.saveDownloadInfo(item)
@@ -96,10 +102,14 @@ object DownloadManager {
             item.lastSpeed = 0
             DownloadNotify.notifyProcess(item)
             item.startTime = System.currentTimeMillis()
-            mDownloadListenerList.forEach {
+            mGlobalDownloadListenerList.forEach {
                 it.onStart(item)
             }
             item.downloadListener?.let {
+                it.onStart(item)
+            }
+
+            mTempDownloadListenerList[item.downloadID]?.forEach {
                 it.onStart(item)
             }
             DownloadInfoDBManager.saveDownloadInfo(item)
@@ -108,11 +118,15 @@ object DownloadManager {
         override fun onProgress(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOADING
 
-            mDownloadListenerList.forEach {
+            mGlobalDownloadListenerList.forEach {
                 it.onProgress(item)
             }
 
             item.downloadListener?.let {
+                it.onProgress(item)
+            }
+
+            mTempDownloadListenerList[item.downloadID]?.forEach {
                 it.onProgress(item)
             }
 
@@ -123,11 +137,15 @@ object DownloadManager {
 
         override fun onPause(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
-            mDownloadListenerList.forEach {
+            mGlobalDownloadListenerList.forEach {
                 it.onPause(item)
             }
 
             item.downloadListener?.let {
+                it.onPause(item)
+            }
+
+            mTempDownloadListenerList[item.downloadID]?.forEach {
                 it.onPause(item)
             }
 
@@ -144,12 +162,17 @@ object DownloadManager {
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
                 ToastUtil.showLong(mContext, "本机已有更高版本的${item.downloadTitle}，下载已取消")
             }
-            mDownloadListenerList.forEach {
+            mGlobalDownloadListenerList.forEach {
                 it.onFail(errorCode, msg, item)
             }
             item.downloadListener?.let {
                 it.onFail(errorCode, msg, item)
             }
+
+            mTempDownloadListenerList[item.downloadID]?.forEach {
+                it.onFail(errorCode, msg, item)
+            }
+            mTempDownloadListenerList.remove(item.downloadID)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyFailed(item)
@@ -172,12 +195,16 @@ object DownloadManager {
             item.finalFilePath = filePath
             addWaitToDownload()
 
-            mDownloadListenerList.forEach {
+            mGlobalDownloadListenerList.forEach {
                 it.onComplete(filePath, item)
             }
             item.downloadListener?.let {
                 it.onComplete(filePath, item)
             }
+            mTempDownloadListenerList[item.downloadID]?.forEach {
+                it.onComplete(filePath, item)
+            }
+            mTempDownloadListenerList.remove(item.downloadID)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyFinished(item)
@@ -189,7 +216,7 @@ object DownloadManager {
         }
 
         override fun onDelete(item: DownloadItem) {
-            mDownloadListenerList.forEach {
+            mGlobalDownloadListenerList.forEach {
                 it.onDelete(item)
             }
 
@@ -281,19 +308,26 @@ object DownloadManager {
                 info.finished = info.finishedLengthBefore
             }
         } else {
-            info.finalFilePath = getFinalFileName(info.downloadURL, info.fileMD5, info.fileNameWithPath)
-            info.tempFilePath = getDownladTempFilePath(info.downloadURL, info.fileMD5, info.fileNameWithPath)
+            val backFileName = if (!TextUtils.isEmpty(info.fileMD5)) {
+                info.fileMD5
+            } else if (!TextUtils.isEmpty(info.fileSHA256)) {
+                info.fileSHA256
+            } else {
+                System.currentTimeMillis().toString()
+            }
+            info.finalFilePath = getFinalFileName(info.downloadURL, backFileName, info.fileNameWithPath)
+            info.tempFilePath = getDownladTempFilePath(info.downloadURL, backFileName, info.fileNameWithPath)
         }
     }
 
 
     private fun checkBeforeDownloadFile(info: DownloadItem): String {
 
-        if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5, false)) {
+        if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
             return info.finalFilePath
         }
 
-        if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5, false)) {
+        if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
             info.finalFilePath = info.tempFilePath
             return info.tempFilePath
         }
@@ -387,22 +421,22 @@ object DownloadManager {
         }
     }
 
-    fun getDownladTempFilePath(downloadURL: String, fileMD5: String, fileName: String): String {
-        return getFilePath(downloadURL, fileMD5, fileName, "Temp_")
+    fun getDownladTempFilePath(downloadURL: String, backFileName: String, fileName: String): String {
+        return getFilePath(downloadURL, backFileName, fileName, "Temp_")
     }
 
-    fun getFinalFileName(downloadURL: String, fileMD5: String, fileName: String): String {
-        return getFilePath(downloadURL, fileMD5, fileName, "")
+    fun getFinalFileName(downloadURL: String, backFileName: String, fileName: String): String {
+        return getFilePath(downloadURL, backFileName, fileName, "")
     }
 
-    private fun getFilePath(downloadURL: String, fileMD5: String, fileName: String, prefix: String): String {
+    private fun getFilePath(downloadURL: String, backFileName: String, fileName: String, prefix: String): String {
         return if (TextUtils.isEmpty(fileName)) {
             ZixieFileProvider.getZixieFilePath(mContext!!) + prefix + URLUtils.getFileName(downloadURL).let {
                 if (TextUtils.isEmpty(it)) {
-                    if (TextUtils.isEmpty(fileMD5)) {
+                    if (TextUtils.isEmpty(backFileName)) {
                         System.currentTimeMillis()
                     } else {
-                        fileMD5
+                        backFileName
                     }
                 } else {
                     it
@@ -416,20 +450,39 @@ object DownloadManager {
 
     fun addTask(info: DownloadItem, forceDownload: Boolean) {
         ZLog.d("addTask:$info")
-        updateInfo(info)
-        innerDownloadListener.onWait(info)
-        if (info.isForceDownloadNew) {
-            // 此前下载的文件不完整
-            if (TextUtils.isEmpty(checkBeforeDownloadFile(info))) {
-                deleteTask(info.downloadID, startByUser = false, deleteFile = true)
+        if (DownloadingList.isDownloading(info)) {
+            val currentDownload = DownloadTaskList.getTaskByDownloadID(info.downloadID)
+            if (!TextUtils.isEmpty(currentDownload?.fileMD5) && !info.fileMD5.equals(currentDownload?.fileMD5)) {
+                info.downloadListener?.onFail(ERR_MD5_BAD, "new md5 is diff with current download", info)
+            } else if (!TextUtils.isEmpty(currentDownload?.fileSHA256) && !info.fileSHA256.equals(currentDownload?.fileSHA256)) {
+                info.downloadListener?.onFail(ERR_MD5_BAD, "new sha256 is diff with current download", info)
+            } else {
+                info.downloadListener?.let {
+                    if (mTempDownloadListenerList.containsKey(info.downloadID) && null != mTempDownloadListenerList[info.downloadID]) {
+                        mTempDownloadListenerList[info.downloadID]!!.add(it)
+                    } else {
+                        mTempDownloadListenerList.put(info.downloadID, ArrayList<DownloadListener>().apply {
+                            add(it)
+                        })
+                    }
+                }
             }
-        }
-        if (DownloadTaskList.hadAddTask(info)) {
-            ZLog.d("mDownloadList contains:$info")
-            DownloadTaskList.updateDownloadTaskListItem(info)
-            resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
         } else {
-            startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
+            updateInfo(info)
+            innerDownloadListener.onWait(info)
+            if (info.isForceDownloadNew) {
+                // 此前下载的文件不完整
+                if (TextUtils.isEmpty(checkBeforeDownloadFile(info))) {
+                    deleteTask(info.downloadID, startByUser = false, deleteFile = true)
+                }
+            }
+            if (DownloadTaskList.hadAddTask(info)) {
+                ZLog.d("mDownloadList contains:$info")
+                DownloadTaskList.updateDownloadTaskListItem(info)
+                resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
+            } else {
+                startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
+            }
         }
     }
 
@@ -463,29 +516,35 @@ object DownloadManager {
 
     fun deleteTask(downloadId: Long, startByUser: Boolean, deleteFile: Boolean) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            if (info.status == DownloadStatus.STATUS_DOWNLOADING) {
-                addWaitToDownload()
+            var downloadListener = mTempDownloadListenerList.get(downloadId)?.first()
+            if (null != downloadListener) {
+                info.downloadListener.onDelete(info)
+                info.downloadListener = downloadListener
+            } else {
+                if (info.status == DownloadStatus.STATUS_DOWNLOADING) {
+                    addWaitToDownload()
+                }
+                DownloadTaskList.removeFromDownloadTaskList(downloadId)
+                info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
+                mDownloadEngine.closeDownload(downloadId, false, deleteFile)
+                DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
+                if (deleteFile) {
+                    mDownloadEngine.deleteFile(info)
+                }
+                DownloadNotify.notifyDelete(info)
+                innerDownloadListener.onDelete(info)
             }
-            DownloadTaskList.removeFromDownloadTaskList(downloadId)
-            info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
-            mDownloadEngine.closeDownload(downloadId, false, deleteFile)
-            DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
-            if (deleteFile) {
-                mDownloadEngine.deleteFile(info)
-            }
-            DownloadNotify.notifyDelete(info)
-            innerDownloadListener.onDelete(info)
         }
     }
 
-    fun addDownloadListener(listener: DownloadListener) {
-        if (!mDownloadListenerList.contains(listener)) {
-            mDownloadListenerList.add(listener)
+    fun addGlobalDownloadListener(listener: DownloadListener) {
+        if (!mGlobalDownloadListenerList.contains(listener)) {
+            mGlobalDownloadListenerList.add(listener)
         }
     }
 
-    fun removeDownloadListener(listener: DownloadListener) {
-        mDownloadListenerList.remove(listener)
+    fun removeGlobalDownloadListener(listener: DownloadListener) {
+        mGlobalDownloadListenerList.remove(listener)
     }
 
     fun pauseAllTask(startByUser: Boolean) {

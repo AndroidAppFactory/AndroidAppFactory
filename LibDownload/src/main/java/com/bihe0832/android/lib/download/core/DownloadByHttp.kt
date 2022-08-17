@@ -20,10 +20,10 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.SHA256
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 
 /**
@@ -184,7 +184,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                     }
                 } else {
                     if (times > MAX_RETRY_TIMES) {
-                        ZLog.e(TAG, "download with error file length after max times:${connection.responseCode} "+info)
+                        ZLog.e(TAG, "download with error file length after max times:${connection.responseCode} " + info)
                         //请求三次都失败在结束
                         notifyDownloadFailed(ERR_HTTP_LENGTH_FAILED, "download with error file length after max times", info)
                         return false
@@ -395,7 +395,21 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 ZLog.e(TAG, " oldfile:$oldfile")
                 ZLog.e(TAG, " oldfile length:" + oldfile.length())
                 if (TextUtils.isEmpty(downloadInfo.fileMD5)) {
-                    notifyDownloadSucc(downloadInfo)
+                    if (TextUtils.isEmpty(downloadInfo.fileSHA256)) {
+                        notifyDownloadSucc(downloadInfo)
+                    } else {
+                        val sha256 = SHA256.getFileSHA256(downloadFile)
+                        ZLog.e(TAG, " oldfile SHA256:$sha256")
+                        ZLog.e(TAG, " downloadInfo md5:" + downloadInfo.fileSHA256)
+                        if (sha256.equals(downloadInfo.fileSHA256, ignoreCase = true)) {
+                            notifyDownloadSucc(downloadInfo)
+                        } else {
+                            notifyDownloadFailed(ERR_MD5_BAD, "Sorry! the file SHA256 is bad", downloadInfo)
+                            if (downloadInfo.isForceDeleteBad) {
+                                deleteFile(downloadInfo)
+                            }
+                        }
+                    }
                 } else {
                     val md5 = MD5.getFileMD5(downloadFile)
                     ZLog.e(TAG, " oldfile md5:$md5")

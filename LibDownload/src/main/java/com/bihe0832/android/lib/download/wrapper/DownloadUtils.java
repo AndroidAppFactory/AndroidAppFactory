@@ -54,7 +54,7 @@ public class DownloadUtils {
      * @param listener
      */
     public static final void addDownloadListener(DownloadListener listener) {
-        DownloadManager.INSTANCE.addDownloadListener(listener);
+        DownloadManager.INSTANCE.addGlobalDownloadListener(listener);
     }
 
     /**
@@ -63,7 +63,7 @@ public class DownloadUtils {
      * @param listener
      */
     public static final void removeDownloadListener(DownloadListener listener) {
-        DownloadManager.INSTANCE.removeDownloadListener(listener);
+        DownloadManager.INSTANCE.removeGlobalDownloadListener(listener);
     }
 
 

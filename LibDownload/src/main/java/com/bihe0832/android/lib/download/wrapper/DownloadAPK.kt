@@ -71,7 +71,7 @@ object DownloadAPK {
         DownloadFile.startDownloadWithProcess(
                 activity,
                 title, msg,
-                url, "", md5,
+                url, "", md5,"",
                 canCancel, false, downloadMobile,
                 listener,
                 SimpleInstallListener(activity, packageName, listener)
@@ -83,7 +83,7 @@ object DownloadAPK {
         DownloadFile.startDownloadWithCheckAndProcess(
                 activity,
                 "", "", "",
-                url, md5,
+                url, md5,"",
                 canCancel = true, useProcess = false,
                 listener = null,
                 downloadListener = object : SimpleDownloadListener() {
@@ -107,7 +107,7 @@ object DownloadAPK {
         DownloadFile.startDownload(
                 context,
                 "", "",
-                url, "", md5, forceDownloadNew = false,
+                url, "", md5, "",forceDownloadNew = false,
                 canPart = true, UseMobile = true, downloadListener = object : SimpleDownloadListener() {
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
             }

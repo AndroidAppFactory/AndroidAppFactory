@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.file.content.FileName
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
 import com.bihe0832.android.lib.utils.encrypt.SHA256
 import java.io.File
 import java.io.InputStream
@@ -107,6 +108,18 @@ object FileUtils {
      *  false 文件不存在
      */
     fun checkFileExist(filePath: String, fileLength: Long, fileMD5: String, ignoreWhenMd5IsBad: Boolean): Boolean {
+        return checkFileExist(filePath, fileLength, fileMD5, "", ignoreWhenMd5IsBad)
+    }
+
+    fun checkFileExist(filePath: String, fileLength: Long, fileMD5: String, fileSHA256: String, ignoreWhenMd5IsBad: Boolean): Boolean {
+        return if (TextUtils.isEmpty(fileMD5)) {
+            checkFileExistByMessageDigest(filePath, fileLength, fileSHA256, SHA256.MESSAGE_DIGEST_TYPE_SHA256, ignoreWhenMd5IsBad)
+        } else {
+            checkFileExistByMessageDigest(filePath, fileLength, fileMD5, MD5.MESSAGE_DIGEST_TYPE_MD5, ignoreWhenMd5IsBad)
+        }
+    }
+
+    fun checkFileExistByMessageDigest(filePath: String, fileLength: Long, digestValue: String, digestType: String, ignoreWhenMd5IsBad: Boolean): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
             false
         } else {
@@ -114,11 +127,11 @@ object FileUtils {
             if (!file.exists() || !file.isFile) {
                 false
             } else {
-                var hasMD5 = !TextUtils.isEmpty(fileMD5)
+                var hasMD5 = !TextUtils.isEmpty(digestValue)
                 if (fileLength > 0) {
                     if (fileLength == file.length()) {
                         if (hasMD5) {
-                            getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
+                            MessageDigestUtils.getFileDigestData(filePath, digestType).equals(digestValue, ignoreCase = true)
                         } else {
                             true
                         }
@@ -127,7 +140,7 @@ object FileUtils {
                     }
                 } else {
                     if (hasMD5) {
-                        getFileMD5(filePath).equals(fileMD5, ignoreCase = true)
+                        MessageDigestUtils.getFileDigestData(filePath, digestType).equals(digestValue, ignoreCase = true)
                     } else {
                         ignoreWhenMd5IsBad
                     }
