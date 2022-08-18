@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.request;
 
 import android.net.Uri;
 import android.text.TextUtils;
+import android.webkit.URLUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -9,8 +10,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by zixie on 16/11/21.
@@ -26,7 +25,7 @@ public class URLUtils {
      * @return 去掉参数的url, 如:http://www.qq.com/ui/oa/test.html
      */
     public static String getNoQueryUrl(String source) {
-        String dest = "";
+        String dest = source;
         try {
             URL sUrl = new URL(source);
             URL dUrl = new URL(sUrl.getProtocol(), sUrl.getHost(),
@@ -37,6 +36,7 @@ public class URLUtils {
         }
         return dest;
     }
+
 
     public static String getUrlEncodeValue(String origValue) {
         if (origValue == null) {
@@ -182,23 +182,11 @@ public class URLUtils {
         if (pInput == null) {
             return false;
         }
-        String regEx = "^(http|https)//://([a-zA-Z0-9//.//-]+(//:[a-zA-"
-                + "Z0-9//.&%//$//-]+)*@)?((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{"
-                + "2}|[1-9]{1}[0-9]{1}|[1-9])//.(25[0-5]|2[0-4][0-9]|[0-1]{1}"
-                + "[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)//.(25[0-5]|2[0-4][0-9]|"
-                + "[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)//.(25[0-5]|2[0-"
-                + "4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0"
-                + "-9//-]+//.)*[a-zA-Z0-9//-]+//.[a-zA-Z]{2,4})(//:[0-9]+)?(/"
-                + "[^/][a-zA-Z0-9//.//,//?//'///////+&%//$//=~_//-@]*)*$";
-        Pattern p = Pattern.compile(regEx);
-        Matcher matcher = p.matcher(pInput);
-
-        boolean res = matcher.matches();
-
-        if (!res) {
-            String lower = pInput.toLowerCase();
-            res = lower.startsWith("http://") || lower.startsWith("https://");
-        }
-        return res;
+        return URLUtil.isHttpsUrl(pInput) || URLUtil.isHttpUrl(pInput);
     }
+
+    public static boolean isURL(String source) {
+        return URLUtil.isValidUrl(source);
+    }
+
 }

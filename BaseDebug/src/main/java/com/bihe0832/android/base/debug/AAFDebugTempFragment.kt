@@ -224,8 +224,8 @@ class AAFDebugTempFragment : DebugEnvFragment() {
                 "https://voice-file-1300342614.cos.ap-shanghai.myqcloud.com/voice%2FA6FCC3060878E3B121899003F5B42CD5%2Bf82ca891eb9845c3a743f6e64cf95ffe.mp3?q-sign-algorithm=sha1\\u0026q-ak=AKIDCLEqBF2YnmUv5zcy3rOzKODk0zh9KErD\\u0026q-sign-time=1660720054%3B1660727254\\u0026q-key-time=1660720054%3B1660727254\\u0026q-header-list=host\\u0026q-url-param-list=\\u0026q-signature=b49a8fafe797c3c618acb23d93dc74488643bc27",
                 "/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
                 "10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
-                "https://cdn.bihe0832.com/images/zixie_32.ico",
-                "https://cdn.bihe0832.com/app/update/get_apk.json",
+                "/storage/emulated/0/Android/data/com.tencent.cmocmna.video/files/mocmna/temp/log//server_20220818.txt",
+                "file://cdn.bihe0832.com/app/update/get_apk.json",
                 "https://webcdn.m.qq.com/webapp_myapp/index.html#/"
 
         ).forEach {

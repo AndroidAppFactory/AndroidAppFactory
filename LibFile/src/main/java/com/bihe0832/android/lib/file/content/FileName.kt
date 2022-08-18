@@ -15,9 +15,10 @@ import java.util.*
 object FileName {
 
     fun getFileName(filePath: String?): String {
-        var noQueryURL = URLUtils.getNoQueryUrl(filePath)
-        if (TextUtils.isEmpty(noQueryURL)) {
-            noQueryURL = filePath
+        var noQueryURL = if (URLUtils.isURL(filePath)) {
+            URLUtils.getNoQueryUrl(filePath)
+        } else {
+            filePath
         }
         noQueryURL?.let {
             val split = noQueryURL.lastIndexOf(File.separator)
