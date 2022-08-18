@@ -79,7 +79,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     public static Bundle getWebviewDataBundle(String url, String data) {
         Bundle bundle = new Bundle();
-        bundle.putString(INTENT_KEY_URL, URLUtils.encode(url));
+        bundle.putString(INTENT_KEY_URL, url);
         if (!TextUtils.isEmpty(data)) {
             bundle.putString(INTENT_KEY_DATA, data);
         }
@@ -192,7 +192,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     @Override
     protected void parseBundle(Bundle bundle, boolean isOnCreate) {
-        mIntentUrl = URLDecoder.decode(bundle.getString(INTENT_KEY_URL));
+        mIntentUrl = bundle.getString(INTENT_KEY_URL);
         mRefreshable = bundle.getBoolean(INTENT_KEY_REFRESH, false);
         mPostData = bundle.getString(INTENT_KEY_DATA);
     }
