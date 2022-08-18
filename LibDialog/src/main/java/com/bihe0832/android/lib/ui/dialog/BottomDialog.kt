@@ -22,7 +22,7 @@ open class BottomDialog : CommonDialog {
         getRootView()?.setOnClickListener {
             if (shouldCanceled) {
                 dismiss()
-                getOnClickBottomListener().onCancel()
+                getOnClickBottomListener()?.onCancel()
             }
         }
     }
