@@ -48,7 +48,6 @@ if [ $specialNum -gt 2 ]; then
   exit
 fi
 
-exit;
 hasNotCommit=$(git status | grep "what will be committed" | wc -l)
 if [ $hasNotCommit -gt 0 ]; then
   echo "------------- git has code not commit !!!!!!!!!!!! -------------"
@@ -106,6 +105,7 @@ else
 fi
 checkResult
 
+./gradlew clean
 
 src=" *ext.mainProject *= *\\\""
 dst="ext.mainProject = \\\"APPTest\\\""
