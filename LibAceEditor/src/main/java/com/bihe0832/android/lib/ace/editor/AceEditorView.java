@@ -14,6 +14,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Base64;
@@ -26,8 +27,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-
-import androidx.annotation.StringRes;
 
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 

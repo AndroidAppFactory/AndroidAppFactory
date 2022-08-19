@@ -19,6 +19,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.NestedScrollingChildHelper;
 import android.support.v4.view.ViewCompat;
@@ -54,9 +55,6 @@ import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.bihe0832.android.lib.text.ClipboardUtil;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
@@ -126,7 +124,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
         mChildHelper = new NestedScrollingChildHelper(this);
         mHandler = new Handler(new Handler.Callback() {
             @Override
-            public boolean handleMessage(@NonNull Message msg) {
+            public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case SELECTION_CHANGED_MESSAGE:
                         if (mSelectionHelper != null) {
@@ -337,7 +335,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
     }
 
     @Override
-    public final void setOnLongClickListener(@Nullable OnLongClickListener l) {
+    public final void setOnLongClickListener(OnLongClickListener l) {
         mWrappedLongClickListener = l;
     }
 
