@@ -31,10 +31,28 @@ libName=$1
 version=$2
 echo "libName:"$libName
 echo "version:"$version
+
+specialNum=0
+res=$(find . -path './.idea' -prune -o -type f | egrep "\.(java|kt|gradle|xml)$")
+for r in $res
+do
+  if [ `grep -c "androidx." $r` -ne '0' ];then
+      echo "The File $r Has androidx!"
+      specialNum=$(($specialNum+1))
+  fi
+done;
+echo $specialNum
+
+if [ $specialNum -gt 2 ]; then
+  echo "------------- Has more androidx !!!!!!!!!!!! -------------"
+  exit
+fi
+
+exit;
 hasNotCommit=$(git status | grep "what will be committed" | wc -l)
 if [ $hasNotCommit -gt 0 ]; then
   echo "------------- git has code not commit !!!!!!!!!!!! -------------"
-   exit
+  exit
 fi
 
 if [ "$libName"x = ""x ]; then
@@ -46,6 +64,7 @@ if [ "$version"x = ""x ]; then
   echo "------------- version can not be null !!!!!!!!!!!! -------------"
   exit
 fi
+
 echo "******** build mkdir bin *******"
 cd $localPath
 #临时文件

@@ -20,7 +20,7 @@ public class PermissionsActivityV2 extends PermissionsActivity {
 
 
     @Override
-    protected void onCreate(@Nullable @androidx.annotation.Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_bihe0832_lib_permissions_activity_v2);
         showTips();

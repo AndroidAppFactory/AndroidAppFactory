@@ -12,10 +12,10 @@ ext.mainProject = "APPTest"
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前设计到Android Support库的有：
  *      LibDeviceNetwork,LibFile,LibViewExt,LibFragmentation_core,LibFlycoTabLayout,LibQRCode,LibAdapter,LibCustomView,LibImmersive
- * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper"
+ * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibThread,LibRequest,LibSqlite,LibAAF,Application,Framework,LibWrapper,LibViewPager"
  *
  */
-ext.developModule = "CommonWebview"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "4.22.31"
+ext.moduleVersionName = "4.23.1"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -74,14 +74,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDebug"               : [
-                "version"            : "4.22.30",
+                "version"            : "4.22.31",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "4.22.30",
+                "version"            : "4.22.31",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -160,7 +160,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "4.22.30",
+                "version"                : "4.22.31",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "Framework"
@@ -172,7 +172,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "4.22.30",
+                "version"                : "4.22.31",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -249,7 +249,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibAAF"                    : [
-                "version"            : "4.20.0",
+                "version"            : "4.23.1",
                 "artifactId"         : "lib-aaf-tools",
                 "apidependenciesList": [
                 ]
@@ -344,7 +344,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibAPK"                    : [
-                "version"            : "4.22.27",
+                "version"            : "4.23.1",
                 "artifactId"         : "lib-utils-apk",
                 "apidependenciesList": ["LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"]
         ],
