@@ -1,12 +1,12 @@
-package com.bihe0832.android.lib.gson.adapter;
+package com.bihe0832.android.base.debug.json;
 
+import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.bihe0832.android.lib.utils.ConvertUtils;
 
 import java.lang.reflect.Type;
 
@@ -15,19 +15,19 @@ import java.lang.reflect.Type;
  * Created on 2019-11-18.
  * Description: Description
  */
-public class LongDefaultAdapter implements JsonSerializer<Long>, JsonDeserializer<Long> {
+public class IntegerDebugAdapter implements JsonSerializer<Integer>, JsonDeserializer<Integer> {
     @Override
-    public Long deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context){
+    public Integer deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context){
         try {
-            return ConvertUtils.parseLong(json.getAsString(),-1);
+            return ConvertUtils.parseInt(json.getAsString(),100);
         } catch (Exception ignore) {
             ignore.printStackTrace();
-            return -1L;
+            return 100;
         }
     }
 
     @Override
-    public JsonElement serialize(Long src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(Integer src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(src);
     }
 }

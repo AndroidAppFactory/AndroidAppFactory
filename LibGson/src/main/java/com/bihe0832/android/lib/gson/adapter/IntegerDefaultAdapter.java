@@ -19,10 +19,10 @@ public class IntegerDefaultAdapter implements JsonSerializer<Integer>, JsonDeser
     @Override
     public Integer deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context){
         try {
-            return ConvertUtils.parseInt(json.getAsString(),0);
+            return ConvertUtils.parseInt(json.getAsString(),-1);
         } catch (Exception ignore) {
             ignore.printStackTrace();
-            return 0;
+            return -1;
         }
     }
 

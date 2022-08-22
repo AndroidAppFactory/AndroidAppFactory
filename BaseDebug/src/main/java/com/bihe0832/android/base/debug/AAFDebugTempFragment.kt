@@ -21,6 +21,7 @@ import com.bihe0832.android.base.debug.icon.DebugIcon
 import com.bihe0832.android.base.debug.icon.DebugTipsIcon
 import com.bihe0832.android.base.debug.ipc.TestIPC1Activity
 import com.bihe0832.android.base.debug.ipc.TestIPCActivity
+import com.bihe0832.android.base.debug.json.IntegerDebugAdapter
 import com.bihe0832.android.base.debug.json.JsonTest
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.request.ROUTRT_NAME_TEST_HTTP
@@ -39,6 +40,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.gson.JsonHelper
+import com.bihe0832.android.lib.gson.JsonHelper.fromJsonList
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
@@ -268,19 +270,27 @@ class AAFDebugTempFragment : DebugEnvFragment() {
 //            var end = System.currentTimeMillis()
 //            ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
 //        }
-        var result = JsonHelper.fromJsonList<JsonTest>(
-                "[" +
-                        "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," +
-                        "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
-                        "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
-                        "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
-                        "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
-                        "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
-                        "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
-                        "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
-                        "]", JsonTest::class.java
-        )
-        ZLog.d(LOG_TAG, "result:" + result)
+        var list = "[" +
+                "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," +
+                "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
+                "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
+                "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
+                "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
+                "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
+                "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
+                "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
+                "]"
+
+        list.let {
+            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(it, JsonTest::class.java))
+            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(JsonHelper.getGson(), it, JsonTest::class.java))
+            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(JsonHelper.getGsonBuilder().apply {
+                registerTypeAdapter(Int::class.java, IntegerDebugAdapter())
+                registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDebugAdapter())
+            }.create(), it, JsonTest::class.java))
+        }
+
+
         JsonTest().apply {
             key = 1212
         }.let {
