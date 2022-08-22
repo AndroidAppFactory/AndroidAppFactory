@@ -26,6 +26,10 @@ object JsonHelper {
      * @return
      */
     fun getGson(): Gson {
+        return getGsonBuilder().create()
+    }
+
+    fun getGsonBuilder(): GsonBuilder {
         return GsonBuilder()
                 .registerTypeAdapter(Double::class.java, DoubleDefaultAdapter())
                 .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
@@ -38,7 +42,6 @@ object JsonHelper {
                 .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
                 .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
                 .registerTypeAdapter(String::class.java, StringNullAdapter())
-                .create()
     }
 
     /**
@@ -51,8 +54,12 @@ object JsonHelper {
      * i.e: String json = JsonHelper.toJson(beanObject);
     </T> */
     fun <T> toJson(beanObject: T): String? {
+        return toJson(getGson(), beanObject)
+    }
+
+    fun <T> toJson(gson: Gson, beanObject: T): String? {
         try {
-            return getGson().toJson(beanObject)
+            return gson.toJson(beanObject)
         } catch (e: Exception) {
             Log.e("JsonHelper", "JsonParserWrapper toJson error:$e")
         }
@@ -71,8 +78,12 @@ object JsonHelper {
      * i.e: BeanClass beanClass = JsonHelper.fromJson(json, BeanClass.class);
      */
     fun <T> fromJson(json: String, beanClass: Class<T>): T? {
+        return fromJson(getGson(), json, beanClass)
+    }
+
+    fun <T> fromJson(gson: Gson, json: String, beanClass: Class<T>): T? {
         try {
-            return getGson().fromJson(json, beanClass)
+            return gson.fromJson(json, beanClass)
         } catch (e: Exception) {
             ZLog.e("JsonHelper", "------------------------------------")
             ZLog.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
@@ -95,9 +106,13 @@ object JsonHelper {
      * i.e: List<BeanClass>  beanClass = JsonHelper.fromJsonList(json, BeanClass.class);
      */
     fun <T> fromJsonList(json: String, clazz: Class<T>): List<T>? {
+        return fromJsonList(getGson(), json, clazz)
+    }
+
+    fun <T> fromJsonList(gson: Gson, json: String, clazz: Class<T>): List<T>? {
         try {
             val type: Type = ParameterizedTypeImpl(clazz)
-            return Gson().fromJson(json, type)
+            return gson.fromJson(json, type)
         } catch (e: Exception) {
             ZLog.e("JsonHelper", "------------------------------------")
             ZLog.e("JsonHelper", "JsonParserWrapper list fromJson Exception:\n")
@@ -122,7 +137,7 @@ object JsonHelper {
                     }
                 }
                 ZLog.e("JsonHelper", "------------------------------------")
-                if(result.size != jsonArray.length()){
+                if (result.size != jsonArray.length()) {
                     ZLog.e("JsonHelper", "JsonParserWrapper parse list :result is ${result.size}, but jsonArray is ${jsonArray.length()}")
                 }
                 return result
