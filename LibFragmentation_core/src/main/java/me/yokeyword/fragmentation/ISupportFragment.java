@@ -1,8 +1,8 @@
 package me.yokeyword.fragmentation;
 
 import android.os.Bundle;
-import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
+import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -33,6 +33,8 @@ public interface ISupportFragment {
     ExtraTransaction extraTransaction();
 
     void enqueueAction(Runnable runnable);
+
+    void post(Runnable runnable);
 
     void onEnterAnimationEnd(@Nullable Bundle savedInstanceState);
 

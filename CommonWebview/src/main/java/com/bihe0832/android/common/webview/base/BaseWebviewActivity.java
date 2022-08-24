@@ -1,13 +1,14 @@
 package com.bihe0832.android.common.webview.base;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
 import com.bihe0832.android.framework.router.RouterConstants;
@@ -16,6 +17,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.tencent.smtt.sdk.QbSdk;
+
 import java.net.URLDecoder;
 
 public abstract class BaseWebviewActivity extends CommonActivity {
@@ -33,7 +35,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mWebViewViewModel = ViewModelProviders.of(this).get(WebViewViewModel.class);
+        mWebViewViewModel = new ViewModelProvider(this).get(WebViewViewModel.class);
         WebviewLoggerFile.INSTANCE.log("BaseWebviewActivity mWebViewViewModel: " + mWebViewViewModel.hashCode());
         ZLog.d(TAG + QbSdk.getTbsVersion(this));
         handleIntent(getIntent());
@@ -41,6 +43,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         try {
             if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
                 handleIntent(intent);
@@ -87,7 +90,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         });
         mWebViewViewModel.getTitleLiveData().observe(BaseWebviewActivity.this, new Observer<String>() {
             @Override
-            public void onChanged(@Nullable final String s) {
+            public void onChanged( final String s) {
                 if (!s.equals("about:blank")) {
                     updateTitle(s);
                 }

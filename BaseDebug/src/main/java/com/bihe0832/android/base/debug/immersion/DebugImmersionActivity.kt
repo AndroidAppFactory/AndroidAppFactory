@@ -2,7 +2,7 @@ package com.bihe0832.android.base.debug.immersion
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.main.CommonActivity

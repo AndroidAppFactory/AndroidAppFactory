@@ -1,10 +1,10 @@
 package me.yokeyword.fragmentation;
 
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MotionEvent;
 
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
@@ -13,7 +13,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Base class for activities that use the support-based
  * {@link ISupportActivity} and
  * {@link AppCompatActivity} APIs.
- *
+ * <p>
  * Created by YoKey on 17/6/20.
  */
 public class SupportActivity extends AppCompatActivity implements ISupportActivity {
@@ -109,6 +109,11 @@ public class SupportActivity extends AppCompatActivity implements ISupportActivi
         return mDelegate.onCreateFragmentAnimator();
     }
 
+    @Override
+    public void post(Runnable runnable) {
+        mDelegate.post(runnable);
+    }
+
     /****************************************以下为可选方法(Optional methods)******************************************************/
 
     /**
@@ -151,11 +156,16 @@ public class SupportActivity extends AppCompatActivity implements ISupportActivi
         mDelegate.showHideFragment(showFragment, hideFragment);
     }
 
+    /**
+     * It is recommended to use {@link SupportFragment#start(ISupportFragment)}.
+     */
     public void start(ISupportFragment toFragment) {
         mDelegate.start(toFragment);
     }
 
     /**
+     * It is recommended to use {@link SupportFragment#start(ISupportFragment, int)}.
+     *
      * @param launchMode Similar to Activity's LaunchMode.
      */
     public void start(ISupportFragment toFragment, @ISupportFragment.LaunchMode int launchMode) {
@@ -163,6 +173,7 @@ public class SupportActivity extends AppCompatActivity implements ISupportActivi
     }
 
     /**
+     * It is recommended to use {@link SupportFragment#startForResult(ISupportFragment, int)}.
      * Launch an fragment for which you would like a result when it poped.
      */
     public void startForResult(ISupportFragment toFragment, int requestCode) {
@@ -170,12 +181,27 @@ public class SupportActivity extends AppCompatActivity implements ISupportActivi
     }
 
     /**
-     * Launch a fragment while poping self.
+     * It is recommended to use {@link SupportFragment#startWithPop(ISupportFragment)}.
+     * Start the target Fragment and pop itself
      */
     public void startWithPop(ISupportFragment toFragment) {
         mDelegate.startWithPop(toFragment);
     }
 
+    /**
+     * It is recommended to use {@link SupportFragment#startWithPopTo(ISupportFragment, Class, boolean)}.
+     *
+     * @see #popTo(Class, boolean)
+     * +
+     * @see #start(ISupportFragment)
+     */
+    public void startWithPopTo(ISupportFragment toFragment, Class<?> targetFragmentClass, boolean includeTargetFragment) {
+        mDelegate.startWithPopTo(toFragment, targetFragmentClass, includeTargetFragment);
+    }
+
+    /**
+     * It is recommended to use {@link SupportFragment#replaceFragment(ISupportFragment, boolean)}.
+     */
     public void replaceFragment(ISupportFragment toFragment, boolean addToBackStack) {
         mDelegate.replaceFragment(toFragment, addToBackStack);
     }
@@ -190,7 +216,7 @@ public class SupportActivity extends AppCompatActivity implements ISupportActivi
     /**
      * Pop the last fragment transition from the manager's fragment
      * back stack.
-     *
+     * <p>
      * 出栈到目标fragment
      *
      * @param targetFragmentClass   目标fragment

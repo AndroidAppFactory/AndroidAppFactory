@@ -1,7 +1,7 @@
 package  com.bihe0832.android.common.list.easyrefresh
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.ajguan.library.EasyRefreshLayout
 import com.ajguan.library.LoadModel
 import com.bihe0832.android.common.list.BaseListFragment

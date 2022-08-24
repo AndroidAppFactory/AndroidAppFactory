@@ -1,8 +1,8 @@
 package com.bihe0832.android.base.debug.card
 
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
 import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList

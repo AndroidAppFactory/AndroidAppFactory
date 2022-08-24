@@ -1,6 +1,6 @@
 package  com.bihe0832.android.common.list
 
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.MediatorLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 /**

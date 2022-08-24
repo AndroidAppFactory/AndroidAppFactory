@@ -1,6 +1,6 @@
 package me.yokeyword.fragmentation_swipeback.core;
 
-import android.support.annotation.FloatRange;
+import androidx.annotation.FloatRange;
 import android.view.View;
 
 import me.yokeyword.fragmentation.SwipeBackLayout;
@@ -16,6 +16,10 @@ public interface ISwipeBackFragment {
     SwipeBackLayout getSwipeBackLayout();
 
     void setSwipeBackEnable(boolean enable);
+
+    void setEdgeLevel(SwipeBackLayout.EdgeLevel edgeLevel);
+
+    void setEdgeLevel(int widthPixel);
 
     /**
      * Set the offset of the parallax slip.

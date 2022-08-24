@@ -1,7 +1,7 @@
 package com.bihe0832.android.common.about
 
-import android.arch.lifecycle.Observer
 import android.view.View
+import androidx.lifecycle.Observer
 import com.bihe0832.android.common.about.card.SettingsData
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData

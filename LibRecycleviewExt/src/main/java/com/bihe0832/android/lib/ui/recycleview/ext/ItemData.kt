@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.ui.recycleview.ext;
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.lib.log.ZLog
 
 data class ItemData(

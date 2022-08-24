@@ -1,6 +1,6 @@
 package com.bihe0832.android.test.module
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.log.DebugLogActivity

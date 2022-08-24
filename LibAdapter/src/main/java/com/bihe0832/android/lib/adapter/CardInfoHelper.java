@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.bihe0832.android.lib.log.ZLog;
@@ -114,8 +113,7 @@ public class CardInfoHelper {
         }
     }
 
-    @Nullable
-    public final CardBaseHolder createViewHolder(int cardType, @Nullable View itemView, @Nullable Context context) {
+    public final CardBaseHolder createViewHolder(int cardType, View itemView, Context context) {
         try {
             Class holderClass = mCardList.get(cardType);
             if (holderClass != null) {

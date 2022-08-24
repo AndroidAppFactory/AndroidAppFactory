@@ -9,12 +9,11 @@ import android.net.NetworkInfo
 import android.net.wifi.*
 import android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION
 import android.os.Build
-import android.support.annotation.RequiresApi
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
-import java.util.*
+import com.bihe0832.android.lib.utils.os.BuildUtils
 
 /**
  * @author zixie code@bihe0832.com
@@ -42,8 +41,8 @@ object WifiManagerWrapper {
                     //                    int wifiStatePre = intent.getIntExtra(WifiManager.EXTRA_PREVIOUS_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);
                     //新的wifi状态
                     wifiState = intent.getIntExtra(
-                        WifiManager.EXTRA_WIFI_STATE,
-                        WifiManager.WIFI_STATE_DISABLED
+                            WifiManager.EXTRA_WIFI_STATE,
+                            WifiManager.WIFI_STATE_DISABLED
                     )
                     mWifiChangeListener?.onStateChanged(wifiState)
                     //处理各种wifi状态
@@ -143,7 +142,7 @@ object WifiManagerWrapper {
             mWifiChangeListener = null
         } else {
             mWifiChangeListener = listener
-            if(hasInit){
+            if (hasInit) {
                 updateBaseInfo()
                 updateScanListInfo()
                 updateConfiguredListInfo()
@@ -247,10 +246,11 @@ object WifiManagerWrapper {
     }
 
     // 得到连接的ID
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun getFrequency(): Int {
-        mWifiInfo?.let {
-            return it.frequency
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mWifiInfo?.let {
+                return it.frequency
+            }
         }
         return 0
     }
@@ -289,7 +289,7 @@ object WifiManagerWrapper {
         }
         buffer.append("\n\twifi state-> $wifiState").append(";network state-> ${isWifiAvailable()}")
         buffer.append("\n\tmWifiList-> " + getScanResultList().size)
-            .append(";mWifiConfigurationList-> " + getConfigurationList().size)
+                .append(";mWifiConfigurationList-> " + getConfigurationList().size)
         return buffer.toString()
     }
 
@@ -311,9 +311,9 @@ object WifiManagerWrapper {
         hasInit = true
 
         mWifiManager =
-            context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         mConnectivityManager =
-            context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         // 取得WifiInfo对象
         updateBaseInfo()
         updateConfiguredListInfo()
@@ -322,7 +322,7 @@ object WifiManagerWrapper {
     }
 
 
-    fun register(context: Context){
+    fun register(context: Context) {
         //需要过滤多个动作，则调用IntentFilter对象的addAction添加新动作
         val foundFilter = IntentFilter()
         //监听Wifi当前网络状态
@@ -331,18 +331,19 @@ object WifiManagerWrapper {
         foundFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
         //监听与接入点之间的连接状态(新连接建立或者现有连接丢失)
         foundFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)
-        if(mNotifyRSSI){
+        if (mNotifyRSSI) {
             //监听Wifi信号强度变化
             foundFilter.addAction(WifiManager.RSSI_CHANGED_ACTION)
         }
 
-        if(mCanScanWifi){
+        if (mCanScanWifi) {
             //监听Wifi发现新的接入点
             foundFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         }
 
         context.applicationContext.registerReceiver(mWifiReceiver, foundFilter)
     }
+
     // 打开WIFI
     fun openWifi() {
         mConnectivityManager?.activeNetworkInfo?.let {
@@ -375,7 +376,7 @@ object WifiManagerWrapper {
 
     //更新wifi列表信息
     private fun updateScanListInfo() {
-        if (mCanScanWifi){
+        if (mCanScanWifi) {
             // 得到扫描结果
             try {
                 mWifiList = mWifiManager?.scanResults

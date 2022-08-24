@@ -1,8 +1,6 @@
 package com.bihe0832.android.lib.lifecycle
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.*
 import com.bihe0832.android.lib.log.ZLog
 
 /**
@@ -10,7 +8,7 @@ import com.bihe0832.android.lib.log.ZLog
  * Created on 2020/5/19.
  * Description: Description
  */
-object ApplicationObserver : LifecycleObserver {
+object ApplicationObserver : DefaultLifecycleObserver {
 
     private const val TAG = "ApplicationObserver"
     private var mAPPStartTime = 0L
@@ -75,8 +73,8 @@ object ApplicationObserver : LifecycleObserver {
         return mAPPStartTime
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onForeground() {
+    override fun onStart(owner: LifecycleOwner) {
+        super.onStart(owner)
         ZLog.d(TAG, "onForeground!")
         mIsAPPBackground = false
         mLastResumeTime = System.currentTimeMillis()
@@ -85,8 +83,8 @@ object ApplicationObserver : LifecycleObserver {
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onBackground() {
+    override fun onStop(owner: LifecycleOwner) {
+        super.onStop(owner)
         ZLog.d(TAG, "onBackground!")
         mLastPauseTime = System.currentTimeMillis()
         mIsAPPBackground = true
@@ -94,6 +92,7 @@ object ApplicationObserver : LifecycleObserver {
             it.onBackground()
         }
     }
+
 
     fun onAllActivityDestroyed() {
         ZLog.d(TAG, "onAllActivityDestroy!")

@@ -4,11 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
@@ -172,7 +171,7 @@ public class InstallUtils {
         }
     }
 
-    static void installSpecialAPKByZip(@NotNull Context context, @NonNull String zipFilePath, String packageName,
+    static void installSpecialAPKByZip(@NotNull Context context, String zipFilePath, String packageName,
                                        final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByZip:" + zipFilePath);
         String finalPackageName = "";
@@ -204,7 +203,7 @@ public class InstallUtils {
         }
     }
 
-    static void installSpecialAPKByFolder(@NotNull Context context, @NonNull String folderPath, String packageName,
+    static void installSpecialAPKByFolder(@NotNull Context context, String folderPath, String packageName,
                                           final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByFolder:" + folderPath);
         String finalPackageName = "";

@@ -1,17 +1,13 @@
 package com.bihe0832.android.common.debug.base
 
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
-import android.view.View
 import com.bihe0832.android.common.debug.R
+import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListActivity
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -20,7 +16,6 @@ import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
-import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.com_bihe0832_fragment_debug_tab.*
 
 abstract class BaseDebugListActivity : CommonListActivity() {

@@ -1,12 +1,14 @@
 package com.bihe0832.android.lib.floatview;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 public abstract class BaseIconView extends ConstraintLayout {

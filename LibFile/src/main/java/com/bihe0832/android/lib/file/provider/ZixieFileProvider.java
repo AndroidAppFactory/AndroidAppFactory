@@ -15,7 +15,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.OpenableColumns;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.text.TextUtils;
 
 import com.bihe0832.android.lib.file.FileUtils;
@@ -23,7 +23,6 @@ import com.bihe0832.android.lib.file.R;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,8 +54,7 @@ import java.io.InputStream;
  */
 public class ZixieFileProvider extends FileProvider {
 
-    @NotNull
-    public static final Uri getZixieFileProvider(@NotNull Context context, @NotNull File file) {
+    public static final Uri getZixieFileProvider(Context context, File file) {
         Uri uri = null;
         try {
             uri = FileProvider.getUriForFile(context, getZixieFileProviderName(context), file);
@@ -72,11 +70,11 @@ public class ZixieFileProvider extends FileProvider {
         return uri;
     }
 
-    public static final String getZixieFileProviderName(@NotNull Context context) {
+    public static final String getZixieFileProviderName(Context context) {
         return context.getPackageName() + ".bihe0832";
     }
 
-    static final String getAAFInnerFileProviderName(@NotNull Context context) {
+    static final String getAAFInnerFileProviderName(Context context) {
         return context.getPackageName() + ".aaf.inner";
     }
 
@@ -92,13 +90,11 @@ public class ZixieFileProvider extends FileProvider {
         }
     }
 
-    @NotNull
-    public static final String getZixieFilePath(@NotNull Context context) {
+    public static final String getZixieFilePath(Context context) {
         return getZixieFilePath(context, context.getResources().getString(R.string.lib_bihe0832_file_folder));
     }
 
-    @NotNull
-    public static final String getZixieFilePath(@NotNull Context context, String filePath) {
+    public static final String getZixieFilePath(Context context, String filePath) {
         String subPath = filePath;
         if (TextUtils.isEmpty(subPath)) {
             subPath = context.getResources().getString(R.string.lib_bihe0832_file_folder);

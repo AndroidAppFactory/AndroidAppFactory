@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
+import androidx.core.app.ActivityCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog

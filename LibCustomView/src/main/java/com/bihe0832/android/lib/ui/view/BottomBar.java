@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.ui.view;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,9 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
+
+
+import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 import java.util.List;

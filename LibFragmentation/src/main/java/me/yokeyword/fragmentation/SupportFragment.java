@@ -3,9 +3,9 @@ package me.yokeyword.fragmentation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.Animation;
 
@@ -14,12 +14,12 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
 /**
  * Base class for activities that use the support-based
  * {@link ISupportFragment} and
- * {@link android.support.v4.app.Fragment} APIs.
+ * {@link Fragment} APIs.
  * Created by YoKey on 17/6/22.
  */
 public class SupportFragment extends Fragment implements ISupportFragment {
     final SupportFragmentDelegate mDelegate = new SupportFragmentDelegate(this);
-    protected FragmentActivity _mActivity;
+    protected SupportActivity _mActivity;
 
     @Override
     public SupportFragmentDelegate getSupportDelegate() {
@@ -39,7 +39,7 @@ public class SupportFragment extends Fragment implements ISupportFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mDelegate.onAttach(activity);
-        _mActivity = mDelegate.getActivity();
+        _mActivity = (SupportActivity) mDelegate.getActivity();
     }
 
     @Override
@@ -102,16 +102,30 @@ public class SupportFragment extends Fragment implements ISupportFragment {
     }
 
     /**
-     * If you want to call the start()/pop()/showHideFragment() on the onCreateXX/onActivityCreated,
-     * call this method to deliver the transaction to the queue.
+     * Causes the Runnable r to be added to the action queue.
+     * <p>
+     * The runnable will be run after all the previous action has been run.
+     * <p>
+     * 前面的事务全部执行后 执行该Action
      *
-     * 在onCreate/onCreateView/onActivityCreated中使用 start()/pop()/showHideFragment(),请使用该方法把你的任务入队
-     *
-     * @param runnable start() , pop() or showHideFragment()
+     * @deprecated Use {@link #post(Runnable)} instead.
      */
+    @Deprecated
     @Override
     public void enqueueAction(Runnable runnable) {
         mDelegate.enqueueAction(runnable);
+    }
+
+    /**
+     * Causes the Runnable r to be added to the action queue.
+     * <p>
+     * The runnable will be run after all the previous action has been run.
+     * <p>
+     * 前面的事务全部执行后 执行该Action
+     */
+    @Override
+    public void post(Runnable runnable) {
+        mDelegate.post(runnable);
     }
 
     /**
@@ -202,7 +216,7 @@ public class SupportFragment extends Fragment implements ISupportFragment {
 
     /**
      * 类似 {@link Activity#setResult(int, Intent)}
-     *
+     * <p>
      * Similar to {@link Activity#setResult(int, Intent)}
      *
      * @see #startForResult(ISupportFragment, int)
@@ -214,7 +228,7 @@ public class SupportFragment extends Fragment implements ISupportFragment {
 
     /**
      * 类似  {@link Activity#onActivityResult(int, int, Intent)}
-     *
+     * <p>
      * Similar to {@link Activity#onActivityResult(int, int, Intent)}
      *
      * @see #startForResult(ISupportFragment, int)
@@ -227,12 +241,11 @@ public class SupportFragment extends Fragment implements ISupportFragment {
     /**
      * 在start(TargetFragment,LaunchMode)时,启动模式为SingleTask/SingleTop, 回调TargetFragment的该方法
      * 类似 {@link Activity#onNewIntent(Intent)}
-     *
+     * <p>
      * Similar to {@link Activity#onNewIntent(Intent)}
      *
-     * @see #start(ISupportFragment, int)
-     *
      * @param args putNewBundle(Bundle newBundle)
+     * @see #start(ISupportFragment, int)
      */
     @Override
     public void onNewBundle(Bundle args) {
@@ -325,11 +338,21 @@ public class SupportFragment extends Fragment implements ISupportFragment {
     }
 
     /**
-     * Launch a fragment while poping self.
+     * Start the target Fragment and pop itself
      */
     public void startWithPop(ISupportFragment toFragment) {
         mDelegate.startWithPop(toFragment);
     }
+
+    /**
+     * @see #popTo(Class, boolean)
+     * +
+     * @see #start(ISupportFragment)
+     */
+    public void startWithPopTo(ISupportFragment toFragment, Class<?> targetFragmentClass, boolean includeTargetFragment) {
+        mDelegate.startWithPopTo(toFragment, targetFragmentClass, includeTargetFragment);
+    }
+
 
     public void replaceFragment(ISupportFragment toFragment, boolean addToBackStack) {
         mDelegate.replaceFragment(toFragment, addToBackStack);
@@ -349,7 +372,7 @@ public class SupportFragment extends Fragment implements ISupportFragment {
     /**
      * Pop the last fragment transition from the manager's fragment
      * back stack.
-     *
+     * <p>
      * 出栈到目标fragment
      *
      * @param targetFragmentClass   目标fragment

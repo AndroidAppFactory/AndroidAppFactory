@@ -3,10 +3,10 @@ package com.bihe0832.android.base.debug.tab
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment.Companion.newInstance
@@ -116,7 +116,7 @@ class SlidingTabActivity : BaseActivity(), OnTabSelectListener {
         Toast.makeText(mContext, "onTabReselect&position--->$position", Toast.LENGTH_SHORT).show()
     }
 
-    private inner class MyPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+    private inner class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getCount(): Int {
             return mFragments.size
         }

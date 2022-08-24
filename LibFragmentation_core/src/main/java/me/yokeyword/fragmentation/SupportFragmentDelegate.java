@@ -6,14 +6,15 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.fragmentation.helper.internal.AnimatorHelper;
 import me.yokeyword.fragmentation.helper.internal.ResultRecord;
@@ -21,12 +22,19 @@ import me.yokeyword.fragmentation.helper.internal.TransactionRecord;
 import me.yokeyword.fragmentation.helper.internal.VisibleDelegate;
 
 public class SupportFragmentDelegate {
-    // Animation
-    private boolean mEnterAnimDisable;
-    boolean mIsSharedElement;
+    private static final long NOT_FOUND_ANIM_TIME = 300L;
+
+    static final int STATUS_UN_ROOT = 0;
+    static final int STATUS_ROOT_ANIM_DISABLE = 1;
+    static final int STATUS_ROOT_ANIM_ENABLE = 2;
+
+    private int mRootStatus = STATUS_UN_ROOT;
+
+    private boolean mIsSharedElement;
     FragmentAnimator mFragmentAnimator;
     AnimatorHelper mAnimHelper;
     boolean mLockAnim;
+    private int mCustomEnterAnim = Integer.MIN_VALUE, mCustomExitAnim = Integer.MIN_VALUE, mCustomPopExitAnim = Integer.MIN_VALUE;
 
     private Handler mHandler;
     private boolean mFirstCreateView = true;
@@ -48,6 +56,8 @@ public class SupportFragmentDelegate {
     boolean mAnimByActivity = true;
     EnterAnimListener mEnterAnimListener;
 
+    private boolean mRootViewClickable;
+
     public SupportFragmentDelegate(ISupportFragment support) {
         if (!(support instanceof Fragment))
             throw new RuntimeException("Must extends Fragment");
@@ -63,7 +73,7 @@ public class SupportFragmentDelegate {
         if (mTransactionDelegate == null)
             throw new RuntimeException(mFragment.getClass().getSimpleName() + " not attach!");
 
-        return new ExtraTransaction.ExtraTransactionImpl<>(mSupportF, mTransactionDelegate, false);
+        return new ExtraTransaction.ExtraTransactionImpl<>((FragmentActivity) mSupport, mSupportF, mTransactionDelegate, false);
     }
 
     public void onAttach(Activity activity) {
@@ -81,24 +91,53 @@ public class SupportFragmentDelegate {
 
         Bundle bundle = mFragment.getArguments();
         if (bundle != null) {
-            mEnterAnimDisable = bundle.getBoolean(TransactionDelegate.FRAGMENTATION_ARG_ANIM_DISABLE, false);
+            mRootStatus = bundle.getInt(TransactionDelegate.FRAGMENTATION_ARG_ROOT_STATUS, STATUS_UN_ROOT);
             mIsSharedElement = bundle.getBoolean(TransactionDelegate.FRAGMENTATION_ARG_IS_SHARED_ELEMENT, false);
             mContainerId = bundle.getInt(TransactionDelegate.FRAGMENTATION_ARG_CONTAINER);
             mReplaceMode = bundle.getBoolean(TransactionDelegate.FRAGMENTATION_ARG_REPLACE, false);
+            mCustomEnterAnim = bundle.getInt(TransactionDelegate.FRAGMENTATION_ARG_CUSTOM_ENTER_ANIM, Integer.MIN_VALUE);
+            mCustomExitAnim = bundle.getInt(TransactionDelegate.FRAGMENTATION_ARG_CUSTOM_EXIT_ANIM, Integer.MIN_VALUE);
+            mCustomPopExitAnim = bundle.getInt(TransactionDelegate.FRAGMENTATION_ARG_CUSTOM_POP_EXIT_ANIM, Integer.MIN_VALUE);
         }
 
         if (savedInstanceState == null) {
             getFragmentAnimator();
         } else {
+            savedInstanceState.setClassLoader(getClass().getClassLoader());
             mSaveInstanceState = savedInstanceState;
             mFragmentAnimator = savedInstanceState.getParcelable(TransactionDelegate.FRAGMENTATION_STATE_SAVE_ANIMATOR);
             mIsHidden = savedInstanceState.getBoolean(TransactionDelegate.FRAGMENTATION_STATE_SAVE_IS_HIDDEN);
             mContainerId = savedInstanceState.getInt(TransactionDelegate.FRAGMENTATION_ARG_CONTAINER);
         }
 
-        // Fix the overlapping BUG on pre-24.0.0
-        processRestoreInstanceState(savedInstanceState);
         mAnimHelper = new AnimatorHelper(_mActivity.getApplicationContext(), mFragmentAnimator);
+
+        final Animation enter = getEnterAnim();
+        if (enter == null) return;
+
+        getEnterAnim().setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mSupport.getSupportDelegate().mFragmentClickable = false;  // 开启防抖动
+
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSupport.getSupportDelegate().mFragmentClickable = true;
+                    }
+                }, enter.getDuration());
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
@@ -111,12 +150,12 @@ public class SupportFragmentDelegate {
         if (transit == FragmentTransaction.TRANSIT_FRAGMENT_OPEN) {
             if (enter) {
                 Animation enterAnim;
-                if (mEnterAnimDisable) {
+                if (mRootStatus == STATUS_ROOT_ANIM_DISABLE) {
                     enterAnim = mAnimHelper.getNoneAnim();
                 } else {
                     enterAnim = mAnimHelper.enterAnim;
+                    fixAnimationListener(enterAnim);
                 }
-                fixAnimationListener(enterAnim);
                 return enterAnim;
             } else {
                 return mAnimHelper.popExitAnim;
@@ -128,8 +167,9 @@ public class SupportFragmentDelegate {
                 compatSharedElements();
             }
 
-            Animation fixedAnim = mAnimHelper.getViewPagerChildFragmentAnimFixed(mFragment, enter);
-            if (fixedAnim != null) return fixedAnim;
+            if (!enter) {
+                return mAnimHelper.compatChildFragmentExitAnim(mFragment);
+            }
 
             return null;
         }
@@ -147,13 +187,20 @@ public class SupportFragmentDelegate {
 
         View view = mFragment.getView();
         if (view != null) {
+            mRootViewClickable = view.isClickable();
             view.setClickable(true);
             setBackground(view);
         }
 
-        if (savedInstanceState != null || mEnterAnimDisable || (mFragment.getTag() != null
-                && mFragment.getTag().startsWith("android:switcher:")) || (mReplaceMode && !mFirstCreateView)) {
+
+        if (savedInstanceState != null
+                || mRootStatus == STATUS_ROOT_ANIM_DISABLE
+                || (mFragment.getTag() != null && mFragment.getTag().startsWith("android:switcher:"))
+                || (mReplaceMode && !mFirstCreateView)) {
             notifyEnterAnimEnd();
+        } else if (mCustomEnterAnim != Integer.MIN_VALUE) {
+            fixAnimationListener(mCustomEnterAnim == 0 ?
+                    mAnimHelper.getNoneAnim() : AnimationUtils.loadAnimation(_mActivity, mCustomEnterAnim));
         }
 
         if (mFirstCreateView) {
@@ -172,6 +219,7 @@ public class SupportFragmentDelegate {
     public void onDestroyView() {
         mSupport.getSupportDelegate().mFragmentClickable = true;
         getVisibleDelegate().onDestroyView();
+        getHandler().removeCallbacks(mNotifyEnterAnimEndRunnable);
     }
 
     public void onDestroy() {
@@ -187,15 +235,28 @@ public class SupportFragmentDelegate {
     }
 
     /**
-     * If you want to call the start()/pop()/showHideFragment() on the onCreateXX/onActivityCreated,
-     * call this method to deliver the transaction to the queue.
+     * Causes the Runnable r to be added to the action queue.
      * <p>
-     * 在onCreate/onCreateView/onActivityCreated中使用 start()/pop()/showHideFragment(),请使用该方法把你的任务入队
+     * The runnable will be run after all the previous action has been run.
+     * <p>
+     * 前面的事务全部执行后 执行该Action
      *
-     * @param runnable start() , pop() or showHideFragment()
+     * @deprecated Use {@link #post(Runnable)} instead.
      */
+    @Deprecated
     public void enqueueAction(Runnable runnable) {
-        getHandler().postDelayed(runnable, mAnimHelper == null ? 0 : mAnimHelper.enterAnim.getDuration());
+        post(runnable);
+    }
+
+    /**
+     * Causes the Runnable r to be added to the action queue.
+     * <p>
+     * The runnable will be run after all the previous action has been run.
+     * <p>
+     * 前面的事务全部执行后 执行该Action
+     */
+    public void post(final Runnable runnable) {
+        mTransactionDelegate.post(runnable);
     }
 
     /**
@@ -341,7 +402,10 @@ public class SupportFragmentDelegate {
      * 隐藏软键盘
      */
     public void hideSoftInput() {
-        SupportHelper.hideSoftInput(mFragment.getView());
+        Activity activity = mFragment.getActivity();
+        if (activity == null) return;
+        View view = activity.getWindow().getDecorView();
+        SupportHelper.hideSoftInput(view);
     }
 
     /**
@@ -406,10 +470,14 @@ public class SupportFragmentDelegate {
     }
 
     /**
-     * Launch a fragment while poping self.
+     * Start the target Fragment and pop itself
      */
     public void startWithPop(ISupportFragment toFragment) {
-        mTransactionDelegate.dispatchStartTransaction(mFragment.getFragmentManager(), mSupportF, toFragment, 0, ISupportFragment.STANDARD, TransactionDelegate.TYPE_ADD_WITH_POP);
+        mTransactionDelegate.startWithPop(mFragment.getFragmentManager(), mSupportF, toFragment);
+    }
+
+    public void startWithPopTo(ISupportFragment toFragment, Class<?> targetFragmentClass, boolean includeTargetFragment) {
+        mTransactionDelegate.startWithPopTo(mFragment.getFragmentManager(), mSupportF, toFragment, targetFragmentClass.getName(), includeTargetFragment);
     }
 
     public void replaceFragment(ISupportFragment toFragment, boolean addToBackStack) {
@@ -429,7 +497,7 @@ public class SupportFragmentDelegate {
     }
 
     public void startChildWithPop(ISupportFragment toFragment) {
-        mTransactionDelegate.dispatchStartTransaction(getChildFragmentManager(), getTopFragment(), toFragment, 0, ISupportFragment.STANDARD, TransactionDelegate.TYPE_ADD_WITH_POP);
+        mTransactionDelegate.startWithPop(getChildFragmentManager(), getTopFragment(), toFragment);
     }
 
     public void replaceChildFragment(ISupportFragment toFragment, boolean addToBackStack) {
@@ -437,14 +505,14 @@ public class SupportFragmentDelegate {
     }
 
     public void pop() {
-        mTransactionDelegate.back(mFragment.getFragmentManager());
+        mTransactionDelegate.pop(mFragment.getFragmentManager());
     }
 
     /**
      * Pop the child fragment.
      */
     public void popChild() {
-        mTransactionDelegate.back(getChildFragmentManager());
+        mTransactionDelegate.pop(getChildFragmentManager());
     }
 
     /**
@@ -457,7 +525,6 @@ public class SupportFragmentDelegate {
      * @param includeTargetFragment 是否包含该fragment
      */
     public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment) {
-        getChildFragmentManager().popBackStack();
         popTo(targetFragmentClass, includeTargetFragment, null);
     }
 
@@ -466,7 +533,7 @@ public class SupportFragmentDelegate {
      * 如果你想在出栈后, 立刻进行FragmentTransaction操作，请使用该方法
      */
     public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment, Runnable afterPopTransactionRunnable) {
-        popTo(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable, 0);
+        popTo(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable, TransactionDelegate.DEFAULT_POPTO_ANIM);
     }
 
     public void popTo(Class<?> targetFragmentClass, boolean includeTargetFragment, Runnable afterPopTransactionRunnable, int popAnim) {
@@ -478,11 +545,15 @@ public class SupportFragmentDelegate {
     }
 
     public void popToChild(Class<?> targetFragmentClass, boolean includeTargetFragment, Runnable afterPopTransactionRunnable) {
-        popToChild(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable, 0);
+        popToChild(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable, TransactionDelegate.DEFAULT_POPTO_ANIM);
     }
 
     public void popToChild(Class<?> targetFragmentClass, boolean includeTargetFragment, Runnable afterPopTransactionRunnable, int popAnim) {
         mTransactionDelegate.popTo(targetFragmentClass.getName(), includeTargetFragment, afterPopTransactionRunnable, getChildFragmentManager(), popAnim);
+    }
+
+    public void popQuiet() {
+        mTransactionDelegate.popQuiet(mFragment.getFragmentManager(), mFragment);
     }
 
     private FragmentManager getChildFragmentManager() {
@@ -493,27 +564,10 @@ public class SupportFragmentDelegate {
         return SupportHelper.getTopFragment(getChildFragmentManager());
     }
 
-    private void processRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            FragmentTransaction ft = mFragment.getFragmentManager().beginTransaction();
-            if (mIsHidden) {
-                ft.hide(mFragment);
-            } else {
-                ft.show(mFragment);
-            }
-            ft.commitAllowingStateLoss();
-        }
-    }
-
     private void fixAnimationListener(Animation enterAnim) {
-        mSupport.getSupportDelegate().mFragmentClickable = false;
         // AnimationListener is not reliable.
-        getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notifyEnterAnimEnd();
-            }
-        }, enterAnim.getDuration());
+        getHandler().postDelayed(mNotifyEnterAnimEndRunnable, enterAnim.getDuration());
+        mSupport.getSupportDelegate().mFragmentClickable = true;
 
         if (mEnterAnimListener != null) {
             getHandler().post(new Runnable() {
@@ -526,13 +580,37 @@ public class SupportFragmentDelegate {
         }
     }
 
+    private Runnable mNotifyEnterAnimEndRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mFragment == null) return;
+            mSupportF.onEnterAnimationEnd(mSaveInstanceState);
+
+            if (mRootViewClickable) return;
+            final View view = mFragment.getView();
+            if (view == null) return;
+            ISupportFragment preFragment = SupportHelper.getPreFragment(mFragment);
+            if (preFragment == null) return;
+
+            long prePopExitDuration = preFragment.getSupportDelegate().getPopExitAnimDuration();
+            long enterDuration = getEnterAnimDuration();
+
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    view.setClickable(false);
+                }
+            }, prePopExitDuration - enterDuration);
+        }
+    };
+
     private void compatSharedElements() {
         notifyEnterAnimEnd();
     }
 
     public void setBackground(View view) {
         if ((mFragment.getTag() != null && mFragment.getTag().startsWith("android:switcher:")) ||
-                mEnterAnimDisable ||
+                mRootStatus != STATUS_UN_ROOT ||
                 view.getBackground() != null) {
             return;
         }
@@ -556,13 +634,7 @@ public class SupportFragmentDelegate {
     }
 
     private void notifyEnterAnimEnd() {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (mFragment == null) return;
-                mSupportF.onEnterAnimationEnd(mSaveInstanceState);
-            }
-        });
+        getHandler().post(mNotifyEnterAnimEndRunnable);
         mSupport.getSupportDelegate().mFragmentClickable = true;
     }
 
@@ -582,6 +654,77 @@ public class SupportFragmentDelegate {
 
     public FragmentActivity getActivity() {
         return _mActivity;
+    }
+
+    private Animation getEnterAnim() {
+        if (mCustomEnterAnim == Integer.MIN_VALUE) {
+            if (mAnimHelper != null && mAnimHelper.enterAnim != null) {
+                return mAnimHelper.enterAnim;
+            }
+        } else {
+            try {
+                return AnimationUtils.loadAnimation(_mActivity, mCustomEnterAnim);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private long getEnterAnimDuration() {
+        Animation enter = getEnterAnim();
+        if (enter != null) {
+            return enter.getDuration();
+        }
+        return NOT_FOUND_ANIM_TIME;
+    }
+
+    public long getExitAnimDuration() {
+        if (mCustomExitAnim == Integer.MIN_VALUE) {
+            if (mAnimHelper != null && mAnimHelper.exitAnim != null) {
+                return mAnimHelper.exitAnim.getDuration();
+            }
+        } else {
+            try {
+                return AnimationUtils.loadAnimation(_mActivity, mCustomExitAnim).getDuration();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return NOT_FOUND_ANIM_TIME;
+    }
+
+    private long getPopExitAnimDuration() {
+        if (mCustomPopExitAnim == Integer.MIN_VALUE) {
+            if (mAnimHelper != null && mAnimHelper.popExitAnim != null) {
+                return mAnimHelper.popExitAnim.getDuration();
+            }
+        } else {
+            try {
+                return AnimationUtils.loadAnimation(_mActivity, mCustomPopExitAnim).getDuration();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return NOT_FOUND_ANIM_TIME;
+    }
+
+    @Nullable
+    Animation getExitAnim() {
+        if (mCustomExitAnim == Integer.MIN_VALUE) {
+            if (mAnimHelper != null && mAnimHelper.exitAnim != null) {
+                return mAnimHelper.exitAnim;
+            }
+        } else {
+            try {
+                return AnimationUtils.loadAnimation(_mActivity, mCustomExitAnim);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     interface EnterAnimListener {

@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.StatFs
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.text.TextUtils
 import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.file.content.FileContent

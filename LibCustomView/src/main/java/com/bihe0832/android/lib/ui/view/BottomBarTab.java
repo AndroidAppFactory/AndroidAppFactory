@@ -2,8 +2,7 @@ package com.bihe0832.android.lib.ui.view;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.v4.content.ContextCompat;
+
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -12,6 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+
+import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
+
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 

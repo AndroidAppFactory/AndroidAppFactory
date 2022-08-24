@@ -1,6 +1,6 @@
 apply from: rootDir.toString() + '/config.gradle'
 apply from: rootDir.toString() + '/dependencies.gradle'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 
@@ -11,22 +11,23 @@ def isRelease = true
 
 def sonatypeRepositoryUrl
 def sonatypeRepositoryVersion
-def userName
-def password
+def sonatypeUserName
+def sonatypePassword
+def moduleName = project.name
 
 try {
-    userName = getProperty("NEXUS_USERNAME")
-}catch(Exception e){
+    sonatypeUserName = getProperty("NEXUS_USERNAME")
+} catch (Exception e) {
     e.printStackTrace()
-    userName = ""
+    sonatypeUserName = ""
 }
 
 
 try {
-    password = getProperty("NEXUS_PASSWORD")
-}catch(Exception e){
+    sonatypePassword = getProperty("NEXUS_PASSWORD")
+} catch (Exception e) {
     e.printStackTrace()
-    password = ""
+    sonatypePassword = ""
 }
 
 if (isRelease) {
@@ -39,54 +40,72 @@ if (isRelease) {
     sonatypeRepositoryVersion = "-SNAPSHOT"
 }
 
-afterEvaluate { project ->
+afterEvaluate {
 
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment ->
-                    signing.signPom(deployment)
-                }
-                repository(url: sonatypeRepositoryUrl) {
-                    authentication(userName: userName, password: password)
-                }
-                pom.groupId = rootProject.zixieGroupId
-                pom.version = rootProject.zixieModuleInfo[module.name].get("version") + sonatypeRepositoryVersion
-                pom.artifactId = rootProject.zixieModuleInfo[module.name].get("artifactId")
+    publishing {
 
-                pom.project {
-                    name module.name
-                    packaging "aar"
-                    description "Android APP Factory"
-                    url "https://android.bihe0832.com/doc/"
+        //发布的 jar 包配置
+        publications {
 
-                    scm {
-                        url "https://github.com/bihe0832/AndroidAppFactory"
-                        connection "scm:git@github.com:bihe0832/AndroidAppFactory.git"
-                        developerConnection "scm:git@github.com:bihe0832/AndroidAppFactory.git"
+            maven(MavenPublication) {
+                groupId = rootProject.zixieGroupId
+                artifactId = rootProject.zixieModuleInfo[moduleName].get("artifactId")
+                version = rootProject.zixieModuleInfo[moduleName].get("version") + sonatypeRepositoryVersion
+                if (moduleName.equals("RouterCompiler")){
+                    from components.java
+                }else {
+                    artifact("$buildDir/outputs/aar/${moduleName}-release.aar") {
+                        builtBy tasks.getByPath("assembleRelease")
                     }
+                }
 
+                signing {
+                    sign publishing.publications
+                }
+
+                pom {
+                    name = moduleName
+                    description = "Android APP Factory"
+                    url = "https://android.bihe0832.com/doc/"
+                    properties = [
+                            myProp          : "email",
+                            "prop.with.dots": "code@bihe0832.com"
+                    ]
                     licenses {
                         license {
-                            name "The Apache Software License, Version 2.0"
-                            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                            distribution "Apache 2.0"
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                         }
                     }
-
                     developers {
                         developer {
-                            id "bihe0832"
-                            name "zixie"
+                            id = "bihe0832"
+                            name = "zixie"
+                            email = "code@bihe0832.com"
                         }
                     }
+                    scm {
+                        connection = "scm:git@github.com:bihe0832/AndroidAppFactory.git"
+                        developerConnection = "scm:git@github.com:bihe0832/AndroidAppFactory.git"
+                        url = "https://github.com/bihe0832/AndroidAppFactory"
+                    }
+                }
+
+            }
+
+        }
+        //仓库地址配置
+        repositories {
+            maven {
+                name = moduleName
+                allowInsecureProtocol true
+                url sonatypeRepositoryUrl
+                credentials {
+                    username = sonatypeUserName
+                    password = sonatypePassword
                 }
             }
         }
-
-        signing {
-            sign configurations.archives
-        }
-
     }
 }
+

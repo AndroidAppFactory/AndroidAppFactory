@@ -5,13 +5,13 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
+import androidx.core.app.ActivityCompat;
 
 import com.bihe0832.android.lib.log.ZLog;
-
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 

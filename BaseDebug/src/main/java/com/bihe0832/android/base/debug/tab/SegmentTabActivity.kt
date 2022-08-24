@@ -2,11 +2,11 @@ package com.bihe0832.android.base.debug.tab
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment.Companion.newInstance
@@ -78,7 +78,7 @@ class SegmentTabActivity : BaseActivity() {
         vp_2.setCurrentItem(1)
     }
 
-    private inner class MyPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+    private inner class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getCount(): Int {
             return mFragments.size

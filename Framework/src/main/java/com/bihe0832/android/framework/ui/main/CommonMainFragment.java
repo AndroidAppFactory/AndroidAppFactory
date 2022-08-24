@@ -1,10 +1,7 @@
 package com.bihe0832.android.framework.ui.main;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
-
 
 import com.bihe0832.android.framework.R;
 import com.bihe0832.android.framework.ui.BaseFragment;
@@ -40,7 +37,7 @@ public abstract class CommonMainFragment extends BaseFragment {
     }
 
     @Override
-    protected void initView(@NonNull View view) {
+    protected void initView(View view) {
         super.initView(view);
         mBottomBarTabs = getBottomBarTabs();
         bottomBar = view.findViewById(R.id.main_fragment_bottomBar);
@@ -94,7 +91,7 @@ public abstract class CommonMainFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mFragments = getFragments();
         loadMultipleRootFragmentByResId(R.id.fragment_content);
