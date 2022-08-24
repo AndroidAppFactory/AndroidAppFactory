@@ -43,6 +43,7 @@ object DownloadConfig {
             setNotificationVisibility(true)
             downloadURL = url
             fileMD5 = md5
+            actionKey = "DownloadConfig"
             isDownloadWhenUseMobile = true
             setCanDownloadByPart(false)
             isForceDownloadNew = TextUtils.isEmpty(md5)

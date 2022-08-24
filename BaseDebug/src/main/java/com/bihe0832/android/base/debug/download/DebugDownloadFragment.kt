@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.debug.download
 
 import android.view.View
+import com.bihe0832.android.app.file.AAFFileUtils
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
@@ -232,10 +233,13 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
 
     private fun testDownloadGzip() {
-        DownloadFile.startDownload(context!!,
+        DownloadFile.startDownload(requireContext(),
                 "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
+                AAFFileUtils.getFileCacheFolder() + System.currentTimeMillis() +"_20220321114751.json.gzip",
                 object : SimpleDownloadListener() {
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                        ZLog.d(LOG_TAG, "onFail:" + msg)
+
                     }
 
                     override fun onComplete(filePath: String, item: DownloadItem) {

@@ -83,15 +83,9 @@ src="[0-9]*\.[0-9]*\.[0-9]*"
 cat $localPath/dependencies.gradle | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 if [[ $libName == Router* ]]; then
-<<<<<<< HEAD
-  ./gradlew clean publish
-else
-  ./gradlew clean publish
-=======
   ./gradlew clean assemble publish
 else
   ./gradlew clean assembleRelease publish
->>>>>>> build_temp
 fi
 checkResult
 ./gradlew clean

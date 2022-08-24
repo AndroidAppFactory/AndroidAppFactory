@@ -8,9 +8,9 @@ ext {
     zixieUserOrg = 'bihe0832'
     zixieGroupId = "com.bihe0832.android"
     zixieLicences = ""
-    try{
+    try {
         zixieVersionCode = Integer.parseInt(['sh', '-c', 'git rev-list --all --count'].execute().text.trim())
-    }catch(NumberFormatException ex){
+    } catch (NumberFormatException ex) {
         System.out.println("not a number" + ex)
         zixieVersionCode = 0
     }
@@ -191,9 +191,14 @@ def autoDependencies(String projectName, String moduleName, HashMap<String, Arra
                     if (listItem.contains(":")) {
                         project(':' + projectName).dependencies.add(item, listItem)
                     } else {
-                        if (null != zixieModuleInfo[listItem]) {
-                            project(':' + projectName).dependencies.add(item, zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
-                            if (zixieIsDebug) println(item + " " + zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
+                        if (checkModuleIsDev(listItem)) {
+                            if (zixieIsDebug) println(item + " project(:'" + listItem + "')")
+                            project(':' + projectName).dependencies.add(item, project(':' + listItem + ''))
+                        } else {
+                            if (null != zixieModuleInfo[listItem]) {
+                                project(':' + projectName).dependencies.add(item, zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
+                                if (zixieIsDebug) println(item + " " + zixieGroupId + ":" + zixieModuleInfo[listItem].get("artifactId") + ":" + zixieModuleInfo[listItem].get("version"))
+                            }
                         }
                     }
                 }
