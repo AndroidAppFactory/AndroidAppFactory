@@ -53,7 +53,7 @@ public class DownloadItem implements Serializable {
     // 下载内容标题，非必填
     private String downloadTitle = "";
     // 下载时指定的本地目录，建议不填
-    private String fileNameWithPath = "";
+    private String fileFolder = "";
     // 下载结束以后，文件的实际地址，不填
     private String finalFilePath = "";
     // 扩展信息，会一路透传到该下载相关的所有事件，包括安装
@@ -221,12 +221,12 @@ public class DownloadItem implements Serializable {
         this.tempFilePath = tempFilePath;
     }
 
-    public String getFileNameWithPath() {
-        return fileNameWithPath;
+    public String getFileFolder() {
+        return fileFolder;
     }
 
-    public void setFileNameWithPath(String fileNameWithPath) {
-        this.fileNameWithPath = fileNameWithPath;
+    public void setFileFolder(String fileFolder) {
+        this.fileFolder = fileFolder;
     }
 
     public boolean isForceDownloadNew() {
@@ -378,7 +378,7 @@ public class DownloadItem implements Serializable {
             this.mDownloadListener = item.mDownloadListener;
             this.downloadDesc = item.downloadDesc;
             this.downloadTitle = item.downloadTitle;
-            this.fileNameWithPath = item.fileNameWithPath;
+            this.fileFolder = item.fileFolder;
             this.finalFilePath = item.finalFilePath;
             this.actionKey = item.actionKey;
             this.extraInfo = item.extraInfo;
@@ -402,7 +402,7 @@ public class DownloadItem implements Serializable {
                 + ", versionCode=" + versionCode
                 + ", downloadIcon='" + downloadIcon + '\''
                 + ", downloadURL='" + downloadURL + '\''
-                + ", fileNameWithPath='" + fileNameWithPath + '\''
+                + ", fileNameWithPath='" + fileFolder + '\''
                 + ", finalFilePath='" + finalFilePath + '\''
                 + ", tempFilePath='" + tempFilePath + '\''
                 + ", fileMD5='" + fileMD5 + '\''
