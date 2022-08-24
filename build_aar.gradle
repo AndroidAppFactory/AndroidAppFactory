@@ -51,8 +51,10 @@ afterEvaluate {
                 groupId = rootProject.zixieGroupId
                 artifactId = rootProject.zixieModuleInfo[moduleName].get("artifactId")
                 version = rootProject.zixieModuleInfo[moduleName].get("version") + sonatypeRepositoryVersion
-                if (moduleName.equals("RouterCompiler")){
+                if (moduleName == "RouterCompiler"){
                     from components.java
+                    artifact sourcesJar
+                    artifact javadocJar
                 }else {
                     artifact("$buildDir/outputs/aar/${moduleName}-release.aar") {
                         builtBy tasks.getByPath("assembleRelease")
