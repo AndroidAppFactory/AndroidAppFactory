@@ -9,13 +9,13 @@ buildscript {
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1293/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1300/content/" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "com.bihe0832.android:GradleDependenciesCheck:4.1.0"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.71"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
     }
 }
 
@@ -31,10 +31,7 @@ allprojects {
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1293/content/" }
-        flatDir {
-            dirs './../libs/'
-        }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1300/content/" }
     }
 
     afterEvaluate { Project subproject ->
@@ -80,14 +77,18 @@ subprojects {
             delete ".externalNativeBuild"
         }
 
-        if (!subproject.name.startsWith("Pub") || subproject.name != "APPTest") {
-            subproject.getTasks().create("copyAAR", Copy.class) {
-                group = "zixieDev"
-                from 'build/outputs/aar/' + module.name + '-release.aar'
-                into "./../libs/"
-            }
+        if (subproject.name.startsWith("Lib")
+                || subproject.name.startsWith("Common")
+                || subproject.name.startsWith("Framework")) {
 
-            subproject.getTasks().getByName('copyAAR').dependsOn("assembleRelease")
+//            subproject.getTasks().create("copyAAR", Copy.class) {
+//                group = "zixieDev"
+//                from 'build/outputs/aar/' + module.name + '-release.aar'
+//                into "./../libs/"
+//            }
+
+//            subproject.getTasks().getByName('publish').dependsOn("assembleRelease")
+//            subproject.getTasks().getByName('copyAAR').dependsOn("assembleRelease")
         }
     }
 }

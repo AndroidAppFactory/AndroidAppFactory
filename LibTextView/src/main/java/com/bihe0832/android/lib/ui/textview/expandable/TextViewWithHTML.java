@@ -13,12 +13,15 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
+import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.textview.ext.TextViewExtKt;
 
 
-public class TextViewWithHTML extends android.support.v7.widget.AppCompatTextView {
+public class TextViewWithHTML extends AppCompatTextView {
     public TextViewWithHTML(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -28,7 +31,7 @@ public class TextViewWithHTML extends android.support.v7.widget.AppCompatTextVie
     }
 
     @Override
-    public void setText(CharSequence htmlText, BufferType type) {
+    public void setText(CharSequence htmlText, TextView.BufferType type) {
         Spanned html = TextFactoryUtils.getSpannedTextByHtml(htmlText.toString());
         ClickableSpan[] spans = html.getSpans(0, html.length(), ClickableSpan.class);
         if (spans != null && spans.length > 0) {
@@ -38,7 +41,7 @@ public class TextViewWithHTML extends android.support.v7.widget.AppCompatTextVie
     }
 
     public void setHTMLText(CharSequence htmlText) {
-        setText(htmlText, BufferType.NORMAL);
+        setText(htmlText, TextView.BufferType.NORMAL);
     }
 
 

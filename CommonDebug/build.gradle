@@ -10,7 +10,7 @@ android {
     buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion project.commonMinSdkVersion
+        minSdkVersion project.libMinSdkVersion
         targetSdkVersion project.targetSdkVersion
         versionCode project.zixieVersionCode
         versionName project.zixieVersionName

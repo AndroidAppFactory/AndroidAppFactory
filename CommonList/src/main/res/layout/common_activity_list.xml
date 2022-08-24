@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/common_activity_list_toolbar"
         style="@style/frameWorkAppTheme.Toolbar.Light"
         app:title="服务" />
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/activity_list_info_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

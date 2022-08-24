@@ -17,17 +17,6 @@ package com.chad.library.adapter.base;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.support.annotation.IdRes;
-import android.support.annotation.IntDef;
-import android.support.annotation.IntRange;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.LayoutParams;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +49,17 @@ import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.IntDef;
+import androidx.annotation.IntRange;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 
 /**
@@ -1141,10 +1141,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             mHeaderLayout = new LinearLayout(header.getContext());
             if (orientation == LinearLayout.VERTICAL) {
                 mHeaderLayout.setOrientation(LinearLayout.VERTICAL);
-                mHeaderLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                mHeaderLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             } else {
                 mHeaderLayout.setOrientation(LinearLayout.HORIZONTAL);
-                mHeaderLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
+                mHeaderLayout.setLayoutParams(new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT));
             }
         }
         final int childCount = mHeaderLayout.getChildCount();
@@ -1207,10 +1207,10 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
             mFooterLayout = new LinearLayout(footer.getContext());
             if (orientation == LinearLayout.VERTICAL) {
                 mFooterLayout.setOrientation(LinearLayout.VERTICAL);
-                mFooterLayout.setLayoutParams(new LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+                mFooterLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             } else {
                 mFooterLayout.setOrientation(LinearLayout.HORIZONTAL);
-                mFooterLayout.setLayoutParams(new LayoutParams(WRAP_CONTENT, MATCH_PARENT));
+                mFooterLayout.setLayoutParams(new LinearLayout.LayoutParams(WRAP_CONTENT, MATCH_PARENT));
             }
         }
         final int childCount = mFooterLayout.getChildCount();
@@ -1354,7 +1354,7 @@ public abstract class BaseQuickAdapter<T, K extends BaseViewHolder> extends Recy
         boolean insert = false;
         if (mEmptyLayout == null) {
             mEmptyLayout = new FrameLayout(emptyView.getContext());
-            final LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
             final ViewGroup.LayoutParams lp = emptyView.getLayoutParams();
             if (lp != null) {
                 layoutParams.width = lp.width;

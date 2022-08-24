@@ -2,9 +2,9 @@ package com.bihe0832.android.lib.immersion
 
 import android.graphics.Color
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.ui.common.ColorTools
 import com.bihe0832.android.lib.ui.image.BitmapUtil

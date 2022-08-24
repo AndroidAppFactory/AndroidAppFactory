@@ -2,9 +2,10 @@ package com.bihe0832.android.base.debug.card;
 
 import static com.bihe0832.android.base.debug.card.DebugListActivityKt.ROUTRT_NAME_TEST_SECTION;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bihe0832.android.app.router.RouterHelper;
 import com.bihe0832.android.base.debug.R;

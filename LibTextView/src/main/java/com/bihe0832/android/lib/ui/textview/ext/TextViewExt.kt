@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.ui.textview.ext;
 
 import android.graphics.drawable.Drawable
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.TextView

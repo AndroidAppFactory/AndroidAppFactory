@@ -2,10 +2,11 @@ package com.bihe0832.android.base.debug.touch;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bihe0832.android.base.debug.R;
 import com.bihe0832.android.framework.ZixieContext;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/com_bihe0832_lib_icon_layout"
     android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:id="@+id/com_bihe0832_lib_icon_icon_redr"
         android:layout_width="4dp"
         android:layout_height="4dp"
-        android:src="@drawable/com_bihe0832_ui_red_dot"
+        android:src="@drawable/botton_bar_tab_red_dot"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,9 +29,9 @@
         android:id="@+id/com_bihe0832_lib_icon_icon_redl"
         android:layout_width="4dp"
         android:layout_height="4dp"
-        android:src="@drawable/com_bihe0832_ui_red_dot"
+        android:src="@drawable/botton_bar_tab_red_dot"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

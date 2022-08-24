@@ -1,9 +1,10 @@
 package com.bihe0832.android.lib.ui.recycleview.ext;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * @author zixie code@bihe0832.com

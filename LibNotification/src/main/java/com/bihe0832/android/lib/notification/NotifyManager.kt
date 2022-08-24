@@ -9,8 +9,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import android.text.TextUtils
 import android.widget.RemoteViews
 import com.bihe0832.android.lib.utils.IdGenerator

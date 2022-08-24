@@ -4,10 +4,9 @@ import static com.bihe0832.android.lib.permission.PermissionManager.PERMISSION_R
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+
+import androidx.core.app.ActivityCompat;
 
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.PermissionsChecker;
@@ -24,20 +23,17 @@ public class PermissionsActivity extends Activity {
     public static final String EXTRA_PERMISSIONS = "com.bihe0832.android.lib.permission.extra_permission"; // 权限参数
     public static final String EXTRA_SOURCE = "com.bihe0832.android.lib.permission.extra_source"; // 权限参数
     public static final String EXTRA_CAN_CANCEL = "com.bihe0832.android.lib.permission.can.cancel"; // 权限参数
-
-
-    private PermissionsChecker permissionsChecker; // 权限检测器
-    private boolean isRequireCheck; // 是否需要系统权限检测, 防止和系统提示框重叠
     protected String[] needCheckPermissionGroup = null;
     protected boolean canCancle = false;
     protected String scene = "";
-
+    protected boolean autoDeny = false;
+    private PermissionsChecker permissionsChecker; // 权限检测器
+    private boolean isRequireCheck; // 是否需要系统权限检测, 防止和系统提示框重叠
     private PermissionDialog dialog = null;
     private long lastCheckTime = 0L;
-    protected boolean autoDeny = false;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() == null || !getIntent().hasExtra(EXTRA_PERMISSIONS)) {
             throw new RuntimeException("PermissionsActivity need check permission");
@@ -109,8 +105,8 @@ public class PermissionsActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         long time = System.currentTimeMillis() - lastCheckTime;
         if (time < 500) {
             autoDeny = true;

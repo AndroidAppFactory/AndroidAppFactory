@@ -1,12 +1,9 @@
 package com.bihe0832.android.test;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.bihe0832.android.base.debug.AAFDebugTempFragment;
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment;
-import com.bihe0832.android.base.debug.download.DebugDownloadFragment;
-import com.bihe0832.android.base.debug.image.DebugImageFragment;
-import com.bihe0832.android.base.debug.tab.DebugTabFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
 import com.bihe0832.android.common.debug.module.DebugCommonFragment;
 import com.bihe0832.android.test.module.AAFDebugCommonFragment;

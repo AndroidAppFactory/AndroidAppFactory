@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.ui.recycleview.ext;
 
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.lib.log.ZLog
 
 /**
@@ -12,8 +12,8 @@ import com.bihe0832.android.lib.log.ZLog
  *
  */
 class RecyclerViewItemActiveHelper(
-        private val recyclerView: RecyclerView,
-        private val activeCallback: ActiveCallback
+    private val recyclerView: RecyclerView,
+    private val activeCallback: ActiveCallback
 ) : RecyclerView.OnScrollListener(), ScrollDirectionDetector.OnDetectScrollListener {
     private val TAG = RecyclerViewItemActiveHelper::class.java.simpleName
 

@@ -1,10 +1,10 @@
 ext {
     //Android编译SDK版本
-    compileSdkVersion = 31
+    compileSdkVersion = 32
     //Android编译工具版本
-    buildToolsVersion = "30.0.3"
+    buildToolsVersion = "31.0.0"
     //Lib 最低适配Android 版本
-    commonMinSdkVersion  = 16
+    libMinSdkVersion = 16
     //APK 最低适配Android 版本
     appMinSdkVersion = 21
     //Android 最佳适配Android 版本
@@ -17,20 +17,36 @@ ext {
     minifyEnabled = true
 
     //使用kotlin版本
-    kotlin_version = '1.3.71'
-    kotlinx_version = '1.3.9'
+    kotlin_version = '1.7.10'
+    kotlinx_coroutines_version = "1.6.3"
 
-
-    glide_version = "4.6.1"
+    glide_version = "4.13.2"
     gson_version = "2.8.2"
-    //使用Android Support库版本
-    android_support_version = "28.0.0"
-    android_constraint_layout_version = '1.1.3'
-    android_arch_lifecycle_version = '1.1.1'
-    android_arch_persistence_version = '1.1.1'
-    robolectricVersion = '3.3.2'
 
-//签名信息
+    androidsupport = [
+            viewpager          : 'androidx.viewpager:viewpager:1.0.0',
+            appcompat          : 'androidx.appcompat:appcompat:1.5.0',
+            androidxcore       : 'androidx.core:core:1.8.0',
+            constraintlayout   : 'androidx.constraintlayout:constraintlayout:2.1.4',
+            annotation         : 'androidx.annotation:annotation:1.3.0',
+            multidex           : 'androidx.multidex:multidex:2.0.1',
+
+            recyclerview       : 'androidx.recyclerview:recyclerview:1.2.1',
+            swiperefreshlayout : 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0',
+
+
+            // ViewModel
+            lifecycle_viewmodel: 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1',
+            // LiveData
+            lifecycle_livedata : 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1',
+            // Lifecycles only (without ViewModel or LiveData)
+            lifecycle          : 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1',
+            lifecyclecommon    : 'androidx.lifecycle:lifecycle-common-java8:2.5.1',
+            lifecycleprocess   : 'androidx.lifecycle:lifecycle-process:2.4.1',
+
+
+    ]
+    //签名信息
     signingConfigs = [
             keyAlias        : 'androiddebugkey',
             keyPassword     : 'android',

@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.permission.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;

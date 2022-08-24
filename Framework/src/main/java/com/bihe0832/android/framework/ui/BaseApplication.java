@@ -4,9 +4,10 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
-import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.webkit.WebView;
+
+import androidx.multidex.MultiDex;
 
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ZixieCoreInit;

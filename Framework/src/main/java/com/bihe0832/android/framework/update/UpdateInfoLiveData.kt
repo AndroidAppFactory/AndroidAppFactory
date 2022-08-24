@@ -1,6 +1,6 @@
 package com.bihe0832.android.framework.update
 
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.MediatorLiveData
 
 
 /**

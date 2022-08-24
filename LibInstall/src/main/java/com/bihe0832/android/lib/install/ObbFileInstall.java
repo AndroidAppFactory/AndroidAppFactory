@@ -1,11 +1,15 @@
 package com.bihe0832.android.lib.install;
 
+import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
+import static com.bihe0832.android.lib.install.InstallErrorCode.PERMISSION_DENY;
+import static com.bihe0832.android.lib.install.InstallErrorCode.UNKNOWN_EXCEPTION;
+import static com.bihe0832.android.lib.install.InstallErrorCode.UNZIP_FAILED;
+
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.log.ZLog;
@@ -15,11 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
-import static com.bihe0832.android.lib.install.InstallErrorCode.PERMISSION_DENY;
-import static com.bihe0832.android.lib.install.InstallErrorCode.UNKNOWN_EXCEPTION;
-import static com.bihe0832.android.lib.install.InstallErrorCode.UNZIP_FAILED;
-
 /**
  * @author zixie code@bihe0832.com
  * Created on 2020/9/25.
@@ -28,7 +27,7 @@ import static com.bihe0832.android.lib.install.InstallErrorCode.UNZIP_FAILED;
 class ObbFileInstall {
     private static final String TAG = "ObbFileInstall";
 
-    static void installObbAPKByFile(@NotNull Context context, @NonNull String fileDir, String packageName, final InstallListener listener) {
+    static void installObbAPKByFile(@NotNull Context context, String fileDir, String packageName, final InstallListener listener) {
         try {
 
             if (!FileUtils.INSTANCE.checkStoragePermissions(context)) {
@@ -95,7 +94,7 @@ class ObbFileInstall {
 
     }
 
-    static void installObbAPKByZip(@NotNull Context context, @NonNull String zipFile, String packageName, final InstallListener listener) {
+    static void installObbAPKByZip(@NotNull Context context, String zipFile, String packageName, final InstallListener listener) {
         try {
             if (!FileUtils.INSTANCE.checkStoragePermissions(context)) {
                 ZLog.d(TAG + "prepare4InstallObb checkPermissions failed");

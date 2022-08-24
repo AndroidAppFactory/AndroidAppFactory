@@ -9,7 +9,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion project.commonMinSdkVersion
+        minSdkVersion project.libMinSdkVersion
         targetSdkVersion project.targetSdkVersion
         versionName project.zixieVersionName
         versionCode project.zixieVersionCode

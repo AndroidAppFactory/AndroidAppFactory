@@ -1,8 +1,8 @@
 package me.yokeyword.fragmentation.helper.internal;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -48,9 +48,9 @@ public final class AnimatorHelper {
     }
 
     @Nullable
-    public Animation getViewPagerChildFragmentAnimFixed(Fragment fragment, boolean enter) {
-        if (!enter && fragment.getTag() != null && fragment.getTag().startsWith("android:switcher:")
-                && fragment.getUserVisibleHint()) {
+    public Animation compatChildFragmentExitAnim(Fragment fragment) {
+        if ((fragment.getTag() != null && fragment.getTag().startsWith("android:switcher:") && fragment.getUserVisibleHint()) ||
+                (fragment.getParentFragment() != null && fragment.getParentFragment().isRemoving() && !fragment.isHidden())) {
             Animation animation = new Animation() {
             };
             animation.setDuration(exitAnim.getDuration());

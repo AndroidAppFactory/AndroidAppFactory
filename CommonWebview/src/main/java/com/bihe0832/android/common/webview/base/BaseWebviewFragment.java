@@ -1,9 +1,6 @@
 package com.bihe0832.android.common.webview.base;
 
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -14,10 +11,6 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +18,13 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
@@ -168,7 +168,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
     @Override
     protected void initView(@NonNull View view) {
         super.initView(view);
-        mWebViewViewModel = ViewModelProviders.of(getActivity()).get(WebViewViewModel.class);
+        mWebViewViewModel = new ViewModelProvider(getActivity()).get(WebViewViewModel.class);
         mWebView = createWebView();
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);

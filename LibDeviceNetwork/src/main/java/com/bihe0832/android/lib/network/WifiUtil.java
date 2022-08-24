@@ -6,11 +6,11 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.support.annotation.NonNull;
+
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -670,7 +670,7 @@ public class WifiUtil {
         return -1;
     }
 
-    public static String getBssid(@NonNull Context context) {
+    public static String getBssid(Context context) {
         String bssid = "";
         try {
             WifiManager wifiManager =
@@ -683,7 +683,7 @@ public class WifiUtil {
         return bssid;
     }
 
-    public static List<WifiChannelInfo> getWifiChannelInfos(@NonNull Context context) {
+    public static List<WifiChannelInfo> getWifiChannelInfos(Context context) {
         List<WifiChannelInfo> wifiChannelInfos = Collections.emptyList();
         try {
             WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);

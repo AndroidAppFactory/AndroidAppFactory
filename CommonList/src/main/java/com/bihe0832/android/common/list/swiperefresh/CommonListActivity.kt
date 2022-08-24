@@ -1,8 +1,8 @@
 package  com.bihe0832.android.common.list.swiperefresh
 
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bihe0832.android.common.list.BaseListActivity
 import com.bihe0832.android.common.list.R
 import com.bihe0832.android.lib.adapter.CardBaseModule

@@ -1,8 +1,8 @@
 package com.bihe0832.android.common.debug.log;
 
 import android.content.Intent
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.list.CardItemForCommonList

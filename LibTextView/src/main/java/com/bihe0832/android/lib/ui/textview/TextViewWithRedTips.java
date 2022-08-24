@@ -1,10 +1,11 @@
 package com.bihe0832.android.lib.ui.textview;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 
 /**

@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/common_toolbar"
         style="@style/frameWorkAppTheme.Toolbar.Light"
         app:title="">
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:src="@drawable/ic_more" />
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/common_fragment_content"

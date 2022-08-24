@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -9,7 +8,7 @@ android {
 
 
     defaultConfig {
-        minSdkVersion project.commonMinSdkVersion
+        minSdkVersion project.libMinSdkVersion
         targetSdkVersion project.targetSdkVersion
         versionName project.zixieVersionName
         versionCode project.zixieVersionCode

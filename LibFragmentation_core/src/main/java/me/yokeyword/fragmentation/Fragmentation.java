@@ -1,6 +1,6 @@
 package me.yokeyword.fragmentation;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,7 +27,7 @@ public class Fragmentation {
     static volatile Fragmentation INSTANCE;
 
     private boolean debug;
-    private int mode = NONE;
+    private int mode = BUBBLE;
     private ExceptionHandler handler;
 
     @IntDef({NONE, SHAKE, BUBBLE})
@@ -50,6 +50,8 @@ public class Fragmentation {
         debug = builder.debug;
         if (debug) {
             mode = builder.mode;
+        } else {
+            mode = NONE;
         }
         handler = builder.handler;
     }
@@ -97,9 +99,9 @@ public class Fragmentation {
 
         /**
          * Sets the mode to display the stack view
-         *
+         * <p>
          * None if debug(false).
-         *
+         * <p>
          * Default:NONE
          */
         public FragmentationBuilder stackViewMode(@StackViewMode int mode) {
@@ -116,14 +118,8 @@ public class Fragmentation {
         }
 
         public Fragmentation install() {
-            synchronized (Fragmentation.class) {
-                if (Fragmentation.INSTANCE != null) {
-                    throw new RuntimeException("Default instance already exists." +
-                            " It may be only set once before it's used the first time to ensure consistent behavior.");
-                }
-                Fragmentation.INSTANCE = new Fragmentation(this);
-                return Fragmentation.INSTANCE;
-            }
+            Fragmentation.INSTANCE = new Fragmentation(this);
+            return Fragmentation.INSTANCE;
         }
     }
 }

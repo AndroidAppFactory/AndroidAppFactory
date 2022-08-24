@@ -2,7 +2,7 @@ package com.bihe0832.android.lib.permission;
 
 import android.Manifest;
 import android.content.Context;
-import android.support.v4.content.PermissionChecker;
+import androidx.core.content.PermissionChecker;
 
 import com.bihe0832.android.lib.permission.wrapper.FloatPermissionWrapperKt;
 

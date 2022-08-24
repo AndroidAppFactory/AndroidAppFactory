@@ -3,8 +3,8 @@ package com.bihe0832.android.framework.image;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
 import com.bihe0832.android.framework.ZixieContext;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
@@ -33,7 +33,7 @@ public class AAFAppGlideModule extends AppGlideModule {
     }
 
     @Override
-    public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
+    public void applyOptions(Context context, GlideBuilder builder) {
         super.applyOptions(context, builder);
         MemorySizeCalculator calculator = new MemorySizeCalculator.Builder(context).setMemoryCacheScreens(2).build();
 
@@ -81,7 +81,7 @@ public class AAFAppGlideModule extends AppGlideModule {
     }
 
     @Override
-    public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
+    public void registerComponents(Context context, Glide glide, Registry registry) {
         super.registerComponents(context, glide, registry);
     }
 }

@@ -1,9 +1,10 @@
 package com.chad.library.adapter.base.callback;
 
 import android.graphics.Canvas;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bihe0832.android.lib.adapter.R;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.DynamicLayout;
 import android.text.Layout;
 import android.text.Spannable;
@@ -19,6 +17,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.bihe0832.android.lib.ui.textview.R;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
@@ -77,13 +78,13 @@ public abstract class ExpandableTextView extends AppCompatTextView {
         init();
     }
 
-    public ExpandableTextView(Context context, @Nullable AttributeSet attrs) {
+    public ExpandableTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(context, attrs);
         init();
     }
 
-    public ExpandableTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ExpandableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttrs(context, attrs);
         init();
@@ -373,7 +374,7 @@ public abstract class ExpandableTextView extends AppCompatTextView {
 
 
     protected SpannableStringBuilder getNotFullContent(DynamicLayout mOriginLayout, CharSequence originText,
-            DynamicLayout mFinalLayout, String mToExpandHint) {
+                                                       DynamicLayout mFinalLayout, String mToExpandHint) {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
         //遇到了新行
         stringBuilder
@@ -453,15 +454,15 @@ public abstract class ExpandableTextView extends AppCompatTextView {
     }
 
     protected String getOriginalTextFromLineToLine(DynamicLayout mOriginLayout, CharSequence mOriginText,
-            int startLineNum,
-            int endLineNum) {
+                                                   int startLineNum,
+                                                   int endLineNum) {
         int indexStart = mOriginLayout.getLineStart(startLineNum - 1);
         int indexEnd = mOriginLayout.getLineEnd(endLineNum - 1);
         return getOriginalTextFromStartToEnd(mOriginText, indexStart, indexEnd);
     }
 
     protected String getOriginalTextFromStartToLine(DynamicLayout mOriginLayout, CharSequence mOriginText, int start,
-            int lineNum) {
+                                                    int lineNum) {
         //折叠这行的最后一个字符 + 1的index，
         int indexEnd = mOriginLayout.getLineEnd(lineNum - 1);
         return getOriginalTextFromStartToEnd(mOriginText, start, indexEnd);

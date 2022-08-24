@@ -32,22 +32,6 @@ version=$2
 echo "libName:"$libName
 echo "version:"$version
 
-specialNum=0
-res=$(find . -path './.idea' -prune -o -type f | egrep "\.(java|kt|gradle|xml)$")
-for r in $res
-do
-  if [ `grep -c "androidx." $r` -ne '0' ];then
-      echo "The File $r Has androidx!"
-      specialNum=$(($specialNum+1))
-  fi
-done;
-echo $specialNum
-
-if [ $specialNum -gt 2 ]; then
-  echo "------------- Has more androidx !!!!!!!!!!!! -------------"
-  exit
-fi
-
 hasNotCommit=$(git status | grep "what will be committed" | wc -l)
 if [ $hasNotCommit -gt 0 ]; then
   echo "------------- git has code not commit !!!!!!!!!!!! -------------"
@@ -99,12 +83,17 @@ src="[0-9]*\.[0-9]*\.[0-9]*"
 cat $localPath/dependencies.gradle | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 if [[ $libName == Router* ]]; then
-  ./gradlew clean uploadArchives
+<<<<<<< HEAD
+  ./gradlew clean publish
 else
-  ./gradlew clean uploadArchives
+  ./gradlew clean publish
+=======
+  ./gradlew clean assemble publish
+else
+  ./gradlew clean assembleRelease publish
+>>>>>>> build_temp
 fi
 checkResult
-
 ./gradlew clean
 
 src=" *ext.mainProject *= *\\\""
