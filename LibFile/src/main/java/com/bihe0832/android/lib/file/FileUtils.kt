@@ -212,12 +212,12 @@ object FileUtils {
         return FileAction.copyFile(srcFile, dstFile, isMove)
     }
 
-    fun copyDirectory(src: File, dest: File) {
-        FileAction.copyDirectory(src, dest, false)
+    fun copyDirectory(src: File, dest: File): Boolean {
+        return FileAction.copyDirectory(src, dest, false)
     }
 
-    fun copyDirectory(src: File, dest: File, isMove: Boolean) {
-        FileAction.copyDirectory(src, dest, isMove)
+    fun copyDirectory(src: File, dest: File, isMove: Boolean): Boolean {
+        return FileAction.copyDirectory(src, dest, isMove)
     }
 
     fun copyAssetsFileToPath(context: Context?, fromFileName: String, targetPath: String): Boolean {

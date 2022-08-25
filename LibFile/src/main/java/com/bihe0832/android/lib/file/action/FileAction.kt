@@ -159,7 +159,7 @@ object FileAction {
         }
     }
 
-    fun copyDirectory(src: File, dest: File, isMove: Boolean) {
+    fun copyDirectory(src: File, dest: File, isMove: Boolean): Boolean {
         try {
             if (src.isDirectory) {
                 if (!dest.exists()) {
@@ -170,13 +170,19 @@ object FileAction {
                     val srcFile = File(src, file)
                     val destFile = File(dest, file)
                     // 递归复制
-                    copyDirectory(srcFile, destFile, isMove)
+                    copyDirectory(srcFile, destFile, isMove).let {
+                        if (!it) {
+                            return false
+                        }
+                    }
                 }
+                return true
             } else {
-                copyFile(src, dest, isMove)
+                return copyFile(src, dest, isMove)
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            return false
         }
     }
 
