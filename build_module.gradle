@@ -227,14 +227,10 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
         if (isDebugModule(moduleName)) {
             finalType = "debugApi"
         } else {
-            if (isApplicationModule(projectName)) {
+            if (!isApplicationModule(projectName)) {
                 finalType = "api"
             } else {
-                if (moduleName.endsWith(".jar") || moduleName.endsWith(".aar")) {
-                    finalType = "compileOnly"
-                } else {
-                    finalType = "implementation"
-                }
+                finalType = "implementation"
             }
         }
     }
