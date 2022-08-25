@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "RouterCompiler,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.1.5"
+ext.moduleVersionName = "5.1.6"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -235,9 +235,9 @@ ext.moduleInfo = [
                 "apidependenciesList": []
         ],
         "RouterCompiler"            : [
-                "version"            : "5.1.5",
-                "artifactId"         : "lib-router-compiler",
-                "apidependenciesList": [
+                "version"                : "5.1.5",
+                "artifactId"             : "lib-router-compiler",
+                "apidependenciesList"    : [
                         'com.squareup:javapoet:1.8.0',
                         'com.google.auto.service:auto-service:1.0.1',
                         "RouterAnnotation"
