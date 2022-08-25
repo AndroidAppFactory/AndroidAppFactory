@@ -15,8 +15,8 @@ import me.yokeyword.fragmentation.SupportHelper;
  * Created by YoKey on 17/12/29.
  */
 public class ActionQueue {
-    private Queue<Action> mQueue = new LinkedList<>();
-    private Handler mMainHandler;
+    private final Queue<Action> mQueue = new LinkedList<>();
+    private final Handler mMainHandler;
 
     public ActionQueue(Handler mainHandler) {
         this.mMainHandler = mainHandler;
@@ -73,9 +73,7 @@ public class ActionQueue {
     private boolean isThrottleBACK(Action action) {
         if (action.action == Action.ACTION_BACK) {
             Action head = mQueue.peek();
-            if (head != null && head.action == Action.ACTION_POP) {
-                return true;
-            }
+            return head != null && head.action == Action.ACTION_POP;
         }
         return false;
     }

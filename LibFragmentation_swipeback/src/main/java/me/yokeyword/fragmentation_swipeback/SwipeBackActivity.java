@@ -37,6 +37,7 @@ public class SwipeBackActivity extends SupportActivity implements ISwipeBackActi
 
     /**
      * 是否可滑动
+     *
      * @param enable
      */
     @Override

@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
+import androidx.fragment.app.FragmentationMagician;
+
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -25,8 +27,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.fragment.app.FragmentationMagician;
 import me.yokeyword.fragmentation_swipeback.core.ISwipeBackActivity;
+
 
 /**
  * Thx https://github.com/ikew0ng/SwipeBackLayout.
