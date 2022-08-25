@@ -88,7 +88,7 @@ else
   ./gradlew clean assembleRelease publish
 fi
 checkResult
-./gradlew clean
+#./gradlew clean
 
 src=" *ext.mainProject *= *\\\""
 dst="ext.mainProject = \\\"APPTest\\\""
