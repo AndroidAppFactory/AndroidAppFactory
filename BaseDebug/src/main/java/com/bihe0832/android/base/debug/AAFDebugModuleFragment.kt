@@ -50,9 +50,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("简单测试函数", View.OnClickListener { testFunc() }))
-            add(DebugItemData("通用测试预处理", View.OnClickListener { preTest(it) }))
-
             add(getDebugItemData("临时测试(Temp)", DebugTempFragment::class.java))
             add(getDebugItemData("临时测试(Basic)", DebugBasicFragment::class.java))
             add(getDebugItemData("列表 Fragment 调试", DebugListFragment::class.java))
@@ -100,13 +97,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
     }
 
 
-    private fun preTest(itemView: View) {
 
-    }
-
-    private fun testFunc() {
-
-    }
 
 
 }
