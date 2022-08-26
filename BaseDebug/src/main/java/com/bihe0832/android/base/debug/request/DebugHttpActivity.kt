@@ -23,9 +23,6 @@ import kotlinx.android.synthetic.main.activity_http_test.*
 import java.io.File
 import java.net.URLDecoder
 
-const val ROUTRT_NAME_TEST_HTTP = "testhttp"
-
-@Module(ROUTRT_NAME_TEST_HTTP)
 class DebugHttpActivity : BaseDebugActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

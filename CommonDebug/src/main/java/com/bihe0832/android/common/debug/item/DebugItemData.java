@@ -23,39 +23,39 @@ public class DebugItemData extends CardBaseModule {
         super();
     }
 
-    public DebugItemData(String netType) {
-        mContentText = netType;
+    public DebugItemData(String content) {
+        mContentText = content;
     }
 
-    public DebugItemData(String netType, View.OnClickListener listener) {
-        this(netType, listener, null);
+    public DebugItemData(String content, View.OnClickListener listener) {
+        this(content, listener, null);
     }
 
-    public DebugItemData(String netType, View.OnClickListener listener, boolean showBottomLine) {
-        this(netType, listener, null, true, showBottomLine);
+    public DebugItemData(String content, View.OnClickListener listener, boolean showBottomLine) {
+        this(content, listener, null, true, showBottomLine);
     }
 
-    public DebugItemData(String netType, View.OnClickListener listener, View.OnLongClickListener longClickListener) {
-        this(netType, listener, longClickListener, true);
+    public DebugItemData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener) {
+        this(content, listener, longClickListener, true);
     }
 
-    public DebugItemData(String netType, View.OnClickListener listener, View.OnLongClickListener longClickListener,
+    public DebugItemData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener,
                          boolean background) {
-        this(netType, listener, longClickListener, background, true);
+        this(content, listener, longClickListener, background, true);
     }
 
-    public DebugItemData(String netType, View.OnClickListener listener, View.OnLongClickListener longClickListener,
+    public DebugItemData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener,
                          boolean background,
                          boolean showBottomLine) {
-        this.mContentText = netType;
+        this.mContentText = content;
         this.mListener = listener;
         this.mLongClickListener = longClickListener;
         this.hasBackground = background;
         this.showBottomLine = showBottomLine;
     }
 
-    public DebugItemData(String netType, boolean background) {
-        mContentText = netType;
+    public DebugItemData(String content, boolean background) {
+        mContentText = content;
         hasBackground = background;
     }
 
