@@ -84,13 +84,13 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             } else {
                 "https://cdn.bihe0832.com/images/head.jpg"
             }
-//            downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
+            downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
 
-            downloadURL = if (type == INSTALL_BY_CUSTOMER) {
-                "https://imtt.dd.qq.com/sjy.10001/16891/apk/E2F59135FAE358442D2137E446AB59DE.apk"
-            } else {
-                "https://imtt.dd.qq.com/sjy.10001/16891/apk/2A5BC6AA4E69DCE13C6D5D3FB820706E.apk"
-            }
+//            downloadURL = if (type == INSTALL_BY_CUSTOMER) {
+//                "https://imtt.dd.qq.com/sjy.10001/16891/apk/E2F59135FAE358442D2137E446AB59DE.apk"
+//            } else {
+//                "https://imtt.dd.qq.com/sjy.10001/16891/apk/2A5BC6AA4E69DCE13C6D5D3FB820706E.apk"
+//            }
             isForceDownloadNew = true
             setCanDownloadByPart(true)
             downloadListener = object : SimpleDownloadListener() {
