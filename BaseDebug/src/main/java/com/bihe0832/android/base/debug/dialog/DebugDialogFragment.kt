@@ -2,6 +2,7 @@ package com.bihe0832.android.base.debug.dialog
 
 import android.Manifest
 import android.app.Activity
+import android.graphics.Color
 import android.view.View
 import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.base.debug.R
@@ -14,6 +15,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.text.ClipboardUtil
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
@@ -303,7 +305,7 @@ class DebugDialogFragment : BaseDebugListFragment() {
     fun showBottomDialog(activity: Activity) {
 
         BottomListDialog(activity).apply {
-            setItemList(mutableListOf<String>("Item 1", "Item 2", "Item 3"))
+            setItemList(mutableListOf<String>("Item 1", "<Strong>" + TextFactoryUtils.getSpecialText("Item 2", Color.RED) + "</Strong>" , "Item 3"))
             setOnItemClickListener {
                 ZixieContext.showToast("Item" + it)
                 dismiss()
@@ -329,7 +331,7 @@ class DebugDialogFragment : BaseDebugListFragment() {
 
     fun testUnique() {
         for (i in 0 until 3) {
-            AAFUniqueDialogManager.tipsUniqueDialogManager.showUniqueDialog(activity!!, "212", "这是内容 ${System.currentTimeMillis()}", "OK")
+            AAFUniqueDialogManager.tipsUniqueDialogManager.showUniqueDialog(requireActivity(), "212", "这是内容 ${System.currentTimeMillis()}", "OK")
         }
     }
 
