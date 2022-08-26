@@ -3,6 +3,7 @@ package com.bihe0832.android.app.router
 import android.app.Activity
 import android.net.Uri
 import android.text.TextUtils
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterAction.SCHEME
@@ -55,9 +56,11 @@ object RouterHelper {
         ActivityObserver.setActivityLifecycleChangedListener(object : AAFActivityLifecycleChangedListener() {
 
             override fun onActivityResumed(activity: Activity) {
-                RouterMappingManager.getInstance().getRouterHost(activity::class.java).let {
-                    if (!TextUtils.isEmpty(it)) {
-                        ZLog.d("Activity ：${activity.javaClass} 对应 Router 为：" + it)
+                if (!ZixieContext.isOfficial()) {
+                    RouterMappingManager.getInstance().getRouterHost(activity::class.java).let {
+                        if (!TextUtils.isEmpty(it)) {
+                            ZLog.d("Router", "Activity ：${activity.javaClass} 对应 Router 为：" + it)
+                        }
                     }
                 }
             }
