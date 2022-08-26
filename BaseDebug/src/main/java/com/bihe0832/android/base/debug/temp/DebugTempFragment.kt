@@ -36,6 +36,8 @@ class DebugTempFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("简单测试函数", View.OnClickListener { testFunc() }))
+            add(DebugItemData("通用测试预处理", View.OnClickListener { preTest(it) }))
             add(DebugItemData("定时任务测试", View.OnClickListener { testTask() }))
             add(
                     DebugItemData(
@@ -135,4 +137,11 @@ class DebugTempFragment : DebugEnvFragment() {
         }, 60)
     }
 
+    private fun preTest(itemView: View) {
+
+    }
+
+    private fun testFunc() {
+
+    }
 }
