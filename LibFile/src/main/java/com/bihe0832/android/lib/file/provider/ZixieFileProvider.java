@@ -71,11 +71,11 @@ public class ZixieFileProvider extends FileProvider {
     }
 
     public static final String getZixieFileProviderName(Context context) {
-        return context.getPackageName() + ".bihe0832";
+        return context.getPackageName() + ".bihe0832.fileprovider";
     }
 
     static final String getAAFInnerFileProviderName(Context context) {
-        return context.getPackageName() + ".aaf.inner";
+        return context.getPackageName() + ".aaf.inner.fileprovider";
     }
 
     public static void setFileUriForIntent(Context context, Intent intent, File file, String mine_type) {
