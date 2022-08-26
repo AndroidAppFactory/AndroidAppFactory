@@ -4,8 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.StatFs
-import androidx.core.content.ContextCompat
 import android.text.TextUtils
+import androidx.core.content.ContextCompat
 import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.file.content.FileContent
 import com.bihe0832.android.lib.file.content.FileName
@@ -205,7 +205,7 @@ object FileUtils {
     }
 
     fun copyFile(source: File, dest: File): Boolean {
-        return FileAction.copyFile(source, dest)
+        return FileAction.copyFile(source, dest, false)
     }
 
     fun copyFile(srcFile: File, dstFile: File, isMove: Boolean): Boolean {
