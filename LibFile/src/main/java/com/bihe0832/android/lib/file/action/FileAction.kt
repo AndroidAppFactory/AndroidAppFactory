@@ -125,7 +125,7 @@ object FileAction {
         return false
     }
 
-    fun copyFile(source: File, dest: File): Boolean {
+    private fun copyFile(source: File, dest: File): Boolean {
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
         try {
