@@ -5,7 +5,7 @@
     <application>
         <provider
             android:name="com.bihe0832.android.lib.file.provider.ZixieFileProvider"
-            android:authorities="${applicationId}.bihe0832"
+            android:authorities="${applicationId}.bihe0832.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -14,7 +14,7 @@
         </provider>
         <provider
             android:name="com.bihe0832.android.lib.file.provider.AAFInnerFileProvider"
-            android:authorities="${applicationId}.aaf.inner"
+            android:authorities="${applicationId}.aaf.inner.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -41,7 +41,6 @@
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
--keep public class * extends android.support.v4.app.Fragment
 -keep public class com.android.vending.licensing.ILicensingService
 -keep public class * extends android.view.View
 
@@ -65,6 +64,17 @@
 -keep class android.support.**{ *; }
 -keep class android.arch.** { *; }
 -keep class android.os.** { *; }
+
+#androidx
+-keep class com.google.android.material.** {*;}
+-keep class androidx.** {*;}
+-keep public class * extends androidx.**
+-keep interface androidx.** {*;}
+-dontwarn com.google.android.material.**
+-dontnote com.google.android.material.**
+-dontwarn androidx.**
+
+
 -keepclasseswithmembernames class * {
     native <methods>;
 }
