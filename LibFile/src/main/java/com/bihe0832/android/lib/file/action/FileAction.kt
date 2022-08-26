@@ -152,6 +152,7 @@ object FileAction {
     }
 
     fun copyFile(srcFile: File, dstFile: File, isMove: Boolean): Boolean {
+        FileUtils.checkAndCreateFolder(dstFile.parentFile.absolutePath)
         return if (isMove) {
             srcFile.renameTo(dstFile)
         } else {
