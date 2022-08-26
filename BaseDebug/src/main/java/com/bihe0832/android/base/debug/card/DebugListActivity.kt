@@ -11,15 +11,11 @@ import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.ui.recycleview.ext.RecyclerViewItemActiveHelper
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
-const val ROUTRT_NAME_TEST_SECTION = "testlist"
-
-@Module(ROUTRT_NAME_TEST_SECTION)
 class TestListActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
     var num = 0

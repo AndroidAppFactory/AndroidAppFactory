@@ -3,29 +3,21 @@ package com.bihe0832.android.common.debug.module
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
-import com.bihe0832.android.common.praise.UserPraiseManager
-import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.debug.log.DebugLogActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_FEEDBACK
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.*
-import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.File
-import java.util.*
-import kotlin.collections.set
 
 open class DebugCommonFragment : DebugEnvFragment() {
 
@@ -39,24 +31,16 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add(DebugItemData("<font color ='#3AC8EF'><b>日志管理</b></font>", View.OnClickListener {
                 showLog()
             }))
-            add(DebugItemData("弹出评分页面", View.OnClickListener {
-                UserPraiseManager.showUserPraiseDialog(activity!!, RouterAction.getFinalURL(MODULE_NAME_FEEDBACK))
-            }))
-            add(DebugItemData("打开反馈页面", View.OnClickListener {
-                val map = HashMap<String, String>()
-                map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode("https://support.qq.com/embed/phone/290858/large/")
-                RouterAction.openPageByRouter(MODULE_NAME_FEEDBACK, map)
-            }))
-            add(DebugItemData("打开应用设置") { IntentUtils.startAppDetailSettings(context) })
             add(DebugItemData("打开开发者模式") {
                 IntentUtils.startSettings(context, Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
             })
-            add(DebugItemData("清除AAF缓存") {
+            add(DebugItemData("打开应用设置") { IntentUtils.startAppDetailSettings(context) })
+            add(DebugItemData("清除缓存") {
                 FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
                 ZixieContext.restartApp()
             })
             add(DebugItemData("清除用户信息授权") {
-               AgreementPrivacy.resetPrivacy()
+                AgreementPrivacy.resetPrivacy()
                 ZixieContext.restartApp()
             })
         }
@@ -64,11 +48,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
 
     protected fun startActivity(activityName: String) {
         try {
-            val threadClazz = Class.forName(activityName)
-            val intent = Intent(context, threadClazz)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            startActivity(intent)
+            startActivityWithException(activityName)
         } catch (e: Exception) {
             e.printStackTrace()
             ZixieContext.showToast("请确认当前运行的测试模块是否包含该应用")
@@ -76,7 +56,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
     }
 
     protected open fun showLog() {
-        startActivity(DebugLogActivity::class.java)
+        startActivityWithException(DebugLogActivity::class.java)
     }
 
     protected fun showMobileInfo() {
@@ -154,7 +134,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
         addPackageInfo("com.tencent.qqlite", builder)
         addPackageInfo("com.tencent.mobileqqi", builder)
         addPackageInfo("com.tencent.tim", builder)
-        sendInfo("分享第三方应用信息给开发者", builder.toString())
+        showInfo("第三方应用信息", builder.toString())
     }
 
     protected fun addPackageInfo(packageName: String, builder: StringBuilder) {

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import com.bihe0832.android.common.debug.DebugMainActivity
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -16,7 +17,6 @@ import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
-import kotlinx.android.synthetic.main.com_bihe0832_fragment_debug_tab.*
 
 abstract class BaseDebugListActivity : CommonListActivity() {
 
@@ -61,19 +61,37 @@ abstract class BaseDebugListActivity : CommonListActivity() {
     }
 
     fun showInputDialog(
-        titleName: String,
-        msg: String,
-        defaultValue: String,
-        listener: InputDialogCompletedCallback
+            titleName: String,
+            msg: String,
+            defaultValue: String,
+            listener: InputDialogCompletedCallback
     ) {
         DialogUtils.showInputDialog(this, titleName, msg, defaultValue, listener)
     }
 
 
-    protected fun startActivity(cls: Class<*>) {
+    protected fun startDebugActivity(cls: Class<*>, titleName: String) {
+        HashMap<String, String>().apply {
+            put(DebugMainActivity.DEBUG_MODULE_CLASS_NAME, cls.name)
+            put(DebugMainActivity.DEBUG_MODULE_TITLE_NAME, titleName)
+        }.let {
+            startActivityWithException(DebugMainActivity::class.java, it)
+        }
+    }
+
+    protected open fun startActivityWithException(cls: Class<*>) {
+        startActivityWithException(cls, null)
+    }
+
+    protected open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
         val intent = Intent(this, cls)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        data?.let {
+            for ((key, value) in it) {
+                intent.putExtra(key, value)
+            }
+        }
         startActivity(intent)
     }
 

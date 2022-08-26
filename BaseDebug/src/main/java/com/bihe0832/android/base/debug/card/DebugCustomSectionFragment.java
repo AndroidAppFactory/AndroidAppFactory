@@ -1,17 +1,14 @@
 package com.bihe0832.android.base.debug.card;
 
-import static com.bihe0832.android.base.debug.card.DebugListActivityKt.ROUTRT_NAME_TEST_SECTION;
 
 import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bihe0832.android.app.router.RouterHelper;
 import com.bihe0832.android.base.debug.R;
 import com.bihe0832.android.base.debug.card.section.SectionDataContent2;
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2;
-import com.bihe0832.android.common.debug.item.DebugTipsData;
 import com.bihe0832.android.common.debug.log.SectionDataContent;
 import com.bihe0832.android.common.debug.log.SectionDataHeader;
 import com.bihe0832.android.framework.ui.BaseFragment;
@@ -52,13 +49,6 @@ public class DebugCustomSectionFragment extends BaseFragment {
 
     private void initList() {
 
-        mDataList.add(
-                new DebugTipsData("点击打开List 测试Activity", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        RouterHelper.INSTANCE.openPageByRouter(ROUTRT_NAME_TEST_SECTION);
-                    }
-                }));
         for (int i = 0; i < 6; i++) {
             CardBaseModule sectionHeader = null;
             if (i < 2) {

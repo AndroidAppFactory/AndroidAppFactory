@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.icon;
+package com.bihe0832.android.base.debug.floatview.icon;
 
 import android.content.Context;
 import com.bihe0832.android.lib.debug.icon.DebugLogTipsIcon;

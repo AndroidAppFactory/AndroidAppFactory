@@ -3,6 +3,7 @@ package com.bihe0832.android.common.debug.base
 import android.content.Intent
 import android.view.View
 import android.widget.TextView
+import com.bihe0832.android.common.debug.DebugMainActivity
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
@@ -46,6 +47,11 @@ open class BaseDebugListFragment : CommonListFragment() {
         }
     }
 
+    fun getDebugItemData(content: String, clazz: Class<*>): DebugItemData {
+        return DebugItemData(content) { startDebugActivity(clazz, content) }
+
+    }
+
     open fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("test"))
@@ -68,6 +74,7 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugTools.showInfo(context, title, content, "发送到第三方应用")
     }
 
+
     fun showInputDialog(
             titleName: String,
             msg: String,
@@ -78,10 +85,33 @@ open class BaseDebugListFragment : CommonListFragment() {
     }
 
 
-    protected open fun startActivity(cls: Class<*>) {
+    protected fun startDebugActivity(cls: Class<*>, titleName: String) {
+        HashMap<String, String>().apply {
+            put(DebugMainActivity.DEBUG_MODULE_CLASS_NAME, cls.name)
+            put(DebugMainActivity.DEBUG_MODULE_TITLE_NAME, titleName)
+        }.let {
+            startActivityWithException(DebugMainActivity::class.java, it)
+        }
+    }
+
+    protected open fun startActivityWithException(cls: String) {
+        startActivityWithException(Class.forName(cls))
+    }
+
+    protected open fun startActivityWithException(cls: Class<*>) {
+        startActivityWithException(cls, null)
+    }
+
+    protected open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
         val intent = Intent(context, cls)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        data?.let {
+            for ((key, value) in it) {
+                intent.putExtra(key, value)
+            }
+        }
+
         startActivity(intent)
     }
 

@@ -6,12 +6,8 @@ import com.bihe0832.android.common.debug.base.BaseDebugListActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 
-const val ROUTRT_NAME_TEST_WEBVIEW = "testweb"
-
-@Module(ROUTRT_NAME_TEST_WEBVIEW)
 class DebugWebviewActivity : BaseDebugListActivity() {
 
     private var lastUrl = "https://blog.bihe0832.com"
@@ -37,12 +33,7 @@ class DebugWebviewActivity : BaseDebugListActivity() {
         }
     }
 
-    override fun initView() {
-        super.initView()
-        mToolbar?.visibility = View.GONE
-    }
-
     override fun getTitleText(): String {
-        return "Webviewl测试"
+        return "Webview调试"
     }
 }

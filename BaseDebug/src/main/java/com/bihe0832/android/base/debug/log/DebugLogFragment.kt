@@ -5,6 +5,7 @@ import android.view.View
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.log.DebugLogActivity
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.log.LoggerTrace
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -17,6 +18,11 @@ class DebugLogFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+
+            add(DebugItemData("自定义日志管理", View.OnClickListener {
+                startActivityWithException(DebugLogActivity::class.java)
+            }))
+
             add(DebugItemData("简单日志", View.OnClickListener {
                 ZLog.i(LOG_TAG, "testi")
                 ZLog.d(LOG_TAG, "testd")

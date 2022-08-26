@@ -9,6 +9,7 @@
 package com.bihe0832.android.base.debug.file
 
 
+import android.util.Base64
 import android.view.View
 import com.bihe0832.android.app.file.AAFFileUtils
 import com.bihe0832.android.app.log.AAFLoggerFile
@@ -23,8 +24,14 @@ import com.bihe0832.android.lib.config.OnConfigChangedListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.sqlite.BaseDBHelper
+import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.encrypt.MD5
+import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
+import com.bihe0832.android.lib.utils.encrypt.SHA256
+import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
@@ -60,6 +67,7 @@ class DebugFileFragment : DebugEnvFragment() {
 
             add(DebugItemData("文本查看器", View.OnClickListener { testEdit() }))
             add(DebugItemData("Assets 操作", View.OnClickListener { testAssets() }))
+            add(DebugItemData("MD5及加解密", View.OnClickListener { testMessageDigest() }))
 
             add(DebugItemData("文件MD5", View.OnClickListener {
                 testMD5()
@@ -71,6 +79,9 @@ class DebugFileFragment : DebugEnvFragment() {
 
             add(DebugItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(DebugItemData("配置 Config 管理测试", View.OnClickListener { testConfig() }))
+            add(DebugItemData("Sqlite测试", View.OnClickListener { testDB() }))
+            add(DebugItemData("数据压缩解压", View.OnClickListener { testZlib() }))
+
         }
     }
 
@@ -235,5 +246,58 @@ class DebugFileFragment : DebugEnvFragment() {
                 ZLog.d(LOG_TAG, file.absolutePath)
             }
         }
+    }
+
+    private fun testMessageDigest() {
+        "123456".let {
+            MD5.getMd5(it).let { data ->
+                ZLog.d("testAssets", "$it MD5 is: $data")
+                ZLog.d("testAssets", "$it MD5 length is: ${data.length}")
+            }
+            MessageDigestUtils.getDigestData(it, "MD5").let { data ->
+                ZLog.d("testAssets", "$it MD5 is: $data")
+                ZLog.d("testAssets", "$it MD5 length is: ${data.length}")
+            }
+            SHA256.getSHA256(it).let { data ->
+                ZLog.d("testAssets", "$it SHA256 is: $data")
+                ZLog.d("testAssets", "$it SHA256 length is: ${data.length}")
+            }
+            MessageDigestUtils.getDigestData(it, "SHA-256").let { data ->
+                ZLog.d("testAssets", "$it SHA256 is: $data")
+                ZLog.d("testAssets", "$it SHA256 length is: ${data.length}")
+            }
+        }
+    }
+    private fun testDB() {
+        System.currentTimeMillis().let {
+            CommonDBManager.saveData("sss" + it, "Fsdfsd")
+            CommonDBManager.getData("sss" + it).let {
+                ZLog.d(BaseDBHelper.TAG, it.toString())
+            }
+            CommonDBManager.getAll().forEach {
+                ZLog.d(BaseDBHelper.TAG, it.toString())
+            }
+        }
+    }
+
+    private fun testZlib() {
+        val builder = StringBuilder()
+        for (i in 0..50) {
+            builder.append('a' + (TextFactoryUtils.getRandomString(26)))
+        }
+        val text = builder.toString()
+
+        val compres = ZlibUtil.compress(text.toByteArray())
+        ZLog.d("testZlib", "compres 前后： " + compres.size + " : " + text.toByteArray().size)
+
+        val b = Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
+        val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
+
+
+        val res = String(ZlibUtil.uncompress(compres))
+        ZLog.d("testZlib", "压缩再解压一致性确认：")
+        ZLog.d("testZlib", "text：\n$text\n\n")
+        ZLog.d("testZlib", "result：\n$res\n\n")
+
     }
 }

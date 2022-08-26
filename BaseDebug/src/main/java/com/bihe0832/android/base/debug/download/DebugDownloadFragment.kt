@@ -1,5 +1,6 @@
 package com.bihe0832.android.base.debug.download
 
+import android.provider.Settings
 import android.view.View
 import com.bihe0832.android.app.file.AAFFileUtils
 import com.bihe0832.android.base.debug.R
@@ -24,6 +25,7 @@ import com.bihe0832.android.lib.utils.encrypt.GzipUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
 import com.bihe0832.android.lib.utils.encrypt.SHA256
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.io.File
 
 class DebugDownloadFragment : BaseDebugListFragment() {
@@ -32,6 +34,12 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
+            add(DebugItemData("打开应用安装界面", View.OnClickListener {
+                IntentUtils.startAppSettings(
+                        context,
+                        Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+                )
+            }))
             add(
                     DebugItemData(
                             "卸载应用",

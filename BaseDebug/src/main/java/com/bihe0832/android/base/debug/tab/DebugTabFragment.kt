@@ -9,9 +9,9 @@ class DebugTabFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("CommonTabActivity", View.OnClickListener { startActivity(CommonTabActivity::class.java) }))
-            add(DebugItemData("SegmentTabActivity", View.OnClickListener { startActivity(SegmentTabActivity::class.java) }))
-            add(DebugItemData("SlidingTabActivity", View.OnClickListener { startActivity(SlidingTabActivity::class.java) }))
+            add(DebugItemData("CommonTabActivity", View.OnClickListener { startActivityWithException(CommonTabActivity::class.java) }))
+            add(DebugItemData("SegmentTabActivity", View.OnClickListener { startActivityWithException(SegmentTabActivity::class.java) }))
+            add(DebugItemData("SlidingTabActivity", View.OnClickListener { startActivityWithException(SlidingTabActivity::class.java) }))
 
         }
     }
