@@ -70,7 +70,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
 
 
-            add(DebugItemData("沉浸式状态栏调试", View.OnClickListener {
+            add(DebugItemData("沉浸式状态栏及标题栏调试", View.OnClickListener {
                 startActivityWithException(DebugImmersionActivity::class.java)
             }))
             add(getDebugItemData("多进程调试", AAFDebugIPCFragment::class.java))

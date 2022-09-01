@@ -41,11 +41,23 @@ public class DebugMainActivity extends CommonActivity {
         ZLog.d(TAG, "rootFragmentClassName: " + rootFragmentClassName);
         ZLog.d(TAG, "rootFragmentTitleName: " + rootFragmentTitleName);
 
-        initToolbar(rootFragmentTitleName, true);
+        initToolbar(getTitleName(), true, R.mipmap.btn_back);
+
         if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.GINGERBREAD) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         }
         CardInfoHelper.getInstance().setAutoAddItem(true);
+    }
+
+    protected String getRootFragmentClassName() {
+        return rootFragmentClassName;
+    }
+
+    protected String getTitleName() {
+        if (TextUtils.isEmpty(rootFragmentTitleName)) {
+            return this.getClass().getSimpleName();
+        }
+        return rootFragmentTitleName;
     }
 
     @Override
@@ -55,6 +67,7 @@ public class DebugMainActivity extends CommonActivity {
     }
 
     protected void loadFragment() {
+        String rootFragmentClassName = getRootFragmentClassName();
         try {
             if (TextUtils.isEmpty(rootFragmentClassName)) {
                 ZixieContext.INSTANCE.showDebug("类名错误，请检查后重试");
@@ -64,7 +77,7 @@ public class DebugMainActivity extends CommonActivity {
             Class rootFragmentClass = Class.forName(rootFragmentClassName);
             if (rootFragmentClass.getClass().isAssignableFrom(BaseFragment.class.getClass())) {
                 if (findFragment(rootFragmentClass) == null) {
-                    loadRootFragment((ISupportFragment) ReflecterHelper.newInstance(this.rootFragmentClassName, null));
+                    loadRootFragment((ISupportFragment) ReflecterHelper.newInstance(rootFragmentClassName, null));
                 }
             } else {
                 ZixieContext.INSTANCE.showDebug(rootFragmentClassName + "不是继承 BaseFragment");

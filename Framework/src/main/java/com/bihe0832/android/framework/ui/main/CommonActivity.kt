@@ -23,7 +23,7 @@ open class CommonActivity : BaseActivity() {
     }
 
     protected fun initToolbar(titleString: String?, needBack: Boolean, iconRes: Int) {
-        initToolbar(R.id.common_toolbar, titleString, needBack, iconRes)
+        initToolbar(R.id.common_toolbar, titleString, true, needBack, iconRes)
     }
 
     protected fun loadRootFragment(toFragment: ISupportFragment) {

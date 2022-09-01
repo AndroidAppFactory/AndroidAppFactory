@@ -18,8 +18,7 @@ open class TestMainActivity : DebugMainActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initToolbar("TestMainActivity", false)
-
+        updateIcon(false, -1)
 //        UpdateManager.checkUpdateAndShowDialog(this, fa¬lse)
         DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
 
@@ -41,15 +40,7 @@ open class TestMainActivity : DebugMainActivity() {
         addWatch(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-//        mIconManager.showIcon()
-//        hideBottomUIMenu()
-    }
-
-    override fun loadFragment() {
-        if (findFragment(TestMainFragment::class.java) == null) {
-            loadRootFragment(TestMainFragment())
-        }
+    override fun getRootFragmentClassName(): String {
+        return TestMainFragment::class.java.name
     }
 }
