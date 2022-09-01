@@ -3,9 +3,11 @@ package com.bihe0832.android.base.debug.card
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.bihe0832.android.base.debug.card.section.SectionDataContent2
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -20,6 +22,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 class DebugListFragment : CommonListFragment() {
     val mDataList = ArrayList<CardBaseModule>()
+    var num  = 0
 
     override fun initView(view: View) {
         super.initView(view)
@@ -67,7 +70,7 @@ class DebugListFragment : CommonListFragment() {
             }
 
             override fun hasMore(): Boolean {
-                return false
+                return num < 4
             }
 
             override fun canRefresh(): Boolean {
@@ -87,21 +90,25 @@ class DebugListFragment : CommonListFragment() {
     }
 
     private fun getTempData(): List<CardBaseModule> {
-        return mutableListOf<CardBaseModule>().apply {
-//            for (i in 0..2) {
-////                add(if (i < 2) {
-////                    SectionDataHeader("标题1:${System.currentTimeMillis()}")
-////                } else {
-////                    SectionDataHeader2("标题2:${System.currentTimeMillis()}")
-////                })
-//                for (j in 0..3) {
-//                    add(if (i < 2) {
-//                        SectionDataContent("内容11:${System.currentTimeMillis()}")
-//                    } else {
-//                        SectionDataContent2("内容22:${System.currentTimeMillis()}")
-//                    })
-//                }
-//            }
+        num++
+        mutableListOf<CardBaseModule>().apply {
+            for (i in 0..2) {
+                add(if (i < 2) {
+                    SectionDataHeader("标题1:${System.currentTimeMillis()}")
+                } else {
+                    SectionDataHeader2("标题2:${System.currentTimeMillis()}")
+                })
+                for (j in 0..3) {
+                    add(if (i < 2) {
+                        SectionDataContent("内容11:${System.currentTimeMillis()}", "")
+                    } else {
+                        SectionDataContent2("内容22:${System.currentTimeMillis()}")
+                    })
+                }
+            }
+        }.let {
+            loadDataFinished()
+            return it
         }
     }
 

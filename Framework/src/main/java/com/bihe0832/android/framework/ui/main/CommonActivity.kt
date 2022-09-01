@@ -1,14 +1,21 @@
 package com.bihe0832.android.framework.ui.main
 
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.lib.aaf.tools.AAFException
+import me.yokeyword.fragmentation.ISupportFragment
 
 
 open class CommonActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.common_activity_framelayout)
+        super.setContentView(R.layout.common_activity_framelayout)
+    }
+
+    final override fun setContentView(@LayoutRes layoutResID: Int) {
+        throw AAFException("please extends com.bihe0832.android.framework.ui.BaseActivity instead of CommonActivity")
     }
 
     protected fun initToolbar(titleString: String?, needBack: Boolean) {
@@ -19,4 +26,7 @@ open class CommonActivity : BaseActivity() {
         initToolbar(R.id.common_toolbar, titleString, needBack, iconRes)
     }
 
+    protected fun loadRootFragment(toFragment: ISupportFragment) {
+        super.loadRootFragment(R.id.common_fragment_content, toFragment)
+    }
 }

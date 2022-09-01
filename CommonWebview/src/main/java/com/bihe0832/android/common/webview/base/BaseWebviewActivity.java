@@ -109,7 +109,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         } else {
             WebviewLoggerFile.INSTANCE.log(TAG + " onResume:" + mURL);
             if (findFragment(getWebViewFragmentClass()) == null) {
-                loadRootFragment(R.id.common_fragment_content, getWebViewFragment());
+                loadRootFragment(getWebViewFragment());
             }
         }
     }
