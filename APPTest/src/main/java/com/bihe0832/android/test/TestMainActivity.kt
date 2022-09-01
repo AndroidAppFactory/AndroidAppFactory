@@ -49,7 +49,7 @@ open class TestMainActivity : DebugMainActivity() {
 
     override fun loadFragment() {
         if (findFragment(TestMainFragment::class.java) == null) {
-            loadRootFragment(R.id.common_fragment_content, TestMainFragment())
+            loadRootFragment(TestMainFragment())
         }
     }
 }

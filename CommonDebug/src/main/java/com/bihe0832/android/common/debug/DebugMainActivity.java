@@ -64,7 +64,7 @@ public class DebugMainActivity extends CommonActivity {
             Class rootFragmentClass = Class.forName(rootFragmentClassName);
             if (rootFragmentClass.getClass().isAssignableFrom(BaseFragment.class.getClass())) {
                 if (findFragment(rootFragmentClass) == null) {
-                    loadRootFragment(R.id.common_fragment_content, (ISupportFragment) ReflecterHelper.newInstance(this.rootFragmentClassName, null));
+                    loadRootFragment((ISupportFragment) ReflecterHelper.newInstance(this.rootFragmentClassName, null));
                 }
             } else {
                 ZixieContext.INSTANCE.showDebug(rootFragmentClassName + "不是继承 BaseFragment");

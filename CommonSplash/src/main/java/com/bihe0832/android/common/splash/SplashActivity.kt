@@ -7,11 +7,11 @@ import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction.openFinalURL
 import com.bihe0832.android.framework.router.RouterAction.openPageByRouter
 import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.framework.ui.main.CommonActivity
+import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.immersion.hideBottomUIMenu
 import com.bihe0832.android.lib.log.ZLog
 
-abstract class SplashActivity : CommonActivity() {
+abstract class SplashActivity : BaseActivity() {
 
     private var nextRouter = ""
 

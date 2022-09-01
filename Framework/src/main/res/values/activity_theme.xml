@@ -72,6 +72,8 @@
     <!--    全屏，主要用于闪屏 -->
     <style name="fullscreenActivityTheme" parent="activityTheme">
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 
