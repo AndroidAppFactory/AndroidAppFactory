@@ -87,14 +87,10 @@ abstract class BaseListActivity : BaseActivity() {
         intent?.extras?.let {
             parseBundle(it)
         }
-        mToolbar = findViewById(R.id.common_activity_list_toolbar)
-        if (null == mToolbar) {
+        if (null == findViewById(R.id.common_activity_list_toolbar)) {
             throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
         }
-        mToolbar?.apply {
-            setNavigationOnClickListener { onBackPressed() }
-            title = getTitleText()
-        }
+        initToolbar(R.id.common_activity_list_toolbar, getTitleText(), true)
         mRecyclerView = findViewById(R.id.activity_list_info_list)
         if (null == mRecyclerView) {
             throw AAFException("please check recyclerview id name is : activity_list_info_list")
