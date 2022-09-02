@@ -88,6 +88,11 @@ open class DebugLogActivity : CommonListActivity() {
         return "日志功能汇总"
     }
 
+    override fun initView() {
+        super.initView()
+        updateIcon(true, R.mipmap.btn_back)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
