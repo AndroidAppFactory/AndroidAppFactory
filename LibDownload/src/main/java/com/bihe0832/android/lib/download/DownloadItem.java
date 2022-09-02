@@ -83,6 +83,12 @@ public class DownloadItem implements Serializable {
     //最后暂停时间，不填
     private transient long pauseTime = 0;
 
+    public static final int MAX_DOWNLOAD_PRIORITY = 100;
+    public static final int FORCE_DOWNLOAD_PRIORITY = 50;
+    public static final int MIN_DOWNLOAD_PRIORITY = 0;
+    public static final int DEFAULT_DOWNLOAD_PRIORITY = 10;
+    //下载优先级
+    private int downloadPriority = DEFAULT_DOWNLOAD_PRIORITY;
 
     public boolean canDownloadByPart() {
         return canDownloadByPart;
@@ -94,6 +100,22 @@ public class DownloadItem implements Serializable {
 
     public void setNotificationVisibility(boolean visibility) {
         notificationVisibility = visibility;
+    }
+
+    public int getDownloadPriority() {
+        return downloadPriority;
+    }
+
+    public void setDownloadPriority(int downloadPriority) {
+        if (downloadPriority > MIN_DOWNLOAD_PRIORITY) {
+            if (downloadPriority > MAX_DOWNLOAD_PRIORITY) {
+                this.downloadPriority = MAX_DOWNLOAD_PRIORITY;
+            } else {
+                this.downloadPriority = downloadPriority;
+            }
+        } else {
+            this.downloadPriority = MIN_DOWNLOAD_PRIORITY;
+        }
     }
 
     public boolean notificationVisibility() {
@@ -386,6 +408,7 @@ public class DownloadItem implements Serializable {
             this.versionCode = item.versionCode;
             this.downloadIcon = item.downloadIcon;
             this.tempFilePath = item.tempFilePath;
+            this.downloadPriority = item.downloadPriority;
         } else {
             Log.e(TAG, "update error , download id is bad ");
         }

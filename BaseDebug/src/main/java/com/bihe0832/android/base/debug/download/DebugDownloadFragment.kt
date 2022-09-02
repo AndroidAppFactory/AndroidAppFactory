@@ -10,17 +10,16 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.wrapper.DownloadAPK
-import com.bihe0832.android.lib.download.wrapper.DownloadFile
-import com.bihe0832.android.lib.download.wrapper.DownloadUtils
-import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.download.wrapper.*
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.encrypt.GzipUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
@@ -33,7 +32,9 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("下载并计算文件的具体信息", View.OnClickListener { testDownload() }))
             add(DebugItemData("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
+            add(DebugItemData("测试下载队列", View.OnClickListener { testDownloadList() }))
             add(DebugItemData("打开应用安装界面", View.OnClickListener {
                 IntentUtils.startAppSettings(
                         context,
@@ -243,7 +244,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     private fun testDownloadGzip() {
         DownloadFile.startDownload(requireContext(),
                 "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
-                AAFFileUtils.getFileCacheFolder() + System.currentTimeMillis() +"_20220321114751.json.gzip",
+                AAFFileUtils.getFileCacheFolder() + System.currentTimeMillis() + "_20220321114751.json.gzip",
                 object : SimpleDownloadListener() {
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                         ZLog.d(LOG_TAG, "onFail:" + msg)
@@ -349,6 +350,104 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
             }, 10 * i)
         }
+
+    }
+
+    fun testDownload() {
+        showInputDialog(
+                "文件下载到本地",
+                "请输入要下载文件的URL",
+                "https://voice-file-1300342614.cos.ap-shanghai.myqcloud.com/voice%2Fo25qH5px6BADuqarW5S_1g9EEOFc%2Bf05ba68b2df7464e8a5c0dd1cc510793.mp3?q-sign-algorithm=sha1&q-ak=AKIDCLEqBF2YnmUv5zcy3rOzKODk0zh9KErD&q-sign-time=1662089624%3B1662096824&q-key-time=1662089624%3B1662096824&q-header-list=host&q-url-param-list=&q-signature=b1b97e58bbe03b5d5d9fc4bee781814e29f6cbbe",
+                object : InputDialogCompletedCallback {
+                    override fun onInputCompleted(p0: String?) {
+                        if (URLUtils.isHTTPUrl(p0)) {
+                            DownloadFile.startDownload(activity!!, p0!!, object : SimpleDownloadListener() {
+
+                                override fun onComplete(filePath: String, item: DownloadItem) {
+                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+                                    filePath.let {
+                                        ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
+                                        ZLog.d(LOG_TAG, "getExtensionName: ${FileUtils.getExtensionName(it)}")
+                                        ZLog.d(LOG_TAG, "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}")
+                                        ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
+                                        ZLog.d(LOG_TAG, "getFileMD5: ${MD5.getFileMD5(it, 0, File(it).length())}")
+                                        ZLog.d(LOG_TAG, "getFileSHA256: ${FileUtils.getFileSHA256(it)}")
+                                        ZLog.d(LOG_TAG, "getFileSHA256: ${SHA256.getFileSHA256(it, 0, File(it).length())}")
+                                    }
+                                }
+
+                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                                    ZLog.d(LOG_TAG, "testDownload onFail : ${errorCode} ${msg} $item")
+                                }
+
+                                override fun onProgress(item: DownloadItem) {
+                                    ZLog.d(LOG_TAG, "testDownload : ${item.process}")
+                                }
+
+                            })
+                        }
+                    }
+
+                }
+        )
+    }
+
+    private var currentNum = 0
+    fun testDownloadList() {
+        val URL_YYB_WZ = "https://dlied4.myapp.com/myapp/1104922185/cos.release-77942/10053761_com.tencent.tmgp.speedmobile_a2238881_1.32.0.2188_uPIKoV.apk"
+        val URL_YYB_TTS = "http://dldir1.qq.com/INO/assistant/com.google.android.tts.apk"
+        val URL_YYB_CHANNEL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
+        val URL_YYB_DDZ = "https://imtt.dd.qq.com/16891/apk/6670A2D979F70D880519412D6E951162.apk?fsname=com.qqgame.hlddz_7.012.001_217.apk&csr=1bbd"
+        val URL_FILE = "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a"
+        val URL_CONFIG = "https://cdn.bihe0832.com/app/update/get_apk.json"
+        var listener = object : SimpleDownloadListener() {
+            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                ZLog.d(LOG_TAG, "testDownloadList onFail: ${errorCode} ${msg} $item")
+            }
+
+            override fun onComplete(filePath: String, item: DownloadItem) {
+                ZLog.d(LOG_TAG, "testDownloadList onComplete: $filePath ${item}")
+            }
+
+            override fun onProgress(item: DownloadItem) {
+
+            }
+
+            override fun onWait(item: DownloadItem) {
+                ZLog.d(LOG_TAG, "testDownloadList onWait: $item")
+            }
+
+        }
+        mutableListOf<String>(
+//                URL_YYB_DDZ, URL_YYB_QQ, URL_YYB_TTS, URL_YYB_GG, URL_FILE, URL_CONFIG
+                URL_YYB_WZ, URL_YYB_DDZ, URL_YYB_TTS, URL_YYB_CHANNEL, URL_FILE, URL_CONFIG
+        ).let {
+            for (currentNum in 0 until it.size) {
+                ThreadManager.getInstance().start({
+                    ZLog.d(LOG_TAG, "testDownloadList : ${it.get(currentNum)}")
+                    if (it.get(currentNum).equals(URL_CONFIG)) {
+                        DownloadConfig.startDownload(requireContext(), it.get(currentNum), "", object : DownloadConfig.ResponseHandler {
+                            override fun onSuccess(type: Int, response: String) {
+                                ZLog.d(LOG_TAG, "testDownloadList  onComplete: ${type} $response")
+                            }
+
+                            override fun onFailed(errorCode: Int, msg: String) {
+                                ZLog.d(LOG_TAG, "testDownloadList DownloadConfig: ${errorCode} ${msg}")
+                            }
+
+                        })
+                    } else if (it.get(currentNum).equals(URL_FILE) || it.get(currentNum).equals(URL_YYB_CHANNEL)) {
+                        DownloadFile.startDownload(requireContext(), it.get(currentNum), listener)
+                    } else {
+                        DownloadAPK.startDownload(requireContext(), it.get(currentNum), "", "")
+                    }
+                }, currentNum)
+
+
+            }
+        }
+
 
     }
 }

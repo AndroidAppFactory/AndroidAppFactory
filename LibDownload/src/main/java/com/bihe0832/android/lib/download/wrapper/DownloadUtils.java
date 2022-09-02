@@ -40,7 +40,10 @@ public class DownloadUtils {
      */
     public static final void startDownload(Context context, @NotNull DownloadItem info, boolean forceDownload) {
         DownloadManager.INSTANCE.init(context);
-        DownloadManager.INSTANCE.addTask(info, forceDownload);
+        if (forceDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
+            info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
+        }
+        DownloadManager.INSTANCE.addTask(info);
     }
 
     public static final void startDownload(Context context, @NotNull DownloadItem info) {
@@ -96,7 +99,7 @@ public class DownloadUtils {
      * @param pauseOnMobile 4G是否暂停下载
      */
     public static final void resumeDownload(long downloadID, boolean pauseOnMobile) {
-        DownloadManager.INSTANCE.resumeTask(downloadID, null, true, pauseOnMobile, false);
+        DownloadManager.INSTANCE.resumeTask(downloadID, null, true, pauseOnMobile);
     }
 
     /**

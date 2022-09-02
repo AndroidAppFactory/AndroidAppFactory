@@ -40,7 +40,7 @@ object DownloadNotify {
                     when (action) {
                         DownloadNotifyManager.ACTION_RESUME -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, true, item.isDownloadWhenUseMobile, false)
+                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, true, item.isDownloadWhenUseMobile)
                             }
                         }
 
@@ -72,7 +72,7 @@ object DownloadNotify {
 
                         DownloadNotifyManager.ACTION_RETRY -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, startByUser = true, downloadWhenUseMobile = true, forceDownload = false)
+                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, startByUser = true, downloadWhenUseMobile = true)
                                 notifyDelete(item)
                             }
                         }

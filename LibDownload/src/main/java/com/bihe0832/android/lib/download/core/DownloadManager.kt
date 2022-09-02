@@ -152,7 +152,6 @@ object DownloadManager {
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyPause(item)
             }
-
             addWaitToDownload()
         }
 
@@ -236,9 +235,9 @@ object DownloadManager {
     private fun addWaitToDownload() {
         getWaitingTask().let { list ->
             if (list.isNotEmpty()) {
-                list.first().let {
+                list.maxByOrNull { it.downloadPriority }?.let {
                     ThreadManager.getInstance().start {
-                        startTask(it, it.isDownloadWhenAdd, it.isDownloadWhenUseMobile, false)
+                        startTask(it, it.isDownloadWhenAdd, it.isDownloadWhenUseMobile)
                     }
                 }
             }
@@ -369,23 +368,22 @@ object DownloadManager {
     private fun startTask(
             info: DownloadItem,
             downloadAfterAdd: Boolean,
-            downloadWhenUseMobile: Boolean,
-            forceDownload: Boolean
+            downloadWhenUseMobile: Boolean
     ) {
         innerDownloadListener.onWait(info)
         if (downloadAfterAdd) {
             if (!isWifi()) {
                 if (downloadWhenUseMobile) {
-                    realStartTask(info, true, forceDownload)
+                    realStartTask(info, true)
                 } else {
-                    realStartTask(info, false, forceDownload)
+                    realStartTask(info, false)
                 }
             } else {
-                realStartTask(info, true, forceDownload)
+                realStartTask(info, true)
             }
         } else {
             ZLog.d("startTask do nothing: $ $info ")
-            realStartTask(info, false, forceDownload)
+            realStartTask(info, false)
         }
     }
 
@@ -395,8 +393,7 @@ object DownloadManager {
 
     private fun realStartTask(
             info: DownloadItem,
-            downloadAfterAdd: Boolean,
-            forceDownload: Boolean
+            downloadAfterAdd: Boolean
     ) {
         ZLog.d("startTask:$info")
         try {
@@ -446,7 +443,7 @@ object DownloadManager {
                                 }
                             }
                         }
-                        mDownloadEngine.startDownload(mContext!!, info, forceDownload)
+                        mDownloadEngine.startDownload(mContext!!, info)
                     } else {
                         info.setPause()
                     }
@@ -503,7 +500,7 @@ object DownloadManager {
     }
 
 
-    fun addTask(info: DownloadItem, forceDownload: Boolean) {
+    fun addTask(info: DownloadItem) {
         ZLog.d("addTask:$info")
         if (DownloadingList.isDownloading(info)) {
             val currentDownload = DownloadTaskList.getTaskByDownloadID(info.downloadID)
@@ -551,11 +548,10 @@ object DownloadManager {
                         info.downloadID,
                         info.downloadListener,
                         info.isDownloadWhenAdd,
-                        info.isDownloadWhenUseMobile,
-                        forceDownload
+                        info.isDownloadWhenUseMobile
                 )
             } else {
-                startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile, forceDownload)
+                startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile)
             }
         }
     }
@@ -564,8 +560,7 @@ object DownloadManager {
             downloadId: Long,
             downloadListener: DownloadListener?,
             startByUser: Boolean,
-            downloadWhenUseMobile: Boolean,
-            forceDownload: Boolean
+            downloadWhenUseMobile: Boolean
     ) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             ZLog.d("resumeTask:$info")
@@ -576,7 +571,7 @@ object DownloadManager {
                 info.downloadListener = it
             }
             innerDownloadListener.onWait(info)
-            startTask(info, startByUser, downloadWhenUseMobile, forceDownload)
+            startTask(info, startByUser, downloadWhenUseMobile)
         }
     }
 
@@ -652,14 +647,14 @@ object DownloadManager {
     fun resumeFailedTask(pauseOnMobile: Boolean) {
         ZLog.d("resumeFailedTask")
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_FAILED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile, false)
+            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
         }
     }
 
     fun resumePauseTask(pauseOnMobile: Boolean) {
         ZLog.d("resumePauseTask")
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile, false)
+            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
         }
     }
 

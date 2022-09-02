@@ -41,8 +41,10 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     private val MAX_RETRY_TIMES = 2
     private val MAX_DOWNLOAD_THREAD = 5
 
+    private val MAX_DOWNLOAD_NUMS = 10
 
-    fun startDownload(context: Context, info: DownloadItem, forceDownload: Boolean) {
+
+    fun startDownload(context: Context, info: DownloadItem) {
         ZLog.e(TAG, "开始下载:${info}")
         if (applicationContext == null) {
             applicationContext = context.applicationContext
@@ -55,12 +57,17 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         }
 
         if (updateDownItemByServerInfo(info)) {
-            if (DownloadingList.getDownloadingNum() < maxNum || forceDownload) {
-                ZLog.d(TAG, "getDownloadList() is good")
-                addToDownloadList(info)
-                innerDownloadListener.onStart(info)
-                goDownload(info)
-                checkDownloadProcess()
+            //强制下载的数量也要控制
+            if (DownloadingList.getDownloadingNum() < MAX_DOWNLOAD_NUMS || DownloadItem.MAX_DOWNLOAD_PRIORITY == info.downloadPriority) {
+                if (DownloadingList.getDownloadingNum() < maxNum || info.downloadPriority >= DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
+                    ZLog.d(TAG, "getDownloadList() is good")
+                    addToDownloadList(info)
+                    innerDownloadListener.onStart(info)
+                    goDownload(info)
+                    checkDownloadProcess()
+                } else {
+                    innerDownloadListener.onWait(info)
+                }
             } else {
                 innerDownloadListener.onWait(info)
             }
@@ -208,6 +215,8 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
     private fun goDownload(info: DownloadItem) {
         ZLog.d(TAG, "goDownload:$info")
+        ZLog.d("DebugDownloadFragment", "goDownload:${info.downloadURL}")
+
         try {
             val file = File(info.tempFilePath)
             var hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, DownloadManager.isDebug())

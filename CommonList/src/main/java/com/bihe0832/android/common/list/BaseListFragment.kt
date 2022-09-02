@@ -48,8 +48,8 @@ abstract class BaseListFragment : BaseFragment() {
         LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
             )
         }
     }
@@ -70,6 +70,7 @@ abstract class BaseListFragment : BaseFragment() {
         }.apply {
             emptyView = getBaseEmptyView()
             setHeaderFooterEmpty(true, false)
+            isUseEmpty(true)
             if (hasHeaderView()) {
                 setHeaderView(getListHeader())
             }
@@ -78,7 +79,7 @@ abstract class BaseListFragment : BaseFragment() {
     }
 
     protected open fun getEmptyText(): String {
-            return ""
+        return ""
     }
 
     protected open fun getBaseEmptyView(): View {
