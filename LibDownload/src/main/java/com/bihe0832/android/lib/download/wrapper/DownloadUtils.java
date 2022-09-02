@@ -1,12 +1,15 @@
 package com.bihe0832.android.lib.download.wrapper;
 
 import android.content.Context;
+
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadListener;
 import com.bihe0832.android.lib.download.core.DownloadManager;
 import com.bihe0832.android.lib.download.core.list.DownloadTaskList;
-import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 /**
@@ -20,13 +23,17 @@ public class DownloadUtils {
     /**
      * 初始化
      *
-     * @param context Application Context
+     * @param context        Application Context
      * @param maxDownloadNum 同时容许下载的最大数量
-     * @param listener 全局回调
-     * @param isDebug 是否开启调试模式
+     * @param listener       全局回调
+     * @param isDebug        是否开启调试模式
      */
     public static final void init(Context context, int maxDownloadNum, DownloadListener listener, Boolean isDebug) {
         DownloadManager.INSTANCE.init(context, maxDownloadNum, listener, isDebug);
+    }
+
+    public static final void init(Context context, boolean isDebug) {
+        DownloadManager.INSTANCE.init(context, isDebug);
     }
 
     public static void onDestroy() {
@@ -95,7 +102,7 @@ public class DownloadUtils {
     /**
      * 恢复一个下载任务
      *
-     * @param downloadID 恢复任务的信息
+     * @param downloadID    恢复任务的信息
      * @param pauseOnMobile 4G是否暂停下载
      */
     public static final void resumeDownload(long downloadID, boolean pauseOnMobile) {
