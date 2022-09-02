@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 
@@ -35,7 +36,7 @@ object DownloadAPK {
     }
 
 
-    //直接下载，显示进度，4G下载弹框，下载完成自动安装且弹框
+    //直接下载，显示进度，4G下载弹框，顺序下载，下载完成自动安装且弹框
     fun startDownloadWithCheckAndProcess(
             activity: Activity,
             title: String,
@@ -49,14 +50,16 @@ object DownloadAPK {
         DownloadFile.startDownloadWithCheckAndProcess(
                 activity,
                 title, msg,
-                url, md5,
+                url, "", md5, "",
                 canCancel,
+                true,
+                forceDownload = false,
                 listener,
                 SimpleInstallListener(activity, packageName, listener)
         )
     }
 
-    //直接下载，显示进度，4G下载看参数，下载完成自动安装且弹框
+    //直接下载，显示进度，4G下载看参数，强制下载，下载完成自动安装且弹框
     fun startDownloadWithProcess(
             activity: Activity,
             title: String,
@@ -71,8 +74,8 @@ object DownloadAPK {
         DownloadFile.startDownloadWithProcess(
                 activity,
                 title, msg,
-                url, "", md5,"",
-                canCancel, false, downloadMobile,
+                url, "", md5, "",
+                canCancel, false, downloadMobile, true,
                 listener,
                 SimpleInstallListener(activity, packageName, listener)
         )
@@ -83,8 +86,9 @@ object DownloadAPK {
         DownloadFile.startDownloadWithCheckAndProcess(
                 activity,
                 "", "", "",
-                url, md5,"",
+                url, md5, "",
                 canCancel = true, useProcess = false,
+                forceDownload = true,
                 listener = null,
                 downloadListener = object : SimpleDownloadListener() {
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
@@ -107,12 +111,13 @@ object DownloadAPK {
         DownloadFile.startDownload(
                 context,
                 "", "",
-                url, "", md5, "",forceDownloadNew = false,
-                canPart = true, UseMobile = true, downloadListener = object : SimpleDownloadListener() {
+                url, "", md5, "", forceDownloadNew = false,
+                canPart = true, UseMobile = true, forceDownload = true, downloadListener = object : SimpleDownloadListener() {
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
             }
 
             override fun onComplete(filePath: String, item: DownloadItem) {
+                ZLog.d("DebugDownloadFragment", "testDownloadList onComplete: $filePath ${item}")
                 ThreadManager.getInstance().runOnUIThread {
                     InstallUtils.installAPP(context, filePath, packageName)
                 }

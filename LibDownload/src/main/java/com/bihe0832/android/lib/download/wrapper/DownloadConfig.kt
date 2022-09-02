@@ -36,11 +36,12 @@ object DownloadConfig {
     }
 
     private fun startDownloadConfig(context: Context, url: String, md5: String, downloadListener: ResponseHandler) {
-        if(TextUtils.isEmpty(url)){
+        if (TextUtils.isEmpty(url)) {
             downloadListener.onFailed(ResponseHandler.ERROR_CONFIG, "url is bad")
         }
         DownloadUtils.startDownload(context, DownloadItem().apply {
             setNotificationVisibility(true)
+            downloadPriority = DownloadItem.MAX_DOWNLOAD_PRIORITY
             downloadURL = url
             fileMD5 = md5
             actionKey = "DownloadConfig"
@@ -49,9 +50,9 @@ object DownloadConfig {
             isForceDownloadNew = TextUtils.isEmpty(md5)
             this.downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                    if(DownloadErrorCode.ERR_MD5_BAD == errorCode){
+                    if (DownloadErrorCode.ERR_MD5_BAD == errorCode) {
                         downloadListener.onFailed(ResponseHandler.ERROR_CDN_MD5, "$errorCode $msg")
-                    }else{
+                    } else {
                         downloadListener.onFailed(ResponseHandler.ERROR_OTHERS, "$errorCode $msg")
                     }
                 }
