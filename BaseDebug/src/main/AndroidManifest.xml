@@ -79,7 +79,6 @@
         <activity
             android:name="com.bihe0832.android.base.debug.permission.DebugPermissionsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
             android:theme="@style/permissionFullscreen" />
 
         <activity
