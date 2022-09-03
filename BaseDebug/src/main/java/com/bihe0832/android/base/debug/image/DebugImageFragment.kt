@@ -60,7 +60,7 @@ public class DebugImageFragment : BaseFragment() {
         )
 
         var path = ""
-        DownloadFile.startDownload(
+        DownloadFile.download(
                 context!!,
                 "http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg", true,
                 object : SimpleDownloadListener() {

@@ -31,7 +31,7 @@ object DownloadConfig {
     }
 
     //直接下载，不显示进度，4G下载直接下载
-    fun startDownload(context: Context, url: String, md5: String, downloadListener: ResponseHandler) {
+    fun download(context: Context, url: String, md5: String, downloadListener: ResponseHandler) {
         startDownloadConfig(context, url, md5, downloadListener)
     }
 

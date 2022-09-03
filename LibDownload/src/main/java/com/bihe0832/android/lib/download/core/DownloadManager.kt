@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode.*
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.list.DownloadTaskList
@@ -36,6 +37,8 @@ object DownloadManager {
     private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
     private var mTempDownloadListenerList = ConcurrentHashMap<Long, ArrayList<DownloadListener>>()
     private const val DEFAULT_MAX_NUM = 3
+    private const val MAX_MAX_NUM = 5
+
     private var mMaxNum = DEFAULT_MAX_NUM
     private var mHasInit = false
     private var mIsDebug = false
@@ -60,6 +63,9 @@ object DownloadManager {
     fun init(context: Context, maxNum: Int, listener: DownloadListener?, isDebug: Boolean = false) {
         initContext(context)
         mMaxNum = maxNum
+        if (mMaxNum > MAX_MAX_NUM) {
+            ZLog.e(TAG, "  \n !!!========================================  \n \n \n !!! zixie download: The max download mum is recommended less than 5 \n \n \n !!!========================================")
+        }
         mIsDebug = isDebug
         if (!mHasInit) {
             mHasInit = true
@@ -250,20 +256,20 @@ object DownloadManager {
     }
 
     private fun checkIsInstalledAndLocalVersionIsNew(info: DownloadItem): Boolean {
-        ZLog.d("checkIsNeedDownload DownloadItem:$info")
+        ZLog.d(TAG, "checkIsNeedDownload DownloadItem:$info")
         if (TextUtils.isEmpty(info.packageName)) {
-            ZLog.d("packageName is bad ")
+            ZLog.d(TAG, "packageName is bad ")
             return false
         }
         if (info.versionCode < 1) {
-            ZLog.d("versionCode is bad ")
+            ZLog.d(TAG, "versionCode is bad ")
             return false
         }
-        ZLog.d("checkIsNeedDownload versionCode:${info.versionCode}")
+        ZLog.d(TAG, "checkIsNeedDownload versionCode:${info.versionCode}")
         return try {
             val packageInfo = APKUtils.getInstalledPackage(mContext, info.packageName)
             if (packageInfo != null) {
-                ZLog.d("checkIsNeedDownload installVersionCode:${packageInfo.versionCode}")
+                ZLog.d(TAG, "checkIsNeedDownload installVersionCode:${packageInfo.versionCode}")
                 packageInfo.versionCode > info.versionCode
             } else {
                 false
@@ -275,20 +281,20 @@ object DownloadManager {
     }
 
     private fun checkIsDownloadingAndVersionIsNew(info: DownloadItem): Boolean {
-        ZLog.d("checkIsDownloading DownloadItem:$info")
+        ZLog.d(TAG, "checkIsDownloading DownloadItem:$info")
         if (TextUtils.isEmpty(info.packageName)) {
-            ZLog.d("packageName is bad ")
+            ZLog.d(TAG, "packageName is bad ")
             return false
         }
         if (info.versionCode < 1) {
-            ZLog.d("versionCode is bad ")
+            ZLog.d(TAG, "versionCode is bad ")
             return false
         }
-        ZLog.d("checkIsNeedDownload versionCode:${info.versionCode}")
+        ZLog.d(TAG, "checkIsNeedDownload versionCode:${info.versionCode}")
         val alreadyDownloadItem =
             DownloadInfoDBManager.getDownloadInfoFromPackageName(info.packageName)
         return if (alreadyDownloadItem == null) {
-            ZLog.d("checkIsNeedDownload alreadyDownloadItem null")
+            ZLog.d(TAG, "checkIsNeedDownload alreadyDownloadItem null")
             false
         } else {
             if (alreadyDownloadItem.versionCode > 0) {
@@ -389,7 +395,7 @@ object DownloadManager {
                 realStartTask(info, true)
             }
         } else {
-            ZLog.d("startTask do nothing: $ $info ")
+            ZLog.d(TAG, "startTask do nothing: $ $info ")
             realStartTask(info, false)
         }
     }
@@ -402,25 +408,25 @@ object DownloadManager {
         info: DownloadItem,
         downloadAfterAdd: Boolean
     ) {
-        ZLog.d("startTask:$info")
+        ZLog.d(TAG, "startTask:$info")
         try {
             // 不合法的URl
             if (!URLUtils.isHTTPUrl(info.downloadURL)) {
-                ZLog.e("bad para:$info")
+                ZLog.e(TAG, "bad para:$info")
                 innerDownloadListener.onFail(ERR_BAD_URL, "bad para", info)
                 return
             }
 
             //本地已有更高版本
             if (checkIsInstalledAndLocalVersionIsNew(info)) {
-                ZLog.e("no need download:$info")
+                ZLog.e(TAG, "no need download:$info")
                 innerDownloadListener.onFail(ERR_URL_IS_TOO_OLD_THAN_LOACL, "install is new", info)
                 return
             }
 
             // 正在下载更高版本
             if (checkIsDownloadingAndVersionIsNew(info)) {
-                ZLog.e("noneed download:$info")
+                ZLog.e(TAG, "noneed download:$info")
                 innerDownloadListener.onFail(
                     ERR_URL_IS_TOO_OLD_THAN_DOWNLOADING,
                     "install is new",
@@ -434,14 +440,14 @@ object DownloadManager {
                 //本地已下载
                 var filePath = checkBeforeDownloadFile(info)
                 if (!TextUtils.isEmpty(filePath)) {
-                    ZLog.e("has download:$info")
+                    ZLog.e(TAG, "has download:$info")
                     info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
                     innerDownloadListener.onComplete(info.finalFilePath, info)
                 } else {
                     if (downloadAfterAdd) {
                         var currentTime = System.currentTimeMillis()
                         if (currentTime - info.pauseTime < 3000L) {
-                            ZLog.e("resume to quick:$info")
+                            ZLog.e(TAG, "resume to quick:$info")
                             innerDownloadListener.onWait(info)
                             info.isDownloadWhenAdd = true
                             (info.pauseTime + 3000L - currentTime).let {
@@ -458,7 +464,7 @@ object DownloadManager {
             }.start()
         } catch (e: Exception) {
             e.printStackTrace()
-            ZLog.e("download:$e")
+            ZLog.e(TAG, "download:$e")
         }
     }
 
@@ -510,7 +516,7 @@ object DownloadManager {
 
 
     fun addTask(info: DownloadItem) {
-        ZLog.d("addTask:$info")
+        ZLog.d(TAG, "addTask:$info")
         if (DownloadingList.isDownloading(info)) {
             val currentDownload = DownloadTaskList.getTaskByDownloadID(info.downloadID)
             if (!TextUtils.isEmpty(currentDownload?.fileMD5) && !info.fileMD5.equals(currentDownload?.fileMD5)) {
@@ -551,7 +557,7 @@ object DownloadManager {
                 }
             }
             if (DownloadTaskList.hadAddTask(info)) {
-                ZLog.d("mDownloadList contains:$info")
+                ZLog.d(TAG, "mDownloadList contains:$info")
                 DownloadTaskList.updateDownloadTaskListItem(info)
                 resumeTask(
                     info.downloadID,
@@ -572,7 +578,7 @@ object DownloadManager {
         downloadWhenUseMobile: Boolean
     ) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            ZLog.d("resumeTask:$info")
+            ZLog.d(TAG, "resumeTask:$info")
             if (startByUser) {
                 info.isDownloadWhenAdd = true
             }
@@ -586,8 +592,8 @@ object DownloadManager {
 
     fun pauseTask(downloadId: Long, startByUser: Boolean, clearHistory: Boolean) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            ZLog.d("pause:$info")
-            ZLog.d("pause:$info")
+            ZLog.d(TAG, "pause:$info")
+            ZLog.d(TAG, "pause:$info")
             mDownloadEngine.closeDownload(info.downloadID, false, clearHistory)
             info.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
             info.setPause()
@@ -632,36 +638,36 @@ object DownloadManager {
     }
 
     fun pauseAllTask(startByUser: Boolean) {
-        ZLog.d("pauseAllTask")
+        ZLog.d(TAG, "pauseAllTask")
         pauseWaitingTask(startByUser)
         pauseDownloadingTask(startByUser)
     }
 
     fun pauseDownloadingTask(startByUser: Boolean) {
-        ZLog.d("pauseDownloadingTask")
+        ZLog.d(TAG, "pauseDownloadingTask")
         getDownloadingTask().forEach { pauseTask(it.downloadID, startByUser, false) }
     }
 
     fun pauseWaitingTask(startByUser: Boolean) {
-        ZLog.d("pauseWaitingTask")
+        ZLog.d(TAG, "pauseWaitingTask")
         getWaitingTask().forEach { pauseTask(it.downloadID, startByUser, false) }
     }
 
     fun resumeAllTask(pauseOnMobile: Boolean) {
-        ZLog.d("resumeAllTask")
+        ZLog.d(TAG, "resumeAllTask")
         resumePauseTask(pauseOnMobile)
         resumeFailedTask(pauseOnMobile)
     }
 
     fun resumeFailedTask(pauseOnMobile: Boolean) {
-        ZLog.d("resumeFailedTask")
+        ZLog.d(TAG, "resumeFailedTask")
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_FAILED }.forEach {
             resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
         }
     }
 
     fun resumePauseTask(pauseOnMobile: Boolean) {
-        ZLog.d("resumePauseTask")
+        ZLog.d(TAG, "resumePauseTask")
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED }.forEach {
             resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
         }
