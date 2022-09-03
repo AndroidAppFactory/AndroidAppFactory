@@ -24,6 +24,6 @@ class ZixieRequestConfig {
 
     //支持MD5检查，使用本地缓存
     fun get(url: String, md5: String, callback: DownloadConfig.ResponseHandler) {
-        DownloadConfig.startDownload(ZixieContext.applicationContext!!, url, md5, callback)
+        DownloadConfig.download(ZixieContext.applicationContext!!, url, md5, callback)
     }
 }

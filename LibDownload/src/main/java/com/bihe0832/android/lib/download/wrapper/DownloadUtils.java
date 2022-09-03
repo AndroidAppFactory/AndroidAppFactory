@@ -24,7 +24,7 @@ public class DownloadUtils {
      * 初始化
      *
      * @param context        Application Context
-     * @param maxDownloadNum 同时容许下载的最大数量
+     * @param maxDownloadNum 同时容许下载的最大数量，如果主要用于大文件下载：建议3个，最大不建议超过5个
      * @param listener       全局回调
      * @param isDebug        是否开启调试模式
      */
