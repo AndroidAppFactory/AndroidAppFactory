@@ -85,24 +85,22 @@ open class BaseActivity : SupportActivity() {
     }
 
     protected fun updateIcon(needBack: Boolean, iconURL: String, iconRes: Int) {
-        updateIcon(iconURL, iconRes) {
-            if (needBack) {
-                onBackPressed()
-            } else {
-                
-            }
-        }
-    }
-
-    protected fun updateIcon(iconURL: String, iconRes: Int, listener: View.OnClickListener) {
         if (iconRes > 0) {
             mNavigationImageButton?.loadCenterInsideImage(iconRes)
         } else if (URLUtils.isHTTPUrl(iconURL)) {
             mNavigationImageButton?.loadCenterInsideImage(iconURL)
         } else {
-            mNavigationImageButton?.loadCenterInsideImage(R.mipmap.icon)
+            if (needBack) {
+                mNavigationImageButton?.loadCenterInsideImage(R.mipmap.ic_left_arrow_white)
+            } else {
+                mNavigationImageButton?.loadCenterInsideImage(R.mipmap.icon)
+            }
         }
-        mToolbar?.setNavigationOnClickListener(listener)
+        mToolbar?.setNavigationOnClickListener {
+            if (needBack) {
+                onBackPressed()
+            }
+        }
     }
 
     protected fun initToolbar(resID: Int, needBack: Boolean) {
