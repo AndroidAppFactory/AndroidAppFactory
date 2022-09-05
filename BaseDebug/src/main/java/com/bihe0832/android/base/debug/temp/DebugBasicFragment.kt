@@ -28,12 +28,15 @@ class DebugBasicFragment : BaseFragment() {
 
 
         test_basic_button.setOnClickListener {
-            showPopList()
+//
+
+            showMenu()
 
 //            test_basic_content.loadFitCenterImage("http://cdn.bihe0832.com/images/cv.png")
         }
 
         test_basic_button_local_1.setOnClickListener {
+            showPopList()
             AceSelectionActionHelper(activity!!).apply {
                 setOnSelectionItemPressedListener(object : AceSelectionActionHelper.OnSelectionItemPressed{
                     override fun onCutClick() {
@@ -85,6 +88,7 @@ class DebugBasicFragment : BaseFragment() {
         }.let {
             PopupList(activity!!).apply {
                 textSize = DisplayUtil.dip2px(context!!, 12f).toFloat()
+                setBgAlpha(1.0f)
             }.show(test_basic_button, 600f, 0f, true,it, object : PopupList.PopupListListener {
 
 
@@ -108,6 +112,8 @@ class DebugBasicFragment : BaseFragment() {
             menuActions.add(getNewPopMenuItem("创建群", R.mipmap.icon, ""))
 
             setMenuItemList(menuActions)
+            setBgAlpha(1.0f)
+
         }.let {
             it.show()
         }

@@ -6,13 +6,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
-
 import com.bihe0832.android.lib.ui.dialog.R;
+import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 import java.util.ArrayList;
@@ -123,28 +122,16 @@ public class PopMenu {
         mMenuWindow.setTouchable(true);
         // 设置点击pop外侧消失，默认为false；在focusable为true时点击外侧始终消失
         mMenuWindow.setOutsideTouchable(true);
-        backgroundAlpha(0.5f);
+        ViewExtKt.changeBackgroundAlpha(mActivity, bgAlpha);
         // 相对于 + 号正下面，同时可以设置偏移量
         mMenuWindow.showAsDropDown(mAttachView, xOffset, yOffset, gravity);
         // 设置pop关闭监听，用于改变背景透明度
         mMenuWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                backgroundAlpha(bgAlpha);
+                ViewExtKt.changeBackgroundAlpha(mActivity, 1.0f);
             }
         });
     }
 
-    /**
-     * 此方法用于改变背景的透明度，从而达到“变暗”的效果
-     */
-    private void backgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = mActivity.getWindow().getAttributes();
-        // 0.0-1.0
-        lp.alpha = bgAlpha;
-        mActivity.getWindow().setAttributes(lp);
-        // everything behind this window will be dimmed.
-        // 此方法用来设置浮动层，防止部分手机变暗无效
-        mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    }
 }
