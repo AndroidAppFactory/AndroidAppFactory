@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 import java.util.List;
@@ -76,6 +77,7 @@ public class PopupList {
     private int mDividerColor;
     private int mDividerWidth;
     private int mDividerHeight;
+    private float mBgAlpha = 1.0f;
 
     public PopupList(Context context) {
         this.mContext = context;
@@ -206,6 +208,12 @@ public class PopupList {
             mPopupWindow = new PopupWindow(contentView, mPopupWindowWidth, mPopupWindowHeight, true);
             mPopupWindow.setTouchable(true);
             mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    ViewExtKt.changeBackgroundAlpha(mContext, 1.0f);
+                }
+            });
         }
         int[] location = new int[2];
         mAnchorView.getLocationInWindow(location);
@@ -224,6 +232,7 @@ public class PopupList {
         if (!mPopupWindow.isShowing()) {
             int x = (int) (location[0] + offsetX - mPopupWindowWidth / 2f + 0.5f);
             int y = (int) (location[1] + offsetY - mPopupWindowHeight + 0.5f);
+            ViewExtKt.changeBackgroundAlpha(mContext, mBgAlpha);
             mPopupWindow.showAtLocation(mAnchorView, Gravity.NO_GRAVITY, x, y);
         }
     }
@@ -314,6 +323,10 @@ public class PopupList {
 
     public void setIndicatorView(View indicatorView) {
         this.mIndicatorView = indicatorView;
+    }
+
+    public void setBgAlpha(float mBgAlpha) {
+        this.mBgAlpha = mBgAlpha;
     }
 
     public View getDefaultIndicatorView(Context context) {
