@@ -2,6 +2,7 @@ package com.bihe0832.android.framework.ui
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -17,7 +18,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.common.ColorTools
-import com.bihe0832.android.lib.ui.image.loadCenterInsideImage
+import com.bihe0832.android.lib.ui.image.loadImage
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation.SupportActivity
@@ -31,10 +32,21 @@ open class BaseActivity : SupportActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (resetDensity()) {
-            DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
+            DisplayUtil.resetDensity(
+                this,
+                ConvertUtils.parseFloat(
+                    resources.getString(R.string.custom_density),
+                    Constants.CUSTOM_DENSITY
+                )
+            )
         }
         if (getStatusBarColor() == Color.TRANSPARENT) {
-            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ContextCompat.getColor(this, R.color.primary)), getNavigationBarColor())
+            enableActivityImmersive(
+                ColorTools.getColorWithAlpha(
+                    0f,
+                    ContextCompat.getColor(this, R.color.primary)
+                ), getNavigationBarColor()
+            )
         } else {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         }
@@ -86,14 +98,14 @@ open class BaseActivity : SupportActivity() {
 
     protected fun updateIcon(needBack: Boolean, iconURL: String, iconRes: Int) {
         if (iconRes > 0) {
-            mNavigationImageButton?.loadCenterInsideImage(iconRes)
+            mNavigationImageButton?.loadImage(iconRes)
         } else if (URLUtils.isHTTPUrl(iconURL)) {
-            mNavigationImageButton?.loadCenterInsideImage(iconURL)
+            mNavigationImageButton?.loadImage(iconURL)
         } else {
             if (needBack) {
-                mNavigationImageButton?.loadCenterInsideImage(R.mipmap.ic_left_arrow_white)
+                mNavigationImageButton?.loadImage(R.mipmap.ic_left_arrow_white)
             } else {
-                mNavigationImageButton?.loadCenterInsideImage(R.mipmap.icon)
+                mNavigationImageButton?.loadImage(R.mipmap.icon)
             }
         }
         mToolbar?.setNavigationOnClickListener {
@@ -111,7 +123,13 @@ open class BaseActivity : SupportActivity() {
         initToolbar(resID, titleString, true, needBack, 0)
     }
 
-    protected fun initToolbar(resID: Int, titleString: String?, needTitleCenter: Boolean, needBack: Boolean, iconRes: Int) {
+    protected fun initToolbar(
+        resID: Int,
+        titleString: String?,
+        needTitleCenter: Boolean,
+        needBack: Boolean,
+        iconRes: Int
+    ) {
         try {
             if (null == mToolbar) {
                 mToolbar = findViewById(resID)
@@ -124,9 +142,11 @@ open class BaseActivity : SupportActivity() {
                     //  找到标题的View
                     if (view is TextView) {
                         mTitleView = view
+                        mTitleView!!.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
                         if (needTitleCenter) {
                             mTitleView!!.setGravity(Gravity.CENTER)
-                            mTitleView!!.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT
+                            mTitleView!!.getLayoutParams().width =
+                                ViewGroup.LayoutParams.MATCH_PARENT
                         }
                         continue
                     }
@@ -134,7 +154,12 @@ open class BaseActivity : SupportActivity() {
                     if (view is ImageButton) {
                         mNavigationImageButton = view
                         DisplayUtil.dip2px(this, 4f).let { padding ->
-                            mNavigationImageButton?.setPadding(padding * 2, padding, padding, padding)
+                            mNavigationImageButton?.setPadding(
+                                padding * 2,
+                                padding,
+                                padding,
+                                padding
+                            )
                         }
 
                         //  布局发生改变的时候拿到导航的宽度
