@@ -45,7 +45,9 @@ public class CardInfoHelper {
 
     public int getResIdByCardInfo(Class<? extends CardBaseInnerModule> module) {
         CardBaseInnerModule moduleItem = getItemByClass(module);
+
         if (null == moduleItem) {
+            ZLog.e(TAG, "  \n !!!========================================  \n \n \n !!! LibAdapter: class  " + module.getName() + " may not add to Adapter card list \n \n \n !!!========================================");
             return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
         } else {
             return moduleItem.getResID();
