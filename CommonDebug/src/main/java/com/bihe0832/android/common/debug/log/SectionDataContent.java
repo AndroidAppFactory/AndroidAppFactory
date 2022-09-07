@@ -28,6 +28,9 @@ public class SectionDataContent extends CardBaseModule {
     public String mLogFileName;
     public ItemOnClickListener mActionListener = null;
 
+    public SectionDataContent() {
+
+    }
     public SectionDataContent(String title, String logFilePath) {
         mTitleName = title;
         mLogFileName = logFilePath;
