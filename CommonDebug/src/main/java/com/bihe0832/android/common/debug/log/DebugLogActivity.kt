@@ -38,7 +38,21 @@ open class DebugLogActivity : CommonListActivity() {
             add(CardItemForCommonList(SectionDataContent::class.java))
             add(CardItemForCommonList(DebugItemData::class.java, true))
             add(CardItemForCommonList(DebugTipsData::class.java, true))
+        }
+    }
 
+    protected fun getCommonLogList(): List<CardBaseModule> {
+        return mutableListOf<CardBaseModule>().apply {
+            add(SectionDataHeader("通用日志工具"))
+            add(DebugItemData("日志路径：<BR><small>${LoggerFile.getZixieFileLogPathByModule("*")}</small>"))
+            add(DebugItemData("选择并发送日志") {
+                isView = false
+                FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
+            })
+            add(DebugItemData("选择并查看日志") {
+                isView = true
+                FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
+            })
         }
     }
 
@@ -67,17 +81,7 @@ open class DebugLogActivity : CommonListActivity() {
 
     open fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
-            add(SectionDataHeader("通用日志工具"))
-            add(DebugItemData("日志路径：<BR><small>${ZixieContext.getLogFolder()}</small>"))
-            add(DebugItemData("选择并发送日志") {
-                isView = false
-                FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
-            })
-            add(DebugItemData("选择并查看日志") {
-                isView = true
-                FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
-            })
-
+            addAll(getCommonLogList())
             add(SectionDataHeader("基础通用日志"))
             add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath()))
             add(SectionDataContent("Webview", WebviewLoggerFile.getWebviewLogPath()))

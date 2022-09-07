@@ -70,7 +70,8 @@ object LoggerFile {
                         file.createNewFile()
                     }
                     checkOldFile(file)
-                    val bufferedWriter = BufferedWriter(OutputStreamWriter(FileOutputStream(file, true), "UTF-8"))
+                    val bufferedWriter =
+                        BufferedWriter(OutputStreamWriter(FileOutputStream(file, true), "UTF-8"))
                     mLogFiles[fileName] = file
                     mBufferedWriters[fileName] = bufferedWriter
                 } catch (e: Exception) {
@@ -118,11 +119,14 @@ object LoggerFile {
 
     fun openLog(filePath: String) {
         try {
+            if (FileUtils.checkFileExist(filePath) && File(filePath).length() > 1 * FileUtils.SPACE_MB) {
+                ZixieContext.showDebug("日志较大，手机打开会比较耗时，建议发送到电脑查看")
+            }
             val map = HashMap<String, String>()
             map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(filePath)
             RouterAction.openFinalURL(
-                    RouterAction.getFinalURL(RouterConstants.MODULE_NAME_EDITOR, map),
-                    Intent.FLAG_ACTIVITY_NEW_TASK
+                RouterAction.getFinalURL(RouterConstants.MODULE_NAME_EDITOR, map),
+                Intent.FLAG_ACTIVITY_NEW_TASK
             )
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
             e.printStackTrace()
@@ -133,7 +137,7 @@ object LoggerFile {
         try { //设置intent的data和Type属性
             mContext?.let { context ->
                 try { //设置intent的data和Type属性
-                    FileUtils.sendFile(context, filePath, "plain/text")
+                    FileUtils.sendFile(context, filePath)
                 } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
                     e.printStackTrace()
                 }

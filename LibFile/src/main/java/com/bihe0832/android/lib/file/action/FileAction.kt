@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.text.TextUtils
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -25,8 +26,16 @@ object FileAction {
     /**
      * 仅能打开 [ZixieFileProvider.getZixieFilePath] 对应目录下的文件
      */
+    fun openFile(context: Context, filePath: String): Boolean {
+        return fileAction(context, Intent.ACTION_VIEW, filePath)
+    }
+
     fun openFile(context: Context, filePath: String, fileType: String): Boolean {
         return fileAction(context, Intent.ACTION_VIEW, filePath, fileType)
+    }
+
+    fun sendFile(context: Context, filePath: String): Boolean {
+        return fileAction(context, Intent.ACTION_SEND, filePath)
     }
 
     fun sendFile(context: Context, filePath: String, fileType: String): Boolean {
@@ -34,7 +43,7 @@ object FileAction {
     }
 
     fun fileAction(context: Context, action: String, filePath: String): Boolean {
-        return fileAction(context, action, filePath, "*/*")
+        return fileAction(context, action, filePath, FileMimeTypes.getMimeType(filePath))
     }
 
     fun fileAction(context: Context, action: String, filePath: String, fileType: String): Boolean {
@@ -52,7 +61,11 @@ object FileAction {
                 if (fileProvider == null) {
                     ZLog.e("fileAction targetFile dont has zixie FileProvider")
                     targetFile =
-                            File(ZixieFileProvider.getZixieFilePath(context) + FileUtils.getFileName(filePath))
+                        File(
+                            ZixieFileProvider.getZixieFilePath(context) + FileUtils.getFileName(
+                                filePath
+                            )
+                        )
                     copyFile(sourceFile, targetFile)
                 }
             }
@@ -67,7 +80,10 @@ object FileAction {
             return true
 
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
-            ZLog.e("FileAction", "  \n !!!========================================  \n \n \n !!! FileAction: The fileAction throw an Exception: ${e.javaClass.name} \n \n \n !!!========================================")
+            ZLog.e(
+                "FileAction",
+                "  \n !!!========================================  \n \n \n !!! FileAction: The fileAction throw an Exception: ${e.javaClass.name} \n \n \n !!!========================================"
+            )
             e.printStackTrace()
             return false
         }
@@ -223,7 +239,11 @@ object FileAction {
 
     }
 
-    fun copyAssetsFolderToFolder(context: Context?, fromAssetPath: String, targetFolder: String): Boolean {
+    fun copyAssetsFolderToFolder(
+        context: Context?,
+        fromAssetPath: String,
+        targetFolder: String
+    ): Boolean {
         if (context == null) {
             ZLog.e("copyAssetsFolder context is null")
             return false
