@@ -206,7 +206,7 @@ object ZixieContext {
     }
 
     fun getLogFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getZixieFolder() + "log" + File.separator)
+        return FileUtils.getFolderPathWithSeparator(getZixieFolder() + "temp${File.separator}log" + File.separator)
     }
 
     fun initModule(action: () -> Unit, canInitWithBackgroundThread: Boolean) {
@@ -260,8 +260,8 @@ object ZixieContext {
         CommonDialog(getCurrentActivity()).apply {
             title = applicationContext!!.resources.getString(R.string.common_reminder_title)
             content = String.format(
-                    applicationContext!!.resources.getString(R.string.exist_msg),
-                    applicationContext!!.resources.getString(R.string.app_name)
+                applicationContext!!.resources.getString(R.string.exist_msg),
+                applicationContext!!.resources.getString(R.string.app_name)
             )
 
 
