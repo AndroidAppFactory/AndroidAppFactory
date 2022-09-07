@@ -67,6 +67,7 @@ object FileAction {
             return true
 
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
+            ZLog.e("FileAction", "  \n !!!========================================  \n \n \n !!! FileAction: The fileAction throw an Exception: ${e.javaClass.name} \n \n \n !!!========================================")
             e.printStackTrace()
             return false
         }

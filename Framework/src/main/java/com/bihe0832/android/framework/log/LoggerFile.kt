@@ -133,7 +133,7 @@ object LoggerFile {
         try { //设置intent的data和Type属性
             mContext?.let { context ->
                 try { //设置intent的data和Type属性
-                    FileUtils.sendFile(context, filePath, "*/*")
+                    FileUtils.sendFile(context, filePath, "plain/text")
                 } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
                     e.printStackTrace()
                 }
