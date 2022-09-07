@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibFile"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -73,14 +73,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDebug"               : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -89,28 +89,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonAceEditor"           : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-ace-editor",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonImage"               : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-image",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonDataCenter"          : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-data-center",
                 "apidependenciesList": [
                         "CommonCoroutines"
                 ]
         ],
         "CommonCoroutines"          : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-coroutines",
                 "apidependenciesList": [
                         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
@@ -120,14 +120,14 @@ ext.moduleInfo = [
         ],
 
         "CommonAbout"               : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "Framework", "CommonList"
                 ]
         ],
         "CommonList"                : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         "${project.androidsupport.swiperefreshlayout}",
@@ -135,21 +135,21 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework",
@@ -160,7 +160,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "5.2.11",
+                "version"                : "5.2.12",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "${project.androidsupport.swiperefreshlayout}",
@@ -173,7 +173,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "5.2.11",
+                "version"                : "5.2.12",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -185,14 +185,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "5.2.11",
+                "version"                : "5.2.12",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "${project.androidsupport.annotation}",
@@ -206,12 +206,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils", "LibDebug"]
         ],
         "LibUIUtils"                : [
-                "version"            : "5.2.11",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -221,7 +221,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibUtils"                  : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-utils",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
@@ -311,12 +311,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibHttpCommon"             : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-http-common",
                 "apidependenciesList": ["LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"]
         ],
         "LibHttpAdvanced"           : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-http-advanced",
                 "apidependenciesList": ["LibHttpCommon", "LibGson", "LibAAF"]
         ],
@@ -360,7 +360,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibConfig", "LibOS"]
         ],
         "LibFile"                   : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-file",
                 "apidependenciesList": [
                         "${project.androidsupport.androidxcore}",
@@ -369,12 +369,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibZip"                    : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-zip",
                 "apidependenciesList": ["LibLog", "LibThread", "LibFile"]
         ],
         "LibDownload"               : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -383,7 +383,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibInstall"                : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-install",
                 "apidependenciesList": ["LibFile", "LibZip", "LibAPK"]
         ],
@@ -393,12 +393,12 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibAndroid", "LibOS"]
         ],
         "LibSuperAPP"               : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": ["LibDialog", "LibAPK"]
         ],
         "LibDebug"                  : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": ["LibDialog", "LibToast", "LibFloatview"]
         ],
@@ -426,7 +426,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibFragmentation"]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         "${project.androidsupport.androidxcore}",
@@ -463,7 +463,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibThread", "LibText"]
         ],
         "LibImage"                  : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-image",
                 "apidependenciesList": [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
@@ -473,14 +473,14 @@ ext.moduleInfo = [
                 ]
         ],
         "LibDialog"                 : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "${project.androidsupport.constraintlayout}",
                         "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText", "LibViewExt"]
         ],
         "LibNotification"           : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibImage", "LibAPK", "LibCommonUtils"
@@ -539,14 +539,14 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork"
                 ]
         ],
         "LibImmersive"              : [
-                "version"            : "5.2.2",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork", "LibImage", "LibCommonUIUtils",
@@ -554,7 +554,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibFileSelect"             : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -562,7 +562,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibFloatview"              : [
-                "version"                : "5.2.9",
+                "version"                : "5.2.12",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         "${project.androidsupport.constraintlayout}",
@@ -591,7 +591,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibAceEditor"              : [
-                "version"            : "5.2.9",
+                "version"            : "5.2.12",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
