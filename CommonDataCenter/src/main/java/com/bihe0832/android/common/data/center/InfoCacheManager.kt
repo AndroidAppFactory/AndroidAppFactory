@@ -1,13 +1,12 @@
 package com.bihe0832.android.common.data.center
 
 import com.bihe0832.android.common.coroutines.Coroutines_ERROR_DATA_NULL
-import com.bihe0832.android.common.coroutines.ZixieCoroutinesException
+import com.bihe0832.android.common.coroutines.ZixieCoroutinesData
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.log.ZLog
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 /**
@@ -29,31 +28,25 @@ abstract class InfoCacheManager<T> {
             var dataItem: T? = null
     )
 
-    inner class ContinuationCallbackForFetchDataListener<T>(private var continuation: Continuation<T>) :
-            AAFDataCallback<T>() {
+    inner class ContinuationCallbackForFetchDataListener<T>(private var continuation: Continuation<ZixieCoroutinesData<T>>) : AAFDataCallback<T>() {
 
         override fun onSuccess(result: T?) {
             if (result != null) {
-                continuation.resume(result)
+                continuation.resume(ZixieCoroutinesData(result))
             } else {
-                continuation.resumeWithException(
-                        ZixieCoroutinesException(
-                                Coroutines_ERROR_DATA_NULL,
-                                ""
-                        )
-                )
+                continuation.resume(ZixieCoroutinesData(Coroutines_ERROR_DATA_NULL, ""))
             }
         }
 
         override fun onError(code: Int, msg: String) {
-            continuation.resumeWithException(ZixieCoroutinesException(code, msg))
+            continuation.resume(ZixieCoroutinesData(code, msg))
         }
     }
 
 
-    suspend fun getData(key: String): T? = getData(key, -1)
+    suspend fun getData(key: String): ZixieCoroutinesData<T> = getData(key, -1)
 
-    suspend fun getData(key: String, duration: Long): T? =
+    suspend fun getData(key: String, duration: Long): ZixieCoroutinesData<T> =
             suspendCoroutine { cont ->
                 getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
             }
