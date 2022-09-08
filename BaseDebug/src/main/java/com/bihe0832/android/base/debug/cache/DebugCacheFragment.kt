@@ -16,7 +16,6 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 
 
 class DebugCacheFragment : DebugEnvFragment() {
-    val LOG_TAG = "DebugTempFragment"
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
