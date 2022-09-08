@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonCoroutines"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -80,7 +80,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "5.2.14",
+                "version"            : "5.2.15",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -103,14 +103,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDataCenter"          : [
-                "version"            : "5.2.14",
+                "version"            : "5.2.15",
                 "artifactId"         : "common-data-center",
                 "apidependenciesList": [
                         "CommonCoroutines"
                 ]
         ],
         "CommonCoroutines"          : [
-                "version"            : "5.2.14",
+                "version"            : "5.2.15",
                 "artifactId"         : "common-coroutines",
                 "apidependenciesList": [
                         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
