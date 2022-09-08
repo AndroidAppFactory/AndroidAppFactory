@@ -71,7 +71,7 @@ open class BaseDebugListFragment : CommonListFragment() {
     }
 
     protected fun showInfo(title: String, content: String) {
-        DebugTools.showInfo(context, title, content, "发送到第三方应用")
+        DebugTools.showInfo(context, title, content, "发送到第三方")
     }
 
 
