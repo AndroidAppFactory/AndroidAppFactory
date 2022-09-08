@@ -1,7 +1,5 @@
 package com.bihe0832.android.common.coroutines
 
-import kotlin.math.E
-
 /**
  * @author zixie code@bihe0832.com Created on 2022/2/10.
  */
@@ -48,7 +46,7 @@ open class ZixieCoroutinesData<T> {
         return ERROR
     }
 
-    protected fun onInnerError(action: (flag: Int, errCode: Int, msg: String?, exception: Exception?) -> Unit) {
+    protected open fun onInnerError(action: (flag: Int, errCode: Int, msg: String?, exception: Exception?) -> Unit) {
         ERROR?.let {
             action(it.flag, it.errCode, it.msg, it.exception)
         }
