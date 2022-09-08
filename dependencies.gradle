@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.2.13"
+ext.moduleVersionName = "5.2.17"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -80,7 +80,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "5.2.13",
+                "version"            : "5.2.16",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -103,14 +103,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDataCenter"          : [
-                "version"            : "5.2.13",
+                "version"            : "5.2.16",
                 "artifactId"         : "common-data-center",
                 "apidependenciesList": [
                         "CommonCoroutines"
                 ]
         ],
         "CommonCoroutines"          : [
-                "version"            : "5.2.13",
+                "version"            : "5.2.16",
                 "artifactId"         : "common-coroutines",
                 "apidependenciesList": [
                         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
