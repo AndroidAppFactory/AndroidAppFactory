@@ -61,11 +61,11 @@ open class DebugCommonFragment : DebugEnvFragment() {
 
     protected fun showMobileInfo() {
         val builder = StringBuilder()
-        builder.append("PackageName: ${context!!.packageName}\n")
-        builder.append("deviceId: ${ZixieContext.deviceId}\n")
-        builder.append("厂商&型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}\n")
+        builder.append("应用包名: ${context!!.packageName}\n")
+        builder.append("设备ID: ${ZixieContext.deviceId}\n")
+        builder.append("厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}\n")
         if (ManufacturerUtil.isHarmonyOs()) {
-            builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})")
+            builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})\n")
         } else {
             builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}\n")
         }
