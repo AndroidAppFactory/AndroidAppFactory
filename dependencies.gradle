@@ -80,7 +80,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "5.2.16",
+                "version"            : "5.2.17",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -103,14 +103,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDataCenter"          : [
-                "version"            : "5.2.16",
+                "version"            : "5.2.17",
                 "artifactId"         : "common-data-center",
                 "apidependenciesList": [
                         "CommonCoroutines"
                 ]
         ],
         "CommonCoroutines"          : [
-                "version"            : "5.2.16",
+                "version"            : "5.2.17",
                 "artifactId"         : "common-coroutines",
                 "apidependenciesList": [
                         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
