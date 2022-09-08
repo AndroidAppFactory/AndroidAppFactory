@@ -10,6 +10,10 @@ open class ZixieCoroutinesException : Exception {
 
     private var code = Coroutines_ERROR_CODE_EXCEPTION
 
+    constructor(code: Int, msg: Exception?) : super(msg) {
+        this.code = code
+    }
+
     constructor(code: Int, msg: String?) : super(msg) {
         this.code = code
     }
@@ -23,7 +27,7 @@ open class ZixieCoroutinesException : Exception {
     }
 
     override fun toString(): String {
-        return "ZixieCoroutinesException{" +
+        return "CoroutinesException{" +
                 "code=" + code +
                 ",msg=" + message +
                 '}'

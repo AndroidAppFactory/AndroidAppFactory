@@ -1,0 +1,55 @@
+package com.bihe0832.android.base.debug.cache
+
+import com.bihe0832.android.common.coroutines.ZixieCoroutinesData
+
+/**
+ *
+ * @author hardyshi code@bihe0832.com
+ * Created on 2022/9/8.
+ * Description: Description
+ *
+ */
+class DebugCoroutinesData<T> : ZixieCoroutinesData<T> {
+
+    constructor(successData: T) : super(successData)
+
+    constructor(errorCode: Int, msg: String?) : super(errorCode, msg)
+
+    constructor(errorCode: Int, exception: Exception?) : super(errorCode, exception)
+
+    constructor(flag: Int, errorCode: Int, exception: Exception?) : super(
+        flag,
+        errorCode,
+        exception
+    )
+
+    constructor(flag: Int, errorCode: Int, exception: String?) : super(
+        flag,
+        errorCode,
+        exception
+    )
+
+    override fun onSuccess(action: (success: T) -> Unit): DebugCoroutinesData<T> {
+        data()?.let { action(it) }
+        return this
+    }
+
+    fun onZixieError(action: (errCode: Int, exception: Exception?) -> Unit): DebugCoroutinesData<T> {
+        error()?.let {
+            if (it.flag == 1){
+                action(it.flag, it.exception)
+            }
+
+        }
+        return this
+    }
+
+    fun onZixieLoginError(action: (errCode: Int, exception: Exception?) -> Unit): DebugCoroutinesData<T> {
+        error()?.let {
+            if (it.flag == 2){
+                action(it.flag, it.exception)
+            }
+        }
+        return this
+    }
+}

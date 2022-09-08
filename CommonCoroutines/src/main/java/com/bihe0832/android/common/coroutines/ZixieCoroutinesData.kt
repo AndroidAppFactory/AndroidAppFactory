@@ -6,7 +6,7 @@ package com.bihe0832.android.common.coroutines
 
 open class ZixieCoroutinesData<T> {
 
-    data class Error(val flag: Int, val errCode: Int, val msg: String?, val exception: Exception?)
+    data class Error(val flag: Int, val exception: ZixieCoroutinesException?)
 
     private var SUCCESS: T? = null
     protected var ERROR: Error? = null
@@ -16,39 +16,40 @@ open class ZixieCoroutinesData<T> {
     }
 
     constructor(errorCode: Int, msg: String?) {
-        ERROR = Error(0, errorCode, msg, null)
+        ERROR = Error(0, ZixieCoroutinesException(errorCode, msg))
     }
 
     constructor(errorCode: Int, exception: Exception?) {
-        ERROR = Error(0, errorCode, "", exception)
+        ERROR = Error(0, ZixieCoroutinesException(errorCode, exception))
     }
 
-    constructor(errorCode: Int, msg: String?, exception: Exception?) {
-        ERROR = Error(0, errorCode, msg, exception)
+    constructor(flag: Int, errorCode: Int, msg: String?) {
+        ERROR = Error(flag, ZixieCoroutinesException(errorCode, msg))
     }
 
-    constructor(type: Int, errorCode: Int, msg: String?, exception: Exception?) {
-        ERROR = Error(type, errorCode, msg, exception)
+    constructor(flag: Int, errorCode: Int, exception: Exception?) {
+        ERROR = Error(flag, ZixieCoroutinesException(errorCode, exception))
     }
 
-    fun onSuccess(action: (success: T) -> Unit): ZixieCoroutinesData<T> {
-        SUCCESS?.let {
+    fun data(): T? {
+        return SUCCESS
+    }
+
+    fun error(): Error? {
+        return ERROR
+    }
+
+    open fun onSuccess(action: (success: T) -> Unit): ZixieCoroutinesData<T> {
+        data()?.let {
             action(it)
         }
         return this
     }
 
-    fun onSuccess(): T? {
-        return SUCCESS
-    }
 
-    fun onError(): Error? {
-        return ERROR
-    }
-
-    open fun onError(action: (errCode: Int, msg: String?, exception: Exception?) -> Unit) {
-        ERROR?.let {
-            action(it.errCode, it.msg, it.exception)
+    open fun onError(action: (flag: Int, errCode: Int, exception: Exception?) -> Unit) {
+        error()?.let {
+            action(it.flag, it.exception?.getCode() ?: -1, it.exception)
         }
     }
 }
