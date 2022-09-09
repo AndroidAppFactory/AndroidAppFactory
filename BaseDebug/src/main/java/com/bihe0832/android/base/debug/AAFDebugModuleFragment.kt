@@ -18,6 +18,7 @@ import com.bihe0832.android.base.debug.clipboard.DebugClipboardFragment
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
 import com.bihe0832.android.base.debug.file.DebugFileFragment
+import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
 import com.bihe0832.android.base.debug.image.DebugImageFragment
 import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
 import com.bihe0832.android.base.debug.ipc.AAFDebugIPCFragment
@@ -52,24 +53,17 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugItemData("临时测试(Temp)", DebugTempFragment::class.java))
             add(getDebugItemData("临时测试(Basic)", DebugBasicFragment::class.java))
-            add(getDebugItemData("列表 Fragment 调试", DebugListFragment::class.java))
-            add(DebugItemData("列表 Activity 调试", View.OnClickListener {
-                startActivityWithException(TestListActivity::class.java)
-            }))
-
-            add(getDebugItemData("剪切板调试", DebugClipboardFragment::class.java))
-            add(getDebugItemData("Dialog 调试", DebugDialogFragment::class.java))
-            add(getDebugItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
-
 
             add(getDebugItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
+            add(getDebugItemData("Dialog 调试", DebugDialogFragment::class.java))
             add(getDebugItemData("文件（Zip、assets 等）、配置操作调试", DebugFileFragment::class.java))
+            add(getDebugItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
+            add(getDebugItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
+
+
             add(getDebugItemData("图片操作调试", DebugImageFragment::class.java))
             add(getDebugItemData("拍照及相册调试", DebugPhotosFragment::class.java))
             add(getDebugItemData("Cache、数据中心测试", DebugCacheFragment::class.java))
-
-
-
             add(DebugItemData("沉浸式状态栏及标题栏调试", View.OnClickListener {
                 startActivityWithException(DebugImmersionActivity::class.java)
             }))
@@ -85,8 +79,15 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(DebugItemData("HTTP Request", View.OnClickListener {
                 startActivityWithException(DebugHttpActivity::class.java)
             }))
+
             add(DebugItemData("弹出评分页面", View.OnClickListener {
                 UserPraiseManager.showUserPraiseDialog(activity!!, RouterAction.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK))
+            }))
+            add(getDebugItemData("剪切板调试", DebugClipboardFragment::class.java))
+
+            add(getDebugItemData("列表 Fragment 调试", DebugListFragment::class.java))
+            add(DebugItemData("列表 Activity 调试", View.OnClickListener {
+                startActivityWithException(TestListActivity::class.java)
             }))
             add(DebugItemData("打开反馈页面", View.OnClickListener {
                 val map = HashMap<String, String>()

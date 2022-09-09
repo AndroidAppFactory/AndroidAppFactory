@@ -103,13 +103,10 @@ object DebugInfoCacheManager {
             add = true
         }
         CoroutineScope(defaultDispatcher).launch {
+            //需要同时处理各种异常的情况
             mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).let {
                 it.onSuccess {
                     ZLog.d(LOG_TAG, it.toString())
-                }
-
-                it.onError { errCode, msg, exception ->
-                    ZLog.d(LOG_TAG, "Error: $errCode, $msg, $exception")
                 }
 
                 it.onZixieError { errCode, exception ->
@@ -119,25 +116,27 @@ object DebugInfoCacheManager {
 
                 it.onZixieLoginError { errCode, exception ->
                     ZLog.d(LOG_TAG, "onZixieLoginError: $errCode,  $exception")
-
                 }
             }
 
 
-            mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).onSuccess {
-                ZLog.d(LOG_TAG, it.toString())
-            }.onZixieError { errCode, exception ->
+            //需要同时处理各种异常的情况，链式调用
+            mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).onZixieError { errCode, exception ->
                 ZLog.d(LOG_TAG, "onZixieError: $errCode,  $exception")
 
             }.onZixieLoginError { errCode, exception ->
                 ZLog.d(LOG_TAG, "onZixieLoginError: $errCode,  $exception")
 
-            }
+            }.onSuccess {
+                ZLog.d(LOG_TAG, it.toString())
+            }.data()
 
+            //请求成功，直接获取到数据
             mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).data()?.let {
                 ZLog.d(LOG_TAG, it.toString())
             }
 
+            //请求异常，对应的错误信息
             mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).error()?.let {
                 ZLog.d(LOG_TAG, it.toString())
             }
