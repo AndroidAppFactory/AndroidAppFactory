@@ -15,6 +15,10 @@ open class ZixieCoroutinesData<T> {
         SUCCESS = successData
     }
 
+    constructor(error: Error?) {
+        ERROR = error
+    }
+
     constructor(errorCode: Int, msg: String?) {
         ERROR = Error(0, ZixieCoroutinesException(errorCode, msg))
     }
