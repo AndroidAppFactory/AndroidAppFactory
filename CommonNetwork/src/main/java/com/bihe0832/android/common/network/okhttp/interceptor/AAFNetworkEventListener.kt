@@ -167,8 +167,10 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
         doLogAction()
     }
 
+    @Synchronized
     fun doLogAction() {
         if (!hasLog) {
+            hasLog = true
             if (enableLog) {
                 if (enableTrace) {
                     logRequest(OkHttpWrapper.getRecord(mNetworkTraceRequestID))
@@ -180,12 +182,10 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
     }
 
     open fun logRequest(record: NetworkContentDataRecord) {
-        hasLog = true
         ZLog.d(TAG, record.toString())
     }
 
     open fun logRequest(record: NetworkRecord?) {
-        hasLog = true
         ZLog.d(TAG, record.toString())
     }
 
