@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.tab
+package com.bihe0832.android.base.debug.tab.bottom
 
 import android.view.View
 import com.bihe0832.android.base.debug.R
@@ -9,10 +9,9 @@ import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.common.ui.bottom.bar.CommonMainFragment
 import com.bihe0832.android.common.ui.bottom.bar.SimpleBottomBarTab
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab
 
-class DebugSimpleTabFragment : CommonMainFragment() {
+class DebugSimpleBottomTabFragment : CommonMainFragment() {
 
     override fun getDefaultTabID(): Int {
         return 1
@@ -38,8 +37,8 @@ class DebugSimpleTabFragment : CommonMainFragment() {
         }
     }
 
-    override fun onBottomBarTabSelected(position: Int, prePosition: Int) {
-        super.onBottomBarTabSelected(position, prePosition)
+    override fun initView(view: View) {
+        super.initView(view)
         getBottomBar().getItem(0).setUnreadDot(true)
         getBottomBar().getItem(1).setUnreadCount(2)
         getBottomBar().getItem(2).setUnreadCount(22)

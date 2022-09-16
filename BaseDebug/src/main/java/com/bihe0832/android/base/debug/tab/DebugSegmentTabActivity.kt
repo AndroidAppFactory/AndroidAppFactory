@@ -14,7 +14,7 @@ import com.flyco.tablayout.SegmentTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.activity_segment_tab.*
 
-class SegmentTabActivity : BaseActivity() {
+class DebugSegmentTabActivity : BaseActivity() {
     private val mFragments = ArrayList<Fragment>()
     private val mFragments2 = ArrayList<Fragment>()
     private val mTitles = arrayOf("首页", "消息")

@@ -4,9 +4,8 @@
     android:id="@+id/fragment_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/windowBackground"
-    android:textColor="@color/colorAccent"
     android:gravity="center"
     android:padding="16dp"
+    android:textColor="@color/colorAccent"
     android:textStyle="bold"
     tools:text="dfsfd" />

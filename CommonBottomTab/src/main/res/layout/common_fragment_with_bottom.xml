@@ -8,12 +8,13 @@
         android:id="@+id/fragment_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/main_fragment_bottomBar"
+        app:layout_constraintBottom_toTopOf="@+id/main_fragment_bottomBar_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/main_fragment_bottomBar_bg"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/com_bihe0832_tab_background"

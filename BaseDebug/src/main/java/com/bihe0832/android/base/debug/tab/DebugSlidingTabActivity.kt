@@ -15,7 +15,7 @@ import com.flyco.tablayout.SlidingTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.activity_sliding_tab.*
 
-class SlidingTabActivity : BaseActivity(), OnTabSelectListener {
+class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
     private val mContext: Context = this
     private val mFragments = ArrayList<Fragment>()
 

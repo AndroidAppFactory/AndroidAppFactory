@@ -39,8 +39,12 @@ public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
         init(context, normalImageRes, selectedImageRes, actionSvga, title);
     }
 
+    protected int getLayoutID() {
+        return R.layout.common_tab_svga;
+    }
+
     private void init(Context context, int normalImageRes, int selectedImageRes, String actionSvga, String title) {
-        View.inflate(context, R.layout.common_tab_svga, this);
+        View.inflate(context, getLayoutID(), this);
         mActionSvga = actionSvga;
         mNormalImageRes = normalImageRes;
         mSelectedImageRes = selectedImageRes;
@@ -69,7 +73,7 @@ public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
 
             @Override
             public void onFinished() {
-                doSelect();
+                onSelectChanged();
             }
         });
     }
@@ -77,21 +81,18 @@ public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
+        onSelectChanged();
         if (selected) {
             SVGAHelperKt.playAssets(mIconView, mActionSvga);
-        } else {
-            doSelect();
         }
     }
 
-    protected void doSelect() {
+    protected void onSelectChanged() {
         if (isSelected()) {
             mIconView.setImageResource(mSelectedImageRes);
-            mIconView.setColorFilter(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_selected));
             mTitleView.setTextColor(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_selected));
         } else {
             mIconView.setImageResource(mNormalImageRes);
-            mIconView.setColorFilter(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_unselect));
             mTitleView.setTextColor(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_unselect));
         }
     }

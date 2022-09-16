@@ -17,11 +17,7 @@
             android:name="com.bihe0832.android.common.debug.DebugMainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/activityTheme"></activity>
 
     </application>
 
