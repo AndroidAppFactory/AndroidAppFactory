@@ -9,7 +9,6 @@
 package com.bihe0832.android.base.debug
 
 
-import android.provider.Settings
 import android.view.View
 import com.bihe0832.android.base.debug.cache.DebugCacheFragment
 import com.bihe0832.android.base.debug.card.DebugListFragment
@@ -27,6 +26,9 @@ import com.bihe0832.android.base.debug.notify.DebugNotifyFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.base.debug.photos.DebugPhotosFragment
 import com.bihe0832.android.base.debug.request.DebugHttpActivity
+import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
+import com.bihe0832.android.base.debug.tab.DebugSimpleTabFragment
+import com.bihe0832.android.base.debug.tab.DebugSvgaTabFragment
 import com.bihe0832.android.base.debug.tab.DebugTabFragment
 import com.bihe0832.android.base.debug.temp.DebugBasicFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
@@ -36,15 +38,10 @@ import com.bihe0832.android.base.debug.webview.DebugWebviewActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.praise.UserPraiseManager
-import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.utils.intent.IntentUtils
-import java.io.File
 
 
 class AAFDebugModuleFragment : DebugEnvFragment() {
@@ -59,9 +56,12 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugItemData("文件（Zip、assets 等）、配置操作调试", DebugFileFragment::class.java))
             add(getDebugItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
             add(getDebugItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
+            add(getDebugItemData("首页SimpleTAB", DebugSimpleTabFragment::class.java))
+            add(getDebugItemData("首页SVGA TAB", DebugSvgaTabFragment::class.java))
 
 
             add(getDebugItemData("图片操作调试", DebugImageFragment::class.java))
+            add(getDebugItemData("SVGA 调试", DebugSvgaFragment::class.java))
             add(getDebugItemData("拍照及相册调试", DebugPhotosFragment::class.java))
             add(getDebugItemData("Cache、数据中心测试", DebugCacheFragment::class.java))
             add(DebugItemData("沉浸式状态栏及标题栏调试", View.OnClickListener {
@@ -96,9 +96,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             }))
         }
     }
-
-
-
 
 
 }

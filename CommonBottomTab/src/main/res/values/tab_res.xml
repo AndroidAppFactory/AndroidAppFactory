@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="com_bihe0832_tab_selected">#ffffff</color>
+    <color name="com_bihe0832_tab_unselect">#999999</color>
+    <color name="com_bihe0832_tab_background">#12222c</color>
+</resources>
