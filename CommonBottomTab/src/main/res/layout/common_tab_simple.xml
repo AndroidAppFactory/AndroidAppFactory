@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <ImageView
+        android:id="@+id/tab_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="4dp"
+        app:autoPlay="false"
+        app:fillMode="Backward"
+        app:layout_constraintBottom_toTopOf="@+id/tab_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:loopCount="1"
+        tools:src="@mipmap/icon" />
+
+    <TextView
+        android:id="@+id/tab_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-8dp"
+        android:layout_marginBottom="-6dp"
+        android:background="@drawable/botton_bar_tab_msg"
+        android:gravity="center"
+        android:minWidth="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="88"
+        android:textColor="@color/white"
+        android:textSize="9dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tab_icon"
+        app:layout_constraintStart_toEndOf="@+id/tab_icon" />
+
+    <View
+        android:id="@+id/tab_tips_dot"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:background="@drawable/botton_bar_tab_msg"
+        android:gravity="center"
+        android:minWidth="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="88"
+        android:textColor="@color/white"
+        android:textSize="9dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tab_icon"
+        app:layout_constraintStart_toEndOf="@+id/tab_icon" />
+
+    <TextView
+        android:id="@+id/tab_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="广场"
+        android:textColor="#3E3E3E"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

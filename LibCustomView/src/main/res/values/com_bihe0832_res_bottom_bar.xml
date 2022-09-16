@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="com_bihe0832_main_bottom_bar_height">48dp</dimen>
-    <color name="com_bihe0832_tag_background">#12222c</color>
-    <color name="com_bihe0832_tab_unselect">#999999</color>
-    <color name="com_bihe0832_tab_selected">#ffffff</color>
-</resources>
