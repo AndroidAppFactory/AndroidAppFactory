@@ -31,25 +31,21 @@
         android:minWidth="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="88"
         android:textColor="@color/white"
         android:textSize="9dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tab_icon"
-        app:layout_constraintStart_toEndOf="@+id/tab_icon" />
+        app:layout_constraintStart_toEndOf="@+id/tab_icon"
+        tools:text="88" />
 
     <View
         android:id="@+id/tab_tips_dot"
         android:layout_width="6dp"
         android:layout_height="6dp"
         android:background="@drawable/botton_bar_tab_msg"
-        android:gravity="center"
         android:minWidth="10dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="88"
-        android:textColor="@color/white"
-        android:textSize="9dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tab_icon"
         app:layout_constraintStart_toEndOf="@+id/tab_icon" />

@@ -17,7 +17,7 @@ import com.flyco.tablayout.widget.MsgView
 import kotlinx.android.synthetic.main.activity_common_tab.*
 import java.util.*
 
-class CommonTabActivity : BaseActivity() {
+class DebugCommonTabActivity : BaseActivity() {
     private val mContext: Context = this
     private val mFragments = ArrayList<Fragment>()
     private val mFragments2 = ArrayList<Fragment>()

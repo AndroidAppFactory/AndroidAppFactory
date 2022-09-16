@@ -82,19 +82,19 @@
             android:theme="@style/permissionFullscreen" />
 
         <activity
-            android:name="com.bihe0832.android.base.debug.tab.CommonTabActivity"
+            android:name="com.bihe0832.android.base.debug.tab.DebugCommonTabActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/activityTheme" />
 
         <activity
-            android:name="com.bihe0832.android.base.debug.tab.SegmentTabActivity"
+            android:name="com.bihe0832.android.base.debug.tab.DebugSegmentTabActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/activityTheme" />
 
         <activity
-            android:name="com.bihe0832.android.base.debug.tab.SlidingTabActivity"
+            android:name="com.bihe0832.android.base.debug.tab.DebugSlidingTabActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/activityTheme" />

@@ -1,8 +1,13 @@
-package com.bihe0832.android.base.debug.tab;
+package com.bihe0832.android.base.debug.tab.bottom;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.View;
 
+import com.bihe0832.android.base.debug.R;
+import com.bihe0832.android.common.ui.bottom.bar.BottomBarTabExtKt;
 import com.bihe0832.android.common.ui.bottom.bar.SvgaBottomBarTab;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
@@ -22,7 +27,13 @@ class DebugSvgaBottomBarTab extends SvgaBottomBarTab {
     }
 
     @Override
+    protected int getLayoutID() {
+        return R.layout.debug_tab_svga;
+    }
+
+    @Override
     public void setSelected(boolean selected) {
+        mIconView.setColorFilter(Color.WHITE);
         if (selected) {
             ViewExtKt.setViewWidth(mIconView, DisplayUtil.dip2px(getContext(), 54f));
             ViewExtKt.setViewHeight(mIconView, DisplayUtil.dip2px(getContext(), 54f));
@@ -30,6 +41,35 @@ class DebugSvgaBottomBarTab extends SvgaBottomBarTab {
             ViewExtKt.setViewWidth(mIconView, DisplayUtil.dip2px(getContext(), 24f));
             ViewExtKt.setViewHeight(mIconView, DisplayUtil.dip2px(getContext(), 24f));
         }
+
         super.setSelected(selected);
+    }
+
+    @Override
+    protected void onSelectChanged() {
+        updateReadDot();
+        super.onSelectChanged();
+    }
+
+    void updateReadDot() {
+        if (mTipsView.getVisibility() == View.VISIBLE) {
+            int totalWidth = getWidth();
+            int iconWidth = totalWidth;
+            if (isSelected()) {
+                iconWidth = DisplayUtil.dip2px(getContext(), 54f);
+            } else {
+                iconWidth = DisplayUtil.dip2px(getContext(), 24f);
+            }
+            Paint paint = new Paint();
+            paint.setTextSize(DisplayUtil.dip2px(getContext(), 9));
+            float length = paint.measureText(mTipsView.getText().toString());
+            BottomBarTabExtKt.resetReadDotRightMargin(mTipsView, totalWidth, iconWidth, (int)length);
+        }
+    }
+
+    @Override
+    public void setUnreadCount(int num) {
+        super.setUnreadCount(num);
+        updateReadDot();
     }
 }

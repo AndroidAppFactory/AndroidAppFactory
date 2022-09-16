@@ -86,7 +86,6 @@ abstract class BaseDebugListActivity : CommonListActivity() {
     protected open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
         val intent = Intent(this, cls)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         data?.let {
             for ((key, value) in it) {
                 intent.putExtra(key, value)

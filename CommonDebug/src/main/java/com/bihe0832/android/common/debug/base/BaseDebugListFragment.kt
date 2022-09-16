@@ -47,7 +47,7 @@ open class BaseDebugListFragment : CommonListFragment() {
         }
     }
 
-    fun getDebugItemData(content: String, clazz: Class<*>): DebugItemData {
+    fun getDebugFragmentItemData(content: String, clazz: Class<*>): DebugItemData {
         return DebugItemData(content) { startDebugActivity(clazz, content) }
 
     }
@@ -105,7 +105,6 @@ open class BaseDebugListFragment : CommonListFragment() {
     protected open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
         val intent = Intent(context, cls)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         data?.let {
             for ((key, value) in it) {
                 intent.putExtra(key, value)

@@ -1,7 +1,9 @@
 package com.bihe0832.android.framework.ui.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import kotlinx.android.synthetic.main.common_fragment_empty.*
@@ -14,7 +16,8 @@ import kotlinx.android.synthetic.main.common_fragment_empty.*
 open class CommonEmptyFragment : BaseFragment() {
 
 
-    private var mTitleString = this.toString()
+    private var mContentString = this.toString()
+    private var mContentBackgroundColor = Color.WHITE
 
     open override fun getLayoutID(): Int {
         return R.layout.common_fragment_empty
@@ -22,15 +25,28 @@ open class CommonEmptyFragment : BaseFragment() {
 
     override fun parseBundle(bundle: Bundle, isOnCreate: Boolean) {
         super.parseBundle(bundle, isOnCreate)
-        mTitleString = bundle.getString(INTENT_KEY_TITLE, this.toString())
+        mContentString = bundle.getString(INTENT_KEY_TITLE, this.toString())
+        mContentBackgroundColor = bundle.getInt(INTENT_KEY_COLOR, ContextCompat.getColor(requireContext(), R.color.windowBackground))
     }
 
     protected override fun initView(view: View) {
-        fragment_content.setText(mTitleString)
+        fragment_content.setText(mContentString)
+        fragment_content.setBackgroundColor(mContentBackgroundColor)
     }
 
     companion object {
         private val INTENT_KEY_TITLE: String = "title"
+        private val INTENT_KEY_COLOR: String = "color"
+
+        @JvmStatic
+        fun newInstance(title: String, color: Int): CommonEmptyFragment {
+            val fragment = CommonEmptyFragment()
+            fragment.arguments = Bundle().apply {
+                putString(INTENT_KEY_TITLE, title)
+                putInt(INTENT_KEY_COLOR, color)
+            }
+            return fragment
+        }
 
         @JvmStatic
         fun newInstance(title: String): CommonEmptyFragment {
