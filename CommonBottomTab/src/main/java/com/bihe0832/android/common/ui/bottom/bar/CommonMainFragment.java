@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.ui.bottom.bar;
 
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.framework.ui.BaseFragment;
@@ -86,7 +87,7 @@ public abstract class CommonMainFragment extends BaseFragment {
     }
 
     protected void changeTab(final int position) {
-        if (position < mBottomBar.getChildCount()) {
+        if (position < ((ViewGroup) mBottomBar.getChildAt(0)).getChildCount()) {
             mBottomBar.setCurrentItem(position);
         }
     }
