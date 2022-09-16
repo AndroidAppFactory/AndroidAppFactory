@@ -50,6 +50,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
                getBottomBar().getItem(2).setUnreadCount(22)
                getBottomBar().getItem(3).setUnreadCount(200)
            }
+            changeTab(2)
         }, 10)
 
     }
