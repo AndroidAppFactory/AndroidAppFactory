@@ -28,6 +28,6 @@ object LogImplForLogcat : LogImpl {
     }
 
     override fun info(tag: String?, msg: String?) {
-        Log.w(tag, msg?: "")
+        Log.i(tag, msg?: "")
     }
 }
