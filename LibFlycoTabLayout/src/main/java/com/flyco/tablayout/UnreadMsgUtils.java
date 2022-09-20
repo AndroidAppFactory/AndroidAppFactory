@@ -1,11 +1,10 @@
-package com.flyco.tablayout.utils;
+package com.flyco.tablayout;
 
 
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RelativeLayout;
-
-import com.flyco.tablayout.widget.MsgView;
+import android.widget.TextView;
 
 /**
  * 未读消息提示View,显示小红点或者带有数字的红点:
@@ -13,8 +12,8 @@ import com.flyco.tablayout.widget.MsgView;
  * 数字两位,圆角矩形,圆角是高度的一半
  * 数字超过两位,显示99+
  */
-public class UnreadMsgUtils {
-    public static void show(MsgView msgView, int num) {
+class UnreadMsgUtils {
+    public static void show(TextView msgView, int num) {
         if (msgView == null) {
             return;
         }
@@ -22,9 +21,7 @@ public class UnreadMsgUtils {
         DisplayMetrics dm = msgView.getResources().getDisplayMetrics();
         msgView.setVisibility(View.VISIBLE);
         if (num <= 0) {//圆点,设置默认宽高
-            msgView.setStrokeWidth(0);
             msgView.setText("");
-
             lp.width = (int) (5 * dm.density);
             lp.height = (int) (5 * dm.density);
             msgView.setLayoutParams(lp);
@@ -46,7 +43,7 @@ public class UnreadMsgUtils {
         }
     }
 
-    public static void show(MsgView msgView, String text) {
+    public static void show(TextView msgView, String text) {
         if (msgView == null) {
             return;
         }
@@ -58,15 +55,5 @@ public class UnreadMsgUtils {
         msgView.setPadding((int) (6 * dm.density), 0, (int) (6 * dm.density), 0);
         msgView.setText(text);
         msgView.setLayoutParams(lp);
-    }
-
-    public static void setSize(MsgView rtv, int size) {
-        if (rtv == null) {
-            return;
-        }
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rtv.getLayoutParams();
-        lp.width = size;
-        lp.height = size;
-        rtv.setLayoutParams(lp);
     }
 }

@@ -12,6 +12,9 @@ import androidx.core.content.ContextCompat;
 
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
+import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
+import com.bihe0832.android.lib.ui.textview.ext.TextViewExtKt;
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * height:56
@@ -19,8 +22,7 @@ import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
 public class SimpleBottomBarTab extends FrameLayout implements BaseBottomBarTab {
     protected ImageView mIconView;
     protected TextView mTitleView;
-    protected TextView mTipsView;
-    protected View mDotView;
+    protected TextViewWithBackground mTipsView;
 
     private int mTabPosition = -1;
 
@@ -40,7 +42,6 @@ public class SimpleBottomBarTab extends FrameLayout implements BaseBottomBarTab 
         mTitleView = findViewById(R.id.tab_title);
         mTitleView.setText(title);
         mTipsView = findViewById(R.id.tab_tips);
-        mDotView = findViewById(R.id.tab_tips_dot);
     }
 
     @Override
@@ -75,11 +76,7 @@ public class SimpleBottomBarTab extends FrameLayout implements BaseBottomBarTab 
     /**
      * 设置未读数量
      */
-    public void setUnreadCount(int num) {
-        BottomBarTabExtKt.setUnreadCount(mTipsView, num);
-    }
-
-    public void setUnreadDot(boolean visible) {
-        BottomBarTabExtKt.setUnreadDot(mDotView, visible);
+    public void showUnreadMsg(int num) {
+        TextViewExtKt.showUnreadMsg(mTipsView, num, DisplayUtil.dip2px(getContext(), 6));
     }
 }

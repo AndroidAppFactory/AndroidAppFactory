@@ -6,22 +6,26 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bihe0832.android.common.about.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.image.GlideExtKt;
+import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
+import com.bihe0832.android.lib.ui.textview.ext.TextViewExtKt;
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2019-11-21.
- *         Description: Description
+ * Created on 2019-11-21.
+ * Description: Description
  */
 public class SettingsHolder extends CardBaseHolder {
 
     public TextView mHeader;
     public ImageView mHeaderIcon;
-    public ImageView mHeaderIsNew;
+    public TextViewWithBackground mHeaderIsNew;
     public TextView mHeaderTips;
     public ImageView mHeadergo;
     public View settings_drivider;
@@ -77,7 +81,7 @@ public class SettingsHolder extends CardBaseHolder {
         }
 
         if (data.mItemIsNew) {
-            mHeaderIsNew.setVisibility(View.VISIBLE);
+            TextViewExtKt.showUnreadMsg(mHeaderIsNew, 0, DisplayUtil.dip2px(getContext(), 8));
         } else {
             mHeaderIsNew.setVisibility(View.GONE);
         }

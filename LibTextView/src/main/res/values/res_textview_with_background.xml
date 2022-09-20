@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextViewWithBackground">
+        <!-- 圆角矩形背景色 -->
+        <attr name="bgtv_backgroundColor" format="color" />
+        <!-- 圆角弧度,单位dp-->
+        <attr name="bgtv_cornerRadius" format="dimension" />
+        <!-- 圆角边框厚度,单位dp-->
+        <attr name="bgtv_strokeWidth" format="dimension" />
+        <!-- 圆角边框颜色-->
+        <attr name="bgtv_strokeColor" format="color" />
+        <!-- 圆角弧度是高度一半-->
+        <attr name="bgtv_isRadiusHalfHeight" format="boolean" />
+        <!-- 圆角矩形宽高相等,取较宽高中大值-->
+        <attr name="bgtv_isWidthHeightEqual" format="boolean" />
+    </declare-styleable>
+</resources>

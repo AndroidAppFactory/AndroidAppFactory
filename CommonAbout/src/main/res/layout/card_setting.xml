@@ -58,12 +58,14 @@
             app:layout_constraintTop_toTopOf="@+id/settings_title"
             tools:text="前往" />
 
-        <ImageView
+        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
             android:id="@+id/settings_is_new"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:src="@drawable/common_background_red_dot"
-            android:visibility="visible"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            app:bgtv_backgroundColor="#FD481F"
+            app:bgtv_isRadiusHalfHeight="true"
+            app:bgtv_strokeColor="#FD481F"
+            app:bgtv_strokeWidth="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/settings_go"
             app:layout_constraintTop_toTopOf="parent" />
