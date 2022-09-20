@@ -26,12 +26,16 @@ class DebugBasicFragment : BaseFragment() {
     override fun initView(view: View) {
         super.initView(view)
 
+        checkbox1.setOnClickListener {
+            checkbox1.toggle()
+        }
+
+        checkbox2.setOnClickListener {
+            checkbox2.toggle()
+        }
 
         test_basic_button.setOnClickListener {
-//
-
             showMenu()
-
 //            test_basic_content.loadFitCenterImage("http://cdn.bihe0832.com/images/cv.png")
         }
 

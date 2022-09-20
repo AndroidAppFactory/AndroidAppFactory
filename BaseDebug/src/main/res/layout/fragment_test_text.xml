@@ -16,12 +16,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <com.bihe0832.android.lib.ui.dialog.view.ProgressIndicatorView
-            android:id="@+id/dots_loading_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_gravity="center" />
-
 
         <Button
             android:id="@+id/test_basic_button"
@@ -35,18 +29,25 @@
             android:id="@+id/info_content_0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="12dp"
-            android:layout_marginRight="16dp"
             android:background="@color/gray_light"
+
             android:gravity="center"
-            android:maxLines="1"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
             android:textColor="#FF3C3C3C"
             android:textSize="14dp"
-            android:textStyle="bold"
             tools:text="方式对双方都是十分的所得税辅导辅导辅导师傅的温热热控开关咖啡机" />
+
+        <TextView
+            android:id="@+id/info_content_00"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@color/gray_light"
+            android:gravity="center"
+            android:textColor="#FF3C3C3C"
+            android:textSize="14dp"
+            tools:text="方式对双方都是十分的所得税辅导辅导辅导师傅的温热热控开关咖啡机" />
+
 
         <com.bihe0832.android.lib.ui.textview.expandable.CommentTextView
             android:id="@+id/info_content_1"
@@ -100,24 +101,6 @@
             android:text="AAF：&lt;a href='https://android.bihe0832.com/doc/summary/links.html'&gt;https://android.bihe0832.com/doc/summary/links.html&lt;/a&gt;" />
 
 
-        <com.bihe0832.android.lib.ui.image.CheckedEnableImageView
-            android:id="@+id/checkbox2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:scaleType="centerCrop"
-            android:src="@drawable/test_selector"
-            android:visibility="visible" />
-
-        <com.bihe0832.android.lib.ui.image.CheckedEnableImageView
-            android:id="@+id/checkbox1"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/test_selector"
-            android:visibility="visible" />
-
     </LinearLayout>
 
-    <!--    </ScrollView>-->
 </FrameLayout>

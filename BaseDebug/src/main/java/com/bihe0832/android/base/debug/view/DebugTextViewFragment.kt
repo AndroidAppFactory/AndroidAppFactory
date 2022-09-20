@@ -2,18 +2,16 @@ package com.bihe0832.android.base.debug.view
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.util.SparseIntArray
-import android.view.Surface
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.ui.image.BitmapUtil
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
@@ -21,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_test_text.*
 
 
 class DebugTextViewFragment : BaseFragment() {
+    private var index = 0
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_test_text
@@ -39,25 +38,62 @@ class DebugTextViewFragment : BaseFragment() {
     )
 
     override fun initView(view: View) {
-        info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
-        testSpecialText(testList[5])
+//        testSpecialText(testList[5])
+//        info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
+
+        testFun()
 
         test_basic_button.setOnClickListener {
-//            info_content_1.text = testList[index + 0]
-//            info_content_1.setExpandText(":fsdfsdfsd")
-//            info_content_2.text = testList[index + 1]
-//            info_content_3.text = testList[index + 2]
-//            index += 3
-//            if (index > 7) {
-//                index = 0
-//            }
+
+            testFun()
+            info_content_1.text = testList[index + 0]
+            info_content_1.setExpandText(":fsdfsdfsd")
+            info_content_2.text = testList[index + 1]
+            info_content_3.text = testList[index + 2]
+            index += 3
+            if (index > 7) {
+                index = 0
+            }
         }
 
-        checkbox1.setOnClickListener {
-            checkbox1.toggle()
-        }
+
     }
 
+
+    fun testFun(){
+        SpannableStringBuilder("a").apply {
+            append("aaaaaaa")
+            setSpan(
+                    ZixieTextImageSpan(
+                            context!!,
+                            BitmapUtil.getLocalBitmap(context!!,
+                                    R.mipmap.icon_author, 1)
+                    ),
+                    2,
+                    3,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            append("aaaaaaa")
+        }.let {
+            info_content_0.setText(it)
+        }
+
+        SpannableStringBuilder("测试").apply {
+            append("测试测试测试测试测试")
+            setSpan(
+                    ZixieTextImageSpan(
+                            context!!,
+                            BitmapUtil.getLocalBitmap(context!!, R.mipmap.icon_author, 1)
+                    ),
+                    2,
+                    3,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            append("这是一个测试")
+        }.let {
+            info_content_00.setText(it)
+        }
+    }
 
     fun testSpecialText(content: String) {
         val spanString = SpannableString(content)
@@ -110,7 +146,7 @@ class DebugTextViewFragment : BaseFragment() {
             setSpan(
                     ZixieTextImageSpan(
                             context!!,
-                            com.bihe0832.android.lib.ui.image.BitmapUtil.getLocalBitmap(context!!,
+                            BitmapUtil.getLocalBitmap(context!!,
                                     R.mipmap.icon_author, 1)
                     ),
                     0,
