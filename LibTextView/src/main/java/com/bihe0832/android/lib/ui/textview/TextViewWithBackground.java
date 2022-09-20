@@ -1,19 +1,17 @@
-package com.flyco.tablayout.widget;
+package com.bihe0832.android.lib.ui.textview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-import com.bihe0832.android.lib.utils.os.BuildUtils;
-import com.flyco.tablayout.R;
 
-/** 用于需要圆角矩形框背景的TextView的情况,减少直接使用TextView时引入的shape资源文件 */
-public class MsgView extends TextView {
+/**
+ * 用于需要圆角矩形框背景的TextView的情况,减少直接使用TextView时引入的shape资源文件
+ */
+public class TextViewWithBackground extends androidx.appcompat.widget.AppCompatTextView {
     private Context context;
     private GradientDrawable gd_background = new GradientDrawable();
     private int backgroundColor;
@@ -23,29 +21,28 @@ public class MsgView extends TextView {
     private boolean isRadiusHalfHeight;
     private boolean isWidthHeightEqual;
 
-    public MsgView(Context context) {
+    public TextViewWithBackground(Context context) {
         this(context, null);
     }
 
-    public MsgView(Context context, AttributeSet attrs) {
+    public TextViewWithBackground(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MsgView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TextViewWithBackground(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         obtainAttributes(context, attrs);
     }
 
     private void obtainAttributes(Context context, AttributeSet attrs) {
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.MsgView);
-        backgroundColor = ta.getColor(R.styleable.MsgView_mv_backgroundColor, Color.TRANSPARENT);
-        cornerRadius = ta.getDimensionPixelSize(R.styleable.MsgView_mv_cornerRadius, 0);
-        strokeWidth = ta.getDimensionPixelSize(R.styleable.MsgView_mv_strokeWidth, 0);
-        strokeColor = ta.getColor(R.styleable.MsgView_mv_strokeColor, Color.TRANSPARENT);
-        isRadiusHalfHeight = ta.getBoolean(R.styleable.MsgView_mv_isRadiusHalfHeight, false);
-        isWidthHeightEqual = ta.getBoolean(R.styleable.MsgView_mv_isWidthHeightEqual, false);
-
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TextViewWithBackground);
+        backgroundColor = ta.getColor(R.styleable.TextViewWithBackground_bgtv_backgroundColor, Color.TRANSPARENT);
+        cornerRadius = ta.getDimensionPixelSize(R.styleable.TextViewWithBackground_bgtv_cornerRadius, 0);
+        strokeWidth = ta.getDimensionPixelSize(R.styleable.TextViewWithBackground_bgtv_strokeWidth, 0);
+        strokeColor = ta.getColor(R.styleable.TextViewWithBackground_bgtv_strokeColor, Color.TRANSPARENT);
+        isRadiusHalfHeight = ta.getBoolean(R.styleable.TextViewWithBackground_bgtv_isRadiusHalfHeight, false);
+        isWidthHeightEqual = ta.getBoolean(R.styleable.TextViewWithBackground_bgtv_isWidthHeightEqual, false);
         ta.recycle();
     }
 
@@ -147,12 +144,6 @@ public class MsgView extends TextView {
 
         setDrawable(gd_background, backgroundColor, strokeColor);
         bg.addState(new int[]{-android.R.attr.state_pressed}, gd_background);
-
-        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN) {//16
-            setBackground(bg);
-        } else {
-            //noinspection deprecation
-            setBackgroundDrawable(bg);
-        }
+        setBackground(bg);
     }
 }

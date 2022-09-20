@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibBottomTab,LibTextView,LibFlycoTabLayout"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.3.3"
+ext.moduleVersionName = "5.3.5"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -220,12 +220,12 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "5.3.0",
+                "version"            : "5.3.3",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": ["LibUtils", "LibUIUtils", "LibDebug"]
         ],
         "LibUIUtils"                : [
-                "version"            : "5.3.0",
+                "version"            : "5.3.3",
                 "artifactId"         : "lib-uiutils",
                 "apidependenciesList": [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
@@ -440,11 +440,11 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibFragmentation"]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "5.2.12",
+                "version"            : "5.3.3",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         "${project.androidsupport.androidxcore}",
-                        "LibCommonUIUtils", "LibOS", "LibRequest", "LibImage"
+                        "LibCommonUIUtils", "LibOS", "LibRequest", "LibImage", "LibTextView"
                 ]
         ],
         "LibQRCode"                 : [
@@ -501,7 +501,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibBottomTab"              : [
-                "version"            : "5.3.0",
+                "version"            : "5.3.3",
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS",
@@ -596,7 +596,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibTextView"               : [
-                "version"            : "5.1.7",
+                "version"            : "5.3.3",
                 "artifactId"         : "lib-textview",
                 "apidependenciesList": [
                         "${project.androidsupport.appcompat}",

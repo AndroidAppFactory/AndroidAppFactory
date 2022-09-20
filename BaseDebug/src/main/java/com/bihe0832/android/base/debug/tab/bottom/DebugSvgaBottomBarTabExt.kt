@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.ui.bottom.bar
+package com.bihe0832.android.base.debug.tab.bottom;
 
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
@@ -12,28 +12,6 @@ import android.widget.TextView
  * Description: Description
  *
  */
-
-fun setUnreadCount(mTipsView: TextView, num: Int) {
-    if (num < 1) {
-        mTipsView.setText(0.toString())
-        mTipsView.setVisibility(View.GONE)
-    } else {
-        mTipsView.setVisibility(View.VISIBLE)
-        if (num > 99) {
-            mTipsView.setText("99+")
-        } else {
-            mTipsView.setText(num.toString())
-        }
-    }
-}
-
-fun setUnreadDot(mTipsView: View, visible: Boolean) {
-    if (visible) {
-        mTipsView.setVisibility(View.VISIBLE)
-    } else {
-        mTipsView.setVisibility(View.GONE)
-    }
-}
 
 
 fun resetReadDotRightMargin(mTipsView: TextView, totalWidth: Int, iconWidth: Int, textWidth: Int) {

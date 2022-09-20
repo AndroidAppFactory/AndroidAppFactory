@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.bihe0832.android.base.debug.R;
-import com.bihe0832.android.common.ui.bottom.bar.BottomBarTabExtKt;
 import com.bihe0832.android.common.ui.bottom.bar.SvgaBottomBarTab;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
@@ -63,13 +62,13 @@ class DebugSvgaBottomBarTab extends SvgaBottomBarTab {
             Paint paint = new Paint();
             paint.setTextSize(DisplayUtil.dip2px(getContext(), 9));
             float length = paint.measureText(mTipsView.getText().toString());
-            BottomBarTabExtKt.resetReadDotRightMargin(mTipsView, totalWidth, iconWidth, (int)length);
+            DebugSvgaBottomBarTabExtKt.resetReadDotRightMargin(mTipsView, totalWidth, iconWidth, (int) length);
         }
     }
 
     @Override
-    public void setUnreadCount(int num) {
-        super.setUnreadCount(num);
+    public void showUnreadMsg(int num) {
+        super.showUnreadMsg(num);
         updateReadDot();
     }
 }

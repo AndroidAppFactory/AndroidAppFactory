@@ -10,10 +10,9 @@ import androidx.viewpager.widget.ViewPager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment
+import com.bihe0832.android.lib.ui.textview.TextViewWithBackground
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
-import com.flyco.tablayout.utils.UnreadMsgUtils
-import com.flyco.tablayout.widget.MsgView
 import kotlinx.android.synthetic.main.activity_common_tab.*
 import java.util.*
 
@@ -95,7 +94,7 @@ class DebugCommonTabActivity : BaseActivity() {
         mTabLayout_4.showDot(1)
 
         //两位数
-        mTabLayout_2.showMsg(0, 55)
+        mTabLayout_2.showMsg(0, "测试")
         mTabLayout_2.setMsgMargin(0, -5f, 5f)
 
         //三位数
@@ -104,15 +103,16 @@ class DebugCommonTabActivity : BaseActivity() {
 
         //设置未读消息红点
         mTabLayout_2.showDot(2)
-        val rtv_2_2: MsgView = mTabLayout_2.getMsgView(2)
+        val rtv_2_2: TextViewWithBackground = mTabLayout_2.getMsgView(2)
         if (rtv_2_2 != null) {
-            UnreadMsgUtils.setSize(rtv_2_2, dp2px(7.5f))
+            rtv_2_2.width = dp2px(7.5f)
+            rtv_2_2.height = dp2px(7.5f)
         }
 
         //设置未读消息背景
         mTabLayout_2.showMsg(3, 5)
         mTabLayout_2.setMsgMargin(3, 0f, 5f)
-        val rtv_2_3: MsgView = mTabLayout_2.getMsgView(3)
+        val rtv_2_3: TextViewWithBackground = mTabLayout_2.getMsgView(3)
         if (rtv_2_3 != null) {
             rtv_2_3.setBackgroundColor(Color.parseColor("#6D8FB0"))
         }

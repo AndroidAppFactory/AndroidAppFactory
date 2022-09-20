@@ -12,6 +12,9 @@ import androidx.core.content.ContextCompat;
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.common.svga.SVGAHelperKt;
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
+import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
+import com.bihe0832.android.lib.ui.textview.ext.TextViewExtKt;
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 import com.opensource.svgaplayer.SVGACallback;
 import com.opensource.svgaplayer.SVGAImageView;
 
@@ -21,8 +24,7 @@ import com.opensource.svgaplayer.SVGAImageView;
 public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
     protected SVGAImageView mIconView;
     protected TextView mTitleView;
-    protected TextView mTipsView;
-    protected View mDotView;
+    protected TextViewWithBackground mTipsView;
 
     private int mTabPosition = -1;
 
@@ -52,7 +54,6 @@ public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
         mIconView = findViewById(R.id.tab_icon);
         mTitleView = findViewById(R.id.tab_title);
         mTipsView = findViewById(R.id.tab_tips);
-        mDotView = findViewById(R.id.tab_tips_dot);
 
         mTitleView.setText(title);
         mIconView.setCallback(new SVGACallback() {
@@ -110,11 +111,7 @@ public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
         return this;
     }
 
-    public void setUnreadCount(int num) {
-        BottomBarTabExtKt.setUnreadCount(mTipsView, num);
-    }
-
-    public void setUnreadDot(boolean visible) {
-        BottomBarTabExtKt.setUnreadDot(mDotView, visible);
+    public void showUnreadMsg(int num) {
+        TextViewExtKt.showUnreadMsg(mTipsView,num, DisplayUtil.dip2px(getContext(), 6));
     }
 }

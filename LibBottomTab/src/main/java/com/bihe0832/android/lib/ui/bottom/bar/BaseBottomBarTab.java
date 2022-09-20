@@ -8,9 +8,7 @@ public interface BaseBottomBarTab {
 
     void setTabPosition(int position);
 
-    void setUnreadCount(int num);
-
-    void setUnreadDot(boolean visible);
+    void showUnreadMsg(int num);
 
     int getTabPosition();
 

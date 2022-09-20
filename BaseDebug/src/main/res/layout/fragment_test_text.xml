@@ -25,13 +25,28 @@
             android:text="切换数据"
             android:textSize="16dp" />
 
+        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+            android:id="@+id/rtv_msg_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text=""
+            android:textColor="#ffffff"
+            android:textSize="11.5sp"
+            app:bgtv_backgroundColor="#FD481F"
+            app:bgtv_isRadiusHalfHeight="true"
+            app:bgtv_strokeColor="#0000ff"
+            app:bgtv_strokeWidth="0dp" />
+
+
         <TextView
             android:id="@+id/info_content_0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:background="@color/gray_light"
-
             android:gravity="center"
             android:textColor="#FF3C3C3C"
             android:textSize="14dp"

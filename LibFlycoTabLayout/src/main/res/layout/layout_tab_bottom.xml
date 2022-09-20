@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bgtv="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
@@ -18,18 +18,18 @@
             android:id="@+id/tv_tab_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"/>
+            android:singleLine="true"
+             />
 
         <ImageView
             android:id="@+id/iv_tab_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
-    <com.flyco.tablayout.widget.MsgView
+    <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
         android:id="@+id/rtv_msg_tip"
-        xmlns:mv="http://schemas.android.com/apk/res-auto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/ll_tap"
@@ -37,9 +37,10 @@
         android:textColor="#ffffff"
         android:textSize="11.5sp"
         android:visibility="gone"
-        mv:mv_backgroundColor="#FD481F"
-        mv:mv_isRadiusHalfHeight="true"
-        mv:mv_strokeColor="#ffffff"
-        mv:mv_strokeWidth="1dp"/>
+        bgtv:bgtv_backgroundColor="#FD481F"
+        bgtv:bgtv_isRadiusHalfHeight="true"
+        bgtv:bgtv_strokeColor="#ffffff"
+        bgtv:bgtv_strokeWidth="1dp" />
+
 
 </RelativeLayout>
