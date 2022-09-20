@@ -50,6 +50,7 @@ class SvgaBottomTabFragment : CommonMainFragment() {
                 getBottomBar().getItem(1).showUnreadMsg(2)
                 getBottomBar().getItem(2).showUnreadMsg(22)
                 getBottomBar().getItem(3).showUnreadMsg(200)
+                getBottomBar().getItem(4).showUnreadMsg(-1)
             }
             changeTab(2)
         }, 3)
