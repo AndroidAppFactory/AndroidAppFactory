@@ -148,10 +148,11 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
         }
     }
 
-    protected void initView(Context context){
+    protected void initView(Context context) {
         mTabsContainer = new LinearLayout(context);
         addView(mTabsContainer);
     }
+
     private void obtainAttributes(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SlidingTabLayout);
 
@@ -381,7 +382,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
      * HorizontalScrollView滚到当前tab,并且居中显示
      */
     private void scrollToCurrentTab() {
-        if (mTabCount <= 0) {
+        if (mTabCount <= 0 || mCurrentTab > mTabCount) {
             return;
         }
 
@@ -418,7 +419,7 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
                 }
             }
         }
-        if(null != mListener){
+        if (null != mListener) {
             mListener.onTabSelect(position);
         }
     }
