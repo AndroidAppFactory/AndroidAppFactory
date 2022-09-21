@@ -1,0 +1,11 @@
+<resources>
+    <!-- some dimen from material design guideline -->
+
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- 通用 -->
+    <dimen name="com_bihe0832_tab_red_dot_size">6dp</dimen>
+    <dimen name="com_bihe0832_tab_red_msg_height">18dp</dimen>
+    <dimen name="com_bihe0832_tab_red_msg_padding">6dp</dimen>
+
+</resources>
