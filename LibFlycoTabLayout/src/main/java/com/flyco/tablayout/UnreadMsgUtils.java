@@ -1,7 +1,6 @@
 package com.flyco.tablayout;
 
 
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,25 +17,29 @@ class UnreadMsgUtils {
             return;
         }
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) msgView.getLayoutParams();
-        DisplayMetrics dm = msgView.getResources().getDisplayMetrics();
         msgView.setVisibility(View.VISIBLE);
         if (num <= 0) {//圆点,设置默认宽高
             msgView.setText("");
-            lp.width = (int) (5 * dm.density);
-            lp.height = (int) (5 * dm.density);
+            int redDotSize = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_dot_size);
+            lp.width = redDotSize;
+            lp.height = redDotSize;
             msgView.setLayoutParams(lp);
         } else {
-            lp.height = (int) (18 * dm.density);
+            int height = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_height);
+            int padding = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_padding);
+
+
+            lp.height = height;
             if (num > 0 && num < 10) {//圆
-                lp.width = (int) (18 * dm.density);
+                lp.width = height;
                 msgView.setText(num + "");
             } else if (num > 9 && num < 100) {//圆角矩形,圆角是高度的一半,设置默认padding
                 lp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-                msgView.setPadding((int) (6 * dm.density), 0, (int) (6 * dm.density), 0);
+                msgView.setPadding(padding, 0, padding, 0);
                 msgView.setText(num + "");
             } else {//数字超过两位,显示99+
                 lp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-                msgView.setPadding((int) (6 * dm.density), 0, (int) (6 * dm.density), 0);
+                msgView.setPadding(padding, 0, padding, 0);
                 msgView.setText("99+");
             }
             msgView.setLayoutParams(lp);
@@ -48,11 +51,13 @@ class UnreadMsgUtils {
             return;
         }
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) msgView.getLayoutParams();
-        DisplayMetrics dm = msgView.getResources().getDisplayMetrics();
         msgView.setVisibility(View.VISIBLE);
-        lp.height = (int) (18 * dm.density);
+        int height = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_height);
+        int padding = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_padding);
+
+        lp.height = height;
         lp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-        msgView.setPadding((int) (6 * dm.density), 0, (int) (6 * dm.density), 0);
+        msgView.setPadding(padding, 0, padding, 0);
         msgView.setText(text);
         msgView.setLayoutParams(lp);
     }

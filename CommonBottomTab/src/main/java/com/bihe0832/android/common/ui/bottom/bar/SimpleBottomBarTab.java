@@ -77,6 +77,6 @@ public class SimpleBottomBarTab extends FrameLayout implements BaseBottomBarTab 
      * 设置未读数量
      */
     public void showUnreadMsg(int num) {
-        TextViewWithBackgroundExtKt.changeStatusWithUnreadMsg(mTipsView, num, DisplayUtil.dip2px(getContext(), 6));
+        TextViewWithBackgroundExtKt.changeStatusWithUnreadMsg(mTipsView, num, (int)getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_dot_size));
     }
 }
