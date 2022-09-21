@@ -4,8 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
 import android.text.TextUtils
+import androidx.core.app.ActivityCompat
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
@@ -153,7 +153,7 @@ object PermissionManager {
         fun onFailed(scene: String, msg: String)
     }
 
-    fun hasPermissionGroup(context: Context?, permissionGroupID: String): Boolean {
+    fun isAllPermissionOK(context: Context?, permissionGroupID: String): Boolean {
         return if (mPermissionGroup.containsKey(permissionGroupID)) {
             !PermissionsChecker(context).lacksPermissions(mPermissionGroup.get(permissionGroupID))
         } else {
@@ -161,9 +161,9 @@ object PermissionManager {
         }
     }
 
-    fun hasPermissionGroup(context: Context, permissionGroupIDList: List<String>): Boolean {
+    fun isAllPermissionOK(context: Context, permissionGroupIDList: List<String>): Boolean {
         for (permissionGroupID in permissionGroupIDList) {
-            if (!hasPermissionGroup(context, permissionGroupID)) {
+            if (!isAllPermissionOK(context, permissionGroupID)) {
                 return false
             }
         }
@@ -200,7 +200,7 @@ object PermissionManager {
             mPermissionCheckResultListener.onFailed(scene, "context is null")
         } else {
             mContext = context.applicationContext
-            if (hasPermissionGroup(context, permissionGroupIDList)) {
+            if (isAllPermissionOK(context, permissionGroupIDList)) {
                 mPermissionCheckResultListener.onSuccess(scene)
             } else {
                 try {
@@ -218,15 +218,15 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionGroup(scene: String, permissionGroupID: String): List<String> {
+    fun getPermissionsByGroupID(scene: String, permissionGroupID: String): List<String> {
         return if (mPermissionGroup.containsKey(getPermissionKey(scene, permissionGroupID))) {
-            return getPermissionGroup(getPermissionKey(scene, permissionGroupID), false);
+            return getPermissionsByGroupID(getPermissionKey(scene, permissionGroupID), false);
         } else {
-            getPermissionGroup(permissionGroupID, true)
+            getPermissionsByGroupID(permissionGroupID, true)
         }
     }
 
-    private fun getPermissionGroup(permissionGroupID: String, isPermission: Boolean): List<String> {
+    private fun getPermissionsByGroupID(permissionGroupID: String, isPermission: Boolean): List<String> {
         var permissionList = mutableListOf<String>()
         if (mPermissionGroup.containsKey(permissionGroupID)) {
             mPermissionGroup.get(permissionGroupID)?.let {
@@ -341,11 +341,11 @@ object PermissionManager {
         return desc
     }
 
-    fun getPermissionContent(context: Context, sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
-        return if (tempPermissionList.size > 1) {
-            getDefaultPermissionContent(context, getPermissionScene(sceneID, tempPermissionList, needSpecial), getPermissionDesc(sceneID, tempPermissionList, needSpecial))
-        } else if (tempPermissionList.size > 0) {
-            getPermissionContent(context, sceneID, tempPermissionList.get(0), needSpecial)
+    fun getPermissionContent(context: Context, sceneID: String, tempPermissionGroupList: List<String>, needSpecial: Boolean): String {
+        return if (tempPermissionGroupList.size > 1) {
+            getDefaultPermissionContent(context, getPermissionScene(sceneID, tempPermissionGroupList, needSpecial), getPermissionDesc(sceneID, tempPermissionGroupList, needSpecial))
+        } else if (tempPermissionGroupList.size > 0) {
+            getPermissionContent(context, sceneID, tempPermissionGroupList.get(0), needSpecial)
         } else {
             ""
         }
@@ -384,12 +384,12 @@ object PermissionManager {
         return context.resources.getString(R.string.com_bihe0832_permission_positive)
     }
 
-    fun getPermissionDenyTime(permission: String): Long {
-        return Config.readConfig(USER_DENY_KEY + permission, 0L)
+    fun getPermissionGroupDenyTime(permissionGroup: String): Long {
+        return Config.readConfig(USER_DENY_KEY + permissionGroup, 0L)
     }
 
-    fun setUserDenyTime(permission: String) {
-        Config.writeConfig(USER_DENY_KEY + permission, System.currentTimeMillis())
+    fun setUserDenyTime(permissionGroup: String) {
+        Config.writeConfig(USER_DENY_KEY + permissionGroup, System.currentTimeMillis())
     }
 
 

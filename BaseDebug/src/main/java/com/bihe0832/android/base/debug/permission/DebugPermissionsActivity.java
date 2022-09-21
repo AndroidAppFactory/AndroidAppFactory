@@ -22,13 +22,13 @@ public class DebugPermissionsActivity extends PermissionsActivityV2 {
 
 
     @Override
-    protected PermissionDialog getDialog(List<String> tempPermissionList) {
-        return super.getDialog(tempPermissionList);
+    protected PermissionDialog getDialog(List<String> tempPermissionGroupList) {
+        return super.getDialog(tempPermissionGroupList);
 //        return new DebugPermissionDialog(this);
     }
 
     @Override
-    protected void onPermissionDialogPositiveClick(List<String> tempPermissionList) {
+    protected void onPermissionDialogPositiveClick(List<String> tempPermissionGroupList) {
         onPermissionDialogPositiveClick(permission.SYSTEM_ALERT_WINDOW);
     }
 

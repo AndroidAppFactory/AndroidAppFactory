@@ -31,13 +31,13 @@ class DebugPermissionDialog : PermissionDialog {
         }
     }
 
-    override fun show(scene: String, showPermission: String, canCancel: Boolean, listener: OnDialogListener) {
+    override fun show(scene: String, showPermissionGroupID: String, canCancel: Boolean, listener: OnDialogListener) {
         setShouldCanceled(canCancel)
         setOnClickBottomListener(listener)
         show()
     }
 
-    override fun show(scene: String, tempPermissionList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
+    override fun show(scene: String, tempPermissionGroupList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
         setShouldCanceled(canCancel)
         setOnClickBottomListener(listener)
         show()
