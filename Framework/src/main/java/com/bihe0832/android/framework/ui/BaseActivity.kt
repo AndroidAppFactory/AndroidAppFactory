@@ -33,19 +33,19 @@ open class BaseActivity : SupportActivity() {
         super.onCreate(savedInstanceState)
         if (resetDensity()) {
             DisplayUtil.resetDensity(
-                this,
-                ConvertUtils.parseFloat(
-                    resources.getString(R.string.custom_density),
-                    Constants.CUSTOM_DENSITY
-                )
+                    this,
+                    ConvertUtils.parseFloat(
+                            resources.getString(R.string.custom_density),
+                            Constants.CUSTOM_DENSITY
+                    )
             )
         }
         if (getStatusBarColor() == Color.TRANSPARENT) {
             enableActivityImmersive(
-                ColorTools.getColorWithAlpha(
-                    0f,
-                    ContextCompat.getColor(this, R.color.primary)
-                ), getNavigationBarColor()
+                    ColorTools.getColorWithAlpha(
+                            0f,
+                            ContextCompat.getColor(this, R.color.primary)
+                    ), getNavigationBarColor()
             )
         } else {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
@@ -101,12 +101,6 @@ open class BaseActivity : SupportActivity() {
             mNavigationImageButton?.loadImage(iconRes)
         } else if (URLUtils.isHTTPUrl(iconURL)) {
             mNavigationImageButton?.loadImage(iconURL)
-        } else {
-            if (needBack) {
-                mNavigationImageButton?.loadImage(R.mipmap.ic_left_arrow_white)
-            } else {
-                mNavigationImageButton?.loadImage(R.mipmap.icon)
-            }
         }
         mToolbar?.setNavigationOnClickListener {
             if (needBack) {
@@ -124,11 +118,11 @@ open class BaseActivity : SupportActivity() {
     }
 
     protected fun initToolbar(
-        resID: Int,
-        titleString: String?,
-        needTitleCenter: Boolean,
-        needBack: Boolean,
-        iconRes: Int
+            resID: Int,
+            titleString: String?,
+            needTitleCenter: Boolean,
+            needBack: Boolean,
+            iconRes: Int
     ) {
         try {
             if (null == mToolbar) {
@@ -146,7 +140,7 @@ open class BaseActivity : SupportActivity() {
                         if (needTitleCenter) {
                             mTitleView!!.setGravity(Gravity.CENTER)
                             mTitleView!!.getLayoutParams().width =
-                                ViewGroup.LayoutParams.MATCH_PARENT
+                                    ViewGroup.LayoutParams.MATCH_PARENT
                         }
                         continue
                     }
@@ -155,10 +149,10 @@ open class BaseActivity : SupportActivity() {
                         mNavigationImageButton = view
                         DisplayUtil.dip2px(this, 4f).let { padding ->
                             mNavigationImageButton?.setPadding(
-                                padding * 2,
-                                padding,
-                                padding,
-                                padding
+                                    padding * 2,
+                                    padding,
+                                    padding,
+                                    padding
                             )
                         }
 
