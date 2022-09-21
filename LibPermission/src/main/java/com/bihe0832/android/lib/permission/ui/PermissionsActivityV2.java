@@ -54,17 +54,17 @@ public class PermissionsActivityV2 extends PermissionsActivity {
     }
 
     @Override
-    protected PermissionDialog getDialog(List<String> tempPermissionList) {
+    protected PermissionDialog getDialog(List<String> tempPermissionGroupList) {
         if (autoDeny) {
-            return super.getDialog(tempPermissionList);
+            return super.getDialog(tempPermissionGroupList);
         } else {
             return null;
         }
     }
 
     @Override
-    protected void showMissingPermissionDialog(List<String> tempPermissionList) {
+    protected void showMissingPermissionDialog(List<String> tempPermissionGroupList) {
         hideTips();
-        super.showMissingPermissionDialog(tempPermissionList);
+        super.showMissingPermissionDialog(tempPermissionGroupList);
     }
 }

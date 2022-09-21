@@ -4,7 +4,6 @@ import static com.bihe0832.android.lib.permission.PermissionManager.PERMISSION_R
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import androidx.core.app.ActivityCompat;
 
@@ -64,7 +63,7 @@ public class PermissionsActivity extends Activity {
         isRequireCheck = true;
     }
 
-    protected PermissionDialog getDialog(List<String> tempPermissionList) {
+    protected PermissionDialog getDialog(List<String> tempPermissionGroupList) {
         return new PermissionDialog(this);
     }
 
@@ -74,7 +73,7 @@ public class PermissionsActivity extends Activity {
         if (isRequireCheck) {
             ArrayList<String> needCheckList = new ArrayList<>();
             for (String permissionGroupID : needCheckPermissionGroup) {
-                List<String> permissions = PermissionManager.INSTANCE.getPermissionGroup(scene, permissionGroupID);
+                List<String> permissions = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, permissionGroupID);
                 for (String permission : permissions) {
                     if (permissionsChecker.lacksPermission(permission)) {
                         needCheckList.add(permission);
@@ -112,18 +111,24 @@ public class PermissionsActivity extends Activity {
             autoDeny = true;
         }
 
-        List<String> tempPermissionList = new ArrayList<>();
-        for (String permission : needCheckPermissionGroup) {
-            if (permissionsChecker.lacksPermission(permission)) {
-                tempPermissionList.add(permission);
-                if (!checkAllPermissionsResult()) {
+        List<String> tempPermissionGroupList = new ArrayList<>();
+
+        for (String permissionGroupID : needCheckPermissionGroup) {
+            List<String> permissionsOfGroup = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, permissionGroupID);
+            for (String permission : permissionsOfGroup) {
+                if (permissionsChecker.lacksPermission(permission)) {
+                    tempPermissionGroupList.add(permissionGroupID);
                     break;
                 }
             }
+            if (tempPermissionGroupList.size() > 0 && !checkAllPermissionsResult()) {
+                break;
+            }
         }
-        if (tempPermissionList.size() > 0) {
+
+        if (tempPermissionGroupList.size() > 0) {
             isRequireCheck = false;
-            showMissingPermissionDialog(tempPermissionList);
+            showMissingPermissionDialog(tempPermissionGroupList);
         } else {
             isRequireCheck = true;
             allPermissionsGranted(); // 全部权限都已获取
@@ -134,49 +139,48 @@ public class PermissionsActivity extends Activity {
         return false;
     }
 
-    protected void showMissingPermissionDialog(final List<String> tempPermissionList) {
+    /**
+     *
+     * @param tempPermissionGroupList 缺少权限的权限组ID
+     */
+    protected void showMissingPermissionDialog(final List<String> tempPermissionGroupList) {
 
-        for (String permission : tempPermissionList) {
-            PermissionManager.INSTANCE.setUserDenyTime(permission);
+        for (String permissionGroup : tempPermissionGroupList) {
+            PermissionManager.INSTANCE.setUserDenyTime(permissionGroup);
         }
-
-        final String firstPermission = tempPermissionList.get(0);
-
-        String firstPermissionGroupID = "";
-        for (String permissionGroupID : needCheckPermissionGroup) {
-            List<String> permissions = PermissionManager.INSTANCE.getPermissionGroup(scene, permissionGroupID);
-            if (permissions.contains(firstPermission)) {
-                firstPermissionGroupID = permissionGroupID;
+        String firstPermissionGroupID = tempPermissionGroupList.get(0);
+        String firstPermission = "";
+        List<String> permissionsOfGroup = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, firstPermissionGroupID);
+        for (String permission : permissionsOfGroup) {
+            if (permissionsChecker.lacksPermission(permission)) {
+                firstPermission = permission;
                 break;
             }
         }
 
-        if (TextUtils.isEmpty(firstPermissionGroupID)) {
-            firstPermissionGroupID = firstPermission;
-        }
-
         if (dialog == null) {
-            dialog = getDialog(tempPermissionList);
+            dialog = getDialog(tempPermissionGroupList);
         }
 
         if (null != dialog && !dialog.isShowing()) {
             final String finalFirstPermissionGroupID = firstPermissionGroupID;
-            dialog.show(scene, tempPermissionList, canCancle, new OnDialogListener() {
+            String finalFirstPermission = firstPermission;
+            dialog.show(scene, tempPermissionGroupList, canCancle, new OnDialogListener() {
                 @Override
                 public void onPositiveClick() {
-                    onPermissionDialogPositiveClick(tempPermissionList);
+                    onPermissionDialogPositiveClick(tempPermissionGroupList);
                 }
 
                 @Override
                 public void onNegativeClick() {
-                    notifyUserCancle(finalFirstPermissionGroupID, firstPermission);
+                    notifyUserCancle(finalFirstPermissionGroupID, finalFirstPermission);
                     dialog.dismiss();
                     finish();
                 }
 
                 @Override
                 public void onCancel() {
-                    notifyUserCancle(finalFirstPermissionGroupID, firstPermission);
+                    notifyUserCancle(finalFirstPermissionGroupID, finalFirstPermission);
                     dialog.dismiss();
                     finish();
                 }
@@ -195,7 +199,7 @@ public class PermissionsActivity extends Activity {
                 .onUserCancel(scene, firstPermissionGroupID, firstPermission);
     }
 
-    protected void onPermissionDialogPositiveClick(final List<String> tempPermissionList) {
+    protected void onPermissionDialogPositiveClick(final List<String> tempPermissionGroupList) {
         IntentUtils.startAppDetailSettings(PermissionsActivity.this);
     }
 

@@ -19,8 +19,9 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 class IconManager(activity: Activity) {
 
     private val REQUEST_ACTIVITY_FLOAT_PERMISSION = 1010
+    private val REQUEST_PERMISSION_SCENE = "IconManager"
 
-    private val TAG = "IconManager"
+    private val TAG = REQUEST_PERMISSION_SCENE
 
     private var mActivity: Activity? = null
     private var mPermissionReqShow: Boolean = false
@@ -78,7 +79,7 @@ class IconManager(activity: Activity) {
     }
 
     fun showIconWithPermissionCheck(result: PermissionManager.OnPermissionResult?) {
-        showIconWithPermissionCheck("IconManager", result)
+        showIconWithPermissionCheck(REQUEST_PERMISSION_SCENE, result)
     }
 
     fun showIconWithPermissionCheck(scene: String, result: PermissionManager.OnPermissionResult?) {
@@ -115,7 +116,7 @@ class IconManager(activity: Activity) {
 
     @Synchronized
     fun showIcon(): Boolean {
-        if (!PermissionManager.hasPermissionGroup(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+        if (!PermissionManager.isAllPermissionOK(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
             Log.d(TAG, "showIcon checkFloatPermission is bad")
             return false
         }
@@ -232,7 +233,7 @@ class IconManager(activity: Activity) {
 
     fun showView(view: View, flag: Int, x: Int?, y: Int?) {
         //添加Icon
-        if (!PermissionManager.hasPermissionGroup(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
+        if (!PermissionManager.isAllPermissionOK(mActivity!!, Manifest.permission.SYSTEM_ALERT_WINDOW)) {
             Log.d(TAG, "showView checkFloatPermission is bad")
             return
         }
