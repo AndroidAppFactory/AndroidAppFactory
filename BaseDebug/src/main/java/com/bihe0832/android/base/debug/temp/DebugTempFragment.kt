@@ -96,6 +96,10 @@ class DebugTempFragment : DebugEnvFragment() {
                 "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}"
         )
         ZLog.d("testAPPObserver", "getCurrentActivity ： ${ActivityObserver.getCurrentActivity()}")
+        ActivityObserver.getActivityList().forEach {
+            ZLog.d("testAPPObserver", "getCurrentActivity ： ${it.javaClass.name} - ${it.hashCode()} - ${it.taskId}")
+        }
+
     }
 
     private fun testTask() {

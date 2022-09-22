@@ -57,31 +57,31 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        ZLog.d(TAG, "onActivityCreated: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityCreated: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)}) - taskid:${activity.taskId}")
         mActivityList.add(activity)
         mSoftReferenceOfCurrentActivity = SoftReference(activity)
         mAAFActivityLifecycleChangedListener?.onActivityCreated(activity, savedInstanceState)
     }
 
     override fun onActivityResumed(activity: Activity) {
-        ZLog.d(TAG, "onActivityResumed: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityResumed: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)}) - taskid:${activity.taskId}")
         mSoftReferenceOfCurrentActivity = SoftReference(activity)
         mSoftReferenceOfResumedActivity = SoftReference(activity)
         mAAFActivityLifecycleChangedListener?.onActivityResumed(activity)
     }
 
     override fun onActivityPaused(activity: Activity) {
-        ZLog.d(TAG, "onActivityPaused: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityPaused: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)}) - taskid:${activity.taskId}")
         mAAFActivityLifecycleChangedListener?.onActivityPaused(activity)
     }
 
     override fun onActivityStarted(activity: Activity) {
-        ZLog.d(TAG, "onActivityStarted: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityStarted: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)}) - taskid:${activity.taskId}")
         mAAFActivityLifecycleChangedListener?.onActivityStarted(activity)
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        ZLog.d(TAG, "onActivityDestroyed: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityDestroyed: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)}) - taskid:${activity.taskId}")
         try {
             mActivityList.remove(activity)
             if (mActivityList.size == 0) {
@@ -96,13 +96,13 @@ object ActivityObserver : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        ZLog.d(TAG, "onActivitySaveInstanceState: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivitySaveInstanceState: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)}) - taskid:${activity.taskId}")
         mAAFActivityLifecycleChangedListener?.onActivitySaveInstanceState(activity, outState)
 
     }
 
     override fun onActivityStopped(activity: Activity) {
-        ZLog.d(TAG, "onActivityStopped: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)})")
+        ZLog.d(TAG, "onActivityStopped: ${activity.javaClass.simpleName}(${System.identityHashCode(activity)}) - taskid:${activity.taskId}")
         mAAFActivityLifecycleChangedListener?.onActivityStopped(activity)
     }
 }
