@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
@@ -170,6 +171,7 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         super.initView(view);
         mWebViewViewModel = new ViewModelProvider(getActivity()).get(WebViewViewModel.class);
         mWebView = createWebView();
+        mWebView.setBackgroundColor(Color.TRANSPARENT);
         mViewParent = (ViewGroup) view.findViewById(R.id.app_webview_x5webView);
         mRetry = (TextView) view.findViewById(R.id.web_retry);
         mRedirect = (TextView) view.findViewById(R.id.web_native_browser);
