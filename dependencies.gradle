@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibWebview"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -71,14 +71,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDebug"               : [
-                "version"            : "5.3.9",
+                "version"            : "5.3.10",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "5.3.9",
+                "version"            : "5.3.10",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -174,7 +174,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "5.3.9",
+                "version"                : "5.3.10",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "${project.androidsupport.swiperefreshlayout}",
@@ -187,7 +187,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "5.3.9",
+                "version"                : "5.3.10",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
