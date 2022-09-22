@@ -64,22 +64,22 @@ object RouterAction {
 
     fun open(schema: String, path: String) {
         Routers.open(
-            ZixieContext.applicationContext,
-            "${schema}://$path",
-            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                ZixieContext.applicationContext,
+                "${schema}://$path",
+                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         )
     }
 
     fun open(schema: String, path: String, para: Map<String, String>?) {
         Routers.open(
-            ZixieContext.applicationContext,
-            getFinalURL(schema, path, para),
-            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                ZixieContext.applicationContext,
+                getFinalURL(schema, path, para),
+                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         )
     }
 
     fun openFinalURL(path: String) {
-        openFinalURL(path, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        openFinalURL(path, Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
     fun openFinalURL(path: String, startFlag: Int) {
@@ -88,38 +88,38 @@ object RouterAction {
 
     fun openForResult(schema: String, activity: Activity, path: String, requestCode: Int) {
         Routers.openForResult(
-            activity,
-            getFinalURL(schema, path),
-            requestCode,
-            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                activity,
+                getFinalURL(schema, path),
+                requestCode,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         )
     }
 
     fun openForResult(
-        schema: String,
-        activity: Activity,
-        path: String,
-        para: Map<String, String>?,
-        requestCode: Int
+            schema: String,
+            activity: Activity,
+            path: String,
+            para: Map<String, String>?,
+            requestCode: Int
     ) {
         Routers.openForResult(
-            activity,
-            getFinalURL(schema, path, para),
-            requestCode,
-            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                activity,
+                getFinalURL(schema, path, para),
+                requestCode,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         )
     }
 
     fun openForResult(
-        activity: Activity,
-        url: String,
-        requestCode: Int
+            activity: Activity,
+            url: String,
+            requestCode: Int
     ) {
         Routers.openForResult(
-            activity,
-            url,
-            requestCode,
-            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                activity,
+                url,
+                requestCode,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         )
     }
 

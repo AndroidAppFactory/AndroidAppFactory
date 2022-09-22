@@ -65,10 +65,11 @@ open class DebugCommonFragment : DebugEnvFragment() {
         builder.append("设备ID: ${ZixieContext.deviceId}\n")
         builder.append("厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}\n")
         if (ManufacturerUtil.isHarmonyOs()) {
-            builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})\n")
+            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})\n")
         } else {
-            builder.append("系统版本: ${BuildUtils.RELEASE}, ${BuildUtils.SDK_INT}\n")
+            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}\n")
         }
+
         builder.append("系统指纹: ${ManufacturerUtil.FINGERPRINT}\n")
         showInfo("分享设备信息给开发者", builder.toString())
     }

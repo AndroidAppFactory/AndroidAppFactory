@@ -31,7 +31,7 @@ public class Routers {
     }
 
     public static boolean open(Context context, String url) {
-        return open(context, Uri.parse(url), Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return open(context, Uri.parse(url), Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
     public static boolean open(Context context, String url, int startFlag) {
@@ -126,8 +126,7 @@ public class Routers {
                     Intent intent = new Intent(context, activityClass);
                     intent.putExtras(parseExtras(uri));
                     intent.putExtra(ROUTERS_KEY_RAW_URL, uri.toString());
-                    if (!(context instanceof Activity)) {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (!(context instanceof Activity) && startFlag > 0) {
                         intent.addFlags(startFlag);
                     }
                     if (requestCode >= 0) {
@@ -148,8 +147,7 @@ public class Routers {
             try {
                 Intent intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
                 System.out.println("jumpToOtherApp url:" + uri.toString() + ",intent:" + intent.toString());
-                if (!(context instanceof Activity)) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (!(context instanceof Activity) && startFlag > 0) {
                     intent.addFlags(startFlag);
                 }
                 if (requestCode >= 0) {
