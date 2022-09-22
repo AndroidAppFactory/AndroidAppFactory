@@ -66,7 +66,7 @@ object RouterAction {
         Routers.open(
                 ZixieContext.applicationContext,
                 "${schema}://$path",
-                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                Intent.FLAG_ACTIVITY_SINGLE_TOP
         )
     }
 
@@ -74,12 +74,12 @@ object RouterAction {
         Routers.open(
                 ZixieContext.applicationContext,
                 getFinalURL(schema, path, para),
-                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                Intent.FLAG_ACTIVITY_SINGLE_TOP
         )
     }
 
     fun openFinalURL(path: String) {
-        openFinalURL(path, Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        openFinalURL(path, Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
     fun openFinalURL(path: String, startFlag: Int) {
@@ -91,7 +91,7 @@ object RouterAction {
                 activity,
                 getFinalURL(schema, path),
                 requestCode,
-                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                Intent.FLAG_ACTIVITY_SINGLE_TOP
         )
     }
 
@@ -106,7 +106,7 @@ object RouterAction {
                 activity,
                 getFinalURL(schema, path, para),
                 requestCode,
-                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                Intent.FLAG_ACTIVITY_SINGLE_TOP
         )
     }
 
@@ -119,7 +119,7 @@ object RouterAction {
                 activity,
                 url,
                 requestCode,
-                Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                Intent.FLAG_ACTIVITY_SINGLE_TOP
         )
     }
 
