@@ -130,13 +130,12 @@ fun Activity.takePhoto(outputUri: Uri?) {
 }
 
 fun Activity.choosePhoto() {
-
     val intent = Intent(Intent.ACTION_PICK)
     intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-    // 判断系统中是否有处理该 Intent 的 Activity
-    if (intent.resolveActivity(packageManager) != null) {
+    try {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
-    } else {
+    } catch (e: Exception) {
+        e.printStackTrace()
         ZixieContext.showDebug("未找到图片查看器")
     }
 }
