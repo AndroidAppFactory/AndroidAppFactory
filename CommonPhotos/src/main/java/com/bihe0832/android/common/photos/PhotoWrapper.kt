@@ -76,14 +76,14 @@ fun Activity.getPhotosUri(fileName: String): Uri? {
 /**
  * TargetFile 建议使用 [getPhotosFolder] 获取
  */
-fun Activity.cropPhoto(sourceFile: String, targetFile: Uri, aspectX: Int = 1, aspectY: Int = 1) {
+fun Activity.cropPhoto(sourceFile: String, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1) {
     var sourceFileProvider =
             ZixieFileProvider.getZixieFileProvider(this, File(sourceFile))
     cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
 }
 
 
-fun Activity.cropPhoto(sourceFile: Intent?, targetFile: Uri, aspectX: Int = 1, aspectY: Int = 1) {
+fun Activity.cropPhoto(sourceFile: Intent?, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1) {
     var file = ZixieFileProvider.uriToFile(this, intent?.data)
     cropPhoto(ZixieFileProvider.getZixieFileProvider(this, file), targetFile, aspectX, aspectY)
 }
