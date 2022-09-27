@@ -2,6 +2,7 @@ package com.bihe0832.android.common.feedback;
 
 
 import android.os.Bundle;
+
 import com.bihe0832.android.common.webview.CommonWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.request.URLUtils;
@@ -10,14 +11,14 @@ import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2019-07-26.
- *         Description: Description
+ * Created on 2019-07-26.
+ * Description: Description
  */
 public class FeedbackFragment extends CommonWebviewFragment {
 
     public static FeedbackFragment newInstance(String url) {
         FeedbackFragment fragment = new FeedbackFragment();
-        Bundle bundle = getWebviewDataBundle(url, fragment.getPostData());
+        Bundle bundle = fragment.getFeedbackDataBundle(url);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -33,7 +34,7 @@ public class FeedbackFragment extends CommonWebviewFragment {
         return url + "?d-wx-push=1" + postData;
     }
 
-    private String getPostData() {
+    protected String getPostData() {
         StringBuilder builder = new StringBuilder();
         builder.append("clientInfo=");
         if (!ZixieContext.INSTANCE.isOfficial()) {
@@ -41,7 +42,7 @@ public class FeedbackFragment extends CommonWebviewFragment {
         }
         builder.append(ManufacturerUtil.INSTANCE.getMANUFACTURER()).append("/")
                 .append(ManufacturerUtil.INSTANCE.getBRAND()).append("/").append(
-                ManufacturerUtil.INSTANCE.getMODEL());
+                        ManufacturerUtil.INSTANCE.getMODEL());
         builder.append("&clientVersion=");
         builder.append(ZixieContext.INSTANCE.getVersionName())
                 .append("/").append(ZixieContext.INSTANCE.getVersionCode())
@@ -62,4 +63,7 @@ public class FeedbackFragment extends CommonWebviewFragment {
     }
 
 
+    protected Bundle getFeedbackDataBundle(String url) {
+        return getWebviewDataBundle(url, getPostData());
+    }
 }
