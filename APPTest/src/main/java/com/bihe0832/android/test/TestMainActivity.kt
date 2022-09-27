@@ -18,7 +18,7 @@ open class TestMainActivity : DebugMainActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateIcon(false, -1)
+        updateIcon(false, null)
 //        UpdateManager.checkUpdateAndShowDialog(this, fa¬lse)
         DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
 

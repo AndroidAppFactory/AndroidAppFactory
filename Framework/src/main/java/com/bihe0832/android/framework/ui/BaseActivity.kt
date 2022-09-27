@@ -18,6 +18,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.common.ColorTools
+import com.bihe0832.android.lib.ui.image.clear
 import com.bihe0832.android.lib.ui.image.loadImage
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -88,7 +89,7 @@ open class BaseActivity : SupportActivity() {
         }
     }
 
-    protected fun updateIcon(needBack: Boolean, iconURL: String) {
+    protected fun updateIcon(needBack: Boolean, iconURL: String?) {
         updateIcon(needBack, iconURL, -1)
     }
 
@@ -96,11 +97,13 @@ open class BaseActivity : SupportActivity() {
         updateIcon(needBack, "", iconRes)
     }
 
-    protected fun updateIcon(needBack: Boolean, iconURL: String, iconRes: Int) {
+    protected fun updateIcon(needBack: Boolean, iconURL: String?, iconRes: Int) {
         if (iconRes > 0) {
             mNavigationImageButton?.loadImage(iconRes)
         } else if (URLUtils.isHTTPUrl(iconURL)) {
-            mNavigationImageButton?.loadImage(iconURL)
+            mNavigationImageButton?.loadImage(iconURL!!)
+        } else if (null == iconURL) {
+            mNavigationImageButton?.clear()
         }
         mToolbar?.setNavigationOnClickListener {
             if (needBack) {
