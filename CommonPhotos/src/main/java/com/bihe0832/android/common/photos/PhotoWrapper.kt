@@ -124,7 +124,6 @@ fun Activity.cropPhoto(
         putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString())
     }
     startActivityForResult(intent, ZixieActivityRequestCode.CROP_PHOTO)
-
 }
 
 fun Activity.takePhoto(outputUri: Uri?) {
