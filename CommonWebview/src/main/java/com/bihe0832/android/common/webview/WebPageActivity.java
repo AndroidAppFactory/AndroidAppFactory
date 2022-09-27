@@ -10,7 +10,7 @@ import com.bihe0832.android.lib.router.annotation.Module;
 public class WebPageActivity extends BaseWebviewActivity {
 
     protected BaseWebviewFragment getWebViewFragment() {
-        return CommonWebviewFragment.newInstance(mURL);
+        return CommonWebviewFragment.newInstance(getURL());
     }
 
     @Override

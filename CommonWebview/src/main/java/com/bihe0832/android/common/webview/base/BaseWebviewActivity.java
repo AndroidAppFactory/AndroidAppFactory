@@ -30,7 +30,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     //标题栏
     private static final String TAG = "WebPageActivity";
     private WebViewViewModel mWebViewViewModel;
-    protected String mURL = "";
+    private String mURL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +56,14 @@ public abstract class BaseWebviewActivity extends CommonActivity {
 
     protected void handleIntent(Intent intent) {
 
-        if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
-            mURL = intent.getData().toString();
-        } else if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
-            mURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
+
+        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL)) {
+            String redirectURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
+            IntentUtils.openWebPage(redirectURL, this);
+            finish();
         } else {
-            if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL)) {
-                String redirectURL = URLDecoder
-                        .decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
-                IntentUtils.openWebPage(redirectURL, this);
-                finish();
-            } else {
-                WebviewLoggerFile.INSTANCE.log("handle intent, but extra is bad");
-            }
+            mURL = parseURL(intent);
+            WebviewLoggerFile.INSTANCE.log("handle intent:" + mURL);
         }
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS)
                 && ConvertUtils.parseInt(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS),
@@ -78,6 +73,20 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         } else {
             initToolbar();
         }
+    }
+
+    protected String parseURL(Intent intent) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+            return intent.getData().toString();
+        } else if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
+            return URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
+        } else {
+            return "";
+        }
+    }
+
+    protected String getURL() {
+        return mURL;
     }
 
     protected void initToolbar() {
@@ -90,7 +99,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         });
         mWebViewViewModel.getTitleLiveData().observe(BaseWebviewActivity.this, new Observer<String>() {
             @Override
-            public void onChanged( final String s) {
+            public void onChanged(final String s) {
                 if (!s.equals("about:blank")) {
                     updateTitle(s);
                 }
@@ -102,8 +111,13 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (TextUtils.isEmpty(mURL)) {
-            WebviewLoggerFile.INSTANCE.log(TAG + " onResume, extra is good, but value is bad");
+            ZLog.e(
+                    TAG,
+                    "  \n !!!========================================  \n \n \n !!! Webview: onResume, extra is good, but value is bad \n \n \n !!!========================================"
+            );
+            WebviewLoggerFile.INSTANCE.log(TAG + "  \n !!!========================================  \n \n \n !!! Webview: onResume, extra is good, but value is bad \n \n \n !!!========================================");
             finish();
             return;
         } else {
