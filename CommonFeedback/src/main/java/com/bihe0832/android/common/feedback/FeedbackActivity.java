@@ -2,6 +2,7 @@ package com.bihe0832.android.common.feedback;
 
 import android.content.Intent;
 import android.text.TextUtils;
+
 import com.bihe0832.android.common.webview.base.BaseWebviewActivity;
 import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
@@ -15,7 +16,7 @@ public final class FeedbackActivity extends BaseWebviewActivity {
 
     @Override
     protected BaseWebviewFragment getWebViewFragment() {
-        return FeedbackFragment.newInstance(mURL);
+        return FeedbackFragment.newInstance(getURL());
     }
 
     @Override
@@ -31,7 +32,7 @@ public final class FeedbackActivity extends BaseWebviewActivity {
     @Override
     protected void handleIntent(Intent intent) {
         super.handleIntent(intent);
-        if (TextUtils.isEmpty(mURL)) {
+        if (TextUtils.isEmpty(getURL())) {
             ZixieContext.INSTANCE.showToast("请输入正确的反馈地址");
             finish();
             return;
