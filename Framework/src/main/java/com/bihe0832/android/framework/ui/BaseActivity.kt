@@ -107,7 +107,7 @@ open class BaseActivity : SupportActivity() {
         }
         mToolbar?.setNavigationOnClickListener {
             if (needBack) {
-                onBackPressed()
+                onBackPressedSupport()
             }
         }
     }
@@ -183,12 +183,15 @@ open class BaseActivity : SupportActivity() {
     }
 
     /**
-     * 页面返回时的特殊处理，例如检查是否是唯一页面，如果是需要跳转到main
+     * 页面返回时的特殊处理，例如检查是否是唯一页面，如果是需要跳转到main等，一般点标题栏返回键，建议调用此方法
      */
     override fun onBackPressedSupport() {
         onBackPressedSupportAction(exitAuto())
     }
 
+    /**
+     * onBackPressedSupport final以后，外部完成返回键的一些额外处理工作
+     */
     open fun onBack() {
         finish()
     }
