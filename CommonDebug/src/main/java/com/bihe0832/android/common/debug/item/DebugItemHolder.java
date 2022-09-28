@@ -45,7 +45,7 @@ public class DebugItemHolder extends CardBaseHolder {
             ((View) mHeader.getParent()).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
         }
 
-        if (data.showBottomLine) {
+        if (data.showBottomLine && null != mBottomLine) {
             mBottomLine.setVisibility(View.VISIBLE);
         } else {
             mBottomLine.setVisibility(View.GONE);

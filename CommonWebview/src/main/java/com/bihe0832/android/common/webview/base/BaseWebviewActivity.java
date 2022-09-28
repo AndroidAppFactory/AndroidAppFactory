@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
 import com.bihe0832.android.framework.router.RouterConstants;
-import com.bihe0832.android.framework.ui.BaseActivityWrapperKt;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
@@ -95,7 +94,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         getMToolbar().setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                BaseActivityWrapperKt.onBackPressedSupportAction(BaseWebviewActivity.this, true);
+                onBackPressedSupport();
             }
         });
         mWebViewViewModel.getTitleLiveData().observe(BaseWebviewActivity.this, new Observer<String>() {

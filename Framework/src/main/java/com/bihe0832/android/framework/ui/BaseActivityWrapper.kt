@@ -15,78 +15,78 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
  * @param autoShowExitDialog 是否自动弹出退出弹框，如果：
  *
  *      为 true ，会弹出是否退出应用弹框
- *      为 false, 会直接调用 onBack()
+ *      为 false, 会直接调用 onBackAction()
  */
 fun BaseActivity.onBackPressedSupportAction(autoShowExitDialog: Boolean) {
     var topActivity = this.javaClass.name
     if (isMain(topActivity)) {
-        if (autoShowExitDialog) {
-            ZixieContext.exitAPP(null)
-        } else {
-            onBack()
-        }
+        mainBackAction(autoShowExitDialog)
         return
     }
 
     var activityNum = 0
 
-    val am = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-    if (BuildUtils.SDK_INT >= Build.VERSION_CODES.M) {
-        val taskInfoList = am.appTasks
-        for (i in taskInfoList.indices) {
-            if (taskInfoList[i].taskInfo.baseIntent.component?.packageName.equals(packageName, ignoreCase = true)) {
-                if (TextUtils.isEmpty(topActivity)) {
-                    topActivity = taskInfoList[i].taskInfo?.topActivity?.className ?: ""
+    try {
+        val am = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.M) {
+            val taskInfoList = am.appTasks
+            for (i in taskInfoList.indices) {
+                if (taskInfoList[i].taskInfo.baseIntent.component?.packageName.equals(packageName, ignoreCase = true)) {
+                    if (TextUtils.isEmpty(topActivity)) {
+                        topActivity = taskInfoList[i].taskInfo?.topActivity?.className ?: ""
+                    }
+                    activityNum += taskInfoList[i].taskInfo?.numActivities ?: 0
+                } else if (i > 0) {
+                    break
                 }
-                activityNum += taskInfoList[i].taskInfo?.numActivities ?: 0
-            } else if (i > 0) {
-                break
             }
-        }
-    } else if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        val taskInfoList = am.runningAppProcesses
-        for (i in taskInfoList.indices) {
-            taskInfoList[i].importanceReasonComponent.packageName
-            if (taskInfoList[i].importanceReasonComponent.packageName.equals(packageName, ignoreCase = true)) {
-                activityNum += 1
-            } else if (i > 0) {
-                break
-            }
-        }
-    } else {
-        val taskInfoList = am.getRunningTasks(Int.MAX_VALUE)
-        for (i in taskInfoList.indices) {
-            if (taskInfoList[i].baseActivity?.packageName.equals(packageName, ignoreCase = true)) {
-                if (TextUtils.isEmpty(topActivity)) {
-                    topActivity = taskInfoList[i].topActivity?.className ?: ""
+        } else if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val taskInfoList = am.runningAppProcesses
+            for (i in taskInfoList.indices) {
+                if (taskInfoList[i]?.processName?.startsWith(packageName, ignoreCase = true) == true) {
+                    activityNum += 1
+                } else if (i > 0) {
+                    break
                 }
-                activityNum += taskInfoList[i].numActivities
-            } else if (i > 0) {
-                break
+            }
+        } else {
+            val taskInfoList = am.getRunningTasks(Int.MAX_VALUE)
+            for (i in taskInfoList.indices) {
+                if (taskInfoList[i].baseActivity?.packageName.equals(packageName, ignoreCase = true)) {
+                    if (TextUtils.isEmpty(topActivity)) {
+                        topActivity = taskInfoList[i].topActivity?.className ?: ""
+                    }
+                    activityNum += taskInfoList[i].numActivities
+                } else if (i > 0) {
+                    break
+                }
             }
         }
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 
     if (activityNum < 2) {
         if (isMain(topActivity)) {
-            if (autoShowExitDialog) {
-                ZixieContext.exitAPP(null)
-            } else {
-                onBack()
-            }
+            mainBackAction(autoShowExitDialog)
         } else {
-            finishAndGoMain()
+            goMain()
+            onBack()
         }
     } else {
         if (isMain(topActivity)) {
-            if (autoShowExitDialog) {
-                ZixieContext.exitAPP(null)
-            } else {
-                onBack()
-            }
+            mainBackAction(autoShowExitDialog)
         } else {
             onBack()
         }
+    }
+}
+
+private fun BaseActivity.mainBackAction(autoShowExitDialog: Boolean) {
+    if (autoShowExitDialog) {
+        ZixieContext.exitAPP(null)
+    } else {
+        onBack()
     }
 }
 
@@ -94,7 +94,7 @@ private fun isMain(activityName: String): Boolean {
     return Routers.getMainActivityList().find { it.name.equals(activityName, true) } != null
 }
 
-private fun BaseActivity.finishAndGoMain() {
+private fun BaseActivity.goMain() {
     var hasStart = false
     val mainActivityList = Routers.getMainActivityList()
     mainActivityList?.let {
@@ -108,7 +108,6 @@ private fun BaseActivity.finishAndGoMain() {
     if (!hasStart) {
         APKUtils.startApp(this, packageName)
     }
-    finish()
 }
 
 private fun startActivity(activity: BaseActivity, threadClazz: Class<out Activity?>): Boolean {
