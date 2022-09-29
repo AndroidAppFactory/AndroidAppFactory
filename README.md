@@ -11,7 +11,39 @@
 
 AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案。方案力求做到**技术方案可以轻松的从一个项目复用到另一个项目，或者可以快速在框架基础上开发出一个独立全新的应用**，开发过程中基本聚焦在新业务的逻辑，而不是基础功能。
 
-**框架目前已经有基础组件 57 个，公共组件 19个，墙裂建议框架的完整能力查看框架使用文档**：[https://android.bihe0832.com/doc/](https://android.bihe0832.com/doc/use/common/common-wrapper.html) ，此处仅列出部分支持能力 ：
+## 相关链接
+
+#### AAF 框架相关
+
+- **框架文档：[https://android.bihe0832.com/doc/](https://android.bihe0832.com/doc/)**
+
+    主要**介绍相关组件的功能以及整体框架使用相关的内容**
+
+- 方案概述：[https://blog.bihe0832.com/android-dev-summary.html](https://blog.bihe0832.com/android-dev-summary.html)
+
+	完整AAF的整个技术方案，以及其中一些核心的技术点
+	
+- 框架源码：[https://github.com/bihe0832/AndroidAppFactory](https://github.com/bihe0832/AndroidAppFactory)
+	
+    基础组件和公共组件等可直接复用组件的源码。
+	
+- 框架代码统计：[https://android.bihe0832.com/source/lib/index.html](https://android.bihe0832.com/source/lib/index.html)
+
+#### AAF Sample 相关
+
+- **AAF Sample：[https://android.bihe0832.com/samples/](https://android.bihe0832.com/samples/)**
+
+    **所有基于AAF开发的应用的集中展示。**
+
+- AAF Sample 源码：[https://github.com/bihe0832/AndroidAppFactory-Sample](https://github.com/bihe0832/AndroidAppFactory-Sample)
+
+	具体实践以开源源码
+
+- AAF Sample 代码统计：[https://android.bihe0832.com/source/sample/index.html](https://android.bihe0832.com/source/sample/index.html)
+
+## 框架能力
+
+**框架目前已经有基础组件 57+ 个，公共组件 19+ 个，墙裂建议框架的完整能力查看框架使用文档**：[https://android.bihe0832.com/doc/](https://android.bihe0832.com/doc/use/common/common-wrapper.html) ，此处仅列出部分支持能力 ：
 
 - **单Activity ＋ 多Fragment 模式的Fragment管理框架**、各种样式的  TabLayout、沉浸式状态栏和导航栏及设置背景和文字颜色、简易文件选择器、文本查看器。使用系统原生对Activity进一步封装扩展的的拍照、相册选择、裁剪图片等。通用闪屏UI，支持Icon，APPName 和 Slogan，判断用户安装情况弹出隐私框
 
@@ -45,33 +77,3 @@ AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案�
 
 - 丰富完备的调试功能，同时提供打开网页、弹出输入框、跳转Activity、基于 LibDebug 的调试信息文本分享等基础功能、通用调试方法，包括**查看应用版本及环境、使用情况，查看设备信息，第三方应用信息**，以及一些快速跳转的功能入口
 
-
-## 相关链接
-
-#### AAF 框架相关
-
-- **框架文档：[https://android.bihe0832.com/doc/](https://android.bihe0832.com/doc/)**
-
-    主要**介绍相关组件的功能以及整体框架使用相关的内容**
-
-- 方案概述：[https://blog.bihe0832.com/android-dev-summary.html](https://blog.bihe0832.com/android-dev-summary.html)
-
-	完整AAF的整个技术方案，以及其中一些核心的技术点
-	
-- 框架源码：[https://github.com/bihe0832/AndroidAppFactory](https://github.com/bihe0832/AndroidAppFactory)
-	
-    基础组件和公共组件等可直接复用组件的源码。
-	
-- 框架代码统计：[https://android.bihe0832.com/source/lib/index.html](https://android.bihe0832.com/source/lib/index.html)
-
-#### AAF Sample 相关
-
-- **AAF Sample：[https://android.bihe0832.com/samples/](https://android.bihe0832.com/samples/)**
-
-    **所有基于AAF开发的应用的集中展示。**
-
-- AAF Sample 源码：[https://github.com/bihe0832/AndroidAppFactory-Sample](https://github.com/bihe0832/AndroidAppFactory-Sample)
-
-	具体实践以开源源码
-
-- AAF Sample 代码统计：[https://android.bihe0832.com/source/sample/index.html](https://android.bihe0832.com/source/sample/index.html)
