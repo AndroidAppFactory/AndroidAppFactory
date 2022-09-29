@@ -11,7 +11,7 @@
 
 AAF 是基于组件化方案，逐渐积累的一套 Android 终端开发方案。方案力求做到**技术方案可以轻松的从一个项目复用到另一个项目，或者可以快速在框架基础上开发出一个独立全新的应用**，开发过程中基本聚焦在新业务的逻辑，而不是基础功能。
 
-框架目前已经有基础组件 57 个，公共组件 19个，**<font color="#ff0000">墙裂建议框架的完整能力可以查看框架文档**：[https://android.bihe0832.com/doc/](https://android.bihe0832.com/doc/use/common/common-wrapper.html) ，此处仅列出部分支持能力</font>：
+**框架目前已经有基础组件 57 个，公共组件 19个，墙裂建议框架的完整能力查看框架使用文档**：[https://android.bihe0832.com/doc/](https://android.bihe0832.com/doc/use/common/common-wrapper.html) ，此处仅列出部分支持能力 ：
 
 - **单Activity ＋ 多Fragment 模式的Fragment管理框架**、各种样式的  TabLayout、沉浸式状态栏和导航栏及设置背景和文字颜色、简易文件选择器、文本查看器。使用系统原生对Activity进一步封装扩展的的拍照、相册选择、裁剪图片等。通用闪屏UI，支持Icon，APPName 和 Slogan，判断用户安装情况弹出隐私框
 
