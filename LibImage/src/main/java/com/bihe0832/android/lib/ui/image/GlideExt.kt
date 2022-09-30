@@ -11,6 +11,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 
+/**
+ * 如果需要同时多中心效果叠加，需要配合 MultiTransformation 使用  loadImage 接口
+ */
 fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
     loadCircleCropImage(url, true, placeholder, error)
 }
@@ -78,6 +81,7 @@ fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int = Color
 fun ImageView.loadImage(url: String, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
     loadImage(url, true, placeholder, error, requestOptions)
 }
+
 
 fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
     loadImage(url, placeholder, error, 0, 0, needFade, DiskCacheStrategy.RESOURCE, false, requestOptions)
