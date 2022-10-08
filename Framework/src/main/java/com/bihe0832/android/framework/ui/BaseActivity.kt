@@ -89,15 +89,23 @@ open class BaseActivity : SupportActivity() {
         }
     }
 
-    protected fun updateIcon(needBack: Boolean, iconURL: String?) {
-        updateIcon(needBack, iconURL, -1)
+    protected fun updateIcon(iconURL: String?, needBack: Boolean) {
+        updateIcon(iconURL, -1, needBack)
     }
 
-    protected fun updateIcon(needBack: Boolean, iconRes: Int) {
-        updateIcon(needBack, "", iconRes)
+    protected fun updateIcon(iconRes: Int, needBack: Boolean) {
+        updateIcon("", iconRes, needBack)
     }
 
-    protected fun updateIcon(needBack: Boolean, iconURL: String?, iconRes: Int) {
+    protected fun updateIcon(iconURL: String?, iconRes: Int, needBack: Boolean) {
+        updateIcon(iconURL, iconRes) {
+            if (needBack) {
+                onBackPressedSupport()
+            }
+        }
+    }
+
+    protected fun updateIcon(iconURL: String?, iconRes: Int, listener: View.OnClickListener?) {
         if (iconRes > 0) {
             mNavigationImageButton?.loadImage(iconRes)
         } else if (URLUtils.isHTTPUrl(iconURL)) {
@@ -105,11 +113,7 @@ open class BaseActivity : SupportActivity() {
         } else if (null == iconURL) {
             mNavigationImageButton?.clear()
         }
-        mToolbar?.setNavigationOnClickListener {
-            if (needBack) {
-                onBackPressedSupport()
-            }
-        }
+        mToolbar?.setNavigationOnClickListener(listener)
     }
 
     protected fun initToolbar(resID: Int, needBack: Boolean) {
@@ -125,6 +129,21 @@ open class BaseActivity : SupportActivity() {
             titleString: String?,
             needTitleCenter: Boolean,
             needBack: Boolean,
+            iconRes: Int
+    ) {
+        initToolbar(resID, titleString, needTitleCenter, {
+            if (needBack) {
+                onBackPressedSupport()
+            }
+        }, iconRes)
+    }
+
+
+    protected fun initToolbar(
+            resID: Int,
+            titleString: String?,
+            needTitleCenter: Boolean,
+            nevagationListener: View.OnClickListener,
             iconRes: Int
     ) {
         try {
@@ -174,7 +193,7 @@ open class BaseActivity : SupportActivity() {
                         break
                     }
                 }
-                updateIcon(needBack, "", iconRes)
+                updateIcon("", iconRes, nevagationListener)
             }
 
         } catch (e: Exception) {

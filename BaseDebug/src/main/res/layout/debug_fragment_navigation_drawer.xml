@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navigation_drawer_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:fitsSystemWindows="true">
+
+
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorControlHighlight"
+        android:gravity="center"
+        android:text="子勰"
+        android:textColor="@color/white"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <FrameLayout
+        android:id="@+id/test_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/test" />
+</RelativeLayout>

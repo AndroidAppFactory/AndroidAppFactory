@@ -94,7 +94,7 @@ open class DebugLogActivity : CommonListActivity() {
 
     override fun initView() {
         super.initView()
-        updateIcon(true, R.mipmap.btn_back)
+        updateIcon(R.mipmap.btn_back, true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
