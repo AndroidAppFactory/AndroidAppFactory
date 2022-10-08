@@ -12,7 +12,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
 
-public class BaseWebView extends WebView{
+public class BaseWebView extends WebView {
 
     private static final String APP_CACAHE_DIRNAME = "/webcache";
 
@@ -21,23 +21,22 @@ public class BaseWebView extends WebView{
 
     public BaseWebView(Context arg0) {
         super(arg0);
+        initBaseWebView();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     public BaseWebView(Context arg0, AttributeSet arg1) {
         super(arg0, arg1);
-        this.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-        });
-        initWebViewSettings();
-
-        this.getRootView().setClickable(true);
+        initBaseWebView();
     }
+
+
     public BaseWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initBaseWebView();
+    }
+
+    public void initBaseWebView() {
         this.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
