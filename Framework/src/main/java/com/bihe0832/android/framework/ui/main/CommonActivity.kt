@@ -11,8 +11,17 @@ import me.yokeyword.fragmentation.ISupportFragment
 open class CommonActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        super.setContentView(R.layout.common_activity_framelayout)
+        super.setContentView(getLayoutID())
     }
+
+    /**
+     * 布局layout
+     * @return
+     */
+    protected open fun getLayoutID(): Int {
+        return R.layout.common_activity_framelayout
+    }
+
 
     final override fun setContentView(@LayoutRes layoutResID: Int) {
         throw AAFException("please extends com.bihe0832.android.framework.ui.BaseActivity instead of CommonActivity")
