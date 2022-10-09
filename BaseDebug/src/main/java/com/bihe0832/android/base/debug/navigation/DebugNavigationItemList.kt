@@ -11,7 +11,7 @@ import com.bihe0832.android.base.debug.R
  *
  */
 class DebugNavigationItemList : AboutFragment() {
-    
+
     override fun getLayoutID(): Int {
         return R.layout.debug_navigation_list
     }

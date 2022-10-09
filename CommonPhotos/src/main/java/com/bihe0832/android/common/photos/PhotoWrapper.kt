@@ -84,7 +84,7 @@ fun Activity.cropPhoto(sourceFile: String, targetFile: Uri?, aspectX: Int = 1, a
 
 
 fun Activity.cropPhoto(sourceFile: Intent?, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1) {
-    var file = ZixieFileProvider.uriToFile(this, intent?.data)
+    var file = ZixieFileProvider.uriToFile(this, sourceFile?.data)
     cropPhoto(ZixieFileProvider.getZixieFileProvider(this, file), targetFile, aspectX, aspectY)
 }
 
