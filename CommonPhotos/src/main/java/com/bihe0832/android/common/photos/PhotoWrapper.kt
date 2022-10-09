@@ -118,6 +118,7 @@ fun Activity.cropPhoto(
         putExtra("outputX", outSizePerPart * aspectX) // 输出图片大小
         putExtra("outputY", outSizePerPart * aspectY)
         putExtra("scale", true)
+        putExtra("scaleUpIfNeeded", true)
         putExtra("circleCrop", true)
         putExtra("return-data", false) // 不直接返回数据
         putExtra(MediaStore.EXTRA_OUTPUT, targetFile) // 返回一个文件
