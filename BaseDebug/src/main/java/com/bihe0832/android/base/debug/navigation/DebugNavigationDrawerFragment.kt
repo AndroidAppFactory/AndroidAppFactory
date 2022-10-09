@@ -2,7 +2,6 @@ package com.bihe0832.android.base.debug.navigation
 
 import android.view.View
 import androidx.drawerlayout.widget.DrawerLayout
-import com.bihe0832.android.app.about.AboutFragment
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.navigation.drawer.NavigationDrawerFragment
 
@@ -24,15 +23,18 @@ class DebugNavigationDrawerFragment : NavigationDrawerFragment() {
         super.setUp(fragmentContainerView, drawerLayout)
     }
 
-    private val listFragment by lazy {
-        AboutFragment()
+    private val listHeadFragment by lazy {
+        DebugNavigationItemList()
+    }
+
+    private val listBodyFragment by lazy {
+        DebugNavigationItemList()
     }
 
     override fun initView(view: View) {
         super.initView(view)
-        if (findFragment(AboutFragment::class.java) == null) {
-            loadRootFragment(R.id.test_id, listFragment)
-        }
+        loadRootFragment(R.id.test_head, listHeadFragment)
+        loadRootFragment(R.id.test_body, listBodyFragment)
     }
 
 }
