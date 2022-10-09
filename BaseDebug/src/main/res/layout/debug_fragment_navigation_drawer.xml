@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navigation_drawer_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical">
 
 
     <TextView
@@ -20,8 +20,17 @@
     </TextView>
 
     <FrameLayout
-        android:id="@+id/test_id"
+        android:id="@+id/test_head"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/test" />
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/colorControlHighlight"
+        android:layout_marginTop="30dp" />
+
+    <FrameLayout
+        android:id="@+id/test_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/com_bihe0832_dialog_bg"
+        android:layout_below="@+id/test"
+        android:layout_marginTop="30dp" />
+</LinearLayout>
