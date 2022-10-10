@@ -46,41 +46,41 @@ object DebugInfoCacheManager {
         }
 
         override suspend fun getData(key: String): DebugCoroutinesData<DebugCacheData> =
-            getData(key, -1)
+                getData(key, -1)
 
         override suspend fun getData(
-            key: String,
-            duration: Long
+                key: String,
+                duration: Long
         ): DebugCoroutinesData<DebugCacheData> =
-            suspendCoroutine { cont ->
-                getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
-            }
+                suspendCoroutine { cont ->
+                    getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
+                }
 
 
         inner class ContinuationCallbackForFetchDataListener(private var continuation: Continuation<DebugCoroutinesData<DebugCacheData>>) :
-            AAFDataCallback<DebugCacheData>() {
+                AAFDataCallback<DebugCacheData>() {
 
             override fun onSuccess(result: DebugCacheData?) {
                 if (result != null) {
                     continuation.resume(DebugCoroutinesData(result))
                 } else {
                     continuation.resume(
-                        DebugCoroutinesData(
-                            0,
-                            Coroutines_ERROR_DATA_NULL,
-                            ""
-                        )
+                            DebugCoroutinesData(
+                                    0,
+                                    Coroutines_ERROR_DATA_NULL,
+                                    ""
+                            )
                     )
                 }
             }
 
             override fun onError(code: Int, msg: String) {
                 continuation.resume(
-                    DebugCoroutinesData(
-                        code,
-                        code,
-                        msg
-                    )
+                        DebugCoroutinesData(
+                                code,
+                                code,
+                                msg
+                        )
                 )
             }
         }
@@ -138,6 +138,10 @@ object DebugInfoCacheManager {
 
             //请求异常，对应的错误信息
             mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).error()?.let {
+                ZLog.d(LOG_TAG, it.toString())
+            }
+
+            mTestInfoCacheManagerImpl.getCachedData(key.toString())?.dataItem?.let {
                 ZLog.d(LOG_TAG, it.toString())
             }
         }
