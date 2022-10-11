@@ -6,7 +6,7 @@
         <activity
                 android:name="com.bihe0832.android.common.feedback.FeedbackActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
-                android:theme="@style/activityTheme"
+                android:theme="@style/AAF.ActivityTheme"
                 android:hardwareAccelerated="true"
                 android:process="@string/com_bihe0832_web_process_name"
                 android:screenOrientation="portrait"></activity>

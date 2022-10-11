@@ -14,7 +14,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/app_about_toolbar"
-            style="@style/frameWorkAppTheme.Toolbar.Light"
+            style="@style/AAF.AppTheme.Toolbar.Light"
             app:title="@string/about" />
 
 
