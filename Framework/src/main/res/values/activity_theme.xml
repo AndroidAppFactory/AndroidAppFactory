@@ -7,24 +7,35 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Animation.Activity" parent="@android:style/Animation.Activity">
+    <style name="AAF.Animation.Activity" parent="@android:style/Animation.Activity">
+        <!--        新页面进入 -->
         <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
         <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>
         <item name="android:activityCloseEnterAnimation">@anim/slide_left_in</item>
+        <!-- 新页面退出 -->
         <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
     </style>
 
-    <style name="frameWorkAppTheme.Toolbar.Base" parent="Base.V7.Widget.AppCompat.Toolbar">
+    <style name="AAF.Animation.BottomWindow" parent="@style/AAF.Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/push_bottom_enter</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_exit</item>
+        <item name="android:activityOpenEnterAnimation">@anim/push_bottom_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/push_bottom_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/push_bottom_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/push_bottom_exit</item>
+
+    </style>
+
+    <style name="AAF.AppTheme.Toolbar.Base" parent="Base.V7.Widget.AppCompat.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
         <item name="contentInsetStart">0dp</item>
         <item name="titleMargin">0dp</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="android:fitsSystemWindows">true</item>
     </style>
 
-    <style name="frameWorkAppTheme.Toolbar.Light" parent="frameWorkAppTheme.Toolbar.Base">
+    <style name="AAF.AppTheme.Toolbar.Light" parent="AAF.AppTheme.Toolbar.Base">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="titleTextAppearance">@style/Title.Base</item>
@@ -32,17 +43,18 @@
         <item name="navigationIcon">@mipmap/ic_left_arrow_white</item>
     </style>
 
-    <style name="frameWorkAppTheme.Fullscreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">
-        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
+    <style name="AAF.AppTheme.Fullscreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowAnimationStyle">@style/AAF.Animation.Activity</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="baseActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AAF.ActivityTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowNoTitle">true</item>
+        <!--  它可以将应用了该 Style 的 Activity 所在的 Window 设置成透明的， 使用windowIsTranslucent 的Activity 不要定义 screenOrientation-->
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowActionBar">false</item>
         <!--主色调 -->
@@ -65,12 +77,12 @@
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
     </style>
 
-    <style name="activityTheme" parent="baseActivityTheme">
-        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
+    <style name="AAF.ActivityTheme" parent="AAF.ActivityTheme.Base">
+        <item name="android:windowAnimationStyle">@style/AAF.Animation.Activity</item>
     </style>
 
     <!--    全屏，主要用于闪屏 -->
-    <style name="fullscreenActivityTheme" parent="activityTheme">
+    <style name="AAF.ActivityTheme.Fullscreen" parent="AAF.ActivityTheme">
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
@@ -78,18 +90,22 @@
     </style>
 
 
-    <style name="dialogActivity" parent="fullscreenActivityTheme">
+    <style name="AAF.ActivityTheme.Dialog" parent="AAF.ActivityTheme.Fullscreen">
         <item name="android:windowBackground">@android:color/transparent</item>
-        <!--  它可以将应用了该 Style 的 Activity 所在的 Window 设置成透明的， 使用windowIsTranslucent 的Activity 不要定义 screenOrientation-->
+        <!--
+        windowIsTranslucent 可以将应用了该 Style 的 Activity 所在的 Window 设置成透明的
+        使用 windowIsTranslucent 的Activity 不要定义 screenOrientation
+        当 windowIsTranslucent= true 时，给Activity设置ActivityAnimation会不起作用，只能设置windowAnimation
+        -->
         <item name="android:windowIsTranslucent">true</item>
         <!--  是否向下传递触摸事件，false 无背景-->
         <item name="android:splitMotionEvents">false</item>
+
     </style>
 
     <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->
-    <style name="bottomShare" parent="dialogActivity">
-        <item name="android:activityOpenEnterAnimation">@anim/push_bottom_in</item>
-        <item name="android:activityOpenExitAnimation">@anim/push_bottom_out</item>
+    <style name="AAF.ActivityTheme.Bottom" parent="AAF.ActivityTheme.Dialog">
+        <item name="android:windowAnimationStyle">@style/AAF.Animation.BottomWindow</item>
     </style>
 
 

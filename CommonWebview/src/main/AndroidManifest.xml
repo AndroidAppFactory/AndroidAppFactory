@@ -6,7 +6,7 @@
     <application>
         <activity
                 android:name="com.bihe0832.android.common.webview.WebPageActivity"
-                android:theme="@style/activityTheme"
+                android:theme="@style/AAF.ActivityTheme"
                 android:hardwareAccelerated="true"
                 android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
                 android:windowSoftInputMode="adjustPan|stateHidden"

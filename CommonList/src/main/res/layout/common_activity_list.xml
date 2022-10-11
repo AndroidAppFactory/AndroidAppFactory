@@ -8,7 +8,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/common_activity_list_toolbar"
-        style="@style/frameWorkAppTheme.Toolbar.Light"
+        style="@style/AAF.AppTheme.Toolbar.Light"
         app:title="服务" />
 
     <com.bihe0832.android.lib.ui.recycleview.ext.MyEasyRefreshLayout

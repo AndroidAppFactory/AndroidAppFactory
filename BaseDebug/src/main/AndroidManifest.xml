@@ -25,56 +25,56 @@
             android:name="com.bihe0832.android.base.debug.ipc.TestIPCActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.ipc.TestIPC1Activity"
             android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
             android:process=":test"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.touch.TouchRegionActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.request.DebugHttpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.network.DebugNetworkActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.card.TestListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.immersion.DebugImmersionActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
         <activity
             android:name="com.bihe0832.android.base.debug.webview.DebugWebviewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
 
         <activity
             android:name="com.bihe0832.android.common.debug.log.DebugLogActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.permission.DebugPermissionsActivity"
@@ -85,19 +85,24 @@
             android:name="com.bihe0832.android.base.debug.tab.DebugCommonTabActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.tab.DebugSegmentTabActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.tab.DebugSlidingTabActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
+
+        <activity
+            android:name="com.bihe0832.android.base.debug.empty.DebugBottomActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Bottom" />
 
     </application>
 

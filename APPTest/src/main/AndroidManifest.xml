@@ -20,7 +20,7 @@
             android:name="com.bihe0832.android.test.TestSplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/fullscreenActivityTheme">
+            android:theme="@style/AAF.ActivityTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,21 +31,19 @@
             android:name="com.bihe0832.android.test.TestMainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="sensor"
-            android:theme="@style/activityTheme" >
+            android:theme="@style/AAF.ActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!--                                <category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
 
-
-
         <activity
             android:name="com.bihe0832.android.test.module.AAFDebugLogActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
             android:process=":test"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme" />
+            android:theme="@style/AAF.ActivityTheme" />
 
     </application>
 

@@ -7,7 +7,7 @@
             android:name="com.bihe0832.android.common.debug.log.DebugLogActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme">
+            android:theme="@style/AAF.ActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -17,7 +17,7 @@
             android:name="com.bihe0832.android.common.debug.DebugMainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/activityTheme"></activity>
+            android:theme="@style/AAF.ActivityTheme"></activity>
 
     </application>
 
