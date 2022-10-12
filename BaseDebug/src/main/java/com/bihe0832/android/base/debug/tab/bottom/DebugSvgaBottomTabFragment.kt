@@ -31,11 +31,51 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
 
     override fun getBottomBarTabs(): ArrayList<BaseBottomBarTab> {
         ArrayList<BaseBottomBarTab>().apply {
-            add(DebugSvgaBottomBarTab(context, R.mipmap.icon_camera, R.mipmap.icon_author, "ic_voice.svga", "弹框"))
-            add(DebugSvgaBottomBarTab(context, R.mipmap.icon_author, R.mipmap.icon_camera, "ic_voice.svga", "下载"))
-            add(DebugSvgaBottomBarTab(context, R.mipmap.icon_feedback, R.mipmap.icon_cloud, "ic_voice.svga", "权限"))
-            add(DebugSvgaBottomBarTab(context, R.mipmap.icon_cloud, R.mipmap.icon_feedback, "ic_voice.svga", "文件"))
-            add(DebugSvgaBottomBarTab(context, R.mipmap.icon_cloud, R.mipmap.icon_feedback, "ic_voice.svga", "文件"))
+            add(
+                DebugSvgaBottomBarTab(
+                    context,
+                    R.mipmap.icon_camera,
+                    R.mipmap.icon_author,
+                    "ic_voice.svga",
+                    "弹框"
+                )
+            )
+            add(
+                DebugSvgaBottomBarTab(
+                    context,
+                    R.mipmap.icon_author,
+                    R.mipmap.icon_camera,
+                    "ic_voice.svga",
+                    "下载"
+                )
+            )
+            add(
+                DebugSvgaBottomBarTab(
+                    context,
+                    R.mipmap.icon_feedback,
+                    R.mipmap.icon_cloud,
+                    "ic_voice.svga",
+                    "权限"
+                )
+            )
+            add(
+                DebugSvgaBottomBarTab(
+                    context,
+                    R.mipmap.icon_cloud,
+                    R.mipmap.icon_feedback,
+                    "ic_voice.svga",
+                    "文件"
+                )
+            )
+            add(
+                DebugSvgaBottomBarTab(
+                    context,
+                    R.mipmap.icon_cloud,
+                    R.mipmap.icon_feedback,
+                    "ic_voice.svga",
+                    "文件"
+                )
+            )
         }.let {
             return it
         }
@@ -44,16 +84,30 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
     override fun initView(view: View) {
         super.initView(view)
         ThreadManager.getInstance().start({
-           ThreadManager.getInstance().runOnUIThread {
-               getBottomBar().getItem(0).showUnreadMsg(0)
-               getBottomBar().getItem(1).showUnreadMsg(2)
-               getBottomBar().getItem(2).showUnreadMsg(22)
-               getBottomBar().getItem(3).showUnreadMsg(200)
-               getBottomBar().getItem(4).showUnreadMsg(-1)
-           }
+            ThreadManager.getInstance().runOnUIThread {
+                getBottomBar().getItem(0).showUnreadMsg(0)
+                getBottomBar().getItem(1).showUnreadMsg(2)
+                getBottomBar().getItem(2).showUnreadMsg(22)
+                getBottomBar().getItem(3).showUnreadMsg(200)
+                getBottomBar().getItem(4).showUnreadMsg(-1)
+            }
             changeTab(2)
         }, 3)
 
     }
+
+    override fun onBottomBarTabUnselected(position: Int) {
+        getBottomBar().getItem(position).showUnreadMsg()
+        getBottomBar().getItem(position).setUnreadMsgNum(getBottomBar().getItem(position).getUnreadMsgNum() - 1)
+    }
+
+    override fun onBottomBarTabSelected(position: Int, prePosition: Int) {
+        onBottomBarTabReselected(position)
+    }
+
+    override fun onBottomBarTabReselected(position: Int) {
+        getBottomBar().getItem(position).hideUnreadMsg()
+    }
+
 
 }

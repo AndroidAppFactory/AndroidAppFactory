@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.ui.textview.ext;
 
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.bihe0832.android.lib.ui.textview.TextViewWithBackground
@@ -19,18 +20,22 @@ fun TextViewWithBackground.changeStatusWithUnreadMsg(num: Int, circleWidth: Int)
     }
 
     if (num < 0) {
-        text = ""
-    } else if (num == 0) { //圆点,设置默认宽高
-        text = ""
-        lp.width = circleWidth
-        lp.height = circleWidth
-        layoutParams = lp
+        visibility = View.GONE
     } else {
-        text = if (num < 100) {
-            num.toString()
+        visibility = View.VISIBLE
+        if (num == 0) { //圆点,设置默认宽高
+            text = ""
+            lp.width = circleWidth
+            lp.height = circleWidth
+            layoutParams = lp
         } else {
-            //数字超过两位,显示99+
-            "99+"
+            text = if (num < 100) {
+                num.toString()
+            } else {
+                //数字超过两位,显示99+
+                "99+"
+            }
         }
     }
+
 }
