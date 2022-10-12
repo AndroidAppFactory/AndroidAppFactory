@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.bihe0832.android.base.debug.R;
 import com.bihe0832.android.common.ui.bottom.bar.SvgaBottomBarTab;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
@@ -67,8 +69,8 @@ class DebugSvgaBottomBarTab extends SvgaBottomBarTab {
     }
 
     @Override
-    public void showUnreadMsg(int num) {
-        super.showUnreadMsg(num);
+    public void showUnreadMsg() {
+        super.showUnreadMsg();
         updateReadDot();
     }
 }

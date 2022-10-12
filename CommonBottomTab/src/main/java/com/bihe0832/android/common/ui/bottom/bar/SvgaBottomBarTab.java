@@ -2,30 +2,28 @@ package com.bihe0832.android.common.ui.bottom.bar;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.common.svga.SVGAHelperKt;
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
 import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
-import com.bihe0832.android.lib.ui.textview.ext.TextViewWithBackgroundExtKt;
 import com.opensource.svgaplayer.SVGACallback;
 import com.opensource.svgaplayer.SVGAImageView;
 
 /**
  * height:56
  */
-public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
+public class SvgaBottomBarTab extends BaseBottomBarTab {
     protected SVGAImageView mIconView;
     protected TextView mTitleView;
     protected TextViewWithBackground mTipsView;
-
-    private int mTabPosition = -1;
 
     protected String mActionSvga = "";
     protected int mNormalImageRes = -1;
@@ -36,25 +34,42 @@ public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
     }
 
     public SvgaBottomBarTab(Context context, AttributeSet attrs, int defStyleAttr, int normalImageRes, int selectedImageRes, String actionSvga, String title) {
-        super(context, attrs, defStyleAttr);
-        init(context, normalImageRes, selectedImageRes, actionSvga, title);
+        super(context, attrs, defStyleAttr, normalImageRes, title);
+        mActionSvga = actionSvga;
+        mNormalImageRes = normalImageRes;
+        mSelectedImageRes = selectedImageRes;
     }
 
+    @Override
+    protected ImageView getIconView() {
+        return mIconView;
+    }
+
+    @Override
+    protected TextView getTitleView() {
+        return mTitleView;
+    }
+
+    @Override
+    protected TextViewWithBackground getTipsView() {
+        return mTipsView;
+    }
+
+    @Override
     protected int getLayoutID() {
         return R.layout.common_tab_svga;
     }
 
-    private void init(Context context, int normalImageRes, int selectedImageRes, String actionSvga, String title) {
-        View.inflate(context, getLayoutID(), this);
-        mActionSvga = actionSvga;
-        mNormalImageRes = normalImageRes;
-        mSelectedImageRes = selectedImageRes;
-
+    @Override
+    protected void initView(@NonNull Context context) {
         mIconView = findViewById(R.id.tab_icon);
         mTitleView = findViewById(R.id.tab_title);
         mTipsView = findViewById(R.id.tab_tips);
+    }
 
-        mTitleView.setText(title);
+    @Override
+    protected void initViewEvent(int icon, @Nullable CharSequence title) {
+        super.initViewEvent(icon, title);
         mIconView.setCallback(new SVGACallback() {
             @Override
             public void onStep(int i, double v) {
@@ -95,22 +110,5 @@ public class SvgaBottomBarTab extends FrameLayout implements BaseBottomBarTab {
             mIconView.setImageResource(mNormalImageRes);
             mTitleView.setTextColor(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_unselect));
         }
-    }
-
-    public void setTabPosition(int position) {
-        mTabPosition = position;
-    }
-
-    public int getTabPosition() {
-        return mTabPosition;
-    }
-
-    @Override
-    public View getTabView() {
-        return this;
-    }
-
-    public void showUnreadMsg(int num) {
-        TextViewWithBackgroundExtKt.changeStatusWithUnreadMsg(mTipsView, num, (int) getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_dot_size));
     }
 }
