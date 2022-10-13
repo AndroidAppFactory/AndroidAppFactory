@@ -2,9 +2,9 @@ package com.bihe0832.android.lib.permission.ui;
 
 import static com.bihe0832.android.lib.permission.PermissionManager.PERMISSION_REQUEST_CODE;
 
-import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.bihe0832.android.lib.permission.PermissionManager;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PermissionsActivity extends Activity {
+public class PermissionsActivity extends AppCompatActivity {
 
     public static final String EXTRA_PERMISSIONS = "com.bihe0832.android.lib.permission.extra_permission"; // 权限参数
     public static final String EXTRA_SOURCE = "com.bihe0832.android.lib.permission.extra_source"; // 权限参数
@@ -140,7 +140,6 @@ public class PermissionsActivity extends Activity {
     }
 
     /**
-     *
      * @param tempPermissionGroupList 缺少权限的权限组ID
      */
     protected void showMissingPermissionDialog(final List<String> tempPermissionGroupList) {

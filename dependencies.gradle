@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibDialog"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.4.1"
+ext.moduleVersionName = "5.5.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -518,7 +518,7 @@ ext.moduleInfo = [
                 "version"            : "5.4.1",
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
-                        "LibAndroid", "LibOS","LibTextView",
+                        "LibAndroid", "LibOS", "LibTextView",
                         "${project.androidsupport.androidxcore}",
                         "${project.androidsupport.annotation}"
                 ]
@@ -570,7 +570,9 @@ ext.moduleInfo = [
                 "version"            : "5.4.0",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
-                        "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork"
+                        "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
+                        "${project.androidsupport.appcompat}"
+
                 ]
         ],
         "LibImmersive"              : [

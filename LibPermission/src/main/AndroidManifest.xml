@@ -6,10 +6,10 @@
         <activity
             android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/permissionFullscreen" />
+            android:theme="@style/AAF.ActivityTheme.Permission" />
         <activity
             android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivityV2"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/permissionFullscreen" />
+            android:theme="@style/AAF.ActivityTheme.Permission" />
     </application>
 </manifest>

@@ -30,19 +30,39 @@ open class PermissionDialog : CommonDialog {
         positive = PermissionManager.getPositiveText(context)
     }
 
-    open fun show(sceneID: String, tempPermissionGroupList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
-        showWithContent(PermissionManager.getPermissionContent(context, sceneID, tempPermissionGroupList, true), canCancel, listener)
+    open fun show(
+        sceneID: String,
+        tempPermissionGroupList: List<String>,
+        canCancel: Boolean,
+        listener: OnDialogListener
+    ) {
+        showWithContent(
+            PermissionManager.getPermissionContent(
+                context,
+                sceneID,
+                tempPermissionGroupList,
+                true
+            ), canCancel, listener
+        )
     }
 
-    open fun show(scene: String, showPermissionGroupID: String, canCancel: Boolean, listener: OnDialogListener) {
-        var content = PermissionManager.getPermissionContent(context, scene, showPermissionGroupID, true)
+    open fun show(
+        scene: String,
+        showPermissionGroupID: String,
+        canCancel: Boolean,
+        listener: OnDialogListener?
+    ) {
+        var content =
+            PermissionManager.getPermissionContent(context, scene, showPermissionGroupID, true)
         showWithContent(content, canCancel, listener)
     }
 
-    private fun showWithContent(content: String, canCancel: Boolean, listener: OnDialogListener) {
+    private fun showWithContent(content: String, canCancel: Boolean, listener: OnDialogListener?) {
         setHtmlContent(content)
         setShouldCanceled(canCancel)
-        setOnClickBottomListener(listener)
+        listener?.let {
+            setOnClickBottomListener(listener)
+        }
         show()
     }
 }

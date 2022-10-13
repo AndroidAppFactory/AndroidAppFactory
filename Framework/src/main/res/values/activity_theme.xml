@@ -75,22 +75,15 @@
         <!--EditText 输入框中字体的颜色-->
         <item name="editTextColor">@color/colorSecondaryText</item>
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <!--支持刘海屏-->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 
     <style name="AAF.ActivityTheme" parent="AAF.ActivityTheme.Base">
         <item name="android:windowAnimationStyle">@style/AAF.Animation.Activity</item>
     </style>
 
-    <!--    全屏，主要用于闪屏 -->
-    <style name="AAF.ActivityTheme.Fullscreen" parent="AAF.ActivityTheme">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-        <item name="android:windowFullscreen">true</item>
-    </style>
-
-
-    <style name="AAF.ActivityTheme.Dialog" parent="AAF.ActivityTheme.Fullscreen">
+    <style name="AAF.ActivityTheme.Dialog" parent="AAF.ActivityTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--
         windowIsTranslucent 可以将应用了该 Style 的 Activity 所在的 Window 设置成透明的
@@ -100,7 +93,6 @@
         <item name="android:windowIsTranslucent">true</item>
         <!--  是否向下传递触摸事件，false 无背景-->
         <item name="android:splitMotionEvents">false</item>
-
     </style>
 
     <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->
@@ -108,5 +100,15 @@
         <item name="android:windowAnimationStyle">@style/AAF.Animation.BottomWindow</item>
     </style>
 
+    <!--    全屏，主要用于闪屏 -->
+    <style name="AAF.ActivityTheme.Fullscreen" parent="AAF.ActivityTheme">
+        <!--        应用启动使用背景-->
+        <item name="android:windowContentOverlay">@null</item>
+        <!--        内容衍生到状态栏-->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <!--        弹框等顶部会有不透明状态栏-->
+        <item name="android:windowFullscreen">true</item>
+
+    </style>
 
 </resources>

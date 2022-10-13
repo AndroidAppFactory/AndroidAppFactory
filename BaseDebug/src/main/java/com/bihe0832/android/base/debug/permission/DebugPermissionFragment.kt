@@ -16,31 +16,44 @@ class DebugPermissionFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
             add(DebugItemData("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
-            add(DebugItemData("通用权限弹框V2", View.OnClickListener { testCommonPermissionV2(activity) }))
+            add(
+                DebugItemData(
+                    "通用权限弹框V2",
+                    View.OnClickListener { testCommonPermissionV2(activity) })
+            )
+            add(DebugItemData("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
+
         }
     }
 
     private fun testCustomPermission(activity: Activity?) {
         PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {
-            put(Manifest.permission.RECORD_AUDIO, "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！")
+            put(
+                Manifest.permission.RECORD_AUDIO,
+                "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！"
+            )
         })
         activity?.let { it ->
             DebugPermissionDialog(it).let { permissionDialog ->
-                permissionDialog.show("", Manifest.permission.RECORD_AUDIO, true, object : OnDialogListener {
-                    override fun onPositiveClick() {
+                permissionDialog.show(
+                    "",
+                    Manifest.permission.RECORD_AUDIO,
+                    true,
+                    object : OnDialogListener {
+                        override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
-                        permissionDialog.dismiss()
-                    }
+                            permissionDialog.dismiss()
+                        }
 
-                    override fun onNegativeClick() {
-                        permissionDialog.dismiss()
+                        override fun onNegativeClick() {
+                            permissionDialog.dismiss()
 
-                    }
+                        }
 
-                    override fun onCancel() {
-                        permissionDialog.dismiss()
-                    }
-                })
+                        override fun onCancel() {
+                            permissionDialog.dismiss()
+                        }
+                    })
 
                 PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {
                     put(Manifest.permission.RECORD_AUDIO, "")
@@ -58,28 +71,42 @@ class DebugPermissionFragment : DebugEnvFragment() {
         })
         activity?.let { it ->
             PermissionDialog(it).let { permissionDialog ->
-                permissionDialog.show("", Manifest.permission.RECORD_AUDIO, true, object : OnDialogListener {
-                    override fun onPositiveClick() {
+                permissionDialog.show(
+                    "",
+                    Manifest.permission.RECORD_AUDIO,
+                    true,
+                    object : OnDialogListener {
+                        override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
-                        permissionDialog.dismiss()
-                    }
+                            permissionDialog.dismiss()
+                        }
 
-                    override fun onNegativeClick() {
-                        permissionDialog.dismiss()
+                        override fun onNegativeClick() {
+                            permissionDialog.dismiss()
 
-                    }
+                        }
 
-                    override fun onCancel() {
-                        permissionDialog.dismiss()
-                    }
-                })
+                        override fun onCancel() {
+                            permissionDialog.dismiss()
+                        }
+                    })
             }
         }
     }
 
     private fun testCommonPermissionV2(activity: Activity?) {
-        PermissionManager.checkPermission(activity, mutableListOf<String>().apply {
-            add(Manifest.permission.ACCESS_COARSE_LOCATION)
-        })
+        PermissionManager.checkPermission(
+            activity,
+            "",
+            false,
+            DebugPermissionsActivity::class.java,
+            null,
+            mutableListOf<String>().apply {
+                add(Manifest.permission.ACCESS_COARSE_LOCATION)
+            })
+    }
+
+    private fun testCommonPermissionDialog() {
+        PermissionDialog(activity!!).show("", Manifest.permission.SYSTEM_ALERT_WINDOW, true, null)
     }
 }

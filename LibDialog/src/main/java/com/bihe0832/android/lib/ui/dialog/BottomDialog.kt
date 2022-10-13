@@ -7,24 +7,30 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 
 
 open class BottomDialog : CommonDialog {
-    constructor(context: Context?) : super(context, R.style.BottomInAndOutStyle)
+    constructor(context: Context?) : super(context, R.style.BaseDialog)
 
     constructor(context: Context?, themeResId: Int) : super(context, themeResId)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getWindow()!!.getDecorView().setSystemUiVisibility(View.INVISIBLE)
         showAnimation()
-        getRootView()?.setOnClickListener {
-            if (shouldCanceled) {
-                dismiss()
-                getOnClickBottomListener()?.onCancel()
+        getRootView()?.apply {
+            setOnClickListener {
+                if (shouldCanceled) {
+                    dismiss()
+                    getOnClickBottomListener()?.onCancel()
+                }
             }
         }
+        getWindow()?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
     }
 
     open fun getRootView(): View? {
@@ -32,7 +38,7 @@ open class BottomDialog : CommonDialog {
     }
 
     open fun getContentView(): View {
-        return findViewById(R.id.dialog_layout)
+        return findViewById(R.id.dialog_content_layout)
     }
 
     override fun getLayoutID(): Int {
@@ -41,44 +47,44 @@ open class BottomDialog : CommonDialog {
 
     private fun showAnimation() {
         getContentView().viewTreeObserver.addOnGlobalLayoutListener(
-                object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        getContentView().viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        val showAnimator = ObjectAnimator.ofFloat(
-                                getContentView(),
-                                "translationY",
-                                getContentView().height.toFloat(),
-                                0f
-                        )
-                        val alphaAnimator = ObjectAnimator.ofFloat(
-                                getContentView(),
-                                "alpha",
-                                0f,
-                                0.5f,
-                                1f
-                        )
-                        showAnimator.duration = 300
-                        alphaAnimator.duration = 300
-                        val animatorSet = AnimatorSet()
-                        animatorSet.play(showAnimator).with(alphaAnimator)
-                        animatorSet.start()
-                    }
-                })
+            object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    getContentView().viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val showAnimator = ObjectAnimator.ofFloat(
+                        getContentView(),
+                        "translationY",
+                        getContentView().height.toFloat(),
+                        0f
+                    )
+                    val alphaAnimator = ObjectAnimator.ofFloat(
+                        getContentView(),
+                        "alpha",
+                        0f,
+                        0.5f,
+                        1f
+                    )
+                    showAnimator.duration = 300
+                    alphaAnimator.duration = 300
+                    val animatorSet = AnimatorSet()
+                    animatorSet.play(showAnimator).with(alphaAnimator)
+                    animatorSet.start()
+                }
+            })
     }
 
     private fun hideAnimation() {
         val showAnimator = ObjectAnimator.ofFloat(
-                getContentView(),
-                "translationY",
-                0f,
-                getContentView().height.toFloat()
+            getContentView(),
+            "translationY",
+            0f,
+            getContentView().height.toFloat()
         )
         val alphaAnimator = ObjectAnimator.ofFloat(
-                getContentView(),
-                "alpha",
-                1f,
-                0.5f,
-                0f
+            getContentView(),
+            "alpha",
+            1f,
+            0.5f,
+            0f
         )
         showAnimator.duration = 300
         alphaAnimator.duration = 300
