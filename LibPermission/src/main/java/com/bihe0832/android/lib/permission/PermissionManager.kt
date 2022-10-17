@@ -153,7 +153,7 @@ object PermissionManager {
         fun onFailed(scene: String, msg: String)
     }
 
-    fun isAllPermissionOK(context: Context?, permissionGroupID: String): Boolean {
+    fun isAllPermissionOK(context: Context, permissionGroupID: String): Boolean {
         return if (mPermissionGroup.containsKey(permissionGroupID)) {
             !PermissionsChecker(context).lacksPermissions(mPermissionGroup.get(permissionGroupID))
         } else {
