@@ -249,9 +249,6 @@ public abstract class BaseJsBridgeProxy {
                 json.put("install", 1);
                 json.put("verCode", item.versionCode);
                 json.put("verName", item.versionName == null ? "" : item.versionName);
-                result.put(pkgName, json);
-                mJsBridge.response(callbackFun, seqid, method, result.toString());
-                return;
             } else {
                 json.put("install", 0);
             }
