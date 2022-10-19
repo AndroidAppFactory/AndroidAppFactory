@@ -9,6 +9,7 @@ package com.bihe0832.android.base.debug.request.okhttp
 
 import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.base.debug.request.Constants
+import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.lib.log.ZLog
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -46,5 +47,7 @@ private class ResultCall<T> : Callback<T> {
 
     override fun onFailure(p0: Call<T>, p1: Throwable) {
         ZLog.d("NetworkResult", p1.toString())
+        ZLog.d("NetworkResult", p0.request().toString())
+
     }
 }

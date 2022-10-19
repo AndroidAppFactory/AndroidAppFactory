@@ -20,6 +20,8 @@ public class ZixieTextRadiusBackgroundSpan extends ReplacementSpan {
     private int mTextDataLength;
     private int mBackgroundColor = Color.TRANSPARENT;
     private int mRadius = DEFAULT_REDIUS;
+    private int mStrokeWidth = 0;
+    private int mStrokeColor = Color.TRANSPARENT;
     private int mMargin = DEFAULT_PADDING_LEFT;
     private int mPaddingLeft = DEFAULT_PADDING_LEFT;
     private int mPaddingTop = DEFAULT_PADDING_TOP;
@@ -37,27 +39,35 @@ public class ZixieTextRadiusBackgroundSpan extends ReplacementSpan {
     }
 
     public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, float textSize) {
-        this(bgColor, radius, DEFAULT_MARGIN, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, textSize, DEFAULT_TEXT_COLOR,
+        this(bgColor, bgColor, 0, radius, DEFAULT_MARGIN, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, textSize, DEFAULT_TEXT_COLOR,
                 null);
     }
 
     public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int paddingLeft, int paddingTop) {
-        this(bgColor, radius, DEFAULT_MARGIN, paddingLeft, paddingTop, DEFAULT_TEXT_SIZE, DEFAULT_TEXT_COLOR, null);
+        this(bgColor, bgColor, 0, radius, DEFAULT_MARGIN, paddingLeft, paddingTop, DEFAULT_TEXT_SIZE, DEFAULT_TEXT_COLOR, null);
     }
 
     public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int textSize, int textColor, Typeface mTypeface) {
-        this(bgColor, radius, DEFAULT_MARGIN, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, textSize, textColor,
+        this(bgColor, bgColor, 0, radius, DEFAULT_MARGIN, DEFAULT_PADDING_LEFT, DEFAULT_PADDING_TOP, textSize, textColor,
                 mTypeface);
     }
 
-    public ZixieTextRadiusBackgroundSpan(int bgColor, int radius, int margin, int paddingLeft, int paddingTop,
-            float textSize,
-            int textColor, Typeface typeface) {
-        initData(bgColor, radius, margin, paddingLeft, paddingTop, textSize, textColor, typeface);
+    public ZixieTextRadiusBackgroundSpan(int bgColor,
+                                         int strokeColor,
+                                         int strokeWidth,
+                                         int radius,
+                                         int margin,
+                                         int paddingLeft,
+                                         int paddingTop,
+                                         float textSize,
+                                         int textColor, Typeface typeface) {
+        initData(bgColor, strokeColor, strokeWidth, radius, margin, paddingLeft, paddingTop, textSize, textColor, typeface);
     }
 
     private void initData(
             int bgColor,
+            int strokeColor,
+            int strokeWidth,
             int radius,
             int margin,
             int paddingLeft,
@@ -66,6 +76,8 @@ public class ZixieTextRadiusBackgroundSpan extends ReplacementSpan {
             int textColor,
             Typeface typeface) {
         mBackgroundColor = bgColor;
+        mStrokeColor = strokeColor;
+        mStrokeWidth = strokeWidth;
         mRadius = radius;
         mMargin = margin;
         mPaddingLeft = paddingLeft;
@@ -88,11 +100,11 @@ public class ZixieTextRadiusBackgroundSpan extends ReplacementSpan {
 
     @Override
     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom,
-            Paint paint) {
+                     Paint paint) {
         int color = paint.getColor();
         Typeface typeface = paint.getTypeface();
-        float size = paint.getTextSize();
         Paint.FontMetricsInt fm = paint.getFontMetricsInt();
+        //paint.ascent()获得文字上边缘，paint.descent()获得文字下边缘
         int sourceTextHeight = fm.descent - fm.ascent;
         int cent = fm.descent + fm.ascent;
         //字号过大，cent为负数，字号过小，cent为正
@@ -139,8 +151,17 @@ public class ZixieTextRadiusBackgroundSpan extends ReplacementSpan {
 
         RectF oval = new RectF(x + mMargin, borderRealTop, x + mTextDataLength - mMargin,
                 borderRealBottom);
-        //设置文字背景矩形，x为span其实左上角相对整个TextView的x值，y为span左上角相对整个View的y值。paint.ascent()获得文字上边缘，paint.descent()获得文字下边缘
+        //设置文字背景矩形，x为span其左上角相对整个TextView的x值，y为span左上角相对整个View的y值。
         canvas.drawRoundRect(oval, mRadius, mRadius, paint);//绘制圆角矩形，第二个参数是x半径，第三个参数是y半径
+        if (mStrokeWidth > 0) {
+            Paint strokePaint = new Paint();
+            paint.setAntiAlias(true);
+            strokePaint.setStyle(Paint.Style.STROKE);
+            strokePaint.setStrokeWidth(mStrokeWidth);
+            strokePaint.setColor(mStrokeColor);
+            canvas.drawRoundRect(oval, mRadius, mRadius, strokePaint);
+        }
+
         int textBottom;
         if (realPadding > 0) {
             textBottom = y - (borderMaxBottom - y);
