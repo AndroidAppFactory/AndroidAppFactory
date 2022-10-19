@@ -22,7 +22,11 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, protected val enableLog: Boolean = false, protected val listener: EventListener?) : EventListener() {
+open class AAFNetworkEventListener(
+    protected val enableTrace: Boolean = false,
+    protected val enableLog: Boolean = false,
+    protected val listener: EventListener?
+) : EventListener() {
 
     private val TAG = "AAFRequest"
     private var mNetworkTraceTimeRecord: NetworkTraceTimeRecord? = null
@@ -48,9 +52,9 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
         mNetworkTraceRequestID = OkHttpWrapper.generateRequestID()
         if (canTrace(call)) {
             mNetworkTraceTimeRecord = OkHttpWrapper.getRecord(
-                    mNetworkTraceRequestID,
-                    call.request().url().toString(),
-                    call.request().method()
+                mNetworkTraceRequestID,
+                call.request().url().toString(),
+                call.request().method()
             ).getRecordTraceTimeData()
         }
         saveEvent(NetworkTraceTimeRecord.EVENT_CALL_START)
@@ -63,7 +67,11 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
         listener?.dnsStart(call, domainName)
     }
 
-    override fun dnsEnd(call: Call, domainName: String, inetAddressList: MutableList<InetAddress>?) {
+    override fun dnsEnd(
+        call: Call,
+        domainName: String,
+        inetAddressList: MutableList<InetAddress>?
+    ) {
         super.dnsEnd(call, domainName, inetAddressList)
         saveEvent(NetworkTraceTimeRecord.EVENT_DNS_END)
         listener?.dnsEnd(call, domainName, inetAddressList)
@@ -87,15 +95,27 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
         listener?.secureConnectEnd(call, handshake)
     }
 
-    override fun connectEnd(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy?, protocol: Protocol?) {
+    override fun connectEnd(
+        call: Call,
+        inetSocketAddress: InetSocketAddress,
+        proxy: Proxy?,
+        protocol: Protocol?
+    ) {
         super.connectEnd(call, inetSocketAddress, proxy, protocol)
         saveEvent(NetworkTraceTimeRecord.EVENT_CONNECT_END)
         listener?.connectEnd(call, inetSocketAddress, proxy, protocol)
     }
 
-    override fun connectFailed(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy?, protocol: Protocol?, ioe: IOException?) {
+    override fun connectFailed(
+        call: Call,
+        inetSocketAddress: InetSocketAddress,
+        proxy: Proxy?,
+        protocol: Protocol?,
+        ioe: IOException?
+    ) {
         super.connectFailed(call, inetSocketAddress, proxy, protocol, ioe)
         listener?.connectFailed(call, inetSocketAddress, proxy, protocol, ioe)
+        doLogAction()
     }
 
     override fun requestHeadersStart(call: Call) {
@@ -107,16 +127,22 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
     override fun requestHeadersEnd(call: Call, request: Request) {
         super.requestHeadersEnd(call, request)
         saveEvent(NetworkTraceTimeRecord.EVENT_REQUEST_HEADERS_END)
-        request.header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID)?.let { contentRequesetID ->
-            if (!TextUtils.isEmpty(contentRequesetID)) {
-                ZLog.d(TAG, "Request ID bind contentRequestId:$contentRequesetID, traceID:${mNetworkTraceRequestID}")
-                mNetworkContentRequestID = contentRequesetID
-                if (canTrace(call)) {
-                    mNetworkTraceTimeRecord?.contentRequestId = mNetworkContentRequestID
+        request.header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID)
+            ?.let { contentRequesetID ->
+                if (!TextUtils.isEmpty(contentRequesetID)) {
+                    ZLog.d(
+                        TAG,
+                        "Request ID bind contentRequestId:$contentRequesetID, traceID:${mNetworkTraceRequestID}"
+                    )
+                    mNetworkContentRequestID = contentRequesetID
+                    if (canTrace(call)) {
+                        mNetworkTraceTimeRecord?.contentRequestId = mNetworkContentRequestID
+                    }
+                    AAFRequestDataRepository.getNetworkContentDataRecordByContentID(
+                        mNetworkContentRequestID
+                    ).mTraceRequestId = mNetworkTraceRequestID
                 }
-                AAFRequestDataRepository.getNetworkContentDataRecordByContentID(mNetworkContentRequestID).mTraceRequestId = mNetworkTraceRequestID
             }
-        }
         listener?.requestHeadersEnd(call, request)
     }
 
@@ -175,7 +201,11 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
                 if (enableTrace) {
                     logRequest(OkHttpWrapper.getRecord(mNetworkTraceRequestID))
                 } else {
-                    logRequest(AAFRequestDataRepository.getNetworkContentDataRecordByContentID(mNetworkContentRequestID))
+                    logRequest(
+                        AAFRequestDataRepository.getNetworkContentDataRecordByContentID(
+                            mNetworkContentRequestID
+                        )
+                    )
                 }
             }
         }
@@ -192,6 +222,7 @@ open class AAFNetworkEventListener(protected val enableTrace: Boolean = false, p
     override fun callFailed(call: Call, ioe: IOException) {
         super.callFailed(call, ioe)
         listener?.callFailed(call, ioe)
+        doLogAction()
     }
 
     private fun saveEvent(eventName: String) {
