@@ -24,8 +24,8 @@ open class DebugEnvFragment : BaseDebugListFragment() {
             ins: OnEnvChangedListener
     ): RadioDialog {
         RadioDialog(activity).apply {
-            setTitle("${title}环境切换")
-            setHtmlContent("点击下方列表选择将 <font color='#38ADFF'> ${title} </font> 环境切换为：")
+            setTitle("${title}切换")
+            setHtmlContent("点击下方列表选择将 <font color='#38ADFF'> ${title} </font> 切换为：")
             setRadioData(data, index, null)
             setPositive("确定")
             setNegative("取消")
@@ -64,7 +64,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
             if (setResultForServer) {
                 showChangeEnvDialog(title, tipsText)
             } else {
-                ToastUtil.showShort(context, "${title}环境切换失败，请重试")
+                ToastUtil.showShort(context, "${title}切换失败，请重试")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -74,8 +74,8 @@ open class DebugEnvFragment : BaseDebugListFragment() {
     fun showChangeEnvDialog(title: String, tipsText: String) {
         try {
             CommonDialog(activity).apply {
-                setTitle("${title}环境切换")
-                setHtmlContent("${title}环境已切换为：<BR> <font color=\"#c0392b\">$tipsText</font> <BR> 点击确认后重启APP后生效")
+                setTitle("${title}切换")
+                setHtmlContent("${title}已切换为：<BR> <font color=\"#c0392b\">$tipsText</font> <BR> 点击确认后重启APP后生效")
                 setShouldCanceled(false)
                 setPositive("确认")
                 setOnClickBottomListener(object : OnDialogListener {
