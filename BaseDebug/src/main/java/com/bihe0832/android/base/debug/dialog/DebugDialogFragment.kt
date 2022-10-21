@@ -44,7 +44,7 @@ class DebugDialogFragment : DebugEnvFragment() {
                 }.let { data ->
                     getChangeEnvSelectDialog("查看应用版本及环境", data, 0, object : DebugEnvFragment.OnEnvChangedListener {
                         override fun onChanged(index: Int) {
-                            showChangeEnvDialog("环境切换", data.get(index))
+                            showChangeEnvDialog("应用环境", data.get(index))
                         }
                     }).let {
                         it.show()
