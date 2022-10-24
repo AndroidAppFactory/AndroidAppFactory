@@ -16,6 +16,7 @@ import com.bihe0832.android.base.debug.card.TestListActivity
 import com.bihe0832.android.base.debug.clipboard.DebugClipboardFragment
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
+import com.bihe0832.android.base.debug.block.DebugEnqueueFragment
 import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
 import com.bihe0832.android.base.debug.image.DebugImageFragment
@@ -52,10 +53,11 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
             add(getDebugFragmentItemData("Dialog、底部弹出Activity 调试", DebugDialogFragment::class.java))
             add(getDebugFragmentItemData("文件（Zip、assets 等）、配置操作调试", DebugFileFragment::class.java))
-            add(getDebugFragmentItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
-            add(getDebugFragmentItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
-
             add(getDebugFragmentItemData("TAB 调试", DebugTabFragment::class.java))
+            add(getDebugFragmentItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
+
+            add(getDebugFragmentItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
+            add(getDebugFragmentItemData("任务队列 调试", DebugEnqueueFragment::class.java))
             add(getDebugFragmentItemData("图片操作调试", DebugImageFragment::class.java))
             add(getDebugFragmentItemData("SVGA 调试", DebugSvgaFragment::class.java))
             add(getDebugFragmentItemData("拍照及相册调试", DebugPhotosFragment::class.java))
