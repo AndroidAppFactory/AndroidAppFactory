@@ -85,11 +85,21 @@ public abstract class BaseAAFBlockTask implements BlockTask {
         blockQueue.add(1);
     }
 
+    public Boolean isFirstInFirstOut() {
+        return true;
+    }
+
     @Override
     public int compareTo(BlockTask another) {
         final int me = this.getPriority();
         final int it = another.getPriority();
-        long result = (me == it ? another.getSequence() - getSequence() : it - me);
+        long result;
+        if (isFirstInFirstOut()) {
+            result = (me == it ? getSequence() - another.getSequence() : it - me);
+        } else {
+            result = (me == it ? another.getSequence() - getSequence() : it - me);
+        }
+
         return (int) result;
     }
 

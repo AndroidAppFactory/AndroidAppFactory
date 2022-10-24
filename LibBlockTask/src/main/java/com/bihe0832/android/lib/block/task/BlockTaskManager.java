@@ -31,7 +31,6 @@ public class BlockTaskManager {
             public void run() {
                 try {
                     while (isRunning) {
-                        ZLog.d(TAG, "Do task by loop");
                         //死循环
                         BlockTask iTask = mTaskQueue.take();
                         if (iTask != null) {
@@ -39,10 +38,6 @@ public class BlockTaskManager {
                             iTask.blockTask();
                             iTask.finishTask();
                         }
-
-//                        if(mTaskQueue.size() == 0){
-//                            isRunning = false;
-//                        }
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
