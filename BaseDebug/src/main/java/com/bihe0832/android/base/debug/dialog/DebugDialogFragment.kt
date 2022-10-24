@@ -266,9 +266,10 @@ class DebugDialogFragment : DebugEnvFragment() {
 
     }
 
+    private val mBlockDialogManager = BlockDialogManager()
     fun testBlock() {
         for (i in 0..5) {
-            BlockDialogManager.showDialog(CommonDialog(activity).apply {
+            mBlockDialogManager.showDialog(CommonDialog(activity).apply {
                 getAlert(this)
                 setTitle("弹框 $i")
             }, MathUtils.getRandNumByLimit(0, 10), i * 3000L)

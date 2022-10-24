@@ -13,26 +13,18 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
  * Description: Description
  *
  */
-object BlockDialogManager {
-    private val mTaskQueue = BlockTaskManager()
+class BlockDialogManager : BlockTaskManager() {
 
-    fun showDialog(dialog: CommonDialog, priority: Int, delayTime: Long) {
-        ZLog.d("BlockDialogManager", "showDialog : $dialog after $delayTime")
-        ThreadManager.getInstance().start({
-            showDialog(dialog, priority)
-        }, delayTime)
-    }
-
-    private fun showDialog(dialog: CommonDialog, priority: Int) {
-        mTaskQueue.add(BlockDialogTask(dialog, dialog.title, priority))
-    }
-
-    private class BlockDialogTask(dialog: CommonDialog, name: String?, priority: Int) : BaseAAFBlockTask(name) {
+    class BlockDialogTask(dialog: CommonDialog, name: String) : BaseAAFBlockTask(name) {
         private var mDialog: CommonDialog? = null
         override fun doTask() {
             try {
-                ThreadManager.getInstance().runOnUIThread {
-                    mDialog!!.show()
+                if (mDialog != null) {
+                    ThreadManager.getInstance().runOnUIThread {
+                        mDialog?.show()
+                    }
+                } else {
+                    unLockBlock()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -40,9 +32,23 @@ object BlockDialogManager {
         }
 
         init {
-            setPriority(priority)
             mDialog = dialog
             mDialog!!.setOnDismissListener { unLockBlock() }
         }
     }
+
+    fun showDelayTask(task: BaseAAFBlockTask, priority: Int, delayTime: Long) {
+        ZLog.d("MnaBlockTaskManager", "showDelayTask : $task after $delayTime")
+        ThreadManager.getInstance().start({
+            add(task.apply {
+                setPriority(priority)
+            })
+        }, delayTime)
+    }
+
+    fun showDialog(dialog: CommonDialog, priority: Int, delayTime: Long) {
+        showDelayTask(BlockDialogTask(dialog, dialog.title), priority, delayTime)
+    }
+
+
 }
