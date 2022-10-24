@@ -17,9 +17,11 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.dialog.*
+import com.bihe0832.android.lib.ui.dialog.blockdialog.BlockDialogManager
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 class DebugDialogFragment : DebugEnvFragment() {
@@ -27,6 +29,8 @@ class DebugDialogFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
+            add(DebugItemData("根据优先级逐次弹框", View.OnClickListener { testBlock() }))
+
             add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
             add(DebugItemData("底部Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
             add(DebugItemData("底部Dialog", View.OnClickListener { showAlert(BottomDialog(activity!!)) }))
@@ -142,7 +146,7 @@ class DebugDialogFragment : DebugEnvFragment() {
         showAlert(CommonDialog(activity))
     }
 
-    fun showAlert(dialog: CommonDialog) {
+    fun getAlert(dialog: CommonDialog) {
         var title = "分享的标题"
         var content = "分享的内容"
         dialog.setTitle(title)
@@ -176,6 +180,10 @@ class DebugDialogFragment : DebugEnvFragment() {
 
             }
         })
+    }
+
+    fun showAlert(dialog: CommonDialog) {
+        getAlert(dialog)
         dialog.show()
     }
 
@@ -246,7 +254,6 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
     fun showBottomDialog(activity: Activity) {
-
         BottomListDialog(activity).apply {
             setItemList(mutableListOf<String>("Item 1", "<Strong>" + TextFactoryUtils.getSpecialText("Item 2", Color.RED) + "</Strong>", "Item 3"))
             setOnItemClickListener {
@@ -255,6 +262,16 @@ class DebugDialogFragment : DebugEnvFragment() {
             }
         }.let {
             it.show()
+        }
+
+    }
+
+    fun testBlock() {
+        for (i in 0..5) {
+            BlockDialogManager.showDialog(CommonDialog(activity).apply {
+                getAlert(this)
+                setTitle("弹框 $i")
+            }, MathUtils.getRandNumByLimit(0, 10), i * 3000L)
         }
 
     }

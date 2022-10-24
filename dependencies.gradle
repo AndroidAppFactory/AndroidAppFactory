@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibBlockTask"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.5.3"
+ext.moduleVersionName = "5.6.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -254,7 +254,8 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
                         "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
-                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC"
+                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
+                        "LibBlockTask"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -505,7 +506,9 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "${project.androidsupport.constraintlayout}",
-                        "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText", "LibViewExt"]
+                        "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText", "LibViewExt",
+                        "LibBlockTask"
+                ]
         ],
         "LibNotification"           : [
                 "version"            : "5.2.12",
@@ -626,8 +629,17 @@ ext.moduleInfo = [
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
                 ]
+        ],
+        "LibBlockTask"              : [
+                "version"            : "5.5.1",
+                "artifactId"         : "lib-block-task",
+                "apidependenciesList": [
+                        "LibLog", "LibCommonUtils"
+                ]
         ]
 ]
+
+
 
 
 
