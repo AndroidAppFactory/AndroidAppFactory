@@ -13,7 +13,6 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/activity_list_refresh"
-        android:background="#4D000000"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
