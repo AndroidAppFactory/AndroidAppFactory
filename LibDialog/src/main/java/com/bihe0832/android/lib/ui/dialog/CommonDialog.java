@@ -50,10 +50,33 @@ public class CommonDialog extends Dialog {
     private View columnLineView;
     private TextView feedback;
     private CheckBox nomoreCb;
+    private View extraView;
+
     private boolean isShowCheckBox = false;
     private OnCheckedListener onCheckedListener;
     private int contentColor = -1;
     private boolean loadImgWithFade = true;
+    /**
+     * 底部是否只有一个按钮
+     */
+    private boolean isSingle = false;
+
+    /**
+     * 都是内容数据
+     */
+    private String message = "";
+    private String title = "";
+    private String content = "";
+    private CharSequence charSequenceContent = null;
+    private MovementMethod movement = null;
+    private String feedbackContent = "";
+    private String positiveString = "";
+    private String negativeString = "";
+    private String imageUrl = null;
+    private boolean shouldCanceledOutside = false;
+    private int imageContentResId = -1;
+    private int imageResId = -1;
+
 
     public CommonDialog(Context context) {
         super(context, R.style.CommonDialog);
@@ -63,28 +86,6 @@ public class CommonDialog extends Dialog {
     public CommonDialog(Context context, int themeResId) {
         super(context, themeResId);
     }
-
-    /**
-     * 都是内容数据
-     */
-    private String message;
-    private String title;
-    private String content;
-    private CharSequence charSequenceContent = null;
-    private MovementMethod movement = null;
-    private String feedbackContent;
-    private String positiveString;
-    private String negativeString;
-    private String imageUrl = null;
-    private boolean shouldCanceledOutside = false;
-    private int imageContentResId = -1;
-    private int imageResId = -1;
-    private View extraView;
-
-    /**
-     * 底部是否只有一个按钮
-     */
-    private boolean isSingle = false;
 
     protected int getLayoutID() {
         return R.layout.com_bihe0832_common_dialog_layout;
@@ -388,9 +389,10 @@ public class CommonDialog extends Dialog {
         return this;
     }
 
-    public boolean getShouldCanceled(){
+    public boolean getShouldCanceled() {
         return shouldCanceledOutside;
     }
+
     public CommonDialog setNegative(String negtive) {
         this.negativeString = negtive;
         return this;
