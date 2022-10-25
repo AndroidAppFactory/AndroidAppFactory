@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.network.okhttp.interceptor.data
+package com.bihe0832.android.lib.okhttp.wrapper.interceptor.data
 
 import com.bihe0832.android.lib.http.common.core.BaseConnection
 import okhttp3.Headers

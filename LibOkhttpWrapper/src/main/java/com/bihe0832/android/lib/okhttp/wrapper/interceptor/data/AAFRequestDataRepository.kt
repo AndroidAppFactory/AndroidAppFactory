@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.network.okhttp.interceptor.data
+package com.bihe0832.android.lib.okhttp.wrapper.interceptor.data
 
 import java.util.concurrent.ConcurrentHashMap
 

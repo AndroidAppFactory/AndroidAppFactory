@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibOkhttpWrapper"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.6.3"
+ext.moduleVersionName = "5.7.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -180,11 +180,7 @@ ext.moduleInfo = [
                 "version"            : "5.6.3",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
-                        "Framework",
-                        'com.squareup.okhttp3:okhttp:3.9.1',
-                        'com.squareup.okhttp3:logging-interceptor:3.8.0',
-                        'com.squareup.retrofit2:retrofit:2.4.0',
-                        'com.squareup.retrofit2:converter-gson:2.4.0',
+                        "Framework"
                 ]
         ],
         "CommonWebview"             : [
@@ -236,7 +232,9 @@ ext.moduleInfo = [
         "LibWrapper"                : [
                 "version"            : "5.6.3",
                 "artifactId"         : "lib-wrapper",
-                "apidependenciesList": ["LibUtils", "LibUIUtils", "LibDebug"]
+                "apidependenciesList": [
+                        "LibUtils", "LibUIUtils", "LibDebug", "LibOkhttpWrapper"
+                ]
         ],
         "LibUIUtils"                : [
                 "version"            : "5.6.3",
@@ -635,6 +633,17 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-block-task",
                 "apidependenciesList": [
                         "LibLog", "LibCommonUtils"
+                ]
+        ],
+        "LibOkhttpWrapper"          : [
+                "version"            : "5.6.1",
+                "artifactId"         : "lib-okhttp-wrapper",
+                "apidependenciesList": [
+                        "LibLog", "LibHttpCommon",
+                        'com.squareup.okhttp3:okhttp:3.9.1',
+                        'com.squareup.okhttp3:logging-interceptor:3.8.0',
+                        'com.squareup.retrofit2:retrofit:2.4.0',
+                        'com.squareup.retrofit2:converter-gson:2.4.0',
                 ]
         ]
 ]

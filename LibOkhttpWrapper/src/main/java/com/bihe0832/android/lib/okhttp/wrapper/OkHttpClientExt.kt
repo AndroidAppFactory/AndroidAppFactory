@@ -6,9 +6,8 @@
  *
  */
 
-package com.bihe0832.android.common.network.okhttp
+package com.bihe0832.android.lib.okhttp.wrapper
 
-import com.bihe0832.android.framework.constant.Constants
 import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -16,6 +15,7 @@ import okhttp3.Response
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.Reader
+import java.nio.charset.Charset
 
 /**
  *
@@ -30,7 +30,7 @@ fun Response.getResponseData(): String {
     var reader: BufferedReader? = null
     try {
         val responseBody = peekBody(Long.MAX_VALUE)
-        val charset = responseBody.contentType()?.charset() ?: Constants.CHAR_SET_UTF8
+        val charset = responseBody.contentType()?.charset() ?: Charset.forName("UTF-8")
         jsonReader = InputStreamReader(responseBody.byteStream(), charset)
         reader = BufferedReader(jsonReader)
         val result = StringBuffer()
@@ -62,7 +62,7 @@ fun Request.getRequestParams(): String {
         val buffer = okio.Buffer()
         try {
             it.writeTo(buffer)
-            val charset = it.contentType()?.charset() ?: Constants.CHAR_SET_UTF8
+            val charset = it.contentType()?.charset() ?: Charset.forName("UTF-8")
             return buffer.readString(charset)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
