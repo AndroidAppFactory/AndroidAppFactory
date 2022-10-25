@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibOkhttpWrapper"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -71,14 +71,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDebug"               : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -87,28 +87,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonShare"               : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-share",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNavigationDrawer"    : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-navigation-drawer",
                 "apidependenciesList": [
                         "CommonList", "CommonAbout"
                 ]
         ],
         "CommonBottomTab"           : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-bottom-tab",
                 "apidependenciesList": [
                         "CommonSvga"
                 ]
         ],
         "CommonSvga"                : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-svga",
                 "apidependenciesList": [
                         "Framework",
@@ -116,7 +116,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonAceEditor"           : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-ace-editor",
                 "apidependenciesList": [
                         "Framework"
@@ -124,14 +124,14 @@ ext.moduleInfo = [
         ],
 
         "CommonAbout"               : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "Framework", "CommonList"
                 ]
         ],
         "CommonList"                : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         "${project.androidsupport.swiperefreshlayout}",
@@ -139,28 +139,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "5.8.0",
+                "version"                : "5.8.1",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "${project.androidsupport.swiperefreshlayout}",
@@ -173,7 +173,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "5.8.0",
+                "version"                : "5.8.1",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -185,14 +185,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "5.8.0",
+                "version"                : "5.8.1",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "${project.androidsupport.annotation}",
@@ -206,7 +206,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibDebug",
@@ -600,7 +600,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"          : [
-                "version"            : "5.8.0",
+                "version"            : "5.8.1",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon",
