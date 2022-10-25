@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
  * Description: Description
  *
  */
-class BlockDialogManager : BlockTaskManager() {
+open class BlockDialogManager : BlockTaskManager() {
 
     class BlockDialogTask(dialog: CommonDialog, name: String) : BaseAAFBlockTask(name) {
         private var mDialog: CommonDialog? = null
@@ -47,7 +47,7 @@ class BlockDialogManager : BlockTaskManager() {
     }
 
     fun showDialog(dialog: CommonDialog, priority: Int, delayTime: Long) {
-        showDelayTask(BlockDialogTask(dialog, dialog.title), priority, delayTime)
+        showDelayTask(BlockDialogTask(dialog, dialog.title ?: ""), priority, delayTime)
     }
 
 
