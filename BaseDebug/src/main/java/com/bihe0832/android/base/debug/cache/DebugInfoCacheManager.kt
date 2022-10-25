@@ -18,7 +18,7 @@ import kotlin.coroutines.suspendCoroutine
  */
 
 object DebugInfoCacheManager {
-    val LOG_TAG = "DebugInfoCacheManager"
+    val LOG_TAG = this.javaClass.simpleName
 
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 

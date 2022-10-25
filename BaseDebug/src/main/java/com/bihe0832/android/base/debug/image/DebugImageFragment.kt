@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.common.image.blur.BlurTransformation
+import com.bihe0832.android.lib.ui.image.blur.BlurTransformation
 import com.bihe0832.android.common.photos.HeadIconBuildFactory
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment

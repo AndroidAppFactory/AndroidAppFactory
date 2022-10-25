@@ -2,12 +2,13 @@ package com.bihe0832.android.common.praise
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.praise.UserPraiseManager.KEY_PRAISE_DONE
-import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.router.Routers
 
 class UserPraiseDialog(private val activity: Activity, private val feedbackRouter: String) : Dialog(activity, R.style.userPraiseDialogTheme) {
 
@@ -39,7 +40,7 @@ class UserPraiseDialog(private val activity: Activity, private val feedbackRoute
         }
         findViewById<View>(R.id.btn_goFeedback)?.setOnClickListener {
             praiseDone()
-            RouterAction.openFinalURL(feedbackRouter)
+            Routers.open(context, feedbackRouter, Intent.FLAG_ACTIVITY_SINGLE_TOP)
             dismiss()
         }
         findViewById<View>(R.id.btn_close)?.setOnClickListener {

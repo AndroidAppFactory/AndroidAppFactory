@@ -14,7 +14,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 
 class DebugLogFragment : BaseDebugListFragment() {
-    val LOG_TAG = "Test"
+    val LOG_TAG = this.javaClass.simpleName
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {

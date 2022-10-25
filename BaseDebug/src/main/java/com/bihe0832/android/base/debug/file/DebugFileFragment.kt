@@ -37,7 +37,7 @@ import java.io.File
 
 
 class DebugFileFragment : DebugEnvFragment() {
-    val LOG_TAG = "DebugFileFragment"
+    val LOG_TAG = this.javaClass.simpleName
 
     val configListener = object : OnConfigChangedListener {
         override fun onValueChanged(key: String?, value: String?) {

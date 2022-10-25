@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.utils.time;
 
 import com.bihe0832.android.lib.log.ZLog;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,10 +34,39 @@ public class DateUtil {
         return getDateEN(currentTime, "yyyy-MM-dd HH:mm:ss");
     }
 
+    public static long getDayStartTimestamp(long currentTimestamp) {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyyMMdd");
+        long todayStart = currentTimestamp;
+        try {
+            todayStart = dayFormat.parse(dayFormat.format(new Date(currentTimestamp))).getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return todayStart;
+    }
+
+
+    public static long getDayStartTimestamp(String dateString, String pattern) {
+        DateFormat df = new SimpleDateFormat(pattern);
+        try {
+            Date dt = df.parse(dateString);
+            return getDayStartTimestamp(dt.getTime());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return -1;
+    }
+
+
+
     public static String getCurrentDateEN(String pattern) {
         return getDateEN(System.currentTimeMillis(), pattern);
     }
 
+    public static String getCurrentWeekCN(long currentTime, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.CHINA);
+        return format.format(new Date(currentTime)).replace("周", "星期");
+    }
 
     public static String getCurrentDateEN() {
         return getCurrentDateEN("yyyy-MM-dd HH:mm:ss");

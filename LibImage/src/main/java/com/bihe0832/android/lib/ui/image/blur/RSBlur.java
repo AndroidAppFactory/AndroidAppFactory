@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.image.blur;
+package com.bihe0832.android.lib.ui.image.blur;
 
 import android.annotation.TargetApi;
 import android.content.Context;
