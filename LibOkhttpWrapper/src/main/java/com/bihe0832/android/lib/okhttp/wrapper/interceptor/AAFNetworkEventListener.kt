@@ -6,15 +6,15 @@
  *
  */
 
-package com.bihe0832.android.common.network.okhttp.interceptor
+package com.bihe0832.android.lib.okhttp.wrapper.interceptor
 
 import android.text.TextUtils
-import com.bihe0832.android.common.network.okhttp.OkHttpWrapper
-import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository
-import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkContentDataRecord
-import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkRecord
-import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkTraceTimeRecord
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkContentDataRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkTraceTimeRecord
 import com.bihe0832.android.lib.thread.ThreadManager
 import okhttp3.*
 import java.io.IOException

@@ -5,14 +5,13 @@
  *  * Last modified 2022/6/27 下午8:40
  *
  */
-package com.bihe0832.android.common.network.okhttp.interceptor
+package com.bihe0832.android.lib.okhttp.wrapper.interceptor
 
-import com.bihe0832.android.common.network.okhttp.OkHttpWrapper
-import com.bihe0832.android.common.network.okhttp.OkHttpWrapper.generateRequestID
-import com.bihe0832.android.common.network.okhttp.getRequestParams
-import com.bihe0832.android.common.network.okhttp.getResponseData
-import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
-import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkContentDataRecord
+import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
+import com.bihe0832.android.lib.okhttp.wrapper.getRequestParams
+import com.bihe0832.android.lib.okhttp.wrapper.getResponseData
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkContentDataRecord
 import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Request
@@ -36,7 +35,7 @@ open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false) : 
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val requestId = generateRequestID()
+        val requestId = OkHttpWrapper.generateRequestID()
         var networkContentDataRecord: NetworkContentDataRecord? = null
         val request = interceptRequest(requestId, chain.request().newBuilder().header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID, requestId).build())
         if (enableIntercept) {

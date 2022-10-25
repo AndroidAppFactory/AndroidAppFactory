@@ -5,10 +5,10 @@
  *  * Last modified 2022/6/28 下午3:09
  *
  */
-package com.bihe0832.android.common.network.okhttp.interceptor.data
+package com.bihe0832.android.lib.okhttp.wrapper.interceptor.data
 
-import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByTraceID
-import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository.getNetworkTraceTimeRecordByRequestID
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByTraceID
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository.getNetworkTraceTimeRecordByRequestID
 import com.bihe0832.android.lib.http.common.core.BaseConnection
 
 /**

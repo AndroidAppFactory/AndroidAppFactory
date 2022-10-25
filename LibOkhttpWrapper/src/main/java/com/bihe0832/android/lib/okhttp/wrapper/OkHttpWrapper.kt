@@ -6,13 +6,13 @@
  *
  */
 
-package com.bihe0832.android.common.network.okhttp
+package com.bihe0832.android.lib.okhttp.wrapper
 
 import android.os.SystemClock
-import com.bihe0832.android.common.network.okhttp.interceptor.AAFNetworkEventListener
-import com.bihe0832.android.common.network.okhttp.interceptor.AAFOKHttpInterceptor
-import com.bihe0832.android.common.network.okhttp.interceptor.data.AAFRequestDataRepository
-import com.bihe0832.android.common.network.okhttp.interceptor.data.NetworkRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFNetworkEventListener
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOKHttpInterceptor
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkRecord
 import com.bihe0832.android.lib.utils.IdGenerator
 import okhttp3.EventListener
 import okhttp3.Interceptor
