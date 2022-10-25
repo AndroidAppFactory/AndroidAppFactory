@@ -9,7 +9,7 @@ import java.io.Serializable
 /**
  * 请求数据记录
  */
-class NetworkContentDataRecord : Serializable {
+class RequestContentDataRecord : Serializable {
 
     var contentRequestId: String = ""
     var mTraceRequestId: String = ""
