@@ -28,7 +28,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.io.File
 
 class DebugDownloadFragment : BaseDebugListFragment() {
-    val LOG_TAG = "DebugDownloadFragment"
+    val LOG_TAG = this.javaClass.simpleName
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {

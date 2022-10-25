@@ -16,7 +16,7 @@ import com.bihe0832.android.lib.log.ZLog
 
 
 class DebugPhotosFragment : BaseDebugListFragment() {
-    val LOG_TAG = "Test"
+    val LOG_TAG = this.javaClass.simpleName
 
     var needCrop = false
 

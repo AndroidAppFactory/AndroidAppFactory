@@ -1,10 +1,10 @@
 package com.bihe0832.android.app.api
 
-import com.bihe0832.android.common.network.okhttp.OkHttpWrapper
-import com.bihe0832.android.common.network.okhttp.getRequestBodyByJsonString
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.gson.JsonHelper
+import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
+import com.bihe0832.android.lib.okhttp.wrapper.getRequestBodyByJsonString
 import com.bihe0832.android.lib.request.URLUtils
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody

@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibCoroutines,LibImage,LibCommonUtils"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.7.0"
+ext.moduleVersionName = "5.8.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -82,8 +82,7 @@ ext.moduleInfo = [
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
-                        "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList",
-                        "CommonCoroutines", "CommonDataCenter", "CommonImage", "CommonAceEditor",
+                        "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
                         "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare"
                 ]
         ],
@@ -120,29 +119,6 @@ ext.moduleInfo = [
                 "version"            : "5.7.0",
                 "artifactId"         : "common-ace-editor",
                 "apidependenciesList": [
-                        "Framework"
-                ]
-        ],
-        "CommonImage"               : [
-                "version"            : "5.7.0",
-                "artifactId"         : "common-image",
-                "apidependenciesList": [
-                        "Framework"
-                ]
-        ],
-        "CommonDataCenter"          : [
-                "version"            : "5.7.0",
-                "artifactId"         : "common-data-center",
-                "apidependenciesList": [
-                        "CommonCoroutines"
-                ]
-        ],
-        "CommonCoroutines"          : [
-                "version"            : "5.7.0",
-                "artifactId"         : "common-coroutines",
-                "apidependenciesList": [
-                        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
-                        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.kotlinx_coroutines_version}",
                         "Framework"
                 ]
         ],
@@ -233,27 +209,15 @@ ext.moduleInfo = [
                 "version"            : "5.7.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
-                        "LibUtils", "LibUIUtils", "LibDebug", "LibOkhttpWrapper"
-                ]
-        ],
-        "LibUIUtils"                : [
-                "version"            : "5.6.3",
-                "artifactId"         : "lib-uiutils",
-                "apidependenciesList": [
+                        "Router", "RouterAnnotation", "LibDebug",
+                        "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
+                        "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
+                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
+                        "LibBlockTask" ,"LibOkhttpWrapper","LibDataCenter","LibCoroutines",
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
                         "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager", "LibSvga"
-                ]
-        ],
-        "LibUtils"                  : [
-                "version"            : "5.6.3",
-                "artifactId"         : "lib-utils",
-                "apidependenciesList": [
-                        "Router", "RouterAnnotation", "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
-                        "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
-                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
-                        "LibBlockTask"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -644,6 +608,21 @@ ext.moduleInfo = [
                         'com.squareup.okhttp3:logging-interceptor:3.8.0',
                         'com.squareup.retrofit2:retrofit:2.4.0',
                         'com.squareup.retrofit2:converter-gson:2.4.0',
+                ]
+        ],
+        "LibDataCenter"          : [
+                "version"            : "5.7.0",
+                "artifactId"         : "lib-data-center",
+                "apidependenciesList": [
+                        "LibLog","LibAAF","LibCoroutines"
+                ]
+        ],
+        "LibCoroutines"          : [
+                "version"            : "5.7.0",
+                "artifactId"         : "lib-coroutines",
+                "apidependenciesList": [
+                        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
+                        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.kotlinx_coroutines_version}",
                 ]
         ]
 ]

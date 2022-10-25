@@ -31,7 +31,7 @@ import java.math.RoundingMode
 
 
 class DebugConvertFragment : DebugEnvFragment() {
-    val LOG_TAG = "DebugTempFragment"
+    val LOG_TAG = this.javaClass.simpleName
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
@@ -40,7 +40,7 @@ class DebugConvertFragment : DebugEnvFragment() {
             add(DebugItemData("Float 转化", View.OnClickListener { testConvertFloat() }))
 
             add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
-            add(DebugItemData("数据格式化", View.OnClickListener { testFormat() }))
+            add(DebugItemData("时间数据格式化", View.OnClickListener { testFormat() }))
             add(DebugItemData("版本号比较", View.OnClickListener { testVersion() }))
 
 
@@ -97,8 +97,8 @@ class DebugConvertFragment : DebugEnvFragment() {
                 "false",
                 "False"
         ).forEach { data ->
-            ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, false))
-            ZLog.d("testConvert", data + " result is:" + ConvertUtils.parseBoolean(data, true))
+            ZLog.d(LOG_TAG, data + " result is:" + ConvertUtils.parseBoolean(data, false))
+            ZLog.d(LOG_TAG, data + " result is:" + ConvertUtils.parseBoolean(data, true))
         }
     }
 
@@ -112,65 +112,57 @@ class DebugConvertFragment : DebugEnvFragment() {
                 1645772904115,
                 1645772404116
         ).forEach { data ->
-            ZLog.d(
-                    "testDateUtil",
-                    "$data trans result is:" + DateUtil.getDateCompareResult(data.toLong())
-            )
-            ZLog.d(
-                    "testDateUtil",
-                    "$data trans result is:" + DateUtil.getDateCompareResult1(data.toLong())
-            )
-            ZLog.d("testDateUtil", "$data trans result is:" + DateUtil.getDateCompareResult2(data))
+            ZLog.d(LOG_TAG, "DateEN $data trans result is:" + DateUtil.getDateEN(data))
+            ZLog.d(LOG_TAG, "DateEN $data start is:" + DateUtil.getDayStartTimestamp(data))
+            ZLog.d(LOG_TAG, "DateEN $data start is:" + DateUtil.getDateEN(DateUtil.getDayStartTimestamp(data)))
+            ZLog.d(LOG_TAG, "DateEN $data trans result is:" + DateUtil.getCurrentWeekCN(data, "yyyy-MM-dd E HH:mm"))
+            ZLog.d(LOG_TAG, "DateCompare $data trans result is:" + DateUtil.getDateCompareResult(data.toLong()))
+            ZLog.d(LOG_TAG, "DateCompare $data trans result is:" + DateUtil.getDateCompareResult1(data.toLong()))
+            ZLog.d(LOG_TAG, "DateCompare $data trans result is:" + DateUtil.getDateCompareResult2(data))
         }
 
         mutableListOf(1, 37, 67, 2434, 24064, 2403564).forEach {
-            ZLog.d(
-                    "formatSecondsTo00",
-                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
+            ZLog.d(LOG_TAG,
+                    "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
             )
-            ZLog.d(
-                    "formatSecondsTo00", "Value $it trans to :" + TimeUtil.formatSecondsTo00(
+            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(
                     it.toLong(),
                     false,
                     false,
                     false
             )
             )
-            ZLog.d(
-                    "formatSecondsTo00",
-                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true)
-            )
-            ZLog.d(
-                    "formatSecondsTo00",
-                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false)
-            )
-            ZLog.d(
-                    "formatSecondsTo00",
-                    "Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
-            )
+            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true))
+            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false))
+            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true))
         }
         mutableListOf(1, 37, 67, 2434, 3600, 3602, 24064, 86400, 86440, 2403564).forEach {
-            ZLog.d(
-                    "formatSecondsToDurationDesc",
-                    "Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong())
-            )
+            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong()))
         }
 
         mutableListOf(2.6, 2.699, 2.722, 2.70, 2.73888888).forEach {
-            ZLog.d("BigDecimal", "$it to ${BigDecimal(it).setScale(2, RoundingMode.DOWN)}")
+            ZLog.d(LOG_TAG, "BigDecimal $it to ${BigDecimal(it).setScale(2, RoundingMode.DOWN)}")
+        }
+
+        mutableListOf("2022-02-25 00:00:00", "2022-02-25 14:51:44", "2012-08-24 00:00:00").forEach {
+            ZLog.d(LOG_TAG, "Day start $it to ${DateUtil.getDayStartTimestamp(it, "yyyy-MM-dd HH:mm:ss")}")
+        }
+
+        mutableListOf("2022-02-25 00:00", "2022-02-25 51:44", "2012-08-24 00:00").forEach {
+            ZLog.d(LOG_TAG, "Day start $it to ${DateUtil.getDayStartTimestamp(it, "yyyy-MM-dd mm:ss")}")
         }
 
     }
 
     private fun testConvertFloat() {
-        ZLog.d("3 " + "3".toFloat() + " " + ConvertUtils.parseFloat("3", 0f))
-        ZLog.d("3 " + "3".toDouble() + " " + ConvertUtils.parseDouble("3", 0.0))
-        ZLog.d("3.6 " + "3.6".toFloat() + " " + ConvertUtils.parseFloat("3.6", 0f))
-        ZLog.d("0.6 " + "0.6".toFloat() + " " + ConvertUtils.parseFloat("0.6.1", 0f))
-        ZLog.d("0.61 " + "0.61".toFloat() + " " + ConvertUtils.parseFloat("0.61", 0f))
-        ZLog.d("3.6 " + "3.6".toDouble() + " " + ConvertUtils.parseDouble("3.6", 0.0))
-        ZLog.d("0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
-        ZLog.d("0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
+        ZLog.d(LOG_TAG, "3 " + "3".toFloat() + " " + ConvertUtils.parseFloat("3", 0f))
+        ZLog.d(LOG_TAG, "3 " + "3".toDouble() + " " + ConvertUtils.parseDouble("3", 0.0))
+        ZLog.d(LOG_TAG, "3.6 " + "3.6".toFloat() + " " + ConvertUtils.parseFloat("3.6", 0f))
+        ZLog.d(LOG_TAG, "0.6 " + "0.6".toFloat() + " " + ConvertUtils.parseFloat("0.6.1", 0f))
+        ZLog.d(LOG_TAG, "0.61 " + "0.61".toFloat() + " " + ConvertUtils.parseFloat("0.61", 0f))
+        ZLog.d(LOG_TAG, "3.6 " + "3.6".toDouble() + " " + ConvertUtils.parseDouble("3.6", 0.0))
+        ZLog.d(LOG_TAG, "0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
+        ZLog.d(LOG_TAG, "0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
 
 
     }
@@ -183,16 +175,16 @@ class DebugConvertFragment : DebugEnvFragment() {
         val text = builder.toString()
 
         val compres = ZlibUtil.compress(text.toByteArray())
-        ZLog.d("testZlib", "compres 前后： " + compres.size + " : " + text.toByteArray().size)
+        ZLog.d(LOG_TAG, "compres 前后： " + compres.size + " : " + text.toByteArray().size)
 
         val b = Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
         val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
 
 
         val res = String(ZlibUtil.uncompress(compres))
-        ZLog.d("testZlib", "压缩再解压一致性确认：")
-        ZLog.d("testZlib", "text：\n$text\n\n")
-        ZLog.d("testZlib", "result：\n$res\n\n")
+        ZLog.d(LOG_TAG, "压缩再解压一致性确认：")
+        ZLog.d(LOG_TAG, "text：\n$text\n\n")
+        ZLog.d(LOG_TAG, "result：\n$res\n\n")
 
     }
 
@@ -210,7 +202,7 @@ class DebugConvertFragment : DebugEnvFragment() {
 
     private fun testPercentItem(data: Float) {
         data.let {
-            ZLog.d("testPercent", data.toString() + " " + MathUtils.getFormatPercentDesc(data))
+            ZLog.d(LOG_TAG, "testPercent " + data.toString() + " " + MathUtils.getFormatPercentDesc(data))
         }
     }
 
@@ -222,14 +214,14 @@ class DebugConvertFragment : DebugEnvFragment() {
         val v2_2 = "1.0.2.02"
         val v3 = "1.0.3"
 
-        ZLog.d("testVerion", "v1 VS v1:" + APKUtils.compareVersion(v1, v1))
-        ZLog.d("testVerion", "v1 VS v2:" + APKUtils.compareVersion(v1, v2))
-        ZLog.d("testVerion", "v2 VS v1:" + APKUtils.compareVersion(v2, v1))
-        ZLog.d("testVerion", "v2_1 VS v1:" + APKUtils.compareVersion(v2_1, v1))
-        ZLog.d("testVerion", "v2_1 VS v2:" + APKUtils.compareVersion(v2_1, v2))
-        ZLog.d("testVerion", "v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
-        ZLog.d("testVerion", "v3 VS v2:" + APKUtils.compareVersion(v3, v2))
-        ZLog.d("testVerion", "v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
+        ZLog.d(LOG_TAG, "v1 VS v1:" + APKUtils.compareVersion(v1, v1))
+        ZLog.d(LOG_TAG, "v1 VS v2:" + APKUtils.compareVersion(v1, v2))
+        ZLog.d(LOG_TAG, "v2 VS v1:" + APKUtils.compareVersion(v2, v1))
+        ZLog.d(LOG_TAG, "v2_1 VS v1:" + APKUtils.compareVersion(v2_1, v1))
+        ZLog.d(LOG_TAG, "v2_1 VS v2:" + APKUtils.compareVersion(v2_1, v2))
+        ZLog.d(LOG_TAG, "v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
+        ZLog.d(LOG_TAG, "v3 VS v2:" + APKUtils.compareVersion(v3, v2))
+        ZLog.d(LOG_TAG, "v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
 
     }
 

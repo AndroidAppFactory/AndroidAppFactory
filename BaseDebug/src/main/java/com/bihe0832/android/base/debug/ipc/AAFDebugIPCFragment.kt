@@ -16,7 +16,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 
 
 class AAFDebugIPCFragment : DebugEnvFragment() {
-    val LOG_TAG = "DebugTempFragment"
+    val LOG_TAG = this.javaClass.simpleName
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
