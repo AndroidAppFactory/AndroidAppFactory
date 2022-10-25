@@ -11,7 +11,7 @@ import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
 import com.bihe0832.android.lib.okhttp.wrapper.getRequestParams
 import com.bihe0832.android.lib.okhttp.wrapper.getResponseData
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkContentDataRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestContentDataRecord
 import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Request
@@ -36,24 +36,24 @@ open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false) : 
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestId = OkHttpWrapper.generateRequestID()
-        var networkContentDataRecord: NetworkContentDataRecord? = null
+        var requestContentDataRecord: RequestContentDataRecord? = null
         val request = interceptRequest(requestId, chain.request().newBuilder().header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID, requestId).build())
         if (enableIntercept) {
-            networkContentDataRecord = getNetworkContentDataRecordByContentID(requestId)
+            requestContentDataRecord = getNetworkContentDataRecordByContentID(requestId)
             val connection = chain.connection()
             val protocol = connection?.protocol() ?: Protocol.HTTP_1_1
-            networkContentDataRecord.url = request.url().toString()
-            networkContentDataRecord.method = request.method()
-            networkContentDataRecord.protocol = protocol
-            networkContentDataRecord.requestHeadersMap = request.headers()
+            requestContentDataRecord.url = request.url().toString()
+            requestContentDataRecord.method = request.method()
+            requestContentDataRecord.protocol = protocol
+            requestContentDataRecord.requestHeadersMap = request.headers()
             val requestBody = request.body()
             if (requestBody != null) {
                 val contentLength = requestBody.contentLength()
-                networkContentDataRecord.requestBodyLength = if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
+                requestContentDataRecord.requestBodyLength = if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
                 if (requestBody.contentType() != null) {
-                    networkContentDataRecord.requestContentType = requestBody.contentType()
+                    requestContentDataRecord.requestContentType = requestBody.contentType()
                 }
-                networkContentDataRecord.requestBody = request.getRequestParams()
+                requestContentDataRecord.requestBody = request.getRequestParams()
             }
         }
 
@@ -62,23 +62,23 @@ open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false) : 
             response = interceptResponse(requestId, chain.proceed(request))
         } catch (var25: Exception) {
             if (enableIntercept) {
-                networkContentDataRecord?.errorMsg = var25.toString()
+                requestContentDataRecord?.errorMsg = var25.toString()
             }
             throw var25
         }
 
         if (enableIntercept) {
-            networkContentDataRecord?.responseHeadersMap = response.headers()
-            networkContentDataRecord?.status = response.code()
-            networkContentDataRecord?.errorMsg = response.message() ?: ""
+            requestContentDataRecord?.responseHeadersMap = response.headers()
+            requestContentDataRecord?.status = response.code()
+            requestContentDataRecord?.errorMsg = response.message() ?: ""
             val responseBody = response.body()
             if (responseBody != null) {
                 val contentLength = responseBody.contentLength()
-                networkContentDataRecord?.responseBodyLength = if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
+                requestContentDataRecord?.responseBodyLength = if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
                 if (responseBody.contentType() != null) {
-                    networkContentDataRecord?.responseContentType = responseBody.contentType()
+                    requestContentDataRecord?.responseContentType = responseBody.contentType()
                 }
-                networkContentDataRecord?.responseBody = response.getResponseData()
+                requestContentDataRecord?.responseBody = response.getResponseData()
             }
         }
         return response

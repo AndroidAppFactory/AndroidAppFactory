@@ -9,10 +9,10 @@
 package com.bihe0832.android.lib.okhttp.wrapper
 
 import android.os.SystemClock
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFNetworkEventListener
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpNetworkEventListener
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOKHttpInterceptor
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
 import com.bihe0832.android.lib.utils.IdGenerator
 import okhttp3.EventListener
 import okhttp3.Interceptor
@@ -35,11 +35,11 @@ object OkHttpWrapper {
     }
 
 
-    private val mRequestRecords: CopyOnWriteArrayList<NetworkRecord> by lazy {
-        CopyOnWriteArrayList<NetworkRecord>()
+    private val mRequestRecords: CopyOnWriteArrayList<RequestRecord> by lazy {
+        CopyOnWriteArrayList<RequestRecord>()
     }
 
-    private fun addRecord(record: NetworkRecord) {
+    private fun addRecord(record: RequestRecord) {
         if (mRequestRecords.size > maxRequestListSize) {
             AAFRequestDataRepository.removeData(mRequestRecords[0].traceRequestId)
             mRequestRecords.removeAt(0)
@@ -61,7 +61,7 @@ object OkHttpWrapper {
     fun getOkHttpClientBuilderWithInterceptor(enableTraceAndIntercept: Boolean): OkHttpClient.Builder {
         return getOkHttpClientBuilder().apply {
             addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
-            eventListenerFactory(generateNetworkEventListener(enableTraceAndIntercept, enableTraceAndIntercept, null))
+            eventListenerFactory(generateOkHttpNetworkEventListener(enableTraceAndIntercept, enableTraceAndIntercept, null))
         }
     }
 
@@ -69,26 +69,26 @@ object OkHttpWrapper {
         return AAFOKHttpInterceptor(enableIntercept)
     }
 
-    fun generateNetworkEventListener(enableTrace: Boolean): EventListener.Factory {
-        return generateNetworkEventListener(enableTrace, enableTrace, null)
+    fun generateOkHttpNetworkEventListener(enableTrace: Boolean): EventListener.Factory {
+        return generateOkHttpNetworkEventListener(enableTrace, enableTrace, null)
     }
 
-    fun generateNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?): EventListener.Factory {
-        return EventListener.Factory { AAFNetworkEventListener(enableTrace, enableLog, listener) }
+    fun generateOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?): EventListener.Factory {
+        return EventListener.Factory { AAFOkHttpNetworkEventListener(enableTrace, enableLog, listener) }
     }
 
     fun generateRequestID(): String {
         return mRequestIdGenerator.generate().toString()
     }
 
-    fun getRecord(requestId: String?): NetworkRecord? {
+    fun getRecord(requestId: String?): RequestRecord? {
         return mRequestRecords.find { it.traceRequestId == requestId }
     }
 
-    fun getRecord(requestId: String, url: String, method: String): NetworkRecord {
+    fun getRecord(requestId: String, url: String, method: String): RequestRecord {
         var record = mRequestRecords.find { it.traceRequestId == requestId }
         if (null == record) {
-            record = NetworkRecord(requestId, url, method, SystemClock.elapsedRealtime())
+            record = RequestRecord(requestId, url, method, SystemClock.elapsedRealtime())
             addRecord(record)
         }
         return record

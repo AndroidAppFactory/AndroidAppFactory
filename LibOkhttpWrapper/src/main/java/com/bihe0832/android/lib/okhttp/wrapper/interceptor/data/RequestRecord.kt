@@ -14,7 +14,7 @@ import com.bihe0832.android.lib.http.common.core.BaseConnection
 /**
  * @desc: 一条网络请求记录
  */
-class NetworkRecord(
+class RequestRecord(
         val traceRequestId: String = "",
         val url: String = "",
         val method: String = "",
@@ -24,11 +24,11 @@ class NetworkRecord(
 
         var contentData = getRecordContentData()
         var traceTimeRecord = getRecordTraceTimeData()
-        val totalCost = traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_CALL_END).let {
+        val totalCost = traceTimeRecord.getEventCostTime(RequestTraceTimeRecord.EVENT_CALL_START, RequestTraceTimeRecord.EVENT_CALL_END).let {
             if (it > 0) {
                 it
             } else {
-                traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_RESPONSE_BODY_END)
+                traceTimeRecord.getEventCostTime(RequestTraceTimeRecord.EVENT_CALL_START, RequestTraceTimeRecord.EVENT_RESPONSE_BODY_END)
             }
         }
         StringBuffer().apply {
@@ -37,9 +37,11 @@ class NetworkRecord(
             append("${contentData.requestHeadersMap.toString()}\n")
             append("${contentData.requestBody}\n\n")
             if (method.equals(BaseConnection.HTTP_REQ_METHOD_POST, ignoreCase = true)) {
-                append("--> END $method (${contentData.requestBodyLength} - byte body)   Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms\n")
+                append("--> END $method (${contentData.requestBodyLength} - byte body)   Cost: ${traceTimeRecord.getEventCostTime(
+                    RequestTraceTimeRecord.EVENT_CALL_START, RequestTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms\n")
             } else {
-                append("--> END $method Cost: ${traceTimeRecord.getEventCostTime(NetworkTraceTimeRecord.EVENT_CALL_START, NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms)\n")
+                append("--> END $method Cost: ${traceTimeRecord.getEventCostTime(
+                    RequestTraceTimeRecord.EVENT_CALL_START, RequestTraceTimeRecord.EVENT_REQUEST_BODY_END)}ms)\n")
             }
             append("<-- ${contentData.status} $url ${contentData.errorMsg}\n")
             append("${contentData.responseHeadersMap.toString()}\n")
@@ -53,14 +55,14 @@ class NetworkRecord(
     /**
      *  请求数据
      */
-    fun getRecordContentData(): NetworkContentDataRecord {
+    fun getRecordContentData(): RequestContentDataRecord {
         return getNetworkContentDataRecordByTraceID(traceRequestId)
     }
 
     /**
      * 网络耗时
      */
-    fun getRecordTraceTimeData(): NetworkTraceTimeRecord {
+    fun getRecordTraceTimeData(): RequestTraceTimeRecord {
         return getNetworkTraceTimeRecordByRequestID(traceRequestId)
     }
 

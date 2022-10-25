@@ -12,9 +12,9 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkContentDataRecord
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkRecord
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.NetworkTraceTimeRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestContentDataRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestTraceTimeRecord
 import com.bihe0832.android.lib.thread.ThreadManager
 import okhttp3.*
 import java.io.IOException
@@ -22,14 +22,14 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-open class AAFNetworkEventListener(
+open class AAFOkHttpNetworkEventListener(
     protected val enableTrace: Boolean = false,
     protected val enableLog: Boolean = false,
     protected val listener: EventListener?
 ) : EventListener() {
 
     private val TAG = "AAFRequest"
-    private var mNetworkTraceTimeRecord: NetworkTraceTimeRecord? = null
+    private var mRequestTraceTimeRecord: RequestTraceTimeRecord? = null
     private var mNetworkTraceRequestID: String = ""
     private var mNetworkContentRequestID: String = ""
     private var hasLog = false
@@ -51,19 +51,19 @@ open class AAFNetworkEventListener(
         super.callStart(call)
         mNetworkTraceRequestID = OkHttpWrapper.generateRequestID()
         if (canTrace(call)) {
-            mNetworkTraceTimeRecord = OkHttpWrapper.getRecord(
+            mRequestTraceTimeRecord = OkHttpWrapper.getRecord(
                 mNetworkTraceRequestID,
                 call.request().url().toString(),
                 call.request().method()
             ).getRecordTraceTimeData()
         }
-        saveEvent(NetworkTraceTimeRecord.EVENT_CALL_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_CALL_START)
         listener?.callStart(call)
     }
 
     override fun dnsStart(call: Call, domainName: String) {
         super.dnsStart(call, domainName)
-        saveEvent(NetworkTraceTimeRecord.EVENT_DNS_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_DNS_START)
         listener?.dnsStart(call, domainName)
     }
 
@@ -73,25 +73,25 @@ open class AAFNetworkEventListener(
         inetAddressList: MutableList<InetAddress>?
     ) {
         super.dnsEnd(call, domainName, inetAddressList)
-        saveEvent(NetworkTraceTimeRecord.EVENT_DNS_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_DNS_END)
         listener?.dnsEnd(call, domainName, inetAddressList)
     }
 
     override fun connectStart(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy) {
         super.connectStart(call, inetSocketAddress, proxy)
-        saveEvent(NetworkTraceTimeRecord.EVENT_CONNECT_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_CONNECT_START)
         listener?.connectStart(call, inetSocketAddress, proxy)
     }
 
     override fun secureConnectStart(call: Call) {
         super.secureConnectStart(call)
-        saveEvent(NetworkTraceTimeRecord.EVENT_SECURE_CONNECT_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_SECURE_CONNECT_START)
         listener?.secureConnectStart(call)
     }
 
     override fun secureConnectEnd(call: Call, handshake: Handshake?) {
         super.secureConnectEnd(call, handshake)
-        saveEvent(NetworkTraceTimeRecord.EVENT_SECURE_CONNECT_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_SECURE_CONNECT_END)
         listener?.secureConnectEnd(call, handshake)
     }
 
@@ -102,7 +102,7 @@ open class AAFNetworkEventListener(
         protocol: Protocol?
     ) {
         super.connectEnd(call, inetSocketAddress, proxy, protocol)
-        saveEvent(NetworkTraceTimeRecord.EVENT_CONNECT_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_CONNECT_END)
         listener?.connectEnd(call, inetSocketAddress, proxy, protocol)
     }
 
@@ -120,13 +120,13 @@ open class AAFNetworkEventListener(
 
     override fun requestHeadersStart(call: Call) {
         super.requestHeadersStart(call)
-        saveEvent(NetworkTraceTimeRecord.EVENT_REQUEST_HEADERS_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_START)
         listener?.requestHeadersStart(call)
     }
 
     override fun requestHeadersEnd(call: Call, request: Request) {
         super.requestHeadersEnd(call, request)
-        saveEvent(NetworkTraceTimeRecord.EVENT_REQUEST_HEADERS_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_END)
         request.header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID)
             ?.let { contentRequesetID ->
                 if (!TextUtils.isEmpty(contentRequesetID)) {
@@ -136,7 +136,7 @@ open class AAFNetworkEventListener(
                     )
                     mNetworkContentRequestID = contentRequesetID
                     if (canTrace(call)) {
-                        mNetworkTraceTimeRecord?.contentRequestId = mNetworkContentRequestID
+                        mRequestTraceTimeRecord?.contentRequestId = mNetworkContentRequestID
                     }
                     AAFRequestDataRepository.getNetworkContentDataRecordByContentID(
                         mNetworkContentRequestID
@@ -148,37 +148,37 @@ open class AAFNetworkEventListener(
 
     override fun requestBodyStart(call: Call) {
         super.requestBodyStart(call)
-        saveEvent(NetworkTraceTimeRecord.EVENT_REQUEST_BODY_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_REQUEST_BODY_START)
         listener?.requestBodyStart(call)
     }
 
     override fun requestBodyEnd(call: Call, byteCount: Long) {
         super.requestBodyEnd(call, byteCount)
-        saveEvent(NetworkTraceTimeRecord.EVENT_REQUEST_BODY_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_REQUEST_BODY_END)
         listener?.requestBodyEnd(call, byteCount)
     }
 
     override fun responseHeadersStart(call: Call) {
         super.responseHeadersStart(call)
-        saveEvent(NetworkTraceTimeRecord.EVENT_RESPONSE_HEADERS_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_RESPONSE_HEADERS_START)
         listener?.responseHeadersStart(call)
     }
 
     override fun responseHeadersEnd(call: Call, response: Response) {
         super.responseHeadersEnd(call, response)
-        saveEvent(NetworkTraceTimeRecord.EVENT_RESPONSE_HEADERS_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_RESPONSE_HEADERS_END)
         listener?.responseHeadersEnd(call, response)
     }
 
     override fun responseBodyStart(call: Call) {
         super.responseBodyStart(call)
-        saveEvent(NetworkTraceTimeRecord.EVENT_RESPONSE_BODY_START)
+        saveEvent(RequestTraceTimeRecord.EVENT_RESPONSE_BODY_START)
         listener?.responseBodyStart(call)
     }
 
     override fun responseBodyEnd(call: Call, byteCount: Long) {
         super.responseBodyEnd(call, byteCount)
-        saveEvent(NetworkTraceTimeRecord.EVENT_RESPONSE_BODY_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_RESPONSE_BODY_END)
         listener?.responseBodyEnd(call, byteCount)
         ThreadManager.getInstance().start({
             doLogAction()
@@ -188,7 +188,7 @@ open class AAFNetworkEventListener(
 
     override fun callEnd(call: Call) {
         super.callEnd(call)
-        saveEvent(NetworkTraceTimeRecord.EVENT_CALL_END)
+        saveEvent(RequestTraceTimeRecord.EVENT_CALL_END)
         listener?.callEnd(call)
         doLogAction()
     }
@@ -211,11 +211,11 @@ open class AAFNetworkEventListener(
         }
     }
 
-    open fun logRequest(record: NetworkContentDataRecord) {
+    open fun logRequest(record: RequestContentDataRecord) {
         ZLog.d(TAG, record.toString())
     }
 
-    open fun logRequest(record: NetworkRecord?) {
+    open fun logRequest(record: RequestRecord?) {
         ZLog.d(TAG, record.toString())
     }
 
@@ -228,7 +228,7 @@ open class AAFNetworkEventListener(
     private fun saveEvent(eventName: String) {
         if (enableTrace) {
             ZLog.d(TAG, eventName)
-            mNetworkTraceTimeRecord?.saveEvent(eventName)
+            mRequestTraceTimeRecord?.saveEvent(eventName)
         }
     }
 }

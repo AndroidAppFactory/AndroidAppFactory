@@ -6,43 +6,44 @@ import java.util.concurrent.ConcurrentHashMap
 object AAFRequestDataRepository {
 
     // 请求时间追踪记录
-    private val mNetworkTraceTimeRecord: ConcurrentHashMap<String, NetworkTraceTimeRecord> = ConcurrentHashMap()
+    private val mRequestTraceTimeRecord: ConcurrentHashMap<String, RequestTraceTimeRecord> = ConcurrentHashMap()
 
     // 网络请求实际结果
-    private val mNetworkContentDataRecord: ConcurrentHashMap<String, NetworkContentDataRecord> = ConcurrentHashMap()
+    private val mRequestContentDataRecord: ConcurrentHashMap<String, RequestContentDataRecord> = ConcurrentHashMap()
 
     fun removeData(traceID: String) {
         getNetworkContentDataRecordByTraceID(traceID).contentRequestId.let {
-            mNetworkContentDataRecord.remove(it)
+            mRequestContentDataRecord.remove(it)
         }
-        mNetworkTraceTimeRecord.remove(traceID)
+        mRequestTraceTimeRecord.remove(traceID)
     }
 
-    fun getNetworkContentDataRecordByContentID(requestId: String): NetworkContentDataRecord {
-        var networkFeedBean = mNetworkContentDataRecord.get(requestId)
+    fun getNetworkContentDataRecordByContentID(requestId: String): RequestContentDataRecord {
+        var networkFeedBean = mRequestContentDataRecord.get(requestId)
         //如果取到的数据为null
         if (networkFeedBean == null) {
             //则存储该数据到map集合中
-            networkFeedBean = NetworkContentDataRecord().apply {
+            networkFeedBean = RequestContentDataRecord().apply {
                 this.contentRequestId = requestId
             }
-            mNetworkContentDataRecord.put(requestId, networkFeedBean)
+            mRequestContentDataRecord.put(requestId, networkFeedBean)
         }
         return networkFeedBean
     }
 
-    fun getNetworkContentDataRecordByTraceID(requestId: String): NetworkContentDataRecord {
+    fun getNetworkContentDataRecordByTraceID(requestId: String): RequestContentDataRecord {
         return getNetworkContentDataRecordByContentID(getNetworkTraceTimeRecordByRequestID(requestId).contentRequestId
                 ?: "")
     }
 
-    fun getNetworkTraceTimeRecordByRequestID(requestId: String): NetworkTraceTimeRecord {
-        var networkFeedBean = mNetworkTraceTimeRecord.get(requestId)
+    fun getNetworkTraceTimeRecordByRequestID(requestId: String): RequestTraceTimeRecord {
+        var networkFeedBean = mRequestTraceTimeRecord.get(requestId)
         if (networkFeedBean == null) {
-            networkFeedBean = NetworkTraceTimeRecord().apply {
+            networkFeedBean = RequestTraceTimeRecord()
+                .apply {
                 this.setTraceRequestId(requestId)
             }
-            mNetworkTraceTimeRecord[requestId] = networkFeedBean
+            mRequestTraceTimeRecord[requestId] = networkFeedBean
         }
         return networkFeedBean
     }
