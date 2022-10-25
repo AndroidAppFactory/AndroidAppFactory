@@ -39,11 +39,7 @@ import com.bihe0832.android.base.debug.view.DebugTextViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebviewActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
-import com.bihe0832.android.common.praise.UserPraiseManager
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.request.URLUtils
 
 
 class AAFDebugModuleFragment : DebugEnvFragment() {
