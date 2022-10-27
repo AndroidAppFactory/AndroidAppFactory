@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.MovementMethod;
 
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.ClipboardUtil;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 
 /**
@@ -80,6 +80,11 @@ public class DebugTools {
     public static void showInfo(final Context context, final String title, final String content,
                                 CharSequence charSequence, MovementMethod method, final String positiveText) {
 
+        ZLog.d("DEBUG", "----- showInfo ------");
+        ZLog.d("DEBUG", title);
+        ZLog.d("DEBUG", content);
+        ZLog.d("DEBUG", "----------------------");
+
         final CommonDialog dialog = new CommonDialog(context);
         String tempContent = "";
         if (!TextUtils.isEmpty(content)) {
@@ -130,6 +135,12 @@ public class DebugTools {
     }
 
     public static void sendInfo(final Context context, final String title, final String content) {
+
+        ZLog.d("DEBUG", "----- sendInfo ------");
+        ZLog.d("DEBUG", title);
+        ZLog.d("DEBUG", content);
+        ZLog.d("DEBUG", "----------------------");
+
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, content);
