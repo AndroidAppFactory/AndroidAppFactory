@@ -23,7 +23,16 @@
         <item name="android:activityOpenExitAnimation">@anim/push_bottom_exit</item>
         <item name="android:activityCloseEnterAnimation">@anim/push_bottom_enter</item>
         <item name="android:activityCloseExitAnimation">@anim/push_bottom_exit</item>
+    </style>
 
+
+    <style name="AAF.Animation.Alpha" parent="@style/AAF.Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
     </style>
 
     <style name="AAF.AppTheme.Toolbar.Base" parent="Base.V7.Widget.AppCompat.Toolbar">
@@ -98,6 +107,11 @@
     <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->
     <style name="AAF.ActivityTheme.Bottom" parent="AAF.ActivityTheme.Dialog">
         <item name="android:windowAnimationStyle">@style/AAF.Animation.BottomWindow</item>
+    </style>
+
+    <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->
+    <style name="AAF.ActivityTheme.Alpha" parent="AAF.ActivityTheme.Dialog">
+        <item name="android:windowAnimationStyle">@style/AAF.Animation.Alpha</item>
     </style>
 
     <!--    全屏，主要用于闪屏 -->
