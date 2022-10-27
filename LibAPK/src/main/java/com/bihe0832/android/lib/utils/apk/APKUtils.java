@@ -9,13 +9,16 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import com.bihe0832.android.lib.utils.encrypt.MD5;
+import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -173,7 +176,7 @@ public class APKUtils {
     }
 
     public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass,
-            boolean showTips) {
+                                   boolean showTips) {
         try {
             Intent intent = new Intent();
             ComponentName cmp = new ComponentName(pkgName, launcerClass);
@@ -287,11 +290,15 @@ public class APKUtils {
     }
 
     public static String getSigMd5ByPkgName(Context context, String pkgName, boolean showTips) {
+        return getSigMessageDigestByPkgName(context, MD5.MESSAGE_DIGEST_TYPE_MD5, pkgName, showTips);
+    }
+
+    public static String getSigMessageDigestByPkgName(Context context, String messageDigestType, String pkgName, boolean showTips) {
         if (null != pkgName && pkgName.length() > 0) {
             try {
                 Signature sig = context.getPackageManager()
                         .getPackageInfo(pkgName, PackageManager.GET_SIGNATURES).signatures[0];
-                String result = MD5.getMd5(sig.toByteArray());
+                String result = MessageDigestUtils.getDigestData(sig.toByteArray(), messageDigestType);
                 if (null != result && result.length() > 0) {
                     return result;
                 } else {
@@ -307,7 +314,7 @@ public class APKUtils {
             }
         } else {
             if (showTips) {
-                ToastUtil.showShort(context, "请先在输入框输入需要查询签名应用的包名！");
+                ToastUtil.showShort(context, "请先输入需要查询签名应用的包名！");
             }
         }
         return "";
