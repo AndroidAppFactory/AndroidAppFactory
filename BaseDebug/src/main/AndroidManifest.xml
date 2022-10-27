@@ -102,7 +102,7 @@
         <activity
             android:name="com.bihe0832.android.base.debug.empty.DebugBottomActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/AAF.ActivityTheme.Bottom" />
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
 
     </application>
 

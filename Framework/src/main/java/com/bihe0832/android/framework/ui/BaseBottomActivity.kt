@@ -9,6 +9,10 @@ open class BaseBottomActivity : BaseActivity() {
 
     override fun finish() {
         super.finish()
-        overridePendingTransition(0, R.anim.push_bottom_exit)
+        overridePendingTransition(0, getExitAnimation())
+    }
+
+    fun getExitAnimation(): Int {
+        return R.anim.fade_out
     }
 }
