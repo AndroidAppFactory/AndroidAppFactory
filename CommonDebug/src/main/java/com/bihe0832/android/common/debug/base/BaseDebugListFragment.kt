@@ -70,10 +70,29 @@ open class BaseDebugListFragment : CommonListFragment() {
         return ZixieContext.applicationContext?.getString(R.string.common_debug_empty_tips) ?: ""
     }
 
+    protected fun showInfo(title: String, content: List<String>) {
+        StringBuilder().apply {
+            content.forEach {
+                append("$it\n")
+            }
+        }.let {
+            DebugTools.showInfo(context, title, it.toString(), "发送到第三方")
+        }
+    }
+
+    protected fun showInfoWithHTML(title: String, content: List<String>) {
+        StringBuilder().apply {
+            content.forEach {
+                append("$it<BR>")
+            }
+        }.let {
+            DebugTools.showInfoWithHTML(context, title, it.toString(), "发送到第三方")
+        }
+    }
+
     protected fun showInfo(title: String, content: String) {
         DebugTools.showInfo(context, title, content, "发送到第三方")
     }
-
 
     fun showInputDialog(
             titleName: String,

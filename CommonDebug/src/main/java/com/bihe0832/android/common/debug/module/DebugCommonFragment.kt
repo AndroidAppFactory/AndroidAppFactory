@@ -60,71 +60,78 @@ open class DebugCommonFragment : DebugEnvFragment() {
     }
 
     protected fun showMobileInfo() {
-        val builder = StringBuilder()
-        builder.append("应用包名: ${context!!.packageName}\n")
-        builder.append("设备ID: ${ZixieContext.deviceId}\n")
-        builder.append("厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}\n")
-        if (ManufacturerUtil.isHarmonyOs()) {
-            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}, Harmony(${ManufacturerUtil.getHarmonyVersion()})\n")
-        } else {
-            builder.append("系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}\n")
-        }
+        mutableListOf<String>().apply {
+            add("应用包名: ${context!!.packageName}")
+            add("设备ID: ${ZixieContext.deviceId}")
+            add("厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}")
+            var sdkVersion = "系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
+                ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
+            } else {
+                ""
+            }
+            add("<font color ='#3AC8EF'>$sdkVersion</font>")
 
-        builder.append("系统指纹: ${ManufacturerUtil.FINGERPRINT}\n")
-        showInfo("分享设备信息给开发者", builder.toString())
+            add("系统指纹: ${ManufacturerUtil.FINGERPRINT}")
+
+        }.let {
+            showInfoWithHTML("设备信息", it)
+        }
     }
 
     protected fun showAPPInfo() {
-        val builder = StringBuilder()
-        var version = if (ZixieContext.isDebug()) {
-            "内测版"
-        } else {
-            if (ZixieContext.isOfficial()) {
-                "外发版"
+        mutableListOf<String>().apply {
+            var version = if (ZixieContext.isDebug()) {
+                "内测版"
             } else {
-                "预发布版"
+                if (ZixieContext.isOfficial()) {
+                    "外发版"
+                } else {
+                    "预发布版"
+                }
             }
+            add("应用名称: ${APKUtils.getAppName(context)}")
+            add("应用包名: ${ZixieContext.applicationContext!!.packageName}")
+            add("安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}")
+            add("版本类型: $version")
+            add("<font color ='#3AC8EF'><b>应用版本: ${ZixieContext.getVersionName()}.${ZixieContext.getVersionCode()}</b></font>")
+            add("版本标识: ${ZixieContext.getVersionTag()}")
+            add("签名MD5: ${APKUtils.getSigMd5ByPkgName(ZixieContext.applicationContext, ZixieContext.applicationContext?.packageName)}")
+        }.let {
+            showInfoWithHTML("应用信息", it)
         }
-        builder.append("应用名称: ${APKUtils.getAppName(context)}\n")
-        builder.append("应用包名: ${ZixieContext.applicationContext!!.packageName}\n")
-        builder.append("安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}\n")
-        builder.append("版本类型: $version\n")
-        builder.append("应用版本: ${ZixieContext.getVersionName()}.${ZixieContext.getVersionCode()}\n")
-        builder.append("版本标识: ${ZixieContext.getVersionTag()}\n")
-        builder.append("签名MD5: ${APKUtils.getSigMd5ByPkgName(ZixieContext.applicationContext, ZixieContext.applicationContext?.packageName)}")
-
-        showInfo("应用信息", builder.toString())
     }
 
     protected fun showUsedInfo() {
-        val builder = StringBuilder()
+        mutableListOf<String>().apply {
+            add("应用安装时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPInstalledTime())}")
+            add("应用安装时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPInstalledTime())}")
+            add("当前版本安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}")
 
-        builder.append("应用安装时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPInstalledTime())}\n")
-        builder.append("当前版本安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}\n")
+            add("上次启动版本号: ${LifecycleHelper.getAPPLastVersion()}")
+            add("上次启动时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPLastStartTime())}")
 
-        builder.append("上次启动版本号: ${LifecycleHelper.getAPPLastVersion()}\n")
-        builder.append("上次启动时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPLastStartTime())}\n")
-
-        builder.append("本次启动类型: ${
-            LifecycleHelper.isFirstStart.let {
-                when (it) {
-                    INSTALL_TYPE_NOT_FIRST -> "非首次启动"
-                    INSTALL_TYPE_VERSION_FIRST -> "版本首次启动"
-                    INSTALL_TYPE_APP_FIRST -> "应用首次启动"
-                    else -> "类型错误（$it）"
+            add("本次启动类型: ${
+                LifecycleHelper.isFirstStart.let {
+                    when (it) {
+                        INSTALL_TYPE_NOT_FIRST -> "非首次启动"
+                        INSTALL_TYPE_VERSION_FIRST -> "版本首次启动"
+                        INSTALL_TYPE_APP_FIRST -> "应用首次启动"
+                        else -> "类型错误（$it）"
+                    }
                 }
-            }
-        }\n")
-        builder.append("本次启动时间: ${DateUtil.getDateEN(ApplicationObserver.getAPPStartTime())}\n")
-        builder.append("累积使用天数: ${LifecycleHelper.getAPPUsedDays()}\n")
-        builder.append("累积使用次数: ${LifecycleHelper.getAPPUsedTimes()}\n")
-        builder.append("当前版本使用次数: ${LifecycleHelper.getCurrentVersionUsedTimes()}\n")
+            }")
+            add("本次启动时间: ${DateUtil.getDateEN(ApplicationObserver.getAPPStartTime())}")
+            add("累积使用天数: ${LifecycleHelper.getAPPUsedDays()}")
+            add("累积使用次数: ${LifecycleHelper.getAPPUsedTimes()}")
+            add("当前版本使用次数: ${LifecycleHelper.getCurrentVersionUsedTimes()}")
 
-        builder.append("最后一次退后台: ${DateUtil.getDateEN(ApplicationObserver.getLastPauseTime())}\n")
-        builder.append("最后一次回前台: ${DateUtil.getDateEN(ApplicationObserver.getLastResumedTime())}\n")
+            add("最后一次退后台: ${DateUtil.getDateEN(ApplicationObserver.getLastPauseTime())}")
+            add("最后一次回前台: ${DateUtil.getDateEN(ApplicationObserver.getLastResumedTime())}")
 
-        builder.append("当前页面: ${ActivityObserver.getCurrentActivity()?.javaClass?.name}\n")
-        showInfo("应用使用情况", builder.toString())
+            add("当前页面: ${ActivityObserver.getCurrentActivity()?.javaClass?.name}")
+        }.let {
+            showInfo("应用使用情况", it)
+        }
     }
 
     protected fun showOtherAPPInfo() {

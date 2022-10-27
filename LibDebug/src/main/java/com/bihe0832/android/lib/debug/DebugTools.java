@@ -12,6 +12,9 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author zixie code@bihe0832.com
  * Created on 2019-09-26.
@@ -80,10 +83,6 @@ public class DebugTools {
     public static void showInfo(final Context context, final String title, final String content,
                                 CharSequence charSequence, MovementMethod method, final String positiveText) {
 
-        ZLog.d("DEBUG", "----- showInfo ------");
-        ZLog.d("DEBUG", title);
-        ZLog.d("DEBUG", content);
-        ZLog.d("DEBUG", "----------------------");
 
         final CommonDialog dialog = new CommonDialog(context);
         String tempContent = "";
@@ -95,6 +94,7 @@ public class DebugTools {
             tempContent = charSequence.toString();
         }
         final String finalContent = tempContent;
+        logInfo("showInfo", title, finalContent);
         dialog.setTitle(title)
                 .setShouldCanceled(true)
                 .setPositive(positiveText)
@@ -136,11 +136,7 @@ public class DebugTools {
 
     public static void sendInfo(final Context context, final String title, final String content) {
 
-        ZLog.d("DEBUG", "----- sendInfo ------");
-        ZLog.d("DEBUG", title);
-        ZLog.d("DEBUG", content);
-        ZLog.d("DEBUG", "----------------------");
-
+        logInfo("sendInfo", title, content);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, content);
@@ -157,5 +153,24 @@ public class DebugTools {
                 ee.printStackTrace();
             }
         }
+    }
+
+    public static void logInfo(String tag, String... data) {
+        logInfo(tag, Arrays.asList(data));
+    }
+
+    public static void logInfo(String tag, List<String> data) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(" \n----- " + tag + " ------\n\n");
+        boolean isFirst = true;
+        for (String content : data) {
+            builder.append(content + "\n");
+            if (isFirst) {
+                builder.append("\n");
+                isFirst = false;
+            }
+        }
+        builder.append("----------------------\n");
+        ZLog.d("DEBUG", builder.toString());
     }
 }
