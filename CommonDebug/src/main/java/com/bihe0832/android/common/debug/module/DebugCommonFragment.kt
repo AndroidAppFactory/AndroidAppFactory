@@ -60,26 +60,33 @@ open class DebugCommonFragment : DebugEnvFragment() {
     }
 
     protected fun showMobileInfo() {
-        mutableListOf<String>().apply {
+        showInfoWithHTML("设备信息", getMobileInfo())
+    }
+
+    protected fun getMobileInfo(): List<String> {
+        return mutableListOf<String>().apply {
             add("应用包名: ${context!!.packageName}")
             add("设备ID: ${ZixieContext.deviceId}")
             add("厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}")
-            var sdkVersion = "系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
-                ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
-            } else {
-                ""
-            }
+            var sdkVersion =
+                "系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
+                    ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
+                } else {
+                    ""
+                }
             add("<font color ='#3AC8EF'>$sdkVersion</font>")
 
             add("系统指纹: ${ManufacturerUtil.FINGERPRINT}")
 
-        }.let {
-            showInfoWithHTML("设备信息", it)
         }
     }
 
     protected fun showAPPInfo() {
-        mutableListOf<String>().apply {
+        showInfoWithHTML("应用信息", getAPPInfo())
+    }
+
+    protected fun getAPPInfo(): List<String> {
+        return mutableListOf<String>().apply {
             var version = if (ZixieContext.isDebug()) {
                 "内测版"
             } else {
@@ -95,14 +102,23 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add("版本类型: $version")
             add("<font color ='#3AC8EF'><b>应用版本: ${ZixieContext.getVersionName()}.${ZixieContext.getVersionCode()}</b></font>")
             add("版本标识: ${ZixieContext.getVersionTag()}")
-            add("签名MD5: ${APKUtils.getSigMd5ByPkgName(ZixieContext.applicationContext, ZixieContext.applicationContext?.packageName)}")
-        }.let {
-            showInfoWithHTML("应用信息", it)
+            add(
+                "签名MD5: ${
+                    APKUtils.getSigMd5ByPkgName(
+                        ZixieContext.applicationContext,
+                        ZixieContext.applicationContext?.packageName
+                    )
+                }"
+            )
         }
     }
 
     protected fun showUsedInfo() {
-        mutableListOf<String>().apply {
+        showInfo("应用使用情况", getUsedInfo())
+    }
+
+    protected fun getUsedInfo(): List<String> {
+        return mutableListOf<String>().apply {
             add("应用安装时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPInstalledTime())}")
             add("应用安装时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPInstalledTime())}")
             add("当前版本安装时间: ${DateUtil.getDateEN(LifecycleHelper.getVersionInstalledTime())}")
@@ -129,14 +145,12 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add("最后一次回前台: ${DateUtil.getDateEN(ApplicationObserver.getLastResumedTime())}")
 
             add("当前页面: ${ActivityObserver.getCurrentActivity()?.javaClass?.name}")
-        }.let {
-            showInfo("应用使用情况", it)
         }
     }
 
+
     protected fun showOtherAPPInfo() {
         val builder = StringBuilder()
-        builder.append("第三方应用信息:\n\n")
         addPackageInfo("com.tencent.mobileqq", builder)
         addPackageInfo("com.tencent.mm", builder)
         addPackageInfo("com.tencent.qqlite", builder)
