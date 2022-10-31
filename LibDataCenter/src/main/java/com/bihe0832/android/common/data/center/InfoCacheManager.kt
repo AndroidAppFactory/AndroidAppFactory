@@ -23,35 +23,35 @@ abstract class InfoCacheManager<T> {
     private val mDataList: ConcurrentHashMap<String, InfoItem<T>> = ConcurrentHashMap()
 
     inner class InfoItem<T>(
-            var key: String = "",
-            var updateTime: Long = 0L,
-            var dataItem: T? = null
+        var key: String = "",
+        var updateTime: Long = 0L,
+        var dataItem: T? = null
     )
 
     inner class ContinuationCallbackForFetchDataListener<T>(private var continuation: Continuation<ZixieCoroutinesData<T>>) :
-            AAFDataCallback<T>() {
+        AAFDataCallback<T>() {
 
         override fun onSuccess(result: T?) {
             if (result != null) {
                 continuation.resume(ZixieCoroutinesData(result))
             } else {
                 continuation.resume(
-                        ZixieCoroutinesData(
-                                -1,
-                                Coroutines_ERROR_DATA_NULL,
-                                ""
-                        )
+                    ZixieCoroutinesData(
+                        -1,
+                        Coroutines_ERROR_DATA_NULL,
+                        ""
+                    )
                 )
             }
         }
 
         override fun onError(code: Int, msg: String) {
             continuation.resume(
-                    ZixieCoroutinesData(
-                            code,
-                            code,
-                            msg
-                    )
+                ZixieCoroutinesData(
+                    code,
+                    code,
+                    msg
+                )
             )
         }
     }
@@ -60,12 +60,16 @@ abstract class InfoCacheManager<T> {
     open suspend fun getData(key: String): ZixieCoroutinesData<T> = getData(key, -1)
 
     open suspend fun getData(key: String, duration: Long): ZixieCoroutinesData<T> =
-            suspendCoroutine { cont ->
-                getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
-            }
+        suspendCoroutine { cont ->
+            getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
+        }
 
     fun getData(key: String, listener: AAFDataCallback<T>) {
         getData(key, -1, listener)
+    }
+
+    fun addData(key: String, data: T) {
+        mDataList.put(key, InfoItem(key, System.currentTimeMillis(), data))
     }
 
     fun getData(key: String, duration: Long, listener: AAFDataCallback<T>) {
@@ -73,7 +77,7 @@ abstract class InfoCacheManager<T> {
         val mFetchDataListener = object : AAFDataCallback<T>() {
             override fun onSuccess(data: T?) {
                 data?.let {
-                    mDataList.put(key, InfoItem(key, System.currentTimeMillis(), it))
+                    addData(key, data)
                 }
                 ZLog.d(TAG, "read $key data from server")
                 listener.onSuccess(data)
