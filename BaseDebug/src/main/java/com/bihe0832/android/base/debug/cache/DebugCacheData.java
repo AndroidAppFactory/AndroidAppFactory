@@ -5,7 +5,7 @@ package com.bihe0832.android.base.debug.cache;
  */
 class DebugCacheData {
 
-    String key = "";
+    public String key = "";
 
     @Override
     public String toString() {
