@@ -18,8 +18,8 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.common.ColorTools
-import com.bihe0832.android.lib.ui.image.clear
-import com.bihe0832.android.lib.ui.image.loadImage
+import com.bihe0832.android.lib.media.image.clear
+import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation.SupportActivity

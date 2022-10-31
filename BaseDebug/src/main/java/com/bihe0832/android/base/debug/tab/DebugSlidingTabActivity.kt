@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment.Companion.newInstance
-import com.bihe0832.android.lib.ui.image.loadCircleCropImage
+import com.bihe0832.android.lib.media.image.loadCircleCropImage
 import com.flyco.tablayout.SlidingTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.activity_sliding_tab.*

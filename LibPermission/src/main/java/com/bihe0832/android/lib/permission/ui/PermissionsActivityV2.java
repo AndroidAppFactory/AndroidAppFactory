@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.R;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-import com.bihe0832.android.lib.ui.image.GlideExtKt;
+import com.bihe0832.android.lib.media.image.GlideExtKt;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -14,7 +14,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
-import com.bihe0832.android.lib.ui.media.Media
+import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.utils.os.OSUtils
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File

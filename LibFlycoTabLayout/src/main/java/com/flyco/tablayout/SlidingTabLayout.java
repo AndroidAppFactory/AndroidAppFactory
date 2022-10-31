@@ -29,7 +29,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bihe0832.android.lib.request.URLUtils;
-import com.bihe0832.android.lib.ui.image.GlideExtKt;
+import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
 

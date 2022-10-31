@@ -37,7 +37,7 @@ open class BlockDialogManager : BlockTaskManager() {
         }
     }
 
-    fun showDelayTask(task: BaseAAFBlockTask, priority: Int, delayTime: Long) {
+    fun addDelayShowTask(task: BaseAAFBlockTask, priority: Int, delayTime: Long) {
         ZLog.d("MnaBlockTaskManager", "showDelayTask : $task after $delayTime")
         ThreadManager.getInstance().start({
             add(task.apply {
@@ -47,7 +47,7 @@ open class BlockDialogManager : BlockTaskManager() {
     }
 
     fun showDialog(dialog: CommonDialog, priority: Int, delayTime: Long) {
-        showDelayTask(BlockDialogTask(dialog, dialog.title ?: ""), priority, delayTime)
+        addDelayShowTask(BlockDialogTask(dialog, dialog.title ?: ""), priority, delayTime)
     }
 
 

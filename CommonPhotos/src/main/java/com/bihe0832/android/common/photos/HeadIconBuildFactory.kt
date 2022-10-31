@@ -11,7 +11,7 @@ package com.bihe0832.android.common.photos
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.image.HeadIconBuilder
+import com.bihe0832.android.lib.media.image.HeadIconBuilder
 import java.io.File
 
 /**

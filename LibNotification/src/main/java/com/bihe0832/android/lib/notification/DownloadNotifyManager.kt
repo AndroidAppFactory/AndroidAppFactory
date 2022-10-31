@@ -11,7 +11,7 @@ import android.widget.RemoteViews
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.format.Formatter
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.util.concurrent.ConcurrentHashMap
