@@ -24,7 +24,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center" />
 
-            <com.bihe0832.android.lib.ui.image.CheckedEnableImageView
+            <com.bihe0832.android.lib.media.image.CheckedEnableImageView
                 android:id="@+id/checkbox2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 android:visibility="visible" />
 
 
-            <com.bihe0832.android.lib.ui.image.CheckedEnableImageView
+            <com.bihe0832.android.lib.media.image.CheckedEnableImageView
                 android:id="@+id/checkbox1"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

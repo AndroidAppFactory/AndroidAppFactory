@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_test_tts.*
 import java.util.*
 
 class DebugTTSFragment : BaseFragment() {
-    val TAG = "DebugTTSFragment"
+    val TAG = this.javaClass.simpleName
     private val FORMAT = "语音播报测试：语速 %s,语调 %s，最大ID %s "
 
     private var times = 0
@@ -27,26 +27,26 @@ class DebugTTSFragment : BaseFragment() {
 
     override fun initView(view: View) {
         LibTTS.init(
-            view.context,
-            Locale.CHINA,
-            "com.iflytek.vflynote",
-            object : LibTTS.TTSInitListener {
-                override fun onInitError() {
-                    showGuide()
-                }
+                view.context,
+                Locale.CHINA,
+                "com.iflytek.vflynote",
+                object : LibTTS.TTSInitListener {
+                    override fun onInitError() {
+                        showGuide()
+                    }
 
-                override fun onLangUnAvailable() {
-                    showGuide()
-                }
+                    override fun onLangUnAvailable() {
+                        showGuide()
+                    }
 
-                override fun onLangAvailable() {
-                    hideGuide()
-                }
+                    override fun onLangAvailable() {
+                        hideGuide()
+                    }
 
-                override fun onTTSError() {
-                    ZixieContext.showToast("TTS引擎异常，正在重新初始化")
-                }
-            })
+                    override fun onTTSError() {
+                        ZixieContext.showToast("TTS引擎异常，正在重新初始化")
+                    }
+                })
 
         LibTTS.addTTSSpeakListener(object : LibTTS.TTSSpeakListener {
 
@@ -103,12 +103,12 @@ class DebugTTSFragment : BaseFragment() {
 
         tts_download?.setOnClickListener {
             DownloadAPK.startDownloadWithCheckAndProcess(
-                activity!!,
-                context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
-                context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
-                "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
-                "",
-                ""
+                    activity!!,
+                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
+                    "",
+                    ""
             )
 
         }
@@ -123,8 +123,8 @@ class DebugTTSFragment : BaseFragment() {
 
         tts_save?.setOnClickListener {
             LibTTS.save(
-                getMsg(),
-                context!!.filesDir.absolutePath + "/audio_" + System.currentTimeMillis() + ".wav"
+                    getMsg(),
+                    context!!.filesDir.absolutePath + "/audio_" + System.currentTimeMillis() + ".wav"
             )
         }
 

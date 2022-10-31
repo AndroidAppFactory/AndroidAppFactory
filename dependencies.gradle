@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.8.5"
+ext.moduleVersionName = "5.9.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -55,7 +55,7 @@ ext.moduleInfo = [
                 "version"            : "",
                 "artifactId"         : "",
                 "apidependenciesList": [
-                        "Application", "CommonDebug",
+                        "Application", "CommonDebug"
                 ]
         ],
         "Application"               : [
@@ -71,14 +71,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDebug"               : [
-                "version"            : "5.8.5",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
                 ]
         ],
         "CommonWrapper"             : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -87,28 +87,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonShare"               : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-share",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNavigationDrawer"    : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-navigation-drawer",
                 "apidependenciesList": [
                         "CommonList", "CommonAbout"
                 ]
         ],
         "CommonBottomTab"           : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-bottom-tab",
                 "apidependenciesList": [
                         "CommonSvga"
                 ]
         ],
         "CommonSvga"                : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-svga",
                 "apidependenciesList": [
                         "Framework",
@@ -116,7 +116,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonAceEditor"           : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-ace-editor",
                 "apidependenciesList": [
                         "Framework"
@@ -124,14 +124,14 @@ ext.moduleInfo = [
         ],
 
         "CommonAbout"               : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "Framework", "CommonList"
                 ]
         ],
         "CommonList"                : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         "${project.androidsupport.swiperefreshlayout}",
@@ -139,28 +139,28 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSplash"              : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonNetwork"             : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "CommonWebview"             : [
-                "version"                : "5.8.4",
+                "version"                : "5.9.0",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         "${project.androidsupport.swiperefreshlayout}",
@@ -173,7 +173,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonFeedback"            : [
-                "version"                : "5.8.4",
+                "version"                : "5.9.0",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : [
                         "CommonWebview"
@@ -185,14 +185,14 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPraise"              : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "Framework"
                 ]
         ],
         "Framework"                 : [
-                "version"                : "5.8.4",
+                "version"                : "5.9.0",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "${project.androidsupport.annotation}",
@@ -206,18 +206,19 @@ ext.moduleInfo = [
                 ]
         ],
         "LibWrapper"                : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "Router", "RouterAnnotation", "LibDebug",
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
                         "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
                         "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
-                        "LibBlockTask" ,"LibOkhttpWrapper","LibDataCenter","LibCoroutines",
+                        "LibBlockTask", "LibOkhttpWrapper", "LibDataCenter", "LibCoroutines",
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
-                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager", "LibSvga"
+                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
+                        "LibSvga", "LibAudioPlayer"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -365,7 +366,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibLog", "LibThread", "LibFile"]
         ],
         "LibDownload"               : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -384,12 +385,12 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibAndroid", "LibOS"]
         ],
         "LibSuperAPP"               : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": ["LibDialog", "LibAPK"]
         ],
         "LibDebug"                  : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": ["LibDialog", "LibToast", "LibFloatview"]
         ],
@@ -417,11 +418,11 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibFragmentation"]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "5.8.0",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         "${project.androidsupport.androidxcore}",
-                        "LibCommonUIUtils", "LibOS", "LibRequest", "LibImage", "LibTextView"
+                        "LibCommonUIUtils", "LibOS", "LibRequest", "LibMedia", "LibTextView"
                 ]
         ],
         "LibQRCode"                 : [
@@ -453,9 +454,9 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-toast",
                 "apidependenciesList": ["LibThread", "LibText"]
         ],
-        "LibImage"                  : [
-                "version"            : "5.8.0",
-                "artifactId"         : "lib-image",
+        "LibMedia"                  : [
+                "version"            : "5.9.0",
+                "artifactId"         : "lib-media",
                 "apidependenciesList": [
                         "com.github.bumptech.glide:glide:${project.glide_version}",
                         "com.github.bumptech.glide:okhttp3-integration:${project.glide_version}",
@@ -464,19 +465,19 @@ ext.moduleInfo = [
                 ]
         ],
         "LibDialog"                 : [
-                "version"            : "5.8.0",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         "${project.androidsupport.constraintlayout}",
-                        "LibThread", "LibImage", "LibOS", "LibCommonUIUtils", "LibText", "LibViewExt",
+                        "LibThread", "LibMedia", "LibOS", "LibCommonUIUtils", "LibText", "LibViewExt",
                         "LibBlockTask"
                 ]
         ],
         "LibNotification"           : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
-                        "LibImage", "LibAPK", "LibCommonUtils"
+                        "LibMedia", "LibAPK", "LibCommonUtils"
                 ]
         ],
         "LibBottomTab"              : [
@@ -532,7 +533,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -541,15 +542,15 @@ ext.moduleInfo = [
                 ]
         ],
         "LibImmersive"              : [
-                "version"            : "5.8.0",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
-                        "LibDeviceNetwork", "LibImage", "LibCommonUIUtils",
+                        "LibDeviceNetwork", "LibMedia", "LibCommonUIUtils",
                         "${project.androidsupport.appcompat}"
                 ]
         ],
         "LibFileSelect"             : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -557,7 +558,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibFloatview"              : [
-                "version"                : "5.8.4",
+                "version"                : "5.9.0",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         "${project.androidsupport.constraintlayout}",
@@ -586,14 +587,14 @@ ext.moduleInfo = [
                 ]
         ],
         "LibAceEditor"              : [
-                "version"            : "5.8.4",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
                 ]
         ],
         "LibBlockTask"              : [
-                "version"            : "5.8.0",
+                "version"            : "5.9.0",
                 "artifactId"         : "lib-block-task",
                 "apidependenciesList": [
                         "LibLog", "LibCommonUtils"
@@ -610,21 +611,30 @@ ext.moduleInfo = [
                         'com.squareup.retrofit2:converter-gson:2.4.0',
                 ]
         ],
-        "LibDataCenter"          : [
+        "LibDataCenter"             : [
                 "version"            : "5.8.0",
                 "artifactId"         : "lib-data-center",
                 "apidependenciesList": [
-                        "LibLog","LibAAF","LibCoroutines"
+                        "LibLog", "LibAAF", "LibCoroutines"
                 ]
         ],
-        "LibCoroutines"          : [
+        "LibCoroutines"             : [
                 "version"            : "5.8.0",
                 "artifactId"         : "lib-coroutines",
                 "apidependenciesList": [
                         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
                         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.kotlinx_coroutines_version}",
                 ]
+        ],
+        "LibAudioPlayer"            : [
+                "version"            : "5.9.0",
+                "artifactId"         : "lib-audio-player",
+                "apidependenciesList": [
+                        "LibMedia", "LibBlockTask"
+                ]
         ]
+
+
 ]
 
 

@@ -15,10 +15,11 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class BlockTaskManager {
     public static final String TAG = "BlockTaskManager";
 
-    private IdGenerator mIdGenerator = new IdGenerator(0);
+    private IdGenerator mIdGenerator = new IdGenerator(1);
     //阻塞队列
     private final PriorityBlockingQueue<BlockTask> mTaskQueue = new PriorityBlockingQueue<>();
     private boolean isRunning = false;
+    private BlockTask currentTask = null;
 
     public BlockTaskManager() {
         start();
@@ -35,7 +36,9 @@ public class BlockTaskManager {
                         BlockTask iTask = mTaskQueue.take();
                         if (iTask != null) {
                             iTask.startTask();
+                            currentTask = iTask;
                             iTask.blockTask();
+                            currentTask = null;
                             iTask.finishTask();
                         }
                     }
@@ -62,8 +65,18 @@ public class BlockTaskManager {
         }
         //按照优先级插入队列 依次播放
         if (!mTaskQueue.contains(task)) {
-            task.setSequence(mIdGenerator.generate());
+            if (task.getSequence() < 1) {
+                task.setSequence(mIdGenerator.generate());
+            }
             mTaskQueue.add(task);
         }
+    }
+
+    public void clearAll() {
+        mTaskQueue.clear();
+    }
+
+    public BlockTask getCurrentTask() {
+        return currentTask;
     }
 }

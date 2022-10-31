@@ -10,6 +10,7 @@ package com.bihe0832.android.base.debug
 
 
 import android.view.View
+import com.bihe0832.android.base.debug.audio.DebugAudioFragment
 import com.bihe0832.android.base.debug.block.DebugEnqueueFragment
 import com.bihe0832.android.base.debug.cache.DebugCacheFragment
 import com.bihe0832.android.base.debug.card.DebugListFragment
@@ -48,6 +49,9 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("临时测试(Temp)", DebugTempFragment::class.java))
             add(getDebugFragmentItemData("临时测试(Basic)", DebugBasicFragment::class.java))
+
+            add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
+
 
             add(getDebugFragmentItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
             add(getDebugFragmentItemData("Dialog、底部弹出Activity 调试", DebugDialogFragment::class.java))

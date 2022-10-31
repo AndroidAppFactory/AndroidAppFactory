@@ -3,7 +3,9 @@ package com.bihe0832.android.common.debug.base
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
+import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
 
 open class BaseDebugActivity : BaseActivity() {
@@ -16,4 +18,47 @@ open class BaseDebugActivity : BaseActivity() {
         }
 
     }
+
+    protected fun sendInfo(title: String, content: String) {
+        DebugUtils.sendInfo(this, title, content)
+    }
+
+    protected fun showInfo(title: String, content: List<String>) {
+        DebugUtils.showInfo(this, title, content)
+    }
+
+    protected fun showInfoWithHTML(title: String, content: List<String>) {
+        DebugUtils.showInfoWithHTML(this, title, content)
+    }
+
+    protected fun showInfo(title: String, content: String) {
+        DebugUtils.showInfo(this, title, content)
+    }
+
+    fun showInputDialog(
+            titleName: String,
+            msg: String,
+            defaultValue: String,
+            listener: InputDialogCompletedCallback
+    ) {
+        DebugUtils.showInputDialog(this, titleName, msg, defaultValue, listener)
+    }
+
+
+    protected fun startDebugActivity(cls: Class<*>, titleName: String) {
+        DebugUtils.startDebugActivity(this, cls, titleName)
+    }
+
+    protected open fun startActivityWithException(cls: String) {
+        DebugUtils.startActivityWithException(this, cls)
+    }
+
+    protected open fun startActivityWithException(cls: Class<*>) {
+        DebugUtils.startActivityWithException(this, cls)
+    }
+
+    protected open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
+        DebugUtils.startActivityWithException(this, cls, data)
+    }
+
 }

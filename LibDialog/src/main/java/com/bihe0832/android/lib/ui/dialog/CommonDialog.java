@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-import com.bihe0832.android.lib.ui.image.GlideExtKt;
+import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 

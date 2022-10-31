@@ -102,6 +102,10 @@
         <item name="android:windowIsTranslucent">true</item>
         <!--  是否向下传递触摸事件，false 无背景-->
         <item name="android:splitMotionEvents">false</item>
+        <!--        应用启动使用背景-->
+        <item name="android:windowContentOverlay">@null</item>
+        <!--        内容衍生到状态栏-->
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->

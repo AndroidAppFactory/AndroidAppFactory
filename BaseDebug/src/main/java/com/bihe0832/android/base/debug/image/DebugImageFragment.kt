@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.lib.ui.image.blur.BlurTransformation
+import com.bihe0832.android.lib.media.image.blur.BlurTransformation
 import com.bihe0832.android.common.photos.HeadIconBuildFactory
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
@@ -14,9 +14,9 @@ import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.image.BitmapUtil
-import com.bihe0832.android.lib.ui.image.HeadIconBuilder
-import com.bihe0832.android.lib.ui.image.loadImage
+import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.HeadIconBuilder
+import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.engine.DiskCacheStrategy

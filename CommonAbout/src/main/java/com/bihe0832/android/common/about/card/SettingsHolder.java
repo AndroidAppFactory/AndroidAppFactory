@@ -11,9 +11,8 @@ import com.bihe0832.android.common.about.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-import com.bihe0832.android.lib.ui.image.GlideExtKt;
+import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
-import com.bihe0832.android.lib.ui.textview.ext.TextViewExtKt;
 import com.bihe0832.android.lib.ui.textview.ext.TextViewWithBackgroundExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 

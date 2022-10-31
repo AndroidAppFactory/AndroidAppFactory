@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.share.ShareBaseActivity
-import com.bihe0832.android.lib.ui.image.loadCenterInsideImage
+import com.bihe0832.android.lib.media.image.loadCenterInsideImage
 
 class DebugBottomActivity : ShareBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

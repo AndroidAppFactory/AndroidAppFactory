@@ -8,8 +8,8 @@ import com.bihe0832.android.lib.ace.editor.AceSelectionActionHelper
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.ui.image.loadImage
-import com.bihe0832.android.lib.ui.image.loadRoundCropImage
+import com.bihe0832.android.lib.media.image.loadImage
+import com.bihe0832.android.lib.media.image.loadRoundCropImage
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
 import com.bihe0832.android.lib.ui.menu.PopupList
