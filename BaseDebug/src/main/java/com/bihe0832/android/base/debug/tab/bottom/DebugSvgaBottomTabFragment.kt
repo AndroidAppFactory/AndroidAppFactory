@@ -3,10 +3,6 @@ package com.bihe0832.android.base.debug.tab.bottom
 import android.graphics.Color
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
-import com.bihe0832.android.base.debug.download.DebugDownloadFragment
-import com.bihe0832.android.base.debug.file.DebugFileFragment
-import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.common.ui.bottom.bar.CommonMainFragment
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment
@@ -21,11 +17,12 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
 
     override fun getFragments(): ArrayList<BaseFragment> {
         return ArrayList<BaseFragment>().apply {
-            add(DebugDialogFragment())
-            add(DebugDownloadFragment())
-            add(CommonEmptyFragment.newInstance("Test", Color.GREEN))
-            add(DebugPermissionFragment())
-            add(DebugFileFragment())
+            add(CommonEmptyFragment.newInstance("Test1", Color.GREEN))
+            add(CommonEmptyFragment.newInstance("Test2", Color.BLUE))
+            add(CommonEmptyFragment.newInstance("Test3", Color.YELLOW))
+            add(CommonEmptyFragment.newInstance("Test4", Color.RED))
+            add(CommonEmptyFragment.newInstance("Test5", Color.MAGENTA))
+
         }
     }
 
@@ -98,7 +95,8 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
 
     override fun onBottomBarTabUnselected(position: Int) {
         getBottomBar().getItem(position).showUnreadMsg()
-        getBottomBar().getItem(position).setUnreadMsgNum(getBottomBar().getItem(position).getUnreadMsgNum() - 1)
+        getBottomBar().getItem(position)
+            .setUnreadMsgNum(getBottomBar().getItem(position).getUnreadMsgNum() - 1)
     }
 
     override fun onBottomBarTabSelected(position: Int, prePosition: Int) {

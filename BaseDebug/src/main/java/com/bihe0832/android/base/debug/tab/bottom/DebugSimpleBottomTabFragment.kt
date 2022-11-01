@@ -44,4 +44,5 @@ class DebugSimpleBottomTabFragment : CommonMainFragment() {
         getBottomBar().getItem(2).showUnreadMsg(22)
         getBottomBar().getItem(3).showUnreadMsg(200)
     }
+
 }
