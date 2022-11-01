@@ -47,6 +47,16 @@ public abstract class CommonMainFragment extends BaseFragment {
         mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {
+                showHideFragment(mFragments.get(position), mFragments.get(prePosition));
+
+                if (position < mFragments.size()) {
+                    mFragments.get(position).setUserVisibleHint(true);
+                }
+
+                if (position != prePosition && prePosition < mFragments.size()) {
+                    mFragments.get(prePosition).setUserVisibleHint(false);
+                }
+                
                 onBottomBarTabSelected(position, prePosition);
             }
 
@@ -66,14 +76,7 @@ public abstract class CommonMainFragment extends BaseFragment {
     }
 
     public void onBottomBarTabSelected(int position, int prePosition) {
-        showHideFragment(mFragments.get(position), mFragments.get(prePosition));
-        for (int i = 0; i < mFragments.size(); i++) {
-            if (i == mBottomBar.getCurrentItemPosition()) {
-                mFragments.get(i).setUserVisibleHint(true);
-            } else {
-                mFragments.get(i).setUserVisibleHint(false);
-            }
-        }
+
     }
 
 
