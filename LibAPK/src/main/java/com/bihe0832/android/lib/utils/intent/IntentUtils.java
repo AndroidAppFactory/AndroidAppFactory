@@ -57,6 +57,22 @@ public class IntentUtils {
         }
     }
 
+    public static boolean goHomePage(Context context) {
+        if (context == null) {
+            return false;
+        }
+        try {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            context.startActivity(home);
+            return true;
+        } catch (Exception e) {
+            ZLog.e(TAG, "goHomePage failed:" + e.getMessage());
+            return false;
+        }
+    }
+
 
     public static boolean startIntent(Context ctx, Intent intent) {
         if (null == intent) {
