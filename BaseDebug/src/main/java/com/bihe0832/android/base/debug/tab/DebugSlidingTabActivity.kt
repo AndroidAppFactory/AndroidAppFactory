@@ -3,7 +3,9 @@ package com.bihe0832.android.base.debug.tab
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -11,6 +13,8 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment.Companion.newInstance
 import com.bihe0832.android.lib.media.image.loadCircleCropImage
+import com.bihe0832.android.lib.ui.textview.ext.setDrawableLeft
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.flyco.tablayout.SlidingTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.activity_sliding_tab.*
@@ -19,12 +23,18 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
     private val mContext: Context = this
     private val mFragments = ArrayList<Fragment>()
 
-    //    private val mTitles = arrayOf(
-//            "热门", "iOS", "Android", "前端", "后端", "设计", "工具资源"
-//    )
     private val mTitles = arrayOf(
-            "https://cdn.bihe0832.com/images/zixie_32.ico", "https://cdn.bihe0832.com/images/head.jpg", "https://cdn.bihe0832.com/images/head.jpg", "https://cdn.bihe0832.com/images/zixie_32.ico", "https://cdn.bihe0832.com/images/head.jpg", "https://cdn.bihe0832.com/images/zixie_32.ico", "https://cdn.bihe0832.com/images/android_favicon.png"
+        "热门", "iOS", "Android", "前端", "后端", "设计", "工具资源"
     )
+//    private val mTitles = arrayOf(
+//        "https://cdn.bihe0832.com/images/zixie_32.ico",
+//        "https://cdn.bihe0832.com/images/head.jpg",
+//        "https://cdn.bihe0832.com/images/head.jpg",
+//        "https://cdn.bihe0832.com/images/zixie_32.ico",
+//        "https://cdn.bihe0832.com/images/head.jpg",
+//        "https://cdn.bihe0832.com/images/zixie_32.ico",
+//        "https://cdn.bihe0832.com/images/android_favicon.png"
+//    )
     private var mAdapter: MyPagerAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,15 +115,31 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
 
     override fun onTabSelect(position: Int) {
         Toast.makeText(mContext, "onTabSelect&position--->$position", Toast.LENGTH_SHORT).show()
-        tl_11.backgroundImageView.loadCircleCropImage(if (position == 0){
-            "https://alifei01.cfp.cn/creative/vcg/nowater800/new/VCG21ba1a56cfe.jpg"
-        }else{
-            "https://alifei01.cfp.cn/creative/vcg/nowarter800/new/VCG211154718095.jpg"
-        })
+        tl_11.backgroundImageView.loadCircleCropImage(
+            if (position == 0) {
+                "https://alifei01.cfp.cn/creative/vcg/nowater800/new/VCG21ba1a56cfe.jpg"
+            } else {
+                "https://alifei01.cfp.cn/creative/vcg/nowarter800/new/VCG211154718095.jpg"
+            }
+        )
+
+        (tl_10.getChildAt(0) as ViewGroup).let { rootView ->
+            ((rootView.getChildAt(1) as ViewGroup).getChildAt(0) as AppCompatTextView).apply {
+
+                compoundDrawablePadding  = DisplayUtil.dip2px(context!!, 4f)
+                setDrawableLeft(
+                    R.mipmap.icon,
+                    DisplayUtil.dip2px(context!!, 20f),
+                    DisplayUtil.dip2px(context!!, 20f)
+                )
+            }
+        }
     }
 
     override fun onTabReselect(position: Int) {
         Toast.makeText(mContext, "onTabReselect&position--->$position", Toast.LENGTH_SHORT).show()
+
+
     }
 
     private inner class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

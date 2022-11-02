@@ -116,6 +116,18 @@
             android:text="AAF：&lt;a href='https://android.bihe0832.com/doc/summary/links.html'&gt;https://android.bihe0832.com/doc/summary/links.html&lt;/a&gt;" />
 
 
+        <TextView
+            android:id="@+id/info_content_drawable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawablePadding="12dp"
+            android:background="@color/gray_light"
+            android:gravity="center"
+            android:textColor="#FF3C3C3C"
+            android:textSize="14dp"
+            tools:text="方式对双方都是十分的所得税辅导辅导辅导师傅的温热热控开关咖啡机" />
+
     </LinearLayout>
 
 </FrameLayout>

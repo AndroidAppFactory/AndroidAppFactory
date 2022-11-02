@@ -10,11 +10,13 @@ import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.ui.textview.ext.setDrawable
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
 
@@ -38,6 +40,19 @@ class DebugTextViewFragment : BaseFragment() {
     )
 
     override fun initView(view: View) {
+        info_content_drawable.apply {
+            setText("fsdfdsfsdf")
+            setDrawable(
+                R.mipmap.icon,
+                R.mipmap.icon,
+                R.mipmap.icon,
+                R.mipmap.icon,
+                DisplayUtil.dip2px(context!!, 30f),
+                DisplayUtil.dip2px(context!!, 30f)
+            )
+        }
+
+
         testSpecialText(testList[5])
         info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
 

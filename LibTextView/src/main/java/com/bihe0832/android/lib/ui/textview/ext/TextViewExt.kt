@@ -39,8 +39,60 @@ fun TextView.setDrawable(leftRes: Int, topRes: Int, rightRes: Int, bottomRes: In
     setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom)
 }
 
+fun TextView.setDrawable(
+    leftRes: Int,
+    topRes: Int,
+    rightRes: Int,
+    bottomRes: Int,
+    width: Int,
+    height: Int
+) {
+    var left: Drawable? = null
+    var top: Drawable? = null
+    var right: Drawable? = null
+    var bottom: Drawable? = null
+
+    if (leftRes > 0) {
+        left = ContextCompat.getDrawable(context, leftRes)?.apply {
+            setBounds(0, 0, width, height)
+        }
+    }
+
+    if (topRes > 0) {
+        right = ContextCompat.getDrawable(context, leftRes)?.apply {
+            setBounds(0, 0, width, height)
+        }
+    }
+
+    if (rightRes > 0) {
+        top = ContextCompat.getDrawable(context, leftRes)?.apply {
+            setBounds(0, 0, width, height)
+        }
+    }
+
+    if (bottomRes > 0) {
+        bottom = ContextCompat.getDrawable(context, leftRes)?.apply {
+            setBounds(0, 0, width, height)
+        }
+    }
+    setCompoundDrawables(left, top, right, bottom)
+}
+
 fun TextView.setDrawableLeft(leftRes: Int) {
-    setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, leftRes), null, null, null)
+    setCompoundDrawablesWithIntrinsicBounds(
+        ContextCompat.getDrawable(context, leftRes),
+        null,
+        null,
+        null
+    )
+}
+
+fun TextView.setDrawableLeft(leftRes: Int, width: Int, height: Int) {
+    ContextCompat.getDrawable(context, leftRes)?.apply {
+        setBounds(0, 0, width, height)
+    }.let {
+        setCompoundDrawables(it, null, null, null)
+    }
 }
 
 fun TextView.disableTemporary(mileSecond: Long) {
@@ -49,11 +101,13 @@ fun TextView.disableTemporary(mileSecond: Long) {
 }
 
 fun TextView.disableForOneSecond() {
-    isEnabled = false
-    postDelayed({ isEnabled = true }, 1000)
+    disableTemporary(1000)
 }
 
-fun TextView.addClickActionText(content: String, keyWordsActionMap: HashMap<String, View.OnClickListener>) {
+fun TextView.addClickActionText(
+    content: String,
+    keyWordsActionMap: HashMap<String, View.OnClickListener>
+) {
     setText(TextFactoryUtils.getCharSequenceWithClickAction(content, keyWordsActionMap))
     setMovementMethod(LinkMovementMethod.getInstance())
 }
