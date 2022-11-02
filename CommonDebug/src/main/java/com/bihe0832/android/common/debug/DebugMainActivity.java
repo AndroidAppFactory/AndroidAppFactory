@@ -24,7 +24,7 @@ import me.yokeyword.fragmentation.ISupportFragment;
  */
 public class DebugMainActivity extends CommonActivity {
 
-    private static final String TAG = "DebugMainActivity";
+    final String TAG = this.getClass().getSimpleName();
 
     public static final String DEBUG_MODULE_CLASS_NAME = "com.bihe0832.android.common.debug.module.class.name";
     public static final String DEBUG_MODULE_TITLE_NAME = "com.bihe0832.android.common.debug.module.title.name";
