@@ -5,4 +5,9 @@
         <item name="android:windowMinWidthMajor">65%</item>
         <item name="android:windowMinWidthMinor">80%</item>
     </style>
+
+    <style name="InputDialog" parent="CommonDialog">
+        <!--显示软件盘-->
+        <item name="android:windowSoftInputMode">stateAlwaysVisible</item>
+    </style>
 </resources>

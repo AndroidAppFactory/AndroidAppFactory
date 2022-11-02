@@ -28,7 +28,7 @@ public class InputDialog {
     public static void showInputDialog(final Context context, String titleName, String msg, String positive,
                                        String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue, String hint,
                                        final InputDialogCallback listener) {
-        final CommonDialog dialog = new CommonDialog(context);
+        final CommonDialog dialog = new CommonDialog(context,R.style.InputDialog);
         dialog.setTitle(titleName);
         dialog.setHtmlContent(msg);
         dialog.setPositive(positive);
