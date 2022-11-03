@@ -138,10 +138,18 @@ class AudioPLayerManager : BlockTaskManager() {
 
 
     fun play(path: String): Int {
-        return play(path, null)
+        return play(path, 0)
+    }
+
+    fun play(path: String, priority: Int): Int {
+        return play(path, priority, null)
     }
 
     fun play(path: String, listener: AudioPlayListener?): Int {
+        return play(path, 0, listener)
+    }
+
+    fun play(path: String, priority: Int, listener: AudioPlayListener?): Int {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
         val soundid = mSoundPool.load(path, PRIORITY_DEFAULT)
@@ -150,6 +158,7 @@ class AudioPLayerManager : BlockTaskManager() {
             listener?.let {
                 playListener = it
             }
+            this.priority = priority
         }
         return soundid
     }
@@ -160,5 +169,13 @@ class AudioPLayerManager : BlockTaskManager() {
         if (stopCurrent) {
             (currentTask as? BlockAudioTask)?.unLockBlock(-3, "pause")
         }
+    }
+
+    fun pause() {
+        mSoundPool.autoPause()
+    }
+
+    fun resume() {
+        mSoundPool.autoResume()
     }
 }
