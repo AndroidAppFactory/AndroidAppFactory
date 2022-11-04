@@ -69,9 +69,12 @@ class AudioPLayerManager : BlockTaskManager() {
     class BlockAudioTask(
         private val mPlay: SoundPool,
         private val mAudioItem: AudioItem,
-        private val finishedAction: () -> Unit,
+        private val innerFinishedAction: () -> Unit,
         name: String
     ) : BaseAAFBlockTask(name) {
+
+        private var errorCode = 0
+        private var msg = ""
 
         override fun doTask() {
             try {
@@ -85,27 +88,37 @@ class AudioPLayerManager : BlockTaskManager() {
                     }
 
                     ThreadManager.getInstance().start({
-                        unLockBlock(0, "success")
+                        unLockBlock()
                     }, mAudioItem.duration)
                 } else {
-                    unLockBlock(-1, "bad audio data")
+                    errorCode = -1
+                    msg = "bad audio data"
+                    unLockBlock()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                unLockBlock(-2, "audio play throw exception:${e}")
+                errorCode = -2
+                msg = "audio play throw exception:${e}"
+                unLockBlock()
             }
-        }
-
-
-        fun unLockBlock(errorCode: Int, msg: String) {
-            mAudioItem.playListener?.onPlayFinished(errorCode, msg)
-            super.unLockBlock()
-            ZLog.d("AudioManager", "play finish：$mAudioItem")
         }
 
         override fun finishTask() {
             super.finishTask()
-            finishedAction()
+            ZLog.d("AudioManager", "play finish：$mAudioItem")
+            innerFinishedAction()
+            try {
+                mAudioItem.playListener?.onPlayFinished(errorCode, msg)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun forceStop() {
+            mPlay.autoPause()
+            errorCode = -3
+            msg = "force stop"
+            unLockBlock()
         }
     }
 
@@ -167,9 +180,10 @@ class AudioPLayerManager : BlockTaskManager() {
         mAudioInfoMap.clear()
         super.clearAll()
         if (stopCurrent) {
-            (currentTask as? BlockAudioTask)?.unLockBlock(-3, "pause")
+            (currentTask as? BlockAudioTask)?.forceStop()
         }
     }
+
 
     fun pause() {
         mSoundPool.autoPause()
