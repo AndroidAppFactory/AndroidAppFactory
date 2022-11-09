@@ -38,11 +38,6 @@ object CookieManagerForZixie {
         }
     }
 
-    fun removeAllCookie() {
-        getCookieManager().removeAllCookie()
-        syncCookie()
-    }
-
     fun removeCookiesForDomain(url: String) {
         val uri = Uri.parse(url)
         if (uri.host == null) {
