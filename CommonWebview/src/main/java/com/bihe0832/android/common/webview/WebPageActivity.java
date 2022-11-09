@@ -21,7 +21,7 @@ public class WebPageActivity extends BaseWebviewActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CookieManagerForZixie.INSTANCE.removeAllCookie();
+        CookieManagerForZixie.INSTANCE.removeCookiesForDomain(getURL());
     }
 }
 

@@ -5,7 +5,6 @@
     <string name="com_bihe0832_permission_negtive">暂不授权</string>
     <string name="com_bihe0832_permission_positive">开启授权</string>
     <string name="com_bihe0832_permission_color">#38ADFF</string>
-    <color name="transparent">#00000000</color>
     <color name="permission_window_bg">#3D000000</color>
     <color name="permission_tips_bg">#FFFFFF</color>
     <color name="permission_tips_text_color">@color/com_bihe0832_dialog_content</color>
