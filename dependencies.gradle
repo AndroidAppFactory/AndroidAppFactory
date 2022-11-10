@@ -108,7 +108,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonSvga"                : [
-                "version"            : "5.9.7",
+                "version"            : "5.9.8",
                 "artifactId"         : "common-svga",
                 "apidependenciesList": [
                         "Framework",
