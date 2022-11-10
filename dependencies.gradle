@@ -146,7 +146,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonPhotos"              : [
-                "version"            : "5.9.7",
+                "version"            : "5.9.8",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework"
