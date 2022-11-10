@@ -533,7 +533,7 @@ ext.moduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "5.9.7",
+                "version"            : "5.9.8",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
