@@ -385,7 +385,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibAndroid", "LibOS"]
         ],
         "LibSuperAPP"               : [
-                "version"            : "5.9.7",
+                "version"            : "5.9.8",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": ["LibDialog", "LibAPK"]
         ],
