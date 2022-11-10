@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.debug.item;
 
 import android.view.View;
+
 import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 
@@ -19,25 +20,32 @@ public class DebugTipsData extends DebugItemData {
         return DebugTipsHolder.class;
     }
 
-    public DebugTipsData(String netType) {
-        super(netType);
+    public DebugTipsData(String content) {
+        super(content);
     }
 
-    public DebugTipsData(String netType, View.OnClickListener listener) {
-        super(netType, listener);
+    public DebugTipsData(String content, View.OnClickListener listener) {
+        super(content, listener);
     }
 
-    public DebugTipsData(String netType, boolean background) {
-        super(netType, background);
+    public DebugTipsData(String content, boolean background) {
+        super(content, background);
     }
 
-    public DebugTipsData(String netType, View.OnClickListener listener, View.OnLongClickListener longClickListener) {
-        super(netType, listener, longClickListener);
+    public DebugTipsData(String content, boolean background, boolean showBottomLine) {
+        super(content, background, showBottomLine);
     }
 
-    public DebugTipsData(String netType, View.OnClickListener listener, View.OnLongClickListener longClickListener,
-                         boolean background) {
-        super(netType, listener, longClickListener, background);
+    public DebugTipsData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener) {
+        super(content, listener, longClickListener);
+    }
+
+    public DebugTipsData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener, boolean background) {
+        super(content, listener, longClickListener, background);
+    }
+
+    public DebugTipsData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener, boolean background, boolean showBottomLine) {
+        super(content, listener, longClickListener, background, showBottomLine);
     }
 
 }
