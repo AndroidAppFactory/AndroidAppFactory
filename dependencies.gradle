@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibViewExt"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -500,7 +500,7 @@ ext.moduleInfo = [
                 "apidependenciesList": ["LibCommonUIUtils", "LibOS"]
         ],
         "LibViewExt"                : [
-                "version"            : "5.9.7",
+                "version"            : "5.9.8",
                 "artifactId"         : "lib-view-ext",
                 "apidependenciesList": [
                         "${project.androidsupport.core}",
