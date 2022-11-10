@@ -116,7 +116,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonAceEditor"           : [
-                "version"            : "5.9.7",
+                "version"            : "5.9.8",
                 "artifactId"         : "common-ace-editor",
                 "apidependenciesList": [
                         "Framework"
