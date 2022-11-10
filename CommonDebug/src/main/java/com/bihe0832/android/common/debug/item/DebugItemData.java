@@ -55,8 +55,11 @@ public class DebugItemData extends CardBaseModule {
     }
 
     public DebugItemData(String content, boolean background) {
-        mContentText = content;
-        hasBackground = background;
+        this(content, null, null, background, true);
+    }
+
+    public DebugItemData(String content, boolean background, boolean showBottomLine) {
+        this(content, null, null, background, showBottomLine);
     }
 
     public int getResID() {
