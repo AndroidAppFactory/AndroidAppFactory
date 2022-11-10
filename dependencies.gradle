@@ -192,7 +192,7 @@ ext.moduleInfo = [
                 ]
         ],
         "Framework"                 : [
-                "version"                : "5.9.7",
+                "version"                : "5.9.8",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         "${project.androidsupport.annotation}",
