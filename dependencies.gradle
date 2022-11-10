@@ -71,7 +71,7 @@ ext.moduleInfo = [
                 ]
         ],
         "CommonDebug"               : [
-                "version"            : "5.9.7",
+                "version"            : "5.9.8",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor"
