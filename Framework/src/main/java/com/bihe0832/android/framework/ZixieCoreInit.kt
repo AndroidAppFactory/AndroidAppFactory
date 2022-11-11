@@ -56,6 +56,7 @@ object ZixieCoreInit {
         val logEnable = openLog || FileUtils.checkFileExist(filePath + "log.enable")
         Log.e(TAG, "log enable: $filePath $openLog $logEnable")
         ZLog.setDebug(logEnable)
+        ZLog.setLogLineLength(1500)
         LoggerFile.init(application, logEnable)
     }
 

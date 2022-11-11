@@ -3,24 +3,27 @@ package com.bihe0832.android.lib.log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import kotlin.jvm.Synchronized;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2020/7/9.
- *         Description:日志工具类的各类日志打印方式
+ * Created on 2020/7/9.
+ * Description:日志工具类的各类日志打印方式
  */
 public final class ZLog {
 
-    private static boolean sDebug;
+    private static boolean sDebug = false;
+    private static int sLogLineLength = 2000;
 
     private static final String TAG = "ZLog";
 
     private static final int STACK_TRACE_DEEP = 6;
-    private static final int LOG_LENGTH = 3000;
 
     private static final ConcurrentHashMap<String, LogImpl> logImplList = new ConcurrentHashMap<String, LogImpl>() {{
         put(LogImplForLogcat.INSTANCE.getName(), LogImplForLogcat.INSTANCE);
@@ -58,10 +61,10 @@ public final class ZLog {
     }
 
     public static void info(String tag, String log) {
-        if (log.length() > LOG_LENGTH) {
-            for (int i = 0; i < log.length(); i += LOG_LENGTH) {
-                if (i + LOG_LENGTH < log.length()) {
-                    info(tag, log.substring(i, i + LOG_LENGTH));
+        if (log.length() > sLogLineLength) {
+            for (int i = 0; i < log.length(); i += sLogLineLength) {
+                if (i + sLogLineLength < log.length()) {
+                    info(tag, log.substring(i, i + sLogLineLength));
                 } else {
                     info(tag, log.substring(i));
                 }
@@ -81,10 +84,10 @@ public final class ZLog {
 
     public static void i(String tag, String log) {
         if (sDebug) {
-            if (log.length() > LOG_LENGTH) {
-                for (int i = 0; i < log.length(); i += LOG_LENGTH) {
-                    if (i + LOG_LENGTH < log.length()) {
-                        i(tag, log.substring(i, i + LOG_LENGTH));
+            if (log.length() > sLogLineLength) {
+                for (int i = 0; i < log.length(); i += sLogLineLength) {
+                    if (i + sLogLineLength < log.length()) {
+                        i(tag, log.substring(i, i + sLogLineLength));
                     } else {
                         i(tag, log);
                     }
@@ -98,10 +101,10 @@ public final class ZLog {
     }
 
     private static void debugLog(String tag, String log) {
-        if (log.length() > LOG_LENGTH) {
-            for (int i = 0; i < log.length(); i += LOG_LENGTH) {
-                if (i + LOG_LENGTH < log.length()) {
-                    debugLog(tag, log.substring(i, i + LOG_LENGTH));
+        if (log.length() > sLogLineLength) {
+            for (int i = 0; i < log.length(); i += sLogLineLength) {
+                if (i + sLogLineLength < log.length()) {
+                    debugLog(tag, log.substring(i, i + sLogLineLength));
                 } else {
                     debugLog(tag, log.substring(i));
                 }
@@ -197,10 +200,10 @@ public final class ZLog {
 
     public static void w(String tag, String log) {
         if (sDebug) {
-            if (log.length() > LOG_LENGTH) {
-                for (int i = 0; i < log.length(); i += LOG_LENGTH) {
-                    if (i + LOG_LENGTH < log.length()) {
-                        w(tag, log.substring(i, i + LOG_LENGTH));
+            if (log.length() > sLogLineLength) {
+                for (int i = 0; i < log.length(); i += sLogLineLength) {
+                    if (i + sLogLineLength < log.length()) {
+                        w(tag, log.substring(i, i + sLogLineLength));
                     } else {
                         w(tag, log.substring(i));
                     }
@@ -221,10 +224,10 @@ public final class ZLog {
 
     public static void e(String tag, String log) {
         if (sDebug) {
-            if (log.length() > LOG_LENGTH) {
-                for (int i = 0; i < log.length(); i += LOG_LENGTH) {
-                    if (i + LOG_LENGTH < log.length()) {
-                        e(tag, log.substring(i, i + LOG_LENGTH));
+            if (log.length() > sLogLineLength) {
+                for (int i = 0; i < log.length(); i += sLogLineLength) {
+                    if (i + sLogLineLength < log.length()) {
+                        e(tag, log.substring(i, i + sLogLineLength));
                     } else {
                         e(tag, log.substring(i));
                     }
@@ -246,6 +249,11 @@ public final class ZLog {
     public static final void setDebug(boolean debug) {
         sDebug = debug;
     }
+
+    public static final void setLogLineLength(int length) {
+        sLogLineLength = length;
+    }
+
 
     @Synchronized
     public static final void addLogImpl(@NotNull LogImpl impl) {
