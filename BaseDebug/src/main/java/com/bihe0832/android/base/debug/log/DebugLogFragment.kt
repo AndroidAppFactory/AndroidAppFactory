@@ -11,6 +11,7 @@ import com.bihe0832.android.framework.log.LoggerTrace
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.log.LogImplForLogcat
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 
 class DebugLogFragment : BaseDebugListFragment() {
@@ -29,6 +30,7 @@ class DebugLogFragment : BaseDebugListFragment() {
                 ZLog.w(LOG_TAG, "testw")
                 ZLog.e(LOG_TAG, "teste")
                 ZLog.info(LOG_TAG, "testinfo")
+                ZLog.info(LOG_TAG, TextFactoryUtils.getRandomString(3000))
             }))
             add(DebugItemData("关闭Logcat", View.OnClickListener { ZLog.closeLogcat() }))
             add(DebugItemData("开启Logcat", View.OnClickListener { ZLog.addLogImpl(LogImplForLogcat) }))
