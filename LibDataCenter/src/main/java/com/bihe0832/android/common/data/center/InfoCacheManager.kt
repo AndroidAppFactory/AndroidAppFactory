@@ -60,19 +60,23 @@ abstract class InfoCacheManager<T> {
     open suspend fun getData(key: String): ZixieCoroutinesData<T> = getData(key, -1)
 
     open suspend fun getData(key: String, duration: Long): ZixieCoroutinesData<T> =
-        suspendCoroutine { cont ->
-            getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
-        }
+            suspendCoroutine { cont ->
+                getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
+            }
 
     fun getData(key: String, listener: AAFDataCallback<T>) {
         getData(key, -1, listener)
+    }
+
+    fun forceUpdate(key: String) {
+        getData(key, -1, null)
     }
 
     fun addData(key: String, data: T) {
         mDataList.put(key, InfoItem(key, System.currentTimeMillis(), data))
     }
 
-    fun getData(key: String, duration: Long, listener: AAFDataCallback<T>) {
+    fun getData(key: String, duration: Long, listener: AAFDataCallback<T>?) {
 
         val mFetchDataListener = object : AAFDataCallback<T>() {
             override fun onSuccess(data: T?) {
@@ -80,11 +84,11 @@ abstract class InfoCacheManager<T> {
                     addData(key, data)
                 }
                 ZLog.d(TAG, "read $key data from server")
-                listener.onSuccess(data)
+                listener?.onSuccess(data)
             }
 
             override fun onError(errorCode: Int, msg: String) {
-                listener.onError(errorCode, msg)
+                listener?.onError(errorCode, msg)
             }
 
         }
@@ -94,7 +98,7 @@ abstract class InfoCacheManager<T> {
                 if (null != it) {
                     if (null != it.dataItem && duration > 0 && System.currentTimeMillis() - duration < it.updateTime) {
                         ZLog.d(TAG, "read $key data from cache")
-                        listener.onSuccess(it.dataItem)
+                        listener?.onSuccess(it.dataItem)
                     } else {
                         getRemoteData(key, mFetchDataListener)
                     }
