@@ -23,35 +23,35 @@ abstract class InfoCacheManager<T> {
     private val mDataList: ConcurrentHashMap<String, InfoItem<T>> = ConcurrentHashMap()
 
     inner class InfoItem<T>(
-        var key: String = "",
-        var updateTime: Long = 0L,
-        var dataItem: T? = null
+            var key: String = "",
+            var updateTime: Long = 0L,
+            var dataItem: T? = null
     )
 
     inner class ContinuationCallbackForFetchDataListener<T>(private var continuation: Continuation<ZixieCoroutinesData<T>>) :
-        AAFDataCallback<T>() {
+            AAFDataCallback<T>() {
 
         override fun onSuccess(result: T?) {
             if (result != null) {
                 continuation.resume(ZixieCoroutinesData(result))
             } else {
                 continuation.resume(
-                    ZixieCoroutinesData(
-                        -1,
-                        Coroutines_ERROR_DATA_NULL,
-                        ""
-                    )
+                        ZixieCoroutinesData(
+                                -1,
+                                Coroutines_ERROR_DATA_NULL,
+                                ""
+                        )
                 )
             }
         }
 
         override fun onError(code: Int, msg: String) {
             continuation.resume(
-                ZixieCoroutinesData(
-                    code,
-                    code,
-                    msg
-                )
+                    ZixieCoroutinesData(
+                            code,
+                            code,
+                            msg
+                    )
             )
         }
     }
@@ -68,8 +68,23 @@ abstract class InfoCacheManager<T> {
         getData(key, -1, listener)
     }
 
-    fun forceUpdate(key: String) {
-        getData(key, -1, null)
+    fun forceUpdate(key: String, forceResetWhenFailed: Boolean) {
+        getData(key, -1, object : AAFDataCallback<T>() {
+            override fun onSuccess(result: T?) {
+
+            }
+
+            override fun onError(errorCode: Int, msg: String) {
+                super.onError(errorCode, msg)
+                if (forceResetWhenFailed) {
+                    resetData(key)
+                }
+            }
+        })
+    }
+
+    fun resetData(key: String) {
+        mDataList.remove(key)
     }
 
     fun addData(key: String, data: T) {
