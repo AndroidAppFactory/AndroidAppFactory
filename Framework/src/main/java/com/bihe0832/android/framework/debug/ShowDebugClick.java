@@ -2,6 +2,7 @@ package com.bihe0832.android.framework.debug;
 
 import android.content.Context;
 import android.view.View;
+
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.debug.DebugTools;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
@@ -13,8 +14,8 @@ import com.bihe0832.android.lib.utils.apk.APKUtils;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2019-11-12.
- *         Description: Description
+ * Created on 2019-11-12.
+ * Description: Description
  */
 public class ShowDebugClick implements View.OnClickListener {
 
@@ -65,26 +66,27 @@ public class ShowDebugClick implements View.OnClickListener {
 
     public String getDebugInfo(Context ctx) {
         StringBuilder builder = new StringBuilder();
-        builder.append(getDebugVersionInfo(ctx));
-        builder.append(getDebugDeviceInfo());
+        builder.append(getDebugVersionInfo(ctx, true));
+        builder.append(getDebugDeviceInfo(true));
         return builder.toString();
     }
 
-    public String getDebugVersionInfo(Context ctx) {
+    public String getDebugVersionInfo(Context ctx, boolean needSpaceLine) {
         StringBuilder builder = new StringBuilder();
         builder.append("版本信息: " + "\n");
-        builder.append(
-                "version: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode()
-                        + "\n");
+        builder.append("version: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode() + "\n");
         builder.append("Tag: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
         builder.append("安装时间:" + DateUtil.getDateEN(LifecycleHelper.INSTANCE.getVersionInstalledTime()) + "\n");
         builder.append("channel: " + ZixieContext.INSTANCE.getChannelID() + "\n");
         builder.append("签名MD5: " + APKUtils.getSigMd5ByPkgName(ctx, ctx.getPackageName()) + "\n");
-        builder.append("official: " + ZixieContext.INSTANCE.isOfficial() + "\n\n");
+        builder.append("official: " + ZixieContext.INSTANCE.isOfficial() + "\n");
+        if (needSpaceLine) {
+            builder.append("\n");
+        }
         return builder.toString();
     }
 
-    public String getDebugDeviceInfo() {
+    public String getDebugDeviceInfo(boolean needSpaceLine) {
         StringBuilder builder = new StringBuilder();
         builder.append("设备信息: " + "\n");
         builder.append("厂商&型号: " + ManufacturerUtil.INSTANCE.getMANUFACTURER() + ", " + ManufacturerUtil.INSTANCE.getMODEL() + "\n");
@@ -94,8 +96,10 @@ public class ShowDebugClick implements View.OnClickListener {
             builder.append("系统版本: Android " + BuildUtils.INSTANCE.getRELEASE() + ", API " + BuildUtils.INSTANCE.getSDK_INT() + "\n");
         }
         builder.append("系统指纹: " + ManufacturerUtil.INSTANCE.getFINGERPRINT() + "\n");
-        builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n\n");
-
+        builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n");
+        if (needSpaceLine) {
+            builder.append("\n");
+        }
         return builder.toString();
     }
 }
