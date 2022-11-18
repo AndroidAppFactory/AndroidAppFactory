@@ -40,7 +40,7 @@ abstract class InfoCacheManager<T> {
             //数据key
             var key: String = "",
             //数据插入或者更新时间
-            var updateTime: Long = 0L,
+            var initTime: Long = 0L,
             // 数据内容
             var dataItem: T? = null)
 
@@ -98,7 +98,7 @@ abstract class InfoCacheManager<T> {
             var startCheckTime = System.currentTimeMillis()
             while (dataIterator.hasNext() && num < getRealBestLength() / DEFAULT_PART) {
                 dataIterator.next().let {
-                    var time = it.value.updateTime
+                    var time = it.value.initTime
                     if (time < startCheckTime - getDefaultDuration()) {
                         ZLog.d(TAG, "remove ${it.key} data by length")
                         dataIterator.remove()
@@ -145,10 +145,10 @@ abstract class InfoCacheManager<T> {
 
         }
 
-        if (mDataMap.containsKey(key)) {
+        if (duration > 0 && mDataMap.containsKey(key)) {
             mDataMap[key].let {
                 if (null != it) {
-                    if (null != it.dataItem && duration > 0 && System.currentTimeMillis() - duration < it.updateTime) {
+                    if (null != it.dataItem && System.currentTimeMillis() - duration < it.initTime) {
                         ZLog.d(TAG, "read $key data from cache")
                         listener?.onSuccess(it.dataItem)
                     } else {
