@@ -17,9 +17,21 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 
 class DebugCacheFragment : DebugEnvFragment() {
 
+    var num = 0
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("测试数据中心", View.OnClickListener { DebugInfoCacheManager.loggerData() }))
+            add(DebugItemData("测试数据缓存效果", View.OnClickListener {
+                DebugInfoCacheManager.loggerData()
+            }))
+
+            add(DebugItemData("测试数据丢弃", View.OnClickListener {
+                for (i in 0..5) {
+                    num++
+                    DebugInfoCacheManager.addData("TestCache$num", DebugCacheData().apply {
+                        this.key = "TestCache$num"
+                    })
+                }
+            }))
         }
     }
 }

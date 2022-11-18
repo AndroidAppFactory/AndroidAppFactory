@@ -23,6 +23,14 @@ object DebugInfoCacheManager {
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 
     private class AAFInfoCacheManager : InfoCacheManager<DebugCacheData>() {
+        override fun getDefaultDuration(): Long {
+            return 10
+        }
+
+        override fun getBestLength(): Int {
+            return 180
+        }
+
         override fun getRemoteData(key: String, listener: AAFDataCallback<DebugCacheData>) {
             when (ConvertUtils.parseInt(key, 0) % 3) {
                 0 -> {
@@ -46,41 +54,41 @@ object DebugInfoCacheManager {
         }
 
         override suspend fun getData(key: String): DebugCoroutinesData<DebugCacheData> =
-            getData(key, -1)
+                getData(key, -1)
 
         override suspend fun getData(
-            key: String,
-            duration: Long
+                key: String,
+                duration: Long
         ): DebugCoroutinesData<DebugCacheData> =
-            suspendCoroutine { cont ->
-                getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
-            }
+                suspendCoroutine { cont ->
+                    getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
+                }
 
 
         inner class ContinuationCallbackForFetchDataListener(private var continuation: Continuation<DebugCoroutinesData<DebugCacheData>>) :
-            AAFDataCallback<DebugCacheData>() {
+                AAFDataCallback<DebugCacheData>() {
 
             override fun onSuccess(result: DebugCacheData?) {
                 if (result != null) {
                     continuation.resume(DebugCoroutinesData(result))
                 } else {
                     continuation.resume(
-                        DebugCoroutinesData(
-                            0,
-                            Coroutines_ERROR_DATA_NULL,
-                            ""
-                        )
+                            DebugCoroutinesData(
+                                    0,
+                                    Coroutines_ERROR_DATA_NULL,
+                                    ""
+                            )
                     )
                 }
             }
 
             override fun onError(code: Int, msg: String) {
                 continuation.resume(
-                    DebugCoroutinesData(
-                        code,
-                        code,
-                        msg
-                    )
+                        DebugCoroutinesData(
+                                code,
+                                code,
+                                msg
+                        )
                 )
             }
         }
@@ -106,7 +114,7 @@ object DebugInfoCacheManager {
         }
         CoroutineScope(defaultDispatcher).launch {
 
-            mTestInfoCacheManagerImpl.addData("TestCache", DebugCacheData().apply {
+            addData("TestCache", DebugCacheData().apply {
                 this.key = "TestCache" + System.currentTimeMillis()
             })
             mTestInfoCacheManagerImpl.getData("TestCache", 500L * key).let {
@@ -142,15 +150,15 @@ object DebugInfoCacheManager {
 
             //需要同时处理各种异常的情况，链式调用
             mTestInfoCacheManagerImpl.getData(key.toString(), 15000L)
-                .onZixieError { errCode, exception ->
-                    ZLog.d(LOG_TAG, "onZixieError: $errCode,  $exception")
+                    .onZixieError { errCode, exception ->
+                        ZLog.d(LOG_TAG, "onZixieError: $errCode,  $exception")
 
-                }.onZixieLoginError { errCode, exception ->
-                    ZLog.d(LOG_TAG, "onZixieLoginError: $errCode,  $exception")
+                    }.onZixieLoginError { errCode, exception ->
+                        ZLog.d(LOG_TAG, "onZixieLoginError: $errCode,  $exception")
 
-                }.onSuccess {
-                    ZLog.d(LOG_TAG, it.toString())
-                }.data()
+                    }.onSuccess {
+                        ZLog.d(LOG_TAG, it.toString())
+                    }.data()
 
             //请求成功，直接获取到数据
             mTestInfoCacheManagerImpl.getData(key.toString(), 15000L).data()?.let {
@@ -166,5 +174,9 @@ object DebugInfoCacheManager {
                 ZLog.d(LOG_TAG, it.toString())
             }
         }
+    }
+
+    fun addData(key: String, cacheData: DebugCacheData) {
+        mTestInfoCacheManagerImpl.addData(key, cacheData)
     }
 }
