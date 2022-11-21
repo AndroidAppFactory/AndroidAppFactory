@@ -54,15 +54,15 @@ open class DebugEnvFragment : BaseDebugListFragment() {
     }
 
 
-    fun showChangeEnvResult(title: String, key: String, value: String) {
-        showChangeEnvResult(title, key, value, value)
+    fun showChangeEnvResult(title: String, key: String, value: String, actionType: Int) {
+        showChangeEnvResult(title, key, value, value, actionType)
     }
 
-    fun showChangeEnvResult(title: String, key: String, value: String, tipsText: String) {
+    fun showChangeEnvResult(title: String, key: String, value: String, tipsText: String, actionType: Int) {
         try {
             var setResultForServer = Config.writeConfig(key, value)
             if (setResultForServer) {
-                showChangeEnvDialog(title, tipsText)
+                showChangeEnvDialog(title, tipsText, actionType)
             } else {
                 ToastUtil.showShort(context, "${title}切换失败，请重试")
             }
@@ -71,26 +71,46 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         }
     }
 
-    fun showChangeEnvDialog(title: String, tipsText: String) {
+
+    val CHANGE_ENV_EXIST_TYPE_NOTHING = 0
+    val CHANGE_ENV_EXIST_TYPE_EXIST = 1
+    val CHANGE_ENV_EXIST_TYPE_RESTART = 2
+
+    fun showChangeEnvDialog(title: String, tipsText: String, actionType: Int) {
         try {
+            var tips = "${title}已切换为：<BR> <font color=\"#c0392b\">$tipsText</font> <BR> 点击确认后" +
+                    when (actionType) {
+                        CHANGE_ENV_EXIST_TYPE_EXIST -> "APP会自动退出，手动启动APP后生效"
+                        CHANGE_ENV_EXIST_TYPE_RESTART -> "APP会自动重启，APP重启后生效"
+                        else -> "生效"
+                    }
             CommonDialog(activity).apply {
                 setTitle("${title}切换")
-                setHtmlContent("${title}已切换为：<BR> <font color=\"#c0392b\">$tipsText</font> <BR> 点击确认后重启APP后生效")
+                setHtmlContent(tips)
                 setShouldCanceled(false)
                 setPositive("确认")
                 setOnClickBottomListener(object : OnDialogListener {
+                    fun clickAction(actionType: Int) {
+                        when (actionType) {
+                            CHANGE_ENV_EXIST_TYPE_EXIST -> ZixieContext.exitAPP()
+                            CHANGE_ENV_EXIST_TYPE_RESTART -> ZixieContext.restartApp()
+                            else -> {
+                                dismiss()
+                            }
+                        }
+                    }
+
                     override fun onPositiveClick() {
-                        ZixieContext.restartApp()
+                        clickAction(actionType)
                     }
 
                     override fun onNegativeClick() {
-                        ZixieContext.restartApp()
+                        clickAction(actionType)
                     }
 
                     override fun onCancel() {
-                        ZixieContext.restartApp()
+                        clickAction(actionType)
                     }
-
                 })
             }.let {
                 it.show()
