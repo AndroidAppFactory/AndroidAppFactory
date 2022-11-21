@@ -41,20 +41,10 @@ class DebugDialogFragment : DebugEnvFragment() {
 
             add(DebugItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(DebugItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
-            add(DebugItemData("模拟环境切换", View.OnClickListener {
-                mutableListOf<String>().apply {
-                    add("测试环境1")
-                    add("测试环境2")
-                }.let { data ->
-                    getChangeEnvSelectDialog("查看应用版本及环境", data, 0, object : DebugEnvFragment.OnEnvChangedListener {
-                        override fun onChanged(index: Int) {
-                            showChangeEnvDialog("应用环境", data.get(index))
-                        }
-                    }).let {
-                        it.show()
-                    }
-                }
-            }))
+            add(changeEnv("模拟环境切换并自动重启",CHANGE_ENV_EXIST_TYPE_RESTART))
+            add(changeEnv("模拟环境切换并自动退出",CHANGE_ENV_EXIST_TYPE_EXIST))
+            add(changeEnv("模拟环境切换并立即生效",CHANGE_ENV_EXIST_TYPE_NOTHING))
+
         }
     }
 
@@ -294,6 +284,23 @@ class DebugDialogFragment : DebugEnvFragment() {
         for (i in 0 until 3) {
             AAFUniqueDialogManager.tipsUniqueDialogManager.showUniqueDialog(requireActivity(), "212", "这是内容 ${System.currentTimeMillis()}", "OK")
         }
+    }
+
+    fun changeEnv(title:String, type:Int): DebugItemData {
+        return DebugItemData(title, View.OnClickListener {
+            mutableListOf<String>().apply {
+                add("测试环境1")
+                add("测试环境2")
+            }.let { data ->
+                getChangeEnvSelectDialog("查看应用版本及环境", data, 0, object : DebugEnvFragment.OnEnvChangedListener {
+                    override fun onChanged(index: Int) {
+                        showChangeEnvDialog("应用环境重启", data.get(index), type)
+                    }
+                }).let {
+                    it.show()
+                }
+            }
+        })
     }
 
 }

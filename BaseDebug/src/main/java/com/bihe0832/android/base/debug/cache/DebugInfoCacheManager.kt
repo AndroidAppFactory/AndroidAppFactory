@@ -53,9 +53,6 @@ object DebugInfoCacheManager {
             }
         }
 
-        override suspend fun getData(key: String): DebugCoroutinesData<DebugCacheData> =
-                getData(key, -1)
-
         override suspend fun getData(
                 key: String,
                 duration: Long
@@ -170,7 +167,7 @@ object DebugInfoCacheManager {
                 ZLog.d(LOG_TAG, it.toString())
             }
 
-            mTestInfoCacheManagerImpl.getCachedData(key.toString())?.dataItem?.let {
+            mTestInfoCacheManagerImpl.getCachedData(key.toString())?.let {
                 ZLog.d(LOG_TAG, it.toString())
             }
         }
