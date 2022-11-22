@@ -16,9 +16,10 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.BaseActivity
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.select.FileSelectTools
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
@@ -141,6 +142,7 @@ class AceEditActivity : BaseActivity() {
     private fun parseBundle(bundle: Bundle?) {
         bundle?.getString(RouterConstants.INTENT_EXTRA_KEY_WEB_URL)?.let {
             filePath = URLDecoder.decode(it)
+            ZLog.d(RouterConstants.MODULE_NAME_EDITOR, "filepath:$filePath")
             updateTitle(FileUtils.getFileName(filePath))
         }
     }

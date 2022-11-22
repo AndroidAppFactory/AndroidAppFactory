@@ -10,6 +10,8 @@ import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.BufferedWriter
 import java.io.File
@@ -26,12 +28,18 @@ import java.util.concurrent.ConcurrentHashMap
  *
  */
 object LoggerFile {
+
+    private const val TAG = "LoggerFile"
+
     private var mCanSaveSpecialFile = false
     private var mContext: Context? = null
 
     private val mLogFiles = ConcurrentHashMap<String, File?>()
     private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
-    private const val DEFAULT_DURATION = 24 * 60 * 60 * 1000L
+    private const val DEFAULT_DURATION = DateUtil.MILLISECOND_OF_HOUR
+    private const val DEFAULT_LOG_FILE_SIZE = FileUtils.SPACE_MB * 3
+    private const val MAX_LOG_FILE_SIZE = FileUtils.SPACE_MB * 10
+
     private var mDuration = DEFAULT_DURATION
     private val mLoggerHandlerThread by lazy {
         HandlerThread("THREAD_ZIXIE_LOG_FILE", 5).also {
@@ -55,7 +63,7 @@ object LoggerFile {
 
     @Synchronized
     fun init(context: Context, isDebug: Boolean) {
-        init(context, isDebug, 24 * 7 * DEFAULT_DURATION)
+        init(context, isDebug, 7 * DateUtil.MILLISECOND_OF_DAY)
     }
 
     @Synchronized
@@ -66,16 +74,22 @@ object LoggerFile {
             } else {
                 try {
                     var file = File(fileName)
+                    if (FileUtils.checkFileExist(fileName)) {
+                        if (file.length() > MAX_LOG_FILE_SIZE) {
+                            FileUtils.copyFile(file, File("${file.parentFile.absolutePath}${File.separator}${FileUtils.getFileNameWithoutEx(fileName)}_${DateUtil.getCurrentDateEN("HHmm")}.txt"), true)
+                        }
+                    }
                     if (!FileUtils.checkFileExist(fileName)) {
                         file.createNewFile()
                     }
                     checkOldFile(file)
                     val bufferedWriter =
-                        BufferedWriter(OutputStreamWriter(FileOutputStream(file, true), "UTF-8"))
+                            BufferedWriter(OutputStreamWriter(FileOutputStream(file, true), "UTF-8"))
                     mLogFiles[fileName] = file
+                    ZLog.e(TAG, "ZLog Add New File !!!! $fileName")
                     mBufferedWriters[fileName] = bufferedWriter
                 } catch (e: Exception) {
-                    ZLog.e("ZLog FLIE ERROR !!!!")
+                    ZLog.e(TAG, "ZLog FLIE ERROR !!!! $e")
                     e.printStackTrace()
                 }
             }
@@ -84,7 +98,6 @@ object LoggerFile {
 
     private fun checkOldFile(file: File) {
         FileUtils.deleteOldAsync(file.parentFile, mDuration)
-
     }
 
     private fun bufferSave(fileName: String, msg: String?) {
@@ -94,7 +107,7 @@ object LoggerFile {
                 mBufferedWriters[fileName]?.newLine()
                 mBufferedWriters[fileName]?.flush()
             } catch (e: java.lang.Exception) {
-                ZLog.e("ZLog FLIE  ERROR !!!!")
+                ZLog.e(TAG, "ZLog FLIE  ERROR !!!! $e")
                 e.printStackTrace()
             }
         }
@@ -112,23 +125,56 @@ object LoggerFile {
                 bufferSave(filePath, msg)
             }
         } catch (e: java.lang.Exception) {
-            ZLog.e("Logger ERROR !!!!")
+            ZLog.e(TAG, "log ERROR !!!! $e")
+            e.printStackTrace()
+        }
+    }
+
+    fun justOpen(filePath: String) {
+        try {
+            val map = HashMap<String, String>()
+            map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(filePath)
+            RouterAction.openFinalURL(
+                    RouterAction.getFinalURL(RouterConstants.MODULE_NAME_EDITOR, map),
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+            )
+        } catch (e: java.lang.Exception) {
+            //当系统没有携带文件打开软件，提示
+            ZLog.e(TAG, "openLog ERROR !!!!$e")
             e.printStackTrace()
         }
     }
 
     fun openLog(filePath: String) {
         try {
-            if (FileUtils.checkFileExist(filePath) && File(filePath).length() > 1 * FileUtils.SPACE_MB) {
-                ZixieContext.showDebug("日志较大，手机打开会比较耗时，建议发送到电脑查看")
+            if (FileUtils.checkFileExist(filePath) && File(filePath).length() > DEFAULT_LOG_FILE_SIZE) {
+                DialogUtils.showConfirmDialog(
+                        ZixieContext.getCurrentActivity()!!,
+                        "超大日志查看",
+                        "日志 「<font color ='#3AC8EF'><b>${FileUtils.getFileName(filePath)} (${FileUtils.getFileLength(File(filePath).length())})」</b></font> 文件较大，手机打开耗时较久或者打开失败，建议发送到电脑查看。本地路径: <BR> $filePath ",
+                        "发送日志",
+                        "继续查看",
+                        object : OnDialogListener {
+                            override fun onPositiveClick() {
+                                sendLog(filePath)
+                            }
+
+                            override fun onNegativeClick() {
+                                justOpen(filePath)
+                            }
+
+                            override fun onCancel() {
+                            }
+
+                        }
+                )
+            } else {
+                justOpen(filePath)
             }
-            val map = HashMap<String, String>()
-            map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(filePath)
-            RouterAction.openFinalURL(
-                RouterAction.getFinalURL(RouterConstants.MODULE_NAME_EDITOR, map),
-                Intent.FLAG_ACTIVITY_NEW_TASK
-            )
-        } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
+
+        } catch (e: java.lang.Exception) {
+            //当系统没有携带文件打开软件，提示
+            ZLog.e(TAG, "openLog ERROR !!!!$e")
             e.printStackTrace()
         }
     }
@@ -138,12 +184,16 @@ object LoggerFile {
             mContext?.let { context ->
                 try { //设置intent的data和Type属性
                     FileUtils.sendFile(context, filePath)
-                } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
+                } catch (e: java.lang.Exception) {
+                    //当系统没有携带文件打开软件，提示
+                    //当系统没有携带文件打开软件，提示
+                    ZLog.e(TAG, "sendLog ERROR !!!!$e")
                     e.printStackTrace()
                 }
             }
-        } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
-            ZLog.e("Logger ERROR !!!!")
+        } catch (e: java.lang.Exception) {
+            //当系统没有携带文件打开软件，提示
+            ZLog.e(TAG, "sendLog ERROR !!!!$e")
             e.printStackTrace()
         }
     }
