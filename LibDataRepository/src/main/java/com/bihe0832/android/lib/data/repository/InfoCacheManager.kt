@@ -133,7 +133,7 @@ abstract class InfoCacheManager<T> {
         val mFetchDataListener = object : AAFDataCallback<T>() {
             override fun onSuccess(data: T?) {
                 data?.let {
-                    addDataToRepository(key, data)
+                    addData(key, data)
                 }
                 ZLog.d(TAG, "read $key data from server")
                 listener?.onSuccess(data)
