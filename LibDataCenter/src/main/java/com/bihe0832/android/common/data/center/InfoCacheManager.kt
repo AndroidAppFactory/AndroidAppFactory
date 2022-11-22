@@ -69,27 +69,7 @@ abstract class InfoCacheManager<T> {
         }
     }
 
-
-    fun forceUpdate(key: String, forceResetWhenFailed: Boolean) {
-        getData(key, -1, object : AAFDataCallback<T>() {
-            override fun onSuccess(result: T?) {
-
-            }
-
-            override fun onError(errorCode: Int, msg: String) {
-                super.onError(errorCode, msg)
-                if (forceResetWhenFailed) {
-                    removeData(key)
-                }
-            }
-        })
-    }
-
-    fun removeData(key: String) {
-        mDataMap.remove(key)
-    }
-
-    fun addData(key: String, data: T) {
+    private fun innerAddData(key: String, data: T) {
         ZLog.d(TAG, "add data：$key ")
         mDataMap[key] = InfoItem(key, System.currentTimeMillis(), data)
         if (mDataMap.size > getRealBestLength()) {
@@ -108,6 +88,29 @@ abstract class InfoCacheManager<T> {
             }
             ZLog.d(TAG, "after remove data length is：${mDataMap.size} ")
         }
+    }
+
+    open fun addData(key: String, data: T) {
+        innerAddData(key, data)
+    }
+
+    fun forceUpdate(key: String, forceResetWhenFailed: Boolean) {
+        getData(key, -1, object : AAFDataCallback<T>() {
+            override fun onSuccess(result: T?) {
+
+            }
+
+            override fun onError(errorCode: Int, msg: String) {
+                super.onError(errorCode, msg)
+                if (forceResetWhenFailed) {
+                    removeData(key)
+                }
+            }
+        })
+    }
+
+    fun removeData(key: String) {
+        mDataMap.remove(key)
     }
 
 
@@ -130,7 +133,7 @@ abstract class InfoCacheManager<T> {
         val mFetchDataListener = object : AAFDataCallback<T>() {
             override fun onSuccess(data: T?) {
                 data?.let {
-                    addData(key, data)
+                    innerAddData(key, data)
                 }
                 ZLog.d(TAG, "read $key data from server")
                 listener?.onSuccess(data)
