@@ -69,7 +69,7 @@ abstract class InfoCacheManager<T> {
         }
     }
 
-    private fun innerAddData(key: String, data: T) {
+    fun addDataToRepository(key: String, data: T) {
         ZLog.d(TAG, "add data：$key ")
         mDataMap[key] = InfoItem(key, System.currentTimeMillis(), data)
         if (mDataMap.size > getRealBestLength()) {
@@ -91,7 +91,7 @@ abstract class InfoCacheManager<T> {
     }
 
     open fun addData(key: String, data: T) {
-        innerAddData(key, data)
+        addDataToRepository(key, data)
     }
 
     fun forceUpdate(key: String, forceResetWhenFailed: Boolean) {
@@ -133,7 +133,7 @@ abstract class InfoCacheManager<T> {
         val mFetchDataListener = object : AAFDataCallback<T>() {
             override fun onSuccess(data: T?) {
                 data?.let {
-                    innerAddData(key, data)
+                    addDataToRepository(key, data)
                 }
                 ZLog.d(TAG, "read $key data from server")
                 listener?.onSuccess(data)
