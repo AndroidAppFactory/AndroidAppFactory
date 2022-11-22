@@ -26,7 +26,7 @@ abstract class InfoCacheManager<T> {
 
     abstract fun getRemoteData(key: String, listener: AAFDataCallback<T>)
 
-    open fun getDefaultDuration(): Long {
+    open fun getDefaultDuration(key: String): Long {
         return DEFAULT_DURATION
     }
 
@@ -99,7 +99,7 @@ abstract class InfoCacheManager<T> {
             while (dataIterator.hasNext() && num < getRealBestLength() / DEFAULT_PART) {
                 dataIterator.next().let {
                     var time = it.value.initTime
-                    if (time < startCheckTime - getDefaultDuration()) {
+                    if (time < startCheckTime - getDefaultDuration(key)) {
                         ZLog.d(TAG, "remove ${it.key} data by length")
                         dataIterator.remove()
                         num++
@@ -117,11 +117,8 @@ abstract class InfoCacheManager<T> {
         getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
     }
 
-    /**
-     * 彻底不看过期时间获取数据
-     */
     open suspend fun getCachedData(key: String): ZixieCoroutinesData<T> {
-        return getData(key, getDefaultDuration())
+        return getData(key, getDefaultDuration(key))
     }
 
     fun getNewData(key: String, listener: AAFDataCallback<T>) {
@@ -163,11 +160,8 @@ abstract class InfoCacheManager<T> {
         }
     }
 
-    /**
-     * 彻底不看过期时间获取数据
-     */
     fun getCachedData(key: String, listener: AAFDataCallback<T>?) {
-        return getData(key, getDefaultDuration(), listener)
+        return getData(key, getDefaultDuration(key), listener)
     }
 
     /**
