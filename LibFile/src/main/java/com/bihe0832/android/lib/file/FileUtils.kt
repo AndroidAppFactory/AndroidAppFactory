@@ -72,7 +72,7 @@ object FileUtils {
     )
 
 
-    const val SPACE_KB = 1024.0
+    const val SPACE_KB = 1024L
     const val SPACE_MB = 1024 * SPACE_KB
     const val SPACE_GB = 1024 * SPACE_MB
     const val SPACE_TB = 1024 * SPACE_GB
