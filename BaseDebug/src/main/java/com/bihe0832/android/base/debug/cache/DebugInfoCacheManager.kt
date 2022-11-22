@@ -1,7 +1,7 @@
 package com.bihe0832.android.base.debug.cache
 
 import com.bihe0832.android.common.coroutines.Coroutines_ERROR_DATA_NULL
-import com.bihe0832.android.common.data.center.InfoCacheManager
+import com.bihe0832.android.lib.data.repository.InfoCacheManager
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
@@ -23,7 +23,7 @@ object DebugInfoCacheManager {
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 
     private class AAFInfoCacheManager : InfoCacheManager<DebugCacheData>() {
-        override fun getDefaultDuration(): Long {
+        override fun getDefaultDuration(key: String): Long {
             return 10
         }
 
