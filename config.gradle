@@ -2,7 +2,7 @@ ext {
     //Android编译SDK版本
     compileSdkVersion = 32
     //Android编译工具版本
-    buildToolsVersion = "31.0.0"
+    buildToolsVersion = "32.0.0"
     //Lib 最低适配Android 版本
     libMinSdkVersion = 16
     //APK 最低适配Android 版本
