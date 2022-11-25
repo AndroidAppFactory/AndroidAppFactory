@@ -35,4 +35,9 @@ open class SequenceDialogManager : BlockTaskManager() {
 
         }, dependList)
     }
+
+    fun getSequenceTaskManager(): SequenceTaskManager {
+        return mSequenceTaskManager
+    }
+
 }
