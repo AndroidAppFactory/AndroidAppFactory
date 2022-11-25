@@ -68,6 +68,9 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
 
     }
 
+    open fun getCheckInterval(): Long {
+        return TASK_CHECKED_PERIOD
+    }
 
     override fun toString(): String {
         return super.toString() + "; currentStatus：$currentStatus"
@@ -82,6 +85,7 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
         }
         Executors.newSingleThreadExecutor().execute {
             try {
+                ZLog.d(TAG, "start task action: ${this.taskName} at $taskStartTime")
                 while (mTaskIsWaiting) {
                     mTaskListAction.logAllTask()
                     //死循环
@@ -112,8 +116,8 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
                             taskAction()
                         }
                         mTaskIsWaiting = false
-                    } else {
-                        Thread.sleep(TASK_CHECKED_PERIOD)
+                    } else if (currentStatus == TASK_STATUS_WAITING) {
+                        Thread.sleep(getCheckInterval())
                     }
                 }
             } catch (ex: Exception) {

@@ -28,7 +28,6 @@ open class SequenceTaskManager {
     }
 
     private var mCurrentTaskListAction = object : SequenceTaskListCall {
-        var lastRetTime = 0L
 
         override fun getTaskStatus(name: String): Int {
             return taskList[name]?.getSequenceTaskStatus() ?: SequenceTask.TASK_STATUS_NOT_EXIST
@@ -50,7 +49,6 @@ open class SequenceTaskManager {
         }
 
         override fun resetTaskManager() {
-            lastRetTime = System.currentTimeMillis()
             if (mTaskManager.isRunning()) {
                 (mTaskManager.currentTask as SequenceTask?)?.let { currentRunningTask ->
                     ZLog.d(SequenceTask.TAG, "pause task: $currentRunningTask")
