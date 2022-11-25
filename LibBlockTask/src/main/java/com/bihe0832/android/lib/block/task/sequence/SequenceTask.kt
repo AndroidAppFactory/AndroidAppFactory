@@ -27,7 +27,7 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
 
         const val TAG = "SequenceTaskManager"
 
-        const val TASK_CHECKED_PERIOD = 500L
+        const val TASK_CHECKED_PERIOD = 100L
 
         const val TASK_STATUS_NOT_EXIST = 0
         const val TASK_STATUS_WAITING = 1
@@ -44,8 +44,8 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
     }
 
     fun unlock() {
-        unLockBlock()
         currentStatus = TASK_STATUS_FINISHED
+        unLockBlock()
     }
 
     override fun compareTo(another: BlockTask): Int {
@@ -92,17 +92,21 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
                     var depIsOKOrTimeout = true
                     var depIsWaiting = false
                     mTaskDependenceList.forEach { dep ->
-                        mTaskListAction.getTaskStatus(dep.dependOnTaskID).let {
-                            if (TASK_STATUS_NOT_EXIST == it) {
-                                depIsOKOrTimeout = depIsOKOrTimeout && System.currentTimeMillis() - taskStartTime > dep.maxWaitingTime
-                            } else if (TASK_STATUS_WAITING == it) {
-                                ZLog.d(TAG, "${this.taskName} will replace by ${dep.dependOnTaskID}")
-
-                                // 切换任务
-                                depIsWaiting = true
-                                depIsOKOrTimeout = false
-                            } else {
-                                depIsOKOrTimeout = depIsOKOrTimeout && TASK_STATUS_FINISHED == it
+                        if (dep.dependOnTaskID.equals(taskName) || mTaskListAction.getAllDependenceList(dep.dependOnTaskID).contains(taskName)) {
+                            ZLog.e(TAG, "\n\n\n !!!!!! $taskName can not depend on ${dep.dependOnTaskID}  skip check!!!! \n\n\n")
+                        } else {
+                            mTaskListAction.getTaskStatus(dep.dependOnTaskID).let {
+                                ZLog.d(TAG, "task dep : $dep and status $it")
+                                if (TASK_STATUS_NOT_EXIST == it) {
+                                    depIsOKOrTimeout = depIsOKOrTimeout && System.currentTimeMillis() - taskStartTime > dep.maxWaitingTime
+                                } else if (TASK_STATUS_WAITING == it) {
+                                    ZLog.d(TAG, "${this.taskName} will replace by ${dep.dependOnTaskID}")
+                                    // 切换任务
+                                    depIsWaiting = true
+                                    depIsOKOrTimeout = false
+                                } else {
+                                    depIsOKOrTimeout = depIsOKOrTimeout && TASK_STATUS_FINISHED == it
+                                }
                             }
                         }
                     }
@@ -117,6 +121,7 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
                         }
                         mTaskIsWaiting = false
                     } else if (currentStatus == TASK_STATUS_WAITING) {
+                        ZLog.d(TAG, "task sleep: ${getCheckInterval()} ")
                         Thread.sleep(getCheckInterval())
                     }
                 }

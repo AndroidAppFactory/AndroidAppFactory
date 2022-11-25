@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.block.task.sequence;
 
 import com.bihe0832.android.lib.block.task.priority.BlockTaskManager
-import com.bihe0832.android.lib.block.task.sequence.SequenceTask.Companion.TASK_STATUS_RUNNING
 import com.bihe0832.android.lib.log.ZLog
 import java.util.concurrent.ConcurrentHashMap
 
@@ -63,11 +62,7 @@ open class SequenceTaskManager {
         }
     }
 
-    private fun innerAdd(taskID: String, task: SequenceTask) {
-        if (taskList.containsKey(taskID) && taskList.get(taskID)?.getSequenceTaskStatus() ?: SequenceTask.TASK_STATUS_NOT_EXIST == TASK_STATUS_RUNNING) {
-            ZLog.e(SequenceTask.TAG, "\n\n\n !!!!!! Task has add before and is running !!!! \n\n\n")
-            return
-        }
+    final fun addTask(taskID: String, task: SequenceTask) {
         taskList.put(taskID, task)
         mTaskManager.add(task)
     }
@@ -86,7 +81,7 @@ open class SequenceTaskManager {
         if (dependList.size != realDependList.size) {
             ZLog.e(SequenceTask.TAG, "\n\n\n !!!!!! add bad TaskDependence !!!! \n\n\n")
         }
-        innerAdd(taskID, SequenceTask(taskID, mCurrentTaskListAction, action, realDependList))
+        addTask(taskID, SequenceTask(taskID, mCurrentTaskListAction, action, realDependList))
     }
 
     fun finishCurrentTask() {
