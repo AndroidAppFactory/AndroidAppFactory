@@ -7,7 +7,7 @@ import android.media.SoundPool
 import android.os.Build
 import androidx.annotation.NonNull
 import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
-import com.bihe0832.android.lib.block.task.BlockTaskManager
+import com.bihe0832.android.lib.block.task.priority.BlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.audio.AudioTools
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -31,14 +31,8 @@ class AudioPLayerManager : BlockTaskManager() {
     private val mSoundPool by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //设置描述音频流信息的属性
-            val abs = AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build()
-            SoundPool.Builder()
-                .setMaxStreams(1)
-                .setAudioAttributes(abs)
-                .build()
+            val abs = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+            SoundPool.Builder().setMaxStreams(1).setAudioAttributes(abs).build()
         } else {
             SoundPool(1, AudioManager.STREAM_MUSIC, 0)
         }
@@ -66,12 +60,7 @@ class AudioPLayerManager : BlockTaskManager() {
         }
     }
 
-    class BlockAudioTask(
-        private val mPlay: SoundPool,
-        private val mAudioItem: AudioItem,
-        private val innerFinishedAction: () -> Unit,
-        name: String
-    ) : BaseAAFBlockTask(name) {
+    class BlockAudioTask(private val mPlay: SoundPool, private val mAudioItem: AudioItem, private val innerFinishedAction: () -> Unit, name: String) : BaseAAFBlockTask(name) {
 
         private var errorCode = 0
         private var msg = ""

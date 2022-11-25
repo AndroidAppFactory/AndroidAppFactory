@@ -20,6 +20,7 @@ import com.bihe0832.android.lib.ui.dialog.*
 import com.bihe0832.android.lib.ui.dialog.blockdialog.BlockDialogManager
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.sequencedialog.SequenceDialogManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
@@ -30,6 +31,7 @@ class DebugDialogFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
             add(DebugItemData("根据优先级逐次弹框", View.OnClickListener { testBlock() }))
+            add(DebugItemData("根据弹框顺序弹", View.OnClickListener { testSequence() }))
 
             add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
             add(DebugItemData("底部Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
@@ -41,9 +43,9 @@ class DebugDialogFragment : DebugEnvFragment() {
 
             add(DebugItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(DebugItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
-            add(changeEnv("模拟环境切换并自动重启",CHANGE_ENV_EXIST_TYPE_RESTART))
-            add(changeEnv("模拟环境切换并自动退出",CHANGE_ENV_EXIST_TYPE_EXIST))
-            add(changeEnv("模拟环境切换并立即生效",CHANGE_ENV_EXIST_TYPE_NOTHING))
+            add(changeEnv("模拟环境切换并自动重启", CHANGE_ENV_EXIST_TYPE_RESTART))
+            add(changeEnv("模拟环境切换并自动退出", CHANGE_ENV_EXIST_TYPE_EXIST))
+            add(changeEnv("模拟环境切换并立即生效", CHANGE_ENV_EXIST_TYPE_NOTHING))
 
         }
     }
@@ -64,8 +66,7 @@ class DebugDialogFragment : DebugEnvFragment() {
             for (i in 0..100) {
                 add("RadioButton $i")
             }
-        }, 1
-        ) { which -> showToast("RadioButton  $which") }
+        }, 1) { which -> showToast("RadioButton  $which") }
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 try {
@@ -256,26 +257,10 @@ class DebugDialogFragment : DebugEnvFragment() {
 
     }
 
-    private val mBlockDialogManager = BlockDialogManager()
-    fun testBlock() {
-        for (i in 0..5) {
-            mBlockDialogManager.showDialog(CommonDialog(activity).apply {
-                getAlert(this)
-                setTitle("弹框 $i")
-            }, MathUtils.getRandNumByLimit(0, 10), i * 3000L)
-        }
-
-    }
-
     fun tesInput(activity: Activity) {
-        DialogUtils.showInputDialog(
-                activity,
-                "测试标题",
-                "",
-                "默认值",
-                InputDialogCompletedCallback {
-                    showToast(it)
-                }
+        DialogUtils.showInputDialog(activity, "测试标题", "", "默认值", InputDialogCompletedCallback {
+            showToast(it)
+        }
 
         )
     }
@@ -286,7 +271,7 @@ class DebugDialogFragment : DebugEnvFragment() {
         }
     }
 
-    fun changeEnv(title:String, type:Int): DebugItemData {
+    fun changeEnv(title: String, type: Int): DebugItemData {
         return DebugItemData(title, View.OnClickListener {
             mutableListOf<String>().apply {
                 add("测试环境1")
@@ -301,6 +286,60 @@ class DebugDialogFragment : DebugEnvFragment() {
                 }
             }
         })
+    }
+
+
+    private val mBlockDialogManager = BlockDialogManager()
+    fun testBlock() {
+        for (i in 0..5) {
+            mBlockDialogManager.showDialog(CommonDialog(activity).apply {
+                getAlert(this)
+                setTitle("弹框 $i")
+            }, MathUtils.getRandNumByLimit(0, 10), i * 3000L)
+        }
+
+    }
+
+
+    private val mSequenceDialogManager = SequenceDialogManager()
+    fun testSequence() {
+        var dependList = HashMap<String, List<SequenceDialogManager.DependenceDialog>>().apply {
+            put("Dialog0", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
+                add(SequenceDialogManager.DependenceDialog("Dialog-1", 3))
+            })
+            put("Dialog1", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
+                add(SequenceDialogManager.DependenceDialog("Dialog0", 6))
+            })
+            put("Dialog2", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
+                add(SequenceDialogManager.DependenceDialog("Dialog0", 10))
+                add(SequenceDialogManager.DependenceDialog("Dialog1", 6))
+            })
+            put("Dialog3", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
+                add(SequenceDialogManager.DependenceDialog("Dialog5", 6))
+                add(SequenceDialogManager.DependenceDialog("Dialog2", 6))
+
+            })
+            put("Dialog4", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
+                add(SequenceDialogManager.DependenceDialog("Dialog3", 6))
+                add(SequenceDialogManager.DependenceDialog("Dialog1", 6))
+
+            })
+            put("Dialog5", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
+                add(SequenceDialogManager.DependenceDialog("Dialog4", 6))
+                add(SequenceDialogManager.DependenceDialog("Dialog1", 6))
+
+            })
+        }
+        val taskIDList = mutableListOf<String>("Dialog0", "Dialog1", "Dialog2", "Dialog3", "Dialog4", "Dialog5", "Dialog6")
+        taskIDList.shuffled().forEach { taskID ->
+            dependList.get(taskID)?.let {
+                mSequenceDialogManager.showDialog(taskID, CommonDialog(activity).apply {
+                    getAlert(this)
+                    setTitle("弹框 $taskID")
+                }, it)
+            }
+        }
+
     }
 
 }

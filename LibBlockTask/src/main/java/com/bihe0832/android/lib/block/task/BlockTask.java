@@ -7,11 +7,19 @@ package com.bihe0832.android.lib.block.task;
  */
 public interface BlockTask extends Comparable<BlockTask> {
 
+    String TAG = "BlockTask";
+
+    // 获取任务名称
+    String getTaskName();
+
     //执行具体任务的方法
     void startTask();
 
     //任务执行完成后的回调方法
     void finishTask();
+
+    //任务执行完成后的回调方法
+    void skipTask();
 
     //设置任务优先级
     void setPriority(int mTaskPriority);
