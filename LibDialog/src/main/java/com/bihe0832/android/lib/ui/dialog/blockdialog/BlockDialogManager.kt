@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.ui.dialog.blockdialog
 
 import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
-import com.bihe0832.android.lib.block.task.BlockTaskManager
+import com.bihe0832.android.lib.block.task.priority.BlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
@@ -10,7 +10,7 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
  *
  * @author hardyshi code@bihe0832.com
  * Created on 2022/10/24.
- * Description: Description
+ * Description: 阻塞式弹框，逐个根据前一个的优先级展示
  *
  */
 open class BlockDialogManager : BlockTaskManager() {
@@ -38,17 +38,17 @@ open class BlockDialogManager : BlockTaskManager() {
     }
 
     fun addDelayShowTask(task: BaseAAFBlockTask, priority: Int, delayTime: Long) {
-        ZLog.d("MnaBlockTaskManager", "showDelayTask : $task after $delayTime")
-        ThreadManager.getInstance().start({
-            add(task.apply {
-                setPriority(priority)
-            })
-        }, delayTime)
+        task.apply {
+            setPriority(priority)
+        }.let {
+            ZLog.d("MnaBlockTaskManager", "showDelayTask : $task after $delayTime")
+            ThreadManager.getInstance().start({
+                add(it)
+            }, delayTime)
+        }
     }
 
     fun showDialog(dialog: CommonDialog, priority: Int, delayTime: Long) {
         addDelayShowTask(BlockDialogTask(dialog, dialog.title ?: ""), priority, delayTime)
     }
-
-
 }

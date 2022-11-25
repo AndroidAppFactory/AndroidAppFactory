@@ -10,7 +10,7 @@ package com.bihe0832.android.base.debug.block
 
 
 import android.view.View
-import com.bihe0832.android.lib.block.task.BlockTaskManager
+import com.bihe0832.android.lib.block.task.priority.BlockTaskManager
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule

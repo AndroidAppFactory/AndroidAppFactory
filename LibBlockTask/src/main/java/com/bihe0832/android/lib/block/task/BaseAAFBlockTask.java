@@ -15,7 +15,7 @@ public abstract class BaseAAFBlockTask implements BlockTask {
     private long mSequence;// 入队次序
     private String mTaskName = "";// 入队次序
     private Boolean mTaskIsRunning = false;
-    private PriorityBlockingQueue<Integer> blockQueue;
+    private final PriorityBlockingQueue<Integer> blockQueue;
 
     public abstract void doTask();
 
@@ -27,7 +27,7 @@ public abstract class BaseAAFBlockTask implements BlockTask {
 
     @Override
     public final void startTask() {
-        ZLog.d(BlockTaskManager.TAG, "Do     Task: " + this);
+        ZLog.d(BlockTask.TAG, "Do     Task: " + this);
         mTaskIsRunning = true;
         doTask();
     }
@@ -79,9 +79,14 @@ public abstract class BaseAAFBlockTask implements BlockTask {
         return mTaskName;
     }
 
+    @Override
+    public void skipTask() {
+        ZLog.d(BlockTask.TAG, "Skip Task: " + this);
+    }
+
     //解除阻塞
     @Override
-    public void unLockBlock() {
+    final public void unLockBlock() {
         blockQueue.add(1);
     }
 

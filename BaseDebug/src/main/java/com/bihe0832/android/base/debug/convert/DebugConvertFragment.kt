@@ -13,9 +13,11 @@ import android.util.Base64
 import android.view.View
 import com.bihe0832.android.base.debug.json.IntegerDebugAdapter
 import com.bihe0832.android.base.debug.json.JsonTest
+import com.bihe0832.android.base.debug.tree.TreeNode
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.block.task.sequence.SequenceTask
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.gson.JsonHelper.fromJsonList
 import com.bihe0832.android.lib.log.ZLog
@@ -32,12 +34,16 @@ import java.math.RoundingMode
 
 class DebugConvertFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
+    var taskIDTree: TreeNode<String>? = null
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("JsonHelper", View.OnClickListener { testJson() }))
             add(DebugItemData("Boolean 转化", View.OnClickListener { testConvertBoolean() }))
             add(DebugItemData("Float 转化", View.OnClickListener { testConvertFloat() }))
+
+            add(DebugItemData("树结构", View.OnClickListener { testTree() }))
+
 
             add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
             add(DebugItemData("时间数据格式化", View.OnClickListener { testFormat() }))
@@ -56,16 +62,7 @@ class DebugConvertFragment : DebugEnvFragment() {
             ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
         }
 
-        var list = "[" +
-                "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," +
-                "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," +
-                "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," +
-                "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," +
-                "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," +
-                "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," +
-                "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," +
-                "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" +
-                "]"
+        var list = "[" + "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," + "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," + "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," + "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," + "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," + "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," + "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," + "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" + "]"
 
         list.let {
             ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(it, JsonTest::class.java))
@@ -86,17 +83,7 @@ class DebugConvertFragment : DebugEnvFragment() {
     }
 
     fun testConvertBoolean() {
-        mutableListOf(
-                "1",
-                "-1",
-                "-1",
-                "0",
-                "233",
-                "true",
-                "tRUe",
-                "false",
-                "False"
-        ).forEach { data ->
+        mutableListOf("1", "-1", "-1", "0", "233", "true", "tRUe", "false", "False").forEach { data ->
             ZLog.d(LOG_TAG, data + " result is:" + ConvertUtils.parseBoolean(data, false))
             ZLog.d(LOG_TAG, data + " result is:" + ConvertUtils.parseBoolean(data, true))
         }
@@ -104,14 +91,7 @@ class DebugConvertFragment : DebugEnvFragment() {
 
     private fun testFormat() {
 
-        mutableListOf(
-                1645771904111,
-                1345775904112,
-                1625775904313,
-                1645775304114,
-                1645772904115,
-                1645772404116
-        ).forEach { data ->
+        mutableListOf(1645771904111, 1345775904112, 1625775904313, 1645775304114, 1645772904115, 1645772404116).forEach { data ->
             ZLog.d(LOG_TAG, "DateEN $data trans result is:" + DateUtil.getDateEN(data))
             ZLog.d(LOG_TAG, "DateEN $data start is:" + DateUtil.getDayStartTimestamp(data))
             ZLog.d(LOG_TAG, "DateEN $data start is:" + DateUtil.getDateEN(DateUtil.getDayStartTimestamp(data)))
@@ -122,16 +102,8 @@ class DebugConvertFragment : DebugEnvFragment() {
         }
 
         mutableListOf(1, 37, 67, 2434, 24064, 2403564).forEach {
-            ZLog.d(LOG_TAG,
-                    "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong())
-            )
-            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(
-                    it.toLong(),
-                    false,
-                    false,
-                    false
-            )
-            )
+            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong()))
+            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, false))
             ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true))
             ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false))
             ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true))
@@ -223,6 +195,32 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "v3 VS v2:" + APKUtils.compareVersion(v3, v2))
         ZLog.d(LOG_TAG, "v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
 
+    }
+
+    fun testTree() {
+        if (taskIDTree == null) {
+            taskIDTree = TreeNode("5")
+        }
+        taskIDTree?.addChild("54")?.apply {
+            addChild("42")
+            addChild("41")
+            addChild("40")
+        }
+        taskIDTree?.addChild("53")?.apply {
+            addChild("32")
+            addChild("30")
+        }
+        taskIDTree?.addChild("52")?.apply {
+            addChild("21")
+            addChild("20")
+        }
+        taskIDTree?.addChild("51")?.apply {
+            addChild("10")
+        }
+
+        taskIDTree?.forEach {
+            ZLog.e(SequenceTask.TAG, "node is :$it")
+        }
     }
 
 
