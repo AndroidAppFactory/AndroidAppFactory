@@ -17,9 +17,9 @@ import java.util.concurrent.Executors
 
 class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManager.SequenceTaskListCall, private val taskAction: () -> Unit, val mTaskDependenceList: List<TaskDependence>) : BaseAAFBlockTask(name) {
 
-    open class TaskDependence(val dependOnTaskID: String, val maxWaitingTime: Long) {
+    open class TaskDependence(val taskID: String, val maxWaitingTime: Long) {
         override fun toString(): String {
-            return "taskID:$dependOnTaskID, max delay times$maxWaitingTime"
+            return "taskID:$taskID, max delay times:$maxWaitingTime"
         }
     }
 
@@ -27,7 +27,7 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
 
         const val TAG = "SequenceTaskManager"
 
-        const val TASK_CHECKED_PERIOD = 100L
+        const val TASK_CHECKED_PERIOD = 500L
 
         const val TASK_STATUS_NOT_EXIST = 0
         const val TASK_STATUS_WAITING = 1
@@ -45,6 +45,11 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
 
     fun unlock() {
         currentStatus = TASK_STATUS_FINISHED
+        unLockBlock()
+    }
+
+    fun pause() {
+        currentStatus = TASK_STATUS_WAITING
         unLockBlock()
     }
 
@@ -76,13 +81,12 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
         return super.toString() + "; currentStatus：$currentStatus"
     }
 
+    @Synchronized
     final override fun doTask() {
         ZLog.d(TAG, "start waiting task: ${this.taskName} at $taskStartTime")
         mTaskIsWaiting = true
         currentStatus = TASK_STATUS_WAITING
-        if (taskStartTime == 0L) {
-            taskStartTime = System.currentTimeMillis()
-        }
+        mTaskListAction.updateTaskWaitTime(taskName)
         Executors.newSingleThreadExecutor().execute {
             try {
                 ZLog.d(TAG, "start task action: ${this.taskName} at $taskStartTime")
@@ -92,15 +96,20 @@ class SequenceTask(name: String, private val mTaskListAction: SequenceTaskManage
                     var depIsOKOrTimeout = true
                     var depIsWaiting = false
                     mTaskDependenceList.forEach { dep ->
-                        if (dep.dependOnTaskID.equals(taskName) || mTaskListAction.getAllDependenceList(dep.dependOnTaskID).contains(taskName)) {
-                            ZLog.e(TAG, "\n\n\n !!!!!! $taskName can not depend on ${dep.dependOnTaskID}  skip check!!!! \n\n\n")
+                        if (dep.taskID.equals(taskName) || mTaskListAction.getAllDependenceList(dep.taskID).contains(taskName)) {
+                            ZLog.e(TAG, "\n\n\n !!!!!! $taskName can not depend on ${dep.taskID}  skip check!!!! \n\n\n")
                         } else {
-                            mTaskListAction.getTaskStatus(dep.dependOnTaskID).let {
-                                ZLog.d(TAG, "task dep : $dep and status $it")
+                            mTaskListAction.getTaskStatus(dep.taskID).let {
+                                ZLog.d(TAG, "  task dep : $dep and status $it")
                                 if (TASK_STATUS_NOT_EXIST == it) {
-                                    depIsOKOrTimeout = depIsOKOrTimeout && System.currentTimeMillis() - taskStartTime > dep.maxWaitingTime
+                                    val startWait = mTaskListAction.getTaskStartWaitTime(dep.taskID)
+                                    if (startWait == 0L) {
+                                        mTaskListAction.updateTaskWaitTime(dep.taskID)
+                                    }
+                                    ZLog.d(TAG, "  task dep : $dep start wait: $startWait")
+                                    depIsOKOrTimeout = depIsOKOrTimeout && (System.currentTimeMillis() - mTaskListAction.getTaskStartWaitTime(dep.taskID) > dep.maxWaitingTime)
                                 } else if (TASK_STATUS_WAITING == it) {
-                                    ZLog.d(TAG, "${this.taskName} will replace by ${dep.dependOnTaskID}")
+                                    ZLog.d(TAG, "${this.taskName} will replace by ${dep.taskID}")
                                     // 切换任务
                                     depIsWaiting = true
                                     depIsOKOrTimeout = false
