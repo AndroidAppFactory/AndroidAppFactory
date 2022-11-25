@@ -24,9 +24,12 @@ open class SequenceTaskManager {
         fun logAllTask()
         fun resetTaskManager()
         fun getAllDependenceList(taskID: String): List<String>
+        fun getTaskStartWaitTime(id: String): Long
+        fun updateTaskWaitTime(id: String)
     }
 
     private var mCurrentTaskListAction = object : SequenceTaskListCall {
+        private val mTaskStartWaitTime = ConcurrentHashMap<String, Long>()
 
         override fun getTaskStatus(name: String): Int {
             return taskList[name]?.getSequenceTaskStatus() ?: SequenceTask.TASK_STATUS_NOT_EXIST
@@ -41,30 +44,46 @@ open class SequenceTaskManager {
         override fun getAllDependenceList(taskID: String): List<String> {
             var list = mutableListOf<String>()
             taskList.get(taskID)?.mTaskDependenceList?.forEach {
-                list.addAll(getAllDependenceList(it.dependOnTaskID))
-                list.add(it.dependOnTaskID)
+                list.addAll(getAllDependenceList(it.taskID))
+                list.add(it.taskID)
             }
             return list
         }
 
+        override fun getTaskStartWaitTime(id: String): Long {
+            return mTaskStartWaitTime[id] ?: 0
+        }
+
+        override fun updateTaskWaitTime(id: String) {
+            if (!mTaskStartWaitTime.containsKey(id)) {
+                mTaskStartWaitTime[id] = System.currentTimeMillis()
+            }
+        }
+
+        @Synchronized
         override fun resetTaskManager() {
             if (mTaskManager.isRunning()) {
                 (mTaskManager.currentTask as SequenceTask?)?.let { currentRunningTask ->
                     ZLog.d(SequenceTask.TAG, "pause task: $currentRunningTask")
                     // 停止当前，替换为新任务
                     mTaskManager.setRunning(false)
-                    currentRunningTask.unlock()
+                    currentRunningTask.pause()
                     mTaskManager.setRunning(true)
                     mTaskManager.restart()
                     mTaskManager.add(currentRunningTask)
                 }
             }
         }
+
+        fun resetTask(taskID: String) {
+            mTaskStartWaitTime.remove(taskID)
+        }
     }
 
     final fun addTask(taskID: String, task: SequenceTask) {
         taskList.put(taskID, task)
         mTaskManager.add(task)
+        mCurrentTaskListAction.resetTask(taskID)
     }
 
     @Synchronized
@@ -72,8 +91,8 @@ open class SequenceTaskManager {
         ZLog.d(SequenceTask.TAG, "Add task: $taskID - $dependList")
         var realDependList = mutableListOf<SequenceTask.TaskDependence>()
         dependList.forEach {
-            if (it.dependOnTaskID.equals(taskID) || mCurrentTaskListAction.getAllDependenceList(it.dependOnTaskID).contains(taskID)) {
-                ZLog.e(SequenceTask.TAG, "\n\n\n !!!!!! $taskID can not depend on ${it.dependOnTaskID} !!!! \n\n\n")
+            if (it.taskID.equals(taskID) || mCurrentTaskListAction.getAllDependenceList(it.taskID).contains(taskID)) {
+                ZLog.e(SequenceTask.TAG, "\n\n\n !!!!!! $taskID can not depend on ${it.taskID} !!!! \n\n\n")
             } else {
                 realDependList.add(it)
             }

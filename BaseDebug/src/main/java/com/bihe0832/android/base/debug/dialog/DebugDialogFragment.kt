@@ -305,6 +305,7 @@ class DebugDialogFragment : DebugEnvFragment() {
     fun testSequence() {
         var dependList = HashMap<String, List<SequenceDialogManager.DependenceDialog>>().apply {
             put("Dialog0", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
+                add(SequenceDialogManager.DependenceDialog("Dialog-1", 6))
             })
             put("Dialog1", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
                 add(SequenceDialogManager.DependenceDialog("Dialog0", 6))
@@ -314,8 +315,8 @@ class DebugDialogFragment : DebugEnvFragment() {
                 add(SequenceDialogManager.DependenceDialog("Dialog1", 6))
             })
             put("Dialog3", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
-                add(SequenceDialogManager.DependenceDialog("Dialog5", 6))
                 add(SequenceDialogManager.DependenceDialog("Dialog2", 6))
+                add(SequenceDialogManager.DependenceDialog("Dialog-1", 6))
 
             })
             put("Dialog4", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
