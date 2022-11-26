@@ -11,25 +11,25 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class DependenceBlockTaskExecutionInfo {
 
-    class SequenceTaskInfo(private var taskID: String = "") {
+    class DependenceTaskInfo(private var taskID: String = "") {
         var taskFirstStartTime = 0L
         private var taskCurrentStatus = DependenceBlockTask.TASK_STATUS_NOT_EXIST
         private var dependList: MutableList<DependenceBlockTask.TaskDependence> = mutableListOf()
 
-        fun getDependInfo(): List<DependenceBlockTask.TaskDependence>? {
+        fun getDependenceInfo(): List<DependenceBlockTask.TaskDependence> {
             return dependList
         }
 
-        fun updateTtaskCurrentStatus(status: Int) {
+        fun updateCurrentStatus(status: Int) {
             taskCurrentStatus = status
         }
 
-        fun gettaskCurrentStatus(): Int {
+        fun getCurrentStatus(): Int {
             return taskCurrentStatus
         }
 
         override fun toString(): String {
-            return "SequenceTaskInfo(taskID='$taskID', taskFirstStartTime=$taskFirstStartTime, taskCurrentStatus=$taskCurrentStatus)"
+            return "DependenceTaskInfo(taskID='$taskID', taskFirstStartTime=$taskFirstStartTime, taskCurrentStatus=$taskCurrentStatus)"
         }
 
         fun addDependList(list: List<DependenceBlockTask.TaskDependence>) {
@@ -42,20 +42,20 @@ class DependenceBlockTaskExecutionInfo {
         }
     }
 
-    private val taskList = ConcurrentHashMap<String, SequenceTaskInfo>()
+    private val taskList = ConcurrentHashMap<String, DependenceTaskInfo>()
 
     @Synchronized
-    fun getTaskInfo(taskID: String): SequenceTaskInfo {
+    fun getTaskInfo(taskID: String): DependenceTaskInfo {
         if (!taskList.containsKey(taskID)) {
-            taskList.put(taskID, SequenceTaskInfo(taskID))
+            taskList.put(taskID, DependenceTaskInfo(taskID))
         }
         return taskList.get(taskID)!!
     }
 
-    fun getTaskDependListInfo(taskID: String): List<String> {
+    fun getTaskDependenceListInfo(taskID: String): List<String> {
         var result = mutableListOf<String>()
-        getTaskInfo(taskID).getDependInfo()?.forEach {
-            result.addAll(getTaskDependListInfo(it.taskID))
+        getTaskInfo(taskID).getDependenceInfo().forEach {
+            result.addAll(getTaskDependenceListInfo(it.taskID))
             result.add(it.taskID)
         }
         return result.distinct()

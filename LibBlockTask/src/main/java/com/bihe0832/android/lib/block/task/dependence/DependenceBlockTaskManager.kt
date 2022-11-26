@@ -27,7 +27,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
 
     interface SequenceTaskCallback {
         fun resetTaskManager(task: DependenceBlockTask)
-        fun getTaskInfo(taskID: String): DependenceBlockTaskExecutionInfo.SequenceTaskInfo
+        fun getTaskInfo(taskID: String): DependenceBlockTaskExecutionInfo.DependenceTaskInfo
         fun updateTaskWaitTime(taskID: String)
         fun updateTaskStatus(taskID: String, status: Int)
         fun logAllTask()
@@ -43,7 +43,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
         }
 
         override fun getAllDependenceList(taskID: String): List<String> {
-            return mSequenceTaskUpdatedInfoList.getTaskDependListInfo(taskID)
+            return mSequenceTaskUpdatedInfoList.getTaskDependenceListInfo(taskID)
         }
 
         override fun updateTaskWaitTime(taskID: String) {
@@ -51,7 +51,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
         }
 
         override fun updateTaskStatus(taskID: String, status: Int) {
-            mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).updateTtaskCurrentStatus(status)
+            mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).updateCurrentStatus(status)
         }
 
         @Synchronized
@@ -68,14 +68,14 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
             mTaskManager.add(task)
         }
 
-        override fun getTaskInfo(taskID: String): DependenceBlockTaskExecutionInfo.SequenceTaskInfo {
+        override fun getTaskInfo(taskID: String): DependenceBlockTaskExecutionInfo.DependenceTaskInfo {
             return mSequenceTaskUpdatedInfoList.getTaskInfo(taskID)
         }
     }
 
     init {
         mTaskManager.add(DependenceBlockTask(INNER_TASK_ID, mCurrentTaskListAction) {
-            if (autoStart) {
+            if (autoStart || mSequenceTaskUpdatedInfoList.getTaskInfo(INNER_TASK_ID).getCurrentStatus() == DependenceBlockTask.TASK_STATUS_FINISHED) {
                 finishTask(INNER_TASK_ID)
             }
         })
@@ -83,7 +83,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
 
     fun finishTask(taskID: String) {
         ZLog.d(BlockTask.TAG, "finishTask task: $taskID")
-        mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).updateTtaskCurrentStatus(DependenceBlockTask.TASK_STATUS_FINISHED)
+        mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).updateCurrentStatus(DependenceBlockTask.TASK_STATUS_FINISHED)
         (mTaskManager.currentTask as DependenceBlockTask?)?.let { currentRunningTask ->
             if (currentRunningTask.taskName.equals(taskID)) {
                 ZLog.d(BlockTask.TAG, "unlock task: $currentRunningTask")
@@ -106,7 +106,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
         var realDependList = mutableListOf<DependenceBlockTask.TaskDependence>().apply {
             add(DependenceBlockTask.TaskDependence(INNER_TASK_ID, DateUtil.MILLISECOND_OF_DAY))
             dependList.forEach {
-                if (it.taskID.equals(taskID) || mSequenceTaskUpdatedInfoList.getTaskDependListInfo(it.taskID).contains(taskID)) {
+                if (it.taskID.equals(taskID) || mSequenceTaskUpdatedInfoList.getTaskDependenceListInfo(it.taskID).contains(taskID)) {
                     ZLog.e(BlockTask.TAG, "\n\n\n !!!!!! $taskID can not depend on ${it.taskID} !!!! \n\n\n")
                 } else {
                     add(it)
@@ -119,7 +119,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
         }
         mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).apply {
             addDependList(realDependList)
-            updateTtaskCurrentStatus(DependenceBlockTask.TASK_STATUS_WAITING)
+            updateCurrentStatus(DependenceBlockTask.TASK_STATUS_WAITING)
         }
         mTaskManager.add(DependenceBlockTask(taskID, mCurrentTaskListAction, action))
     }

@@ -18,9 +18,9 @@ open class DependenceBlockDialogManager(autoStart: Boolean) {
     private val TAG = "DependenceBlockDialogManager"
     private val mDependenceBlockTaskManager = DependenceBlockTaskManager(autoStart)
 
-    class DependentDialog(dialogID: String, maxWaitingSecond: Int) : DependenceBlockTask.TaskDependence(dialogID, maxWaitingSecond * 1000L)
+    class DependenceDialog(dialogID: String, maxWaitingSecond: Int) : DependenceBlockTask.TaskDependence(dialogID, maxWaitingSecond * 1000L)
 
-    fun showDialog(taskID: String, dialog: CommonDialog, dependList: List<DependentDialog>) {
+    fun showDialog(taskID: String, dialog: CommonDialog, dependList: List<DependenceDialog>) {
         ZLog.d(TAG, "Add dialog : $taskID - $dependList")
 
         mDependenceBlockTaskManager.addTask(taskID, {
