@@ -17,7 +17,6 @@ import com.bihe0832.android.base.debug.tree.TreeNode
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.block.task.sequence.SequenceTask
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.gson.JsonHelper.fromJsonList
 import com.bihe0832.android.lib.log.ZLog
@@ -219,7 +218,7 @@ class DebugConvertFragment : DebugEnvFragment() {
         }
 
         taskIDTree?.forEach {
-            ZLog.e(SequenceTask.TAG, "node is :$it")
+            ZLog.e("node is :$it")
         }
     }
 

@@ -17,21 +17,24 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.dialog.*
-import com.bihe0832.android.lib.ui.dialog.blockdialog.BlockDialogManager
+import com.bihe0832.android.lib.ui.dialog.blockdialog.PriorityBlockDialogManager
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
-import com.bihe0832.android.lib.ui.dialog.sequencedialog.SequenceDialogManager
+import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 class DebugDialogFragment : DebugEnvFragment() {
+    private val mDependenceBlockDialogManager = DependenceBlockDialogManager(false)
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
             add(DebugItemData("根据优先级逐次弹框", View.OnClickListener { testBlock() }))
-            add(DebugItemData("根据弹框顺序弹", View.OnClickListener { testSequence() }))
+            add(DebugItemData("根据弹框顺序弹后台添加", View.OnClickListener { testSequence1() }))
+            add(DebugItemData("根据弹框顺序弹触发启动", View.OnClickListener { testSequence2() }))
+            add(DebugItemData("根据弹框顺序弹触发启动", View.OnClickListener { mDependenceBlockDialogManager.start() }))
 
             add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
             add(DebugItemData("底部Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
@@ -289,10 +292,10 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
 
-    private val mBlockDialogManager = BlockDialogManager()
+    private val mPriorityBlockDialogManager = PriorityBlockDialogManager()
     fun testBlock() {
         for (i in 0..5) {
-            mBlockDialogManager.showDialog(CommonDialog(activity).apply {
+            mPriorityBlockDialogManager.showDialog(CommonDialog(activity).apply {
                 getAlert(this)
                 setTitle("弹框 $i")
             }, MathUtils.getRandNumByLimit(0, 10), i * 3000L)
@@ -301,45 +304,56 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
 
-    private val mSequenceDialogManager = SequenceDialogManager()
-    fun testSequence() {
-        var dependList = HashMap<String, List<SequenceDialogManager.DependenceDialog>>().apply {
-            put("Dialog0", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
-                add(SequenceDialogManager.DependenceDialog("Dialog-1", 6))
-            })
-            put("Dialog1", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
-                add(SequenceDialogManager.DependenceDialog("Dialog0", 6))
-            })
-            put("Dialog2", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
-                add(SequenceDialogManager.DependenceDialog("Dialog0", 10))
-                add(SequenceDialogManager.DependenceDialog("Dialog1", 6))
-            })
-            put("Dialog3", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
-                add(SequenceDialogManager.DependenceDialog("Dialog2", 6))
-                add(SequenceDialogManager.DependenceDialog("Dialog-1", 6))
+    var dependList = HashMap<String, List<DependenceBlockDialogManager.DependentDialog>>().apply {
+        put("Dialog0", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
+//                add(DependenceBlockDialogManager.DependentDialog("Dialog-1", 6))
+        })
+        put("Dialog1", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
+            add(DependenceBlockDialogManager.DependentDialog("Dialog0", 6))
+        })
+        put("Dialog2", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
+            add(DependenceBlockDialogManager.DependentDialog("Dialog0", 10))
+            add(DependenceBlockDialogManager.DependentDialog("Dialog1", 6))
+        })
+        put("Dialog3", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
+            add(DependenceBlockDialogManager.DependentDialog("Dialog2", 6))
+//                add(DependenceBlockDialogManager.DependentDialog("Dialog-1", 6))
 
-            })
-            put("Dialog4", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
-                add(SequenceDialogManager.DependenceDialog("Dialog3", 6))
-                add(SequenceDialogManager.DependenceDialog("Dialog1", 6))
+        })
+        put("Dialog4", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
+            add(DependenceBlockDialogManager.DependentDialog("Dialog3", 6))
+            add(DependenceBlockDialogManager.DependentDialog("Dialog1", 6))
 
-            })
-            put("Dialog5", mutableListOf<SequenceDialogManager.DependenceDialog>().apply {
-                add(SequenceDialogManager.DependenceDialog("Dialog4", 6))
-                add(SequenceDialogManager.DependenceDialog("Dialog1", 6))
+        })
+        put("Dialog5", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
+            add(DependenceBlockDialogManager.DependentDialog("Dialog4", 6))
+            add(DependenceBlockDialogManager.DependentDialog("Dialog1", 6))
+        })
+    }
 
-            })
-        }
-        val taskIDList = mutableListOf<String>("Dialog0", "Dialog1", "Dialog2", "Dialog3", "Dialog4", "Dialog5", "Dialog6")
+    fun testSequence1() {
+
+        val taskIDList = mutableListOf<String>("Dialog0", "Dialog1", "Dialog4", "Dialog5", "Dialog6")
         taskIDList.shuffled().forEach { taskID ->
             dependList.get(taskID)?.let {
-                mSequenceDialogManager.showDialog(taskID, CommonDialog(activity).apply {
+                mDependenceBlockDialogManager.showDialog(taskID, CommonDialog(activity).apply {
                     getAlert(this)
                     setTitle("弹框 $taskID")
                 }, it)
             }
         }
-
     }
 
+    fun testSequence2() {
+        val taskIDList = mutableListOf<String>( "Dialog2", "Dialog3", "Dialog4", )
+        taskIDList.shuffled().forEach { taskID ->
+            dependList.get(taskID)?.let {
+                mDependenceBlockDialogManager.showDialog(taskID, CommonDialog(activity).apply {
+                    getAlert(this)
+                    setTitle("弹框 $taskID")
+                }, it)
+            }
+
+        }
+    }
 }

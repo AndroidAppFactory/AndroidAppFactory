@@ -10,7 +10,7 @@ package com.bihe0832.android.base.debug.block
 
 
 import android.view.View
-import com.bihe0832.android.lib.block.task.priority.BlockTaskManager
+import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -25,7 +25,7 @@ class DebugEnqueueFragment : DebugEnvFragment() {
 
     var num = 0
 
-    private val mTaskQueue = BlockTaskManager()
+    private val mTaskQueue = PriorityBlockTaskManager()
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("定时任务测试", View.OnClickListener { testTask() }))

@@ -7,7 +7,7 @@ import android.media.SoundPool
 import android.os.Build
 import androidx.annotation.NonNull
 import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
-import com.bihe0832.android.lib.block.task.priority.BlockTaskManager
+import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.audio.AudioTools
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap
  * Description: Description
  *
  */
-class AudioPLayerManager : BlockTaskManager() {
+class AudioPLayerManager : PriorityBlockTaskManager() {
 
     val PRIORITY_DEFAULT = 1
     private val TAG = "AudioManager"
