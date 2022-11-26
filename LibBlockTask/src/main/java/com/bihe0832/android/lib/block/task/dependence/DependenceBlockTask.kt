@@ -71,7 +71,11 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
     final override fun doTask() {
         ZLog.d(TAG, "start waiting task: ${this.taskName} ")
         mTaskIsWaiting = true
-        mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_WAITING)
+        if (!mTaskListAction.canReset(taskName) && mTaskListAction.getTaskInfo(taskName).getCurrentStatus() > TASK_STATUS_WAITING) {
+            ZLog.d(TAG, "task: ${this.taskName} current :${mTaskListAction.getTaskInfo(taskName).getCurrentStatus()} can not reset to TASK_STATUS_WAITING")
+        } else {
+            mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_WAITING)
+        }
         mTaskListAction.updateTaskWaitTime(taskName)
         Executors.newSingleThreadExecutor().execute {
             try {
