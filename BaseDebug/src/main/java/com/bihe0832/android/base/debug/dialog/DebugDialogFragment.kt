@@ -304,30 +304,30 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
 
-    var dependList = HashMap<String, List<DependenceBlockDialogManager.DependentDialog>>().apply {
-        put("Dialog0", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
-//                add(DependenceBlockDialogManager.DependentDialog("Dialog-1", 6))
+    var dependList = HashMap<String, List<DependenceBlockDialogManager.DependenceDialog>>().apply {
+        put("Dialog0", mutableListOf<DependenceBlockDialogManager.DependenceDialog>().apply {
+//                add(DependenceBlockDialogManager.DependenceDialog("Dialog-1", 6))
         })
-        put("Dialog1", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
-            add(DependenceBlockDialogManager.DependentDialog("Dialog0", 6))
+        put("Dialog1", mutableListOf<DependenceBlockDialogManager.DependenceDialog>().apply {
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog0", 6))
         })
-        put("Dialog2", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
-            add(DependenceBlockDialogManager.DependentDialog("Dialog0", 10))
-            add(DependenceBlockDialogManager.DependentDialog("Dialog1", 6))
+        put("Dialog2", mutableListOf<DependenceBlockDialogManager.DependenceDialog>().apply {
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog0", 10))
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog1", 6))
         })
-        put("Dialog3", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
-            add(DependenceBlockDialogManager.DependentDialog("Dialog2", 6))
-//                add(DependenceBlockDialogManager.DependentDialog("Dialog-1", 6))
+        put("Dialog3", mutableListOf<DependenceBlockDialogManager.DependenceDialog>().apply {
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog2", 6))
+//                add(DependenceBlockDialogManager.DependenceDialog("Dialog-1", 6))
 
         })
-        put("Dialog4", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
-            add(DependenceBlockDialogManager.DependentDialog("Dialog3", 6))
-            add(DependenceBlockDialogManager.DependentDialog("Dialog1", 6))
+        put("Dialog4", mutableListOf<DependenceBlockDialogManager.DependenceDialog>().apply {
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog3", 6))
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog1", 6))
 
         })
-        put("Dialog5", mutableListOf<DependenceBlockDialogManager.DependentDialog>().apply {
-            add(DependenceBlockDialogManager.DependentDialog("Dialog4", 6))
-            add(DependenceBlockDialogManager.DependentDialog("Dialog1", 6))
+        put("Dialog5", mutableListOf<DependenceBlockDialogManager.DependenceDialog>().apply {
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog4", 6))
+            add(DependenceBlockDialogManager.DependenceDialog("Dialog1", 6))
         })
     }
 

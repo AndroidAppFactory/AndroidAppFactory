@@ -86,7 +86,7 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
                         if (depID.equals(taskName) || mTaskListAction.getAllDependenceList(taskName).contains(taskName)) {
                             ZLog.e(TAG, "\n\n\n !!!!!! $taskName can not depend on ${depID}  skip check!!!! \n\n\n")
                         } else {
-                            depInfo.gettaskCurrentStatus().let {
+                            depInfo.getCurrentStatus().let {
                                 ZLog.d(TAG, "  $taskName task dep : $depID and status $it")
                                 if (TASK_STATUS_NOT_EXIST == it) {
                                     var startWait = depInfo.taskFirstStartTime
@@ -95,7 +95,7 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
                                         startWait = System.currentTimeMillis()
                                     }
                                     ZLog.d(TAG, "  $taskName task dep : $depID start wait: $startWait")
-                                    depIsOKOrTimeout = depIsOKOrTimeout && (System.currentTimeMillis() - startWait > mTaskListAction.getTaskInfo(taskName).getDependInfo()?.find { it.taskID.equals(depID) }?.maxWaitingTime ?: 0)
+                                    depIsOKOrTimeout = depIsOKOrTimeout && (System.currentTimeMillis() - startWait > mTaskListAction.getTaskInfo(taskName).getDependenceInfo()?.find { it.taskID.equals(depID) }?.maxWaitingTime ?: 0)
                                 } else if (TASK_STATUS_WAITING == it) {
                                     ZLog.w(TAG, "${this.taskName} will replace by ${depID}")
                                     // 切换任务
