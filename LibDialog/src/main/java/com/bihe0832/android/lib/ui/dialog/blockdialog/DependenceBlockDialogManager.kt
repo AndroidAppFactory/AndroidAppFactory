@@ -1,7 +1,7 @@
 package com.bihe0832.android.lib.ui.dialog.blockdialog
 
-import com.bihe0832.android.lib.block.task.sequence.DependenceBlockTask
-import com.bihe0832.android.lib.block.task.sequence.DependenceBlockTaskManager
+import com.bihe0832.android.lib.block.task.dependence.DependenceBlockTask
+import com.bihe0832.android.lib.block.task.dependence.DependenceBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
