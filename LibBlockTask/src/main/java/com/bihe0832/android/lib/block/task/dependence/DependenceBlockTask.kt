@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.block.task.sequence
+package com.bihe0832.android.lib.block.task.dependence
 
 import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
 import com.bihe0832.android.lib.block.task.BlockTask

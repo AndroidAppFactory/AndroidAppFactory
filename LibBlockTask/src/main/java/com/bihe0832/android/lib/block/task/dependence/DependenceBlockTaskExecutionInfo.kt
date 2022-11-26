@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.block.task.sequence
+package com.bihe0832.android.lib.block.task.dependence
 
 import java.util.concurrent.ConcurrentHashMap
 
