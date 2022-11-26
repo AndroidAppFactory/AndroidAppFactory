@@ -13,9 +13,9 @@ import kotlin.jvm.Synchronized;
 /**
  * @author hardyshi code@bihe0832.com
  * Created on 2022/10/22.
- * Description: Description
+ * Description: 具有优先级性质的排序任务
  */
-public class BlockTaskManager {
+public class PriorityBlockTaskManager {
 
     protected IdGenerator mIdGenerator = new IdGenerator(1);
     //阻塞队列
@@ -26,7 +26,7 @@ public class BlockTaskManager {
     private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
     protected BlockTask currentTask = null;
 
-    public BlockTaskManager() {
+    public PriorityBlockTaskManager() {
     }
 
     //开始遍历任务队列
@@ -66,6 +66,7 @@ public class BlockTaskManager {
         }
     }
 
+    @Synchronized
     public void add(BlockTask task) {
         long time = System.currentTimeMillis();
         ZLog.d(BlockTask.TAG, "Add    task: " + time + " - " + task);

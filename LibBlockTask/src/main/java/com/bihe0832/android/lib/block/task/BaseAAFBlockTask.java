@@ -27,7 +27,7 @@ public abstract class BaseAAFBlockTask implements BlockTask {
 
     @Override
     public final void startTask() {
-        ZLog.d(BlockTask.TAG, "Do     Task: " + this);
+        ZLog.w(BlockTask.TAG, "Do     Task: " + this);
         mTaskIsRunning = true;
         doTask();
     }
@@ -81,7 +81,7 @@ public abstract class BaseAAFBlockTask implements BlockTask {
 
     @Override
     public void skipTask() {
-        ZLog.d(BlockTask.TAG, "Skip Task: " + this);
+        ZLog.w(BlockTask.TAG, "Skip Task: " + this);
     }
 
     //解除阻塞
