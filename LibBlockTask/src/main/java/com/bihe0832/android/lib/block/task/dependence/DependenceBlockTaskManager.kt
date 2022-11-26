@@ -32,6 +32,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
         fun updateTaskStatus(taskID: String, status: Int)
         fun logAllTask()
         fun getAllDependenceList(taskID: String): List<String>
+        fun canReset(taskID: String): Boolean
     }
 
     private var mCurrentTaskListAction = object : SequenceTaskCallback {
@@ -44,6 +45,10 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
 
         override fun getAllDependenceList(taskID: String): List<String> {
             return mSequenceTaskUpdatedInfoList.getTaskDependenceListInfo(taskID)
+        }
+
+        override fun canReset(taskID: String): Boolean {
+            return taskID != INNER_TASK_ID
         }
 
         override fun updateTaskWaitTime(taskID: String) {
