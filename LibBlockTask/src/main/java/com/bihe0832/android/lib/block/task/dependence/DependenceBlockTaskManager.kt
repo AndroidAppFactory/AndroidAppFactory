@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.block.task.dependence;
 
+import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
 import com.bihe0832.android.lib.block.task.BlockTask
 import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
@@ -28,11 +29,10 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
     interface SequenceTaskCallback {
         fun resetTaskManager(task: DependenceBlockTask)
         fun getTaskInfo(taskID: String): DependenceBlockTaskExecutionInfo.DependenceTaskInfo
-        fun updateTaskWaitTime(taskID: String)
+        fun updateTaskStartTime(taskID: String)
         fun updateTaskStatus(taskID: String, status: Int)
         fun logAllTask()
         fun getAllDependenceList(taskID: String): List<String>
-        fun canReset(taskID: String): Boolean
     }
 
     private var mCurrentTaskListAction = object : SequenceTaskCallback {
@@ -47,16 +47,17 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
             return mSequenceTaskUpdatedInfoList.getTaskDependenceListInfo(taskID)
         }
 
-        override fun canReset(taskID: String): Boolean {
-            return taskID != INNER_TASK_ID
-        }
-
-        override fun updateTaskWaitTime(taskID: String) {
-            mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).taskFirstStartTime = System.currentTimeMillis()
+        override fun updateTaskStartTime(taskID: String) {
+            mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).updateTaskStartTime()
         }
 
         override fun updateTaskStatus(taskID: String, status: Int) {
-            mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).updateCurrentStatus(status)
+            var taskInfo = getTaskInfo(taskID)
+            if (INNER_TASK_ID.equals(taskID) && taskInfo.getCurrentStatus() > DependenceBlockTask.TASK_STATUS_WAITING) {
+                ZLog.w(BaseAAFBlockTask.TAG, "task: ${taskID} current :${taskInfo.getCurrentStatus()} can not reset to $status")
+            } else {
+                taskInfo.updateCurrentStatus(status)
+            }
         }
 
         @Synchronized
@@ -80,6 +81,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
 
     init {
         mTaskManager.add(DependenceBlockTask(INNER_TASK_ID, mCurrentTaskListAction) {
+            ZLog.d(BlockTask.TAG, "$INNER_TASK_ID start : $autoStart ${mSequenceTaskUpdatedInfoList.getTaskInfo(INNER_TASK_ID).getCurrentStatus()}")
             if (autoStart || mSequenceTaskUpdatedInfoList.getTaskInfo(INNER_TASK_ID).getCurrentStatus() == DependenceBlockTask.TASK_STATUS_FINISHED) {
                 finishTask(INNER_TASK_ID)
             }

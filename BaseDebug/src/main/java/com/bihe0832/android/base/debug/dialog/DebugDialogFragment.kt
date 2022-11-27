@@ -17,17 +17,23 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.ui.dialog.*
+import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
 import com.bihe0832.android.lib.ui.dialog.blockdialog.PriorityBlockDialogManager
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
-import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 class DebugDialogFragment : DebugEnvFragment() {
-    private val mDependenceBlockDialogManager = DependenceBlockDialogManager(false)
+    private val mDependenceBlockDialogManager by lazy {
+        DependenceBlockDialogManager(false)
+    }
 
+    override fun initView(view: View) {
+        super.initView(view)
+        mDependenceBlockDialogManager.start()
+    }
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
@@ -345,7 +351,7 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
     fun testSequence2() {
-        val taskIDList = mutableListOf<String>( "Dialog2", "Dialog3", "Dialog4", )
+        val taskIDList = mutableListOf<String>("Dialog2", "Dialog3", "Dialog4")
         taskIDList.shuffled().forEach { taskID ->
             dependList.get(taskID)?.let {
                 mDependenceBlockDialogManager.showDialog(taskID, CommonDialog(activity).apply {
