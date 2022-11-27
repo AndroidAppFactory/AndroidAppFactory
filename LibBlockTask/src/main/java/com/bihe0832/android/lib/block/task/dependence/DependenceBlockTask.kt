@@ -71,12 +71,8 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
     final override fun doTask() {
         ZLog.d(TAG, "start waiting task: ${this.taskName} ")
         mTaskIsWaiting = true
-        if (!mTaskListAction.canReset(taskName) && mTaskListAction.getTaskInfo(taskName).getCurrentStatus() > TASK_STATUS_WAITING) {
-            ZLog.d(TAG, "task: ${this.taskName} current :${mTaskListAction.getTaskInfo(taskName).getCurrentStatus()} can not reset to TASK_STATUS_WAITING")
-        } else {
-            mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_WAITING)
-        }
-        mTaskListAction.updateTaskWaitTime(taskName)
+        mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_WAITING)
+        mTaskListAction.updateTaskStartTime(taskName)
         Executors.newSingleThreadExecutor().execute {
             try {
                 ZLog.w(TAG, "start task action: ${this.taskName} ")
@@ -91,21 +87,24 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
                             ZLog.e(TAG, "\n\n\n !!!!!! $taskName can not depend on ${depID}  skip check!!!! \n\n\n")
                         } else {
                             depInfo.getCurrentStatus().let {
-                                ZLog.d(TAG, "  $taskName task dep : $depID and status $it")
                                 if (TASK_STATUS_NOT_EXIST == it) {
-                                    var startWait = depInfo.taskFirstStartTime
+                                    var startWait = depInfo.getFirstStartTime()
                                     if (startWait == 0L) {
-                                        mTaskListAction.updateTaskWaitTime(depID)
+                                        mTaskListAction.updateTaskStartTime(depID)
                                         startWait = System.currentTimeMillis()
                                     }
-                                    ZLog.d(TAG, "  $taskName task dep : $depID start wait: $startWait")
-                                    depIsOKOrTimeout = depIsOKOrTimeout && (System.currentTimeMillis() - startWait > mTaskListAction.getTaskInfo(taskName).getDependenceInfo()?.find { it.taskID.equals(depID) }?.maxWaitingTime ?: 0)
+                                    var hasWait = System.currentTimeMillis() - startWait
+                                    var needWait = mTaskListAction.getTaskInfo(taskName).getDependenceInfo()?.find { it.taskID.equals(depID) }?.maxWaitingTime
+                                            ?: 0
+                                    ZLog.d(TAG, "  $taskName task dep : $depID  hasWait $hasWait needWait $needWait ")
+                                    depIsOKOrTimeout = depIsOKOrTimeout && (hasWait > needWait)
                                 } else if (TASK_STATUS_WAITING == it) {
-                                    ZLog.w(TAG, "${this.taskName} will replace by ${depID}")
+                                    ZLog.w(TAG, "${this.taskName} task dep : $depID , and  will replace by $depID")
                                     // 切换任务
                                     depIsWaiting = true
                                     depIsOKOrTimeout = false
                                 } else {
+                                    ZLog.d(TAG, "  $taskName task dep : $depID and status $it")
                                     depIsOKOrTimeout = depIsOKOrTimeout && (TASK_STATUS_FINISHED == it)
                                 }
                             }
@@ -116,12 +115,12 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
                         mTaskIsWaiting = false
                         mTaskListAction.resetTaskManager(this)
                     } else if (depIsOKOrTimeout) {
+                        ZLog.w(TAG, "task start do: ${this.taskName}")
                         mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_RUNNING)
-                        ZLog.w(TAG, "start do task: ${this.taskName}")
                         taskAction()
                         mTaskIsWaiting = false
                     } else {
-                        ZLog.d(TAG, "task sleep: ${getCheckInterval()} ")
+                        ZLog.d(TAG, "task $taskName sleep: ${getCheckInterval()} ")
                         Thread.sleep(getCheckInterval())
                     }
                 }

@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 class DependenceBlockTaskExecutionInfo {
 
     class DependenceTaskInfo(private var taskID: String = "") {
-        var taskFirstStartTime = 0L
+        private var taskFirstStartTime = 0L
         private var taskCurrentStatus = DependenceBlockTask.TASK_STATUS_NOT_EXIST
         private var dependList: MutableList<DependenceBlockTask.TaskDependence> = mutableListOf()
 
@@ -22,6 +22,16 @@ class DependenceBlockTaskExecutionInfo {
 
         fun updateCurrentStatus(status: Int) {
             taskCurrentStatus = status
+        }
+
+        fun updateTaskStartTime() {
+            if (taskFirstStartTime == 0L) {
+                taskFirstStartTime = System.currentTimeMillis()
+            }
+        }
+
+        fun getFirstStartTime(): Long {
+            return taskFirstStartTime
         }
 
         fun getCurrentStatus(): Int {
