@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bihe0832_common_custom_toast_layout_id"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="32dp"
+    android:background="@drawable/com_bihe0832_common_toast_tips_corner"
+    android:gravity="center"
+    android:minWidth="108dp"
+    android:minHeight="108dp"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:text="content">
+
+    <ImageView
+        android:id="@+id/bihe0832_common_toast_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerInside"
+        tools:src="@mipmap/icon" />
+
+    <TextView
+        android:id="@+id/bihe0832_common_toast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bihe0832_common_toast_text_color"
+        android:textSize="14dp"
+        tools:text="这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试" />
+</LinearLayout>

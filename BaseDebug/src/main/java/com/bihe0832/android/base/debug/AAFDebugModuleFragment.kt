@@ -34,6 +34,7 @@ import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
 import com.bihe0832.android.base.debug.tab.DebugTabFragment
 import com.bihe0832.android.base.debug.temp.DebugBasicFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
+import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.base.debug.view.DebugTextViewFragment
@@ -61,6 +62,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
             add(getDebugFragmentItemData("UI（点击区、Toast、前后台）测试", DebugUIFragment::class.java))
+            add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
 
 
             add(getDebugFragmentItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
