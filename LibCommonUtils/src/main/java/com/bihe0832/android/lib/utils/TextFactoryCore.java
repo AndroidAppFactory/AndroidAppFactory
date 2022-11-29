@@ -22,4 +22,43 @@ public class TextFactoryCore {
         dest = m.replaceAll("");
         return dest;
     }
+
+    public static Pattern getSafePattern(String key) {
+        return Pattern.compile(escapeExprSpecialWord(key));
+    }
+
+    /**
+     * 转义正则特殊字符 （$()*+.[]?\^{},|）
+     *
+     * @param keyword
+     * @return
+     */
+    public static String escapeExprSpecialWord(String keyword) {
+        if (isNotBlank(keyword)) {
+            String[] fbsArr = {"\\", "$", "(", ")", "*", "+", ".", "[", "]", "?", "^", "{", "}", "|"};
+            for (String key : fbsArr) {
+                if (keyword.contains(key)) {
+                    keyword = keyword.replace(key, "\\" + key);
+                }
+            }
+        }
+        return keyword;
+    }
+
+    public static boolean isBlank(String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if ((Character.isWhitespace(str.charAt(i)) == false)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isNotBlank(String str) {
+        return !isBlank(str);
+    }
 }

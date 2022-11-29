@@ -11,15 +11,18 @@ import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+
 import com.bihe0832.android.lib.utils.TextFactoryCore;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by zixie on 16/11/21.
@@ -57,7 +60,7 @@ public class TextFactoryUtils {
     /**
      * 分割字符串
      *
-     * @param line 原始字符串
+     * @param line      原始字符串
      * @param seperator 分隔符
      * @return 分割结果
      */
@@ -138,10 +141,9 @@ public class TextFactoryUtils {
         }
     }
 
-    public static final CharSequence getCharSequenceWithClickAction(String content, String title,
-            View.OnClickListener listener) {
+    public static final CharSequence getCharSequenceWithClickAction(String content, String title, View.OnClickListener listener) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getSpannedTextByHtml(content));
-        Pattern pattern = Pattern.compile(title);
+        Pattern pattern = TextFactoryCore.getSafePattern(title);
         Matcher matcher = pattern.matcher(spannableStringBuilder);
         while (matcher.find()) {
             setClickableSpan(spannableStringBuilder, matcher, listener);
@@ -149,11 +151,10 @@ public class TextFactoryUtils {
         return (CharSequence) spannableStringBuilder;
     }
 
-    public static final CharSequence getCharSequenceWithClickAction(String content,
-            HashMap<String, OnClickListener> listenerHashMap) {
+    public static final CharSequence getCharSequenceWithClickAction(String content, HashMap<String, OnClickListener> listenerHashMap) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getSpannedTextByHtml(content));
         for (HashMap.Entry<String, OnClickListener> entry : listenerHashMap.entrySet()) {
-            Pattern pattern = Pattern.compile(entry.getKey());
+            Pattern pattern = TextFactoryCore.getSafePattern(entry.getKey());
             Matcher matcher = pattern.matcher(spannableStringBuilder);
             while (matcher.find()) {
                 setClickableSpan(spannableStringBuilder, matcher, entry.getValue());
@@ -163,8 +164,7 @@ public class TextFactoryUtils {
     }
 
 
-    private static final void setClickableSpan(SpannableStringBuilder clickableHtmlBuilder,
-            Matcher matcher, final View.OnClickListener listener) {
+    private static final void setClickableSpan(SpannableStringBuilder clickableHtmlBuilder, Matcher matcher, final View.OnClickListener listener) {
         int start = matcher.start();
         int end = matcher.end();
         clickableHtmlBuilder.setSpan(new ClickableSpan() {
@@ -177,4 +177,6 @@ public class TextFactoryUtils {
             }
         }, start, end, 34);
     }
+
+
 }
