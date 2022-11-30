@@ -74,7 +74,7 @@ object DownloadAPK {
             activity,
             title, msg,
             url, "", md5, "",
-            canCancel, false, downloadMobile, true,
+            canCancel, forceDownloadNew = false, downloadMobile, forceDownload = true,
             listener,
             SimpleInstallListener(activity, packageName, listener)
         )

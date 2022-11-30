@@ -17,6 +17,8 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 
 object UpdateHelper {
+
+    private const val TAG = "Update"
     var hasShow = false
 
     private fun startUpdate(activity: Activity, version: String, desc: String, url: String, md5: String, canCancel: Boolean) {
@@ -151,10 +153,10 @@ object UpdateHelper {
                 } else {
                     when {
                         LifecycleHelper.isFirstStart > INSTALL_TYPE_NOT_FIRST -> {
-                            ZLog.d("skip update by first update")
+                            ZLog.d(TAG, "skip update by first update")
                         }
                         hasShow -> {
-                            ZLog.d("skip update by has show")
+                            ZLog.d(TAG, "skip update by has show")
                         }
                         else -> {
                             showUpdateDialog(activity, info.newVersionName, info.newVersionTitle, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
