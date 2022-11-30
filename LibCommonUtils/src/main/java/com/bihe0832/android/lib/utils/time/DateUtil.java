@@ -58,7 +58,6 @@ public class DateUtil {
     }
 
 
-
     public static String getCurrentDateEN(String pattern) {
         return getDateEN(System.currentTimeMillis(), pattern);
     }
@@ -192,13 +191,40 @@ public class DateUtil {
         }
     }
 
+    public final String getDateCompareResult(long oldTimestamp, long currentTimestamp, String yearPattern, String monthPattern, String weekPattern, String yesterdayPattern, String timePattern) {
+        long todayStart = currentTimestamp;
+        try {
+            SimpleDateFormat dayFormat = new SimpleDateFormat("yyyyMMdd");
+            todayStart = dayFormat.parse(dayFormat.format(new Date())).getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        long diffValue = currentTimestamp - oldTimestamp;
+        long yearC = diffValue / DateUtil.MILLISECOND_OF_YEAR;
+        long dayC = diffValue / DateUtil.MILLISECOND_OF_DAY;
+        if (yearC > 0L) {
+            return DateUtil.getDateEN(oldTimestamp, yearPattern);
+        } else if (dayC > 6L) {
+            return DateUtil.getDateEN(oldTimestamp, monthPattern);
+        } else if (dayC > 1L) {
+            SimpleDateFormat format = new SimpleDateFormat(weekPattern, Locale.CHINA);
+            return format.format(new Date(oldTimestamp)).replace("周", "星期");
+        } else if (dayC > 0L) {
+            return DateUtil.getDateEN(oldTimestamp, yesterdayPattern);
+        } else if (oldTimestamp < todayStart) {
+            return DateUtil.getDateEN(oldTimestamp, yesterdayPattern);
+        } else {
+            return DateUtil.getDateEN(oldTimestamp, timePattern);
+        }
+    }
+
+
     public static boolean isToady(long timestamp) {
         Calendar pre = Calendar.getInstance();
         pre.setTimeInMillis(timestamp);
         Calendar cur = Calendar.getInstance();
         cur.setTimeInMillis(System.currentTimeMillis());
-        ZLog.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur
-                .get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
+        ZLog.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
         if (pre.get(Calendar.YEAR) == cur.get(Calendar.YEAR)) {
             int diffDay = cur.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
             if (0 == diffDay) {

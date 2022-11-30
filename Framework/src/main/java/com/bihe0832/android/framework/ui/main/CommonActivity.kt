@@ -14,6 +14,7 @@ open class CommonActivity : BaseActivity() {
         super.setContentView(getLayoutID())
     }
 
+
     /**
      * 布局layout
      * @return
@@ -21,7 +22,6 @@ open class CommonActivity : BaseActivity() {
     protected open fun getLayoutID(): Int {
         return R.layout.common_activity_framelayout
     }
-
 
     final override fun setContentView(@LayoutRes layoutResID: Int) {
         throw AAFException("please extends com.bihe0832.android.framework.ui.BaseActivity instead of CommonActivity")
