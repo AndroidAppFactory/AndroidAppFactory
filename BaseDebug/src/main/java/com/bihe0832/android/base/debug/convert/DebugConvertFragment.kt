@@ -75,6 +75,7 @@ class DebugConvertFragment : DebugEnvFragment() {
 
         JsonTest().apply {
             key = 1212
+            setData3("chat&user")
         }.let {
             ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
         }

@@ -26,7 +26,7 @@ object JsonHelper {
      * @return
      */
     fun getGson(): Gson {
-        return getGsonBuilder().create()
+        return getGsonBuilder().disableHtmlEscaping().create()
     }
 
     fun getGsonBuilder(): GsonBuilder {
