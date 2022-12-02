@@ -44,17 +44,28 @@ public class ToastUtil {
     }
 
     public static void show(final Context ctx, final String toastInfo, final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
-        View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_common_toast, null);
-        final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
-        show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
+        ThreadManager.getInstance().start(new Runnable() {
+            @Override
+            public void run() {
+                View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_common_toast, null);
+                final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
+                show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
+
+            }
+        });
     }
 
     public static void showTips(final Context ctx, final int imageRes, final String toastInfo, final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
-        View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_common_toast_tips, null);
-        final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
-        ImageView toastImage = (ImageView) layout.findViewById(R.id.bihe0832_common_toast_image);
-        toastImage.setImageResource(imageRes);
-        show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
+        ThreadManager.getInstance().start(new Runnable() {
+            @Override
+            public void run() {
+                View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_common_toast_tips, null);
+                final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
+                ImageView toastImage = (ImageView) layout.findViewById(R.id.bihe0832_common_toast_image);
+                toastImage.setImageResource(imageRes);
+                show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
+            }
+        });
     }
 
     private static void show(final Context ctx, final View layout, final String toastInfo, final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
@@ -63,24 +74,24 @@ public class ToastUtil {
         toastText.setText(charSequence);
         toastText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         show(ctx, layout, duration, gravityType, xOffset, yOffset);
+
     }
 
     public static void show(final Context ctx, final View layout, final int duration, final int gravityType, final int xOffset, final int yOffset) {
-
-        try {
-            ThreadManager.getInstance().runOnUIThread(new Runnable() {
-                @Override
-                public void run() {
+        ThreadManager.getInstance().runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
                     Toast toast = new Toast(ctx);
                     toast.setDuration(duration);
                     toast.setView(layout);
                     toast.setGravity(gravityType, xOffset, yOffset);
                     toast.show();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
+            }
+        });
     }
 }  

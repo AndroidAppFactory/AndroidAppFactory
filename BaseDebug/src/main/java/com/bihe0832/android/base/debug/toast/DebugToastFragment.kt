@@ -20,6 +20,7 @@ class DebugToastFragment : DebugEnvFragment() {
             add(DebugItemData("Tips Toast", View.OnClickListener { ToastUtil.showTips(context!!, R.mipmap.icon, "执行成功", Toast.LENGTH_SHORT) }))
             add(DebugItemData("调试版本", View.OnClickListener { ZixieContext.showDebugEditionToast() }))
             add(DebugItemData("敬请期待", View.OnClickListener { ZixieContext.showWaiting() }))
+            add(DebugItemData("打开Activity Toast 立即关闭", View.OnClickListener { startActivityWithException(DebugToastActivity::class.java) }))
             add(DebugItemData("仅前台Toast", View.OnClickListener {
                 ZixieContext.showLongToastJustAPPFront("这是一个仅前台Toast")
                 ThreadManager.getInstance().start({

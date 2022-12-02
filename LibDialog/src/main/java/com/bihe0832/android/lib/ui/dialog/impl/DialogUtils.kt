@@ -12,7 +12,7 @@ import android.view.inputmethod.EditorInfo
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.R
-import com.bihe0832.android.lib.ui.dialog.input.InputDialog
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCallback
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 
@@ -26,7 +26,7 @@ object DialogUtils {
     fun showInputDialog(context: Context, titleName: String, msg: String, positive: String,
                         negtive: String, canCanceledOnTouchOutside: Boolean, inputType: Int, defaultValue: String, hint: String,
                         listener: InputDialogCallback?) {
-        InputDialog.showInputDialog(context, titleName, msg, positive, negtive, canCanceledOnTouchOutside, inputType, defaultValue, hint, listener)
+        InputDialogUtils.showInputDialog(context, titleName, msg, positive, negtive, canCanceledOnTouchOutside, inputType, defaultValue, hint, listener)
     }
 
     fun showInputDialog(context: Context, title: String, msg: String, hint: String, value: String, inputType: Int, callback: InputDialogCompletedCallback?) {

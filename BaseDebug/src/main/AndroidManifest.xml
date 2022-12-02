@@ -104,6 +104,11 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AAF.ActivityTheme.Alpha" />
 
+        <activity
+            android:name="com.bihe0832.android.base.debug.toast.DebugToastActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
+
     </application>
 
 </manifest>

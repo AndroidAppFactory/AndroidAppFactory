@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.ui.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
+import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 import java.text.NumberFormat;
@@ -201,8 +204,15 @@ public class DownloadProgressDialog extends Dialog {
 
     @Override
     public void show() {
-        super.show();
-        refreshView();
+        Activity activity = ViewExtKt.getActivity(getContext());
+        if (null != activity && !activity.isFinishing()) {
+            if (!isShowing()) {
+                super.show();
+            }
+            refreshView();
+        } else {
+            ZLog.e("CommonDialog", "activity is null or isFinishing");
+        }
     }
 
     /**

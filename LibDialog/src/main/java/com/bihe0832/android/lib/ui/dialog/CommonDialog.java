@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.ui.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,8 +18,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bihe0832.android.lib.text.TextFactoryUtils;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.GlideExtKt;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
+import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 
@@ -258,12 +262,26 @@ public class CommonDialog extends Dialog {
         }
     }
 
-    @Override
-    public void show() {
+    private void showAction() {
         if (!isShowing()) {
             super.show();
         }
         refreshView();
+    }
+
+    @Override
+    public void show() {
+        Activity activity = ViewExtKt.getActivity(getContext());
+        if (null != activity && !activity.isFinishing()) {
+            ThreadManager.getInstance().runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    showAction();
+                }
+            });
+        } else {
+            ZLog.e("LoadingDialog", "activity is null or isFinishing");
+        }
     }
 
     /**

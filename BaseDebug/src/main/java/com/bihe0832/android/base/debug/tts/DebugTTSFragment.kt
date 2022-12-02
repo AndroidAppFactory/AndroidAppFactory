@@ -92,9 +92,12 @@ class DebugTTSFragment : BaseFragment() {
     }
 
     fun hideGuide() {
-        tts_tips.visibility = View.GONE
-        tts_download.visibility = View.GONE
-        tts_set.visibility = View.GONE
+        if (isRootViewCreated()){
+            tts_tips.visibility = View.GONE
+            tts_download.visibility = View.GONE
+            tts_set.visibility = View.GONE
+        }
+
     }
 
 
@@ -187,7 +190,7 @@ class DebugTTSFragment : BaseFragment() {
     private fun getMsg(): String {
         times++
         updateTTSTitle()
-        return tts_test_text?.text.toString() + times
+        return tts_test_text?.text.toString()
     }
 
     private fun updateTTSTitle() {
