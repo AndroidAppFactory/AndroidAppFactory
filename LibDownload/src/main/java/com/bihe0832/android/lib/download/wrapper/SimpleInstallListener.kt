@@ -26,11 +26,11 @@ open class SimpleInstallListener(
     private val installListener = object : InstallListener {
 
         override fun onUnCompress() {
-            loadingDialog.showOnUIThread("特殊应用安装较慢，请耐心等待 <BR><BR> 当前安装包解压中，请稍候...")
+            loadingDialog.show("特殊应用安装较慢，请耐心等待 <BR><BR> 当前安装包解压中，请稍候...")
         }
 
         override fun onInstallPrepare() {
-            loadingDialog.showOnUIThread("特殊应用安装较慢，请耐心等待 <BR><BR> 当前安装包完整性检查，请稍候...")
+            loadingDialog.show("特殊应用安装较慢，请耐心等待 <BR><BR> 当前安装包完整性检查，请稍候...")
         }
 
         override fun onInstallStart() {

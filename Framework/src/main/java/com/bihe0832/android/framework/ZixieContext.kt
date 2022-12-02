@@ -96,7 +96,7 @@ object ZixieContext {
 
     //任何时候都弹
     fun showToast(msg: String, duration: Int) {
-        if (BuildUtils.SDK_INT >= 30) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.R) {
             //大于等于 30
             if (ApplicationObserver.isAPPBackground()) {
                 ThreadManager.getInstance().runOnUIThread {
@@ -259,10 +259,7 @@ object ZixieContext {
     fun exitAPP(callbackListener: OnDialogListener?) {
         CommonDialog(getCurrentActivity()).apply {
             title = applicationContext!!.resources.getString(R.string.common_reminder_title)
-            content = String.format(
-                applicationContext!!.resources.getString(R.string.exist_msg),
-                applicationContext!!.resources.getString(R.string.app_name)
-            )
+            content = String.format(applicationContext!!.resources.getString(R.string.exist_msg), applicationContext!!.resources.getString(R.string.app_name))
 
 
             setCancelable(true)

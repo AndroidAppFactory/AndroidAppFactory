@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.ui.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,9 +10,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.view.ProgressIndicatorView;
+import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 
 
 public class LoadingDialog extends Dialog {
@@ -81,18 +84,19 @@ public class LoadingDialog extends Dialog {
         refreshView();
     }
 
-    public void showOnUIThread() {
-        ThreadManager.getInstance().runOnUIThread(new Runnable() {
-            @Override
-            public void run() {
-                show();
-            }
-        });
-    }
-
     @Override
     public void show() {
-        showAction();
+        Activity activity = ViewExtKt.getActivity(getContext());
+        if (null != activity && !activity.isFinishing()) {
+            ThreadManager.getInstance().runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    showAction();
+                }
+            });
+        } else {
+            ZLog.e("LoadingDialog", "activity is null or isFinishing");
+        }
     }
 
     public void show(String msg) {
@@ -100,17 +104,12 @@ public class LoadingDialog extends Dialog {
         show();
     }
 
-    public void showOnUIThread(String msg) {
-        title = msg;
-        showOnUIThread();
-    }
-
     /**
      * 初始化界面控件
      */
     private void initView() {
         titleTv = (TextView) findViewById(R.id.loading_label);
-        ((ProgressIndicatorView)findViewById(R.id.dots_loading_bar)).setAnimationNum(3);
+        ((ProgressIndicatorView) findViewById(R.id.dots_loading_bar)).setAnimationNum(3);
     }
 
     public LoadingDialog setHtmlTitle(String content) {

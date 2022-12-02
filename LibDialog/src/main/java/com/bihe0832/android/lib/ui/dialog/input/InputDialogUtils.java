@@ -24,7 +24,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil;
  * Created on 2022/5/25.
  * Description: Description
  */
-public class InputDialog {
+public class InputDialogUtils {
     public static void showInputDialog(final Context context, String titleName, String msg, String positive,
                                        String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue, String hint,
                                        final InputDialogCallback listener) {

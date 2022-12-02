@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="这是一个语音测试"
+            android:text="上车上车 上星上分"
             android:textSize="20dp" />
 
         <TextView
