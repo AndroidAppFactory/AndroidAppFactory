@@ -4,8 +4,12 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.os.Build
 import android.text.TextUtils
+import android.view.View
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.utils.apk.APKUtils
@@ -121,4 +125,14 @@ private fun startActivity(activity: BaseActivity, threadClazz: Class<out Activit
         e.printStackTrace()
     }
     return false
+}
+
+fun BaseActivity.setLayerToGray() {
+    Paint().apply {
+        colorFilter = ColorMatrixColorFilter(ColorMatrix().apply {
+            setSaturation(0f)
+        })
+    }.let {
+        window.decorView.setLayerType(View.LAYER_TYPE_HARDWARE, it)
+    }
 }

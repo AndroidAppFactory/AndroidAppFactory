@@ -25,4 +25,8 @@ public class Constants {
 
     public static final float CUSTOM_DENSITY = 360f;
 
+    public static final String CONFIG_KEY_LAYER_START_VALUE =  "com.bihe0832.android.config.layer.gray.start";
+    public static final String CONFIG_KEY_LAYER_END_VALUE = "com.bihe0832.android.config.layer.gray.end";
+
+
 }
