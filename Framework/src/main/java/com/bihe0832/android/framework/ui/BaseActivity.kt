@@ -13,13 +13,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
+import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.media.image.clear
+import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.common.ColorTools
-import com.bihe0832.android.lib.media.image.clear
-import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation.SupportActivity
@@ -28,34 +29,31 @@ open class BaseActivity : SupportActivity() {
 
     var mToolbar: Toolbar? = null
     var mTitleView: TextView? = null
-    var mNavigationImageButton: ImageButton? = null
+    private var mNavigationImageButton: ImageButton? = null
+    private val mNeedEnableLayerToGray by lazy {
+        (System.currentTimeMillis() / 1000).let {
+            return@lazy it in Config.readConfig(Constants.CONFIG_KEY_LAYER_START_VALUE, 0L)..Config.readConfig(Constants.CONFIG_KEY_LAYER_END_VALUE, 0L)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (resetDensity()) {
-            DisplayUtil.resetDensity(
-                    this,
-                    ConvertUtils.parseFloat(
-                            resources.getString(R.string.custom_density),
-                            Constants.CUSTOM_DENSITY
-                    )
-            )
+            DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
         }
         if (getStatusBarColor() == Color.TRANSPARENT) {
-            enableActivityImmersive(
-                    ColorTools.getColorWithAlpha(
-                            0f,
-                            ContextCompat.getColor(this, R.color.primary)
-                    ), getNavigationBarColor()
-            )
+            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ContextCompat.getColor(this, R.color.primary)), getNavigationBarColor())
         } else {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         }
+
+        if (resetDensity()) {
+            setLayerToGray()
+        }
     }
 
-
     open fun resetDensity(): Boolean {
-        return true
+        return mNeedEnableLayerToGray
     }
 
     open fun getStatusBarColor(): Int {
@@ -124,13 +122,7 @@ open class BaseActivity : SupportActivity() {
         initToolbar(resID, titleString, true, needBack, 0)
     }
 
-    protected fun initToolbar(
-            resID: Int,
-            titleString: String?,
-            needTitleCenter: Boolean,
-            needBack: Boolean,
-            iconRes: Int
-    ) {
+    protected fun initToolbar(resID: Int, titleString: String?, needTitleCenter: Boolean, needBack: Boolean, iconRes: Int) {
         initToolbar(resID, titleString, needTitleCenter, {
             if (needBack) {
                 onBackPressedSupport()
@@ -139,13 +131,7 @@ open class BaseActivity : SupportActivity() {
     }
 
 
-    protected fun initToolbar(
-            resID: Int,
-            titleString: String?,
-            needTitleCenter: Boolean,
-            nevagationListener: View.OnClickListener,
-            iconRes: Int
-    ) {
+    protected fun initToolbar(resID: Int, titleString: String?, needTitleCenter: Boolean, nevagationListener: View.OnClickListener, iconRes: Int) {
         try {
             if (null == mToolbar) {
                 mToolbar = findViewById(resID)
@@ -161,8 +147,7 @@ open class BaseActivity : SupportActivity() {
                         mTitleView!!.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
                         if (needTitleCenter) {
                             mTitleView!!.setGravity(Gravity.CENTER)
-                            mTitleView!!.getLayoutParams().width =
-                                    ViewGroup.LayoutParams.MATCH_PARENT
+                            mTitleView!!.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT
                         }
                         continue
                     }
@@ -170,12 +155,7 @@ open class BaseActivity : SupportActivity() {
                     if (view is ImageButton) {
                         mNavigationImageButton = view
                         DisplayUtil.dip2px(this, 4f).let { padding ->
-                            mNavigationImageButton?.setPadding(
-                                    padding * 2,
-                                    padding,
-                                    padding,
-                                    padding
-                            )
+                            mNavigationImageButton?.setPadding(padding * 2, padding, padding, padding)
                         }
 
                         //  布局发生改变的时候拿到导航的宽度
