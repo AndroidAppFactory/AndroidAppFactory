@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object AAFNetWorkApi {
 
     private val mHttpClient: OkHttpClient by lazy {
-        OkHttpWrapper.getOkHttpClientBuilderWithInterceptor(!ZixieContext.isOfficial()).build()
+        OkHttpWrapper.getBasicOkHttpClientBuilderWithInterceptor(!ZixieContext.isOfficial()).build()
     }
 
     const val LOG_TAG = "RetrofitLog"
@@ -41,18 +41,11 @@ object AAFNetWorkApi {
     }
 
     fun getRetrofit(url: String): Retrofit {
-        return Retrofit.Builder()
-                .client(mHttpClient)
-                .addConverterFactory(GsonConverterFactory.create(JsonHelper.getGson()))
-                .baseUrl(url)
-                .build()
+        return Retrofit.Builder().client(mHttpClient).addConverterFactory(GsonConverterFactory.create(JsonHelper.getGson())).baseUrl(url).build()
     }
 
     fun getRetrofitWithoutJsonParse(url: String): Retrofit {
-        return Retrofit.Builder()
-                .client(mHttpClient)
-                .baseUrl(url)
-                .build()
+        return Retrofit.Builder().client(mHttpClient).baseUrl(url).build()
     }
 
     fun getRequestPara(): JSONObject {

@@ -10,6 +10,7 @@ package com.bihe0832.android.base.debug.request.okhttp
 import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.base.debug.request.Constants
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -33,10 +34,12 @@ interface ApiService {
 }
 
 fun debugOKHttp() {
-    AAFNetWorkApi.getRetrofit(Constants.HTTP_DOMAIN)
-            .create(ApiService::class.java).getData(AAFNetWorkApi.getRequestBody()).apply {
+    ThreadManager.getInstance().start {
 
-            }.enqueue(ResultCall<ResponseBody>())
+        AAFNetWorkApi.getRetrofit(Constants.HTTP_DOMAIN).create(ApiService::class.java).getData(AAFNetWorkApi.getRequestBody()).apply {
+
+                }.enqueue(ResultCall<ResponseBody>())
+    }
 }
 
 private class ResultCall<T> : Callback<T> {

@@ -9,8 +9,9 @@
 package com.bihe0832.android.lib.okhttp.wrapper
 
 import android.os.SystemClock
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpNetworkEventListener
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFBasicOkHttpNetworkEventListener
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOKHttpInterceptor
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpNetworkEventListener
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
 import com.bihe0832.android.lib.utils.IdGenerator
@@ -27,7 +28,7 @@ const val TIME_OUT_WRITE = 5000L
 
 
 object OkHttpWrapper {
-
+    const val TAG = "AAFRequest"
     const val HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID = "AAF-Content-Request-Id"
 
     private val mRequestIdGenerator by lazy {
@@ -47,7 +48,7 @@ object OkHttpWrapper {
         mRequestRecords.add(record)
     }
 
-    var maxRequestListSize = 100
+    var maxRequestListSize = 50
 
     fun getOkHttpClientBuilder(): OkHttpClient.Builder {
         return OkHttpClient.Builder().apply {
@@ -65,6 +66,13 @@ object OkHttpWrapper {
         }
     }
 
+    fun getBasicOkHttpClientBuilderWithInterceptor(enableTraceAndIntercept: Boolean): OkHttpClient.Builder {
+        return getOkHttpClientBuilder().apply {
+            addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
+            eventListenerFactory(generateBasicOkHttpNetworkEventListener(enableTraceAndIntercept, enableTraceAndIntercept, null))
+        }
+    }
+
     fun generateNetworkInterceptor(enableIntercept: Boolean): Interceptor {
         return AAFOKHttpInterceptor(enableIntercept)
     }
@@ -75,6 +83,10 @@ object OkHttpWrapper {
 
     fun generateOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?): EventListener.Factory {
         return EventListener.Factory { AAFOkHttpNetworkEventListener(enableTrace, enableLog, listener) }
+    }
+
+    fun generateBasicOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?): EventListener.Factory {
+        return EventListener.Factory { AAFBasicOkHttpNetworkEventListener(enableTrace, enableLog, listener) }
     }
 
     fun generateRequestID(): String {
