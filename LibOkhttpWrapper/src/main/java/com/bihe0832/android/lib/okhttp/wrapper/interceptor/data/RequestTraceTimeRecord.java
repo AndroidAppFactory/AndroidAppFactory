@@ -27,10 +27,11 @@ public class RequestTraceTimeRecord implements Serializable {
     public static String EVENT_SECURE_CONNECT_START = "secureConnectStart";
     public static String EVENT_SECURE_CONNECT_END = "secureConnectEnd";
     public static String EVENT_CONNECT_END = "connectEnd";
-    public static String EVENT_REQUEST_BODY_START = "requestBodyStart";
-    public static String EVENT_REQUEST_BODY_END = "requestBodyEnd";
     public static String EVENT_REQUEST_HEADERS_START = "requestHeadersStart";
     public static String EVENT_REQUEST_HEADERS_END = "requestHeadersEnd";
+    public static String EVENT_REQUEST_BODY_START = "requestBodyStart";
+    public static String EVENT_REQUEST_BODY_END = "requestBodyEnd";
+
     public static String EVENT_RESPONSE_HEADERS_START = "responseHeadersStart";
     public static String EVENT_RESPONSE_HEADERS_END = "responseHeadersEnd";
     public static String EVENT_RESPONSE_BODY_START = "responseBodyStart";

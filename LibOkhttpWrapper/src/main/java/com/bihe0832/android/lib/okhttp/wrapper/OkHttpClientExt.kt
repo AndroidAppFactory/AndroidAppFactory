@@ -8,6 +8,7 @@
 
 package com.bihe0832.android.lib.okhttp.wrapper
 
+import com.bihe0832.android.lib.log.ZLog
 import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -25,39 +26,46 @@ import java.nio.charset.Charset
  *
  */
 
-fun Response.getResponseData(): String {
+fun Response.getResponseData(enableLog: Boolean): String {
     var jsonReader: Reader? = null
     var reader: BufferedReader? = null
+    val result = StringBuffer()
     try {
         val responseBody = peekBody(Long.MAX_VALUE)
         val charset = responseBody.contentType()?.charset() ?: Charset.forName("UTF-8")
         jsonReader = InputStreamReader(responseBody.byteStream(), charset)
         reader = BufferedReader(jsonReader)
-        val result = StringBuffer()
+
         var line: String? = reader.readLine()
         do {
             result.append(line)
             line = reader.readLine()
         } while (line != null)
-        return result.toString()
     } catch (e: java.lang.Exception) {
-        e.printStackTrace()
+        ZLog.e(OkHttpWrapper.TAG, "getResponseData cause Exception:$e")
+        if (enableLog) {
+            e.printStackTrace()
+        }
     } finally {
         try {
             jsonReader?.close()
         } catch (e: Exception) {
-            e.printStackTrace()
+            if (enableLog) {
+                e.printStackTrace()
+            }
         }
         try {
             reader?.close()
         } catch (e: Exception) {
-            e.printStackTrace()
+            if (enableLog) {
+                e.printStackTrace()
+            }
         }
     }
-    return ""
+    return result.toString()
 }
 
-fun Request.getRequestParams(): String {
+fun Request.getRequestParams(enableLog: Boolean): String {
     this.body()?.let {
         val buffer = okio.Buffer()
         try {
@@ -65,12 +73,17 @@ fun Request.getRequestParams(): String {
             val charset = it.contentType()?.charset() ?: Charset.forName("UTF-8")
             return buffer.readString(charset)
         } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+            ZLog.e(OkHttpWrapper.TAG, "getResponseData cause Exception:$e")
+            if (enableLog) {
+                e.printStackTrace()
+            }
         } finally {
             try {
                 buffer.close()
             } catch (e: Exception) {
-                e.printStackTrace()
+                if (enableLog) {
+                    e.printStackTrace()
+                }
             }
         }
     }

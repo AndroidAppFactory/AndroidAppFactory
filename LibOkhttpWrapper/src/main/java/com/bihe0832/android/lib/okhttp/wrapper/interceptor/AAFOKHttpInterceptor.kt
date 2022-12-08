@@ -22,7 +22,7 @@ import okhttp3.Response
  * Created on 2022/6/27.
  * Description: Description
  */
-open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false) : Interceptor {
+open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false, private var enableLog: Boolean = false) : Interceptor {
 
     private val HTTP_REQ_PROPERTY_CONTENT_ENCODING = "Content-Encoding"
 
@@ -53,7 +53,7 @@ open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false) : 
                 if (requestBody.contentType() != null) {
                     requestContentDataRecord.requestContentType = requestBody.contentType()
                 }
-                requestContentDataRecord.requestBody = request.getRequestParams()
+                requestContentDataRecord.requestBody = request.getRequestParams(enableLog)
             }
         }
 
@@ -78,7 +78,7 @@ open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false) : 
                 if (responseBody.contentType() != null) {
                     requestContentDataRecord?.responseContentType = responseBody.contentType()
                 }
-                requestContentDataRecord?.responseBody = response.getResponseData()
+                requestContentDataRecord?.responseBody = response.getResponseData(enableLog)
             }
         }
         return response
