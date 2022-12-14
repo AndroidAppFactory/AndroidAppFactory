@@ -29,7 +29,7 @@ open class AAFBasicOkHttpNetworkEventListener(protected val enableTrace: Boolean
     private var mRequestTraceTimeRecord: RequestTraceTimeRecord? = null
     private var mNetworkTraceRequestID: String = ""
     private var mNetworkContentRequestID: String = ""
-    private var hasLog = false
+    private var lastTraceNetworkRequestID = ""
 
     open fun canTrace(call: Call): Boolean {
         return enableTrace
@@ -101,8 +101,7 @@ open class AAFBasicOkHttpNetworkEventListener(protected val enableTrace: Boolean
 
     @Synchronized
     fun doLogAction() {
-        if (!hasLog) {
-            hasLog = true
+        if (lastTraceNetworkRequestID != mNetworkTraceRequestID) {
             if (enableLog) {
                 if (enableTrace) {
                     logRequest(OkHttpWrapper.getRecord(mNetworkTraceRequestID))
@@ -110,6 +109,7 @@ open class AAFBasicOkHttpNetworkEventListener(protected val enableTrace: Boolean
                     logRequest(AAFRequestDataRepository.getNetworkContentDataRecordByContentID(mNetworkContentRequestID))
                 }
             }
+            lastTraceNetworkRequestID = mNetworkTraceRequestID
         }
     }
 
@@ -129,9 +129,7 @@ open class AAFBasicOkHttpNetworkEventListener(protected val enableTrace: Boolean
 
     protected fun saveEvent(eventName: String) {
         if (enableTrace) {
-            if (enableLog) {
-                ZLog.d(OkHttpWrapper.TAG, eventName)
-            }
+            ZLog.d(OkHttpWrapper.TAG, eventName)
             mRequestTraceTimeRecord?.saveEvent(eventName)
         }
     }
