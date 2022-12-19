@@ -25,7 +25,7 @@ public class PermissionsActivity extends AppCompatActivity {
     protected String[] needCheckPermissionGroup = null;
     protected boolean canCancle = false;
     protected String scene = "";
-    protected boolean autoDeny = false;
+    private boolean autoDeny = false;
     private PermissionsChecker permissionsChecker; // 权限检测器
     private boolean isRequireCheck; // 是否需要系统权限检测, 防止和系统提示框重叠
     private PermissionDialog dialog = null;
@@ -70,6 +70,10 @@ public class PermissionsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        startCheckPermission();
+    }
+
+    protected void startCheckPermission() {
         if (isRequireCheck) {
             ArrayList<String> needCheckList = new ArrayList<>();
             for (String permissionGroupID : needCheckPermissionGroup) {
@@ -90,10 +94,13 @@ public class PermissionsActivity extends AppCompatActivity {
         }
     }
 
-
-    // 请求权限兼容低版本
-    protected void requestPermissions(String... permissions) {
+    private void requestPermissions(String... permissions) {
         lastCheckTime = System.currentTimeMillis();
+        doRequestPermissionsAction(permissions);
+    }
+
+    // 请求权限，如果有类似用户拒绝授权多久不能再次授权的逻辑，可以再此处处理
+    protected void doRequestPermissionsAction(String... permissions) {
         ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
     }
 
@@ -103,12 +110,20 @@ public class PermissionsActivity extends AppCompatActivity {
         finish();
     }
 
+    protected void setAutoDeny() {
+        autoDeny = true;
+    }
+
+    // 如果是 autoDeny 为 true，此时直接弹框，不用校验
+    public boolean isAutoDeny() {
+        return autoDeny;
+    }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         long time = System.currentTimeMillis() - lastCheckTime;
         if (time < 500) {
-            autoDeny = true;
+            setAutoDeny();
         }
 
         List<String> tempPermissionGroupList = new ArrayList<>();
@@ -172,14 +187,14 @@ public class PermissionsActivity extends AppCompatActivity {
 
                 @Override
                 public void onNegativeClick() {
-                    notifyUserCancle(finalFirstPermissionGroupID, finalFirstPermission);
+                    notifyUserCancel(finalFirstPermissionGroupID, finalFirstPermission);
                     dialog.dismiss();
                     finish();
                 }
 
                 @Override
                 public void onCancel() {
-                    notifyUserCancle(finalFirstPermissionGroupID, finalFirstPermission);
+                    notifyUserCancel(finalFirstPermissionGroupID, finalFirstPermission);
                     dialog.dismiss();
                     finish();
                 }
@@ -188,14 +203,13 @@ public class PermissionsActivity extends AppCompatActivity {
             if (null != dialog) {
                 dialog.dismiss();
             }
-            notifyUserCancle(firstPermissionGroupID, firstPermission);
+            notifyUserCancel(firstPermissionGroupID, firstPermission);
             finish();
         }
     }
 
-    protected void notifyUserCancle(String firstPermissionGroupID, String firstPermission) {
-        PermissionManager.INSTANCE.getPermissionCheckResultListener()
-                .onUserCancel(scene, firstPermissionGroupID, firstPermission);
+    protected void notifyUserCancel(String firstPermissionGroupID, String firstPermission) {
+        PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(scene, firstPermissionGroupID, firstPermission);
     }
 
     protected void onPermissionDialogPositiveClick(final List<String> tempPermissionGroupList) {

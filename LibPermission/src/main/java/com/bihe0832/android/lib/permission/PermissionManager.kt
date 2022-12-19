@@ -322,23 +322,19 @@ object PermissionManager {
     }
 
     fun getPermissionScene(sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
-        var scene = ""
-        tempPermissionList.forEach {
-            scene = scene + getPermissionScene(sceneID, it, needSpecial) + "、"
+        tempPermissionList.map {
+            getPermissionScene(sceneID, it, needSpecial)
+        }.filter { it.isNotBlank() }.let {
+            return it.joinToString("、", "", "")
         }
-        scene = scene.substring(0, scene.length - 1)
-
-        return scene
     }
 
     fun getPermissionDesc(sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
-        var desc = ""
-        tempPermissionList.forEach {
-            desc = desc + getPermissionDesc(sceneID, it, needSpecial) + "、"
+        tempPermissionList.map {
+            getPermissionDesc(sceneID, it, needSpecial)
+        }.filter { it.isNotBlank() }.let {
+            return it.joinToString("、", "", "")
         }
-        desc = desc.substring(0, desc.length - 1)
-
-        return desc
     }
 
     fun getPermissionContent(context: Context, sceneID: String, tempPermissionGroupList: List<String>, needSpecial: Boolean): String {
@@ -356,20 +352,15 @@ object PermissionManager {
     }
 
     fun getDefaultPermissionContent(context: Context, sceneText: String, permissionDesc: String): String {
-        return String.format(
-                context.getString(R.string.com_bihe0832_permission_default_content),
-                APKUtils.getAppName(context),
-                if (TextUtils.isEmpty(sceneText)) {
-                    mDefaultScene
-                } else {
-                    sceneText
-                },
-                if (TextUtils.isEmpty(permissionDesc)) {
-                    mDefaultDesc
-                } else {
-                    permissionDesc
-                }
-        )
+        return String.format(context.getString(R.string.com_bihe0832_permission_default_content), APKUtils.getAppName(context), if (TextUtils.isEmpty(sceneText)) {
+            mDefaultScene
+        } else {
+            sceneText
+        }, if (TextUtils.isEmpty(permissionDesc)) {
+            mDefaultDesc
+        } else {
+            permissionDesc
+        })
     }
 
     fun getTitle(context: Context): String {

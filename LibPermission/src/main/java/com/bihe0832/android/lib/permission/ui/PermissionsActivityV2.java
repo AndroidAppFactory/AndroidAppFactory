@@ -6,10 +6,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.R;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-import com.bihe0832.android.lib.media.image.GlideExtKt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,6 @@ public class PermissionsActivityV2 extends PermissionsActivity {
         } else {
             hideTips();
         }
-
     }
 
     protected void hideTips() {
@@ -55,7 +54,7 @@ public class PermissionsActivityV2 extends PermissionsActivity {
 
     @Override
     protected PermissionDialog getDialog(List<String> tempPermissionGroupList) {
-        if (autoDeny) {
+        if (isAutoDeny()) {
             return super.getDialog(tempPermissionGroupList);
         } else {
             return null;
