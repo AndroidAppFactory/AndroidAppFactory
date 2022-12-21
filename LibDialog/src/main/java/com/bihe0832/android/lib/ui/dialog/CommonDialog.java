@@ -36,7 +36,7 @@ public class CommonDialog extends Dialog {
     /**
      * 显示的内容
      */
-    private LinearLayout content_layout;
+    private LinearLayout contentLayout;
     private TextView contentTv;
 
     /**
@@ -85,7 +85,6 @@ public class CommonDialog extends Dialog {
     public CommonDialog(Context context) {
         super(context, R.style.CommonDialog);
     }
-
 
     public CommonDialog(Context context, int themeResId) {
         super(context, themeResId);
@@ -149,6 +148,7 @@ public class CommonDialog extends Dialog {
      * 初始化界面控件的显示数据
      */
     protected void refreshView() {
+
         //如果用户自定了title和message
         setCanceledOnTouchOutside(shouldCanceledOutside);
         setCancelable(shouldCanceledOutside);
@@ -184,9 +184,9 @@ public class CommonDialog extends Dialog {
             }
         }
 
-        if (extraView != null && content_layout != null && extraView.getParent() == null) {
-            content_layout.removeAllViews();
-            content_layout.addView(extraView);
+        if (extraView != null && contentLayout != null && extraView.getParent() == null) {
+            contentLayout.removeAllViews();
+            contentLayout.addView(extraView);
         }
         //如果设置按钮的文字
         if (positiveBn != null) {
@@ -288,21 +288,26 @@ public class CommonDialog extends Dialog {
      * 初始化界面控件
      */
     private void initView() {
-        negativeBn = (Button) findViewById(R.id.negative);
-        positiveBn = (Button) findViewById(R.id.positive);
-        titleTv = (TextView) findViewById(R.id.title);
-        content_layout = findViewById(R.id.content_layout);
-        contentTv = (TextView) findViewById(R.id.content);
-        columnLineView = findViewById(R.id.column_line);
-        imageView = (ImageView) findViewById(R.id.content_img);
-        feedback = (TextView) findViewById(R.id.feedback);
-        nomoreCb = (CheckBox) findViewById(R.id.nomore_cb);
+        try {
+            negativeBn = (Button) findViewById(R.id.negative);
+            positiveBn = (Button) findViewById(R.id.positive);
+            titleTv = (TextView) findViewById(R.id.title);
+            contentTv = (TextView) findViewById(R.id.content);
+            columnLineView = findViewById(R.id.column_line);
+            imageView = (ImageView) findViewById(R.id.content_img);
+            feedback = (TextView) findViewById(R.id.feedback);
+            nomoreCb = (CheckBox) findViewById(R.id.nomore_cb);
+            contentLayout = findViewById(R.id.content_layout);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView ");
+            e.printStackTrace();
+        }
     }
 
     /**
      * 设置确定取消按钮的回调
      */
-    protected OnDialogListener onClickBottomListener;
+    protected OnDialogListener onClickBottomListener = null;
 
     public CommonDialog setOnClickBottomListener(OnDialogListener clickBottomListener) {
         this.onClickBottomListener = clickBottomListener;
