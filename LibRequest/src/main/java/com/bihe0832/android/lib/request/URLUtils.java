@@ -120,16 +120,17 @@ public class URLUtils {
     }
 
     public static String getFileName(String url) {
-        if (TextUtils.isEmpty(url)) {
+        String noQueryUrl = getNoQueryUrl(url);
+        if (TextUtils.isEmpty(noQueryUrl)) {
             return "";
         } else {
-            int start = url.lastIndexOf("/");
-            int finish = url.indexOf(URLUtils.HTTP_REQ_ENTITY_START);
+            int start = noQueryUrl.lastIndexOf("/");
+            int finish = noQueryUrl.indexOf(URLUtils.HTTP_REQ_ENTITY_START);
             if (start != -1) {
                 if (finish != -1) {
-                    return url.substring(start + 1, finish);
+                    return noQueryUrl.substring(start + 1, finish);
                 } else {
-                    return url.substring(start + 1);
+                    return noQueryUrl.substring(start + 1);
                 }
             } else {
                 return "";
