@@ -151,7 +151,7 @@ open class BaseFragment : SwipeBackFragment() {
     }
 
     /**
-     * 解析intent 传递的参数
+     * 解析intent 传递的参数，一些预加载的逻辑也可以在这里提前处理
      * @param bundle
      */
     protected open fun parseBundle(bundle: Bundle, isOnCreate: Boolean) {
