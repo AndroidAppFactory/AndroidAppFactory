@@ -2,14 +2,17 @@ package com.bihe0832.android.lib.timer;
 
 
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import kotlin.jvm.Synchronized;
 
 public class TaskManager {
@@ -18,6 +21,7 @@ public class TaskManager {
     private static final String LOG_TAG = "TaskManager";
     protected static final int PERIOD = 500;
     private boolean started = false;
+    private boolean showLog = false;
     private ConcurrentHashMap<String, BaseTask> mTaskList = new ConcurrentHashMap<String, BaseTask>();
     ScheduledExecutorService scheduledExecutorService = null;
 
@@ -69,12 +73,12 @@ public class TaskManager {
                         ZLog.d(LOG_TAG, "TaskDispatcher stopTimer");
                         stopTimer();
                     } else {
-                        ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
+                        if (showLog) ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
                         Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
                         while (iter.hasNext()) {
                             Entry<String, BaseTask> entry = iter.next();
                             final BaseTask task = (BaseTask) entry.getValue();
-                            ZLog.d(LOG_TAG, "TaskDispatcher :" + task);
+                            if (showLog) ZLog.d(LOG_TAG, "TaskDispatcher :" + task);
                             if (task.isDeleted()) {
                                 mTaskList.remove(task);
                             } else {
@@ -133,6 +137,10 @@ public class TaskManager {
      */
     public BaseTask getTaskByName(String taskName) {
         return mTaskList.get(taskName);
+    }
+
+    public void setLogEnable(boolean showLog) {
+        this.showLog = showLog;
     }
 
     /**

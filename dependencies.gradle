@@ -17,6 +17,7 @@ ext.mainProject = "APPTest"
  */
 ext.developModule = "Framework"
 
+
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -34,7 +35,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.10.21"
+ext.moduleVersionName = "5.10.22"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -331,7 +332,7 @@ ext.moduleInfo = [
         "LibTimer"                  : [
                 "version"            : "5.9.10",
                 "artifactId"         : "lib-timer",
-                "apidependenciesList": ["LibThread", "LibLog"]
+                "apidependenciesList": ["LibThread", "LibLog","LibCommonUtils"]
         ],
         "LibConfig"                 : [
                 "version"            : "5.10.13",

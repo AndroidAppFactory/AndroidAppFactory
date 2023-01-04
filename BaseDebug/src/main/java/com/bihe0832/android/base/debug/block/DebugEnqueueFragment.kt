@@ -10,14 +10,15 @@ package com.bihe0832.android.base.debug.block
 
 
 import android.view.View
-import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
+import com.bihe0832.android.lib.timer.TimerProcessManager
 
 
 class DebugEnqueueFragment : DebugEnvFragment() {
@@ -29,6 +30,8 @@ class DebugEnqueueFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("定时任务测试", View.OnClickListener { testTask() }))
+            add(DebugItemData("定时计数任务(自动结束)", View.OnClickListener { testTimerProcess(true) }))
+            add(DebugItemData("定时计数任务(延迟结束)", View.OnClickListener { testTimerProcess(false) }))
 
             add(DebugItemData("添加中优先级任务", View.OnClickListener {
                 num++
@@ -56,8 +59,17 @@ class DebugEnqueueFragment : DebugEnvFragment() {
                 mTaskQueue.add(LogTask("HIGH：$num").apply {
                     setPriority(num)
                 })
-
             }))
+        }
+    }
+
+    private fun testTimerProcess(autoEnd:Boolean) {
+        TimerProcessManager.startTimerProcess(1, 10, 1, 1, autoEnd, object : TimerProcessManager.ProgressCallback {
+            override fun onProgress(name: String, progress: Int) {
+                ZLog.d("TimerProcessManager", "TASK_NAME $name  and progress $progress")
+            }
+        }).let {
+            ThreadManager.getInstance().start({TimerProcessManager.stopTimerProcess(it)},15)
         }
     }
 
