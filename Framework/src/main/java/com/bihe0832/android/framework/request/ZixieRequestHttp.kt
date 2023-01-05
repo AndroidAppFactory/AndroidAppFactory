@@ -1,6 +1,7 @@
 package com.bihe0832.android.framework.request
 
 
+import com.bihe0832.android.framework.request.ZixieRequestHttp.getOrigin
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
@@ -14,6 +15,10 @@ object ZixieRequestHttp {
 
     fun get(url: String): String {
         return HTTPServer.getInstance().doRequestSync(url)
+    }
+
+    fun getOriginByteArray(url: String): ByteArray {
+        return getOrigin(url).toByteArray(Charset.forName(BaseConnection.HTTP_REQ_VALUE_CHARSET_ISO_8599_1))
     }
 
     fun getOrigin(url: String): String {
