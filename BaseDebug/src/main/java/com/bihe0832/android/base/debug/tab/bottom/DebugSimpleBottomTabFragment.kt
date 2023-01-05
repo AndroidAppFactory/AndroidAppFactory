@@ -39,10 +39,10 @@ class DebugSimpleBottomTabFragment : CommonMainFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
-        getBottomBar().getItem(0).showUnreadMsg(0)
-        getBottomBar().getItem(1).showUnreadMsg(2)
-        getBottomBar().getItem(2).showUnreadMsg(22)
-        getBottomBar().getItem(3).showUnreadMsg(200)
+//        getBottomBar().getItem(0).showUnreadMsg(0)
+//        getBottomBar().getItem(1).showUnreadMsg(2)
+//        getBottomBar().getItem(2).showUnreadMsg(22)
+//        getBottomBar().getItem(3).showUnreadMsg(200)
     }
 
 }

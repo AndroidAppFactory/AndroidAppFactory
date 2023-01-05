@@ -32,7 +32,7 @@
         android:paddingRight="@dimen/com_bihe0832_tab_red_msg_padding"
         android:textColor="@color/white"
         android:textSize="9dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:bgtv_backgroundColor="#FD481F"
         app:bgtv_isRadiusHalfHeight="true"
         app:bgtv_strokeColor="#FD481F"
