@@ -1,10 +1,11 @@
 package com.bihe0832.android.framework.request
 
 
-import com.bihe0832.android.framework.request.ZixieRequestHttp.getOrigin
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
+import com.bihe0832.android.lib.http.common.core.BaseConnection
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
+import java.nio.charset.Charset
 
 /**
  * @author zixie code@bihe0832.com
