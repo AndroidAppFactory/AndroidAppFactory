@@ -88,6 +88,9 @@ object ZixieContext {
     val deviceId: String
         get() = DeviceIDUtils.getAndroidId(applicationContext) ?: ""
 
+    val deviceKey: Long
+        get() = ConvertUtils.getUnsignedInt(ZixieContext.deviceId.hashCode())
+
     fun showDebugEditionToast() {
         if (!isOfficial()) {
             showLongToast("测试版本，请勿外泄~")
