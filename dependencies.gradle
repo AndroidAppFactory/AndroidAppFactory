@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "Application,CommonBottomTab"
 
 
 /**
@@ -35,7 +35,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.10.23"
+ext.moduleVersionName = "5.10.24"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
