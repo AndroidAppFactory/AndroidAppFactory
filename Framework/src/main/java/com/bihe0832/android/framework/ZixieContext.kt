@@ -12,7 +12,6 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Environment
 import android.text.TextUtils
@@ -30,6 +29,7 @@ import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.File
 import kotlin.system.exitProcess
@@ -290,11 +290,12 @@ object ZixieContext {
 
     open fun restartApp() {
         applicationContext?.let { context ->
-            context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            }?.let {
-                context.startActivity(it)
-            }
+            showLongToast("重启会偶现白屏或黑屏，请耐心等待")
+            ThreadManager.getInstance().start({
+                IntentUtils.restartAPP(context)
+                exitProcess(0)
+            }, 3)
+
         }
     }
 }

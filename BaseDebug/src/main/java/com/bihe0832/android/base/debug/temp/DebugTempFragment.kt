@@ -26,12 +26,11 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
 
-
-
     private fun preTest(itemView: View) {
 
     }
 
     private fun testFunc() {
+        
     }
 }
