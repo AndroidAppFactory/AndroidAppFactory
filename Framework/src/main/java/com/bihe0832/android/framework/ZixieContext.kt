@@ -90,11 +90,13 @@ object ZixieContext {
         get() = DeviceIDUtils.getAndroidId(applicationContext) ?: ""
 
     val deviceKey: Long
-        get() = ConvertUtils.getUnsignedInt(ZixieContext.deviceId.hashCode())
+        get() = ConvertUtils.getUnsignedInt(deviceId.hashCode())
 
     fun showDebugEditionToast() {
         if (!isOfficial()) {
-            showLongToast("测试版本，请勿外泄~")
+            applicationContext?.let { context ->
+                showLongToast(context.getString(R.string.common_tips_debug))
+            }
         }
     }
 
@@ -146,7 +148,9 @@ object ZixieContext {
     }
 
     fun showWaiting() {
-        showToast("功能开发中，敬请期待~")
+        applicationContext?.let { context ->
+            showLongToast(context.getString(R.string.common_tips_waiting))
+        }
     }
 
     fun getVersionNameAndCode(): String {
@@ -288,9 +292,13 @@ object ZixieContext {
         }.show()
     }
 
-    open fun restartApp(waitTime:Long) {
+    open fun restartApp() {
+        restartApp(ConvertUtils.parseLong(applicationContext?.getString(R.string.common_waiting_duration_restart), 1500L))
+    }
+
+    open fun restartApp(waitTime: Long) {
         applicationContext?.let { context ->
-            showLongToast("重启会偶现白屏或黑屏，请耐心等待")
+            showLongToast(context.getString(R.string.common_tips_restart))
             ThreadManager.getInstance().start({
                 IntentUtils.restartAPP(context)
                 exitProcess(0)

@@ -81,7 +81,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
             var tips = "${title}已切换为：<BR> <font color=\"#c0392b\">$tipsText</font> <BR> 点击确认后" +
                     when (actionType) {
                         CHANGE_ENV_EXIST_TYPE_EXIST -> "APP会自动退出，手动启动APP后生效"
-                        CHANGE_ENV_EXIST_TYPE_RESTART -> "APP会自动重启，APP重启后生效"
+                        CHANGE_ENV_EXIST_TYPE_RESTART -> "APP会自动重启，APP重启后生效。<font color=\"#EC4C40\">重启过程会偶现白屏，请耐心等待</font>"
                         else -> "生效"
                     }
             CommonDialog(activity).apply {
@@ -93,7 +93,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
                     fun clickAction(actionType: Int) {
                         when (actionType) {
                             CHANGE_ENV_EXIST_TYPE_EXIST -> ZixieContext.exitAPP()
-                            CHANGE_ENV_EXIST_TYPE_RESTART -> ZixieContext.restartApp()
+                            CHANGE_ENV_EXIST_TYPE_RESTART -> ZixieContext.restartApp(0L)
                             else -> {
                                 dismiss()
                             }
