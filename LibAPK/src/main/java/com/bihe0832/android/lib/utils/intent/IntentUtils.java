@@ -1,7 +1,11 @@
 package com.bihe0832.android.lib.utils.intent;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -187,18 +191,17 @@ public class IntentUtils {
         }
     }
 
-
     // 启动手机的设置
     public static String convertIntentToJson(Intent intent) {
         JSONObject jsonObject = new JSONObject();
         try {
-            if (null != intent && !intent.getExtras().isEmpty()){
+            if (null != intent && !intent.getExtras().isEmpty()) {
                 Bundle b = intent.getExtras();
                 Set<String> keys = b.keySet();
                 for (String key : keys) {
                     try {
                         jsonObject.put(key, b.get(key));
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -211,4 +214,28 @@ public class IntentUtils {
     }
 
 
+    public static final void restartAPP(final Context context) {
+        Intent intent = new Intent(context, getLaunchActivityName(context, context.getPackageName()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        int mPendingIntentId = (int) (System.currentTimeMillis() / 1000);
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+    }
+
+    public static Class getLaunchActivityName(Context context, String packageName) {
+        PackageManager localPackageManager = context.getPackageManager();
+        Intent localIntent = new Intent("android.intent.action.MAIN");
+        localIntent.addCategory("android.intent.category.LAUNCHER");
+        for (ResolveInfo localResolveInfo : localPackageManager.queryIntentActivities(localIntent, 0)) {
+            if (!localResolveInfo.activityInfo.applicationInfo.packageName.equalsIgnoreCase(packageName)) {
+                continue;
+            }
+            return localResolveInfo.activityInfo.getClass();
+        }
+        return null;
+    }
 }
