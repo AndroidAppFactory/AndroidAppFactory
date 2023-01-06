@@ -288,14 +288,13 @@ object ZixieContext {
         }.show()
     }
 
-    open fun restartApp() {
+    open fun restartApp(waitTime:Long) {
         applicationContext?.let { context ->
             showLongToast("重启会偶现白屏或黑屏，请耐心等待")
             ThreadManager.getInstance().start({
                 IntentUtils.restartAPP(context)
                 exitProcess(0)
-            }, 3)
-
+            }, waitTime)
         }
     }
 }
