@@ -3,4 +3,6 @@
     <color name="com_bihe0832_tab_selected">#ffffff</color>
     <color name="com_bihe0832_tab_unselect">#999999</color>
     <color name="com_bihe0832_tab_background">#12222c</color>
+    <dimen name="com_bihe0832_tab_main_bottom_bar_height">56dp</dimen>
+
 </resources>

@@ -16,7 +16,7 @@
     <View
         android:id="@+id/main_fragment_bottomBar_bg"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/com_bihe0832_tab_main_bottom_bar_height"
         android:background="@color/com_bihe0832_tab_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_fragment_bottomBar_bg"
+        app:layout_constraintBottom_toBottomOf="@+id/main_fragment_bottomBar_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
