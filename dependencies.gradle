@@ -12,7 +12,7 @@ ext.mainProject = "APPTest"
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  * 当前设计到Android Support库的有：
  *      LibDeviceNetwork,LibFile,LibFragmentation_core,LibFlycoTabLayout,LibQRCode,LibAdapter,LibDialog,LibBottomTab,LibViewExt,LibViewPager,LibImmersive,LibTextView
- * 当前如果全量填"RouterAnnotation,Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
+ * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
 ext.developModule = "Application"
@@ -113,7 +113,8 @@ ext.moduleInfo = [
                 "artifactId"         : "common-svga",
                 "apidependenciesList": [
                         "Framework",
-                        "com.github.yyued:SVGAPlayer-Android:2.6.1"
+                        project.svga_dependency
+
                 ]
         ],
         "CommonAceEditor"           : [
@@ -135,7 +136,7 @@ ext.moduleInfo = [
                 "version"            : "5.10.26",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
-                        "${project.androidsupport.swiperefreshlayout}",
+                        project.androidsupport.swiperefreshlayout,
                         "Framework"
                 ]
         ],
@@ -164,13 +165,11 @@ ext.moduleInfo = [
                 "version"                : "5.10.26",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
-                        "${project.androidsupport.swiperefreshlayout}",
+                        project.androidsupport.swiperefreshlayout,
                         "Framework"
                 ],
                 "specialdependenciesList": [
-                        "kapt": [
-                                "RouterCompiler"
-                        ]
+                        "kapt": ["RouterCompiler"]
                 ]
         ],
         "CommonFeedback"            : [
@@ -180,9 +179,7 @@ ext.moduleInfo = [
                         "CommonWebview"
                 ],
                 "specialdependenciesList": [
-                        "kapt": [
-                                "RouterCompiler"
-                        ]
+                        "kapt": ["RouterCompiler"]
                 ]
         ],
         "CommonPraise"              : [
@@ -196,13 +193,13 @@ ext.moduleInfo = [
                 "version"                : "5.10.26",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
-                        "${project.androidsupport.annotation}",
-                        "${project.androidsupport.lifecycle_livedata}",
-                        "${project.androidsupport.multidex}",
+                        project.androidsupport.annotation,
+                        project.androidsupport.lifecycle_livedata,
+                        project.androidsupport.multidex,
                         "LibWrapper", "LibLifecycle"
                 ],
                 "specialdependenciesList": [
-                        "kapt": ["com.github.bumptech.glide:compiler:${project.glide_version}"]
+                        "kapt": [project.glide.compiler]
 
                 ]
         ],
@@ -231,8 +228,8 @@ ext.moduleInfo = [
                 "version"                : "5.1.7",
                 "artifactId"             : "lib-router-compiler",
                 "apidependenciesList"    : [
-                        'com.squareup:javapoet:1.8.0',
-                        'com.google.auto.service:auto-service:1.0.1',
+                        project.router.javapoet,
+                        project.router.auto_service,
                         "RouterAnnotation"
                 ],
                 "specialdependenciesList": [
@@ -263,17 +260,23 @@ ext.moduleInfo = [
         "LibLog"                    : [
                 "version"            : "5.9.10",
                 "artifactId"         : "lib-log",
-                "apidependenciesList": ["LibAndroid"]
+                "apidependenciesList": [
+                        "LibAndroid"
+                ]
         ],
         "LibCommonUtils"            : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-utils-common",
-                "apidependenciesList": ["LibAndroid", "LibLog"]
+                "apidependenciesList": [
+                        "LibAndroid", "LibLog"
+                ]
         ],
         "LibOS"                     : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-android-os",
-                "apidependenciesList": ["LibLog", "LibCommonUtils"]
+                "apidependenciesList": [
+                        "LibLog", "LibCommonUtils"
+                ]
         ],
         "LibThread"                 : [
                 "version"            : "5.1.7",
@@ -283,46 +286,58 @@ ext.moduleInfo = [
         "LibEncrypt"                : [
                 "version"            : "5.9.10",
                 "artifactId"         : "lib-encrypt",
-                "apidependenciesList": ["LibLog"]
+                "apidependenciesList": [
+                        "LibLog"
+                ]
         ],
         "LibChannel"                : [
                 "version"            : "5.9.10",
                 "artifactId"         : "lib-channel",
-                "apidependenciesList": ["LibLog"]
+                "apidependenciesList": [
+                        "LibLog"
+                ]
         ],
         "LibRequest"                : [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-request",
-                "apidependenciesList": ["LibOS"]
+                "apidependenciesList": [
+                        "LibOS"
+                ]
         ],
         "LibGson"                   : [
                 "version"            : "5.10.15",
                 "artifactId"         : "lib-gson",
                 "apidependenciesList": [
-                        "com.google.code.gson:gson:${project.gson_version}",
+                        project.gson_version,
                         "LibCommonUtils", "LibLog",
                 ]
         ],
         "LibHttpCommon"             : [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-http-common",
-                "apidependenciesList": ["LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"]
+                "apidependenciesList": [
+                        "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"
+                ]
         ],
         "LibHttpAdvanced"           : [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-http-advanced",
-                "apidependenciesList": ["LibHttpCommon", "LibGson", "LibAAF"]
+                "apidependenciesList": [
+                        "LibHttpCommon", "LibGson", "LibAAF"
+                ]
         ],
         "LibSqlite"                 : [
                 "version"            : "5.9.10",
                 "artifactId"         : "lib-sqlite",
-                "apidependenciesList": ["LibLog"]
+                "apidependenciesList": [
+                        "LibLog"
+                ]
         ],
         "LibDeviceNetwork"          : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-device-network",
                 "apidependenciesList": [
-                        "${project.androidsupport.androidxcore}",
+                        project.androidsupport.androidxcore,
                         "LibOS", "LibCommonUtils",
                         "LibText",
                         "LibThread",
@@ -332,31 +347,38 @@ ext.moduleInfo = [
         "LibTimer"                  : [
                 "version"            : "5.10.22",
                 "artifactId"         : "lib-timer",
-                "apidependenciesList": ["LibThread", "LibLog","LibCommonUtils"]
+                "apidependenciesList": [
+                        "LibThread", "LibLog", "LibCommonUtils"
+                ]
         ],
         "LibConfig"                 : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-config",
                 "apidependenciesList": [
-                        "LibCommonUtils",
-                        "com.tencent:mmkv:1.2.13"
+                        project.tencent.mmkv,
+                        "LibCommonUtils"
+
                 ]
         ],
         "LibAPK"                    : [
                 "version"            : "5.10.25",
                 "artifactId"         : "lib-utils-apk",
-                "apidependenciesList": ["LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"]
+                "apidependenciesList": [
+                        "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
+                ]
         ],
         "LibTTS"                    : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-tts",
-                "apidependenciesList": ["LibConfig", "LibOS"]
+                "apidependenciesList": [
+                        "LibConfig", "LibOS"
+                ]
         ],
         "LibFile"                   : [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-file",
                 "apidependenciesList": [
-                        "${project.androidsupport.androidxcore}",
+                        project.androidsupport.androidxcore,
                         "LibEncrypt", "LibCommonUtils", "LibThread",
                         "LibOS", "LibLog", "LibRequest"
                 ]
@@ -364,7 +386,9 @@ ext.moduleInfo = [
         "LibZip"                    : [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-zip",
-                "apidependenciesList": ["LibLog", "LibThread", "LibFile"]
+                "apidependenciesList": [
+                        "LibLog", "LibThread", "LibFile"
+                ]
         ],
         "LibDownload"               : [
                 "version"            : "5.10.25",
@@ -378,51 +402,65 @@ ext.moduleInfo = [
         "LibInstall"                : [
                 "version"            : "5.10.25",
                 "artifactId"         : "lib-install",
-                "apidependenciesList": ["LibFile", "LibZip", "LibAPK"]
+                "apidependenciesList": [
+                        "LibFile", "LibZip", "LibAPK"
+                ]
         ],
         "LibText"                   : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-text",
-                "apidependenciesList": ["LibAndroid", "LibOS"]
+                "apidependenciesList": [
+                        "LibAndroid", "LibOS"
+                ]
         ],
         "LibSuperAPP"               : [
                 "version"            : "5.10.25",
                 "artifactId"         : "lib-super-app",
-                "apidependenciesList": ["LibDialog", "LibAPK"]
+                "apidependenciesList": [
+                        "LibDialog", "LibAPK"
+                ]
         ],
         "LibDebug"                  : [
                 "version"            : "5.10.25",
                 "artifactId"         : "lib-debug",
-                "apidependenciesList": ["LibDialog", "LibToast", "LibFloatview"]
+                "apidependenciesList": [
+                        "LibDialog", "LibToast", "LibFloatview"
+                ]
         ],
         "LibCommonUIUtils"          : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-ui-common",
-                "apidependenciesList": ["LibAndroid", "LibOS", "LibLog"]
+                "apidependenciesList": [
+                        "LibAndroid", "LibOS", "LibLog"
+                ]
         ],
         "LibFragmentation_core"     : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-fragmentation-core",
                 "apidependenciesList": [
-                        "${project.androidsupport.appcompat}",
+                        project.androidsupport.appcompat,
                         "LibCommonUIUtils", "LibOS"
                 ]
         ],
         "LibFragmentation"          : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-fragmentation",
-                "apidependenciesList": ["LibFragmentation_core"]
+                "apidependenciesList": [
+                        "LibFragmentation_core"
+                ]
         ],
         "LibFragmentation_swipeback": [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-fragmentation-swipeback",
-                "apidependenciesList": ["LibFragmentation"]
+                "apidependenciesList": [
+                        "LibFragmentation"
+                ]
         ],
         "LibFlycoTabLayout"         : [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
-                        "${project.androidsupport.androidxcore}",
+                        project.androidsupport.androidxcore,
                         "LibCommonUIUtils", "LibOS", "LibRequest", "LibMedia", "LibTextView"
                 ]
         ],
@@ -430,7 +468,7 @@ ext.moduleInfo = [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-qrcode",
                 "apidependenciesList": [
-                        "${project.androidsupport.appcompat}",
+                        project.androidsupport.appcompat,
                         "com.google.zxing:core:3.3.0",
                         "LibCommonUIUtils", "LibOS"
                 ]
@@ -439,7 +477,7 @@ ext.moduleInfo = [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-adapter",
                 "apidependenciesList": [
-                        "${project.androidsupport.recyclerview}",
+                        project.androidsupport.recyclerview,
                         "LibCommonUIUtils", "LibText"
                 ]
         ],
@@ -453,14 +491,16 @@ ext.moduleInfo = [
         "LibToast"                  : [
                 "version"            : "5.10.16",
                 "artifactId"         : "lib-toast",
-                "apidependenciesList": ["LibThread", "LibText"]
+                "apidependenciesList": [
+                        "LibThread", "LibText"
+                ]
         ],
         "LibMedia"                  : [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-media",
                 "apidependenciesList": [
-                        "com.github.bumptech.glide:glide:${project.glide_version}",
-                        "com.github.bumptech.glide:okhttp3-integration:${project.glide_version}",
+                        project.glide.glide,
+                        project.glide.glide_okhttp3,
                         "LibLog", "LibOS", "LibFile"
 
                 ]
@@ -469,7 +509,7 @@ ext.moduleInfo = [
                 "version"            : "5.10.21",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
-                        "${project.androidsupport.constraintlayout}",
+                        project.androidsupport.constraintlayout,
                         "LibThread", "LibMedia", "LibOS", "LibCommonUIUtils", "LibText", "LibViewExt",
                         "LibBlockTask"
                 ]
@@ -486,25 +526,28 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",
-                        "${project.androidsupport.androidxcore}",
-                        "${project.androidsupport.annotation}"
+                        project.androidsupport.androidxcore,
+                        project.androidsupport.annotation
                 ]
         ],
         "LibRecycleviewExt"         : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-recycleview-ext",
-                "apidependenciesList": ["LibRefresh"]
+                "apidependenciesList": [
+                        "LibRefresh"]
         ],
         "LibTouchRegion"            : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-touchregion",
-                "apidependenciesList": ["LibCommonUIUtils", "LibOS"]
+                "apidependenciesList": [
+                        "LibCommonUIUtils", "LibOS"
+                ]
         ],
         "LibViewExt"                : [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-view-ext",
                 "apidependenciesList": [
-                        "${project.androidsupport.core}",
+                        project.androidsupport.androidxcore,
                         "LibCommonUIUtils", "LibText"
                 ]
         ],
@@ -512,14 +555,14 @@ ext.moduleInfo = [
                 "version"            : "5.1.7",
                 "artifactId"         : "lib-view-pager",
                 "apidependenciesList": [
-                        "${project.androidsupport.viewpager}"
+                        project.androidsupport.viewpager
                 ]
         ],
         "LibWebview"                : [
                 "version"            : "5.10.25",
                 "artifactId"         : "lib-webview",
                 "apidependenciesList": [
-                        "com.tencent.tbs:tbssdk:44199",
+                        project.tencent.tbssdk,
                         "LibLog", "LibThread", "LibToast", "LibAPK"
                 ]
         ],
@@ -527,9 +570,9 @@ ext.moduleInfo = [
                 "version"            : "5.10.25",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
-                        "${project.androidsupport.lifecycle}",
-                        "${project.androidsupport.lifecyclecommon}",
-                        "${project.androidsupport.lifecycleprocess}",
+                        project.androidsupport.lifecycle,
+                        project.androidsupport.lifecyclecommon,
+                        project.androidsupport.lifecycleprocess,
                         "LibLog", "LibConfig", "LibAPK", "LibAAF"
                 ]
         ],
@@ -538,7 +581,7 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
-                        "${project.androidsupport.appcompat}"
+                        project.androidsupport.appcompat
 
                 ]
         ],
@@ -547,7 +590,7 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork", "LibMedia", "LibCommonUIUtils",
-                        "${project.androidsupport.appcompat}"
+                        project.androidsupport.appcompat
                 ]
         ],
         "LibFileSelect"             : [
@@ -562,7 +605,7 @@ ext.moduleInfo = [
                 "version"                : "5.10.25",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
-                        "${project.androidsupport.constraintlayout}",
+                        project.androidsupport.constraintlayout,
                         "LibLog", "LibConfig", "LibThread", "LibOS", "LibDialog", "LibToast", "LibPermission", "LibAAF"
                 ],
                 "specialdependenciesList": [
@@ -582,8 +625,8 @@ ext.moduleInfo = [
                 "version"            : "5.10.13",
                 "artifactId"         : "lib-textview",
                 "apidependenciesList": [
-                        "${project.androidsupport.appcompat}",
-                        "${project.androidsupport.constraintlayout}",
+                        project.androidsupport.appcompat,
+                        project.androidsupport.constraintlayout,
                         "LibText"
                 ]
         ],
@@ -606,13 +649,13 @@ ext.moduleInfo = [
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon",
-                        'com.squareup.okhttp3:okhttp:3.9.1',
-                        'com.squareup.okhttp3:logging-interceptor:3.8.0',
-                        'com.squareup.retrofit2:retrofit:2.4.0',
-                        'com.squareup.retrofit2:converter-gson:2.4.0',
+                        project.okhttp.okhttp,
+                        project.okhttp.logging_interceptor,
+                        project.okhttp.retrofit,
+                        project.okhttp.converter_gson
                 ]
         ],
-        "LibDataRepository"             : [
+        "LibDataRepository"         : [
                 "version"            : "5.10.2",
                 "artifactId"         : "lib-data-repository",
                 "apidependenciesList": [
@@ -623,8 +666,8 @@ ext.moduleInfo = [
                 "version"            : "5.8.0",
                 "artifactId"         : "lib-coroutines",
                 "apidependenciesList": [
-                        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${project.kotlinx_coroutines_version}",
-                        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.kotlinx_coroutines_version}",
+                        project.kotlinx_coroutines.core,
+                        project.kotlinx_coroutines.android
                 ]
         ],
         "LibAudioPlayer"            : [
