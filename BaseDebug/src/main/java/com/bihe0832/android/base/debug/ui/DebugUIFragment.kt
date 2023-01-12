@@ -75,15 +75,20 @@ class DebugUIFragment : DebugEnvFragment() {
             add(DebugItemData("应用前后台信息", View.OnClickListener { testAPPObserver() }))
 
             add(DebugItemData("打开反馈页面", View.OnClickListener {
-                val map = HashMap<String, String>()
-                map[com.bihe0832.android.framework.router.RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode("https://support.qq.com/embed/phone/290858/large/")
-                RouterAction.openPageByRouter(com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_FEEDBACK, map)
+                RouterAction.openFinalURL(getFeedBackURL())
             }))
 
             add(DebugItemData("弹出评分页面", View.OnClickListener {
-                UserPraiseManager.showUserPraiseDialog(activity!!, RouterAction.getFinalURL(com.bihe0832.android.framework.router.RouterConstants.MODULE_NAME_FEEDBACK))
+                UserPraiseManager.showUserPraiseDialog(activity!!, getFeedBackURL())
+
             }))
         }
+    }
+
+    private fun getFeedBackURL(): String {
+        val map = HashMap<String, String>()
+        map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode("https://support.qq.com/embed/phone/290858/large/")
+        return RouterAction.getFinalURL(RouterConstants.MODULE_NAME_FEEDBACK, map)
     }
 
     private fun testAPPObserver() {

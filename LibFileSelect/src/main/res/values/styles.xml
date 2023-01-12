@@ -6,47 +6,63 @@
     <!--状态栏颜色-->
     <color name="colorPrimaryDark">@color/primary_dark</color>
     <color name="colorPrimaryLight">@color/primary_light</color>
-
     <!--控制各个控件被选中时的颜色-->
     <color name="colorAccent">@color/accent</color>
     <!--各个控制控件的默认颜色 与colorAccent相反-->
-    <color name="colorControlNormal">@color/divider</color>
+    <color name="colorControlNormal">@color/com_bihe0832_select_default</color>
     <!--控制normal状态下button的颜色-->
     <color name="colorButtonNormal">@color/colorControlNormal</color>
     <!--控制所有可点击的View的涟漪效果颜色-->
-    <color name="colorControlActivated">@color/colorPrimaryDark</color>
-    <color name="colorControlHighlight">@color/colorPrimaryDark</color>
+    <color name="colorControlActivated">@color/com_bihe0832_select_state_checked</color>
+    <color name="colorControlHighlight">@color/com_bihe0832_select_state_focused</color>
     <!--文本颜色-->
-    <color name="colorPrimaryText">@color/primary_text</color>
-    <color name="colorSecondaryText">@color/secondary_text</color>
+    <color name="textColorPrimary">@color/primary_text</color>
+    <color name="textColorSecondary">@color/secondary_text</color>
     <!--页面背景色-->
-    <color name="colorWindowBg">@color/icons</color>
-    <color name="windowBackground">@color/colorWindowBg</color>
-    <color name="navigationBarColor">@color/colorPrimaryText</color>
+    <color name="colorWindowBg">@color/window_background</color>
+    <color name="windowBackground">@color/window_background</color>
+    <color name="navigationBarColor">@color/navigation_bar_color</color>
 
 
-    <!--    https://www.materialpalette.com/indigo/indigo 生成颜色表-->
+    <color name="gray_light">#f2f2f2</color>
+    <color name="black">#202020</color>
+    <color name="white">#ffffff</color>
+
+    <!--主色调，标题栏等-->
     <color name="primary">#3F51B5</color>
-    <color name="primary_dark">#303F9F</color>
+    <!--状态栏颜色-->
+    <color name="primary_dark">@color/primary</color>
     <color name="primary_light">#C5CAE9</color>
+    <!--控制各个控件被选中时的颜色-->
     <color name="accent">#536DFE</color>
+    <!--文本颜色-->
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
+    <!--图标颜色-->
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
+
+    <!--分割线颜色-->
+    <color name="divider">@color/gray_light</color>
+
+    <!--页面背景色-->
+    <color name="window_background">@color/white</color>
+    <!--虚拟按键栏背景色-->
+    <color name="navigation_bar_color">@color/black</color>
+
 
     <style name="fileActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowNoTitle">true</item>
+        <!--  它可以将应用了该 Style 的 Activity 所在的 Window 设置成透明的， 使用windowIsTranslucent 的Activity 不要定义 screenOrientation-->
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowActionBar">false</item>
         <!--主色调 -->
-        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <!--状态栏颜色-->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--控制各个控件被选中时的颜色-->
-        <item name="colorAccent">@color/accent</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <!--各个控制控件的默认颜色 与colorAccent相反-->
         <item name="colorControlNormal">@color/colorControlNormal</item>
         <!--页面背景色-->
@@ -57,7 +73,8 @@
         <!--控制所有可点击的View的涟漪效果颜色-->
         <item name="colorControlHighlight">@color/colorControlHighlight</item>
         <!--EditText 输入框中字体的颜色-->
-        <item name="editTextColor">@color/colorSecondaryText</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="editTextColor">@color/secondary_text</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
     </style>
 </resources>

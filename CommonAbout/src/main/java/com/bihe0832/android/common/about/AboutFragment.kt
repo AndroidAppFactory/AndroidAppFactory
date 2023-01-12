@@ -22,6 +22,7 @@ open class AboutFragment : CommonListFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(SettingsItem.getVersionList())
             add(SettingsItem.getFeedback())
+            add(SettingsItem.getQQService(activity))
             add(SettingsItem.getZixie())
             if (!ZixieContext.isOfficial()) {
                 add(SettingsItem.getDebug())

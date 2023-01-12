@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:padding="16dp"
-    android:textColor="@color/colorAccent"
+    android:textColor="@color/textColorPrimary"
     android:textStyle="bold"
     tools:text="dfsfd" />

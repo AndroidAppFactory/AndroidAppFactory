@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/card_settings_bg">
+    android:background="@color/windowBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content"
@@ -37,6 +37,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="12dp"
             android:ellipsize="end"
+            android:textColor="@color/textColorPrimary"
             android:maxLines="1"
             android:text="加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订"
             android:textSize="14dp"
@@ -62,9 +63,9 @@
             android:id="@+id/settings_is_new"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            app:bgtv_backgroundColor="#FD481F"
+            app:bgtv_backgroundColor="@color/red_dot"
             app:bgtv_isRadiusHalfHeight="true"
-            app:bgtv_strokeColor="#FD481F"
+            app:bgtv_strokeColor="@color/red_dot"
             app:bgtv_strokeWidth="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/settings_go"
@@ -88,7 +89,7 @@
         android:id="@+id/settings_drivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray_light"
+        android:background="@color/divider"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

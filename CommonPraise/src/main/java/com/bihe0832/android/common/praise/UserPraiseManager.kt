@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.praise
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.bihe0832.android.framework.ZixieContext
@@ -12,8 +13,13 @@ import java.util.concurrent.TimeUnit
 
 object UserPraiseManager {
 
+    // 是否评价过
     const val KEY_PRAISE_DONE = "KEY_PRAISE_DONE"
+
+    //上次评价的版本
     const val KEY_PRAISE_VERSION = "KEY_PRAISE_VERSION"
+
+    // 最后一次展示时间
     const val KEY_PRAISE_LAST_SHOW_TIME = "KEY_PRAISE_LAST_SHOW_DATE"
     private var mMarketPackageName: String = ""
     private val mInit: Boolean
@@ -30,17 +36,17 @@ object UserPraiseManager {
     private var mShowInterval = 2
 
     //弹框内容
-    private var mDialogContent = ""
+    private var mHeadTitle = ""
 
     init {
-        //1_3_3_2_这里一个测试
+        //1_3_3_2_这是一个测试
         val praiseConfig = Config.readConfig(KEY_PRAISE_DONE, "")
-        praiseConfig.split(":".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray().let { temp ->
+        praiseConfig.split("_".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray().let { temp ->
             mNeedShow = ConvertUtils.getSafeValueFromArray(temp, 0, "") == "1"
             mAppUseTimeThreshold = ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 1, "1"))
             mAppUseDayThreshold = ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 2, "1"))
             mShowInterval = ConvertUtils.parseInt(ConvertUtils.getSafeValueFromArray(temp, 3, "2"))
-            mDialogContent = ConvertUtils.getSafeValueFromArray(temp, 4, "")
+            mHeadTitle = ConvertUtils.getSafeValueFromArray(temp, 4, "")
             mMarketPackageName = APPMarketHelper.getFirstMarket(ZixieContext.applicationContext)
             mInit = true
         }
@@ -68,7 +74,7 @@ object UserPraiseManager {
             return false
         }
 
-        if (ZixieContext.getVersionName() == Config.readConfig(KEY_PRAISE_VERSION, "")) {
+        if (ZixieContext.getVersionCode() == Config.readConfig(KEY_PRAISE_VERSION, 0L)) {
             return false
         }
 
@@ -81,25 +87,29 @@ object UserPraiseManager {
 
     fun showUserPraiseDialog(activity: Activity, feedbackRouter: String) {
         Config.writeConfig(KEY_PRAISE_LAST_SHOW_TIME, System.currentTimeMillis())
-        val dialog = UserPraiseDialog(activity, feedbackRouter)
-        dialog.setCanceledOnTouchOutside(false)
-        if (mDialogContent.isNotEmpty()) {
-            dialog.setContent(mDialogContent)
-        }
-        dialog.show()
+        UserPraiseDialog(activity, feedbackRouter).apply {
+            if (mHeadTitle.isNotEmpty()) {
+                setHeadTitleContent(mHeadTitle)
+            }
+        }.show()
     }
 
-    fun launchAppStore(activity: Activity): Boolean {
+    fun launchAppStore(context: Context): Boolean {
         val intent = Intent()
         intent.action = Intent.ACTION_VIEW
-        val uri = Uri.parse(String.format("market://details?id=%s", activity.packageName))
+        val uri = Uri.parse(String.format("market://details?id=%s", context.packageName))
         return try {
             intent.setPackage(mMarketPackageName)
             intent.data = uri
-            IntentUtils.startIntent(activity, intent)
+            IntentUtils.startIntent(context, intent)
             true
         } catch (e: Exception) {
             false
         }
+    }
+
+    fun doPraiseAction() {
+        Config.readConfig(KEY_PRAISE_DONE, 1)
+        Config.readConfig(KEY_PRAISE_VERSION, ZixieContext.getVersionCode())
     }
 }

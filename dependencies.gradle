@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonBottomTab"
+ext.developModule = "LibFileSelect"
 
 
 /**
@@ -215,7 +215,7 @@ ext.moduleInfo = [
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
-                        "LibImmersive", "LibFileSelect", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
+                        "LibImmersive",  "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
                         "LibSvga", "LibAudioPlayer"
                 ]
         ],

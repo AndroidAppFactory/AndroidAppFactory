@@ -42,7 +42,7 @@ open class BaseActivity : SupportActivity() {
             DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
         }
         if (getStatusBarColor() == Color.TRANSPARENT) {
-            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ContextCompat.getColor(this, R.color.primary)), getNavigationBarColor())
+            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ContextCompat.getColor(this, R.color.colorPrimaryDark)), getNavigationBarColor())
         } else {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         }
@@ -57,7 +57,7 @@ open class BaseActivity : SupportActivity() {
     }
 
     open fun getStatusBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.colorPrimary)
+        return ContextCompat.getColor(this, R.color.colorPrimaryDark)
     }
 
     open fun getNavigationBarColor(): Int {

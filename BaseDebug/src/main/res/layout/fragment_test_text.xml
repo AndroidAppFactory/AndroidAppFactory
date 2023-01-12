@@ -35,7 +35,7 @@
             android:text=""
             android:textColor="#ffffff"
             android:textSize="11.5sp"
-            app:bgtv_backgroundColor="#FD481F"
+            app:bgtv_backgroundColor="@color/red_dot"
             app:bgtv_isRadiusHalfHeight="true"
             app:bgtv_strokeColor="#0000ff"
             app:bgtv_strokeWidth="0dp" />
