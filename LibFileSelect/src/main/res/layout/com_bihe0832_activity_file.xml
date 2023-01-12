@@ -27,16 +27,16 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:text="选择文本"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/icons"
             android:textSize="12dp" />
 
         <ImageView
             android:id="@+id/activity_file_btn_close"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
             android:background="@mipmap/close"
-            android:layout_gravity="center_vertical"
             android:padding="8dp" />
     </LinearLayout>
 

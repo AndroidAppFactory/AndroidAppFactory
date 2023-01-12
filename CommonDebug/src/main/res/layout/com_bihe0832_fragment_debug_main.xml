@@ -12,10 +12,8 @@
         android:background="@color/colorPrimary"
         app:tl_tab_space_equal="true"
         app:tl_textBold="SELECT"
-        app:tl_textSelectColor="@color/white"
-        app:tl_textsize="12dp"
-        app:tl_underline_color="@color/colorPrimary"
-        app:tl_underline_height="1dp" />
+        app:tl_textSelectColor="@color/textColorIcons"
+        app:tl_textsize="12dp" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/framework_viewPager"

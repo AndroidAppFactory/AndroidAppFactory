@@ -3,13 +3,6 @@
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">30dp</dimen>
-    <color name="common_debug_activity_split_bg">#c9c9c9</color>
-    <color name="common_debug_tips_text">@color/white</color>
-    <color name="common_debug_tips_bg">@color/colorAccent</color>
-
-    <color name="common_debug_text">@color/black</color>
-    <color name="common_debug_bg">@color/white</color>
-
     <string name="common_debug_empty_tips">"数据加载中，请稍候"</string>
 
 </resources>

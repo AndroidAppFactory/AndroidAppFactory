@@ -12,6 +12,7 @@
 
     <application
         android:usesCleartextTraffic="true"
+        android:theme="@style/AAF.ActivityTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
         <uses-library

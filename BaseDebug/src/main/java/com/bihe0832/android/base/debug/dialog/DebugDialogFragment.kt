@@ -43,7 +43,7 @@ class DebugDialogFragment : DebugEnvFragment() {
             add(DebugItemData("根据弹框顺序弹触发启动", View.OnClickListener { mDependenceBlockDialogManager.start() }))
 
             add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
-            add(DebugItemData("底部Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
+            add(DebugItemData("底部分享Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
             add(DebugItemData("底部Dialog", View.OnClickListener { showAlert(BottomDialog(activity!!)) }))
             add(DebugItemData("通用弹框", View.OnClickListener { testAlert(activity!!) }))
             add(DebugItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))

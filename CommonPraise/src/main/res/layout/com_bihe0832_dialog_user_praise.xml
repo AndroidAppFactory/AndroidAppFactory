@@ -2,86 +2,88 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="300dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:minWidth="300dp">
 
     <View
+        android:id="@+id/dialog_bg"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/praise_dialog_bg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/com_bihe0832_common_dialog_bg"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
-    <TextView
-        android:id="@+id/tv_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginRight="32dp"
-        android:gravity="center_horizontal"
-        android:text="你的支持是我们不断优化的动力"
-        android:textSize="14dp"
-        android:textStyle="bold"
-        android:textColor="@color/gray_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_horizontal"
+        android:text="你的支持是我们不断优化的动力"
+        android:textColor="@color/primary_text"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_bg"
+        app:layout_constraintStart_toStartOf="@+id/dialog_bg"
+        app:layout_constraintTop_toTopOf="@+id/dialog_bg" />
+
     <ImageView
         android:id="@+id/icon_praise"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginTop="24dp"
         android:src="@mipmap/praise_ic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_text" />
+        app:layout_constraintEnd_toEndOf="@+id/dialog_bg"
+        app:layout_constraintStart_toStartOf="@+id/dialog_bg"
+        app:layout_constraintTop_toBottomOf="@+id/head" />
 
     <Button
-        android:id="@+id/btn_goMarket"
+        android:id="@+id/positive"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="64dp"
+        android:layout_marginLeft="36dp"
         android:layout_marginTop="24dp"
-        android:layout_marginRight="64dp"
+        android:layout_marginRight="36dp"
         android:background="@drawable/praise_btn_go_market"
         android:text="赐我力量"
         android:textColor="@color/white"
         android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_bg"
+        app:layout_constraintStart_toStartOf="@+id/dialog_bg"
         app:layout_constraintTop_toBottomOf="@+id/icon_praise" />
 
     <Button
-        android:id="@+id/btn_goFeedback"
+        android:id="@+id/negative"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="48dp"
         android:background="@drawable/praise_btn_go_feedback"
         android:text="吐槽一下"
         android:textColor="#888888"
         android:textSize="14dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btn_goMarket"
-        app:layout_constraintStart_toStartOf="@+id/btn_goMarket"
-        app:layout_constraintTop_toBottomOf="@+id/btn_goMarket" />
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_bg"
+        app:layout_constraintEnd_toEndOf="@+id/positive"
+        app:layout_constraintStart_toStartOf="@+id/positive"
+        app:layout_constraintTop_toBottomOf="@+id/positive" />
 
 
     <ImageButton
-        android:id="@+id/btn_close"
+        android:id="@+id/close"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginLeft="-12dp"
+        android:layout_marginBottom="-16dp"
         android:background="@mipmap/icon_close_black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintBottom_toTopOf="@+id/dialog_bg"
+        app:layout_constraintStart_toEndOf="@+id/dialog_bg" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

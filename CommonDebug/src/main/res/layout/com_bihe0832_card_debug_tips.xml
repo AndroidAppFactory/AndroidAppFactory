@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="@color/common_debug_tips_bg">
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/test_title"
@@ -12,21 +12,21 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:lineHeight="24dp"
-        tools:text="这是一个提示消息，这是一个提示消息这是一个提示消息这是一个提示消息这是一个提示消息这是一个提示消息"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:paddingTop="16dp"
+        android:paddingRight="16dp"
         android:paddingBottom="16dp"
+        android:textColor="@color/textColorIcons"
+        android:textSize="12dp"
         android:textStyle="bold"
-        android:textColor="@color/common_debug_tips_text"
-        android:textSize="12dp" />
+        tools:text="这是一个提示消息，这是一个提示消息这是一个提示消息这是一个提示消息这是一个提示消息这是一个提示消息" />
 
     <View
         android:id="@+id/test_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/common_debug_activity_split_bg"
-        android:visibility="gone"/>
+        android:background="@color/divider"
+        android:visibility="gone" />
 
 </RelativeLayout>

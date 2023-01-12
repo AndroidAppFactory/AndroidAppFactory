@@ -8,42 +8,69 @@
     <color name="black">#202020</color>
     <color name="white">#ffffff</color>
     <color name="text_gray">#999999</color>
+    <color name="red_dot">#FD481F</color>
+
 
     <!--    主题相关配色-->
+    <!--    生成颜色表及部分颜色定义：https://www.materialpalette.com/indigo/indigo -->
+    <!--    颜色定义参考：https://github.com/bihe0832/Android-System-Related-Charts/blob/master/application-framework/README.md#AppCompat%E7%9A%84%E4%B8%BB%E9%A2%98%E7%A4%BA%E6%84%8F%E5%9B%BE-->
+
     <!--主色调 -->
     <color name="colorPrimary">@color/primary</color>
     <!--状态栏颜色-->
     <color name="colorPrimaryDark">@color/primary_dark</color>
     <color name="colorPrimaryLight">@color/primary_light</color>
-
     <!--控制各个控件被选中时的颜色-->
     <color name="colorAccent">@color/accent</color>
     <!--各个控制控件的默认颜色 与colorAccent相反-->
-    <color name="colorControlNormal">@color/divider</color>
+    <color name="colorControlNormal">@color/com_bihe0832_select_default</color>
     <!--控制normal状态下button的颜色-->
     <color name="colorButtonNormal">@color/colorControlNormal</color>
     <!--控制所有可点击的View的涟漪效果颜色-->
-    <color name="colorControlActivated">@color/colorPrimaryDark</color>
-    <color name="colorControlHighlight">@color/colorPrimaryDark</color>
+    <color name="colorControlActivated">@color/com_bihe0832_select_state_checked</color>
+    <color name="colorControlHighlight">@color/com_bihe0832_select_state_focused</color>
     <!--文本颜色-->
-    <color name="colorPrimaryText">@color/primary_text</color>
-    <color name="colorSecondaryText">@color/secondary_text</color>
+    <color name="textColorIcons">@color/icons</color>
+    <color name="textColorPrimary">@color/primary_text</color>
+    <color name="textColorSecondary">@color/secondary_text</color>
     <!--页面背景色-->
-    <color name="colorWindowBg">@color/icons</color>
-    <color name="windowBackground">@color/colorWindowBg</color>
-    <color name="navigationBarColor">@color/colorPrimaryText</color>
+    <color name="colorWindowBg">@color/window_background</color>
+    <color name="windowBackground">@color/window_background</color>
+    <color name="navigationBarColor">@color/navigation_bar_color</color>
 
-    <color name="com_bihe0832_select_default">@color/colorPrimaryText</color>
-    <color name="com_bihe0832_select_state_checked">@color/colorAccent</color>
 
-    <!--    https://www.materialpalette.com/indigo/indigo 生成颜色表-->
+    <!--    https://www.materialpalette.com/indigo/indigo 生成颜色表并补充完善-->
+    <!--主色调，标题栏等-->
     <color name="primary">#3F51B5</color>
-    <color name="primary_dark">#303F9F</color>
+    <!--状态栏颜色-->
+    <color name="primary_dark">@color/primary</color>
     <color name="primary_light">#C5CAE9</color>
+    <!--控制各个控件被选中时的颜色-->
     <color name="accent">#536DFE</color>
+    <!--文本颜色-->
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
+    <!--图标颜色-->
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
+
+    <!--分割线颜色-->
+    <color name="divider">@color/gray_light</color>
+
+    <!--页面背景色-->
+    <color name="window_background">@color/white</color>
+    <!--虚拟按键栏背景色-->
+    <color name="navigation_bar_color">@color/black</color>
+
+    <!-- 各个控制控件的通用颜色 -->
+    <!--    有背景时的背景色-->
+    <color name="com_bihe0832_select_bg">@color/window_background</color>
+    <!--    控件的默认颜色-->
+    <color name="com_bihe0832_select_default">@color/primary_text</color>
+    <!--    控件被选中时的颜色-->
+    <color name="com_bihe0832_select_state_checked">@color/accent</color>
+    <!--    控件获得焦点时的颜色-->
+    <color name="com_bihe0832_select_state_focused">@color/com_bihe0832_select_default</color>
+    <!--    控件被操作时的颜色-->
+    <color name="com_bihe0832_select_state_pressed">@color/com_bihe0832_select_state_checked</color>
 
 </resources>

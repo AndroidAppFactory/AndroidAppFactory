@@ -42,6 +42,7 @@
         <item name="titleMargin">0dp</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="android:fitsSystemWindows">true</item>
+
     </style>
 
     <style name="AAF.AppTheme.Toolbar.Light" parent="AAF.AppTheme.Toolbar.Base">
@@ -82,8 +83,10 @@
         <!--控制所有可点击的View的涟漪效果颜色-->
         <item name="colorControlHighlight">@color/colorControlHighlight</item>
         <!--EditText 输入框中字体的颜色-->
-        <item name="editTextColor">@color/colorSecondaryText</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="editTextColor">@color/secondary_text</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+
         <!--支持刘海屏-->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>

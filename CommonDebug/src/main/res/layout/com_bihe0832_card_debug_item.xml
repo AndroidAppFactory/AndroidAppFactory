@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@color/common_debug_bg"
+    android:background="@color/windowBackground"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textColor="@color/common_debug_text"
+        android:textColor="@color/primary_text"
         android:textSize="12dp"
         tools:text="fsdfdsf" />
 
@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/common_debug_activity_split_bg"
-        android:visibility="gone"/>
+        android:background="@color/divider"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </RelativeLayout>

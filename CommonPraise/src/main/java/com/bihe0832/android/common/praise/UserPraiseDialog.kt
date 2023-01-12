@@ -1,62 +1,58 @@
 package com.bihe0832.android.common.praise
 
-import android.app.Activity
-import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.bihe0832.android.common.praise.UserPraiseManager.KEY_PRAISE_DONE
-import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.router.Routers
+import com.bihe0832.android.lib.ui.dialog.CommonDialog
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 
-class UserPraiseDialog(private val activity: Activity, private val feedbackRouter: String) : Dialog(activity, R.style.userPraiseDialogTheme) {
+class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : CommonDialog(context) {
 
-    private var mContentView: TextView? = null
-
-    private var mContent = ""
-
-    fun setContent(content: String) {
-        this.mContent = content
+    private var mHeadTitleContent = ""
+    override fun getLayoutID(): Int {
+        return R.layout.com_bihe0832_dialog_user_praise
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        super.setContentView(R.layout.com_bihe0832_dialog_user_praise)
-        initView()
-        initEvent()
-        initData()
-    }
+        setShouldCanceled(true)
+        setOnClickBottomListener(object : OnDialogListener {
+            override fun onPositiveClick() {
+                UserPraiseManager.doPraiseAction()
+                UserPraiseManager.launchAppStore(context)
+                dismiss()
+            }
 
-    private fun initView() {
-        mContentView = findViewById(R.id.tv_text)
-    }
+            override fun onNegativeClick() {
+                UserPraiseManager.doPraiseAction()
+                Routers.open(context, feedbackRouter, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                dismiss()
+            }
 
-    private fun initEvent() {
-        findViewById<View>(R.id.btn_goMarket)?.setOnClickListener {
-            praiseDone()
-            UserPraiseManager.launchAppStore(activity)
+            override fun onCancel() {
+                dismiss()
+            }
+
+        })
+        findViewById<View>(R.id.close).setOnClickListener {
             dismiss()
         }
-        findViewById<View>(R.id.btn_goFeedback)?.setOnClickListener {
-            praiseDone()
-            Routers.open(context, feedbackRouter, Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            dismiss()
-        }
-        findViewById<View>(R.id.btn_close)?.setOnClickListener {
-            this@UserPraiseDialog.dismiss()
-        }
     }
 
-    private fun initData() {
-        if (mContent.isNotEmpty()) {
-            this.mContentView?.text = mContent
+
+    fun setHeadTitleContent(content: String) {
+        mHeadTitleContent = content
+    }
+
+    override fun refreshView() {
+        super.refreshView()
+        if (mHeadTitleContent.isNotBlank()) {
+            findViewById<TextView>(R.id.head).text = mHeadTitleContent
         }
-    }
 
-    private fun praiseDone() {
-        Config.readConfig(KEY_PRAISE_DONE, 1)
     }
-
 
 }

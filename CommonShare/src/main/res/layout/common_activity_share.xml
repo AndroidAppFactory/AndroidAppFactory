@@ -4,7 +4,7 @@
     android:id="@+id/BaseRlContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/share_bg_color"
+    android:background="@color/com_bihe0832_share_bg_color"
     android:fitsSystemWindows="true">
 
     <ImageView
@@ -26,7 +26,7 @@
         android:id="@+id/BaseSharePanel"
         android:layout_width="match_parent"
         android:layout_height="132dp"
-        android:background="@color/share_panel_color"
+        android:background="@color/com_bihe0832_share_panel_color"
         android:orientation="vertical"
         android:paddingTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,8 +37,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="分享到"
-            android:textColor="@color/share_text_color"
-            android:textSize="@dimen/share_title_text_size" />
+            android:textColor="@color/com_bihe0832_share_text_color"
+            android:textSize="@dimen/com_bihe0832_share_title_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
