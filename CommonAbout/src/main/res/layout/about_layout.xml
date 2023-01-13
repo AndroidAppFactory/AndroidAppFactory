@@ -73,7 +73,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="12dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:textSize="12dp"
                 tools:text="Version:1.1.1" />
 
