@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_topic_item_list"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
 
     <ImageView
         android:id="@+id/app_icon"
@@ -25,9 +26,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
         android:text="@string/app_name"
+        android:textColor="@color/colorOnBackground"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:textColor="@color/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_icon" />
@@ -39,8 +40,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="80dp"
         android:text="@string/app_desc"
-        android:textSize="14dp"
         android:textColor="@color/textColorSecondary"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

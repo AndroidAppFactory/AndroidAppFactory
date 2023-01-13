@@ -1,11 +1,10 @@
 <resources>
-    <color name="common_activity_bg">@color/colorPrimaryDark</color>
     <string name="update_url">https://cdn.bihe0832.com/app/update/get_apk.json</string>
     <string name="version_url">https://cdn.bihe0832.com/app/help/zapk.html</string>
     <string name="com_bihe0832_web_process_name"></string>
 
     <!--    <string name="agreement_url">https://blog.bihe0832.com</string>-->
-<!--    <string name="privacy_url">https://blog.bihe0832.com</string>-->
-<!--    <string name="privacy_agreement_content">请你务必审慎阅读、充分理解「用户协议」和「隐私政策」各条款，包括但不限于：为了向你提供应用管理、内容分享等服务，我们需要收集你的设备信息、操作日志、用户网络等个人信息。你可以在「设置」中管理你的授权。&lt;BR&gt; 你可阅读&lt;font color=\'#428bca\'&gt;「隐私政策」&lt;/font&gt;和&lt;font color=\'#428bca\'&gt;「用户协议」&lt;/font&gt;了解详细信息。如你同意，请点击「同意」开始接受我们的服务</string>-->
+    <!--    <string name="privacy_url">https://blog.bihe0832.com</string>-->
+    <!--    <string name="privacy_agreement_content">请你务必审慎阅读、充分理解「用户协议」和「隐私政策」各条款，包括但不限于：为了向你提供应用管理、内容分享等服务，我们需要收集你的设备信息、操作日志、用户网络等个人信息。你可以在「设置」中管理你的授权。&lt;BR&gt; 你可阅读&lt;font color=\'#428bca\'&gt;「隐私政策」&lt;/font&gt;和&lt;font color=\'#428bca\'&gt;「用户协议」&lt;/font&gt;了解详细信息。如你同意，请点击「同意」开始接受我们的服务</string>-->
 
 </resources>

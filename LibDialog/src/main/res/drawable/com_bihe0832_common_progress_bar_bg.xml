@@ -7,8 +7,8 @@
             <gradient
                 android:angle="270"
                 android:centerY="0.75"
-                android:endColor="@color/process_back_color"
-                android:startColor="@color/process_back_color" />
+                android:endColor="@color/com_bihe0832_process_back_color"
+                android:startColor="@color/com_bihe0832_process_back_color" />
         </shape>
     </item>
     <!-- 进度 -->
@@ -19,8 +19,8 @@
                 <gradient
                     android:angle="270"
                     android:centerY="0.75"
-                    android:endColor="@color/process_color"
-                    android:startColor="@color/process_color" />
+                    android:endColor="@color/com_bihe0832_process_color"
+                    android:startColor="@color/com_bihe0832_process_color" />
             </shape>
         </clip>
     </item>

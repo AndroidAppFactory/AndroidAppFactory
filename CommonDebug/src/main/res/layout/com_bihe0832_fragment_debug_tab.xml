@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:lineHeight="30dp"
             android:padding="20dp"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/colorOnBackground"
             android:textSize="12dp"
             android:visibility="gone"
             tools:text="用于日常功能体验、所有应用共通的信息调试，谨慎添加"

@@ -16,7 +16,7 @@
         android:gravity="center"
         android:maxLines="2"
         android:text="XX模块日志"
-        android:textColor="@color/textColorPrimary"
+        android:textColor="@color/colorOnBackground"
         android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

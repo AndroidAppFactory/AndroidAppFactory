@@ -11,7 +11,6 @@
         android:background="@drawable/com_bihe0832_common_bottom_dialog_bg"
         android:orientation="vertical">
 
-
         <LinearLayout
             android:id="@+id/layout_List"
             android:layout_width="match_parent"
