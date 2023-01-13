@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/colorOnBackground"
         android:textSize="12dp"
         tools:text="fsdfdsf" />
 

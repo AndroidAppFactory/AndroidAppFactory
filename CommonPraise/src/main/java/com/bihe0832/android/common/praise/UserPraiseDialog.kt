@@ -19,6 +19,8 @@ class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setShouldCanceled(true)
+        setPositive(context.getString(R.string.com_bihe0832_praise_positive))
+        setNegative(context.getString(R.string.com_bihe0832_praise_negative))
         setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 UserPraiseManager.doPraiseAction()

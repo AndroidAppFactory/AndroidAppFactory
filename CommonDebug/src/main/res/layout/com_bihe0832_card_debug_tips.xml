@@ -16,7 +16,7 @@
         android:paddingTop="16dp"
         android:paddingRight="16dp"
         android:paddingBottom="16dp"
-        android:textColor="@color/textColorIcons"
+        android:textColor="@color/colorOnPrimary"
         android:textSize="12dp"
         android:textStyle="bold"
         tools:text="这是一个提示消息，这是一个提示消息这是一个提示消息这是一个提示消息这是一个提示消息这是一个提示消息" />

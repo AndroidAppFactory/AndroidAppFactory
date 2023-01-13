@@ -41,16 +41,16 @@
         android:paddingLeft="18dp"
         android:paddingRight="16dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_webview_progressbar">
+        app:layout_constraintTop_toBottomOf="@id/app_webview_progressbar"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/web_load_failed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="网页加载失败"
-            android:textColor="#768289"
+            android:textColor="@color/textColorSecondary"
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,15 +69,13 @@
             app:layout_constraintTop_toBottomOf="@+id/web_load_failed"
             tools:text="TextView" />
 
-
         <View
             android:id="@+id/web_split_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="25dp"
-            android:background="#E5E5E5"
+            android:background="@color/divider"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/web_error_url" />
 
@@ -88,33 +86,37 @@
             android:layout_marginTop="25dp"
             android:lineSpacingExtra="12dp"
             android:text="• 没有网络信号或数据连接\n• 此网页可能暂时出现故障\n• 输入网址不正确"
-            android:textColor="#333333"
+            android:textColor="@color/textColorSecondary"
             android:textSize="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/web_split_line" />
 
-        <TextView
+        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
             android:id="@+id/web_retry"
             android:layout_width="130dp"
             android:layout_height="40dp"
-            android:background="@drawable/button_bg_shape"
             android:gravity="center"
             android:text="点击重试"
-            android:textColor="#333333"
+            android:textColor="@color/textColorPrimary"
+            app:bgtv_cornerRadius="6dp"
+            app:bgtv_strokeColor="@color/colorButtonNormal"
+            app:bgtv_strokeWidth="1dp"
             app:layout_constraintBottom_toBottomOf="@+id/web_native_browser"
             app:layout_constraintEnd_toStartOf="@+id/web_native_browser"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/web_native_browser" />
 
-        <TextView
+        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
             android:id="@+id/web_native_browser"
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_marginTop="45dp"
-            android:background="@drawable/button_bg_shape"
             android:gravity="center"
             android:text="用系统浏览器打开"
-            android:textColor="#333333"
+            android:textColor="@color/textColorPrimary"
+            app:bgtv_cornerRadius="6dp"
+            app:bgtv_strokeColor="@color/colorButtonNormal"
+            app:bgtv_strokeWidth="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/web_retry"
             app:layout_constraintTop_toBottomOf="@+id/web_error_info" />
