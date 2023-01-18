@@ -6,6 +6,7 @@ import android.view.View
 import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.empty.DebugBottomActivity
+import com.bihe0832.android.base.debug.temp.DebugTempFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
@@ -26,21 +27,30 @@ import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 class DebugDialogFragment : DebugEnvFragment() {
+
+    private val INNER_PAUSE_TASK_ID = "AAFInnerTaskForDependenceBlockDialogManager"
+
+
     private val mDependenceBlockDialogManager by lazy {
         DependenceBlockDialogManager(false)
     }
 
     override fun initView(view: View) {
         super.initView(view)
-        mDependenceBlockDialogManager.start()
+
     }
+
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
             add(DebugItemData("根据优先级逐次弹框", View.OnClickListener { testBlock() }))
-            add(DebugItemData("根据弹框顺序弹后台添加", View.OnClickListener { testSequence1() }))
-            add(DebugItemData("根据弹框顺序弹触发启动", View.OnClickListener { testSequence2() }))
-            add(DebugItemData("根据弹框顺序弹触发启动", View.OnClickListener { mDependenceBlockDialogManager.start() }))
+            add(DebugItemData("根据弹框顺序弹不自动弹", View.OnClickListener { testSequence1() }))
+            add(DebugItemData("根据弹框顺序弹自动弹", View.OnClickListener { testSequence2() }))
+            add(DebugItemData("弹框顺序手动触发启动", View.OnClickListener {
+                mDependenceBlockDialogManager.start()
+                resume()
+            }))
+            add(DebugItemData("弹框顺序手动触发暂停", View.OnClickListener { pause() }))
 
             add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
             add(DebugItemData("底部分享Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
@@ -342,11 +352,21 @@ class DebugDialogFragment : DebugEnvFragment() {
         val taskIDList = mutableListOf<String>("Dialog0", "Dialog1", "Dialog4", "Dialog5", "Dialog6")
         taskIDList.shuffled().forEach { taskID ->
             dependList.get(taskID)?.let {
-                mDependenceBlockDialogManager.showDialog(taskID, CommonDialog(activity).apply {
+                mDependenceBlockDialogManager.showDialog(taskID, CommonDialog(ZixieContext.getCurrentActivity()).apply {
                     getAlert(this)
                     setTitle("弹框 $taskID")
+                    setOnDismissListener {
+                        startDebugActivity(DebugTempFragment::class.java, "临时测试(Temp)")
+                    }
                 }, it)
             }
+        }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser, hasCreateView)
+        if (!isVisibleToUser) {
+            pause()
         }
     }
 
@@ -361,5 +381,14 @@ class DebugDialogFragment : DebugEnvFragment() {
             }
 
         }
+        mDependenceBlockDialogManager.start()
+    }
+
+    private fun resume() {
+        mDependenceBlockDialogManager.getDependentTaskManager().finishTask(INNER_PAUSE_TASK_ID)
+    }
+
+    private fun pause() {
+        mDependenceBlockDialogManager.getDependentTaskManager().addTask(INNER_PAUSE_TASK_ID, 1000, {}, mutableListOf())
     }
 }

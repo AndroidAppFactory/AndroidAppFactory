@@ -33,13 +33,9 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
 
     private var mTaskIsWaiting = false
 
+    //任务已完成
     fun unlock() {
         mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_FINISHED)
-        unLockBlock()
-    }
-
-    fun pause() {
-        mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_WAITING)
         unLockBlock()
     }
 
