@@ -57,7 +57,8 @@ public class CommonDialog extends Dialog {
     private View extraView;
 
     private boolean isShowCheckBox = false;
-    private OnCheckedListener onCheckedListener;
+    private OnCheckedListener onCheckedListener = null;
+    private OnDismissListener onDismissListener = null;
     private int contentColor = -1;
     private boolean loadImgWithFade = true;
     /**
@@ -316,6 +317,16 @@ public class CommonDialog extends Dialog {
 
     public OnDialogListener getOnClickBottomListener() {
         return onClickBottomListener;
+    }
+
+    @Override
+    public void setOnDismissListener(OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+        super.setOnDismissListener(this.onDismissListener);
+    }
+
+    public OnDismissListener getOnDismissListener() {
+        return onDismissListener;
     }
 
     public CommonDialog setOnCheckedListener(OnCheckedListener onCheckedListener) {

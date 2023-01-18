@@ -108,7 +108,7 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
     }
 
     @Synchronized
-    fun addTask(taskID: String, action: () -> Unit, dependList: List<DependenceBlockTask.TaskDependence>) {
+    fun addTask(taskID: String, taskPriority: Int, action: () -> Unit, dependList: List<DependenceBlockTask.TaskDependence>) {
         ZLog.d(BlockTask.TAG, "Add task: $taskID - $dependList")
         var realDependList = mutableListOf<DependenceBlockTask.TaskDependence>().apply {
             add(DependenceBlockTask.TaskDependence(INNER_TASK_ID, DateUtil.MILLISECOND_OF_DAY))
@@ -128,7 +128,13 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
             addDependList(realDependList)
             updateCurrentStatus(DependenceBlockTask.TASK_STATUS_WAITING)
         }
-        mTaskManager.add(DependenceBlockTask(taskID, mCurrentTaskListAction, action))
+        mTaskManager.add(DependenceBlockTask(taskID, mCurrentTaskListAction, action).apply {
+            priority = taskPriority
+        })
     }
 
+    @Synchronized
+    fun addTask(taskID: String, action: () -> Unit, dependList: List<DependenceBlockTask.TaskDependence>) {
+        addTask(taskID, 0, action, dependList)
+    }
 }

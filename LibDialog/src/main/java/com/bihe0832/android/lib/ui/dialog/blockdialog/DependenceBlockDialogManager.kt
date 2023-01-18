@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.ui.dialog.blockdialog
 
+import android.content.DialogInterface
 import com.bihe0832.android.lib.block.task.dependence.DependenceBlockTask
 import com.bihe0832.android.lib.block.task.dependence.DependenceBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
@@ -15,24 +16,33 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
  */
 open class DependenceBlockDialogManager(autoStart: Boolean) {
 
+
+
     private val TAG = "DependenceBlockDialogManager"
     private val mDependenceBlockTaskManager = DependenceBlockTaskManager(autoStart)
+    private var startNextAfterFinished = 200L
 
     class DependenceDialog(dialogID: String, maxWaitingSecond: Int) : DependenceBlockTask.TaskDependence(dialogID, maxWaitingSecond * 1000L)
 
     fun showDialog(taskID: String, dialog: CommonDialog, dependList: List<DependenceDialog>) {
         ZLog.d(TAG, "Add dialog : $taskID - $dependList")
-
         mDependenceBlockTaskManager.addTask(taskID, {
             ThreadManager.getInstance().runOnUIThread {
-                dialog.setOnDismissListener {
-                    mDependenceBlockTaskManager.finishTask(taskID)
+                val originDismissListener: DialogInterface.OnDismissListener? = dialog.onDismissListener
+                dialog.setOnDismissListener { disMissDialog ->
+                    originDismissListener?.onDismiss(disMissDialog)
+                    ThreadManager.getInstance().start({
+                        mDependenceBlockTaskManager.finishTask(taskID)
+                    }, startNextAfterFinished)
                     ZLog.d(TAG, "dialog $taskID dismiss and Finish task")
                 }
                 dialog.show()
             }
-
         }, dependList)
+    }
+
+    fun setWaitTimeForStartNextAfterFinished(time: Long) {
+        startNextAfterFinished = time
     }
 
     fun getDependentTaskManager(): DependenceBlockTaskManager {
@@ -42,5 +52,4 @@ open class DependenceBlockDialogManager(autoStart: Boolean) {
     fun start() {
         mDependenceBlockTaskManager.start()
     }
-
 }
