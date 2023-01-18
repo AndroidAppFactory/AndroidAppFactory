@@ -2,11 +2,12 @@ package com.bihe0832.android.base.debug.download
 
 import android.provider.Settings
 import android.view.View
-import com.bihe0832.android.app.file.AAFFileUtils
+import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
@@ -244,7 +245,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     private fun testDownloadGzip() {
         DownloadFile.forceDownload(requireContext(),
             "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
-            AAFFileUtils.getFileCacheFolder() + System.currentTimeMillis() + "_20220321114751.json.gzip",
+            AAFFileWrapper.getFileCacheFolder() + System.currentTimeMillis() + "_20220321114751.json.gzip",
             object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     ZLog.d(LOG_TAG, "onFail:" + msg)

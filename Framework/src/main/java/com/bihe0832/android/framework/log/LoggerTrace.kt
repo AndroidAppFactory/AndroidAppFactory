@@ -1,6 +1,8 @@
 package com.bihe0832.android.framework.log
 
+import android.app.Activity
 import android.text.TextUtils
+import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.lib.log.ZLog
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -100,11 +102,11 @@ object LoggerTrace {
         LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME), msg)
     }
 
-    fun openLog() {
-        LoggerFile.openLog(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME))
+    fun openLog(activity: Activity) {
+        AAFFileTools.openFileWithTips(activity, LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME))
     }
 
     fun sendLog() {
-        LoggerFile.sendLog(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME))
+        AAFFileTools.sendFile(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME))
     }
 }

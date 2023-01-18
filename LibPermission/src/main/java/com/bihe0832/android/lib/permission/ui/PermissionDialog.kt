@@ -12,6 +12,9 @@ import com.bihe0832.android.lib.ui.dialog.OnDialogListener
  */
 open class PermissionDialog : CommonDialog {
 
+    var useDefault: Boolean = true
+    var needSpecial: Boolean = true
+
     override fun getLayoutID(): Int {
         return super.getLayoutID()
     }
@@ -30,30 +33,12 @@ open class PermissionDialog : CommonDialog {
         positive = PermissionManager.getPositiveText(context)
     }
 
-    open fun show(
-        sceneID: String,
-        tempPermissionGroupList: List<String>,
-        canCancel: Boolean,
-        listener: OnDialogListener
-    ) {
-        showWithContent(
-            PermissionManager.getPermissionContent(
-                context,
-                sceneID,
-                tempPermissionGroupList,
-                true
-            ), canCancel, listener
-        )
+    open fun show(sceneID: String, tempPermissionGroupList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
+        showWithContent(PermissionManager.getPermissionContent(context, sceneID, tempPermissionGroupList, useDefault, needSpecial), canCancel, listener)
     }
 
-    open fun show(
-        scene: String,
-        showPermissionGroupID: String,
-        canCancel: Boolean,
-        listener: OnDialogListener?
-    ) {
-        var content =
-            PermissionManager.getPermissionContent(context, scene, showPermissionGroupID, true)
+    open fun show(scene: String, showPermissionGroupID: String, canCancel: Boolean, listener: OnDialogListener?) {
+        var content = PermissionManager.getPermissionContent(context, scene, showPermissionGroupID, useDefault, needSpecial)
         showWithContent(content, canCancel, listener)
     }
 

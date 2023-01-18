@@ -6,10 +6,11 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.bihe0832.android.common.debug.R;
-import com.bihe0832.android.framework.log.LoggerFile;
+import com.bihe0832.android.framework.file.AAFFileTools;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
+import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 
 /**
  * @author zixie code@bihe0832.com
@@ -46,7 +47,7 @@ public class SectionHolderContent extends CardBaseHolder {
                     data.mActionListener.onClick(v, SectionDataContent.TYPE_OPEN);
                 } else {
                     try {
-                        LoggerFile.INSTANCE.openLog(data.mLogFileName);
+                        AAFFileTools.INSTANCE.openFileWithTips(ViewExtKt.getActivity(v), data.mLogFileName);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -62,7 +63,7 @@ public class SectionHolderContent extends CardBaseHolder {
                     data.mActionListener.onClick(v, SectionDataContent.TYPE_SEND);
                 } else {
                     try {
-                        LoggerFile.INSTANCE.sendLog(data.mLogFileName);
+                        AAFFileTools.INSTANCE.sendFile(data.mLogFileName);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.immersion.AppCompatActivityImmersiveExtKt;
@@ -36,7 +37,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 
 import me.yokeyword.fragmentation.SupportActivity;
 
@@ -50,6 +50,7 @@ public class FileActivity extends SupportActivity {
     File mFile = null;
     File[] mFileArr = null;
     String mSelectedPath = null;
+    private boolean needSDcard = false;
     FileSearchTask mFSTask = null;
     Handler mHandler;
 
@@ -58,17 +59,12 @@ public class FileActivity extends SupportActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_bihe0832_activity_file);
 
-        AppCompatActivityImmersiveExtKt
-                .enableActivityImmersive(
-                        this,
-                        ContextCompat.getColor(this, R.color.colorPrimaryDark),
-                        ContextCompat.getColor(this, R.color.navigationBarColor)
-                );
-
-        init();
+        AppCompatActivityImmersiveExtKt.enableActivityImmersive(this, ContextCompat.getColor(this, R.color.colorPrimaryDark), ContextCompat.getColor(this, R.color.navigationBarColor));
+        initPermission();
         initHandler();
         initView();
         initViewAction();
+
 
         String path = getIntent().getStringExtra(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL);
         if (!TextUtils.isEmpty(path)) {
@@ -79,47 +75,37 @@ public class FileActivity extends SupportActivity {
     }
 
 
-    private void init() {
-        PermissionManager.INSTANCE.addPermissionGroupDesc(new HashMap<String, String>() {
-            {
-                put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡");
-            }
-        });
+    private void initPermission() {
+        needSDcard = getIntent().getBooleanExtra(FileSelectTools.INTENT_EXTRA_KEY_NEED_SDCARD_PERMISSION, false);
+        if (needSDcard) {
+            PermissionManager.INSTANCE.addPermissionGroupDesc("FileSelect", Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡");
+            PermissionManager.INSTANCE.addPermissionGroupContent("FileSelect", Manifest.permission.WRITE_EXTERNAL_STORAGE, "如果你需要选择非应用目录的文件，需要授权当前应用访问存储卡的权限");
 
-        PermissionManager.INSTANCE.addPermissionGroupScene(new HashMap<String, String>() {
-            {
-                put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "选择文件");
-            }
-        });
-        ArrayList permission = new ArrayList();
-        permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        PermissionManager.INSTANCE.checkPermission(this, "FileSelect", false, new OnPermissionResult() {
-            @Override
-            public void onSuccess() {
+            ArrayList permission = new ArrayList();
+            permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            PermissionManager.INSTANCE.checkPermission(this, "FileSelect", false, new OnPermissionResult() {
+                @Override
+                public void onSuccess() {
 //                ToastUtil.showShort(FileActivity.this, "用户授权成功");
-            }
+                }
 
-            @Override
-            public void onUserCancel(String scene, String permissionGroupID, String permission) {
-                ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
-                setResult(RESULT_CANCELED);
-                finish();
-            }
+                @Override
+                public void onUserCancel(String scene, String permissionGroupID, String permission) {
+                    ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
+                }
 
-            @Override
-            public void onUserDeny(String scene, String permissionGroupID, String permission) {
-                ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
-                setResult(RESULT_CANCELED);
-                finish();
-            }
+                @Override
+                public void onUserDeny(String scene, String permissionGroupID, String permission) {
+                    ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
+                }
 
-            @Override
-            public void onFailed(@NotNull String msg) {
-                ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        }, permission);
+                @Override
+                public void onFailed(@NotNull String msg) {
+                    ToastUtil.showShort(FileActivity.this, "未获得访问存储卡权限，请重试");
+                }
+            }, permission);
+        }
+
     }
 
     @Override
@@ -180,8 +166,7 @@ public class FileActivity extends SupportActivity {
                     File mTempFile = mFileArr[position];
                     if (mTempFile.isDirectory()) {
                         stopSearch();
-                        if (mTempFile.list() == null || mTempFile.listFiles() == null
-                                || mTempFile.listFiles().length < 1) {
+                        if (mTempFile.list() == null || mTempFile.listFiles() == null || mTempFile.listFiles().length < 1) {
                             ToastUtil.showShort(FileActivity.this, "当前为空目录");
                         } else {
                             mFSTask = new FileSearchTask();
@@ -311,8 +296,7 @@ public class FileActivity extends SupportActivity {
             FileViewHolder mHolder;
             if (convertView == null) {
                 mHolder = new FileViewHolder();
-                convertView = LayoutInflater.from(FileActivity.this)
-                        .inflate(R.layout.com_bihe0832_card_item_file, null);
+                convertView = LayoutInflater.from(FileActivity.this).inflate(R.layout.com_bihe0832_card_item_file, null);
                 mHolder.iv_icon = (ImageView) convertView.findViewById(R.id.item_file_iv_icon);
                 mHolder.tv_fileName = (TextView) convertView.findViewById(R.id.item_file_tv_filename);
                 mHolder.cb_selected = (CheckBox) convertView.findViewById(R.id.item_file_cb_selected);

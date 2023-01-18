@@ -1,17 +1,11 @@
 package com.bihe0832.android.framework.log
 
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.os.HandlerThread
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.BufferedWriter
 import java.io.File
@@ -129,73 +123,4 @@ object LoggerFile {
             e.printStackTrace()
         }
     }
-
-    fun justOpen(filePath: String) {
-        try {
-            val map = HashMap<String, String>()
-            map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = URLUtils.encode(filePath)
-            RouterAction.openFinalURL(
-                    RouterAction.getFinalURL(RouterConstants.MODULE_NAME_EDITOR, map),
-                    Intent.FLAG_ACTIVITY_NEW_TASK
-            )
-        } catch (e: java.lang.Exception) {
-            //当系统没有携带文件打开软件，提示
-            ZLog.e(TAG, "openLog ERROR !!!!$e")
-            e.printStackTrace()
-        }
-    }
-
-    fun openLog(filePath: String) {
-        try {
-            if (FileUtils.checkFileExist(filePath) && File(filePath).length() > DEFAULT_LOG_FILE_SIZE) {
-                DialogUtils.showConfirmDialog(
-                        ZixieContext.getCurrentActivity()!!,
-                        "超大日志查看",
-                        "日志 「<font color ='#3AC8EF'><b>${FileUtils.getFileName(filePath)} (${FileUtils.getFileLength(File(filePath).length())})」</b></font> 文件较大，手机打开耗时较久或者打开失败，建议发送到电脑查看。本地路径: <BR> $filePath ",
-                        "发送日志",
-                        "继续查看",
-                        object : OnDialogListener {
-                            override fun onPositiveClick() {
-                                sendLog(filePath)
-                            }
-
-                            override fun onNegativeClick() {
-                                justOpen(filePath)
-                            }
-
-                            override fun onCancel() {
-                            }
-
-                        }
-                )
-            } else {
-                justOpen(filePath)
-            }
-
-        } catch (e: java.lang.Exception) {
-            //当系统没有携带文件打开软件，提示
-            ZLog.e(TAG, "openLog ERROR !!!!$e")
-            e.printStackTrace()
-        }
-    }
-
-    fun sendLog(filePath: String) {
-        try { //设置intent的data和Type属性
-            mContext?.let { context ->
-                try { //设置intent的data和Type属性
-                    FileUtils.sendFile(context, filePath)
-                } catch (e: java.lang.Exception) {
-                    //当系统没有携带文件打开软件，提示
-                    //当系统没有携带文件打开软件，提示
-                    ZLog.e(TAG, "sendLog ERROR !!!!$e")
-                    e.printStackTrace()
-                }
-            }
-        } catch (e: java.lang.Exception) {
-            //当系统没有携带文件打开软件，提示
-            ZLog.e(TAG, "sendLog ERROR !!!!$e")
-            e.printStackTrace()
-        }
-    }
-
 }

@@ -11,7 +11,7 @@ package com.bihe0832.android.base.debug.file
 
 import android.util.Base64
 import android.view.View
-import com.bihe0832.android.app.file.AAFFileUtils
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
@@ -104,11 +104,11 @@ class DebugFileFragment : DebugEnvFragment() {
         }
 
         val logPath = AAFLoggerFile.getLogPathByModuleName(AAFLoggerFile.MODULE_UPDATE)
-        FileUtils.copyFile(File(logPath), File(AAFFileUtils.getFileTempFolder() + FileUtils.getFileName(logPath))).let {
+        FileUtils.copyFile(File(logPath), File(AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(logPath))).let {
             ZLog.d(LOG_TAG, "===============$it==================")
         }
 
-        FileUtils.copyDirectory(File(logPath).parentFile, File(AAFFileUtils.getFileTempFolder())).let {
+        FileUtils.copyDirectory(File(logPath).parentFile, File(AAFFileWrapper.getFileTempFolder())).let {
             ZLog.d(LOG_TAG, "===============$it==================")
         }
     }
