@@ -1,5 +1,8 @@
 package com.bihe0832.android.app.log
 
+import android.app.Activity
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.log.LoggerFile
 
 
@@ -23,15 +26,14 @@ object AAFLoggerFile {
     }
 
     fun openLog(module: String) {
-        LoggerFile.openLog(LoggerFile.getZixieFileLogPathByModule(module))
+        AAFFileTools.openFileWithTips(ZixieContext.getCurrentActivity()!!, LoggerFile.getZixieFileLogPathByModule(module))
     }
 
     fun sendLog(module: String) {
-        LoggerFile.sendLog(LoggerFile.getZixieFileLogPathByModule(module))
+        AAFFileTools.sendFile(LoggerFile.getZixieFileLogPathByModule(module))
     }
 
-
-    fun getLogPathByModuleName(module: String): String{
+    fun getLogPathByModuleName(module: String): String {
         return LoggerFile.getZixieFileLogPathByModule(module)
     }
 }

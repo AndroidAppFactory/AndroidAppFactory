@@ -11,6 +11,7 @@ import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.common.webview.log.WebviewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -101,7 +102,7 @@ open class DebugLogActivity : CommonListActivity() {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
                 if (isView) {
-                    LoggerFile.openLog(filePath)
+                    AAFFileTools.openFileWithTips(this, filePath)
                 } else {
                     FileUtils.sendFile(this@DebugLogActivity, filePath, "*/*").let {
                         if (!it) {

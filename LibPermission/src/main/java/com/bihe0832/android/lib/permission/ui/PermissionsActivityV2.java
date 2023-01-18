@@ -17,6 +17,13 @@ import java.util.List;
 
 public class PermissionsActivityV2 extends PermissionsActivity {
 
+    public Boolean getUseDefault() {
+        return true;
+    }
+
+    public Boolean getNeedSpecial() {
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +40,31 @@ public class PermissionsActivityV2 extends PermissionsActivity {
             tempPermissionList.add(permission);
         }
 
-        String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, false);
-        String permissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, false);
+        String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, false, getNeedSpecial());
+        String permissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, false, getNeedSpecial());
+        String permissionContent = PermissionManager.INSTANCE.getPermissionContent(this, scene, tempPermissionList, false, getNeedSpecial());
 
-        if (!TextUtils.isEmpty(permissionDesc) && !TextUtils.isEmpty(permissionScene)) {
+        if (!TextUtils.isEmpty(permissionDesc)) {
             ((TextView) findViewById(R.id.permission_title)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionDesc + "权限使用说明"));
-            ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionScene));
+            if (!TextUtils.isEmpty(permissionScene)) {
+                ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionScene));
+            } else if (!TextUtils.isEmpty(permissionContent)) {
+                ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionContent));
+            } else {
+                if (getUseDefault()) {
+                    String defaultPermissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, true, getNeedSpecial());
+                    String defaultPermissionContent = PermissionManager.INSTANCE.getPermissionContent(this, scene, tempPermissionList, true, getNeedSpecial());
+                    if (!TextUtils.isEmpty(defaultPermissionScene)) {
+                        ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(defaultPermissionScene));
+                    } else if (!TextUtils.isEmpty(defaultPermissionContent)) {
+                        ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(defaultPermissionContent));
+                    } else {
+                        hideTips();
+                    }
+                } else {
+                    hideTips();
+                }
+            }
         } else {
             hideTips();
         }
@@ -55,7 +81,10 @@ public class PermissionsActivityV2 extends PermissionsActivity {
     @Override
     protected PermissionDialog getDialog(List<String> tempPermissionGroupList) {
         if (isAutoDeny()) {
-            return super.getDialog(tempPermissionGroupList);
+            PermissionDialog dialog = super.getDialog(tempPermissionGroupList);
+            dialog.setUseDefault(getUseDefault());
+            dialog.setNeedSpecial(getNeedSpecial());
+            return dialog;
         } else {
             return null;
         }

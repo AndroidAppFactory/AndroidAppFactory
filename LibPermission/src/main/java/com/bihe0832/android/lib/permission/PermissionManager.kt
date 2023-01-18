@@ -256,11 +256,13 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionScene(scene: String, permissionGroupID: String, needSpecial: Boolean): String {
+    fun getPermissionScene(scene: String, permissionGroupID: String, useDefault: Boolean, needSpecial: Boolean): String {
         return if (mPermissionScene.containsKey(getPermissionKey(scene, permissionGroupID))) {
             return getPermissionScene(getPermissionKey(scene, permissionGroupID), needSpecial)
-        } else {
+        } else if (useDefault) {
             getPermissionScene(permissionGroupID, needSpecial)
+        } else {
+            return ""
         }
     }
 
@@ -280,11 +282,13 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionDesc(scene: String, permissionGroupID: String, needSpecial: Boolean): String {
+    fun getPermissionDesc(scene: String, permissionGroupID: String, useDefault: Boolean, needSpecial: Boolean): String {
         return if (mPermissionDesc.containsKey(getPermissionKey(scene, permissionGroupID))) {
             return getPermissionDesc(getPermissionKey(scene, permissionGroupID), needSpecial)
-        } else {
+        } else if (useDefault) {
             getPermissionDesc(permissionGroupID, needSpecial)
+        } else {
+            ""
         }
     }
 
@@ -304,11 +308,13 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionContent(context: Context, scene: String, permissionGroupID: String, needSpecial: Boolean): String {
+    fun getPermissionContent(context: Context, scene: String, permissionGroupID: String, useDefault: Boolean, needSpecial: Boolean): String {
         return if (mPermissionContent.containsKey(getPermissionKey(scene, permissionGroupID))) {
             return getPermissionContent(context, getPermissionKey(scene, permissionGroupID), needSpecial)
-        } else {
+        } else if (useDefault) {
             getPermissionContent(context, permissionGroupID, needSpecial)
+        } else {
+            ""
         }
     }
 
@@ -321,27 +327,27 @@ object PermissionManager {
         return getDefaultPermissionContent(context, permissionGroupID, needSpecial)
     }
 
-    fun getPermissionScene(sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
+    fun getPermissionScene(sceneID: String, tempPermissionList: List<String>, useDefault: Boolean, needSpecial: Boolean): String {
         tempPermissionList.map {
-            getPermissionScene(sceneID, it, needSpecial)
+            getPermissionScene(sceneID, it, useDefault, needSpecial)
         }.filter { it.isNotBlank() }.let {
             return it.joinToString("、", "", "")
         }
     }
 
-    fun getPermissionDesc(sceneID: String, tempPermissionList: List<String>, needSpecial: Boolean): String {
+    fun getPermissionDesc(sceneID: String, tempPermissionList: List<String>, useDefault: Boolean, needSpecial: Boolean): String {
         tempPermissionList.map {
-            getPermissionDesc(sceneID, it, needSpecial)
+            getPermissionDesc(sceneID, it, useDefault, needSpecial)
         }.filter { it.isNotBlank() }.let {
             return it.joinToString("、", "", "")
         }
     }
 
-    fun getPermissionContent(context: Context, sceneID: String, tempPermissionGroupList: List<String>, needSpecial: Boolean): String {
+    fun getPermissionContent(context: Context, sceneID: String, tempPermissionGroupList: List<String>, useDefault: Boolean, needSpecial: Boolean): String {
         return if (tempPermissionGroupList.size > 1) {
-            getDefaultPermissionContent(context, getPermissionScene(sceneID, tempPermissionGroupList, needSpecial), getPermissionDesc(sceneID, tempPermissionGroupList, needSpecial))
+            getDefaultPermissionContent(context, getPermissionScene(sceneID, tempPermissionGroupList, useDefault, needSpecial), getPermissionDesc(sceneID, tempPermissionGroupList, useDefault, needSpecial))
         } else if (tempPermissionGroupList.size > 0) {
-            getPermissionContent(context, sceneID, tempPermissionGroupList.get(0), needSpecial)
+            getPermissionContent(context, sceneID, tempPermissionGroupList.get(0), useDefault, needSpecial)
         } else {
             ""
         }
