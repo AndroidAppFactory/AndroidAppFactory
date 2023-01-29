@@ -46,13 +46,14 @@ open class AboutFragment : CommonListFragment() {
         var position: Int = -1
         val title = context?.resources?.getString(R.string.settings_update_title)
         for (i in mAdapter.data.indices) {
-            if (title == (mAdapter.data[i] as? SettingsData)?.mItemText) {
+            if (mAdapter.data[i] is SettingsData && title == (mAdapter.data[i] as? SettingsData)?.mItemText) {
                 position = i
                 break
             }
         }
-        mRecyclerView?.findViewHolderForAdapterPosition(position)?.let { viewHolder ->
-            (mAdapter.data[position] as SettingsData).apply {
+
+        if (position >= 0) {
+            (mAdapter.data[position] as? SettingsData)?.apply {
                 if (null != cloud && cloud.updateType > UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP) {
                     mTipsText = context?.resources?.getString(R.string.settings_update_tips)
                             ?: ""
@@ -61,8 +62,10 @@ open class AboutFragment : CommonListFragment() {
                     mTipsText = ""
                     mItemIsNew = false
                 }
-            }.let { newData ->
-                (viewHolder as CardBaseHolder).initData(newData)
+            }?.let { newData ->
+                mRecyclerView?.findViewHolderForAdapterPosition(position).let { viewHolder ->
+                    (viewHolder as? CardBaseHolder)?.initData(newData)
+                }
             }
         }
     }

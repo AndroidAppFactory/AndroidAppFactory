@@ -15,8 +15,6 @@ open class AboutFragment : com.bihe0832.android.common.about.AboutFragment() {
                 }
             }))
             addAll(super.getDataList())
-
-
         }
     }
 }
