@@ -40,7 +40,7 @@ object SettingsItem {
 
 
     fun getUpdate(activity: Activity?, listener: View.OnClickListener): SettingsData {
-        return SettingsData("版本更新").apply {
+        return SettingsData(activity?.resources?.getString(R.string.settings_update_title)).apply {
             mItemIconRes = R.mipmap.icon_update
             mHeaderTextBold = true
             mShowDriver = true
