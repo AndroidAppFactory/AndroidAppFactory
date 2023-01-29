@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application,CommonAbout"
+ext.developModule = "Application"
 
 
 /**
@@ -35,7 +35,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.10.31"
+ext.moduleVersionName = "5.10.32"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -79,7 +79,7 @@ ext.moduleInfo = [
 		]
 	],
 	"CommonWrapper"             : [
-		"version"            : "5.10.31",
+		"version"            : "5.10.32",
 		"artifactId"         : "common-wrapper",
 		"apidependenciesList": [
 			"CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -95,7 +95,7 @@ ext.moduleInfo = [
 		]
 	],
 	"CommonNavigationDrawer"    : [
-		"version"            : "5.10.31",
+		"version"            : "5.10.32",
 		"artifactId"         : "common-navigation-drawer",
 		"apidependenciesList": [
 			"CommonList", "CommonAbout"
@@ -126,7 +126,7 @@ ext.moduleInfo = [
 	],
 
 	"CommonAbout"               : [
-		"version"            : "5.10.31",
+		"version"            : "5.10.32",
 		"artifactId"         : "common-about",
 		"apidependenciesList": [
 			"Framework", "CommonList"
