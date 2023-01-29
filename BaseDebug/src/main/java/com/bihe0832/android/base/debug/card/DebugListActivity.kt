@@ -10,6 +10,7 @@ import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
@@ -64,6 +65,13 @@ class TestListActivity : CommonListActivity() {
                     }
                     super.onActive(recyclerView, newposition)
                     ZixieContext.showDebug("Test onActive:" + newposition)
+                    it.findViewHolderForAdapterPosition(newposition)?.let {viewHolder ->
+                        (mAdapter.data[newposition] as CardBaseModule).apply{
+
+                        }.let{newData->
+                            (viewHolder as CardBaseHolder).initData(newData)
+                        }
+                    }
                     if (num > 4) {
                         mRefresh?.isEnabled = true
                     }

@@ -10,13 +10,11 @@ import com.bihe0832.android.common.settings.SettingsItem
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
+import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
-/**
- * 如果有更新，第一个Item一定要是更新，否则会导致UI显示异常
- */
-open class AboutFragment : CommonListFragment() {
 
+open class AboutFragment : CommonListFragment() {
 
     open fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
@@ -45,20 +43,29 @@ open class AboutFragment : CommonListFragment() {
     }
 
     open fun updateRedPoint(cloud: UpdateDataFromCloud?) {
-        if (mDataList.size > 0) {
-            (mDataList[0] as SettingsData).apply {
+        var position: Int = -1
+        val title = context?.resources?.getString(R.string.settings_update_title)
+        for (i in mAdapter.data.indices) {
+            if (title == (mAdapter.data[i] as? SettingsData)?.mItemText) {
+                position = i
+                break
+            }
+        }
+        mRecyclerView?.findViewHolderForAdapterPosition(position)?.let { viewHolder ->
+            (mAdapter.data[position] as SettingsData).apply {
                 if (null != cloud && cloud.updateType > UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP) {
-                    mTipsText = "发现新版本"
+                    mTipsText = context?.resources?.getString(R.string.settings_update_tips)
+                            ?: ""
                     mItemIsNew = true
                 } else {
                     mTipsText = ""
                     mItemIsNew = false
                 }
+            }.let { newData ->
+                (viewHolder as CardBaseHolder).initData(newData)
             }
-            getAdapter().notifyDataSetChanged()
         }
     }
-
 
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
