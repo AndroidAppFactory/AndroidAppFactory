@@ -6,9 +6,9 @@ function checkResult() {
   result=$?
   echo "result : $result"
   if [ $result -eq 0 ]; then
-    echo "checkResult: execCommand succ"
+    echo "checkResult: execCommand succ,libName:$1 "
   else
-    echo "checkResult: execCommand failed"
+    echo "checkResult: execCommand failed,libName:$1 "
     exit $result
   fi
 }
@@ -87,21 +87,21 @@ if [[ $libName == Router* ]]; then
 else
   ./gradlew clean assembleRelease publish
 fi
-checkResult
+checkResult $libName
 #./gradlew clean
 
 src=" *ext.mainProject *= *\\\""
 dst="ext.mainProject = \\\"APPTest\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
-checkResult
+checkResult $libName
 
 src=" *ext.developModule *= *\\\""
 dst="ext.developModule = \\\"Application\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
-checkResult
+checkResult $libName
 
 git add $localPath/dependencies.gradle
 git commit $localPath/dependencies.gradle -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
-checkResult
+checkResult $libName
