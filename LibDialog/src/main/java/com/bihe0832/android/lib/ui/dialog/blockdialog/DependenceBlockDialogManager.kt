@@ -9,7 +9,7 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/10/24.
  * Description: 阻塞式弹框，只有他依赖的弹框都正常弹出，他才弹出
  *

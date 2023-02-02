@@ -9,7 +9,7 @@ import com.bihe0832.android.lib.utils.time.DateUtil
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/10/24.
  * Description: 具有依赖性质的任务管理器
  *

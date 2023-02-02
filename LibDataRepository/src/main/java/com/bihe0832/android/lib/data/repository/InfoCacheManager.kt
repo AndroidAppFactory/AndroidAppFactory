@@ -1,12 +1,10 @@
 package com.bihe0832.android.lib.data.repository
 
-import com.bihe0832.android.common.coroutines.Coroutines_ERROR_DATA_NULL
-import com.bihe0832.android.common.coroutines.ZixieCoroutinesData
+import com.bihe0832.android.common.coroutines.AAFCoroutinesData
+import com.bihe0832.android.common.coroutines.AAFDataCallbackToAAFCoroutinesData
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.log.ZLog
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
@@ -44,20 +42,6 @@ abstract class InfoCacheManager<T> {
             // 数据内容
             var dataItem: T? = null)
 
-    inner class ContinuationCallbackForFetchDataListener<T>(private var continuation: Continuation<ZixieCoroutinesData<T>>) : AAFDataCallback<T>() {
-
-        override fun onSuccess(result: T?) {
-            if (result != null) {
-                continuation.resume(ZixieCoroutinesData(result))
-            } else {
-                continuation.resume(ZixieCoroutinesData(-1, Coroutines_ERROR_DATA_NULL, ""))
-            }
-        }
-
-        override fun onError(code: Int, msg: String) {
-            continuation.resume(ZixieCoroutinesData(code, code, msg))
-        }
-    }
 
     private fun getRealBestLength(): Int {
         getBestLength().let {
@@ -114,13 +98,13 @@ abstract class InfoCacheManager<T> {
     }
 
 
-    open suspend fun getNewData(key: String): ZixieCoroutinesData<T> = getData(key, -1)
+    open suspend fun getNewData(key: String): AAFCoroutinesData<T> = getData(key, -1)
 
-    open suspend fun getData(key: String, duration: Long): ZixieCoroutinesData<T> = suspendCoroutine { cont ->
-        getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
+    open suspend fun getData(key: String, duration: Long): AAFCoroutinesData<T> = suspendCoroutine { cont ->
+        getData(key, duration, AAFDataCallbackToAAFCoroutinesData(cont))
     }
 
-    open suspend fun getCachedData(key: String): ZixieCoroutinesData<T> {
+    open suspend fun getCachedData(key: String): AAFCoroutinesData<T> {
         return getData(key, getDefaultDuration(key))
     }
 

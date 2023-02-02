@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibCoroutines"
 
 
 /**
@@ -35,7 +35,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.10.34"
+ext.moduleVersionName = "5.10.35"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -667,7 +667,8 @@ ext.moduleInfo = [
 		"artifactId"         : "lib-coroutines",
 		"apidependenciesList": [
 			project.kotlinx_coroutines.core,
-			project.kotlinx_coroutines.android
+			project.kotlinx_coroutines.android,
+			"LibAAF"
 		]
 	],
 	"LibAudioPlayer"            : [

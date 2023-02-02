@@ -1,15 +1,15 @@
 package com.bihe0832.android.base.debug.cache
 
-import com.bihe0832.android.common.coroutines.ZixieCoroutinesData
+import com.bihe0832.android.common.coroutines.AAFCoroutinesData
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/9/8.
  * Description: Description
  *
  */
-class DebugCoroutinesData<T> : ZixieCoroutinesData<T> {
+class DebugCoroutinesData<T> : AAFCoroutinesData<T> {
 
     constructor(successData: T) : super(successData)
 
@@ -17,26 +17,18 @@ class DebugCoroutinesData<T> : ZixieCoroutinesData<T> {
 
     constructor(errorCode: Int, exception: Exception?) : super(errorCode, exception)
 
-    constructor(flag: Int, errorCode: Int, exception: Exception?) : super(
-        flag,
-        errorCode,
-        exception
-    )
+    constructor(flag: Int, errorCode: Int, exception: Exception?) : super(flag, errorCode, exception)
 
-    constructor(flag: Int, errorCode: Int, exception: String?) : super(
-        flag,
-        errorCode,
-        exception
-    )
+    constructor(flag: Int, errorCode: Int, exception: String?) : super(flag, errorCode, exception)
 
     override fun onSuccess(action: (success: T) -> Unit): DebugCoroutinesData<T> {
         data()?.let { action(it) }
         return this
     }
 
-    fun onZixieError(action: (errCode: Int, exception: Exception?) -> Unit): DebugCoroutinesData<T> {
+    fun onAAFError(action: (errCode: Int, exception: Exception?) -> Unit): DebugCoroutinesData<T> {
         error()?.let {
-            if (it.flag == 1){
+            if (it.flag == 1) {
                 action(it.flag, it.exception)
             }
 
@@ -44,9 +36,9 @@ class DebugCoroutinesData<T> : ZixieCoroutinesData<T> {
         return this
     }
 
-    fun onZixieLoginError(action: (errCode: Int, exception: Exception?) -> Unit): DebugCoroutinesData<T> {
+    fun onAAFLoginError(action: (errCode: Int, exception: Exception?) -> Unit): DebugCoroutinesData<T> {
         error()?.let {
-            if (it.flag == 2){
+            if (it.flag == 2) {
                 action(it.flag, it.exception)
             }
         }
