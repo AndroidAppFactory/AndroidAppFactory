@@ -18,6 +18,8 @@ class DebugTabFragment : BaseDebugListFragment() {
             add(getDebugFragmentItemData("首页SimpleTAB", DebugSimpleBottomTabFragment::class.java))
             add(getDebugFragmentItemData("首页SVGA TAB", SvgaBottomTabFragment::class.java))
             add(getDebugFragmentItemData("首页自定义SVGA TAB", DebugSvgaBottomTabFragment::class.java))
+            add(getDebugFragmentItemData("常见多TAB页面", DebugSlidingFragment::class.java))
+
 
         }
     }
