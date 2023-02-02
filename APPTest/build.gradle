@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 //apply plugin: com.bihe0832.android.plugin.TransformTestPlugin
 // 不同类型的包，仅仅修改下面两项即可，其余内容保持一致
 project.ext.applicationID = "com.bihe0832.android.test"
-project.ext.applicationName="子勰Lib"
-project.ext.applicationPrefix="Zixie"
+project.ext.applicationName = "子勰Lib"
+project.ext.applicationPrefix = "Zixie"
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -24,9 +24,18 @@ android {
     }
 
     packagingOptions {
-        project.doNotStripList.each { item ->
-            doNotStrip item
+        project.ndk_abiFilters_project.split(",").each { abiItem ->
+            def finalDoNotStripFileName = "*/" + abiItem + "/*.so"
+            doNotStrip finalDoNotStripFileName
         }
+
+        project.ndk_abiFilters_all.split(",").each { abiItem ->
+            project.pickFirstList.each { item ->
+                def finalPickFirstFileName = "lib/" + abiItem + "/" + item
+                pickFirst finalPickFirstFileName
+            }
+        }
+
         project.excludeList.each { item ->
             exclude item
         }
@@ -34,10 +43,6 @@ android {
 
     lintOptions {
         abortOnError false
-    }
-
-    dataBinding {
-        enabled = true
     }
 
     signingConfigs {
@@ -75,12 +80,13 @@ android {
             shrinkResources false
         }
     }
+
     android.applicationVariants.all { variant ->
         def finalFileName = applicationPrefix + "_V${defaultConfig.versionName}_${defaultConfig.versionCode}"
         variant.outputs.all {
             if (variant.buildType.name == 'debug') {
                 outputFileName = finalFileName + "_debug.apk"
-            }else{
+            } else {
                 outputFileName = finalFileName + "_release.apk"
             }
         }
