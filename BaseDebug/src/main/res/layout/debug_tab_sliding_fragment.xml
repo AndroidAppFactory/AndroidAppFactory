@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/toolbar_padding_top">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/id_topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="50dp">
+
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/framework_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tl_iconVisible="false"
+            app:tl_indicator_color="@color/textColorPrimary"
+            app:tl_indicator_corner_radius="2dp"
+            app:tl_indicator_gravity="BOTTOM"
+            app:tl_indicator_height="3dp"
+            app:tl_indicator_margin_bottom="6dp"
+            app:tl_indicator_margin_left="8dp"
+            app:tl_indicator_margin_right="8dp"
+            app:tl_tab_padding="8dp"
+            app:tl_tab_space_equal="false"
+            app:tl_textBold="SELECT"
+            app:tl_textSelectColor="@color/textColorPrimary"
+            app:tl_textUnselectColor="@color/textColorSecondary"
+            app:tl_textsize="12dp" />
+
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.bihe0832.android.lib.ui.viewpager.NoScrollViewPager
+        android:id="@+id/framework_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
