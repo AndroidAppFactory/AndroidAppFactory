@@ -1,8 +1,8 @@
 package com.bihe0832.android.base.debug.cache
 
 import com.bihe0832.android.common.coroutines.Coroutines_ERROR_DATA_NULL
-import com.bihe0832.android.lib.data.repository.InfoCacheManager
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
+import com.bihe0832.android.lib.data.repository.InfoCacheManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
 import kotlinx.coroutines.CoroutineDispatcher
@@ -119,12 +119,12 @@ object DebugInfoCacheManager {
                     ZLog.d(LOG_TAG, it.toString())
                 }
 
-                it.onZixieError { errCode, exception ->
+                it.onAAFError { errCode, exception ->
                     ZLog.d(LOG_TAG, "onZixieError: $errCode,  $exception")
 
                 }
 
-                it.onZixieLoginError { errCode, exception ->
+                it.onAAFLoginError { errCode, exception ->
                     ZLog.d(LOG_TAG, "onZixieLoginError: $errCode,  $exception")
                 }
             }
@@ -134,12 +134,12 @@ object DebugInfoCacheManager {
                     ZLog.d(LOG_TAG, it.toString())
                 }
 
-                it.onZixieError { errCode, exception ->
+                it.onAAFError { errCode, exception ->
                     ZLog.d(LOG_TAG, "onZixieError: $errCode,  $exception")
 
                 }
 
-                it.onZixieLoginError { errCode, exception ->
+                it.onAAFLoginError { errCode, exception ->
                     ZLog.d(LOG_TAG, "onZixieLoginError: $errCode,  $exception")
                 }
             }
@@ -147,10 +147,10 @@ object DebugInfoCacheManager {
 
             //需要同时处理各种异常的情况，链式调用
             mTestInfoCacheManagerImpl.getData(key.toString(), 15000L)
-                    .onZixieError { errCode, exception ->
+                    .onAAFError { errCode, exception ->
                         ZLog.d(LOG_TAG, "onZixieError: $errCode,  $exception")
 
-                    }.onZixieLoginError { errCode, exception ->
+                    }.onAAFLoginError { errCode, exception ->
                         ZLog.d(LOG_TAG, "onZixieLoginError: $errCode,  $exception")
 
                     }.onSuccess {

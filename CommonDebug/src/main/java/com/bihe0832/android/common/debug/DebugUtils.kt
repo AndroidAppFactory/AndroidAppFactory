@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/10/28.
  * Description: Description
  */

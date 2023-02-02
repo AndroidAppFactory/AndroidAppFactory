@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.ui.dialog.impl.UniqueDialogManager
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/8/9.
  * Description: Description
  *

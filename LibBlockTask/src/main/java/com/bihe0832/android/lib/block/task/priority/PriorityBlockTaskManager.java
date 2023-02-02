@@ -11,7 +11,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 import kotlin.jvm.Synchronized;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/10/22.
  * Description: 具有优先级性质的排序任务
  */

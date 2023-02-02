@@ -8,7 +8,7 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/10/24.
  * Description: 阻塞式弹框，逐个根据前一个的优先级展示
  *

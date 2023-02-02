@@ -10,7 +10,7 @@ import com.bihe0832.android.lib.log.ZLog
 import kotlinx.android.synthetic.main.common_fragment_empty.*
 
 /**
- * @author hardyshi code@bihe0832.com Created on 4/9/22.
+ * @author zixie code@bihe0832.com Created on 4/9/22.
  *
  * 一个空白的Fragment，用于一些便捷调试的场景
  */

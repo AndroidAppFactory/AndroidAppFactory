@@ -2,7 +2,7 @@ package com.bihe0832.lib.audio.player
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2022/10/31.
  * Description: Description
  *
