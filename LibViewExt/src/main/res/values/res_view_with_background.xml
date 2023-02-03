@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TextViewWithBackground">
+    <declare-styleable name="ViewWithBackground">
         <!-- 圆角矩形背景色 -->
         <attr name="bgtv_backgroundColor" format="color" />
         <!-- 圆角弧度,单位dp-->

@@ -1,18 +1,18 @@
-package com.bihe0832.android.lib.ui.textview;
+package com.bihe0832.android.lib.ui.view.ext;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 
-import com.bihe0832.android.lib.ui.view.ext.DrawableFactoryKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 
 /**
  * 用于需要圆角矩形框背景的TextView的情况,减少直接使用TextView时引入的shape资源文件
  */
-public class TextViewWithBackground extends androidx.appcompat.widget.AppCompatTextView {
+public class ViewWithBackground extends View {
     private Context context;
     private int backgroundColor;
     private int cornerRadius;
@@ -21,15 +21,15 @@ public class TextViewWithBackground extends androidx.appcompat.widget.AppCompatT
     private boolean isRadiusHalfHeight;
     private boolean isWidthHeightEqual;
 
-    public TextViewWithBackground(Context context) {
+    public ViewWithBackground(Context context) {
         this(context, null);
     }
 
-    public TextViewWithBackground(Context context, AttributeSet attrs) {
+    public ViewWithBackground(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TextViewWithBackground(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ViewWithBackground(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         obtainAttributes(context, attrs);
@@ -50,7 +50,7 @@ public class TextViewWithBackground extends androidx.appcompat.widget.AppCompatT
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (isWidthHeightEqual() && getWidth() > 0 && getHeight() > 0) {
             int max = Math.max(getWidth(), getHeight());
-            int measureSpec = MeasureSpec.makeMeasureSpec(max, MeasureSpec.EXACTLY);
+            int measureSpec = View.MeasureSpec.makeMeasureSpec(max, View.MeasureSpec.EXACTLY);
             super.onMeasure(measureSpec, measureSpec);
             return;
         }
