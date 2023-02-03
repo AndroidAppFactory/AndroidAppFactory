@@ -22,23 +22,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:background="@color/colorPrimary"
             android:text="切换数据"
             android:textSize="16dp" />
 
         <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
             android:id="@+id/rtv_msg_tip"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text=""
+            android:text="12323"
             android:textColor="#ffffff"
             android:textSize="11.5sp"
             app:bgtv_backgroundColor="@color/red_dot"
-            app:bgtv_isRadiusHalfHeight="true"
+            app:bgtv_cornerRadius="5dp"
             app:bgtv_strokeColor="#0000ff"
-            app:bgtv_strokeWidth="0dp" />
+            app:bgtv_strokeWidth="1dp" />
+
+
+        <com.bihe0832.android.lib.ui.view.ext.ViewWithBackground
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            app:bgtv_backgroundColor="@color/red_dot"
+            app:bgtv_cornerRadius="25dp"
+            app:bgtv_strokeColor="#0000ff"
+            app:bgtv_strokeWidth="1dp" />
 
 
         <TextView
@@ -121,8 +136,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:drawablePadding="12dp"
             android:background="@color/gray_light"
+            android:drawablePadding="12dp"
             android:gravity="center"
             android:textColor="#FF3C3C3C"
             android:textSize="14dp"

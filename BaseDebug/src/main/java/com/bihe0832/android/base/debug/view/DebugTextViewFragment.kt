@@ -16,6 +16,9 @@ import com.bihe0832.android.lib.ui.textview.ext.setDrawable
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
+import com.bihe0832.android.lib.ui.view.ext.setCornerRadiusBackground
+import com.bihe0832.android.lib.ui.view.ext.setDrawableBackground
+import com.bihe0832.android.lib.ui.view.ext.setStrokeBackground
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
@@ -28,27 +31,29 @@ class DebugTextViewFragment : BaseFragment() {
     }
 
     var testList = mutableListOf<String>(
-        "这是一个测试测试0",
-        "这是一个测试测试这是一个测试测试这是一个测试1",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试3",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试测试4",
-        "这是一个两个个三个四个五测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是测试5",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这试测试6",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试试这是这是一个测试测7",
-        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个试测这是一个试测这是一个试测这是一个试测试这是一个测试测试8"
+            "这是一个测试测试0",
+            "这是一个测试测试这是一个测试测试这是一个测试1",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试3",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试测试4",
+            "这是一个两个个三个四个五测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是测试5",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这试测试6",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试试这是这是一个测试测7",
+            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个试测这是一个试测这是一个试测这是一个试测试这是一个测试测试8"
     )
 
     override fun initView(view: View) {
+
+
         info_content_drawable.apply {
             setText("fsdfdsfsdf")
             setDrawable(
-                R.mipmap.icon,
-                R.mipmap.icon,
-                R.mipmap.icon,
-                R.mipmap.icon,
-                DisplayUtil.dip2px(context!!, 30f),
-                DisplayUtil.dip2px(context!!, 30f)
+                    R.mipmap.icon,
+                    R.mipmap.icon,
+                    R.mipmap.icon,
+                    R.mipmap.icon,
+                    DisplayUtil.dip2px(context!!, 30f),
+                    DisplayUtil.dip2px(context!!, 30f)
             )
         }
 
@@ -56,17 +61,44 @@ class DebugTextViewFragment : BaseFragment() {
         testSpecialText(testList[5])
         info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
 
+//        rtv_msg_tip.setDrawableBackground(resources.getColor(R.color.red_dot), 15, 0, Color.parseColor("#0000ff"))
+        test_basic_button.apply {
+            var num = 0
+            setOnClickListener {
 
-        test_basic_button.setOnClickListener {
+                num++
+                when (num) {
+                    1 -> {
+                        setCornerRadiusBackground(5)
+                    }
 
-            testSpecialText(testList[5])
-            info_content_1.text = testList[index + 0]
-            info_content_1.setExpandText(":fsdfsdfsd")
-            info_content_2.text = testList[index + 1]
-            info_content_3.text = testList[index + 2]
-            index += 3
-            if (index > 7) {
-                index = 0
+                    2 -> {
+                        setStrokeBackground(3, Color.RED)
+                    }
+
+                    3 -> {
+                        setCornerRadiusBackground(Color.GREEN, 15)
+                    }
+
+                    4 -> {
+                        setDrawableBackground(Color.YELLOW, 15, 3, Color.GREEN)
+                    }
+
+                    5 -> {
+                        setStrokeBackground(15, 3, Color.GREEN)
+                    }
+
+                }
+
+                testSpecialText(testList[5])
+                info_content_1.text = testList[index + 0]
+                info_content_1.setExpandText(":fsdfsdfsd")
+                info_content_2.text = testList[index + 1]
+                info_content_3.text = testList[index + 2]
+                index += 3
+                if (index > 7) {
+                    index = 0
+                }
             }
         }
 
@@ -78,16 +110,16 @@ class DebugTextViewFragment : BaseFragment() {
         SpannableStringBuilder("a").apply {
             append("aaaaaaa")
             setSpan(
-                ZixieTextImageSpan(
-                    context!!,
-                    BitmapUtil.getLocalBitmap(
-                        context!!,
-                        R.mipmap.icon_author, 1
-                    )
-                ),
-                2,
-                3,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    ZixieTextImageSpan(
+                            context!!,
+                            BitmapUtil.getLocalBitmap(
+                                    context!!,
+                                    R.mipmap.icon_author, 1
+                            )
+                    ),
+                    2,
+                    3,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             append("aaaaaaa")
         }.let {
@@ -97,13 +129,13 @@ class DebugTextViewFragment : BaseFragment() {
         SpannableStringBuilder("测试").apply {
             append("测试测试测试测试测试")
             setSpan(
-                ZixieTextImageSpan(
-                    context!!,
-                    BitmapUtil.getLocalBitmap(context!!, R.mipmap.icon_author, 1)
-                ),
-                2,
-                3,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    ZixieTextImageSpan(
+                            context!!,
+                            BitmapUtil.getLocalBitmap(context!!, R.mipmap.icon_author, 1)
+                    ),
+                    2,
+                    3,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             append("这是一个测试")
         }.let {
@@ -118,30 +150,30 @@ class DebugTextViewFragment : BaseFragment() {
         var start: Int = content.indexOf("测试", startIndex, true)
         var end = start + "测试".length
         spanString.setSpan(
-            ZixieTextRadiusBackgroundSpan(
-                Color.YELLOW,
-                Color.RED,
-                2,
-                10,
-                60,
-                20,
-                0,
-                info_content_0.textSize * 3 / 5,
-                0,
-                Typeface.DEFAULT
-            ),
-            start,
-            end,
-            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                ZixieTextRadiusBackgroundSpan(
+                        Color.YELLOW,
+                        Color.RED,
+                        2,
+                        10,
+                        60,
+                        20,
+                        0,
+                        info_content_0.textSize * 3 / 5,
+                        0,
+                        Typeface.DEFAULT
+                ),
+                start,
+                end,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
         )
 
         spanString.setSpan(
-            ZixieTextClickableSpan(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-                    ZixieContext.showToast("test")
-                }
+                ZixieTextClickableSpan(object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        ZixieContext.showToast("test")
+                    }
 
-            }), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+                }), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
         );
 
 //        }
@@ -188,11 +220,11 @@ class DebugTextViewFragment : BaseFragment() {
 //        }
 
         info_content_0.append(
-            TextFactoryUtils.getSpannedTextByHtml(
-                TextFactoryUtils.getTextHtmlAfterTransform(
-                    "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+                TextFactoryUtils.getSpannedTextByHtml(
+                        TextFactoryUtils.getTextHtmlAfterTransform(
+                                "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+                        )
                 )
-            )
         )
     }
 }
