@@ -5,13 +5,13 @@ import android.app.ActivityManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Process
-import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.privacy.AgreementPrivacy.hasAgreedPrivacy
+import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
@@ -76,6 +76,7 @@ object AppFactoryInit {
         WifiManagerWrapper.init(application.applicationContext, !ZixieContext.isOfficial())
         // 监听信号变化，统一到MobileUtil
         MobileUtil.registerMobileSignalListener(application.applicationContext)
+        CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
     }
 
     fun initAll(application: android.app.Application) {
