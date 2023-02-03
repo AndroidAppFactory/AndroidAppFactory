@@ -19,6 +19,7 @@ public class CardInfoHelper {
     private HashMap<Integer, Class<CardBaseHolder>> mCardList = new HashMap<>();
     private static volatile CardInfoHelper instance;
     private boolean mAutoAddItem = false;
+    private boolean mIsDebug = false;
 
     public static CardInfoHelper getInstance() {
         if (instance == null) {
@@ -33,6 +34,14 @@ public class CardInfoHelper {
 
     private CardInfoHelper() {
 
+    }
+
+    public void enableDebug(boolean isDebug) {
+        mIsDebug = isDebug;
+    }
+
+    public boolean isDebug() {
+        return mIsDebug;
     }
 
     public void setAutoAddItem(boolean autoAddItem) {

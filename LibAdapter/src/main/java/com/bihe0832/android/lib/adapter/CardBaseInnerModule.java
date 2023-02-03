@@ -26,7 +26,11 @@ public abstract class CardBaseInnerModule implements MultiItemEntity {
     public abstract Class<? extends CardBaseHolder> getViewHolderClass();
 
     public String getTypeBadText() {
-        return "当前版本不支持该样式，请更新版本";
+        if (CardInfoHelper.getInstance().isDebug()) {
+            return "当前样式不支持，请结合 CardInfoHelper 相关日志确认";
+        } else {
+            return "当前版本不支持该样式，请更新版本";
+        }
     }
 
 }
