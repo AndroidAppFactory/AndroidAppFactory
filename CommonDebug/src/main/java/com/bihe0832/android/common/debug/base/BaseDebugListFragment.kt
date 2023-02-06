@@ -6,6 +6,7 @@ import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.debug.item.DebugTipsHolder
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
@@ -39,7 +40,6 @@ open class BaseDebugListFragment : CommonListFragment() {
 
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
-            add(CardItemForCommonList(DebugTipsData::class.java, true))
             add(CardItemForCommonList(DebugItemData::class.java, true))
         }
     }
@@ -79,12 +79,7 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugUtils.showInfo(context, title, content)
     }
 
-    fun showInputDialog(
-            titleName: String,
-            msg: String,
-            defaultValue: String,
-            listener: InputDialogCompletedCallback
-    ) {
+    fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: InputDialogCompletedCallback) {
         DebugUtils.showInputDialog(context, titleName, msg, defaultValue, listener)
     }
 

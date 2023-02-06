@@ -9,16 +9,21 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
 /**
  * @author zixie
+ * <p>
+ * 目前框架仅支持同一个数据结构（即UI样式，BaseModule），不同场景下使用不同的展示形式（BaseHolder），暂不支持不同的数据结构，相同的展示形式
+ * 在同一个 Adapter 中，一个数据结构（即UI样式，BaseModule）仅支持单一数据展示形式（BaseHolder），如果有相同的数据结构（即UI样式，BaseModule），不同的展示形式（BaseHolder），建议可以合并展现形式为一个
  */
 public class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, BaseViewHolder> {
 
     private Context mContext;
     private ArrayList mHeaderIDList = new ArrayList();
+    private HashMap<Integer, Class<? extends CardBaseHolder>> mSpecialList = new HashMap<>();
 
     public CardBaseAdapter(Context context, List data) {
         super(data);
@@ -30,10 +35,30 @@ public class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, B
     }
 
     protected void addItemToAdapter(Class<? extends CardBaseModule> module, boolean isHeader) {
-        int resID = CardInfoHelper.getInstance().getResIdByCardInfo(module);
-        CardInfoHelper.getInstance().addCardItem(module);
-        if (isHeader) {
-            mHeaderIDList.add(resID);
+        CardBaseInnerModule innerModule = CardInfoHelper.getInstance().getItemByClass(module);
+        if (null != innerModule) {
+            addItemToAdapter(innerModule, module, innerModule.getViewHolderClass(), isHeader);
+        }
+    }
+
+    protected void addItemToAdapter(Class<? extends CardBaseModule> module, Class<? extends CardBaseHolder> holderClass, boolean isHeader) {
+        addItemToAdapter(null, module, holderClass, isHeader);
+    }
+
+    private void addItemToAdapter(CardBaseInnerModule innerModuleParam, Class<? extends CardBaseModule> module, Class<? extends CardBaseHolder> holderClass, boolean isHeader) {
+        CardBaseInnerModule newInnerModule = innerModuleParam;
+        if (null == innerModuleParam) {
+            newInnerModule = CardInfoHelper.getInstance().getItemByClass(module);
+        }
+
+        if (null != newInnerModule) {
+            CardInfoHelper.getInstance().addCardItem(newInnerModule.getResID(), newInnerModule.getViewHolderClass());
+            if (newInnerModule.getViewHolderClass().getCanonicalName() != holderClass.getCanonicalName()) {
+                mSpecialList.put(newInnerModule.getResID(), holderClass);
+            }
+            if (isHeader) {
+                mHeaderIDList.add(newInnerModule.getResID());
+            }
         }
     }
 
@@ -57,7 +82,11 @@ public class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, B
         if (BaseMultiItemQuickAdapter.TYPE_NOT_FOUND != cardId) {
             try {
                 View itemView = getItemView(cardId, parent);
-                holder = CardInfoHelper.getInstance().createViewHolder(cardId, itemView, mContext);
+                if (mSpecialList.containsKey(cardId)) {
+                    holder = CardInfoHelper.getInstance().createViewHolder(itemView, mSpecialList.get(cardId), mContext);
+                } else {
+                    holder = CardInfoHelper.getInstance().createViewHolder(cardId, itemView, mContext);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
