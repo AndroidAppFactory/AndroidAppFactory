@@ -3,7 +3,9 @@ package com.bihe0832.android.base.debug.card
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.bihe0832.android.base.debug.card.section.SectionDataContent2
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
+import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -65,10 +67,10 @@ class TestListActivity : CommonListActivity() {
                     }
                     super.onActive(recyclerView, newposition)
                     ZixieContext.showDebug("Test onActive:" + newposition)
-                    it.findViewHolderForAdapterPosition(newposition)?.let {viewHolder ->
-                        (mAdapter.data[newposition] as CardBaseModule).apply{
+                    it.findViewHolderForAdapterPosition(newposition)?.let { viewHolder ->
+                        (mAdapter.data[newposition] as CardBaseModule).apply {
 
-                        }.let{newData->
+                        }.let { newData ->
                             (viewHolder as CardBaseHolder).initData(newData)
                         }
                     }
@@ -94,6 +96,7 @@ class TestListActivity : CommonListActivity() {
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
+            add(CardItemForCommonList(SectionDataContent2::class.java, true))
         }
     }
 
@@ -140,15 +143,15 @@ class TestListActivity : CommonListActivity() {
                         SectionDataHeader2("标题2 - $i $isUpper:${System.currentTimeMillis()}")
 //                        }
                 )
-//                for (j in 0..3) {
-//                    add(
-//                            if (i < 2) {
-//                                SectionDataContent("内容1 - $i $j:${System.currentTimeMillis()}", "")
-//                            } else {
-//                                SectionDataContent2("内容2 - $i $j:${System.currentTimeMillis()}")
-//                            }
-//                    )
-//                }
+                for (j in 0..3) {
+                    add(
+                            if (i < 2) {
+                                SectionDataContent("内容1 - $i $j:${System.currentTimeMillis()}", "")
+                            } else {
+                                SectionDataContent2("内容2 - $i $j:${System.currentTimeMillis()}")
+                            }
+                    )
+                }
             }
         }
     }

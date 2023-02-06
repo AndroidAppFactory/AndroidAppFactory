@@ -3,19 +3,21 @@ package com.bihe0832.android.common.debug.module
 import android.view.View
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.DebugItemHolder
 import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.router.Routers
 
 open class DebugRouterFragment : BaseDebugListFragment() {
 
     inner class RouterItem(url: String) : DebugItemData(
-        url,
-        View.OnClickListener { Routers.open(context, url) },
-        View.OnLongClickListener {
-            showInfo("复制并分享路由地址", url)
-            true
-        }
+            url,
+            View.OnClickListener { Routers.open(context, url) },
+            View.OnLongClickListener {
+                showInfo("复制并分享路由地址", url)
+                true
+            }
     )
 
     final override fun getDataList(): ArrayList<CardBaseModule> {
@@ -32,6 +34,17 @@ open class DebugRouterFragment : BaseDebugListFragment() {
             )
 
             addAll(getRouterList())
+        }
+    }
+
+    override fun getCardList(): List<CardItemForCommonList>? {
+        mutableListOf<CardItemForCommonList>().apply {
+            super.getCardList()?.let {
+                addAll(it)
+            }
+            add(CardItemForCommonList(DebugTipsData::class.java, DebugItemHolder::class.java, true))
+        }.let {
+            return it
         }
     }
 

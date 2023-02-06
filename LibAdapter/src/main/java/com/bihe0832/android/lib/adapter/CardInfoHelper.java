@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import com.bihe0832.android.lib.log.ZLog;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -36,41 +35,7 @@ public class CardInfoHelper {
 
     }
 
-    public void enableDebug(boolean isDebug) {
-        mIsDebug = isDebug;
-    }
-
-    public boolean isDebug() {
-        return mIsDebug;
-    }
-
-    public void setAutoAddItem(boolean autoAddItem) {
-        mAutoAddItem = autoAddItem;
-    }
-
-    public boolean autoAddItem() {
-        return mAutoAddItem;
-    }
-
-    public int getResIdByCardInfo(Class<? extends CardBaseInnerModule> module) {
-        CardBaseInnerModule moduleItem = getItemByClass(module);
-
-        if (null == moduleItem) {
-            ZLog.e(TAG, "  \n !!!========================================  \n \n \n !!! LibAdapter: class  " + module.getName() + " may not add to Adapter card list \n \n \n !!!========================================");
-            return BaseMultiItemQuickAdapter.TYPE_NOT_FOUND;
-        } else {
-            return moduleItem.getResID();
-        }
-    }
-
-    public final void addCardItem(Class<? extends CardBaseInnerModule> module) {
-        CardBaseInnerModule moduleItem = getItemByClass(module);
-        if (null != moduleItem) {
-            addCardItem(moduleItem.getResID(), moduleItem.getViewHolderClass());
-        }
-    }
-
-    private CardBaseInnerModule getItemByClass(Class<? extends CardBaseInnerModule> module) {
+    protected CardBaseInnerModule getItemByClass(Class<? extends CardBaseInnerModule> module) {
         try {
 
             Constructor ct = module.getConstructors()[0];
@@ -87,7 +52,6 @@ public class CardInfoHelper {
         }
         return null;
     }
-
 
     private Object getDefaultValue(Class clazz) {
         if (clazz.equals(boolean.class)) {
@@ -114,8 +78,23 @@ public class CardInfoHelper {
         }
     }
 
+    public void enableDebug(boolean isDebug) {
+        mIsDebug = isDebug;
+    }
+
+    public boolean isDebug() {
+        return mIsDebug;
+    }
+
+    public void setAutoAddItem(boolean autoAddItem) {
+        mAutoAddItem = autoAddItem;
+    }
+
+    public boolean autoAddItem() {
+        return mAutoAddItem;
+    }
+
     public final void addCardItem(int resID, Class<? extends CardBaseHolder> holderCalss) {
-        ZLog.d(TAG, "addCardItem:" + resID + " " + holderCalss.toString());
         if (!mCardList.containsKey(resID) && holderCalss != null && CardBaseHolder.class.isAssignableFrom(holderCalss)) {
             ZLog.w(TAG, "added CardItem:" + resID + " " + holderCalss);
             mCardList.put(resID, (Class<CardBaseHolder>) holderCalss);
@@ -124,9 +103,20 @@ public class CardInfoHelper {
 
     public final CardBaseHolder createViewHolder(int cardType, View itemView, Context context) {
         try {
-            Class holderClass = mCardList.get(cardType);
+            if (mCardList.containsKey(cardType)) {
+                return createViewHolder(itemView, mCardList.get(cardType), context);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public final CardBaseHolder createViewHolder(View itemView, Class<? extends CardBaseHolder> holderClass, Context context) {
+        try {
             if (holderClass != null) {
-                return (CardBaseHolder) holderClass.getConstructor(View.class, Context.class).newInstance(itemView, context);
+                return holderClass.getConstructor(View.class, Context.class).newInstance(itemView, context);
             }
         } catch (Exception e) {
             e.printStackTrace();

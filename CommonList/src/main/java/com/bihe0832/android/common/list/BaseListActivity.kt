@@ -65,8 +65,12 @@ abstract class BaseListActivity : BaseActivity() {
         object : CardBaseAdapter(this, mutableListOf<CardBaseModule>()) {
             init {
                 getCardList()?.forEach { item ->
-                    item.getmCardItemClass()?.let {
-                        addItemToAdapter(it, item.isHeader)
+                    item.cardItemClass?.let {
+                        if (item.cardHolderClass != null) {
+                            addItemToAdapter(it, item.cardHolderClass, item.isHeader)
+                        } else {
+                            addItemToAdapter(it, item.isHeader)
+                        }
                     }
 
                 }
