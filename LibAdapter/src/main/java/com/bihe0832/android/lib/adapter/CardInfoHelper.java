@@ -74,8 +74,6 @@ public class CardInfoHelper {
         try {
 
             Constructor ct = module.getConstructors()[0];
-            ZLog.d(TAG, "Constructor = " + ct.toString());
-
             Class<?>[] params = ct.getParameterTypes();
             Object[] cArg = new Object[params.length];
             for (int i = 0; i < params.length; i++) {
@@ -84,7 +82,7 @@ public class CardInfoHelper {
             CardBaseInnerModule moduleItem = (CardBaseInnerModule) ct.newInstance(cArg);
             return moduleItem;
         } catch (Exception e) {
-            ZLog.e(TAG, "class " + module + " should hava a no params Constructor!!!");
+            ZLog.e(TAG, "  \n !!!========================================  \n \n \n !!! LibAdapter: class " + module + " should hava a no params Constructor!!!!!!========================================");
             e.printStackTrace();
         }
         return null;
@@ -119,7 +117,7 @@ public class CardInfoHelper {
     public final void addCardItem(int resID, Class<? extends CardBaseHolder> holderCalss) {
         ZLog.d(TAG, "addCardItem:" + resID + " " + holderCalss.toString());
         if (!mCardList.containsKey(resID) && holderCalss != null && CardBaseHolder.class.isAssignableFrom(holderCalss)) {
-            ZLog.w(TAG, "added CardItem:" + resID + " " + holderCalss.toString());
+            ZLog.w(TAG, "added CardItem:" + resID + " " + holderCalss);
             mCardList.put(resID, (Class<CardBaseHolder>) holderCalss);
         }
     }
