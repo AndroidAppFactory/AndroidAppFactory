@@ -205,7 +205,6 @@ object DownloadFile {
                                             md5,
                                             sha256,
                                             forceDownloadNew = false,
-                                            canPart = true,
                                             UseMobile = true,
                                             forceDownload = forceDownload,
                                             downloadListener = downloadListener
@@ -235,7 +234,6 @@ object DownloadFile {
                     startDownload(
                             activity, title, msg, url, "", md5, sha256,
                             forceDownloadNew = false,
-                            canPart = true,
                             UseMobile = true,
                             forceDownload = forceDownload,
                             downloadListener = downloadListener
@@ -309,7 +307,6 @@ object DownloadFile {
                 md5,
                 sha256,
                 forceDownloadNew,
-                true,
                 useMobile,
                 forceDownload,
                 object : DownloadListener {
@@ -375,7 +372,6 @@ object DownloadFile {
         forceDownload(
                 context, "", "", url, "", "", "",
                 forceDownloadNew,
-                canPart = false,
                 UseMobile = true,
                 downloadListener = downloadListener
         )
@@ -390,7 +386,6 @@ object DownloadFile {
         download(
                 context, "", "", url, "", "", "",
                 forceDownloadNew,
-                canPart = false,
                 UseMobile = true,
                 downloadListener = downloadListener
         )
@@ -433,7 +428,7 @@ object DownloadFile {
             downloadListener: DownloadListener?
     ) {
         forceDownload(
-                context, "", "", url, folder, md5, "", forceDownloadNew = false, canPart = true,
+                context, "", "", url, folder, md5, "", forceDownloadNew = false,
                 UseMobile = true,
                 downloadListener = downloadListener
         )
@@ -447,7 +442,7 @@ object DownloadFile {
             downloadListener: DownloadListener?
     ) {
         download(
-                context, "", "", url, folder, md5, "", forceDownloadNew = false, canPart = true,
+                context, "", "", url, folder, md5, "", forceDownloadNew = false,
                 UseMobile = true,
                 downloadListener = downloadListener
         )
@@ -465,7 +460,6 @@ object DownloadFile {
         download(
                 context, "", "", url, folder, md5, "",
                 forceDownloadNew = false,
-                canPart = false,
                 UseMobile = useMobile,
                 downloadListener = downloadListener
         )
@@ -480,7 +474,6 @@ object DownloadFile {
             md5: String,
             sha256: String,
             forceDownloadNew: Boolean,
-            canPart: Boolean,
             UseMobile: Boolean,
             downloadListener: DownloadListener?
     ) {
@@ -493,7 +486,6 @@ object DownloadFile {
                 md5,
                 sha256,
                 forceDownloadNew,
-                canPart,
                 UseMobile,
                 false,
                 downloadListener
@@ -509,7 +501,6 @@ object DownloadFile {
             md5: String,
             sha256: String,
             forceDownloadNew: Boolean,
-            canPart: Boolean,
             UseMobile: Boolean,
             downloadListener: DownloadListener?
     ) {
@@ -522,7 +513,6 @@ object DownloadFile {
                 md5,
                 sha256,
                 forceDownloadNew,
-                canPart,
                 UseMobile,
                 true,
                 downloadListener
@@ -539,7 +529,6 @@ object DownloadFile {
             md5: String,
             sha256: String,
             forceDownloadNew: Boolean,
-            canPart: Boolean,
             UseMobile: Boolean,
             forceDownload: Boolean,
             downloadListener: DownloadListener?
@@ -561,7 +550,6 @@ object DownloadFile {
             }
             actionKey = "DownloadFile"
             isDownloadWhenUseMobile = UseMobile
-            setCanDownloadByPart(canPart)
             this.downloadListener = downloadListener
         }, forceDownload)
     }

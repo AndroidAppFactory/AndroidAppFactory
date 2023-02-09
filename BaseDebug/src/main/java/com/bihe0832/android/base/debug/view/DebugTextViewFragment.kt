@@ -6,20 +6,16 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.ui.textview.ext.setDrawable
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
-import com.bihe0832.android.lib.ui.view.ext.setCornerRadiusBackground
-import com.bihe0832.android.lib.ui.view.ext.setDrawableBackground
-import com.bihe0832.android.lib.ui.view.ext.setStrokeBackground
-import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
 
@@ -44,17 +40,26 @@ class DebugTextViewFragment : BaseFragment() {
 
     override fun initView(view: View) {
 
+        var text = "这是普通颜色文字" + TextFactoryUtils.getSpecialText("这是高亮测试", Color.parseColor("#E66633"))
 
+
+        info_content_drawable.setText(TextFactoryUtils.getCharSequenceWithClickAction(text, "这是高亮测试", object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                ZixieContext.showToast(text)
+            }
+
+        }))
+        info_content_drawable.setMovementMethod(LinkMovementMethod.getInstance())
         info_content_drawable.apply {
-            setText("fsdfdsfsdf")
-            setDrawable(
-                    R.mipmap.icon,
-                    R.mipmap.icon,
-                    R.mipmap.icon,
-                    R.mipmap.icon,
-                    DisplayUtil.dip2px(context!!, 30f),
-                    DisplayUtil.dip2px(context!!, 30f)
-            )
+//            setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getSpecialText("这是一个测试",Color.WHITE)))
+//            setDrawable(
+//                    R.mipmap.icon,
+//                    R.mipmap.icon,
+//                    R.mipmap.icon,
+//                    R.mipmap.icon,
+//                    DisplayUtil.dip2px(context!!, 30f),
+//                    DisplayUtil.dip2px(context!!, 30f)
+//            )
         }
 
 
@@ -66,39 +71,40 @@ class DebugTextViewFragment : BaseFragment() {
             var num = 0
             setOnClickListener {
 
-                num++
-                when (num) {
-                    1 -> {
-                        setCornerRadiusBackground(5)
-                    }
-
-                    2 -> {
-                        setStrokeBackground(3, Color.RED)
-                    }
-
-                    3 -> {
-                        setCornerRadiusBackground(Color.GREEN, 15)
-                    }
-
-                    4 -> {
-                        setDrawableBackground(Color.YELLOW, 15, 3, Color.GREEN)
-                    }
-
-                    5 -> {
-                        setStrokeBackground(15, 3, Color.GREEN)
-                    }
-
-                }
-
-                testSpecialText(testList[5])
-                info_content_1.text = testList[index + 0]
-                info_content_1.setExpandText(":fsdfsdfsd")
-                info_content_2.text = testList[index + 1]
-                info_content_3.text = testList[index + 2]
-                index += 3
-                if (index > 7) {
-                    index = 0
-                }
+//                setTextColor(Color.WHITE)
+//                num++
+//                when (num) {
+//                    1 -> {
+//                        setCornerRadiusBackground(5)
+//                    }
+//
+//                    2 -> {
+//                        setStrokeBackground(3, Color.RED)
+//                    }
+//
+//                    3 -> {
+//                        setCornerRadiusBackground(Color.GREEN, 15)
+//                    }
+//
+//                    4 -> {
+//                        setDrawableBackground(Color.YELLOW, 15, 3, Color.GREEN)
+//                    }
+//
+//                    5 -> {
+//                        setStrokeBackground(15, 3, Color.GREEN)
+//                    }
+//
+//                }
+//
+//                testSpecialText(testList[5])
+//                info_content_1.text = testList[index + 0]
+//                info_content_1.setExpandText(":fsdfsdfsd")
+//                info_content_2.text = testList[index + 1]
+//                info_content_3.text = testList[index + 2]
+//                index += 3
+//                if (index > 7) {
+//                    index = 0
+//                }
             }
         }
 

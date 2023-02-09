@@ -40,7 +40,7 @@ public class PermissionsActivityV2 extends PermissionsActivity {
             tempPermissionList.add(permission);
         }
 
-        String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, false, getNeedSpecial());
+        String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, true, getNeedSpecial());
         String permissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, false, getNeedSpecial());
         String permissionContent = PermissionManager.INSTANCE.getPermissionContent(this, scene, tempPermissionList, false, getNeedSpecial());
 
