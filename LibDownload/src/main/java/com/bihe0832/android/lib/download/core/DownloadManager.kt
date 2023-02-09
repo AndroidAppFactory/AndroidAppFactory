@@ -23,8 +23,6 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import java.io.File
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
 
 
 object DownloadManager {
@@ -34,8 +32,7 @@ object DownloadManager {
     }
 
     private var mContext: Context? = null
-    private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
-    private var mTempDownloadListenerList = ConcurrentHashMap<Long, ArrayList<DownloadListener>>()
+    private var mGlobalDownloadListenerList: DownloadListener? = null
     private const val DEFAULT_MAX_NUM = 3
     private const val MAX_MAX_NUM = 5
 
@@ -72,11 +69,7 @@ object DownloadManager {
             DownloadNotify.init(context)
             DownloadInfoDBManager.init(context)
         }
-        listener?.let {
-            if (!mGlobalDownloadListenerList.contains(it)) {
-                mGlobalDownloadListenerList.add(it)
-            }
-        }
+        mGlobalDownloadListenerList = listener
     }
 
     private fun initContext(context: Context?) {
@@ -88,7 +81,7 @@ object DownloadManager {
     fun onDestroy() {
         pauseAllTask(false)
         DownloadNotify.destroy()
-        mGlobalDownloadListenerList.clear()
+        mGlobalDownloadListenerList = null
     }
 
     private val innerDownloadListener = object : DownloadListener {
@@ -98,14 +91,7 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onWait(item)
             }
-
-            mTempDownloadListenerList[item.downloadID]?.forEach {
-                it.onWait(item)
-            }
-
-            mGlobalDownloadListenerList.forEach {
-                it.onWait(item)
-            }
+            mGlobalDownloadListenerList?.onWait(item)
             DownloadInfoDBManager.saveDownloadInfo(item)
         }
 
@@ -118,14 +104,8 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onStart(item)
             }
+            mGlobalDownloadListenerList?.onStart(item)
 
-            mTempDownloadListenerList[item.downloadID]?.forEach {
-                it.onStart(item)
-            }
-
-            mGlobalDownloadListenerList.forEach {
-                it.onStart(item)
-            }
             DownloadInfoDBManager.saveDownloadInfo(item)
         }
 
@@ -136,13 +116,7 @@ object DownloadManager {
                 it.onProgress(item)
             }
 
-            mTempDownloadListenerList[item.downloadID]?.forEach {
-                it.onProgress(item)
-            }
-
-            mGlobalDownloadListenerList.forEach {
-                it.onProgress(item)
-            }
+            mGlobalDownloadListenerList?.onProgress(item)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyProcess(item)
@@ -156,13 +130,7 @@ object DownloadManager {
                 it.onPause(item)
             }
 
-            mTempDownloadListenerList[item.downloadID]?.forEach {
-                it.onPause(item)
-            }
-
-            mGlobalDownloadListenerList.forEach {
-                it.onPause(item)
-            }
+            mGlobalDownloadListenerList?.onPause(item)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyPause(item)
@@ -181,14 +149,7 @@ object DownloadManager {
                 it.onFail(errorCode, msg, item)
             }
 
-            mTempDownloadListenerList[item.downloadID]?.forEach {
-                it.onFail(errorCode, msg, item)
-            }
-            mTempDownloadListenerList.remove(item.downloadID)
-
-            mGlobalDownloadListenerList.forEach {
-                it.onFail(errorCode, msg, item)
-            }
+            mGlobalDownloadListenerList?.onFail(errorCode, msg, item)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyFailed(item)
@@ -214,14 +175,9 @@ object DownloadManager {
             item.downloadListener?.let {
                 it.onComplete(filePath, item)
             }
-            mTempDownloadListenerList[item.downloadID]?.forEach {
-                it.onComplete(filePath, item)
-            }
-            mTempDownloadListenerList.remove(item.downloadID)
+            mGlobalDownloadListenerList?.onComplete(filePath, item)
 
-            mGlobalDownloadListenerList.forEach {
-                it.onComplete(filePath, item)
-            }
+
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyFinished(item)
@@ -242,9 +198,7 @@ object DownloadManager {
                 DownloadNotify.notifyDelete(item)
             }
 
-            mGlobalDownloadListenerList.forEach {
-                it.onDelete(item)
-            }
+            mGlobalDownloadListenerList?.onDelete(item)
         }
     }
 
@@ -486,15 +440,7 @@ object DownloadManager {
             } else if (!TextUtils.isEmpty(currentDownload?.fileSHA256) && !info.fileSHA256.equals(currentDownload?.fileSHA256)) {
                 info.downloadListener?.onFail(ERR_MD5_BAD, "new sha256 is diff with current download", info)
             } else {
-                info.downloadListener?.let {
-                    if (mTempDownloadListenerList.containsKey(info.downloadID) && null != mTempDownloadListenerList[info.downloadID]) {
-                        mTempDownloadListenerList[info.downloadID]!!.add(it)
-                    } else {
-                        mTempDownloadListenerList.put(info.downloadID, ArrayList<DownloadListener>().apply {
-                            add(it)
-                        })
-                    }
-                }
+                currentDownload?.downloadListener = info.downloadListener
             }
         } else {
             updateInfo(info)
@@ -545,35 +491,19 @@ object DownloadManager {
 
     fun deleteTask(downloadId: Long, startByUser: Boolean, deleteFile: Boolean) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            var downloadListener = mTempDownloadListenerList.get(downloadId)?.first()
-            if (null != downloadListener) {
-                info.downloadListener.onDelete(info)
-                info.downloadListener = downloadListener
-            } else {
-                if (info.status == DownloadStatus.STATUS_DOWNLOADING) {
-                    addWaitToDownload()
-                }
-                DownloadTaskList.removeFromDownloadTaskList(downloadId)
-                info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
-                mDownloadEngine.closeDownload(downloadId, false, deleteFile)
-                DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
-                if (deleteFile) {
-                    mDownloadEngine.deleteFile(info)
-                }
-                DownloadNotify.notifyDelete(info)
-                innerDownloadListener.onDelete(info)
+            if (info.status == DownloadStatus.STATUS_DOWNLOADING) {
+                addWaitToDownload()
             }
+            DownloadTaskList.removeFromDownloadTaskList(downloadId)
+            info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
+            mDownloadEngine.closeDownload(downloadId, false, deleteFile)
+            DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
+            if (deleteFile) {
+                mDownloadEngine.deleteFile(info)
+            }
+            DownloadNotify.notifyDelete(info)
+            innerDownloadListener.onDelete(info)
         }
-    }
-
-    fun addGlobalDownloadListener(listener: DownloadListener) {
-        if (!mGlobalDownloadListenerList.contains(listener)) {
-            mGlobalDownloadListenerList.add(listener)
-        }
-    }
-
-    fun removeGlobalDownloadListener(listener: DownloadListener) {
-        mGlobalDownloadListenerList.remove(listener)
     }
 
     fun pauseAllTask(startByUser: Boolean) {
@@ -618,14 +548,14 @@ object DownloadManager {
 
 
     fun getFinishedTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD }.toList()
+        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD }.toList<DownloadItem>()
     }
 
     fun getDownloadingTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList().filter { DownloadingList.isDownloading(it) }.toList()
+        return DownloadTaskList.getDownloadTasKList().filter { DownloadingList.isDownloading(it) }.toList<DownloadItem>()
     }
 
     fun getWaitingTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }.toList()
+        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }.toList<DownloadItem>()
     }
 }

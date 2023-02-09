@@ -20,6 +20,7 @@ import java.util.List;
 
 public class DownloadUtils {
 
+
     /**
      * 初始化
      *
@@ -57,25 +58,6 @@ public class DownloadUtils {
         info.setForceDownloadNew(true);
         startDownload(context, info, info.isForceDownloadNew());
     }
-
-    /**
-     * 增加下载回调
-     *
-     * @param listener
-     */
-    public static final void addDownloadListener(DownloadListener listener) {
-        DownloadManager.INSTANCE.addGlobalDownloadListener(listener);
-    }
-
-    /**
-     * 移除下载回调
-     *
-     * @param listener
-     */
-    public static final void removeDownloadListener(DownloadListener listener) {
-        DownloadManager.INSTANCE.removeGlobalDownloadListener(listener);
-    }
-
 
     /**
      * 通过下载地址获取任务信息
@@ -174,7 +156,7 @@ public class DownloadUtils {
      * @return 所有下载任务列表
      */
     @NotNull
-    public static final List getAll() {
+    public static final List<DownloadItem> getAll() {
         return DownloadManager.INSTANCE.getAllTask();
     }
 
@@ -184,7 +166,7 @@ public class DownloadUtils {
      * @return
      */
     @NotNull
-    public static final List getFinished() {
+    public static final List<DownloadItem> getFinished() {
         return DownloadManager.INSTANCE.getFinishedTask();
     }
 
@@ -194,7 +176,7 @@ public class DownloadUtils {
      * @return
      */
     @NotNull
-    public static final List getDownloading() {
+    public static final List<DownloadItem> getDownloading() {
         return DownloadManager.INSTANCE.getDownloadingTask();
     }
 
@@ -204,7 +186,7 @@ public class DownloadUtils {
      * @return
      */
     @NotNull
-    public static final List getWaiting() {
+    public static final List<DownloadItem> getWaiting() {
         return DownloadManager.INSTANCE.getWaitingTask();
     }
 }

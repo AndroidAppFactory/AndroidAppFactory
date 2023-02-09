@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.download.core.list
 
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -76,6 +75,6 @@ object DownloadTaskList {
 
     @Synchronized
     fun getTaskByDownloadURL(downloadURL: String): DownloadItem? {
-        return mDownloadList[DownloadUtils.getDownloadIDByURL(downloadURL)]
+        return mDownloadList[DownloadItem.getDownloadIDByURL(downloadURL)]
     }
 }
