@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <!--    <ScrollView-->
@@ -35,12 +36,10 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:text="12323"
-            android:textColor="#ffffff"
+            android:textColor="#00ffff"
             android:textSize="11.5sp"
-            app:bgtv_backgroundColor="@color/red_dot"
-            app:bgtv_cornerRadius="5dp"
-            app:bgtv_strokeColor="#0000ff"
-            app:bgtv_strokeWidth="1dp" />
+            app:bgtv_backgroundColor="#ffffff"
+            app:bgtv_cornerRadius="5dp" />
 
 
         <com.bihe0832.android.lib.ui.view.ext.ViewWithBackground

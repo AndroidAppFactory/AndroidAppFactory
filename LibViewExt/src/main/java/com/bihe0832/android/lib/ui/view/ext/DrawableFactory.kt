@@ -22,9 +22,9 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 /**
  * 所有长度的单位都是px
  */
-fun getDrawable(color: Int, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strokeColor: Int): Drawable {
+fun getDrawable(color: Int?, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strokeColor: Int): Drawable {
     GradientDrawable().apply {
-        if (color != -1) {
+        color?.let {
             setColor(color)
         }
         setCornerRadius(pxOfCornerRadius)
@@ -39,12 +39,12 @@ fun getDrawable(color: Int, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strok
 /**
  * 所有长度的单位都是px
  */
-fun View.generateDrawable(color: Int, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strokeColor: Int): Drawable {
-    if (color == -1) {
+fun View.generateDrawable(color: Int?, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strokeColor: Int): Drawable {
+    if (color == null) {
         if (background is ColorDrawable) {
             (background as ColorDrawable).color
         } else {
-            -1
+            null
         }
     } else {
         color
@@ -54,37 +54,37 @@ fun View.generateDrawable(color: Int, pxOfCornerRadius: Float, pxOfStrokeWidth: 
 }
 
 
-fun View.setDrawableBackground(color: Int, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strokeColor: Int) {
+fun View.setDrawableBackground(color: Int?, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strokeColor: Int) {
     background = generateDrawable(color, pxOfCornerRadius, pxOfStrokeWidth, strokeColor)
 }
 
 /**
  * 所有长度的单位都是dp
  */
-fun getDrawable(context: Context, color: Int, dpOfCornerRadius: Int, dpOfStrokeWidth: Int, strokeColor: Int): Drawable {
+fun getDrawable(context: Context, color: Int?, dpOfCornerRadius: Int, dpOfStrokeWidth: Int, strokeColor: Int): Drawable {
     return getDrawable(color, DisplayUtil.dip2px(context, dpOfCornerRadius.toFloat()).toFloat(), DisplayUtil.dip2px(context, dpOfStrokeWidth.toFloat()), strokeColor)
 }
 
 
-fun View.generateDrawable(color: Int, dpOfCornerRadius: Int, dpOfStrokeWidth: Int, strokeColor: Int): Drawable {
+fun View.generateDrawable(color: Int?, dpOfCornerRadius: Int, dpOfStrokeWidth: Int, strokeColor: Int): Drawable {
     return generateDrawable(color, DisplayUtil.dip2px(context, dpOfCornerRadius.toFloat()).toFloat(), DisplayUtil.dip2px(context, dpOfStrokeWidth.toFloat()), strokeColor)
 }
 
 
-fun View.setDrawableBackground(color: Int, cornerRadius: Int, strokeWidth: Int, strokeColor: Int) {
+fun View.setDrawableBackground(color: Int?, cornerRadius: Int, strokeWidth: Int, strokeColor: Int) {
     background = generateDrawable(color, cornerRadius, strokeWidth, strokeColor)
 }
 
-fun View.generateCornerRadiusDrawable(color: Int, cornerRadius: Int): Drawable {
+fun View.generateCornerRadiusDrawable(color: Int?, cornerRadius: Int): Drawable {
     return generateDrawable(color, cornerRadius, 0, Color.TRANSPARENT)
 }
 
-fun View.setCornerRadiusBackground(color: Int, cornerRadius: Int) {
+fun View.setCornerRadiusBackground(color: Int?, cornerRadius: Int) {
     background = generateCornerRadiusDrawable(color, cornerRadius)
 }
 
 fun View.generateCornerRadiusDrawable(cornerRadius: Int): Drawable {
-    return generateCornerRadiusDrawable(-1, cornerRadius)
+    return generateCornerRadiusDrawable(null, cornerRadius)
 }
 
 fun View.setCornerRadiusBackground(cornerRadius: Int) {
@@ -92,7 +92,7 @@ fun View.setCornerRadiusBackground(cornerRadius: Int) {
 }
 
 fun View.generateStrokeDrawable(cornerRadius: Int, strokeWidth: Int, strokeColor: Int): Drawable {
-    return generateDrawable(-1, cornerRadius, strokeWidth, strokeColor)
+    return generateDrawable(null, cornerRadius, strokeWidth, strokeColor)
 }
 
 fun View.setStrokeBackground(cornerRadius: Int, strokeWidth: Int, strokeColor: Int) {
