@@ -1,12 +1,12 @@
 package com.bihe0832.android.lib.download.part
 
 import android.text.TextUtils
+import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.logHeaderFields
 import com.bihe0832.android.lib.download.core.upateRequestInfo
 import com.bihe0832.android.lib.download.dabase.DownloadInfoDBManager
-import com.bihe0832.android.lib.download.dabase.DownloadInfoDBManager.TAG
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils

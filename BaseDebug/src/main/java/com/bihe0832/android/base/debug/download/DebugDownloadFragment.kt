@@ -119,7 +119,6 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 //                "https://imtt.dd.qq.com/sjy.10001/16891/apk/2A5BC6AA4E69DCE13C6D5D3FB820706E.apk"
 //            }
             isForceDownloadNew = true
-            setCanDownloadByPart(true)
             downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     showResult("应用下载失败（$errorCode）")

@@ -134,7 +134,6 @@ object DownloadAPK {
             md5,
             "",
             forceDownloadNew = false,
-            canPart = true,
             UseMobile = true,
             downloadListener = SimpleAPKDownloadListener(context, packageName)
         )
@@ -150,7 +149,6 @@ object DownloadAPK {
             md5,
             "",
             forceDownloadNew = false,
-            canPart = true,
             UseMobile = true,
             downloadListener = SimpleAPKDownloadListener(context, packageName)
         )

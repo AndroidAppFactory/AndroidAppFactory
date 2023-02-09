@@ -51,7 +51,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("临时测试(Temp)", DebugTempFragment::class.java))
             add(getDebugFragmentItemData("临时测试(Basic)", DebugBasicFragment::class.java))
 
-            add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
 
 
             add(getDebugFragmentItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
@@ -59,6 +58,11 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("文件（Zip、assets 等）、配置操作调试", DebugFileFragment::class.java))
             add(getDebugFragmentItemData("TAB 调试", DebugTabFragment::class.java))
             add(getDebugFragmentItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
+
+            add(getDebugFragmentItemData("TextView 调试", DebugTextViewFragment::class.java))
+            add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
+
+
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
             add(getDebugFragmentItemData("UI（点击区、Toast、前后台）测试", DebugUIFragment::class.java))
@@ -78,7 +82,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("日志调试", DebugLogFragment::class.java))
             add(getDebugFragmentItemData("通知栏调试", DebugNotifyFragment::class.java))
             add(getDebugFragmentItemData("TTS 调试", DebugTTSFragment::class.java))
-            add(getDebugFragmentItemData("TextView 调试", DebugTextViewFragment::class.java))
             add(DebugItemData("WebView 调试", View.OnClickListener {
                 startActivityWithException(DebugWebviewActivity::class.java)
             }))

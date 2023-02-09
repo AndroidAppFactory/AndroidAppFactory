@@ -44,8 +44,6 @@ public class DownloadItem implements Serializable {
     private boolean downloadWhenUseMobile = false;
     // 任务添加后是否自动下载，非必填
     private boolean downloadWhenAdd = true;
-    // 是否支持分片下载
-    private boolean canDownloadByPart = false;
     //内部下载回调
     private transient DownloadListener mDownloadListener = null;
     // 下载信息描述，非必填
@@ -89,14 +87,6 @@ public class DownloadItem implements Serializable {
     public static final int DEFAULT_DOWNLOAD_PRIORITY = 10;
     //下载优先级
     private int downloadPriority = DEFAULT_DOWNLOAD_PRIORITY;
-
-    public boolean canDownloadByPart() {
-        return canDownloadByPart;
-    }
-
-    public void setCanDownloadByPart(boolean canDownloadByPart) {
-        this.canDownloadByPart = canDownloadByPart;
-    }
 
     public void setNotificationVisibility(boolean visibility) {
         notificationVisibility = visibility;
@@ -396,7 +386,6 @@ public class DownloadItem implements Serializable {
             this.notificationVisibility = item.notificationVisibility;
             this.downloadWhenUseMobile = item.downloadWhenUseMobile;
             this.downloadWhenAdd = item.downloadWhenAdd;
-            this.canDownloadByPart = item.canDownloadByPart;
             this.mDownloadListener = item.mDownloadListener;
             this.downloadDesc = item.downloadDesc;
             this.downloadTitle = item.downloadTitle;

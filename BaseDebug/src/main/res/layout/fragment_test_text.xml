@@ -124,23 +124,27 @@
         <com.bihe0832.android.lib.ui.textview.expandable.TextViewWithHTML
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/gray"
             android:clickable="true"
             android:linksClickable="true"
             android:padding="10dp"
-            android:text="AAF：&lt;a href='https://android.bihe0832.com/doc/summary/links.html'&gt;https://android.bihe0832.com/doc/summary/links.html&lt;/a&gt;" />
+            android:text="AAF：&lt;a href='https://android.bihe0832.com/doc/summary/links.html'&gt;https://android.bihe0832.com/doc/summary/links.html&lt;/a&gt;"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
 
 
         <TextView
             android:id="@+id/info_content_drawable"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:background="@color/gray_light"
+            android:background="@color/white"
             android:drawablePadding="12dp"
             android:gravity="center"
-            android:textColor="#FF3C3C3C"
+            android:padding="16dp"
+            android:textColor="#716861"
             android:textSize="14dp"
-            tools:text="方式对双方都是十分的所得税辅导辅导辅导师傅的温热热控开关咖啡机" />
+            android:text="这是一个测试" />
 
     </LinearLayout>
 

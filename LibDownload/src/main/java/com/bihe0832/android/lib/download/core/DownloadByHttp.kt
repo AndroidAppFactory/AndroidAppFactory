@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.download.core
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode.*
@@ -211,6 +212,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         } while (true)
     }
 
+    @SuppressLint("Range")
     private fun goDownload(info: DownloadItem) {
         ZLog.d(TAG, "goDownload:$info")
         ZLog.d("DebugDownloadFragment", "goDownload:${info.downloadURL}")
@@ -266,12 +268,12 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     }
 
     private fun startNew(info: DownloadItem) {
-        ZLog.d(TAG, "startNew:$info")
+        ZLog.d(TAG, "开启新下载: startNew:$info")
         var threadNum = 1
         if (info.fileLength > DOWNLOAD_PART_SIZE) {
             // 先分大片
             threadNum = (info.fileLength / DOWNLOAD_PART_SIZE).toInt().let {
-                ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，默认分片大小：${DOWNLOAD_PART_SIZE}，按默认分片可分片：${it}")
+                ZLog.e(TAG, "开启新下载: 文件长度: ${info.fileLength}，默认分片大小：${DOWNLOAD_PART_SIZE}，按默认分片可分片：${it}")
                 when {
                     it > MAX_DOWNLOAD_THREAD * 2 -> {
                         MAX_DOWNLOAD_THREAD
@@ -287,13 +289,13 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                     }
                 }
             }
-            ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，二次分片数量：${threadNum}，并行下载量数量：${maxNum}")
+            ZLog.e(TAG, "开启新下载: 文件长度: ${info.fileLength}，二次分片数量：${threadNum}，并行下载量数量：${maxNum}")
             if (threadNum < 1) {
                 threadNum = 1
             } else if (threadNum > MAX_DOWNLOAD_THREAD) {
                 threadNum = MAX_DOWNLOAD_THREAD
             }
-            ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，三次分片数量：${threadNum}，并行下载量数量：${maxNum}")
+            ZLog.e(TAG, "开启新下载: 文件长度: ${info.fileLength}，三次分片数量：${threadNum}，并行下载量数量：${maxNum}")
             //太小的文件分小片
             if (info.fileLength / threadNum < DOWNLOAD_MIN_SIZE) {
                 threadNum = (info.fileLength / DOWNLOAD_MIN_SIZE).toInt()
@@ -310,12 +312,12 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 threadNum -= 1
             }
         }
-        ZLog.e(TAG, "分片下载: 文件长度: ${info.fileLength}，最终分片数量：${threadNum}")
-        ZLog.e(TAG, "分片下载: 最后一片长度: ${info.fileLength - newpart * (threadNum - 1)}")
+        ZLog.e(TAG, "开启新下载: 文件长度: ${info.fileLength}，最终分片数量：${threadNum}")
+        ZLog.e(TAG, "开启新下载: 最后一片长度: ${info.fileLength - newpart * (threadNum - 1)}")
         if (threadNum > 1) {
             for (i in 0 until threadNum) {
                 var start = i * newpart
-                ZLog.d("分片下载：开始第$i 段")
+                ZLog.d("开启新下载：开始第$i 片，共$threadNum 片")
                 when (i) {
                     0 -> {
                         startDownloadPart(i, info, 0, newpart, 0)
@@ -329,6 +331,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                 }
             }
         } else {
+            ZLog.d("开启新下载：不分片")
             startDownloadPart(0, info, 0, newpart, 0)
         }
     }
