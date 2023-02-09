@@ -202,10 +202,7 @@ object DownloadManager {
             }
             item.finished = item.fileLength
             if (FileMimeTypes.isApkFile(filePath)) {
-                mContext?.packageManager?.getPackageArchiveInfo(
-                        filePath,
-                        PackageManager.GET_ACTIVITIES
-                )?.packageName?.let {
+                mContext?.packageManager?.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES)?.packageName?.let {
                     item.packageName = it
                 }
             }
@@ -299,19 +296,14 @@ object DownloadManager {
             return false
         }
         ZLog.d(TAG, "checkIsNeedDownload versionCode:${info.versionCode}")
-        val alreadyDownloadItem =
-                DownloadInfoDBManager.getDownloadInfoFromPackageName(info.packageName)
+        val alreadyDownloadItem = DownloadInfoDBManager.getDownloadInfoFromPackageName(info.packageName)
         return if (alreadyDownloadItem == null) {
             ZLog.d(TAG, "checkIsNeedDownload alreadyDownloadItem null")
             false
         } else {
             if (alreadyDownloadItem.versionCode > 0) {
                 if (info.versionCode != alreadyDownloadItem.versionCode) {
-                    deleteTask(
-                            alreadyDownloadItem.downloadID,
-                            startByUser = false,
-                            deleteFile = true
-                    )
+                    deleteTask(alreadyDownloadItem.downloadID, startByUser = false, deleteFile = true)
                 }
                 false
             } else {
@@ -346,13 +338,11 @@ object DownloadManager {
             }
 
             if (finalFilePathIsNull) {
-                info.finalFilePath =
-                        getFinalFileName(info.downloadURL, backFileName, info.fileFolder)
+                info.finalFilePath = getFinalFileName(info.downloadURL, backFileName, info.fileFolder)
             }
 
             if (tempFilePathIsNull) {
-                info.tempFilePath =
-                        getDownladTempFilePath(info.downloadURL, backFileName, info.fileFolder)
+                info.tempFilePath = getDownladTempFilePath(info.downloadURL, backFileName, info.fileFolder)
             }
         }
     }
@@ -360,25 +350,11 @@ object DownloadManager {
 
     private fun checkBeforeDownloadFile(info: DownloadItem): String {
 
-        if (FileUtils.checkFileExist(
-                        info.finalFilePath,
-                        info.fileLength,
-                        info.fileMD5,
-                        info.fileSHA256,
-                        false
-                )
-        ) {
+        if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
             return info.finalFilePath
         }
 
-        if (FileUtils.checkFileExist(
-                        info.tempFilePath,
-                        info.fileLength,
-                        info.fileMD5,
-                        info.fileSHA256,
-                        false
-                )
-        ) {
+        if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
             info.finalFilePath = info.tempFilePath
             return info.tempFilePath
         }
@@ -386,11 +362,7 @@ object DownloadManager {
     }
 
     @Synchronized
-    private fun startTask(
-            info: DownloadItem,
-            downloadAfterAdd: Boolean,
-            downloadWhenUseMobile: Boolean
-    ) {
+    private fun startTask(info: DownloadItem, downloadAfterAdd: Boolean, downloadWhenUseMobile: Boolean) {
         innerDownloadListener.onWait(info)
         if (downloadAfterAdd) {
             if (!isWifi()) {
@@ -412,10 +384,7 @@ object DownloadManager {
         return NetworkUtil.isWifiNet(mContext)
     }
 
-    private fun realStartTask(
-            info: DownloadItem,
-            downloadAfterAdd: Boolean
-    ) {
+    private fun realStartTask(info: DownloadItem, downloadAfterAdd: Boolean) {
         ZLog.d(TAG, "startTask:$info")
         try {
             // 不合法的URl
@@ -435,11 +404,7 @@ object DownloadManager {
             // 正在下载更高版本
             if (checkIsDownloadingAndVersionIsNew(info)) {
                 ZLog.e(TAG, "noneed download:$info")
-                innerDownloadListener.onFail(
-                        ERR_URL_IS_TOO_OLD_THAN_DOWNLOADING,
-                        "install is new",
-                        info
-                )
+                innerDownloadListener.onFail(ERR_URL_IS_TOO_OLD_THAN_DOWNLOADING, "install is new", info)
                 return
             }
 
@@ -483,11 +448,7 @@ object DownloadManager {
         }
     }
 
-    fun getDownladTempFilePath(
-            downloadURL: String,
-            backFileName: String,
-            fileName: String
-    ): String {
+    fun getDownladTempFilePath(downloadURL: String, backFileName: String, fileName: String): String {
         return getFilePath(downloadURL, backFileName, fileName, "Temp_")
     }
 
@@ -495,21 +456,14 @@ object DownloadManager {
         return getFilePath(downloadURL, backFileName, filePath, "")
     }
 
-    private fun getFilePath(
-            downloadURL: String,
-            backFileName: String,
-            filePath: String,
-            prefix: String
-    ): String {
+    private fun getFilePath(downloadURL: String, backFileName: String, filePath: String, prefix: String): String {
         var folder = if (TextUtils.isEmpty(filePath)) {
             ZixieFileProvider.getZixieFilePath(mContext!!)
         } else {
             filePath
         }
         FileUtils.checkAndCreateFolder(folder)
-        return FileUtils.getFolderPathWithSeparator(folder) + prefix + URLUtils.getFileName(
-                downloadURL
-        ).let {
+        return FileUtils.getFolderPathWithSeparator(folder) + prefix + URLUtils.getFileName(downloadURL).let {
             if (TextUtils.isEmpty(it)) {
                 if (TextUtils.isEmpty(backFileName)) {
                     System.currentTimeMillis()
@@ -528,30 +482,17 @@ object DownloadManager {
         if (DownloadingList.isDownloading(info)) {
             val currentDownload = DownloadTaskList.getTaskByDownloadID(info.downloadID)
             if (!TextUtils.isEmpty(currentDownload?.fileMD5) && !info.fileMD5.equals(currentDownload?.fileMD5)) {
-                info.downloadListener?.onFail(
-                        ERR_MD5_BAD,
-                        "new md5 is diff with current download",
-                        info
-                )
-            } else if (!TextUtils.isEmpty(currentDownload?.fileSHA256) && !info.fileSHA256.equals(
-                            currentDownload?.fileSHA256
-                    )
-            ) {
-                info.downloadListener?.onFail(
-                        ERR_MD5_BAD,
-                        "new sha256 is diff with current download",
-                        info
-                )
+                info.downloadListener?.onFail(ERR_MD5_BAD, "new md5 is diff with current download", info)
+            } else if (!TextUtils.isEmpty(currentDownload?.fileSHA256) && !info.fileSHA256.equals(currentDownload?.fileSHA256)) {
+                info.downloadListener?.onFail(ERR_MD5_BAD, "new sha256 is diff with current download", info)
             } else {
                 info.downloadListener?.let {
                     if (mTempDownloadListenerList.containsKey(info.downloadID) && null != mTempDownloadListenerList[info.downloadID]) {
                         mTempDownloadListenerList[info.downloadID]!!.add(it)
                     } else {
-                        mTempDownloadListenerList.put(
-                                info.downloadID,
-                                ArrayList<DownloadListener>().apply {
-                                    add(it)
-                                })
+                        mTempDownloadListenerList.put(info.downloadID, ArrayList<DownloadListener>().apply {
+                            add(it)
+                        })
                     }
                 }
             }
@@ -567,24 +508,14 @@ object DownloadManager {
             if (DownloadTaskList.hadAddTask(info)) {
                 ZLog.d(TAG, "mDownloadList contains:$info")
                 DownloadTaskList.updateDownloadTaskListItem(info)
-                resumeTask(
-                        info.downloadID,
-                        info.downloadListener,
-                        info.isDownloadWhenAdd,
-                        info.isDownloadWhenUseMobile
-                )
+                resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile)
             } else {
                 startTask(info, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile)
             }
         }
     }
 
-    fun resumeTask(
-            downloadId: Long,
-            downloadListener: DownloadListener?,
-            startByUser: Boolean,
-            downloadWhenUseMobile: Boolean
-    ) {
+    fun resumeTask(downloadId: Long, downloadListener: DownloadListener?, startByUser: Boolean, downloadWhenUseMobile: Boolean) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             ZLog.d(TAG, "resumeTask:$info")
             if (startByUser) {
@@ -687,18 +618,14 @@ object DownloadManager {
 
 
     fun getFinishedTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList()
-                .filter { it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD }
-                .toList()
+        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD }.toList()
     }
 
     fun getDownloadingTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList().filter { DownloadingList.isDownloading(it) }
-                .toList()
+        return DownloadTaskList.getDownloadTasKList().filter { DownloadingList.isDownloading(it) }.toList()
     }
 
     fun getWaitingTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList()
-                .filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }.toList()
+        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }.toList()
     }
 }
