@@ -4,7 +4,6 @@ package com.bihe0832.android.lib.download;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.bihe0832.android.lib.download.wrapper.DownloadUtils;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.MathUtils;
 
@@ -132,7 +131,7 @@ public class DownloadItem implements Serializable {
 
     //下载ID,一个任务的唯一标示
     public long getDownloadID() {
-        return DownloadUtils.getDownloadIDByURL(downloadURL);
+        return getDownloadIDByURL(downloadURL);
     }
 
     public boolean isForceDeleteBad() {

@@ -6,11 +6,15 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.download.wrapper.DownloadAPK
+import com.bihe0832.android.lib.download.wrapper.DownloadConfig
+import com.bihe0832.android.lib.download.wrapper.DownloadFile
+import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.wrapper.*
+import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
@@ -260,12 +264,10 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
-        DownloadUtils.addDownloadListener(globalListener)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        DownloadUtils.removeDownloadListener(globalListener)
     }
 
     private fun testDownloadGzip() {
@@ -360,7 +362,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             ThreadManager.getInstance().start({
                 DownloadFile.download(
                         activity!!,
-                        url, "", "fsdfdsffd$i", object : SimpleDownloadListener() {
+                        url, "", false, "fsdfdsffd$i", object : SimpleDownloadListener() {
                     private fun getString(): String {
                         return "SimpleDownloadListener" + this.hashCode() + "-" + i
                     }

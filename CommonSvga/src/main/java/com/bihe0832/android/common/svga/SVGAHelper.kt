@@ -2,9 +2,9 @@ package com.bihe0832.android.common.svga
 
 import android.net.http.HttpResponseCache
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.utils.encrypt.SHA256
 import com.bihe0832.android.lib.utils.time.DateUtil
@@ -62,7 +62,7 @@ object SVGAHelper {
 
     fun playURL(url: String, md5: String, callback: SVGAParser.ParseCompletion) {
         try {
-            DownloadFile.forceDownload(ZixieContext.applicationContext!!, url, "", md5, object : SimpleDownloadListener() {
+            DownloadFile.forceDownload(ZixieContext.applicationContext!!, url, md5, object : SimpleDownloadListener() {
                 override fun onComplete(filePath: String, item: DownloadItem) {
                     playFile(filePath, callback)
                 }
