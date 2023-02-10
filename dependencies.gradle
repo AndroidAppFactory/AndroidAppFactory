@@ -602,7 +602,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibFloatview"              : [
-        "version"                : "5.10.39",
+        "version"                : "5.10.44",
         "artifactId"             : "lib-float-view",
         "apidependenciesList"    : [
             project.androidsupport.constraintlayout,
