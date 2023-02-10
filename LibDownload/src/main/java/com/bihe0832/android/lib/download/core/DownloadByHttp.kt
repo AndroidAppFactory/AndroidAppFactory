@@ -114,11 +114,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
                         downloadItem.finished = newFinished
                         downloadItem.finishedLengthBefore = finishedBefore
                         if (DownloadManager.isDebug()) ZLog.d(TAG, "分片下载汇总 - ${downloadItem.downloadID}: 完成长度:${FileUtils.getFileLength(newFinished)} 之前下载长度:${FileUtils.getFileLength(finishedBefore)}")
-                        if (DownloadManager.isDebug()) ZLog.d(TAG, "分片下载汇总 - ${downloadItem.downloadID}: " +
-                                "文件长度 :${FileUtils.getFileLength(downloadItem.fileLength)}" +
-                                ";完成长度 :${FileUtils.getFileLength(downloadItem.finished)}" +
-                                ";之前下载长度 :${FileUtils.getFileLength(downloadItem.finishedLengthBefore)}" +
-                                ";本次下载累计长度 :${FileUtils.getFileLength(newFinished - downloadItem.finishedLengthBefore)} ，新增长度: ${FileUtils.getFileLength(downloadItem.lastSpeed)}")
+                        if (DownloadManager.isDebug()) ZLog.d(TAG, "分片下载汇总 - ${downloadItem.downloadID}: " + "文件长度 :${FileUtils.getFileLength(downloadItem.fileLength)}" + ";完成长度 :${FileUtils.getFileLength(downloadItem.finished)}" + ";之前下载长度 :${FileUtils.getFileLength(downloadItem.finishedLengthBefore)}" + ";本次下载累计长度 :${FileUtils.getFileLength(newFinished - downloadItem.finishedLengthBefore)} ，新增长度: ${FileUtils.getFileLength(downloadItem.lastSpeed)}")
                         if (downloadItem.fileLength > 0 && downloadItem.finished >= downloadItem.fileLength) {
                             downloadItem.finished = downloadItem.fileLength
                         }
@@ -216,7 +212,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     private fun goDownload(info: DownloadItem) {
         ZLog.d(TAG, "goDownload:$info")
         try {
-            val file = File(info.tempFilePath)
+            val file = File(info.filePath)
             var hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, DownloadManager.isDebug())
             if (file.exists() && hasDownload && info.fileLength > 0 && file.length() <= info.fileLength) {
                 ZLog.e(TAG, "断点续传逻辑:$info")
@@ -340,7 +336,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
             this.partID = partNo
             this.downloadID = info.downloadID
             this.realDownloadURL = info.realURL
-            this.finalFileName = info.tempFilePath
+            this.finalFileName = info.filePath
             this.partStart = oldstart
             this.partEnd = end
             this.partFinished = finished
@@ -380,8 +376,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
     fun deleteFile(downloadInfo: DownloadItem) {
         ThreadManager.getInstance().start {
-            FileUtils.deleteFile(downloadInfo.finalFilePath)
-            FileUtils.deleteFile(downloadInfo.tempFilePath)
+            FileUtils.deleteFile(downloadInfo.filePath)
         }
     }
 
@@ -396,7 +391,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
 
     private fun notifyDownloadAfterFinish(downloadInfo: DownloadItem) {
         closeDownload(downloadInfo.downloadID, true, false)
-        var downloadFile = downloadInfo.tempFilePath
+        var downloadFile = downloadInfo.filePath
         ThreadManager.getInstance().start {
             try {
                 val oldfile = File(downloadFile)
@@ -438,25 +433,7 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
         }
     }
 
-    private fun notifyDownloadSucc(downloadInfo: DownloadItem) {
-        var downloadFile = downloadInfo.tempFilePath
-        var finalFileName = downloadInfo.finalFilePath
-        val oldfile = File(downloadFile)
-        val newfile = File(finalFileName)
-        when {
-            downloadFile.equals(finalFileName) -> {
-                innerDownloadListener.onComplete(finalFileName, downloadInfo)
-            }
-            oldfile.renameTo(newfile) -> {
-                ZLog.e(TAG, " File renamed")
-                ZLog.e(TAG, " finalFile:$finalFileName")
-                ZLog.e(TAG, " finalFile length:" + newfile.length())
-                innerDownloadListener.onComplete(finalFileName, downloadInfo)
-            }
-            else -> {
-                ZLog.e("Sorry! the file can't be renamed")
-                innerDownloadListener.onComplete(downloadFile, downloadInfo)
-            }
-        }
+    private fun notifyDownloadSucc(downloadInfo: DownloadItem): String {
+        return innerDownloadListener.onComplete(downloadInfo.filePath, downloadInfo)
     }
 }

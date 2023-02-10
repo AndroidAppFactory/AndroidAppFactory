@@ -121,14 +121,14 @@ object DownloadFile {
                 downloadListener?.onFail(errorCode, msg, item)
             }
 
-            override fun onComplete(filePath: String, item: DownloadItem) {
+            override fun onComplete(filePath: String, item: DownloadItem): String {
                 ZLog.i("startDownload download Path: $filePath")
                 ThreadManager.getInstance().start({
                     ThreadManager.getInstance().runOnUIThread {
                         progressDialog.dismiss()
                     }
                 }, 2)
-                downloadListener?.onComplete(filePath, item)
+                return downloadListener?.onComplete(filePath, item) ?: filePath
             }
 
             override fun onDelete(item: DownloadItem) {

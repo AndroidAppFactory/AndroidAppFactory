@@ -11,10 +11,7 @@ import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 
-open class SimpleInstallListener(
-        private val activity: Activity,
-        private val packageName: String,
-        private val listener: OnDialogListener?) : SimpleDownloadListener() {
+open class SimpleInstallListener(private val activity: Activity, private val packageName: String, private val listener: OnDialogListener?) : SimpleDownloadListener() {
 
     private val loadingDialog = LoadingDialog(activity).apply {
         setIsFullScreen(true)
@@ -46,7 +43,7 @@ open class SimpleInstallListener(
         listener?.onNegativeClick()
     }
 
-    override fun onComplete(filePath: String, item: DownloadItem) {
+    override fun onComplete(filePath: String, item: DownloadItem): String {
         ZLog.i("startDownloadApk download installApkPath: $filePath")
         ThreadManager.getInstance().runOnUIThread {
             if (InstallUtils.getFileType(filePath) == ApkInstallType.APK) {
@@ -55,6 +52,7 @@ open class SimpleInstallListener(
                 InstallUtils.installAPP(activity, filePath, packageName, installListener)
             }
         }
+        return filePath
     }
 
     override fun onProgress(item: DownloadItem) {

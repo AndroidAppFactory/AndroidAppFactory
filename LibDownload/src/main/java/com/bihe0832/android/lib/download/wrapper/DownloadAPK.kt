@@ -93,10 +93,11 @@ object DownloadAPK {
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     }
 
-                    override fun onComplete(filePath: String, item: DownloadItem) {
+                    override fun onComplete(filePath: String, item: DownloadItem): String {
                         ThreadManager.getInstance().runOnUIThread {
                             InstallUtils.installAPP(activity, filePath, packageName)
                         }
+                        return filePath
                     }
 
                     override fun onProgress(item: DownloadItem) {
@@ -112,10 +113,11 @@ object DownloadAPK {
         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
         }
 
-        override fun onComplete(filePath: String, item: DownloadItem) {
+        override fun onComplete(filePath: String, item: DownloadItem): String {
             ThreadManager.getInstance().runOnUIThread {
                 InstallUtils.installAPP(context, filePath, packageName)
             }
+            return filePath
         }
 
         override fun onProgress(item: DownloadItem) {

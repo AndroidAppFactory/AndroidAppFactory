@@ -15,7 +15,7 @@ import kotlin.jvm.Synchronized;
 /**
  * 下载信息结构体
  * <p>
- * 除 downloadURL ，其余都非必填，默认不支持分片下载，每次下载都会强制重新下载
+ * 除 downloadURL ，其余都非必填，下载本地仅支持传入文件夹，不支持传入下载文件路径，如果是要下载到指定文件，请参考 DownloadTools 二次分封装
  *
  * @author zixie code@bihe0832.com Created on 2020/6/3.
  */
@@ -51,8 +51,6 @@ public class DownloadItem implements Serializable {
     private String downloadTitle = "";
     // 下载时指定的本地目录，建议不填
     private String fileFolder = "";
-    // 下载结束以后，文件的实际地址，不填
-    private String finalFilePath = "";
     // 扩展信息，会一路透传到该下载相关的所有事件，包括安装
     private String actionKey = "";
     // 扩展信息，会一路透传到该下载相关的所有事件，包括安装
@@ -63,8 +61,8 @@ public class DownloadItem implements Serializable {
     private long versionCode = 0;
     // 下载显示的Icon，非必填
     private String downloadIcon = "";
-    // 下载时，临时的中间文件，不填
-    private String tempFilePath = "";
+    // 下载时，最终下载的文件路径，外部参数不要填，交给内部处理!!!!
+    private String filePath = "";
     // 累积已经下载完的文件长度，不填
     private long finishedLength = 0;
     // 之前已经下载完的文件长度，不填
@@ -224,12 +222,12 @@ public class DownloadItem implements Serializable {
         this.packageName = packageName;
     }
 
-    public String getTempFilePath() {
-        return tempFilePath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setTempFilePath(String tempFilePath) {
-        this.tempFilePath = tempFilePath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public String getFileFolder() {
@@ -263,14 +261,6 @@ public class DownloadItem implements Serializable {
 
     public void setFileLength(long fileLength) {
         this.fileLength = fileLength;
-    }
-
-    public String getFinalFilePath() {
-        return finalFilePath;
-    }
-
-    public void setFinalFilePath(String finalFilePath) {
-        this.finalFilePath = finalFilePath;
     }
 
     public long getFinishedLengthBefore() {
@@ -389,13 +379,12 @@ public class DownloadItem implements Serializable {
             this.downloadDesc = item.downloadDesc;
             this.downloadTitle = item.downloadTitle;
             this.fileFolder = item.fileFolder;
-            this.finalFilePath = item.finalFilePath;
             this.actionKey = item.actionKey;
             this.extraInfo = item.extraInfo;
             this.packageName = item.packageName;
             this.versionCode = item.versionCode;
             this.downloadIcon = item.downloadIcon;
-            this.tempFilePath = item.tempFilePath;
+            this.filePath = item.filePath;
             this.downloadPriority = item.downloadPriority;
         } else {
             Log.e(TAG, "update error , download id is bad ");
@@ -404,31 +393,6 @@ public class DownloadItem implements Serializable {
 
     @Override
     public String toString() {
-        return "下载资源：{"
-                + " downloadURL='" + downloadURL + '\''
-                + ", downloadTitle='" + downloadTitle + '\''
-                + ", fileFolder='" + fileFolder + '\''
-                + ", finalFilePath='" + finalFilePath + '\''
-                + ", tempFilePath='" + tempFilePath + '\''
-                + ", fileMD5='" + fileMD5 + '\''
-                + ", fileSHA256='" + fileSHA256 + '\''
-                + ", forceDownloadNew=" + forceDownloadNew
-                + ", downloadDesc='" + downloadDesc + '\''
-                + ", actionKey='" + actionKey + '\''
-                + ", extraInfo='" + extraInfo + '\''
-                + ", packageName='" + packageName + '\''
-                + ", versionCode=" + versionCode
-                + ", downloadIcon='" + downloadIcon + '\''
-                + ", finishedLength=" + finishedLength
-                + ", finishedLengthBefore=" + finishedLengthBefore
-                + ", fileLength=" + fileLength
-                + ", lastSpeed=" + lastSpeed
-                + ", startTime=" + startTime
-                + ", pauseTime=" + pauseTime
-                + ", autoInstall=" + autoInstall
-                + ", status=" + status
-                + ", downloadWhenUseMobile=" + downloadWhenUseMobile
-                + ", downloadWhenAdd=" + downloadWhenAdd
-                + '}';
+        return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + ", downloadTitle='" + downloadTitle + '\'' + ", fileFolder='" + fileFolder + '\'' + ", tempFilePath='" + filePath + '\'' + ", fileMD5='" + fileMD5 + '\'' + ", fileSHA256='" + fileSHA256 + '\'' + ", forceDownloadNew=" + forceDownloadNew + ", downloadDesc='" + downloadDesc + '\'' + ", actionKey='" + actionKey + '\'' + ", extraInfo='" + extraInfo + '\'' + ", packageName='" + packageName + '\'' + ", versionCode=" + versionCode + ", downloadIcon='" + downloadIcon + '\'' + ", finishedLength=" + finishedLength + ", finishedLengthBefore=" + finishedLengthBefore + ", fileLength=" + fileLength + ", lastSpeed=" + lastSpeed + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", autoInstall=" + autoInstall + ", status=" + status + ", downloadWhenUseMobile=" + downloadWhenUseMobile + ", downloadWhenAdd=" + downloadWhenAdd + '}';
     }
 }

@@ -112,7 +112,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
                             DownloadInfoDBManager.INSTANCE.getFinishedBefore(item.getDownloadID()));
                     item.setFinished(item.getFinishedLengthBefore());
                     DownloadTaskList.INSTANCE.addToDownloadTaskList(item);
-                    if (FileUtils.INSTANCE.checkFileExist(item.getFinalFilePath())) {
+                    if (FileUtils.INSTANCE.checkFileExist(item.getFilePath())) {
                         item.setFinished(item.getFileLength());
                         item.setStatus(DownloadStatus.STATUS_DOWNLOAD_SUCCEED);
                     }

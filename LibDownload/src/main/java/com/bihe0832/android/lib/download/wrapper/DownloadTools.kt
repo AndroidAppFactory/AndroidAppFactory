@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.request.URLUtils
@@ -101,39 +102,40 @@ object DownloadTools {
                     }
                 }
 
-                fun notifyDownloadSuccess(finalPath: String, item: DownloadItem) {
+                fun notifyDownloadSuccess(finalPath: String, item: DownloadItem): String {
+                    var path = finalPath
                     mTempDownloadListenerList[item.downloadID]?.forEach {
-                        it.onComplete(finalPath, item)
+                        path = it.onComplete(path, item)
                     }
                     mTempDownloadListenerList.remove(item.downloadID)
 
                     mGlobalDownloadListenerList.forEach {
-                        it.onComplete(finalPath, item)
+                        path = it.onComplete(path, item)
                     }
+                    return path
                 }
 
-                override fun onComplete(downloadFilePath: String, item: DownloadItem) {
+                override fun onComplete(downloadFilePath: String, item: DownloadItem): String {
                     if (needRename) {
                         if (downloadFilePath == finalPath) {
-                            notifyDownloadSuccess(downloadFilePath, item)
+                            return notifyDownloadSuccess(downloadFilePath, item)
                         } else {
-                            ThreadManager.getInstance().start {
-                                FileUtils.copyFile(File(downloadFilePath), File(finalPath), false).let { result ->
-                                    if (result) {
-                                        item.finalFilePath = finalPath
-                                        ThreadManager.getInstance().runOnUIThread {
-                                            notifyDownloadSuccess(finalPath, item)
-                                        }
-                                    } else {
-                                        ThreadManager.getInstance().runOnUIThread {
-                                            onFail(DownloadErrorCode.ERR_FILE_RENAME_FAILED, "download success and rename failed", item)
-                                        }
+                            FileUtils.copyFile(File(downloadFilePath), File(finalPath), true).let { result ->
+                                if (result) {
+                                    ThreadManager.getInstance().runOnUIThread {
+                                        notifyDownloadSuccess(finalPath, item)
                                     }
+                                    return finalPath
+                                } else {
+                                    ThreadManager.getInstance().runOnUIThread {
+                                        onFail(DownloadErrorCode.ERR_FILE_RENAME_FAILED, "download success and rename failed", item)
+                                    }
+                                    return downloadFilePath
                                 }
                             }
                         }
                     } else {
-                        notifyDownloadSuccess(downloadFilePath, item)
+                        return notifyDownloadSuccess(downloadFilePath, item)
                     }
                 }
 
@@ -177,8 +179,15 @@ object DownloadTools {
         }.let {
             addNewKeyListener(it.downloadID, path, isFilePath)
             addDownloadListenerToList(it.downloadID, downloadListener)
-            it.downloadListener = mDownloadKeyListenerList[it.downloadID]
-            DownloadUtils.startDownload(context, it, forceDownload)
+            if (isFilePath && FileUtils.checkFileExist(path, 0, md5, sha256, false)) {
+                it.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
+                it.filePath = path
+                mDownloadKeyListenerList[it.downloadID]?.onComplete(path, it)
+            } else {
+                it.downloadListener = mDownloadKeyListenerList[it.downloadID]
+                DownloadUtils.startDownload(context, it, forceDownload)
+            }
+
         }
     }
 }

@@ -38,10 +38,11 @@ class DebugAudioFragment : DebugEnvFragment() {
                     "https://cdn.bihe0832.com/audio/03.wav",
                     false,
                     object : SimpleDownloadListener() {
-                        override fun onComplete(filePath: String, item: DownloadItem) {
+                        override fun onComplete(filePath: String, item: DownloadItem): String {
                             blockAudioPlayerManager.play(filePath)
                             blockAudioPlayerManager.play(context!!, R.raw.one)
                             blockAudioPlayerManager.play(context!!, R.raw.four)
+                            return filePath
                         }
 
                         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {

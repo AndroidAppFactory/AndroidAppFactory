@@ -68,7 +68,7 @@ public class DebugImageFragment : BaseFragment() {
                         ZLog.e(item.toString())
                     }
 
-                    override fun onComplete(filePath: String, item: DownloadItem) {
+                    override fun onComplete(filePath: String, item: DownloadItem): String {
                         path = filePath
                         BitmapUtil.getLocalBitmap(filePath).let {
                             test_image_remote_source.post {
@@ -95,6 +95,7 @@ public class DebugImageFragment : BaseFragment() {
                             }
 
                         }
+                        return filePath
                     }
 
                     override fun onProgress(item: DownloadItem) {
