@@ -523,7 +523,7 @@ object DownloadManager {
     }
 
     fun getDownloadingTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList().filter { DownloadingList.isDownloading(it) }.toList<DownloadItem>()
+        return DownloadingList.getDownloadingItemList().toList<DownloadItem>()
     }
 
     fun getWaitingTask(): List<DownloadItem> {
