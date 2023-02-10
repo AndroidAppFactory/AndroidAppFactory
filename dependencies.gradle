@@ -133,7 +133,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonList"                : [
-        "version"            : "5.10.43",
+        "version"            : "5.10.44",
         "artifactId"         : "common-list",
         "apidependenciesList": [
             project.androidsupport.swiperefreshlayout,
