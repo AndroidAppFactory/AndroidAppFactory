@@ -335,7 +335,7 @@ public class DownloadItem implements Serializable {
     }
 
     public void setStatus(@DownloadStatus int newStatus) {
-        Log.d(TAG, "status change , before: " + this.status + " after : " + newStatus);
+        Log.d("DownloadItem", "status change , before: " + this.status + " after : " + newStatus);
         this.status = newStatus;
     }
 
