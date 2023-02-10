@@ -116,7 +116,7 @@ object DialogUtils {
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean, callback: OnDialogListener?) {
-        showAlertDialog(context, title, message, context.getString(R.string.dialog_button_ok), canCancel, callback)
+        showAlertDialog(context, title, message, context.getString(R.string.dialog_tips_button), canCancel, callback)
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean) {
