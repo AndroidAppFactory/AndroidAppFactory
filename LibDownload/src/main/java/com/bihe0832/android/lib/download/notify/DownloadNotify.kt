@@ -61,7 +61,7 @@ object DownloadNotify {
                         }
                         DownloadNotifyManager.ACTION_INSTALL -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                InstallUtils.installAPP(context, item.finalFilePath)
+                                InstallUtils.installAPP(context, item.filePath)
                                 notifyDelete(item)
                             }
                         }

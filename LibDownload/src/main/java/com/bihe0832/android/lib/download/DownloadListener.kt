@@ -42,7 +42,7 @@ interface DownloadListener {
     /**任务下载完成通知，在任务保存完全部数据时回调。
      * 根据需要更新任务的UI状态显示，如:任务状态显示为”已完成“
      */
-    fun onComplete(filePath: String, item: DownloadItem)
+    fun onComplete(filePath: String, item: DownloadItem): String
 
     fun onDelete(item: DownloadItem)
 }

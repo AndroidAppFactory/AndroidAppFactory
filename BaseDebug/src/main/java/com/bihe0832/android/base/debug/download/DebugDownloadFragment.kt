@@ -41,8 +41,9 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
             }
 
-            override fun onComplete(filePath: String, item: DownloadItem) {
+            override fun onComplete(filePath: String, item: DownloadItem): String {
                 ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+                return filePath
             }
 
             override fun onStart(item: DownloadItem) {
@@ -128,7 +129,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                     showResult("应用下载失败（$errorCode）")
                 }
 
-                override fun onComplete(filePath: String, item: DownloadItem) {
+                override fun onComplete(filePath: String, item: DownloadItem): String {
                     showResult("startDownloadApk download installApkPath: $filePath")
                     if (type == INSTALL_BY_CUSTOMER) {
                         var photoURI =
@@ -157,6 +158,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
                         })
                     }
+                    return filePath
                 }
 
                 override fun onProgress(item: DownloadItem) {
@@ -284,7 +286,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
                     }
 
-                    override fun onComplete(filePath: String, item: DownloadItem) {
+                    override fun onComplete(filePath: String, item: DownloadItem): String {
                         ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
 
                         ZLog.d(LOG_TAG, FileUtils.getFileContent(filePath, true))
@@ -305,6 +307,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             ZLog.d(LOG_TAG, "$filePath SHA256 is: $data")
                             ZLog.d(LOG_TAG, "$filePath SHA256 length is: ${data.length}")
                         }
+                        return filePath
                     }
 
 
@@ -371,11 +374,12 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         return "SimpleDownloadListener" + this.hashCode() + "-" + i
                     }
 
-                    override fun onComplete(filePath: String, item: DownloadItem) {
+                    override fun onComplete(filePath: String, item: DownloadItem): String {
                         ZLog.d(
                                 "testDownloadMoreThanOnce",
                                 "onComplete : ${getString()} ${filePath}"
                         )
+                        return filePath
                     }
 
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
@@ -409,7 +413,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         if (URLUtils.isHTTPUrl(p0)) {
                             DownloadFile.download(activity!!, p0!!, ZixieContext.getLogFolder() + URLUtils.getFileName(p0), true, object : SimpleDownloadListener() {
 
-                                override fun onComplete(filePath: String, item: DownloadItem) {
+                                override fun onComplete(filePath: String, item: DownloadItem): String {
                                     ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
                                     ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
                                     filePath.let {
@@ -439,6 +443,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                                                 }"
                                         )
                                     }
+                                    return filePath
                                 }
 
                                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
@@ -472,8 +477,9 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 ZLog.d(LOG_TAG, "testDownloadList onFail: ${errorCode} ${msg} $item")
             }
 
-            override fun onComplete(filePath: String, item: DownloadItem) {
+            override fun onComplete(filePath: String, item: DownloadItem): String {
                 ZLog.d(LOG_TAG, "testDownloadList onComplete: $filePath ${item}")
+                return filePath
             }
 
             override fun onProgress(item: DownloadItem) {

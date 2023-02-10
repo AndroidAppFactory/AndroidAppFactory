@@ -88,9 +88,7 @@ object DownloadManager {
         override fun onWait(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_WAITING
             DownloadNotify.notifyProcess(item)
-            item.downloadListener?.let {
-                it.onWait(item)
-            }
+            item.downloadListener?.onWait(item)
             mGlobalDownloadListenerList?.onWait(item)
             DownloadInfoDBManager.saveDownloadInfo(item)
         }
@@ -101,9 +99,7 @@ object DownloadManager {
             DownloadNotify.notifyProcess(item)
             item.startTime = System.currentTimeMillis()
 
-            item.downloadListener?.let {
-                it.onStart(item)
-            }
+            item.downloadListener?.onStart(item)
             mGlobalDownloadListenerList?.onStart(item)
 
             DownloadInfoDBManager.saveDownloadInfo(item)
@@ -112,10 +108,7 @@ object DownloadManager {
         override fun onProgress(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOADING
 
-            item.downloadListener?.let {
-                it.onProgress(item)
-            }
-
+            item.downloadListener?.onProgress(item)
             mGlobalDownloadListenerList?.onProgress(item)
 
             if (item.notificationVisibility()) {
@@ -126,10 +119,7 @@ object DownloadManager {
         override fun onPause(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
 
-            item.downloadListener?.let {
-                it.onPause(item)
-            }
-
+            item.downloadListener?.onPause(item)
             mGlobalDownloadListenerList?.onPause(item)
 
             if (item.notificationVisibility()) {
@@ -145,10 +135,7 @@ object DownloadManager {
                 ToastUtil.showLong(mContext, "本机已有更高版本的${item.downloadTitle}，下载已取消")
             }
 
-            item.downloadListener?.let {
-                it.onFail(errorCode, msg, item)
-            }
-
+            item.downloadListener?.onFail(errorCode, msg, item)
             mGlobalDownloadListenerList?.onFail(errorCode, msg, item)
 
             if (item.notificationVisibility()) {
@@ -156,7 +143,7 @@ object DownloadManager {
             }
         }
 
-        override fun onComplete(filePath: String, item: DownloadItem) {
+        override fun onComplete(filePath: String, item: DownloadItem): String {
             item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
             if (item.fileLength < 1) {
                 item.fileLength = File(filePath).length()
@@ -169,35 +156,33 @@ object DownloadManager {
             }
             DownloadInfoDBManager.saveDownloadInfo(item)
             addDownloadItemToList(item)
-            item.finalFilePath = filePath
             addWaitToDownload()
 
-            item.downloadListener?.let {
-                it.onComplete(filePath, item)
+            ThreadManager.getInstance().start {
+                ZLog.d(TAG, "onComplete start: $filePath ")
+                var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
+                newPath = mGlobalDownloadListenerList?.onComplete(newPath, item) ?: newPath
+                ZLog.d(TAG, "onComplete end: $newPath ")
+                item.filePath = newPath
+                DownloadInfoDBManager.saveDownloadInfo(item)
+                if (item.notificationVisibility()) {
+                    DownloadNotify.notifyFinished(item)
+                }
+
+                if (item.isAutoInstall) {
+                    InstallUtils.installAPP(mContext, newPath)
+                }
             }
-            mGlobalDownloadListenerList?.onComplete(filePath, item)
 
-
-
-            if (item.notificationVisibility()) {
-                DownloadNotify.notifyFinished(item)
-            }
-
-            if (item.isAutoInstall) {
-                InstallUtils.installAPP(mContext, filePath)
-            }
+            return filePath
         }
 
         override fun onDelete(item: DownloadItem) {
 
-            item.downloadListener?.let {
-                it.onDelete(item)
-            }
-
+            item.downloadListener?.onDelete(item)
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyDelete(item)
             }
-
             mGlobalDownloadListenerList?.onDelete(item)
         }
     }
@@ -269,8 +254,7 @@ object DownloadManager {
     private fun updateInfo(info: DownloadItem) {
         var savedInfo = DownloadInfoDBManager.getDownloadInfo(info.downloadURL)
         if (savedInfo != null) {
-            info.finalFilePath = savedInfo.finalFilePath
-            info.tempFilePath = savedInfo.tempFilePath
+            info.filePath = savedInfo.filePath
             if (!TextUtils.isEmpty(savedInfo.realURL)) {
                 info.realURL = savedInfo.realURL
             }
@@ -280,9 +264,8 @@ object DownloadManager {
                 info.finished = info.finishedLengthBefore
             }
         }
-        val finalFilePathIsNull = TextUtils.isEmpty(info.finalFilePath)
-        val tempFilePathIsNull = TextUtils.isEmpty(info.tempFilePath)
-        if (finalFilePathIsNull || tempFilePathIsNull) {
+        val tempFilePathIsNull = TextUtils.isEmpty(info.filePath)
+        if (tempFilePathIsNull) {
             val backFileName = if (!TextUtils.isEmpty(info.fileMD5)) {
                 info.fileMD5
             } else if (!TextUtils.isEmpty(info.fileSHA256)) {
@@ -290,27 +273,15 @@ object DownloadManager {
             } else {
                 System.currentTimeMillis().toString()
             }
-
-            if (finalFilePathIsNull) {
-                info.finalFilePath = getFinalFileName(info.downloadURL, backFileName, info.fileFolder)
-            }
-
-            if (tempFilePathIsNull) {
-                info.tempFilePath = getDownladTempFilePath(info.downloadURL, backFileName, info.fileFolder)
-            }
+            info.filePath = getDownladTempFilePath(info.downloadURL, backFileName, info.fileFolder)
         }
     }
 
 
     private fun checkBeforeDownloadFile(info: DownloadItem): String {
 
-        if (FileUtils.checkFileExist(info.finalFilePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
-            return info.finalFilePath
-        }
-
-        if (FileUtils.checkFileExist(info.tempFilePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
-            info.finalFilePath = info.tempFilePath
-            return info.tempFilePath
+        if (FileUtils.checkFileExist(info.filePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
+            return info.filePath
         }
         return ""
     }
@@ -369,7 +340,7 @@ object DownloadManager {
                 if (!TextUtils.isEmpty(filePath)) {
                     ZLog.e(TAG, "has download:$info")
                     info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
-                    innerDownloadListener.onComplete(info.finalFilePath, info)
+                    innerDownloadListener.onComplete(info.filePath, info)
                 } else {
                     if (downloadAfterAdd) {
                         var currentTime = System.currentTimeMillis()

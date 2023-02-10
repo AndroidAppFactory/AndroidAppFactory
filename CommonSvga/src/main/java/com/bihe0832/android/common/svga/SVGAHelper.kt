@@ -63,8 +63,9 @@ object SVGAHelper {
     fun playURL(url: String, md5: String, callback: SVGAParser.ParseCompletion) {
         try {
             DownloadFile.forceDownload(ZixieContext.applicationContext!!, url, "", false, md5, object : SimpleDownloadListener() {
-                override fun onComplete(filePath: String, item: DownloadItem) {
+                override fun onComplete(filePath: String, item: DownloadItem): String {
                     playFile(filePath, callback)
+                    return filePath
                 }
 
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {

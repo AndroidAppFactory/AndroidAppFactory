@@ -44,7 +44,7 @@ public class DownloadUtils {
     /**
      * 添加一个下载任务
      *
-     * @param info 添加任务的信息
+     * @param info 添加任务的信息，除 downloadURL ，其余都非必填，下载本地仅支持传入文件夹，不支持传入下载文件路径，如果是要下载到指定文件，请参考 DownloadTools 二次分封装
      */
     public static final void startDownload(Context context, @NotNull DownloadItem info, boolean forceDownload) {
         DownloadManager.INSTANCE.init(context);

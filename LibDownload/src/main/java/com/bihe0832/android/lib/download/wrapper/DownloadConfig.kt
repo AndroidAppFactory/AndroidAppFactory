@@ -56,7 +56,7 @@ object DownloadConfig {
                     }
                 }
 
-                override fun onComplete(filePath: String, item: DownloadItem) {
+                override fun onComplete(filePath: String, item: DownloadItem): String {
                     try {
                         FileUtils.getFileContent(filePath).let {
                             if (it.isNotEmpty()) {
@@ -72,6 +72,7 @@ object DownloadConfig {
                     } catch (e: Exception) {
                         downloadListener.onFailed(ResponseHandler.ERROR_EXCEPTION, e.message.toString())
                     }
+                    return filePath
                 }
 
                 override fun onProgress(item: DownloadItem) {
