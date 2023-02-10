@@ -412,50 +412,51 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 object : InputDialogCompletedCallback {
                     override fun onInputCompleted(p0: String?) {
                         if (URLUtils.isHTTPUrl(p0)) {
-                            DownloadFile.download(activity!!, p0!!, ZixieContext.getLogFolder() + URLUtils.getFileName(p0), true, object : SimpleDownloadListener() {
-
-                                override fun onComplete(filePath: String, item: DownloadItem): String {
-                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
-                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
-                                    filePath.let {
-                                        ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
-                                        ZLog.d(
-                                                LOG_TAG,
-                                                "getExtensionName: ${FileUtils.getExtensionName(it)}"
-                                        )
-                                        ZLog.d(
-                                                LOG_TAG,
-                                                "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}"
-                                        )
-                                        ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
-                                        ZLog.d(
-                                                LOG_TAG,
-                                                "getFileMD5: ${MD5.getFileMD5(it, 0, File(it).length())}"
-                                        )
-                                        ZLog.d(LOG_TAG, "getFileSHA256: ${FileUtils.getFileSHA256(it)}")
-                                        ZLog.d(
-                                                LOG_TAG,
-                                                "getFileSHA256: ${
-                                                    SHA256.getFileSHA256(
-                                                            it,
-                                                            0,
-                                                            File(it).length()
-                                                    )
-                                                }"
-                                        )
-                                    }
-                                    return filePath
-                                }
-
-                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                                    ZLog.d(LOG_TAG, "testDownload onFail : ${errorCode} ${msg} $item")
-                                }
-
-                                override fun onProgress(item: DownloadItem) {
-                                    ZLog.d(LOG_TAG, "testDownload : ${item.process}")
-                                }
-
-                            })
+                            DownloadFile.download(activity!!, p0!!, ZixieContext.getLogFolder() + System.currentTimeMillis().toString() + URLUtils.getFileName(p0), true, null)
+//                            DownloadFile.download(activity!!, p0!!, ZixieContext.getLogFolder() + URLUtils.getFileName(p0), true, object : SimpleDownloadListener() {
+//
+//                                override fun onComplete(filePath: String, item: DownloadItem): String {
+//                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+//                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+//                                    filePath.let {
+//                                        ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
+//                                        ZLog.d(
+//                                                LOG_TAG,
+//                                                "getExtensionName: ${FileUtils.getExtensionName(it)}"
+//                                        )
+//                                        ZLog.d(
+//                                                LOG_TAG,
+//                                                "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}"
+//                                        )
+//                                        ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
+//                                        ZLog.d(
+//                                                LOG_TAG,
+//                                                "getFileMD5: ${MD5.getFileMD5(it, 0, File(it).length())}"
+//                                        )
+//                                        ZLog.d(LOG_TAG, "getFileSHA256: ${FileUtils.getFileSHA256(it)}")
+//                                        ZLog.d(
+//                                                LOG_TAG,
+//                                                "getFileSHA256: ${
+//                                                    SHA256.getFileSHA256(
+//                                                            it,
+//                                                            0,
+//                                                            File(it).length()
+//                                                    )
+//                                                }"
+//                                        )
+//                                    }
+//                                    return filePath
+//                                }
+//
+//                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+//                                    ZLog.d(LOG_TAG, "testDownload onFail : ${errorCode} ${msg} $item")
+//                                }
+//
+//                                override fun onProgress(item: DownloadItem) {
+//                                    ZLog.d(LOG_TAG, "testDownload : ${item.process}")
+//                                }
+//
+//                            })
                         }
                     }
 

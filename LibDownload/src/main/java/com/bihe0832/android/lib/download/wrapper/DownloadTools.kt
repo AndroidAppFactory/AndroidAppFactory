@@ -184,12 +184,16 @@ object DownloadTools {
             return list
         }
 
-        fun addNameListener(downloadListener: DownloadListener) {
+        fun addNameListener(downloadListener: DownloadListener?) {
             getKeyDownloadListenerList("").add(downloadListener)
         }
 
-        fun addNameListener(finalPath: String, downloadListener: DownloadListener) {
-            getKeyDownloadListenerList(finalPath).add(downloadListener)
+        fun addNameListener(finalPath: String, downloadListener: DownloadListener?) {
+            getKeyDownloadListenerList(finalPath).apply {
+                downloadListener?.let {
+                    add(downloadListener)
+                }
+            }
         }
     }
 
@@ -201,13 +205,9 @@ object DownloadTools {
         mDownloadKeyListenerList[downloadID] = keyListener
 
         if (isFile) {
-            downloadListener?.let {
-                keyListener.addNameListener(finalPath, it)
-            }
+            keyListener.addNameListener(finalPath, downloadListener)
         } else {
-            downloadListener?.let {
-                keyListener.addNameListener(it)
-            }
+            keyListener.addNameListener(downloadListener)
         }
     }
 
