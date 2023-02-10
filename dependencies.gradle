@@ -190,7 +190,7 @@ ext.moduleInfo = [
         ]
     ],
     "Framework"                 : [
-        "version"                : "5.10.43",
+        "version"                : "5.10.44",
         "artifactId"             : "framework",
         "apidependenciesList"    : [
             project.androidsupport.annotation,
