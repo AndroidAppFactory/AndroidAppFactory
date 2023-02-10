@@ -393,6 +393,10 @@ public class DownloadItem implements Serializable {
 
     @Override
     public String toString() {
-        return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + ", downloadTitle='" + downloadTitle + '\'' + ", fileFolder='" + fileFolder + '\'' + ", tempFilePath='" + filePath + '\'' + ", fileMD5='" + fileMD5 + '\'' + ", fileSHA256='" + fileSHA256 + '\'' + ", forceDownloadNew=" + forceDownloadNew + ", downloadDesc='" + downloadDesc + '\'' + ", actionKey='" + actionKey + '\'' + ", extraInfo='" + extraInfo + '\'' + ", packageName='" + packageName + '\'' + ", versionCode=" + versionCode + ", downloadIcon='" + downloadIcon + '\'' + ", finishedLength=" + finishedLength + ", finishedLengthBefore=" + finishedLengthBefore + ", fileLength=" + fileLength + ", lastSpeed=" + lastSpeed + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", autoInstall=" + autoInstall + ", status=" + status + ", downloadWhenUseMobile=" + downloadWhenUseMobile + ", downloadWhenAdd=" + downloadWhenAdd + '}';
+        long code = 0;
+        if (mDownloadListener != null){
+            code = mDownloadListener.hashCode();
+        }
+        return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + " listener='" + code + '\'' + ", downloadTitle='" + downloadTitle + '\'' + ", fileFolder='" + fileFolder + '\'' + ", tempFilePath='" + filePath + '\'' + ", fileMD5='" + fileMD5 + '\'' + ", fileSHA256='" + fileSHA256 + '\'' + ", forceDownloadNew=" + forceDownloadNew + ", downloadDesc='" + downloadDesc + '\'' + ", actionKey='" + actionKey + '\'' + ", extraInfo='" + extraInfo + '\'' + ", packageName='" + packageName + '\'' + ", versionCode=" + versionCode + ", downloadIcon='" + downloadIcon + '\'' + ", finishedLength=" + finishedLength + ", finishedLengthBefore=" + finishedLengthBefore + ", fileLength=" + fileLength + ", lastSpeed=" + lastSpeed + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", autoInstall=" + autoInstall + ", status=" + status + ", downloadWhenUseMobile=" + downloadWhenUseMobile + ", downloadWhenAdd=" + downloadWhenAdd + '}';
     }
 }
