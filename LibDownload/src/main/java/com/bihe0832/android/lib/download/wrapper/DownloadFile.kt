@@ -232,6 +232,6 @@ object DownloadFile {
     }
 
     private fun startDownload(context: Context, title: String, msg: String, url: String, path: String, isFile: Boolean, md5: String, sha256: String, forceDownloadNew: Boolean, UseMobile: Boolean, forceDownload: Boolean, downloadListener: DownloadListener?) {
-        DownloadTools.download(context, title, msg, url, path, isFile, md5, sha256, forceDownloadNew, UseMobile, "DownloadFile", forceDownload, downloadListener)
+        DownloadTools.startDownload(context, title, msg, url, path, isFile, md5, sha256, forceDownloadNew, UseMobile, "DownloadFile", forceDownload, downloadListener)
     }
 }

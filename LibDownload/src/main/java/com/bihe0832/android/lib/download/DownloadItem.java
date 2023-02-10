@@ -405,20 +405,20 @@ public class DownloadItem implements Serializable {
     @Override
     public String toString() {
         return "下载资源：{"
-                + "downloadDesc='" + downloadDesc + '\''
+                + " downloadURL='" + downloadURL + '\''
                 + ", downloadTitle='" + downloadTitle + '\''
-                + ", actionKey='" + actionKey + '\''
-                + ", extraInfo='" + extraInfo + '\''
-                + ", packageName='" + packageName + '\''
-                + ", versionCode=" + versionCode
-                + ", downloadIcon='" + downloadIcon + '\''
-                + ", downloadURL='" + downloadURL + '\''
-                + ", fileNameWithPath='" + fileFolder + '\''
+                + ", fileFolder='" + fileFolder + '\''
                 + ", finalFilePath='" + finalFilePath + '\''
                 + ", tempFilePath='" + tempFilePath + '\''
                 + ", fileMD5='" + fileMD5 + '\''
                 + ", fileSHA256='" + fileSHA256 + '\''
                 + ", forceDownloadNew=" + forceDownloadNew
+                + ", downloadDesc='" + downloadDesc + '\''
+                + ", actionKey='" + actionKey + '\''
+                + ", extraInfo='" + extraInfo + '\''
+                + ", packageName='" + packageName + '\''
+                + ", versionCode=" + versionCode
+                + ", downloadIcon='" + downloadIcon + '\''
                 + ", finishedLength=" + finishedLength
                 + ", finishedLengthBefore=" + finishedLengthBefore
                 + ", fileLength=" + fileLength

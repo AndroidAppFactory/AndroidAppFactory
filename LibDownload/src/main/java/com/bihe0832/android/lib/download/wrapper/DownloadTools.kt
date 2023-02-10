@@ -14,13 +14,28 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
- * 主要用于二层封装
+ * 主要用于二层封装，所有的下载会优先走到预处理的listener，处理结束以后再对外回调最终结果，仅能回调通过：
+ *
+ * DownLoadAPK，DownloadConfig，DownloadFile 触发的下载
  */
 
 object DownloadTools {
 
     private var mTempDownloadListenerList = ConcurrentHashMap<Long, CopyOnWriteArrayList<DownloadListener>>()
+    private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
+
     private var mDownloadKeyListenerList = ConcurrentHashMap<Long, DownloadListener>()
+
+    fun addGlobalDownloadListener(downloadListener: DownloadListener?) {
+        mGlobalDownloadListenerList.add(downloadListener)
+    }
+
+    fun removeGlobalDownloadListener(downloadListener: DownloadListener?) {
+        if (mGlobalDownloadListenerList.contains(downloadListener)) {
+            mGlobalDownloadListenerList.remove(downloadListener)
+        }
+    }
+
 
     private fun addDownloadListenerToList(downloadID: Long, downloadListener: DownloadListener?) {
         downloadListener?.let {
@@ -41,10 +56,16 @@ object DownloadTools {
                     mTempDownloadListenerList[item.downloadID]?.forEach {
                         it.onWait(item)
                     }
+                    mGlobalDownloadListenerList.forEach {
+                        it.onWait(item)
+                    }
                 }
 
                 override fun onStart(item: DownloadItem) {
                     mTempDownloadListenerList[item.downloadID]?.forEach {
+                        it.onStart(item)
+                    }
+                    mGlobalDownloadListenerList.forEach {
                         it.onStart(item)
                     }
                 }
@@ -53,10 +74,18 @@ object DownloadTools {
                     mTempDownloadListenerList[item.downloadID]?.forEach {
                         it.onProgress(item)
                     }
+
+                    mGlobalDownloadListenerList.forEach {
+                        it.onProgress(item)
+                    }
                 }
 
                 override fun onPause(item: DownloadItem) {
                     mTempDownloadListenerList[item.downloadID]?.forEach {
+                        it.onPause(item)
+                    }
+
+                    mGlobalDownloadListenerList.forEach {
                         it.onPause(item)
                     }
                 }
@@ -66,26 +95,34 @@ object DownloadTools {
                         it.onFail(errorCode, msg, item)
                     }
                     mTempDownloadListenerList.remove(item.downloadID)
+
+                    mGlobalDownloadListenerList.forEach {
+                        it.onFail(errorCode, msg, item)
+                    }
                 }
 
-                fun notifySucc(finalPath: String, item: DownloadItem) {
+                fun notifyDownloadSuccess(finalPath: String, item: DownloadItem) {
                     mTempDownloadListenerList[item.downloadID]?.forEach {
                         it.onComplete(finalPath, item)
                     }
                     mTempDownloadListenerList.remove(item.downloadID)
+
+                    mGlobalDownloadListenerList.forEach {
+                        it.onComplete(finalPath, item)
+                    }
                 }
 
                 override fun onComplete(downloadFilePath: String, item: DownloadItem) {
                     if (needRename) {
                         if (downloadFilePath == finalPath) {
-                            notifySucc(downloadFilePath, item)
+                            notifyDownloadSuccess(downloadFilePath, item)
                         } else {
                             ThreadManager.getInstance().start {
                                 FileUtils.copyFile(File(downloadFilePath), File(finalPath), false).let { result ->
                                     if (result) {
                                         item.finalFilePath = finalPath
                                         ThreadManager.getInstance().runOnUIThread {
-                                            notifySucc(finalPath, item)
+                                            notifyDownloadSuccess(finalPath, item)
                                         }
                                     } else {
                                         ThreadManager.getInstance().runOnUIThread {
@@ -96,7 +133,7 @@ object DownloadTools {
                             }
                         }
                     } else {
-                        notifySucc(downloadFilePath, item)
+                        notifyDownloadSuccess(downloadFilePath, item)
                     }
                 }
 
@@ -105,12 +142,16 @@ object DownloadTools {
                         it.onDelete(item)
                     }
                     mTempDownloadListenerList.remove(item.downloadID)
+
+                    mGlobalDownloadListenerList.forEach {
+                        it.onDelete(item)
+                    }
                 }
             }
         }
     }
 
-    fun download(context: Context, title: String, msg: String, url: String, path: String, isFilePath: Boolean, md5: String, sha256: String, forceDownloadNew: Boolean, UseMobile: Boolean, actionKey: String, forceDownload: Boolean, downloadListener: DownloadListener?) {
+    fun startDownload(context: Context, title: String, msg: String, url: String, path: String, isFilePath: Boolean, md5: String, sha256: String, forceDownloadNew: Boolean, UseMobile: Boolean, actionKey: String, forceDownload: Boolean, downloadListener: DownloadListener?) {
         DownloadItem().apply {
             if (FileMimeTypes.isApkFile(URLUtils.getFileName(url))) {
                 setNotificationVisibility(true)
@@ -136,7 +177,7 @@ object DownloadTools {
         }.let {
             addNewKeyListener(it.downloadID, path, isFilePath)
             addDownloadListenerToList(it.downloadID, downloadListener)
-            it.downloadListener = mTempDownloadListenerList[it.downloadID]?.firstOrNull()
+            it.downloadListener = mDownloadKeyListenerList[it.downloadID]
             DownloadUtils.startDownload(context, it, forceDownload)
         }
     }
