@@ -173,7 +173,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonFeedback"            : [
-        "version"                : "5.10.43",
+        "version"                : "5.10.44",
         "artifactId"             : "common-feedback",
         "apidependenciesList"    : [
             "CommonWebview"
