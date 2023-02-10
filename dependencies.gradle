@@ -594,7 +594,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibFileSelect"             : [
-        "version"            : "5.10.39",
+        "version"            : "5.10.44",
         "artifactId"         : "lib-file-select",
         "apidependenciesList": [
             "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
