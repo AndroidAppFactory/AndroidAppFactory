@@ -277,6 +277,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         DownloadFile.forceDownload(requireContext(),
                 "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip",
                 AAFFileWrapper.getFileCacheFolder() + System.currentTimeMillis() + "_20220321114751.json.gzip",
+                false,
                 object : SimpleDownloadListener() {
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                         ZLog.d(LOG_TAG, "onFail:" + msg)
@@ -406,7 +407,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 object : InputDialogCompletedCallback {
                     override fun onInputCompleted(p0: String?) {
                         if (URLUtils.isHTTPUrl(p0)) {
-                            DownloadFile.download(activity!!, p0!!, object : SimpleDownloadListener() {
+                            DownloadFile.download(activity!!, p0!!, ZixieContext.getLogFolder() + URLUtils.getFileName(p0), true, object : SimpleDownloadListener() {
 
                                 override fun onComplete(filePath: String, item: DownloadItem) {
                                     ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")

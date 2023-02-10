@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 

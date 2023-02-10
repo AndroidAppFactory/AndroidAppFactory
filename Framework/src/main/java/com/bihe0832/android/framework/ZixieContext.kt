@@ -24,8 +24,8 @@ import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
@@ -265,31 +265,27 @@ object ZixieContext {
 
 
     fun exitAPP(callbackListener: OnDialogListener?) {
-        CommonDialog(getCurrentActivity()).apply {
-            title = applicationContext!!.resources.getString(R.string.common_reminder_title)
-            content = String.format(applicationContext!!.resources.getString(R.string.exist_msg), applicationContext!!.resources.getString(R.string.app_name))
+        getCurrentActivity()?.let {
+            DialogUtils.showConfirmDialog(
+                    it,
+                    applicationContext!!.resources.getString(R.string.common_reminder_title),
+                    String.format(applicationContext!!.resources.getString(R.string.exist_msg), applicationContext!!.resources.getString(R.string.app_name)),
+                    applicationContext!!.resources.getString(R.string.comfirm), applicationContext!!.resources.getString(R.string.cancel), true,
+                    object : OnDialogListener {
+                        override fun onPositiveClick() {
+                            callbackListener?.onPositiveClick()
+                            exitAPP()
+                        }
 
+                        override fun onNegativeClick() {
+                            callbackListener?.onNegativeClick()
+                        }
 
-            setCancelable(true)
-            positive = applicationContext!!.resources.getString(R.string.comfirm)
-            negative = applicationContext!!.resources.getString(R.string.cancel)
-            setOnClickBottomListener(object : OnDialogListener {
-                override fun onPositiveClick() {
-                    callbackListener?.onPositiveClick()
-                    dismiss()
-                    exitAPP()
-                }
-
-                override fun onNegativeClick() {
-                    callbackListener?.onNegativeClick()
-                    dismiss()
-                }
-
-                override fun onCancel() {
-                    callbackListener?.onCancel()
-                }
-            })
-        }.show()
+                        override fun onCancel() {
+                            callbackListener?.onCancel()
+                        }
+                    })
+        }
     }
 
     open fun restartApp() {

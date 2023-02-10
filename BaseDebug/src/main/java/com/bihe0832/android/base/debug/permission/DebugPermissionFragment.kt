@@ -56,7 +56,7 @@ class DebugPermissionFragment : DebugEnvFragment() {
                     })
 
                 PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {
-                    put(Manifest.permission.RECORD_AUDIO, "")
+                    put(Manifest.permission.RECORD_AUDIO, "fsdf")
                 })
             }
         }
@@ -107,6 +107,21 @@ class DebugPermissionFragment : DebugEnvFragment() {
     }
 
     private fun testCommonPermissionDialog() {
-        PermissionDialog(activity!!).show("", Manifest.permission.SYSTEM_ALERT_WINDOW, true, null)
+        PermissionDialog(activity!!).let {
+            it.show("", Manifest.permission.SYSTEM_ALERT_WINDOW, true, object :OnDialogListener{
+                override fun onPositiveClick() {
+                    it.dismiss()
+                }
+
+                override fun onNegativeClick() {
+                    it.dismiss()
+                }
+
+                override fun onCancel() {
+                    it.dismiss()
+                }
+
+            })
+        }
     }
 }

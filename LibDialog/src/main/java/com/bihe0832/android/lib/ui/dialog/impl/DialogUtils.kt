@@ -12,9 +12,9 @@ import android.view.inputmethod.EditorInfo
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.R
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCallback
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogUtils
 
 /**
  * @author zixie code@bihe0832.com
@@ -23,36 +23,24 @@ import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
  */
 object DialogUtils {
 
-    fun showInputDialog(context: Context, titleName: String, msg: String, positive: String,
-                        negtive: String, canCanceledOnTouchOutside: Boolean, inputType: Int, defaultValue: String, hint: String,
-                        listener: InputDialogCallback?) {
+    fun showInputDialog(context: Context, titleName: String, msg: String, positive: String, negtive: String, canCanceledOnTouchOutside: Boolean, inputType: Int, defaultValue: String, hint: String, listener: InputDialogCallback?) {
         InputDialogUtils.showInputDialog(context, titleName, msg, positive, negtive, canCanceledOnTouchOutside, inputType, defaultValue, hint, listener)
     }
 
     fun showInputDialog(context: Context, title: String, msg: String, hint: String, value: String, inputType: Int, callback: InputDialogCompletedCallback?) {
-        showInputDialog(
-                context,
-                title,
-                msg,
-                context.getString(R.string.dialog_button_ok),
-                "",
-                true,
-                if (inputType == 0) EditorInfo.TYPE_CLASS_TEXT else inputType,
-                value,
-                hint,
-                object : InputDialogCallback {
-                    override fun onPositiveClick(input: String) {
-                        callback?.onInputCompleted(input)
-                    }
+        showInputDialog(context, title, msg, context.getString(R.string.dialog_button_ok), "", true, if (inputType == 0) EditorInfo.TYPE_CLASS_TEXT else inputType, value, hint, object : InputDialogCallback {
+            override fun onPositiveClick(input: String) {
+                callback?.onInputCompleted(input)
+            }
 
-                    override fun onNegativeClick(s: String) {
+            override fun onNegativeClick(s: String) {
 
-                    }
+            }
 
-                    override fun onCancel(s: String) {
+            override fun onCancel(s: String) {
 
-                    }
-                })
+            }
+        })
     }
 
 
@@ -102,12 +90,12 @@ object DialogUtils {
         showConfirmDialog(context, context.getString(R.string.dialog_title), message, context.getString(R.string.dialog_button_ok), context.getString(R.string.dialog_button_cancel), canCancel, callback)
     }
 
-    fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean, callback: OnDialogListener?) {
+    fun showAlertDialog(context: Context, title: String?, message: String?, positive: String, canCancel: Boolean, callback: OnDialogListener?) {
         val dialog = CommonDialog(context)
         dialog.title = title
         dialog.setHtmlContent(message)
-        dialog.positive = context.getString(R.string.dialog_button_ok)
-        dialog.setShouldCanceled(canCancel)
+        dialog.positive = positive
+        dialog.shouldCanceled = canCancel
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 dialog.dismiss()
@@ -124,8 +112,11 @@ object DialogUtils {
                 callback?.onCancel()
             }
         })
-        dialog.setShouldCanceled(true)
         dialog.show()
+    }
+
+    fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean, callback: OnDialogListener?) {
+        showAlertDialog(context, title, message, context.getString(R.string.dialog_button_ok), canCancel, callback)
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean) {
