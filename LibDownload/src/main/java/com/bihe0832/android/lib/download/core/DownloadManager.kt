@@ -32,7 +32,6 @@ object DownloadManager {
     }
 
     private var mContext: Context? = null
-    private var mGlobalDownloadListenerList: DownloadListener? = null
     private const val DEFAULT_MAX_NUM = 3
     private const val MAX_MAX_NUM = 5
 
@@ -53,11 +52,10 @@ object DownloadManager {
     }
 
     fun init(context: Context, isDebug: Boolean = false) {
-        init(context, DEFAULT_MAX_NUM, null, isDebug)
+        init(context, DEFAULT_MAX_NUM, isDebug)
     }
-
-
-    fun init(context: Context, maxNum: Int, listener: DownloadListener?, isDebug: Boolean = false) {
+    
+    fun init(context: Context, maxNum: Int, isDebug: Boolean = false) {
         initContext(context)
         mMaxNum = maxNum
         if (mMaxNum > MAX_MAX_NUM) {
@@ -69,7 +67,6 @@ object DownloadManager {
             DownloadNotify.init(context)
             DownloadInfoDBManager.init(context)
         }
-        mGlobalDownloadListenerList = listener
     }
 
     private fun initContext(context: Context?) {
@@ -81,7 +78,6 @@ object DownloadManager {
     fun onDestroy() {
         pauseAllTask(false)
         DownloadNotify.destroy()
-        mGlobalDownloadListenerList = null
     }
 
     private val innerDownloadListener = object : DownloadListener {
@@ -89,7 +85,6 @@ object DownloadManager {
             item.status = DownloadStatus.STATUS_DOWNLOAD_WAITING
             DownloadNotify.notifyProcess(item)
             item.downloadListener?.onWait(item)
-            mGlobalDownloadListenerList?.onWait(item)
             DownloadInfoDBManager.saveDownloadInfo(item)
         }
 
@@ -100,8 +95,6 @@ object DownloadManager {
             item.startTime = System.currentTimeMillis()
 
             item.downloadListener?.onStart(item)
-            mGlobalDownloadListenerList?.onStart(item)
-
             DownloadInfoDBManager.saveDownloadInfo(item)
         }
 
@@ -109,7 +102,6 @@ object DownloadManager {
             item.status = DownloadStatus.STATUS_DOWNLOADING
 
             item.downloadListener?.onProgress(item)
-            mGlobalDownloadListenerList?.onProgress(item)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyProcess(item)
@@ -120,7 +112,6 @@ object DownloadManager {
             item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
 
             item.downloadListener?.onPause(item)
-            mGlobalDownloadListenerList?.onPause(item)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyPause(item)
@@ -136,7 +127,6 @@ object DownloadManager {
             }
 
             item.downloadListener?.onFail(errorCode, msg, item)
-            mGlobalDownloadListenerList?.onFail(errorCode, msg, item)
 
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyFailed(item)
@@ -161,14 +151,12 @@ object DownloadManager {
             ThreadManager.getInstance().start {
                 ZLog.d(TAG, "onComplete start: $filePath ")
                 var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
-                newPath = mGlobalDownloadListenerList?.onComplete(newPath, item) ?: newPath
                 ZLog.d(TAG, "onComplete end: $newPath ")
                 item.filePath = newPath
                 DownloadInfoDBManager.saveDownloadInfo(item)
                 if (item.notificationVisibility()) {
                     DownloadNotify.notifyFinished(item)
                 }
-
                 if (item.isAutoInstall) {
                     InstallUtils.installAPP(mContext, newPath)
                 }
@@ -183,7 +171,6 @@ object DownloadManager {
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyDelete(item)
             }
-            mGlobalDownloadListenerList?.onDelete(item)
         }
     }
 

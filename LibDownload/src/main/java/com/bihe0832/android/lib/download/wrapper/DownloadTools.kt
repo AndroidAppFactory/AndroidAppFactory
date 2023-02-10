@@ -5,11 +5,11 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.dialog.impl.UniqueDialogManager
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
@@ -22,11 +22,10 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 object DownloadTools {
 
-    private var mTempDownloadListenerList = ConcurrentHashMap<Long, CopyOnWriteArrayList<DownloadListener>>()
+    private val UNIQUE_KEY = "DownloadTools"
+
+    //外部注册的全局回调，仅回调，不包含任何逻辑，如果一个URL在多个地方下载，下载状态也只会每个Listener触发一次
     private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
-
-    private var mDownloadKeyListenerList = ConcurrentHashMap<Long, DownloadListener>()
-
     fun addGlobalDownloadListener(downloadListener: DownloadListener?) {
         mGlobalDownloadListenerList.add(downloadListener)
     }
@@ -38,121 +37,181 @@ object DownloadTools {
     }
 
 
-    private fun addDownloadListenerToList(downloadID: Long, downloadListener: DownloadListener?) {
-        downloadListener?.let {
-            if (mTempDownloadListenerList.containsKey(downloadID) && null != mTempDownloadListenerList[downloadID]) {
-                mTempDownloadListenerList[downloadID]!!.add(it)
-            } else {
-                mTempDownloadListenerList.put(downloadID, CopyOnWriteArrayList<DownloadListener>().apply {
-                    add(it)
-                })
+    // 下载URL与回调的对应关系，基本上一个URL对应一个回调，下载时在这里转换，不进一步到底层，同样的，底层的回调，在这里做进一步的分发
+    private var mDownloadKeyListenerList = ConcurrentHashMap<Long, KeyListener>()
+
+    private class KeyListener {
+        private var nameListener = ConcurrentHashMap<String, CopyOnWriteArrayList<DownloadListener>>()
+        private val mListener = object : DownloadListener {
+            override fun onWait(item: DownloadItem) {
+                nameListener.values.forEach { list ->
+                    list.forEach {
+                        it.onWait(item)
+                    }
+                }
+
+                mGlobalDownloadListenerList.forEach {
+                    it.onWait(item)
+                }
             }
-        }
-    }
 
-    private fun addNewKeyListener(downloadID: Long, finalPath: String, needRename: Boolean) {
-        if (!mDownloadKeyListenerList.containsKey(downloadID)) {
-            mDownloadKeyListenerList[downloadID] = object : DownloadListener {
-                override fun onWait(item: DownloadItem) {
-                    mTempDownloadListenerList[item.downloadID]?.forEach {
-                        it.onWait(item)
-                    }
-                    mGlobalDownloadListenerList.forEach {
-                        it.onWait(item)
-                    }
-                }
-
-                override fun onStart(item: DownloadItem) {
-                    mTempDownloadListenerList[item.downloadID]?.forEach {
-                        it.onStart(item)
-                    }
-                    mGlobalDownloadListenerList.forEach {
+            override fun onStart(item: DownloadItem) {
+                nameListener.values.forEach { list ->
+                    list.forEach {
                         it.onStart(item)
                     }
                 }
 
-                override fun onProgress(item: DownloadItem) {
-                    mTempDownloadListenerList[item.downloadID]?.forEach {
+                mGlobalDownloadListenerList.forEach {
+                    it.onStart(item)
+                }
+            }
+
+            override fun onProgress(item: DownloadItem) {
+                nameListener.values.forEach { list ->
+                    list.forEach {
                         it.onProgress(item)
                     }
-
-                    mGlobalDownloadListenerList.forEach {
-                        it.onProgress(item)
-                    }
                 }
 
-                override fun onPause(item: DownloadItem) {
-                    mTempDownloadListenerList[item.downloadID]?.forEach {
+                mGlobalDownloadListenerList.forEach {
+                    it.onProgress(item)
+                }
+            }
+
+            override fun onPause(item: DownloadItem) {
+                nameListener.values.forEach { list ->
+                    list.forEach {
                         it.onPause(item)
                     }
-
-                    mGlobalDownloadListenerList.forEach {
-                        it.onPause(item)
-                    }
                 }
 
-                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                    mTempDownloadListenerList[item.downloadID]?.forEach {
+                mGlobalDownloadListenerList.forEach {
+                    it.onPause(item)
+                }
+            }
+
+            @Synchronized
+            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                nameListener.values.forEach { list ->
+                    list.forEach {
                         it.onFail(errorCode, msg, item)
                     }
-                    mTempDownloadListenerList.remove(item.downloadID)
-
-                    mGlobalDownloadListenerList.forEach {
-                        it.onFail(errorCode, msg, item)
-                    }
                 }
+                nameListener.clear()
 
-                fun notifyDownloadSuccess(finalPath: String, item: DownloadItem): String {
-                    var path = finalPath
-                    mTempDownloadListenerList[item.downloadID]?.forEach {
-                        path = it.onComplete(path, item)
-                    }
-                    mTempDownloadListenerList.remove(item.downloadID)
-
-                    mGlobalDownloadListenerList.forEach {
-                        path = it.onComplete(path, item)
-                    }
-                    return path
+                mGlobalDownloadListenerList.forEach {
+                    it.onFail(errorCode, msg, item)
                 }
+            }
 
-                override fun onComplete(downloadFilePath: String, item: DownloadItem): String {
-                    if (needRename) {
-                        if (downloadFilePath == finalPath) {
-                            return notifyDownloadSuccess(downloadFilePath, item)
-                        } else {
-                            FileUtils.copyFile(File(downloadFilePath), File(finalPath), true).let { result ->
-                                if (result) {
-                                    ThreadManager.getInstance().runOnUIThread {
-                                        notifyDownloadSuccess(finalPath, item)
-                                    }
-                                    return finalPath
-                                } else {
-                                    ThreadManager.getInstance().runOnUIThread {
-                                        onFail(DownloadErrorCode.ERR_FILE_RENAME_FAILED, "download success and rename failed", item)
-                                    }
-                                    return downloadFilePath
-                                }
-                            }
+            @Synchronized
+            fun notifySuccess(downloadPath: String, item: DownloadItem): String {
+                var path = downloadPath
+                nameListener[UNIQUE_KEY]?.forEach {
+                    it.onComplete(path, item)
+                }
+                nameListener.remove(UNIQUE_KEY)
+                val iterator = nameListener.entries.iterator()
+                while (iterator.hasNext()) {
+                    val next = iterator.next()
+                    val filePath = next.key
+                    val listenerList = next.value
+                    if (filePath == path) {
+                        listenerList.forEach {
+                            it.onComplete(path, item)
                         }
                     } else {
-                        return notifyDownloadSuccess(downloadFilePath, item)
+                        try {
+                            FileUtils.copyFile(File(path), File(filePath), true).let { result ->
+                                if (result) {
+                                    path = filePath
+                                    listenerList.forEach {
+                                        it.onComplete(path, item)
+                                    }
+                                } else {
+                                    listenerList.forEach {
+                                        it.onFail(DownloadErrorCode.ERR_FILE_RENAME_FAILED, "download success and rename failed", item)
+                                    }
+                                }
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            listenerList.forEach {
+                                it.onFail(DownloadErrorCode.ERR_FILE_RENAME_FAILED, "download success and rename throw Exception:$e", item)
+                            }
+                        }
                     }
+                    iterator.remove()
+                    nameListener.remove(filePath)
                 }
+                mGlobalDownloadListenerList.forEach {
+                    path = it.onComplete(path, item)
+                }
+                return path
+            }
 
-                override fun onDelete(item: DownloadItem) {
-                    mTempDownloadListenerList[item.downloadID]?.forEach {
+            override fun onComplete(downloadPath: String, item: DownloadItem): String {
+                return notifySuccess(downloadPath, item)
+            }
+
+            @Synchronized
+            override fun onDelete(item: DownloadItem) {
+                nameListener.values.forEach { list ->
+                    list.forEach {
                         it.onDelete(item)
                     }
-                    mTempDownloadListenerList.remove(item.downloadID)
-
-                    mGlobalDownloadListenerList.forEach {
-                        it.onDelete(item)
-                    }
                 }
+                nameListener.clear()
+
+                mGlobalDownloadListenerList.forEach {
+                    it.onDelete(item)
+                }
+            }
+        }
+
+        fun getDownloadListener(): DownloadListener {
+            return mListener
+        }
+
+        private fun getKeyDownloadListenerList(finalPath: String): CopyOnWriteArrayList<DownloadListener> {
+            var file = finalPath
+            if (TextUtils.isEmpty(file)) {
+                file = UNIQUE_KEY
+            }
+            var list = nameListener[file] ?: CopyOnWriteArrayList<DownloadListener>()
+            nameListener[file] = list
+            return list
+        }
+
+        fun addNameListener(downloadListener: DownloadListener) {
+            getKeyDownloadListenerList("").add(downloadListener)
+        }
+
+        fun addNameListener(finalPath: String, downloadListener: DownloadListener) {
+            getKeyDownloadListenerList(finalPath).add(downloadListener)
+        }
+    }
+
+    private fun addNewKeyListener(downloadID: Long, finalPath: String, isFile: Boolean, downloadListener: DownloadListener?) {
+        if (!mDownloadKeyListenerList.containsKey(downloadID) || null == mDownloadKeyListenerList[downloadID]) {
+            mDownloadKeyListenerList[downloadID] = KeyListener()
+        }
+        var keyListener = mDownloadKeyListenerList[downloadID] ?: KeyListener()
+        mDownloadKeyListenerList[downloadID] = keyListener
+
+        if (isFile) {
+            downloadListener?.let {
+                keyListener.addNameListener(finalPath, it)
+            }
+        } else {
+            downloadListener?.let {
+                keyListener.addNameListener(it)
             }
         }
     }
 
+    @Synchronized
     fun startDownload(context: Context, title: String, msg: String, url: String, path: String, isFilePath: Boolean, md5: String, sha256: String, forceDownloadNew: Boolean, UseMobile: Boolean, actionKey: String, forceDownload: Boolean, downloadListener: DownloadListener?) {
         DownloadItem().apply {
             if (FileMimeTypes.isApkFile(URLUtils.getFileName(url))) {
@@ -170,24 +229,15 @@ object DownloadTools {
                     path
                 }
             }
-
             fileMD5 = md5
             fileSHA256 = sha256
             isForceDownloadNew = forceDownloadNew
             this.actionKey = actionKey
             isDownloadWhenUseMobile = UseMobile
         }.let {
-            addNewKeyListener(it.downloadID, path, isFilePath)
-            addDownloadListenerToList(it.downloadID, downloadListener)
-            if (isFilePath && FileUtils.checkFileExist(path, 0, md5, sha256, false)) {
-                it.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
-                it.filePath = path
-                mDownloadKeyListenerList[it.downloadID]?.onComplete(path, it)
-            } else {
-                it.downloadListener = mDownloadKeyListenerList[it.downloadID]
-                DownloadUtils.startDownload(context, it, forceDownload)
-            }
-
+            addNewKeyListener(it.downloadID, path, isFilePath, downloadListener)
+            it.downloadListener = mDownloadKeyListenerList[it.downloadID]?.getDownloadListener()
+            DownloadUtils.startDownload(context, it, forceDownload)
         }
     }
 }

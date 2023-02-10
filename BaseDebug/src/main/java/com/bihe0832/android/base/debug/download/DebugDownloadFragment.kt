@@ -38,11 +38,11 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             }
 
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-
+                ZLog.d(LOG_TAG, "globalListener onFail " + msg)
             }
 
             override fun onComplete(filePath: String, item: DownloadItem): String {
-                ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+                ZLog.d(LOG_TAG, "globalListener onComplete : ${filePath}")
                 return filePath
             }
 
@@ -364,28 +364,29 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     fun testDownloadMoreThanOnce() {
 
         var url =
-                "https://c5ea82c62f3216ea883c2d99c8d55e0d.rdt.tfogc.com:49156/imtt.dd.qq.com/sjy.20002/sjy.00001/16891/apk/717B4E2AED4A487A68D81C9976E48E20.apk"
-        for (i in 0..3) {
+                "http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip"
+        val filePath =
+                "/storage/emulated/0/Android/data/com.bihe0832.android.test/files/zixie/"
+        for (i in 0..4) {
             ThreadManager.getInstance().start({
                 DownloadFile.download(
                         activity!!,
-                        url, "", false, "fsdfdsffd$i", object : SimpleDownloadListener() {
+                        url, filePath, i % 2 == 1, object : SimpleDownloadListener() {
                     private fun getString(): String {
                         return "SimpleDownloadListener" + this.hashCode() + "-" + i
                     }
 
                     override fun onComplete(filePath: String, item: DownloadItem): String {
                         ZLog.d(
-                                "testDownloadMoreThanOnce",
-                                "onComplete : ${getString()} ${filePath}"
+                                LOG_TAG,
+                                "testDownloadMoreThanOnce onComplete : ${getString()} ${filePath}"
                         )
                         return filePath
                     }
 
                     override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                        ZLog.d(
-                                "testDownloadMoreThanOnce",
-                                "onFail : ${getString()} ${errorCode} ${msg}"
+                        ZLog.d(LOG_TAG,
+                                "testDownloadMoreThanOnce onFail : ${getString()} ${errorCode} ${msg}"
                         )
                     }
 
@@ -398,7 +399,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
                 })
 
-            }, 10 * i)
+            }, 2)
         }
 
     }
@@ -478,7 +479,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             }
 
             override fun onComplete(filePath: String, item: DownloadItem): String {
-                ZLog.d(LOG_TAG, "testDownloadList onComplete: $filePath ${item}")
+                ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
                 return filePath
             }
 

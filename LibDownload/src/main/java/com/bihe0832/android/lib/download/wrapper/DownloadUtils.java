@@ -26,11 +26,10 @@ public class DownloadUtils {
      *
      * @param context        Application Context
      * @param maxDownloadNum 同时容许下载的最大数量，如果主要用于大文件下载：建议3个，最大不建议超过5个
-     * @param listener       全局回调
      * @param isDebug        是否开启调试模式
      */
-    public static final void init(Context context, int maxDownloadNum, DownloadListener listener, Boolean isDebug) {
-        DownloadManager.INSTANCE.init(context, maxDownloadNum, listener, isDebug);
+    public static final void init(Context context, int maxDownloadNum, Boolean isDebug) {
+        DownloadManager.INSTANCE.init(context, maxDownloadNum, isDebug);
     }
 
     public static final void init(Context context, boolean isDebug) {
