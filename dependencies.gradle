@@ -631,7 +631,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibAceEditor"              : [
-        "version"            : "5.10.39",
+        "version"            : "5.10.44",
         "artifactId"         : "lib-ace-editor",
         "apidependenciesList": [
             "LibFileSelect", "LibOS", "LibDialog", "LibText"
