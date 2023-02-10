@@ -215,8 +215,6 @@ class DownloadByHttp(private var applicationContext: Context, private var maxNum
     @SuppressLint("Range")
     private fun goDownload(info: DownloadItem) {
         ZLog.d(TAG, "goDownload:$info")
-        ZLog.d("DebugDownloadFragment", "goDownload:${info.downloadURL}")
-
         try {
             val file = File(info.tempFilePath)
             var hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, DownloadManager.isDebug())

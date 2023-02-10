@@ -6,15 +6,11 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.lib.download.wrapper.DownloadAPK
-import com.bihe0832.android.lib.download.wrapper.DownloadConfig
-import com.bihe0832.android.lib.download.wrapper.DownloadFile
-import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.wrapper.DownloadUtils
+import com.bihe0832.android.lib.download.wrapper.*
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
@@ -34,7 +30,7 @@ import java.io.File
 class DebugDownloadFragment : BaseDebugListFragment() {
 
     companion object {
-        val LOG_TAG = this.javaClass.simpleName
+        val LOG_TAG = "DebugDownloadFragment"
 
         val globalListener = object : SimpleDownloadListener() {
             override fun onProgress(item: DownloadItem) {
@@ -47,6 +43,10 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
             override fun onComplete(filePath: String, item: DownloadItem) {
                 ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+            }
+
+            override fun onStart(item: DownloadItem) {
+                ZLog.d(LOG_TAG, "testDownload onStart : ${item}")
             }
 
         }
@@ -264,11 +264,14 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
+        DownloadTools.addGlobalDownloadListener(globalListener)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        DownloadTools.removeGlobalDownloadListener(globalListener)
     }
+
 
     private fun testDownloadGzip() {
         DownloadFile.forceDownload(requireContext(),
