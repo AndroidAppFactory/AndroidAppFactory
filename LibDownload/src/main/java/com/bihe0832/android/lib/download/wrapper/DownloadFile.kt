@@ -22,32 +22,21 @@ object DownloadFile {
 
     //检测网络类型，并且4G弹框，不使用进度条
     fun downloadWithCheck(activity: Activity, url: String, downloadListener: DownloadListener?) {
-        downloadWithCheck(activity, url, "", false, downloadListener)
+        downloadWithCheck(activity, url, "", downloadListener)
     }
 
     //检测网络类型，并且4G弹框，不使用进度条
     fun downloadWithCheck(activity: Activity, url: String, md5: String, downloadListener: DownloadListener?) {
-        downloadWithCheck(activity, url, md5, false, downloadListener)
+        downloadWithCheck(activity, url, "", false, md5, true, downloadListener)
     }
 
     //检测网络类型，并且4G弹框，不使用进度条
-    fun downloadWithCheck(activity: Activity, url: String, md5: String, canCancel: Boolean, downloadListener: DownloadListener?) {
-        downloadWithCheckAndProcess(activity, url, md5, canCancel, null, downloadListener)
-    }
-
-    //检测网络类型，并且4G弹框，不显示进度条
-    fun downloadWithCheckAndProcess(activity: Activity, url: String, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        downloadWithCheckAndProcess(activity, url, "", false, md5, canCancel, listener, downloadListener)
+    fun downloadWithCheck(activity: Activity, url: String, path: String, isFile: Boolean, md5: String, canCancel: Boolean, downloadListener: DownloadListener?) {
+        downloadWithCheckAndProcess(activity, url, path, isFile, md5, canCancel, null, downloadListener)
     }
 
     fun downloadWithCheckAndProcess(activity: Activity, url: String, path: String, isFile: Boolean, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
         downloadWithCheckAndProcess(activity, "", "", url, path, isFile, md5, "", canCancel, useProcess = false, forceDownload = false, listener = listener, downloadListener = downloadListener)
-    }
-
-
-    //检测网络类型，并且4G弹框，显示进度条
-    fun downloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
-        downloadWithCheckAndProcess(activity, title, msg, url, "", false, md5, canCancel, listener, downloadListener)
     }
 
     fun downloadWithCheckAndProcess(activity: Activity, title: String, msg: String, url: String, path: String, isFile: Boolean, md5: String, canCancel: Boolean, listener: OnDialogListener?, downloadListener: DownloadListener?) {
@@ -192,17 +181,8 @@ object DownloadFile {
         download(context, url, "", false, downloadListener)
     }
 
-
-    fun forceDownload(context: Context, url: String, md5: String, downloadListener: DownloadListener?) {
-        forceDownload(context, url, "", false, md5, downloadListener)
-    }
-
     fun forceDownload(context: Context, url: String, path: String, isFile: Boolean, downloadListener: DownloadListener?) {
         forceDownload(context, url, path, isFile, "", downloadListener)
-    }
-
-    fun download(context: Context, url: String, md5: String, downloadListener: DownloadListener?) {
-        download(context, url, "", false, md5, downloadListener)
     }
 
     fun download(context: Context, url: String, path: String, isFile: Boolean, downloadListener: DownloadListener?) {
