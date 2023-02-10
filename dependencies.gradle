@@ -204,7 +204,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibWrapper"                : [
-        "version"            : "5.10.43",
+        "version"            : "5.10.44",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
             "Router", "RouterAnnotation", "LibDebug",
