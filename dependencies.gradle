@@ -88,7 +88,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonShare"               : [
-        "version"            : "5.10.43",
+        "version"            : "5.10.44",
         "artifactId"         : "common-share",
         "apidependenciesList": [
             "Framework"
