@@ -27,7 +27,7 @@ import java.net.HttpURLConnection
  */
 object UpdateManager {
 
-    private val TAG = "MnaUpdateHelper-> "
+    private val TAG = "UpdateHelper-> "
 
     fun checkUpdateAndShowDialog(activity: Activity, checkUpdateByUser: Boolean) {
         fetchUpdate(activity, {
