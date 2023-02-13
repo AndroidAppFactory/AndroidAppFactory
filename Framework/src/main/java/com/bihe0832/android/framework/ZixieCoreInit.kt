@@ -2,6 +2,7 @@ package com.bihe0832.android.framework
 
 
 import android.app.Application
+import android.os.Environment
 import android.util.Log
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
@@ -11,6 +12,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import java.io.File
 
 
 /**
@@ -52,9 +54,14 @@ object ZixieCoreInit {
     }
 
     private fun initLog(application: Application, openLog: Boolean) {
-        val filePath = ZixieContext.getZixieExtFolder()
-        val logEnable = openLog || FileUtils.checkFileExist(filePath + "log.enable")
-        Log.e(TAG, "log enable: $filePath $openLog $logEnable")
+        val filePath = if (FileUtils.checkStoragePermissions(ZixieContext.applicationContext)) {
+            "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}zixie${File.separator}"
+        } else {
+            ZixieContext.getZixieFolder()
+        }
+        val logFileEnabled = FileUtils.checkFileExist(filePath + "logFileEnabled")
+        val logEnable = openLog || logFileEnabled
+        Log.e(TAG, "log enable: $filePath $openLog  $logFileEnabled $logEnable ")
         ZLog.setDebug(logEnable)
         ZLog.setLogLineLength(1500)
         LoggerFile.init(application, logEnable)

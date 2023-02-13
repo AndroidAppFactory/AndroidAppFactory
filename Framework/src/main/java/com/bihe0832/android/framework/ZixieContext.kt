@@ -199,22 +199,12 @@ object ZixieContext {
         return LifecycleHelper.getAPPUsedTimes()
     }
 
-
     fun getZixieFolder(): String {
         return zixieFolderPath
     }
 
-    fun getZixieExtFolder(): String {
-        var path = if (FileUtils.checkStoragePermissions(applicationContext)) {
-            "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}zixie${File.separator}"
-        } else {
-            getZixieFolder()
-        }
-        return FileUtils.getFolderPathWithSeparator(path)
-    }
-
     fun getLogFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getZixieFolder() + "temp${File.separator}log" + File.separator)
+        return FileUtils.getFolderPathWithSeparator( getZixieFolder() + "temp${File.separator}log" + File.separator)
     }
 
     fun initModule(action: () -> Unit, canInitWithBackgroundThread: Boolean) {
@@ -266,25 +256,20 @@ object ZixieContext {
 
     fun exitAPP(callbackListener: OnDialogListener?) {
         getCurrentActivity()?.let {
-            DialogUtils.showConfirmDialog(
-                    it,
-                    applicationContext!!.resources.getString(R.string.common_reminder_title),
-                    String.format(applicationContext!!.resources.getString(R.string.exist_msg), applicationContext!!.resources.getString(R.string.app_name)),
-                    applicationContext!!.resources.getString(R.string.comfirm), applicationContext!!.resources.getString(R.string.cancel), true,
-                    object : OnDialogListener {
-                        override fun onPositiveClick() {
-                            callbackListener?.onPositiveClick()
-                            exitAPP()
-                        }
+            DialogUtils.showConfirmDialog(it, applicationContext!!.resources.getString(R.string.common_reminder_title), String.format(applicationContext!!.resources.getString(R.string.exist_msg), applicationContext!!.resources.getString(R.string.app_name)), applicationContext!!.resources.getString(R.string.comfirm), applicationContext!!.resources.getString(R.string.cancel), true, object : OnDialogListener {
+                override fun onPositiveClick() {
+                    callbackListener?.onPositiveClick()
+                    exitAPP()
+                }
 
-                        override fun onNegativeClick() {
-                            callbackListener?.onNegativeClick()
-                        }
+                override fun onNegativeClick() {
+                    callbackListener?.onNegativeClick()
+                }
 
-                        override fun onCancel() {
-                            callbackListener?.onCancel()
-                        }
-                    })
+                override fun onCancel() {
+                    callbackListener?.onCancel()
+                }
+            })
         }
     }
 
