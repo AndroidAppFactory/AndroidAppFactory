@@ -46,7 +46,7 @@ object UpdateHelper {
 
         DownloadAPK.startDownloadWithProcess(
                 activity,
-                String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), "（$version)"),
+                String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), "$version"),
                 desc,
                 url, md5, activity.packageName,
                 canCancel, true,
