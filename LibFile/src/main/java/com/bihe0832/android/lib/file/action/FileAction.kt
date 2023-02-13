@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.text.TextUtils
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.content.FileName
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
@@ -60,12 +61,7 @@ object FileAction {
                 }
                 if (fileProvider == null) {
                     ZLog.e("fileAction targetFile dont has zixie FileProvider")
-                    targetFile =
-                        File(
-                            ZixieFileProvider.getZixieFilePath(context) + FileUtils.getFileName(
-                                filePath
-                            )
-                        )
+                    targetFile = File(ZixieFileProvider.getZixieFilePath(context) + FileName.getFileName(filePath))
                     copyFile(sourceFile, targetFile)
                 }
             }
@@ -80,15 +76,42 @@ object FileAction {
             return true
 
         } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
-            ZLog.e(
-                "FileAction",
-                "  \n !!!========================================  \n \n \n !!! FileAction: The fileAction throw an Exception: ${e.javaClass.name} \n \n \n !!!========================================"
-            )
+            ZLog.e("FileAction", "  \n !!!========================================  \n \n \n !!! FileAction: The fileAction throw an Exception: ${e.javaClass.name} \n \n \n !!!========================================")
             e.printStackTrace()
             return false
         }
     }
 
+    fun checkAndCreateFolder(path: String): Boolean {
+        try {
+            File(path).let {
+                return if (!it.exists()) {
+                    it.mkdirs()
+                } else {
+                    true
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
+    }
+
+    fun getFolderPathWithSeparator(path: String): String {
+        try {
+            var result = checkAndCreateFolder(path)
+            if (!result) {
+                ZLog.e("file $path is bad !!!")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return if (path.endsWith(File.separator)) {
+            path
+        } else {
+            path + File.separator
+        }
+    }
     fun deleteOldAsync(dir: File, duration: Long) {
         ThreadManager.getInstance().start {
             deleteOld(dir, duration)
@@ -169,7 +192,7 @@ object FileAction {
     }
 
     fun copyFile(srcFile: File, dstFile: File, isMove: Boolean): Boolean {
-        FileUtils.checkAndCreateFolder(dstFile.parentFile.absolutePath)
+        checkAndCreateFolder(dstFile.parentFile.absolutePath)
         return if (isMove) {
             srcFile.renameTo(dstFile)
         } else {
@@ -222,7 +245,7 @@ object FileAction {
         }
         try {
             FileUtils.checkAndCreateFolder(File(targetPath).parentFile.absolutePath)
-            FileUtils.deleteFile(targetPath)
+            deleteFile(targetPath)
             context.assets.open(fromFileName).use { input ->
                 FileOutputStream(targetPath).use { output ->
                     copyStream(input, output)
@@ -239,11 +262,7 @@ object FileAction {
 
     }
 
-    fun copyAssetsFolderToFolder(
-        context: Context?,
-        fromAssetPath: String,
-        targetFolder: String
-    ): Boolean {
+    fun copyAssetsFolderToFolder(context: Context?, fromAssetPath: String, targetFolder: String): Boolean {
         if (context == null) {
             ZLog.e("copyAssetsFolder context is null")
             return false
@@ -255,7 +274,7 @@ object FileAction {
                 fromAssetPath + File.separator
             }
 
-            var target = FileUtils.getFolderPathWithSeparator(targetFolder)
+            var target = getFolderPathWithSeparator(targetFolder)
             var res = true
             context.assets.list(fromAssetPath)?.forEach { file: String ->
                 var dataArray = context.assets.list(file) ?: emptyArray()

@@ -28,47 +28,47 @@ import java.text.NumberFormat
 object FileUtils {
 
     val ILLEGAL_FILENAME_CHARS = charArrayOf(
-        34.toChar(),
-        60.toChar(),
-        62.toChar(),
-        124.toChar(),
-        0.toChar(),
-        1.toChar(),
-        2.toChar(),
-        3.toChar(),
-        4.toChar(),
-        5.toChar(),
-        6.toChar(),
-        7.toChar(),
-        8.toChar(),
-        9.toChar(),
-        10.toChar(),
-        11.toChar(),
-        12.toChar(),
-        13.toChar(),
-        14.toChar(),
-        15.toChar(),
-        16.toChar(),
-        17.toChar(),
-        18.toChar(),
-        19.toChar(),
-        20.toChar(),
-        21.toChar(),
-        22.toChar(),
-        23.toChar(),
-        24.toChar(),
-        25.toChar(),
-        26.toChar(),
-        27.toChar(),
-        28.toChar(),
-        29.toChar(),
-        30.toChar(),
-        31.toChar(),
-        58.toChar(),
-        42.toChar(),
-        63.toChar(),
-        92.toChar(),
-        47.toChar()
+            34.toChar(),
+            60.toChar(),
+            62.toChar(),
+            124.toChar(),
+            0.toChar(),
+            1.toChar(),
+            2.toChar(),
+            3.toChar(),
+            4.toChar(),
+            5.toChar(),
+            6.toChar(),
+            7.toChar(),
+            8.toChar(),
+            9.toChar(),
+            10.toChar(),
+            11.toChar(),
+            12.toChar(),
+            13.toChar(),
+            14.toChar(),
+            15.toChar(),
+            16.toChar(),
+            17.toChar(),
+            18.toChar(),
+            19.toChar(),
+            20.toChar(),
+            21.toChar(),
+            22.toChar(),
+            23.toChar(),
+            24.toChar(),
+            25.toChar(),
+            26.toChar(),
+            27.toChar(),
+            28.toChar(),
+            29.toChar(),
+            30.toChar(),
+            31.toChar(),
+            58.toChar(),
+            42.toChar(),
+            63.toChar(),
+            92.toChar(),
+            47.toChar()
     )
 
 
@@ -81,8 +81,8 @@ object FileUtils {
         context?.let {
             return PackageManager.PERMISSION_GRANTED ==
                     ContextCompat.checkSelfPermission(
-                        it,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            it,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
                     )
         }
         return false
@@ -101,34 +101,11 @@ object FileUtils {
     }
 
     fun checkAndCreateFolder(path: String): Boolean {
-        try {
-            File(path).let {
-                return if (!it.exists()) {
-                    it.mkdirs()
-                } else {
-                    true
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return false
+        return FileAction.checkAndCreateFolder(path)
     }
 
     fun getFolderPathWithSeparator(path: String): String {
-        try {
-            var result = checkAndCreateFolder(path)
-            if (!result) {
-                ZLog.e("file $path is bad !!!")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return if (path.endsWith(File.separator)) {
-            path
-        } else {
-            path + File.separator
-        }
+        return FileAction.getFolderPathWithSeparator(path)
     }
 
     fun checkFileExist(filePath: String): Boolean {
@@ -149,46 +126,46 @@ object FileUtils {
      *  false 文件不存在
      */
     fun checkFileExist(
-        filePath: String,
-        fileLength: Long,
-        fileMD5: String,
-        ignoreWhenMd5IsBad: Boolean
+            filePath: String,
+            fileLength: Long,
+            fileMD5: String,
+            ignoreWhenMd5IsBad: Boolean
     ): Boolean {
         return checkFileExist(filePath, fileLength, fileMD5, "", ignoreWhenMd5IsBad)
     }
 
     fun checkFileExist(
-        filePath: String,
-        fileLength: Long,
-        fileMD5: String,
-        fileSHA256: String,
-        ignoreWhenMd5IsBad: Boolean
+            filePath: String,
+            fileLength: Long,
+            fileMD5: String,
+            fileSHA256: String,
+            ignoreWhenMd5IsBad: Boolean
     ): Boolean {
         return if (TextUtils.isEmpty(fileMD5)) {
             checkFileExistByMessageDigest(
-                filePath,
-                fileLength,
-                fileSHA256,
-                SHA256.MESSAGE_DIGEST_TYPE_SHA256,
-                ignoreWhenMd5IsBad
+                    filePath,
+                    fileLength,
+                    fileSHA256,
+                    SHA256.MESSAGE_DIGEST_TYPE_SHA256,
+                    ignoreWhenMd5IsBad
             )
         } else {
             checkFileExistByMessageDigest(
-                filePath,
-                fileLength,
-                fileMD5,
-                MD5.MESSAGE_DIGEST_TYPE_MD5,
-                ignoreWhenMd5IsBad
+                    filePath,
+                    fileLength,
+                    fileMD5,
+                    MD5.MESSAGE_DIGEST_TYPE_MD5,
+                    ignoreWhenMd5IsBad
             )
         }
     }
 
     fun checkFileExistByMessageDigest(
-        filePath: String,
-        fileLength: Long,
-        digestValue: String,
-        digestType: String,
-        ignoreWhenMd5IsBad: Boolean
+            filePath: String,
+            fileLength: Long,
+            digestValue: String,
+            digestType: String,
+            ignoreWhenMd5IsBad: Boolean
     ): Boolean {
         return if (TextUtils.isEmpty(filePath)) {
             false
@@ -202,7 +179,7 @@ object FileUtils {
                     if (fileLength == file.length()) {
                         if (hasMD5) {
                             MessageDigestUtils.getFileDigestData(filePath, digestType)
-                                .equals(digestValue, ignoreCase = true)
+                                    .equals(digestValue, ignoreCase = true)
                         } else {
                             true
                         }
@@ -212,7 +189,7 @@ object FileUtils {
                 } else {
                     if (hasMD5) {
                         MessageDigestUtils.getFileDigestData(filePath, digestType)
-                            .equals(digestValue, ignoreCase = true)
+                                .equals(digestValue, ignoreCase = true)
                     } else {
                         ignoreWhenMd5IsBad
                     }
@@ -305,9 +282,9 @@ object FileUtils {
     }
 
     fun copyAssetsFolderToFolder(
-        context: Context?,
-        fromAssetPath: String,
-        targetFolder: String
+            context: Context?,
+            fromAssetPath: String,
+            targetFolder: String
     ): Boolean {
         return FileAction.copyAssetsFolderToFolder(context, fromAssetPath, targetFolder)
     }

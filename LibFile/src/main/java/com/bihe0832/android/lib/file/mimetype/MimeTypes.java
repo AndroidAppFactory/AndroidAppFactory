@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.file.content.FileName;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +37,7 @@ public class MimeTypes {
     }
 
     public String getMimeType(String filename) {
-        String extension = FileUtils.INSTANCE.getExtensionName(filename);
+        String extension = FileName.INSTANCE.getExtensionName(filename);
         if (TextUtils.isEmpty(extension)) {
             return "*/*";
         }
@@ -120,7 +121,7 @@ public class MimeTypes {
     }
 
     public boolean isArchive(File file) {
-        return FileUtils.INSTANCE.getExtensionName(file.getName()).equalsIgnoreCase("zip");
+        return FileName.INSTANCE.getExtensionName(file.getName()).equalsIgnoreCase("zip");
     }
 
     /**
