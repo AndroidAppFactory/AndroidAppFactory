@@ -28,7 +28,7 @@ public class SettingsHolder extends CardBaseHolder {
     public TextViewWithBackground mHeaderIsNew;
     public TextView mHeaderTips;
     public ImageView mHeadergo;
-    public View settings_drivider;
+    public View settings_driver;
 
     public SettingsHolder(View itemView, Context context) {
         super(itemView, context);
@@ -41,7 +41,7 @@ public class SettingsHolder extends CardBaseHolder {
         mHeaderIsNew = getView(R.id.settings_is_new);
         mHeaderTips = getView(R.id.settings_tips);
         mHeadergo = getView(R.id.settings_go);
-        settings_drivider = getView(R.id.settings_drivider);
+        settings_driver = getView(R.id.settings_driver);
     }
 
     @Override
@@ -92,9 +92,9 @@ public class SettingsHolder extends CardBaseHolder {
             mHeadergo.setVisibility(View.GONE);
         }
         if (data.mShowDriver) {
-            settings_drivider.setVisibility(View.VISIBLE);
+            settings_driver.setVisibility(View.VISIBLE);
         } else {
-            settings_drivider.setVisibility(View.GONE);
+            settings_driver.setVisibility(View.GONE);
         }
     }
 }

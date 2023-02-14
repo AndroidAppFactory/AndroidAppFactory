@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="10dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/settings_drivider"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/settings_driver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
             android:ellipsize="end"
             android:textColor="@color/textColorPrimary"
@@ -88,7 +88,7 @@
 
 
     <View
-        android:id="@+id/settings_drivider"
+        android:id="@+id/settings_driver"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider"
