@@ -47,6 +47,7 @@ public class DebugMainActivity extends CommonActivity {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         }
         CardInfoHelper.getInstance().setAutoAddItem(true);
+        loadFragment();
     }
 
     protected String getRootFragmentClassName() {
@@ -63,7 +64,14 @@ public class DebugMainActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadFragment();
+        try {
+            Class rootFragmentClass = Class.forName(getRootFragmentClassName());
+            if (findFragment(rootFragmentClass) != null) {
+                ((BaseFragment) findFragment(rootFragmentClass)).setUserVisibleHint(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void loadFragment() {
