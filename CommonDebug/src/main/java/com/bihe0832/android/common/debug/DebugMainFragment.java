@@ -10,6 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bihe0832.android.common.debug.module.DebugCommonFragment;
 import com.bihe0832.android.framework.ui.BaseFragment;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -29,9 +30,7 @@ public class DebugMainFragment extends BaseFragment {
     protected String[] mTabString = null;
 
     public DebugMainFragment() {
-        this(new String[]{
-                TAB_FOR_DEV_COMMON
-        });
+        this(new String[]{TAB_FOR_DEV_COMMON});
     }
 
     public DebugMainFragment(String[] tabString) {
@@ -44,11 +43,9 @@ public class DebugMainFragment extends BaseFragment {
         return new DebugCommonFragment();
     }
 
-
     protected int getDefaultTabIndex() {
         return 0;
     }
-
 
     @Override
     protected int getLayoutID() {
@@ -100,6 +97,13 @@ public class DebugMainFragment extends BaseFragment {
             }
         });
         mTabBar.setCurrentTab(getDefaultTabIndex());
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser, boolean hasCreateView) {
+        ZLog.d("setUserVisibleHint:$isVisibleToUser");
+        super.setUserVisibleHint(isVisibleToUser, hasCreateView);
+        getFragmentByIndex(ConvertUtils.getSafeValueFromArray(mTabString, lastTab, "")).setUserVisibleHint(isVisibleToUser);
     }
 
     private class MyTaskPagerFragmentAdapter extends FragmentPagerAdapter {

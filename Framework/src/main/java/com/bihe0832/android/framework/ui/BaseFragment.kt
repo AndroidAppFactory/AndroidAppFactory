@@ -24,11 +24,7 @@ open class BaseFragment : SwipeBackFragment() {
      */
     private var hasCreateView = false
 
-    final override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+    final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         getLayoutID().let {
             if (it > 0) {
                 return inflater.inflate(getLayoutID(), container, false)
@@ -78,13 +74,7 @@ open class BaseFragment : SwipeBackFragment() {
         super.onViewCreated(view, savedInstanceState)
         if (resetDensity()) {
             activity?.let {
-                DisplayUtil.resetDensity(
-                        it,
-                        ConvertUtils.parseFloat(
-                                it.resources.getString(R.string.custom_density),
-                                Constants.CUSTOM_DENSITY
-                        )
-                )
+                DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(it.resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
             }
         }
         hasCreateView = true
@@ -97,14 +87,26 @@ open class BaseFragment : SwipeBackFragment() {
     }
 
     /**
-     * 仅用于简单的Fragment的setUserVisibleHint设置，
+     * 对于Activity的根Fragment, 建议在 Activity的 onResume 里手动调用根Fragment的 setUserVisibleHint
      * 对于有viewPager等特殊复杂场景的页面，需要自行完成setUserVisibleHint的设置
      * 如果自行设置 setUserVisibleHint ，不要调用 super.setUserVisibleHint
+     *
+     * 具体示例可以参考：CommonMainFragment
      * @param isVisibleToUser
      */
     final override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         setUserVisibleHint(isVisibleToUser, hasCreateView)
+    }
+
+    /**
+     * 前后台切换
+     *
+     * @param isVisibleToUser 当前是前台或者后台
+     * @param hasCreateView 当前View 是否已经创建好
+     */
+    open fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
+        ZLog.d("hardy", "${this.javaClass.name} ,isVisibleToUser:$isVisibleToUser ,hasCreateView:$hasCreateView")
     }
 
     fun setChildUserVisibleHint(isVisibleToUser: Boolean) {
@@ -142,11 +144,7 @@ open class BaseFragment : SwipeBackFragment() {
         return null
     }
 
-    protected open fun getCustomRootView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+    protected open fun getCustomRootView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return null
     }
 
@@ -173,15 +171,6 @@ open class BaseFragment : SwipeBackFragment() {
 
     }
 
-    /**
-     * 前后台切换
-     *
-     * @param isVisibleToUser 当前是前台或者后台
-     * @param hasCreateView 当前View 是否已经创建好
-     */
-    open fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
-
-    }
 
     open fun resetDensity(): Boolean {
         return true
