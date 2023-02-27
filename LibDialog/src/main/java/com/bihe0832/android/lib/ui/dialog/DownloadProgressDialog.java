@@ -147,13 +147,11 @@ public class DownloadProgressDialog extends Dialog {
         }
 
         if (null != mProgressNumber) {
-            String process = FileUtils.INSTANCE.getFileLength(mCurrentSize) + "/";
-            if (mAPKSize < 1) {
-                process = process + "0";
+            if (mCurrentSize > 0 && mAPKSize > 0) {
+                mProgressNumber.setText(FileUtils.INSTANCE.getFileLength(mCurrentSize) + "/" + FileUtils.INSTANCE.getFileLength(mAPKSize));
             } else {
-                process = process + FileUtils.INSTANCE.getFileLength(mAPKSize);
+                mProgressNumber.setText("");
             }
-            mProgressNumber.setText(process);
         }
 
         if (null != mProgressPercent) {
@@ -164,8 +162,7 @@ public class DownloadProgressDialog extends Dialog {
                 } else {
                     double percent = mCurrentSize * 1d / mAPKSize;
                     SpannableString tmp = new SpannableString(mProgressPercentFormat.format(percent));
-                    tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
-                            0, tmp.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, tmp.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     mProgressPercent.setText(tmp);
                 }
             } else {

@@ -111,6 +111,13 @@ object DownloadFile {
         }
         ThreadManager.getInstance().runOnUIThread { progressDialog.show() }
         startDownload(activity.applicationContext, title, msg, url, path, isFile, md5, sha256, forceDownloadNew, useMobile, forceDownload, object : DownloadListener {
+            fun updateProcess(item: DownloadItem) {
+                activity.runOnUiThread {
+                    progressDialog.setAPKSize(item.fileLength)
+                    progressDialog.setCurrentSize(item.finished)
+                }
+            }
+
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                 ToastUtil.showShort(activity, "应用下载失败（$errorCode）")
                 ThreadManager.getInstance().start({
@@ -140,17 +147,16 @@ object DownloadFile {
 
             override fun onWait(item: DownloadItem) {
                 downloadListener?.onWait(item)
+                updateProcess(item)
             }
 
             override fun onStart(item: DownloadItem) {
                 downloadListener?.onWait(item)
+                updateProcess(item)
             }
 
             override fun onProgress(item: DownloadItem) {
-                activity.runOnUiThread(Runnable {
-                    progressDialog.setAPKSize(item.fileLength)
-                    progressDialog.setCurrentSize(item.finished)
-                })
+                updateProcess(item)
                 downloadListener?.onProgress(item)
             }
 
