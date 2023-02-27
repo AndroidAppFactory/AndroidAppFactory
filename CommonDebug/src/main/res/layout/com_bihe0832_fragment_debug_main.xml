@@ -13,7 +13,7 @@
         app:tl_tab_space_equal="true"
         app:tl_textBold="SELECT"
         app:tl_textSelectColor="@color/colorOnPrimary"
-        app:tl_textUnselectColor="@color/textColorSecondary"
+        app:tl_textUnselectColor="@color/colorOnPrimary"
         app:tl_textsize="14dp" />
 
     <androidx.viewpager.widget.ViewPager
