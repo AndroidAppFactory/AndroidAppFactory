@@ -336,7 +336,8 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
             TextView tv_tab_title = (TextView) v.findViewById(R.id.tv_tab_title);
             ImageView tv_tab_title_image = (ImageView) v.findViewById(R.id.tv_tab_image);
             if (tv_tab_title != null) {
-                tv_tab_title.setTextColor(i == mCurrentTab ? mTextSelectColor : mTextUnselectColor);
+                boolean isSelected = i == mCurrentTab;
+                tv_tab_title.setTextColor(isSelected ? mTextSelectColor : mTextUnselectColor);
                 tv_tab_title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextsize);
                 tv_tab_title.setPadding((int) mTabPadding, 0, (int) mTabPadding, 0);
                 if (mTextAllCaps) {
@@ -345,6 +346,8 @@ public class SlidingTabLayout extends HorizontalScrollView implements ViewPager.
 
                 if (mTextBold == TEXT_BOLD_BOTH) {
                     tv_tab_title.getPaint().setFakeBoldText(true);
+                } else if (mTextBold == TEXT_BOLD_WHEN_SELECT) {
+                    tv_tab_title.getPaint().setFakeBoldText(isSelected);
                 } else if (mTextBold == TEXT_BOLD_NONE) {
                     tv_tab_title.getPaint().setFakeBoldText(false);
                 }
