@@ -25,6 +25,7 @@ import com.bihe0832.android.base.debug.image.DebugImageFragment
 import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
 import com.bihe0832.android.base.debug.ipc.AAFDebugIPCFragment
 import com.bihe0832.android.base.debug.log.DebugLogFragment
+import com.bihe0832.android.base.debug.message.DebugMessageFragment
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.notify.DebugNotifyFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
@@ -51,13 +52,13 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("临时测试(Temp)", DebugTempFragment::class.java))
             add(getDebugFragmentItemData("临时测试(Basic)", DebugBasicFragment::class.java))
 
-
-
             add(getDebugFragmentItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
             add(getDebugFragmentItemData("Dialog、底部弹出Activity 调试", DebugDialogFragment::class.java))
             add(getDebugFragmentItemData("文件（Zip、assets 等）、配置操作调试", DebugFileFragment::class.java))
             add(getDebugFragmentItemData("TAB 调试", DebugTabFragment::class.java))
             add(getDebugFragmentItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
+            add(getDebugFragmentItemData("公告消息 调试", DebugMessageFragment::class.java))
+
 
             add(getDebugFragmentItemData("TextView 调试", DebugTextViewFragment::class.java))
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))

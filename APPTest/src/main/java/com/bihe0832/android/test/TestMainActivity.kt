@@ -2,9 +2,12 @@ package com.bihe0832.android.test
 
 import android.os.Bundle
 import android.view.Gravity
+import androidx.lifecycle.Observer
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager.addWatch
+import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.base.debug.navigation.DebugNavigationDrawerFragment
 import com.bihe0832.android.common.debug.DebugMainActivity
+import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
@@ -27,6 +30,13 @@ open class TestMainActivity : DebugMainActivity() {
             mNavigationDrawerFragment.openDrawer()
         }
 
+        AAFMessageManager.getMessageLiveData().observe(this, object : Observer<List<MessageInfoItem>> {
+            override fun onChanged(t: List<MessageInfoItem>?) {
+                t?.filter { it.canShow(true) }?.forEach {
+                    AAFMessageManager.showNotice(this@TestMainActivity, it, true)
+                }
+            }
+        })
 //        UpdateManager.checkUpdateAndShowDialog(this, fa¬lse)
         DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
 

@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download.wrapper
 import android.app.Activity
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -70,13 +71,34 @@ object DownloadAPK {
             downloadMobile: Boolean,
             listener: OnDialogListener?
     ) {
+        startDownloadWithProcess(
+                activity,
+                title, msg,
+                url, md5,
+                canCancel, downloadMobile,
+                listener,
+                SimpleInstallListener(activity, packageName, listener)
+        )
+    }
+
+    fun startDownloadWithProcess(
+            activity: Activity,
+            title: String,
+            msg: String,
+            url: String,
+            md5: String,
+            canCancel: Boolean,
+            downloadMobile: Boolean,
+            listener: OnDialogListener?,
+            downloadListener: DownloadListener?
+    ) {
         DownloadFile.downloadWithProcess(
                 activity,
                 title, msg,
                 url, "", false, md5, "",
                 canCancel, forceDownloadNew = false, downloadMobile, forceDownload = true,
                 listener,
-                SimpleInstallListener(activity, packageName, listener)
+                downloadListener
         )
     }
 
@@ -84,8 +106,8 @@ object DownloadAPK {
     fun startDownloadWithCheck(activity: Activity, url: String, md5: String, packageName: String) {
         DownloadFile.downloadWithCheckAndProcess(
                 activity,
-                "", "", "",
-                url, false, md5, "",
+                "", "",
+                url, "", false, md5, "",
                 canCancel = true, useProcess = false,
                 forceDownload = true,
                 listener = null,
