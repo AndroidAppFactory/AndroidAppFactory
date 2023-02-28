@@ -57,14 +57,14 @@ object UpdateManager {
 //                            var updateString = "{\n" +
 //                                    "  \"showRedMaxVersionCode\": 2,\n" +
 //                                    "  \"needUpdateMinVersionCode\": 2,\n" +
-//                                    "  \"forceUpdateMinVersionCode\": 0,\n" +
+//                                    "  \"forceUpdateMinVersionCode\": 2,\n" +
 //                                    "  \"forceUpdateList\": \" \",\n" +
 //                                    "  \"needUpdateList\": \" \",\n" +
 //                                    "  \"newVersionName\": \"1.1.0\",\n" +
-//                                    "  \"newVersionCode\": 2,\n" +
+//                                    "  \"newVersionCode\": 5,\n" +
 //                                    "  \"newVersionInfo\": \"1. 全新UI <BR> 2. 支持卸载\",\n" +
 //                                    "  \"newVersionMD5\": \"7a413381aa84c837cc5de1577aec23a9\",\n" +
-//                                    "  \"newVersionURL\": \"https://github.com/bihe0832/AndroidAppFactory-Sample/releases/download/V1.0.0.1/ZAPK_V1.0.0_1_release.apk\"\n" +
+//                                    "  \"newVersionURL\": \".apk\"\n" +
 //                                    "}"
 
                             var updateInfo = JsonHelper.fromJson(updateString, UpdateDataFromCloud::class.java)

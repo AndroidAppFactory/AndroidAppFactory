@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Process
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager
+import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
@@ -48,6 +49,7 @@ object AppFactoryInit {
             RouterHelper.initRouter()
             initPermission()
             DownloadUtils.init(ctx, ZixieContext.isDebug())
+            AAFMessageManager.initModule(ctx)
             ThreadManager.getInstance().start({
                 ZLog.e("Application process initCore web start")
                 WebViewHelper.init(ctx, null, Bundle().apply {

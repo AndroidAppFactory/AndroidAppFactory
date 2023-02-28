@@ -34,6 +34,3 @@ fun openWebPage(url: String) {
     RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_WEB_PAGE, map)
 }
 
-fun openFeedback(){
-    openWebPage("https://support.qq.com/embed/phone/290858/large/")
-}

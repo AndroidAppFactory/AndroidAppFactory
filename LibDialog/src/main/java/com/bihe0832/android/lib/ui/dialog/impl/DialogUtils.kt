@@ -52,11 +52,11 @@ object DialogUtils {
         showInputDialog(context, titleName, "", defaultValue, listener)
     }
 
-    fun showConfirmDialog(context: Context, title: String, message: String, postiveStr: String?, negativeStr: String?, canCancel: Boolean, callback: OnDialogListener) {
+    fun showConfirmDialog(context: Context, title: String, message: String, positiveStr: String?, negativeStr: String?, canCancel: Boolean, callback: OnDialogListener) {
         val dialog = CommonDialog(context)
         dialog.setTitle(title)
         dialog.setHtmlContent(message)
-        dialog.positive = postiveStr
+        dialog.positive = positiveStr
         dialog.negative = negativeStr
         dialog.setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
@@ -78,8 +78,8 @@ object DialogUtils {
         dialog.show()
     }
 
-    fun showConfirmDialog(context: Context, title: String, message: String, postiveStr: String?, negativeStr: String?, callback: OnDialogListener) {
-        showConfirmDialog(context, title, message, postiveStr, negativeStr, true, callback)
+    fun showConfirmDialog(context: Context, title: String, message: String, positiveStr: String?, negativeStr: String?, callback: OnDialogListener) {
+        showConfirmDialog(context, title, message, positiveStr, negativeStr, true, callback)
     }
 
     fun showConfirmDialog(context: Context, title: String, message: String, canCancel: Boolean, callback: OnDialogListener) {
