@@ -303,15 +303,19 @@ public class BitmapUtil {
             final int heightRatio;
             final int widthRatio;
             if (reqHeight == 0) {
-                sampleSize = (int) Math.floor((float) width / (float) reqWidth);
-            } else if (reqWidth == 0) {
-                sampleSize = (int) Math.floor((float) height / (float) reqHeight);
+                if (reqWidth != 0) {
+                    sampleSize = (int) Math.floor((float) width / (float) reqWidth);
+                }
             } else {
-                heightRatio = (int) Math.floor((float) height / (float) reqHeight);
-                widthRatio = (int) Math.floor((float) width / (float) reqWidth);
-                sampleSize = centerInside
-                        ? Math.max(heightRatio, widthRatio)
-                        : Math.min(heightRatio, widthRatio);
+                if (reqWidth == 0) {
+                    sampleSize = (int) Math.floor((float) height / (float) reqHeight);
+                } else {
+                    heightRatio = (int) Math.floor((float) height / (float) reqHeight);
+                    widthRatio = (int) Math.floor((float) width / (float) reqWidth);
+                    sampleSize = centerInside
+                            ? Math.max(heightRatio, widthRatio)
+                            : Math.min(heightRatio, widthRatio);
+                }
             }
         }
         options.inSampleSize = sampleSize;
