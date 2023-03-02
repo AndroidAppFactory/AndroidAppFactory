@@ -35,6 +35,7 @@ import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
 import com.bihe0832.android.base.debug.tab.DebugTabFragment
 import com.bihe0832.android.base.debug.temp.DebugBasicFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
+import com.bihe0832.android.base.debug.thread.DebugThreadAndCoroutinesFragmeAndnt
 import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
@@ -62,6 +63,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(getDebugFragmentItemData("TextView 调试", DebugTextViewFragment::class.java))
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
+            add(getDebugFragmentItemData("协程及多线程调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
 
 
 
