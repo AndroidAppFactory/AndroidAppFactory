@@ -84,7 +84,7 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, requestOption
 
 
 fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
-    loadImage(url, placeholder, error, 0, 0, needFade, DiskCacheStrategy.AUTOMATIC, false, requestOptions)
+    loadImage(url, placeholder, error, 0, 0, needFade, DiskCacheStrategy.NONE, false, requestOptions)
 }
 
 
