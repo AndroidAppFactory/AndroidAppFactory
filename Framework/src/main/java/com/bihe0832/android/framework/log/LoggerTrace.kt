@@ -99,7 +99,7 @@ object LoggerTrace {
     }
 
     private fun logToFile(msg: String) {
-        LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME), msg)
+        LoggerFile.logFile(LoggerFile.getZixieFileLogPathByModule(TRACE_MODULE_NAME), msg)
     }
 
     fun openLog(activity: Activity) {
