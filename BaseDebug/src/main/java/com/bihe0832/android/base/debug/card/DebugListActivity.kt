@@ -1,11 +1,12 @@
 package com.bihe0832.android.base.debug.card
 
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.card.section.SectionDataContent2
-import com.bihe0832.android.base.debug.card.section.SectionDataHeader2
-import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -14,7 +15,9 @@ import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.custom.view.PlaceholderView
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.ui.recycleview.ext.RecyclerViewItemActiveHelper
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -41,17 +44,38 @@ class TestListActivity : CommonListActivity() {
                 addOnScrollListener(it)
             }
         }
-        mAdapter.isUpFetchEnable = true
-        mAdapter.setUpFetchListener {
-            num++
-            if (num < 5) {
-                ThreadManager.getInstance().start(
-                        {
-                            var data = getTempData(true)
-                            mAdapter.data.addAll(0, data)
-                            mAdapter.notifyItemRangeInserted(0, data.size)
-                        }, 500L
-                )
+        mAdapter.apply {
+            isUpFetchEnable = true
+            setUpFetchListener {
+                num++
+                if (num < 5) {
+                    ThreadManager.getInstance().start(
+                            {
+                                var data = getTempData(true)
+                                mAdapter.data.addAll(0, data)
+                                mAdapter.notifyItemRangeInserted(0, data.size)
+                            }, 500L
+                    )
+                }
+            }
+
+            emptyView = PlaceholderView(this@TestListActivity).apply {
+                getHeadIcon().apply {
+                    loadImage(R.mipmap.icon)
+                    visibility = View.VISIBLE
+                }
+                setEmptyTips("这是一个测试消息")
+                getActionText().apply {
+                    setText("点击更新")
+                    setTextColor(resources.getColor(R.color.colorAccent))
+                    strokeColor = resources.getColor(R.color.colorAccent)
+                    strokeWidth = DisplayUtil.dip2px(this@TestListActivity, 1f)
+                    backgroundColor = resources.getColor(R.color.windowBackground)
+                    visibility = View.VISIBLE
+                    setOnClickListener {
+                        RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT)
+                    }
+                }
             }
         }
     }
@@ -135,24 +159,24 @@ class TestListActivity : CommonListActivity() {
 
     private fun getTempData(isUpper: Boolean): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
-            for (i in 0..19) {
-                add(
-//                        if (i < 2) {
-//                            SectionDataHeader("标题1 - $i:${System.currentTimeMillis()}")
-//                        } else {
-                        SectionDataHeader2("标题2 - $i $isUpper:${System.currentTimeMillis()}")
-//                        }
-                )
-                for (j in 0..3) {
-                    add(
-                            if (i < 2) {
-                                SectionDataContent("内容1 - $i $j:${System.currentTimeMillis()}", "")
-                            } else {
-                                SectionDataContent2("内容2 - $i $j:${System.currentTimeMillis()}")
-                            }
-                    )
-                }
-            }
+//            for (i in 0..19) {
+//                add(
+////                        if (i < 2) {
+////                            SectionDataHeader("标题1 - $i:${System.currentTimeMillis()}")
+////                        } else {
+//                        SectionDataHeader2("标题2 - $i $isUpper:${System.currentTimeMillis()}")
+////                        }
+//                )
+//                for (j in 0..3) {
+//                    add(
+//                            if (i < 2) {
+//                                SectionDataContent("内容1 - $i $j:${System.currentTimeMillis()}", "")
+//                            } else {
+//                                SectionDataContent2("内容2 - $i $j:${System.currentTimeMillis()}")
+//                            }
+//                    )
+//                }
+//            }
         }
     }
 

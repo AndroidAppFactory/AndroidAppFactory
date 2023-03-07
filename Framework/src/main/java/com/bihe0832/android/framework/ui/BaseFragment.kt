@@ -96,7 +96,12 @@ open class BaseFragment : SwipeBackFragment() {
      */
     final override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        setUserVisibleHint(isVisibleToUser, hasCreateView)
+        try {
+            setUserVisibleHint(isVisibleToUser, hasCreateView)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
     /**

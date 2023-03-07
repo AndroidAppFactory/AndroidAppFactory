@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.view.ext;
+package com.bihe0832.android.lib.ui.custom.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.bihe0832.android.lib.ui.view.ext.DrawableFactoryKt;
+import com.bihe0832.android.lib.ui.view.ext.R;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 
