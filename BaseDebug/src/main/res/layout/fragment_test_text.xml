@@ -42,7 +42,7 @@
             app:bgtv_cornerRadius="5dp" />
 
 
-        <com.bihe0832.android.lib.ui.view.ext.ViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.ViewWithBackground
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_marginTop="10dp"
