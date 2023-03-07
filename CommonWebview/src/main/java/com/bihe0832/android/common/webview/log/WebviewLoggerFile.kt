@@ -16,7 +16,7 @@ object WebviewLoggerFile {
 
 
     fun log(msg: String) {
-        LoggerFile.log(LoggerFile.getZixieFileLogPathByModule(MODULE_NAME), msg)
+        LoggerFile.logFile(LoggerFile.getZixieFileLogPathByModule(MODULE_NAME), msg)
     }
 
     fun getWebviewLogPath(): String {
