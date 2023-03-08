@@ -7,16 +7,16 @@ import java.util.Date;
 
 public class MessageInfoItem {
 
-    public static final String Notice_TYPE_TEXT = "text";
-    public static final String Notice_TYPE_IMG = "image";
-    public static final String Notice_TYPE_WEB_PAGE = "web";
-    public static final String Notice_TYPE_APK = "apk";
+    public static final String TYPE_TEXT = "text";
+    public static final String TYPE_IMG = "image";
+    public static final String TYPE_WEB_PAGE = "web";
+    public static final String TYPE_APK = "apk";
     // 公告ID，可以用于更新推送
     @SerializedName("id")
     private String messageID;
     //公告类型
     @SerializedName("type")
-    private String type = MessageInfoItem.Notice_TYPE_TEXT;
+    private String type = MessageInfoItem.TYPE_TEXT;
 
     @SerializedName("position")
     private String position;
@@ -235,6 +235,6 @@ public class MessageInfoItem {
 
     @Override
     public String toString() {
-        return "NoticeInfoItem{" + "id='" + messageID + '\'' + ", type=" + type + ", title='" + title + '\''  + ", action='" + action + '\'' + ", lastshow='" + lastShowTime + '\'' + ", expireDate='" + expireDate + '\'' + ", shouldTop='" + shouldTop + '\'' + ", isNotify='" + isNotify + '\''  + ", canDelete='" + canDelete + '\'' + ", showFace='" + showFace + '\'' + '}';
+        return "MessageInfoItem{" + "id='" + messageID + '\'' + ", type=" + type + ", title='" + title + '\''  + ", action='" + action + '\'' + ", lastshow='" + lastShowTime + '\'' + ", expireDate='" + expireDate + '\'' + ", shouldTop='" + shouldTop + '\'' + ", isNotify='" + isNotify + '\''  + ", canDelete='" + canDelete + '\'' + ", showFace='" + showFace + '\'' + '}';
     }
 }

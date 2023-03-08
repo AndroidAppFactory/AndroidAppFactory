@@ -13,9 +13,11 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.ui.textview.ext.changeStatusWithUnreadMsg
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
+import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
 
@@ -67,12 +69,14 @@ class DebugTextViewFragment : BaseFragment() {
         info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
 
 //        rtv_msg_tip.setDrawableBackground(resources.getColor(R.color.red_dot), 15, 0, Color.parseColor("#0000ff"))
+        rtv_msg_tip.changeStatusWithUnreadMsg(90, DisplayUtil.dip2px(context, 8f))
         test_basic_button.apply {
-            var num = 0
+            var num = -1
             setOnClickListener {
+                rtv_msg_tip.changeStatusWithUnreadMsg(num, DisplayUtil.dip2px(context, 8f))
 
 //                setTextColor(Color.WHITE)
-//                num++
+                num++
 //                when (num) {
 //                    1 -> {
 //                        setCornerRadiusBackground(5)

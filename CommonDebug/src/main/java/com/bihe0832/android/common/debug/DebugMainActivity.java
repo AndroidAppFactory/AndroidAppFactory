@@ -56,6 +56,15 @@ public class DebugMainActivity extends CommonActivity {
 
     protected String getTitleName() {
         if (TextUtils.isEmpty(rootFragmentTitleName)) {
+            try {
+                if (getRootFragmentClassName() != null) {
+                    return getRootFragmentClassName().substring(getRootFragmentClassName().lastIndexOf(".") + 1);
+                } else {
+                    return this.getClass().getSimpleName();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return this.getClass().getSimpleName();
         }
         return rootFragmentTitleName;

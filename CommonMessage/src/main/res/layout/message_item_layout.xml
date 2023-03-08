@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bihe0832.android.lib.ui.custom.view.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/message_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/com_bihe0832_message_item_bg_color"
+    android:clickable="true"
+    app:ios="false"
+    app:leftSwipe="true"
+    app:swipeEnable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/message_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp">
+
+        <com.bihe0832.android.lib.ui.custom.view.ViewWithBackground
+            android:id="@+id/message_is_new"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            app:bgtv_backgroundColor="@color/red_dot"
+            app:bgtv_isRadiusHalfHeight="true"
+            app:layout_constraintBottom_toBottomOf="@+id/message_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/message_title" />
+
+        <ImageView
+            android:id="@+id/message_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="4dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/message_black"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/message_title"
+            app:layout_constraintStart_toEndOf="@+id/message_is_new"
+            app:layout_constraintTop_toTopOf="@+id/message_title" />
+
+        <TextView
+            android:id="@+id/message_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="这是一个置顶的消息"
+            android:textColor="@color/com_bihe0832_message_item_title_color"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/message_driver"
+            app:layout_constraintEnd_toStartOf="@+id/message_time"
+            app:layout_constraintStart_toEndOf="@+id/message_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/com_bihe0832_message_item_time_color"
+            android:textSize="10dp"
+            android:visibility="visible"
+            app:layout_constraintBaseline_toBaselineOf="@+id/message_title"
+            app:layout_constraintEnd_toStartOf="@+id/message_go"
+            tools:text="2023-02-02" />
+
+        <ImageView
+            android:id="@+id/message_go"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_right_go"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/message_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/message_title" />
+
+        <View
+            android:id="@+id/message_driver"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/com_bihe0832_message_item_time_divider"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/message_delete"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:background="@color/red_dot"
+        android:gravity="center"
+        android:text="删除"
+        android:textColor="@color/com_bihe0832_message_item_bg_color"
+        android:textSize="14dp"
+        android:textStyle="bold" />
+
+</com.bihe0832.android.lib.ui.custom.view.SwipeMenuLayout>

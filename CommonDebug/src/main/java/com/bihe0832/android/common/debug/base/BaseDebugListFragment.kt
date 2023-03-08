@@ -5,8 +5,6 @@ import android.widget.TextView
 import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.DebugTipsData
-import com.bihe0832.android.common.debug.item.DebugTipsHolder
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
@@ -83,6 +81,10 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugUtils.showInputDialog(context, titleName, msg, defaultValue, listener)
     }
 
+
+    protected fun startDebugActivity(cls: Class<*>) {
+        startDebugActivity(cls, "")
+    }
 
     protected fun startDebugActivity(cls: Class<*>, titleName: String) {
         DebugUtils.startDebugActivity(context, cls, titleName)

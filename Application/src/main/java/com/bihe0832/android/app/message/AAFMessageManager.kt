@@ -28,10 +28,10 @@ object AAFMessageManager : MessageManager() {
                 ?: "", ""))
     }
 
-    fun showNotice(activity: Activity, messageInfoItem: MessageInfoItem, showFace: Boolean) {
+    fun showMessage(activity: Activity, messageInfoItem: MessageInfoItem, showFace: Boolean) {
         mDependenceBlockDialogManager.getDependentTaskManager().addTask(messageInfoItem.messageID, {
             ThreadManager.getInstance().runOnUIThread {
-                showNotice(activity, messageInfoItem, showFace, object : OnDialogListener {
+                showMessage(activity, messageInfoItem, showFace, object : OnDialogListener {
                     override fun onPositiveClick() {
                         mDependenceBlockDialogManager.getDependentTaskManager().finishTask(messageInfoItem.messageID)
                     }

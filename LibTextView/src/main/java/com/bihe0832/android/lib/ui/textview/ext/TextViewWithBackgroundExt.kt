@@ -27,6 +27,9 @@ fun TextViewWithBackground.setUnreadMsg(num: Int, circleWidth: Int) {
         lp.height = circleWidth
         layoutParams = lp
     } else {
+        lp.width = LinearLayout.LayoutParams.WRAP_CONTENT
+        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT
+        layoutParams = lp
         text = if (num < 100) {
             num.toString()
         } else {
