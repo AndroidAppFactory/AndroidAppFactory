@@ -10,7 +10,6 @@ import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.utils.ConvertUtils
 import java.sql.SQLException
 import java.util.*
 
@@ -27,15 +26,15 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
 
     fun initData(context: Context) {
         MessageDBManager.init(context)
-        sortNotice(MessageDBManager.getAll()).let { list ->
+        sortMessge(MessageDBManager.getAll()).let { list ->
             ThreadManager.getInstance().runOnUIThread {
                 postValue(list.filter { it.isNotExpired && !it.hasDelete() })
                 ZLog.d(TAG, "updateData value length:" + value?.size)
             }
-            list.forEach { noticeInfo ->
-                if (!noticeInfo.isNotExpired) {
+            list.forEach { messageInfo ->
+                if (!messageInfo.isNotExpired) {
                     ThreadManager.getInstance().run {
-                        MessageDBManager.deleteData(noticeInfo)
+                        MessageDBManager.deleteData(messageInfo)
                     }
                 }
             }
@@ -44,8 +43,8 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
 
 
     @Synchronized
-    fun parseNotice(resultJson: String) {
-        ZLog.d(TAG, "parseNotice:$resultJson")
+    fun parseMessage(resultJson: String) {
+        ZLog.d(TAG, "parseMessage:$resultJson")
         var httpResultList: List<MessageInfoItem> = ArrayList()
         try {
             JsonHelper.fromJsonList(resultJson, MessageInfoItem::class.java)?.filter { it.isNotExpired }?.let { msgJsonResponse ->
@@ -62,8 +61,8 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
 
         //本地已经有的列表
         var msgListInDB = HashMap<String, MessageInfoItem>().apply {
-            MessageDBManager.getAll().let { noticeInfo ->
-                noticeInfo.forEach {
+            MessageDBManager.getAll().let { messgeInfo ->
+                messgeInfo.forEach {
                     put(it.messageID, it)
                 }
             }
@@ -74,16 +73,16 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
         for (index in httpResultList.indices) {
             var infoFromServer = httpResultList[index]
             if (msgListInDB.keys.contains(infoFromServer.messageID) && null != msgListInDB[infoFromServer.messageID]) {
-                msgListInDB[infoFromServer.messageID]!!.let { noticeInfoDB ->
+                msgListInDB[infoFromServer.messageID]!!.let { messageInfoDB ->
                     infoFromServer.apply {
-                        this.messageID = noticeInfoDB.messageID
-                        this.isNotify = noticeInfoDB.isNotify
-                        this.setHasDelete(noticeInfoDB.hasDelete())
-                        this.setHasRead(noticeInfoDB.hasRead())
-                        this.showFace = noticeInfoDB.showFace
+                        this.messageID = messageInfoDB.messageID
+                        this.isNotify = messageInfoDB.isNotify
+                        this.setHasDelete(messageInfoDB.hasDelete())
+                        this.setHasRead(messageInfoDB.hasRead())
+                        this.showFace = messageInfoDB.showFace
                     }.let {
-                        ZLog.d(TAG, "本地已有再次下发：本地数据：$noticeInfoDB ,下发数据: $it")
-                        noticeInfoDB.copyFrom(it)
+                        ZLog.d(TAG, "本地已有再次下发：本地数据：$messageInfoDB ,下发数据: $it")
+                        messageInfoDB.copyFrom(it)
                     }
                 }
                 MessageDBManager.saveData(infoFromServer)
@@ -102,12 +101,12 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
 
         var finalResult = (newHttpResultList + msgListInDB.values).filter { it.isNotExpired && !it.hasDelete() }
         ThreadManager.getInstance().runOnUIThread {
-            value = sortNotice(finalResult).toMutableList()
+            value = sortMessge(finalResult).toMutableList()
         }
     }
 
     @Synchronized
-    private fun sortNotice(finalResult: List<MessageInfoItem>): List<MessageInfoItem> {
+    private fun sortMessge(finalResult: List<MessageInfoItem>): List<MessageInfoItem> {
         return finalResult.sortedWith(compareBy { it.messageID }).sortedWith(compareBy { it.shouldTop }).reversed()
     }
 
@@ -128,7 +127,7 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
     }
 
     //更新 是否已读，flag;更新是否删除，目前仅做删除标记 ，isDel
-    fun updateNoticeFlag(msgid: String, hasRead: Boolean, isDel: Boolean) {
+    fun updateMessageFlag(msgid: String, hasRead: Boolean, isDel: Boolean) {
         try {
             value?.let { list ->
                 list.find { it.messageID == msgid }?.let {
@@ -150,7 +149,7 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
         }
     }
 
-    fun updateNoticeFace(msgid: String, showFace: Int) {
+    fun updateMessageFace(msgid: String, showFace: Int) {
         try {
             value?.let { list ->
                 list.find { it.messageID == msgid }?.let {

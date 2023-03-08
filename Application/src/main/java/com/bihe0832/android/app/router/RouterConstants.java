@@ -13,4 +13,7 @@ public class RouterConstants extends com.bihe0832.android.framework.router.Route
     public static final String INTENT_EXTRA_KEY_WEB_URL = BaseWebviewFragment.INTENT_KEY_URL;
     public static final String MODULE_NAME_BASE_ABOUT = "about";
 
+    public static final String MODULE_NAME_MESSAGE = "message";
+
+
 }

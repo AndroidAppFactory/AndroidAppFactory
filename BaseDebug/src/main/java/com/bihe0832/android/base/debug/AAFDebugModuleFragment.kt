@@ -40,6 +40,7 @@ import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.base.debug.view.DebugTextViewFragment
+import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebviewActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -62,6 +63,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
 
             add(getDebugFragmentItemData("TextView 调试", DebugTextViewFragment::class.java))
+            add(getDebugFragmentItemData("自定义View 调试", DebugCustomViewFragment::class.java))
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
             add(getDebugFragmentItemData("协程及多线程调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
 

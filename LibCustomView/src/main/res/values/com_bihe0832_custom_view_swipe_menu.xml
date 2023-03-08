@@ -1,0 +1,7 @@
+<resources>
+    <declare-styleable name="SwipeButtonLayout">
+        <attr name="swipeEnable" format="boolean" />
+        <attr name="ios" format="boolean" />
+        <attr name="leftSwipe" format="boolean" />
+    </declare-styleable>
+</resources>

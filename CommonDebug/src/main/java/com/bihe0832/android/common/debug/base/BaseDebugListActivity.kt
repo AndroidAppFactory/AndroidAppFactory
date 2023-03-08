@@ -74,6 +74,10 @@ abstract class BaseDebugListActivity : CommonListActivity() {
     }
 
 
+    protected fun startDebugActivity(cls: Class<*>) {
+        startDebugActivity(cls, "")
+    }
+
     protected fun startDebugActivity(cls: Class<*>, titleName: String) {
         DebugUtils.startDebugActivity(this, cls, titleName)
     }

@@ -33,6 +33,11 @@ open class BaseDebugFragment : BaseFragment() {
     }
 
 
+    protected fun startDebugActivity(cls: Class<*>) {
+        startDebugActivity(cls, "")
+    }
+
+
     protected fun startDebugActivity(cls: Class<*>, titleName: String) {
         DebugUtils.startDebugActivity(context, cls, titleName)
     }

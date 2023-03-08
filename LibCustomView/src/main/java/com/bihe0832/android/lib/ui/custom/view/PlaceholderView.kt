@@ -21,6 +21,11 @@ class PlaceholderView : ConstraintLayout {
         initView(context)
     }
 
+    constructor(context: Context, tipsText: String?) : super(context) {
+        initView(context)
+        setEmptyTips(tipsText)
+    }
+
     private fun initView(context: Context) {
         inflate(context, R.layout.com_bihe0832_custom_view_placeholder_view, this)
         initViewInfo()

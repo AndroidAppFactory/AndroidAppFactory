@@ -14,8 +14,9 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginBottom="12dp"
-        android:visibility="invisible"
-        tools:visibility="visible" />
+        android:scaleType="centerInside"
+        android:alpha="0.4"
+        android:src="@mipmap/com_bihe0832_custom_view_placeholder_icon" />
 
     <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
         android:id="@+id/list_empty_tips"

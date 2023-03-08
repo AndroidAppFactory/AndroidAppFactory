@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="com_bihe0832_message_item_bg_color">@color/white</color>
+    <color name="com_bihe0832_message_item_title_color">@color/textColorPrimary</color>
+    <color name="com_bihe0832_message_item_time_color">@color/textColorSecondary</color>
+    <color name="com_bihe0832_message_item_time_divider">@color/divider</color>
+    <string name="com_bihe0832_message_empty_text">消息空空如也~</string>
+
+</resources>

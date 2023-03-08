@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.common.message.MessageListLiveData
 import com.bihe0832.android.common.message.data.MessageInfoItem
+import com.bihe0832.android.common.message.data.db.MessageDBManager
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
@@ -36,7 +37,6 @@ abstract class MessageManager {
 
     open fun initModule(context: Context) {
         MessageListLiveData.initData(context)
-
         ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
             override fun onBackground() {
 
@@ -66,23 +66,23 @@ abstract class MessageManager {
             override fun getResponseHandler(): HttpResponseHandler {
                 return HttpResponseHandler { statusCode, msg ->
                     if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
-                        MessageListLiveData.parseNotice(msg)
+                        MessageListLiveData.parseMessage(msg)
                     }
                 }
             }
         })
     }
 
-    fun showNotice(activity: Activity, item: MessageInfoItem, showFace: Boolean, listener: OnDialogListener?) {
+    fun showMessage(activity: Activity, item: MessageInfoItem, showFace: Boolean, listener: OnDialogListener?) {
         when (item.type) {
-            MessageInfoItem.Notice_TYPE_TEXT, MessageInfoItem.Notice_TYPE_IMG, MessageInfoItem.Notice_TYPE_APK -> {
+            MessageInfoItem.TYPE_TEXT, MessageInfoItem.TYPE_IMG, MessageInfoItem.TYPE_APK -> {
                 CommonDialog(activity).apply {
                     setTitle(item.title)
                     setSingle(TextUtils.isEmpty(item.action))
                     setPositive(if (TextUtils.isEmpty(item.action)) {
                         "确定"
                     } else {
-                        if (item.type == MessageInfoItem.Notice_TYPE_APK) {
+                        if (item.type == MessageInfoItem.TYPE_APK) {
                             "立刻下载"
                         } else {
                             "前往"
@@ -92,7 +92,7 @@ abstract class MessageManager {
                     setOnClickBottomListener(object : OnDialogListener {
                         override fun onPositiveClick() {
                             if (!TextUtils.isEmpty(item.action)) {
-                                if (item.type == MessageInfoItem.Notice_TYPE_APK) {
+                                if (item.type == MessageInfoItem.TYPE_APK) {
                                     DownloadAPK.startDownloadWithCheck(activity, item.action, "", "")
                                 } else {
                                     RouterAction.openFinalURL(item.action)
@@ -114,7 +114,7 @@ abstract class MessageManager {
                         }
                     })
                     setShouldCanceled(TextUtils.isEmpty(item.action))
-                    if (item.type == MessageInfoItem.Notice_TYPE_IMG) {
+                    if (item.type == MessageInfoItem.TYPE_IMG) {
                         setImageUrl(item.content)
                     } else {
                         setHtmlContent(item.content)
@@ -122,13 +122,19 @@ abstract class MessageManager {
                 }.show()
             }
 
-            MessageInfoItem.Notice_TYPE_WEB_PAGE -> {
+            MessageInfoItem.TYPE_WEB_PAGE -> {
                 openZixieWeb(item.content)
             }
         }
-        MessageListLiveData.updateNoticeFlag(item.messageID, hasRead = true, isDel = false)
+        MessageListLiveData.updateMessageFlag(item.messageID, hasRead = true, isDel = false)
         if (showFace && item.showFace > 0) {
-            MessageListLiveData.updateNoticeFace(item.messageID, item.showFace - 1)
+            MessageListLiveData.updateMessageFace(item.messageID, item.showFace - 1)
+        }
+    }
+
+    fun deleteMessage(messageInfoItem: MessageInfoItem?) {
+        messageInfoItem?.let {
+            MessageDBManager.deleteData(messageInfoItem)
         }
     }
 

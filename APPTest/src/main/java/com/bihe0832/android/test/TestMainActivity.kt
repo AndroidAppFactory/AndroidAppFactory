@@ -33,7 +33,7 @@ open class TestMainActivity : DebugMainActivity() {
         AAFMessageManager.getMessageLiveData().observe(this, object : Observer<List<MessageInfoItem>> {
             override fun onChanged(t: List<MessageInfoItem>?) {
                 t?.filter { it.canShow(true) }?.forEach {
-                    AAFMessageManager.showNotice(this@TestMainActivity, it, true)
+                    AAFMessageManager.showMessage(this@TestMainActivity, it, true)
                 }
             }
         })
