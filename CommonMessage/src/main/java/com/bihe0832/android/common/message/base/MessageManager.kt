@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getAPPCurrentStartTime
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -61,21 +62,23 @@ abstract class MessageManager {
 
 
     fun fetchMessageByFile(url: String) {
-        HTTPServer.getInstance().doRequestAsync(object : HttpBasicRequest() {
-            override fun getUrl(): String {
-                return url
-            }
+        if (URLUtils.isHTTPUrl(url)) {
+            HTTPServer.getInstance().doRequestAsync(object : HttpBasicRequest() {
+                override fun getUrl(): String {
+                    return url
+                }
 
-            override fun getResponseHandler(): HttpResponseHandler {
-                return HttpResponseHandler { statusCode, msg ->
-                    if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
-                        ThreadManager.getInstance().start {
-                            MessageListLiveData.parseMessage(msg)
+                override fun getResponseHandler(): HttpResponseHandler {
+                    return HttpResponseHandler { statusCode, msg ->
+                        if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
+                            ThreadManager.getInstance().start {
+                                MessageListLiveData.parseMessage(msg)
+                            }
                         }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     fun showMessage(activity: Activity, item: MessageInfoItem, showFace: Boolean, listener: OnDialogListener?) {
