@@ -9,7 +9,7 @@ import java.util.concurrent.Executors
  *
  * @author zixie code@bihe0832.com
  * Created on 2022/11/25.
- * Description: Description
+ * Description: 带依赖的阻塞任务
  *
  */
 
@@ -23,12 +23,13 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
 
     companion object {
 
-        const val TASK_CHECKED_PERIOD = 500L
+        const val TASK_CHECKED_PERIOD = 200L
 
         const val TASK_STATUS_NOT_EXIST = 0
         const val TASK_STATUS_WAITING = 1
         const val TASK_STATUS_RUNNING = 2
         const val TASK_STATUS_FINISHED = 3
+        const val TASK_STATUS_KILLED = 4
     }
 
     private var mTaskIsWaiting = false
@@ -77,6 +78,10 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
                     //死循环
                     var depIsOKOrTimeout = true
                     var depIsWaiting = false
+                    if (mTaskListAction.getTaskInfo(taskName).getCurrentStatus() == TASK_STATUS_KILLED) {
+                        ZLog.w(TAG, "$taskName has killed, force exist and do nothing")
+                        break
+                    }
                     mTaskListAction.getAllDependenceList(taskName).forEach { depID ->
                         val depInfo = mTaskListAction.getTaskInfo(depID)
                         if (depID.equals(taskName) || mTaskListAction.getAllDependenceList(taskName).contains(taskName)) {
@@ -111,7 +116,8 @@ class DependenceBlockTask(name: String, private val mTaskListAction: DependenceB
                         mTaskIsWaiting = false
                         mTaskListAction.resetTaskManager(this)
                     } else if (depIsOKOrTimeout) {
-                        ZLog.w(TAG, "task start do: ${this.taskName}")
+                        ZLog.w(TAG, "task start do: ${this.taskName} ${mTaskListAction.getTaskInfo(taskName).getCurrentStatus()}")
+
                         mTaskListAction.updateTaskStatus(taskName, TASK_STATUS_RUNNING)
                         taskAction()
                         mTaskIsWaiting = false

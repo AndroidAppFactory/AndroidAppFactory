@@ -51,6 +51,9 @@ class DebugDialogFragment : DebugEnvFragment() {
                 resume()
             }))
             add(DebugItemData("弹框顺序手动触发暂停", View.OnClickListener { pause() }))
+            add(DebugItemData("弹框顺序强制重置清空", View.OnClickListener {
+                reset()
+            }))
 
             add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
             add(DebugItemData("底部分享Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
@@ -388,6 +391,9 @@ class DebugDialogFragment : DebugEnvFragment() {
         mDependenceBlockDialogManager.getDependentTaskManager().finishTask(INNER_PAUSE_TASK_ID)
     }
 
+    private fun reset(){
+        mDependenceBlockDialogManager.getDependentTaskManager().reset()
+    }
     private fun pause() {
         mDependenceBlockDialogManager.getDependentTaskManager().addTask(INNER_PAUSE_TASK_ID, 1000, {}, mutableListOf())
     }

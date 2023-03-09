@@ -15,7 +15,6 @@ import com.bihe0832.android.lib.utils.time.DateUtil
  *
  */
 
-
 open class DependenceBlockTaskManager(private val autoStart: Boolean) {
 
     private val INNER_TASK_ID = "AAFInnerTaskForDependentBlockTaskManager"
@@ -136,5 +135,17 @@ open class DependenceBlockTaskManager(private val autoStart: Boolean) {
     @Synchronized
     fun addTask(taskID: String, action: () -> Unit, dependList: List<DependenceBlockTask.TaskDependence>) {
         addTask(taskID, 0, action, dependList)
+    }
+
+    fun reset() {
+        val taskID = mTaskManager.currentTask?.taskName ?: ""
+        ZLog.w(BaseAAFBlockTask.TAG, "start reset, current task: $taskID  ${mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).getCurrentStatus()}")
+        mTaskManager.clearAll()
+        mSequenceTaskUpdatedInfoList.getTaskInfo(taskID).updateCurrentStatus(DependenceBlockTask.TASK_STATUS_KILLED)
+        (mTaskManager.currentTask as DependenceBlockTask?)?.let { currentRunningTask ->
+            Thread.sleep(currentRunningTask.getCheckInterval() * 2)
+            currentRunningTask.unlock()
+        }
+        mSequenceTaskUpdatedInfoList.clear()
     }
 }

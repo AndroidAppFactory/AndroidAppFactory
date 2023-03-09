@@ -7,7 +7,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 /**
  * @author zixie code@bihe0832.com
  * Created on 2022/10/22.
- * Description: Description
+ * Description: 阻塞任务的任务定义
  */
 public abstract class BaseAAFBlockTask implements BlockTask {
 
