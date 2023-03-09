@@ -11,7 +11,6 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.sql.SQLException
-import java.util.*
 
 
 /**
@@ -23,10 +22,11 @@ import java.util.*
 object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
 
     private val TAG = "MessageListLiveData-> "
+    private const val lockdata = false
 
     fun initData(context: Context) {
         MessageDBManager.init(context)
-        sortMessge(MessageDBManager.getAll()).let { list ->
+        sortMessage(MessageDBManager.getAll()).let { list ->
             ThreadManager.getInstance().runOnUIThread {
                 postValue(list.filter { it.isNotExpired && !it.hasDelete() })
                 ZLog.d(TAG, "updateData value length:" + value?.size)
@@ -44,69 +44,72 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
 
     @Synchronized
     fun parseMessage(resultJson: String) {
-        ZLog.d(TAG, "parseMessage:$resultJson")
-        var httpResultList: List<MessageInfoItem> = ArrayList()
-        try {
-            JsonHelper.fromJsonList(resultJson, MessageInfoItem::class.java)?.filter { it.isNotExpired }?.let { msgJsonResponse ->
-                httpResultList = msgJsonResponse
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        if (httpResultList == null || httpResultList.isEmpty()) {
-            ZLog.d(TAG, "httpResultList = null or size is 0")
-            return
-        }
-
-        //本地已经有的列表
-        var msgListInDB = HashMap<String, MessageInfoItem>().apply {
-            MessageDBManager.getAll().let { messgeInfo ->
-                messgeInfo.forEach {
-                    put(it.messageID, it)
+        ThreadManager.getInstance().start {
+            ZLog.d(TAG, "parseMessage:$resultJson")
+            var httpResultList: List<MessageInfoItem> = ArrayList()
+            try {
+                JsonHelper.fromJsonList(resultJson, MessageInfoItem::class.java)?.filter { it.isNotExpired }?.let { msgJsonResponse ->
+                    httpResultList = msgJsonResponse
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        }
 
-        // 保存数据库，并将已经读取的数据结合网络数据更新到最新
-        var ignoreList = ArrayList<String>()
-        for (index in httpResultList.indices) {
-            var infoFromServer = httpResultList[index]
-            if (msgListInDB.keys.contains(infoFromServer.messageID) && null != msgListInDB[infoFromServer.messageID]) {
-                msgListInDB[infoFromServer.messageID]!!.let { messageInfoDB ->
-                    infoFromServer.apply {
-                        this.messageID = messageInfoDB.messageID
-                        this.isNotify = messageInfoDB.isNotify
-                        this.setHasDelete(messageInfoDB.hasDelete())
-                        this.setHasRead(messageInfoDB.hasRead())
-                        this.showFace = messageInfoDB.showFace
-                    }.let {
-                        ZLog.d(TAG, "本地已有再次下发：本地数据：$messageInfoDB ,下发数据: $it")
-                        messageInfoDB.copyFrom(it)
+            if (httpResultList == null || httpResultList.isEmpty()) {
+                ZLog.d(TAG, "httpResultList = null or size is 0")
+            } else {
+                synchronized(lockdata) {
+                    //本地已经有的列表
+                    var msgListInDB = HashMap<String, MessageInfoItem>().apply {
+                        MessageDBManager.getAll().let { messgeInfo ->
+                            messgeInfo.forEach {
+                                put(it.messageID, it)
+                            }
+                        }
+                    }
+
+                    // 保存数据库，并将已经读取的数据结合网络数据更新到最新
+                    var ignoreList = ArrayList<String>()
+                    for (index in httpResultList.indices) {
+                        var infoFromServer = httpResultList[index]
+                        if (msgListInDB.keys.contains(infoFromServer.messageID) && null != msgListInDB[infoFromServer.messageID]) {
+                            msgListInDB[infoFromServer.messageID]!!.let { messageInfoDB ->
+                                infoFromServer.apply {
+                                    this.messageID = messageInfoDB.messageID
+                                    this.isNotify = messageInfoDB.isNotify
+                                    this.setHasDelete(messageInfoDB.hasDelete())
+                                    this.setHasRead(messageInfoDB.hasRead())
+                                    this.showFace = messageInfoDB.showFace
+                                    this.lastShow = messageInfoDB.lastShow
+                                }.let {
+                                    ZLog.d(TAG, "本地已有再次下发：本地数据：$messageInfoDB ,下发数据: $it")
+                                    messageInfoDB.copyFrom(it)
+                                }
+                            }
+                            MessageDBManager.saveData(infoFromServer)
+                            ignoreList.add(infoFromServer.messageID)
+                        } else {
+                            MessageDBManager.saveData(infoFromServer)
+                        }
+                    }
+                    //剔除网络请求重复的公告
+                    var newHttpResultList = httpResultList.toMutableList().filter { !ignoreList.contains(it.messageID) }
+
+                    //通知栏通知
+                    sendNotify(newHttpResultList)
+                    ZLog.d(TAG, "value length:" + value?.size)
+
+                    var finalResult = (newHttpResultList + msgListInDB.values).filter { it.isNotExpired && !it.hasDelete() }
+                    ThreadManager.getInstance().runOnUIThread {
+                        value = sortMessage(finalResult).toMutableList()
                     }
                 }
-                MessageDBManager.saveData(infoFromServer)
-                ignoreList.add(infoFromServer.messageID)
-            } else {
-                MessageDBManager.saveData(infoFromServer)
             }
-        }
-
-        //剔除网络请求重复的公告
-        var newHttpResultList = httpResultList.toMutableList().filter { !ignoreList.contains(it.messageID) }
-
-        //通知栏通知
-        sendNotify(newHttpResultList)
-        ZLog.d(TAG, "value length:" + value?.size)
-
-        var finalResult = (newHttpResultList + msgListInDB.values).filter { it.isNotExpired && !it.hasDelete() }
-        ThreadManager.getInstance().runOnUIThread {
-            value = sortMessge(finalResult).toMutableList()
         }
     }
 
     @Synchronized
-    private fun sortMessge(finalResult: List<MessageInfoItem>): List<MessageInfoItem> {
+    private fun sortMessage(finalResult: List<MessageInfoItem>): List<MessageInfoItem> {
         return finalResult.sortedWith(compareBy { it.messageID }).sortedWith(compareBy { it.shouldTop }).reversed()
     }
 
@@ -127,41 +130,30 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
     }
 
     //更新 是否已读，flag;更新是否删除，目前仅做删除标记 ，isDel
-    fun updateMessageFlag(msgid: String, hasRead: Boolean, isDel: Boolean) {
-        try {
-            value?.let { list ->
-                list.find { it.messageID == msgid }?.let {
-                    it.setHasRead(hasRead)
-                    it.setHasDelete(isDel)
-                    it.lastShow = LifecycleHelper.getCurrentTime()
-                    ThreadManager.getInstance().run {
-                        MessageDBManager.saveData(it)
+    fun updateMessageLocalStatus(msgid: String, hasRead: Boolean, showFace: Int, isDel: Boolean) {
+        ThreadManager.getInstance().start {
+            synchronized(lockdata) {
+                try {
+                    value?.let { list ->
+                        list.find { it.messageID == msgid }?.let {
+                            it.setHasRead(hasRead)
+                            it.setHasDelete(isDel)
+                            it.showFace = showFace
+                            it.lastShow = LifecycleHelper.getCurrentTime()
+                            MessageDBManager.saveData(it)
+                        }
+                        if (isDel) {
+                            ThreadManager.getInstance().runOnUIThread {
+                                value = list.filter { it.messageID != msgid }.toMutableList()
+                            }
+                        }
+                        postValue(list.toList())
                     }
-                }
-                if (isDel) {
-                    ThreadManager.getInstance().runOnUIThread {
-                        value = list.filter { it.messageID != msgid }.toMutableList()
-                    }
+
+                } catch (e: SQLException) {
+                    e.printStackTrace()
                 }
             }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-    }
-
-    fun updateMessageFace(msgid: String, showFace: Int) {
-        try {
-            value?.let { list ->
-                list.find { it.messageID == msgid }?.let {
-                    it.showFace = showFace
-                    ThreadManager.getInstance().run {
-                        MessageDBManager.saveData(it)
-                    }
-                }
-            }
-
-        } catch (e: SQLException) {
-            e.printStackTrace()
         }
     }
 }

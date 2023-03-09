@@ -34,10 +34,10 @@ object MessageDBManager {
         return mutableListOf()
     }
 
-    fun getData(url: String): MessageInfoItem? {
+    fun getData(messageID: String): MessageInfoItem? {
         try {
             commonDBHelperInstance?.let {
-                return MessageTableModel.getData(it, url)
+                return MessageTableModel.getData(it, messageID)
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -2,13 +2,12 @@ package com.bihe0832.android.test
 
 import android.os.Bundle
 import android.view.Gravity
-import androidx.lifecycle.Observer
+import android.view.View
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager.addWatch
-import com.bihe0832.android.app.message.AAFMessageManager
+import com.bihe0832.android.app.message.addMessageAction
+import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.base.debug.navigation.DebugNavigationDrawerFragment
 import com.bihe0832.android.common.debug.DebugMainActivity
-import com.bihe0832.android.common.message.data.MessageInfoItem
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
@@ -26,17 +25,15 @@ open class TestMainActivity : DebugMainActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateIcon("", R.mipmap.ic_menu_white) {
-            mNavigationDrawerFragment.openDrawer()
-        }
-
-        AAFMessageManager.getMessageLiveData().observe(this, object : Observer<List<MessageInfoItem>> {
-            override fun onChanged(t: List<MessageInfoItem>?) {
-                t?.filter { it.canShow(true) }?.forEach {
-                    AAFMessageManager.showMessage(this@TestMainActivity, it, true)
-                }
+        initToolbar(R.id.common_toolbar, getTitleName(), false, object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                mNavigationDrawerFragment.openDrawer()
             }
-        })
+
+        }, R.mipmap.ic_menu_white)
+
+
+        addMessageAction(findViewById(R.id.message), findViewById(R.id.message_unread))
 //        UpdateManager.checkUpdateAndShowDialog(this, fa¬lse)
         DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
 
@@ -57,13 +54,14 @@ open class TestMainActivity : DebugMainActivity() {
 
     }
 
+
     override fun loadFragment() {
         super.loadFragment()
         loadRootFragment(R.id.navigation_drawer_fl, mNavigationDrawerFragment)
     }
 
     override fun getLayoutID(): Int {
-        return R.layout.debug_main_activity_framelayout
+        return R.layout.activity_debug_main
     }
 
     override fun onDestroy() {

@@ -148,6 +148,9 @@ open class BaseActivity : SupportActivity() {
                         if (needTitleCenter) {
                             mTitleView!!.setGravity(Gravity.CENTER)
                             mTitleView!!.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT
+                        } else {
+                            mTitleView!!.setGravity(Gravity.CENTER_VERTICAL or Gravity.LEFT)
+                            mTitleView!!.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT
                         }
                         continue
                     }
