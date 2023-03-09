@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonMessage"
+ext.developModule = "Application"
 
 
 /**
@@ -79,7 +79,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonWrapper"             : [
-        "version"            : "5.11.1",
+        "version"            : "5.11.2",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -88,7 +88,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonMessage"             : [
-        "version"            : "5.11.1",
+        "version"            : "5.11.2",
         "artifactId"         : "common-message",
         "apidependenciesList": [
             "CommonList"
