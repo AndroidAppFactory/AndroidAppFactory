@@ -3,7 +3,7 @@ package com.bihe0832.android.lib.block.task;
 /**
  * @author zixie code@bihe0832.com
  * Created on 2022/10/22.
- * Description: Description
+ * Description: 阻塞任务的任务抽象
  */
 public interface BlockTask extends Comparable<BlockTask> {
 

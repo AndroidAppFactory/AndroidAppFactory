@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @author zixie code@bihe0832.com
  * Created on 2020/9/30.
- * Description: Description
+ * Description: 带依赖的阻塞任务的具体任务的运行情况
  *
  */
 class DependenceBlockTaskExecutionInfo {
@@ -69,5 +69,9 @@ class DependenceBlockTaskExecutionInfo {
             result.add(it.taskID)
         }
         return result.distinct()
+    }
+
+    fun clear(){
+        taskList.clear()
     }
 }
