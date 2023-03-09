@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.common.message.MessageListLiveData
+import com.bihe0832.android.common.message.R
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.common.message.data.db.MessageDBManager
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
@@ -28,9 +30,6 @@ import java.net.HttpURLConnection
  *
  */
 abstract class MessageManager {
-    // AAF 框架的公共通知
-    private val AAF_COMMON_MESSAGE = "https://cdn.bihe0832.com/app/msg/aaf_msg.json"
-
     abstract fun fetchNewMsg()
 
     fun getMessageLiveData(): MessageListLiveData {
@@ -54,7 +53,9 @@ abstract class MessageManager {
     }
 
     fun updateMsg() {
-        fetchMessageByFile(AAF_COMMON_MESSAGE)
+        ZixieContext.applicationContext?.let {
+            fetchMessageByFile(it.getString(R.string.com_bihe0832_message_common_msg_url))
+        }
         fetchNewMsg()
     }
 
