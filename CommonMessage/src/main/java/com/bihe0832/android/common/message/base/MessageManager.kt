@@ -14,6 +14,8 @@ import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
+import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getAPPCurrentStartTime
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import java.net.HttpURLConnection
@@ -66,7 +68,9 @@ abstract class MessageManager {
             override fun getResponseHandler(): HttpResponseHandler {
                 return HttpResponseHandler { statusCode, msg ->
                     if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
-                        MessageListLiveData.parseMessage(msg)
+                        ThreadManager.getInstance().start {
+                            MessageListLiveData.parseMessage(msg)
+                        }
                     }
                 }
             }
@@ -126,10 +130,13 @@ abstract class MessageManager {
                 openZixieWeb(item.content)
             }
         }
-        MessageListLiveData.updateMessageFlag(item.messageID, hasRead = true, isDel = false)
-        if (showFace && item.showFace > 0) {
-            MessageListLiveData.updateMessageFace(item.messageID, item.showFace - 1)
+        var showFace = if (showFace && item.showFace > 0) {
+            item.showFace - 1
+        } else {
+            item.showFace
         }
+        MessageListLiveData.updateMessageLocalStatus(item.messageID, hasRead = true, showFace = showFace, isDel = false)
+
     }
 
     fun deleteMessage(messageInfoItem: MessageInfoItem?) {
@@ -138,4 +145,21 @@ abstract class MessageManager {
         }
     }
 
+    /**
+     * @param showAgain 在本次启动中，如果已经拍过脸，再次拉取到是否要二次拍脸
+     * @return
+     */
+    open fun canShowFace(messageInfoItem: MessageInfoItem, showAgain: Boolean): Boolean {
+        return if (messageInfoItem.showFace > 0 || messageInfoItem.showFace == -1) {
+            val canShow = messageInfoItem.isNotExpired && !messageInfoItem.hasDelete()
+            if (showAgain) {
+                canShow
+            } else {
+                val notShowThisStart = MessageDBManager.getData(messageInfoItem.messageID)?.lastShow ?: messageInfoItem.lastShow < getAPPCurrentStartTime()
+                canShow && notShowThisStart
+            }
+        } else {
+            false
+        }
+    }
 }

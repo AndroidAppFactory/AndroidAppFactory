@@ -60,18 +60,6 @@ public class MessageInfoItem {
     private transient boolean hasRead = false;
     private transient long lastShowTime = 0L;
 
-    public boolean canShow(boolean isFace) {
-        if (isFace) {
-            if (showFace > 0) {
-                return isNotExpired() && !hasDelete();
-            } else {
-                return false;
-            }
-        } else {
-            return isNotExpired() && !hasDelete();
-        }
-    }
-
     public boolean isNotExpired() {
         return expireDate.equalsIgnoreCase("-1") || DateUtil.compareDate(new Date(), expireDate, "yyyyMMddHHmm") <= 0;
     }
