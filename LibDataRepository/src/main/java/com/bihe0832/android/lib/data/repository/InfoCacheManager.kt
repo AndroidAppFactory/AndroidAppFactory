@@ -158,5 +158,12 @@ abstract class InfoCacheManager<T> {
         return mDataMap.get(key)
     }
 
-
+    fun hasData(key: String, duration: Long): Boolean {
+        getSourceData(key)?.let {
+            if (it.dataItem != null && System.currentTimeMillis() - it.initTime < duration) {
+                return true
+            }
+        }
+        return false
+    }
 }
