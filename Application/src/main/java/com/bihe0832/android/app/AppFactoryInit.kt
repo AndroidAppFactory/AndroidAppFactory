@@ -3,8 +3,10 @@ package com.bihe0832.android.app
 import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import android.webkit.WebView
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterHelper
@@ -19,6 +21,7 @@ import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.WifiManagerWrapper
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.web.WebViewHelper
 import com.tencent.smtt.sdk.TbsPrivacyAccess
@@ -85,6 +88,10 @@ object AppFactoryInit {
                     initCore(application, processName)
                     if (processName.equals(application.packageName, ignoreCase = true)) {
                         initExtra(application)
+                    } else {
+                        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.P) {
+                            WebView.setDataDirectorySuffix(it.processName)
+                        }
                     }
                 }
             }
