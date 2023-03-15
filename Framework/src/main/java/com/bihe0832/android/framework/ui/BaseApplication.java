@@ -42,9 +42,6 @@ public abstract class BaseApplication extends Application {
                 if (it.processName.equalsIgnoreCase(getPackageName())) {
                     ZixieContext.INSTANCE.showDebugEditionToast();
                 } else {
-                    if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.P) {
-                        WebView.setDataDirectorySuffix(it.processName);
-                    }
                     ZixieContext.INSTANCE.showDebug("独立进程初始化：" + it.processName);
                     ZLog.e("Application process: name:" + it.processName + " and id:" + it.pid);
                 }
