@@ -16,7 +16,7 @@ public class WebViewHelper {
 
     public static void init(Context context, HashMap<String, Object> initSettings, Bundle userIDBundleData,
                             boolean needPreLauncher) {
-        initX5(context, initSettings, userIDBundleData);
+        initX5(context, initSettings, userIDBundleData, needPreLauncher);
         if (needPreLauncher && null != context) {
             Intent intent = new Intent();
             intent.setClass(context, WebViewService.class);
@@ -29,7 +29,7 @@ public class WebViewHelper {
      *
      * @param context
      */
-    private static void initX5(Context context, HashMap<String, Object> initSettings, Bundle userIDBundleData) {
+    private static void initX5(Context context, HashMap<String, Object> initSettings, Bundle userIDBundleData, boolean needPreLauncher) {
         if (null == context) {
             throw new IllegalArgumentException("initX5 error, context is null!");
         }
@@ -39,8 +39,12 @@ public class WebViewHelper {
         if (null != initSettings) {
             paramMap.putAll(initSettings);
         }
-        // 启用X5多进程dex2oat模式
-        paramMap.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        if (needPreLauncher) {
+            // 启用X5多进程dex2oat模式
+            paramMap.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        } else {
+            paramMap.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, false);
+        }
         QbSdk.initTbsSettings(paramMap);
 
         //x5内核初始化接口
