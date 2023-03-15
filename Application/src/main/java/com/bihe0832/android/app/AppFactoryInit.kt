@@ -54,18 +54,10 @@ object AppFactoryInit {
                 ZLog.e("Application process initCore web start")
                 WebViewHelper.init(ctx, null, Bundle().apply {
                     putString(
-                            TbsPrivacyAccess.ConfigurablePrivacy.MODEL.name,
-                            ManufacturerUtil.MODEL
-                    )
-                    putString(
-                            TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name,
-                            ZixieContext.deviceId
-                    )
-                    putString(
-                            TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name,
-                            ZixieContext.deviceId
-                    )
-                }, true)
+                            TbsPrivacyAccess.ConfigurablePrivacy.MODEL.name, ManufacturerUtil.MODEL)
+                    putString(TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name, ZixieContext.deviceId)
+                    putString(TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name, ZixieContext.deviceId)
+                }, false)
             }, 5)
             ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)
         }
