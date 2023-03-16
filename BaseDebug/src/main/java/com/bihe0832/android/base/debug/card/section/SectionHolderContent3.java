@@ -3,10 +3,7 @@ package com.bihe0832.android.base.debug.card.section;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
-import android.widget.TextView;
 
-import com.bihe0832.android.base.debug.R;
-import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 
 /**
@@ -23,7 +20,7 @@ public class SectionHolderContent3 extends SectionHolderContent2 {
 
     @Override
     public void initData(CardBaseModule item) {
-       super.initData(item);
-       mHeader.setBackgroundColor(Color.GREEN);
+        super.initData(item);
+        mHeader.setBackgroundColor(Color.GREEN);
     }
 }

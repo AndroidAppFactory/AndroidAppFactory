@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bihe0832.android.base.debug.card.section.SectionDataContent2
-import com.bihe0832.android.base.debug.card.section.SectionHolderContent3
+import com.bihe0832.android.base.debug.card.section.SectionDataContent3
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.list.CardItemForCommonList
@@ -44,7 +44,7 @@ class DebugListFragment : CommonListFragment() {
 
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
-            add(CardItemForCommonList(SectionDataContent2::class.java, SectionHolderContent3::class.java, true))
+            add(CardItemForCommonList(SectionDataContent3::class.java, true))
         }
     }
 
@@ -95,11 +95,12 @@ class DebugListFragment : CommonListFragment() {
 //                    SectionDataHeader2("标题2:${System.currentTimeMillis()}")
 //                })
                 for (j in 0..3) {
-                    add(if (i < 2) {
-                        SectionDataContent("内容1:${System.currentTimeMillis()}", "")
+                    if (i < 2) {
+                        add(SectionDataContent("内容1:${System.currentTimeMillis()}", ""))
                     } else {
-                        SectionDataContent2("内容2:${System.currentTimeMillis()}")
-                    })
+                        add(SectionDataContent2("内容2:${System.currentTimeMillis()}"))
+                        add(SectionDataContent3("内容3:${System.currentTimeMillis()}"))
+                    }
                 }
             }
         }.let {
