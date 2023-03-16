@@ -35,30 +35,31 @@ public class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, B
     }
 
     protected void addItemToAdapter(Class<? extends CardBaseModule> module, boolean isHeader) {
-        CardBaseInnerModule innerModule = CardInfoHelper.getInstance().getItemByClass(module);
-        if (null != innerModule) {
-            addItemToAdapter(innerModule, module, innerModule.getViewHolderClass(), isHeader);
+        CardBaseInnerModule innerModuleInstance = CardInfoHelper.getInstance().getItemByClass(module);
+        if (null != innerModuleInstance) {
+            addItemToAdapter(innerModuleInstance, module, innerModuleInstance.getViewHolderClass(), false, isHeader);
         }
     }
 
     protected void addItemToAdapter(Class<? extends CardBaseModule> module, Class<? extends CardBaseHolder> holderClass, boolean isHeader) {
-        addItemToAdapter(null, module, holderClass, isHeader);
+        addItemToAdapter(null, module, holderClass, true, isHeader);
     }
 
-    private void addItemToAdapter(CardBaseInnerModule innerModuleParam, Class<? extends CardBaseModule> module, Class<? extends CardBaseHolder> holderClass, boolean isHeader) {
-        CardBaseInnerModule newInnerModule = innerModuleParam;
-        if (null == innerModuleParam) {
-            newInnerModule = CardInfoHelper.getInstance().getItemByClass(module);
+    private void addItemToAdapter(CardBaseInnerModule innerModuleParam, Class<? extends CardBaseModule> module, Class<? extends CardBaseHolder> holderClass, boolean addSpecial, boolean isHeader) {
+        CardBaseInnerModule innerModuleInstance = innerModuleParam;
+        if (null == innerModuleInstance) {
+            innerModuleInstance = CardInfoHelper.getInstance().getItemByClass(module);
         }
 
-        if (null != newInnerModule) {
-            CardInfoHelper.getInstance().addCardItem(newInnerModule.getResID(), newInnerModule.getViewHolderClass());
-            if (newInnerModule.getViewHolderClass().getCanonicalName() != holderClass.getCanonicalName()) {
-                mSpecialList.put(newInnerModule.getResID(), holderClass);
-            }
-            if (isHeader) {
-                mHeaderIDList.add(newInnerModule.getResID());
-            }
+        if (null != innerModuleInstance) {
+            CardInfoHelper.getInstance().addCardItem(innerModuleInstance.getResID(), innerModuleInstance.getViewHolderClass());
+        }
+        if (addSpecial) {
+            mSpecialList.put(innerModuleInstance.getResID(), holderClass);
+        }
+
+        if (isHeader) {
+            mHeaderIDList.add(innerModuleInstance.getResID());
         }
     }
 
