@@ -41,16 +41,12 @@
             app:bgtv_isRadiusHalfHeight="true" />
 
 
-
-
-
         <TextView
             android:id="@+id/info_content_0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:background="@color/gray_light"
-            android:gravity="center"
             android:textColor="#FF3C3C3C"
             android:textSize="14dp"
             tools:text="方式对双方都是十分的所得税辅导辅导辅导师傅的温热热控开关咖啡机" />

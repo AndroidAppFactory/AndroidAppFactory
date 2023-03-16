@@ -29,7 +29,7 @@ class DebugTextViewFragment : BaseFragment() {
     }
 
     var testList = mutableListOf<String>(
-            "这是一个测试测试0",
+            "这是一个测个测个测测个测测个fdsfsdsf测个测个测试测试0 fdsfsdf\ndsd ",
             "这是一个测试测试这是一个测试测试这是一个测试1",
             "这是一个测试测试这是一个测试测试这是一个测试测试这是一",
             "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试3",
@@ -65,8 +65,8 @@ class DebugTextViewFragment : BaseFragment() {
         }
 
 
-        testSpecialText(testList[5])
-        info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
+        testSpecialText(testList[0])
+//        info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
 
 //        rtv_msg_tip.setDrawableBackground(resources.getColor(R.color.red_dot), 15, 0, Color.parseColor("#0000ff"))
         rtv_msg_tip.changeStatusWithUnreadMsg(90, DisplayUtil.dip2px(context, 8f))
@@ -167,11 +167,24 @@ class DebugTextViewFragment : BaseFragment() {
                         10,
                         60,
                         20,
-                        0,
+                        20,
                         info_content_0.textSize * 3 / 5,
                         0,
                         Typeface.DEFAULT
-                ),
+                )
+//                ZixieTextRadiusBackgroundSpan(
+//                        Color.parseColor("#998D8D8D"),
+//                        Color.parseColor("#998D8D8D"),
+//                        0,
+//                        DisplayUtil.dip2px(ZixieContext.applicationContext, 4f),
+//                        DisplayUtil.dip2px(ZixieContext.applicationContext, 20f),
+//                        8,
+//                        DisplayUtil.dip2px(ZixieContext.applicationContext, 20f),
+//                        DisplayUtil.dip2px(ZixieContext.applicationContext, 18f).toFloat(),
+//                        Color.WHITE,
+//                        Typeface.DEFAULT_BOLD
+//                )
+        ,
                 start,
                 end,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
@@ -229,12 +242,12 @@ class DebugTextViewFragment : BaseFragment() {
 //
 //        }
 
-        info_content_0.append(
-                TextFactoryUtils.getSpannedTextByHtml(
-                        TextFactoryUtils.getTextHtmlAfterTransform(
-                                "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
-                        )
-                )
-        )
+//        info_content_0.append(
+//                TextFactoryUtils.getSpannedTextByHtml(
+//                        TextFactoryUtils.getTextHtmlAfterTransform(
+//                                "这是一个         一个测试                 fdsfsdf\ndsd   fdf "
+//                        )
+//                )
+//        )
     }
 }
