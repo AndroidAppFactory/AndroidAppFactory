@@ -11,6 +11,7 @@ import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.ui.custom.view.PlaceholderView
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeLinearLayoutManager
 
 /**
@@ -87,14 +88,15 @@ abstract class BaseListFragment : BaseFragment() {
     }
 
     protected open fun getBaseEmptyView(): View {
-        val emptyView = LayoutInflater.from(context).inflate(R.layout.common_view_list_empty, null, false)
-        emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text =
-                if (getLayoutManagerForList() is GridLayoutManager) {
-                    getString(R.string.bad_layoutmanager_empty_tips)
-                } else {
-                    getEmptyText()
-                }
-        return emptyView
+        return PlaceholderView(context!!).apply {
+            if (getLayoutManagerForList() is GridLayoutManager) {
+                getString(R.string.bad_layoutmanager_empty_tips)
+            } else {
+                getEmptyText()
+            }.let {
+                setEmptyTips(it)
+            }
+        }
     }
 
     override fun getLayoutID(): Int {

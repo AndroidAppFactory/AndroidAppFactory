@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import com.bihe0832.android.lib.floatview.IconManager
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.thread.ThreadManager
 
 
 /**
@@ -66,46 +67,53 @@ object DebugLogTips {
     }
 
     fun showView(logView: DebugLogTipsIcon, canTouch: Boolean) {
-        mIconManager?.let {
-            logView.visibility = View.VISIBLE
-            mIconManager!!.showViewWithPermissionCheck(
-                    logView,
-                    SCENE_NAME_DEBUG,
-                    if (canTouch) mIconManager!!.getFullScreenFlag() else mIconManager!!.getNoTouchFlag(),
-                    logView.locationX,
-                    logView.locationY, null)
+        ThreadManager.getInstance().runOnUIThread {
+            mIconManager?.let {
+                logView.visibility = View.VISIBLE
+                mIconManager!!.showViewWithPermissionCheck(
+                        logView,
+                        SCENE_NAME_DEBUG,
+                        if (canTouch) mIconManager!!.getFullScreenFlag() else mIconManager!!.getNoTouchFlag(),
+                        logView.locationX,
+                        logView.locationY, null)
+            }
         }
     }
 
 
     fun hideView(logView: DebugLogTipsIcon) {
-        mIconManager?.let {
-            it.removeView(logView)
+        ThreadManager.getInstance().runOnUIThread {
+            mIconManager?.let {
+                it.removeView(logView)
+            }
         }
     }
 
     fun show(text: String) {
-        mLogView?.let {
-            it.show(text)
-            mIconManager!!.showViewWithPermissionCheck(
-                    it,
-                    SCENE_NAME_DEBUG,
-                    mIconManager!!.getNoTouchFlag(),
-                    it.locationX,
-                    it.locationY, null)
+        ThreadManager.getInstance().runOnUIThread {
+            mLogView?.let {
+                it.show(text)
+                mIconManager!!.showViewWithPermissionCheck(
+                        it,
+                        SCENE_NAME_DEBUG,
+                        mIconManager!!.getNoTouchFlag(),
+                        it.locationX,
+                        it.locationY, null)
+            }
         }
-
     }
 
     fun append(text: String) {
-        mLogView?.let {
-            it.append(text)
-            mIconManager!!.showViewWithPermissionCheck(
-                    it,
-                    SCENE_NAME_DEBUG,
-                    mIconManager!!.getNoTouchFlag(),
-                    it.locationX,
-                    it.locationY, null)
+        ThreadManager.getInstance().runOnUIThread {
+            mLogView?.let {
+                it.append(text)
+                mIconManager!!.showViewWithPermissionCheck(
+                        it,
+                        SCENE_NAME_DEBUG,
+                        mIconManager!!.getNoTouchFlag(),
+                        it.locationX,
+                        it.locationY, null)
+            }
         }
     }
 

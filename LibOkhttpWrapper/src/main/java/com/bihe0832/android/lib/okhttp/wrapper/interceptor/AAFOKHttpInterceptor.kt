@@ -12,10 +12,7 @@ import com.bihe0832.android.lib.okhttp.wrapper.getRequestParams
 import com.bihe0832.android.lib.okhttp.wrapper.getResponseData
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestContentDataRecord
-import okhttp3.Interceptor
-import okhttp3.Protocol
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
 
 /**
  * @author zixie code@bihe0832.com
@@ -53,7 +50,11 @@ open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false, pr
                 if (requestBody.contentType() != null) {
                     requestContentDataRecord.requestContentType = requestBody.contentType()
                 }
-                requestContentDataRecord.requestBody = request.getRequestParams(enableLog)
+                if (requestBody.contentType() != MultipartBody.FORM && contentLength < 500 * 1024) {
+                    requestContentDataRecord.requestBody = request.getRequestParams(enableLog)
+                } else {
+                    requestContentDataRecord.requestBody = "！！！AAF Record UnSupport Request , type: " + requestBody.contentType()
+                }
             }
         }
 
@@ -78,7 +79,11 @@ open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false, pr
                 if (responseBody.contentType() != null) {
                     requestContentDataRecord?.responseContentType = responseBody.contentType()
                 }
-                requestContentDataRecord?.responseBody = response.getResponseData(enableLog)
+                if (contentLength < 500 * 1024) {
+                    requestContentDataRecord?.responseBody = response.getResponseData(enableLog)
+                } else {
+                    requestContentDataRecord?.requestBody = "！！！AAF Record UnSupport Response , type: $contentLength"
+                }
             }
         }
         return response

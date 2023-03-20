@@ -14,8 +14,6 @@ import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.*
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.bihe0832.android.lib.utils.os.BuildUtils
-import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.File
 
@@ -26,7 +24,9 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add(DebugTipsData("APPFactory的通用组件和工具"))
             add(DebugItemData("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
             add(DebugItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
-            add(DebugItemData("查看设备信息", View.OnClickListener { showMobileInfo() }))
+            add(DebugItemData("查看设备概要信息", View.OnClickListener { showInfoWithHTML("设备概要信息", getMobileInfo(context)) }))
+            add(DebugItemData("查看设备详细信息", View.OnClickListener { startDebugActivity(DebugDeviceFragment::class.java, "设备详细信息") }))
+
             add(DebugItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
             add(DebugItemData("<font color ='#3AC8EF'><b>日志管理</b></font>", View.OnClickListener {
                 showLog()
@@ -57,28 +57,6 @@ open class DebugCommonFragment : DebugEnvFragment() {
 
     protected open fun showLog() {
         startActivityWithException(DebugLogActivity::class.java)
-    }
-
-    protected fun showMobileInfo() {
-        showInfoWithHTML("设备信息", getMobileInfo())
-    }
-
-    protected fun getMobileInfo(): List<String> {
-        return mutableListOf<String>().apply {
-            add("应用包名: ${context!!.packageName}")
-            add("设备ID: ${ZixieContext.deviceId}")
-            add("厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}")
-            var sdkVersion =
-                "系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
-                    ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
-                } else {
-                    ""
-                }
-            add("<font color ='#3AC8EF'>$sdkVersion</font>")
-
-            add("系统指纹: ${ManufacturerUtil.FINGERPRINT}")
-
-        }
     }
 
     protected fun showAPPInfo() {

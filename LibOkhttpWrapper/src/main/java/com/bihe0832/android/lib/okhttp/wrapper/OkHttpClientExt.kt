@@ -27,37 +27,35 @@ import java.nio.charset.Charset
  */
 
 fun Response.getResponseData(enableLog: Boolean): String {
-    var jsonReader: Reader? = null
-    var reader: BufferedReader? = null
     val result = StringBuffer()
-    try {
-        val responseBody = peekBody(Long.MAX_VALUE)
-        val charset = responseBody.contentType()?.charset() ?: Charset.forName("UTF-8")
-        jsonReader = InputStreamReader(responseBody.byteStream(), charset)
-        reader = BufferedReader(jsonReader)
-
-        var line: String? = reader.readLine()
-        do {
-            result.append(line)
-            line = reader.readLine()
-        } while (line != null)
-    } catch (e: java.lang.Exception) {
-        ZLog.e(OkHttpWrapper.TAG, "getResponseData cause Exception:$e")
-        if (enableLog) {
-            e.printStackTrace()
-        }
-    } finally {
+    if (enableLog) {
+        var jsonReader: Reader? = null
+        var reader: BufferedReader? = null
         try {
-            jsonReader?.close()
-        } catch (e: Exception) {
+            val responseBody = peekBody(Long.MAX_VALUE)
+            val charset = responseBody.contentType()?.charset() ?: Charset.forName("UTF-8")
+            jsonReader = InputStreamReader(responseBody.byteStream(), charset)
+            reader = BufferedReader(jsonReader)
+
+            var line: String? = reader.readLine()
+            do {
+                result.append(line)
+                line = reader.readLine()
+            } while (line != null)
+        } catch (e: java.lang.Exception) {
+            ZLog.e(OkHttpWrapper.TAG, "getResponseData cause Exception:$e")
             if (enableLog) {
                 e.printStackTrace()
             }
-        }
-        try {
-            reader?.close()
-        } catch (e: Exception) {
-            if (enableLog) {
+        } finally {
+            try {
+                jsonReader?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            try {
+                reader?.close()
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -66,27 +64,26 @@ fun Response.getResponseData(enableLog: Boolean): String {
 }
 
 fun Request.getRequestParams(enableLog: Boolean): String {
-    this.body()?.let {
-        val buffer = okio.Buffer()
-        try {
-            it.writeTo(buffer)
-            val charset = it.contentType()?.charset() ?: Charset.forName("UTF-8")
-            return buffer.readString(charset)
-        } catch (e: java.lang.Exception) {
-            ZLog.e(OkHttpWrapper.TAG, "getResponseData cause Exception:$e")
-            if (enableLog) {
-                e.printStackTrace()
-            }
-        } finally {
+    if (enableLog) {
+        this.body()?.let {
+            val buffer = okio.Buffer()
             try {
-                buffer.close()
-            } catch (e: Exception) {
-                if (enableLog) {
+                it.writeTo(buffer)
+                val charset = it.contentType()?.charset() ?: Charset.forName("UTF-8")
+                return buffer.readString(charset)
+            } catch (e: java.lang.Exception) {
+                ZLog.e(OkHttpWrapper.TAG, "getResponseData cause Exception:$e")
+                e.printStackTrace()
+            } finally {
+                try {
+                    buffer.close()
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
     }
+
     return ""
 }
 

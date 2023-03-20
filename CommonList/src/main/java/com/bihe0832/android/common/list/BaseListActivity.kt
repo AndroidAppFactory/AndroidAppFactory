@@ -1,10 +1,8 @@
 package  com.bihe0832.android.common.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +10,7 @@ import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.ui.custom.view.PlaceholderView
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeLinearLayoutManager
 
 /**
@@ -132,14 +131,15 @@ abstract class BaseListActivity : BaseActivity() {
     }
 
     protected open fun getBaseEmptyView(): View {
-        val emptyView = LayoutInflater.from(this).inflate(R.layout.common_view_list_empty, null, false)
-        emptyView.findViewById<TextView>(R.id.common_view_list_empty_content_tips).text =
-                if (getLayoutManagerForList() is GridLayoutManager) {
-                    getString(R.string.bad_layoutmanager_empty_tips)
-                } else {
-                    getEmptyText()
-                }
-        return emptyView
+        return PlaceholderView(this).apply {
+            if (getLayoutManagerForList() is GridLayoutManager) {
+                getString(R.string.bad_layoutmanager_empty_tips)
+            } else {
+                getEmptyText()
+            }.let {
+                setEmptyTips(it)
+            }
+        }
     }
 
 
