@@ -83,9 +83,13 @@ object DebugLogTips {
 
     fun hideView(logView: DebugLogTipsIcon) {
         ThreadManager.getInstance().runOnUIThread {
-            mIconManager?.let {
-                it.removeView(logView)
-            }
+            mIconManager?.removeView(logView)
+        }
+    }
+
+    fun hide() {
+        mLogView?.let {
+            hideView(it)
         }
     }
 
@@ -93,11 +97,7 @@ object DebugLogTips {
         ThreadManager.getInstance().runOnUIThread {
             mLogView?.let {
                 it.show(text)
-                mIconManager!!.showViewWithPermissionCheck(
-                        it,
-                        SCENE_NAME_DEBUG,
-                        mIconManager!!.getNoTouchFlag(),
-                        it.locationX,
+                mIconManager!!.showViewWithPermissionCheck(it, SCENE_NAME_DEBUG, mIconManager!!.getNoTouchFlag(), it.locationX,
                         it.locationY, null)
             }
         }

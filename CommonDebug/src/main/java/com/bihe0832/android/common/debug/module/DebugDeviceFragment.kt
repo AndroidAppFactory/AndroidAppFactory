@@ -3,6 +3,7 @@ package com.bihe0832.android.common.debug.module
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Build
+import android.os.Debug
 import android.os.Process
 import android.text.format.Formatter
 import android.view.View
@@ -75,11 +76,20 @@ class DebugDeviceFragment : DebugEnvFragment() {
             // 通过这种方法可以传入当前进程的 pid 获取到当前进程的总内存占用情况，其中不仅包括了虚拟机的内存占用情况，还包括原生层和其它内存占用,AndroidQ 版本对这个 API 增加了限制，当采样率较高时，会一直返回一个相同的值。
             val memInfo = activityManager.getProcessMemoryInfo(intArrayOf(Process.myPid()))
             if (memInfo.isNotEmpty()) {
-                add(getInfoItem("当前应用占用内存：${Formatter.formatFileSize(context, (memInfo[0].totalPss * 1024).toLong())}"))
+                add(getInfoItem("当前应用占用内存（精度高，限频：5min）：${Formatter.formatFileSize(context, (memInfo[0].totalPss * 1024).toLong())}"))
                 add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其中栈内存：${Formatter.formatFileSize(context, (memInfo[0].dalvikPss * 1024).toLong())}"))
                 add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其中堆内存：${Formatter.formatFileSize(context, ((memInfo[0].totalPss - memInfo[0].dalvikPss - memInfo[0].otherPss) * 1024).toLong())}"))
                 add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其他内存：${Formatter.formatFileSize(context, (memInfo[0].otherPss * 1024).toLong())}"))
             }
+            val info: Debug.MemoryInfo = Debug.MemoryInfo()
+            Debug.getMemoryInfo(info)
+            if (memInfo.isNotEmpty()) {
+                add(getInfoItem("当前应用占用内存（精度低，实时获取）：${Formatter.formatFileSize(context, (info.totalPss * 1024).toLong())}"))
+                add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其中栈内存：${Formatter.formatFileSize(context, (info.dalvikPss * 1024).toLong())}"))
+                add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其中堆内存：${Formatter.formatFileSize(context, (info.nativePss * 1024).toLong())}"))
+                add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其他内存：${Formatter.formatFileSize(context, (info.otherPss * 1024).toLong())}"))
+            }
+
             add(getInfoItem("Dalvik 单应用最大内存：${Formatter.formatFileSize(context, Runtime.getRuntime().totalMemory())}"))
             add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;当前应用栈内存已用量：${Formatter.formatFileSize(context, Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())}"))
             add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;当前应用栈内存可用量：${Formatter.formatFileSize(context, Runtime.getRuntime().freeMemory())}"))
@@ -138,6 +148,7 @@ class DebugDeviceFragment : DebugEnvFragment() {
     }
 
     fun stopAutoShowSimpleInfo() {
+        DebugLogTips.hide()
         TaskManager.getInstance().removeTask(TASK)
     }
 
@@ -146,12 +157,12 @@ class DebugDeviceFragment : DebugEnvFragment() {
             val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             val outInfo = ActivityManager.MemoryInfo()
             activityManager.getMemoryInfo(outInfo)
-
-            val memInfo = activityManager.getProcessMemoryInfo(intArrayOf(Process.myPid()))
+            val info: Debug.MemoryInfo = Debug.MemoryInfo()
+            Debug.getMemoryInfo(info)
             StringBuffer().apply {
                 append("系统内存：${Formatter.formatFileSize(context, outInfo.availMem)}/ ${Formatter.formatFileSize(context, outInfo.totalMem)}").append("<BR>")
                 append("系统触发GC时内存临界值：${Formatter.formatFileSize(context, outInfo.threshold)}").append("系统是否处于低内存运行：${outInfo.lowMemory}").append("<BR>")
-                append("当前应用占用内存：${Formatter.formatFileSize(context, (memInfo[0].totalPss * 1024).toLong())}")
+                append("当前应用占用内存：${Formatter.formatFileSize(context, (info.totalPss * 1024).toLong())}")
             }.let {
                 return it.toString()
             }
