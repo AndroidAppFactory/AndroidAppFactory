@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.debug.module
 
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
+import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -102,6 +103,10 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun getInfoItem(itemContent: String): DebugItemData {
+        return DebugItemData(itemContent) { showInfo("应用调试信息", itemContent) }
     }
 
 }

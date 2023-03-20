@@ -30,6 +30,7 @@ const val TIME_OUT_WRITE = 5000L
 object OkHttpWrapper {
     const val TAG = "AAFRequest"
     const val HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID = "AAF-Content-Request-Id"
+    private var maxRequestListSize = 50
 
     private val mRequestIdGenerator by lazy {
         IdGenerator(0)
@@ -48,7 +49,12 @@ object OkHttpWrapper {
         mRequestRecords.add(record)
     }
 
-    var maxRequestListSize = 50
+    // 建议不超过 0，如果请求比较复杂且内容较多，会导致内存占用偏高
+    fun setMaxRequestNumInRequestCacheList(cacheMaxRequest: Int) {
+        if (cacheMaxRequest > 0) {
+            maxRequestListSize = cacheMaxRequest
+        }
+    }
 
     fun getOkHttpClientBuilder(): OkHttpClient.Builder {
         return OkHttpClient.Builder().apply {

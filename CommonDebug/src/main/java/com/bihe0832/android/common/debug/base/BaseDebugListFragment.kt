@@ -15,16 +15,32 @@ import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 
 open class BaseDebugListFragment : CommonListFragment() {
 
+    private var mLoadingDialog: LoadingDialog? = null
+
     private val mTestDataLiveData by lazy {
         object : DebugListLiveData() {
             override fun initData() {
-                postValue(getDataList())
+                ThreadManager.getInstance().start {
+                    getDataList().let {
+                        ThreadManager.getInstance().runOnUIThread {
+                            if (showLoadIng()) {
+                                mLoadingDialog?.dismiss()
+                            }
+                            postValue(it)
+                        }
+                    }
+                }
             }
         }
+    }
+
+    fun showLoadIng(): Boolean {
+        return false
     }
 
     override fun getResID(): Int {
@@ -33,7 +49,16 @@ open class BaseDebugListFragment : CommonListFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
+        if (showLoadIng()) {
+            mLoadingDialog = LoadingDialog(view.context)
+            mLoadingDialog?.show()
+        }
         CardInfoHelper.getInstance().setAutoAddItem(true)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mLoadingDialog = null
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {

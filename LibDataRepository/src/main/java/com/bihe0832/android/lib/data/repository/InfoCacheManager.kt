@@ -22,6 +22,16 @@ abstract class InfoCacheManager<T> {
     // cache 满了以后，单次清除的内容量
     val DEFAULT_PART = 20
 
+    private val realPartSize by lazy {
+        getBestPart().let {
+            if (it < DEFAULT_PART) {
+                DEFAULT_PART
+            } else {
+                it
+            }
+        }
+    }
+
     abstract fun getRemoteData(key: String, listener: AAFDataCallback<T>)
 
     open fun getDefaultDuration(key: String): Long {
@@ -29,7 +39,11 @@ abstract class InfoCacheManager<T> {
     }
 
     open fun getBestLength(): Int {
-        return 3000
+        return 200
+    }
+
+    open fun getBestPart(): Int {
+        return DEFAULT_PART
     }
 
     private val mDataMap: ConcurrentHashMap<String, InfoItem<T>> = ConcurrentHashMap()
@@ -45,10 +59,10 @@ abstract class InfoCacheManager<T> {
 
     private fun getRealBestLength(): Int {
         getBestLength().let {
-            if (it > DEFAULT_PART) {
+            if (it > realPartSize) {
                 return it
             } else {
-                return DEFAULT_PART
+                return realPartSize
             }
         }
     }
@@ -96,7 +110,6 @@ abstract class InfoCacheManager<T> {
     fun removeData(key: String) {
         mDataMap.remove(key)
     }
-
 
     open suspend fun getNewData(key: String): AAFCoroutinesData<T> = getData(key, -1)
 
@@ -165,5 +178,9 @@ abstract class InfoCacheManager<T> {
             }
         }
         return false
+    }
+
+    fun currentLength(): Int {
+        return mDataMap.size
     }
 }

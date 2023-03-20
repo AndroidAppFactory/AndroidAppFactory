@@ -35,7 +35,7 @@ open class TestMainActivity : DebugMainActivity() {
 
         addMessageAction(findViewById(R.id.message), findViewById(R.id.message_unread))
 //        UpdateManager.checkUpdateAndShowDialog(this, fa¬lse)
-        DebugLogTips.initModule(this, true, Gravity.RIGHT or Gravity.BOTTOM)
+        DebugLogTips.initModule(this, true, Gravity.LEFT or Gravity.TOP)
 
         CommonDBManager.init(this)
 
