@@ -19,7 +19,11 @@ import okhttp3.*
  * Created on 2022/6/27.
  * Description: Description
  */
-open class AAFOKHttpInterceptor(private var enableIntercept: Boolean = false, private var enableLog: Boolean = false) : Interceptor {
+open class AAFOKHttpInterceptor(
+        // 是否开启请求拦截并记录日志信息
+        private var enableIntercept: Boolean = false,
+        // 是否开启异常日志
+        private var enableLog: Boolean = true) : Interceptor {
 
     private val HTTP_REQ_PROPERTY_CONTENT_ENCODING = "Content-Encoding"
 
