@@ -24,7 +24,13 @@ import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-open class AAFBasicOkHttpNetworkEventListener(protected val enableTrace: Boolean = false, protected val enableLog: Boolean = false, protected val listener: EventListener?) : EventListener() {
+open class AAFBasicOkHttpNetworkEventListener(
+        // 是否统计请求耗时
+        protected val enableTrace: Boolean = false,
+        // 是否打印基本的请求数据
+        protected val enableLog: Boolean = false,
+        // 网络事件回调
+        protected val listener: EventListener?) : EventListener() {
 
     private var mRequestTraceTimeRecord: RequestTraceTimeRecord? = null
     private var mNetworkTraceRequestID: String = ""

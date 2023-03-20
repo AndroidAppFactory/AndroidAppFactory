@@ -44,7 +44,7 @@ fun debugOKHttp() {
 
 private class ResultCall<T> : Callback<T> {
     override fun onResponse(p0: Call<T>, p1: Response<T>) {
-        ZLog.d("NetworkResult", (p1.body() as ResponseBody).source().toString())
+        ZLog.d("NetworkResult", (p1.body() as? ResponseBody)?.source().toString())
     }
 
     override fun onFailure(p0: Call<T>, p1: Throwable) {
