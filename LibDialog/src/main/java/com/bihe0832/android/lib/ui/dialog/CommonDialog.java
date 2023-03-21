@@ -209,7 +209,7 @@ public class CommonDialog extends Dialog {
                 imageView.setImageResource(imageContentResId);
                 imageView.setVisibility(View.VISIBLE);
             } else if (imageUrl != null) {
-                GlideExtKt.loadCenterCropImage(imageView, imageUrl, loadImgWithFade, Color.BLACK, Color.WHITE);
+                GlideExtKt.loadCenterCropImage(imageView, imageUrl, Color.BLACK, Color.WHITE, loadImgWithFade);
                 imageView.setVisibility(View.VISIBLE);
             } else {
                 imageView.setVisibility(View.GONE);

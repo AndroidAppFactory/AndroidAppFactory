@@ -16,7 +16,7 @@ import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.media.image.clear
+import com.bihe0832.android.lib.media.image.clearImage
 import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
@@ -109,7 +109,7 @@ open class BaseActivity : SupportActivity() {
         } else if (URLUtils.isHTTPUrl(iconURL)) {
             mNavigationImageButton?.loadImage(iconURL!!)
         } else if (null == iconURL) {
-            mNavigationImageButton?.clear()
+            mNavigationImageButton?.clearImage()
         }
         mToolbar?.setNavigationOnClickListener(listener)
     }
