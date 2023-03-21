@@ -40,7 +40,7 @@ object DownloadConfig {
             downloadListener.onFailed(ResponseHandler.ERROR_CONFIG, "url is bad")
         }
         DownloadUtils.startDownload(context, DownloadItem().apply {
-            setNotificationVisibility(true)
+            setNotificationVisibility(false)
             downloadPriority = DownloadItem.MAX_DOWNLOAD_PRIORITY
             downloadURL = url
             fileMD5 = md5
