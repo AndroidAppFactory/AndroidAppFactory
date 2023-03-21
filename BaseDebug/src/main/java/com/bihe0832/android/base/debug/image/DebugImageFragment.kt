@@ -6,10 +6,10 @@ import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.photos.HeadIconBuildFactory
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.lib.download.wrapper.DownloadFile
-import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.wrapper.DownloadFile
+import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.BitmapUtil
@@ -46,9 +46,10 @@ public class DebugImageFragment : BaseFragment() {
 
         test_image_local_source.loadImage(
                 "http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg",
+                100, 100,
+                R.mipmap.icon_author,
+                R.mipmap.icon_author,
                 false,
-                R.mipmap.icon_author,
-                R.mipmap.icon_author,
                 RequestOptions.bitmapTransform(
                         MultiTransformation(
                                 CenterInside(),

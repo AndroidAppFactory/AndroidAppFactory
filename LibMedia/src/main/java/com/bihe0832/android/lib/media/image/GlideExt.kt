@@ -15,78 +15,91 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
  * 如果需要同时多中心效果叠加，需要配合 MultiTransformation 使用  loadImage 接口
  */
 fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadCircleCropImage(url, true, placeholder, error)
+    loadCircleCropImage(url, placeholder, error, true)
 }
 
 /**
  * circleCrop():圆形裁剪
  */
-fun ImageView.loadCircleCropImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().optionalCircleCrop())
+fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder, needFade: Boolean) {
+    loadImage(url, 0, 0, placeholder, error, needFade, RequestOptions().optionalCircleCrop())
 }
 
 fun ImageView.loadRoundCropImage(url: String, radius: Int, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadRoundCropImage(url, radius, true, placeholder, error)
+    loadRoundCropImage(url, radius, placeholder, error, true)
 }
 
 /**
  * RoundedCorners 圆角
  */
-fun ImageView.loadRoundCropImage(url: String, radius: Int, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions.bitmapTransform(RoundedCorners(radius)))
+fun ImageView.loadRoundCropImage(url: String, radius: Int, placeholder: Int = Color.GRAY, error: Int = placeholder, needFade: Boolean) {
+    loadImage(url, 0, 0, placeholder, error, needFade, RequestOptions.bitmapTransform(RoundedCorners(radius)))
 }
 
 fun ImageView.loadCenterCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadCenterCropImage(url, true, placeholder, error)
+    loadCenterCropImage(url, placeholder, error, true)
 }
 
 /**
  * centerCrop()：以填满整个控件为目标,等比缩放,超过控件时将被 裁剪 ( 宽高都要填满 ,所以只要图片宽高比与控件宽高比不同时,一定会被剪裁)
  */
-fun ImageView.loadCenterCropImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().optionalCenterCrop())
+fun ImageView.loadCenterCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder, needFade: Boolean) {
+    loadImage(url, 0, 0, placeholder, error, needFade, RequestOptions().optionalCenterCrop())
 }
 
 fun ImageView.loadCenterInsideImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadCenterInsideImage(url, true, placeholder, error)
+    loadCenterInsideImage(url, placeholder, error, true)
 }
 
 /**
  * centerInside()：以完整显示图片为目标, 不剪裁 ,当显示不下的时候将缩放,能够显示的情况下不缩放
  */
-fun ImageView.loadCenterInsideImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().optionalCenterInside())
+fun ImageView.loadCenterInsideImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder, needFade: Boolean) {
+    loadImage(url, 0, 0, placeholder, error, needFade, RequestOptions().optionalCenterInside())
 }
 
 fun ImageView.loadFitCenterImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadFitCenterImage(url, true, placeholder, error)
+    loadFitCenterImage(url, placeholder, error, true)
 }
 
 /**
  * fitCenter()：将图片按照原始的长宽比充满全屏
  */
-fun ImageView.loadFitCenterImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions().optionalFitCenter())
+fun ImageView.loadFitCenterImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder, needFade: Boolean) {
+    loadImage(url, 0, 0, placeholder, error, needFade, RequestOptions().optionalFitCenter())
 }
 
 fun ImageView.loadImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, true, placeholder, error)
+    loadImage(url, 0, 0, placeholder, error, true)
 }
 
-fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, needFade, placeholder, error, RequestOptions())
+fun ImageView.loadImage(url: String, width: Int, height: Int, placeholder: Int = Color.GRAY, error: Int = placeholder, needFade: Boolean) {
+    loadImage(url, width, height, placeholder, error, needFade, RequestOptions())
 }
 
-
-fun ImageView.loadImage(url: String, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
-    loadImage(url, true, placeholder, error, requestOptions)
+fun ImageView.loadCircleCropImage(resId: Int) {
+    loadImage(resId, 0, 0, RequestOptions().optionalCircleCrop())
 }
 
-
-fun ImageView.loadImage(url: String, needFade: Boolean, placeholder: Int, error: Int, requestOptions: RequestOptions = RequestOptions()) {
-    loadImage(url, placeholder, error, 0, 0, needFade, DiskCacheStrategy.NONE, false, requestOptions)
+fun ImageView.loadCenterCropImage(resId: Int) {
+    loadImage(resId, 0, 0, RequestOptions().optionalCenterCrop())
 }
 
+fun ImageView.loadCenterInsideImage(resId: Int) {
+    loadImage(resId, 0, 0, RequestOptions().optionalCenterInside())
+}
+
+fun ImageView.loadImage(resId: Int) {
+    loadImage(resId, 0, 0, RequestOptions())
+}
+
+fun ImageView.loadRoundCropImage(resId: Int, radius: Int) {
+    loadImage(resId, 0, 0, RequestOptions.bitmapTransform(RoundedCorners(radius)))
+}
+
+fun ImageView.loadImage(url: String, width: Int, height: Int, placeholder: Int, error: Int, needFade: Boolean, requestOptions: RequestOptions = RequestOptions()) {
+    loadImage(url, placeholder, error, width, height, needFade, DiskCacheStrategy.NONE, false, requestOptions)
+}
 
 fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, height: Int, needFade: Boolean, strategy: DiskCacheStrategy, skipMemoryCache: Boolean, requestOptions: RequestOptions = RequestOptions()) {
     ZLog.d("Glide", "load image:$url")
@@ -124,31 +137,16 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
     }
 }
 
-fun ImageView.loadCircleCropImage(resId: Int) {
-    loadImage(resId, RequestOptions().optionalCircleCrop())
-}
-
-fun ImageView.loadCenterCropImage(resId: Int) {
-    loadImage(resId, RequestOptions().optionalCenterCrop())
-}
-
-fun ImageView.loadCenterInsideImage(resId: Int) {
-    loadImage(resId, RequestOptions().optionalCenterInside())
-}
-
-
-fun ImageView.loadImage(resId: Int) {
-    loadImage(resId, RequestOptions())
-}
-
-
-fun ImageView.loadRoundCropImage(resId: Int, radius: Int) {
-    loadImage(resId, RequestOptions.bitmapTransform(RoundedCorners(radius)))
-}
-
-fun ImageView.loadImage(resId: Int, requestOptions: RequestOptions = RequestOptions()) {
+fun ImageView.loadImage(resId: Int, width: Int, height: Int, requestOptions: RequestOptions = RequestOptions()) {
     requestOptions.dontAnimate()
     try {
+        if (width > 0) {
+            if (height > 0) {
+                requestOptions.override(width, height)
+            } else {
+                requestOptions.override(width)
+            }
+        }
         Glide.with(this.context).load(resId).apply(requestOptions).into(this)
     } catch (e: Exception) {
         e.printStackTrace()
@@ -160,7 +158,7 @@ fun ImageView.loadImage(resId: Int, requestOptions: RequestOptions = RequestOpti
     }
 }
 
-fun ImageView.clear() {
+fun ImageView.clearImage() {
     try {
         Glide.with(this.context).clear(this)
     } catch (e: Exception) {

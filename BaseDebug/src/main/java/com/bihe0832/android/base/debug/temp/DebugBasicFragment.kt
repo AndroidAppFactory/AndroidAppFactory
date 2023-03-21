@@ -69,7 +69,7 @@ class DebugBasicFragment : BaseFragment() {
         }
 
         test_basic_button_local_2.setOnClickListener {
-            test_basic_content.loadImage("http://cdn.bihe0832.com/images/zixie_32.ico", true, Color.GRAY, Color.GRAY, RequestOptions().optionalCircleCrop())
+            test_basic_content.loadImage("http://cdn.bihe0832.com/images/zixie_32.ico", 0,0 ,Color.GRAY, Color.GRAY, true, RequestOptions().optionalCircleCrop())
         }
 
         test_basic_button_local_3.setOnClickListener {

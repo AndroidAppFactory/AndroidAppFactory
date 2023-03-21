@@ -54,7 +54,6 @@ object LoggerFile {
         }
     }
 
-
     @Synchronized
     fun init(context: Context, isDebug: Boolean) {
         init(context, isDebug, 7 * DateUtil.MILLISECOND_OF_DAY)
