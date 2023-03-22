@@ -15,7 +15,7 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
  * 如果需要同时多中心效果叠加，需要配合 MultiTransformation 使用  loadImage 接口
  */
 fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadCircleCropImage(url, placeholder, error, true)
+    loadCircleCropImage(url, placeholder, error, false)
 }
 
 /**
@@ -26,7 +26,7 @@ fun ImageView.loadCircleCropImage(url: String, placeholder: Int = Color.GRAY, er
 }
 
 fun ImageView.loadRoundCropImage(url: String, radius: Int, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadRoundCropImage(url, radius, placeholder, error, true)
+    loadRoundCropImage(url, radius, placeholder, error, false)
 }
 
 /**
@@ -37,7 +37,7 @@ fun ImageView.loadRoundCropImage(url: String, radius: Int, placeholder: Int = Co
 }
 
 fun ImageView.loadCenterCropImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadCenterCropImage(url, placeholder, error, true)
+    loadCenterCropImage(url, placeholder, error, false)
 }
 
 /**
@@ -48,7 +48,7 @@ fun ImageView.loadCenterCropImage(url: String, placeholder: Int = Color.GRAY, er
 }
 
 fun ImageView.loadCenterInsideImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadCenterInsideImage(url, placeholder, error, true)
+    loadCenterInsideImage(url, placeholder, error, false)
 }
 
 /**
@@ -59,7 +59,7 @@ fun ImageView.loadCenterInsideImage(url: String, placeholder: Int = Color.GRAY, 
 }
 
 fun ImageView.loadFitCenterImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadFitCenterImage(url, placeholder, error, true)
+    loadFitCenterImage(url, placeholder, error, false)
 }
 
 /**
@@ -70,7 +70,7 @@ fun ImageView.loadFitCenterImage(url: String, placeholder: Int = Color.GRAY, err
 }
 
 fun ImageView.loadImage(url: String, placeholder: Int = Color.GRAY, error: Int = placeholder) {
-    loadImage(url, 0, 0, placeholder, error, true)
+    loadImage(url, 0, 0, placeholder, error, false)
 }
 
 fun ImageView.loadImage(url: String, width: Int, height: Int, placeholder: Int = Color.GRAY, error: Int = placeholder, needFade: Boolean) {
@@ -112,6 +112,7 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
     }
 
     if (width > 0) {
+        requestOptions.sizeMultiplier(width * 0.3f)
         if (height > 0) {
             requestOptions.override(width, height)
         } else {
@@ -126,7 +127,6 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
         }.load(url).apply {
             if (needFade) {
                 transition(withCrossFade(DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(true).build()))
-                thumbnail(0.3f)
             } else {
                 requestOptions.dontAnimate()
             }
