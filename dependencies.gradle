@@ -15,8 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
-
+ext.developModule = "Framework"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -203,7 +202,7 @@ ext.moduleInfo = [
             project.androidsupport.annotation,
             project.androidsupport.lifecycle_livedata,
             project.androidsupport.multidex,
-            "LibWrapper", "LibLifecycle"
+            "LibWrapper"
         ],
         "specialdependenciesList": [
             "kapt": [project.glide.compiler]
