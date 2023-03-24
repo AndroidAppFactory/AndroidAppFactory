@@ -130,7 +130,7 @@ def getPublishCommand() {
             resultList = resultList + item + "\n"
         }
         System.err.println("\n\n========================================\n\n")
-        System.err.println("当前开发的组件开发修改版本号后，直接在根目录运行下面的命令即可发布所有依赖到最新版本\n")
+        System.err.println("组件开发完毕修改版本号后，直接在根目录运行下面的命令即可发布所有依赖到最新版本\n")
         System.err.println("运行后升级版本的组件有：\n\n\t" + moduleList)
         System.err.println("\n发布使用的命令： \n\n")
 
