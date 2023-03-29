@@ -1,6 +1,8 @@
 package com.bihe0832.android.base.debug.tts
 
 import android.content.Intent
+import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
@@ -10,6 +12,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.tts.LibTTS
+import com.bihe0832.android.lib.tts.TTSData
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import kotlinx.android.synthetic.main.fragment_test_tts.*
@@ -17,9 +20,10 @@ import java.util.*
 
 class DebugTTSFragment : BaseFragment() {
     val TAG = this.javaClass.simpleName
-    private val FORMAT = "语音播报测试：语速 %s,语调 %s，最大ID %s "
+    private val FORMAT = "语音播报测试：语速 %s,语速 %s,音量 %s，最大ID %s "
 
     private var times = 0
+    private var volume = 0.5f
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_test_tts
@@ -121,12 +125,12 @@ class DebugTTSFragment : BaseFragment() {
         }
 
         tts_speak?.setOnClickListener {
-            LibTTS.speak(getMsg(), LibTTS.SPEEAK_TYPE_SEQUENCE)
+            LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_SEQUENCE)
         }
 
         tts_save?.setOnClickListener {
             LibTTS.save(
-                    getMsg(),
+                    getTTSData(),
                     context!!.filesDir.absolutePath + "/audio_" + System.currentTimeMillis() + ".wav"
             )
         }
@@ -141,7 +145,6 @@ class DebugTTSFragment : BaseFragment() {
             updateTTSTitle()
         }
 
-
         tts_pitch_incre?.setOnClickListener {
             LibTTS.setPitch(LibTTS.getPitch() + 0.1f)
             updateTTSTitle()
@@ -152,20 +155,30 @@ class DebugTTSFragment : BaseFragment() {
             updateTTSTitle()
         }
 
+        tts_volume_incre?.setOnClickListener {
+            volume += 0.1f
+            updateTTSTitle()
+        }
+
+        tts_volume_decre?.setOnClickListener {
+            volume -= 0.1f
+            updateTTSTitle()
+        }
+
         tts_sequence?.setOnClickListener {
-            LibTTS.speak(getMsg(), LibTTS.SPEEAK_TYPE_SEQUENCE)
+            LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_SEQUENCE)
         }
 
         tts_next?.setOnClickListener {
-            LibTTS.speak(getMsg(), LibTTS.SPEEAK_TYPE_NEXT)
+            LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_NEXT)
         }
 
         tts_now?.setOnClickListener {
-            LibTTS.speak(getMsg(), LibTTS.SPEEAK_TYPE_FLUSH)
+            LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_FLUSH)
         }
 
         tts_clear?.setOnClickListener {
-            LibTTS.speak(getMsg(), LibTTS.SPEEAK_TYPE_CLEAR)
+            LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_CLEAR)
         }
 
         TaskManager.getInstance().addTask(object : BaseTask() {
@@ -187,13 +200,17 @@ class DebugTTSFragment : BaseFragment() {
         })
     }
 
-    private fun getMsg(): String {
+    private fun getTTSData(): TTSData {
         times++
         updateTTSTitle()
-        return tts_test_text?.text.toString()
+        return TTSData(tts_test_text?.text.toString()).apply {
+            addSpeakParams(Bundle().apply {
+                putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
+            })
+        }
     }
 
     private fun updateTTSTitle() {
-        tts_title?.text = String.format(FORMAT, LibTTS.getSpeechRate(), LibTTS.getPitch(), times)
+        tts_title?.text = String.format(FORMAT, LibTTS.getSpeechRate(), LibTTS.getPitch(), volume, times)
     }
 }
