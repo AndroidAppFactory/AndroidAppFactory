@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Framework"
+ext.developModule = "LibTTS"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.11.14"
+ext.moduleVersionName = "5.11.15"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -202,7 +202,7 @@ ext.moduleInfo = [
             project.androidsupport.annotation,
             project.androidsupport.lifecycle_livedata,
             project.androidsupport.multidex,
-            "LibWrapper"
+            "LibWrapper","Router", "RouterAnnotation",
         ],
         "specialdependenciesList": [
             "kapt": [project.glide.compiler]
@@ -213,7 +213,7 @@ ext.moduleInfo = [
         "version"            : "5.11.14",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
-            "Router", "RouterAnnotation", "LibDebug",
+            "LibDebug",
             "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
             "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
             "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",

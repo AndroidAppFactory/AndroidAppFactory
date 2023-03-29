@@ -3,20 +3,19 @@ package com.bihe0832.android.lib.tts
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.text.TextUtils
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.File
 import java.lang.reflect.Field
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 
 /**
@@ -42,14 +41,14 @@ object LibTTS {
     private const val CONFIG_VALUE_PITCH = 0.4f
     private const val CONFIG_VALUE_SPEECH_RATE = 0.4f
 
-    private var mUtteranceId = 1
-
+    val mTTSIDGenerator = IdGenerator(1)
     private var mSpeech: TextToSpeech? = null
     private var mContext: Context? = null
     private var mLocale: Locale? = null
+    private var needStopAfterSpeak = false
 
     private val mMsgList by lazy {
-        mutableListOf<String>()
+        mutableListOf<TTSData>()
     }
 
     private val mTTSSpeakListenerList = mutableListOf<TTSSpeakListener>()
@@ -90,6 +89,11 @@ object LibTTS {
             mTTSSpeakListenerList.forEach {
                 it.onUtteranceDone(utteranceId)
             }
+
+            if (needStopAfterSpeak) {
+                onDestroy()
+                needStopAfterSpeak = false
+            }
         }
 
         override fun onUtteranceError(utteranceId: String) {
@@ -105,6 +109,10 @@ object LibTTS {
         }
     }
 
+    fun init(context: Context, loc: Locale, listener: TTSInitListener) {
+        init(context, loc, null, listener)
+    }
+
     fun init(context: Context, loc: Locale, engine: String?, listener: TTSInitListener) {
         mContext = context
         mLocale = loc
@@ -112,7 +120,7 @@ object LibTTS {
         engine?.let {
             setEngine(it)
         }
-        initTTS()
+        initTTSAndSpeak(null)
         mSpeech?.engines?.forEach {
             ZLog.e(TAG, "onInit: 引擎列表：" + it.label + " " + it.name)
             if (it.name == mSpeech!!.defaultEngine) {
@@ -121,12 +129,7 @@ object LibTTS {
         }
     }
 
-    fun init(context: Context, loc: Locale, listener: TTSInitListener) {
-        init(context, loc, null, listener)
-    }
-
-
-    private fun initTTS() {
+    private fun initTTSAndSpeak(ttsData: TTSData?) {
         if (mContext != null && mLocale != null) {
             var enginePackageName = Config.readConfig(CONFIG_KEY_ENGINE, CONFIG_VALUE_ENGINE).let {
                 if (it.isEmpty()) {
@@ -135,25 +138,27 @@ object LibTTS {
                     it
                 }
             }
-            try {
-                mSpeech?.shutdown()
-            } catch (e: Exception) {
-                e.printStackTrace();
-            }
-
             mSpeech = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
                 if (status == TextToSpeech.SUCCESS) {
                     ZLog.d(TAG, "onInit: TTS引擎初始化成功")
+//                    lastInitTime = System.currentTimeMillis()
+                    initConfig()
                     setLanguage(mLocale!!)
+                    ttsData?.let {
+                        if (speak(ttsData) == TextToSpeech.ERROR) {
+                            mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
+                        }
+                    }
                 } else {
                     ZLog.e(TAG, "onInit: TTS引擎初始化失败")
                     mTTSInitListenerList.forEach {
                         it.onInitError()
                     }
+                    if (null != ttsData) {
+                        mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
+                    }
                 }
             }, enginePackageName)
-            setPitch(Config.readConfig(CONFIG_KEY_PITCH, getDefaultPitch()))
-            setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, getDefaultSpeechRate()))
             if (BuildUtils.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                 mSpeech?.setOnUtteranceCompletedListener { utteranceId ->
                     mTTSResultListener.onUtteranceDone(utteranceId ?: "")
@@ -179,7 +184,15 @@ object LibTTS {
             mTTSInitListenerList.forEach {
                 it.onInitError()
             }
+            if (null != ttsData) {
+                mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
+            }
         }
+    }
+
+    private fun initConfig() {
+        setPitch(Config.readConfig(CONFIG_KEY_PITCH, getDefaultPitch()))
+        setSpeechRate(Config.readConfig(CONFIG_KEY_SPEECH_RATE, getDefaultSpeechRate()))
     }
 
     interface TTSInitListener {
@@ -221,6 +234,74 @@ object LibTTS {
         return supported ?: TextToSpeech.ERROR
     }
 
+    fun isSpeak(): Boolean {
+        return mSpeech?.isSpeaking ?: false
+    }
+
+    fun hasMoreSpeak(): Boolean {
+        return mMsgList.size > 0
+    }
+
+    fun startSpeak() {
+        if (mMsgList.isNotEmpty()) {
+            var s = mMsgList[0]
+            mMsgList.removeAt(0)
+            speakWithTry(s)
+        }
+    }
+
+    fun stopSpeak() {
+        ZLog.e(TAG, "stopSpeak")
+        if (isSpeak()) {
+            needStopAfterSpeak = true
+        } else {
+            onDestroy()
+        }
+    }
+
+    fun forceStop() {
+        onDestroy()
+    }
+
+    fun speak(tempStr: TTSData, type: Int) {
+        when (type) {
+            SPEEAK_TYPE_SEQUENCE -> {
+                mMsgList.add(tempStr)
+                if (mSpeech?.isSpeaking != true) {
+                    startSpeak()
+                }
+            }
+            SPEEAK_TYPE_NEXT -> {
+                mMsgList.add(0, tempStr)
+                if (mSpeech?.isSpeaking != true) {
+                    startSpeak()
+                }
+            }
+            SPEEAK_TYPE_FLUSH -> {
+                mMsgList.add(0, tempStr)
+                startSpeak()
+            }
+            SPEEAK_TYPE_CLEAR -> {
+                mMsgList.clear()
+                mMsgList.add(0, tempStr)
+                startSpeak()
+            }
+        }
+    }
+
+    private fun speakWithTry(ttsData: TTSData) {
+        ZLog.e(TAG, "speakWithTry ttsData: $ttsData ")
+        if (!isTTSServiceOK(mSpeech)) {
+            initTTSAndSpeak(ttsData)
+        } else {
+            var result = speak(ttsData)
+            ZLog.e(TAG, "speakWithTry result: $result ")
+            if (result == TextToSpeech.ERROR) {
+                initTTSAndSpeak(ttsData)
+            }
+        }
+    }
+
     fun isTTSServiceOK(tts: TextToSpeech?): Boolean {
         var isBindConnection = true
         if (tts == null) {
@@ -247,99 +328,28 @@ object LibTTS {
         return isBindConnection
     }
 
-    fun isSpeak(): Boolean {
-        return mSpeech?.isSpeaking ?: false
-    }
-
-    fun hasMoreSpeak(): Boolean {
-        return mMsgList.size > 0
-    }
-
-    fun startSpeak() {
-        if (!isTTSServiceOK(mSpeech)) {
-            ZLog.e(TAG, "TTS引擎异常，重新再次初始化")
-            initTTS()
-        } else {
-            if (mMsgList.isNotEmpty()) {
-                var s = mMsgList[0]
-                mMsgList.removeAt(0)
-                speak(s)
-            }
-        }
-    }
-
-    fun stopSpeak() {
-        mSpeech?.stop()
-        mSpeech?.shutdown()
-        mMsgList.clear()
-    }
-
-    fun speak(tempStr: String, type: Int) {
-        when (type) {
-            SPEEAK_TYPE_SEQUENCE -> {
-                mMsgList.add(tempStr)
-                if (mSpeech?.isSpeaking == false) {
-                    startSpeak()
-                }
-            }
-            SPEEAK_TYPE_NEXT -> {
-                mMsgList.add(0, tempStr)
-                if (mSpeech?.isSpeaking == false) {
-                    startSpeak()
-                }
-            }
-            SPEEAK_TYPE_FLUSH -> {
-                mMsgList.add(0, tempStr)
-                startSpeak()
-            }
-            SPEEAK_TYPE_CLEAR -> {
-                mMsgList.clear()
-                mMsgList.add(0, tempStr)
-                startSpeak()
-            }
-        }
-    }
-
-
-    private fun speak(tempStr: String) {
-        mUtteranceId++
-        ZLog.e(TAG, "mUtteranceId: $mUtteranceId $tempStr")
+    private fun speak(ttsData: TTSData): Int? {
         var result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null)
+            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
         } else {
-            mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, null, mUtteranceId.toString())
+            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakBundle(), ttsData.getUtteranceId())
         }
-
-        if (result == TextToSpeech.ERROR) {
-            mTTSResultListener.onUtteranceFailed(mUtteranceId.toString(), tempStr)
-            initTTS()
-        }
+        ZLog.e(TAG, "speak ttsData result $result ,ttsData: $ttsData ")
+        return result
     }
 
-    fun save(tempStr: String, finalFileName: String): Int {
-        if (!isTTSServiceOK(mSpeech)) {
-            ZLog.e(TAG, "TTS引擎异常，重新再次初始化")
-            initTTS()
-        }
-        mUtteranceId++
-        var result = TextToSpeech.ERROR
-        if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            HashMap<String, String>().apply {
-                put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, mUtteranceId.toString())
-            }.let {
-                result = mSpeech?.speak(tempStr, TextToSpeech.QUEUE_FLUSH, it) ?: TextToSpeech.ERROR
-            }
-        } else {
-            val bundle = Bundle()
-            bundle.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, mUtteranceId.toString())
-            result = mSpeech?.synthesizeToFile(tempStr, bundle, File(finalFileName), mUtteranceId.toString())
+    fun save(ttsData: TTSData, finalFileName: String): Int? {
+        ZLog.e(TAG, "ttsData: $ttsData")
+        val result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
                     ?: TextToSpeech.ERROR
-
+        } else {
+            mSpeech?.synthesizeToFile(ttsData.speakText, ttsData.getSpeakBundle(), File(finalFileName), ttsData.speakText)
+                    ?: TextToSpeech.ERROR
         }
         ZLog.i(TAG, "saveAudioFile: $finalFileName 文件保存结果： $result")
         return result
     }
-
 
     fun getSpeechRate(): Float {
         val speechRate = Config.readConfig(CONFIG_KEY_SPEECH_RATE, getDefaultSpeechRate())
@@ -366,7 +376,6 @@ object LibTTS {
 
         ZLog.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result $result1")
     }
-
 
     fun getPitch(): Float {
         val pitch = Config.readConfig(CONFIG_KEY_PITCH, getDefaultPitch())
@@ -423,10 +432,13 @@ object LibTTS {
     }
 
     fun onDestroy() {
+        ZLog.e(TAG, "onDestroy")
+
         if (mSpeech != null) {
             mSpeech!!.stop()
             mSpeech!!.shutdown()
             mSpeech = null
         }
+        needStopAfterSpeak = false
     }
 }
