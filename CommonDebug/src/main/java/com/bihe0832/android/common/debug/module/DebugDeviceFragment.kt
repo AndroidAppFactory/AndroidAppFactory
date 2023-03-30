@@ -1,7 +1,9 @@
 package com.bihe0832.android.common.debug.module
 
 import android.app.ActivityManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Debug
 import android.os.Process
@@ -12,6 +14,7 @@ import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
+import com.bihe0832.android.lib.device.battery.BatteryHelper
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
@@ -33,9 +36,22 @@ import com.bihe0832.android.lib.utils.time.DateUtil
 class DebugDeviceFragment : DebugEnvFragment() {
 
     val TASK = "DebugDeviceFragment"
+    val statusChangeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            getDataLiveData().initData()
+            ZixieContext.showToast(BatteryHelper.getBatteryStatus(context).toString())
+        }
+    }
+
     override fun initView(view: View) {
         super.initView(view)
         showResult("点击信息内容可以复制和分享")
+        BatteryHelper.startReceiveBatteryChanged(context, statusChangeReceiver)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        BatteryHelper.stopReceiveBatteryChanged(context, statusChangeReceiver)
     }
 
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -115,9 +131,16 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(getInfoItem("Wi-Fi IP：${NetworkUtil.getDtTypeInfo(context).wifiIp}"))
             add(getInfoItem("周边Wi-Fi数量：${WifiManagerWrapper.getScanResultList().size}"))
             add(getInfoItem("移动网络基站信息：${MobileUtil.getPhoneCellInfo(context)}"))
-            add(getInfoItem("移动网络运营商：${DeviceInfoManager.getInstance().getMobileOperatorType()}"))
+            add(getInfoItem("移动网络运营商：${DeviceInfoManager.getInstance().mobileOperatorType}"))
             add(getInfoItem("移动网络信号强度：${MobileUtil.getSignalLevel()}"))
             add(getInfoItem("移动网络 IP：${NetworkUtil.getDtTypeInfo(context).mobileIp}"))
+
+            add(DebugTipsData("电量信息"))
+            BatteryHelper.getBatteryStatus(ZixieContext.applicationContext!!)?.let {
+                add(getInfoItem("充电状态：" + if (it.isCharging) "充电中" else "未充电"))
+                add(getInfoItem("充电类型：${it.getChargeTypeDesc()} — ${it.plugged}"))
+                add(getInfoItem("当前电量：${it.getBatteryPercentDesc()} - ${it.getBatteryPercent()}"))
+            }
         }
     }
 
@@ -169,6 +192,8 @@ class DebugDeviceFragment : DebugEnvFragment() {
         }
         return ""
     }
+
+
 }
 
 fun getMobileInfo(context: Context?): List<String> {
