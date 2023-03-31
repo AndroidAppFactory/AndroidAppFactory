@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.network.IpUtils;
-import com.bihe0832.android.lib.network.WifiUtil;
+import com.bihe0832.android.lib.network.wifi.WifiUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

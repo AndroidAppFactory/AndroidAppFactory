@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.network.DeviceInfoManager;
 import com.bihe0832.android.lib.network.MobileUtil;
 import com.bihe0832.android.lib.network.NetworkUtil;
-import com.bihe0832.android.lib.network.WifiManagerWrapper;
+import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import java.util.ArrayList;
 import org.jetbrains.annotations.NotNull;

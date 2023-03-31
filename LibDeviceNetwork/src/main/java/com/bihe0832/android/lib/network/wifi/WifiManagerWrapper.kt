@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.network;
+package com.bihe0832.android.lib.network.wifi;
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,9 +11,12 @@ import android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION
 import android.os.Build
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.network.IpUtils
+import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.utils.os.BuildUtils.SDK_INT
 
 /**
  * @author zixie code@bihe0832.com
@@ -213,7 +216,20 @@ object WifiManagerWrapper {
 
     //Wifi信号强度等级
     fun getSignalLevel(): Int {
-        return WifiManager.calculateSignalLevel(getRssi(), 5)
+        return getWifiSignalLevel(mWifiManager, getRssi(), 5)
+    }
+
+    fun getWifiSignalLevel(wm: WifiManager?, rssi: Int, numLevels: Int): Int {
+        return try {
+            if (SDK_INT >= Build.VERSION_CODES.R && wm != null) {
+                wm.calculateSignalLevel(rssi)
+            } else {
+                WifiManager.calculateSignalLevel(rssi, numLevels)
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            -1
+        }
     }
 
     //连接速度
@@ -321,6 +337,9 @@ object WifiManagerWrapper {
         register(context)
     }
 
+    fun hasInit(): Boolean {
+        return hasInit
+    }
 
     fun register(context: Context) {
         //需要过滤多个动作，则调用IntentFilter对象的addAction添加新动作
