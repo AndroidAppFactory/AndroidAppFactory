@@ -69,7 +69,7 @@ object AppFactoryInit {
     @Synchronized
     private fun initExtra(application: android.app.Application) {
         // 初始化网络变量和监听
-        NetworkChangeManager.getInstance().init(application.applicationContext, true)
+        NetworkChangeManager.init(application.applicationContext, true)
         WifiManagerWrapper.init(application.applicationContext, !ZixieContext.isOfficial())
         // 监听信号变化，统一到MobileUtil
         MobileUtil.registerMobileSignalListener(application.applicationContext)
