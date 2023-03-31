@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.network;
+package com.bihe0832.android.lib.network.wifi;
 
 import android.content.Context;
 import android.net.DhcpInfo;
@@ -9,6 +9,8 @@ import android.net.wifi.WifiManager;
 import android.os.Build.VERSION_CODES;
 
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.network.IpUtils;
+import com.bihe0832.android.lib.network.NetworkUtil;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 import java.io.BufferedReader;
@@ -111,20 +113,14 @@ public class WifiUtil {
 
     public static int getWifiSignalLevel(Context context) {
         int strength = -1;
-        if (context == null) {
-            return strength;
-        }
         try {
             WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
-                if (info.getBSSID() != null) {
-                    // 链接信号强度
-                    strength = WifiManager.calculateSignalLevel(info.getRssi(), 5);
-                }
+                strength = WifiManagerWrapper.INSTANCE.getWifiSignalLevel(wm, info.getRssi(), 5);
             }
         } catch (Exception e) {
-            // ignore
+            e.printStackTrace();
         }
         return strength;
     }

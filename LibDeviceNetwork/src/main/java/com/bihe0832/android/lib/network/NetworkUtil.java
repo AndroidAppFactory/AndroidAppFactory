@@ -11,6 +11,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.network.wifi.WifiUtil;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.IOException;
 import java.net.Inet4Address;

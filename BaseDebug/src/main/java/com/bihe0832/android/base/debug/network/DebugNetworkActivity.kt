@@ -8,7 +8,7 @@ import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
-import com.bihe0832.android.lib.network.WifiManagerWrapper
+import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import kotlinx.android.synthetic.main.activity_test_text.*
 
 class DebugNetworkActivity : BaseActivity() {
