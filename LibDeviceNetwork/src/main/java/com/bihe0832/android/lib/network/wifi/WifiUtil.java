@@ -11,6 +11,7 @@ import android.os.Build.VERSION_CODES;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.network.IpUtils;
 import com.bihe0832.android.lib.network.NetworkUtil;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 import java.io.BufferedReader;
@@ -24,8 +25,6 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -59,12 +58,18 @@ public class WifiUtil {
 
     public static final String INVALID_BSSID = "02:00:00:00:00:00";
     private static final String INVALID_MAC = "00:00:00:00:00:00";
+
+    public static final String DEFAULT_SSID = "<unknown ssid>";
+
     private static final String MAC_RE = "^%s\\s+0x1\\s+0x[2|6]\\s+([:0-9a-fA-F]+)\\s+\\*\\s+\\w+$";
     private final static int BUF = 8 * 1024;
 
     private static int sLastTerminalCount = -1;
 
     public static int getSecurity(WifiConfiguration config) {
+        if (config == null){
+            return SECURITY_NONE;
+        }
         if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
             return SECURITY_PSK;
         }
@@ -481,7 +486,7 @@ public class WifiUtil {
         return linkSpeed;
     }
 
-    public static int getWifiSignalValue(Context ctx) {
+    public static int getWifiRssi(Context ctx) {
         int signalValue = 1;
         try {
             WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -507,70 +512,21 @@ public class WifiUtil {
         if (NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
             return -1;
         }
-        int curChannel = 0;
+
         try {
             WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
                 List<ScanResult> scanResults = wm.getScanResults();
-                if (scanResults == null || scanResults.size() <= 0) {
-                    ZLog.d("channel scanResult is 0, for location switch or permission denied");
-                    return curChannel;
-                }
-                for (ScanResult result : scanResults) {
-                    int channel = getWifiChannelByFrequency(result.frequency);
-                    if (result.BSSID.equalsIgnoreCase(info.getBSSID())) {
-                        curChannel = channel;
-                    }
-                }
+                return WifiChannelInfo.getWiFiChannel(scanResults, info.getBSSID());
             }
         } catch (Exception e) {
-            // ignore
+            e.printStackTrace();
         }
-        return curChannel;
+        return -1;
     }
 
-    public static RouterChannelInfo getRouterChannelInfo(WifiManager wifiManager) {
-        RouterChannelInfo ret = new RouterChannelInfo();
-        try {
-            WifiInfo info = wifiManager.getConnectionInfo();
-            List<ScanResult> scanResults = wifiManager.getScanResults();
-            HashMap<Integer, Integer> channelCount = new HashMap<Integer, Integer>();
-            int curChannel = 0;
-            for (ScanResult result : scanResults) {
-                int channel = getWifiChannelByFrequency(result.frequency);
-                if (result.BSSID.equalsIgnoreCase(info.getBSSID())) {
-                    curChannel = channel;
-                }
-                if (channelCount.containsKey(channel)) {
-                    channelCount.put(channel, channelCount.get(channel) + 1);
-                } else {
-                    channelCount.put(channel, 1);
-                }
-            }
-            int curChannelApCount = 0;
-            int neigbourChannelApCount = 0;
-            int totalApCount = 0;
-            for (HashMap.Entry<Integer, Integer> entry : channelCount.entrySet()) {
-                int chn = entry.getKey();
-                int num = entry.getValue();
-                totalApCount += num;
-                if (curChannel == chn) {
-                    curChannelApCount = num;
-                } else if (chn >= curChannel - 2 && chn <= curChannel + 2) {
-                    neigbourChannelApCount += num;
-                }
-            }
-            ret.curChannel = curChannel;
-            ret.curChannelApCount = curChannelApCount;
-            ret.neigbourChannelApCount = neigbourChannelApCount;
-            ret.totalApCount = totalApCount;
-        } catch (Exception e) {
-            ZLog.e(e.toString());
-        }
-        return ret;
-    }
-
+    //周边Wi-Fi、信道等信息
     public static String getWifiSignal(Context ctx) {
         if (NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
             return VOID_SIGNAL_INFO;
@@ -589,7 +545,7 @@ public class WifiUtil {
             }
             for (ScanResult result : scanResults) {
 
-                int channel = getWifiChannelByFrequency(result.frequency);
+                int channel = WifiChannelInfo.getWifiChannelByFrequency(result.frequency);
                 if (result.BSSID.equalsIgnoreCase(info.getBSSID())) {
                     curChannel = channel;
                 }
@@ -635,13 +591,8 @@ public class WifiUtil {
         return ret;
     }
 
-    /*去除字符串中的双引号*/
-    public static String removeQuotes(String originStr) {
-        return originStr.replace("\"", "");
-    }
-
     public static String getWifiSSIDWithoutQuotes(Context context) {
-        return removeQuotes(getWifiSSID(context));
+        return TextFactoryUtils.trimMarks(getWifiSSID(context));
     }
 
     public static int getWifiCode(Context context) {
@@ -679,112 +630,6 @@ public class WifiUtil {
         return bssid;
     }
 
-    public static List<WifiChannelInfo> getWifiChannelInfos(Context context) {
-        List<WifiChannelInfo> wifiChannelInfos = Collections.emptyList();
-        try {
-            WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (wm != null) {
-                List<ScanResult> scanResults = wm.getScanResults();
-                wifiChannelInfos = new ArrayList<>(scanResults.size());
-                for (ScanResult scanResult : scanResults) {
-                    wifiChannelInfos.add(new WifiChannelInfo(scanResult.BSSID, scanResult.SSID, scanResult.level,
-                            scanResult.frequency));
-                }
-            }
-        } catch (Exception e) {
-            ZLog.d("getWifiChannelInfos failed, for " + e.toString());
-        }
-        return wifiChannelInfos;
-    }
-
-    public static FrequencyInfo getWifiFrequencyInfo(Context ctx) {
-        if (NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
-            return FrequencyInfo.EMPTY;
-        }
-        try {
-            WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (null == wm) {
-                return FrequencyInfo.EMPTY;
-            }
-            WifiInfo info = wm.getConnectionInfo();
-            List<ScanResult> scanResults = wm.getScanResults();
-            if (scanResults == null || scanResults.size() <= 0) {
-                ZLog.d("channel scanResult is 0, for location switch or permission denied");
-                return FrequencyInfo.EMPTY;
-            }
-            for (ScanResult result : scanResults) {
-                if (result.BSSID.equalsIgnoreCase(info.getBSSID())) {
-                    boolean is24G = is24GHz(result.frequency);
-                    boolean is5G = is5GHz(result.frequency);
-                    return new FrequencyInfo(is24G, is5G);
-                }
-            }
-        } catch (Exception e) {
-            // ignore
-        }
-        return FrequencyInfo.EMPTY;
-    }
-
-    public static boolean is24GHz(int freq) {
-        return freq > 2400 && freq < 2500;
-    }
-
-
-    public static boolean is5GHz(int freq) {
-        return freq > 4900 && freq < 5900;
-    }
-
-    public static class FrequencyInfo {
-
-        public static final FrequencyInfo EMPTY = new FrequencyInfo(false, false);
-
-        public final boolean is24G;
-        public final boolean is5G;
-
-        public FrequencyInfo(boolean is24G, boolean is5G) {
-            this.is24G = is24G;
-            this.is5G = is5G;
-        }
-    }
-
-    public static class RouterChannelInfo {
-
-        public int curChannel = -1;
-        public int curChannelApCount = -1;
-        public int neigbourChannelApCount = -1;
-        public int totalApCount = -1;
-    }
-
-    public static class WifiChannelInfo {
-
-        public final String bssid;
-        public final String ssid;
-        public final int signalLevelDbm;
-        public final int frequency;
-        public final int channel;
-
-        public WifiChannelInfo(String bssid, String ssid, int signalLevelDbm, int frequency) {
-            this.bssid = bssid;
-            this.ssid = ssid;
-            this.signalLevelDbm = signalLevelDbm;
-            this.frequency = frequency;
-            this.channel = getWifiChannelByFrequency(frequency);
-        }
-
-        @Override
-        public String toString() {
-
-            return "WifiChannelInfo{" +
-                    "bssid='" + bssid + '\'' +
-                    ", bssid='" + ssid + '\'' +
-                    ", signalLevelDbm=" + signalLevelDbm +
-                    ", frequency=" + frequency +
-                    ", channel=" + channel +
-                    '}';
-
-
-        }
-    }
 
     /**
      * 获取当前路由器上连接的设备数
@@ -971,108 +816,5 @@ public class WifiUtil {
         return mapList;
     }
 
-    public static int getWifiChannelByFrequency(int frequency) {
-        int channel = -1;
-        switch (frequency) {
-            case 2412:
-                channel = 1;
-                break;
-            case 2417:
-                channel = 2;
-                break;
-            case 2422:
-                channel = 3;
-                break;
-            case 2427:
-                channel = 4;
-                break;
-            case 2432:
-                channel = 5;
-                break;
-            case 2437:
-                channel = 6;
-                break;
-            case 2442:
-                channel = 7;
-                break;
-            case 2447:
-                channel = 8;
-                break;
-            case 2452:
-                channel = 9;
-                break;
-            case 2457:
-                channel = 10;
-                break;
-            case 2462:
-                channel = 11;
-                break;
-            case 2467:
-                channel = 12;
-                break;
-            case 2472:
-                channel = 13;
-                break;
-            case 2484:
-                channel = 14;
-                break;
-            case 5180:
-                channel = 36;
-                break;
-            case 5190:
-                channel = 38;
-                break;
-            case 5200:
-                channel = 40;
-                break;
-            case 5210:
-                channel = 42;
-                break;
-            case 5220:
-                channel = 44;
-                break;
-            case 5230:
-                channel = 46;
-                break;
-            case 5240:
-                channel = 48;
-                break;
-            case 5260:
-                channel = 52;
-                break;
-            case 5280:
-                channel = 56;
-                break;
-            case 5300:
-                channel = 60;
-                break;
-            case 5320:
-                channel = 64;
-                break;
-            case 5500:
-                channel = 100;
-                break;
-            case 5520:
-                channel = 104;
-                break;
-            case 5745:
-                channel = 149;
-                break;
-            case 5765:
-                channel = 153;
-                break;
-            case 5785:
-                channel = 157;
-                break;
-            case 5805:
-                channel = 161;
-                break;
-            case 5825:
-                channel = 165;
-                break;
-            default:
-                break;
-        }
-        return channel;
-    }
+
 }

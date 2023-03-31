@@ -235,7 +235,7 @@ public class NetworkUtil {
     public static int getSignalValue(Context context, int networkType) {
         switch (networkType) {
             case NETWORK_CLASS_WIFI:
-                return WifiUtil.getWifiSignalValue(context);
+                return WifiUtil.getWifiRssi(context);
             case NETWORK_CLASS_2_G:
             case NETWORK_CLASS_3_G:
             case NETWORK_CLASS_4_G:

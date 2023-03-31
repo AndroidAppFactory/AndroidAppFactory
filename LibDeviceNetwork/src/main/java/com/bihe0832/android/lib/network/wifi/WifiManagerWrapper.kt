@@ -12,7 +12,6 @@ import android.os.Build
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.IpUtils
-import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -27,7 +26,6 @@ import com.bihe0832.android.lib.utils.os.BuildUtils.SDK_INT
 object WifiManagerWrapper {
 
     val TAG = "WifiManager-> "
-    val DEFAULT_SSID = "<unknown ssid>"
 
     private var mContext: Context? = null
 
@@ -177,7 +175,7 @@ object WifiManagerWrapper {
     //Wifi的名称
     fun getSSID(): String {
         mWifiInfo?.let {
-            if (TextFactoryUtils.trimMarks(it.ssid).equals(DEFAULT_SSID, ignoreCase = true)) {
+            if (TextFactoryUtils.trimMarks(it.ssid).equals(WifiUtil.DEFAULT_SSID, ignoreCase = true)) {
                 getConfiguredByNetworkID(getNetworkId())?.let { wifiConfiguration ->
                     return TextFactoryUtils.trimMarks(wifiConfiguration.SSID)
                 }
@@ -185,7 +183,7 @@ object WifiManagerWrapper {
                 return TextFactoryUtils.trimMarks(it.ssid)
             }
         }
-        return DEFAULT_SSID
+        return WifiUtil.DEFAULT_SSID
     }
 
     // 得到接入点的BSSID
@@ -261,8 +259,7 @@ object WifiManagerWrapper {
         return -1
     }
 
-    // 得到连接的ID
-    private fun getFrequency(): Int {
+    fun getFrequency(): Int {
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWifiInfo?.let {
                 return it.frequency
@@ -273,8 +270,7 @@ object WifiManagerWrapper {
 
     //判断是否是5GWiFi
     fun is5GHzWiFi(): Boolean {
-        val frequency = getFrequency();
-        return frequency in 4901..5899
+        return FrequencyInfo.is5GHzWiFi(getFrequency())
     }
 
     //获取当前连接的wifi的配置信息
@@ -335,10 +331,6 @@ object WifiManagerWrapper {
         updateConfiguredListInfo()
         updateScanListInfo()
         register(context)
-    }
-
-    fun hasInit(): Boolean {
-        return hasInit
     }
 
     fun register(context: Context) {
@@ -448,7 +440,6 @@ object WifiManagerWrapper {
         }
     }
 
-    @JvmOverloads
     fun connectWifi(ssid: String, password: String, type: Int, forceDeleteIfExist: Boolean = true) {
         var networkId = -1
         var tempConfig = getConfiguredBySSID(ssid)
@@ -487,19 +478,6 @@ object WifiManagerWrapper {
             return it.networkId > 0 && it.networkId == getNetworkId()
         }
         return false
-    }
-
-    fun getNetType(context: Context): Int {
-        return NetworkUtil.getNetworkState(context)
-    }
-
-    fun getNetTypeName(context: Context): String {
-        return NetworkUtil.getNetworkName(NetworkUtil.getNetworkState(context))
-    }
-
-    // 主要提供在WiFi下获取移动网络的网络类型，不保证移动网络已连接，仅是信号类型
-    fun getMobileNetType(context: Context): Int {
-        return NetworkUtil.getMobileNetworkClass(context, null)
     }
 
     fun getWiFiBssID(): String? {
@@ -568,6 +546,13 @@ object WifiManagerWrapper {
         return null
     }
 
+    fun getChannel(): Int {
+        return WifiChannelInfo.getWiFiChannel(mWifiList, getBSSID())
+    }
+    
+    fun getSecurity(): Int {
+        return WifiUtil.getSecurity(getWifiConfiguration())
+    }
 
     private fun createWifiInfo(ssid: String, Password: String, Type: Int): WifiConfiguration {
         val config = WifiConfiguration()

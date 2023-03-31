@@ -18,7 +18,9 @@ import com.bihe0832.android.lib.device.battery.BatteryHelper
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
+import com.bihe0832.android.lib.network.wifi.WifiChannelInfo
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
+import com.bihe0832.android.lib.network.wifi.WifiUtil
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -127,8 +129,13 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(getInfoItem("网络是否可用：${NetworkUtil.isNetworkOnline()}"))
             add(getInfoItem("Wi-Fi SSID：${WifiManagerWrapper.getSSID()}"))
             add(getInfoItem("Wi-Fi BSSID：${WifiManagerWrapper.getBSSID()}"))
-            add(getInfoItem("Wi-Fi 强度：${WifiManagerWrapper.getSignalLevel()}"))
+            add(getInfoItem("Wi-Fi 强度：${WifiManagerWrapper.getSignalLevel()} (${WifiManagerWrapper.getRssi()})"))
+            add(getInfoItem("Wi-Fi 信道：${WifiChannelInfo.getWifiChannelByFrequency(WifiManagerWrapper.getFrequency())}"))
+            add(getInfoItem("Wi-Fi 连接速度：${WifiManagerWrapper.getLinkSpeed()} / ${WifiManagerWrapper.getLinkSpeedUnits()}"))
             add(getInfoItem("Wi-Fi IP：${NetworkUtil.getDtTypeInfo(context).wifiIp}"))
+            add(getInfoItem("Wi-Fi Frequency：${WifiManagerWrapper.getFrequency()}"))
+            add(getInfoItem("Wi-Fi 加密类型：${WifiUtil.getWifiCode(context)}"))
+
             add(getInfoItem("周边Wi-Fi数量：${WifiManagerWrapper.getScanResultList().size}"))
             add(getInfoItem("移动网络基站信息：${MobileUtil.getPhoneCellInfo(context)}"))
             add(getInfoItem("移动网络运营商：${DeviceInfoManager.getInstance().mobileOperatorType}"))
