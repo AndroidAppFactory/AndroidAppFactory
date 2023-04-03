@@ -17,15 +17,15 @@ public class UpdateDataFromCloud {
     //更新类型
     private int updateType = UPDATE_TYPE_NEW;
 
-    //红点更新最低版本号、可选项（低于该版本显示红点、可选、强更无需配置必有红点）
+    //红点更新最高版本号、可选项（低于该版本显示红点、可选、强更无需配置必有红点）
     @SerializedName("showRedMaxVersionCode")
     private int showRedMaxVersionCode = 0;
 
-    //可选更新最低版本号、可选项（低于该版本弹框）
+    //可选更新最高版本号、可选项（该版本及更低版本弹框）
     @SerializedName("needUpdateMinVersionCode")
     private int needUpdateMinVersionCode = 0;
 
-    //强制更新最低版本号、可选项（低于该版本强更）
+    //强制更新最高版本号、可选项（该版本及更低版本强更）
     @SerializedName("forceUpdateMinVersionCode")
     private int forceUpdateMinVersionCode = 0;
 
