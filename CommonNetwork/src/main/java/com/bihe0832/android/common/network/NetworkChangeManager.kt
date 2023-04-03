@@ -15,7 +15,6 @@ import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import com.bihe0832.android.lib.network.wifi.WifiUtil
-import com.bihe0832.android.lib.thread.ThreadManager
 
 object NetworkChangeManager {
 
