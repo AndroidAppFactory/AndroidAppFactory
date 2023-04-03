@@ -15,6 +15,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.device.DeviceIDUtils
@@ -143,6 +144,7 @@ object ZixieContext {
     //仅debug弹
     fun showDebug(msg: String) {
         if (isDebug()) {
+            Log.e("DEBUG",msg)
             showToast(msg)
         }
     }
