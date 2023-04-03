@@ -16,6 +16,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.device.battery.BatteryHelper
 import com.bihe0832.android.lib.network.DeviceInfoManager
+import com.bihe0832.android.lib.network.DtTypeInfo
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.network.wifi.WifiChannelInfo
@@ -132,7 +133,6 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(getInfoItem("Wi-Fi 强度：${WifiManagerWrapper.getSignalLevel()} (${WifiManagerWrapper.getRssi()})"))
             add(getInfoItem("Wi-Fi 信道：${WifiChannelInfo.getWifiChannelByFrequency(WifiManagerWrapper.getFrequency())}"))
             add(getInfoItem("Wi-Fi 连接速度：${WifiManagerWrapper.getLinkSpeed()} / ${WifiManagerWrapper.getLinkSpeedUnits()}"))
-            add(getInfoItem("Wi-Fi IP：${NetworkUtil.getDtTypeInfo(context).wifiIp}"))
             add(getInfoItem("Wi-Fi Frequency：${WifiManagerWrapper.getFrequency()}"))
             add(getInfoItem("Wi-Fi 加密类型：${WifiUtil.getWifiCode(context)}"))
 
@@ -140,7 +140,10 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(getInfoItem("移动网络基站信息：${MobileUtil.getPhoneCellInfo(context)}"))
             add(getInfoItem("移动网络运营商：${DeviceInfoManager.getInstance().mobileOperatorType}"))
             add(getInfoItem("移动网络信号强度：${MobileUtil.getSignalLevel()}"))
-            add(getInfoItem("移动网络 IP：${NetworkUtil.getDtTypeInfo(context).mobileIp}"))
+            DtTypeInfo.getDtTypeInfo(context).let {
+                add(getInfoItem("Wi-Fi IP：${it.wifiIp}"))
+                add(getInfoItem("移动网络 IP：${it.mobileIp}"))
+            }
 
             add(DebugTipsData("电量信息"))
             BatteryHelper.getBatteryStatus(ZixieContext.applicationContext!!)?.let {
