@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.debug;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.MovementMethod;
 
@@ -11,6 +10,7 @@ import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
+import com.bihe0832.android.lib.utils.intent.IntentUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -135,24 +135,8 @@ public class DebugTools {
     }
 
     public static void sendInfo(final Context context, final String title, final String content) {
-
         logInfo("sendInfo", title, content);
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, content);
-        sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        sendIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        sendIntent.setType("text/plain");
-        try {
-            context.startActivity(Intent.createChooser(sendIntent, title));
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                context.startActivity(sendIntent);
-            } catch (Exception ee) {
-                ee.printStackTrace();
-            }
-        }
+        IntentUtils.sendTextInfo(context, title, content);
     }
 
     public static void logInfo(String tag, String... data) {

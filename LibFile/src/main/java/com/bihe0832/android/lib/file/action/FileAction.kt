@@ -28,26 +28,26 @@ object FileAction {
      * 仅能打开 [ZixieFileProvider.getZixieFilePath] 对应目录下的文件
      */
     fun openFile(context: Context, filePath: String): Boolean {
-        return fileAction(context, Intent.ACTION_VIEW, filePath)
+        return fileAction(context, Intent.ACTION_VIEW, "", filePath)
     }
 
-    fun openFile(context: Context, filePath: String, fileType: String): Boolean {
-        return fileAction(context, Intent.ACTION_VIEW, filePath, fileType)
+    fun openFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+        return fileAction(context, Intent.ACTION_VIEW, actionTitle, filePath, fileType)
     }
 
     fun sendFile(context: Context, filePath: String): Boolean {
-        return fileAction(context, Intent.ACTION_SEND, filePath)
+        return fileAction(context, Intent.ACTION_SEND, "", filePath)
     }
 
-    fun sendFile(context: Context, filePath: String, fileType: String): Boolean {
-        return fileAction(context, Intent.ACTION_SEND, filePath, fileType)
+    fun sendFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+        return fileAction(context, Intent.ACTION_SEND, actionTitle, filePath, fileType)
     }
 
-    fun fileAction(context: Context, action: String, filePath: String): Boolean {
-        return fileAction(context, action, filePath, FileMimeTypes.getMimeType(filePath))
+    fun fileAction(context: Context, action: String, actionTitle: String, filePath: String): Boolean {
+        return fileAction(context, action, actionTitle, filePath, FileMimeTypes.getMimeType(filePath))
     }
 
-    fun fileAction(context: Context, action: String, filePath: String, fileType: String): Boolean {
+    fun fileAction(context: Context, action: String, actionTitle: String, filePath: String, fileType: String): Boolean {
         try { //设置intent的data和Type属性
             ZLog.d("fileAction sourceFile:$filePath")
             var sourceFile = File(filePath)
@@ -71,7 +71,12 @@ object FileAction {
                 addCategory("android.intent.category.DEFAULT")
                 ZixieFileProvider.setFileUriForIntent(context, this, targetFile, fileType)
             }.let {
-                context.startActivity(it)
+                try {
+                    context.startActivity(Intent.createChooser(it, actionTitle))
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                    context.startActivity(it)
+                }
             }
             return true
 

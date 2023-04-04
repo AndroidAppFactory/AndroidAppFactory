@@ -204,7 +204,7 @@ public class FileActivity extends SupportActivity {
                             btn_back.setVisibility(View.GONE);
                             tv_path.setText("已选择：" + mSelectedPath);
                         } else {
-                            btn_close.setBackgroundResource(R.mipmap.close);
+                            btn_close.setBackgroundResource(R.mipmap.ic_close);
                             btn_back.setVisibility(View.VISIBLE);
                             tv_path.setText(mFile.getAbsolutePath());
                         }

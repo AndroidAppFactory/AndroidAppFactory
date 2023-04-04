@@ -4,7 +4,12 @@
     <color name="com_bihe0832_share_panel_color">#BF2D2D2B</color>
     <color name="com_bihe0832_share_text_color">#ADADAD</color>
     <dimen name="com_bihe0832_share_title_text_size">10dp</dimen>
-    <dimen name="com_bihe0832_share_item_text_size">@dimen/com_bihe0832_share_title_text_size</dimen>
+    <dimen name="com_bihe0832_share_item_text_size">@dimen/com_bihe0832_share_title_text_size
+    </dimen>
+
+    <string name="com_bihe0832_share_app_title">分享 %1$s 给好友</string>
+    <string name="com_bihe0832_share_app">我刚刚发现了一个很好玩的应用，推荐给你试试吧。名字叫 %1$s ，可以在这里下载： %2$s </string>
+    <string name="com_bihe0832_share_target">https://cdn.bihe0832.com/app/download.html</string>
 
     <style name="shareItemText">
         <item name="android:textColor">@color/com_bihe0832_share_text_color</item>

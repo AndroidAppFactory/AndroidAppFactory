@@ -39,7 +39,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginTop="16dp"
-        android:src="@mipmap/praise_ic"
+        android:src="@mipmap/icon_praise"
         app:layout_constraintEnd_toEndOf="@+id/dialog_bg"
         app:layout_constraintStart_toStartOf="@+id/dialog_bg"
         app:layout_constraintTop_toBottomOf="@+id/head" />
@@ -108,7 +108,7 @@
         android:layout_height="24dp"
         android:layout_marginLeft="-12dp"
         android:layout_marginBottom="-16dp"
-        android:background="@mipmap/icon_close_black"
+        android:background="@mipmap/ic_close_black"
         app:layout_constraintBottom_toTopOf="@+id/dialog_bg"
         app:layout_constraintStart_toEndOf="@+id/dialog_bg" />
 

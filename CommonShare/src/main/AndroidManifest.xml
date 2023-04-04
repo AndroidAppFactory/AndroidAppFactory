@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.bihe0832.android.common.share">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bihe0832.android.common.share">
 
+    <application>
+        <activity
+            android:name="com.bihe0832.android.common.share.ShareAPPActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
+    </application>
 </manifest>

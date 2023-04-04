@@ -21,6 +21,7 @@ open class AboutFragment : CommonListFragment() {
             add(SettingsItem.getVersionList())
             add(SettingsItem.getFeedback())
             add(SettingsItem.getQQService(activity))
+            add(SettingsItem.getShareAPP())
             add(SettingsItem.getZixie())
             if (!ZixieContext.isOfficial()) {
                 add(SettingsItem.getDebug())

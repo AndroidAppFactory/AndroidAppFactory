@@ -10,7 +10,6 @@ import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.file.content.FileContent
 import com.bihe0832.android.lib.file.content.FileName
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
 import com.bihe0832.android.lib.utils.encrypt.SHA256
@@ -229,8 +228,8 @@ object FileUtils {
     /**
      * 仅能打开 [ZixieFileProvider.getZixieFilePath] 对应目录下的文件
      */
-    fun openFile(context: Context, filePath: String, fileType: String): Boolean {
-        return FileAction.openFile(context, filePath, fileType)
+    fun openFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+        return FileAction.openFile(context, actionTitle, filePath, fileType)
     }
 
     fun openFile(context: Context, filePath: String): Boolean {
@@ -241,8 +240,8 @@ object FileUtils {
         return FileAction.sendFile(context, filePath)
     }
 
-    fun sendFile(context: Context, filePath: String, fileType: String): Boolean {
-        return FileAction.sendFile(context, filePath, fileType)
+    fun sendFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+        return FileAction.sendFile(context, actionTitle, filePath, fileType)
     }
 
     fun deleteOldAsync(dir: File, duration: Long) {
