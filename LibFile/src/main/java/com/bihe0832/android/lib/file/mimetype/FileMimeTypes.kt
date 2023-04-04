@@ -36,7 +36,7 @@ object FileMimeTypes {
         }
         getTypeByExtension(extension).let {
             if (TextUtils.isEmpty(it)) {
-                MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.substring(1)).let { webkitMimeType ->
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension).let { webkitMimeType ->
                     webkitMimeType?.let {
                         putTypeByExtension(extension, webkitMimeType)
                     }

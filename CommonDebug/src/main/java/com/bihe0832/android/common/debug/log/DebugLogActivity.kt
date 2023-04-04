@@ -104,7 +104,7 @@ open class DebugLogActivity : CommonListActivity() {
                 if (isView) {
                     AAFFileTools.openFileWithTips(this, filePath)
                 } else {
-                    FileUtils.sendFile(this@DebugLogActivity, filePath, "*/*").let {
+                    FileUtils.sendFile(this@DebugLogActivity, filePath).let {
                         if (!it) {
                             ZixieContext.showToast("分享文件:$filePath 失败")
                         }

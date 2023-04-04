@@ -11,7 +11,6 @@ import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.superapp.QQHelper
 import com.bihe0832.android.lib.superapp.WechatOfficialAccount
-import java.util.*
 
 /**
  *
@@ -115,6 +114,17 @@ object SettingsItem {
             mShowGo = true
             mHeaderListener = View.OnClickListener {
                 openZixieWeb("file:///android_asset/web/author.html")
+            }
+        }
+    }
+
+    fun getShareAPP(): SettingsData {
+        return SettingsData("分享给好友").apply {
+            mItemIconRes = R.drawable.ic_share
+            mShowDriver = true
+            mShowGo = true
+            mHeaderListener = View.OnClickListener {
+                RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_SHARE_APK)
             }
         }
     }

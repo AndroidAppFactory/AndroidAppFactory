@@ -25,8 +25,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add(DebugItemData("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
             add(DebugItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
             add(DebugItemData("查看设备概要信息", View.OnClickListener { showInfoWithHTML("设备概要信息", getMobileInfo(context)) }))
-            add(DebugItemData("查看设备详细信息", View.OnClickListener { startDebugActivity(DebugDeviceFragment::class.java, "设备详细信息") }))
-
+            add(getDebugFragmentItemData("查看设备详细信息", DebugDeviceFragment::class.java))
             add(DebugItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
             add(DebugItemData("<font color ='#3AC8EF'><b>日志管理</b></font>", View.OnClickListener {
                 showLog()
@@ -154,7 +153,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
-                FileUtils.sendFile(activity!!, filePath, "*/*").let {
+                FileUtils.sendFile(activity!!, filePath).let {
                     if (!it) {
                         ZixieContext.showToast("分享文件:$filePath 失败")
                     }

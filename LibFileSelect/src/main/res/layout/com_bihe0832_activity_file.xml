@@ -36,7 +36,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
-            android:background="@mipmap/close"
+            android:background="@mipmap/ic_close"
             android:padding="8dp" />
     </LinearLayout>
 

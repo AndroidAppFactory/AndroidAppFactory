@@ -30,4 +30,7 @@ public class RouterConstants {
 
     public static final String MODULE_NAME_DEBUG = "zdebug";
     public static final String MODULE_NAME_SPLASH = "splash";
+
+    public static final String MODULE_NAME_SHARE_APK = "zshare";
+
 }

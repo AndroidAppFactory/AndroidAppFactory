@@ -5,8 +5,9 @@ import android.graphics.Color
 import android.view.View
 import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.base.debug.empty.DebugBottomActivity
+import com.bihe0832.android.base.debug.share.DebugShareFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
+import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
@@ -56,7 +57,7 @@ class DebugDialogFragment : DebugEnvFragment() {
             }))
 
             add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
-            add(DebugItemData("底部分享Activity", View.OnClickListener { startActivityWithException(DebugBottomActivity::class.java) }))
+            add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
             add(DebugItemData("底部Dialog", View.OnClickListener { showAlert(BottomDialog(activity!!)) }))
             add(DebugItemData("通用弹框", View.OnClickListener { testAlert(activity!!) }))
             add(DebugItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))

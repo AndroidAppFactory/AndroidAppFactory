@@ -61,7 +61,7 @@ class AceEditActivity : BaseActivity() {
                             iconResId = R.mipmap.ic_share
                             setItemClickListener {
                                 hide()
-                                FileUtils.sendFile(this@AceEditActivity, filePath, FileMimeTypes.getMimeType(filePath))
+                                FileUtils.sendFile(this@AceEditActivity, filePath)
                             }
                         })
 

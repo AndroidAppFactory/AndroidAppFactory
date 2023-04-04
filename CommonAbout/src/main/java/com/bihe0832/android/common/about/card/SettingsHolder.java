@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.bihe0832.android.common.about.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
-import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.media.image.GlideExtKt;
+import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
 import com.bihe0832.android.lib.ui.textview.ext.TextViewWithBackgroundExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
@@ -62,10 +62,12 @@ public class SettingsHolder extends CardBaseHolder {
             } else {
                 GlideExtKt.loadImage(mHeaderIcon, data.mItemIconRes);
                 mHeaderIcon.setVisibility(View.VISIBLE);
+                mHeaderIcon.setColorFilter(getContext().getResources().getColor(R.color.textColorPrimary));
             }
         } else {
             GlideExtKt.loadImage(mHeaderIcon, data.mItemIconURL, R.mipmap.icon, R.mipmap.icon);
             mHeaderIcon.setVisibility(View.VISIBLE);
+            mHeaderIcon.setColorFilter(getContext().getResources().getColor(R.color.textColorPrimary));
         }
 
         mHeader.setText(data.mItemText);
