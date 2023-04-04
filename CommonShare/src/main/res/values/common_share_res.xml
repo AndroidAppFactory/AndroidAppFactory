@@ -10,6 +10,8 @@
     <string name="com_bihe0832_share_app_title">分享 %1$s 给好友</string>
     <string name="com_bihe0832_share_app">我刚刚发现了一个很好玩的应用，推荐给你试试吧。名字叫 %1$s ，可以在这里下载： %2$s </string>
     <string name="com_bihe0832_share_target">https://cdn.bihe0832.com/app/download.html</string>
+    <string name="com_bihe0832_share_app_big">APK 文件过大，建议使用二维码分享给好友下载</string>
+    <string name="com_bihe0832_share_app_faild">APK 获取失败，建议使用二维码分享给好友下载</string>
 
     <style name="shareItemText">
         <item name="android:textColor">@color/com_bihe0832_share_text_color</item>
