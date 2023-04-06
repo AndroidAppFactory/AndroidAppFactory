@@ -285,6 +285,17 @@ public class APKUtils {
         }
     }
 
+    public static String getAPKPath(Context context, String pkgName) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            ApplicationInfo info = pm.getApplicationInfo(pkgName, PackageManager.GET_SIGNATURES);
+            return info.sourceDir;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public static String getSigMd5ByPkgName(Context context, String pkgName) {
         return getSigMd5ByPkgName(context, pkgName, false);
     }

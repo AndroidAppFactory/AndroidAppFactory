@@ -1,6 +1,5 @@
 package com.bihe0832.android.common.share
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -14,6 +13,7 @@ import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.google.zxing.encoding.EncodingHandler
 import java.io.File
@@ -57,14 +57,12 @@ class ShareAPPActivity : ShareBaseActivity() {
         }
 
         findViewById<View>(R.id.share_apk_panel_send_source).setOnClickListener {
-
-
-            packageManager.getApplicationInfo(packageName, PackageManager.GET_SIGNATURES)?.let {
-                if (FileUtils.checkFileExist(it.sourceDir)) {
-                    if (File(it.sourceDir).length() > FileUtils.SPACE_MB * 100) {
+            APKUtils.getAPKPath(this, packageName).let {
+                if (FileUtils.checkFileExist(it)) {
+                    if (File(it).length() > FileUtils.SPACE_MB * 100) {
                         ZixieContext.showToast(getString(R.string.com_bihe0832_share_app_big))
                     }
-                    AAFFileTools.sendFile(it.sourceDir)
+                    AAFFileTools.sendFile(it)
                 } else {
                     ZixieContext.showToast(getString(R.string.com_bihe0832_share_app_faild))
                 }
