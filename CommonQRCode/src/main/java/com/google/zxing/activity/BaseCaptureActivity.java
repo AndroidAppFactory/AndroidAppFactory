@@ -65,7 +65,9 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
         }
         initFlashAction();
 
-        initAlbumAction();
+        CheckedEnableImageView btnAlbum = (CheckedEnableImageView) findViewById(R.id.common_qrcode_album);
+        btnAlbum.setColorFilter(Color.WHITE);
+        initAlbumAction(btnAlbum);
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.common_qrcode_viewfinder_content);
         hasSurface = false;
@@ -97,9 +99,7 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
     /**
      * 如果需要增加权限判断，可以加在这里
      */
-    protected void initAlbumAction() {
-        CheckedEnableImageView btnAlbum = (CheckedEnableImageView) findViewById(R.id.common_qrcode_album);
-        btnAlbum.setColorFilter(Color.WHITE);
+    protected void initAlbumAction(CheckedEnableImageView btnAlbum) {
         btnAlbum.setOnClickListener(view -> {
             PhotoWrapperKt.getPhotoContent(this);
         });
