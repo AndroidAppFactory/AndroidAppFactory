@@ -7,7 +7,7 @@ import com.bihe0832.android.app.leakcanary.LeakCanaryManager.addWatch
 import com.bihe0832.android.app.message.addMessageAction
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.base.debug.navigation.DebugNavigationDrawerFragment
-import com.bihe0832.android.common.debug.DebugMainActivity
+import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
@@ -17,7 +17,7 @@ import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
-open class TestMainActivity : DebugMainActivity() {
+open class TestMainActivity : CommonRootActivity() {
 
     private val mNavigationDrawerFragment by lazy {
         DebugNavigationDrawerFragment()

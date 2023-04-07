@@ -34,7 +34,7 @@ class TestListActivity : CommonListActivity() {
             addItemDecoration(
                     GridDividerItemDecoration.Builder(context).apply {
                         setShowLastLine(true)
-                        setColor(com.bihe0832.android.common.debug.R.color.result_point_color)
+                        setColor(R.color.divider)
                         setHorizontalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
 //                    setVerticalSpan(DisplayUtil.dip2px(context!!, 10f).toFloat())
                     }.build()

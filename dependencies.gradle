@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibMedia,LibDeviceNetwork"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.11.22"
+ext.moduleVersionName = "5.12.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -74,7 +74,7 @@ ext.moduleInfo = [
         "version"            : "5.11.22",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
-            "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor","CommonNetwork"
+            "Framework", "CommonPraise", "CommonFeedback", "CommonList", "CommonAceEditor", "CommonNetwork"
         ]
     ],
     "CommonWrapper"             : [
@@ -83,7 +83,15 @@ ext.moduleInfo = [
         "apidependenciesList": [
             "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
             "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
-            "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage"
+            "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
+            "CommonQRCode"
+        ]
+    ],
+    "CommonQRCode"              : [
+        "version"            : "5.11.22",
+        "artifactId"         : "common-qrcode",
+        "apidependenciesList": [
+            "Framework"
         ]
     ],
     "CommonMessage"             : [
@@ -475,8 +483,8 @@ ext.moduleInfo = [
         "artifactId"         : "lib-qrcode",
         "apidependenciesList": [
             project.androidsupport.appcompat,
-            "com.google.zxing:core:3.3.0",
-            "LibCommonUIUtils", "LibOS"
+            "com.google.zxing:core:3.3.3",
+            "LibMedia"
         ]
     ],
     "LibAdapter"                : [

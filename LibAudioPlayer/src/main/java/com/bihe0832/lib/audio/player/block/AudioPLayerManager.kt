@@ -71,7 +71,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
                     mAudioItem.playListener?.onPlayStart()
                     ZLog.d("AudioManager", "play start：$mAudioItem")
                     try {
-                        mPlay.play(mAudioItem.soundid, 1f, 1f, 0, 0, 1.0f)
+                        mPlay.play(mAudioItem.soundid, mAudioItem.leftVolume, mAudioItem.rightVolume, mAudioItem.priority, 0, 1.0f)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -112,19 +112,27 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
     }
 
     fun play(@NonNull context: Context, @NonNull resId: Int): Int {
-        return play(context, resId, null)
+        return play(context, resId, 1F, null)
     }
 
-    fun play(context: Context, resId: Int, listener: AudioPlayListener?): Int {
-        return play(context, resId, 0, listener)
+    fun play(@NonNull context: Context, leftVolume: Float, resId: Int): Int {
+        return play(context, resId, leftVolume, null)
+    }
+
+    fun play(@NonNull context: Context, leftVolume: Float, resId: Int, priority: Int): Int {
+        return play(context, resId, leftVolume, leftVolume, priority, null)
+    }
+
+    fun play(context: Context, resId: Int, leftVolume: Float, listener: AudioPlayListener?): Int {
+        return play(context, resId, leftVolume, leftVolume, 0, listener)
     }
 
     fun play(context: Context, resId: Int, priority: Int): Int {
-        return play(context, resId, priority, null)
+        return play(context, resId, 1F, 1F, priority, null)
     }
 
 
-    fun play(context: Context, resId: Int, priority: Int, listener: AudioPlayListener?): Int {
+    fun play(context: Context, resId: Int, leftVolume: Float, rightVolume: Float, priority: Int, listener: AudioPlayListener?): Int {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
         val soundid = mSoundPool.load(context, resId, PRIORITY_DEFAULT)
@@ -134,24 +142,26 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
                 playListener = it
             }
             this.priority = priority
+            this.leftVolume = leftVolume
+            this.rightVolume = rightVolume
         }
         return soundid
     }
 
 
     fun play(path: String): Int {
-        return play(path, 0)
+        return play(path, 1F, 0)
     }
 
-    fun play(path: String, priority: Int): Int {
-        return play(path, priority, null)
+    fun play(path: String, leftVolume: Float, priority: Int): Int {
+        return play(path, leftVolume, leftVolume, priority, null)
     }
 
-    fun play(path: String, listener: AudioPlayListener?): Int {
-        return play(path, 0, listener)
+    fun play(path: String, leftVolume: Float, listener: AudioPlayListener?): Int {
+        return play(path, leftVolume, leftVolume, 0, listener)
     }
 
-    fun play(path: String, priority: Int, listener: AudioPlayListener?): Int {
+    fun play(path: String, leftVolume: Float, rightVolume: Float, priority: Int, listener: AudioPlayListener?): Int {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
         val soundid = mSoundPool.load(path, PRIORITY_DEFAULT)
@@ -161,6 +171,8 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
                 playListener = it
             }
             this.priority = priority
+            this.leftVolume = leftVolume
+            this.rightVolume = rightVolume
         }
         return soundid
     }
@@ -172,7 +184,6 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
             (currentTask as? BlockAudioTask)?.forceStop()
         }
     }
-
 
     fun pause() {
         mSoundPool.autoPause()

@@ -4,13 +4,13 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.common.debug.DebugMainActivity
+import com.bihe0832.android.framework.ui.main.CommonActivity
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.common.ColorTools
 
 
-class DebugImmersionActivity : DebugMainActivity() {
+class DebugImmersionActivity : CommonActivity() {
 
     override fun getStatusBarColor(): Int {
         return Color.parseColor("#00ffffff")
@@ -19,15 +19,6 @@ class DebugImmersionActivity : DebugMainActivity() {
 
     override fun getNavigationBarColor(): Int {
         return Color.RED
-    }
-
-
-    override fun getTitleName(): String {
-        return super.getTitleName()
-    }
-
-    override fun loadFragment() {
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

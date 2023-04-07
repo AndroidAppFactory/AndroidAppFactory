@@ -23,5 +23,9 @@ public class ZixieActivityRequestCode {
 
     public static final int CROP_PHOTO = 4;
 
+    public static final int QRCODE_SCAN = 5;
+    // 二维码扫描结果
+    public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
+
 
 }

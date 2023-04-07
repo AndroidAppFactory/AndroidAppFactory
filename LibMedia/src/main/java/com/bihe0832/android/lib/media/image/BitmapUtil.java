@@ -15,6 +15,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -91,6 +92,7 @@ public class BitmapUtil {
             try {
                 BitmapFactory.Options options = getLocalBitmapOptions(localPath);
                 calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
+                options.inJustDecodeBounds = false;
                 bitmap = BitmapFactory.decodeFile(localPath, options);
             } catch (Exception error) {
                 error.printStackTrace();
@@ -112,8 +114,7 @@ public class BitmapUtil {
         return bitmap;
     }
 
-
-    public static BitmapFactory.Options getLocalBitmapOptions(ContentResolver context, Uri uri) {
+    public static BitmapFactory.Options getLocalBitmapOptions(ContentResolver contentResolver, Uri uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         InputStream input = null;
         try {
@@ -121,7 +122,7 @@ public class BitmapUtil {
             options.inDither = true;
             options.inPurgeable = true;
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;//optional
-            input = context.openInputStream(uri);
+            input = contentResolver.openInputStream(uri);
             BitmapFactory.decodeStream(input, null, options);
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,27 +138,75 @@ public class BitmapUtil {
         return options;
     }
 
-    public static Bitmap getLocalBitmap(ContentResolver context, Uri uri, int reqWidth, int reqHeight,
-                                        boolean centerInside) {
-        Bitmap bitmap = null;
-        InputStream input = null;
-        try {
-            BitmapFactory.Options options = getLocalBitmapOptions(context, uri);
-            calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
-            input = context.openInputStream(uri);
-            bitmap = BitmapFactory.decodeStream(input, null, options);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != input) {
-                    input.close();
+    private static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options, boolean centerInside) {
+        calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight, options, centerInside);
+    }
+
+    //根据width 和 height 与 reqWidth 和 reqHeight 的差异，计算出如果缩放到一样大，使用的 BitmapFactory.Options
+    public static void calculateInSampleSize(int reqWidth, int reqHeight, int width, int height, BitmapFactory.Options options, boolean centerInside) {
+        int sampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio;
+            final int widthRatio;
+            if (reqHeight == 0) {
+                if (reqWidth != 0) {
+                    sampleSize = (int) Math.floor((float) width / (float) reqWidth);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                if (reqWidth == 0) {
+                    sampleSize = (int) Math.floor((float) height / (float) reqHeight);
+                } else {
+                    heightRatio = (int) Math.floor((float) height / (float) reqHeight);
+                    widthRatio = (int) Math.floor((float) width / (float) reqWidth);
+                    sampleSize = centerInside ? Math.max(heightRatio, widthRatio) : Math.min(heightRatio, widthRatio);
+                }
             }
         }
+        options.inSampleSize = sampleSize;
+    }
 
+    /**
+     * 读取一个缩放后的图片，限定图片大小，避免OOM
+     *
+     * @param uri       图片uri，支持“file://”、“content://”
+     * @param maxWidth  最大允许宽度
+     * @param maxHeight 最大允许高度
+     * @return 返回一个缩放后的Bitmap，失败则返回null
+     */
+    public static Bitmap getLocalBitmap(Context context, Uri uri, int maxWidth, int maxHeight, boolean centerInside) {
+        if (context == null) {
+            return null;
+        }
+        return getLocalBitmap(context.getContentResolver(), uri, maxWidth, maxHeight, centerInside);
+    }
+
+    public static Bitmap getLocalBitmap(ContentResolver contentResolver, Uri uri, int reqWidth, int reqHeight, boolean centerInside) {
+        Bitmap bitmap = null;
+        InputStream input = null;
+        String scheme = uri.getScheme();
+        if (ContentResolver.SCHEME_CONTENT.equals(scheme) || ContentResolver.SCHEME_FILE.equals(scheme)) {
+            try {
+                BitmapFactory.Options options = getLocalBitmapOptions(contentResolver, uri);
+                calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
+                options.inJustDecodeBounds = false;
+                input = contentResolver.openInputStream(uri);
+                bitmap = BitmapFactory.decodeStream(input, null, options);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (null != input) {
+                        input.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (ContentResolver.SCHEME_ANDROID_RESOURCE.equals(scheme)) {
+            Log.e("readBitmapData", "Unable to close content: " + uri);
+        } else {
+            Log.e("readBitmapData", "Unable to close content: " + uri);
+        }
         return bitmap;
     }
 
@@ -289,38 +338,7 @@ public class BitmapUtil {
         return BitmapFactory.decodeStream(stream, null, options);
     }
 
-    private static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options,
-                                              boolean centerInside) {
-        calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight, options,
-                centerInside);
-    }
 
-    //根据width 和 height 与 reqWidth 和 reqHeight 的差异，计算出如果缩放到一样大，使用的 BitmapFactory.Options
-    public static void calculateInSampleSize(int reqWidth, int reqHeight, int width, int height,
-                                             BitmapFactory.Options options, boolean centerInside) {
-        int sampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            final int heightRatio;
-            final int widthRatio;
-            if (reqHeight == 0) {
-                if (reqWidth != 0) {
-                    sampleSize = (int) Math.floor((float) width / (float) reqWidth);
-                }
-            } else {
-                if (reqWidth == 0) {
-                    sampleSize = (int) Math.floor((float) height / (float) reqHeight);
-                } else {
-                    heightRatio = (int) Math.floor((float) height / (float) reqHeight);
-                    widthRatio = (int) Math.floor((float) width / (float) reqWidth);
-                    sampleSize = centerInside
-                            ? Math.max(heightRatio, widthRatio)
-                            : Math.min(heightRatio, widthRatio);
-                }
-            }
-        }
-        options.inSampleSize = sampleSize;
-        options.inJustDecodeBounds = false;
-    }
 
 
     /**

@@ -41,5 +41,11 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AAF.ActivityTheme.Alpha"
             tools:replace="android:theme" />
+
+        <activity
+            android:name="com.bihe0832.android.framework.ui.main.CommonRootActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme"></activity>
     </application>
 </manifest>

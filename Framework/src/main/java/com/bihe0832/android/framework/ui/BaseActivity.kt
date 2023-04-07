@@ -15,6 +15,7 @@ import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
+import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.clearImage
 import com.bihe0832.android.lib.media.image.loadImage
@@ -31,7 +32,7 @@ open class BaseActivity : SupportActivity() {
     var mTitleView: TextView? = null
     private var mNavigationImageButton: ImageButton? = null
     private val mNeedEnableLayerToGray by lazy {
-        (System.currentTimeMillis() / 1000).let {
+        (LifecycleHelper.getCurrentTime() / 1000).let {
             return@lazy it in Config.readConfig(Constants.CONFIG_KEY_LAYER_START_VALUE, 0L)..Config.readConfig(Constants.CONFIG_KEY_LAYER_END_VALUE, 0L)
         }
     }
@@ -47,13 +48,13 @@ open class BaseActivity : SupportActivity() {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         }
 
-        if (resetDensity()) {
+        if (mNeedEnableLayerToGray) {
             setLayerToGray()
         }
     }
 
     open fun resetDensity(): Boolean {
-        return mNeedEnableLayerToGray
+        return true
     }
 
     open fun getStatusBarColor(): Int {

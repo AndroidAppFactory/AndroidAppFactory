@@ -30,6 +30,7 @@ import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.notify.DebugNotifyFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.base.debug.photos.DebugPhotosFragment
+import com.bihe0832.android.base.debug.qrcode.DebugQRCodeFragment
 import com.bihe0832.android.base.debug.request.DebugHttpActivity
 import com.bihe0832.android.base.debug.share.DebugShareFragment
 import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
@@ -71,6 +72,8 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
+            add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
+
             add(getDebugFragmentItemData("UI（点击区、Toast、前后台）测试", DebugUIFragment::class.java))
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))

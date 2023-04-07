@@ -31,6 +31,22 @@ public class RouterConstants {
     public static final String MODULE_NAME_DEBUG = "zdebug";
     public static final String MODULE_NAME_SPLASH = "splash";
 
-    public static final String MODULE_NAME_SHARE_APK = "zshare";
+    //打开二维码扫描
+    public static final String MODULE_NAME_QRCODE_SCAN = "qrscan";
+    public static final String INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND = "opensound";
+    public static final String INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE = "openvibrate";
+
+
+    //二维码分享的数据
+    public static final String MODULE_NAME_SHARE_QRCODE = "zshare";
+    // 分享的内容
+    public static final String INTENT_EXTRA_VALUE_SHARE_DATA_WITH_ENCODE = INTENT_EXTRA_KEY_WEB_URL;
+    // 分享的主标题
+    public static final String INTENT_EXTRA_VALUE_SHARE_TITLE_WITH_ENCODE = "title";
+    // 分享的副标题
+    public static final String INTENT_EXTRA_VALUE_SHARE_DESC_WITH_ENCODE = "desc";
+    // 分享APK
+    public static final String MODULE_NAME_SHARE_APK = "zshareapk";
+
 
 }

@@ -74,7 +74,7 @@
             app:etv_EllipsisHint="……"
             app:etv_MaxLinesOnShrink="3"
             app:etv_ToExpandHint="    战力 17000"
-            app:etv_ToExpandHintColor="@color/corner_color"
+            app:etv_ToExpandHintColor="@color/colorPrimary"
             tools:text="刺猬索尼克和他的好友强势回归，精彩刺激的跑酷游戏盛大登场！启动速度狂热，再现索尼克传奇。在精彩刺激的平台关卡中奔跑、跳跃、冲刺或飞翔。解锁全新角色，比如塔尔斯、纳克等，每个角色都有其独特技能，你可以将其强化。在4个栩栩如生的场景中对抗蛋头博士，拯救索尼克的星" />
 
         <com.bihe0832.android.lib.ui.textview.expandable.CommentTextView
@@ -88,7 +88,7 @@
             app:etv_EllipsisHint="……"
             app:etv_MaxLinesOnShrink="3"
             app:etv_ToExpandHint="    战力 17000"
-            app:etv_ToExpandHintColor="@color/corner_color"
+            app:etv_ToExpandHintColor="@color/colorPrimary"
             tools:text="刺猬索尼克和他的好友强势回归，精彩刺激的跑酷游戏盛大登场！启动速度狂热，再现索尼克传奇。在精彩刺激的平台关卡中奔跑、跳跃、冲刺或飞翔。解锁全新角色，比如塔尔斯、纳克等，每个角色都有其独特技能，你可以将其强化。在4个栩栩如生的场景中对抗蛋头博士，拯救索尼克的星" />
 
         <com.bihe0832.android.lib.ui.textview.expandable.CommentTextView
@@ -102,7 +102,7 @@
             app:etv_EllipsisHint="……"
             app:etv_MaxLinesOnShrink="3"
             app:etv_ToExpandHint="    战力 17000"
-            app:etv_ToExpandHintColor="@color/corner_color"
+            app:etv_ToExpandHintColor="@color/colorPrimary"
             tools:text="刺猬索尼克和他的好友强势回归，精彩刺激的跑酷游戏盛大登场！启动速度狂热，再现索尼克传奇。在精彩刺激的平台关卡中奔跑、跳跃、冲刺或飞翔。解锁全新角色，比如塔尔斯、纳克等，每个角色都有其独特技能，你可以将其强化。在4个栩栩如生的场景中对抗蛋头博士，拯救索尼克的星" />
 
 

@@ -11,6 +11,8 @@ class AudioItem(val soundid: Int, val duration: Long) {
 
     var playListener: AudioPlayListener? = null
     var priority = 0
+    var leftVolume: Float = 1F
+    var rightVolume: Float = 1F
 
     override fun toString(): String {
         return "AudioItem(soundid=$soundid, duration=$duration)"
