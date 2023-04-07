@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import com.bihe0832.android.framework.ZixieContext
@@ -15,11 +16,12 @@ import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.OSUtils
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
-
+val selectPhotoPermission = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 val takePhotoPermission = mutableListOf(Manifest.permission.CAMERA)
 const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
 
@@ -190,7 +192,28 @@ fun Activity.showPhotoChooser() {
     }
 
     view.choosePhotoBtn.setOnClickListener {
-        choosePhoto()
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
+            choosePhoto()
+        } else {
+            PermissionManager.checkPermission(this, "PhotoSelect", false, object : PermissionManager.OnPermissionResult {
+                override fun onFailed(msg: String) {
+                    dialog.dismiss()
+                }
+
+                override fun onSuccess() {
+                    dialog.dismiss()
+                    choosePhoto()
+                }
+
+                override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                    dialog.dismiss()
+                }
+
+                override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                    dialog.dismiss()
+                }
+            }, selectPhotoPermission)
+        }
     }
 }
 
