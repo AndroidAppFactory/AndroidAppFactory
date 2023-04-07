@@ -13,15 +13,14 @@ import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.media.Media
+import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.utils.os.OSUtils
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
 
 val takePhotoPermission = mutableListOf(Manifest.permission.CAMERA)
-val selectPhotoPermission = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
 
 
@@ -145,6 +144,17 @@ fun Activity.choosePhoto() {
     }
 }
 
+fun Activity.getPhotoContent() {
+    val intent = Intent(Intent.ACTION_GET_CONTENT)
+    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+    try {
+        startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        ZixieContext.showDebug("未找到图片查看器")
+    }
+}
+
 fun Activity.showPhotoChooser() {
     val view = LayoutInflater.from(this).inflate(R.layout.com_bihe0832_dialog_photo_chooser, null)
     val dialog = AlertDialog.Builder(this).setView(view).create()
@@ -180,30 +190,7 @@ fun Activity.showPhotoChooser() {
     }
 
     view.choosePhotoBtn.setOnClickListener {
-        PermissionManager.checkPermission(
-                this,
-                "PhotoSelect",
-                false,
-                object : PermissionManager.OnPermissionResult {
-                    override fun onFailed(msg: String) {
-                        dialog.dismiss()
-                    }
-
-                    override fun onSuccess() {
-                        dialog.dismiss()
-                        choosePhoto()
-                    }
-
-                    override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
-                        dialog.dismiss()
-                    }
-
-                    override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
-                        dialog.dismiss()
-                    }
-                },
-                selectPhotoPermission
-        )
+        choosePhoto()
     }
 }
 

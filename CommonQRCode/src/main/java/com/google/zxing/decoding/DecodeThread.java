@@ -19,7 +19,7 @@ package com.google.zxing.decoding;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.google.zxing.activity.CaptureActivity;
+import com.google.zxing.activity.BaseCaptureActivity;
 import com.bihe0832.android.lib.qrcode.QRCodeDecodingHandler;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
@@ -34,12 +34,12 @@ import java.util.concurrent.CountDownLatch;
 final class DecodeThread extends Thread {
 
     public static final String BARCODE_BITMAP = "barcode_bitmap";
-    private final CaptureActivity activity;
+    private final BaseCaptureActivity activity;
     private final Hashtable<DecodeHintType, Object> hints = new Hashtable<>();
     private Handler handler;
     private final CountDownLatch handlerInitLatch;
 
-    DecodeThread(CaptureActivity activity, ResultPointCallback resultPointCallback) {
+    DecodeThread(BaseCaptureActivity activity, ResultPointCallback resultPointCallback) {
         this.activity = activity;
         handlerInitLatch = new CountDownLatch(1);
         hints.putAll(QRCodeDecodingHandler.HINTS);

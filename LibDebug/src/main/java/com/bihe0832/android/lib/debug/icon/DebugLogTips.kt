@@ -27,17 +27,9 @@ object DebugLogTips {
     }
 
     fun initModule(activity: Activity, useDefault: Boolean, gravity: Int) {
-        PermissionManager.addPermissionGroupScene(
-                SCENE_NAME_DEBUG,
-                Manifest.permission.SYSTEM_ALERT_WINDOW,
-                "悬浮窗"
-        )
+        PermissionManager.addPermissionGroupDesc(SCENE_NAME_DEBUG, Manifest.permission.SYSTEM_ALERT_WINDOW, "悬浮窗")
 
-        PermissionManager.addPermissionGroupDesc(
-                SCENE_NAME_DEBUG,
-                Manifest.permission.SYSTEM_ALERT_WINDOW,
-                "调试日志需要通过<font color ='#38ADFF'><b>悬浮窗实时展示</b></font>"
-        )
+        PermissionManager.addPermissionGroupScene(SCENE_NAME_DEBUG, Manifest.permission.SYSTEM_ALERT_WINDOW, "调试日志需要通过<font color ='#38ADFF'><b>悬浮窗实时展示</b></font>")
 
         PermissionManager.addPermissionGroupContent(
                 SCENE_NAME_DEBUG,

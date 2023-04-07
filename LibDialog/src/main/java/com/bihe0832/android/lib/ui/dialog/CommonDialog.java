@@ -157,7 +157,7 @@ public class CommonDialog extends Dialog {
         int screenheight = DisplayUtil.getScreenHeight(getContext());
         if (titleTv != null) {
             if (!TextUtils.isEmpty(title)) {
-                titleTv.setText(title);
+                titleTv.setText(TextFactoryUtils.getSpannedTextByHtml(title));
                 titleTv.setVisibility(View.VISIBLE);
             } else {
                 titleTv.setVisibility(View.GONE);

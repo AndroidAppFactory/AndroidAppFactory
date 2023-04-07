@@ -13,6 +13,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.bihe0832.android.common.photos.PhotoWrapperKt;
 import com.bihe0832.android.common.qrcode.R;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
@@ -21,7 +22,6 @@ import com.bihe0832.android.framework.ui.BaseActivity;
 import com.bihe0832.android.lib.device.vibrator.VibratorUtil;
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView;
 import com.bihe0832.android.lib.qrcode.QRCodeDecodingHandler;
-import com.bihe0832.android.lib.router.annotation.Module;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.LoadingDialog;
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager;
@@ -33,8 +33,7 @@ import com.google.zxing.view.ViewfinderView;
 
 import java.io.IOException;
 
-@Module(RouterConstants.MODULE_NAME_QRCODE_SCAN)
-public class CaptureActivity extends BaseActivity implements Callback {
+public class BaseCaptureActivity extends BaseActivity implements Callback {
 
     private static final long VIBRATE_DURATION = 300L;
     private static final float BEEP_VOLUME = 0.80f;
@@ -53,13 +52,22 @@ public class CaptureActivity extends BaseActivity implements Callback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_bihe0832_qrcode_activity_scanner);
+        initToolbar(R.id.common_toolbar, "二维码扫描", true, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDecode(null);
+            }
+        }, R.mipmap.ic_left_arrow_white);
+
         initData(getIntent());
         if (opensound) {
             blockAudioPlayerManager = new AudioPLayerManager();
         }
-        initAction();
+        initFlashAction();
+
+        initAlbumAction();
         CameraManager.init(getApplication());
-        viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_content);
+        viewfinderView = (ViewfinderView) findViewById(R.id.common_qrcode_viewfinder_content);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
     }
@@ -69,15 +77,9 @@ public class CaptureActivity extends BaseActivity implements Callback {
         handleDecode(null);
     }
 
-    private void initAction() {
-        initToolbar(R.id.common_toolbar, "二维码扫描", true, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleDecode(null);
-            }
-        }, R.mipmap.ic_left_arrow_white);
+    protected void initFlashAction() {
 
-        CheckedEnableImageView btnFlash = (CheckedEnableImageView) findViewById(R.id.btn_flash);
+        CheckedEnableImageView btnFlash = (CheckedEnableImageView) findViewById(R.id.common_qrcode_flash);
         btnFlash.setOnClickListener(view -> {
             try {
                 boolean isSuccess = CameraManager.get().setFlashLight(!btnFlash.isChecked());
@@ -90,14 +92,16 @@ public class CaptureActivity extends BaseActivity implements Callback {
                 e.printStackTrace();
             }
         });
+    }
 
-        CheckedEnableImageView btnAlbum = (CheckedEnableImageView) findViewById(R.id.btn_album);
+    /**
+     * 如果需要增加权限判断，可以加在这里
+     */
+    protected void initAlbumAction() {
+        CheckedEnableImageView btnAlbum = (CheckedEnableImageView) findViewById(R.id.common_qrcode_album);
         btnAlbum.setColorFilter(Color.WHITE);
         btnAlbum.setOnClickListener(view -> {
-            //打开手机中的相册
-            Intent innerIntent = new Intent(Intent.ACTION_GET_CONTENT); //"android.intent.action.GET_CONTENT"
-            innerIntent.setType("image/*");
-            startActivityForResult(innerIntent, ZixieActivityRequestCode.CHOOSE_PHOTO);
+            PhotoWrapperKt.getPhotoContent(this);
         });
     }
 
@@ -157,7 +161,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
         }
         mLoading.setCanCanceled(false);
         ThreadManager.getInstance().runOnUIThread(() -> {
-            mLoading.show("正在扫描...");
+            mLoading.show("识别中，请稍候...");
             Result result = QRCodeDecodingHandler.decodeQRcode(this, uri, 300);
             mLoading.dismiss();
             if (result != null) {
@@ -171,7 +175,18 @@ public class CaptureActivity extends BaseActivity implements Callback {
     @Override
     protected void onResume() {
         super.onResume();
-        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.scanner_view);
+        startScan();
+    }
+
+    /**
+     * 如果需要增加权限判断，可以加在这里
+     */
+    protected void startScan() {
+        startScanAction();
+    }
+
+    protected void startScanAction() {
+        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.common_qrcode_scanner_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
             initCamera(surfaceHolder);

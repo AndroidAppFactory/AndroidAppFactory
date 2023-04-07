@@ -5,7 +5,7 @@
 
     <application>
         <activity
-            android:name="com.google.zxing.activity.CaptureActivity"
+            android:name="com.bihe0832.android.common.qrcode.QrcodeScanActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AAF.ActivityTheme" />

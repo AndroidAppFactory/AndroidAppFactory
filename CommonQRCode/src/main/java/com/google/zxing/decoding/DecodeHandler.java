@@ -27,7 +27,7 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
-import com.google.zxing.activity.CaptureActivity;
+import com.google.zxing.activity.BaseCaptureActivity;
 import com.google.zxing.MessageConstants;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.camera.PlanarYUVLuminanceSource;
@@ -40,10 +40,10 @@ final class DecodeHandler extends Handler {
 
   private static final String TAG = DecodeHandler.class.getSimpleName();
 
-  private final CaptureActivity activity;
+  private final BaseCaptureActivity activity;
   private final MultiFormatReader multiFormatReader;
 
-  DecodeHandler(CaptureActivity activity, Hashtable<DecodeHintType, Object> hints) {
+  DecodeHandler(BaseCaptureActivity activity, Hashtable<DecodeHintType, Object> hints) {
     multiFormatReader = new MultiFormatReader();
     multiFormatReader.setHints(hints);
     this.activity = activity;

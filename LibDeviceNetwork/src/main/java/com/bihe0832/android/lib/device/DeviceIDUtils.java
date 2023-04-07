@@ -8,8 +8,8 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
 import com.bihe0832.android.lib.log.ZLog;
-
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -66,7 +66,7 @@ public class DeviceIDUtils {
 
     @SuppressLint("HardwareIds")
     public static String getMacAddress(Context context) {
-        String mac = "";
+        String mac = MARSHMALLOW_MAC;
         try {
             WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if(wm != null) {
@@ -74,26 +74,12 @@ public class DeviceIDUtils {
                 if(wifiInfo != null) {
                     mac = wifiInfo.getMacAddress(); // 方法1
                 }
-                if(MARSHMALLOW_MAC.equals(mac)) { // MAC地址，6.0以后为02:00:00:00:00:00
-                    String result = null;
-                    result = getMacAddressByInterface(); // 方法2
-                    if(result != null && result.length() > 0) {
-                        return result.toUpperCase();
-                    } else {
-                        result = getAddressMacByFile(); // 方法3
-                        if(result != null && result.length() > 0) {
-                            return result.toUpperCase();
-                        }
-                    }
-                } else if(mac != null) {
-                    return mac.toUpperCase();
-                }
             }
         } catch(Exception e) {
-            // ignore
+            e.printStackTrace();
         }
 
-        return "";
+        return mac.toUpperCase();
     }
 
     private static String getAddressMacByFile() {

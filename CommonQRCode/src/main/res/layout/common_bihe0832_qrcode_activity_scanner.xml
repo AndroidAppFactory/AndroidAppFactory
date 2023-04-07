@@ -16,12 +16,12 @@
         android:layout_height="match_parent">
 
         <SurfaceView
-            android:id="@+id/scanner_view"
+            android:id="@+id/common_qrcode_scanner_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <com.google.zxing.view.ViewfinderView
-            android:id="@+id/viewfinder_content"
+            android:id="@+id/common_qrcode_viewfinder_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:corner_color="@color/corner_color"
@@ -38,7 +38,7 @@
             app:result_point_color="@color/result_point_color" />
 
         <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-            android:id="@+id/btn_flash"
+            android:id="@+id/common_qrcode_flash"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginBottom="48dp"
@@ -47,20 +47,20 @@
             android:src="@drawable/com_bihe0832_common_qrcode_select"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_album"
+            app:layout_constraintEnd_toStartOf="@+id/common_qrcode_album"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-            android:id="@+id/btn_album"
+            android:id="@+id/common_qrcode_album"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="18dp"
             android:scaleType="centerInside"
             android:src="@mipmap/icon_photos"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_flash"
+            app:layout_constraintBottom_toBottomOf="@+id/common_qrcode_flash"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_flash" />
+            app:layout_constraintStart_toEndOf="@+id/common_qrcode_flash" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
