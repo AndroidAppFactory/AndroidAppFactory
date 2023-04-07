@@ -15,7 +15,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonPhotos"
+ext.developModule = "Application"
 
 
 /**
@@ -79,7 +79,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonWrapper"             : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.2",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -89,7 +89,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonQRCode"              : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.2",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
@@ -163,7 +163,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonPhotos"              : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.2",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
             "Framework"
