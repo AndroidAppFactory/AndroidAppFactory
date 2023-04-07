@@ -86,4 +86,5 @@ abstract class ShareBaseActivity : BaseBottomActivity() {
     protected abstract fun onShareToQZoneBtnClick()
     protected abstract fun onShareToWechatSessionBtnClick()
     protected abstract fun onShareToWechatTimelineBtnClick()
+
 }

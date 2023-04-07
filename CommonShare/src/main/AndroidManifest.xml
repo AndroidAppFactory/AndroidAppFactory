@@ -7,5 +7,9 @@
             android:name="com.bihe0832.android.common.share.ShareAPPActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AAF.ActivityTheme.Alpha" />
+        <activity
+            android:name="com.bihe0832.android.common.share.ShareQRCodeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
     </application>
 </manifest>

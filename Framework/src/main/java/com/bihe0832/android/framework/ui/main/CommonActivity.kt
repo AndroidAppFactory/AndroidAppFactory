@@ -14,7 +14,6 @@ open class CommonActivity : BaseActivity() {
         super.setContentView(getLayoutID())
     }
 
-
     /**
      * 布局layout
      * @return

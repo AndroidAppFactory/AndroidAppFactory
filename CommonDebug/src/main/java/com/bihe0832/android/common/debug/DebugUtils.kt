@@ -1,7 +1,9 @@
 package com.bihe0832.android.common.debug
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
@@ -53,12 +55,7 @@ object DebugUtils {
 
 
     fun startDebugActivity(context: Context?, cls: Class<*>, titleName: String) {
-        HashMap<String, String>().apply {
-            put(DebugMainActivity.DEBUG_MODULE_CLASS_NAME, cls.name)
-            put(DebugMainActivity.DEBUG_MODULE_TITLE_NAME, titleName)
-        }.let {
-            startActivityWithException(context, DebugMainActivity::class.java, it)
-        }
+        CommonRootActivity.startCommonRootActivity(context, cls, titleName)
     }
 
     fun startActivityWithException(context: Context?, cls: String) {
@@ -79,4 +76,20 @@ object DebugUtils {
         }
         context?.startActivity(intent)
     }
+
+    fun startActivityForResultWithException(context: Activity?, cls: Class<*>, requestCode: Int) {
+        startActivityForResultWithException(context, cls, requestCode, null)
+    }
+
+    fun startActivityForResultWithException(context: Activity?, cls: Class<*>, requestCode: Int, data: Map<String, String>?) {
+        val intent = Intent(context, cls)
+        data?.let {
+            for ((key, value) in it) {
+                intent.putExtra(key, value)
+            }
+        }
+        context?.startActivityForResult(intent, requestCode)
+    }
+
+
 }

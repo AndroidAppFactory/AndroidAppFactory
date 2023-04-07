@@ -7,9 +7,14 @@
     <dimen name="com_bihe0832_share_item_text_size">@dimen/com_bihe0832_share_title_text_size
     </dimen>
 
-    <string name="com_bihe0832_share_app_title">分享 %1$s 给好友</string>
+
+    <string name="com_bihe0832_share_desc">我刚发现了一个好玩的，快扫码看看吧</string>
+    <string name="com_bihe0832_share_dialog_title">分享%1$s给好友</string>
+    <string name="com_bihe0832_share_link">我刚发现了一个好玩的，快点击链接看看吧：%1$s</string>
+
+
     <string name="com_bihe0832_share_app">我刚刚发现了一个很好玩的应用，推荐给你试试吧。名字叫 %1$s ，可以在这里下载： %2$s </string>
-    <string name="com_bihe0832_share_target">https://cdn.bihe0832.com/app/download.html</string>
+    <string name="com_bihe0832_share_app_target">https://cdn.bihe0832.com/app/download.html</string>
     <string name="com_bihe0832_share_app_big">APK 文件过大，建议使用二维码分享给好友下载</string>
     <string name="com_bihe0832_share_app_faild">APK 获取失败，建议使用二维码分享给好友下载</string>
 
