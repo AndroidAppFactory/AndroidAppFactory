@@ -308,13 +308,11 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionContent(context: Context, scene: String, permissionGroupID: String, useDefault: Boolean, needSpecial: Boolean): String {
+    fun getPermissionContent(context: Context, scene: String, permissionGroupID: String, needSpecial: Boolean): String {
         return if (mPermissionContent.containsKey(getPermissionKey(scene, permissionGroupID))) {
             return getPermissionContent(context, getPermissionKey(scene, permissionGroupID), needSpecial)
-        } else if (useDefault) {
-            getPermissionContent(context, permissionGroupID, needSpecial)
         } else {
-            ""
+            getDefaultPermissionContent(context, getPermissionKey(scene, permissionGroupID), needSpecial)
         }
     }
 
@@ -347,7 +345,7 @@ object PermissionManager {
         return if (tempPermissionGroupList.size > 1) {
             getDefaultPermissionContent(context, getPermissionScene(sceneID, tempPermissionGroupList, useDefault, needSpecial), getPermissionDesc(sceneID, tempPermissionGroupList, useDefault, needSpecial))
         } else if (tempPermissionGroupList.size > 0) {
-            getPermissionContent(context, sceneID, tempPermissionGroupList.get(0), useDefault, needSpecial)
+            getPermissionContent(context, sceneID, tempPermissionGroupList.get(0), needSpecial)
         } else {
             ""
         }

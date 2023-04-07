@@ -1,7 +1,10 @@
 package com.bihe0832.android.lib.permission.ui
 
 import android.content.Context
+import android.text.TextUtils
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.permission.PermissionManager.getPermissionContent
+import com.bihe0832.android.lib.permission.PermissionManager.getPermissionDesc
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 
@@ -33,17 +36,26 @@ open class PermissionDialog : CommonDialog {
         positive = PermissionManager.getPositiveText(context)
     }
 
-    open fun show(sceneID: String, tempPermissionGroupList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
-        showWithContent(PermissionManager.getPermissionContent(context, sceneID, tempPermissionGroupList, useDefault, needSpecial), canCancel, listener)
+    open fun show(scene: String, tempPermissionList: List<String>, canCancel: Boolean, listener: OnDialogListener) {
+        showWithContent(scene, tempPermissionList, canCancel, listener)
     }
 
     open fun show(scene: String, showPermissionGroupID: String, canCancel: Boolean, listener: OnDialogListener?) {
-        var content = PermissionManager.getPermissionContent(context, scene, showPermissionGroupID, useDefault, needSpecial)
-        showWithContent(content, canCancel, listener)
+        showWithContent(scene, mutableListOf(showPermissionGroupID), canCancel, listener)
     }
 
-    private fun showWithContent(content: String, canCancel: Boolean, listener: OnDialogListener?) {
-        setHtmlContent(content)
+    private fun showWithContent(scene: String, tempPermissionList: List<String>, canCancel: Boolean, listener: OnDialogListener?) {
+
+        val permissionDesc: String = getPermissionDesc(scene, tempPermissionList, false, needSpecial)
+        setTitle(permissionDesc + "权限使用说明")
+
+        val permissionContent: String = getPermissionContent(context, scene, tempPermissionList, false, needSpecial)
+        if (!TextUtils.isEmpty(permissionContent)) {
+            setHtmlContent(permissionContent)
+        } else {
+            val defaultPermissionContent: String = getPermissionContent(context, scene, tempPermissionList, useDefault, needSpecial)
+            setHtmlContent(defaultPermissionContent)
+        }
         setShouldCanceled(canCancel)
         listener?.let {
             setOnClickBottomListener(listener)

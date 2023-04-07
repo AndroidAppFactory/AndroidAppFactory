@@ -22,7 +22,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.google.zxing.activity.CaptureActivity;
+import com.google.zxing.activity.BaseCaptureActivity;
 import com.google.zxing.MessageConstants;
 import com.google.zxing.Result;
 import com.google.zxing.camera.CameraManager;
@@ -37,7 +37,7 @@ public final class CaptureActivityHandler extends Handler {
 
     private static final String TAG = CaptureActivityHandler.class.getSimpleName();
 
-    private final CaptureActivity activity;
+    private final BaseCaptureActivity activity;
     private final DecodeThread decodeThread;
     private State state;
 
@@ -45,7 +45,7 @@ public final class CaptureActivityHandler extends Handler {
         PREVIEW, SUCCESS, DONE
     }
 
-    public CaptureActivityHandler(CaptureActivity activity, ViewfinderView viewfinderView) {
+    public CaptureActivityHandler(BaseCaptureActivity activity, ViewfinderView viewfinderView) {
         this.activity = activity;
         decodeThread = new DecodeThread(activity, new ViewfinderResultPointCallback(viewfinderView));
         decodeThread.start();
