@@ -366,9 +366,7 @@ object LibTTS {
 
     fun setSpeechRate(speechRate: Float) {
         var tempmSpeechRate = speechRate
-        if (tempmSpeechRate > 1) {
-            tempmSpeechRate = 1f
-        } else if (tempmSpeechRate <= 0) {
+        if (tempmSpeechRate < 0) {
             tempmSpeechRate = 0.1f
         }
         val result = mSpeech?.setSpeechRate(speechRate * 4)
@@ -394,9 +392,7 @@ object LibTTS {
     fun setPitch(pitch: Float) {
         var tempPitch = pitch
 
-        if (tempPitch > 1) {
-            tempPitch = 1f
-        } else if (tempPitch <= 0) {
+        if (tempPitch < 0) {
             tempPitch = 0.1f
         }
         val result = mSpeech?.setPitch(tempPitch * 2)
