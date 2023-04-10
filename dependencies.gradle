@@ -6,7 +6,7 @@ def project = ext
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"
  */
-ext.mainProject = "APPTest,CommonDebug"
+ext.mainProject = "APPTest"
 
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
@@ -14,7 +14,7 @@ ext.mainProject = "APPTest,CommonDebug"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibQRCode"
+ext.developModule = "Application"
 
 
 /**
@@ -71,14 +71,14 @@ ext.moduleInfo = [
         ]
     ],
     "CommonDebug"               : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
-            "Framework", "CommonPraise", "CommonList", "CommonAceEditor","CommonWebview",  "LibDebug"
+            "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview"
         ]
     ],
     "CommonWrapper"             : [
-        "version"            : "5.12.2",
+        "version"            : "5.12.3",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -88,42 +88,42 @@ ext.moduleInfo = [
         ]
     ],
     "CommonQRCode"              : [
-        "version"            : "5.12.2",
+        "version"            : "5.12.3",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
         ]
     ],
     "CommonMessage"             : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-message",
         "apidependenciesList": [
             "CommonList"
         ]
     ],
     "CommonShare"               : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-share",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNavigationDrawer"    : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-navigation-drawer",
         "apidependenciesList": [
             "CommonList", "CommonAbout"
         ]
     ],
     "CommonBottomTab"           : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-bottom-tab",
         "apidependenciesList": [
             "CommonSvga"
         ]
     ],
     "CommonSvga"                : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-svga",
         "apidependenciesList": [
             "Framework",
@@ -132,7 +132,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonAceEditor"           : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-ace-editor",
         "apidependenciesList": [
             "Framework"
@@ -140,14 +140,12 @@ ext.moduleInfo = [
     ],
 
     "CommonAbout"               : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-about",
-        "apidependenciesList": [
-            "Framework", "CommonList"
-        ]
+        "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
     ],
     "CommonList"                : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-list",
         "apidependenciesList": [
             project.androidsupport.swiperefreshlayout,
@@ -155,62 +153,53 @@ ext.moduleInfo = [
         ]
     ],
     "CommonSplash"              : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-splash",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonPhotos"              : [
-        "version"            : "5.12.2",
+        "version"            : "5.12.3",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNetwork"             : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-network",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonWebview"             : [
-        "version"                : "5.12.1",
+        "version"                : "5.12.3",
         "artifactId"             : "common-webview",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
             "Framework"
         ],
-        "specialdependenciesList": [
-            "kapt": ["RouterCompiler"]
-        ]
-    ],
+        "specialdependenciesList": ["kapt": ["RouterCompiler"]]],
     "CommonFeedback"            : [
-        "version"                : "5.12.1",
+        "version"                : "5.12.3",
         "artifactId"             : "common-feedback",
-        "apidependenciesList"    : [
-            "CommonWebview"
-        ],
-        "specialdependenciesList": [
-            "kapt": ["RouterCompiler"]
-        ]
+        "apidependenciesList"    : ["CommonWebview"],
+        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonPraise"              : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "common-praise",
-        "apidependenciesList": [
-            "Framework"
-        ]
+        "apidependenciesList": ["Framework"]
     ],
     "Framework"                 : [
-        "version"                : "5.12.1",
+        "version"                : "5.12.3",
         "artifactId"             : "framework",
         "apidependenciesList"    : [
             project.androidsupport.annotation,
             project.androidsupport.lifecycle_livedata,
             project.androidsupport.multidex,
-            "LibWrapper","Router", "RouterAnnotation",
+            "LibWrapper", "Router", "RouterAnnotation",
         ],
         "specialdependenciesList": [
             "kapt": [project.glide.compiler]
@@ -218,10 +207,10 @@ ext.moduleInfo = [
         ]
     ],
     "LibWrapper"                : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
-
+            "LibDebug",
             "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
             "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
             "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
@@ -230,8 +219,7 @@ ext.moduleInfo = [
             "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
             "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
             "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
-            "LibSvga", "LibAudioPlayer","LibCustomView"
-        ]
+            "LibSvga", "LibAudioPlayer", "LibCustomView"]
     ],
     "RouterAnnotation"          : [
         "version"            : "4.1.0",
@@ -248,7 +236,6 @@ ext.moduleInfo = [
         ],
         "specialdependenciesList": [
             "annotationProcessor": ["com.google.auto.service:auto-service:1.0.1"]
-
         ]
     ],
     "Router"                    : [
@@ -261,8 +248,7 @@ ext.moduleInfo = [
     "LibAAF"                    : [
         "version"            : "5.1.7",
         "artifactId"         : "lib-aaf-tools",
-        "apidependenciesList": [
-        ]
+        "apidependenciesList": []
     ],
     "LibAndroid"                : [
         "version"            : "5.1.7",
@@ -479,7 +465,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibQRCode"                 : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.3",
         "artifactId"         : "lib-qrcode",
         "apidependenciesList": [
             project.androidsupport.appcompat,
