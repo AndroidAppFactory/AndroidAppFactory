@@ -1,10 +1,12 @@
 package com.google.zxing.activity;
 
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -19,7 +21,6 @@ import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.BaseActivity;
-import com.bihe0832.android.lib.device.vibrator.VibratorUtil;
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView;
 import com.bihe0832.android.lib.qrcode.QRCodeDecodingHandler;
 import com.bihe0832.android.lib.thread.ThreadManager;
@@ -265,7 +266,11 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
         }
 
         if (openvibrate) {
-            VibratorUtil.Vibrate(this, VIBRATE_DURATION);
+
+            Vibrator vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
+            if (vibrator != null){
+                vibrator.vibrate(VIBRATE_DURATION);
+            }
         }
     }
 
