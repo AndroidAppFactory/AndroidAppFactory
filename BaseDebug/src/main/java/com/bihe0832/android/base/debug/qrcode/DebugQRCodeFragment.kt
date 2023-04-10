@@ -80,7 +80,7 @@ class DebugQRCodeFragment : BaseFragment() {
                 BitmapUtil.getViewBitmap(rootview.findViewById<ImageView>(R.id.qrcode_image)).let {
                     val data = QrcodeUtils.decodeQRcode(it)
                     ThreadManager.getInstance().runOnUIThread {
-                        rootview.findViewById<TextView>(R.id.qrcode_result).text = "源数据为：${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：" + data.text
+                        rootview.findViewById<TextView>(R.id.qrcode_result).text = "源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data.text
                     }
                 }
             }
