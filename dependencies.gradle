@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibDeviceNetwork"
+ext.developModule = "Application"
 
 
 /**
@@ -71,14 +71,14 @@ ext.moduleInfo = [
         ]
     ],
     "CommonDebug"               : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview"
         ]
     ],
     "CommonWrapper"             : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -88,42 +88,42 @@ ext.moduleInfo = [
         ]
     ],
     "CommonQRCode"              : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
         ]
     ],
     "CommonMessage"             : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-message",
         "apidependenciesList": [
             "CommonList"
         ]
     ],
     "CommonShare"               : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-share",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNavigationDrawer"    : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-navigation-drawer",
         "apidependenciesList": [
             "CommonList", "CommonAbout"
         ]
     ],
     "CommonBottomTab"           : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-bottom-tab",
         "apidependenciesList": [
             "CommonSvga"
         ]
     ],
     "CommonSvga"                : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-svga",
         "apidependenciesList": [
             "Framework",
@@ -132,7 +132,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonAceEditor"           : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-ace-editor",
         "apidependenciesList": [
             "Framework"
@@ -140,12 +140,12 @@ ext.moduleInfo = [
     ],
 
     "CommonAbout"               : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-about",
         "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
     ],
     "CommonList"                : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-list",
         "apidependenciesList": [
             project.androidsupport.swiperefreshlayout,
@@ -153,28 +153,28 @@ ext.moduleInfo = [
         ]
     ],
     "CommonSplash"              : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-splash",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonPhotos"              : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNetwork"             : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-network",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonWebview"             : [
-        "version"                : "5.12.3",
+        "version"                : "5.12.4",
         "artifactId"             : "common-webview",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -182,18 +182,18 @@ ext.moduleInfo = [
         ],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]],
     "CommonFeedback"            : [
-        "version"                : "5.12.3",
+        "version"                : "5.12.4",
         "artifactId"             : "common-feedback",
         "apidependenciesList"    : ["CommonWebview"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonPraise"              : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "common-praise",
         "apidependenciesList": ["Framework"]
     ],
     "Framework"                 : [
-        "version"                : "5.12.3",
+        "version"                : "5.12.4",
         "artifactId"             : "framework",
         "apidependenciesList"    : [
             project.androidsupport.annotation,
@@ -207,7 +207,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibWrapper"                : [
-        "version"            : "5.12.3",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
             "LibDebug",
@@ -334,7 +334,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibDeviceNetwork"          : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-device-network",
         "apidependenciesList": [
             project.androidsupport.androidxcore,
@@ -361,7 +361,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibAPK"                    : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-utils-apk",
         "apidependenciesList": [
             "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
@@ -391,7 +391,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibDownload"               : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-download",
         "apidependenciesList": [
             "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -400,7 +400,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibInstall"                : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-install",
         "apidependenciesList": [
             "LibFile", "LibZip", "LibAPK"
@@ -414,14 +414,14 @@ ext.moduleInfo = [
         ]
     ],
     "LibSuperAPP"               : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-super-app",
         "apidependenciesList": [
             "LibDialog", "LibAPK"
         ]
     ],
     "LibDebug"                  : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-debug",
         "apidependenciesList": [
             "LibDialog", "LibToast", "LibFloatview"
@@ -515,7 +515,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibNotification"           : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-notification",
         "apidependenciesList": [
             "LibMedia", "LibAPK", "LibCommonUtils"
@@ -559,7 +559,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibWebview"                : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-webview",
         "apidependenciesList": [
             project.tencent.tbssdk,
@@ -567,7 +567,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibLifecycle"              : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-lifecycle",
         "apidependenciesList": [
             project.androidsupport.lifecycle,
@@ -577,7 +577,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibPermission"             : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-permission",
         "apidependenciesList": [
             "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -586,7 +586,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibImmersive"              : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-immersive",
         "apidependenciesList": [
             "LibDeviceNetwork", "LibMedia", "LibCommonUIUtils",
@@ -594,7 +594,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibFileSelect"             : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-file-select",
         "apidependenciesList": [
             "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -602,7 +602,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibFloatview"              : [
-        "version"                : "5.12.1",
+        "version"                : "5.12.4",
         "artifactId"             : "lib-float-view",
         "apidependenciesList"    : [
             project.androidsupport.constraintlayout,
@@ -631,7 +631,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibAceEditor"              : [
-        "version"            : "5.12.1",
+        "version"            : "5.12.4",
         "artifactId"         : "lib-ace-editor",
         "apidependenciesList": [
             "LibFileSelect", "LibOS", "LibDialog", "LibText"
