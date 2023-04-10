@@ -15,6 +15,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.privacy.AgreementPrivacy.hasAgreedPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
+import com.bihe0832.android.lib.device.shake.ShakeManager
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
@@ -74,6 +75,7 @@ object AppFactoryInit {
         // 监听信号变化，统一到MobileUtil
         MobileUtil.registerMobileSignalListener(application.applicationContext)
         CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
+        ShakeManager.init(application.applicationContext)
     }
 
     fun initAll(application: android.app.Application) {

@@ -32,6 +32,7 @@ import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.base.debug.photos.DebugPhotosFragment
 import com.bihe0832.android.base.debug.qrcode.DebugQRCodeFragment
 import com.bihe0832.android.base.debug.request.DebugHttpActivity
+import com.bihe0832.android.base.debug.shake.DebugShakeAndVibratorFragment
 import com.bihe0832.android.base.debug.share.DebugShareFragment
 import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
 import com.bihe0832.android.base.debug.tab.DebugTabFragment
@@ -68,8 +69,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("自定义View 调试", DebugCustomViewFragment::class.java))
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
             add(getDebugFragmentItemData("协程及多线程调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
-
-
+            add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
             add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
@@ -99,7 +99,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(DebugItemData("HTTP Request", View.OnClickListener {
                 startActivityWithException(DebugHttpActivity::class.java)
             }))
-
 
             add(getDebugFragmentItemData("剪切板调试", DebugClipboardFragment::class.java))
 
