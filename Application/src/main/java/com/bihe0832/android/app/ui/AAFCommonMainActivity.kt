@@ -22,5 +22,6 @@ open class AAFCommonMainActivity : CommonActivityWithNavigationDrawer() {
         addRedDotAction(findViewById(R.id.title_icon_unread))
         checkMsgAndShowFace(this)
         UpdateManager.checkUpdateAndShowDialog(this, false, ZixieContext.isOfficial())
+        updateTitle(titleName)
     }
 }
