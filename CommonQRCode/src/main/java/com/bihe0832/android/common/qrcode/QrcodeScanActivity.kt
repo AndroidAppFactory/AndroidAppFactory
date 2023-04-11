@@ -59,7 +59,7 @@ class QrcodeScanActivity : BaseCaptureActivity() {
             if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
                 getPhotoContent()
             } else {
-                PermissionManager.checkPermission(this, "PhotoSelect", false, object : PermissionResultOfAAF(false) {
+                PermissionManager.checkPermission(this, RouterConstants.MODULE_NAME_QRCODE_SCAN, false, object : PermissionResultOfAAF(false) {
                     override fun onSuccess() {
                         getPhotoContent()
                     }
