@@ -20,7 +20,7 @@ open class AboutActivity : com.bihe0832.android.common.about.AboutActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        UpdateManager.checkUpdateAndShowDialog(this, false)
+        UpdateManager.checkUpdateAndShowDialog(this, checkUpdateByUser = false, showIfNeedUpdate = true)
     }
 
     override fun initView() {

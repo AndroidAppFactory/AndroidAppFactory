@@ -35,7 +35,7 @@
             android:layout_height="18dp"
             android:layout_marginLeft="4dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/message_black"
+            android:src="@mipmap/icon_message"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/message_title"
             app:layout_constraintStart_toEndOf="@+id/message_is_new"

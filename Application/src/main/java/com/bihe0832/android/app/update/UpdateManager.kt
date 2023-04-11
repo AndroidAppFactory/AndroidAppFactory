@@ -29,12 +29,12 @@ object UpdateManager {
 
     private val TAG = "UpdateHelper-> "
 
-    fun checkUpdateAndShowDialog(activity: Activity, checkUpdateByUser: Boolean) {
+    fun checkUpdateAndShowDialog(activity: Activity, checkUpdateByUser: Boolean, showIfNeedUpdate: Boolean) {
         fetchUpdate(activity, {
             getInstance().runOnUIThread {
                 UpdateInfoLiveData.value = it
             }
-            UpdateHelper.showUpdate(activity, checkUpdateByUser, it)
+            UpdateHelper.showUpdate(activity, checkUpdateByUser, showIfNeedUpdate, it)
         }, {
             if (checkUpdateByUser) {
                 ZixieContext.showLongToast("当前已是最新版本")

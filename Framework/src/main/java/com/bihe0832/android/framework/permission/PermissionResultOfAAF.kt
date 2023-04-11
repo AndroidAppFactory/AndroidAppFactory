@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.ui
+package com.bihe0832.android.framework.permission
 
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.log.ZLog

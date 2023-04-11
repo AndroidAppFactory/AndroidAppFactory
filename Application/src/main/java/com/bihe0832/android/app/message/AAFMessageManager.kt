@@ -47,6 +47,4 @@ object AAFMessageManager : MessageManager() {
             }
         }, mutableListOf())
     }
-
-
 }

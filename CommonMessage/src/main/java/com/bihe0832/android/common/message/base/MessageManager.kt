@@ -166,4 +166,13 @@ abstract class MessageManager {
             false
         }
     }
+
+    fun getUnreadNum(): Int {
+        getMessageLiveData().value?.filter { !it.hasRead() }?.let {
+            if (it.isNotEmpty()) {
+                return it.size
+            }
+        }
+        return 0
+    }
 }
