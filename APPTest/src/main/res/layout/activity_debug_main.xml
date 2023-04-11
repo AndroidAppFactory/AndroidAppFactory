@@ -15,6 +15,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/common_toolbar"
+            tools:layout_height="wrap_content"
             style="@style/AAF.AppTheme.Toolbar.Light"
             app:title="是防守打法">
 
@@ -24,18 +25,18 @@
                 android:layout_gravity="center_vertical|end">
 
                 <ImageView
-                    android:id="@+id/message"
+                    android:id="@+id/title_icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginRight="16dp"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/message_black"
+                    android:src="@mipmap/icon_message"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
-                    android:id="@+id/message_unread"
+                    android:id="@+id/title_icon_unread"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-2dp"
@@ -48,8 +49,8 @@
                     android:textSize="8dp"
                     app:bgtv_backgroundColor="@color/red_dot"
                     app:bgtv_isRadiusHalfHeight="true"
-                    app:layout_constraintEnd_toEndOf="@+id/message"
-                    app:layout_constraintTop_toTopOf="@+id/message"
+                    app:layout_constraintEnd_toEndOf="@+id/title_icon"
+                    app:layout_constraintTop_toTopOf="@+id/title_icon"
                     tools:text="99+"
                     tools:visibility="visible" />
 
@@ -68,7 +69,7 @@
         android:id="@+id/navigation_drawer_fl"
         android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@color/permission_window_bg" />
+        android:layout_gravity="start"
+        android:background="@color/com_bihe0832_share_bg_color" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

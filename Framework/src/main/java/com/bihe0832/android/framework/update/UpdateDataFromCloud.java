@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName;
 public class UpdateDataFromCloud {
 
     public static final int UPDATE_TYPE_NEW = 0;
-	public static final int UPDATE_TYPE_HAS_NEW = 1;
-	public static final int UPDATE_TYPE_HAS_NEW_JUMP = 2;
-    public static final int UPDATE_TYPE_RED = 3;
-	public static final int UPDATE_TYPE_RED_JUMP = 4;
-    public static final int UPDATE_TYPE_NEED = 5;
-    public static final int UPDATE_TYPE_NEED_JUMP = 6;
-    public static final int UPDATE_TYPE_MUST = 7;
-    public static final int UPDATE_TYPE_MUST_JUMP = 8;
+    public static final int UPDATE_TYPE_HAS_NEW_JUMP = 1;
+    public static final int UPDATE_TYPE_HAS_NEW = 2;
+    public static final int UPDATE_TYPE_RED_JUMP = 3;
+    public static final int UPDATE_TYPE_RED = 4;
+    public static final int UPDATE_TYPE_NEED_JUMP = 5;
+    public static final int UPDATE_TYPE_NEED = 6;
+    public static final int UPDATE_TYPE_MUST_JUMP = 7;
+    public static final int UPDATE_TYPE_MUST = 8;
 
     //更新类型
     private int updateType = UPDATE_TYPE_NEW;
@@ -154,6 +154,9 @@ public class UpdateDataFromCloud {
         this.updateType = updateType;
     }
 
+    public boolean canShowNew(){
+        return  updateType > UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW;
+    }
 
     @Override
     public String toString() {

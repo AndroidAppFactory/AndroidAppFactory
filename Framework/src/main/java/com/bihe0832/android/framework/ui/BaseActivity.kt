@@ -78,7 +78,7 @@ open class BaseActivity : SupportActivity() {
         return true
     }
 
-    protected fun updateTitle(titleString: String?) {
+    protected open fun updateTitle(titleString: String?) {
         try {
             titleString?.let {
                 mToolbar?.title = TextFactoryUtils.getSpannedTextByHtml(titleString)
@@ -104,7 +104,7 @@ open class BaseActivity : SupportActivity() {
         }
     }
 
-    protected fun updateIcon(iconURL: String?, iconRes: Int, listener: View.OnClickListener?) {
+    protected open fun updateIcon(iconURL: String?, iconRes: Int, listener: View.OnClickListener?) {
         if (iconRes > 0) {
             mNavigationImageButton?.loadImage(iconRes)
         } else if (URLUtils.isHTTPUrl(iconURL)) {

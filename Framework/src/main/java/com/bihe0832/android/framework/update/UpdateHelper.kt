@@ -4,26 +4,21 @@ import android.app.Activity
 import android.text.TextUtils
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.openFeedback
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.download.wrapper.SimpleInstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import java.util.HashMap
 
 
 object UpdateHelper {
@@ -138,7 +133,7 @@ object UpdateHelper {
                         onNegativeClick()
                     }
                 })
-                setShouldCanceled(type != UpdateDataFromCloud.UPDATE_TYPE_MUST)
+                setShouldCanceled(type < UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP)
             }.show()
         }
     }
@@ -153,7 +148,7 @@ object UpdateHelper {
         showUpdateDialogWithTitle(activity, versionName, title, activity.getString(R.string.dialog_apk_update_info_pre) + desc, url, md5, type)
     }
 
-    fun showUpdate(activity: Activity, checkUpdateByUser: Boolean, info: UpdateDataFromCloud) {
+    fun showUpdate(activity: Activity, checkUpdateByUser: Boolean, showIfNeedUpdate: Boolean, info: UpdateDataFromCloud) {
         when (info.updateType) {
             //强更、弹框、必弹
             UpdateDataFromCloud.UPDATE_TYPE_MUST, UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP -> {
@@ -170,8 +165,11 @@ object UpdateHelper {
                         hasShow -> {
                             ZLog.d(TAG, "skip update by has show")
                         }
-                        else -> {
+                        showIfNeedUpdate -> {
                             showUpdateDialog(activity, info.newVersionName, info.newVersionTitle, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
+                        }
+                        else -> {
+                            ZLog.d(TAG, "skip update by showIfNeedUpdate is false")
                         }
                     }
                 }

@@ -12,7 +12,7 @@ ext {
     //Android 最佳适配Android 版本
     targetSdkVersion = 30
     //版本号，正式版本会由自动构建替换
-    versionCode = 1
+    versionCode = 2
     //版本名，正式版本会由自动构建替换
     versionName = "1.2.0"
     //Android 构建包时是否混淆代码

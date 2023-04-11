@@ -7,7 +7,6 @@ import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
 import com.bihe0832.android.common.settings.SettingsItem
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.adapter.CardBaseHolder
@@ -21,17 +20,6 @@ open class AboutFragment : CommonListFragment() {
             add(SettingsItem.getVersionList())
             add(SettingsItem.getFeedback())
             add(SettingsItem.getQQService(activity))
-            add(SettingsItem.getShareAPP())
-            add(SettingsItem.getZixie())
-            if (!ZixieContext.isOfficial()) {
-                add(SettingsItem.getDebug())
-            }
-        }
-    }
-
-    val mDataList by lazy {
-        ArrayList<CardBaseModule>().apply {
-            addAll(getDataList())
         }
     }
 
@@ -43,21 +31,29 @@ open class AboutFragment : CommonListFragment() {
         })
     }
 
-    open fun updateRedPoint(cloud: UpdateDataFromCloud?) {
+    fun getSettingsDataByTitle(title: String?): Int {
         var position: Int = -1
-        val title = context?.resources?.getString(R.string.settings_update_title)
-        for (i in mAdapter.data.indices) {
-            if (mAdapter.data[i] is SettingsData && title == (mAdapter.data[i] as? SettingsData)?.mItemText) {
-                position = i
-                break
+        if (!title.isNullOrEmpty()) {
+            for (i in mAdapter.data.indices) {
+                if (mAdapter.data[i] is SettingsData && title == (mAdapter.data[i] as? SettingsData)?.mItemText) {
+                    position = i
+                    break
+                }
             }
         }
+        return position
+    }
 
+    open fun updateRedPoint(cloud: UpdateDataFromCloud?) {
+        var position = getSettingsDataByTitle(context?.resources?.getString(R.string.settings_update_title))
+        updateRedPoint(position, cloud)
+    }
+
+    open fun updateRedPoint(position: Int, cloud: UpdateDataFromCloud?) {
         if (position >= 0) {
             (mAdapter.data[position] as? SettingsData)?.apply {
-                if (null != cloud && cloud.updateType > UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP) {
-                    mTipsText = context?.resources?.getString(R.string.settings_update_tips)
-                            ?: ""
+                if (null != cloud && cloud.canShowNew()) {
+                    mTipsText = context?.resources?.getString(R.string.settings_update_tips) ?: ""
                     mItemIsNew = true
                 } else {
                     mTipsText = ""
@@ -74,11 +70,11 @@ open class AboutFragment : CommonListFragment() {
     override fun getDataLiveData(): CommonListLiveData {
         return object : CommonListLiveData() {
             override fun initData() {
-                postValue(mDataList)
+                postValue(getDataList())
             }
 
             override fun refresh() {
-
+                postValue(getDataList())
             }
 
             override fun loadMore() {
