@@ -9,6 +9,7 @@ package com.bihe0832.android.lib.ui.dialog.impl
 
 import android.content.Context
 import android.view.inputmethod.EditorInfo
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.R
@@ -53,29 +54,31 @@ object DialogUtils {
     }
 
     fun showConfirmDialog(context: Context, title: String, message: String, positiveStr: String?, negativeStr: String?, canCancel: Boolean, callback: OnDialogListener) {
-        val dialog = CommonDialog(context)
-        dialog.setTitle(title)
-        dialog.setHtmlContent(message)
-        dialog.positive = positiveStr
-        dialog.negative = negativeStr
-        dialog.setOnClickBottomListener(object : OnDialogListener {
-            override fun onPositiveClick() {
-                dialog.dismiss()
-                callback.onPositiveClick()
-            }
+        ThreadManager.getInstance().runOnUIThread {
+            val dialog = CommonDialog(context)
+            dialog.setTitle(title)
+            dialog.setHtmlContent(message)
+            dialog.positive = positiveStr
+            dialog.negative = negativeStr
+            dialog.setOnClickBottomListener(object : OnDialogListener {
+                override fun onPositiveClick() {
+                    dialog.dismiss()
+                    callback.onPositiveClick()
+                }
 
-            override fun onNegativeClick() {
-                dialog.dismiss()
-                callback.onNegativeClick()
-            }
+                override fun onNegativeClick() {
+                    dialog.dismiss()
+                    callback.onNegativeClick()
+                }
 
-            override fun onCancel() {
-                dialog.dismiss()
-                callback.onCancel()
-            }
-        })
-        dialog.setShouldCanceled(canCancel)
-        dialog.show()
+                override fun onCancel() {
+                    dialog.dismiss()
+                    callback.onCancel()
+                }
+            })
+            dialog.setShouldCanceled(canCancel)
+            dialog.show()
+        }
     }
 
     fun showConfirmDialog(context: Context, title: String, message: String, positiveStr: String?, negativeStr: String?, callback: OnDialogListener) {
@@ -91,28 +94,30 @@ object DialogUtils {
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, positive: String, canCancel: Boolean, callback: OnDialogListener?) {
-        val dialog = CommonDialog(context)
-        dialog.title = title
-        dialog.setHtmlContent(message)
-        dialog.positive = positive
-        dialog.shouldCanceled = canCancel
-        dialog.setOnClickBottomListener(object : OnDialogListener {
-            override fun onPositiveClick() {
-                dialog.dismiss()
-                callback?.onPositiveClick()
-            }
+        ThreadManager.getInstance().runOnUIThread {
+            val dialog = CommonDialog(context)
+            dialog.title = title
+            dialog.setHtmlContent(message)
+            dialog.positive = positive
+            dialog.shouldCanceled = canCancel
+            dialog.setOnClickBottomListener(object : OnDialogListener {
+                override fun onPositiveClick() {
+                    dialog.dismiss()
+                    callback?.onPositiveClick()
+                }
 
-            override fun onNegativeClick() {
-                dialog.dismiss()
-                callback?.onNegativeClick()
-            }
+                override fun onNegativeClick() {
+                    dialog.dismiss()
+                    callback?.onNegativeClick()
+                }
 
-            override fun onCancel() {
-                dialog.dismiss()
-                callback?.onCancel()
-            }
-        })
-        dialog.show()
+                override fun onCancel() {
+                    dialog.dismiss()
+                    callback?.onCancel()
+                }
+            })
+            dialog.show()
+        }
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean, callback: OnDialogListener?) {

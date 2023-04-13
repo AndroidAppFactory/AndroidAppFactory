@@ -54,19 +54,7 @@ object UpdateManager {
                     AAFLoggerFile.logUpdate("updateString:$updateString")
                     if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(updateString)) {
                         try {
-//                            var updateString = "{\n" +
-//                                    "  \"showRedMaxVersionCode\": 2,\n" +
-//                                    "  \"needUpdateMinVersionCode\": 2,\n" +
-//                                    "  \"forceUpdateMinVersionCode\": 2,\n" +
-//                                    "  \"forceUpdateList\": \" \",\n" +
-//                                    "  \"needUpdateList\": \" \",\n" +
-//                                    "  \"newVersionName\": \"1.1.0\",\n" +
-//                                    "  \"newVersionCode\": 5,\n" +
-//                                    "  \"newVersionInfo\": \"1. 全新UI <BR> 2. 支持卸载\",\n" +
-//                                    "  \"newVersionMD5\": \"7a413381aa84c837cc5de1577aec23a9\",\n" +
-//                                    "  \"newVersionURL\": \".apk\"\n" +
-//                                    "}"
-
+//                            var updateString = "{\"newVersionName\":\"1.3.1\",\"newVersionCode\":\"140\",\"newVersionURL\":\"https://android.bihe0832.com/app/release/ZAPK_official.apk\",\"newVersionMD5\":\"12973fbecaceaf6e1426d1936eb56d91\",\"newVersionInfo\":\"1. 添加邮件通知<BR>2. 修复下拉刷新的问题\",\"showRedMaxVersionCode\":\"139\",\"needUpdateMinVersionCode\":\"139\",\"forceUpdateMinVersionCode\":\"1\",\"needUpdateList\":\"\",\"forceUpdateList\":\"\"}"
                             var updateInfo = JsonHelper.fromJson(updateString, UpdateDataFromCloud::class.java)
                             if (null == updateInfo) {
                                 ZLog.d("${TAG}:updateInfo null:")
