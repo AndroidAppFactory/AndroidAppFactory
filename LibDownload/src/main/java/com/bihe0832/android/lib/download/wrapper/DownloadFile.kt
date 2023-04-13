@@ -121,20 +121,18 @@ object DownloadFile {
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                 ToastUtil.showShort(activity, "应用下载失败（$errorCode）")
                 ThreadManager.getInstance().start({
+                    downloadListener?.onFail(errorCode, msg, item)
                     ThreadManager.getInstance().runOnUIThread {
                         progressDialog.dismiss()
                     }
                 }, 2)
-                downloadListener?.onFail(errorCode, msg, item)
             }
 
             override fun onComplete(filePath: String, item: DownloadItem): String {
                 ZLog.i("startDownload download Path: $filePath")
-                ThreadManager.getInstance().start({
-                    ThreadManager.getInstance().runOnUIThread {
-                        progressDialog.dismiss()
-                    }
-                }, 2)
+                ThreadManager.getInstance().runOnUIThread {
+                    progressDialog.dismiss()
+                }
                 return downloadListener?.onComplete(filePath, item) ?: filePath
             }
 

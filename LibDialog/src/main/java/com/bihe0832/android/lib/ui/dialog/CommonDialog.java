@@ -329,6 +329,11 @@ public class CommonDialog extends Dialog {
         return onDismissListener;
     }
 
+    @Override
+    public void dismiss() {
+        super.dismiss();
+    }
+
     public CommonDialog setOnCheckedListener(OnCheckedListener onCheckedListener) {
         this.onCheckedListener = onCheckedListener;
         return this;

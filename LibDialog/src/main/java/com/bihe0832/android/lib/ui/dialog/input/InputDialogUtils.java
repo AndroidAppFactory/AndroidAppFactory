@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.dialog.R;
@@ -28,67 +29,73 @@ public class InputDialogUtils {
     public static void showInputDialog(final Context context, String titleName, String msg, String positive,
                                        String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue, String hint,
                                        final InputDialogCallback listener) {
-        final CommonDialog dialog = new CommonDialog(context,R.style.InputDialog);
-        dialog.setTitle(titleName);
-        dialog.setHtmlContent(msg);
-        dialog.setPositive(positive);
-        dialog.setNegative(negtive);
-        dialog.setShouldCanceled(canCanceledOnTouchOutside);
-        final EditText editText = new EditText(context);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        editText.setLayoutParams(params);
-        editText.setSingleLine();
-        editText.setInputType(inputType);
-        editText.setPadding(
-                DisplayUtil.dip2px(context, 4f),
-                DisplayUtil.dip2px(context, 8f),
-                DisplayUtil.dip2px(context, 4f),
-                DisplayUtil.dip2px(context, 8f)
-        );
-        editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_hint));
-        editText.setTextSize(10);
-        editText.setTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_bg));
-        editText.setHintTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_split));
-        editText.setHint(hint);
-        if (!TextUtils.isEmpty(defaultValue)) {
-            editText.requestFocus();
-            editText.setText(defaultValue);
-            editText.selectAll();
-        }
-
-        dialog.addViewToContent(editText);
-        dialog.setOnClickBottomListener(new OnDialogListener() {
+        ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
-            public void onPositiveClick() {
-                try {
-                    listener.onPositiveClick(editText.getText().toString());
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            public void run() {
+                final CommonDialog dialog = new CommonDialog(context,R.style.InputDialog);
+                dialog.setTitle(titleName);
+                dialog.setHtmlContent(msg);
+                dialog.setPositive(positive);
+                dialog.setNegative(negtive);
+                dialog.setShouldCanceled(canCanceledOnTouchOutside);
+                final EditText editText = new EditText(context);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                editText.setLayoutParams(params);
+                editText.setSingleLine();
+                editText.setInputType(inputType);
+                editText.setPadding(
+                        DisplayUtil.dip2px(context, 4f),
+                        DisplayUtil.dip2px(context, 8f),
+                        DisplayUtil.dip2px(context, 4f),
+                        DisplayUtil.dip2px(context, 8f)
+                );
+                editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_hint));
+                editText.setTextSize(10);
+                editText.setTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_bg));
+                editText.setHintTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_split));
+                editText.setHint(hint);
+                if (!TextUtils.isEmpty(defaultValue)) {
+                    editText.requestFocus();
+                    editText.setText(defaultValue);
+                    editText.selectAll();
                 }
-            }
 
-            @Override
-            public void onNegativeClick() {
-                try {
-                    listener.onNegativeClick(editText.getText().toString());
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+                dialog.addViewToContent(editText);
+                dialog.setOnClickBottomListener(new OnDialogListener() {
+                    @Override
+                    public void onPositiveClick() {
+                        try {
+                            listener.onPositiveClick(editText.getText().toString());
+                            dialog.dismiss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-            @Override
-            public void onCancel() {
-                try {
-                    listener.onCancel(editText.getText().toString());
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void onNegativeClick() {
+                        try {
+                            listener.onNegativeClick(editText.getText().toString());
+                            dialog.dismiss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        try {
+                            listener.onCancel(editText.getText().toString());
+                            dialog.dismiss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                dialog.show();
             }
         });
-        dialog.show();
+
     }
 }

@@ -72,7 +72,6 @@ object UpdateHelper {
                             onNegativeClick()
                         }
                     })
-
                 } else {
                     dialogListenerWhenDownload.onNegativeClick()
                 }
