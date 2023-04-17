@@ -15,23 +15,23 @@ object RouterInterrupt {
 
     interface RouterProcess {
         //是否需要登录
-        fun needLogin(uri: Uri): Boolean
+        fun needLogin(uri: Uri, source: String): Boolean
 
         //是否需要拦截
-        fun needInterrupt(uri: Uri): Boolean
+        fun needInterrupt(uri: Uri, source: String): Boolean
 
         //拦截后操作
-        fun doInterrupt(uri: Uri): Boolean
+        fun doInterrupt(uri: Uri, source: String): Boolean
 
-        fun afterOpen(context: Context, uri: Uri) {
+        fun afterOpen(context: Context, uri: Uri, source: String) {
             logRouterToFile("afterOpen ->$uri")
         }
 
-        fun notFound(context: Context, uri: Uri) {
+        fun notFound(context: Context, uri: Uri, source: String) {
             logRouterToFile("notFound ->$uri")
         }
 
-        fun error(context: Context, uri: Uri, e: Throwable) {
+        fun error(context: Context, uri: Uri, source: String, e: Throwable) {
             logRouterToFile("error ->$uri")
         }
     }
@@ -39,28 +39,28 @@ object RouterInterrupt {
     @Synchronized
     fun init(process: RouterProcess) {
         RouterContext.setGlobalRouterCallback(object : RouterContext.RouterCallback {
-            override fun afterOpen(context: Context, uri: Uri) {
-                process.afterOpen(context, uri)
+            override fun afterOpen(context: Context, uri: Uri, source: String) {
+                process.afterOpen(context, uri, source)
             }
 
             //跳转前拦截
-            override fun beforeOpen(context: Context, uri: Uri): Boolean {
+            override fun beforeOpen(context: Context, uri: Uri, source: String): Boolean {
                 logRouterToFile("beforeOpen ->$uri")
-                return if (process.needInterrupt(uri) || process.needLogin(uri)) {
+                return if (process.needInterrupt(uri, source) || process.needLogin(uri, source)) {
                     //拦截处理结果
                     logRouterToFile("needInterrupt uri ->$uri")
-                    process.doInterrupt(uri)
+                    process.doInterrupt(uri, source)
                 } else {
                     false
                 }
             }
 
-            override fun error(context: Context, uri: Uri, e: Throwable) {
-                process.error(context, uri, e)
+            override fun error(context: Context, uri: Uri, source: String, e: Throwable) {
+                process.error(context, uri, source, e)
             }
 
-            override fun notFound(context: Context, uri: Uri) {
-                process.notFound(context, uri)
+            override fun notFound(context: Context, uri: Uri, source: String) {
+                process.notFound(context, uri, source)
             }
         })
     }

@@ -48,6 +48,10 @@ class DebugQRCodeFragment : BaseFragment() {
             QrcodeUtils.openQrScan(activity, true, true)
         }
 
+        view.findViewById<View>(R.id.qrcode_scan_parse).setOnClickListener {
+            QrcodeUtils.openQrScanAndParse(true, true)
+        }
+
         view.findViewById<View>(R.id.qrcode_share).setOnClickListener {
             shareByQrcode(view.findViewById<EditText>(R.id.qrcode_input).text.toString()
 //                    "我发现了一个好玩的#—#",
@@ -64,7 +68,7 @@ class DebugQRCodeFragment : BaseFragment() {
                 rootview.findViewById<ImageView>(R.id.qrcode_image).setImageBitmap(null)
             } else {
                 ThreadManager.getInstance().start {
-                    QrcodeUtils.createQRCode(text, DisplayUtil.dip2px(rootview.context, 200f)).let {
+                    QrcodeUtils.createQRCode(text, DisplayUtil.dip2px(rootview.context, 400f)).let {
                         rootview.findViewById<ImageView>(R.id.qrcode_image).setImageBitmap(it)
                         Thread.sleep(500L)
                         updateText()
@@ -80,7 +84,7 @@ class DebugQRCodeFragment : BaseFragment() {
                 BitmapUtil.getViewBitmap(rootview.findViewById<ImageView>(R.id.qrcode_image)).let {
                     val data = QrcodeUtils.decodeQRcode(it)
                     ThreadManager.getInstance().runOnUIThread {
-                        rootview.findViewById<TextView>(R.id.qrcode_result).text = "源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data.text
+                        rootview.findViewById<TextView>(R.id.qrcode_result).text = "源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data?.text?:""
                     }
                 }
             }

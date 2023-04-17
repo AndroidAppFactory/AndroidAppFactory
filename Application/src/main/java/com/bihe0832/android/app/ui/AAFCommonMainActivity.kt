@@ -23,5 +23,6 @@ open class AAFCommonMainActivity : CommonActivityWithNavigationDrawer() {
         checkMsgAndShowFace(this)
         UpdateManager.checkUpdateAndShowDialog(this, false, ZixieContext.isOfficial())
         updateTitle(titleName)
+        showQrcodeScan(needSound = true, needVibrate = true)
     }
 }

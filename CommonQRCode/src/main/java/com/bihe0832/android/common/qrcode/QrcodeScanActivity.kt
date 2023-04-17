@@ -15,7 +15,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.google.zxing.activity.BaseCaptureActivity
 
 @Module(RouterConstants.MODULE_NAME_QRCODE_SCAN)
-class QrcodeScanActivity : BaseCaptureActivity() {
+open class QrcodeScanActivity : BaseCaptureActivity() {
     init {
         PermissionManager.addPermissionGroup(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, mutableListOf<String>().apply {
             add(Manifest.permission.CAMERA)

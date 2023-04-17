@@ -20,13 +20,13 @@ object RouterContext {
     }
 
     interface RouterCallback {
-        fun notFound(context: Context, uri: Uri)
+        fun notFound(context: Context, uri: Uri, source: String)
 
-        fun beforeOpen(context: Context, uri: Uri): Boolean
+        fun beforeOpen(context: Context, uri: Uri, source: String): Boolean
 
-        fun afterOpen(context: Context, uri: Uri)
+        fun afterOpen(context: Context, uri: Uri, source: String)
 
-        fun error(context: Context, uri: Uri, e: Throwable)
+        fun error(context: Context, uri: Uri, source: String, e: Throwable)
     }
 
 }

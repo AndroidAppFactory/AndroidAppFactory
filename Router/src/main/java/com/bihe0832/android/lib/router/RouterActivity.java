@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 /**
  * @author zixie code@bihe0832.com
- *         Created on 2017-07-18.
- *         Description: Description
+ * Created on 2017-07-18.
+ * Description: Description
  */
 
 public class RouterActivity extends Activity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +26,16 @@ public class RouterActivity extends Activity {
 
         if (uri != null) {
             try {
-                flag = Integer.parseInt(uri.getQueryParameter("zixie_router_flag"), Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                flag = Integer.parseInt(uri.getQueryParameter(Routers.ROUTER_FLAG), Intent.FLAG_ACTIVITY_SINGLE_TOP);
             } catch (Exception e) {
                 e.printStackTrace();
                 flag = Intent.FLAG_ACTIVITY_SINGLE_TOP;
             }
-            Routers.open(this, uri, flag, callback);
+            String source = uri.getQueryParameter(Routers.ROUTERS_KEY_PARSE_SOURCE_KEY);
+            if (TextUtils.isEmpty(source)) {
+                source = Routers.ROUTERS_VALUE_PARSE_SOURCE;
+            }
+            Routers.open(this, uri, source, flag, callback);
         }
         finish();
     }

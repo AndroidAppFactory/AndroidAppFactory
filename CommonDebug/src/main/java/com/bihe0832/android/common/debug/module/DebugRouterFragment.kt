@@ -6,14 +6,14 @@ import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugItemHolder
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.list.CardItemForCommonList
+import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.router.Routers
 
 open class DebugRouterFragment : BaseDebugListFragment() {
 
     inner class RouterItem(url: String) : DebugItemData(
             url,
-            View.OnClickListener { Routers.open(context, url) },
+            View.OnClickListener { RouterAction.openFinalURL(url) },
             View.OnLongClickListener {
                 showInfo("复制并分享路由地址", url)
                 true

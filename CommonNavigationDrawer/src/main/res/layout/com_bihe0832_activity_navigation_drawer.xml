@@ -58,9 +58,19 @@
                 android:gravity="center"
                 android:textColor="@color/colorOnPrimary"
                 android:textSize="16dp"
-                android:textStyle="bold">
+                android:textStyle="bold" />
 
-            </TextView>
+            <ImageView
+                android:id="@+id/title_scan"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginRight="16dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_scan"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout

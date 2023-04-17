@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bihe0832.android.common.navigation.drawer.NavigationDrawerFragment
 import com.bihe0832.android.common.navigation.drawer.R
+import com.bihe0832.android.common.qrcode.QrcodeUtils
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.media.image.clearImage
 import com.bihe0832.android.lib.media.image.loadImage
@@ -43,6 +44,22 @@ open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
         }
         mNavigationDrawerFragment?.let {
             loadRootFragment(R.id.navigation_drawer_fl, it)
+        }
+    }
+
+    fun showQrcodeScan(needSound: Boolean, needVibrate: Boolean) {
+        findViewById<ImageView>(R.id.title_scan).apply {
+            setColorFilter(resources.getColor(R.color.colorOnPrimary))
+            visibility = View.VISIBLE
+            setOnClickListener {
+                QrcodeUtils.openQrScanAndParse(needSound, needVibrate)
+            }
+        }
+    }
+
+    fun hideQrcodeScan() {
+        findViewById<ImageView>(R.id.title_scan).apply {
+            visibility = View.GONE
         }
     }
 

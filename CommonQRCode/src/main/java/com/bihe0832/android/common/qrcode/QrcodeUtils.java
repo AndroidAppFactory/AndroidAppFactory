@@ -2,6 +2,7 @@ package com.bihe0832.android.common.qrcode;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -27,11 +28,16 @@ public class QrcodeUtils {
         RouterAction.INSTANCE.openForResult(activity, RouterAction.INSTANCE.getFinalURL(RouterConstants.MODULE_NAME_QRCODE_SCAN, dataParam), ZixieActivityRequestCode.QRCODE_SCAN);
     }
 
+    public static final void openQrScanAndParse(boolean needSound, boolean needVibrate) {
+        HashMap dataParam = new HashMap();
+        dataParam.put(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND, String.valueOf(needSound));
+        dataParam.put(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
+        RouterAction.INSTANCE.openPageByRouter(RouterConstants.MODULE_NAME_QRCODE_SCAN_AND_PARSE, dataParam, Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
 
     public static final Result decodeQRcode(String filePath) {
         return QRCodeDecodingHandler.decodeQRcode(filePath);
     }
-
 
     public static final Result decodeQRcode(String filePath, int width) {
         return QRCodeDecodingHandler.decodeQRcode(filePath, width);

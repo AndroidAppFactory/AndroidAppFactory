@@ -63,35 +63,43 @@ object RouterAction {
 
 
     fun open(schema: String, path: String) {
-        Routers.open(ZixieContext.applicationContext, "${schema}://$path", Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        Routers.open(ZixieContext.applicationContext, "${schema}://$path", "", Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
     fun open(schema: String, path: String, para: Map<String, String>?) {
-        Routers.open(ZixieContext.applicationContext, getFinalURL(schema, path, para), Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        Routers.open(ZixieContext.applicationContext, getFinalURL(schema, path, para), "", Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
+
+    fun open(schema: String, path: String, para: Map<String, String>?,flag: Int) {
+        Routers.open(ZixieContext.applicationContext, getFinalURL(schema, path, para), "", flag)
+    }
     fun openFinalURL(path: String) {
         openFinalURL(path, Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
     fun openFinalURL(path: String, startFlag: Int) {
-        Routers.open(ZixieContext.applicationContext, path, startFlag)
+        Routers.open(ZixieContext.applicationContext, path, "", startFlag)
     }
 
     fun openForResult(schema: String, activity: Activity, path: String, requestCode: Int) {
-        Routers.openForResult(activity, getFinalURL(schema, path), requestCode, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        Routers.openForResult(activity, getFinalURL(schema, path), "", requestCode, Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
     fun openForResult(schema: String, activity: Activity, path: String, para: Map<String, String>?, requestCode: Int) {
-        Routers.openForResult(activity, getFinalURL(schema, path, para), requestCode, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        Routers.openForResult(activity, getFinalURL(schema, path, para), "", requestCode, Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
     fun openForResult(activity: Activity, url: String, requestCode: Int) {
-        Routers.openForResult(activity, url, requestCode, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        Routers.openForResult(activity, url, "", requestCode, Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
     fun openPageByRouter(pathHost: String, para: Map<String, String>?) {
         open(SCHEME, pathHost, para)
+    }
+
+    fun openPageByRouter(pathHost: String, para: Map<String, String>?, flag: Int) {
+        open(SCHEME, pathHost, para, flag)
     }
 
     fun openPageByRouter(pathHost: String) {
