@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -30,7 +31,7 @@ class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : 
 
             override fun onNegativeClick() {
                 UserPraiseManager.doPraiseAction()
-                Routers.open(context, feedbackRouter, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                RouterAction.openFinalURL( feedbackRouter, Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 dismiss()
             }
 

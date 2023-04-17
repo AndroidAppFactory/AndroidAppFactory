@@ -1,6 +1,8 @@
 package com.bihe0832.android.framework.router;
 
 
+import android.graphics.Color;
+
 import com.bihe0832.android.lib.file.select.FileSelectTools;
 
 /**
@@ -35,7 +37,8 @@ public class RouterConstants {
     public static final String MODULE_NAME_QRCODE_SCAN = "qrscan";
     public static final String INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND = "opensound";
     public static final String INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE = "openvibrate";
-
+    // 扫码并且完成解析与跳转
+    public static final String MODULE_NAME_QRCODE_SCAN_AND_PARSE = "qrparse";
 
     //二维码分享的数据
     public static final String MODULE_NAME_SHARE_QRCODE = "zshare";

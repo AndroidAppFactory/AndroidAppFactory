@@ -10,6 +10,7 @@ package com.bihe0832.android.base.debug
 
 
 import android.view.View
+import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.audio.DebugAudioFragment
 import com.bihe0832.android.base.debug.block.DebugEnqueueFragment
 import com.bihe0832.android.base.debug.cache.DebugCacheFragment
@@ -47,6 +48,7 @@ import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebviewActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 

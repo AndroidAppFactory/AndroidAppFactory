@@ -65,6 +65,20 @@
             app:bgtv_cornerRadius="8dp" />
 
         <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+            android:id="@+id/qrcode_scan_parse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="点击唤起相机扫描并识别"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16dp"
+            app:bgtv_backgroundColor="@color/colorPrimary"
+            app:bgtv_cornerRadius="8dp" />
+
+
+        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
             android:id="@+id/qrcode_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

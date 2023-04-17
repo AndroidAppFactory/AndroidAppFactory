@@ -260,7 +260,7 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
         viewfinderView.drawViewfinder();
     }
 
-    private void playBeepSoundAndVibrate() {
+    protected void playBeepSoundAndVibrate() {
         if (opensound && blockAudioPlayerManager != null) {
             blockAudioPlayerManager.play(this, BEEP_VOLUME, R.raw.beep);
         }
