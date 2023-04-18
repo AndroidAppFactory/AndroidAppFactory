@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.router.RouterMappingManager
 import com.bihe0832.android.lib.router.Routers
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 
 /**
@@ -97,6 +98,8 @@ object RouterHelper {
                 super.notFound(context, uri, source)
                 if (Routers.ROUTERS_VALUE_PARSE_SOURCE.equals(source, ignoreCase = true)) {
                     goSplash(null)
+                } else {
+                    IntentUtils.jumpToOtherApp(uri.toString(), context)
                 }
             }
         })

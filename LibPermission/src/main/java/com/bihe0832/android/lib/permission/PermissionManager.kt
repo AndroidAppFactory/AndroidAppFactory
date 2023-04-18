@@ -60,6 +60,34 @@ object PermissionManager {
         return mOuterResultListenerList.get(scene)
     }
 
+    fun logPermissionConfigInfo() {
+        ZLog.d(TAG, "----------logPermissionConfigInfo start ----------")
+        mPermissionGroup.forEach { (key, value) ->
+            logPermission("mPermissionGroup", key, value.toString())
+        }
+        ZLog.d(TAG, "\n\n")
+        mPermissionScene.forEach { (key, value) ->
+            logPermission("mPermissionScene", key, value)
+        }
+        ZLog.d(TAG, "\n\n")
+        mPermissionDesc.forEach { (key, value) ->
+            logPermission("mPermissionDesc", key, value)
+        }
+        ZLog.d(TAG, "\n\n")
+        mPermissionContent.forEach { (key, value) ->
+            logPermission("mPermissionContent", key, value)
+        }
+        ZLog.d(TAG, "\n\n")
+        mPermissionSettings.forEach { (key, value) ->
+            logPermission("mPermissionSettings", key, value)
+        }
+        ZLog.d(TAG, "----------logPermissionConfigInfo end ----------")
+    }
+
+    fun logPermission(type: String, key: String, value: String) {
+        ZLog.d(TAG, "$type: \n\tkey is [$key],  data is [${value}]")
+    }
+
     fun getPermissionCheckResultListener(): InnerOnPermissionResult {
         return mPermissionCheckResultListener
     }
@@ -94,7 +122,7 @@ object PermissionManager {
 
     fun getPermissionKey(sceneid: String?, permissionGroupID: String): String {
         sceneid?.let {
-            return permissionGroupID + sceneid
+            return permissionGroupID + "_" + sceneid
         }
         return permissionGroupID
     }

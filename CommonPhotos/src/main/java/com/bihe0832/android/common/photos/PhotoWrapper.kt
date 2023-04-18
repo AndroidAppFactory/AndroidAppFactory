@@ -21,7 +21,7 @@ import com.bihe0832.android.lib.utils.os.OSUtils
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
-val selectPhotoPermission = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+val selectPhotoPermission = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
 val takePhotoPermission = mutableListOf(Manifest.permission.CAMERA)
 const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
 

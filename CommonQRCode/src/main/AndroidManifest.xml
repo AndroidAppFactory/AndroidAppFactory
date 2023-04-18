@@ -8,7 +8,7 @@
             android:name="com.bihe0832.android.common.qrcode.QrcodeScanActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
+            android:theme="@style/AAF.ActivityTheme.Fullscreen" />
 
         <activity
             android:name="com.bihe0832.android.common.qrcode.QrcodeWithResultActivity"
