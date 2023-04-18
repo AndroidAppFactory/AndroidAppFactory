@@ -6,19 +6,26 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/common_toolbar"
-        style="@style/AAF.AppTheme.Toolbar.Light"
-        app:title="" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <SurfaceView
             android:id="@+id/common_qrcode_scanner_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/common_qrcode_scanner_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="@dimen/toolbar_padding_top"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_left_arrow_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.zxing.view.ViewfinderView
             android:id="@+id/common_qrcode_viewfinder_content"

@@ -5,10 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.View
-import com.bihe0832.android.common.photos.*
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.photos.*
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider

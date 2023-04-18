@@ -53,12 +53,12 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_bihe0832_qrcode_activity_scanner);
-        initToolbar(R.id.common_toolbar, "二维码扫描", true, new View.OnClickListener() {
+        findViewById(R.id.common_qrcode_scanner_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleDecode(null);
+                onBack();
             }
-        }, R.mipmap.ic_left_arrow_white);
+        });
 
         initData(getIntent());
         if (opensound) {

@@ -22,7 +22,7 @@ class DebugPermissionFragment : DebugEnvFragment() {
                     View.OnClickListener { testCommonPermissionV2(activity) })
             )
             add(DebugItemData("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
-
+            add(DebugItemData("查看当前自定义的权限信息", View.OnClickListener { PermissionManager.logPermissionConfigInfo() }))
         }
     }
 
