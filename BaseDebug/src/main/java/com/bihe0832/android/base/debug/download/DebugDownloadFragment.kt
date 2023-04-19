@@ -317,8 +317,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 })
 
 
-        ZixieRequestHttp.getOrigin("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
-                .let {
+        ZixieRequestHttp.getOrigin("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")?.let {
                     val filePath =
                             "/storage/emulated/0/Android/data/com.bihe0832.android.test/files/zixie/new_${System.currentTimeMillis()}.json.gzip"
 
