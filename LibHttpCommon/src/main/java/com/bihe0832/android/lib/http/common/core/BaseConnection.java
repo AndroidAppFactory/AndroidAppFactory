@@ -209,21 +209,21 @@ public abstract class BaseConnection {
                 if (outputStream != null) {
                     outputStream.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
                 if (br != null) {
                     br.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
                 if (inptStream != null) {
                     inptStream.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -238,7 +238,7 @@ public abstract class BaseConnection {
         } else {
             try {
                 return getURLConnection().getResponseMessage();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return "";
             }
@@ -252,7 +252,7 @@ public abstract class BaseConnection {
         } else {
             try {
                 return getURLConnection().getResponseCode();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return -1;
             }
