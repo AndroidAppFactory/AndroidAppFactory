@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.File
 
 
@@ -26,7 +27,7 @@ import java.io.File
 object ZixieCoreInit {
     // 全局变量的初始化
     var hasInit = false
-    private const val TAG = "ZixieCoreInit"
+    const val TAG = "ZixieCoreInit"
 
     //目前仅仅主进程和web进程需要初始化
     @Synchronized
@@ -42,7 +43,7 @@ object ZixieCoreInit {
             Log.e(TAG, "isDebug: ${ZixieContext.isDebug()} ;isOfficial: ${ZixieContext.isOfficial()}")
             Log.e(TAG, "tag: ${ZixieContext.getVersionTag()}")
             Log.e(TAG, "version: ${ZixieContext.getVersionNameAndCode()}")
-            Log.e(TAG, "APPInstalledTime: ${ZixieContext.getAPPInstalledTime()} ;VersionInstalledTime: ${ZixieContext.getAPPLastVersionInstalledTime()}")
+            Log.e(TAG, "APPInstalledTime: ${DateUtil.getDateEN(ZixieContext.getAPPInstalledTime())} ;VersionInstalledTime: ${DateUtil.getDateEN(ZixieContext.getAPPLastVersionInstalledTime())}")
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
             if (skipPrivacy) {
                 AgreementPrivacy.doAgreedPrivacy()

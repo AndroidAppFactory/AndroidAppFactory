@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import android.util.Log
 import android.webkit.WebView
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager
 import com.bihe0832.android.app.message.AAFMessageManager
@@ -46,10 +47,20 @@ object AppFactoryInit {
         if (!hasInit) {
             hasInit = true
             ZixieCoreInit.initAfterAgreePrivacy(application)
+            Log.e(ZixieCoreInit.TAG, "———————————————————————— 设备信息 ————————————————————————")
+            Log.e(ZixieCoreInit.TAG, "设备ID: ${ZixieContext.deviceId}")
+            Log.e(ZixieCoreInit.TAG, "厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}")
+            Log.e(ZixieCoreInit.TAG, "系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
+                ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
+            } else {
+                ""
+            })
+            Log.e(ZixieCoreInit.TAG, "———————————————————————— 设备信息 ————————————————————————")
 
             if (ZixieContext.isDebug()) {
                 LeakCanaryManager.init(application)
             }
+
             RouterHelper.initRouter()
             initPermission()
             DownloadUtils.init(ctx, ZixieContext.isDebug())
