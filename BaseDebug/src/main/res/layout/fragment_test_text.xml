@@ -40,6 +40,26 @@
             app:bgtv_backgroundColor="@color/red_dot"
             app:bgtv_isRadiusHalfHeight="true" />
 
+        <com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView
+            android:id="@+id/text_marquee"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="12dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingTop="2dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="2dp"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="8dp"
+            app:scroll_repeat="3"
+            app:scroll_start="end" />
+
 
         <TextView
             android:id="@+id/info_content_0"
