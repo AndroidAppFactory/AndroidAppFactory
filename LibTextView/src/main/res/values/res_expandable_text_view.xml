@@ -54,4 +54,14 @@
 
     </declare-styleable>
 
+    <declare-styleable name="MarqueeTextView">
+        <attr name="scroll_speed_100_px" format="integer" />
+        <attr name="scroll_first_delay" format="integer" />
+        <attr name="scroll_next_delay" format="integer" />
+        <attr name="scroll_repeat" format="integer" />
+        <attr name="scroll_start">
+            <enum name="start" value="1" />
+            <enum name="end" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

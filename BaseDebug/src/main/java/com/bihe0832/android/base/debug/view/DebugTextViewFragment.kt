@@ -9,14 +9,18 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.view.View
 import com.bihe0832.android.base.debug.R
+import com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView.OnScrollListener
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.textview.ext.changeStatusWithUnreadMsg
+import com.bihe0832.android.lib.ui.textview.ext.setDrawableLeft
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
+import com.bihe0832.android.lib.ui.view.ext.setDrawableBackground
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
@@ -41,6 +45,33 @@ class DebugTextViewFragment : BaseFragment() {
     )
 
     override fun initView(view: View) {
+
+
+        text_marquee.apply {
+            setDrawableBackground(context.resources.getColor(R.color.colorPrimaryLight), DisplayUtil.dip2px(context, 2f), 0, 0)
+            setDrawableLeft(R.mipmap.icon_camera, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
+            setText(":fds")
+            startScroll()
+            setOnScrollListener(object :OnScrollListener{
+                override fun OnComplete() {
+                    text_marquee.setText(text_marquee.text.toString() + "fdsffsd ")
+                }
+
+                override fun onPause() {
+                    ZLog.d("onPause")
+                }
+
+                override fun onStop() {
+                    ZLog.d("onPause")
+                }
+
+                override fun onStart() {
+                    ZLog.d("onPause")
+                }
+
+            })
+        }
+
 
         var text = "这是普通颜色文字" + TextFactoryUtils.getSpecialText("这是高亮测试", Color.parseColor("#E66633"))
 
