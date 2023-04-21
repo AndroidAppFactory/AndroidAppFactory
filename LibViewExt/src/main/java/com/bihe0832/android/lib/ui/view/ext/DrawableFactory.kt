@@ -36,6 +36,20 @@ fun getDrawable(color: Int?, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, stro
     }
 }
 
+fun getDrawable(colors: IntArray, orientation: GradientDrawable.Orientation, pxOfCornerRadius: Float, pxOfStrokeWidth: Int, strokeColor: Int): Drawable {
+    GradientDrawable().apply {
+        setColors(colors)
+        setOrientation(orientation)
+        setCornerRadius(pxOfCornerRadius)
+        setStroke(pxOfStrokeWidth, strokeColor)
+    }.let {
+        return StateListDrawable().apply {
+            addState(intArrayOf(-R.attr.state_pressed), it)
+        }
+    }
+}
+
+
 /**
  * 所有长度的单位都是px
  */

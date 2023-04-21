@@ -2,6 +2,7 @@ package com.bihe0832.android.base.debug.view
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -9,7 +10,6 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView.OnScrollListener
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.log.ZLog
@@ -17,10 +17,11 @@ import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.textview.ext.changeStatusWithUnreadMsg
 import com.bihe0832.android.lib.ui.textview.ext.setDrawableLeft
+import com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView.OnScrollListener
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
-import com.bihe0832.android.lib.ui.view.ext.setDrawableBackground
+import com.bihe0832.android.lib.ui.view.ext.getDrawable
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
@@ -48,7 +49,7 @@ class DebugTextViewFragment : BaseFragment() {
 
 
         text_marquee.apply {
-            setDrawableBackground(context.resources.getColor(R.color.colorPrimaryLight), DisplayUtil.dip2px(context, 2f), 0, 0)
+            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
             setDrawableLeft(R.mipmap.icon_camera, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             setText(":fds")
             startScroll()
