@@ -10,6 +10,7 @@ import android.util.Log
 import android.webkit.WebView
 import com.bihe0832.android.app.leakcanary.LeakCanaryManager
 import com.bihe0832.android.app.message.AAFMessageManager
+import com.bihe0832.android.app.permission.AAFPermissionManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
@@ -62,7 +63,7 @@ object AppFactoryInit {
             }
 
             RouterHelper.initRouter()
-            initPermission()
+            AAFPermissionManager.initPermission()
             DownloadUtils.init(ctx, ZixieContext.isDebug())
             AAFMessageManager.initModule(ctx)
             ThreadManager.getInstance().start({
@@ -114,36 +115,6 @@ object AppFactoryInit {
     fun initUserLoginRetBeforeGetUser(openid: String) {
     }
 
-    fun initPermission() {
 
-        PermissionManager.addPermissionGroup(
-                "",
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                mutableListOf<String>().apply {
-                    add(Manifest.permission.ACCESS_COARSE_LOCATION)
-                    add(Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-        )
-
-        PermissionManager.addPermissionGroupDesc(
-                HashMap<String, String>().apply {
-                    put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡")
-                    put(Manifest.permission.RECORD_AUDIO, "麦克风")
-                    put(Manifest.permission.ACCESS_COARSE_LOCATION, "位置")
-                    put(Manifest.permission.READ_PHONE_STATE, "电话信息")
-                    put(Manifest.permission.CAMERA, "相机")
-                }
-        )
-
-        PermissionManager.addPermissionGroupScene(
-                HashMap<String, String>().apply {
-                    put(Manifest.permission.WRITE_EXTERNAL_STORAGE, "动态发布、个人/群头像设置、性别认证、聊天发送图片消息等")
-                    put(Manifest.permission.RECORD_AUDIO, "发送语音动态、个人语音介绍、开黑房间语音互动、聊天语音消息等")
-                    put(Manifest.permission.ACCESS_COARSE_LOCATION, "附近的人、开黑房间、个人主页等")
-                    put(Manifest.permission.CAMERA, "动态发布、个人/群头像设置、性别认证、聊天发送图片消息等")
-                }
-        )
-
-    }
 
 }

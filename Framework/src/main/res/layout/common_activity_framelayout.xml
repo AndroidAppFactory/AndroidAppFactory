@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:background="@color/windowBackground"
     android:gravity="center"
@@ -11,6 +12,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/common_toolbar"
         style="@style/AAF.AppTheme.Toolbar.Light"
+        tools:layout_height="50dp"
         app:title="" />
 
     <FrameLayout

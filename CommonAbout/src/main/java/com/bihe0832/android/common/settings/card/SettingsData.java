@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.about.card;
+package com.bihe0832.android.common.settings.card;
 
 import android.view.View;
 

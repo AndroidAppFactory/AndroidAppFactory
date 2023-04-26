@@ -30,7 +30,7 @@
                     android:layout_height="24dp"
                     android:layout_marginRight="16dp"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/icon_message"
+                    android:src="@drawable/icon_message"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

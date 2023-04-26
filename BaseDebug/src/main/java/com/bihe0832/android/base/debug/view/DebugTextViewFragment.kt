@@ -50,7 +50,7 @@ class DebugTextViewFragment : BaseFragment() {
 
         text_marquee.apply {
             background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
-            setDrawableLeft(R.mipmap.icon_camera, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
+            setDrawableLeft(R.drawable.icon_camera, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             setText(":fds")
             startScroll()
             setOnScrollListener(object :OnScrollListener{
@@ -87,10 +87,10 @@ class DebugTextViewFragment : BaseFragment() {
         info_content_drawable.apply {
 //            setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getSpecialText("这是一个测试",Color.WHITE)))
 //            setDrawable(
-//                    R.mipmap.icon,
-//                    R.mipmap.icon,
-//                    R.mipmap.icon,
-//                    R.mipmap.icon,
+//                    R.drawable.icon,
+//                    R.drawable.icon,
+//                    R.drawable.icon,
+//                    R.drawable.icon,
 //                    DisplayUtil.dip2px(context!!, 30f),
 //                    DisplayUtil.dip2px(context!!, 30f)
 //            )
@@ -156,7 +156,7 @@ class DebugTextViewFragment : BaseFragment() {
                             context!!,
                             BitmapUtil.getLocalBitmap(
                                     context!!,
-                                    R.mipmap.icon_author, 1
+                                    R.drawable.icon_author, 1
                             )
                     ),
                     2,
@@ -173,7 +173,7 @@ class DebugTextViewFragment : BaseFragment() {
             setSpan(
                     ZixieTextImageSpan(
                             context!!,
-                            BitmapUtil.getLocalBitmap(context!!, R.mipmap.icon_author, 1)
+                            BitmapUtil.getLocalBitmap(context!!, R.drawable.icon_author, 1)
                     ),
                     2,
                     3,
@@ -242,7 +242,7 @@ class DebugTextViewFragment : BaseFragment() {
 ////            setSpan(
 ////                ZixieTextImageSpan(
 ////                    context!!,
-////                    R.mipmap.ic_left_arrow_white
+////                    R.drawable.ic_left_arrow_white
 ////                ),
 ////                0,
 ////                1,
@@ -252,7 +252,7 @@ class DebugTextViewFragment : BaseFragment() {
 //                    ZixieTextImageSpan(
 //                            context!!,
 //                            BitmapUtil.getLocalBitmap(context!!,
-//                                    R.mipmap.icon_author, 1)
+//                                    R.drawable.icon_author, 1)
 //                    ),
 //                    0,
 //                    1,

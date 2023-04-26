@@ -22,11 +22,11 @@ class DebugCommonTabActivity : BaseActivity() {
     private val mFragments2 = ArrayList<Fragment>()
     private val mTitles = arrayOf("首页", "消息", "联系人", "更多")
     private val mIconUnselectIds = intArrayOf(
-            R.mipmap.icon_author, R.mipmap.icon_camera,
-            R.mipmap.icon_cloud, R.mipmap.icon_cycle)
+            R.drawable.icon_author, R.drawable.icon_camera,
+            R.drawable.icon_cloud, R.drawable.icon_cycle)
     private val mIconSelectIds = intArrayOf(
-            R.mipmap.icon_author, R.mipmap.icon_camera,
-            R.mipmap.icon_cloud, R.mipmap.icon_cycle)
+            R.drawable.icon_author, R.drawable.icon_camera,
+            R.drawable.icon_cloud, R.drawable.icon_cycle)
     private val mTabEntities: ArrayList<CustomTabEntity> = ArrayList<CustomTabEntity>()
     private var mAdapter: MyPagerAdapter? = null
 

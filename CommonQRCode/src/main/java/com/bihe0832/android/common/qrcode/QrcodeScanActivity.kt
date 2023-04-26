@@ -6,8 +6,8 @@ import android.view.View
 import com.bihe0832.android.common.photos.getPhotoContent
 import com.bihe0832.android.common.photos.selectPhotoPermission
 import com.bihe0832.android.common.photos.takePhotoPermission
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.permission.PermissionResultOfAAF
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
