@@ -13,8 +13,8 @@ class SettingsDataV2 : CardBaseModule() {
 
     var onClickListener: View.OnClickListener? = null
     var onCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
-    var isChecked = false
-    var mShowDriver = false
+    var isChecked = true
+    var mShowDriver = true
 
     override fun getResID(): Int {
         return R.layout.card_privacy_setting
