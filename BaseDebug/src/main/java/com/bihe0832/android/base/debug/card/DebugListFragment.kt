@@ -19,27 +19,37 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
  */
 
 class DebugListFragment : CommonListFragment() {
+
     val mDataList = ArrayList<CardBaseModule>()
     var num = 0
 
-    override fun initView(view: View) {
-        super.initView(view)
-        mRecyclerView?.apply {
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-            addItemDecoration(
-                    GridDividerItemDecoration.Builder(context).apply {
-                        setShowLastLine(false)
-                        setColor(R.color.divider)
-                        setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
-                    }.build()
-            )
+    private val mListLiveData = object : CommonListLiveData() {
+        override fun initData() {
+            mDataList.addAll(getTempData())
+            postValue(mDataList)
+        }
+
+        override fun refresh() {
+            mDataList.clear()
+            initData()
+        }
+
+        override fun loadMore() {
+            mDataList.addAll(getTempData())
+            postValue(mDataList)
+        }
+
+        override fun hasMore(): Boolean {
+            return num < 4
+        }
+
+        override fun canRefresh(): Boolean {
+            return true
         }
     }
 
-    override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
-//        return SafeGridLayoutManager(context, 3)
-        return getLinearLayoutManagerForList()
-
+    override fun getDataLiveData(): CommonListLiveData {
+        return mListLiveData
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
@@ -48,33 +58,22 @@ class DebugListFragment : CommonListFragment() {
         }
     }
 
-    override fun getDataLiveData(): CommonListLiveData {
-        return object : CommonListLiveData() {
-            override fun initData() {
-                mDataList.addAll(getTempData())
-                postValue(mDataList)
-            }
-
-            override fun refresh() {
-                mDataList.clear()
-                initData()
-            }
-
-            override fun loadMore() {
-                mDataList.addAll(getTempData())
-                postValue(mDataList)
-            }
-
-            override fun hasMore(): Boolean {
-                return num < 4
-            }
-
-            override fun canRefresh(): Boolean {
-                return true
-            }
-
-
+    override fun initView(view: View) {
+        super.initView(view)
+        mRecyclerView?.apply {
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addItemDecoration(GridDividerItemDecoration.Builder(context).apply {
+                setShowLastLine(false)
+                setColor(R.color.divider)
+                setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
+            }.build()
+            )
         }
+    }
+
+    override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
+//        return SafeGridLayoutManager(context, 3)
+        return getLinearLayoutManagerForList()
     }
 
     override fun getEmptyText(): String {

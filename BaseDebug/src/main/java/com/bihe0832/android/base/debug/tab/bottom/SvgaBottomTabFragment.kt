@@ -32,11 +32,11 @@ class SvgaBottomTabFragment : CommonMainFragment() {
 
     override fun getBottomBarTabs(): ArrayList<BaseBottomBarTab> {
         ArrayList<BaseBottomBarTab>().apply {
-            add(SvgaBottomBarTab(context, R.mipmap.icon_camera, R.mipmap.icon_author, "ic_voice.svga", "弹框"))
-            add(SvgaBottomBarTab(context, R.mipmap.icon_author, R.mipmap.icon_camera, "ic_voice.svga", "下载"))
-            add(SvgaBottomBarTab(context, R.mipmap.icon_feedback, R.mipmap.icon_cloud, "ic_voice.svga", "权限"))
-            add(SvgaBottomBarTab(context, R.mipmap.icon_cloud, R.mipmap.icon_feedback, "ic_voice.svga", "文件"))
-            add(SvgaBottomBarTab(context, R.mipmap.icon_cloud, R.mipmap.icon_feedback, "ic_voice.svga", "文件"))
+            add(SvgaBottomBarTab(context, R.drawable.icon_camera,  R.drawable.icon_author, "ic_voice.svga", "弹框"))
+            add(SvgaBottomBarTab(context,  R.drawable.icon_author, R.drawable.icon_camera, "ic_voice.svga", "下载"))
+            add(SvgaBottomBarTab(context,  R.drawable.icon_feedback, R.drawable.icon_cloud, "ic_voice.svga", "权限"))
+            add(SvgaBottomBarTab(context, R.drawable.icon_cloud,  R.drawable.icon_feedback, "ic_voice.svga", "文件"))
+            add(SvgaBottomBarTab(context, R.drawable.icon_cloud,  R.drawable.icon_feedback, "ic_voice.svga", "文件"))
         }.let {
             return it
         }

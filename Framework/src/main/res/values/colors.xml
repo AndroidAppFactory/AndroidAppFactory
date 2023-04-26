@@ -53,7 +53,7 @@
     <color name="accent">#536DFE</color>
     <!--文本颜色-->
     <color name="primary_text">#212121</color>
-    <color name="secondary_text">#333333</color>
+    <color name="secondary_text">#8D8D8D</color>
     <!--图标颜色-->
     <color name="icons">#FFFFFF</color>
     <!--分割线颜色-->

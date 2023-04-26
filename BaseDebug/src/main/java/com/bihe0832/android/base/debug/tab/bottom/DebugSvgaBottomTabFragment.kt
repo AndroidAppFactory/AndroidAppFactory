@@ -31,8 +31,8 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
             add(
                 DebugSvgaBottomBarTab(
                     context,
-                    R.mipmap.icon_camera,
-                    R.mipmap.icon_author,
+                        R.drawable.icon_camera,
+                    R.drawable.icon_author,
                     "ic_voice.svga",
                     "弹框"
                 )
@@ -40,8 +40,8 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
             add(
                 DebugSvgaBottomBarTab(
                     context,
-                    R.mipmap.icon_author,
-                    R.mipmap.icon_camera,
+                        R.drawable.icon_author,
+                        R.drawable.icon_camera,
                     "ic_voice.svga",
                     "下载"
                 )
@@ -49,8 +49,8 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
             add(
                 DebugSvgaBottomBarTab(
                     context,
-                    R.mipmap.icon_feedback,
-                    R.mipmap.icon_cloud,
+                        R.drawable.icon_feedback,
+                        R.drawable.icon_cloud,
                     "ic_voice.svga",
                     "权限"
                 )
@@ -58,8 +58,8 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
             add(
                 DebugSvgaBottomBarTab(
                     context,
-                    R.mipmap.icon_cloud,
-                    R.mipmap.icon_feedback,
+                        R.drawable.icon_cloud,
+                        R.drawable.icon_feedback,
                     "ic_voice.svga",
                     "文件"
                 )
@@ -67,8 +67,8 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
             add(
                 DebugSvgaBottomBarTab(
                     context,
-                    R.mipmap.icon_cloud,
-                    R.mipmap.icon_feedback,
+                        R.drawable.icon_cloud,
+                        R.drawable.icon_feedback,
                     "ic_voice.svga",
                     "文件"
                 )

@@ -26,15 +26,15 @@ fun TextView.setDrawable(leftRes: Int, topRes: Int, rightRes: Int, bottomRes: In
     }
 
     if (topRes > 0) {
-        right = ContextCompat.getDrawable(context, leftRes)
+        top = ContextCompat.getDrawable(context, topRes)
     }
 
     if (rightRes > 0) {
-        top = ContextCompat.getDrawable(context, leftRes)
+        right = ContextCompat.getDrawable(context, rightRes)
     }
 
     if (bottomRes > 0) {
-        bottom = ContextCompat.getDrawable(context, leftRes)
+        bottom = ContextCompat.getDrawable(context, bottomRes)
     }
     setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom)
 }
@@ -59,19 +59,19 @@ fun TextView.setDrawable(
     }
 
     if (topRes > 0) {
-        right = ContextCompat.getDrawable(context, leftRes)?.apply {
+        top = ContextCompat.getDrawable(context, topRes)?.apply {
             setBounds(0, 0, width, height)
         }
     }
 
     if (rightRes > 0) {
-        top = ContextCompat.getDrawable(context, leftRes)?.apply {
+        right = ContextCompat.getDrawable(context, rightRes)?.apply {
             setBounds(0, 0, width, height)
         }
     }
 
     if (bottomRes > 0) {
-        bottom = ContextCompat.getDrawable(context, leftRes)?.apply {
+        bottom = ContextCompat.getDrawable(context, bottomRes)?.apply {
             setBounds(0, 0, width, height)
         }
     }

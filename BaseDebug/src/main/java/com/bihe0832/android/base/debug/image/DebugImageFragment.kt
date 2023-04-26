@@ -47,8 +47,8 @@ public class DebugImageFragment : BaseFragment() {
         test_image_local_source.loadImage(
                 "http://up.deskcity.org/pic_source/18/2e/04/182e04f62f1aebf9089ed2275d26de21.jpg",
                 100, 100,
-                R.mipmap.icon_author,
-                R.mipmap.icon_author,
+                R.drawable.icon_author,
+                R.drawable.icon_author,
                 false,
                 RequestOptions.bitmapTransform(
                         MultiTransformation(

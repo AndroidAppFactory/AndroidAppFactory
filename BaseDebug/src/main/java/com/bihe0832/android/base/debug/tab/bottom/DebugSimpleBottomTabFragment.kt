@@ -28,10 +28,10 @@ class DebugSimpleBottomTabFragment : CommonMainFragment() {
 
     override fun getBottomBarTabs(): ArrayList<BaseBottomBarTab> {
         ArrayList<BaseBottomBarTab>().apply {
-            add(SimpleBottomBarTab(context, R.mipmap.icon_camera, "弹框"))
-            add(SimpleBottomBarTab(context, R.mipmap.icon_author, "下载"))
-            add(SimpleBottomBarTab(context, R.mipmap.icon_feedback, "权限"))
-            add(SimpleBottomBarTab(context, R.mipmap.icon_cloud, "文件"))
+            add(SimpleBottomBarTab(context, R.drawable.icon_camera, "弹框"))
+            add(SimpleBottomBarTab(context, R.drawable.icon_author, "下载"))
+            add(SimpleBottomBarTab(context, R.drawable.icon_feedback, "权限"))
+            add(SimpleBottomBarTab(context, R.drawable.icon_cloud, "文件"))
         }.let {
             return it
         }

@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import com.bihe0832.android.common.about.R
-import com.bihe0832.android.common.about.card.SettingsData
+import com.bihe0832.android.common.permission.PermissionFragment
+import com.bihe0832.android.common.settings.card.SettingsData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.openZixieWeb
+import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.superapp.QQHelper
@@ -23,7 +25,7 @@ object SettingsItem {
 
     fun getVersionList(): SettingsData {
         return SettingsData("版本介绍").apply {
-            mItemIconRes = R.mipmap.icon_help
+            mItemIconRes = R.drawable.icon_help
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
@@ -40,7 +42,7 @@ object SettingsItem {
 
     fun getUpdate(activity: Activity?, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
         return SettingsData(activity?.resources?.getString(R.string.settings_update_title)).apply {
-            mItemIconRes = R.mipmap.icon_update
+            mItemIconRes = R.drawable.icon_update
             mHeaderTextBold = true
             mShowDriver = true
             mShowGo = true
@@ -66,7 +68,7 @@ object SettingsItem {
 
     fun getMessage(msgNum: Int, listener: View.OnClickListener): SettingsData {
         return SettingsData("消息中心").apply {
-            mItemIconRes = R.mipmap.icon_message
+            mItemIconRes = R.drawable.icon_message
             mShowDriver = true
             mShowGo = true
             mItemIsNew = msgNum > 0
@@ -76,7 +78,7 @@ object SettingsItem {
 
     fun getFeedback(): SettingsData {
         return SettingsData("建议反馈").apply {
-            mItemIconRes = R.mipmap.icon_feedback
+            mItemIconRes = R.drawable.icon_feedback
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
@@ -134,7 +136,7 @@ object SettingsItem {
 
     fun getZixie(): SettingsData {
         return SettingsData("关于开发者").apply {
-            mItemIconRes = R.mipmap.icon_author
+            mItemIconRes = R.drawable.icon_author
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
@@ -145,7 +147,7 @@ object SettingsItem {
 
     fun getShareAPP(): SettingsData {
         return SettingsData("分享给好友").apply {
-            mItemIconRes = R.drawable.ic_share
+            mItemIconRes = R.drawable.icon_share
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
@@ -153,4 +155,17 @@ object SettingsItem {
             }
         }
     }
+
+    fun getPermission(): SettingsData {
+        val title = "隐私及权限设置"
+        return SettingsData(title).apply {
+            mItemIconRes = R.drawable.icon_privacy_tip
+            mShowDriver = true
+            mShowGo = true
+            mHeaderListener = View.OnClickListener {
+                CommonRootActivity.startCommonRootActivity(it.context, PermissionFragment::class.java, title)
+            }
+        }
+    }
+
 }

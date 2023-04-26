@@ -39,6 +39,8 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
                 RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
             })
             addAll(super.getDataList())
+        }.apply {
+            processLastItemDriver()
         }
     }
 }

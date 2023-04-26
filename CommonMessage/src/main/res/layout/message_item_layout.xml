@@ -35,7 +35,7 @@
             android:layout_height="18dp"
             android:layout_marginLeft="4dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/icon_message"
+            android:src="@drawable/icon_message"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/message_title"
             app:layout_constraintStart_toEndOf="@+id/message_is_new"
@@ -67,7 +67,8 @@
             android:textColor="@color/com_bihe0832_message_item_time_color"
             android:textSize="10dp"
             android:visibility="visible"
-            app:layout_constraintBaseline_toBaselineOf="@+id/message_title"
+            app:layout_constraintBottom_toBottomOf="@+id/message_title"
+            app:layout_constraintTop_toTopOf="@+id/message_title"
             app:layout_constraintEnd_toStartOf="@+id/message_go"
             tools:text="2023-02-02" />
 
@@ -79,9 +80,9 @@
             android:layout_centerVertical="true"
             android:src="@mipmap/ic_right_go"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/message_title"
+            app:layout_constraintBottom_toBottomOf="@+id/message_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/message_title" />
+            app:layout_constraintTop_toTopOf="@+id/message_icon" />
 
         <View
             android:id="@+id/message_driver"
