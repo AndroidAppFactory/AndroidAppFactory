@@ -100,7 +100,7 @@ public class CommonRootActivity extends CommonActivity {
         }
     }
 
-    public static final void startCommonRootActivity(Context context, Class cls, String titleName) {
+    public static final void startCommonRootActivity(Context context, Class   cls, String titleName) {
         Intent intent = new Intent(context, CommonRootActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(DEBUG_MODULE_CLASS_NAME, cls.getName());

@@ -156,16 +156,15 @@ object SettingsItem {
         }
     }
 
-    fun getPermission(): SettingsData {
+    fun getPermission(cls: Class<out PermissionFragment>): SettingsData {
         val title = "隐私及权限设置"
         return SettingsData(title).apply {
             mItemIconRes = R.drawable.icon_privacy_tip
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
-                CommonRootActivity.startCommonRootActivity(it.context, PermissionFragment::class.java, title)
+                CommonRootActivity.startCommonRootActivity(it.context, cls, title)
             }
         }
     }
-
 }

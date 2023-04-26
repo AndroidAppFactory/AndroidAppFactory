@@ -4,6 +4,7 @@ import android.view.View
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.main.CommonNavigationContentFragment
+import com.bihe0832.android.common.permission.PermissionFragment
 import com.bihe0832.android.common.settings.SettingsItem
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
@@ -38,6 +39,7 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
             add(SettingsItem.getMessage(AAFMessageManager.getUnreadNum()) {
                 RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
             })
+            add(SettingsItem.getPermission(PermissionFragment::class.java))
             addAll(super.getDataList())
         }.apply {
             processLastItemDriver()
