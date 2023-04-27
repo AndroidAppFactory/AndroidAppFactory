@@ -95,7 +95,7 @@ open class DebugLogActivity : CommonListActivity() {
 
     override fun initView() {
         super.initView()
-        updateIcon(R.mipmap.ic_left_arrow_white, true)
+        updateIcon(R.drawable.icon_left_arrow, true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

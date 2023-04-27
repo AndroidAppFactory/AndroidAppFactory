@@ -27,7 +27,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@null"
             android:padding="16dp"
-            app:srcCompat="@drawable/ic_more" />
+            app:srcCompat="@drawable/icon_more" />
     </LinearLayout>
 
 
@@ -54,7 +54,7 @@
             android:layout_margin="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_back" />
+            app:srcCompat="@drawable/icon_left_arrow" />
     </LinearLayout>
 
     <LinearLayout
@@ -71,7 +71,7 @@
             android:layout_margin="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_back" />
+            app:srcCompat="@drawable/icon_left_arrow" />
 
         <LinearLayout
             android:id="@+id/ace_selection_secondary_lower_options"

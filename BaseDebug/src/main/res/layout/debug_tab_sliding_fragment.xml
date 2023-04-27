@@ -50,11 +50,10 @@
             android:layout_height="44dp"
             android:layout_gravity="center_vertical"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_share"
+            android:src="@drawable/icon_share"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

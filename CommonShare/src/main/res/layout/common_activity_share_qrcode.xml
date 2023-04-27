@@ -99,26 +99,26 @@
             <TextView
                 android:id="@+id/share_apk_panel_send_source"
                 style="@style/shareItemText"
-                android:drawableTop="@drawable/share_android"
+                android:drawableTop="@drawable/icon_apk"
                 android:text="分享APK"
                 android:visibility="gone" />
 
             <TextView
                 android:id="@+id/share_qrcode_panel_send"
                 style="@style/shareItemText"
-                android:drawableTop="@drawable/share_send"
+                android:drawableTop="@drawable/icon_send"
                 android:text="分享二维码" />
 
             <TextView
                 android:id="@+id/share_qrcode_panel_download"
                 style="@style/shareItemText"
-                android:drawableTop="@drawable/share_save"
+                android:drawableTop="@drawable/icon_save"
                 android:text="保存二维码" />
 
             <TextView
                 android:id="@+id/share_qrcode_panel_link"
                 style="@style/shareItemText"
-                android:drawableTop="@drawable/share_copy"
+                android:drawableTop="@drawable/icon_copy"
                 android:text="分享链接" />
 
 

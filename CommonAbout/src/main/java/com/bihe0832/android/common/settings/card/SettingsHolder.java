@@ -62,12 +62,10 @@ public class SettingsHolder extends CardBaseHolder {
             } else {
                 GlideExtKt.loadImage(mHeaderIcon, data.mItemIconRes);
                 mHeaderIcon.setVisibility(View.VISIBLE);
-                mHeaderIcon.setColorFilter(getContext().getResources().getColor(R.color.textColorPrimary));
             }
         } else {
             GlideExtKt.loadImage(mHeaderIcon, data.mItemIconURL, R.mipmap.icon, R.mipmap.icon);
             mHeaderIcon.setVisibility(View.VISIBLE);
-            mHeaderIcon.setColorFilter(getContext().getResources().getColor(R.color.textColorPrimary));
         }
 
         mHeader.setText(data.mItemText);

@@ -26,10 +26,11 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/ic_menu_white"
+                android:src="@drawable/icon_menu"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/colorOnPrimary" />
 
             <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
                 android:id="@+id/title_icon_unread"
@@ -68,6 +69,7 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/icon_scan"
                 android:visibility="gone"
+                app:tint="@color/colorOnPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

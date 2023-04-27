@@ -37,7 +37,6 @@ open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
         }
 
         findViewById<ImageView>(R.id.title_icon).apply {
-            setColorFilter(resources.getColor(R.color.colorOnPrimary))
             setOnClickListener {
                 openDrawer()
             }
@@ -49,7 +48,6 @@ open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
 
     fun showQrcodeScan(needSound: Boolean, needVibrate: Boolean) {
         findViewById<ImageView>(R.id.title_scan).apply {
-            setColorFilter(resources.getColor(R.color.colorOnPrimary))
             visibility = View.VISIBLE
             setOnClickListener {
                 QrcodeUtils.openQrScanAndParse(needSound, needVibrate)
