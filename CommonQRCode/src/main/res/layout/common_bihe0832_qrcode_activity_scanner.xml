@@ -23,7 +23,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="@dimen/toolbar_padding_top"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_left_arrow_white"
+            android:src="@drawable/icon_left_arrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +51,8 @@
             android:layout_marginBottom="48dp"
             android:padding="18dp"
             android:scaleType="centerInside"
-            android:src="@drawable/com_bihe0832_common_qrcode_select"
+            android:tint="@color/icons"
+            android:src="@drawable/com_bihe0832_common_qrcode_flash_select"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/common_qrcode_album"
@@ -63,7 +64,8 @@
             android:layout_height="60dp"
             android:padding="18dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/icon_photos"
+            android:src="@drawable/icon_photos"
+            android:tint="@color/icons"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/common_qrcode_flash"
             app:layout_constraintEnd_toEndOf="parent"

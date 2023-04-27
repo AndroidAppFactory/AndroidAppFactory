@@ -17,11 +17,25 @@ public class BaseWebView extends WebView {
     private static final String APP_CACAHE_DIRNAME = "/webcache";
 
     private OnScrollChangedCallback mOnScrollChangedCallback;
-
+    protected boolean hasDoActionBeforeLoadURL = false;
 
     public BaseWebView(Context arg0) {
         super(arg0);
         initBaseWebView();
+    }
+
+    @Override
+    public void reload() {
+        hasDoActionBeforeLoadURL = false;
+        super.reload();
+    }
+
+    public boolean hasDoActionBeforeLoadURL() {
+        return hasDoActionBeforeLoadURL;
+    }
+
+    public void doActionBeforeLoadURL() {
+        hasDoActionBeforeLoadURL = true;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -47,7 +61,6 @@ public class BaseWebView extends WebView {
 
         this.getRootView().setClickable(true);
     }
-
 
     public interface OnScrollChangedCallback {
         void onScroll(int l, int t);

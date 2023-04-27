@@ -23,7 +23,7 @@ public class FeedbackFragment extends CommonWebviewFragment {
         return fragment;
     }
 
-    // 追加业务参数
+    // 追加业务参数，建议尽量追加静态参数，不要追加动态参数
     @Override
     protected String getFinalURL(String url) {
         String mUserID = ZixieContext.INSTANCE.getDeviceId();

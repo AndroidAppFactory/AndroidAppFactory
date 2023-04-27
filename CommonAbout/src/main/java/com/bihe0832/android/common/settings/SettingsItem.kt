@@ -57,7 +57,7 @@ object SettingsItem {
 
     fun getAboutAPP(context: Context, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
         return SettingsData(getAboutTitle(context)).apply {
-            mItemIconRes = R.mipmap.icon_android
+            mItemIconRes = R.drawable.icon_android
             mHeaderTextBold = true
             mShowDriver = true
             mShowGo = true
@@ -92,7 +92,7 @@ object SettingsItem {
     fun getQQService(activity: Activity?): SettingsData {
         return SettingsData("客服QQ").apply {
             var feedbackQQnumber = ZixieContext.applicationContext!!.resources.getString(R.string.feedback_qq)
-            mItemIconRes = R.mipmap.icon_qq_black
+            mItemIconRes = R.mipmap.ic_qq_black
             mShowDriver = true
             mShowGo = true
             mTipsText = "<u>${feedbackQQnumber}</u>"
@@ -107,7 +107,7 @@ object SettingsItem {
 
     fun getDebug(): SettingsData {
         return SettingsData("调试").apply {
-            mItemIconRes = R.mipmap.icon_android
+            mItemIconRes = R.drawable.icon_android
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
@@ -118,7 +118,7 @@ object SettingsItem {
 
     fun getWechat(activity: Activity?): SettingsData {
         return SettingsData("微信公众号").apply {
-            mItemIconRes = R.mipmap.icon_wechat_black
+            mItemIconRes = R.mipmap.ic_wechat_black
             mShowDriver = true
             mShowGo = true
             mTipsText = "<u>前往关注</u>"

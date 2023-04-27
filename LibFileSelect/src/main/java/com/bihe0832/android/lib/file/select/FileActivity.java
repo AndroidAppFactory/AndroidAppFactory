@@ -200,11 +200,11 @@ public class FileActivity extends SupportActivity {
                 switch (msg.what) {
                     case HANDLER_MSG_SELECTED:
                         if (mSelectedPath != null) {
-                            btn_close.setBackgroundResource(R.mipmap.ic_done);
+                            btn_close.setBackgroundResource(R.drawable.icon_done);
                             btn_back.setVisibility(View.GONE);
                             tv_path.setText("已选择：" + mSelectedPath);
                         } else {
-                            btn_close.setBackgroundResource(R.mipmap.ic_close);
+                            btn_close.setBackgroundResource(R.drawable.icon_close);
                             btn_back.setVisibility(View.VISIBLE);
                             tv_path.setText(mFile.getAbsolutePath());
                         }
@@ -326,8 +326,6 @@ public class FileActivity extends SupportActivity {
                     mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_file);
                 }
             }
-            mHolder.iv_icon.setColorFilter(getResources().getColor(R.color.primary_text));
-
             mHolder.cb_selected.setVisibility(View.VISIBLE);
             mHolder.cb_selected.setTag(position);
             if (mSelectedPath != null && mTempFile.getAbsolutePath().equals(mSelectedPath)) {

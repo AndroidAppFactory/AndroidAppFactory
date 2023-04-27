@@ -44,13 +44,12 @@ class AceEditActivity : BaseActivity() {
 
     private fun initView() {
         edit_menu_more.apply {
-            setColorFilter(resources.getColor(R.color.white))
             setOnClickListener {
                 PopMenu(this@AceEditActivity, edit_menu_more).apply {
                     ArrayList<PopMenuItem>().apply {
                         add(PopMenuItem().apply {
                             actionName = getString(R.string.ace_editor_menu_open_new)
-                            iconResId = R.mipmap.ic_folder_open
+                            iconResId = R.drawable.icon_folder_open
                             setItemClickListener {
                                 hide()
                                 FileSelectTools.openFileSelect(this@AceEditActivity, ZixieContext.getLogFolder())
@@ -58,7 +57,7 @@ class AceEditActivity : BaseActivity() {
                         })
                         add(PopMenuItem().apply {
                             actionName = getString(R.string.ace_editor_menu_share)
-                            iconResId = R.mipmap.ic_share
+                            iconResId = R.drawable.icon_send
                             setItemClickListener {
                                 hide()
                                 FileUtils.sendFile(this@AceEditActivity, filePath)
@@ -74,7 +73,7 @@ class AceEditActivity : BaseActivity() {
                                 actionName = getString(it, getString(R.string.ace_editor_menu_auto_wrap))
                             }
 
-                            iconResId = R.mipmap.ic_wrap_text
+                            iconResId = R.drawable.icon_wrap_text
                             setItemClickListener {
                                 hide()
                                 mAceEditFragment.setAutoWrap(!mAceEditFragment.isAutoWrap())
@@ -113,8 +112,8 @@ class AceEditActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         if (FileUtils.checkFileExist(filePath)) {
-            if (FileMimeTypes.isTextFile(filePath)) {
-                showBadFile(getString(R.string.ace_editor_load_file_not_found))
+            if (!FileMimeTypes.isTextFile(filePath)) {
+                showBadFile(getString(R.string.ace_editor_load_file_folder))
             } else {
                 mAceEditFragment.setFilePath(filePath)
                 if (findFragment(AceEditFragment::class.java) == null) {

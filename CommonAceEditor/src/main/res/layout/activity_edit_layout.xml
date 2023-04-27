@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:gravity="center"
     android:orientation="vertical">
@@ -10,6 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/common_toolbar"
         style="@style/AAF.AppTheme.Toolbar.Light"
+        tools:layout_height="30dp"
         app:title="">
 
         <ImageView
@@ -17,7 +19,7 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:src="@drawable/ic_more" />
+            android:src="@drawable/icon_more" />
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout

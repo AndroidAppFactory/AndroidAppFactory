@@ -2,7 +2,6 @@ package com.google.zxing.activity;
 
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,7 +66,6 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
         initFlashAction();
 
         CheckedEnableImageView btnAlbum = (CheckedEnableImageView) findViewById(R.id.common_qrcode_album);
-        btnAlbum.setColorFilter(Color.WHITE);
         initAlbumAction(btnAlbum);
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.common_qrcode_viewfinder_content);
@@ -81,7 +79,6 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
     }
 
     protected void initFlashAction() {
-
         CheckedEnableImageView btnFlash = (CheckedEnableImageView) findViewById(R.id.common_qrcode_flash);
         btnFlash.setOnClickListener(view -> {
             try {

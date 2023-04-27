@@ -7,17 +7,21 @@ import android.net.Uri;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
+
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+import com.bihe0832.android.lib.webview.BaseWebView;
 import com.bihe0832.android.lib.webview.jsbridge.JsBridge.ResponseType;
 import com.tencent.smtt.sdk.WebView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 
 /**
@@ -35,18 +39,18 @@ public abstract class BaseJsBridgeProxy {
     private final int PAGE_CONTROL_GO_FORWARD = 2;
 
     protected JsBridge mJsBridge;
-    private WebView mWebView;
+    private BaseWebView mWebView;
     private Activity mActivity;
 
     private boolean canPullRefresh = true;
 
-    public BaseJsBridgeProxy(WebView webView, Activity activity) {
+    public BaseJsBridgeProxy(BaseWebView webView, Activity activity) {
         mWebView = webView;
         mActivity = activity;
         this.mJsBridge = new JsBridge(mWebView, mActivity);
     }
 
-    public BaseJsBridgeProxy(WebView webView, Activity activity, JsBridge jsBridge) {
+    public BaseJsBridgeProxy(BaseWebView webView, Activity activity, JsBridge jsBridge) {
         mWebView = webView;
         mActivity = activity;
         this.mJsBridge = jsBridge;
@@ -186,6 +190,7 @@ public abstract class BaseJsBridgeProxy {
                     } else if (loadType == PAGE_CONTROL_GO_FORWARD) {
                         mWebView.goForward();
                     } else {
+                        // ⚠️ 此处的reload 只会走webview的内部逻辑，不会走 loadURL的完整逻辑，如果还有外部逻辑要处理，建议用自定义接口
                         mWebView.reload();
                     }
                 }

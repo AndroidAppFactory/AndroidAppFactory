@@ -156,7 +156,8 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
     protected String mIntentUrl;
     protected String mPostData;
-    protected boolean mRefreshable;
+    protected boolean mRefreshable = false;
+
     private int mOriginalSystemUiVisibility;
     private int mOriginalOrientation;
 
@@ -236,12 +237,12 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
 
             @Override
             public void onRefresh() {
-
                 mSwipeLayout.setRefreshing(false);
                 if (mJSBridgeProxy != null && mJSBridgeProxy.canPullToRefresh()) {
                     if (mRefreshCallback != null) {
                         mRefreshCallback.onRefresh(mWebView);
                     } else {
+                        // ⚠️ 此处的reload 只会走webview的内部逻辑，不会走 loadURL的完整逻辑，如果还有外部逻辑要处理，建议用mRefreshCallback
                         mWebView.reload();
                     }
                     mSwipeLayout.setEnabled(true);
@@ -292,22 +293,26 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         isLoadSuccess = true;
         mIntentUrl = url;
         mPostData = data;
-        actionBeforeLoadURL(url);
+        String finalURL = getFinalURL(url);
+        actionBeforeLoadURL(finalURL);
+        mWebView.doActionBeforeLoadURL();
         if (TextUtils.isEmpty(data)) {
-            mWebView.loadUrl(getFinalURL(url));
+            mWebView.loadUrl(finalURL);
         } else {
-            mWebView.postUrl(getFinalURL(url), data.getBytes());
+            mWebView.postUrl(finalURL, data.getBytes());
         }
     }
 
     protected WebResourceResponse interceptRequestResult(String url) {
-
+        if (!mWebView.hasDoActionBeforeLoadURL()) {
+            //主要用于解决页面通过webview的reload刷新时没有走 actionBeforeLoadURL 导致一些前置逻辑被跳过
+            actionBeforeLoadURL(url);
+            mWebView.doActionBeforeLoadURL();
+        }
         if (null != getGlobalLocalRes() && getGlobalLocalRes().containsKey(url)) {
             try {
-                String type = MimeTypeMap.getSingleton()
-                        .getMimeTypeFromExtension(FileUtils.INSTANCE.getExtensionName(url));
-                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8,
-                        getContext().getAssets().open(getGlobalLocalRes().get(url)));
+                String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(FileUtils.INSTANCE.getExtensionName(url));
+                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8, getContext().getAssets().open(getGlobalLocalRes().get(url)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -417,21 +422,9 @@ public abstract class BaseWebviewFragment extends BaseFragment implements
         }
 
         public boolean jumpToOtherApp(String url, Context context) {
-            if (context != null && !TextUtils.isEmpty(url)) {
-                try {
-                    ZLog.e(TAG, "jumpToOtherApp url:" + url);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
-                    return true;
-                } catch (Exception var4) {
-                    ZLog.e(TAG, "jumpToOtherApp failed:" + var4.getMessage());
-                    // TODO 兼容主流的应用schema打开方式，一般是call schema的同时，会跳转到下载页面，如果返回false就会报错
-                    return true;
-                }
-            } else {
-                return false;
-            }
+            ZLog.e(TAG, "jumpToOtherApp url:" + url);
+            // TODO 兼容主流的应用schema打开方式，一般是call schema的同时，会跳转到下载页面，如果返回false就会报错
+            return IntentUtils.startIntent(context, new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         }
 
         //https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4
