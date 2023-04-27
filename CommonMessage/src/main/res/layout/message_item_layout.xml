@@ -39,14 +39,15 @@
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/message_title"
             app:layout_constraintStart_toEndOf="@+id/message_is_new"
-            app:layout_constraintTop_toTopOf="@+id/message_title" />
+            app:layout_constraintTop_toTopOf="@+id/message_title"
+            app:tint="@color/com_bihe0832_message_item_title_color" />
 
         <TextView
             android:id="@+id/message_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="12dp"
             android:layout_marginBottom="16dp"
             android:ellipsize="end"
             android:gravity="center_vertical"
@@ -76,10 +77,10 @@
             android:id="@+id/message_go"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_right"
-            android:tint="@color/textColorPrimary"
+            app:tint="@color/com_bihe0832_message_item_title_color"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/message_icon"
             app:layout_constraintEnd_toEndOf="parent"

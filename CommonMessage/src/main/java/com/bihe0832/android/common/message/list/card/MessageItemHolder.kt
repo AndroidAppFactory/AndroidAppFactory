@@ -30,23 +30,14 @@ class MessageItemHolder(itemView: View?, context: Context?) : CardBaseHolder(ite
                 View.INVISIBLE
             }
 
-            getView<ImageView>(R.id.message_icon).apply {
-                setColorFilter(context.resources.getColor(R.color.com_bihe0832_message_item_title_color))
-            }
-
             getView<TextView>(R.id.message_title).apply {
                 text = TextFactoryUtils.getSpannedTextByHtml(messageItem.title)
             }
 
             getView<TextView>(R.id.message_time).apply {
-
                 SimpleDateFormat("yyyyMMddHHmm").parse(messageItem.createDate).time.let {
                     text = TextFactoryUtils.getSpannedTextByHtml(DateUtil.getDateEN(it, "yyyy-MM-dd HH:mm"))
                 }
-            }
-
-            getView<ImageView>(R.id.message_go).apply {
-                setColorFilter(context.resources.getColor(R.color.com_bihe0832_message_item_title_color))
             }
         }
 
