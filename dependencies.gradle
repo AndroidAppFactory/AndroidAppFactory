@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonQRCode"
+ext.developModule = "Application"
 
 
 /**
@@ -78,7 +78,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonWrapper"             : [
-        "version"            : "5.12.16",
+        "version"            : "5.12.17",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
@@ -88,7 +88,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonQRCode"              : [
-        "version"            : "5.12.16",
+        "version"            : "5.12.17",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
@@ -109,7 +109,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonNavigationDrawer"    : [
-        "version"            : "5.12.16",
+        "version"            : "5.12.17",
         "artifactId"         : "common-navigation-drawer",
         "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
     ],
