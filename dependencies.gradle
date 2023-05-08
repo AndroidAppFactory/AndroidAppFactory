@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibAAFResource,LibCommonUIUtils"
+ext.developModule = "Application"
 
 
 /**
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.13.0"
+ext.moduleVersionName = "5.13.1"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -121,7 +121,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonSvga"                : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "common-svga",
         "apidependenciesList": [
             "Framework",
@@ -142,7 +142,7 @@ ext.moduleInfo = [
         "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
     ],
     "CommonList"                : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "common-list",
         "apidependenciesList": [
             project.androidsupport.swiperefreshlayout,
@@ -190,7 +190,7 @@ ext.moduleInfo = [
         "apidependenciesList": ["Framework"]
     ],
     "Framework"                 : [
-        "version"                : "5.12.16",
+        "version"                : "5.13.1",
         "artifactId"             : "framework",
         "apidependenciesList"    : [
             project.androidsupport.annotation,
@@ -204,7 +204,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibWrapper"                : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
             "LibDebug",
@@ -358,7 +358,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibAPK"                    : [
-        "version"            : "5.12.4",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-utils-apk",
         "apidependenciesList": [
             "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
@@ -388,7 +388,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibDownload"               : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-download",
         "apidependenciesList": [
             "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -396,7 +396,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibInstall"                : [
-        "version"            : "5.12.4",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-install",
         "apidependenciesList": [
             "LibFile", "LibZip", "LibAPK"
@@ -410,14 +410,14 @@ ext.moduleInfo = [
         ]
     ],
     "LibSuperAPP"               : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-super-app",
         "apidependenciesList": [
             "LibDialog", "LibAPK"
         ]
     ],
     "LibDebug"                  : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-debug",
         "apidependenciesList": [
             "LibDialog", "LibToast", "LibFloatview"
@@ -431,7 +431,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibFragmentation_core"     : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-fragmentation-core",
         "apidependenciesList": [
             project.androidsupport.appcompat,
@@ -439,21 +439,21 @@ ext.moduleInfo = [
         ]
     ],
     "LibFragmentation"          : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-fragmentation",
         "apidependenciesList": [
             "LibFragmentation_core"
         ]
     ],
     "LibFragmentation_swipeback": [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-fragmentation-swipeback",
         "apidependenciesList": [
             "LibFragmentation"
         ]
     ],
     "LibFlycoTabLayout"         : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-flycotablayout",
         "apidependenciesList": [
             project.androidsupport.androidxcore,
@@ -470,7 +470,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibAdapter"                : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-adapter",
         "apidependenciesList": [
             project.androidsupport.recyclerview,
@@ -478,14 +478,14 @@ ext.moduleInfo = [
         ]
     ],
     "LibRefresh"                : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-refresh",
         "apidependenciesList": [
             "LibAdapter"
         ]
     ],
     "LibToast"                  : [
-        "version"            : "5.10.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-toast",
         "apidependenciesList": [
             "LibThread", "LibText", "LibAAFResource"
@@ -502,7 +502,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibDialog"                 : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-dialog",
         "apidependenciesList": [
             project.androidsupport.constraintlayout,
@@ -511,14 +511,14 @@ ext.moduleInfo = [
         ]
     ],
     "LibNotification"           : [
-        "version"            : "5.12.4",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-notification",
         "apidependenciesList": [
             "LibMedia", "LibAPK", "LibCommonUtils"
         ]
     ],
     "LibBottomTab"              : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-bottom-tab",
         "apidependenciesList": [
             "LibAndroid", "LibOS", "LibTextView",
@@ -527,20 +527,20 @@ ext.moduleInfo = [
         ]
     ],
     "LibRecycleviewExt"         : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-recycleview-ext",
         "apidependenciesList": [
             "LibRefresh"]
     ],
     "LibTouchRegion"            : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-touchregion",
         "apidependenciesList": [
             "LibAAFResource", "LibOS"
         ]
     ],
     "LibViewExt"                : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-view-ext",
         "apidependenciesList": [
             project.androidsupport.androidxcore,
@@ -555,7 +555,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibWebview"                : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-webview",
         "apidependenciesList": [
             project.tencent.tbssdk,
@@ -563,7 +563,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibLifecycle"              : [
-        "version"            : "5.12.4",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-lifecycle",
         "apidependenciesList": [
             project.androidsupport.lifecycle,
@@ -573,7 +573,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibPermission"             : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-permission",
         "apidependenciesList": [
             "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -582,7 +582,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibImmersive"              : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-immersive",
         "apidependenciesList": [
             "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibCommonUIUtils",
@@ -590,7 +590,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibFileSelect"             : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-file-select",
         "apidependenciesList": [
             "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -598,7 +598,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibFloatview"              : [
-        "version"                : "5.12.16",
+        "version"                : "5.13.1",
         "artifactId"             : "lib-float-view",
         "apidependenciesList"    : [
             project.androidsupport.constraintlayout,
@@ -618,7 +618,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibTextView"               : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-textview",
         "apidependenciesList": [
             project.androidsupport.appcompat,
@@ -627,7 +627,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibAceEditor"              : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-ace-editor",
         "apidependenciesList": [
             "LibFileSelect", "LibOS", "LibDialog", "LibText"
@@ -675,14 +675,14 @@ ext.moduleInfo = [
         ]
     ],
     "LibCustomView"             : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-custom-view",
         "apidependenciesList": [
             "LibTextView"
         ]
     ],
     "LibAAFResource"            : [
-        "version"            : "5.12.16",
+        "version"            : "5.13.1",
         "artifactId"         : "lib-aaf-res",
         "apidependenciesList": [
             ""
