@@ -73,7 +73,7 @@ public class LoadingDialog extends Dialog {
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
             findViewById(R.id.loading_main_layout).setLayoutParams(lp);
         } else {
-            findViewById(R.id.loading_main_layout).setBackgroundResource(R.drawable.com_bihe0832_loading_progress_bg);
+            findViewById(R.id.loading_main_layout).setBackgroundResource(R.drawable.com_bihe0832_base_loading_progress_bg);
         }
     }
 

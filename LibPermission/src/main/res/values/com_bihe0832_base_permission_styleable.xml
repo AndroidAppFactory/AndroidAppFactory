@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="AAF.ActivityTheme.Permission" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 去除Activity顶部黑线 -->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:splitMotionEvents">false</item>
+    </style>
+
+</resources>

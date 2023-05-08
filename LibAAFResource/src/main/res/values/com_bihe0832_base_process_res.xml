@@ -1,0 +1,4 @@
+<resources>
+    <color name="com_bihe0832_process_color">@color/com_bihe0832_select_state_checked</color>
+    <color name="com_bihe0832_process_back_color">@color/com_bihe0832_select_default</color>
+</resources>

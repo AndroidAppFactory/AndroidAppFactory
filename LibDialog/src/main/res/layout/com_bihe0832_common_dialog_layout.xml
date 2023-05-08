@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    android:background="@drawable/com_bihe0832_common_dialog_bg"
+    android:background="@drawable/com_bihe0832_base_dialog_bg"
     android:orientation="vertical">
 
     <TextView
@@ -129,7 +129,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:singleLine="true"
-            android:textColor="@drawable/com_bihe0832_common_dialog_negative_style"
+            android:textColor="@drawable/com_bihe0832_base_dialog_negative_style"
             android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
             tools:text="前往"
             tools:visibility="visible" />
@@ -152,7 +152,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:singleLine="true"
-            android:textColor="@drawable/com_bihe0832_common_dialog_positive_style"
+            android:textColor="@drawable/com_bihe0832_base_dialog_positive_style"
             android:textSize="@dimen/com_bihe0832_dialog_button_text_size"
             android:textStyle="bold"
             tools:text="确定" />

@@ -12,7 +12,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="24dp"
-        android:background="@drawable/com_bihe0832_common_dialog_bg"
+        android:background="@drawable/com_bihe0832_base_dialog_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

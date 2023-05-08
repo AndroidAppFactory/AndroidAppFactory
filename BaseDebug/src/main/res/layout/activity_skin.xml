@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/icon"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:onClick="load"
+        android:text="下载"
+        android:textColor="@color/text_color" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:onClick="apply"
+        android:text="换肤"
+        android:textColor="@color/text_color" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:onClick="restore"
+        android:text="还原"
+        android:textColor="@color/text_color" />
+
+</LinearLayout>

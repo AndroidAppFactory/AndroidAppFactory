@@ -67,13 +67,13 @@ public class RadioDialog extends CommonDialog {
             RadioButton radioButton = new RadioButton(getContext());
             radioButton.setId(i);
             radioButton.setButtonDrawable(
-                    getContext().getResources().getDrawable(R.drawable.com_bihe0832_common_radio_selctor));
+                    getContext().getResources().getDrawable(R.drawable.com_bihe0832_base_radio_selctor));
             radioButton.setPadding(DisplayUtil.dip2px(getContext(), 8f), DisplayUtil.dip2px(getContext(), 8f), 0,
                     DisplayUtil.dip2px(getContext(), 8f));
             //设置文字
             radioButton.setText(mDataList.get(i));
             radioButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.com_bihe0832_dialog_content_text_size));
-            radioButton.setTextColor(getContext().getResources().getColorStateList(R.drawable.com_bihe0832_common_select_color));
+            radioButton.setTextColor(getContext().getResources().getColorStateList(R.drawable.com_bihe0832_base_select_color));
             final int index = i;
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override

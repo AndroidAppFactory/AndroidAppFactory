@@ -22,7 +22,7 @@
         android:layout_centerInParent="true"
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@id/text"
-        android:background="@drawable/cpmplete_icon"
+        android:background="@drawable/icon_done"
         android:visibility="invisible"
         tools:ignore="RtlHardcoded" />
 

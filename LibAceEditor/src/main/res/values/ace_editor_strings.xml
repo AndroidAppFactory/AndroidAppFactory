@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="custom_density">360</string>
-
-    <string name="ace_editor_load_failed">文件加载失败</string>
-    <string name="ace_editor_save_failed">文件保存失败</string>
-    <string name="ace_editor_file_to_big">文件过大，语法高亮等功能已禁用</string>
-</resources>

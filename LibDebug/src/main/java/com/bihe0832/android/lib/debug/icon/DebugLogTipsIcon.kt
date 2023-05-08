@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.bihe0832.android.lib.debug.R
 import com.bihe0832.android.lib.floatview.BaseIconView
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import kotlinx.android.synthetic.main.log_view.view.*
 
 open class DebugLogTipsIcon(context: Context) : BaseIconView(context) {
 
@@ -19,7 +18,7 @@ open class DebugLogTipsIcon(context: Context) : BaseIconView(context) {
 
 
     fun getTextView(): TextView? {
-        return log_view_text
+        return findViewById(R.id.log_view_text) as? TextView
     }
 
     override fun ignoreStatusBar(): Boolean {
@@ -27,7 +26,7 @@ open class DebugLogTipsIcon(context: Context) : BaseIconView(context) {
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.log_view
+        return R.layout.com_bihe0832_lib_log_view
     }
 
     override fun getRootId(): Int {

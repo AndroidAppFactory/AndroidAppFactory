@@ -47,7 +47,7 @@ public class ToastUtil {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
-                View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_common_toast, null);
+                View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_base_toast, null);
                 final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
                 show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
 
@@ -59,7 +59,7 @@ public class ToastUtil {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
-                View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_common_toast_tips, null);
+                View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_base_toast_tips, null);
                 final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
                 ImageView toastImage = (ImageView) layout.findViewById(R.id.bihe0832_common_toast_image);
                 toastImage.setImageResource(imageRes);

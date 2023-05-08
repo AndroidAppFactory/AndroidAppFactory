@@ -39,7 +39,7 @@ public class PopMenu {
         mActivity = activity;
         mAttachView = attach;
         mWidth = (int) mActivity.getResources().getDimension(R.dimen.com_bihe0832_pop_menu_width);
-        mBackgroundDrawable = mActivity.getResources().getDrawable(R.drawable.com_bihe0832_pop_menu_bg);
+        mBackgroundDrawable = mActivity.getResources().getDrawable(R.drawable.com_bihe0832_base_pop_menu_bg);
         xOffset = DisplayUtil.dip2px(activity, -8);
         yOffset = DisplayUtil.dip2px(activity, 8);
     }

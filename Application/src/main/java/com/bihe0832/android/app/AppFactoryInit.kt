@@ -1,6 +1,5 @@
 package com.bihe0832.android.app
 
-import android.Manifest
 import android.app.ActivityManager
 import android.content.Context
 import android.os.Build
@@ -22,7 +21,6 @@ import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
-import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil

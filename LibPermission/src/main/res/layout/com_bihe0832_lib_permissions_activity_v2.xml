@@ -12,7 +12,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginTop="64dp"
         android:layout_marginRight="12dp"
-        android:background="@drawable/bg_permission"
+        android:background="@drawable/com_bihe0832_base_dialog_permission_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

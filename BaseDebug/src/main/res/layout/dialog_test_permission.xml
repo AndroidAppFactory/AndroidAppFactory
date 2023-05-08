@@ -3,7 +3,7 @@
         android:id="@+id/dialog_content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/com_bihe0832_common_dialog_bg">
+        android:background="@drawable/com_bihe0832_base_dialog_bg">
 
     <TextView
             android:id="@+id/dialog_title"

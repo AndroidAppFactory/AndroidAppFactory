@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--常用颜色定义-->
+    <color name="transparent">@color/transparent_black</color>
+    <color name="transparent_black">#00000000</color>
+    <color name="transparent_white">#00FFFFFF</color>
+    <color name="transparent_background">#80000000</color>
+
+    <color name="gray_light">#f2f2f2</color>
+    <color name="gray">#646464</color>
+    <color name="gray_font_dark">#646464</color>
+    <color name="black">#202020</color>
+    <color name="white">#ffffff</color>
+    <color name="text_gray">#999999</color>
+    <color name="red_dot">#FD481F</color>
+</resources>

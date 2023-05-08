@@ -99,7 +99,7 @@ public class CardBaseAdapter extends BaseMultiItemQuickAdapter<CardBaseModule, B
     }
 
     protected int getBadDataTypeHolderID() {
-        return R.layout.card_bad_data_item;
+        return R.layout.com_bihe0832_base_card_bad_data_item;
     }
 
     @Override

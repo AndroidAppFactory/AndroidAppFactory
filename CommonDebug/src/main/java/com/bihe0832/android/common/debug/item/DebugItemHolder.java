@@ -27,7 +27,7 @@ public class DebugItemHolder extends CardBaseHolder {
 
     @Override
     public void initView() {
-        mHeader = getView(R.id.test_title);
+        mHeader = getView(R.id.bad_card_title);
         mBottomLine = getView(R.id.test_bottom_line);
     }
 

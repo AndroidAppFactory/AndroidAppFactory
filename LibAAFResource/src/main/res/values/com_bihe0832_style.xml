@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--    AAF 核心颜色定义，所有应用自定义颜色，都修改下放颜色即可：
+                生成颜色表并补充完善地址：https://www.materialpalette.com/indigo/indigo
+    -->
+    <!--主色调，标题栏等-->
+    <color name="primary">#3F51B5</color>
+    <!--状态栏颜色-->
+    <color name="primary_dark">@color/primary</color>
+    <color name="primary_light">#C5CAE9</color>
+    <!--控制各个控件被选中时的颜色-->
+    <color name="accent">#536DFE</color>
+    <!--文本颜色-->
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#8D8D8D</color>
+    <!--图标颜色-->
+    <color name="icons">#FFFFFF</color>
+    <!--分割线颜色-->
+    <color name="divider">@color/gray_light</color>
+
+</resources>

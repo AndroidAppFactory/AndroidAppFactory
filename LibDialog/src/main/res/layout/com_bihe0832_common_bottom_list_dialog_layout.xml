@@ -8,14 +8,14 @@
         android:id="@+id/dialog_content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/com_bihe0832_common_bottom_dialog_bg"
+        android:background="@drawable/com_bihe0832_base_dialog_bottom_bg"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/layout_List"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/com_bihe0832_common_bottom_dialog_bg"
+            android:background="@drawable/com_bihe0832_base_dialog_bottom_bg"
             android:orientation="vertical" />
 
         <View
@@ -33,7 +33,7 @@
             android:paddingTop="18dp"
             android:paddingBottom="18dp"
             android:text="取消"
-            android:textColor="@drawable/com_bihe0832_common_dialog_negative_style"
+            android:textColor="@drawable/com_bihe0832_base_dialog_negative_style"
             android:textSize="@dimen/com_bihe0832_dialog_button_text_size" />
 
     </LinearLayout>

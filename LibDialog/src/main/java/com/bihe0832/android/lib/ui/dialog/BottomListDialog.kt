@@ -2,7 +2,6 @@ package com.bihe0832.android.lib.ui.dialog
 
 import android.app.Activity
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -67,7 +66,7 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
                 gravity = Gravity.CENTER_HORIZONTAL
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.com_bihe0832_dialog_button_text_size))
                 this.text = TextFactoryUtils.getSpannedTextByHtml(text)
-                setTextColor(getContext().getResources().getColorStateList(R.drawable.com_bihe0832_common_dialog_positive_style));
+                setTextColor(getContext().getResources().getColorStateList(R.drawable.com_bihe0832_base_dialog_positive_style));
                 setOnClickListener {
                     itemClickListener?.invoke(textList.indexOf(text))
                 }

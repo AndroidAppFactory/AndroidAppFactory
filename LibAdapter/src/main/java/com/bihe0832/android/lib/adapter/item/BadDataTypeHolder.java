@@ -24,7 +24,7 @@ public class BadDataTypeHolder extends CardBaseHolder {
 
     @Override
     public void initView() {
-        mHeader = getView(R.id.test_title);
+        mHeader = getView(R.id.bad_card_title);
     }
 
     @Override

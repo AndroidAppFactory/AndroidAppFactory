@@ -34,7 +34,7 @@
         <item name="android:textColor">@color/colorOnPrimary</item>
     </style>
 
-    <style name="AAF.AppTheme.Toolbar.Base" parent="Base.V7.Widget.AppCompat.Toolbar">
+    <style name="AAF.AppTheme.Toolbar.Base" parent="Base.Widget.AppCompat.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="titleTextAppearance">@style/AAF.AppTheme.Title.Text</item>

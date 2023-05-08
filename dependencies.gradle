@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonMessage"
+ext.developModule = "LibAAFResource,LibCommonUIUtils"
 
 
 /**
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.12.17"
+ext.moduleVersionName = "5.13.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -216,7 +216,7 @@ ext.moduleInfo = [
             "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
             "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
             "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
-            "LibSvga", "LibAudioPlayer", "LibCustomView"]
+            "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource"]
     ],
     "RouterAnnotation"          : [
         "version"            : "4.1.0",
@@ -392,8 +392,7 @@ ext.moduleInfo = [
         "artifactId"         : "lib-download",
         "apidependenciesList": [
             "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
-            "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced",
-            "LibCommonUIUtils"
+            "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced"
         ]
     ],
     "LibInstall"                : [
@@ -436,7 +435,7 @@ ext.moduleInfo = [
         "artifactId"         : "lib-fragmentation-core",
         "apidependenciesList": [
             project.androidsupport.appcompat,
-            "LibCommonUIUtils", "LibOS"
+            "LibAAFResource", "LibOS"
         ]
     ],
     "LibFragmentation"          : [
@@ -458,7 +457,7 @@ ext.moduleInfo = [
         "artifactId"         : "lib-flycotablayout",
         "apidependenciesList": [
             project.androidsupport.androidxcore,
-            "LibCommonUIUtils", "LibOS", "LibRequest", "LibMedia", "LibTextView"
+            "LibAAFResource", "LibOS", "LibRequest", "LibMedia", "LibTextView"
         ]
     ],
     "LibQRCode"                 : [
@@ -475,7 +474,7 @@ ext.moduleInfo = [
         "artifactId"         : "lib-adapter",
         "apidependenciesList": [
             project.androidsupport.recyclerview,
-            "LibCommonUIUtils", "LibText"
+            "LibAAFResource", "LibText"
         ]
     ],
     "LibRefresh"                : [
@@ -489,7 +488,7 @@ ext.moduleInfo = [
         "version"            : "5.10.16",
         "artifactId"         : "lib-toast",
         "apidependenciesList": [
-            "LibThread", "LibText"
+            "LibThread", "LibText", "LibAAFResource"
         ]
     ],
     "LibMedia"                  : [
@@ -507,7 +506,7 @@ ext.moduleInfo = [
         "artifactId"         : "lib-dialog",
         "apidependenciesList": [
             project.androidsupport.constraintlayout,
-            "LibThread", "LibMedia", "LibOS", "LibCommonUIUtils", "LibText", "LibViewExt",
+            "LibThread", "LibMedia", "LibOS", "LibAAFResource", "LibText", "LibViewExt",
             "LibBlockTask"
         ]
     ],
@@ -537,7 +536,7 @@ ext.moduleInfo = [
         "version"            : "5.12.16",
         "artifactId"         : "lib-touchregion",
         "apidependenciesList": [
-            "LibCommonUIUtils", "LibOS"
+            "LibAAFResource", "LibOS"
         ]
     ],
     "LibViewExt"                : [
@@ -545,7 +544,7 @@ ext.moduleInfo = [
         "artifactId"         : "lib-view-ext",
         "apidependenciesList": [
             project.androidsupport.androidxcore,
-            "LibCommonUIUtils", "LibText"
+            "LibAAFResource", "LibText"
         ]
     ],
     "LibViewPager"              : [
@@ -586,7 +585,7 @@ ext.moduleInfo = [
         "version"            : "5.12.16",
         "artifactId"         : "lib-immersive",
         "apidependenciesList": [
-            "LibDeviceNetwork", "LibMedia", "LibCommonUIUtils",
+            "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibCommonUIUtils",
             project.androidsupport.appcompat
         ]
     ],
@@ -675,11 +674,18 @@ ext.moduleInfo = [
             "LibMedia", "LibBlockTask"
         ]
     ],
-    "LibCustomView"            : [
+    "LibCustomView"             : [
         "version"            : "5.12.16",
         "artifactId"         : "lib-custom-view",
         "apidependenciesList": [
             "LibTextView"
+        ]
+    ],
+    "LibAAFResource"            : [
+        "version"            : "5.12.16",
+        "artifactId"         : "lib-aaf-res",
+        "apidependenciesList": [
+            ""
         ]
     ]
 ]

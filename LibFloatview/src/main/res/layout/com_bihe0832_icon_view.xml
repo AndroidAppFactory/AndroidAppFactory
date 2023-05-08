@@ -20,7 +20,7 @@
         android:id="@+id/com_bihe0832_lib_icon_icon_redr"
         android:layout_width="4dp"
         android:layout_height="4dp"
-        android:src="@drawable/com_bihe0832_background_red_dot"
+        android:src="@drawable/com_bihe0832_base_red_dot_background"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:id="@+id/com_bihe0832_lib_icon_icon_redl"
         android:layout_width="4dp"
         android:layout_height="4dp"
-        android:src="@drawable/com_bihe0832_background_red_dot"
+        android:src="@drawable/com_bihe0832_base_red_dot_background"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
