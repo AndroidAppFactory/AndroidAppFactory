@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.Toast
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.base.debug.theme.ThemeActivity
 import com.bihe0832.android.base.debug.touch.TouchRegionActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -66,6 +67,10 @@ class DebugUIFragment : DebugEnvFragment() {
 
             add(DebugItemData("点击区扩大Demo", View.OnClickListener {
                 startActivityWithException(TouchRegionActivity::class.java)
+            }))
+
+            add(DebugItemData("一键换肤", View.OnClickListener {
+                startActivityWithException(ThemeActivity::class.java)
             }))
 
             add(DebugItemData("Toast测试", View.OnClickListener {

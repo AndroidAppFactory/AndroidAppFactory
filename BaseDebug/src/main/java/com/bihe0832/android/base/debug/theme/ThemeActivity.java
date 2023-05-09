@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.skin;
+package com.bihe0832.android.base.debug.theme;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.theme.ThemeManager;
 
-public class SkinActivity extends Activity {
+public class ThemeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
