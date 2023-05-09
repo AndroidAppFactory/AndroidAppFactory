@@ -91,7 +91,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/web_split_line" />
 
-        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/web_retry"
             android:layout_width="130dp"
             android:layout_height="40dp"
@@ -106,7 +106,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/web_native_browser" />
 
-        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/web_native_browser"
             android:layout_width="130dp"
             android:layout_height="40dp"

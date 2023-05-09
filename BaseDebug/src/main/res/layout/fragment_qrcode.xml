@@ -37,7 +37,7 @@
 
         </TextView>
 
-        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/qrcode_again"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             app:bgtv_cornerRadius="8dp" />
 
 
-        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/qrcode_scan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
             app:bgtv_backgroundColor="@color/colorPrimary"
             app:bgtv_cornerRadius="8dp" />
 
-        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/qrcode_scan_parse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
             app:bgtv_cornerRadius="8dp" />
 
 
-        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/qrcode_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

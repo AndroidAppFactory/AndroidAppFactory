@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.LoadingDialog
@@ -83,7 +84,7 @@ open class BaseDebugListFragment : CommonListFragment() {
     }
 
     override fun getEmptyText(): String {
-        return ZixieContext.applicationContext?.getString(R.string.common_debug_empty_tips) ?: ""
+        return ThemeResourcesManager.getString(R.string.common_debug_empty_tips) ?: ""
     }
 
     protected fun sendInfo(title: String, content: String) {

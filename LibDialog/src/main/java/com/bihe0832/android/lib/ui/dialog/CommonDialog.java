@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.GlideExtKt;
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
@@ -194,7 +195,7 @@ public class CommonDialog extends Dialog {
             if (!TextUtils.isEmpty(positiveString)) {
                 positiveBn.setText(TextFactoryUtils.getSpannedTextByHtml(positiveString));
             } else {
-                positiveBn.setText(getContext().getString(R.string.dialog_button_ok));
+                positiveBn.setText(ThemeResourcesManager.INSTANCE.getString(R.string.dialog_button_ok));
             }
         }
 

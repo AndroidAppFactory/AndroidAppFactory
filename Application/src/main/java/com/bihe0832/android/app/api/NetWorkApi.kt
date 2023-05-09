@@ -1,5 +1,6 @@
 package com.bihe0832.android.app.api
 
+import android.text.TextUtils
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.gson.JsonHelper
@@ -31,7 +32,10 @@ object AAFNetWorkApi {
     const val REQUEST_PARAM_DEVKEY = "devid"
     const val REQUEST_PARAM_PACKAGE_NAME = "package"
 
-    fun getCommonURL(url: String, param: String): String {
+    fun getCommonURL(url: String?, param: String): String {
+        if (TextUtils.isEmpty(url)) {
+            return ""
+        }
         val publicPara = StringBuffer()
         publicPara.append(REQUEST_PARAM_DEVKEY).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(ZixieContext.deviceId)
         publicPara.append(URLUtils.HTTP_REQ_ENTITY_JOIN).append(REQUEST_PARAM_OS).append(URLUtils.HTTP_REQ_ENTITY_MERGE).append(Constants.SYSTEM_CONSTANT)

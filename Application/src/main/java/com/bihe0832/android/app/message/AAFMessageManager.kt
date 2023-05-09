@@ -5,7 +5,7 @@ import com.bihe0832.android.app.R
 import com.bihe0832.android.app.api.AAFNetWorkApi
 import com.bihe0832.android.common.message.base.MessageManager
 import com.bihe0832.android.common.message.data.MessageInfoItem
-import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
@@ -24,7 +24,7 @@ object AAFMessageManager : MessageManager() {
     }
 
     override fun fetchNewMsg() {
-        fetchMessageByFile(AAFNetWorkApi.getCommonURL(ZixieContext.applicationContext?.getString(R.string.message_url)
+        fetchMessageByFile(AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.message_url)
                 ?: "", ""))
     }
 

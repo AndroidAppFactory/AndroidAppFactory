@@ -2,13 +2,12 @@ package com.bihe0832.android.common.message.list.card
 
 import android.content.Context
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import com.bihe0832.android.common.message.R
 import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.ui.custom.view.ViewWithBackground
+import com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.text.SimpleDateFormat
 

@@ -15,7 +15,7 @@ import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.ui.textview.ext.changeStatusWithUnreadMsg
+import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnreadMsg
 import com.bihe0832.android.lib.ui.textview.ext.setDrawableLeft
 import com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView.OnScrollListener
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
@@ -49,8 +49,8 @@ class DebugTextViewFragment : BaseFragment() {
 
 
         text_marquee.apply {
-            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
-            setDrawableLeft(R.drawable.icon_camera, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
+//            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
+            setDrawableLeft(R.drawable.icon_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             setText(":fds")
             startScroll()
             setOnScrollListener(object :OnScrollListener{

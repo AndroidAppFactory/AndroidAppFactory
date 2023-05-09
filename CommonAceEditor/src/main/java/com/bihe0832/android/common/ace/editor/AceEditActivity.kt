@@ -21,6 +21,7 @@ import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.menu.PopMenu
@@ -48,7 +49,7 @@ class AceEditActivity : BaseActivity() {
                 PopMenu(this@AceEditActivity, edit_menu_more).apply {
                     ArrayList<PopMenuItem>().apply {
                         add(PopMenuItem().apply {
-                            actionName = getString(R.string.ace_editor_menu_open_new)
+                            actionName = ThemeResourcesManager.getString(R.string.ace_editor_menu_open_new)
                             iconResId = R.drawable.icon_folder_open
                             setItemClickListener {
                                 hide()
@@ -56,7 +57,7 @@ class AceEditActivity : BaseActivity() {
                             }
                         })
                         add(PopMenuItem().apply {
-                            actionName = getString(R.string.ace_editor_menu_share)
+                            actionName = ThemeResourcesManager.getString(R.string.ace_editor_menu_share)
                             iconResId = R.drawable.icon_send
                             setItemClickListener {
                                 hide()
@@ -70,7 +71,7 @@ class AceEditActivity : BaseActivity() {
                             } else {
                                 R.string.ace_editor_menu_open
                             }.let {
-                                actionName = getString(it, getString(R.string.ace_editor_menu_auto_wrap))
+                                actionName = ThemeResourcesManager.getString(it) + ThemeResourcesManager.getString(R.string.ace_editor_menu_auto_wrap)
                             }
 
                             iconResId = R.drawable.icon_wrap_text
@@ -113,7 +114,7 @@ class AceEditActivity : BaseActivity() {
         super.onResume()
         if (FileUtils.checkFileExist(filePath)) {
             if (!FileMimeTypes.isTextFile(filePath)) {
-                showBadFile(getString(R.string.ace_editor_load_file_folder))
+                showBadFile(ThemeResourcesManager.getString(R.string.ace_editor_load_file_folder)!!)
             } else {
                 mAceEditFragment.setFilePath(filePath)
                 if (findFragment(AceEditFragment::class.java) == null) {
@@ -122,9 +123,9 @@ class AceEditActivity : BaseActivity() {
             }
         } else {
             if (TextUtils.isEmpty(filePath)) {
-                showBadFile(getString(R.string.ace_editor_load_file_empty))
+                showBadFile(ThemeResourcesManager.getString(R.string.ace_editor_load_file_empty)!!)
             } else {
-                showBadFile(getString(R.string.ace_editor_load_file_not_found))
+                showBadFile(ThemeResourcesManager.getString(R.string.ace_editor_load_file_not_found)!!)
             }
         }
     }
@@ -150,7 +151,7 @@ class AceEditActivity : BaseActivity() {
     private fun showBadFile(msg: String) {
         DialogUtils.showConfirmDialog(
                 this,
-                getString(R.string.dialog_title),
+                ThemeResourcesManager.getString(R.string.dialog_title)!!,
                 msg,
                 "选择文件",
                 "退出查看",

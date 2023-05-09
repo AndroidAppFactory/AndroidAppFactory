@@ -15,6 +15,7 @@ import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.qrcode.QRCodeEncodingHandler
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.net.URLDecoder
@@ -119,22 +120,22 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
 
     // 图片主文字
     open fun getShareTitle(): String {
-        return getString(R.string.app_name)
+        return ThemeResourcesManager.getString(R.string.app_name)!!
     }
 
     // 图片副文字
     open fun getShareDesc(): String {
-        return getString(R.string.com_bihe0832_share_desc)
+        return ThemeResourcesManager.getString(R.string.com_bihe0832_share_desc)!!
     }
 
     // 文本分享的内容
     open fun getShareLink(): String {
-        return String.format(getString(R.string.com_bihe0832_share_link), mShareData)
+        return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_link)!!, mShareData)
     }
 
 
     open fun getShareDialogTitle(): String {
-        return String.format(getString(R.string.com_bihe0832_share_dialog_title), "")
+        return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_dialog_title)!!, "")
     }
 
     override fun onShareCancelClick() {

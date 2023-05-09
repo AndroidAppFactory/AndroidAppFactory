@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
@@ -74,7 +75,7 @@ open class BaseFragment : SwipeBackFragment() {
         super.onViewCreated(view, savedInstanceState)
         if (resetDensity()) {
             activity?.let {
-                DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(it.resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
+                DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(ThemeResourcesManager.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
             }
         }
         hasCreateView = true

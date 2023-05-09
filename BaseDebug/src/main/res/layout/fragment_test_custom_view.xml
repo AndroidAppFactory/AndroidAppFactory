@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <com.bihe0832.android.lib.ui.custom.view.ViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_marginTop="10dp"

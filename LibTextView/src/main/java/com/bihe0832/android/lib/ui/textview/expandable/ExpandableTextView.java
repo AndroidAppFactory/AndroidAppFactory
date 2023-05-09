@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.ui.textview.R;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
@@ -143,15 +144,15 @@ public abstract class ExpandableTextView extends AppCompatTextView {
         mCurrentStatus = typedArray.getInt(R.styleable.ExpandableTextView_etv_InitState, STATUS_SHRINK);
 
         if (mEllipsisHint == null) {
-            mEllipsisHint = getContext().getResources().getString(R.string.to_ellipsis_hint);
+            mEllipsisHint = ThemeResourcesManager.INSTANCE.getString(R.string.to_ellipsis_hint);
         }
 
         if (mToExpandHint == null) {
-            mToExpandHint = getContext().getResources().getString(R.string.to_expand_hint);
+            mToExpandHint = ThemeResourcesManager.INSTANCE.getString(R.string.to_expand_hint);
         }
 
         if (mToShrinkHint == null) {
-            mToShrinkHint = getContext().getResources().getString(R.string.to_shrink_hint);
+            mToShrinkHint = ThemeResourcesManager.INSTANCE.getString(R.string.to_shrink_hint);
         }
 
         typedArray.recycle();

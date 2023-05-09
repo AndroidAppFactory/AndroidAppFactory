@@ -1,13 +1,13 @@
 package com.bihe0832.android.common.debug.item;
 
 import android.content.Context;
-import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
 import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 
 /**
@@ -42,7 +42,7 @@ public class DebugItemHolder extends CardBaseHolder {
             itemView.setOnLongClickListener(data.mLongClickListener);
         }
         if (!data.hasBackground) {
-            ((View) mHeader.getParent()).setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+            ((View) mHeader.getParent()).setBackgroundColor(ThemeResourcesManager.INSTANCE.getColor(R.color.transparent));
         }
 
         if (data.showBottomLine && null != mBottomLine) {

@@ -11,8 +11,8 @@ import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.media.image.clearImage
 import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.ui.textview.TextViewWithBackground
-import com.bihe0832.android.lib.ui.textview.ext.changeStatusWithUnreadMsg
+import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
+import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnreadMsg
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 

@@ -10,6 +10,7 @@ import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.custom.view.PlaceholderView
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeLinearLayoutManager
 
@@ -133,7 +134,7 @@ abstract class BaseListActivity : BaseActivity() {
     protected open fun getBaseEmptyView(): View {
         return PlaceholderView(this).apply {
             if (getLayoutManagerForList() is GridLayoutManager) {
-                getString(R.string.bad_layoutmanager_empty_tips)
+                ThemeResourcesManager.getString(R.string.bad_layoutmanager_empty_tips)
             } else {
                 getEmptyText()
             }.let {

@@ -15,6 +15,7 @@ import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager.getInstance
 import java.net.HttpURLConnection
 
@@ -45,7 +46,7 @@ object UpdateManager {
     private fun fetchUpdate(activity: Activity, successAction: (info: UpdateDataFromCloud) -> Unit, failedAction: () -> Unit) {
         object : HttpBasicRequest() {
             override fun getUrl(): String {
-                return AAFNetWorkApi.getCommonURL(activity.getString(R.string.update_url), "")
+                return AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.update_url), "")
             }
 
             override fun getResponseHandler(): HttpResponseHandler {

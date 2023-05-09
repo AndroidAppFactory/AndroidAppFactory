@@ -22,7 +22,7 @@
             android:singleLine="true"/>
     </LinearLayout>
 
-    <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+    <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
         android:layout_toRightOf="@+id/ll_tap"
         android:id="@+id/rtv_msg_tip"
         android:layout_width="wrap_content"

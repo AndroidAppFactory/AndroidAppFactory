@@ -9,6 +9,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.tts.LibTTS
@@ -111,8 +112,8 @@ class DebugTTSFragment : BaseFragment() {
         tts_download?.setOnClickListener {
             DownloadAPK.startDownloadWithCheckAndProcess(
                     activity!!,
-                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
-                    context!!.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                    ThemeResourcesManager.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                    ThemeResourcesManager.getString(R.string.app_name) + ":谷歌TTS下载 ",
                     "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
                     "",
                     ""

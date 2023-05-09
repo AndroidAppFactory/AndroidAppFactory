@@ -6,6 +6,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.google.zxing.Result
 
@@ -22,7 +23,7 @@ class QrcodeWithResultActivity : QrcodeScanActivity() {
 
     open fun handleQrcodeResult(scanResult: String) {
         if (TextUtils.isEmpty(scanResult)) {
-            ZixieContext.showToast("扫码失败，" + getString(R.string.app_name) + "无法识别该二维码")
+            ZixieContext.showToast("扫码失败，" + ThemeResourcesManager.getString(R.string.app_name) + "无法识别该二维码")
         } else {
             Intent.parseUri(scanResult, Intent.URI_INTENT_SCHEME).let {
                 if (isSelfIntent(it)) {
@@ -30,7 +31,7 @@ class QrcodeWithResultActivity : QrcodeScanActivity() {
                     RouterAction.openFinalURL(scanResult)
                 } else {
                     if (!IntentUtils.startIntent(this, it)) {
-                        ZixieContext.showToast("扫码失败，" + getString(R.string.app_name) + "无法解析该二维码")
+                        ZixieContext.showToast("扫码失败，" + ThemeResourcesManager.getString(R.string.app_name) + "无法解析该二维码")
                     } else {
                         playBeepSoundAndVibrate()
                     }

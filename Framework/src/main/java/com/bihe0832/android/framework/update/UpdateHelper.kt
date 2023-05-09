@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -28,7 +29,7 @@ object UpdateHelper {
 
     private fun startUpdate(activity: Activity, version: String, desc: String, url: String, md5: String, canCancel: Boolean) {
 
-        var title = String.format(ZixieContext.applicationContext!!.getString(R.string.dialog_apk_updating), "$version")
+        var title = String.format(ThemeResourcesManager.getString(R.string.dialog_apk_updating)!!, "$version")
 
         var dialogListenerWhenDownload = object : OnDialogListener {
             override fun onPositiveClick() {
@@ -52,14 +53,14 @@ object UpdateHelper {
                 if (errorCode in listOf(DownloadErrorCode.ERR_BAD_URL, DownloadErrorCode.ERR_HTTP_LENGTH_FAILED, DownloadErrorCode.ERR_MD5_BAD)) {
                     DialogUtils.showConfirmDialog(
                             activity, title,
-                            ZixieContext.applicationContext!!.resources.getString(R.string.dialog_apk_update_failed_desc),
-                            ZixieContext.applicationContext!!.resources.getString(R.string.dialog_apk_update_failed_positive),
-                            ZixieContext.applicationContext!!.resources.getString(R.string.dialog_apk_update_failed_negative), object : OnDialogListener {
+                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_desc)!!,
+                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_positive),
+                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_negative), object : OnDialogListener {
                         override fun onPositiveClick() {
                             if (canCancel) {
                                 openFeedback()
                             } else {
-                                IntentUtils.openWebPage(ZixieContext.applicationContext!!.resources.getString(R.string.feedback_url), activity)
+                                IntentUtils.openWebPage(ThemeResourcesManager.getString(R.string.feedback_url), activity)
                             }
                             onNegativeClick()
                         }
@@ -140,11 +141,11 @@ object UpdateHelper {
     fun showUpdateDialog(activity: Activity, versionName: String, titleString: String, desc: String, url: String, md5: String, type: Int) {
         hasShow = false
         var title = if (TextUtils.isEmpty(titleString)) {
-            activity.resources.getString(R.string.dialog_apk_update_title) + versionName
+            ThemeResourcesManager.getString(R.string.dialog_apk_update_title)+ versionName
         } else {
             titleString
         }
-        showUpdateDialogWithTitle(activity, versionName, title, activity.getString(R.string.dialog_apk_update_info_pre) + desc, url, md5, type)
+        showUpdateDialogWithTitle(activity, versionName, title, ThemeResourcesManager.getString(R.string.dialog_apk_update_info_pre) + desc, url, md5, type)
     }
 
     fun showUpdate(activity: Activity, checkUpdateByUser: Boolean, showIfNeedUpdate: Boolean, info: UpdateDataFromCloud) {

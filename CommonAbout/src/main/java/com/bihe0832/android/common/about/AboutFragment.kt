@@ -8,6 +8,7 @@ import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 
 
 open class AboutFragment : SettingsFragment() {
@@ -31,7 +32,7 @@ open class AboutFragment : SettingsFragment() {
     }
 
     open fun updateRedPoint(cloud: UpdateDataFromCloud?) {
-        var position = getSettingsDataPositionByTitle(context?.resources?.getString(R.string.settings_update_title))
+        var position = getSettingsDataPositionByTitle(ThemeResourcesManager.getString(R.string.settings_update_title))
         updateRedPoint(position, cloud)
     }
 
@@ -39,7 +40,7 @@ open class AboutFragment : SettingsFragment() {
         if (position >= 0) {
             (mAdapter.data[position] as? SettingsData)?.apply {
                 if (null != cloud && cloud.canShowNew()) {
-                    mTipsText = context?.resources?.getString(R.string.settings_update_tips) ?: ""
+                    mTipsText = ThemeResourcesManager.getString(R.string.settings_update_tips) ?: ""
                     mItemIsNew = true
                 } else {
                     mTipsText = ""

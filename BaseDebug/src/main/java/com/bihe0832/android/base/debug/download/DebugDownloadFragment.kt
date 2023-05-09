@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
@@ -109,7 +110,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
         DownloadItem().apply {
             setNotificationVisibility(true)
-            downloadTitle = getString(R.string.app_name)
+            downloadTitle = ThemeResourcesManager.getString(R.string.app_name)
             downloadDesc = "ffsf"
             downloadIcon = if (type == INSTALL_BY_CUSTOMER) {
                 "https://cdn.bihe0832.com/images/zixie_32.ico"
@@ -340,7 +341,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         DownloadAPK.startDownloadWithProcess(
                 activity!!,
                 String.format(
-                        ZixieContext.applicationContext!!.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating),
+                        ThemeResourcesManager.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating)!!,
                         "（V.2.2.21)"
                 ),
                 "这是一个Desc测试",

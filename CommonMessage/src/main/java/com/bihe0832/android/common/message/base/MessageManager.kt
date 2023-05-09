@@ -7,7 +7,6 @@ import com.bihe0832.android.common.message.MessageListLiveData
 import com.bihe0832.android.common.message.R
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.common.message.data.db.MessageDBManager
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
@@ -18,6 +17,7 @@ import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getAPPCurrentStartTime
 import com.bihe0832.android.lib.request.URLUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -54,9 +54,7 @@ abstract class MessageManager {
     }
 
     fun updateMsg() {
-        ZixieContext.applicationContext?.let {
-            fetchMessageByFile(it.getString(R.string.com_bihe0832_message_common_msg_url))
-        }
+        fetchMessageByFile(ThemeResourcesManager.getString(R.string.com_bihe0832_message_common_msg_url)!!)
         fetchNewMsg()
     }
 

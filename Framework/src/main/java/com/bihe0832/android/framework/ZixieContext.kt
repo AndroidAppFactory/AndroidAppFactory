@@ -13,7 +13,6 @@ import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.os.Build
-import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
@@ -24,6 +23,7 @@ import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
@@ -95,14 +95,14 @@ object ZixieContext {
 
     fun showDebugEditionToast() {
         if (!isOfficial()) {
-            applicationContext?.let { context ->
-                showLongToast(context.getString(R.string.common_tips_debug))
+            ThemeResourcesManager.getString(R.string.common_tips_debug)?.takeIf { it.isNotBlank() }?.let { text ->
+                showLongToast(text)
             }
         }
     }
 
     //任何时候都弹
-    fun showToast(msg: String, duration: Int) {
+    fun showToast(msg: String?, duration: Int) {
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.R) {
             //大于等于 30
             if (ApplicationObserver.isAPPBackground()) {
@@ -150,8 +150,8 @@ object ZixieContext {
     }
 
     fun showWaiting() {
-        applicationContext?.let { context ->
-            showLongToast(context.getString(R.string.common_tips_waiting))
+        ThemeResourcesManager.getString(R.string.common_tips_waiting)?.takeIf { it.isNotBlank() }?.let { text ->
+            showLongToast(text)
         }
     }
 
@@ -258,7 +258,7 @@ object ZixieContext {
 
     fun exitAPP(callbackListener: OnDialogListener?) {
         getCurrentActivity()?.let {
-            DialogUtils.showConfirmDialog(it, applicationContext!!.resources.getString(R.string.common_reminder_title), String.format(applicationContext!!.resources.getString(R.string.exist_msg), applicationContext!!.resources.getString(R.string.app_name)), applicationContext!!.resources.getString(R.string.comfirm), applicationContext!!.resources.getString(R.string.cancel), true, object : OnDialogListener {
+            DialogUtils.showConfirmDialog(it, ThemeResourcesManager.getString(R.string.common_reminder_title)!!, String.format(ThemeResourcesManager.getString(R.string.exist_msg)!!, ThemeResourcesManager.getString(R.string.app_name)), ThemeResourcesManager.getString(R.string.comfirm), ThemeResourcesManager.getString(R.string.cancel), true, object : OnDialogListener {
                 override fun onPositiveClick() {
                     callbackListener?.onPositiveClick()
                     exitAPP()
@@ -276,12 +276,14 @@ object ZixieContext {
     }
 
     open fun restartApp() {
-        restartApp(ConvertUtils.parseLong(applicationContext?.getString(R.string.common_waiting_duration_restart), 1500L))
+        restartApp(ConvertUtils.parseLong(ThemeResourcesManager.getString(R.string.common_waiting_duration_restart), 1500L))
     }
 
     open fun restartApp(waitTime: Long) {
         applicationContext?.let { context ->
-            showLongToast(context.getString(R.string.common_tips_restart))
+            ThemeResourcesManager.getString(R.string.common_tips_restart)?.takeIf { it.isNotBlank() }?.let { text ->
+                showLongToast(text)
+            }
             ThreadManager.getInstance().start({
                 IntentUtils.restartAPP(context)
                 exitProcess(0)

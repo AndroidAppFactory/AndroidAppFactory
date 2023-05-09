@@ -9,6 +9,7 @@ package com.bihe0832.android.lib.ui.dialog.impl
 
 import android.content.Context
 import android.view.inputmethod.EditorInfo
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
@@ -29,7 +30,7 @@ object DialogUtils {
     }
 
     fun showInputDialog(context: Context, title: String, msg: String, hint: String, value: String, inputType: Int, callback: InputDialogCompletedCallback?) {
-        showInputDialog(context, title, msg, context.getString(R.string.dialog_button_ok), "", true, if (inputType == 0) EditorInfo.TYPE_CLASS_TEXT else inputType, value, hint, object : InputDialogCallback {
+        showInputDialog(context, title, msg, ThemeResourcesManager.getString(R.string.dialog_button_ok)!!, "", true, if (inputType == 0) EditorInfo.TYPE_CLASS_TEXT else inputType, value, hint, object : InputDialogCallback {
             override fun onPositiveClick(input: String) {
                 callback?.onInputCompleted(input)
             }
@@ -46,7 +47,7 @@ object DialogUtils {
 
 
     fun showInputDialog(context: Context, titleName: String, msg: String, defaultValue: String, listener: InputDialogCompletedCallback?) {
-        showInputDialog(context, titleName, msg, context.getString(R.string.dialog_input_hint), defaultValue, EditorInfo.TYPE_CLASS_TEXT, listener)
+        showInputDialog(context, titleName, msg, ThemeResourcesManager.getString(R.string.dialog_input_hint)!!, defaultValue, EditorInfo.TYPE_CLASS_TEXT, listener)
     }
 
     fun showInputDialog(context: Context, titleName: String, defaultValue: String, listener: InputDialogCompletedCallback?) {
@@ -86,11 +87,11 @@ object DialogUtils {
     }
 
     fun showConfirmDialog(context: Context, title: String, message: String, canCancel: Boolean, callback: OnDialogListener) {
-        showConfirmDialog(context, title, message, context.getString(R.string.dialog_button_ok), context.getString(R.string.dialog_button_cancel), canCancel, callback)
+        showConfirmDialog(context, title, message, ThemeResourcesManager.getString(R.string.dialog_button_ok), ThemeResourcesManager.getString(R.string.dialog_button_cancel), canCancel, callback)
     }
 
     fun showConfirmDialog(context: Context, message: String, canCancel: Boolean, callback: OnDialogListener) {
-        showConfirmDialog(context, context.getString(R.string.dialog_title), message, context.getString(R.string.dialog_button_ok), context.getString(R.string.dialog_button_cancel), canCancel, callback)
+        showConfirmDialog(context, ThemeResourcesManager.getString(R.string.dialog_title)!!, message, ThemeResourcesManager.getString(R.string.dialog_button_ok), ThemeResourcesManager.getString(R.string.dialog_button_cancel), canCancel, callback)
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, positive: String, canCancel: Boolean, callback: OnDialogListener?) {
@@ -121,7 +122,7 @@ object DialogUtils {
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean, callback: OnDialogListener?) {
-        showAlertDialog(context, title, message, context.getString(R.string.dialog_tips_button), canCancel, callback)
+        showAlertDialog(context, title, message, ThemeResourcesManager.getString(R.string.dialog_tips_button)!!, canCancel, callback)
     }
 
     fun showAlertDialog(context: Context, title: String?, message: String?, canCancel: Boolean) {
@@ -129,7 +130,7 @@ object DialogUtils {
     }
 
     fun showAlertDialog(context: Context, message: String?) {
-        showAlertDialog(context, context.getString(R.string.dialog_title), message, true)
+        showAlertDialog(context, ThemeResourcesManager.getString(R.string.dialog_title), message, true)
     }
 
 }

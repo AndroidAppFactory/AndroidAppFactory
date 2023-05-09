@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.config.Config
@@ -21,6 +20,7 @@ import com.bihe0832.android.lib.media.image.clearImage
 import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.common.ColorTools
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -40,17 +40,9 @@ open class BaseActivity : SupportActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (resetDensity()) {
-            DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(resources.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
-        }
-        if (getStatusBarColor() == Color.TRANSPARENT) {
-            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ContextCompat.getColor(this, R.color.colorPrimaryDark)), getNavigationBarColor())
-        } else {
-            enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
+            DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(ThemeResourcesManager.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
         }
 
-        if (mNeedEnableLayerToGray) {
-            setLayerToGray()
-        }
     }
 
     open fun resetDensity(): Boolean {
@@ -58,11 +50,26 @@ open class BaseActivity : SupportActivity() {
     }
 
     open fun getStatusBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        return ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!
     }
 
     open fun getNavigationBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.navigationBarColor)
+        return ThemeResourcesManager.getColor(R.color.navigationBarColor)!!
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (getStatusBarColor() == Color.TRANSPARENT) {
+            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!), getNavigationBarColor())
+        } else {
+            enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
+        }
+
+        mToolbar?.setBackgroundColor(ThemeResourcesManager.getColor(R.color.colorPrimary)!!)
+        
+        if (mNeedEnableLayerToGray) {
+            setLayerToGray()
+        }
     }
 
     override fun onPause() {

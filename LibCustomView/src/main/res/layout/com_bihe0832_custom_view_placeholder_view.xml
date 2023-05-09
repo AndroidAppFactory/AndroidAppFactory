@@ -19,7 +19,7 @@
         android:src="@drawable/icon_info"
         app:tint="@color/textColorPrimary" />
 
-    <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+    <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
         android:id="@+id/list_empty_tips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:textColor="@color/primary_text"
         android:textSize="12dp" />
 
-    <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+    <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
         android:id="@+id/list_empty_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

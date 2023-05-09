@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.File
@@ -39,6 +40,7 @@ object ZixieCoreInit {
             // 初始化配置管理
             Config.init(ZixieContext.applicationContext, Constants.CONFIG_COMMON_FILE_NAME, !ZixieContext.isOfficial())
             Config.loadLoaclFile(application, Constants.CONFIG_SPECIAL_FILE_NAME, !ZixieContext.isOfficial())
+            ThemeResourcesManager.init(ZixieContext.application!!)
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
             Log.e(TAG, "isDebug: ${ZixieContext.isDebug()} ;isOfficial: ${ZixieContext.isOfficial()}")
             Log.e(TAG, "tag: ${ZixieContext.getVersionTag()}")

@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/colorOnPrimary" />
 
-            <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+            <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
                 android:id="@+id/title_icon_unread"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

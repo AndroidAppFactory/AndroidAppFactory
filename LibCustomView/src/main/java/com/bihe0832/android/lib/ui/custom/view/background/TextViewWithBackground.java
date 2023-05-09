@@ -1,10 +1,11 @@
-package com.bihe0832.android.lib.ui.textview;
+package com.bihe0832.android.lib.ui.custom.view.background;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
 
+import com.bihe0832.android.lib.ui.custom.view.R;
 import com.bihe0832.android.lib.ui.view.ext.DrawableFactoryKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 

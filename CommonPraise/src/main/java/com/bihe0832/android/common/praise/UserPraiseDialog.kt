@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.lib.router.Routers
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 
@@ -20,8 +20,8 @@ class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setShouldCanceled(true)
-        setPositive(context.getString(R.string.com_bihe0832_praise_positive))
-        setNegative(context.getString(R.string.com_bihe0832_praise_negative))
+        setPositive(ThemeResourcesManager.getString(R.string.com_bihe0832_praise_positive))
+        setNegative(ThemeResourcesManager.getString(R.string.com_bihe0832_praise_negative))
         setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
                 UserPraiseManager.doPraiseAction()

@@ -7,9 +7,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import com.bihe0832.android.lib.ui.textview.TextViewWithBackground
-import com.bihe0832.android.lib.ui.textview.ext.changeStatusWithUnreadMsg
-import com.bihe0832.android.lib.ui.textview.ext.setUnreadMsg
+import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnreadMsg
+import com.bihe0832.android.lib.ui.custom.view.background.setUnreadMsg
 
 /**
  * height:56
@@ -20,7 +19,7 @@ abstract class BaseBottomBarTab(context: Context, attrs: AttributeSet?, defStyle
 
     protected abstract fun getTitleView(): TextView?
 
-    protected abstract fun getTipsView(): TextViewWithBackground?
+    protected abstract fun getTipsView(): com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground?
 
     protected abstract fun getLayoutID(): Int
 

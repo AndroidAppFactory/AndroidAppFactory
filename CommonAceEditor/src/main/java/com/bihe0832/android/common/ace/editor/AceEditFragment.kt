@@ -14,6 +14,7 @@ import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.ace.editor.AceConstants
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.LoadingDialog
 import kotlinx.android.synthetic.main.fragment_ace_edit.*
@@ -76,7 +77,7 @@ class AceEditFragment : BaseFragment() {
     override fun initData() {
         super.initData()
         if (FileUtils.checkFileExist(filePath)) {
-            mLoadingDialog?.show(getString(R.string.ace_editor_load_file_tips))
+            mLoadingDialog?.show(ThemeResourcesManager.getString(R.string.ace_editor_load_file_tips))
             ThreadManager.getInstance().start {
                 FileUtils.getFileBytes(filePath).let {
                     main_ace_editor?.loadContent(filePath, it)

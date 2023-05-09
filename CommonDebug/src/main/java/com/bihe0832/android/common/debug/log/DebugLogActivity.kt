@@ -1,7 +1,6 @@
 package com.bihe0832.android.common.debug.log;
 
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
@@ -17,6 +16,7 @@ import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 
@@ -30,7 +30,7 @@ open class DebugLogActivity : CommonListActivity() {
     }
 
     override fun getNavigationBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.transparent)
+        return ThemeResourcesManager.getColor(R.color.transparent)!!
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {

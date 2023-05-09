@@ -6,11 +6,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
-import androidx.core.content.ContextCompat;
 
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
-import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
+import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground;
 
 /**
  * height:56
@@ -62,14 +61,14 @@ public class SimpleBottomBarTab extends BaseBottomBarTab {
         super.setSelected(selected);
         if (selected) {
             mIconView.setAlpha(1.0f);
-            mIconView.setColorFilter(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_selected));
+            mIconView.setColorFilter(getContext().getResources().getColor(R.color.com_bihe0832_tab_selected));
             mTitleView.setAlpha(1.0f);
-            mTitleView.setTextColor(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_selected));
+            mTitleView.setTextColor(getContext().getResources().getColor(R.color.com_bihe0832_tab_selected));
         } else {
             mIconView.setAlpha(0.5f);
-            mIconView.setColorFilter(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_unselect));
+            mIconView.setColorFilter(getContext().getResources().getColor(R.color.com_bihe0832_tab_unselect));
             mTitleView.setAlpha(0.5f);
-            mTitleView.setTextColor(ContextCompat.getColor(getContext(), R.color.com_bihe0832_tab_unselect));
+            mTitleView.setTextColor(getContext().getResources().getColor( R.color.com_bihe0832_tab_unselect));
         }
     }
 }

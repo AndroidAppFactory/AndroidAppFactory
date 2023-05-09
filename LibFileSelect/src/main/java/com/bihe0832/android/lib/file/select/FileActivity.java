@@ -21,12 +21,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.immersion.AppCompatActivityImmersiveExtKt;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.PermissionManager.OnPermissionResult;
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.ui.touchregion.ViewExtForTouchRegionKt;
@@ -59,7 +58,7 @@ public class FileActivity extends SupportActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_bihe0832_activity_file);
 
-        AppCompatActivityImmersiveExtKt.enableActivityImmersive(this, ContextCompat.getColor(this, R.color.colorPrimaryDark), ContextCompat.getColor(this, R.color.navigationBarColor));
+        AppCompatActivityImmersiveExtKt.enableActivityImmersive(this, ThemeResourcesManager.INSTANCE.getColor(R.color.colorPrimaryDark), ThemeResourcesManager.INSTANCE.getColor(R.color.navigationBarColor));
         initPermission();
         initHandler();
         initView();

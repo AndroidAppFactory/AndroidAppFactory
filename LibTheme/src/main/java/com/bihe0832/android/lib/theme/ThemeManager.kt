@@ -1,0 +1,62 @@
+package com.bihe0832.android.lib.theme
+
+import android.app.Application
+import android.content.pm.PackageManager
+import android.content.res.AssetManager
+import android.content.res.Resources
+import android.text.TextUtils
+import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.theme.core.ActivityLifecycleForTheme
+import java.util.*
+
+/**
+ * Created by liupei on 2018/3/16.
+ */
+object ThemeManager : Observable() {
+
+    const val TAG = "ThemeManager"
+    private val CONFIG_KEY_CURRENT_THEME = "com.bihe0832.android.lib.skin.core.theme.path"
+    private lateinit var mApplication: Application
+    private  var isDebug: Boolean = false
+
+    fun init(application: Application, isDebug:Boolean) {
+        this.mApplication = application
+        this.isDebug = isDebug
+        ThemeResourcesManager.init(application)
+        application.registerActivityLifecycleCallbacks(ActivityLifecycleForTheme())
+        applyTheme(Config.readConfig(CONFIG_KEY_CURRENT_THEME, ""))
+    }
+
+    fun isDebug(): Boolean {
+        return isDebug
+    }
+    fun applyTheme(path: String?) {
+        if (TextUtils.isEmpty(path)) {
+            ThemeResourcesManager.reset()
+            changeThemPath("")
+        } else {
+            try {
+                val assetManager = AssetManager::class.java.newInstance()
+                val method = assetManager.javaClass.getMethod("addAssetPath", String::class.java)
+                method.isAccessible = true
+                method.invoke(assetManager, path)
+                val resources = mApplication.resources
+                val skinRes = Resources(assetManager, resources.displayMetrics, resources.configuration)
+                //获取外部Apk(皮肤包) 包名
+                val packageName = mApplication.packageManager.getPackageArchiveInfo(path!!, PackageManager.GET_ACTIVITIES)?.packageName
+                if (!TextUtils.isEmpty(packageName)) {
+                    ThemeResourcesManager.apply(skinRes, packageName)
+                    changeThemPath(path)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        setChanged()
+        notifyObservers()
+    }
+
+    private fun changeThemPath(path: String?) {
+        Config.writeConfig(CONFIG_KEY_CURRENT_THEME, path ?: "")
+    }
+}

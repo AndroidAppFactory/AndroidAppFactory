@@ -1,7 +1,6 @@
 package com.bihe0832.android.base.debug.card
 
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bihe0832.android.app.router.RouterConstants
@@ -16,6 +15,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.media.image.loadImage
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.custom.view.PlaceholderView
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
@@ -125,7 +125,7 @@ class TestListActivity : CommonListActivity() {
     }
 
     override fun getNavigationBarColor(): Int {
-        return ContextCompat.getColor(this, R.color.transparent)
+        return ThemeResourcesManager.getColor(R.color.transparent)!!
     }
 
     override fun getDataLiveData(): CommonListLiveData {

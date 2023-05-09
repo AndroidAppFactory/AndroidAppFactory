@@ -11,10 +11,12 @@ import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.ColorRes;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
+
 
 /**
  * @author zixie code@bihe0832.com
@@ -200,7 +202,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
          * 通过资源文件设置分隔线颜色
          */
         public Builder setColorResource(@ColorRes int resource) {
-            setColor(ContextCompat.getColor(mContext, resource));
+            setColor(ThemeResourcesManager.INSTANCE.getColor(resource));
             return this;
         }
 

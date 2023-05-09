@@ -10,7 +10,7 @@ import androidx.viewpager.widget.ViewPager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment
-import com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.activity_common_tab.*

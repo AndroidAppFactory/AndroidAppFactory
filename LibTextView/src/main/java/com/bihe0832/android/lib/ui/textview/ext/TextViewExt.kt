@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
 
 /**
@@ -22,19 +22,19 @@ fun TextView.setDrawable(leftRes: Int, topRes: Int, rightRes: Int, bottomRes: In
     var bottom: Drawable? = null
 
     if (leftRes > 0) {
-        left = ContextCompat.getDrawable(context, leftRes)
+        left = ThemeResourcesManager.getDrawable(leftRes)
     }
 
     if (topRes > 0) {
-        top = ContextCompat.getDrawable(context, topRes)
+        top = ThemeResourcesManager.getDrawable(topRes)
     }
 
     if (rightRes > 0) {
-        right = ContextCompat.getDrawable(context, rightRes)
+        right = ThemeResourcesManager.getDrawable(rightRes)
     }
 
     if (bottomRes > 0) {
-        bottom = ContextCompat.getDrawable(context, bottomRes)
+        bottom = ThemeResourcesManager.getDrawable(bottomRes)
     }
     setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom)
 }
@@ -53,25 +53,25 @@ fun TextView.setDrawable(
     var bottom: Drawable? = null
 
     if (leftRes > 0) {
-        left = ContextCompat.getDrawable(context, leftRes)?.apply {
+        left = ThemeResourcesManager.getDrawable(leftRes)?.apply {
             setBounds(0, 0, width, height)
         }
     }
 
     if (topRes > 0) {
-        top = ContextCompat.getDrawable(context, topRes)?.apply {
+        top = ThemeResourcesManager.getDrawable(topRes)?.apply {
             setBounds(0, 0, width, height)
         }
     }
 
     if (rightRes > 0) {
-        right = ContextCompat.getDrawable(context, rightRes)?.apply {
+        right = ThemeResourcesManager.getDrawable(rightRes)?.apply {
             setBounds(0, 0, width, height)
         }
     }
 
     if (bottomRes > 0) {
-        bottom = ContextCompat.getDrawable(context, bottomRes)?.apply {
+        bottom = ThemeResourcesManager.getDrawable(bottomRes)?.apply {
             setBounds(0, 0, width, height)
         }
     }
@@ -79,16 +79,11 @@ fun TextView.setDrawable(
 }
 
 fun TextView.setDrawableLeft(leftRes: Int) {
-    setCompoundDrawablesWithIntrinsicBounds(
-        ContextCompat.getDrawable(context, leftRes),
-        null,
-        null,
-        null
-    )
+    setCompoundDrawablesWithIntrinsicBounds(ThemeResourcesManager.getDrawable(leftRes), null, null, null)
 }
 
 fun TextView.setDrawableLeft(leftRes: Int, width: Int, height: Int) {
-    ContextCompat.getDrawable(context, leftRes)?.apply {
+    ThemeResourcesManager.getDrawable(leftRes)?.apply {
         setBounds(0, 0, width, height)
     }.let {
         setCompoundDrawables(it, null, null, null)

@@ -46,7 +46,7 @@
         app:tint="@color/accent" />
 
 
-    <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+    <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
         android:id="@+id/positive_bg"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toTopOf="@+id/positive_bg" />
 
 
-    <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+    <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
         android:id="@+id/negative_bg"
         android:layout_width="0dp"
         android:layout_height="40dp"

@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.media.image
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bihe0832.android.lib.log.ZLog
 import com.bumptech.glide.Glide
@@ -147,11 +148,33 @@ fun ImageView.loadImage(resId: Int, width: Int, height: Int, requestOptions: Req
                 requestOptions.override(width)
             }
         }
+
         Glide.with(this.context).load(resId).apply(requestOptions).into(this)
     } catch (e: Exception) {
         e.printStackTrace()
         try {
             setImageResource(resId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}
+
+fun ImageView.loadImage(drawableResource: Drawable, width: Int, height: Int, requestOptions: RequestOptions = RequestOptions()) {
+    requestOptions.dontAnimate()
+    try {
+        if (width > 0) {
+            if (height > 0) {
+                requestOptions.override(width, height)
+            } else {
+                requestOptions.override(width)
+            }
+        }
+        Glide.with(this.context).load(drawableResource).apply(requestOptions).into(this)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        try {
+            setImageDrawable(drawableResource)
         } catch (e: Exception) {
             e.printStackTrace()
         }

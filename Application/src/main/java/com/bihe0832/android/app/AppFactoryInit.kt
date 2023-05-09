@@ -21,6 +21,7 @@ import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
+import com.bihe0832.android.lib.theme.ThemeManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
@@ -86,6 +87,7 @@ object AppFactoryInit {
         MobileUtil.registerMobileSignalListener(application.applicationContext)
         CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
         ShakeManager.init(application.applicationContext)
+        ThemeManager.init(application,!ZixieContext.isOfficial())
     }
 
     fun initAll(application: android.app.Application) {

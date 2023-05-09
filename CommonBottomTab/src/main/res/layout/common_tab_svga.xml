@@ -22,7 +22,7 @@
         app:loopCount="1"
         tools:src="@mipmap/icon" />
 
-    <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+    <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
         android:id="@+id/tab_tips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

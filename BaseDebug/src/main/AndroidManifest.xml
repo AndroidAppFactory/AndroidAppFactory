@@ -109,6 +109,11 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AAF.ActivityTheme.Alpha" />
 
+        <activity
+            android:name="com.bihe0832.android.base.debug.skin.SkinActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme" />
+
     </application>
 
 </manifest>

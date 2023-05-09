@@ -12,9 +12,11 @@ import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-import com.bihe0832.android.lib.ui.textview.TextViewWithBackground;
-import com.bihe0832.android.lib.ui.textview.ext.TextViewWithBackgroundExtKt;
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
+import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground;
+import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackgroundExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
+import com.bumptech.glide.request.RequestOptions;
 
 /**
  * @author zixie code@bihe0832.com
@@ -60,7 +62,7 @@ public class SettingsHolder extends CardBaseHolder {
             if (data.mItemIconRes < 0) {
                 mHeaderIcon.setVisibility(View.GONE);
             } else {
-                GlideExtKt.loadImage(mHeaderIcon, data.mItemIconRes);
+                GlideExtKt.loadImage(mHeaderIcon, ThemeResourcesManager.INSTANCE.getDrawable(data.mItemIconRes), 0, 0, new RequestOptions());
                 mHeaderIcon.setVisibility(View.VISIBLE);
             }
         } else {

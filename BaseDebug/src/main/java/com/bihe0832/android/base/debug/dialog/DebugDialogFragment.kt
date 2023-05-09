@@ -7,12 +7,12 @@ import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.share.DebugShareFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
-import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.text.ClipboardUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -82,7 +82,7 @@ class DebugDialogFragment : DebugEnvFragment() {
         dialog.setContent(content)
         dialog.setPositive("分享给我们")
         dialog.setNegative("复制到剪切板")
-        dialog.setFeedBackContent(getString(R.string.theme_change_tips))
+        dialog.setFeedBackContent(ThemeResourcesManager.getString(R.string.theme_change_tips))
         dialog.setShouldCanceled(true)
 
         dialog.setRadioData(mutableListOf<String>().apply {

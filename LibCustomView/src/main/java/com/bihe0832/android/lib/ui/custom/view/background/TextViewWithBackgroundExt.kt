@@ -1,9 +1,8 @@
-package com.bihe0832.android.lib.ui.textview.ext;
+package com.bihe0832.android.lib.ui.custom.view.background;
 
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.bihe0832.android.lib.ui.textview.TextViewWithBackground
 
 /**
  *

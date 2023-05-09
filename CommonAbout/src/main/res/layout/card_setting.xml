@@ -40,7 +40,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
             android:ellipsize="end"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/com_bihe0832_dialog_bg"
             android:maxLines="1"
             android:text="加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订"
             android:textSize="14dp"
@@ -62,7 +62,7 @@
             app:layout_constraintTop_toTopOf="@+id/settings_title"
             tools:text="前往" />
 
-        <com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/settings_is_new"
             android:layout_width="8dp"
             android:layout_height="8dp"

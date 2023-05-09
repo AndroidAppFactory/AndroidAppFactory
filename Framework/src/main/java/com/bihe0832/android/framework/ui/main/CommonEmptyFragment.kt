@@ -3,10 +3,10 @@ package com.bihe0832.android.framework.ui.main
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import kotlinx.android.synthetic.main.common_fragment_empty.*
 
 /**
@@ -29,7 +29,7 @@ open class CommonEmptyFragment : BaseFragment() {
         mContentString = bundle.getString(INTENT_KEY_TITLE, this.toString())
         mContentBackgroundColor = bundle.getInt(
             INTENT_KEY_COLOR,
-            ContextCompat.getColor(requireContext(), R.color.windowBackground)
+                ThemeResourcesManager.getColor(R.color.windowBackground)!!
         )
     }
 

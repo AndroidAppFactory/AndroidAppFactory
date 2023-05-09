@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="16dp">
 
-        <com.bihe0832.android.lib.ui.custom.view.ViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground
             android:id="@+id/message_is_new"
             android:layout_width="6dp"
             android:layout_height="6dp"

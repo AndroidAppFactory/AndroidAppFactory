@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.ui.textview.TextViewWithBackground
+import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
 
 /**
  * @author zixie code@bihe0832.com Created on 2021/12/30.

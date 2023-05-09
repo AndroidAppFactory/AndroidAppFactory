@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.bihe0832.android.lib.ui.custom.view.ViewWithBackground
+        <com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="fitCenter"

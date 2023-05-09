@@ -1,9 +1,7 @@
 package  com.bihe0832.android.common.list
 
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +9,7 @@ import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.aaf.tools.AAFException
 import com.bihe0832.android.lib.adapter.CardBaseAdapter
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.custom.view.PlaceholderView
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeLinearLayoutManager
 
@@ -90,7 +89,7 @@ abstract class BaseListFragment : BaseFragment() {
     protected open fun getBaseEmptyView(): View {
         return PlaceholderView(context!!).apply {
             if (getLayoutManagerForList() is GridLayoutManager) {
-                getString(R.string.bad_layoutmanager_empty_tips)
+                ThemeResourcesManager.getString(R.string.bad_layoutmanager_empty_tips)
             } else {
                 getEmptyText()
             }.let {
