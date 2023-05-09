@@ -14,13 +14,12 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
-import com.bihe0832.android.framework.privacy.AgreementPrivacy.hasAgreedPrivacy
+import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.device.shake.ShakeManager
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
-import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import com.bihe0832.android.lib.theme.ThemeManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -82,7 +81,6 @@ object AppFactoryInit {
     private fun initExtra(application: android.app.Application) {
         // 初始化网络变量和监听
         NetworkChangeManager.init(application.applicationContext, true)
-        WifiManagerWrapper.init(application.applicationContext, !ZixieContext.isOfficial())
         // 监听信号变化，统一到MobileUtil
         MobileUtil.registerMobileSignalListener(application.applicationContext)
         CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
@@ -91,7 +89,7 @@ object AppFactoryInit {
     }
 
     fun initAll(application: android.app.Application) {
-        if (hasAgreedPrivacy()) {
+        if (AgreementPrivacy.hasAgreedPrivacy()) {
             val am = application.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             val runningApps = am.runningAppProcesses
             for (it in runningApps) {
