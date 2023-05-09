@@ -40,7 +40,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
             android:ellipsize="end"
-            android:textColor="@color/com_bihe0832_dialog_bg"
+            android:textColor="@color/textColorPrimary"
             android:maxLines="1"
             android:text="加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订加速宝退订"
             android:textSize="14dp"
