@@ -78,6 +78,10 @@ class IconManager(activity: Activity) {
         mIconView?.setClickListener(listener)
     }
 
+    fun setIconLongClickListener(listener: View.OnLongClickListener) {
+        mIconView?.setOnLongClickListener(listener)
+    }
+
     fun showIconWithPermissionCheck(result: PermissionManager.OnPermissionResult?) {
         showIconWithPermissionCheck(REQUEST_PERMISSION_SCENE, result)
     }
@@ -170,6 +174,7 @@ class IconManager(activity: Activity) {
 
     fun getFullScreenFlag(): Int {
         return (WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 or WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
                 or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH)

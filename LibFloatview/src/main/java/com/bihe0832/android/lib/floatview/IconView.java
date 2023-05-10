@@ -1,13 +1,13 @@
 package com.bihe0832.android.lib.floatview;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -16,6 +16,7 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.config.Config;
 import com.bihe0832.android.lib.log.ZLog;
@@ -60,6 +61,9 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
     private Animation mIconMovingAnim;//悬浮窗拖动时的动画
     private boolean isLogoAnimRunning;//Icon选中动画是否正在运行
     public volatile boolean hasBeenAdded = false;
+    public volatile boolean longPressAvailabledNow = false;
+    private long mTouchActionDownTime = 0L;
+
     private OnClickListener mOnClickListener = null;
 
     Handler mUiHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_ANDROID_MAIN)) {
@@ -130,6 +134,8 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
             case MotionEvent.ACTION_DOWN:
                 // Icon开始旋转
                 getIconView().startAnimation(mIconMovingAnim);
+                longPressAvailabledNow = true;
+                mTouchActionDownTime = System.currentTimeMillis();
                 xInView = event.getX();
                 yInView = event.getY();
                 xDownInScreen = event.getRawX();
@@ -148,6 +154,16 @@ public abstract class IconView extends LinearLayout implements View.OnClickListe
             case MotionEvent.ACTION_MOVE:
                 if (needUpdateViewPosition()) {
                     updateViewPosition();
+                    longPressAvailabledNow = false;
+                } else {
+                    if (longPressAvailabledNow) {
+                        long moveTime = System.currentTimeMillis();
+                        if ((moveTime - mTouchActionDownTime) >= ViewConfiguration.getLongPressTimeout()) {
+                            // 符合长按要求
+                            performLongClick();
+                            longPressAvailabledNow = false;
+                        }
+                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:

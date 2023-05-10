@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/position_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
+        android:id="@+id/position_text"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:bgtv_backgroundColor="@color/bihe0832_common_toast_background_color"
+        app:bgtv_isRadiusHalfHeight="true"
+        app:bgtv_isWidthHeightEqual="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
