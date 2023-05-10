@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.common.svga.SVGAHelperKt;
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
 import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground;
 import com.opensource.svgaplayer.SVGACallback;
@@ -104,10 +105,10 @@ public class SvgaBottomBarTab extends BaseBottomBarTab {
     protected void onSelectChanged() {
         if (isSelected()) {
             mIconView.setImageResource(mSelectedImageRes);
-            mTitleView.setTextColor(getContext().getResources().getColor(R.color.com_bihe0832_tab_selected));
+            mTitleView.setTextColor(ThemeResourcesManager.INSTANCE.getColor(R.color.com_bihe0832_tab_selected));
         } else {
             mIconView.setImageResource(mNormalImageRes);
-            mTitleView.setTextColor(getContext().getResources().getColor(R.color.com_bihe0832_tab_unselect));
+            mTitleView.setTextColor(ThemeResourcesManager.INSTANCE.getColor(R.color.com_bihe0832_tab_unselect));
         }
     }
 }

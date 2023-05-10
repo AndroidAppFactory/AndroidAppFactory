@@ -8,36 +8,40 @@ import com.bihe0832.android.lib.floatview.BaseIconView
 import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
 import com.bihe0832.android.lib.utils.ConvertUtils
 
-class PositionIcon(context: Context) : BaseIconView(context) {
+open class PositionIcon(context: Context) : BaseIconView(context) {
 
-    private var locationKey: String = ""
-    private var startLocationX: Int = 0
-    private var startLocationY: Int = 0
-    private var callbackClick: Boolean = false
+    protected var mLocationKey: String = ""
+    private var mStartLocationX: Int = 0
+    private var mStartLocationY: Int = 0
+    private var mCallbackClick: Boolean = true
 
-    fun shouldNotifyClick(shouldNotifyClick: Boolean) {
-        callbackClick = shouldNotifyClick
+    fun setActived(shouldNotifyClick: Boolean) {
+        mCallbackClick = shouldNotifyClick
+    }
+
+    fun getLocationKey(): String {
+        return mLocationKey
     }
 
     fun setLocationInfo(locationKey: String, startLocationX: Int, startLocationY: Int) {
         setStartLocationX(startLocationX)
         setStartLocationY(startLocationY)
-        this.locationKey = locationKey
+        this.mLocationKey = locationKey
     }
 
     fun setStartLocationX(location: Int) {
         if (location > 0) {
-            this.startLocationX = location
+            this.mStartLocationX = location
         } else {
-            this.startLocationX = 0
+            this.mStartLocationX = 0
         }
     }
 
     fun setStartLocationY(location: Int) {
         if (location > 0) {
-            this.startLocationX = location
+            this.mStartLocationX = location
         } else {
-            this.startLocationX = 0
+            this.mStartLocationX = 0
         }
     }
 
@@ -58,26 +62,26 @@ class PositionIcon(context: Context) : BaseIconView(context) {
     }
 
     override fun getDefaultX(): Int {
-        if (locationKey.isEmpty()) {
-            return startLocationX
+        if (mLocationKey.isEmpty()) {
+            return mStartLocationX
         }
-        val location = PositionConfig.getPositionList(locationKey)
-        return ConvertUtils.parseInt(ConvertUtils.getSafeValueFromList(location, 0, ""), startLocationX)
+        val location = PositionConfig.getPositionList(mLocationKey)
+        return ConvertUtils.parseInt(ConvertUtils.getSafeValueFromList(location, 0, ""), mStartLocationX)
     }
 
     override fun getDefaultY(): Int {
-        if (locationKey.isEmpty()) {
-            return startLocationY
+        if (mLocationKey.isEmpty()) {
+            return mStartLocationY
         }
-        val location = PositionConfig.getPositionList(locationKey)
-        return ConvertUtils.parseInt(ConvertUtils.getSafeValueFromList(location, 1, ""), startLocationY)
+        val location = PositionConfig.getPositionList(mLocationKey)
+        return ConvertUtils.parseInt(ConvertUtils.getSafeValueFromList(location, 1, ""), mStartLocationY)
 
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (locationKey.isNotEmpty() && event?.action == MotionEvent.ACTION_UP) {
+        if (mLocationKey.isNotEmpty() && event?.action == MotionEvent.ACTION_UP) {
             updatePosition()
-            if (callbackClick) {
+            if (mCallbackClick) {
                 performClick()
             }
         }
@@ -90,7 +94,7 @@ class PositionIcon(context: Context) : BaseIconView(context) {
             getLocationOnScreen(outLocation)
             var centerX = outLocation[0] + (right - left) / 2
             var centerY = outLocation[1] + (bottom - top) / 2
-            PositionConfig.writePosition(locationKey, outLocation[0], outLocation[1], centerX, centerY)
+            PositionConfig.writePosition(mLocationKey, outLocation[0], outLocation[1], centerX, centerY)
         }
     }
 

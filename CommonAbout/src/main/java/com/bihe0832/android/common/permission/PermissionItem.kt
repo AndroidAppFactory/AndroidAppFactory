@@ -9,6 +9,7 @@ import com.bihe0832.android.framework.permission.PermissionResultOfAAF
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.utils.intent.IntentUtils
@@ -53,9 +54,9 @@ object PermissionItem {
             description = permissionScene
             val hasPermission: Boolean = PermissionManager.isAllPermissionOK(activity, permissionGroup)
             tips = if (hasPermission) {
-                TextFactoryUtils.getSpecialText("已开启", activity.resources.getColor(R.color.textColorSecondary))
+                TextFactoryUtils.getSpecialText("已开启", ThemeResourcesManager.getColor(R.color.textColorSecondary)!!)
             } else {
-                TextFactoryUtils.getSpecialText("去设置", activity.resources.getColor(R.color.textColorPrimary))
+                TextFactoryUtils.getSpecialText("去设置", ThemeResourcesManager.getColor(R.color.textColorPrimary)!!)
             }
             onClickListener = View.OnClickListener {
                 if (hasPermission) {

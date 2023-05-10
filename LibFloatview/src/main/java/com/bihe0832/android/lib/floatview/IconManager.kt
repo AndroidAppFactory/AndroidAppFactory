@@ -189,7 +189,7 @@ class IconManager(activity: Activity) {
     }
 
     fun getNoTouchFlag(): Int {
-        return WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        return WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
     }
 
     fun showViewCanInput(view: View, x: Int?, y: Int?) {

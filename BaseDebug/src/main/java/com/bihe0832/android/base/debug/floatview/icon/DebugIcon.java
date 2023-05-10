@@ -5,6 +5,7 @@ import android.view.WindowManager;
 import com.bihe0832.android.base.debug.R;
 import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.floatview.IconViewWithRedDot;
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 
 /**
  * @author zixie code@bihe0832.com Created on 8/26/21.
@@ -12,7 +13,7 @@ import com.bihe0832.android.lib.floatview.IconViewWithRedDot;
 public class DebugIcon extends IconViewWithRedDot {
 
     public DebugIcon(Context context) throws AAFException {
-        super(context, context.getResources().getDrawable(R.mipmap.share_qq));
+        super(context, ThemeResourcesManager.INSTANCE.getDrawable(R.mipmap.share_qq));
     }
 
     @Override

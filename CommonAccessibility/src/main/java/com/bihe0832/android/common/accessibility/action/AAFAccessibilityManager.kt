@@ -37,6 +37,10 @@ object AAFAccessibilityManager {
         mAAFAccessibilityActionDispatcher = dispatcher
     }
 
+    fun isOk(): Boolean {
+        return isStart
+    }
+
     fun start() {
         isStart = true
     }

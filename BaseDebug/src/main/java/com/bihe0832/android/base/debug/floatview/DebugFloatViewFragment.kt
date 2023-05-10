@@ -32,8 +32,11 @@ class DebugFloatViewFragment : DebugEnvFragment() {
             add(DebugItemData("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
             add(DebugItemData("展示定位Icon", View.OnClickListener { showPosition() }))
             add(DebugItemData("开启无障碍", View.OnClickListener { AAFAccessibilityManager.openSettings(context!!) }))
-            add(DebugItemData("模拟点击指定位置", View.OnClickListener { AAFAccessibilityDispatcher.doClickAction(LOG_TAG, null) }))
-            add(DebugItemData("模拟点击测试反馈", View.OnClickListener { ZixieContext.showWaiting() }))
+            add(DebugItemData("模拟点击指定位置", View.OnClickListener {
+                AAFAccessibilityDispatcher.doClickAction(LOG_TAG, null)
+            }))
+            add(DebugItemData("模拟点击测试反馈", View.OnClickListener {
+                ZixieContext.showWaiting() }))
 
         }
     }
@@ -78,15 +81,11 @@ class DebugFloatViewFragment : DebugEnvFragment() {
 
     val mPositionIcon by lazy {
         PositionIcon(context!!).apply {
-            setOnClickListener {
-                ZixieContext.showWaiting()
-            }
             setText("1")
         }
     }
     var a = false
     private fun showPosition() {
-
         mPositionIcon.setLocationInfo(LOG_TAG, 100, 100)
         mIconManager.showView(mPositionIcon, mIconManager.getFullScreenFlag(), mPositionIcon.defaultX, mPositionIcon.defaultY)
         a = true
