@@ -2,7 +2,9 @@ package com.bihe0832.android.app.permission
 
 import android.Manifest
 import com.bihe0832.android.common.photos.takePhotoPermission
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
 
 /**
  *
@@ -19,4 +21,13 @@ object AAFPermissionManager {
         PermissionManager.addPermissionGroupScene("", Manifest.permission.CAMERA, "扫描、识别二维码")
 
     }
+
+    fun hasFloatPermission(): Boolean {
+        return PermissionManager.isAllPermissionOK(ZixieContext.applicationContext!!, Manifest.permission.SYSTEM_ALERT_WINDOW)
+    }
+
+    fun openFloatPermission() {
+        return openFloatSettings(ZixieContext.applicationContext!!)
+    }
+
 }

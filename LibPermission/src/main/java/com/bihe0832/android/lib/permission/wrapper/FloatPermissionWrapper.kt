@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.permission.wrapper
 
+import android.Manifest
 import android.app.AppOpsManager
 import android.content.Context
 import android.os.Binder
@@ -7,6 +8,8 @@ import android.os.Build
 import android.os.Process
 import android.provider.Settings
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.permission.PermissionManager
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -56,4 +59,8 @@ fun checkFloatPermission(context: Context?): Boolean {
         }
     }
     return false
+}
+
+fun openFloatSettings(context: Context?) {
+    IntentUtils.startAppSettings(context, PermissionManager.getPermissionSettings(Manifest.permission.SYSTEM_ALERT_WINDOW))
 }

@@ -39,9 +39,9 @@ open class PositionIcon(context: Context) : BaseIconView(context) {
 
     fun setStartLocationY(location: Int) {
         if (location > 0) {
-            this.mStartLocationX = location
+            this.mStartLocationY = location
         } else {
-            this.mStartLocationX = 0
+            this.mStartLocationY = 0
         }
     }
 

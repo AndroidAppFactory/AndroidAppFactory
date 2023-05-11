@@ -122,7 +122,7 @@ public class PermissionsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         long time = System.currentTimeMillis() - lastCheckTime;
-        if (time < 500) {
+        if (time < 1000) {
             setAutoDeny();
         }
 
@@ -213,7 +213,13 @@ public class PermissionsActivity extends AppCompatActivity {
     }
 
     protected void onPermissionDialogPositiveClick(final List<String> tempPermissionGroupList) {
-        IntentUtils.startAppDetailSettings(PermissionsActivity.this);
+        if (tempPermissionGroupList.size() > 0) {
+            if (tempPermissionGroupList.size() > 1) {
+                IntentUtils.startAppDetailSettings(PermissionsActivity.this);
+            } else {
+                onPermissionDialogPositiveClick(tempPermissionGroupList.get(0));
+            }
+        }
     }
 
     protected void onPermissionDialogPositiveClick(final String showPermission) {

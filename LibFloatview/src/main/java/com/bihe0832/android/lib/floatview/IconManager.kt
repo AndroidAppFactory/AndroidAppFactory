@@ -36,6 +36,7 @@ class IconManager(activity: Activity) {
     init {
         mActivity = activity
         mIconView = IconViewWithRedDot(mActivity)
+        PermissionManager.addPermissionGroupDesc(REQUEST_PERMISSION_SCENE, Manifest.permission.SYSTEM_ALERT_WINDOW, "悬浮窗")
     }
 
     constructor(activity: Activity, view: IconView) : this(activity) {

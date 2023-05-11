@@ -39,8 +39,8 @@ open class CommonEmptyFragment : BaseFragment() {
     }
 
     companion object {
-        private val INTENT_KEY_TITLE: String = "title"
-        private val INTENT_KEY_COLOR: String = "color"
+        val INTENT_KEY_TITLE: String = "title"
+        val INTENT_KEY_COLOR: String = "color"
 
         @JvmStatic
         fun newInstance(title: String, color: Int): CommonEmptyFragment {
