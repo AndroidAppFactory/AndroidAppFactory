@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.timer
 
 import com.bihe0832.android.lib.utils.IdGenerator
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 object TimerProcessManager {
 
@@ -10,48 +12,40 @@ object TimerProcessManager {
 
     private const val TASK_NAME_PRE = "TimerProcessManager"
     private val mIntentID = IdGenerator(1)
+    private val mProcessTimer = Timer()
 
-    fun startTimerProcess(start: Int, end: Int, timerPeriod: Int, step: Int, autoEnd: Boolean, progressCallback: ProgressCallback): String {
+    private val aaa = ConcurrentHashMap<String, TimerTask>()
+
+    fun startProcessWithDuration(start: Int, end: Int, duration: Int, step: Int, autoEnd: Boolean, progressCallback: ProgressCallback): String {
         var name = TASK_NAME_PRE + mIntentID.generate()
-        TaskManager.getInstance().addTask(object : BaseTask() {
+        val period = duration * 1000L * step / ((end - start))
+        val task = object : TimerTask() {
             private var current = start
-            override fun getMyInterval(): Int {
-                return timerPeriod * 2
-            }
-
-            override fun getNextEarlyRunTime(): Int {
-                return 0
-            }
-
-            override fun runAfterAdd(): Boolean {
-                return true
-            }
-
             override fun run() {
-                if (autoEnd) {
-                    progressCallback.onProgress(name, current)
-                } else {
-                    if (current >= end) {
-                        progressCallback.onProgress(name, end - step)
+                if (current >= end) {
+                    if (autoEnd) {
+                        progressCallback.onProgress(name, end)
                     } else {
-                        progressCallback.onProgress(name, current)
+                        progressCallback.onProgress(name, end - step)
                     }
+                } else {
+                    progressCallback.onProgress(name, current)
                 }
+
                 if (autoEnd && current >= end) {
-                    stopTimerProcess(name)
+                    this.cancel()
+                    mProcessTimer.purge()
                 } else {
                     current += step
                 }
             }
-
-            override fun getTaskName(): String {
-                return name
-            }
-        })
+        }
+        aaa.put(name, task)
+        mProcessTimer.schedule(task, 0, period)
         return name
     }
 
-    fun stopTimerProcess(name: String) {
-        TaskManager.getInstance().removeTask(name)
+    fun stopProcess(name: String) {
+        aaa[name]?.cancel()
     }
 }

@@ -7,7 +7,7 @@ import android.content.res.TypedArray;
  * Created by liupei on 2018/3/16.
  */
 
-public class ThemeUtills {
+public class ThemeTools {
     public static int[] getThemeResid(Context context, int[] attrs) {
         int[] resIds = new int[]{attrs.length};
         TypedArray typedArray = context.obtainStyledAttributes(attrs);

@@ -22,8 +22,10 @@ public class ActivityLifecycleForTheme implements Application.ActivityLifecycleC
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        LayoutInflater layoutInflater = LayoutInflater.from(activity);
-        forceSetFactory2(activity, layoutInflater);
+        if (ThemeManager.INSTANCE.isEnabled()) {
+            LayoutInflater layoutInflater = LayoutInflater.from(activity);
+            forceSetFactory2(activity, layoutInflater);
+        }
     }
 
     private void forceSetFactory2(Activity activity, LayoutInflater inflater) {

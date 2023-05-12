@@ -46,7 +46,7 @@ public class ThemeAttributeTrans {
                 int id;
                 if (attributeValue.startsWith("?")) {
                     int attrid = Integer.parseInt(attributeValue.substring(1));
-                    id = ThemeUtills.getThemeResid(view.getContext(), new int[]{attrid})[0];
+                    id = ThemeTools.getThemeResid(view.getContext(), new int[]{attrid})[0];
                 } else {
                     id = Integer.parseInt(attributeValue.substring(1));
                 }

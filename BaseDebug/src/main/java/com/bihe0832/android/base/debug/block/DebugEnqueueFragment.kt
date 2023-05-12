@@ -64,12 +64,12 @@ class DebugEnqueueFragment : DebugEnvFragment() {
     }
 
     private fun testTimerProcess(autoEnd:Boolean) {
-        TimerProcessManager.startTimerProcess(1, 10, 1, 1, autoEnd, object : TimerProcessManager.ProgressCallback {
+        TimerProcessManager.startProcessWithDuration(1, 20, 5, 1, autoEnd, object : TimerProcessManager.ProgressCallback {
             override fun onProgress(name: String, progress: Int) {
                 ZLog.d("TimerProcessManager", "TASK_NAME $name  and progress $progress")
             }
         }).let {
-            ThreadManager.getInstance().start({TimerProcessManager.stopTimerProcess(it)},15)
+            ThreadManager.getInstance().start({ TimerProcessManager.stopProcess(it) }, 7)
         }
     }
 

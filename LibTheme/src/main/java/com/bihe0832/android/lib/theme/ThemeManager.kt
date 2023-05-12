@@ -15,45 +15,61 @@ import java.util.*
 object ThemeManager : Observable() {
 
     const val TAG = "ThemeManager"
-    private val CONFIG_KEY_CURRENT_THEME = "com.bihe0832.android.lib.skin.core.theme.path"
+    private val CONFIG_KEY_THEME_ENABLED = "com.bihe0832.android.lib.theme.enabled"
+    private val CONFIG_KEY_CURRENT_THEME = "com.bihe0832.android.lib.theme.path"
     private lateinit var mApplication: Application
-    private  var isDebug: Boolean = false
+    private var isDebug: Boolean = false
 
-    fun init(application: Application, isDebug:Boolean) {
+    fun init(application: Application, isDebug: Boolean) {
         this.mApplication = application
         this.isDebug = isDebug
         ThemeResourcesManager.init(application)
-        application.registerActivityLifecycleCallbacks(ActivityLifecycleForTheme())
-        applyTheme(Config.readConfig(CONFIG_KEY_CURRENT_THEME, ""))
+        if (isEnabled()) {
+            application.registerActivityLifecycleCallbacks(ActivityLifecycleForTheme())
+            if (hasTheme()) {
+                applyTheme(Config.readConfig(CONFIG_KEY_CURRENT_THEME, ""))
+            }
+        }
+    }
+
+    fun hasTheme(): Boolean {
+        return !TextUtils.isEmpty(Config.readConfig(CONFIG_KEY_CURRENT_THEME, ""))
+    }
+
+    fun isEnabled(): Boolean {
+        return Config.isSwitchEnabled(CONFIG_KEY_THEME_ENABLED, false)
     }
 
     fun isDebug(): Boolean {
         return isDebug
     }
+
     fun applyTheme(path: String?) {
-        if (TextUtils.isEmpty(path)) {
-            ThemeResourcesManager.reset()
-            changeThemPath("")
-        } else {
-            try {
-                val assetManager = AssetManager::class.java.newInstance()
-                val method = assetManager.javaClass.getMethod("addAssetPath", String::class.java)
-                method.isAccessible = true
-                method.invoke(assetManager, path)
-                val resources = mApplication.resources
-                val skinRes = Resources(assetManager, resources.displayMetrics, resources.configuration)
-                //获取外部Apk(皮肤包) 包名
-                val packageName = mApplication.packageManager.getPackageArchiveInfo(path!!, PackageManager.GET_ACTIVITIES)?.packageName
-                if (!TextUtils.isEmpty(packageName)) {
-                    ThemeResourcesManager.apply(skinRes, packageName)
-                    changeThemPath(path)
+        if (isEnabled()){
+            if (TextUtils.isEmpty(path)) {
+                ThemeResourcesManager.reset()
+                changeThemPath("")
+            } else {
+                try {
+                    val assetManager = AssetManager::class.java.newInstance()
+                    val method = assetManager.javaClass.getMethod("addAssetPath", String::class.java)
+                    method.isAccessible = true
+                    method.invoke(assetManager, path)
+                    val resources = mApplication.resources
+                    val skinRes = Resources(assetManager, resources.displayMetrics, resources.configuration)
+                    //获取外部Apk(皮肤包) 包名
+                    val packageName = mApplication.packageManager.getPackageArchiveInfo(path!!, PackageManager.GET_ACTIVITIES)?.packageName
+                    if (!TextUtils.isEmpty(packageName)) {
+                        ThemeResourcesManager.apply(skinRes, packageName)
+                        changeThemPath(path)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
+            setChanged()
+            notifyObservers()
         }
-        setChanged()
-        notifyObservers()
     }
 
     private fun changeThemPath(path: String?) {
