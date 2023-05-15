@@ -11,6 +11,22 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <com.bihe0832.android.lib.ui.custom.view.SlideViewLayout
+            android:id="@+id/slide_rail"
+            android:layout_width="287dp"
+            android:layout_height="54dp"
+            android:background="@drawable/common_button_bg_shape">
+            <!--滑动部 件在自定义View中滑动的块块 -->
+            <ImageView
+                android:id="@+id/lock_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical|right"
+                android:src="@drawable/icon_info"
+                android:tint="@color/black" />
+        </com.bihe0832.android.lib.ui.custom.view.SlideViewLayout>
+
+
         <com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground
             android:layout_width="10dp"
             android:layout_height="10dp"
