@@ -1,6 +1,8 @@
 <resources>
 
     <string name="about">关于我们</string>
+    <string name="author">ZIXIE</string>
+
     <string name="settings_update_title">版本更新</string>
     <string name="settings_update_tips">发现新版本</string>
 

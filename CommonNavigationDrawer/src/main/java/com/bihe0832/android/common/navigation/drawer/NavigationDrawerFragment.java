@@ -100,7 +100,6 @@ public abstract class NavigationDrawerFragment extends BaseFragment {
 
             }
         });
-        setDrawerLeftEdgeSize();
     }
 
     public void openDrawer() {
@@ -130,7 +129,7 @@ public abstract class NavigationDrawerFragment extends BaseFragment {
     }
 
     /*设置可以全屏滑动*/
-    private void setDrawerLeftEdgeSize() {
+    protected void setDrawerLeftEdgeSize() {
         try {
             Field viewDragHelper = mDrawerLayout.getClass().getDeclaredField("mLeftDragger");
             viewDragHelper.setAccessible(true);

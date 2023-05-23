@@ -21,6 +21,8 @@ class DebugNavigationDrawerFragment : NavigationDrawerFragment() {
 
     override fun setUp(fragmentContainerView: View, drawerLayout: DrawerLayout) {
         super.setUp(fragmentContainerView, drawerLayout)
+        setDrawerLeftEdgeSize()
+
     }
 
     private val listHeadFragment by lazy {

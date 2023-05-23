@@ -16,6 +16,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/app_about_toolbar"
             style="@style/AAF.AppTheme.Toolbar.Light"
+            tools:layout_height="30dp"
             app:title="@string/about" />
 
 

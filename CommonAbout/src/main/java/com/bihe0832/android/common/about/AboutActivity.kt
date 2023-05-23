@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.debug.ShowDebugClick
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import kotlinx.android.synthetic.main.about_layout.*
 import java.util.*
 
@@ -22,7 +23,7 @@ open class AboutActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.about_layout)
-        initToolbar(R.id.app_about_toolbar, "关于我们", true)
+        initToolbar(R.id.app_about_toolbar, ThemeResourcesManager.getString(R.string.about), true)
         initView()
         //仅检查更新，不做升级
         if (findFragment(getAboutItemClass()) == null) {
@@ -41,7 +42,7 @@ open class AboutActivity : BaseActivity() {
 
             }
         })
-        getCopyRightTextView().text = "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " ZIXIE.All Rights Reserved"
+        getCopyRightTextView().text = "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " " + ThemeResourcesManager.getString(R.string.author) + " .All Rights Reserved"
     }
 
     protected fun showVersionDetail() {
