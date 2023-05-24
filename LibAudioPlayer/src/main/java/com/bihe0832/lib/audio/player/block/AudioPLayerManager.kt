@@ -155,7 +155,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
     }
 
     fun play(path: String, leftVolume: Float, priority: Int): Int {
-        return play(path, leftVolume, leftVolume, priority, null)
+        return play(path, 1.0F, leftVolume, leftVolume, priority, null)
     }
 
     fun play(path: String, leftVolume: Float, listener: AudioPlayListener?): Int {
