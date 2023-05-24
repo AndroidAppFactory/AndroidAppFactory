@@ -48,6 +48,7 @@ class DebugDeviceFragment : DebugEnvFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
+        WifiManagerWrapper.init(view.context, debug = true, notifyRSSI = true, canScanWifi = true)
         showResult("点击信息内容可以复制和分享")
         BatteryHelper.startReceiveBatteryChanged(context, statusChangeReceiver)
     }
@@ -128,22 +129,27 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(getInfoItem("网络类型：${NetworkUtil.getNetworkName(context)}"))
             add(getInfoItem("是否联网：${NetworkUtil.isNetworkConnected(context)}"))
             add(getInfoItem("网络是否可用：${NetworkUtil.isNetworkOnline()}"))
-            add(getInfoItem("Wi-Fi SSID：${WifiManagerWrapper.getSSID()}"))
-            add(getInfoItem("Wi-Fi BSSID：${WifiManagerWrapper.getBSSID()}"))
+            DtTypeInfo.getDtTypeInfo(context).let {
+                add(getInfoItem("Wi-Fi IP：${it.wifiIp}"))
+                add(getInfoItem("移动网络 IP：${it.mobileIp}"))
+            }
+            add(DebugTipsData("Wi-Fi"))
+            add(getInfoItem("Wi-Fi SSID（位置权限）：${WifiManagerWrapper.getSSID()}"))
+            add(getInfoItem("Wi-Fi BSSID（位置权限）：${WifiManagerWrapper.getBSSID()}"))
             add(getInfoItem("Wi-Fi 强度：${WifiManagerWrapper.getSignalLevel()} (${WifiManagerWrapper.getRssi()})"))
             add(getInfoItem("Wi-Fi 信道：${WifiChannelInfo.getWifiChannelByFrequency(WifiManagerWrapper.getFrequency())}"))
             add(getInfoItem("Wi-Fi 连接速度：${WifiManagerWrapper.getLinkSpeed()} / ${WifiManagerWrapper.getLinkSpeedUnits()}"))
             add(getInfoItem("Wi-Fi Frequency：${WifiManagerWrapper.getFrequency()}"))
             add(getInfoItem("Wi-Fi 加密类型：${WifiUtil.getWifiCode(context)}"))
-
-            add(getInfoItem("周边Wi-Fi数量：${WifiManagerWrapper.getScanResultList().size}"))
-            add(getInfoItem("移动网络基站信息：${MobileUtil.getPhoneCellInfo(context)}"))
-            add(getInfoItem("移动网络运营商：${DeviceInfoManager.getInstance().mobileOperatorType}"))
+            add(getInfoItem("周边Wi-Fi数量（扫描Wi-Fi）：${WifiManagerWrapper.getScanResultList().size}"))
+            add(DebugTipsData("移动网络"))
+            add(getInfoItem("移动网络基站信息（位置权限）：${MobileUtil.getPhoneCellInfo(context)}"))
+            add(getInfoItem("是否有SIM卡：${DeviceInfoManager.getInstance().hasSimCard()}"))
+            add(getInfoItem("数据开关是否打开：${DeviceInfoManager.getInstance().isMobileSwitchOpened}"))
+            add(getInfoItem("移动网络是否打开：${DeviceInfoManager.getInstance().isMobileOpened}"))
+            add(getInfoItem("运营商(系统接口)：${DeviceInfoManager.getInstance().getOperatorName(context!!)}"))
+            add(getInfoItem("运营商：${DeviceInfoManager.getInstance().operatorName}"))
             add(getInfoItem("移动网络信号强度：${MobileUtil.getSignalLevel()}"))
-            DtTypeInfo.getDtTypeInfo(context).let {
-                add(getInfoItem("Wi-Fi IP：${it.wifiIp}"))
-                add(getInfoItem("移动网络 IP：${it.mobileIp}"))
-            }
 
             add(DebugTipsData("电量信息"))
             BatteryHelper.getBatteryStatus(ZixieContext.applicationContext!!)?.let {

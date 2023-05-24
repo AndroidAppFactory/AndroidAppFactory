@@ -47,7 +47,7 @@ class DebugNetworkActivity : BaseActivity() {
         }
 
         if (NetworkUtil.isMobileNet(netTYpe)) {
-            builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n").append("    CellInfo(").append(MobileUtil.getPhoneCellInfo(this)).append(");\n    运营商(").append(DeviceInfoManager.getInstance().getMobileOperatorType()).append(");\n    强度(").append(MobileUtil.getSignalLevel()).append(");\n    IP(").append(DtTypeInfo.getDtTypeInfo(this).mobileIp).append(")")
+            builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n").append("    CellInfo(").append(MobileUtil.getPhoneCellInfo(this)).append(");\n    运营商(").append(DeviceInfoManager.getInstance().operatorName).append(");\n    强度(").append(MobileUtil.getSignalLevel()).append(");\n    IP(").append(DtTypeInfo.getDtTypeInfo(this).mobileIp).append(")")
         }
         runOnUiThread { result.text = builder.toString() }
     }

@@ -1,37 +1,29 @@
 package com.bihe0832.android.lib.network;
 
-import java.util.HashMap;
-
-
 public class IspUtil {
-    public static final String CMCC = "中国移动";
-    public static final String CUCC = "中国联通";
-    public static final String CTCC = "中国电信";
-    public static final String CTT = "中国铁通";
-    public static final String GWBN = "长城宽带";
-    public static final String HTBN = "互通宽带";
-    public static final String EDU = "教育网";
-    public static final String GR = "广东广电";
-    public static final String GY = "广东盈通";
-    public static final String STVC = "天威视讯";
-    public static final String DEFAULT_ISP = "其他";
 
-    private static final HashMap<Integer, String> ISP_MAP = new HashMap<Integer, String>() {{
-        put(159, CTT);
-        put(159918, HTBN);
-        put(169070, EDU);
-        put(181, CUCC);
-        put(200928, GR);
-        put(258, GWBN);
-        put(502, GY);
-        put(564, CMCC);
-        put(567, CTCC);
-        put(645, STVC);
-    }};
-
-    public static String getIspName(int ispCode) {
-        String ispName = ISP_MAP.get(ispCode);
-        return ispName != null ? ispName : DEFAULT_ISP;
+    public static final String ISP_TYPE_UNKNOW = "其他";
+    public static String getOperatorDesc(String operatorCode) {
+        if (operatorCode == null || "".equals(operatorCode)) {
+            return ISP_TYPE_UNKNOW;
+        }
+        switch (operatorCode) {
+            case "46000":
+            case "46002":
+            case "46004":
+            case "46007":
+            case "46008":
+                return "中国移动";
+            case "46001":
+            case "46006":
+            case "46009":
+                return "中国联通";
+            case "46003":
+            case "46005":
+            case "46011":
+                return "中国电信";
+            default:
+                return ISP_TYPE_UNKNOW;
+        }
     }
-
 }

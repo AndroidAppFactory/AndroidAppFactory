@@ -1,13 +1,9 @@
 package com.bihe0832.android.lib.network;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-
-import androidx.core.app.ActivityCompat;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
@@ -45,7 +41,7 @@ public class DeviceInfoManager {
      *
      * @return 状态
      */
-    public boolean ishasSimCard() {
+    public boolean hasSimCard() {
         if (null == telephonyManager) {
             return true;
         }
@@ -106,89 +102,20 @@ public class DeviceInfoManager {
 
     /*检测4G是否打开*/
     public boolean isMobileOpened() {
-        return ishasSimCard() && isMobileSwitchOpened();
+        return hasSimCard() && isMobileSwitchOpened();
     }
 
-    /*默认读取上网卡的运营商信息*/
-    public int getMobileMutisetId() {
+    /*获取运营商类型*/
+    public String getOperatorName() {
         if (telephonyManager == null) {
-            return -1;
+            return IspUtil.ISP_TYPE_UNKNOW;
         }
         String simOperator = telephonyManager.getSimOperator();
         ZLog.d("getSimOperator simOperator:" + simOperator);
-        return parseOperatorCode(simOperator);
+        return IspUtil.getOperatorDesc(simOperator);
     }
 
-    /*基于服务器返回的setID判断网络的运营商类型*/
-    public String getOperatorType(int setId) {
-        String result = "unknow";
-        switch (setId) {
-            case 0:
-                result = "中国电信";
-                break;
-            case 1:
-                result = "中国移动";
-                break;
-            case 2:
-                result = "中国联通";
-                break;
-            case 3:
-                result = "其他";
-                break;
-            default:
-                break;
-        }
-        return result;
-    }
-
-    /*获取4G的运营商类型*/
-    public String getMobileOperatorType() {
-        String result = "unknow";
-        int setId = getMobileMutisetId();
-        switch (setId) {
-            case 0:
-                result = "中国电信";
-                break;
-            case 1:
-                result = "中国移动";
-                break;
-            case 2:
-                result = "中国联通";
-                break;
-            case 3:
-                result = "cap";
-                break;
-            default:
-                break;
-        }
-        return result;
-    }
-
-    public int parseOperatorCode(String operatorCode) {
-        if (operatorCode == null || "".equals(operatorCode)) {
-            return -1;
-        }
-        switch (operatorCode) {
-            case "46000":
-            case "46002":
-            case "46004":
-            case "46007":
-            case "46008":
-                return 1;
-            case "46001":
-            case "46006":
-            case "46009":
-                return 2;
-            case "46003":
-            case "46005":
-            case "46011":
-                return 0;
-            default:
-                return -1;
-        }
-    }
-
-    /*默认读取拨号卡的运营商信息，而不是上网卡的运营商信息*/
+    /*通过系统接口获取运营商类型*/
     public String getOperatorName(Context context) {
         /*
          * getSimOperatorName()就可以直接获取到运营商的名字
@@ -202,43 +129,5 @@ public class DeviceInfoManager {
         String OperatorName = telephonyManager.getSimOperatorName();
         ZLog.d("getOperatorName OperatorName:" + OperatorName);
         return OperatorName;
-    }
-
-    /*默认读取拨号卡的运营商信息，而不是上网卡的运营商信息*/
-    public String getProvidersName(Context context) {
-        if (telephonyManager == null) {
-            return "";
-        }
-        String ProvidersName = null;
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return "unknow";
-        }
-        String IMSI = telephonyManager.getSubscriberId();
-        if (IMSI == null) {
-            return "unknow";
-        }
-        ZLog.d("getProvidersName IMSI：" + IMSI);
-
-        if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46004") || IMSI.startsWith("46007")) {
-            ProvidersName = "中国移动";
-        } else if (IMSI.startsWith("46001") || IMSI.startsWith("46006") || IMSI.startsWith("46009")) {
-            ProvidersName = "中国联通";
-        } else if (IMSI.startsWith("46003") || IMSI.startsWith("46005") || IMSI.startsWith("46011")) {
-            ProvidersName = "中国电信";
-        } else if (IMSI.startsWith("46020")) {
-            ProvidersName = "中国铁通";
-        } else {
-            ProvidersName = "unknow";
-        }
-
-        ZLog.d("getProvidersName 当前卡为：" + ProvidersName);
-        return ProvidersName;
     }
 }
