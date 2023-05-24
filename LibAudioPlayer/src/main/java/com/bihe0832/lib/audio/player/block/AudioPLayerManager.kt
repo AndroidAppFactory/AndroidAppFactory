@@ -71,7 +71,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
                     mAudioItem.playListener?.onPlayStart()
                     ZLog.d("AudioManager", "play start：$mAudioItem")
                     try {
-                        mPlay.play(mAudioItem.soundid, mAudioItem.leftVolume, mAudioItem.rightVolume, mAudioItem.priority, 0, 1.0f)
+                        mPlay.play(mAudioItem.soundid, mAudioItem.leftVolume, mAudioItem.rightVolume, mAudioItem.priority, 0, mAudioItem.rate)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -120,19 +120,19 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
     }
 
     fun play(@NonNull context: Context, leftVolume: Float, resId: Int, priority: Int): Int {
-        return play(context, resId, leftVolume, leftVolume, priority, null)
+        return play(context, resId, 1F, leftVolume, leftVolume, priority, null)
     }
 
     fun play(context: Context, resId: Int, leftVolume: Float, listener: AudioPlayListener?): Int {
-        return play(context, resId, leftVolume, leftVolume, 0, listener)
+        return play(context, resId, 1F, leftVolume, leftVolume, 0, listener)
     }
 
     fun play(context: Context, resId: Int, priority: Int): Int {
-        return play(context, resId, 1F, 1F, priority, null)
+        return play(context, resId, 1F, 1F, 1F, priority, null)
     }
 
 
-    fun play(context: Context, resId: Int, leftVolume: Float, rightVolume: Float, priority: Int, listener: AudioPlayListener?): Int {
+    fun play(context: Context, resId: Int, rate: Float, leftVolume: Float, rightVolume: Float, priority: Int, listener: AudioPlayListener?): Int {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
         val soundid = mSoundPool.load(context, resId, PRIORITY_DEFAULT)
@@ -142,6 +142,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
                 playListener = it
             }
             this.priority = priority
+            this.rate = rate
             this.leftVolume = leftVolume
             this.rightVolume = rightVolume
         }
@@ -183,6 +184,11 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         if (stopCurrent) {
             (currentTask as? BlockAudioTask)?.forceStop()
         }
+    }
+
+    fun finishCurrent() {
+        pause()
+        getCurrentTask().finishTask()
     }
 
     fun pause() {
