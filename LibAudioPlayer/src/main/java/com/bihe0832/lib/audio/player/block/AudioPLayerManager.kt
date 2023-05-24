@@ -159,10 +159,10 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
     }
 
     fun play(path: String, leftVolume: Float, listener: AudioPlayListener?): Int {
-        return play(path, leftVolume, leftVolume, 0, listener)
+        return play(path, 1.0F, leftVolume, leftVolume, 0, listener)
     }
 
-    fun play(path: String, leftVolume: Float, rightVolume: Float, priority: Int, listener: AudioPlayListener?): Int {
+    fun play(path: String, rate: Float, leftVolume: Float, rightVolume: Float, priority: Int, listener: AudioPlayListener?): Int {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
         val soundid = mSoundPool.load(path, PRIORITY_DEFAULT)
@@ -174,6 +174,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
             this.priority = priority
             this.leftVolume = leftVolume
             this.rightVolume = rightVolume
+            this.rate = rate
         }
         return soundid
     }
