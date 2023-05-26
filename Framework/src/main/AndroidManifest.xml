@@ -19,6 +19,7 @@
 
         <activity
             android:name="com.bihe0832.android.lib.router.RouterActivity"
+            android:exported="true"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -45,6 +46,6 @@
             android:name="com.bihe0832.android.framework.ui.main.CommonRootActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme"></activity>
+            android:theme="@style/AAF.ActivityTheme" />
     </application>
 </manifest>

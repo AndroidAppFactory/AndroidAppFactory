@@ -7,14 +7,12 @@
             android:name="com.bihe0832.android.common.debug.log.DebugLogActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/AAF.ActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
-
-
     </application>
 
 </manifest>

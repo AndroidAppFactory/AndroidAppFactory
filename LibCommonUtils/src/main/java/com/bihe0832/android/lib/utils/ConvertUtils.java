@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
  */
 public class ConvertUtils {
 
+    private static final Pattern numPattenPool = Pattern.compile("^[-\\+]?[\\d]+$");
+    private static final Pattern floatPattenPool = Pattern.compile("^[-+]?[\\d]*\\.?[\\d]+$");
 
     /**
      * 解析字符串为整数, 转换出错返回指定默认值
@@ -23,8 +25,7 @@ public class ConvertUtils {
 
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
-                if (pattern.matcher(str).matches()) {
+                if (numPattenPool.matcher(str).matches()) {
                     value = Integer.parseInt(str);
                 }
             } catch (Exception e) {
@@ -56,8 +57,7 @@ public class ConvertUtils {
         long value = defaultValue;
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                Pattern pattern = Pattern.compile("^[-\\+]?[\\d]+$");
-                if (pattern.matcher(str).matches()) {
+                if (numPattenPool.matcher(str).matches()) {
                     value = Long.parseLong(str);
                 }
             } catch (Exception e) {
@@ -103,8 +103,7 @@ public class ConvertUtils {
 
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                Pattern pattern = Pattern.compile("^[-+]?[\\d]*\\.?[\\d]+$");
-                if (pattern.matcher(str).matches()) {
+                if (floatPattenPool.matcher(str).matches()) {
                     value = Float.parseFloat(str);
                 }
             } catch (Exception e) {
@@ -126,8 +125,7 @@ public class ConvertUtils {
         double value = defaultValue;
         if (!android.text.TextUtils.isEmpty(str)) {
             try {
-                Pattern pattern = Pattern.compile("^[-+]?[\\d]*\\.?[\\d]+$");
-                if (pattern.matcher(str).matches()) {
+                if (floatPattenPool.matcher(str).matches()) {
                     value = Double.parseDouble(str);
                 }
             } catch (Exception e) {

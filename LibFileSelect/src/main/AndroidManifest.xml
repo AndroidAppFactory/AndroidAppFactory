@@ -8,6 +8,6 @@
                 android:name="com.bihe0832.android.lib.file.select.FileActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:theme="@style/fileActivityTheme"
-                android:screenOrientation="portrait"></activity>
+                android:screenOrientation="portrait" />
     </application>
 </manifest>

@@ -14,7 +14,6 @@ import java.util.Locale;
  * 各式日期转换
  */
 public class DateUtil {
-
     private static final String TAG = "DateUtil";
     public static final long MILLISECOND_OF_MINUTE = 60 * 1000;
     public static final long MILLISECOND_OF_HOUR = MILLISECOND_OF_MINUTE * 60;
@@ -25,7 +24,7 @@ public class DateUtil {
     public static final int ONE_DAY_MILLSEC = 24 * 60 * 60 * 1000;
 
     public static String getDateEN(long currentTime, String pattern) {
-        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
+        SimpleDateFormat format = SimpleDateFormatFactory.getSimpleDateFormat(pattern);
         String date = format.format(new Date(currentTime));
         return date;
     }
@@ -35,7 +34,7 @@ public class DateUtil {
     }
 
     public static long getDayStartTimestamp(long currentTimestamp) {
-        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat dayFormat = SimpleDateFormatFactory.getSimpleDateFormat("yyyyMMdd");
         long todayStart = currentTimestamp;
         try {
             todayStart = dayFormat.parse(dayFormat.format(new Date(currentTimestamp))).getTime();
@@ -47,7 +46,7 @@ public class DateUtil {
 
 
     public static long getDayStartTimestamp(String dateString, String pattern) {
-        DateFormat df = new SimpleDateFormat(pattern);
+        DateFormat df = SimpleDateFormatFactory.getSimpleDateFormat(pattern);
         try {
             Date dt = df.parse(dateString);
             return getDayStartTimestamp(dt.getTime());
@@ -63,7 +62,7 @@ public class DateUtil {
     }
 
     public static String getCurrentWeekCN(long currentTime, String pattern) {
-        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.CHINA);
+        SimpleDateFormat format = SimpleDateFormatFactory.getSimpleDateFormat(pattern, Locale.CHINA);
         return format.format(new Date(currentTime)).replace("周", "星期");
     }
 
@@ -73,7 +72,7 @@ public class DateUtil {
 
     //单位：s
     public static int getDateDistance(String date1, String date2) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat df = SimpleDateFormatFactory.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date dt1 = df.parse(date1);
             Date dt2 = df.parse(date2);
@@ -85,7 +84,7 @@ public class DateUtil {
     }
 
     public static long getTime(String dateString, String pattern) {
-        DateFormat df = new SimpleDateFormat(pattern);
+        DateFormat df = SimpleDateFormatFactory.getSimpleDateFormat(pattern);
         try {
             Date dt = df.parse(dateString);
             return dt.getTime();
@@ -194,7 +193,7 @@ public class DateUtil {
     public final String getDateCompareResult(long oldTimestamp, long currentTimestamp, String yearPattern, String monthPattern, String weekPattern, String yesterdayPattern, String timePattern) {
         long todayStart = currentTimestamp;
         try {
-            SimpleDateFormat dayFormat = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat dayFormat = SimpleDateFormatFactory.getSimpleDateFormat("yyyyMMdd");
             todayStart = dayFormat.parse(dayFormat.format(new Date())).getTime();
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,7 +206,7 @@ public class DateUtil {
         } else if (dayC > 6L) {
             return DateUtil.getDateEN(oldTimestamp, monthPattern);
         } else if (dayC > 1L) {
-            SimpleDateFormat format = new SimpleDateFormat(weekPattern, Locale.CHINA);
+            SimpleDateFormat format = SimpleDateFormatFactory.getSimpleDateFormat(weekPattern, Locale.CHINA);
             return format.format(new Date(oldTimestamp)).replace("周", "星期");
         } else if (dayC > 0L) {
             return DateUtil.getDateEN(oldTimestamp, yesterdayPattern);

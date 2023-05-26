@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.bihe0832.android.common.webview">
+    package="com.bihe0832.android.common.webview">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application>
         <activity
-                android:name="com.bihe0832.android.common.webview.WebPageActivity"
-                android:theme="@style/AAF.ActivityTheme"
-                android:hardwareAccelerated="true"
-                android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
-                android:windowSoftInputMode="adjustPan|stateHidden"
-                android:exported="true"
-                android:process="@string/com_bihe0832_web_process_name"
-                android:screenOrientation="portrait">
+            android:name="com.bihe0832.android.common.webview.WebPageActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:process="@string/com_bihe0832_web_process_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden">
 
             <!-- 两个 intent-filter 二选一，一个只打开指定域名，一个直接支持设为默认浏览器 -->
 
@@ -22,7 +22,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="https" android:host="*.ptlogin2.qq.com" />
+                <data
+                    android:host="*.ptlogin2.qq.com"
+                    android:scheme="https" />
 
             </intent-filter>
 

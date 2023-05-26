@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Process
 import android.util.Log
 import android.webkit.WebView
-import com.bihe0832.android.app.leakcanary.LeakCanaryManager
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.permission.AAFPermissionManager
 import com.bihe0832.android.app.router.RouterHelper
@@ -55,10 +54,6 @@ object AppFactoryInit {
                 ""
             })
             Log.e(ZixieCoreInit.TAG, "———————————————————————— 设备信息 ————————————————————————")
-
-            if (ZixieContext.isDebug()) {
-                LeakCanaryManager.init(application)
-            }
 
             RouterHelper.initRouter()
             AAFPermissionManager.initPermission()

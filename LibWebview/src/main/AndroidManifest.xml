@@ -8,18 +8,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <service android:name="com.bihe0832.android.lib.web.WebViewService"
+        <service
+            android:name="com.bihe0832.android.lib.web.WebViewService"
             android:process="@string/com_bihe0832_web_process_name"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <!-- 在AndroidManifest.xml中增加内核首次加载时优化Service声明；
              该Service仅在TBS内核首次Dex加载时触发并执行dex2oat任务，任务完成后自动结束。  -->
         <service
             android:name="com.tencent.smtt.export.external.DexClassLoaderProviderService"
             android:label="dexopt"
-            android:process=":dexopt" >
-        </service>
+            android:exported="false"
+            android:process=":dexopt" />
 
 
     </application>

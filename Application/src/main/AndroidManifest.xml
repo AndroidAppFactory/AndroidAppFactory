@@ -13,16 +13,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-            android:name="com.bihe0832.android.app.Application"
-            tools:replace="android:name">
+        android:name="com.bihe0832.android.app.Application"
+        tools:replace="android:name">
 
         <activity
-                android:name="com.bihe0832.android.app.about.AboutActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.app.about.AboutActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
-        <activity android:name="com.bihe0832.android.common.webview.WebPageActivity">
+        <activity
+            android:name="com.bihe0832.android.common.webview.WebPageActivity"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

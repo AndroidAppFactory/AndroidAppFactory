@@ -10,7 +10,7 @@ ext {
     //APK 最低适配Android 版本
     appMinSdkVersion = 21
     //Android 最佳适配Android 版本
-    targetSdkVersion = 30
+    targetSdkVersion = 31
     //版本号，正式版本会由自动构建替换
     versionCode = 2
     //版本名，正式版本会由自动构建替换

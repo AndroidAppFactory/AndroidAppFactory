@@ -20,6 +20,7 @@
             android:name="com.bihe0832.android.test.TestSplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/AAF.ActivityTheme.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,12 +32,7 @@
             android:name="com.bihe0832.android.test.TestMainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="sensor"
-            android:theme="@style/AAF.ActivityTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <!--                                <category android:name="android.intent.category.LAUNCHER" />-->
-            </intent-filter>
-        </activity>
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.test.module.AAFDebugLogActivity"

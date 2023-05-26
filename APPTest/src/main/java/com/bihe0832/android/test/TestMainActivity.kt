@@ -2,7 +2,6 @@ package com.bihe0832.android.test
 
 import android.os.Bundle
 import android.view.Gravity
-import com.bihe0832.android.app.leakcanary.LeakCanaryManager.addWatch
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.ui.AAFCommonMainActivity
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
@@ -39,7 +38,6 @@ open class TestMainActivity : AAFCommonMainActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        addWatch(this)
     }
 
     override fun getRootFragmentClassName(): String {

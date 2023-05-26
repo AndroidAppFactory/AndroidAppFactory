@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibHttpCommon,LibFileSelect,LibPermission,LibCommonUtils"
 
 
 /**
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.15.9"
+ext.moduleVersionName = "5.15.10"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -65,9 +65,8 @@ ext.moduleInfo = [
             "CommonWrapper"
         ],
         "specialdependenciesList": [
-            "kapt"      : ["RouterCompiler"],
-            "debugApi"  : ["com.squareup.leakcanary:leakcanary-android:1.5.1"],
-            "releaseApi": ["com.squareup.leakcanary:leakcanary-android-no-op:1.5.1"]
+            "kapt"               : ["RouterCompiler"],
+            "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"],
         ]
     ],
     "CommonDebug"               : [
