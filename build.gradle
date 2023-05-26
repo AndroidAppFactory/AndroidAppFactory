@@ -9,11 +9,11 @@ buildscript {
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1531/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1532/content/" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.4.1'
         classpath "com.bihe0832.android:GradleDependenciesCheck:4.1.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
     }
@@ -31,7 +31,7 @@ allprojects {
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1531/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1532/content/" }
     }
 
     afterEvaluate { Project subproject ->

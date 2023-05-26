@@ -1,7 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
 
-        package="com.bihe0832.android.lib.ui.dialog">
+    package="com.bihe0832.android.lib.ui.dialog">
 
-    <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
 
 </manifest>
