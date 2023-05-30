@@ -7,7 +7,7 @@ package com.bihe0832.lib.audio.player
  * Description: Description
  *
  */
-class AudioItem(val soundid: Int, val duration: Long) {
+class AudioItem(val soundid: Int, val sourceDuration: Long) {
 
     var playListener: AudioPlayListener? = null
     var priority = 0
@@ -16,7 +16,7 @@ class AudioItem(val soundid: Int, val duration: Long) {
     var rate: Float = 1F
 
     override fun toString(): String {
-        return "AudioItem(soundid=$soundid, duration=$duration)"
+        return "AudioItem(soundid=$soundid, duration=$sourceDuration)"
     }
 
 

@@ -15,6 +15,7 @@ import java.lang.reflect.Constructor;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by liupei on 2018/3/16.
@@ -29,6 +30,8 @@ public class ThemeLayoutInflaterFactory implements LayoutInflater.Factory2, Obse
     }
 
     private static final ConcurrentHashMap<String, Constructor<? extends View>> sViewConstructorMap = new ConcurrentHashMap<String, Constructor<? extends View>>();
+    private static final CopyOnWriteArrayList<String> sBadViewConstructorMap = new CopyOnWriteArrayList<>();
+
     private static final Class<?>[] sConstructorSignature = new Class[]{Context.class, AttributeSet.class};
     private final String[] sViewPre = new String[]{"android.widget.", "android.view.", "androidx.", "android.webkit."};
 
@@ -56,20 +59,24 @@ public class ThemeLayoutInflaterFactory implements LayoutInflater.Factory2, Obse
     private View createView(String name, Context context, AttributeSet attrs) {
         Constructor<? extends View> constructor = findConstructor(context, name);
         try {
-            return constructor.newInstance(context, attrs);
+            if (constructor != null) {
+                return constructor.newInstance(context, attrs);
+            }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     private Constructor<? extends View> findConstructor(Context context, String name) {
         Constructor<? extends View> constructor = sViewConstructorMap.get(name);
-        if (null == constructor) {
+        if (null == constructor && !sBadViewConstructorMap.contains(name)) {
             try {
                 Class<? extends View> clazz = context.getClassLoader().loadClass(name).asSubclass(View.class);
                 constructor = clazz.getConstructor(sConstructorSignature);
                 sViewConstructorMap.put(name, constructor);
             } catch (Exception e) {
+                sBadViewConstructorMap.add(name);
                 e.printStackTrace();
             }
         }

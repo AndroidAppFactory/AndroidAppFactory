@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.lib.audio.player.AudioItem
 import com.bihe0832.lib.audio.player.AudioPlayListener
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.ceil
 
 /**
  *
@@ -67,7 +68,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
 
         override fun doTask() {
             try {
-                if (mAudioItem != null && mAudioItem.duration > 0) {
+                if (mAudioItem != null && mAudioItem.sourceDuration > 0) {
                     mAudioItem.playListener?.onPlayStart()
                     ZLog.d("AudioManager", "play start：$mAudioItem")
                     try {
@@ -75,10 +76,9 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
-
                     ThreadManager.getInstance().start({
                         unLockBlock()
-                    }, mAudioItem.duration)
+                    }, ceil((mAudioItem.sourceDuration / mAudioItem.rate).toDouble()).toLong())
                 } else {
                     errorCode = -1
                     msg = "bad audio data"

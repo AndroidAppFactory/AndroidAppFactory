@@ -40,29 +40,17 @@ class DebugConvertFragment : DebugEnvFragment() {
             add(DebugItemData("JsonHelper", View.OnClickListener { testJson() }))
             add(DebugItemData("Boolean 转化", View.OnClickListener { testConvertBoolean() }))
             add(DebugItemData("Float 转化", View.OnClickListener { testConvertFloat() }))
-            add(DebugItemData("Int 转化", View.OnClickListener { testConvertInt() }))
 
             add(DebugItemData("树结构", View.OnClickListener { testTree() }))
 
 
             add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
-            add(DebugItemData("时间数据格式化", View.OnClickListener { testDateFormat() }))
+            add(DebugItemData("时间数据格式化", View.OnClickListener { testFormat() }))
             add(DebugItemData("版本号比较", View.OnClickListener { testVersion() }))
-            add(DebugItemData("性能测试", View.OnClickListener { testCPU() }))
 
 
         }
     }
-
-    private fun testCPU() {
-        for (i in 0..10000) {
-//            testConvertBoolean()
-//            testConvertFloat()
-//            testConvertInt()
-            testDateFormat()
-        }
-    }
-
 
     private fun testJson() {
         for (i in 0..100) {
@@ -96,18 +84,12 @@ class DebugConvertFragment : DebugEnvFragment() {
 
     fun testConvertBoolean() {
         mutableListOf("1", "-1", "-1", "0", "233", "true", "tRUe", "false", "False").forEach { data ->
-            ZLog.d(LOG_TAG, data + " to boolean result is:" + ConvertUtils.parseBoolean(data, false))
-            ZLog.d(LOG_TAG, data + " to boolean result is:" + ConvertUtils.parseBoolean(data, true))
+            ZLog.d(LOG_TAG, data + " result is:" + ConvertUtils.parseBoolean(data, false))
+            ZLog.d(LOG_TAG, data + " result is:" + ConvertUtils.parseBoolean(data, true))
         }
     }
 
-    private fun testConvertInt() {
-        mutableListOf("1", "-1", "-1.4", "0.3", "23.3", "true", "12", "f2alse", "233False").forEach { data ->
-            ZLog.d(LOG_TAG, data + " to int result is:" + ConvertUtils.parseInt(data))
-        }
-    }
-
-    private fun testDateFormat() {
+    private fun testFormat() {
 
         mutableListOf(1645771904111, 1345775904112, 1625775904313, 1645775304114, 1645772904115, 1645772404116).forEach { data ->
             ZLog.d(LOG_TAG, "DateEN $data trans result is:" + DateUtil.getDateEN(data))
@@ -153,8 +135,9 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "3.6 " + "3.6".toDouble() + " " + ConvertUtils.parseDouble("3.6", 0.0))
         ZLog.d(LOG_TAG, "0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
         ZLog.d(LOG_TAG, "0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
-    }
 
+
+    }
 
     private fun testZlib() {
         val builder = StringBuilder()
@@ -211,6 +194,7 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
         ZLog.d(LOG_TAG, "v3 VS v2:" + APKUtils.compareVersion(v3, v2))
         ZLog.d(LOG_TAG, "v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
+
     }
 
     fun testTree() {

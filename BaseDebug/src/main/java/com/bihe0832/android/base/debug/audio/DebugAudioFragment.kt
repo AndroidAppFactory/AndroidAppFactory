@@ -58,8 +58,9 @@ class DebugAudioFragment : DebugEnvFragment() {
             }))
 
             add(DebugItemData("播放本地音频", View.OnClickListener {
-                blockAudioPlayerManager.play(context!!, R.raw.two)
-                blockAudioPlayerManager.play(context!!,  R.raw.three, 1)
+                blockAudioPlayerManager.play(context!!, R.raw.one)
+                blockAudioPlayerManager.play(context!!, R.raw.two, 0.1f, 1.0f, 1.0f, 1, null)
+                blockAudioPlayerManager.play(context!!, R.raw.three)
             }))
 
             add(DebugItemData("播放扫码音频", View.OnClickListener {
