@@ -24,6 +24,7 @@ import com.bihe0832.android.lib.media.image.CheckedEnableImageView;
 import com.bihe0832.android.lib.qrcode.QRCodeDecodingHandler;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.LoadingDialog;
+import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager;
 import com.google.zxing.Result;
 import com.google.zxing.camera.CameraManager;
@@ -41,7 +42,9 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
     private CaptureActivityHandler handler;
     private ViewfinderView viewfinderView;
     private LoadingDialog mLoading = null;
-    private boolean hasSurface;
+    private SurfaceView surfaceView = null;
+    private boolean hasSurface = false;
+
     private InactivityTimer inactivityTimer;
     private AudioPLayerManager blockAudioPlayerManager = null;
 
@@ -52,6 +55,7 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_bihe0832_qrcode_activity_scanner);
+
         findViewById(R.id.common_qrcode_scanner_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,12 +68,11 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
             blockAudioPlayerManager = new AudioPLayerManager();
         }
         initFlashAction();
-
         CheckedEnableImageView btnAlbum = (CheckedEnableImageView) findViewById(R.id.common_qrcode_album);
         initAlbumAction(btnAlbum);
+        initSurfaceView();
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.common_qrcode_viewfinder_content);
-        hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
     }
 
@@ -103,12 +106,19 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
         });
     }
 
+    private void initSurfaceView() {
+        surfaceView = (SurfaceView) findViewById(R.id.common_qrcode_scanner_view);
+        SurfaceHolder surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.addCallback(this);
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
+
     private void initData(Intent intent) {
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND)) {
-            opensound = intent.getBooleanExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND, true);
+            opensound = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND), true);
         }
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE)) {
-            openvibrate = intent.getBooleanExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND, true);
+            openvibrate = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND), true);
         }
     }
 
@@ -183,14 +193,10 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
         startScanAction();
     }
 
+
     protected void startScanAction() {
-        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.common_qrcode_scanner_view);
-        SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
-            initCamera(surfaceHolder);
-        } else {
-            surfaceHolder.addCallback(this);
-            surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+            initCamera(surfaceView.getHolder());
         }
     }
 
