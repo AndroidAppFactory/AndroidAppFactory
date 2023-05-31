@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.tencent.smtt.sdk.WebView
+    <com.bihe0832.android.lib.webview.BaseWebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"></com.tencent.smtt.sdk.WebView>
+        android:visibility="visible"></com.bihe0832.android.lib.webview.BaseWebView>
 
 </LinearLayout>

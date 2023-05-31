@@ -30,8 +30,8 @@ class DebugWebviewActivity : BaseDebugListActivity() {
             add(DebugItemData("打开JSbridge调试页面", View.OnClickListener { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
             add(DebugItemData("打开TBS调试页面", View.OnClickListener { openWeb("http://debugtbs.qq.com/") }))
             add(DebugItemData("打开本地调试页", View.OnClickListener { openWeb("file:///android_asset/index.html") }))
-            add(DebugItemData("H5与原生混排", View.OnClickListener { openWeb("file:///android_asset/html_mix.html") }))
-            add(DebugItemData("H5与原生混排3", View.OnClickListener { startDebugActivity(DebugH5NativeWebFragment::class.java) }))
+            add(DebugItemData("H5与原生混排Demo", View.OnClickListener { startDebugActivity(DebugH5NativeWebFragment::class.java) }))
+            add(DebugItemData("H5与原生混排实践", View.OnClickListener { startDebugActivity(DebugWebviewFragment::class.java) }))
 
         }
     }

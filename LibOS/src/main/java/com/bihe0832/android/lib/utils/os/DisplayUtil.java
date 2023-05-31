@@ -21,9 +21,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
 import com.bihe0832.android.lib.log.ZLog;
+
 import java.lang.reflect.Method;
-import kotlin.ReplaceWith;
 
 public class DisplayUtil {
 
@@ -190,15 +191,22 @@ public class DisplayUtil {
         } else {
             return getScreenHeight(context);
         }
-
     }
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
     public static int dip2px(Context context, float dpValue) {
-        return (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+    }
+
+    public static int dip2pxWithDefaultDensity(Context context, float dpValue) {
+        float baseNoncompatPx = sNoncompatDensity * dpValue;
+        if (baseNoncompatPx > 0) {
+            return (int) baseNoncompatPx;
+        } else {
+            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+        }
     }
 
     /**
@@ -209,6 +217,16 @@ public class DisplayUtil {
         return (int) (pxValue / scale + 0.5f);
     }
 
+    public static int px2dipWithDefaultDensity(Context context, float pxValue) {
+        float scale = 0f;
+        if (sNoncompatDensity > 0) {
+            scale = sNoncompatDensity;
+        } else {
+            scale = context.getResources().getDisplayMetrics().density;
+        }
+        return (int) (pxValue / scale + 0.5f);
+    }
+
     /**
      * 将sp值转换为px值，保证文字大小不变
      *
@@ -216,8 +234,16 @@ public class DisplayUtil {
      * @return
      */
     public static int sp2px(Context context, float spValue) {
-        return (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
+    }
+
+    public static int sp2pxWithDefaultDensity(Context context, float dpValue) {
+        float baseNoncompatPx = sNoncompatScaledDensity * dpValue;
+        if (baseNoncompatPx > 0) {
+            return (int) baseNoncompatPx;
+        } else {
+            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, dpValue, context.getResources().getDisplayMetrics());
+        }
     }
 
     /**
@@ -226,6 +252,16 @@ public class DisplayUtil {
     public static int px2sp(Context context, int px) {
         float scale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (px / scale + 0.5f);
+    }
+
+    public static int px2spWithDefaultDensity(Context context, float pxValue) {
+        float scale = 0f;
+        if (sNoncompatScaledDensity > 0) {
+            scale = sNoncompatScaledDensity;
+        } else {
+            scale = context.getResources().getDisplayMetrics().scaledDensity;
+        }
+        return (int) (pxValue / scale + 0.5f);
     }
 
     public static int getDimension(Context context, int resourceId) {
@@ -269,24 +305,24 @@ public class DisplayUtil {
         Resources resources = context.getResources();
         for (int i = 0; i < vp.getChildCount(); i++) {
             vp.getChildAt(i).getContext().getPackageName();
-            if (vp.getChildAt(i).getId() != -1
-                    && "navigationBarBackground".equals(resources.getResourceEntryName(vp.getChildAt(i).getId()))
-            ) {
+            if (vp.getChildAt(i).getId() != -1 && "navigationBarBackground".equals(resources.getResourceEntryName(vp.getChildAt(i).getId()))) {
                 return true;
             }
         }
         return false;
     }
 
+    //保存之前density值
+    private static float sNoncompatDensity = 0f;
+    //保存之前scaledDensity值，scaledDensity为字体的缩放因子，正常情况下和density相等，但是调节系统字体大小后会改变这个值
+    private static float sNoncompatScaledDensity = 0f;
 
-    private static float sNoncompatDensity;
-    private static float sNoncompatScaledDensity;
 
     /**
      * 修正显示dpi，统一将页面dpi以基准值修正
      *
      * @param activity 必须是Activity
-     * @param density 当前设计风格的横向基准dp，例如安卓官方为360dp
+     * @param density  当前设计风格的横向基准dp，例如安卓官方为360dp
      */
     public static void resetDensity(final Activity activity, final float density) {
         if (activity == null) {
@@ -304,6 +340,7 @@ public class DisplayUtil {
         if (sNoncompatDensity == 0) {
             sNoncompatDensity = appDisplayMetrics.density;
             sNoncompatScaledDensity = appDisplayMetrics.scaledDensity;
+            //监听设备系统字体切换
             application.registerComponentCallbacks(new ComponentCallbacks() {
                 @Override
                 public void onConfigurationChanged(Configuration newConfig) {
@@ -327,6 +364,7 @@ public class DisplayUtil {
         if (width > height) {
             target = height;
         }
+        //获取以设计图总宽度target下的density值
         float targetDensity = target / density;
         DisplayMetrics activityDisplayMetrics = activity.getResources().getDisplayMetrics();
 
@@ -347,8 +385,9 @@ public class DisplayUtil {
         if (targetDensity < 1) {
             targetDensity = 1;
         }
-
+        //通过计算之前scaledDensity和density的比获得scaledDensity值
         float targetScaledDensity = targetDensity * (sNoncompatScaledDensity / sNoncompatDensity);
+        //获取以设计图总宽度target dp下的dpi值
         int targetDensityDpi = (int) (160 * targetDensity);
 
         ZLog.d("--------------------------------");
@@ -357,12 +396,18 @@ public class DisplayUtil {
         ZLog.d("targetDensityDpi: " + targetDensityDpi);
         ZLog.d("--------------------------------");
 
+        //设置系统density值
         appDisplayMetrics.density = targetDensity;
+        //设置系统scaledDensity值
         appDisplayMetrics.scaledDensity = targetScaledDensity;
+        //设置系统densityDpi值
         appDisplayMetrics.densityDpi = targetDensityDpi;
 
+        //设置当前activity的density值
         activityDisplayMetrics.density = targetDensity;
+        //设置当前activity的scaledDensity值
         activityDisplayMetrics.scaledDensity = targetScaledDensity;
+        //设置当前activity的densityDpi值
         activityDisplayMetrics.densityDpi = targetDensityDpi;
     }
 }

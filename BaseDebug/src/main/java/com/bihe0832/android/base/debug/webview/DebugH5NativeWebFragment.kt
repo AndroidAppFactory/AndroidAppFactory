@@ -1,21 +1,19 @@
 package com.bihe0832.android.base.debug.webview
 
-import android.graphics.Color
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import com.bihe0832.android.lib.webview.BaseWebView
 import com.tencent.smtt.sdk.WebView
 import com.tencent.smtt.sdk.WebViewClient
 
 
 class DebugH5NativeWebFragment : BaseFragment() {
     private val TV_HEIGHT = 50
-    private var mWebView: WebView? = null
+    private var mWebView: BaseWebView? = null
     private var textView: TextView? = null
 
     override fun getLayoutID(): Int {
@@ -24,10 +22,10 @@ class DebugH5NativeWebFragment : BaseFragment() {
 
 
     override fun initView(view: View) {
-        mWebView = view.findViewById<WebView>(R.id.webview)
+        mWebView = view.findViewById<BaseWebView>(R.id.webview)
         val settings = mWebView!!.getSettings()
         settings.javaScriptEnabled = true
-        textView = getTextView()
+        textView = DebugWebviewFragment.getTextView(context)
         mWebView!!.addView(textView)
         setLocalWeb()
     }
@@ -45,16 +43,5 @@ class DebugH5NativeWebFragment : BaseFragment() {
                 }
             }
         }
-    }
-
-    private fun getTextView(): TextView {
-        val textView = TextView(context)
-        textView.setTextColor(Color.GRAY)
-        textView.textSize = 20f
-        textView.setBackgroundColor(Color.YELLOW)
-        textView.text = "Zixie AAF Webview Debug TextView "
-        textView.gravity = Gravity.CENTER
-        textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(context, TV_HEIGHT.toFloat()))
-        return textView
     }
 }
