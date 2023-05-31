@@ -32,7 +32,7 @@ class DebugJsBridgeProxy(webView: BaseWebView, activity: Activity) : MyBaseJsBri
                     mJsBridge.response(callbackFun, seqid, method, "showNativeView success")
                 }
             } else {
-                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
+                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
             }
         } catch (var11: Exception) {
             mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
@@ -48,7 +48,7 @@ class DebugJsBridgeProxy(webView: BaseWebView, activity: Activity) : MyBaseJsBri
                     mJsBridge.response(callbackFun, seqid, method, null)
                 }
             } else {
-                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
+                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
             }
         } catch (var11: Exception) {
             mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
