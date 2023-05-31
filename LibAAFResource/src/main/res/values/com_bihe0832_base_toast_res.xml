@@ -1,6 +1,6 @@
 <resources>
     <color name="bihe0832_common_toast_background_color">#DFDFDF</color>
-    <color name="bihe0832_common_toast_text_color">@color/textColorPrimary</color>
+    <color name="bihe0832_common_toast_text_color">#212121</color>
     <dimen name="bihe0832_common_toast_padding">5dp</dimen>
     <dimen name="bihe0832_common_toast_img_size">20dp</dimen>
     <dimen name="bihe0832_common_toast_text_size">14dp</dimen>
