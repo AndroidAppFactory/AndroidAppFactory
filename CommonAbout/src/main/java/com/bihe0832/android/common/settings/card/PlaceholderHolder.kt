@@ -7,9 +7,6 @@ import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
-/**
- * Created by lwtorlu on 2022/8/2.
- */
 class PlaceholderHolder(view: View, context: Context) : CardBaseHolder(view, context) {
 
     private var blockView: View? = null

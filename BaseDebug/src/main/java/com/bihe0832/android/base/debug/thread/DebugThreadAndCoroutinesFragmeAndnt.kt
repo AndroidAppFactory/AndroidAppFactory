@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import kotlinx.coroutines.*
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/3/2.
  * Description: Description
  */

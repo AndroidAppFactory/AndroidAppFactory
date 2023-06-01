@@ -8,7 +8,7 @@ import android.os.BatteryManager
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/3/30.
  * Description: Description
  *

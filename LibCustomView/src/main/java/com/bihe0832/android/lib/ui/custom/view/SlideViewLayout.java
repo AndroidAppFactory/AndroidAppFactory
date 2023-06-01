@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.customview.widget.ViewDragHelper;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/5/12.
  * Description: 仿滑动解锁等滑动特效
  */

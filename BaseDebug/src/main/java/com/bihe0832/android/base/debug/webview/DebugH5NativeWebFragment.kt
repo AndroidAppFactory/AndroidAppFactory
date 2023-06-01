@@ -1,8 +1,12 @@
 package com.bihe0832.android.base.debug.webview
 
+import android.content.Context
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.bihe0832.android.base.debug.R
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -12,7 +16,6 @@ import com.tencent.smtt.sdk.WebViewClient
 
 
 class DebugH5NativeWebFragment : BaseFragment() {
-    private val TV_HEIGHT = 50
     private var mWebView: BaseWebView? = null
     private var textView: TextView? = null
 
@@ -25,7 +28,7 @@ class DebugH5NativeWebFragment : BaseFragment() {
         mWebView = view.findViewById<BaseWebView>(R.id.webview)
         val settings = mWebView!!.getSettings()
         settings.javaScriptEnabled = true
-        textView = DebugWebviewFragment.getTextView(context)
+        textView = getTextView(context!!)
         mWebView!!.addView(textView)
         setLocalWeb()
     }
@@ -38,10 +41,27 @@ class DebugH5NativeWebFragment : BaseFragment() {
                 mWebView!!.evaluateJavascript("javaScript:getNativeViewPosition()") { value ->
                     ThreadManager.getInstance().runOnUIThread {
                         textView?.setTranslationY(DisplayUtil.dip2px(context, value.toFloat()).toFloat());
-                        mWebView!!.loadUrl("javaScript:setNativeViewHeight(" + TV_HEIGHT + ")")
+                        mWebView!!.loadUrl("javaScript:setNativeViewHeight(" + getHeight() + ")")
                     }
                 }
             }
         }
     }
+
+    companion object {
+        fun getTextView(context: Context): TextView {
+            val textView = TextView(context)
+            textView.setBackgroundColor(context.resources.getColor(R.color.bihe0832_common_toast_background_color))
+            textView.text = "Zixie AAF Webview Debug TextView2 " as CharSequence
+            textView.gravity = Gravity.CENTER
+            textView.visibility = View.GONE
+            textView.layoutParams = ViewGroup.MarginLayoutParams(-1, getHeight())
+            return textView
+        }
+
+        fun getHeight(): Int {
+            return ZixieContext.screenWidth * 9 / 16
+        }
+    }
+
 }

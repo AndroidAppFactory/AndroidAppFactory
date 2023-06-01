@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.network.ping;
 
 /**
- * Author: waynescliu
  * Date: 2020/8/13
  * Description:用于判定ping的结果
  */

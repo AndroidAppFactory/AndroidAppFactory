@@ -11,9 +11,6 @@ import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.com_bihe0832_common_bottom_list_dialog_layout.*
 
-/**
- * Created by lwtorlu on 2021/8/15.
- */
 class BottomListDialog(activity: Activity) : BottomDialog(activity) {
 
     private val textList: ArrayList<String> = arrayListOf()

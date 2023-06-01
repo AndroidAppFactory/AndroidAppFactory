@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/2/3.
  * Description: 一些常见的背景颜色等的代码实现，核心就是 GradientDrawable
  *

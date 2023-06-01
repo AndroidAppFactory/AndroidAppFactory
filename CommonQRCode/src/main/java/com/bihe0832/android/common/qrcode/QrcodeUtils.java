@@ -16,7 +16,7 @@ import com.google.zxing.Result;
 import java.util.HashMap;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/4/7.
  * Description: Description
  */

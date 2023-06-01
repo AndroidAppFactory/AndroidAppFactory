@@ -7,9 +7,7 @@ import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 
-/**
- * Created by lwtorlu on 2022/8/2.
- */
+
 class PlaceholderData() : CardBaseModule() {
 
     var heightOfDP: Float = 0f

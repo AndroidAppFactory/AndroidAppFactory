@@ -11,7 +11,7 @@ import com.bihe0832.android.lib.network.NetworkUtil;
 import java.util.List;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/3/31.
  * Description: Wi-Fi 频率信息
  */

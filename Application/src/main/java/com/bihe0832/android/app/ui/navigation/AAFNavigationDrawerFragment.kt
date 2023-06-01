@@ -6,7 +6,7 @@ import com.bihe0832.android.common.main.CommonNavigationDrawerFragment
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/4/10.
  * Description: Description
  *

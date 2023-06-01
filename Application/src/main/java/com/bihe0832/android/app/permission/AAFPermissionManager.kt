@@ -8,7 +8,7 @@ import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/4/26.
  * Description: Description
  *

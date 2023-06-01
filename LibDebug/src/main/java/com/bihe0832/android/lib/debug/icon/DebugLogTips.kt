@@ -9,9 +9,6 @@ import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.thread.ThreadManager
 
 
-/**
- * Created by lwtorlu on 2021/9/8.
- */
 object DebugLogTips {
 
     private const val SCENE_NAME_DEBUG = "IconManagerDebugLogTips"
