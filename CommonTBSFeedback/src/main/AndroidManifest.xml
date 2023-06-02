@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.bihe0832.android.common.tbsfeedback">
+
+    <application>
+        <activity
+                android:name=".TBSFeedbackActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:theme="@style/AAF.ActivityTheme"
+                android:hardwareAccelerated="true"
+                android:process="@string/com_bihe0832_web_process_name"
+                android:screenOrientation="portrait"></activity>
+    </application>
+</manifest>

@@ -23,7 +23,8 @@ import com.bihe0832.android.lib.theme.ThemeManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
-import com.bihe0832.android.lib.web.WebViewHelper
+import com.bihe0832.android.lib.webview.tbs.WebViewHelper
+import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsPrivacyAccess
 
 /**
@@ -59,16 +60,28 @@ object AppFactoryInit {
             AAFPermissionManager.initPermission()
             DownloadUtils.init(ctx, ZixieContext.isDebug())
             AAFMessageManager.initModule(ctx)
+
+            ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)
+        }
+    }
+
+    private fun initWebview(application: android.app.Application, processInfo: ActivityManager.RunningAppProcessInfo) {
+        if (processInfo.processName.equals(application.packageName, ignoreCase = true)) {
             ThreadManager.getInstance().start({
                 ZLog.e("Application process initCore web start")
-                WebViewHelper.init(ctx, null, Bundle().apply {
+                ZLog.d("" + QbSdk.getTbsVersion(application.applicationContext))
+
+                WebViewHelper.init(application.applicationContext, null, Bundle().apply {
                     putString(
                             TbsPrivacyAccess.ConfigurablePrivacy.MODEL.name, ManufacturerUtil.MODEL)
                     putString(TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name, ZixieContext.deviceId)
                     putString(TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name, ZixieContext.deviceId)
                 }, false)
             }, 5)
-            ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)
+        } else {
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.P) {
+                WebView.setDataDirectorySuffix(processInfo.processName)
+            }
         }
     }
 
@@ -80,7 +93,7 @@ object AppFactoryInit {
         MobileUtil.registerMobileSignalListener(application.applicationContext)
         CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
         ShakeManager.init(application.applicationContext)
-        ThemeManager.init(application,!ZixieContext.isOfficial())
+        ThemeManager.init(application, !ZixieContext.isOfficial())
     }
 
     fun initAll(application: android.app.Application) {
@@ -95,11 +108,8 @@ object AppFactoryInit {
                     initCore(application, processName)
                     if (processName.equals(application.packageName, ignoreCase = true)) {
                         initExtra(application)
-                    } else {
-                        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.P) {
-                            WebView.setDataDirectorySuffix(it.processName)
-                        }
                     }
+                    initWebview(application, it)
                 }
             }
         }

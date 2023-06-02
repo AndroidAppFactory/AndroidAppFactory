@@ -7,7 +7,7 @@ import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
-import com.bihe0832.android.common.webview.log.WebviewLoggerFile
+import com.bihe0832.android.common.webview.core.WebviewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileTools

@@ -23,15 +23,15 @@ import java.util.HashMap;
 public class QrcodeUtils {
     public static final void openQrScan(Activity activity, boolean needSound, boolean needVibrate) {
         HashMap dataParam = new HashMap();
-        dataParam.put(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND, String.valueOf(needSound));
-        dataParam.put(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
+        dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND, String.valueOf(needSound));
+        dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
         RouterAction.INSTANCE.openForResult(activity, RouterAction.INSTANCE.getFinalURL(RouterConstants.MODULE_NAME_QRCODE_SCAN, dataParam), ZixieActivityRequestCode.QRCODE_SCAN);
     }
 
     public static final void openQrScanAndParse(boolean needSound, boolean needVibrate) {
         HashMap dataParam = new HashMap();
-        dataParam.put(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND, String.valueOf(needSound));
-        dataParam.put(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
+        dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND, String.valueOf(needSound));
+        dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
         RouterAction.INSTANCE.openPageByRouter(RouterConstants.MODULE_NAME_QRCODE_SCAN_AND_PARSE, dataParam, Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 

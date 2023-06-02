@@ -51,11 +51,11 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mShareData = parseShareString(intent, RouterConstants.INTENT_EXTRA_VALUE_SHARE_DATA_WITH_ENCODE)
+        mShareData = parseShareString(intent, RouterConstants.INTENT_EXTRA_KEY_SHARE_DATA_WITH_ENCODE)
                 ?: getShareData()
-        mShareTitle = parseShareString(intent, RouterConstants.INTENT_EXTRA_VALUE_SHARE_TITLE_WITH_ENCODE)
+        mShareTitle = parseShareString(intent, RouterConstants.INTENT_EXTRA_KEY_SHARE_TITLE_WITH_ENCODE)
                 ?: getShareTitle()
-        mShareDesc = parseShareString(intent, RouterConstants.INTENT_EXTRA_VALUE_SHARE_DESC_WITH_ENCODE)
+        mShareDesc = parseShareString(intent, RouterConstants.INTENT_EXTRA_KEY_SHARE_DESC_WITH_ENCODE)
                 ?: getShareDesc()
         if (TextUtils.isEmpty(mShareData)) {
             finish()

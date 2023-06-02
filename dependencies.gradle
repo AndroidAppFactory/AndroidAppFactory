@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibJsBridge,LibWrapper"
 
 
 /**
@@ -22,7 +22,7 @@ ext.developModule = "Application"
  *  true 全都加载，
  *  false 仅加载与 mainProject 相关的模块
  */
-ext.includeALLDependOnDevelopModule = false
+ext.includeALLDependOnDevelopModule = true
 
 /**
  * 应用组件 （Pub 开头，各个外发APP的发布模块）是否以application模式运行，当需要独立运行应用组件时修改，默认为false
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.15.13"
+ext.moduleVersionName = "5.16.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -51,18 +51,18 @@ ext.moduleInfo = [
             ]
         ]
     ],
-    "BaseDebug"                 : [
+    "BaseDebug"        : [
         "version"            : "",
         "artifactId"         : "",
         "apidependenciesList": [
-            "Application", "CommonDebug"
+            "Application", "CommonDebug", "CommonTBSFeedback"
         ]
     ],
-    "Application"               : [
+    "Application"      : [
         "version"                : "",
         "artifactId"             : "",
         "apidependenciesList"    : [
-            "CommonWrapper"
+            "CommonWrapper", "CommonTBSWebview"
         ],
         "specialdependenciesList": [
             "kapt"               : ["RouterCompiler"],
@@ -76,14 +76,14 @@ ext.moduleInfo = [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview"
         ]
     ],
-    "CommonWrapper"             : [
+    "CommonWrapper"    : [
         "version"            : "5.15.13",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
-            "CommonFeedback", "CommonWebview", "CommonSplash", "CommonPhotos",
+            "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
             "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
             "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
-            "CommonQRCode","CommonAccessibility"
+            "CommonQRCode", "CommonAccessibility"
         ]
     ],
     "CommonAccessibility"              : [
@@ -147,7 +147,7 @@ ext.moduleInfo = [
         "artifactId"         : "common-about",
         "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
     ],
-    "CommonList"                : [
+    "CommonList"       : [
         "version"            : "5.15.13",
         "artifactId"         : "common-list",
         "apidependenciesList": [
@@ -155,47 +155,72 @@ ext.moduleInfo = [
             "Framework"
         ]
     ],
-    "CommonSplash"              : [
+    "CommonSplash"     : [
         "version"            : "5.15.13",
         "artifactId"         : "common-splash",
         "apidependenciesList": [
             "Framework"
         ]
     ],
-    "CommonPhotos"              : [
+    "CommonPhotos"     : [
         "version"            : "5.15.13",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
             "Framework"
         ]
     ],
-    "CommonNetwork"             : [
+    "CommonNetwork"    : [
         "version"            : "5.15.13",
         "artifactId"         : "common-network",
         "apidependenciesList": [
             "Framework"
         ]
     ],
-    "CommonWebview"             : [
+    "CommonTBSFeedback": [
+        "version"                : "5.15.13",
+        "artifactId"             : "common-feedback-tbs",
+        "apidependenciesList"    : ["CommonTBSWebview", "CommonFeedback"],
+        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+    ],
+    "CommonTBSWebview" : [
+        "version"                : "5.15.13",
+        "artifactId"             : "common-webview-tbs",
+        "apidependenciesList"    : [
+            project.androidsupport.swiperefreshlayout,
+            "CommonWebview", "CommonTBS"
+        ],
+        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+    ],
+    "CommonTBS"        : [
+        "version"            : "5.15.13",
+        "artifactId"         : "common-tbs",
+        "apidependenciesList": [
+            project.tencent.tbssdk,
+            "LibJsBridge",
+            "LibOS"
+        ]
+    ],
+    "CommonWebview"    : [
         "version"                : "5.15.13",
         "artifactId"             : "common-webview",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
-            "Framework"
+            "Framework", "LibJsBridge"
         ],
-        "specialdependenciesList": ["kapt": ["RouterCompiler"]]],
-    "CommonFeedback"            : [
+        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+    ],
+    "CommonFeedback"   : [
         "version"                : "5.15.13",
         "artifactId"             : "common-feedback",
         "apidependenciesList"    : ["CommonWebview"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
-    "CommonPraise"              : [
+    "CommonPraise"     : [
         "version"            : "5.15.13",
         "artifactId"         : "common-praise",
         "apidependenciesList": ["Framework"]
     ],
-    "Framework"                 : [
+    "Framework"        : [
         "version"                : "5.15.13",
         "artifactId"             : "framework",
         "apidependenciesList"    : [
@@ -209,7 +234,7 @@ ext.moduleInfo = [
 
         ]
     ],
-    "LibWrapper"                : [
+    "LibWrapper"       : [
         "version"            : "5.15.13",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
@@ -220,7 +245,7 @@ ext.moduleInfo = [
             "LibBlockTask", "LibOkhttpWrapper", "LibDataRepository", "LibCoroutines",
             "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
             "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
-            "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibWebview", "LibPermission",
+            "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibPermission",
             "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
             "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme"]
     ],
@@ -561,11 +586,10 @@ ext.moduleInfo = [
             project.androidsupport.viewpager
         ]
     ],
-    "LibWebview"                : [
+    "LibJsBridge"      : [
         "version"            : "5.15.13",
-        "artifactId"         : "lib-webview",
+        "artifactId"         : "lib-jsbridge",
         "apidependenciesList": [
-            project.tencent.tbssdk,
             "LibLog", "LibThread", "LibToast", "LibAPK"
         ]
     ],

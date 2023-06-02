@@ -3,8 +3,8 @@ package com.bihe0832.android.common.webview;
 
 import android.os.Bundle;
 
-import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
-import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy;
+import com.bihe0832.android.common.webview.nativeimpl.NativeJsBridgeProxy;
+import com.bihe0832.android.common.webview.nativeimpl.NativeWebviewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
 import com.bihe0832.android.lib.ace.editor.AceConstants;
@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.request.URLUtils;
 
 import java.util.HashMap;
 
-public class CommonWebviewFragment extends BaseWebviewFragment {
+public class CommonWebviewFragment extends NativeWebviewFragment {
 
 
     public static final String VERSION_NAME = "1.0.0";
@@ -64,11 +64,6 @@ public class CommonWebviewFragment extends BaseWebviewFragment {
     @Override
     protected boolean loadUseIntent(String url) {
         return false;
-    }
-
-    @Override
-    protected MyBaseJsBridgeProxy getJsBridgeProxy() {
-        return new MyBaseJsBridgeProxy(mWebView, getActivity());
     }
 
     @Override

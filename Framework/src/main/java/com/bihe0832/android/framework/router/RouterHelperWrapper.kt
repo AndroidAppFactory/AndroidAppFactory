@@ -25,14 +25,23 @@ fun openFeedback() {
 
 fun shareByQrcode(url: String, titleString: String? = null, descString: String? = null) {
     val map = HashMap<String, String>().apply {
-        put(RouterConstants.INTENT_EXTRA_VALUE_SHARE_DATA_WITH_ENCODE, URLUtils.encode(url))
+        put(RouterConstants.INTENT_EXTRA_KEY_SHARE_DATA_WITH_ENCODE, URLUtils.encode(url))
         titleString?.let {
-            put(RouterConstants.INTENT_EXTRA_VALUE_SHARE_TITLE_WITH_ENCODE, URLUtils.encode(titleString))
+            put(RouterConstants.INTENT_EXTRA_KEY_SHARE_TITLE_WITH_ENCODE, URLUtils.encode(titleString))
         }
 
         descString?.let {
-            put(RouterConstants.INTENT_EXTRA_VALUE_SHARE_DESC_WITH_ENCODE, URLUtils.encode(descString))
+            put(RouterConstants.INTENT_EXTRA_KEY_SHARE_DESC_WITH_ENCODE, URLUtils.encode(descString))
         }
     }
     RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_SHARE_QRCODE, map)
+}
+
+fun shareAPP(canSendAPK: Boolean = false) {
+    val map = HashMap<String, String>().apply {
+        if (canSendAPK) {
+            put(RouterConstants.INTENT_EXTRA_KEY_SHARE_SEND_APK, true.toString())
+        }
+    }
+    RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_SHARE_APK, map)
 }

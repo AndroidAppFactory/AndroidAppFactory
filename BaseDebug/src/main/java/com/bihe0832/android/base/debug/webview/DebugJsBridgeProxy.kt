@@ -6,18 +6,18 @@ import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsoluteLayout
-import com.bihe0832.android.common.webview.log.MyBaseJsBridgeProxy
+import com.bihe0832.android.common.webview.nativeimpl.NativeJsBridgeProxy
+import com.bihe0832.android.common.webview.nativeimpl.NativeWebView
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.jsbridge.JsResult
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
-import com.bihe0832.android.lib.webview.BaseWebView
-import com.bihe0832.android.lib.webview.jsbridge.JsResult
 
 /**
  * Created by zixie on 2016/10/20.
  */
-class DebugJsBridgeProxy(webView: BaseWebView, activity: Activity) : MyBaseJsBridgeProxy(webView, activity) {
+class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsBridgeProxy(activity, webView) {
 
     private val mViewMap = HashMap<String?, View?>()
 
@@ -56,7 +56,7 @@ class DebugJsBridgeProxy(webView: BaseWebView, activity: Activity) : MyBaseJsBri
 
     private fun resetADHeight(key: String?, height: Int) {
         if (!TextUtils.isEmpty(key)) {
-            webView.evaluateJavascript("javaScript:getNativeViewPosition('$key')") { value ->
+            mWebView.evaluateJavascript("javaScript:getNativeViewPosition('$key')") { value ->
                 ThreadManager.getInstance().runOnUIThread {
                     val mNativeView = mViewMap[key]
                     if (mNativeView != null) {
@@ -65,7 +65,7 @@ class DebugJsBridgeProxy(webView: BaseWebView, activity: Activity) : MyBaseJsBri
                             val params = mNativeView.layoutParams as AbsoluteLayout.LayoutParams
                             params.y = DisplayUtil.dip2pxWithDefaultDensity(ZixieContext.applicationContext, top)
                             mNativeView.layoutParams = params
-                            webView.loadUrl("javaScript:setNativeViewHeight('" + key + "'," + DisplayUtil.px2dipWithDefaultDensity(ZixieContext.applicationContext, height.toFloat()) + ")")
+                            mWebView.loadUrl("javaScript:setNativeViewHeight('" + key + "'," + DisplayUtil.px2dipWithDefaultDensity(ZixieContext.applicationContext, height.toFloat()) + ")")
                             if (height > 0) {
                                 mNativeView.visibility = View.VISIBLE
                             } else {
@@ -122,8 +122,8 @@ class DebugJsBridgeProxy(webView: BaseWebView, activity: Activity) : MyBaseJsBri
             if (!TextUtils.isEmpty(finalViewID)) {
                 if (mViewMap[finalViewID] == null) {
                     ThreadManager.getInstance().runOnUIThread {
-                        val view = DebugH5NativeWebFragment.getTextView(webView.context)
-                        webView.addView(view)
+                        val view = DebugH5NativeWebFragment.getTextView(mWebView.context)
+                        mWebView.addView(view)
                         addNativeView(finalViewID, view)
                         view.visibility = View.GONE
                         resetADHeight(finalViewID, DebugH5NativeWebFragment.getHeight())

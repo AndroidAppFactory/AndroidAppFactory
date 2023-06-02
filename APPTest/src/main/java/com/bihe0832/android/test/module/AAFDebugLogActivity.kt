@@ -5,7 +5,7 @@ import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.common.debug.log.DebugLogActivity
 import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.debug.log.SectionDataHeader
-import com.bihe0832.android.common.webview.log.WebviewLoggerFile
+import com.bihe0832.android.common.webview.core.WebviewLoggerFile
 import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.adapter.CardBaseModule

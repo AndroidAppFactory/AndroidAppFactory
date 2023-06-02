@@ -10,13 +10,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bihe0832.android.common.webview.R;
-import com.bihe0832.android.common.webview.log.WebviewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewViewModel;
+import com.bihe0832.android.common.webview.core.WebviewLoggerFile;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
-import com.tencent.smtt.sdk.QbSdk;
 
 import java.net.URLDecoder;
 
@@ -37,7 +37,6 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
         mWebViewViewModel = new ViewModelProvider(this).get(WebViewViewModel.class);
         WebviewLoggerFile.INSTANCE.log("BaseWebviewActivity mWebViewViewModel: " + mWebViewViewModel.hashCode());
-        ZLog.d(TAG + QbSdk.getTbsVersion(this));
         handleIntent(getIntent());
     }
 

@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.bihe0832.android.lib.webview.BaseWebView
+    <com.bihe0832.android.common.webview.nativeimpl.NativeWebView
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"></com.bihe0832.android.lib.webview.BaseWebView>
+        android:visibility="visible"></com.bihe0832.android.common.webview.nativeimpl.NativeWebView>
 
 </LinearLayout>

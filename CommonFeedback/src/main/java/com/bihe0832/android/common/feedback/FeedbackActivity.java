@@ -11,7 +11,7 @@ import com.bihe0832.android.lib.router.annotation.Module;
 
 
 @Module(RouterConstants.MODULE_NAME_FEEDBACK)
-public final class FeedbackActivity extends BaseWebviewActivity {
+public class FeedbackActivity extends BaseWebviewActivity {
 
 
     @Override

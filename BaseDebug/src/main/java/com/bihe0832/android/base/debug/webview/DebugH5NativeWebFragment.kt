@@ -4,19 +4,19 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
-import com.bihe0832.android.lib.webview.BaseWebView
-import com.tencent.smtt.sdk.WebView
-import com.tencent.smtt.sdk.WebViewClient
+import com.bihe0832.android.common.webview.nativeimpl.NativeWebView
 
 
 class DebugH5NativeWebFragment : BaseFragment() {
-    private var mWebView: BaseWebView? = null
+    private var mWebView: NativeWebView? = null
     private var textView: TextView? = null
 
     override fun getLayoutID(): Int {
@@ -25,7 +25,7 @@ class DebugH5NativeWebFragment : BaseFragment() {
 
 
     override fun initView(view: View) {
-        mWebView = view.findViewById<BaseWebView>(R.id.webview)
+        mWebView = view.findViewById<NativeWebView>(R.id.webview)
         val settings = mWebView!!.getSettings()
         settings.javaScriptEnabled = true
         textView = getTextView(context!!)

@@ -18,7 +18,7 @@ public class FeedbackFragment extends CommonWebviewFragment {
 
     public static FeedbackFragment newInstance(String url) {
         FeedbackFragment fragment = new FeedbackFragment();
-        Bundle bundle = fragment.getFeedbackDataBundle(url);
+        Bundle bundle = getFeedbackDataBundle(url);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -26,6 +26,10 @@ public class FeedbackFragment extends CommonWebviewFragment {
     // 追加业务参数，建议尽量追加静态参数，不要追加动态参数
     @Override
     protected String getFinalURL(String url) {
+       return getFinalFeedbackURL(url);
+    }
+
+    public static String getFinalFeedbackURL(String url){
         String mUserID = ZixieContext.INSTANCE.getDeviceId();
         String mNickName = "";
         String mHeadIconURL = "";
@@ -34,19 +38,15 @@ public class FeedbackFragment extends CommonWebviewFragment {
         return url + "?d-wx-push=1" + postData;
     }
 
-    protected String getPostData() {
+    protected static String getPostData() {
         StringBuilder builder = new StringBuilder();
         builder.append("clientInfo=");
         if (!ZixieContext.INSTANCE.isOfficial()) {
             builder.append("内部版本").append("/");
         }
-        builder.append(ManufacturerUtil.INSTANCE.getMANUFACTURER()).append("/")
-                .append(ManufacturerUtil.INSTANCE.getBRAND()).append("/").append(
-                        ManufacturerUtil.INSTANCE.getMODEL());
+        builder.append(ManufacturerUtil.INSTANCE.getMANUFACTURER()).append("/").append(ManufacturerUtil.INSTANCE.getBRAND()).append("/").append(ManufacturerUtil.INSTANCE.getMODEL());
         builder.append("&clientVersion=");
-        builder.append(ZixieContext.INSTANCE.getVersionName())
-                .append("/").append(ZixieContext.INSTANCE.getVersionCode())
-                .append("/").append(ZixieContext.INSTANCE.getVersionTag())
+        builder.append(ZixieContext.INSTANCE.getVersionName()).append("/").append(ZixieContext.INSTANCE.getVersionCode()).append("/").append(ZixieContext.INSTANCE.getVersionTag())
                 .append("/").append(ZixieContext.INSTANCE.getChannelID());
         builder.append("&os=");
         builder.append("Android").append("/").append(BuildUtils.INSTANCE.getRELEASE()).append("/")
@@ -63,7 +63,7 @@ public class FeedbackFragment extends CommonWebviewFragment {
     }
 
 
-    protected Bundle getFeedbackDataBundle(String url) {
+    public static Bundle getFeedbackDataBundle(String url) {
         return getWebviewDataBundle(url, getPostData());
     }
 }

@@ -29,7 +29,7 @@ public class DebugWebviewFragment extends CommonWebviewFragment {
 
     protected DebugJsBridgeProxy getJsBridgeProxy() {
         if (mBaseJsBridgeProxy == null) {
-            mBaseJsBridgeProxy = new DebugJsBridgeProxy(mWebView, getActivity());
+            mBaseJsBridgeProxy = new DebugJsBridgeProxy(getActivity(), mWebView);
         }
         return mBaseJsBridgeProxy;
     }

@@ -7,15 +7,12 @@ import com.bihe0832.android.common.about.R
 import com.bihe0832.android.common.permission.PermissionFragment
 import com.bihe0832.android.common.settings.card.SettingsData
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.framework.router.openFeedback
-import com.bihe0832.android.framework.router.openZixieWeb
+import com.bihe0832.android.framework.router.*
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
-import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.superapp.QQHelper
 import com.bihe0832.android.lib.superapp.WechatOfficialAccount
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 
 /**
  *
@@ -150,7 +147,7 @@ object SettingsItem {
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
-                RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_SHARE_APK)
+                shareAPP(true)
             }
         }
     }

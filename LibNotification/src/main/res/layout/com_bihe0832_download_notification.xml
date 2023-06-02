@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="3dp"
             android:singleLine="true"
-            android:text="腾讯手游加速器正为您下载PUBG Mobile(Asia)"
+            android:text=""
             android:textSize="14dp"
             android:textStyle="bold" />
 

@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.share
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileTools
@@ -24,19 +25,24 @@ class ShareAPPActivity : ShareQRCodeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         findViewById<View>(R.id.share_apk_panel_send_source).apply {
-            visibility = View.VISIBLE
-            setOnClickListener {
-                APKUtils.getAPKPath(this.context, packageName).let {
-                    if (FileUtils.checkFileExist(it)) {
-                        if (File(it).length() > FileUtils.SPACE_MB * 100) {
-                            ZixieContext.showToast(ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_big)!!)
+            if (!TextUtils.isEmpty(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_SHARE_SEND_APK))) {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    APKUtils.getAPKPath(this.context, packageName).let {
+                        if (FileUtils.checkFileExist(it)) {
+                            if (File(it).length() > FileUtils.SPACE_MB * 100) {
+                                ZixieContext.showToast(ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_big)!!)
+                            }
+                            AAFFileTools.sendFile(it)
+                        } else {
+                            ZixieContext.showToast(ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_faild)!!)
                         }
-                        AAFFileTools.sendFile(it)
-                    } else {
-                        ZixieContext.showToast(ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_faild)!!)
                     }
                 }
+            } else {
+                visibility = View.GONE
             }
+
         }
     }
 

@@ -1,8 +1,6 @@
 package com.bihe0832.android.framework.router;
 
 
-import android.graphics.Color;
-
 import com.bihe0832.android.lib.file.select.FileSelectTools;
 
 /**
@@ -13,11 +11,13 @@ public class RouterConstants {
 
     //内置反馈
     public static final String MODULE_NAME_FEEDBACK = "zfeedback";
+    public static final String MODULE_NAME_FEEDBACK_TBS = "ztbsfeedback";
 
     //内置文本编辑器
     public static final String MODULE_NAME_EDITOR = "zeditor";
 
     public static final String MODULE_NAME_WEB_PAGE = "zweb";
+    public static final String MODULE_NAME_WEB_PAGE_TBS = "ztbsweb";
     //webview参数，要打开的URL
     public static final String INTENT_EXTRA_KEY_WEB_URL = FileSelectTools.INTENT_EXTRA_KEY_WEB_URL;
     //是否隐藏webview的标题栏
@@ -35,21 +35,23 @@ public class RouterConstants {
 
     //打开二维码扫描
     public static final String MODULE_NAME_QRCODE_SCAN = "qrscan";
-    public static final String INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND = "opensound";
-    public static final String INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE = "openvibrate";
+    public static final String INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND = "opensound";
+    public static final String INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE = "openvibrate";
     // 扫码并且完成解析与跳转
     public static final String MODULE_NAME_QRCODE_SCAN_AND_PARSE = "qrparse";
 
     //二维码分享的数据
     public static final String MODULE_NAME_SHARE_QRCODE = "zshare";
     // 分享的内容
-    public static final String INTENT_EXTRA_VALUE_SHARE_DATA_WITH_ENCODE = INTENT_EXTRA_KEY_WEB_URL;
+    public static final String INTENT_EXTRA_KEY_SHARE_DATA_WITH_ENCODE = INTENT_EXTRA_KEY_WEB_URL;
     // 分享的主标题
-    public static final String INTENT_EXTRA_VALUE_SHARE_TITLE_WITH_ENCODE = "title";
+    public static final String INTENT_EXTRA_KEY_SHARE_TITLE_WITH_ENCODE = "title";
     // 分享的副标题
-    public static final String INTENT_EXTRA_VALUE_SHARE_DESC_WITH_ENCODE = "desc";
+    public static final String INTENT_EXTRA_KEY_SHARE_DESC_WITH_ENCODE = "desc";
     // 分享APK
     public static final String MODULE_NAME_SHARE_APK = "zshareapk";
+    // 是否支持发送APK
+    public static final String INTENT_EXTRA_KEY_SHARE_SEND_APK = "apk";
 
 
 }

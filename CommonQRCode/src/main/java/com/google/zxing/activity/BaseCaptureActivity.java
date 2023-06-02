@@ -114,11 +114,11 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
     }
 
     private void initData(Intent intent) {
-        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND)) {
-            opensound = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND), true);
+        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND)) {
+            opensound = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND), true);
         }
-        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_VIBRATE)) {
-            openvibrate = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_VALUE_QRCODE_SCAN_SOUND), true);
+        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE)) {
+            openvibrate = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND), true);
         }
     }
 
