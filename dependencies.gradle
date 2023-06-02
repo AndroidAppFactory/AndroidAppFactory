@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibJsBridge,LibWrapper"
+ext.developModule = "Application"
 
 
 /**
@@ -22,7 +22,7 @@ ext.developModule = "LibJsBridge,LibWrapper"
  *  true 全都加载，
  *  false 仅加载与 mainProject 相关的模块
  */
-ext.includeALLDependOnDevelopModule = true
+ext.includeALLDependOnDevelopModule = false
 
 /**
  * 应用组件 （Pub 开头，各个外发APP的发布模块）是否以application模式运行，当需要独立运行应用组件时修改，默认为false
@@ -70,14 +70,14 @@ ext.moduleInfo = [
         ]
     ],
     "CommonDebug"               : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview"
         ]
     ],
     "CommonWrapper"    : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
@@ -87,47 +87,47 @@ ext.moduleInfo = [
         ]
     ],
     "CommonAccessibility"              : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-accessibility",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonQRCode"              : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
         ]
     ],
     "CommonMessage"             : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-message",
         "apidependenciesList": [
             "CommonAbout"
         ]
     ],
     "CommonShare"               : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-share",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNavigationDrawer"    : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-navigation-drawer",
         "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
     ],
     "CommonBottomTab"           : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-bottom-tab",
         "apidependenciesList": [
             "CommonSvga"
         ]
     ],
     "CommonSvga"                : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-svga",
         "apidependenciesList": [
             "Framework",
@@ -136,19 +136,19 @@ ext.moduleInfo = [
         ]
     ],
     "CommonAceEditor"           : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-ace-editor",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonAbout"               : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-about",
         "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
     ],
     "CommonList"       : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-list",
         "apidependenciesList": [
             project.androidsupport.swiperefreshlayout,
@@ -156,34 +156,34 @@ ext.moduleInfo = [
         ]
     ],
     "CommonSplash"     : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-splash",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonPhotos"     : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNetwork"    : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-network",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonTBSFeedback": [
-        "version"                : "5.15.13",
+        "version"                : "5.16.0",
         "artifactId"             : "common-feedback-tbs",
         "apidependenciesList"    : ["CommonTBSWebview", "CommonFeedback"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonTBSWebview" : [
-        "version"                : "5.15.13",
+        "version"                : "5.16.0",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -192,7 +192,7 @@ ext.moduleInfo = [
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonTBS"        : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-tbs",
         "apidependenciesList": [
             project.tencent.tbssdk,
@@ -201,7 +201,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonWebview"    : [
-        "version"                : "5.15.13",
+        "version"                : "5.16.0",
         "artifactId"             : "common-webview",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -210,18 +210,18 @@ ext.moduleInfo = [
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonFeedback"   : [
-        "version"                : "5.15.13",
+        "version"                : "5.16.0",
         "artifactId"             : "common-feedback",
         "apidependenciesList"    : ["CommonWebview"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonPraise"     : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "common-praise",
         "apidependenciesList": ["Framework"]
     ],
     "Framework"        : [
-        "version"                : "5.15.13",
+        "version"                : "5.16.0",
         "artifactId"             : "framework",
         "apidependenciesList"    : [
             project.androidsupport.annotation,
@@ -235,7 +235,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibWrapper"       : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
             "LibDebug",
@@ -587,7 +587,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibJsBridge"      : [
-        "version"            : "5.15.13",
+        "version"            : "5.16.0",
         "artifactId"         : "lib-jsbridge",
         "apidependenciesList": [
             "LibLog", "LibThread", "LibToast", "LibAPK"
