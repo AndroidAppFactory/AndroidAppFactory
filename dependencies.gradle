@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Framework"
+ext.developModule = "CommonTBS"
 
 
 /**
@@ -34,7 +34,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "5.16.0"
+ext.moduleVersionName = "5.16.1"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.moduleInfo = [
@@ -58,25 +58,25 @@ ext.moduleInfo = [
             "Application", "CommonDebug", "CommonTBSFeedback"
         ]
     ],
-    "Application"      : [
+    "Application"        : [
         "version"                : "",
         "artifactId"             : "",
         "apidependenciesList"    : [
-            "CommonWrapper", "CommonTBSWebview"
+            "CommonWrapper", "CommonTBSWrapper"
         ],
         "specialdependenciesList": [
             "kapt"               : ["RouterCompiler"],
             "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"],
         ]
     ],
-    "CommonDebug"               : [
+    "CommonDebug"        : [
         "version"            : "5.16.0",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview"
         ]
     ],
-    "CommonWrapper"    : [
+    "CommonWrapper"      : [
         "version"            : "5.16.0",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
@@ -86,21 +86,28 @@ ext.moduleInfo = [
             "CommonQRCode", "CommonAccessibility"
         ]
     ],
-    "CommonAccessibility"              : [
+    "CommonTBSWrapper"   : [
+        "version"            : "5.16.0",
+        "artifactId"         : "common-wrapper-tbs",
+        "apidependenciesList": [
+            "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
+        ]
+    ],
+    "CommonAccessibility": [
         "version"            : "5.16.0",
         "artifactId"         : "common-accessibility",
         "apidependenciesList": [
             "Framework"
         ]
     ],
-    "CommonQRCode"              : [
+    "CommonQRCode"       : [
         "version"            : "5.16.0",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
         ]
     ],
-    "CommonMessage"             : [
+    "CommonMessage"      : [
         "version"            : "5.16.0",
         "artifactId"         : "common-message",
         "apidependenciesList": [
