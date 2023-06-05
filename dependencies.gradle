@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonTBS"
+ext.developModule = "Application"
 
 
 /**
@@ -87,7 +87,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonTBSWrapper"   : [
-        "version"            : "5.16.0",
+        "version"            : "5.16.1",
         "artifactId"         : "common-wrapper-tbs",
         "apidependenciesList": [
             "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
@@ -184,13 +184,13 @@ ext.moduleInfo = [
         ]
     ],
     "CommonTBSFeedback": [
-        "version"                : "5.16.0",
+        "version"                : "5.16.1",
         "artifactId"             : "common-feedback-tbs",
         "apidependenciesList"    : ["CommonTBSWebview", "CommonFeedback"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonTBSWebview" : [
-        "version"                : "5.16.0",
+        "version"                : "5.16.1",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -199,7 +199,7 @@ ext.moduleInfo = [
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonTBS"        : [
-        "version"            : "5.16.0",
+        "version"            : "5.16.1",
         "artifactId"         : "common-tbs",
         "apidependenciesList": [
             project.tencent.tbssdk,
