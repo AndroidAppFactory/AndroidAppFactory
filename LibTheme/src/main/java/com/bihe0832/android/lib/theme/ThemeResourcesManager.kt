@@ -9,9 +9,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.IdGenerator
 
-/**
- * Created by liupei on 2018/3/16.
- */
+
 object ThemeResourcesManager {
     private var mThemeResources: Resources? = null
     private lateinit var mAppDefaultResources: Resources

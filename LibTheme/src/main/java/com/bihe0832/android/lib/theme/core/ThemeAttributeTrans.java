@@ -16,9 +16,6 @@ import com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by liupei on 2018/3/16.
- */
 
 public class ThemeAttributeTrans {
     public static final List<String> list = new ArrayList<>();

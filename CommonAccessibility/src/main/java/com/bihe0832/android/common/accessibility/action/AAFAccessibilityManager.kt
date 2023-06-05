@@ -16,7 +16,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
  *
  * @author zixie code@bihe0832.com
  * Created on 2023/5/10.
- * Description: Description
+ * Description: 模拟点击，无障碍的开启关闭状态管理等
  *
  */
 object AAFAccessibilityManager {

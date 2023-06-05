@@ -9,9 +9,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.theme.core.ActivityLifecycleForTheme
 import java.util.*
 
-/**
- * Created by liupei on 2018/3/16.
- */
+
 object ThemeManager : Observable() {
 
     const val TAG = "ThemeManager"

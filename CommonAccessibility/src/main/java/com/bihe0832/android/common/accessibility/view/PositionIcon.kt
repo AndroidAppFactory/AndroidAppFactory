@@ -8,6 +8,10 @@ import com.bihe0832.android.lib.floatview.BaseIconView
 import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
 import com.bihe0832.android.lib.utils.ConvertUtils
 
+
+/**
+ * 按键校准时使用的悬浮窗信息
+ */
 open class PositionIcon(context: Context) : BaseIconView(context) {
 
     protected var mLocationKey: String = ""

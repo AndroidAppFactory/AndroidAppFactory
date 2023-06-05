@@ -11,7 +11,7 @@ import com.bihe0832.android.lib.utils.ConvertUtils
  *
  * @author zixie code@bihe0832.com
  * Created on 2023/5/10.
- * Description: Description
+ * Description: 根据提供的位置，或者位置左边的key完成一次模拟操作
  *
  */
 object AAFAccessibilityDispatcher {

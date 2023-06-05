@@ -3,9 +3,6 @@ package com.bihe0832.android.lib.theme.core;
 import android.content.Context;
 import android.content.res.TypedArray;
 
-/**
- * Created by liupei on 2018/3/16.
- */
 
 public class ThemeTools {
     public static int[] getThemeResid(Context context, int[] attrs) {

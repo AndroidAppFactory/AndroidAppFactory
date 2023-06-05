@@ -4,6 +4,9 @@ import com.bihe0832.android.common.accessibility.action.AAFAccessibilityManager
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 
+/**
+ * 按键位置记录管理
+ */
 object PositionConfig {
 
     private val CONFIG_KEY_PRE = "com.bihe0832.android.accessibility.position"

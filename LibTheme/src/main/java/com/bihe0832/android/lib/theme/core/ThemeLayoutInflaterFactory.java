@@ -17,9 +17,6 @@ import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Created by liupei on 2018/3/16.
- */
 
 public class ThemeLayoutInflaterFactory implements LayoutInflater.Factory2, Observer {
     // 属性处理类
