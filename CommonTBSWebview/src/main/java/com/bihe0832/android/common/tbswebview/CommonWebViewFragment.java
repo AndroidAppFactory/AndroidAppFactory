@@ -3,7 +3,7 @@ package com.bihe0832.android.common.tbswebview;
 
 import android.os.Bundle;
 
-import com.bihe0832.android.common.webview.tbsimpl.TBSWebviewFragment;
+import com.bihe0832.android.common.webview.tbsimpl.TBSWebViewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
 import com.bihe0832.android.lib.ace.editor.AceConstants;
@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.request.URLUtils;
 
 import java.util.HashMap;
 
-public class CommonWebviewFragment extends TBSWebviewFragment {
+public class CommonWebViewFragment extends TBSWebViewFragment {
 
 
     public static final String VERSION_NAME = "1.0.0";
@@ -23,15 +23,15 @@ public class CommonWebviewFragment extends TBSWebviewFragment {
     private static final String URL_PARAM_CLIENT_TIME = "ClientTime";
     private static final String URL_PARAM_PLATFORM = "OSVersion";
 
-    public static CommonWebviewFragment newInstance(String url) {
-        CommonWebviewFragment fragment = new CommonWebviewFragment();
+    public static CommonWebViewFragment newInstance(String url) {
+        CommonWebViewFragment fragment = new CommonWebViewFragment();
         Bundle bundle = getWebviewDataBundle(url, "");
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static CommonWebviewFragment newInstance(String url, boolean refreshable) {
-        CommonWebviewFragment fragment = new CommonWebviewFragment();
+    public static CommonWebViewFragment newInstance(String url, boolean refreshable) {
+        CommonWebViewFragment fragment = new CommonWebViewFragment();
         Bundle bundle = getWebviewDataBundle(url, "");
         bundle.putBoolean(INTENT_KEY_REFRESH, refreshable);
         fragment.setArguments(bundle);

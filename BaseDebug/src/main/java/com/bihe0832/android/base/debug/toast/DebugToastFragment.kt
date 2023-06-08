@@ -15,6 +15,9 @@ class DebugToastFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("Toast测试", View.OnClickListener {
+                ToastUtil.showTop(context, "这是一个测试用的<font color ='#38ADFF'><b>测试消息</b></font>", Toast.LENGTH_LONG)
+            }))
             add(DebugItemData("普通Toast", View.OnClickListener { ToastUtil.showShort(context!!, "这是一个普通Toast") }))
             add(DebugItemData("顶部Toast", View.OnClickListener { ToastUtil.showTop(context!!, "这是一个顶部Toast", Toast.LENGTH_SHORT) }))
             add(DebugItemData("Tips Toast", View.OnClickListener { ToastUtil.showTips(context!!, R.mipmap.icon, "执行成功", Toast.LENGTH_SHORT) }))

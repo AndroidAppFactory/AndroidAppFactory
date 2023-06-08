@@ -43,7 +43,7 @@ import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-public abstract class BaseWebviewFragment extends BaseFragment implements ActivityCompat.OnRequestPermissionsResultCallback {
+public abstract class BaseWebViewFragment extends BaseFragment implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     protected static final String TAG = "WebPageFragment -> :";
 

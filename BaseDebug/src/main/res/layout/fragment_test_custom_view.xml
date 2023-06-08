@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <com.bihe0832.android.lib.ui.custom.view.SlideViewLayout
+        <com.bihe0832.android.lib.ui.custom.view.slide.SlideViewLayout
             android:id="@+id/slide_rail"
             android:layout_width="287dp"
             android:layout_height="54dp"
@@ -24,7 +24,7 @@
                 android:layout_gravity="center_vertical|right"
                 android:src="@drawable/icon_info"
                 android:tint="@color/black" />
-        </com.bihe0832.android.lib.ui.custom.view.SlideViewLayout>
+        </com.bihe0832.android.lib.ui.custom.view.slide.SlideViewLayout>
 
 
         <com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground
@@ -39,7 +39,7 @@
             app:bgtv_strokeColor="#0000ff"
             app:bgtv_strokeWidth="1dp" />
 
-        <com.bihe0832.android.lib.ui.custom.view.SwipeMenuLayout
+        <com.bihe0832.android.lib.ui.custom.view.slide.SwipeMenuLayout
             android:id="@+id/test_basic_swipe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:text="删除" />
 
 
-        </com.bihe0832.android.lib.ui.custom.view.SwipeMenuLayout>
+        </com.bihe0832.android.lib.ui.custom.view.slide.SwipeMenuLayout>
 
     </LinearLayout>
 

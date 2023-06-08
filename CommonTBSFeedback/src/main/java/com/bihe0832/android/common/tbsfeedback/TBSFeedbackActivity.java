@@ -1,7 +1,7 @@
 package com.bihe0832.android.common.tbsfeedback;
 
 import com.bihe0832.android.common.feedback.FeedbackActivity;
-import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
+import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.lib.router.annotation.Module;
 
@@ -10,7 +10,7 @@ import com.bihe0832.android.lib.router.annotation.Module;
 public final class TBSFeedbackActivity extends FeedbackActivity {
 
     @Override
-    protected BaseWebviewFragment getWebViewFragment() {
+    protected BaseWebViewFragment getWebViewFragment() {
         return TBSFeedbackFragment.newInstance(getURL());
     }
 

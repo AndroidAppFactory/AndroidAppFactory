@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.custom.view;
+package com.bihe0832.android.lib.ui.custom.view.slide;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -15,6 +15,11 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
+import com.bihe0832.android.lib.ui.custom.view.R;
+
+/**
+ * 左滑删除
+ */
 public class SwipeMenuLayout extends ViewGroup {
 
     private int mScaleTouchSlop;//为了处理单击事件的冲突

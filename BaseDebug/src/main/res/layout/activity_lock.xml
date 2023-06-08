@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bihe0832.android.lib.ui.custom.view.slide.SlideFinishLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lock_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorOnBackground"
+    tools:context=".lock.DebugLockActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lock_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/lock_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="60dp"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="38dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="17:30" />
+
+        <TextView
+            android:id="@+id/lock_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/lock_time"
+            app:layout_constraintTop_toBottomOf="@+id/lock_time"
+            tools:text="12月21日 星期三" />
+
+        <ImageView
+            android:id="@+id/lock_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/icon"
+            app:layout_constraintBottom_toTopOf="@+id/lock_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lock_date" />
+
+        <TextView
+            android:id="@+id/lock_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:text="@string/app_name"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/lock_desc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/lock_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="42dp"
+            android:text="@string/app_desc"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/lock_charge_process"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <com.bihe0832.android.lib.ui.custom.view.process.AccCircleProgress
+            android:id="@+id/lock_charge_process"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="36dp"
+            app:layout_constraintBottom_toTopOf="@+id/lock_action"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/lock_charge_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:textColor="#ffffff"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/lock_charge_process"
+            app:layout_constraintStart_toStartOf="@+id/lock_charge_process"
+            app:layout_constraintTop_toTopOf="@+id/lock_charge_process"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="33" />
+
+        <com.bihe0832.android.lib.ui.dialog.view.ProgressIndicatorView
+            android:id="@+id/lock_charge_indicator"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/lock_charge_process"
+            app:layout_constraintEnd_toEndOf="@+id/lock_charge_process"
+            app:layout_constraintStart_toStartOf="@+id/lock_charge_process"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:visibility="visible" />
+
+        <com.bihe0832.android.lib.ui.textview.hint.HintTextView
+            android:id="@+id/lock_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:text=">>> 滑动解锁"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.bihe0832.android.lib.ui.custom.view.slide.SlideFinishLayout>

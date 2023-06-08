@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.custom.view;
+package com.bihe0832.android.lib.ui.custom.view.slide;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -13,7 +13,7 @@ import androidx.customview.widget.ViewDragHelper;
 /**
  * @author zixie code@bihe0832.com
  * Created on 2023/5/12.
- * Description: 仿滑动解锁等滑动特效
+ * Description: 仿滑动解锁等滑动特效，仅内部LockBtn 在范围内滑动
  */
 public class SlideViewLayout extends FrameLayout {
     /**

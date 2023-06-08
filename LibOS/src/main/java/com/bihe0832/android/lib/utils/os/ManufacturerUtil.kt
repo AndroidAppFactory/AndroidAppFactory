@@ -161,19 +161,25 @@ object ManufacturerUtil {
         }
     }
 
-    val isVivo: Boolean =
+    val isVivo: Boolean by lazy {
         TextFactoryCore.trimSpace("$MANUFACTURER-$DEVICE".toLowerCase()).contains("vivo")
+    }
 
-    val isSmartisan: Boolean = TextFactoryCore.trimSpace(BRAND.toLowerCase()).contains("smartisan")
+    val isSmartisan: Boolean by lazy {
+        TextFactoryCore.trimSpace(BRAND.toLowerCase()).contains("smartisan")
+    }
 
-    val isMeizu: Boolean = TextFactoryCore.trimSpace(BRAND.toLowerCase()).contains("meizu")
+    val isMeizu: Boolean by lazy {
+        TextFactoryCore.trimSpace(BRAND.toLowerCase()).contains("meizu")
+    }
 
     val vivoRomVersion: String by lazy {
         getValueByKey("ro.vivo.android.os.version") { "" }
     }
 
-    val isSumsung: Boolean =
+    val isSumsung: Boolean by lazy {
         TextFactoryCore.trimSpace(MANUFACTURER.toLowerCase()).contains("samsung")
+    }
 
     val sumsungRomVersion: String by lazy {
         val version = getValueByKey("ro.build.display.id") { "" }

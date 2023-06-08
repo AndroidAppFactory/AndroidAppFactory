@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.bihe0832.android.common.webview.base.BaseWebviewActivity;
-import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
+import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.lib.router.annotation.Module;
@@ -15,7 +15,7 @@ public class FeedbackActivity extends BaseWebviewActivity {
 
 
     @Override
-    protected BaseWebviewFragment getWebViewFragment() {
+    protected BaseWebViewFragment getWebViewFragment() {
         return FeedbackFragment.newInstance(getURL());
     }
 

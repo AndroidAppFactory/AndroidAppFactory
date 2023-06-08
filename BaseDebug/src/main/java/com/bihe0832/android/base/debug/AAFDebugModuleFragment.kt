@@ -10,7 +10,6 @@ package com.bihe0832.android.base.debug
 
 
 import android.view.View
-import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.audio.DebugAudioFragment
 import com.bihe0832.android.base.debug.block.DebugEnqueueFragment
 import com.bihe0832.android.base.debug.cache.DebugCacheFragment
@@ -24,6 +23,7 @@ import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
 import com.bihe0832.android.base.debug.image.DebugImageFragment
 import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
+import com.bihe0832.android.base.debug.intent.DebugIntentFragment
 import com.bihe0832.android.base.debug.ipc.AAFDebugIPCFragment
 import com.bihe0832.android.base.debug.log.DebugLogFragment
 import com.bihe0832.android.base.debug.message.DebugMessageFragment
@@ -43,12 +43,10 @@ import com.bihe0832.android.base.debug.thread.DebugThreadAndCoroutinesFragmeAndn
 import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
-import com.bihe0832.android.base.debug.view.DebugTextViewFragment
-import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
+import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebviewActivity
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 
@@ -67,8 +65,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("公告消息 调试", DebugMessageFragment::class.java))
 
 
-            add(getDebugFragmentItemData("TextView 调试", DebugTextViewFragment::class.java))
-            add(getDebugFragmentItemData("自定义View 调试", DebugCustomViewFragment::class.java))
+
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
             add(getDebugFragmentItemData("协程及多线程调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
             add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))
@@ -76,7 +73,9 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
             add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
 
-            add(getDebugFragmentItemData("UI（点击区、Toast、前后台）测试", DebugUIFragment::class.java))
+            add(getDebugFragmentItemData("UI（换肤、哀悼日、前后台等）测试", DebugUIFragment::class.java))
+            add(getDebugFragmentItemData("UI（反馈、评分、锁屏、设置等）测试", DebugIntentFragment::class.java))
+            add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
 

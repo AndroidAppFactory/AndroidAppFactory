@@ -4,14 +4,14 @@ package com.bihe0832.android.common.tbsfeedback;
 import android.os.Bundle;
 
 import com.bihe0832.android.common.feedback.FeedbackFragment;
-import com.bihe0832.android.common.tbswebview.CommonWebviewFragment;
+import com.bihe0832.android.common.tbswebview.CommonWebViewFragment;
 
 /**
  * @author zixie code@bihe0832.com
  * Created on 2019-07-26.
  * Description: Description
  */
-public class TBSFeedbackFragment extends CommonWebviewFragment {
+public class TBSFeedbackFragment extends CommonWebViewFragment {
 
     public static TBSFeedbackFragment newInstance(String url) {
         TBSFeedbackFragment fragment = new TBSFeedbackFragment();

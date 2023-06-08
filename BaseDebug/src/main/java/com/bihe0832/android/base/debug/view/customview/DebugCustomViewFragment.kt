@@ -5,7 +5,7 @@ import android.widget.ImageView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.ui.custom.view.SlideViewLayout
+import com.bihe0832.android.lib.ui.custom.view.slide.SlideViewLayout
 import kotlinx.android.synthetic.main.fragment_test_custom_view.*
 
 

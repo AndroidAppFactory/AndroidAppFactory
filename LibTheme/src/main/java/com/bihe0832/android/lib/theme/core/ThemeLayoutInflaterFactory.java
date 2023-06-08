@@ -40,7 +40,7 @@ public class ThemeLayoutInflaterFactory implements LayoutInflater.Factory2, Obse
         }
         if (view != null) {
             if (ThemeManager.INSTANCE.isDebug()) {
-                ZLog.e(ThemeManager.TAG, String.format("检查[%s]:" + name, context.getClass().getName()));
+                ZLog.d(ThemeManager.TAG, String.format("检查[%s]:" + name, context.getClass().getName()));
             }
             mThemeAttributeTrans.load(view, attrs);
         }

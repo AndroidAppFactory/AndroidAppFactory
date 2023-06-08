@@ -15,12 +15,14 @@ import android.widget.FrameLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bihe0832.android.common.webview.R;
-import com.bihe0832.android.common.webview.base.BaseWebviewFragment;
+import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
 import com.bihe0832.android.common.webview.core.WebviewLoggerFile;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.webview.tbs.jsbridge.TBSWebView;
 import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
@@ -42,7 +44,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class TBSWebviewFragment extends BaseWebviewFragment {
+public abstract class TBSWebViewFragment extends BaseWebViewFragment {
     public TBSWebView mWebView;
     private View mCustomView;
     private int mOriginalSystemUiVisibility;
@@ -61,11 +63,11 @@ public abstract class TBSWebviewFragment extends BaseWebviewFragment {
     }
 
     protected WebViewClient getWebViewClient() {
-        return new TBSWebviewFragment.MyWebViewClient();
+        return new TBSWebViewFragment.MyWebViewClient();
     }
 
     protected WebChromeClient getWebChromeClient() {
-        return new TBSWebviewFragment.MyWebChromeClient();
+        return new TBSWebViewFragment.MyWebChromeClient();
     }
 
     protected void createWebView() {
@@ -284,7 +286,30 @@ public abstract class TBSWebviewFragment extends BaseWebviewFragment {
 
         @Override
         public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
-            super.onReceivedSslError(webView, sslErrorHandler, sslError);
+            DialogUtils.INSTANCE.showConfirmDialog(
+                    getContext(),
+                    getResources().getString(R.string.dialog_title),
+                    getResources().getString(R.string.com_bihe0832_web_ssl_error_message),
+                    getResources().getString(R.string.dialog_button_ok),
+                    getResources().getString(R.string.dialog_button_cancel),
+                    new OnDialogListener() {
+                        @Override
+                        public void onPositiveClick() {
+                            sslErrorHandler.proceed();
+                        }
+
+                        @Override
+                        public void onNegativeClick() {
+                            sslErrorHandler.cancel();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            onNegativeClick();
+                        }
+                    }
+
+            );
         }
     }
 

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="com_bihe0832_web_process_name">:web</string>
+    <string name="com_bihe0832_web_ssl_error_message">当前页面SSL认证失败，继续访问可能存在风险，是否继续访问？</string>
 </resources>

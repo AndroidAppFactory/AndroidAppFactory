@@ -23,7 +23,7 @@ import java.net.URLDecoder;
 public abstract class BaseWebviewActivity extends CommonActivity {
 
 
-    protected abstract BaseWebviewFragment getWebViewFragment();
+    protected abstract BaseWebViewFragment getWebViewFragment();
 
     protected abstract Class getWebViewFragmentClass();
 
@@ -46,7 +46,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         try {
             if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
                 handleIntent(intent);
-                ((BaseWebviewFragment) findFragment(getWebViewFragmentClass())).loadUrl(mURL, null);
+                ((BaseWebViewFragment) findFragment(getWebViewFragmentClass())).loadUrl(mURL, null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,7 +77,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     protected String parseURL(Intent intent) {
         if (Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
             return intent.getData().toString();
-        } else if (intent.hasExtra(BaseWebviewFragment.INTENT_KEY_URL)) {
+        } else if (intent.hasExtra(BaseWebViewFragment.INTENT_KEY_URL)) {
             return URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_URL));
         } else {
             return "";

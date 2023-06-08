@@ -3,8 +3,7 @@ package com.bihe0832.android.common.webview;
 
 import android.os.Bundle;
 
-import com.bihe0832.android.common.webview.nativeimpl.NativeJsBridgeProxy;
-import com.bihe0832.android.common.webview.nativeimpl.NativeWebviewFragment;
+import com.bihe0832.android.common.webview.nativeimpl.NativeWebViewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
 import com.bihe0832.android.lib.ace.editor.AceConstants;
@@ -13,7 +12,7 @@ import com.bihe0832.android.lib.request.URLUtils;
 
 import java.util.HashMap;
 
-public class CommonWebviewFragment extends NativeWebviewFragment {
+public class CommonWebviewFragment extends NativeWebViewFragment {
 
 
     public static final String VERSION_NAME = "1.0.0";

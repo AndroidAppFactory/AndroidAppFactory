@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Gravity
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.ui.AAFCommonMainActivity
+import com.bihe0832.android.base.debug.lock.DebugLockService
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
@@ -36,6 +37,10 @@ open class TestMainActivity : AAFCommonMainActivity() {
 //        return R.layout.activity_debug_main
 //    }
 
+    override fun onResume() {
+        super.onResume()
+        DebugLockService.startLockService(this)
+    }
     override fun onDestroy() {
         super.onDestroy()
     }

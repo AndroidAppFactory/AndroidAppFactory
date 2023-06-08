@@ -42,7 +42,6 @@
         <item name="titleMargin">0dp</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="android:fitsSystemWindows">true</item>
-
     </style>
 
     <style name="AAF.AppTheme.Toolbar.Light" parent="AAF.AppTheme.Toolbar.Base">
@@ -52,13 +51,14 @@
         <item name="navigationIcon">@drawable/icon_left_arrow</item>
     </style>
 
-    <style name="AAF.ActivityTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AAF.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowNoTitle">true</item>
         <!--  它可以将应用了该 Style 的 Activity 所在的 Window 设置成透明的， 使用windowIsTranslucent 的Activity 不要定义 screenOrientation-->
         <item name="android:windowIsTranslucent">false</item>
+        <!--取消系统默认的actionBar-->
         <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
         <!--主色调 -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <!--状态栏颜色-->
@@ -78,9 +78,14 @@
         <item name="editTextColor">@color/secondary_text</item>
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
-
         <!--支持刘海屏-->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+
+    <style name="AAF.ActivityTheme.Base" parent="AAF.AppTheme">
+        <!-- 取消actionBar的标题-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AAF.ActivityTheme" parent="AAF.ActivityTheme.Base">
@@ -95,9 +100,25 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <!--        弹框等顶部会有不透明状态栏-->
         <item name="android:windowFullscreen">true</item>
-
     </style>
 
+    <!--使用 AAF.ActivityTheme.Transparent 主题的Activity 不要定义 screenOrientation ，此时会正常展示状态栏-->
+    <style name="AAF.ActivityTheme.Transparent" parent="AAF.ActivityTheme">
+        <!--        应用启动使用背景-->
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <!--
+       windowIsTranslucent 可以将应用了该 Style 的 Activity 所在的 Window 设置成透明的
+       使用 windowIsTranslucent 的Activity 不要定义 screenOrientation
+       当 windowIsTranslucent= true 时，给Activity设置ActivityAnimation会不起作用，只能设置windowAnimation
+       -->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!--使用 AAF.ActivityTheme.Dialog 主题的Activity 不要定义 screenOrientation -->
     <style name="AAF.ActivityTheme.Dialog" parent="AAF.ActivityTheme.Fullscreen">
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--
@@ -110,12 +131,12 @@
         <item name="android:splitMotionEvents">false</item>
     </style>
 
-    <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->
+    <!--使用 AAF.ActivityTheme.Bottom 主题的Activity 不要定义 screenOrientation -->
     <style name="AAF.ActivityTheme.Bottom" parent="AAF.ActivityTheme.Dialog">
         <item name="android:windowAnimationStyle">@style/AAF.Animation.BottomWindow</item>
     </style>
 
-    <!--使用 bottomShare 主题的Activity 不要定义 screenOrientation -->
+    <!--使用 AAF.ActivityTheme.Alpha 主题的Activity 不要定义 screenOrientation -->
     <style name="AAF.ActivityTheme.Alpha" parent="AAF.ActivityTheme.Dialog">
         <item name="android:windowAnimationStyle">@style/AAF.Animation.Alpha</item>
     </style>
