@@ -24,6 +24,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.webview.tbs.WebViewHelper
+import com.bihe0832.android.lib.widget.WidgetUpdateManager
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsPrivacyAccess
 
@@ -108,6 +109,8 @@ object AppFactoryInit {
                     initCore(application, processName)
                     if (processName.equals(application.packageName, ignoreCase = true)) {
                         initExtra(application)
+                    } else if (processName.equals(application.packageName + application.applicationContext.getString(R.string.com_bihe0832_widgets_process_name), ignoreCase = true)) {
+                        WidgetUpdateManager.initModule(application.applicationContext)
                     }
                     initWebview(application, it)
                 }

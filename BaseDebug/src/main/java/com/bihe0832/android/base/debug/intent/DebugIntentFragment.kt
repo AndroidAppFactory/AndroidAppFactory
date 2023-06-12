@@ -9,11 +9,14 @@
 package com.bihe0832.android.base.debug.intent
 
 
+import android.content.ComponentName
+import android.content.Intent
 import android.provider.Settings
 import android.view.View
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.lock.DebugLockService
+import com.bihe0832.android.base.debug.widget.TestWorker1
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.praise.UserPraiseManager
@@ -21,6 +24,7 @@ import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.widget.WidgetUpdateManager
 
 
 class DebugIntentFragment : DebugEnvFragment() {
@@ -41,6 +45,25 @@ class DebugIntentFragment : DebugEnvFragment() {
             add(DebugItemData("启动锁屏页面", View.OnClickListener {
                 DebugLockService.startLockServiceWithPermission(context)
             }))
+
+            add(DebugItemData("刷新指定Widget信息", View.OnClickListener {
+                WidgetUpdateManager.updateWidget(context!!, TestWorker1::class.java, canAutoUpdateByOthers = false, updateAll = false)
+
+            }))
+
+            add(DebugItemData("刷新所有Widget信息", View.OnClickListener {
+                WidgetUpdateManager.updateAllWidgets(context!!)
+
+            }))
+
+            add(DebugItemData("启动Service", View.OnClickListener {
+                val intent = Intent();
+                intent.setAction("com.example.wecodeprocess.action.OPEN_WECODE_FROM_WECODE");
+                intent.setComponent(ComponentName(context!!.applicationContext!!, "com.bihe0832.android.base.debug.lock.DebugLockService"))
+                context!!.applicationContext!!.startService(intent)
+            }))
+
+
 
             add(DebugItemData("弹出评分页面", View.OnClickListener {
                 UserPraiseManager.showUserPraiseDialog(activity!!, getFeedBackURL())

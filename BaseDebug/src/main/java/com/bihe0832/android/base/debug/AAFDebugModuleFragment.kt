@@ -74,7 +74,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
 
             add(getDebugFragmentItemData("UI（换肤、哀悼日、前后台等）测试", DebugUIFragment::class.java))
-            add(getDebugFragmentItemData("UI（反馈、评分、锁屏、设置等）测试", DebugIntentFragment::class.java))
+            add(getDebugFragmentItemData("UI（反馈、评分、锁屏、Widget、设置等）测试", DebugIntentFragment::class.java))
             add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))

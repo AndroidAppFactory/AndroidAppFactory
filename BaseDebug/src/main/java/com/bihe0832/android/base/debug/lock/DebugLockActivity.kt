@@ -19,6 +19,7 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.device.battery.BatteryHelper
 import com.bihe0832.android.lib.device.battery.BatteryHelper.getBatteryStatus
+import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
@@ -31,6 +32,7 @@ import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils.SDK_INT
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
+import com.bihe0832.android.lib.widget.WidgetUpdateManager
 
 class DebugLockActivity : BaseActivity() {
 
@@ -167,19 +169,13 @@ class DebugLockActivity : BaseActivity() {
         textView.setLinearGradientColors(intArrayOf(Color.GRAY, Color.WHITE, Color.GRAY))
         textView.setLinearGradientPositions(floatArrayOf(0.1f, 0.5f, 0.9f))
         textView.setLinearGradientTileMode(Shader.TileMode.CLAMP)
-
-//        ValueAnimator colorAnim = ObjectAnimator.ofInt(textView, "textColor", getResources().getColor(R.color.colorOnPrimary), getResources().getColor(R.color.colorAccent));
-//        colorAnim.setDuration(4000);
-//        colorAnim.setEvaluator(new ArgbEvaluator());
-//        colorAnim.setRepeatCount(ValueAnimator.INFINITE);
-//        colorAnim.setRepeatMode(ValueAnimator.REVERSE);
-//        colorAnim.start();
     }
 
     private fun initIconAnim() {
         val iv = findViewById<ImageView>(R.id.lock_icon)
         iv.setOnClickListener {
-            APKUtils.startApp(this@DebugLockActivity, "com.tencent.cmocmna")
+            LockScreenService.disableSystemLockScreen(this)
+            APKUtils.startApp(this@DebugLockActivity, "com.tencent.mm")
             finish()
         }
         val animatorSet = AnimatorSet()
@@ -213,6 +209,7 @@ class DebugLockActivity : BaseActivity() {
                 ZLog.e("disableSystemLockScreen exception, cause: " + e.cause + ", message: " + e.message)
             }
         }
+        WidgetUpdateManager.updateAllWidgets(this)
     }
 
     companion object {

@@ -9,10 +9,17 @@
 package com.bihe0832.android.base.debug.temp
 
 
+import android.graphics.BitmapFactory
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.os.DisplayUtil
+import java.net.URL
 
 
 class DebugTempFragment : DebugEnvFragment() {
@@ -30,6 +37,14 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
     private fun testFunc() {
-
+        val imgUrl = "https://cdn.bihe0832.com/images/head.jpg"
+        ThreadManager.getInstance().start {
+            var a = BitmapUtil.getRemoteBitmap(imgUrl, DisplayUtil.dip2px(context, 40f), DisplayUtil.dip2px(context, 40f))
+            val url = URL(imgUrl)
+            val ist = url.openStream()
+            BitmapFactory.decodeStream(ist).let {
+                ZixieContext.showToast(it.toString())
+            }
+        }
     }
 }

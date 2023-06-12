@@ -1,9 +1,10 @@
-package com.bihe0832.android.common.lock.screen.permission
+package com.bihe0832.android.lib.lock.screen.permission
 
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import com.bihe0832.android.common.lock.screen.service.LockScreenService
+import com.bihe0832.android.lib.lock.screen.service.LockScreenService
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
@@ -21,12 +22,14 @@ object LockScreenPermission {
         PermissionManager.addPermissionGroupScene(SCENE, Manifest.permission.WAKE_LOCK, "自定义锁屏界面")
     }
 
-    fun startLockService(context: Context, cls: Class<out LockScreenService?>?) {
+    fun startLockService(context: Context, cls: Class<out LockScreenService?>) {
+        ZLog.e(LockScreenService.TAG, "startLockService ${cls.name}")
         val intent = Intent(context, cls)
+        intent.setPackage(context.packageName)
         context.startService(intent)
     }
 
-    fun startLockServiceWithPermission(context: Context, cls: Class<out LockScreenService?>?) {
+    fun startLockServiceWithPermission(context: Context, cls: Class<out LockScreenService?>) {
         if (PermissionManager.isAllPermissionOK(context, mLockScreenPermission)) {
             startLockService(context, cls)
         } else {

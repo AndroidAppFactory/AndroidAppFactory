@@ -47,6 +47,8 @@ ext {
         lifecycle          : "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1",
         lifecyclecommon    : "androidx.lifecycle:lifecycle-common-java8:2.5.1",
         lifecycleprocess   : "androidx.lifecycle:lifecycle-process:2.4.1",
+        worker             : "androidx.work:work-runtime:2.7.1"
+
     ]
 
     router = [

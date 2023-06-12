@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "Framework,LibLockScreen,LibMedia"
 
 
 /**
@@ -62,7 +62,7 @@ ext.moduleInfo = [
         "version"                : "",
         "artifactId"             : "",
         "apidependenciesList"    : [
-            "CommonWrapper", "CommonTBSWrapper"
+            "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper"
         ],
         "specialdependenciesList": [
             "kapt"               : ["RouterCompiler"],
@@ -83,7 +83,7 @@ ext.moduleInfo = [
             "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
             "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
             "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
-            "CommonQRCode", "CommonAccessibility", "CommonLockScreen"
+            "CommonQRCode", "CommonAccessibility"
         ]
     ],
     "CommonTBSWrapper"   : [
@@ -91,13 +91,6 @@ ext.moduleInfo = [
         "artifactId"         : "common-wrapper-tbs",
         "apidependenciesList": [
             "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
-        ]
-    ],
-    "CommonLockScreen"   : [
-        "version"            : "5.17.0",
-        "artifactId"         : "common-lock-screen",
-        "apidependenciesList": [
-            "Framework"
         ]
     ],
     "CommonAccessibility": [
@@ -263,12 +256,19 @@ ext.moduleInfo = [
             "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
             "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme"]
     ],
-    "RouterAnnotation"          : [
+    "LibScreenWrapper"   : [
+        "version"            : "5.17.0",
+        "artifactId"         : "lib-wrapper-screen",
+        "apidependenciesList": [
+            "LibWidget"
+        ]
+    ],
+    "RouterAnnotation"   : [
         "version"            : "4.1.0",
         "artifactId"         : "lib-router-annotation",
         "apidependenciesList": []
     ],
-    "RouterCompiler"            : [
+    "RouterCompiler"     : [
         "version"                : "5.1.7",
         "artifactId"             : "lib-router-compiler",
         "apidependenciesList"    : [
@@ -735,14 +735,29 @@ ext.moduleInfo = [
 
         ]
     ],
-    "LibTheme"                  : [
+    "LibTheme": [
         "version"            : "5.17.0",
         "artifactId"         : "lib-theme",
         "apidependenciesList": [
             project.androidsupport.androidxcore,
             "LibConfig", "LibCustomView"
         ]
-    ]
+    ],
+    "LibWidget": [
+        "version"            : "5.17.0",
+        "artifactId"         : "lib-widget",
+        "apidependenciesList": [
+            "LibLockScreen",
+            project.androidsupport.worker
+        ]
+    ],
+    "LibLockScreen": [
+        "version"            : "5.17.0",
+        "artifactId"         : "lib-lock-screen",
+        "apidependenciesList": [
+            "LibLog", "LibConfig","LibPermission","LibNotification"
+        ]
+    ],
 ]
 
 

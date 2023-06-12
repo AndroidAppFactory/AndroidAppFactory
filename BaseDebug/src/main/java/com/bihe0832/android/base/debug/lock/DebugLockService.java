@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.bihe0832.android.common.lock.screen.permission.LockScreenPermission;
-import com.bihe0832.android.common.lock.screen.service.LockScreenService;
+import com.bihe0832.android.lib.lock.screen.permission.LockScreenPermission;
+import com.bihe0832.android.lib.lock.screen.service.LockScreenService;
+import com.bihe0832.android.lib.log.ZLog;
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -13,6 +14,13 @@ import com.bihe0832.android.common.lock.screen.service.LockScreenService;
  * Description: Description
  */
 public class DebugLockService extends LockScreenService {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ZLog.d(LockScreenService.TAG, "onCreate被调用，启动前台service");
+
+    }
 
     public static void startLockServiceWithPermission(Context context) {
         LockScreenPermission.INSTANCE.startLockServiceWithPermission(context, DebugLockService.class);
@@ -29,7 +37,7 @@ public class DebugLockService extends LockScreenService {
 
     @Override
     protected void handleReceiverIntent(Context context, Intent intent) {
-        wakeUpAndUnlock(context);
+        disableSystemLockScreen(context);
         super.handleReceiverIntent(context, intent);
     }
 }

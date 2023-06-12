@@ -23,7 +23,6 @@ import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.log.ZLog;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -86,19 +85,23 @@ public class BitmapUtil {
     }
 
     public static Bitmap getLocalBitmap(String localPath, int reqWidth, int reqHeight, boolean centerInside) {
-        Bitmap bitmap = null;
         File file = new File(localPath);
         if (file.exists()) {
             try {
                 BitmapFactory.Options options = getLocalBitmapOptions(localPath);
                 calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
                 options.inJustDecodeBounds = false;
-                bitmap = BitmapFactory.decodeFile(localPath, options);
+                Bitmap bitmap = bitmap = BitmapFactory.decodeFile(localPath, options);
+                // 缩放 Bitmap 对象
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                // 释放资源
+                bitmap.recycle();
+                return scaledBitmap;
             } catch (Exception error) {
                 error.printStackTrace();
             }
         }
-        return bitmap;
+        return null;
     }
 
     public static Bitmap getLocalBitmap(String localPath) {
@@ -181,16 +184,23 @@ public class BitmapUtil {
     }
 
     public static Bitmap getLocalBitmap(ContentResolver contentResolver, Uri uri, int reqWidth, int reqHeight, boolean centerInside) {
-        Bitmap bitmap = null;
-        InputStream input = null;
+
         String scheme = uri.getScheme();
         if (ContentResolver.SCHEME_CONTENT.equals(scheme) || ContentResolver.SCHEME_FILE.equals(scheme)) {
+            InputStream input = null;
+
             try {
+                input = contentResolver.openInputStream(uri);
                 BitmapFactory.Options options = getLocalBitmapOptions(contentResolver, uri);
                 calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
                 options.inJustDecodeBounds = false;
-                input = contentResolver.openInputStream(uri);
-                bitmap = BitmapFactory.decodeStream(input, null, options);
+
+                Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
+                // 缩放 Bitmap 对象
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                // 释放资源
+                bitmap.recycle();
+                return scaledBitmap;
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -207,7 +217,7 @@ public class BitmapUtil {
         } else {
             Log.e("readBitmapData", "Unable to close content: " + uri);
         }
-        return bitmap;
+        return null;
     }
 
     public static Bitmap getLocalBitmap(ContentResolver context, Uri uri) {
@@ -309,37 +319,36 @@ public class BitmapUtil {
         return updatedBitmap;
     }
 
-    public static Bitmap getRemoteBitmap(String imgUrl, int width, int height) {
-        Bitmap bitmap = null;
+    public static Bitmap getRemoteBitmap(String urlString, int reqWidth, int reqHeight) {
         try {
-            URL url = new URL(imgUrl);
-            InputStream is = url.openStream();
-            // 将InputStream变为Bitmap
-            bitmap = getRemoteBitmap(is, width, height);
-            is.close();
+            // 创建 URL 对象
+            URL url = new URL(urlString);
+            // 打开连接并获取输入流
+            InputStream inputStream = url.openConnection().getInputStream();
+            // 将输入流解码为 Bitmap 对象
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+
+            // 计算采样率
+            calculateInSampleSize(reqWidth, reqHeight, options, true);
+
+            // 重新打开输入流并解码为 Bitmap 对象
+            inputStream = url.openConnection().getInputStream();
+            options.inJustDecodeBounds = false;
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+            // 缩放 Bitmap 对象
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+            // 释放资源
+            bitmap.recycle();
+            return scaledBitmap;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return bitmap;
+        return null;
     }
-
-    private static Bitmap getRemoteBitmap(InputStream is, int width, int height) {
-        BufferedInputStream stream = new BufferedInputStream(is);
-        stream.mark(4 * 1024);
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(stream, null, options);
-        calculateInSampleSize(width, height, options, true);
-        try {
-            stream.reset();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return BitmapFactory.decodeStream(stream, null, options);
-    }
-
-
-
 
     /**
      * 把bitmap保存到本地

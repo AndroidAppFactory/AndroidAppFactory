@@ -64,18 +64,18 @@ public class ShowDebugClick implements View.OnClickListener {
         DebugTools.sendInfo(ctx, "请转发给开发者", result, true);
     }
 
-    public String getDebugInfo(Context ctx) {
+    public static String getDebugInfo(Context ctx) {
         StringBuilder builder = new StringBuilder();
         builder.append(getDebugVersionInfo(ctx, true));
         builder.append(getDebugDeviceInfo(true));
         return builder.toString();
     }
 
-    public String getDebugVersionInfo(Context ctx, boolean needSpaceLine) {
+    public static  String getDebugVersionInfo(Context ctx, boolean needSpaceLine) {
         StringBuilder builder = new StringBuilder();
         builder.append("版本信息: " + "\n");
-        builder.append("version: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode() + "\n");
-        builder.append("Tag: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
+        builder.append("应用版本: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode() + "\n");
+        builder.append("版本标识: " + ZixieContext.INSTANCE.getVersionTag() + "\n");
         builder.append("安装时间:" + DateUtil.getDateEN(LifecycleHelper.INSTANCE.getVersionInstalledTime()) + "\n");
         builder.append("channel: " + ZixieContext.INSTANCE.getChannelID() + "\n");
         builder.append("签名MD5: " + APKUtils.getSigMd5ByPkgName(ctx, ctx.getPackageName()) + "\n");
@@ -86,7 +86,7 @@ public class ShowDebugClick implements View.OnClickListener {
         return builder.toString();
     }
 
-    public String getDebugDeviceInfo(boolean needSpaceLine) {
+    public static String getDebugDeviceInfo(boolean needSpaceLine) {
         StringBuilder builder = new StringBuilder();
         builder.append("设备信息: " + "\n");
         builder.append("厂商&型号: " + ManufacturerUtil.INSTANCE.getMANUFACTURER() + ", " + ManufacturerUtil.INSTANCE.getMODEL() + "\n");
@@ -96,7 +96,7 @@ public class ShowDebugClick implements View.OnClickListener {
             builder.append("系统版本: Android " + BuildUtils.INSTANCE.getRELEASE() + ", API " + BuildUtils.INSTANCE.getSDK_INT() + "\n");
         }
         builder.append("系统指纹: " + ManufacturerUtil.INSTANCE.getFINGERPRINT() + "\n");
-        builder.append("deviceId: " + ZixieContext.INSTANCE.getDeviceId() + "\n");
+        builder.append("设备标识: " + ZixieContext.INSTANCE.getDeviceId() + "\n");
         if (needSpaceLine) {
             builder.append("\n");
         }
