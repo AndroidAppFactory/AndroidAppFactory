@@ -13,6 +13,48 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail"
+            android:exported="true"
+            android:label="详细调试"
+            android:process="@string/com_bihe0832_widgets_process_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_detail" />
+        </receiver>
+
+        <receiver
+            android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderSimple"
+            android:exported="true"
+            android:label="简洁调试"
+            android:process="@string/com_bihe0832_widgets_process_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_simple" />
+        </receiver>
+
+        <receiver
+            android:name="com.bihe0832.android.common.debug.widget.device.AAFDebugWidgetProviderDevice"
+            android:exported="true"
+            android:label="设备调试"
+            android:process="@string/com_bihe0832_widgets_process_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_device" />
+        </receiver>
     </application>
 
 </manifest>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/iv_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/com_bihe0832_base_toast_corner"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/widget_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon" />
+
+        <TextView
+            android:id="@+id/widget_start_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/common_button_bg_shape"
+            android:paddingLeft="12dp"
+            android:paddingTop="6dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="6dp"
+            android:text="进入调试"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget_start_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/common_button_bg_shape"
+            android:paddingLeft="12dp"
+            android:paddingTop="6dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="6dp"
+            android:text="进入应用"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="6dp"
+        android:layout_weight="1"
+        android:background="@drawable/com_bihe0832_base_toast_corner"
+        android:gravity="left|center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/widget_text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="应用名称：子勰Lib" />
+
+        <TextView
+            android:id="@+id/widget_text_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="应用版本：1.2.0.2" />
+
+        <TextView
+            android:id="@+id/widget_text_install"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            tools:text="安装时间：2023-06-12 15:12:31" />
+
+        <TextView
+            android:id="@+id/widget_text_deviceid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            tools:text="设备标识：ce5c98e5dab24476" />
+
+        <TextView
+            android:id="@+id/widget_text_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="版本标识：Tag_ZIXIE_1.0.0_1" />
+
+        <TextView
+            android:id="@+id/widget_text_manufa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="厂商型号： HUAWEI, TNY-AL00, HONOR" />
+
+        <TextView
+            android:id="@+id/widget_text_os"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="系统版本： Android 10, API 29, Harmony(3.0.0)" />
+
+
+        <TextView
+            android:id="@+id/widget_text_extra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="其他信息：暂无" />
+    </LinearLayout>
+</LinearLayout>

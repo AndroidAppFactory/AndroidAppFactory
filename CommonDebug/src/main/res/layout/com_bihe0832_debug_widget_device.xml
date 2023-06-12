@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/iv_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/com_bihe0832_base_toast_corner"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/widget_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:src="@mipmap/icon" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="6dp"
+        android:layout_weight="1"
+        android:background="@drawable/com_bihe0832_base_toast_corner"
+        android:gravity="left|center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/widget_text_deviceid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            tools:text="设备标识：ce5c98e5dab24476" />
+
+        <TextView
+            android:id="@+id/widget_text_manufa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="厂商型号： HUAWEI, TNY-AL00, HONOR" />
+
+        <TextView
+            android:id="@+id/widget_text_os"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            tools:text="系统版本： Android 10, API 29, Harmony(3.0.0)" />
+
+
+    </LinearLayout>
+</LinearLayout>

@@ -134,10 +134,11 @@
         <receiver
             android:name=".widget.TestWidgetProvider1"
             android:exported="true"
+            android:label="WidgetDemo1"
             android:process="@string/com_bihe0832_widgets_process_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.REFRESH" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -147,14 +148,15 @@
         <receiver
             android:name=".widget.TestWidgetProvider2"
             android:exported="true"
+            android:label="WidgetDemo2"
             android:process="@string/com_bihe0832_widgets_process_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.REFRESH" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/com_bihe0832_debug_widget_demo_2" />
+                android:resource="@xml/com_bihe0832_debug_widget_detail" />
         </receiver>
 
         <activity
