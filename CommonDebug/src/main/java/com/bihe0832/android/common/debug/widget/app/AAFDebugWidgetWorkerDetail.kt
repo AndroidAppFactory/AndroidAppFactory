@@ -34,7 +34,7 @@ open class AAFDebugWidgetWorkerDetail(context: Context, workerParams: WorkerPara
             remoteViews.setOnClickPendingIntent(R.id.widget_start_app, getPendingIntent(context, getFinalURL(RouterConstants.MODULE_NAME_SPLASH)))
 
             //通过远程对象修改textview
-            remoteViews.setTextViewText(R.id.widget_text_title, "应用名称：" + APKUtils.getAppName(context))
+            remoteViews.setTextViewText(R.id.widget_text_title, "提取时间：" + DateUtil.getCurrentDateEN())
             remoteViews.setTextViewText(R.id.widget_text_version, "应用版本：" + getVersionName() + "." + getVersionCode())
             remoteViews.setTextViewText(R.id.widget_text_install, "安装时间：" + DateUtil.getDateEN(getVersionInstalledTime()))
             remoteViews.setTextViewText(R.id.widget_text_deviceid, "设备标识：${ZixieContext.deviceId}")

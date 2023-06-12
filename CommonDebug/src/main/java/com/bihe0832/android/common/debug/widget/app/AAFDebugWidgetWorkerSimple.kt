@@ -12,7 +12,6 @@ import com.bihe0832.android.framework.ZixieContext.getVersionTag
 import com.bihe0832.android.framework.debug.ShowDebugClick
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getVersionInstalledTime
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker
 
@@ -25,7 +24,7 @@ open class AAFDebugWidgetWorkerSimple(context: Context, workerParams: WorkerPara
                 """.trimIndent()
             //只能通过远程对象来设置appwidget中的控件状态
             val remoteViews = RemoteViews(context.packageName, R.layout.com_bihe0832_debug_widget_simple)
-            remoteViews.setTextViewText(R.id.widget_text_title, "应用名称：" + APKUtils.getAppName(context))
+            remoteViews.setTextViewText(R.id.widget_text_title, "提取时间：" + DateUtil.getCurrentDateEN())
             //通过远程对象修改textview
             remoteViews.setTextViewText(R.id.widget_text_version, "应用版本：" + getVersionName() + "." + getVersionCode() + " (${getVersionTag()})")
             remoteViews.setTextViewText(R.id.widget_text_install, "安装时间：" + DateUtil.getDateEN(getVersionInstalledTime()))
