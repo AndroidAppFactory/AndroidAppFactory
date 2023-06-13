@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibJsBridge,CommonDebug"
+ext.developModule = "Application"
 
 
 /**
@@ -70,7 +70,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonDebug"        : [
-        "version"            : "5.18.1",
+        "version"            : "5.18.2",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview",
@@ -78,7 +78,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonWrapper"      : [
-        "version"            : "5.18.0",
+        "version"            : "5.18.2",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
@@ -88,7 +88,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonTBSWrapper"   : [
-        "version"            : "5.18.0",
+        "version"            : "5.18.2",
         "artifactId"         : "common-wrapper-tbs",
         "apidependenciesList": [
             "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
@@ -185,13 +185,13 @@ ext.moduleInfo = [
         ]
     ],
     "CommonTBSFeedback": [
-        "version"                : "5.18.0",
+        "version"                : "5.18.2",
         "artifactId"             : "common-feedback-tbs",
         "apidependenciesList"    : ["CommonTBSWebview", "CommonFeedback"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonTBSWebview" : [
-        "version"                : "5.18.0",
+        "version"                : "5.18.2",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -200,7 +200,7 @@ ext.moduleInfo = [
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonTBS"        : [
-        "version"            : "5.17.0",
+        "version"            : "5.18.2",
         "artifactId"         : "common-tbs",
         "apidependenciesList": [
             project.tencent.tbssdk,
@@ -209,7 +209,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonWebview"    : [
-        "version"                : "5.18.0",
+        "version"                : "5.18.2",
         "artifactId"             : "common-webview",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -218,7 +218,7 @@ ext.moduleInfo = [
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonFeedback"   : [
-        "version"                : "5.18.0",
+        "version"                : "5.18.2",
         "artifactId"             : "common-feedback",
         "apidependenciesList"    : ["CommonWebview"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
@@ -602,7 +602,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibJsBridge"      : [
-        "version"            : "5.17.0",
+        "version"            : "5.18.2",
         "artifactId"         : "lib-jsbridge",
         "apidependenciesList": [
             "LibLog", "LibThread", "LibToast", "LibAPK"
