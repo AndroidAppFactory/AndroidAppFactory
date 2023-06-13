@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "CommonDebug"
+ext.developModule = "Application"
 
 
 /**
@@ -70,7 +70,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonDebug"        : [
-        "version"            : "5.18.3",
+        "version"            : "5.18.4",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview",
