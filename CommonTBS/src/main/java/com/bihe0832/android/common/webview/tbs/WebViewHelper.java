@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.webview.tbs;
+package com.bihe0832.android.common.webview.tbs;
 
 import android.content.Context;
 import android.content.Intent;

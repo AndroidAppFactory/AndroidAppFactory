@@ -4,10 +4,10 @@ package com.bihe0832.android.common.webview.tbsimpl;
 import android.app.Activity;
 import android.net.Uri;
 
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridge;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridgeProxy;
-import com.bihe0832.android.lib.webview.tbs.jsbridge.TBSWebView;
+import com.bihe0832.android.common.webview.tbs.TBSWebView;
 
 
 /**
@@ -18,15 +18,15 @@ import com.bihe0832.android.lib.webview.tbs.jsbridge.TBSWebView;
 public class TBSJsBridgeProxy extends BaseJsBridgeProxy {
 
     protected TBSJsBridge mJsBridge;
-    private TBSWebView mWebView;
-
 
     public TBSJsBridgeProxy(Activity activity, TBSWebView webView) {
         super(activity);
-        mWebView = webView;
-        this.mJsBridge = new TBSJsBridge(activity, mWebView);
+        this.mJsBridge = new TBSJsBridge(activity, webView);
     }
 
+    public TBSWebView getWebView() {
+        return mJsBridge.getWebView();
+    }
 
     @Override
     protected BaseJsBridge getJsBridge() {
@@ -35,27 +35,56 @@ public class TBSJsBridgeProxy extends BaseJsBridgeProxy {
 
     @Override
     protected void reload() {
-        mWebView.reload();
+        try {
+            getWebView().reload();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void goForward() {
-        mWebView.goForward();
+        try {
+            getWebView().goForward();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void goBack() {
-        mWebView.goBack();
+        try {
+            getWebView().goBack();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean canGoBack() {
-        return mWebView.canGoBack();
+        try {
+            return getWebView().canGoBack();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean canGoForward() {
+        try {
+            return getWebView().canGoForward();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     protected void callAMethod(Uri uri, String hostAsMethodName, int seqid, String callbackName) {
-        WebviewLoggerFile.INSTANCE.logCall(uri, hostAsMethodName, seqid, callbackName);
+        WebViewLoggerFile.INSTANCE.logCall(uri, hostAsMethodName, seqid, callbackName);
         super.callAMethod(uri, hostAsMethodName, seqid, callbackName);
     }
+
+
 }

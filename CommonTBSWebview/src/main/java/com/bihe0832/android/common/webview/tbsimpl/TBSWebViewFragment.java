@@ -16,7 +16,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
+import com.bihe0832.android.common.webview.tbs.TBSWebView;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
@@ -24,7 +25,6 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
-import com.bihe0832.android.lib.webview.tbs.jsbridge.TBSWebView;
 import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
 import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
 import com.tencent.smtt.export.external.interfaces.JsPromptResult;
@@ -352,8 +352,8 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
             super.onReceivedTitle(view, title);
 
             mWebViewViewModel.setTitleString(title);
-            WebviewLoggerFile.INSTANCE.log("BaseWebviewFragment title：" + title);
-            WebviewLoggerFile.INSTANCE.log("BaseWebviewFragment mWebViewViewModel: " + mWebViewViewModel.hashCode());
+            WebViewLoggerFile.INSTANCE.log("BaseWebviewFragment title：" + title);
+            WebViewLoggerFile.INSTANCE.log("BaseWebviewFragment mWebViewViewModel: " + mWebViewViewModel.hashCode());
         }
 
 

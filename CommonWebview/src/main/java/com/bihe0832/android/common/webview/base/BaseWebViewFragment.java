@@ -25,7 +25,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.core.WebViewViewModel;
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterAction;
 import com.bihe0832.android.framework.router.RouterConstants;
@@ -221,7 +221,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
     }
 
     public boolean shouldWebClientOverrideUrlLoading(String url, String mRefererString) {
-        WebviewLoggerFile.INSTANCE.log(TAG + "shouldOverrideUrlLoading url:" + url);
+        WebViewLoggerFile.INSTANCE.log(TAG + "shouldOverrideUrlLoading url:" + url);
         if (TextUtils.isEmpty(url)) {
             return false;
         }

@@ -1,7 +1,7 @@
 package com.bihe0832.android.common.webview.nativeimpl
 
 import android.content.Context
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile
 import com.bihe0832.android.lib.jsbridge.BaseJsBridge
 
 /**
@@ -11,7 +11,11 @@ import com.bihe0832.android.lib.jsbridge.BaseJsBridge
  */
 open class NativeJsBridge(context: Context?) : BaseJsBridge(context) {
 
-    var mWebView: NativeWebView? = null
+    private var mWebView: NativeWebView? = null
+
+    public fun getWebView(): NativeWebView? {
+        return mWebView
+    }
 
     constructor(context: Context?, webView: NativeWebView) : this(context) {
         this.mWebView = webView
@@ -22,7 +26,7 @@ open class NativeJsBridge(context: Context?) : BaseJsBridge(context) {
     }
 
     override fun callback(function: String, result: String, type: ResponseType) {
-        WebviewLoggerFile.logCallback(function, result, type)
+        WebViewLoggerFile.logCallback(function, result, type)
         super.callback(function, result, type)
     }
 }

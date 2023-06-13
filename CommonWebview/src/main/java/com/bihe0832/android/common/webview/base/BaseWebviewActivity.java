@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.core.WebViewViewModel;
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
@@ -36,7 +36,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mWebViewViewModel = new ViewModelProvider(this).get(WebViewViewModel.class);
-        WebviewLoggerFile.INSTANCE.log("BaseWebviewActivity mWebViewViewModel: " + mWebViewViewModel.hashCode());
+        WebViewLoggerFile.INSTANCE.log("BaseWebviewActivity mWebViewViewModel: " + mWebViewViewModel.hashCode());
         handleIntent(getIntent());
     }
 
@@ -62,7 +62,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
             finish();
         } else {
             mURL = parseURL(intent);
-            WebviewLoggerFile.INSTANCE.log("handle intent:" + mURL);
+            WebViewLoggerFile.INSTANCE.log("handle intent:" + mURL);
         }
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS)
                 && ConvertUtils.parseInt(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS),
@@ -102,7 +102,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
                 if (!s.equals("about:blank")) {
                     updateTitle(s);
                 }
-                WebviewLoggerFile.INSTANCE.log("mWebViewViewModel: " + hashCode() + "  title: " + s);
+                WebViewLoggerFile.INSTANCE.log("mWebViewViewModel: " + hashCode() + "  title: " + s);
             }
         });
     }
@@ -116,11 +116,11 @@ public abstract class BaseWebviewActivity extends CommonActivity {
                     TAG,
                     "  \n !!!========================================  \n \n \n !!! Webview: onResume, extra is good, but value is bad \n \n \n !!!========================================"
             );
-            WebviewLoggerFile.INSTANCE.log(TAG + "  \n !!!========================================  \n \n \n !!! Webview: onResume, extra is good, but value is bad \n \n \n !!!========================================");
+            WebViewLoggerFile.INSTANCE.log(TAG + "  \n !!!========================================  \n \n \n !!! Webview: onResume, extra is good, but value is bad \n \n \n !!!========================================");
             finish();
             return;
         } else {
-            WebviewLoggerFile.INSTANCE.log(TAG + " onResume:" + mURL);
+            WebViewLoggerFile.INSTANCE.log(TAG + " onResume:" + mURL);
             if (findFragment(getWebViewFragmentClass()) == null) {
                 loadRootFragment(getWebViewFragment());
             }

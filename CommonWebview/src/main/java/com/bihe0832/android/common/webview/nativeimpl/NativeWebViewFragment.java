@@ -27,7 +27,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
@@ -332,8 +332,8 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
             super.onReceivedTitle(view, title);
 
             mWebViewViewModel.setTitleString(title);
-            WebviewLoggerFile.INSTANCE.log("BaseWebviewFragment title：" + title);
-            WebviewLoggerFile.INSTANCE.log("BaseWebviewFragment mWebViewViewModel: " + mWebViewViewModel.hashCode());
+            WebViewLoggerFile.INSTANCE.log("BaseWebviewFragment title：" + title);
+            WebViewLoggerFile.INSTANCE.log("BaseWebviewFragment mWebViewViewModel: " + mWebViewViewModel.hashCode());
         }
 
 

@@ -49,6 +49,9 @@ public abstract class BaseJsBridgeProxy {
 
     public abstract boolean canGoBack();
 
+    public abstract boolean canGoForward();
+
+
     public BaseJsBridgeProxy(Activity activity) {
         mActivity = activity;
     }

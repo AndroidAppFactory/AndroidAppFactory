@@ -7,7 +7,7 @@ import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileTools
@@ -85,7 +85,7 @@ open class DebugLogActivity : CommonListActivity() {
             addAll(getCommonLogList())
             add(SectionDataHeader("基础通用日志"))
             add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath()))
-            add(SectionDataContent("Webview", WebviewLoggerFile.getWebviewLogPath()))
+            add(SectionDataContent("Webview", WebViewLoggerFile.getWebviewLogPath()))
         }
     }
 

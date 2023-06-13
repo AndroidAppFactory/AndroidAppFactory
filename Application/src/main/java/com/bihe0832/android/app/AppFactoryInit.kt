@@ -23,7 +23,7 @@ import com.bihe0832.android.lib.theme.ThemeManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
-import com.bihe0832.android.lib.webview.tbs.WebViewHelper
+import com.bihe0832.android.common.webview.tbs.WebViewHelper
 import com.bihe0832.android.lib.widget.WidgetUpdateManager
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsPrivacyAccess

@@ -13,7 +13,7 @@ import java.net.URLDecoder
  * Description: 用户处理特殊日志
  *
  */
-object WebviewLoggerFile {
+object WebViewLoggerFile {
 
     const val MODULE_NAME = "webview"
 

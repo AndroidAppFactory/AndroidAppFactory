@@ -1,10 +1,9 @@
 package com.bihe0832.android.common.webview.tbsimpl
 
 import android.content.Context
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile
-import com.bihe0832.android.common.webview.core.WebviewLoggerFile.log
+import com.bihe0832.android.common.webview.core.WebViewLoggerFile
+import com.bihe0832.android.common.webview.tbs.TBSWebView
 import com.bihe0832.android.lib.jsbridge.BaseJsBridge
-import com.bihe0832.android.lib.webview.tbs.jsbridge.TBSWebView
 
 /**
  * @author hardyshi code@bihe0832.com
@@ -13,7 +12,11 @@ import com.bihe0832.android.lib.webview.tbs.jsbridge.TBSWebView
  */
 open class TBSJsBridge(context: Context?) : BaseJsBridge(context) {
 
-    var mWebView: TBSWebView? = null
+    private var mWebView: TBSWebView? = null
+
+    public fun getWebView(): TBSWebView? {
+        return mWebView
+    }
 
     constructor(context: Context?, webView: TBSWebView) : this(context) {
         this.mWebView = webView
@@ -24,7 +27,7 @@ open class TBSJsBridge(context: Context?) : BaseJsBridge(context) {
     }
 
     override fun callback(function: String, result: String, type: ResponseType) {
-        WebviewLoggerFile.logCallback(function, result, type)
+        WebViewLoggerFile.logCallback(function, result, type)
         super.callback(function, result, type)
     }
 }

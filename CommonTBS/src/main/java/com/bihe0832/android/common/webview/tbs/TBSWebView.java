@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.webview.tbs.jsbridge;
+package com.bihe0832.android.common.webview.tbs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
