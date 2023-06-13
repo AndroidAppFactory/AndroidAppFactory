@@ -23,10 +23,6 @@ import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker
 open class AAFDebugWidgetWorkerDetail(context: Context, workerParams: WorkerParameters) : BaseWidgetWorker(context, workerParams) {
     override fun updateWidget(context: Context) {
         ThreadManager.getInstance().start {
-            val data = """
-                ${DateUtil.getCurrentDateEN()}
-                ${ShowDebugClick.getDebugInfo(context)}
-                """.trimIndent()
             //只能通过远程对象来设置appwidget中的控件状态
             val remoteViews = RemoteViews(context.packageName, R.layout.com_bihe0832_debug_widget_detail)
             remoteViews.setOnClickPendingIntent(R.id.widget_start_debug, getPendingIntent(context, getFinalURL(RouterConstants.MODULE_NAME_DEBUG)))

@@ -9,7 +9,6 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getVersionCode
 import com.bihe0832.android.framework.ZixieContext.getVersionName
 import com.bihe0832.android.framework.ZixieContext.getVersionTag
-import com.bihe0832.android.framework.debug.ShowDebugClick
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getVersionInstalledTime
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.time.DateUtil
@@ -18,10 +17,6 @@ import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker
 open class AAFDebugWidgetWorkerSimple(context: Context, workerParams: WorkerParameters) : BaseWidgetWorker(context, workerParams) {
     override fun updateWidget(context: Context) {
         ThreadManager.getInstance().start {
-            val data = """
-                ${DateUtil.getCurrentDateEN()}
-                ${ShowDebugClick.getDebugInfo(context)}
-                """.trimIndent()
             //只能通过远程对象来设置appwidget中的控件状态
             val remoteViews = RemoteViews(context.packageName, R.layout.com_bihe0832_debug_widget_simple)
             remoteViews.setTextViewText(R.id.widget_text_title, "提取时间：" + DateUtil.getCurrentDateEN())

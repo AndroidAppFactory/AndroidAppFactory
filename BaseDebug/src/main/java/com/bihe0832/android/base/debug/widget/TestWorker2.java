@@ -33,7 +33,7 @@ public class TestWorker2 extends BaseWidgetWorker {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
-                String data = DateUtil.getCurrentDateEN() + "\n" + ShowDebugClick.getDebugInfo(context);
+                String data = DateUtil.getCurrentDateEN() + "\n" + ShowDebugClick.getBasicDebugInfo(context);
                 //只能通过远程对象来设置appwidget中的控件状态
                 RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout_2);
 

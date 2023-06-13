@@ -5,12 +5,12 @@ import android.view.View;
 
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.debug.DebugTools;
-import com.bihe0832.android.lib.utils.os.BuildUtils;
-import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.utils.time.DateUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
+import com.bihe0832.android.lib.utils.time.DateUtil;
 
 /**
  * @author zixie code@bihe0832.com
@@ -64,14 +64,18 @@ public class ShowDebugClick implements View.OnClickListener {
         DebugTools.sendInfo(ctx, "请转发给开发者", result, true);
     }
 
-    public static String getDebugInfo(Context ctx) {
+    public String getDebugInfo(Context ctx) {
+        return getBasicDebugInfo(ctx);
+    }
+
+    public static String getBasicDebugInfo(Context ctx) {
         StringBuilder builder = new StringBuilder();
         builder.append(getDebugVersionInfo(ctx, true));
         builder.append(getDebugDeviceInfo(true));
         return builder.toString();
     }
 
-    public static  String getDebugVersionInfo(Context ctx, boolean needSpaceLine) {
+    public static String getDebugVersionInfo(Context ctx, boolean needSpaceLine) {
         StringBuilder builder = new StringBuilder();
         builder.append("版本信息: " + "\n");
         builder.append("应用版本: " + ZixieContext.INSTANCE.getVersionName() + "." + ZixieContext.INSTANCE.getVersionCode() + "\n");
