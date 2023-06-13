@@ -135,7 +135,7 @@
             android:name=".widget.TestWidgetProvider1"
             android:exported="true"
             android:label="WidgetDemo1"
-            android:process="@string/com_bihe0832_widgets_process_name">
+            android:process="@string/com_bihe0832_lock_screen_process_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.REFRESH" />
@@ -149,7 +149,7 @@
             android:name=".widget.TestWidgetProvider2"
             android:exported="true"
             android:label="WidgetDemo2"
-            android:process="@string/com_bihe0832_widgets_process_name">
+            android:process="@string/com_bihe0832_lock_screen_process_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.REFRESH" />
@@ -166,7 +166,7 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleInstance"
             android:noHistory="true"
-            android:process="@string/com_bihe0832_widgets_process_name"
+            android:process="@string/com_bihe0832_lock_screen_process_name"
             android:resizeableActivity="false"
             android:screenOrientation="portrait"
             android:showOnLockScreen="true"
@@ -177,7 +177,7 @@
             android:name="com.bihe0832.android.base.debug.lock.DebugLockService"
             android:exported="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
-            android:process="@string/com_bihe0832_widgets_process_name">
+            android:process="@string/com_bihe0832_lock_screen_process_name">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.SCREEN_OFF" />

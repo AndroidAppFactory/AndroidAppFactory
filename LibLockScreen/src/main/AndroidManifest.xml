@@ -6,7 +6,7 @@
     <application>
         <service
             android:name="com.bihe0832.android.lib.lock.screen.service.CancelNoticeService"
-            android:process="@string/com_bihe0832_widgets_process_name"
+            android:process="@string/com_bihe0832_lock_screen_process_name"
             android:enabled="true"
             android:exported="true" />
     </application>

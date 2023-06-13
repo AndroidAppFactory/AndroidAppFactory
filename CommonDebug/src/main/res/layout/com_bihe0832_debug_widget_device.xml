@@ -36,13 +36,13 @@
             tools:text="设备标识：ce5c98e5dab24476" />
 
         <TextView
-            android:id="@+id/widget_text_manufa"
+            android:id="@+id/widget_text_manufacturer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textColor="@color/textColorPrimary"
             android:textSize="12dp"
-            tools:text="厂商型号： HUAWEI, TNY-AL00, HONOR" />
+            android:text="@string/common_debug_empty_tips" />
 
         <TextView
             android:id="@+id/widget_text_os"

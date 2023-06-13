@@ -11,6 +11,7 @@ import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.permission.AAFPermissionManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
+import com.bihe0832.android.common.webview.tbs.WebViewHelper
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
@@ -23,7 +24,6 @@ import com.bihe0832.android.lib.theme.ThemeManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
-import com.bihe0832.android.common.webview.tbs.WebViewHelper
 import com.bihe0832.android.lib.widget.WidgetUpdateManager
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsPrivacyAccess
@@ -95,6 +95,7 @@ object AppFactoryInit {
         CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
         ShakeManager.init(application.applicationContext)
         ThemeManager.init(application, !ZixieContext.isOfficial())
+        WidgetUpdateManager.initModuleWithMainProcess(application.applicationContext)
     }
 
     fun initAll(application: android.app.Application) {
@@ -109,8 +110,8 @@ object AppFactoryInit {
                     initCore(application, processName)
                     if (processName.equals(application.packageName, ignoreCase = true)) {
                         initExtra(application)
-                    } else if (processName.equals(application.packageName + application.applicationContext.getString(R.string.com_bihe0832_widgets_process_name), ignoreCase = true)) {
-                        WidgetUpdateManager.initModule(application.applicationContext)
+                    } else if (processName.equals(application.packageName + application.applicationContext.getString(R.string.com_bihe0832_lock_screen_process_name), ignoreCase = true)) {
+                        WidgetUpdateManager.initModuleWithOtherProcess(application.applicationContext)
                     }
                     initWebview(application, it)
                 }

@@ -42,7 +42,7 @@
             android:layout_marginTop="4dp"
             android:textColor="@color/textColorPrimary"
             android:textSize="12dp"
-            tools:text="版本：1.2.0.2" />
+            android:text="@string/common_debug_empty_tips" />
 
         <TextView
             android:id="@+id/widget_text_install"

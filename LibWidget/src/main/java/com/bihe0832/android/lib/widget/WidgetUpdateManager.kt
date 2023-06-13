@@ -10,6 +10,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
@@ -66,7 +67,7 @@ object WidgetUpdateManager {
         }
     }
 
-    private fun updateAllWidgets(context: Context, sourceClass: Class<out Worker>?) {
+    private fun updateAllWidgets(context: Context, sourceClass: Class<out BaseWidgetWorker>?) {
         ZLog.e(TAG, "updateAll: durtaion is :${System.currentTimeMillis() - mlastUpdateAllTime}")
         //执行一次任务
         if (System.currentTimeMillis() - mlastUpdateAllTime > 20 * 1000) {
@@ -102,7 +103,7 @@ object WidgetUpdateManager {
         }
 
         override fun doWork(): Result {
-            ZLog.d(TAG, "do work")
+            ZLog.d(TAG, "do update all work")
             try {
                 startLockScreen(applicationContext)
                 Config.readConfig(TAG, "").split(" ").distinct().forEach {
@@ -118,13 +119,17 @@ object WidgetUpdateManager {
         }
     }
 
-    fun initModule(context: Context) {
+    fun initModuleWithOtherProcess(context: Context) {
 
         // provide custom configuration
-        Configuration.Builder().setMinimumLoggingLevel(android.util.Log.INFO).build().let { myConfig->
+        Configuration.Builder().setMinimumLoggingLevel(android.util.Log.INFO).build().let { myConfig ->
             // initialize WorkManager
             WorkManager.initialize(context, myConfig)
         }
+        initModuleWithMainProcess(context)
+    }
+
+    fun initModuleWithMainProcess(context: Context) {
         OneTimeWorkRequest.Builder(UpdateAllWork::class.java).apply {
             if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
                 setBackoffCriteria(BackoffPolicy.EXPONENTIAL, Duration.ofSeconds(10))
@@ -142,7 +147,7 @@ object WidgetUpdateManager {
     }
 
 
-    fun updateWidget(context: Context, clazz: Class<out Worker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean) {
+    fun updateWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean) {
         ZLog.d(TAG, "updateWidget:" + clazz.name + ",canAutoUpdateByOthers: $canAutoUpdateByOthers ; updateAll: $updateAll")
         if (canAutoUpdateByOthers) {
             addToAutoUpdateList(clazz.name)
@@ -158,7 +163,7 @@ object WidgetUpdateManager {
         }
     }
 
-    fun enableWidget(context: Context, clazz: Class<out Worker>, canAutoUpdateByOthers: Boolean) {
+    fun enableWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean) {
         WorkManager.getInstance(context).enqueue(PeriodicWorkRequest.Builder(clazz, 15, TimeUnit.MINUTES).build())
         updateWidget(context, clazz, canAutoUpdateByOthers, true)
     }

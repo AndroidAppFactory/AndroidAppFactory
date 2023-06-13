@@ -17,10 +17,10 @@
         <receiver
             android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail"
             android:exported="true"
-            android:label="详细调试"
-            android:process="@string/com_bihe0832_widgets_process_name">
+            android:label="详细调试">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.appwidget.action.REFRESH" />
             </intent-filter>
             <meta-data
@@ -31,10 +31,10 @@
         <receiver
             android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderSimple"
             android:exported="true"
-            android:label="简洁调试"
-            android:process="@string/com_bihe0832_widgets_process_name">
+            android:label="简洁调试">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.appwidget.action.REFRESH" />
             </intent-filter>
             <meta-data
@@ -45,10 +45,10 @@
         <receiver
             android:name="com.bihe0832.android.common.debug.widget.device.AAFDebugWidgetProviderDevice"
             android:exported="true"
-            android:label="设备调试"
-            android:process="@string/com_bihe0832_widgets_process_name">
+            android:label="设备调试">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.appwidget.action.REFRESH" />
             </intent-filter>
             <meta-data

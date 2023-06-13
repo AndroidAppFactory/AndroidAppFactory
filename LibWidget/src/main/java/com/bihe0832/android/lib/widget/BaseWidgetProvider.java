@@ -12,7 +12,9 @@ import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker;
 public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     //系统更新广播
-    public static final String APPWIDGET_UPDATE = "android.appwidget.action.APPWIDGET_UPDATE";
+    public static final String REFRESH_ACTION_APPWIDGET_UPDATE = "android.appwidget.action.APPWIDGET_UPDATE";
+    public static final String REFRESH_ACTION_SCREEN_ON = "android.intent.action.SCREEN_ON";
+
     //自定义的刷新广播
     public static final String REFRESH_ACTION = "android.appwidget.action.REFRESH";
     public static final String REFRESH_INTENT_KEY_UPDATE_ALL = "update_all";
@@ -32,6 +34,8 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
             boolean updateAll = intent.getBooleanExtra(REFRESH_INTENT_KEY_UPDATE_ALL, true);
             //执行一次任务
             WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(), updateAll);
+        } else if (TextUtils.equals(intent.getAction(), REFRESH_ACTION_APPWIDGET_UPDATE) || TextUtils.equals(intent.getAction(), REFRESH_ACTION_SCREEN_ON)) {
+            WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(), false);
         }
         ZLog.d(WidgetUpdateManager.TAG, "onReceive end:" + getClass().getName());
     }

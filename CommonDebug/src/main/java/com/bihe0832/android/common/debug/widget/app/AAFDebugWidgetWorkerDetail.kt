@@ -15,7 +15,6 @@ import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getVersionInstalledTime
 import com.bihe0832.android.lib.notification.NotifyManager.getPendingIntent
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
@@ -39,7 +38,7 @@ open class AAFDebugWidgetWorkerDetail(context: Context, workerParams: WorkerPara
             remoteViews.setTextViewText(R.id.widget_text_install, "安装时间：" + DateUtil.getDateEN(getVersionInstalledTime()))
             remoteViews.setTextViewText(R.id.widget_text_deviceid, "设备标识：${ZixieContext.deviceId}")
             remoteViews.setTextViewText(R.id.widget_text_tag, "版本标识：" + getVersionTag())
-            remoteViews.setTextViewText(R.id.widget_text_manufa, "厂商型号：${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}")
+            remoteViews.setTextViewText(R.id.widget_text_manufacturer, "厂商型号：${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}")
             var sdkVersion = "系统版本：${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
                 ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
             } else {

@@ -3,6 +3,6 @@
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">30dp</dimen>
-    <string name="common_debug_empty_tips">"数据加载中，请稍候"</string>
+    <string name="common_debug_empty_tips">数据加载中，请稍候～</string>
 
 </resources>

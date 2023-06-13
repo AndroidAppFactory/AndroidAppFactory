@@ -27,7 +27,7 @@ public abstract class BaseWidgetWorker extends Worker {
     public Result doWork() {
         //模拟耗时/网络请求操作
         try {
-            ZLog.d(WidgetUpdateManager.TAG, "doWork:" + getClass().getName());
+            ZLog.w(WidgetUpdateManager.TAG, "start doWork:" + getClass().getName());
             updateWidget(getApplicationContext());
             return Result.success();
         } catch (Exception e) {

@@ -56,7 +56,7 @@ class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsB
 
     private fun resetADHeight(key: String?, height: Int) {
         if (!TextUtils.isEmpty(key)) {
-            mWebView.evaluateJavascript("javaScript:getNativeViewPosition('$key')") { value ->
+            webView?.evaluateJavascript("javaScript:getNativeViewPosition('$key')") { value ->
                 ThreadManager.getInstance().runOnUIThread {
                     val mNativeView = mViewMap[key]
                     if (mNativeView != null) {
@@ -65,7 +65,7 @@ class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsB
                             val params = mNativeView.layoutParams as AbsoluteLayout.LayoutParams
                             params.y = DisplayUtil.dip2pxWithDefaultDensity(ZixieContext.applicationContext, top)
                             mNativeView.layoutParams = params
-                            mWebView.loadUrl("javaScript:setNativeViewHeight('" + key + "'," + DisplayUtil.px2dipWithDefaultDensity(ZixieContext.applicationContext, height.toFloat()) + ")")
+                            webView.loadUrl("javaScript:setNativeViewHeight('" + key + "'," + DisplayUtil.px2dipWithDefaultDensity(ZixieContext.applicationContext, height.toFloat()) + ")")
                             if (height > 0) {
                                 mNativeView.visibility = View.VISIBLE
                             } else {
@@ -122,8 +122,8 @@ class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsB
             if (!TextUtils.isEmpty(finalViewID)) {
                 if (mViewMap[finalViewID] == null) {
                     ThreadManager.getInstance().runOnUIThread {
-                        val view = DebugH5NativeWebFragment.getTextView(mWebView.context)
-                        mWebView.addView(view)
+                        val view = DebugH5NativeWebFragment.getTextView(webView.context)
+                        webView.addView(view)
                         addNativeView(finalViewID, view)
                         view.visibility = View.GONE
                         resetADHeight(finalViewID, DebugH5NativeWebFragment.getHeight())
