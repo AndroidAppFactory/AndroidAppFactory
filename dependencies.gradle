@@ -14,7 +14,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application,LibLockScreen"
+ext.developModule = "Application"
 
 
 /**
@@ -70,7 +70,7 @@ ext.moduleInfo = [
         ]
     ],
     "CommonDebug"        : [
-        "version"            : "5.18.2",
+        "version"            : "5.18.3",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview",
@@ -258,7 +258,7 @@ ext.moduleInfo = [
             "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme"]
     ],
     "LibScreenWrapper"   : [
-        "version"            : "5.18.0",
+        "version"            : "5.18.3",
         "artifactId"         : "lib-wrapper-screen",
         "apidependenciesList": [
             "LibWidget"
@@ -745,7 +745,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibWidget": [
-        "version"            : "5.18.0",
+        "version"            : "5.18.3",
         "artifactId"         : "lib-widget",
         "apidependenciesList": [
             "LibLockScreen",
@@ -753,7 +753,7 @@ ext.moduleInfo = [
         ]
     ],
     "LibLockScreen": [
-        "version"            : "5.18.0",
+        "version"            : "5.18.3",
         "artifactId"         : "lib-lock-screen",
         "apidependenciesList": [
             "LibLog", "LibConfig","LibPermission","LibNotification"
