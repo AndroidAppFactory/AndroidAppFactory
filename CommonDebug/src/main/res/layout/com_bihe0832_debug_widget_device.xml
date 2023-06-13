@@ -30,7 +30,7 @@
             android:id="@+id/widget_text_deviceid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             android:textStyle="bold"
             tools:text="设备标识：ce5c98e5dab24476" />
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             android:text="@string/common_debug_empty_tips" />
 
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             tools:text="系统版本： Android 10, API 29, Harmony(3.0.0)" />
 

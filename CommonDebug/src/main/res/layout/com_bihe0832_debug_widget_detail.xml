@@ -35,7 +35,7 @@
             android:paddingRight="12dp"
             android:paddingBottom="6dp"
             android:text="进入调试"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="14dp"
             android:textStyle="bold" />
 
@@ -51,7 +51,7 @@
             android:paddingRight="12dp"
             android:paddingBottom="6dp"
             android:text="进入应用"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="14dp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -69,7 +69,7 @@
             android:id="@+id/widget_text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             tools:text="应用名称：子勰Lib" />
 
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             tools:text="应用版本：1.2.0.2" />
 
@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             android:textStyle="bold"
             android:text="@string/common_debug_empty_tips" />
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             android:textStyle="bold"
             tools:text="设备标识：ce5c98e5dab24476" />
@@ -107,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             tools:text="版本标识：Tag_ZIXIE_1.0.0_1" />
 
@@ -116,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             tools:text="厂商型号： HUAWEI, TNY-AL00, HONOR" />
 
@@ -125,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             tools:text="系统版本： Android 10, API 29, Harmony(3.0.0)" />
 
@@ -135,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="12dp"
             tools:text="其他信息：暂无" />
     </LinearLayout>
