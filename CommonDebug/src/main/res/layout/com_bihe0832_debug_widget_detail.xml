@@ -34,13 +34,13 @@
             android:paddingTop="6dp"
             android:paddingRight="12dp"
             android:paddingBottom="6dp"
-            android:text="进入调试"
+            android:text="调试详情"
             android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="14dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/widget_start_app"
+            android:id="@+id/widget_start_device"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -50,7 +50,7 @@
             android:paddingTop="6dp"
             android:paddingRight="12dp"
             android:paddingBottom="6dp"
-            android:text="进入应用"
+            android:text="设备详情"
             android:textColor="@color/bihe0832_common_toast_text_color"
             android:textSize="14dp"
             android:textStyle="bold" />

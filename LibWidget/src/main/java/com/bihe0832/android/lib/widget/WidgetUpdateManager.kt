@@ -28,6 +28,8 @@ object WidgetUpdateManager {
 
     private const val WIDGET_WORK_NAME = "WidgetUpdaterWorkaround"
     private var mlastUpdateAllTime = 0L
+    const val WIDGET_HOST_ID = 0x100
+    const val ADD_WIDGET = 1
 
     private fun addToAutoUpdateList(clazzName: String) {
         Config.readConfig(TAG, "").let {

@@ -1,18 +1,22 @@
 package com.bihe0832.android.common.debug.widget.app
 
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.widget.RemoteViews
 import androidx.work.WorkerParameters
 import com.bihe0832.android.common.debug.R
+import com.bihe0832.android.common.debug.module.DebugDeviceFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getVersionCode
 import com.bihe0832.android.framework.ZixieContext.getVersionName
 import com.bihe0832.android.framework.ZixieContext.getVersionTag
-import com.bihe0832.android.framework.debug.ShowDebugClick
 import com.bihe0832.android.framework.router.RouterAction.getFinalURL
 import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getVersionInstalledTime
+import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager.getPendingIntent
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -26,7 +30,11 @@ open class AAFDebugWidgetWorkerDetail(context: Context, workerParams: WorkerPara
             //只能通过远程对象来设置appwidget中的控件状态
             val remoteViews = RemoteViews(context.packageName, R.layout.com_bihe0832_debug_widget_detail)
             remoteViews.setOnClickPendingIntent(R.id.widget_start_debug, getPendingIntent(context, getFinalURL(RouterConstants.MODULE_NAME_DEBUG)))
-            remoteViews.setOnClickPendingIntent(R.id.widget_start_app, getPendingIntent(context, getFinalURL(RouterConstants.MODULE_NAME_SPLASH)))
+
+            val intent = Intent(context, CommonRootActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.putExtra(CommonRootActivity.DEBUG_MODULE_CLASS_NAME, DebugDeviceFragment::class.java.name)
+            remoteViews.setOnClickPendingIntent(R.id.widget_start_device, PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
 
             //通过远程对象修改textview
             remoteViews.setTextViewText(R.id.widget_text_title, "提取时间：" + DateUtil.getCurrentDateEN())

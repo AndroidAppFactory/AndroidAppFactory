@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
+import com.bihe0832.android.test.widget.DebugWidget
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
@@ -40,6 +41,7 @@ open class TestMainActivity : AAFCommonMainActivity() {
     override fun onResume() {
         super.onResume()
         DebugLockService.startLockService(this)
+        DebugWidget.showAddDebugWidgetTips(this)
     }
     override fun onDestroy() {
         super.onDestroy()

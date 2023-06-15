@@ -25,7 +25,10 @@ public class QrcodeUtils {
         HashMap dataParam = new HashMap();
         dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND, String.valueOf(needSound));
         dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
-        RouterAction.INSTANCE.openForResult(activity, RouterAction.INSTANCE.getFinalURL(RouterConstants.MODULE_NAME_QRCODE_SCAN, dataParam), ZixieActivityRequestCode.QRCODE_SCAN);
+        RouterAction.INSTANCE.openForResult(
+                activity,
+                RouterAction.INSTANCE.getFinalURL(RouterConstants.MODULE_NAME_QRCODE_SCAN, dataParam),
+                ZixieActivityRequestCode.QRCODE_SCAN);
     }
 
     public static final void openQrScanAndParse(boolean needSound, boolean needVibrate) {
