@@ -43,10 +43,12 @@ class WidgetSelectDialog : CommonDialog {
         val mAppWidgetManager = AppWidgetManager.getInstance(context)
         val widgetProviders: List<AppWidgetProviderInfo> = mAppWidgetManager.getInstalledProviders()
         this.mItemLayout?.removeAllViews()
+        var isFirst = true
         for (widgetProvider in widgetProviders.reversed()) {
             try {
                 if (widgetProvider.provider.packageName.equals(context!!.packageName)) {
-                    this.mItemLayout?.addView(getView(widgetProvider))
+                    this.mItemLayout?.addView(getView(widgetProvider, isFirst))
+                    isFirst = false
                     ZLog.d("Widget:$widgetProvider")
                 }
             } catch (e: java.lang.Exception) {
@@ -55,10 +57,15 @@ class WidgetSelectDialog : CommonDialog {
         }
     }
 
-    fun getView(widgetProvider: AppWidgetProviderInfo): View {
+    fun getView(widgetProvider: AppWidgetProviderInfo, isFirst: Boolean): View {
         LayoutInflater.from(context).inflate(R.layout.com_bihe0832_widget_select_item, null, false).apply {
             findViewById<ImageView>(R.id.widget_icon).setImageResource(widgetProvider.previewImage)
             findViewById<TextView>(R.id.widget_title).setText(widgetProvider.loadLabel(context!!.packageManager))
+            if (isFirst) {
+                findViewById<View>(R.id.widget_divider).visibility = View.GONE
+            } else {
+                findViewById<View>(R.id.widget_divider).visibility = View.VISIBLE
+            }
             setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
                     WidgetTools.addWidgetToHome(context, widgetProvider.provider, -1)
