@@ -1,0 +1,42 @@
+apply from: rootDir.toString() + '/config.gradle'
+def project = ext
+
+ext.tbsmoduleInfo = [
+    "CommonTBSWrapper"   : [
+        "version"            : "5.18.6",
+        "artifactId"         : "common-wrapper-tbs",
+        "apidependenciesList": [
+            "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
+        ]
+    ],
+    "CommonTBSFeedback": [
+        "version"                : "5.18.6",
+        "artifactId"             : "common-feedback-tbs",
+        "apidependenciesList"    : ["CommonTBSWebview", "CommonFeedback"],
+        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+    ],
+    "CommonTBSWebview" : [
+        "version"                : "5.18.6",
+        "artifactId"             : "common-webview-tbs",
+        "apidependenciesList"    : [
+            project.androidsupport.swiperefreshlayout,
+            "CommonWebview", "CommonTBS"
+        ],
+        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+    ],
+    "CommonTBS"        : [
+        "version"            : "5.18.2",
+        "artifactId"         : "common-tbs",
+        "apidependenciesList": [
+            project.tencent.tbssdk,
+            "LibJsBridge",
+            "LibOS"
+        ]
+    ]
+]
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+apply from: rootDir.toString() + '/config.gradle'
+
+ext.kitmoduleInfo = [
+    "ServicesGoogle": [
+        "version"            : "5.18.6",
+        "artifactId"         : "services-google",
+        "apidependenciesList": [
+            "Framework",
+            "com.google.android.gms:play-services-auth:20.5.0"
+        ]
+    ]
+]
+
+
+
+
+
+

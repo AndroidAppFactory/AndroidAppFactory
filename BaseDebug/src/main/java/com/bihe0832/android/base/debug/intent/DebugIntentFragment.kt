@@ -30,10 +30,8 @@ import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.widget.WidgetUpdateManager
-import com.bihe0832.android.lib.widget.tools.WidgetSelectDialog
 import com.bihe0832.android.lib.widget.tools.WidgetTools
 
 
@@ -105,10 +103,11 @@ class DebugIntentFragment : DebugEnvFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == ZixieActivityRequestCode.SELECT_WIDGET) {
-            WidgetTools.onActivityResult(context!!, data)
+            val appWidgetId = WidgetTools.getAppWidgetId(data)
+            WidgetTools.addWidgetToHome(context!!, appWidgetId)
         }
-
     }
+
 
     private fun getFeedBackURL(): String {
         val map = HashMap<String, String>()

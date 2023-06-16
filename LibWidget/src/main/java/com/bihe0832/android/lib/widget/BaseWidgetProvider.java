@@ -9,6 +9,9 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker;
 
+/**
+ * 所有 AppWidgetProvider 的基类，包含了对添加、移除、更新、通用广播等逻辑
+ */
 public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     //系统更新广播

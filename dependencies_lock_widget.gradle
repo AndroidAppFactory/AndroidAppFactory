@@ -1,0 +1,26 @@
+apply from: rootDir.toString() + '/config.gradle'
+def project = ext
+ext.widgetmoduleInfo = [
+    "LibScreenWrapper": [
+        "version"            : "5.18.7",
+        "artifactId"         : "lib-wrapper-screen",
+        "apidependenciesList": [
+            "LibWidget"
+        ]
+    ],
+    "LibWidget"       : [
+        "version"            : "5.18.7",
+        "artifactId"         : "lib-widget",
+        "apidependenciesList": [
+            "LibLockScreen",
+            project.androidsupport.worker
+        ]
+    ],
+    "LibLockScreen"   : [
+        "version"            : "5.18.3",
+        "artifactId"         : "lib-lock-screen",
+        "apidependenciesList": [
+            "LibLog", "LibConfig", "LibPermission", "LibNotification"
+        ]
+    ],
+]

@@ -75,9 +75,8 @@ object WidgetTools {
         }
     }
 
-    fun onActivityResult(context: Context, data: Intent?) {
-        val appWidgetId = data?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1) ?: -1
-        addWidgetToHome(context, null, appWidgetId)
+    fun getAppWidgetId(data: Intent?): Int {
+        return data?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1) ?: -1
     }
 
     fun addWidgetToHome(context: Context, classT: Class<out BaseWidgetProvider>?) {
@@ -85,6 +84,10 @@ object WidgetTools {
             val componentName = ComponentName(context, it)
             addWidgetToHome(context, componentName, -1)
         }
+    }
+
+    fun addWidgetToHome(context: Context, appWidgetId: Int) {
+        addWidgetToHome(context, null, appWidgetId)
     }
 
     fun addWidgetToHome(context: Context, componentName: ComponentName?, appWidgetId: Int) {
@@ -107,6 +110,5 @@ object WidgetTools {
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
-
     }
 }

@@ -21,6 +21,7 @@ import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
 import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
+import com.bihe0832.android.base.debug.google.DebugGoogleFragment
 import com.bihe0832.android.base.debug.image.DebugImageFragment
 import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
 import com.bihe0832.android.base.debug.intent.DebugIntentFragment
@@ -65,6 +66,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("公告消息 调试", DebugMessageFragment::class.java))
 
 
+            add(getDebugFragmentItemData("Google相关 调试", DebugGoogleFragment::class.java))
 
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
             add(getDebugFragmentItemData("协程及多线程调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
