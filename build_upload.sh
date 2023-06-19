@@ -32,7 +32,14 @@ version=$2
 echo "libName:"$libName
 echo "version:"$version
 
-hasNotCommit=$(git status | grep "what will be committed" | wc -l)
+configFile=("dependencies_lib.gradle" "dependencies_lock_widget.gradle" "dependencies_services.gradle" "dependencies_tbs.gradle" "dependencies_common.gradle")
+
+hasNotAdd=$(git status | grep "what will be committed" | wc -l)
+hasNotCommit=$(git status | grep "Changes to be committed" | wc -l)
+if [ $hasNotAdd -gt 0 ]; then
+  echo "------------- git has code not add !!!!!!!!!!!! -------------"
+  exit
+fi
 if [ $hasNotCommit -gt 0 ]; then
   echo "------------- git has code not commit !!!!!!!!!!!! -------------"
   exit
@@ -77,11 +84,16 @@ dst="ext.moduleVersionName = \\\"${version}\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
-
-
 src="[0-9]*\.[0-9]*\.[0-9]*"
-cat $localPath/dependencies.gradle | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/dependencies.gradle
-mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
+for index in "${!configFile[@]}"
+do
+    fileName="${configFile[$index]}"
+    echo "Index: $index, fileName: $fileName"
+    echo "finalPath: $localPath/$fileName"
+    cat $localPath/$fileName | sed "/ *\\\"${libName}\\\" *: */,/version/s/${src}/${version}/"  >$localPath/bin/$fileName
+    mv -f $localPath/bin/$fileName $localPath/$fileName
+done
+
 if [[ $libName == Router* ]]; then
   ./gradlew clean assemble publish
 else
@@ -102,6 +114,12 @@ cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/depe
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 checkResult $libName
 
-git add $localPath/dependencies.gradle
-git commit $localPath/dependencies.gradle -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
-checkResult $libName
+git status
+for index in "${!configFile[@]}"
+do
+    fileName="${configFile[$index]}"
+    echo "Index: $index, fileName: $fileName"
+    echo "finalPath: $localPath/$fileName"
+    git add $localPath/$fileName
+    git commit $localPath/$fileName -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
+done
