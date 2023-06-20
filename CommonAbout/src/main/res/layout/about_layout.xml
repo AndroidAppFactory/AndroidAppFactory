@@ -68,13 +68,27 @@
             custom:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/about_copyright"
+                android:id="@+id/about_privacy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginRight="8dp"
                 android:textColor="@color/colorAccent"
+                android:textSize="12dp"
+                android:visibility="gone"
+                tools:text="Version:1.1.1" />
+
+            <TextView
+                android:id="@+id/about_copyright"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/textColorPrimary"
                 android:textSize="12dp"
                 tools:text="Version:1.1.1" />
 

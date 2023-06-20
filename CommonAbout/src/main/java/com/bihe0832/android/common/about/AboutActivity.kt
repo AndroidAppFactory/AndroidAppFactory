@@ -1,13 +1,18 @@
 package com.bihe0832.android.common.about
 
 import android.os.Bundle
+import android.text.TextUtils
+import android.text.method.LinkMovementMethod
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.debug.ShowDebugClick
+import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
-import kotlinx.android.synthetic.main.about_layout.*
+import com.bihe0832.android.lib.utils.intent.IntentUtils.openWebPage
 import java.util.*
 
 open class AboutActivity : BaseActivity() {
@@ -32,8 +37,8 @@ open class AboutActivity : BaseActivity() {
     }
 
     protected open fun initView() {
-        getVersionTextView().text = "当前版本：" + ZixieContext.getVersionName()
-        getVersionIcon().setOnClickListener(object : ShowDebugClick() {
+        getVersionTextView()?.text = "当前版本：" + ZixieContext.getVersionName()
+        getVersionIcon()?.setOnClickListener(object : ShowDebugClick() {
             override fun onClickAction() {
                 showVersionDetail()
             }
@@ -42,22 +47,43 @@ open class AboutActivity : BaseActivity() {
 
             }
         })
-        getCopyRightTextView().text = "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " " + ThemeResourcesManager.getString(R.string.author) + " .All Rights Reserved"
+        ThemeResourcesManager.getString(R.string.privacy_url).let { privacy_url ->
+            if (TextUtils.isEmpty(privacy_url)) {
+                getPrivacyTextView()?.visibility = View.GONE
+            } else {
+                getPrivacyTextView()?.apply {
+                    visibility = View.VISIBLE
+                    text = TextFactoryUtils.getCharSequenceWithClickAction(resources.getString(R.string.privacy_agreement_entrance), AgreementPrivacy.getAgreementAndPrivacyClickActionMap(this@AboutActivity))
+                    movementMethod = LinkMovementMethod.getInstance()
+                }
+            }
+        }
+
+        getCopyRightTextView()?.text = getCommonRightText()
+    }
+
+    protected open fun getCommonRightText(): String {
+        return "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " " + ThemeResourcesManager.getString(R.string.author) + " .All Rights Reserved"
+
     }
 
     protected fun showVersionDetail() {
-        getVersionTextView().text = "当前版本：" + ZixieContext.getVersionNameAndCode()
+        getVersionTextView()?.text = "当前版本：" + ZixieContext.getVersionNameAndCode()
     }
 
-    protected fun getVersionIcon(): ImageView {
-        return about_app_icon
+    protected fun getVersionIcon(): ImageView? {
+        return findViewById(R.id.about_app_icon) as? ImageView
     }
 
-    protected fun getVersionTextView(): TextView {
-        return about_version_info
+    protected fun getVersionTextView(): TextView? {
+        return findViewById(R.id.about_version_info) as? TextView
     }
 
-    protected fun getCopyRightTextView(): TextView {
-        return about_copyright
+    protected fun getCopyRightTextView(): TextView? {
+        return findViewById(R.id.about_copyright) as? TextView
+    }
+
+    protected fun getPrivacyTextView(): TextView? {
+        return findViewById(R.id.about_privacy) as? TextView
     }
 }

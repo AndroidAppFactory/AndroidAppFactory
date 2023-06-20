@@ -25,7 +25,7 @@ open class AboutActivity : com.bihe0832.android.common.about.AboutActivity() {
 
     override fun initView() {
         super.initView()
-        getVersionIcon().setOnClickListener(object : ShowDebugClick() {
+        getVersionIcon()?.setOnClickListener(object : ShowDebugClick() {
             override fun onClickAction() {
                 showVersionDetail()
             }
