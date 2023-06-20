@@ -121,5 +121,6 @@ do
     echo "Index: $index, fileName: $fileName"
     echo "finalPath: $localPath/$fileName"
     git add $localPath/$fileName
-    git commit $localPath/$fileName -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
+    git add $localPath/dependencies.gradle
+    git commit $localPath/dependencies.gradle $localPath/$fileName -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
 done

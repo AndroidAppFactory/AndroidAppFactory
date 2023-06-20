@@ -3,7 +3,7 @@ def project = ext
 
 ext.commonmoduleInfo = [
     "CommonDebug"           : [
-        "version"            : "6.0.0",
+        "version"            : "6.0.1",
         "artifactId"         : "common-debug",
         "apidependenciesList": [
             "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview",
@@ -11,7 +11,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonWrapper"         : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
@@ -21,47 +21,47 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonAccessibility"   : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-accessibility",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonQRCode"          : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
         ]
     ],
     "CommonMessage"         : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-message",
         "apidependenciesList": [
             "CommonAbout"
         ]
     ],
     "CommonShare"           : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-share",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNavigationDrawer": [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-navigation-drawer",
         "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
     ],
     "CommonBottomTab"       : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-bottom-tab",
         "apidependenciesList": [
             "CommonSvga"
         ]
     ],
     "CommonSvga"            : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-svga",
         "apidependenciesList": [
             "Framework",
@@ -70,19 +70,19 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonAceEditor"       : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-ace-editor",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonAbout"           : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-about",
         "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
     ],
     "CommonList"            : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-list",
         "apidependenciesList": [
             project.androidsupport.swiperefreshlayout,
@@ -90,28 +90,28 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonSplash"          : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-splash",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonPhotos"          : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonNetwork"         : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-network",
         "apidependenciesList": [
             "Framework"
         ]
     ],
     "CommonWebview"         : [
-        "version"                : "5.18.6",
+        "version"                : "6.0.1",
         "artifactId"             : "common-webview",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -120,18 +120,18 @@ ext.commonmoduleInfo = [
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonFeedback"        : [
-        "version"                : "5.18.6",
+        "version"                : "6.0.1",
         "artifactId"             : "common-feedback",
         "apidependenciesList"    : ["CommonWebview"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonPraise"          : [
-        "version"            : "5.18.6",
+        "version"            : "6.0.1",
         "artifactId"         : "common-praise",
         "apidependenciesList": ["Framework"]
     ],
     "Framework"        : [
-        "version"                : "5.18.6",
+        "version"                : "6.0.1",
         "artifactId"             : "framework",
         "apidependenciesList"    : [
             project.androidsupport.annotation,
