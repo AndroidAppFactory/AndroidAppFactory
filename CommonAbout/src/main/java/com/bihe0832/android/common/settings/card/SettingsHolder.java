@@ -73,6 +73,8 @@ public class SettingsHolder extends CardBaseHolder {
         mHeader.setText(data.mItemText);
         if (data.mHeaderTextBold) {
             mHeader.setTypeface(null, Typeface.BOLD);
+        } else {
+            mHeader.setTypeface(null, Typeface.NORMAL);
         }
         if (TextUtils.isEmpty(data.mTipsText)) {
             mHeaderTips.setVisibility(View.GONE);

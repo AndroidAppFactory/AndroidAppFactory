@@ -98,7 +98,7 @@ object SettingsItem {
     fun getFeedbackMail(activity: Activity?, title: String?): SettingsData {
         val mail = ThemeResourcesManager.getString(R.string.feedback_mail)
         return SettingsData(title).apply {
-            mItemIconRes = R.mipmap.ic_qq_black
+            mItemIconRes = R.drawable.icon_message
             mShowDriver = true
             mShowGo = true
             mTipsText = "<u>${mail}</u>"
