@@ -267,12 +267,6 @@ class AceWebView extends WebView implements NestedScrollingChild {
             }
 
             @Override
-            public void onPasteClick() {
-                final String s = new String(Base64.encode(ClipboardUtil.pasteFromClipboard(getContext()).getBytes(), Base64.NO_WRAP));
-                loadUrl("javascript: ace_paste('" + s + "');");
-            }
-
-            @Override
             public void onCopyClick() {
                 loadUrl("javascript: ace_copy(false);");
                 mHasPaste = true;

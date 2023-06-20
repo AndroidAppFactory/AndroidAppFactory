@@ -18,14 +18,12 @@ class AceSelectionActionHelper(private val mContext: Activity) {
 
     private val OPTION_CUT = "剪切"
     private val OPTION_COPY = "复制"
-    private val OPTION_PASTE = "粘贴"
     private val OPTION_SELECT_ALL = "全选"
     private val OPTION_SEARCH = "搜索"
 
     interface OnSelectionItemPressed {
         fun onCutClick()
         fun onCopyClick()
-        fun onPasteClick()
         fun onSelectAllClick()
         fun onSearchClick()
     }
@@ -66,9 +64,6 @@ class AceSelectionActionHelper(private val mContext: Activity) {
             if (mHasSelection) {
                 add(OPTION_COPY)
             }
-            if (!mReadOnly && !TextUtils.isEmpty(ClipboardUtil.pasteFromClipboard(mContext))) {
-                add(OPTION_PASTE)
-            }
             add(OPTION_SELECT_ALL)
         }
     }
@@ -91,10 +86,6 @@ class AceSelectionActionHelper(private val mContext: Activity) {
 
                 OPTION_COPY -> {
                     mOnSelectionItemPressedListener?.onCopyClick()
-                }
-
-                OPTION_PASTE -> {
-                    mOnSelectionItemPressedListener?.onPasteClick()
                 }
 
                 OPTION_SELECT_ALL -> {

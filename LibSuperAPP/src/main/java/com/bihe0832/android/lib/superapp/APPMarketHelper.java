@@ -15,16 +15,18 @@ public class APPMarketHelper {
 
     public static String getFirstMarket(Context context) {
         try {
-            if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_TENCENT_MARKET)) {
-                return  SuperAPPContants.APK_PACKAGE_NAME_TENCENT_MARKET;
-            } else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_XIAOMI_MARKET)) {
-                return  SuperAPPContants.APK_PACKAGE_NAME_XIAOMI_MARKET;
-            } else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_HUAWEI_MARKET)) {
-                return  SuperAPPContants.APK_PACKAGE_NAME_HUAWEI_MARKET;
-            } else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_OPPO_MARKET)) {
-                return  SuperAPPContants.APK_PACKAGE_NAME_OPPO_MARKET;
-            }  else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_VIVO_MARKET)) {
-                return  SuperAPPContants.APK_PACKAGE_NAME_VIVO_MARKET;
+            if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_GOOGLE_PLAY)) {
+                return SuperAPPContants.APK_PACKAGE_NAME_GOOGLE_PLAY;
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_TENCENT_MARKET)) {
+                return SuperAPPContants.APK_PACKAGE_NAME_TENCENT_MARKET;
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_XIAOMI_MARKET)) {
+                return SuperAPPContants.APK_PACKAGE_NAME_XIAOMI_MARKET;
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_HUAWEI_MARKET)) {
+                return SuperAPPContants.APK_PACKAGE_NAME_HUAWEI_MARKET;
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_OPPO_MARKET)) {
+                return SuperAPPContants.APK_PACKAGE_NAME_OPPO_MARKET;
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_VIVO_MARKET)) {
+                return SuperAPPContants.APK_PACKAGE_NAME_VIVO_MARKET;
             }
         } catch (Exception e) {
             return "";
@@ -39,15 +41,17 @@ public class APPMarketHelper {
     public static ArrayList<String> getMarkerList(Context context) {
         ArrayList<String> marketList = new ArrayList<>();
         try {
-            if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_TENCENT_MARKET)) {
+            if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_GOOGLE_PLAY)) {
+                marketList.add(SuperAPPContants.APK_PACKAGE_NAME_GOOGLE_PLAY);
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_TENCENT_MARKET)) {
                 marketList.add(SuperAPPContants.APK_PACKAGE_NAME_TENCENT_MARKET);
-            } else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_XIAOMI_MARKET)) {
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_XIAOMI_MARKET)) {
                 marketList.add(SuperAPPContants.APK_PACKAGE_NAME_XIAOMI_MARKET);
-            } else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_HUAWEI_MARKET)) {
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_HUAWEI_MARKET)) {
                 marketList.add(SuperAPPContants.APK_PACKAGE_NAME_HUAWEI_MARKET);
-            } else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_OPPO_MARKET)) {
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_OPPO_MARKET)) {
                 marketList.add(SuperAPPContants.APK_PACKAGE_NAME_OPPO_MARKET);
-            }  else if (isMarketInstall(context,SuperAPPContants.APK_PACKAGE_NAME_VIVO_MARKET)) {
+            } else if (isMarketInstall(context, SuperAPPContants.APK_PACKAGE_NAME_VIVO_MARKET)) {
                 marketList.add(SuperAPPContants.APK_PACKAGE_NAME_VIVO_MARKET);
             }
         } catch (Exception e) {

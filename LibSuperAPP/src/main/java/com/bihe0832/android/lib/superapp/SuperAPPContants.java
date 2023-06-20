@@ -12,6 +12,8 @@ public class SuperAPPContants {
     public static final String APK_PACKAGE_NAME_QQ = "com.tencent.mobileqq";
     public static final String APK_LAUNCHER_CLASS_QQ = "com.tencent.mobileqq.activity.HomeActivity";
 
+
+    public static final String APK_PACKAGE_NAME_GOOGLE_PLAY = "com.android.vending";
     public static final String APK_PACKAGE_NAME_TENCENT_MARKET = "com.tencent.android.qqdownloader";
     public static final String APK_PACKAGE_NAME_XIAOMI_MARKET = "com.xiaomi.market";
     public static final String APK_PACKAGE_NAME_VIVO_MARKET = "com.bbk.appstore";

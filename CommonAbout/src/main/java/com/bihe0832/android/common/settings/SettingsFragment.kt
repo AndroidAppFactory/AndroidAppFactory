@@ -59,13 +59,7 @@ open class SettingsFragment : CommonListFragment() {
     }
 
     open fun getDataList(): ArrayList<CardBaseModule> {
-        return ArrayList<CardBaseModule>().apply {
-            add(SettingsItem.getVersionList())
-            add(SettingsItem.getFeedback())
-            add(SettingsItem.getQQService(activity))
-        }.apply {
-            processLastItemDriver()
-        }
+        return ArrayList<CardBaseModule>()
     }
 
     fun List<CardBaseModule>.processLastItemDriver() {

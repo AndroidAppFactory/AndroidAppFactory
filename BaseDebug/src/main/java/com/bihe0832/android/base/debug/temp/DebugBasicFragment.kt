@@ -51,10 +51,6 @@ class DebugBasicFragment : BaseFragment() {
                         ZixieContext.showToast("onCopyClick")
                     }
 
-                    override fun onPasteClick() {
-                        ZixieContext.showToast("onPasteClick")
-                    }
-
                     override fun onSelectAllClick() {
                         ZixieContext.showToast("onSelectAllClick")
                     }

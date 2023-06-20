@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.superapp.APPMarketHelper
+import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.util.concurrent.TimeUnit
@@ -86,10 +88,34 @@ object UserPraiseManager {
     }
 
     fun showUserPraiseDialog(activity: Activity, feedbackRouter: String) {
+        showUserPraiseDialog(activity, feedbackRouter) {
+            launchAppStore(activity)
+        }
+    }
+
+    fun showUserPraiseDialog(activity: Activity, feedbackRouter: String, successAction: () -> Unit) {
         Config.writeConfig(KEY_PRAISE_LAST_SHOW_TIME, System.currentTimeMillis())
         UserPraiseDialog(activity, feedbackRouter).apply {
             if (mHeadTitle.isNotEmpty()) {
                 setHeadTitleContent(mHeadTitle)
+            }
+            onClickBottomListener = object : OnDialogListener {
+                override fun onPositiveClick() {
+                    successAction.invoke()
+                    doPraiseAction()
+                    dismiss()
+                }
+
+                override fun onNegativeClick() {
+                    doPraiseAction()
+                    RouterAction.openFinalURL(feedbackRouter, Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    dismiss()
+                }
+
+                override fun onCancel() {
+                    dismiss()
+                }
+
             }
         }.show()
     }
@@ -108,7 +134,7 @@ object UserPraiseManager {
         }
     }
 
-    fun doPraiseAction() {
+    private fun doPraiseAction() {
         Config.readConfig(KEY_PRAISE_DONE, 1)
         Config.readConfig(KEY_PRAISE_VERSION, ZixieContext.getVersionCode())
     }

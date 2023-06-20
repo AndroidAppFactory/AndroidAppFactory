@@ -13,6 +13,8 @@ import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.lib.superapp.QQHelper
 import com.bihe0832.android.lib.superapp.WechatOfficialAccount
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
+import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 /**
  *
@@ -74,13 +76,38 @@ object SettingsItem {
         }
     }
 
-    fun getFeedback(): SettingsData {
-        return SettingsData("建议反馈").apply {
+    fun getFeedbackURL(): SettingsData {
+        return getFeedbackURL(ThemeResourcesManager.getString(R.string.feedback))
+    }
+
+    fun getFeedbackURL(title: String?): SettingsData {
+        return SettingsData(title).apply {
             mItemIconRes = R.drawable.icon_feedback
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
                 openFeedback()
+            }
+        }
+    }
+
+    fun getFeedbackMail(activity: Activity?): SettingsData {
+        return getFeedbackMail(activity, ThemeResourcesManager.getString(R.string.feedback))
+    }
+
+    fun getFeedbackMail(activity: Activity?, title: String?): SettingsData {
+        val mail = ThemeResourcesManager.getString(R.string.feedback_mail)
+        return SettingsData(title).apply {
+            mItemIconRes = R.mipmap.ic_qq_black
+            mShowDriver = true
+            mShowGo = true
+            mTipsText = "<u>${mail}</u>"
+            mHeaderTipsListener = View.OnClickListener {
+                IntentUtils.sendMail(activity, mail, String.format(ThemeResourcesManager.getString(R.string.feedback_mail_title)!!, APKUtils.getAppName(activity)), "").let { res ->
+                    if (!res) {
+                        openFeedback()
+                    }
+                }
             }
         }
     }
@@ -141,13 +168,13 @@ object SettingsItem {
         }
     }
 
-    fun getShareAPP(): SettingsData {
+    fun getShareAPP(canSendAPK: Boolean): SettingsData {
         return SettingsData("分享给好友").apply {
             mItemIconRes = R.drawable.icon_share
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
-                shareAPP(true)
+                shareAPP(canSendAPK)
             }
         }
     }

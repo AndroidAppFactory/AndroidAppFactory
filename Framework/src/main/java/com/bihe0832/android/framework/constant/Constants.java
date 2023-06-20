@@ -22,7 +22,6 @@ public class Constants {
 
     public static Charset CHAR_SET_UTF8 = Charset.forName(CHAR_SET_NAME);
 
-
     public static final float CUSTOM_DENSITY = 360f;
 
     public static final String CONFIG_KEY_LAYER_START_VALUE =  "com.bihe0832.android.config.layer.gray.start";

@@ -19,6 +19,8 @@ import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -188,6 +190,44 @@ public class IntentUtils {
             } catch (Exception ee) {
                 ee.printStackTrace();
             }
+        }
+    }
+
+    public static boolean sendMail(final Context context, final String mail, final String title, final String content) {
+        Uri uri = Uri.parse("mailto:" + mail);
+        List<ResolveInfo> packageInfos = context.getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_SENDTO, uri), 0);
+        List<String> tempPkgNameList = new ArrayList<>();
+        List<Intent> emailIntents = new ArrayList<>();
+        for (ResolveInfo info : packageInfos) {
+            String pkgName = info.activityInfo.packageName;
+            if (!tempPkgNameList.contains(pkgName)) {
+                tempPkgNameList.add(pkgName);
+                Intent intent = context.getPackageManager().getLaunchIntentForPackage(pkgName);
+                emailIntents.add(intent);
+            }
+        }
+        if (!emailIntents.isEmpty()) {
+            String[] email = {mail};
+            Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+            intent.putExtra(Intent.EXTRA_CC, email);
+            intent.putExtra(Intent.EXTRA_SUBJECT, title);
+            intent.putExtra(Intent.EXTRA_TEXT, content);
+
+            try {
+                context.startActivity(Intent.createChooser(intent, title));
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    context.startActivity(intent);
+                    return true;
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                    return false;
+                }
+            }
+        } else {
+            return false;
         }
     }
 

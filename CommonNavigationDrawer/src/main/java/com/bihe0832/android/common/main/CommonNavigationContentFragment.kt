@@ -25,11 +25,7 @@ open class CommonNavigationContentFragment : AboutFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(SettingsItem.getFeedback())
-            add(SettingsItem.getShareAPP())
             add(SettingsItem.getVersionList())
-            add(SettingsItem.getZixie())
-
             if (!ZixieContext.isOfficial()) {
                 add(SettingsItem.getDebug())
             }

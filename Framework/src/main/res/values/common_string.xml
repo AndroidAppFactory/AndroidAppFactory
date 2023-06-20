@@ -5,8 +5,12 @@
     <string name="app_desc">潜心学技术，努力做精品</string>
     <string name="router_schema">zixie</string>
 
+    <string name="feedback">建议反馈</string>
     <string name="feedback_qq">2217661422</string>
+    <string name="feedback_mail">app@bihe0832.com</string>
+    <string name="feedback_mail_title">提交关于 %1$s 的使用反馈</string>
     <string name="feedback_url">https://support.qq.com/product/290858</string>
+
     <string name="version_url"></string>
     <string name="update_url"></string>
     <string name="message_url"></string>

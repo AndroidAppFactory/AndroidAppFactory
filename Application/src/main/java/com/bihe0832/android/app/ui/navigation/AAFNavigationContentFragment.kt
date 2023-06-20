@@ -1,6 +1,7 @@
 package com.bihe0832.android.app.ui.navigation
 
 import android.view.View
+import com.bihe0832.android.app.about.getFeedbackItem
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.main.CommonNavigationContentFragment
@@ -40,7 +41,11 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
                 RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
             })
             add(SettingsItem.getPermission(PermissionFragment::class.java))
+            add(SettingsItem.getFeedbackURL())
+            add(getFeedbackItem(activity))
+            add(SettingsItem.getShareAPP(true))
             addAll(super.getDataList())
+            add(SettingsItem.getZixie())
         }.apply {
             processLastItemDriver()
         }

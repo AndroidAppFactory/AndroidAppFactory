@@ -2,7 +2,6 @@ package com.bihe0832.android.common.about
 
 import android.view.View
 import com.bihe0832.android.common.settings.SettingsFragment
-import com.bihe0832.android.common.settings.SettingsItem
 import com.bihe0832.android.common.settings.card.SettingsData
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
@@ -14,13 +13,7 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 open class AboutFragment : SettingsFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
-        return ArrayList<CardBaseModule>().apply {
-            add(SettingsItem.getVersionList())
-            add(SettingsItem.getFeedback())
-            add(SettingsItem.getQQService(activity))
-        }.apply {
-            processLastItemDriver()
-        }
+        return ArrayList<CardBaseModule>()
     }
 
     override fun initView(view: View) {

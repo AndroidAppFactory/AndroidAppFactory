@@ -22,24 +22,6 @@ class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : 
         setShouldCanceled(true)
         setPositive(ThemeResourcesManager.getString(R.string.com_bihe0832_praise_positive))
         setNegative(ThemeResourcesManager.getString(R.string.com_bihe0832_praise_negative))
-        setOnClickBottomListener(object : OnDialogListener {
-            override fun onPositiveClick() {
-                UserPraiseManager.doPraiseAction()
-                UserPraiseManager.launchAppStore(context)
-                dismiss()
-            }
-
-            override fun onNegativeClick() {
-                UserPraiseManager.doPraiseAction()
-                RouterAction.openFinalURL( feedbackRouter, Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                dismiss()
-            }
-
-            override fun onCancel() {
-                dismiss()
-            }
-
-        })
         findViewById<View>(R.id.close).setOnClickListener {
             dismiss()
         }
