@@ -2,14 +2,14 @@ apply from: rootDir.toString() + '/config.gradle'
 def project = ext
 ext.widgetmoduleInfo = [
     "LibScreenWrapper": [
-        "version"            : "6.0.1",
+        "version"            : "6.0.4",
         "artifactId"         : "lib-wrapper-screen",
         "apidependenciesList": [
             "LibWidget"
         ]
     ],
     "LibWidget"       : [
-        "version"            : "6.0.1",
+        "version"            : "6.0.4",
         "artifactId"         : "lib-widget",
         "apidependenciesList": [
             "LibLockScreen",

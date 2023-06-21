@@ -10,11 +10,11 @@ ext.kitmoduleInfo = [
         ]
     ],
     "ServicesGooglePay": [
-        "version"            : "6.0.2",
+        "version"            : "6.0.4",
         "artifactId"         : "services-google-pay",
         "apidependenciesList": [
-            "Framework",
-            "com.android.billingclient:billing::6.0.0"
+            "ServicesGoogle",
+            "com.android.billingclient:billing:6.0.0"
         ]
     ]
 ]
