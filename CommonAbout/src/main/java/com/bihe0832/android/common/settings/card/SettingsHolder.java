@@ -49,10 +49,8 @@ public class SettingsHolder extends CardBaseHolder {
     @Override
     public void initData(CardBaseModule item) {
         SettingsData data = (SettingsData) item;
-        if (data.mHeaderListener != null) {
-            itemView.setOnClickListener(data.mHeaderListener);
-        }
-
+        itemView.setOnClickListener(data.mHeaderListener);
+        
         if (data.mHeaderTipsListener != null) {
             mHeaderTips.setOnClickListener(data.mHeaderTipsListener);
         } else {
