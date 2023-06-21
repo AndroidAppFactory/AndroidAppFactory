@@ -36,6 +36,19 @@ object WidgetTools {
         pickWidget(context, "小组件快捷添加", "<font color ='" + context.resources.getColor(R.color.colorAccent) + "'><b>长按组件信息</b></font>可快速添加小组件到手机", "关闭", "")
     }
 
+    fun hasAddWidget(context: Context): Boolean {
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val appWidgetProviderInfos = appWidgetManager.installedProviders
+        for (appWidgetProviderInfo in appWidgetProviderInfos) {
+            // 检查小部件是否在主屏幕或其他小部件主屏幕上
+            if (appWidgetProviderInfo.provider.packageName == context.packageName) {
+                // 小部件已经被添加
+                return true
+            }
+        }
+        return false
+    }
+
     fun hasAddWidget(context: Context, classT: Class<out BaseWidgetProvider>): Boolean {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, classT))

@@ -10,6 +10,7 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.widget.tools.WidgetTools
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker
 import java.time.Duration
 import java.util.concurrent.TimeUnit
@@ -30,6 +31,40 @@ object WidgetUpdateManager {
     private var mlastUpdateAllTime = 0L
     const val WIDGET_HOST_ID = 0x100
     const val ADD_WIDGET = 1
+
+
+    fun initModuleWithOtherProcess(context: Context) {
+
+        // provide custom configuration
+        Configuration.Builder().setMinimumLoggingLevel(android.util.Log.INFO).build().let { myConfig ->
+            // initialize WorkManager
+            WorkManager.initialize(context, myConfig)
+        }
+        initModuleWithMainProcess(context)
+    }
+
+    fun initModuleWithMainProcess(context: Context) {
+        updateAllWidgets(context)
+    }
+
+
+    fun enqueueAutoStart(context: Context) {
+        cancelAutoStart(context)
+        OneTimeWorkRequest.Builder(UpdateAllWork::class.java).apply {
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
+                setBackoffCriteria(BackoffPolicy.EXPONENTIAL, Duration.ofSeconds(10))
+            }
+            setInitialDelay((100 * 356).toLong(), TimeUnit.DAYS)
+        }.build().let { workRequest ->
+            ZLog.w(TAG, "enqueueAutoStart")
+            WorkManager.getInstance(context).enqueueUniqueWork(WIDGET_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+        }
+    }
+
+    fun cancelAutoStart(context: Context) {
+        ZLog.w(TAG, "cancelAutoStart")
+        WorkManager.getInstance(context).cancelUniqueWork(WIDGET_WORK_NAME)
+    }
 
     private fun addToAutoUpdateList(clazzName: String) {
         Config.readConfig(TAG, "").let {
@@ -121,28 +156,6 @@ object WidgetUpdateManager {
         }
     }
 
-    fun initModuleWithOtherProcess(context: Context) {
-
-        // provide custom configuration
-        Configuration.Builder().setMinimumLoggingLevel(android.util.Log.INFO).build().let { myConfig ->
-            // initialize WorkManager
-            WorkManager.initialize(context, myConfig)
-        }
-        initModuleWithMainProcess(context)
-    }
-
-    fun initModuleWithMainProcess(context: Context) {
-        OneTimeWorkRequest.Builder(UpdateAllWork::class.java).apply {
-            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
-                setBackoffCriteria(BackoffPolicy.EXPONENTIAL, Duration.ofSeconds(10))
-            }
-            setInitialDelay((100 * 356).toLong(), TimeUnit.DAYS)
-        }.build().let { workRequest ->
-            WorkManager.getInstance(context).cancelUniqueWork(WIDGET_WORK_NAME)
-            WorkManager.getInstance(context).enqueueUniqueWork(WIDGET_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
-        }
-        updateAllWidgets(context)
-    }
 
     fun updateAllWidgets(context: Context) {
         updateAllWidgets(context, null)
@@ -166,13 +179,18 @@ object WidgetUpdateManager {
     }
 
     fun enableWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean) {
+        enqueueAutoStart(context)
         WorkManager.getInstance(context).enqueue(PeriodicWorkRequest.Builder(clazz, 15, TimeUnit.MINUTES).build())
         updateWidget(context, clazz, canAutoUpdateByOthers, true)
     }
 
     fun disableWidget(context: Context, clazz: Class<out Worker>) {
         removeFromAutoUpdateList(clazz.name)
-        updateAllWidgets(context)
+        if (!WidgetTools.hasAddWidget(context)) {
+            cancelAutoStart(context)
+        } else {
+            updateAllWidgets(context)
+        }
     }
 
 }

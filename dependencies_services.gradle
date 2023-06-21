@@ -8,6 +8,14 @@ ext.kitmoduleInfo = [
             "Framework",
             "com.google.android.gms:play-services-auth:20.5.0"
         ]
+    ],
+    "ServicesGooglePay": [
+        "version"            : "6.0.2",
+        "artifactId"         : "services-google-pay",
+        "apidependenciesList": [
+            "Framework",
+            "com.android.billingclient:billing::6.0.0"
+        ]
     ]
 ]
 
