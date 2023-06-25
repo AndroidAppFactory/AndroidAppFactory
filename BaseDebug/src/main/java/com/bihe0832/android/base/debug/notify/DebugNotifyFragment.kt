@@ -2,6 +2,7 @@ package com.bihe0832.android.base.debug.notify
 
 import android.view.View
 import com.bihe0832.android.app.api.AAFNetWorkApi.LOG_TAG
+import com.bihe0832.android.app.permission.AAFPermissionManager
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
@@ -16,9 +17,12 @@ class DebugNotifyFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("是否开启通知", View.OnClickListener { AAFPermissionManager.hasNotifyPermission() }))
+            add(DebugItemData("打开通知设置", View.OnClickListener { AAFPermissionManager.openNotifyPermission() }))
             add(DebugItemData("普通通知", View.OnClickListener { testNotify() }))
             add(DebugItemData("可刷新通知", View.OnClickListener { testRefreshNotify() }))
             add(DebugItemData("下载通知", View.OnClickListener { testNotifyProcess() }))
+
         }
     }
 

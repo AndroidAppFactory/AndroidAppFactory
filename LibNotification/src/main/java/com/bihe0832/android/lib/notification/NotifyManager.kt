@@ -9,10 +9,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import android.text.TextUtils
 import android.widget.RemoteViews
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
@@ -163,10 +163,10 @@ object NotifyManager {
     }
 
     fun showNotificationsSettings(context: Context): Boolean {
-        return if (IntentUtils.startAppDetailSettings(context)) {
+        return if (IntentUtils.startAppSettings(context, Settings.ACTION_APP_NOTIFICATION_SETTINGS)) {
             true
         } else {
-            return IntentUtils.startSettings(context, Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+            return IntentUtils.startAppDetailSettings(context)
         }
     }
 }

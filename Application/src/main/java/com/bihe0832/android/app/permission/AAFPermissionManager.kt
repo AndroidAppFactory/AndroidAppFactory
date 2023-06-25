@@ -1,10 +1,14 @@
 package com.bihe0832.android.app.permission
 
 import android.Manifest
+import android.content.Intent
+import android.provider.Settings
 import com.bihe0832.android.common.photos.takePhotoPermission
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 /**
  *
@@ -29,5 +33,14 @@ object AAFPermissionManager {
     fun openFloatPermission() {
         return openFloatSettings(ZixieContext.applicationContext!!)
     }
+
+    fun hasNotifyPermission(): Boolean {
+        return NotifyManager.showNotificationsSettings(ZixieContext.applicationContext!!)
+    }
+
+    fun openNotifyPermission() {
+        IntentUtils.startAppSettings(ZixieContext.applicationContext!!,Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+    }
+
 
 }

@@ -299,7 +299,7 @@ object PermissionManager {
         return if (mPermissionScene.containsKey(permissionGroupID)) {
             if (mPermissionScene.get(permissionGroupID) != null) {
                 return if (needSpecial) {
-                    addHtmlWrapper(mPermissionScene.get(permissionGroupID)!!)
+                    addPermissionHtmlWrapper(mPermissionScene.get(permissionGroupID)!!)
                 } else {
                     mPermissionScene.get(permissionGroupID)!!
                 }
@@ -325,7 +325,7 @@ object PermissionManager {
         return if (mPermissionDesc.containsKey(permissionGroupID)) {
             if (mPermissionDesc.get(permissionGroupID) != null) {
                 return if (needSpecial) {
-                    addHtmlWrapper(mPermissionDesc.get(permissionGroupID)!!)
+                    addPermissionHtmlWrapper(mPermissionDesc.get(permissionGroupID)!!)
                 } else {
                     mPermissionDesc.get(permissionGroupID)!!
                 }
@@ -424,7 +424,7 @@ object PermissionManager {
         return ""
     }
 
-    private fun addHtmlWrapper(content: String): String {
+    fun addPermissionHtmlWrapper(content: String): String {
         return "<font color ='" + (ThemeResourcesManager.getString(R.string.com_bihe0832_permission_color)
                 ?: "#38ADFF") + "'><b>$content</b></font>"
     }

@@ -143,17 +143,28 @@ public class IntentUtils {
         }
 
         Intent intent = new Intent(data);
-        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
-            intent.putExtra("android.provider.extra.APP_PACKAGE", ctx.getPackageName());
-        } else if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
-            //5.0以上到8.0以下
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
+            //5.0以上
             intent.putExtra("app_package", ctx.getPackageName());
             if (null != ctx.getApplicationInfo()) {
                 intent.putExtra("app_uid", ctx.getApplicationInfo().uid);
             }
         }
-        intent.setData(Uri.fromParts("package", ctx.getPackageName(), null));
-        if (!startIntent(ctx, intent)) {
+
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
+            // 8.0 以上
+            intent.putExtra("android.provider.extra.APP_PACKAGE", ctx.getPackageName());
+        }
+
+        Intent intent2 = (Intent) intent.clone();
+        intent2.setData(Uri.fromParts("package", ctx.getPackageName(), null));
+        boolean result;
+        if (intent2.resolveActivity(ctx.getPackageManager()) != null) {
+            result = startIntent(ctx, intent2);
+        } else {
+            result = startIntent(ctx, intent);
+        }
+        if (!result) {
             if (showDetail) {
                 return startAppDetailSettings(ctx);
             } else {
