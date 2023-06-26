@@ -64,13 +64,19 @@
 
         <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
             android:id="@+id/settings_is_new"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:bgtv_backgroundColor="@color/red_dot"
             app:bgtv_isRadiusHalfHeight="true"
             app:bgtv_strokeColor="@color/red_dot"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             app:bgtv_strokeWidth="1dp"
-            tools:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            tools:text="3"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/settings_go"
             app:layout_constraintTop_toTopOf="parent" />

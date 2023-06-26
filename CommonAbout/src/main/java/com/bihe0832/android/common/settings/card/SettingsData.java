@@ -18,7 +18,7 @@ public class SettingsData extends CardBaseModule {
     public String mItemText = "";
     public String mItemIconURL = "";
     public int mItemIconRes = -1;
-    public boolean mItemIsNew = false;
+    public int mItemNewNum = -1;
     public boolean mShowGo = true;
     public boolean mShowDriver = false;
     public boolean mHeaderTextBold = false;
@@ -47,7 +47,7 @@ public class SettingsData extends CardBaseModule {
                 ", mItemText='" + mItemText + '\'' +
                 ", mItemIconURL='" + mItemIconURL + '\'' +
                 ", mItemIconRes=" + mItemIconRes +
-                ", mItemIsNew=" + mItemIsNew +
+                ", mItemIsNew=" + mItemNewNum +
                 ", mShowDriver=" + mShowDriver +
                 ", mHeaderTextBold=" + mHeaderTextBold +
                 ", mTipsText='" + mTipsText + '\'' +

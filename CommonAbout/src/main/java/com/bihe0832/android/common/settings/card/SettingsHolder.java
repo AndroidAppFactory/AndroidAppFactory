@@ -82,8 +82,8 @@ public class SettingsHolder extends CardBaseHolder {
             mHeaderTips.setVisibility(View.VISIBLE);
         }
 
-        if (data.mItemIsNew) {
-            TextViewWithBackgroundExtKt.changeStatusWithUnreadMsg(mHeaderIsNew, 0, DisplayUtil.dip2px(getContext(), 8));
+        if (data.mItemNewNum >=0) {
+            TextViewWithBackgroundExtKt.changeStatusWithUnreadMsg(mHeaderIsNew, data.mItemNewNum, DisplayUtil.dip2px(getContext(), 8));
         } else {
             mHeaderIsNew.setVisibility(View.GONE);
         }

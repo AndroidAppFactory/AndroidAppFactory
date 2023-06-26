@@ -1,7 +1,6 @@
 package com.bihe0832.android.common.settings
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import com.bihe0832.android.common.about.R
 import com.bihe0832.android.common.permission.PermissionFragment
@@ -40,38 +39,42 @@ object SettingsItem {
         }
     }
 
-    fun getUpdate(activity: Activity?, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
-        return SettingsData(ThemeResourcesManager.getString(R.string.settings_update_title)).apply {
+    fun getUpdate(titile: String, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
+        return SettingsData(titile).apply {
             mItemIconRes = R.drawable.icon_update
             mHeaderTextBold = true
             mShowDriver = true
             mShowGo = true
-            mItemIsNew = cloud?.canShowNew() ?: false
+            if (cloud?.canShowNew() == true) {
+                mItemNewNum = 0
+            }
             mHeaderListener = listener
         }
     }
 
-    fun getAboutTitle(context: Context): String {
-        return "关于" + ThemeResourcesManager.getString(R.string.app_name)
+    fun getAboutTitle(): String {
+        return "关于" + ThemeResourcesManager.getString(R.string.about_app)
     }
 
-    fun getAboutAPP(context: Context, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
-        return SettingsData(getAboutTitle(context)).apply {
+    fun getAboutAPP(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
+        return getUpdate(getAboutTitle(), cloud, listener).apply {
             mItemIconRes = R.drawable.icon_android
-            mHeaderTextBold = true
-            mShowDriver = true
-            mShowGo = true
-            mItemIsNew = cloud?.canShowNew() ?: false
-            mHeaderListener = listener
+        }
+    }
+
+    fun getUpdate(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
+        return getUpdate(ThemeResourcesManager.getString(R.string.settings_update_title)
+                ?: "", cloud, listener).apply {
+            mItemIconRes = R.drawable.icon_update
         }
     }
 
     fun getMessage(msgNum: Int, listener: View.OnClickListener): SettingsData {
-        return SettingsData("消息中心").apply {
+        return SettingsData(ThemeResourcesManager.getString(R.string.settings_message_title)).apply {
             mItemIconRes = R.drawable.icon_message
             mShowDriver = true
             mShowGo = true
-            mItemIsNew = msgNum > 0
+            mItemNewNum = msgNum
             mHeaderListener = listener
         }
     }

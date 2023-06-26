@@ -18,27 +18,45 @@ open class AboutFragment : SettingsFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
-        updateRedPoint(UpdateInfoLiveData.value)
+        changeUpdateRedDot(UpdateInfoLiveData.value, true)
         UpdateInfoLiveData.observe(this) { data ->
-            updateRedPoint(data)
+            changeUpdateRedDot(data, true)
         }
     }
 
-    open fun updateRedPoint(cloud: UpdateDataFromCloud?) {
-        var position = getSettingsDataPositionByTitle(ThemeResourcesManager.getString(R.string.settings_update_title))
-        updateRedPoint(position, cloud)
+    open fun changeUpdateRedDot(cloud: UpdateDataFromCloud?, showTips: Boolean) {
+        changeUpdateRedDot(ThemeResourcesManager.getString(R.string.settings_update_title), cloud, showTips)
     }
 
-    open fun updateRedPoint(position: Int, cloud: UpdateDataFromCloud?) {
+    open fun changeUpdateRedDot(title: String?, cloud: UpdateDataFromCloud?, showTips: Boolean) {
+        val position = getSettingsDataPositionByTitle(title)
+        if (cloud?.canShowNew() == true) {
+            if (showTips) {
+                updateItemRedDot(position, 0, ThemeResourcesManager.getString(R.string.settings_update_tips)
+                        ?: "")
+            } else {
+                updateItemRedDot(position, 0, "")
+            }
+
+        } else {
+            updateItemRedDot(position, -1, "")
+        }
+    }
+
+    open fun changeMessageRedDot(title: String?, num: Int) {
+        val position = getSettingsDataPositionByTitle(title)
+        if (num > 0) {
+            updateItemRedDot(position, num, "")
+        } else {
+            updateItemRedDot(position, -1, "")
+        }
+    }
+
+    open fun updateItemRedDot(position: Int, newNum: Int, tips: String) {
         if (position >= 0) {
             (mAdapter.data[position] as? SettingsData)?.apply {
-                if (null != cloud && cloud.canShowNew()) {
-                    mTipsText = ThemeResourcesManager.getString(R.string.settings_update_tips) ?: ""
-                    mItemIsNew = true
-                } else {
-                    mTipsText = ""
-                    mItemIsNew = false
-                }
+                mTipsText = tips
+                mItemNewNum = newNum
             }?.let { newData ->
                 mRecyclerView?.findViewHolderForAdapterPosition(position).let { viewHolder ->
                     (viewHolder as? CardBaseHolder)?.initData(newData)
