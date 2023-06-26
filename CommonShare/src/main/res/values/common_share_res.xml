@@ -3,9 +3,11 @@
     <color name="com_bihe0832_share_bg_color">#A6000000</color>
     <color name="com_bihe0832_share_panel_color">#BF2D2D2B</color>
     <color name="com_bihe0832_share_text_color">#ADADAD</color>
+    <color name="com_bihe0832_share_icon_color">@color/icons</color>
     <dimen name="com_bihe0832_share_title_text_size">10dp</dimen>
     <dimen name="com_bihe0832_share_item_text_size">@dimen/com_bihe0832_share_title_text_size
     </dimen>
+    <dimen name="com_bihe0832_share_item_icon_size">28dp</dimen>
 
 
     <string name="com_bihe0832_share_desc">我刚发现了一个好玩的，快扫码看看吧</string>
@@ -18,16 +20,27 @@
     <string name="com_bihe0832_share_app_big">APK 文件过大，建议使用二维码分享给好友下载</string>
     <string name="com_bihe0832_share_app_faild">APK 获取失败，建议使用二维码分享给好友下载</string>
 
-    <style name="shareItemText">
-        <item name="android:textColor">@color/com_bihe0832_share_text_color</item>
-        <item name="android:textSize">@dimen/com_bihe0832_share_item_text_size</item>
+    <style name="shareItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="android:letterSpacing">0.06</item>
-        <item name="android:lineSpacingExtra">6dp</item>
-        <item name="android:drawablePadding">8dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="shareItemText" parent="shareItem">
+        <item name="android:textColor">@color/com_bihe0832_share_text_color</item>
+        <item name="android:textSize">@dimen/com_bihe0832_share_item_text_size</item>
+    </style>
+
+    <style name="shareItemImage" parent="shareItem">
+        <item name="android:tint">@color/com_bihe0832_share_icon_color</item>
+        <item name="android:layout_height">@dimen/com_bihe0832_share_item_icon_size</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
     </style>
 </resources>
 

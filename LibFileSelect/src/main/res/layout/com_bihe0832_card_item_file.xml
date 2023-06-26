@@ -11,7 +11,7 @@
         android:layout_height="24dp"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:src="@mipmap/ic_file_type_file"
+        android:src="@drawable/ic_file_type_file"
         app:tint="@color/textColorPrimary" />
 
     <TextView

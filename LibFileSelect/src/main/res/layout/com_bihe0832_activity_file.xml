@@ -18,7 +18,7 @@
             android:layout_width="22dp"
             android:layout_height="18dp"
             android:layout_margin="12dp"
-            android:background="@drawable/icon_left_arrow" />
+            android:background="@drawable/ic_left_arrow" />
 
         <TextView
             android:id="@+id/activity_file_tv_title"
@@ -37,7 +37,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
-            android:background="@drawable/icon_close"
+            android:background="@drawable/ic_close"
             android:padding="8dp"
             app:tint="@color/colorOnPrimary" />
     </LinearLayout>

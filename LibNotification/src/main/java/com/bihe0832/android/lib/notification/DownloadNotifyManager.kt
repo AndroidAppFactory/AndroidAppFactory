@@ -10,8 +10,8 @@ import android.view.View
 import android.widget.RemoteViews
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.format.Formatter
-import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.util.concurrent.ConcurrentHashMap
@@ -89,12 +89,12 @@ object DownloadNotifyManager {
                     remoteViews.setTextViewText(R.id.download_notification_desc, Formatter.formatFileSize(context, speed) + "/s")
                 }
                 R.id.download_notification_btn_restart.let {
-                    remoteViews.setImageViewResource(it, R.mipmap.btn_pause)
+                    remoteViews.setImageViewResource(it, R.drawable.ic_pause_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_PAUSE))
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
+                    remoteViews.setImageViewResource(it, R.drawable.ic_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
                 }
@@ -104,12 +104,12 @@ object DownloadNotifyManager {
                 remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载已暂停")
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 R.id.download_notification_btn_restart.let {
-                    remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
+                    remoteViews.setImageViewResource(it, R.drawable.ic_start_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_RESUME))
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
+                    remoteViews.setImageViewResource(it, R.drawable.ic_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
                 }
@@ -119,12 +119,12 @@ object DownloadNotifyManager {
                 remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载失败")
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 R.id.download_notification_btn_restart.let {
-                    remoteViews.setImageViewResource(it, R.mipmap.btn_restart)
+                    remoteViews.setImageViewResource(it, R.drawable.ic_start_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_RETRY))
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.mipmap.btn_cancel)
+                    remoteViews.setImageViewResource(it, R.drawable.ic_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(it, getPendingIntent(context, downloadURL, notifyID, ACTION_DELETE))
                 }

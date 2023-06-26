@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|right"
-                android:src="@drawable/icon_info"
+                android:src="@drawable/ic_info"
                 android:tint="@color/black" />
         </com.bihe0832.android.lib.ui.custom.view.slide.SlideViewLayout>
 

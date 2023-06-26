@@ -16,7 +16,7 @@
         android:layout_marginBottom="12dp"
         android:scaleType="centerInside"
         android:alpha="0.4"
-        android:src="@drawable/icon_info"
+        android:src="@drawable/ic_info"
         app:tint="@color/textColorPrimary" />
 
     <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground

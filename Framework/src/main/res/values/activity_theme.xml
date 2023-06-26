@@ -48,7 +48,7 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:background">@color/colorPrimary</item>
-        <item name="navigationIcon">@drawable/icon_left_arrow</item>
+        <item name="navigationIcon">@drawable/ic_left_arrow</item>
     </style>
 
     <style name="AAF.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">

@@ -3,7 +3,7 @@
     android:initialLayout="@layout/widget_layout_2"
     android:minWidth="120dp"
     android:minHeight="80dp"
-    android:previewImage="@drawable/icon_info"
+    android:previewImage="@drawable/ic_info"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000">
 

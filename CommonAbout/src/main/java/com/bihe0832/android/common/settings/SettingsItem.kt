@@ -24,7 +24,7 @@ object SettingsItem {
 
     fun getVersionList(): SettingsData {
         return SettingsData("版本介绍").apply {
-            mItemIconRes = R.drawable.icon_menu
+            mItemIconRes = R.drawable.ic_menu
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {

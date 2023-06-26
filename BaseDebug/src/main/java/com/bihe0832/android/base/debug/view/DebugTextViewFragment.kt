@@ -2,7 +2,6 @@ package com.bihe0832.android.base.debug.view
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.graphics.drawable.GradientDrawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -21,7 +20,6 @@ import com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView.OnScrollList
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
-import com.bihe0832.android.lib.ui.view.ext.getDrawable
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import kotlinx.android.synthetic.main.fragment_test_text.*
 
@@ -50,7 +48,7 @@ class DebugTextViewFragment : BaseFragment() {
 
         text_marquee.apply {
 //            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
-            setDrawableLeft(R.drawable.icon_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
+            setDrawableLeft(R.drawable.ic_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             setText(":fds")
             startScroll()
             setOnScrollListener(object :OnScrollListener{

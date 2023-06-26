@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 public class DebugIcon extends IconViewWithRedDot {
 
     public DebugIcon(Context context) throws AAFException {
-        super(context, ThemeResourcesManager.INSTANCE.getDrawable(R.mipmap.share_qq));
+        super(context, ThemeResourcesManager.INSTANCE.getDrawable(R.drawable.icon_qq));
     }
 
     @Override

@@ -199,11 +199,11 @@ public class FileActivity extends SupportActivity {
                 switch (msg.what) {
                     case HANDLER_MSG_SELECTED:
                         if (mSelectedPath != null) {
-                            btn_close.setBackgroundResource(R.drawable.icon_done);
+                            btn_close.setBackgroundResource(R.drawable.ic_done_fill);
                             btn_back.setVisibility(View.GONE);
                             tv_path.setText("已选择：" + mSelectedPath);
                         } else {
-                            btn_close.setBackgroundResource(R.drawable.icon_close);
+                            btn_close.setBackgroundResource(R.drawable.ic_close);
                             btn_back.setVisibility(View.VISIBLE);
                             tv_path.setText(mFile.getAbsolutePath());
                         }
@@ -307,22 +307,22 @@ public class FileActivity extends SupportActivity {
 
             File mTempFile = mFileArr[position];
             if (mTempFile.isDirectory()) {
-                mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_folder);
+                mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_folder);
             } else {
                 if (FileMimeTypes.INSTANCE.isTextFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_text);
+                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_text);
                 } else if (FileMimeTypes.INSTANCE.isApkFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_apk);
+                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_apk);
                 } else if (FileMimeTypes.INSTANCE.isImageFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_image);
+                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_image);
                 } else if (FileMimeTypes.INSTANCE.isArchive(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_archive);
+                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_archive);
                 } else if (FileMimeTypes.INSTANCE.isVideoFile(mTempFile)) {
-                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_video);
+                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_video);
                 } else if (FileMimeTypes.INSTANCE.isAudioFile(mTempFile)) {
-                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_audio);
+                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_audio);
                 } else {
-                    mHolder.iv_icon.setImageResource(R.mipmap.ic_file_type_file);
+                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_file);
                 }
             }
             mHolder.cb_selected.setVisibility(View.VISIBLE);

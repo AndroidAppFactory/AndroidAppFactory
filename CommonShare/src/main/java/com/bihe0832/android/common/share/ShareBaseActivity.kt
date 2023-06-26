@@ -2,6 +2,7 @@ package com.bihe0832.android.common.share
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import com.bihe0832.android.framework.ui.BaseBottomActivity
 
 /**
@@ -57,7 +58,9 @@ abstract class ShareBaseActivity : BaseBottomActivity() {
                 findViewById<View>(R.id.BaseShareLinkBtn)?.visibility = View.VISIBLE
             }
             if (showSavePic()) {
-                findViewById<View>(R.id.BaseShareDownloadBtn)?.visibility = View.VISIBLE
+                findViewById<View>(R.id.BaseShareDownloadBtn)?.apply {
+                    visibility = View.VISIBLE
+                }
             }
             if (showPicPreview()) {
                 findViewById<View>(R.id.shareImagePreview)?.visibility = View.VISIBLE

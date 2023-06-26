@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.TextView
-import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 
 /**
  *
@@ -87,6 +87,14 @@ fun TextView.setDrawableLeft(leftRes: Int, width: Int, height: Int) {
         setBounds(0, 0, width, height)
     }.let {
         setCompoundDrawables(it, null, null, null)
+    }
+}
+
+fun TextView.setDrawableTop(topRes: Int, width: Int, height: Int) {
+    ThemeResourcesManager.getDrawable(topRes)?.apply {
+        setBounds(0, 0, width, height)
+    }.let {
+        setCompoundDrawables(null, it, null, null)
     }
 }
 
