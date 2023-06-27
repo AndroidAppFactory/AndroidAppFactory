@@ -45,9 +45,9 @@ public class MessageInfoItem {
     @SerializedName("notifyDesc")
     private String notifyDesc = "";
     @SerializedName("notifyChannelName")
-    private String notifyChannelName = "";
+    private String notifyChannelName = "消息";
     @SerializedName("notifyChannelID")
-    private String notifyChannelID = "";
+    private String notifyChannelID = "Remote";
     //是否可以删除
     @SerializedName("canDelete")
     private String canDelete = "1";

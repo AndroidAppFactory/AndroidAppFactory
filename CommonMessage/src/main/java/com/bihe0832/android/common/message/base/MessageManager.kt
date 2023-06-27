@@ -40,6 +40,7 @@ abstract class MessageManager {
     }
 
     open fun initModule(context: Context) {
+        ZLog.d(MessageListLiveData.TAG, "MessageManager initModule ")
         MessageListLiveData.initData(context)
         ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
             override fun onBackground() {
@@ -56,6 +57,7 @@ abstract class MessageManager {
     }
 
     fun updateMsg() {
+        ZLog.d(MessageListLiveData.TAG, "MessageManager updateMsg ")
         fetchMessageByFile(ThemeResourcesManager.getString(R.string.com_bihe0832_message_common_msg_url)!!)
         fetchNewMsg()
     }
