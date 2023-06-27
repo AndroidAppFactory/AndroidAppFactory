@@ -45,6 +45,7 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
             ZLog.d(TAG, "httpResultList = null or size is 0")
         } else {
             synchronized(lockdata) {
+                ZLog.d(TAG, "parseMessage and update msglist")
                 //本地已经有的列表
                 var msgListInDB = HashMap<String, MessageInfoItem>().apply {
                     MessageDBManager.getAll().let { messgeInfo ->
@@ -71,24 +72,27 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
                                 ZLog.d(TAG, "本地已有再次下发：本地数据：$messageInfoDB ,下发数据: $it")
                                 messageInfoDB.copyFrom(it)
                             }
-                            }
-                            MessageDBManager.saveData(infoFromServer)
-                            ignoreList.add(infoFromServer.messageID)
-                        } else {
-                            MessageDBManager.saveData(infoFromServer)
                         }
+                        MessageDBManager.saveData(infoFromServer)
+                        ignoreList.add(infoFromServer.messageID)
+                    } else {
+                        MessageDBManager.saveData(infoFromServer)
                     }
-                    //剔除网络请求重复的公告
-                    var newHttpResultList = httpResultList.toMutableList().filter { !ignoreList.contains(it.messageID) }
+                }
+                //剔除网络请求重复的公告
+                var newHttpResultList = httpResultList.toMutableList().filter { !ignoreList.contains(it.messageID) }
 
-                    //通知栏通知
-                    sendNotify(newHttpResultList)
+                //通知栏通知
+                sendNotify(newHttpResultList)
+                ZLog.d(TAG, "value length:" + value?.size)
+                ZLog.d(TAG, "newHttpResultList length:" + newHttpResultList?.size)
+                ZLog.d(TAG, "msgListInDB length:" + msgListInDB?.size)
+                var finalResult = (newHttpResultList + msgListInDB.values).filter { it.isNotExpired && !it.hasDelete() }
+                ZLog.d(TAG, "finalResult length:" + finalResult?.size)
+                ThreadManager.getInstance().runOnUIThread {
+                    value = sortMessage(finalResult).toMutableList()
                     ZLog.d(TAG, "value length:" + value?.size)
-
-                    var finalResult = (newHttpResultList + msgListInDB.values).filter { it.isNotExpired && !it.hasDelete() }
-                    ThreadManager.getInstance().runOnUIThread {
-                        value = sortMessage(finalResult).toMutableList()
-                    }
+                }
                 }
         }
     }

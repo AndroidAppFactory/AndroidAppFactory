@@ -47,7 +47,7 @@ abstract class MessageManager {
             }
 
             override fun onForeground() {
-                if (LifecycleHelper.getCurrentTime() - ApplicationObserver.getLastPauseTime() > 5 * 60 * 1000) {
+                if (ApplicationObserver.getLastPauseTime() > 0 && LifecycleHelper.getCurrentTime() - ApplicationObserver.getLastPauseTime() > 5 * 60 * 1000) {
                     updateMsg()
                 }
             }
@@ -72,7 +72,8 @@ abstract class MessageManager {
                     return HttpResponseHandler { statusCode, msg ->
                         if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
                             ThreadManager.getInstance().start {
-                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile:$msg")
+                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile url:$url")
+                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile result:$msg")
                                 var httpResultList: ArrayList<MessageInfoItem> = ArrayList()
                                 try {
                                     JsonHelper.fromJsonList(msg, MessageInfoItem::class.java)?.filter { it.isNotExpired }?.let { msgJsonResponse ->
@@ -81,7 +82,7 @@ abstract class MessageManager {
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
-                                ZLog.d(MessageListLiveData.TAG, "httpResultList:" + httpResultList.size)
+                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile parse result:" + httpResultList.size)
                                 MessageListLiveData.parseMessage(httpResultList)
                             }
                         }
