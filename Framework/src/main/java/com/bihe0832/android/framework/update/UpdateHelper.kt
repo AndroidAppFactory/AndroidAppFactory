@@ -160,16 +160,16 @@ object UpdateHelper {
                 } else {
                     when {
                         LifecycleHelper.isFirstStart > INSTALL_TYPE_NOT_FIRST -> {
-                            ZLog.d(TAG, "skip update by first update")
+                            ZLog.e(TAG, "skip update by first update")
                         }
                         hasShow -> {
-                            ZLog.d(TAG, "skip update by has show")
+                            ZLog.e(TAG, "skip update by has show")
                         }
                         showIfNeedUpdate -> {
                             showUpdateDialog(activity, info.newVersionName, info.newVersionTitle, info.newVersionInfo, info.newVersionURL, info.newVersionMD5, info.updateType)
                         }
                         else -> {
-                            ZLog.d(TAG, "skip update by showIfNeedUpdate is false")
+                            ZLog.e(TAG, "skip update by showIfNeedUpdate is false")
                         }
                     }
                 }
