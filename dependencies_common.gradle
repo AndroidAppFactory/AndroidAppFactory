@@ -11,7 +11,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonWrapper"         : [
-        "version"            : "6.1.0",
+        "version"            : "6.1.1",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
@@ -35,7 +35,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonMessage"         : [
-        "version"            : "6.1.0",
+        "version"            : "6.1.1",
         "artifactId"         : "common-message",
         "apidependenciesList": [
             "CommonAbout"
@@ -49,7 +49,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonNavigationDrawer": [
-        "version"            : "6.1.0",
+        "version"            : "6.1.1",
         "artifactId"         : "common-navigation-drawer",
         "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
     ],
