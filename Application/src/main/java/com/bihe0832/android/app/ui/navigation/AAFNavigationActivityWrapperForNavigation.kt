@@ -12,11 +12,19 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
  *
  * @author zixie code@bihe0832.com
  * Created on 2023/3/9.
- * Description: Description
+ * Description: 根据更新和消息未读数目汇总红点数目
  *
  */
 
-private val mAutoShowMessageList = mutableListOf<String>()
+fun CommonActivityWithNavigationDrawer.addRedDotAction(unreadView: TextViewWithBackground) {
+    updateRedDot(unreadView)
+    AAFMessageManager.getMessageLiveData().observe(this) { t ->
+        updateRedDot(unreadView)
+    }
+    UpdateInfoLiveData.observe(this) { t ->
+        updateRedDot(unreadView)
+    }
+}
 
 private fun updateRedDot(unreadView: TextViewWithBackground) {
     val hasNewUpdate = UpdateInfoLiveData.value?.canShowNew() ?: false
@@ -38,23 +46,4 @@ private fun updateRedDot(unreadView: TextViewWithBackground) {
     }
 }
 
-fun CommonActivityWithNavigationDrawer.addRedDotAction(unreadView: TextViewWithBackground) {
-    updateRedDot(unreadView)
-    AAFMessageManager.getMessageLiveData().observe(this) { t ->
-        updateRedDot(unreadView)
-    }
-    UpdateInfoLiveData.observe(this) { t ->
-        updateRedDot(unreadView)
-    }
-}
 
-@Synchronized
-fun checkMsgAndShowFace(activity: BaseActivity) {
-    AAFMessageManager.getMessageLiveData().value?.let { noticeList ->
-        noticeList.distinctBy { it.messageID }.filter { !mAutoShowMessageList.contains(it.messageID) && AAFMessageManager.canShowFace(it, false) }.forEach {
-            mAutoShowMessageList.add(it.messageID)
-            AAFMessageManager.showMessage(activity, it, true)
-        }
-    }
-
-}

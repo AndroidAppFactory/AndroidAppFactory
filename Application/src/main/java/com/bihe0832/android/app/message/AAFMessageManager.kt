@@ -19,6 +19,11 @@ import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManag
  */
 object AAFMessageManager : MessageManager() {
 
+    /**
+     * 所有已经通过拍脸展示的公告
+     */
+    val mAutoShowMessageList = mutableListOf<String>()
+
     private val mDependenceBlockDialogManager by lazy {
         DependenceBlockDialogManager(true)
     }

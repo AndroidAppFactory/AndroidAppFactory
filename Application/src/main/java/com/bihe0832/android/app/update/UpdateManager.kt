@@ -4,6 +4,7 @@ import android.app.Activity
 import android.text.TextUtils
 import com.bihe0832.android.app.R
 import com.bihe0832.android.app.api.AAFNetWorkApi
+import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
