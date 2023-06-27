@@ -20,16 +20,16 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
  *
  */
 
-fun BaseActivity.addMessageIconActionAndShowFace(activity: BaseActivity, messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
-    setMessageIconActionAndShowFace(activity, messageView, unreadView, autoShow)
+fun BaseActivity.addMessageIconActionAndShowFace(messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
+    setMessageIconActionAndShowFace(this, messageView, unreadView, autoShow)
 }
 
 fun BaseActivity.checkMsgAndShowFace() {
     checkMsgAndShowFace(this)
 }
 
-fun BaseFragment.addMessageIconActionAndShowFace(activity: BaseActivity, messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
-    setMessageIconActionAndShowFace(activity, messageView, unreadView, autoShow)
+fun BaseFragment.addMessageIconActionAndShowFace(messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
+    setMessageIconActionAndShowFace(activity!!, messageView, unreadView, autoShow)
 }
 
 fun BaseFragment.checkMsgAndShowFace() {
