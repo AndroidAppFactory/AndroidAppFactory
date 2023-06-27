@@ -118,7 +118,7 @@ object SettingsItem {
     fun getQQService(activity: Activity?): SettingsData {
         return SettingsData("客服QQ").apply {
             var feedbackQQnumber = ThemeResourcesManager.getString(R.string.feedback_qq)
-            mItemIconRes = R.mipmap.ic_qq_black
+            mItemIconRes = R.drawable.icon_qq
             mShowDriver = true
             mShowGo = true
             mTipsText = "<u>${feedbackQQnumber}</u>"
@@ -144,7 +144,7 @@ object SettingsItem {
 
     fun getWechat(activity: Activity?): SettingsData {
         return SettingsData("微信公众号").apply {
-            mItemIconRes = R.mipmap.ic_wechat_black
+            mItemIconRes = R.drawable.icon_wechat
             mShowDriver = true
             mShowGo = true
             mTipsText = "<u>前往关注</u>"

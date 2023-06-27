@@ -26,6 +26,7 @@ open class TestMainActivity : AAFCommonMainActivity() {
 
             override fun onAllActivityDestroyed() {
                 ZLog.d("onAllActivityDestroyed")
+                R.mipmap.default_head_icon
             }
         })
 //        ThemeManager.getThemeInfo()?.let {
