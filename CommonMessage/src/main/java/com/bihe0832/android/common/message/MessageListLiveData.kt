@@ -5,7 +5,6 @@ import androidx.lifecycle.MediatorLiveData
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.common.message.data.db.MessageDBManager
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
@@ -21,7 +20,7 @@ import java.sql.SQLException
 
 object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
 
-    private val TAG = "MessageListLiveData-> "
+    val TAG = "Message-> "
     private const val lockdata = false
 
     fun initData(context: Context) {
@@ -41,50 +40,37 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
         }
     }
 
-
-    @Synchronized
-    fun parseMessage(resultJson: String) {
-        ThreadManager.getInstance().start {
-            ZLog.d(TAG, "parseMessage:$resultJson")
-            var httpResultList: List<MessageInfoItem> = ArrayList()
-            try {
-                JsonHelper.fromJsonList(resultJson, MessageInfoItem::class.java)?.filter { it.isNotExpired }?.let { msgJsonResponse ->
-                    httpResultList = msgJsonResponse
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            if (httpResultList == null || httpResultList.isEmpty()) {
-                ZLog.d(TAG, "httpResultList = null or size is 0")
-            } else {
-                synchronized(lockdata) {
-                    //本地已经有的列表
-                    var msgListInDB = HashMap<String, MessageInfoItem>().apply {
-                        MessageDBManager.getAll().let { messgeInfo ->
-                            messgeInfo.forEach {
-                                put(it.messageID, it)
-                            }
+    fun parseMessage(httpResultList: List<MessageInfoItem>) {
+        if (httpResultList == null || httpResultList.isEmpty()) {
+            ZLog.d(TAG, "httpResultList = null or size is 0")
+        } else {
+            synchronized(lockdata) {
+                //本地已经有的列表
+                var msgListInDB = HashMap<String, MessageInfoItem>().apply {
+                    MessageDBManager.getAll().let { messgeInfo ->
+                        messgeInfo.forEach {
+                            put(it.messageID, it)
                         }
                     }
+                }
 
-                    // 保存数据库，并将已经读取的数据结合网络数据更新到最新
-                    var ignoreList = ArrayList<String>()
-                    for (index in httpResultList.indices) {
-                        var infoFromServer = httpResultList[index]
-                        if (msgListInDB.keys.contains(infoFromServer.messageID) && null != msgListInDB[infoFromServer.messageID]) {
-                            msgListInDB[infoFromServer.messageID]!!.let { messageInfoDB ->
-                                infoFromServer.apply {
-                                    this.messageID = messageInfoDB.messageID
-                                    this.isNotify = messageInfoDB.isNotify
-                                    this.setHasDelete(messageInfoDB.hasDelete())
-                                    this.setHasRead(messageInfoDB.hasRead())
-                                    this.showFace = messageInfoDB.showFace
-                                    this.lastShow = messageInfoDB.lastShow
-                                }.let {
-                                    ZLog.d(TAG, "本地已有再次下发：本地数据：$messageInfoDB ,下发数据: $it")
-                                    messageInfoDB.copyFrom(it)
-                                }
+                // 保存数据库，并将已经读取的数据结合网络数据更新到最新
+                var ignoreList = ArrayList<String>()
+                for (index in httpResultList.indices) {
+                    var infoFromServer = httpResultList[index]
+                    if (msgListInDB.keys.contains(infoFromServer.messageID) && null != msgListInDB[infoFromServer.messageID]) {
+                        msgListInDB[infoFromServer.messageID]!!.let { messageInfoDB ->
+                            infoFromServer.apply {
+                                this.messageID = messageInfoDB.messageID
+                                this.isNotify = messageInfoDB.isNotify
+                                this.setHasDelete(messageInfoDB.hasDelete())
+                                this.setHasRead(messageInfoDB.hasRead())
+                                this.showFace = messageInfoDB.showFace
+                                this.lastShow = messageInfoDB.lastShow
+                            }.let {
+                                ZLog.d(TAG, "本地已有再次下发：本地数据：$messageInfoDB ,下发数据: $it")
+                                messageInfoDB.copyFrom(it)
+                            }
                             }
                             MessageDBManager.saveData(infoFromServer)
                             ignoreList.add(infoFromServer.messageID)
@@ -104,7 +90,6 @@ object MessageListLiveData : MediatorLiveData<List<MessageInfoItem>>() {
                         value = sortMessage(finalResult).toMutableList()
                     }
                 }
-            }
         }
     }
 

@@ -10,12 +10,14 @@ import com.bihe0832.android.common.message.data.db.MessageDBManager
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
+import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getAPPCurrentStartTime
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -70,7 +72,17 @@ abstract class MessageManager {
                     return HttpResponseHandler { statusCode, msg ->
                         if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
                             ThreadManager.getInstance().start {
-                                MessageListLiveData.parseMessage(msg)
+                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile:$msg")
+                                var httpResultList: ArrayList<MessageInfoItem> = ArrayList()
+                                try {
+                                    JsonHelper.fromJsonList(msg, MessageInfoItem::class.java)?.filter { it.isNotExpired }?.let { msgJsonResponse ->
+                                        httpResultList.addAll(msgJsonResponse)
+                                    }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                                ZLog.d(MessageListLiveData.TAG, "httpResultList:" + httpResultList.size)
+                                MessageListLiveData.parseMessage(httpResultList)
                             }
                         }
                     }
