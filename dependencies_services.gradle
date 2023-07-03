@@ -1,20 +1,20 @@
 apply from: rootDir.toString() + '/config.gradle'
 
 ext.kitmoduleInfo = [
-    "ServicesGoogle": [
-        "version"            : "6.1.0",
-        "artifactId"         : "services-google",
-        "apidependenciesList": [
-            "Framework",
-            "com.google.android.gms:play-services-auth:20.5.0"
-        ]
-    ],
     "ServicesGooglePay": [
         "version"            : "6.1.0",
         "artifactId"         : "services-google-pay",
         "apidependenciesList": [
             "ServicesGoogle",
             "com.android.billingclient:billing:6.0.0"
+        ]
+    ],
+    "ServicesGoogle"   : [
+        "version"            : "6.1.0",
+        "artifactId"         : "services-google",
+        "apidependenciesList": [
+            "Framework",
+            "com.google.android.gms:play-services-auth:20.5.0"
         ]
     ]
 ]
