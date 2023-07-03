@@ -427,9 +427,11 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
     @Override
     protected void destroyWebView() {
         if (mWebView != null) {
+            mWebView.setOnScrollChangedCallback(null);
             mWebView.stopLoading();
             mWebView.clearHistory();
             mWebView.destroy();
+            mWebView = null;
         }
     }
 
