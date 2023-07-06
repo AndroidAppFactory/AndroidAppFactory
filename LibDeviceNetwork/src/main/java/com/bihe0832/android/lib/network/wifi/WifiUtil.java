@@ -185,6 +185,11 @@ public class WifiUtil {
         return MacUtils.getLanMacAddr(gateWayIp);
     }
 
+    public static String getGatewayIp(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getGatewayIp(wm);
+    }
+
     public static String getGatewayIp(WifiManager wm) {
         String ret = IpUtils.INVALID_IP;
         try {
