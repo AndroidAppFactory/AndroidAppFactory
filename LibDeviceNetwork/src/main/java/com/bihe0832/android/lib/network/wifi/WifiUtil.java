@@ -179,7 +179,12 @@ public class WifiUtil {
         return sLastTerminalCount;
     }
 
-    public static String getWifiMacAddr(WifiManager wm) {
+    public static String getGatewayMac(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getGatewayIp(wm);
+    }
+
+    public static String getGatewayMac(WifiManager wm) {
         String gateWayIp = getGatewayIp(wm);
         ZLog.d("getWifiMacAddr gateWayIp:" + gateWayIp);
         return MacUtils.getLanMacAddr(gateWayIp);

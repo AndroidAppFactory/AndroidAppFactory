@@ -12,7 +12,6 @@ import android.os.Build
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.IpUtils
-import com.bihe0832.android.lib.network.MacUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -144,9 +143,7 @@ object WifiManagerWrapper {
         } else {
             mWifiChangeListener = listener
             if (hasInit) {
-                updateBaseInfo()
-                updateScanListInfo()
-                updateConfiguredListInfo()
+                refreshWifiInfo()
                 listener.onWifiInfoChanged(mContext)
                 listener.onScanUpdate(mContext, getScanResultList())
                 listener.onConnectUpdate(mContext, getConfigurationList())
@@ -247,7 +244,7 @@ object WifiManagerWrapper {
     }
 
     fun getGatewayMac(): String {
-        return WifiUtil.getWifiMacAddr(mWifiManager)
+        return WifiUtil.getGatewayMac(mWifiManager)
     }
     
     // 得到连接的ID
@@ -304,54 +301,71 @@ object WifiManagerWrapper {
         return buffer.toString()
     }
 
-    fun init(context: Context, debug: Boolean) {
-        init(context, debug, notifyRSSI = false, canScanWifi = false)
+    fun getChannel(): Int {
+        return WifiChannelInfo.getWiFiChannel(mWifiList, getBSSID())
     }
 
-    fun init(context: Context, debug: Boolean, notifyRSSI: Boolean, canScanWifi: Boolean) {
-        // 取得WifiManager对象
-        mContext = context
-        isDebug = debug
-        mNotifyRSSI = notifyRSSI
-        mCanScanWifi = canScanWifi
-        if (hasInit) {
-            context.applicationContext.unregisterReceiver(mWifiReceiver)
-            register(context)
-            return
-        }
-        hasInit = true
-
-        mWifiManager =
-                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        mConnectivityManager =
-                context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        // 取得WifiInfo对象
-        updateBaseInfo()
-        updateConfiguredListInfo()
-        updateScanListInfo()
-        register(context)
+    fun getSecurity(): Int {
+        return WifiUtil.getSecurity(getWifiConfiguration())
     }
 
-    fun register(context: Context) {
-        //需要过滤多个动作，则调用IntentFilter对象的addAction添加新动作
-        val foundFilter = IntentFilter()
-        //监听Wifi当前网络状态
-        foundFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
-        //监听Wifi硬件状态(关闭、开启、...)
-        foundFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
-        //监听与接入点之间的连接状态(新连接建立或者现有连接丢失)
-        foundFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)
-        if (mNotifyRSSI) {
-            //监听Wifi信号强度变化
-            foundFilter.addAction(WifiManager.RSSI_CHANGED_ACTION)
+    fun getConfiguredBySSID(ssid: String): WifiConfiguration? {
+        if (TextUtils.isEmpty(ssid)) {
+            return null
+        }
+        getConfigurationList()?.let {
+            if (it.isNotEmpty()) {
+                for (existingConfig in it) {
+                    if (TextFactoryUtils.trimMarks(existingConfig?.SSID) == ssid) {
+                        return existingConfig
+                    }
+                }
+            }
         }
 
-        if (mCanScanWifi) {
-            //监听Wifi发现新的接入点
-            foundFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        return null
+    }
+
+
+
+    fun connectWifi(context: Context?, ssid: String, password: String, type: Int, forceDeleteIfExist: Boolean = true) {
+        var networkId = -1
+        var tempConfig = getConfiguredBySSID(ssid)
+        //如果该SSID已经连接过，而且本次连接需要强制重连，直接remove历史
+        if (tempConfig != null && forceDeleteIfExist) {
+            mWifiManager?.removeNetwork(tempConfig.networkId)
+            tempConfig = null
         }
 
-        context.applicationContext.registerReceiver(mWifiReceiver, foundFilter)
+        networkId = if (null != tempConfig && tempConfig.networkId > -1) {
+            tempConfig.networkId
+        } else {
+            val wcg = createWifiInfo(ssid, password, type)
+            mWifiManager?.addNetwork(wcg) ?: -1
+        }
+
+        connectWifi(context, networkId)
+    }
+
+    // 指定配置好的网络进行连接
+    fun connectWifi(context: Context?, networkId: Int) {
+        if (networkId > -1 && mWifiManager?.connectionInfo?.networkId != networkId) {
+            mWifiManager?.disconnect()
+            mWifiManager?.enableNetwork(networkId, true)
+            mWifiManager?.reconnect()
+        } else {
+            mWifiChangeListener?.let {
+                it.onWifiInfoChanged(context)
+            }
+        }
+    }
+
+    //Wifi的名称
+    fun isCurrent(ssid: String): Boolean {
+        getConfiguredBySSID(ssid)?.let {
+            return it.networkId > 0 && it.networkId == getNetworkId()
+        }
+        return false
     }
 
     // 打开WIFI
@@ -376,6 +390,60 @@ object WifiManagerWrapper {
     //扫描列表
     fun startScan() {
         ThreadManager.getInstance().start { mWifiManager?.startScan() }
+    }
+
+
+    fun init(context: Context, debug: Boolean) {
+        init(context, debug, notifyRSSI = false, canScanWifi = false)
+    }
+
+    fun init(context: Context, debug: Boolean, notifyRSSI: Boolean, canScanWifi: Boolean) {
+        // 取得WifiManager对象
+        mContext = context
+        isDebug = debug
+        mNotifyRSSI = notifyRSSI
+        mCanScanWifi = canScanWifi
+        if (hasInit) {
+            context.applicationContext.unregisterReceiver(mWifiReceiver)
+            register(context)
+            return
+        }
+        hasInit = true
+
+        mWifiManager =
+                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        mConnectivityManager =
+                context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        // 取得WifiInfo对象
+        refreshWifiInfo()
+        register(context)
+    }
+
+    fun refreshWifiInfo(){
+        updateBaseInfo()
+        updateConfiguredListInfo()
+        updateScanListInfo()
+    }
+    private fun register(context: Context) {
+        //需要过滤多个动作，则调用IntentFilter对象的addAction添加新动作
+        val foundFilter = IntentFilter()
+        //监听Wifi当前网络状态
+        foundFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+        //监听Wifi硬件状态(关闭、开启、...)
+        foundFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        //监听与接入点之间的连接状态(新连接建立或者现有连接丢失)
+        foundFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)
+        if (mNotifyRSSI) {
+            //监听Wifi信号强度变化
+            foundFilter.addAction(WifiManager.RSSI_CHANGED_ACTION)
+        }
+
+        if (mCanScanWifi) {
+            //监听Wifi发现新的接入点
+            foundFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        }
+
+        context.applicationContext.registerReceiver(mWifiReceiver, foundFilter)
     }
 
     //更新当前连接的wifi的信息
@@ -439,47 +507,6 @@ object WifiManagerWrapper {
         }
     }
 
-    fun connectWifi(context: Context?, ssid: String, password: String, type: Int, forceDeleteIfExist: Boolean = true) {
-        var networkId = -1
-        var tempConfig = getConfiguredBySSID(ssid)
-        //如果该SSID已经连接过，而且本次连接需要强制重连，直接remove历史
-        if (tempConfig != null && forceDeleteIfExist) {
-            mWifiManager?.removeNetwork(tempConfig.networkId)
-            tempConfig = null
-        }
-
-        networkId = if (null != tempConfig && tempConfig.networkId > -1) {
-            tempConfig.networkId
-        } else {
-            val wcg = createWifiInfo(ssid, password, type)
-            mWifiManager?.addNetwork(wcg) ?: -1
-        }
-
-        connectWifi(context, networkId)
-    }
-
-    // 指定配置好的网络进行连接
-    fun connectWifi(context: Context?, networkId: Int) {
-        if (networkId > -1 && mWifiManager?.connectionInfo?.networkId != networkId) {
-            mWifiManager?.disconnect()
-            mWifiManager?.enableNetwork(networkId, true)
-            mWifiManager?.reconnect()
-        } else {
-            mWifiChangeListener?.let {
-                it.onWifiInfoChanged(context)
-            }
-        }
-    }
-
-    //Wifi的名称
-    fun isCurrent(ssid: String): Boolean {
-        getConfiguredBySSID(ssid)?.let {
-            return it.networkId > 0 && it.networkId == getNetworkId()
-        }
-        return false
-    }
-
-
     private fun getWifiConfigurationString(info: WifiConfiguration?): String {
         val sbuf = StringBuilder()
         info?.let {
@@ -489,23 +516,6 @@ object WifiManagerWrapper {
             sbuf.append(";BSSID:").append(info.BSSID)
         }
         return sbuf.toString()
-    }
-
-    fun getConfiguredBySSID(ssid: String): WifiConfiguration? {
-        if (TextUtils.isEmpty(ssid)) {
-            return null
-        }
-        getConfigurationList()?.let {
-            if (it.isNotEmpty()) {
-                for (existingConfig in it) {
-                    if (TextFactoryUtils.trimMarks(existingConfig?.SSID) == ssid) {
-                        return existingConfig
-                    }
-                }
-            }
-        }
-
-        return null
     }
 
     private fun getConfiguredByNetworkID(networkId: Int): WifiConfiguration? {
@@ -523,14 +533,6 @@ object WifiManagerWrapper {
         }
 
         return null
-    }
-
-    fun getChannel(): Int {
-        return WifiChannelInfo.getWiFiChannel(mWifiList, getBSSID())
-    }
-
-    fun getSecurity(): Int {
-        return WifiUtil.getSecurity(getWifiConfiguration())
     }
 
     private fun createWifiInfo(ssid: String, Password: String, Type: Int): WifiConfiguration {
