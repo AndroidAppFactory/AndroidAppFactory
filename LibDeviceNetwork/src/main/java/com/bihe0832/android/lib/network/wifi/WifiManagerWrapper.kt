@@ -216,6 +216,7 @@ object WifiManagerWrapper {
     fun getSignalLevel(): Int {
         return WifiUtil.getWifiSignalLevel(mWifiManager, getRssi(), 5)
     }
+
     //连接速度
     fun getLinkSpeed(): Int {
         mWifiInfo?.let {
@@ -237,18 +238,18 @@ object WifiManagerWrapper {
         return 0
     }
 
-    fun getIp(): String {
+    fun getIpString(): String {
         return IpUtils.ipn2s(getIpAddress())
     }
 
-    fun getGatewayIp(context: Context?): String {
-        return WifiUtil.getGatewayIp(context)
+    fun getGatewayIpString(): String {
+        return WifiUtil.getGatewayIp(mWifiManager)
     }
 
     fun getGatewayMac(): String {
         return WifiUtil.getWifiMacAddr(mWifiManager)
     }
-
+    
     // 得到连接的ID
     private fun getNetworkId(): Int {
         mWifiInfo?.let {
@@ -478,26 +479,6 @@ object WifiManagerWrapper {
         return false
     }
 
-    fun getWiFiBssID(): String? {
-        var bssId: String? = ""
-        try {
-            val wi = mWifiManager?.connectionInfo
-            bssId = wi?.bssid // WiFi路由的MAC地址
-        } catch (e: Exception) {
-            ZLog.e("getWiFiBssID error:" + e.message)
-        }
-
-        return if (bssId != null && bssId.length > 0) {
-            bssId.toUpperCase()
-        } else bssId
-    }
-
-    fun getWifiMacAddr(): String {
-        val dhcpInfo = mWifiManager?.dhcpInfo ?: return ""
-        val gateWayIp = IpUtils.ipn2s(dhcpInfo.gateway)
-        ZLog.d("getWifiMacAddr gateWayIp:$gateWayIp")
-        return MacUtils.getLanMacAddr(gateWayIp)
-    }
 
     private fun getWifiConfigurationString(info: WifiConfiguration?): String {
         val sbuf = StringBuilder()

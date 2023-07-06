@@ -140,7 +140,7 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(getInfoItem("路由器 BSSID（位置权限）：${WifiManagerWrapper.getBSSID()}"))
             add(getInfoItem("路由器 Mac(BSSID)：${WifiManagerWrapper.getBSSID()}"))
             add(getInfoItem("路由器 Mac(ARP)：${WifiManagerWrapper.getGatewayMac()}"))
-            add(getInfoItem("路由器 IP：${WifiManagerWrapper.getGatewayIp(context)}"))
+            add(getInfoItem("路由器 IP：${WifiManagerWrapper.getGatewayIpString()}"))
             add(getInfoItem("Wi-Fi 强度：${WifiManagerWrapper.getSignalLevel()} (${WifiManagerWrapper.getRssi()})"))
             add(getInfoItem("Wi-Fi 信道：${WifiChannelInfo.getWifiChannelByFrequency(WifiManagerWrapper.getFrequency())}"))
             add(getInfoItem("Wi-Fi 连接速度：${WifiManagerWrapper.getLinkSpeed()} / ${WifiManagerWrapper.getLinkSpeedUnits()}"))

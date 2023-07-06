@@ -23,7 +23,7 @@ import java.util.Vector;
 
 /**
  * 实现WIFI相关的网络信息获取方法
- *
+ * <p>
  * 尽量使用 {@link WifiManagerWrapper}
  */
 
@@ -44,7 +44,7 @@ public class WifiUtil {
     private static int sLastTerminalCount = -1;
 
     public static int getSecurity(WifiConfiguration config) {
-        if (config == null){
+        if (config == null) {
             return SECURITY_NONE;
         }
         if (config.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.WPA_PSK)) {
@@ -58,12 +58,8 @@ public class WifiUtil {
     }
 
     /*基于NetID获取WiFi-SSID,无需依赖定位权限*/
-    public static String getWifiSSIDBasedNetworkId(Context context) {
-        if (context == null) {
-            return "";
-        }
+    public static String getWifiSSIDBasedNetworkId(WifiManager wm) {
         try {
-            WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
                 if (null == info) {
@@ -93,127 +89,6 @@ public class WifiUtil {
         return "";
     }
 
-    public static int getWifiSignalLevel(Context context) {
-        int strength = -1;
-        try {
-            WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (wm != null) {
-                WifiInfo info = wm.getConnectionInfo();
-                strength = getWifiSignalLevel(wm, info.getRssi(), 5);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return strength;
-    }
-
-
-    public static int getWifiSignalLevel(WifiManager wm, int rssi, int numLevels) {
-        int signalLevel = -1;
-        try {
-            if (BuildUtils.INSTANCE.getSDK_INT() >= 30 && wm != null) {
-                signalLevel = wm.calculateSignalLevel(rssi);
-            } else {
-                signalLevel = WifiManager.calculateSignalLevel(rssi, numLevels);
-            }
-        } catch (Exception var6) {
-            var6.printStackTrace();
-            signalLevel = -1;
-        }
-
-        return signalLevel;
-    }
-
-    public static int getCachedTerminalCount() {
-        return sLastTerminalCount;
-    }
-
-    public static String getWifiMacAddr(WifiManager wm) {
-        if (null == wm) {
-            return "";
-        }
-        DhcpInfo dhcpInfo = wm.getDhcpInfo();
-        if (null == dhcpInfo) {
-            return "";
-        }
-        String gateWayIp = IpUtils.ipn2s(dhcpInfo.gateway);
-        ZLog.d("getWifiMacAddr gateWayIp:" + gateWayIp);
-        return MacUtils.getLanMacAddr(gateWayIp);
-    }
-
-    public static String getGatewayIp(Context context) {
-        String ret = IpUtils.INVALID_IP;
-        if (context == null) {
-            return ret;
-        }
-        try {
-            WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (wm != null) {
-                DhcpInfo dhcpInfo = wm.getDhcpInfo();
-                ret = IpUtils.ipn2s(dhcpInfo.gateway);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ret;
-    }
-
-    public static int getWifiLinkSpeed(Context ctx) {
-        int linkSpeed = -1;
-        try {
-            WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (wm != null) {
-                WifiInfo info = wm.getConnectionInfo();
-                if (info.getBSSID() != null) {
-                    // 链接信号强度
-                    linkSpeed = info.getLinkSpeed();
-                }
-            }
-        } catch (Exception e) {
-            // ignore
-        }
-        return linkSpeed;
-    }
-
-    public static int getWifiRssi(Context ctx) {
-        int signalValue = 1;
-        try {
-            WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (wm != null) {
-                WifiInfo info = wm.getConnectionInfo();
-                if (info.getBSSID() != null) {
-                    // 链接信号强度
-                    signalValue = info.getRssi();
-                }
-            }
-        } catch (Exception e) {
-            // ignore
-        }
-        return signalValue;
-    }
-
-    /**
-     * @return int
-     *         -1   当前非WiFi或未知信道
-     *         0    无权限
-     */
-    public static int getWifiChannel(Context ctx) {
-        if (NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
-            return -1;
-        }
-
-        try {
-            WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (wm != null) {
-                WifiInfo info = wm.getConnectionInfo();
-                List<ScanResult> scanResults = wm.getScanResults();
-                return WifiChannelInfo.getWiFiChannel(scanResults, info.getBSSID());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
 
     //周边Wi-Fi、信道等信息
     public static String getWifiSignal(Context ctx) {
@@ -264,10 +139,129 @@ public class WifiUtil {
         }
     }
 
-    public static String getWifiSSID(Context context) {
+
+    public static int getWifiSignalLevel(Context ctx) {
+        WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiSignalLevel(wm);
+    }
+
+    public static int getWifiSignalLevel(WifiManager wm) {
+        int strength = -1;
+        try {
+            if (wm != null) {
+                WifiInfo info = wm.getConnectionInfo();
+                strength = getWifiSignalLevel(wm, info.getRssi(), 5);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strength;
+    }
+
+
+    public static int getWifiSignalLevel(WifiManager wm, int rssi, int numLevels) {
+        int signalLevel = -1;
+        try {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= 30 && wm != null) {
+                signalLevel = wm.calculateSignalLevel(rssi);
+            } else {
+                signalLevel = WifiManager.calculateSignalLevel(rssi, numLevels);
+            }
+        } catch (Exception var6) {
+            var6.printStackTrace();
+            signalLevel = -1;
+        }
+
+        return signalLevel;
+    }
+
+    public static int getCachedTerminalCount() {
+        return sLastTerminalCount;
+    }
+
+    public static String getWifiMacAddr(WifiManager wm) {
+        String gateWayIp = getGatewayIp(wm);
+        ZLog.d("getWifiMacAddr gateWayIp:" + gateWayIp);
+        return MacUtils.getLanMacAddr(gateWayIp);
+    }
+
+    public static String getGatewayIp(WifiManager wm) {
+        String ret = IpUtils.INVALID_IP;
+        try {
+            if (wm != null) {
+                DhcpInfo dhcpInfo = wm.getDhcpInfo();
+                ret = IpUtils.ipn2s(dhcpInfo.gateway);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public static int getWifiLinkSpeed(WifiManager wm) {
+        int linkSpeed = -1;
+        try {
+            if (wm != null) {
+                WifiInfo info = wm.getConnectionInfo();
+                if (info.getBSSID() != null) {
+                    // 链接信号强度
+                    linkSpeed = info.getLinkSpeed();
+                }
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+        return linkSpeed;
+    }
+
+    public static int getWifiRssi(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiRssi(wm);
+    }
+
+    public static int getWifiRssi(WifiManager wm) {
+        int signalValue = 1;
+        try {
+            if (wm != null) {
+                WifiInfo info = wm.getConnectionInfo();
+                if (info.getBSSID() != null) {
+                    // 链接信号强度
+                    signalValue = info.getRssi();
+                }
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+        return signalValue;
+    }
+
+    /**
+     * @return int
+     * -1   当前非WiFi或未知信道
+     * 0    无权限
+     */
+    public static int getWifiChannel(Context ctx) {
+        if (NetworkUtil.getNetworkState(ctx) != NetworkUtil.NETWORK_CLASS_WIFI) {
+            return -1;
+        }
+
+        try {
+            WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if (wm != null) {
+                WifiInfo info = wm.getConnectionInfo();
+                List<ScanResult> scanResults = wm.getScanResults();
+                return WifiChannelInfo.getWiFiChannel(scanResults, info.getBSSID());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+
+    public static String getWifiSSID(WifiManager wm) {
         String ret = "";
         try {
-            WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             if (wm != null) {
                 WifiInfo info = wm.getConnectionInfo();
                 if (info != null) {
@@ -280,8 +274,8 @@ public class WifiUtil {
         return ret;
     }
 
-    public static String getWifiSSIDWithoutQuotes(Context context) {
-        return TextFactoryUtils.trimMarks(getWifiSSID(context));
+    public static String getWifiSSIDWithoutQuotes(WifiManager wm) {
+        return TextFactoryUtils.trimMarks(getWifiSSID(wm));
     }
 
     public static int getWifiCode(Context context) {
@@ -306,12 +300,10 @@ public class WifiUtil {
         return -1;
     }
 
-    public static String getBssid(Context context) {
+    public static String getBssid(WifiManager wm) {
         String bssid = "";
         try {
-            WifiManager wifiManager =
-                    (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            WifiInfo wifiInfo = wm.getConnectionInfo();
             bssid = wifiInfo.getBSSID();
         } catch (Exception e) {
             ZLog.d("getBssid failed, for " + e.toString());
@@ -389,8 +381,7 @@ public class WifiUtil {
         return total;
     }
 
-    public static String getWifiIp(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    public static String getWifiIp(WifiManager wifiManager) {
         if (null == wifiManager) {
             return "";
         }
@@ -402,5 +393,6 @@ public class WifiUtil {
         ZLog.i("wifi_ip -> " + ipAddress);
         return ipAddress;
     }
+
 
 }
