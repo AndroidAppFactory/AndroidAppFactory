@@ -91,12 +91,16 @@ public class BitmapUtil {
                 BitmapFactory.Options options = getLocalBitmapOptions(localPath);
                 calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
                 options.inJustDecodeBounds = false;
-                Bitmap bitmap = bitmap = BitmapFactory.decodeFile(localPath, options);
-                // 缩放 Bitmap 对象
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
-                // 释放资源
-                bitmap.recycle();
-                return scaledBitmap;
+                Bitmap bitmap = BitmapFactory.decodeFile(localPath, options);
+                if (reqWidth > 0 && reqHeight > 0) {
+                    // 缩放 Bitmap 对象
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                    // 释放资源
+                    bitmap.recycle();
+                    return scaledBitmap;
+                } else {
+                    return bitmap;
+                }
             } catch (Exception error) {
                 error.printStackTrace();
             }
@@ -194,13 +198,16 @@ public class BitmapUtil {
                 BitmapFactory.Options options = getLocalBitmapOptions(contentResolver, uri);
                 calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
                 options.inJustDecodeBounds = false;
-
                 Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
-                // 缩放 Bitmap 对象
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
-                // 释放资源
-                bitmap.recycle();
-                return scaledBitmap;
+                if (reqWidth > 0 && reqHeight > 0) {
+                    // 缩放 Bitmap 对象
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                    // 释放资源
+                    bitmap.recycle();
+                    return scaledBitmap;
+                } else {
+                    return bitmap;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -339,11 +346,15 @@ public class BitmapUtil {
             options.inJustDecodeBounds = false;
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
             inputStream.close();
-            // 缩放 Bitmap 对象
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
-            // 释放资源
-            bitmap.recycle();
-            return scaledBitmap;
+            if (reqWidth > 0 && reqHeight > 0) {
+                // 缩放 Bitmap 对象
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                // 释放资源
+                bitmap.recycle();
+                return scaledBitmap;
+            } else {
+                return bitmap;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
