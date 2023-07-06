@@ -2,7 +2,7 @@ apply from: rootDir.toString() + '/config.gradle'
 
 ext.kitmoduleInfo = [
     "ServicesGooglePay": [
-        "version"            : "6.1.7",
+        "version"            : "6.1.8",
         "artifactId"         : "services-google-pay",
         "apidependenciesList": [
             "ServicesGoogle",
@@ -10,7 +10,7 @@ ext.kitmoduleInfo = [
         ]
     ],
     "ServicesGoogle"   : [
-        "version"            : "6.1.7",
+        "version"            : "6.1.8",
         "artifactId"         : "services-google",
         "apidependenciesList": [
             "Framework",
