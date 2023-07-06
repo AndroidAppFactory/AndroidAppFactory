@@ -237,6 +237,18 @@ object WifiManagerWrapper {
         return 0
     }
 
+    fun getIp(): String {
+        return IpUtils.ipn2s(getIpAddress())
+    }
+
+    fun getGatewayIp(context: Context?): String {
+        return WifiUtil.getGatewayIp(context)
+    }
+
+    fun getGatewayMac(): String {
+        return WifiUtil.getWifiMacAddr(mWifiManager)
+    }
+
     // 得到连接的ID
     private fun getNetworkId(): Int {
         mWifiInfo?.let {

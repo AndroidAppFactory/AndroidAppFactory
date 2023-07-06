@@ -119,7 +119,7 @@ public class RouterInfo {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
         }
-        HashMap<String, String> ipmacMap = MacUtils.getHardwareAddress(ipList);
+        Map<String, String> ipmacMap = MacUtils.getHardwareAddress(ipList);
         int total = ipmacMap != null ? ipmacMap.size() : 0;
         ZLog.d("neighborPhones wifis:" + (endIp - startIp) + ",valid host:" + total + ",iplists:" + ipList.size()
                 + ",count:" + count);

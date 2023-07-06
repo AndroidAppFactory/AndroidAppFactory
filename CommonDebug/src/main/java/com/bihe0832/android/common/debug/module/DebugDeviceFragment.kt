@@ -14,6 +14,7 @@ import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
+import com.bihe0832.android.lib.device.DeviceIDUtils
 import com.bihe0832.android.lib.device.battery.BatteryHelper
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.network.DtTypeInfo
@@ -132,10 +133,14 @@ class DebugDeviceFragment : DebugEnvFragment() {
             DtTypeInfo.getDtTypeInfo(context).let {
                 add(getInfoItem("Wi-Fi IP：${it.wifiIp}"))
                 add(getInfoItem("移动网络 IP：${it.mobileIp}"))
+                add(getInfoItem("Mac 地址：${DeviceIDUtils.getMacAddress(context)}"))
             }
             add(DebugTipsData("Wi-Fi"))
-            add(getInfoItem("Wi-Fi SSID（位置权限）：${WifiManagerWrapper.getSSID()}"))
-            add(getInfoItem("Wi-Fi BSSID（位置权限）：${WifiManagerWrapper.getBSSID()}"))
+            add(getInfoItem("路由器 SSID（位置权限）：${WifiManagerWrapper.getSSID()}"))
+            add(getInfoItem("路由器 BSSID（位置权限）：${WifiManagerWrapper.getBSSID()}"))
+            add(getInfoItem("路由器 Mac(BSSID)：${WifiManagerWrapper.getBSSID()}"))
+            add(getInfoItem("路由器 Mac(ARP)：${WifiManagerWrapper.getGatewayMac()}"))
+            add(getInfoItem("路由器 IP：${WifiManagerWrapper.getGatewayIp(context)}"))
             add(getInfoItem("Wi-Fi 强度：${WifiManagerWrapper.getSignalLevel()} (${WifiManagerWrapper.getRssi()})"))
             add(getInfoItem("Wi-Fi 信道：${WifiChannelInfo.getWifiChannelByFrequency(WifiManagerWrapper.getFrequency())}"))
             add(getInfoItem("Wi-Fi 连接速度：${WifiManagerWrapper.getLinkSpeed()} / ${WifiManagerWrapper.getLinkSpeedUnits()}"))

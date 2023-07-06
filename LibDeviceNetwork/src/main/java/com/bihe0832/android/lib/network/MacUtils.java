@@ -3,20 +3,17 @@ package com.bihe0832.android.lib.network;
 import android.os.Build;
 
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.network.wifi.WifiUtil;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author zixie code@bihe0832.com
@@ -32,43 +29,15 @@ public class MacUtils {
     public static final int IO_BUFFER_SIZE = 8 * 1024;
 
     public static String getLanMacAddr(String wifiGateIp) {
-        String ipMac = "";
-        BufferedReader bufferedReader = null;
-        try {
-            if (wifiGateIp != null && wifiGateIp.length() != 0) {
-                bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"), IO_BUFFER_SIZE);
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    if (line.contains(INVALID_MAC)) {
-                        continue;
-                    }
-                    if (!line.contains(wifiGateIp)) {
-                        continue;
-                    }
-                    String linePattern = String.format(MAC_RE, wifiGateIp.replace(".", "\\."));
-                    Pattern pattern = Pattern.compile(linePattern);
-                    Matcher matcher = pattern.matcher(line);
-                    if (matcher.matches()) {
-                        String macAddr = matcher.group(1);
-                        if (!macAddr.equals(INVALID_MAC)) {
-                            ipMac = macAddr;
-                        }
-                        break;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // ignore
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (Exception e) {
-                    // ignore
-                }
+        Set<String> set = new HashSet<>();
+        set.add(wifiGateIp);
+        Map<String, String> data = getLanMacAddr(set);
+        for (Map.Entry<String, String> entry : data.entrySet()) {
+            if (entry.getValue().contains(wifiGateIp)) {
+                return entry.getKey();
             }
         }
-        return ipMac;
+        return INVALID_MAC;
     }
 
     public static Map<String, String> getLanMacAddr(Set<String> ipList) {
@@ -89,7 +58,6 @@ public class MacUtils {
 
                 while ((line = bufferedReader.readLine()) != null) {
                     ZLog.d("getLanMacAddr1 lien:" + line);
-
                     String[] lineSegments = line.split(" +");
                     if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.P) {
                         if (lineSegments.length > 4) {
@@ -109,7 +77,6 @@ public class MacUtils {
                                     int dup = Integer.parseInt(macIP.split(" ")[1]);
                                     ipMacMap.put(macAddr, macIP.split(" ")[0] + " " + String.valueOf(dup + 1));
                                 }
-                                //ipMacMap.put(ip, macAddr);
                             }
 
                         }
@@ -131,7 +98,6 @@ public class MacUtils {
                                     int dup = Integer.parseInt(macIP.split(" ")[1]);
                                     ipMacMap.put(macAddr, macIP.split(" ")[0] + " " + String.valueOf(dup + 1));
                                 }
-                                //ipMacMap.put(ip, macAddr);
                             }
 
                         }
@@ -141,64 +107,22 @@ public class MacUtils {
                 }
             }
         } catch (Exception e) {
-            // ignore
+            e.printStackTrace();
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (Exception e) {
-                    // ignore
+                    e.printStackTrace();
                 }
             }
         }
         return ipMacMap;
     }
 
-    public static HashMap<String, String> getHardwareAddress(Vector<String> ipList) {
-        String hw = INVALID_MAC;
-        HashMap<String, String> mapList = new HashMap<String, String>();
-        BufferedReader bufferedReader = null;
-        try {
-            if (ipList != null && ipList.size() != 0) {
-                bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"), BUF);
-                String line;
-                Matcher matcher;
-                while ((line = bufferedReader.readLine()) != null) {
-                    if (line.contains(INVALID_MAC)) {
-                        continue;
-                    }
-                    boolean flag = false;
-                    for (String ip : ipList) {
-                        if (!line.contains(ip)) {
-                            continue;
-                        }
-                        String ptrn = String.format(MAC_RE, ip.replace(".", "\\."));
-                        Pattern pattern = Pattern.compile(ptrn);
-                        matcher = pattern.matcher(line);
-                        if (matcher.matches()) {
-                            hw = matcher.group(1);
-                            if (!hw.equals(INVALID_MAC)) {
-                                // ZLog.debug("neighborPhones ip:" + ip + ",mac:"
-                                // + hw);
-                                mapList.put(ip, hw);
-                                flag = true;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            return mapList;
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (Exception e) {
-                    ZLog.e("getHardwareAddress, error:" + e.getMessage());
-                }
-            }
-        }
-        return mapList;
+    public static Map<String, String> getHardwareAddress(Vector<String> ipList) {
+        Set<String> set = new HashSet<>();
+        set.addAll(ipList);
+        return getLanMacAddr(set);
     }
 }

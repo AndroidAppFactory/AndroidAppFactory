@@ -35,6 +35,22 @@ object NetworkChangeManager {
     private var mNetReceiver: BroadcastReceiver? = null
     private val networkChangeListeners = ArrayList<NetworkChangeListener>()
 
+    fun getLastNetType(): Int {
+        return cachedNetType
+    }
+
+    fun getLastDtTypeInfo(): DtTypeInfo {
+        return cachedDtTypeInfo
+    }
+
+    fun getLastWifiBssId(): String {
+        return cachedWifiBssId
+    }
+
+    fun getLastWifiSSID(): String {
+        return cachedWifiSsid
+    }
+
     fun init(context: Context, getNetType: Boolean, getSSID: Boolean = false, getBssID: Boolean = false, curCellId: Boolean = false) {
         DeviceInfoManager.getInstance().init(context.applicationContext)
         WifiManagerWrapper.init(context, isDebug())

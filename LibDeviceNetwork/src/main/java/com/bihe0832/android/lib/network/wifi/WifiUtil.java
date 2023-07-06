@@ -18,6 +18,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -152,7 +153,7 @@ public class WifiUtil {
                 ret = IpUtils.ipn2s(dhcpInfo.gateway);
             }
         } catch (Exception e) {
-            // ignore
+            e.printStackTrace();
         }
         return ret;
     }
@@ -375,7 +376,7 @@ public class WifiUtil {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
             }
-            HashMap<String, String> ipmacMap = MacUtils.getHardwareAddress(ipList);
+            Map<String, String> ipmacMap = MacUtils.getHardwareAddress(ipList);
             total = ipmacMap != null ? ipmacMap.size() : 0;
             // 因为必然有自己为终端
             if (total == 0) {
