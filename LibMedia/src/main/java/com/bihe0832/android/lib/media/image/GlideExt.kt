@@ -118,8 +118,6 @@ fun ImageView.loadImage(url: String, placeholder: Int, error: Int, width: Int, h
         } else {
             requestOptions.override(width)
         }
-    } else {
-        requestOptions.sizeMultiplier(0.3f)
     }
     try {
         Glide.with(this.context).apply {
@@ -148,8 +146,6 @@ fun ImageView.loadImage(resId: Int, width: Int, height: Int, requestOptions: Req
             } else {
                 requestOptions.override(width)
             }
-        } else {
-            requestOptions.sizeMultiplier(0.3f)
         }
 
         Glide.with(this.context).load(resId).apply(requestOptions).into(this)
@@ -172,8 +168,6 @@ fun ImageView.loadImage(drawableResource: Drawable, width: Int, height: Int, req
             } else {
                 requestOptions.override(width)
             }
-        } else {
-            requestOptions.sizeMultiplier(0.3f)
         }
         Glide.with(this.context).load(drawableResource).apply(requestOptions).into(this)
     } catch (e: Exception) {

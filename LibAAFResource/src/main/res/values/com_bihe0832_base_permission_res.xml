@@ -4,7 +4,7 @@
     <string name="com_bihe0832_permission_default_desc">部分设备</string>
     <string name="com_bihe0832_permission_negtive">暂不授权</string>
     <string name="com_bihe0832_permission_positive">开启授权</string>
-    <string name="com_bihe0832_permission_color">@color/accent</string>
+    <color name="com_bihe0832_permission_color">@color/accent</color>
     <color name="permission_window_bg">@color/transparent_background</color>
     <color name="permission_tips_bg">@color/white</color>
     <color name="permission_tips_text_color">@color/com_bihe0832_dialog_content</color>

@@ -19,11 +19,9 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
  */
 object AAFPermissionManager {
     fun initPermission() {
-
         PermissionManager.addPermissionGroup("", Manifest.permission.CAMERA, takePhotoPermission)
         PermissionManager.addPermissionGroupDesc("", Manifest.permission.CAMERA, "相机")
         PermissionManager.addPermissionGroupScene("", Manifest.permission.CAMERA, "扫描、识别二维码")
-
     }
 
     fun hasFloatPermission(): Boolean {
@@ -39,7 +37,7 @@ object AAFPermissionManager {
     }
 
     fun openNotifyPermission() {
-        IntentUtils.startAppSettings(ZixieContext.applicationContext!!,Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        IntentUtils.startAppSettings(ZixieContext.applicationContext!!, Settings.ACTION_APP_NOTIFICATION_SETTINGS)
     }
 
 

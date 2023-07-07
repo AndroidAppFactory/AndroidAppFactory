@@ -122,7 +122,7 @@ object PermissionManager {
     }
 
     fun getPermissionKey(sceneid: String?, permissionGroupID: String): String {
-        sceneid?.let {
+        if (!TextUtils.isEmpty(sceneid)) {
             return permissionGroupID + "_" + sceneid
         }
         return permissionGroupID
@@ -425,8 +425,11 @@ object PermissionManager {
     }
 
     fun addPermissionHtmlWrapper(content: String): String {
-        return "<font color ='" + (ThemeResourcesManager.getString(R.string.com_bihe0832_permission_color)
-                ?: "#38ADFF") + "'><b>$content</b></font>"
+        var color = "#38ADFF"
+        ThemeResourcesManager.getColor(R.color.com_bihe0832_permission_color)?.let {
+            color = String.format("#%06X", (0xFFFFFF and it))
+        }
+        return "<font color ='$color'><b>$content</b></font>"
     }
 
 
