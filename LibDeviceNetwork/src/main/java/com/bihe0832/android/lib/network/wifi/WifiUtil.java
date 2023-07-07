@@ -57,6 +57,11 @@ public class WifiUtil {
         return (config.wepKeys[0] != null) ? SECURITY_WEP : SECURITY_NONE;
     }
 
+    public static String getWifiSSIDBasedNetworkId(Context ctx) {
+        WifiManager wm = (WifiManager) ctx.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiSSIDBasedNetworkId(wm);
+    }
+
     /*基于NetID获取WiFi-SSID,无需依赖定位权限*/
     public static String getWifiSSIDBasedNetworkId(WifiManager wm) {
         try {
@@ -208,6 +213,11 @@ public class WifiUtil {
         return ret;
     }
 
+    public static int getWifiLinkSpeed(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiLinkSpeed(wm);
+    }
+
     public static int getWifiLinkSpeed(WifiManager wm) {
         int linkSpeed = -1;
         try {
@@ -268,6 +278,10 @@ public class WifiUtil {
         return -1;
     }
 
+    public static String getWifiSSID(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiSSID(wm);
+    }
 
     public static String getWifiSSID(WifiManager wm) {
         String ret = "";
@@ -282,6 +296,11 @@ public class WifiUtil {
             ZLog.d("getRouterSSID, exception:" + e.getMessage());
         }
         return ret;
+    }
+
+    public static String getWifiSSIDWithoutQuotes(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiSSIDWithoutQuotes(wm);
     }
 
     public static String getWifiSSIDWithoutQuotes(WifiManager wm) {
@@ -310,6 +329,11 @@ public class WifiUtil {
         return -1;
     }
 
+    public static String getBssid(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getBssid(wm);
+    }
+
     public static String getBssid(WifiManager wm) {
         String bssid = "";
         try {
@@ -319,6 +343,11 @@ public class WifiUtil {
             ZLog.d("getBssid failed, for " + e.toString());
         }
         return bssid;
+    }
+
+    public static int getWifiSharedTerminalNum(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiSharedTerminalNum(wm);
     }
 
     // 如果没有其他终端将返回1，即仅有自己
@@ -389,6 +418,11 @@ public class WifiUtil {
             ZLog.e(e.getMessage());
         }
         return total;
+    }
+
+    public static String getWifiIp(Context context) {
+        WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        return getWifiIp(wm);
     }
 
     public static String getWifiIp(WifiManager wifiManager) {
