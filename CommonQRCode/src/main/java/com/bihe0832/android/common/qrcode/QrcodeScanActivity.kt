@@ -4,8 +4,8 @@ import android.Manifest
 import android.os.Build
 import android.view.View
 import com.bihe0832.android.common.photos.getPhotoContent
-import com.bihe0832.android.framework.permission.AAFPermissionManager
-import com.bihe0832.android.framework.permission.PermissionResultOfAAF
+import com.bihe0832.android.common.permission.AAFPermissionManager
+import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -17,7 +17,7 @@ import com.google.zxing.activity.BaseCaptureActivity
 @Module(RouterConstants.MODULE_NAME_QRCODE_SCAN)
 open class QrcodeScanActivity : BaseCaptureActivity() {
     init {
-        PermissionManager.addPermissionGroup(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, AAFPermissionManager.takePhotoPermission)
+        PermissionManager.addPermissionGroup(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, com.bihe0832.android.common.permission.AAFPermissionManager.takePhotoPermission)
         PermissionManager.addPermissionGroupDesc(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, "相机")
         PermissionManager.addPermissionGroupScene(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, "扫描、识别二维码")
     }
@@ -28,7 +28,7 @@ open class QrcodeScanActivity : BaseCaptureActivity() {
         if (PermissionManager.isAllPermissionOK(this, Manifest.permission.CAMERA)) {
             startScanAction()
         } else if (!userDeny) {
-            PermissionManager.checkPermission(this, RouterConstants.MODULE_NAME_QRCODE_SCAN, true, PermissionsActivityV2::class.java, object : PermissionResultOfAAF(false) {
+            PermissionManager.checkPermission(this, RouterConstants.MODULE_NAME_QRCODE_SCAN, true, PermissionsActivityV2::class.java, object : com.bihe0832.android.common.permission.PermissionResultOfAAF(false) {
                 override fun onSuccess() {
                     startScanAction()
                 }
@@ -48,7 +48,7 @@ open class QrcodeScanActivity : BaseCaptureActivity() {
                     userDeny = true
                 }
 
-            }, AAFPermissionManager.takePhotoPermission)
+            }, com.bihe0832.android.common.permission.AAFPermissionManager.takePhotoPermission)
         }
     }
 
@@ -57,7 +57,7 @@ open class QrcodeScanActivity : BaseCaptureActivity() {
             if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
                 getPhotoContent()
             } else {
-                PermissionManager.checkPermission(this, RouterConstants.MODULE_NAME_QRCODE_SCAN, false, object : PermissionResultOfAAF(false) {
+                PermissionManager.checkPermission(this, RouterConstants.MODULE_NAME_QRCODE_SCAN, false, object : com.bihe0832.android.common.permission.PermissionResultOfAAF(false) {
                     override fun onSuccess() {
                         getPhotoContent()
                     }
@@ -76,7 +76,7 @@ open class QrcodeScanActivity : BaseCaptureActivity() {
                         super.onUserDeny(scene, permissionGroupID, permission)
                         userDeny = true
                     }
-                }, AAFPermissionManager.selectPhotoPermission)
+                }, com.bihe0832.android.common.permission.AAFPermissionManager.selectPhotoPermission)
             }
         }
     }

@@ -1,11 +1,13 @@
-package com.bihe0832.android.common.permission
+package com.bihe0832.android.common.permission.settings
 
 import android.app.Activity
 import android.view.View
 import android.widget.CompoundButton
 import com.bihe0832.android.common.about.R
+import com.bihe0832.android.common.permission.PermissionResultOfAAF
+import com.bihe0832.android.common.settings.card.SettingsData
 import com.bihe0832.android.common.settings.card.SettingsDataV2
-import com.bihe0832.android.framework.permission.PermissionResultOfAAF
+import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.text.TextFactoryUtils
@@ -23,16 +25,26 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
  */
 object PermissionItem {
 
+    fun getPermission(cls: Class<out PermissionFragment>): SettingsData {
+        val title = "隐私及权限设置"
+        return SettingsData(title).apply {
+            mItemIconRes = R.drawable.icon_privacy_tip
+            mShowDriver = true
+            mShowGo = true
+            mHeaderListener = View.OnClickListener {
+                CommonRootActivity.startCommonRootActivity(it.context, cls, title)
+            }
+        }
+    }
 
     fun getRecommandSetting(): SettingsDataV2 {
         return SettingsDataV2().apply {
             title = "个性化内容推荐"
             description = "开启后，将根据您的喜好为您推荐个性化内容"
             isChecked = false
-            onCheckedChangeListener =
-                    CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
 
-                    }
+            }
         }
     }
 

@@ -1,12 +1,11 @@
-package com.bihe0832.android.framework.permission
+package com.bihe0832.android.common.permission
 
 import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.provider.Settings
+import com.bihe0832.android.common.permission.special.LocationPermissionWrapper
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.permission.special.LocationPermissionWrapper
-import com.bihe0832.android.framework.permission.special.PermissionsActivityWithSpecial
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
@@ -24,7 +23,9 @@ object AAFPermissionManager {
 
     val selectPhotoPermission = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     val takePhotoPermission = mutableListOf(Manifest.permission.CAMERA)
+    val locationPermission = mutableListOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     fun initPermission() {
+        PermissionManager.addPermissionGroup("", Manifest.permission.ACCESS_COARSE_LOCATION, locationPermission)
         PermissionManager.addPermissionGroup("", Manifest.permission.CAMERA, takePhotoPermission)
         PermissionManager.addPermissionGroupDesc("", Manifest.permission.CAMERA, "相机")
         PermissionManager.addPermissionGroupScene("", Manifest.permission.CAMERA, "扫描、识别二维码")

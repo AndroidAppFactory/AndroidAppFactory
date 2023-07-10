@@ -79,7 +79,7 @@ public class PermissionsActivity extends AppCompatActivity {
             for (String permissionGroupID : needCheckPermissionGroup) {
                 List<String> permissions = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, permissionGroupID);
                 for (String permission : permissions) {
-                    if (permissionsChecker.lacksPermission(permission)) {
+                    if (needCheckPermission(permission)) {
                         needCheckList.add(permission);
                     }
                 }
@@ -94,6 +94,9 @@ public class PermissionsActivity extends AppCompatActivity {
         }
     }
 
+    protected boolean needCheckPermission(String permission){
+        return  permissionsChecker.lacksPermission(permission);
+    }
     private void requestPermissions(String... permissions) {
         lastCheckTime = System.currentTimeMillis();
         doRequestPermissionsAction(permissions);

@@ -3,7 +3,6 @@ package com.bihe0832.android.common.settings
 import android.app.Activity
 import android.view.View
 import com.bihe0832.android.common.about.R
-import com.bihe0832.android.common.permission.PermissionFragment
 import com.bihe0832.android.common.settings.card.SettingsData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.*
@@ -182,15 +181,5 @@ object SettingsItem {
         }
     }
 
-    fun getPermission(cls: Class<out PermissionFragment>): SettingsData {
-        val title = "隐私及权限设置"
-        return SettingsData(title).apply {
-            mItemIconRes = R.drawable.icon_privacy_tip
-            mShowDriver = true
-            mShowGo = true
-            mHeaderListener = View.OnClickListener {
-                CommonRootActivity.startCommonRootActivity(it.context, cls, title)
-            }
-        }
-    }
+
 }

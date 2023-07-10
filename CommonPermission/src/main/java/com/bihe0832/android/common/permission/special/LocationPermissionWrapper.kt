@@ -1,4 +1,4 @@
-package com.bihe0832.android.framework.permission.special
+package com.bihe0832.android.common.permission.special
 
 import android.app.Activity
 import android.content.Context

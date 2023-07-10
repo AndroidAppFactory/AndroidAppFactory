@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.permission
+package com.bihe0832.android.common.permission.settings
 
 import android.Manifest
 import com.bihe0832.android.common.about.R

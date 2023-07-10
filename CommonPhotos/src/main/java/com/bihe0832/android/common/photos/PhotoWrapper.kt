@@ -1,6 +1,5 @@
 package com.bihe0832.android.common.photos
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -9,9 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
-import com.bihe0832.android.framework.permission.AAFPermissionManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
@@ -212,7 +211,7 @@ fun Activity.showPhotoChooser() {
                 override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
                     dialog.dismiss()
                 }
-            }, AAFPermissionManager.selectPhotoPermission)
+            }, com.bihe0832.android.common.permission.AAFPermissionManager.selectPhotoPermission)
         }
     }
 }

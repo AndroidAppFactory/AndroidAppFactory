@@ -5,9 +5,9 @@ import android.app.Activity
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
-import com.bihe0832.android.framework.permission.AAFPermissionManager
-import com.bihe0832.android.framework.permission.PermissionResultOfAAF
-import com.bihe0832.android.framework.permission.special.PermissionsActivityWithSpecial
+import com.bihe0832.android.common.permission.AAFPermissionManager
+import com.bihe0832.android.common.permission.PermissionResultOfAAF
+import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog

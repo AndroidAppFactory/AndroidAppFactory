@@ -6,7 +6,8 @@ import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.about.R
 import com.bihe0832.android.common.main.CommonNavigationContentFragment
-import com.bihe0832.android.common.permission.PermissionFragment
+import com.bihe0832.android.common.permission.settings.PermissionFragment
+import com.bihe0832.android.common.permission.settings.PermissionItem
 import com.bihe0832.android.common.settings.SettingsItem
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
@@ -47,7 +48,7 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
                 })
             }
 
-            add(SettingsItem.getPermission(PermissionFragment::class.java))
+            add(PermissionItem.getPermission(PermissionFragment::class.java))
             add(SettingsItem.getFeedbackURL())
             add(getFeedbackItem(activity))
             add(SettingsItem.getShareAPP(true))

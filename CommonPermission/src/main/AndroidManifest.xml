@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bihe0832.android.common.permission">
+
+    <application>
+        <activity
+            android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha"
+            tools:replace="android:theme" />
+
+        <activity
+            android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivityV2"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha"
+            tools:replace="android:theme" />
+
+        <activity
+            android:name="com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
+
+    </application>
+</manifest>

@@ -17,7 +17,7 @@ ext.commonmoduleInfo = [
             "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
             "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
             "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
-            "CommonQRCode", "CommonAccessibility"
+            "CommonQRCode", "CommonAccessibility","CommonPermission"
         ]
     ],
     "CommonAccessibility"   : [
@@ -100,7 +100,7 @@ ext.commonmoduleInfo = [
         "version"            : "6.1.14",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
-            "Framework"
+            "Framework","CommonPermission"
         ]
     ],
     "CommonNetwork"         : [
@@ -126,9 +126,14 @@ ext.commonmoduleInfo = [
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonPraise"          : [
-        "version"            : "6.1.14",
-        "artifactId"         : "common-praise",
-        "apidependenciesList": ["Framework"]
+            "version"            : "6.1.14",
+            "artifactId"         : "common-praise",
+            "apidependenciesList": ["Framework"]
+    ],
+    "CommonPermission"          : [
+            "version"            : "6.1.14",
+            "artifactId"         : "common-permission",
+            "apidependenciesList": ["CommonAbout"]
     ],
     "Framework"        : [
         "version"                : "6.1.14",

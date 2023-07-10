@@ -1,9 +1,9 @@
-package com.bihe0832.android.framework.permission.special;
+package com.bihe0832.android.common.permission.special;
 
 import android.Manifest;
 import android.provider.Settings;
 
-import com.bihe0832.android.framework.permission.AAFPermissionManager;
+import com.bihe0832.android.common.permission.AAFPermissionManager;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
@@ -16,27 +16,27 @@ import java.util.List;
 
 public class PermissionsActivityWithSpecial extends PermissionsActivityV2 {
 
+    @Override
+    protected boolean needCheckPermission(String permission) {
+        return !AAFPermissionManager.INSTANCE.permissionExtraCheckIsOK(this, permission) || super.needCheckPermission(permission);
+    }
 
     @Override
-    protected void allPermissionsGranted() {
-        boolean isAllOK = true;
-        for (String permissionGroupID : needCheckPermissionGroup) {
-            List<String> permissions = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, permissionGroupID);
-            for (String permission : permissions) {
-                if (!AAFPermissionManager.INSTANCE.permissionExtraCheckIsOK(this, permission)) {
-                    isAllOK = false;
-                    doSpecialCheck(permissionGroupID, permission);
-                    break;
-                }
+    protected void doRequestPermissionsAction(String... permissions) {
+        boolean hasSpecial = false;
+        for (String permission : permissions) {
+            if (!AAFPermissionManager.INSTANCE.permissionExtraCheckIsOK(this, permission)) {
+                doSpecialCheck(permission);
+                hasSpecial = true;
+                break;
             }
         }
-
-        if (isAllOK) {
-            super.allPermissionsGranted();
+        if (!hasSpecial) {
+            super.doRequestPermissionsAction(permissions);
         }
     }
 
-    protected void doSpecialCheck(String permissionGroupID, String permission) {
+    protected void doSpecialCheck(String permission) {
         if (permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION) && !LocationPermissionWrapper.INSTANCE.isLocationEnabled(this)) {
             String content = PermissionManager.INSTANCE.getPermissionContent(this, scene, Arrays.asList(permission), getUseDefault(), getNeedSpecial());
             CommonDialog dialog = LocationPermissionWrapper.INSTANCE.getEnabledDialog(this, content);
@@ -50,7 +50,14 @@ public class PermissionsActivityWithSpecial extends PermissionsActivityV2 {
                 @Override
                 public void onNegativeClick() {
                     dialog.dismiss();
-                    notifyUserCancel(permissionGroupID, permission);
+                    for (String permissionGroupID : needCheckPermissionGroup) {
+                        List<String> permissionsOfGroup = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, permissionGroupID);
+                        if (permissionsOfGroup.contains(permission)) {
+                            notifyUserCancel(permissionGroupID, permission);
+                            finish();
+                        }
+                    }
+                    notifyUserCancel("", permission);
                     finish();
                 }
 
