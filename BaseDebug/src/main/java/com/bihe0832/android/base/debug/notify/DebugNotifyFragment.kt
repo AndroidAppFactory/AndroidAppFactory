@@ -2,7 +2,7 @@ package com.bihe0832.android.base.debug.notify
 
 import android.view.View
 import com.bihe0832.android.app.api.AAFNetWorkApi.LOG_TAG
-import com.bihe0832.android.app.permission.AAFPermissionManager
+import com.bihe0832.android.framework.permission.AAFPermissionManager
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext

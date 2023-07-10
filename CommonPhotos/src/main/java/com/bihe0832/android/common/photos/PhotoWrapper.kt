@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
+import com.bihe0832.android.framework.permission.AAFPermissionManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
@@ -21,8 +22,7 @@ import com.bihe0832.android.lib.utils.os.OSUtils
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
 import java.io.File
 
-val selectPhotoPermission = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-val takePhotoPermission = mutableListOf(Manifest.permission.CAMERA)
+
 const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
 
 
@@ -187,7 +187,7 @@ fun Activity.showPhotoChooser() {
                     }
 
                 },
-                takePhotoPermission
+                AAFPermissionManager.takePhotoPermission
         )
     }
 
@@ -212,7 +212,7 @@ fun Activity.showPhotoChooser() {
                 override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
                     dialog.dismiss()
                 }
-            }, selectPhotoPermission)
+            }, AAFPermissionManager.selectPhotoPermission)
         }
     }
 }

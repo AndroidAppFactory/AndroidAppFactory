@@ -46,7 +46,7 @@ open class PermissionDialog : CommonDialog {
     }
 
     open fun showWithContent(permissionDesc: String, permissionContent: String, canCancel: Boolean, listener: OnDialogListener?) {
-        setTitle(permissionDesc + PermissionManager.getTitle(context))
+        setTitle(PermissionManager.getTitle(context))
         setHtmlContent(permissionContent)
         setShouldCanceled(canCancel)
         listener?.let {

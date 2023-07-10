@@ -33,7 +33,9 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add(DebugItemData("打开开发者模式") {
                 IntentUtils.startSettings(context, Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
             })
-            add(DebugItemData("打开应用设置") { IntentUtils.startAppDetailSettings(context) })
+            add(DebugItemData("打开应用设置") {
+                IntentUtils.startAppDetailSettings(context)
+            })
             add(DebugItemData("清除缓存") {
                 FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
                 ZixieContext.restartApp()

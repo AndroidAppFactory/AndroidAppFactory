@@ -3,9 +3,11 @@ package com.bihe0832.android.base.debug.permission
 import android.Manifest
 import android.app.Activity
 import android.view.View
-import com.bihe0832.android.app.permission.AAFPermissionManager
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
+import com.bihe0832.android.framework.permission.AAFPermissionManager
+import com.bihe0832.android.framework.permission.PermissionResultOfAAF
+import com.bihe0832.android.framework.permission.special.PermissionsActivityWithSpecial
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
@@ -19,14 +21,20 @@ class DebugPermissionFragment : DebugEnvFragment() {
             add(DebugItemData("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
             add(DebugItemData("通用权限弹框V2", View.OnClickListener { testCommonPermissionV2(activity) }))
             add(DebugItemData("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
-            add(DebugItemData("申请相册权限", View.OnClickListener { checkPermision() }))
+            add(DebugItemData("申请通用权限（相机）", View.OnClickListener { checkCommonPermision() }))
+            add(DebugItemData("申请特殊权限（位置）", View.OnClickListener { checkSpecialPermision() }))
             add(DebugItemData("查看当前自定义的权限信息", View.OnClickListener { PermissionManager.logPermissionConfigInfo() }))
         }
     }
 
-    private fun checkPermision() {
+    private fun checkCommonPermision() {
         PermissionManager.checkPermission(context!!, Manifest.permission.CAMERA)
     }
+
+    private fun checkSpecialPermision() {
+        AAFPermissionManager.checkSpecialPermission(activity!!, "", true, mutableListOf(Manifest.permission.ACCESS_COARSE_LOCATION), PermissionsActivityWithSpecial::class.java, PermissionResultOfAAF(false));
+    }
+
 
     private fun testCustomPermission(activity: Activity?) {
         PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {

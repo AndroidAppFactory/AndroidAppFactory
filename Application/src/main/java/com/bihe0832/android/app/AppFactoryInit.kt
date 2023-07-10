@@ -8,7 +8,7 @@ import android.os.Process
 import android.util.Log
 import android.webkit.WebView
 import com.bihe0832.android.app.message.AAFMessageManager
-import com.bihe0832.android.app.permission.AAFPermissionManager
+import com.bihe0832.android.framework.permission.AAFPermissionManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.common.webview.tbs.WebViewHelper
@@ -89,7 +89,7 @@ object AppFactoryInit {
     @Synchronized
     private fun initExtra(application: android.app.Application) {
         // 初始化网络变量和监听
-        NetworkChangeManager.init(application.applicationContext, true)
+        NetworkChangeManager.init(application.applicationContext, getNetType = true, getSSID = true, getBssID = true)
         // 监听信号变化，统一到MobileUtil
         MobileUtil.registerMobileSignalListener(application.applicationContext)
         CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
@@ -121,7 +121,6 @@ object AppFactoryInit {
 
     fun initUserLoginRetBeforeGetUser(openid: String) {
     }
-
 
 
 }

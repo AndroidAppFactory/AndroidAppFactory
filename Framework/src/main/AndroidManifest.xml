@@ -35,11 +35,17 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AAF.ActivityTheme.Alpha"
             tools:replace="android:theme" />
+
         <activity
             android:name="com.bihe0832.android.lib.permission.ui.PermissionsActivityV2"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AAF.ActivityTheme.Alpha"
             tools:replace="android:theme" />
+
+        <activity
+            android:name="com.bihe0832.android.framework.permission.special.PermissionsActivityWithSpecial"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
 
         <activity
             android:name="com.bihe0832.android.framework.ui.main.CommonRootActivity"

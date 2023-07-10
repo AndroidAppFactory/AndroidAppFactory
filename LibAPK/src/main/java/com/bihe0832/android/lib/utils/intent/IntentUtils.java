@@ -103,22 +103,22 @@ public class IntentUtils {
     // 启动应用的设置
     public static boolean startAppDetailSettings(Context ctx) {
         boolean result = false;
-        if (ManufacturerUtil.INSTANCE.isXiaomi()) {
-            result = PermissionIntent.gotoMiuiPermission(ctx);
-        } else if (ManufacturerUtil.INSTANCE.isMeizu()) {
-            result = PermissionIntent.gotoMeizuPermission(ctx);
-        } else if (ManufacturerUtil.INSTANCE.isHuawei()) {
-            result = PermissionIntent.gotoHuaweiPermission(ctx);
-        }
-        if (result) {
-            return true;
+        if (BuildUtils.INSTANCE.getSDK_INT() <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            result = startAppSettings(ctx, Settings.ACTION_SETTINGS, false);
         } else {
-            if (BuildUtils.INSTANCE.getSDK_INT() <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                return startAppSettings(ctx, Settings.ACTION_SETTINGS, false);
-            } else {
-                return startAppSettings(ctx, Settings.ACTION_APPLICATION_DETAILS_SETTINGS, false);
+            result = startAppSettings(ctx, Settings.ACTION_APPLICATION_DETAILS_SETTINGS, false);
+        }
+
+        if (!result) {
+            if (ManufacturerUtil.INSTANCE.isXiaomi()) {
+                result = PermissionIntent.gotoMiuiPermission(ctx);
+            } else if (ManufacturerUtil.INSTANCE.isMeizu()) {
+                result = PermissionIntent.gotoMeizuPermission(ctx);
+            } else if (ManufacturerUtil.INSTANCE.isHuawei()) {
+                result = PermissionIntent.gotoHuaweiPermission(ctx);
             }
         }
+        return result;
     }
 
     // 启动应用的设置

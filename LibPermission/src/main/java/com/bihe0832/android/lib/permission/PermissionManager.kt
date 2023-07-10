@@ -233,18 +233,22 @@ object PermissionManager {
                 mPermissionCheckResultListener.onSuccess(scene)
             } else {
                 try {
-                    val intent = Intent(context, permissionsActivityClass)
-                    intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissionGroupIDList.toTypedArray())
-                    intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
-                    intent.putExtra(PermissionsActivity.EXTRA_SOURCE, scene)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    ActivityCompat.startActivity(context!!, intent, null)
+                    startPermissionActivity(context, scene, canCancel, permissionsActivityClass, permissionGroupIDList)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     mPermissionCheckResultListener.onFailed(scene, "start permission activity failed")
                 }
             }
         }
+    }
+
+    fun startPermissionActivity(context: Context?, scene: String, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, permissionGroupIDList: List<String>) {
+        val intent = Intent(context, permissionsActivityClass)
+        intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissionGroupIDList.toTypedArray())
+        intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
+        intent.putExtra(PermissionsActivity.EXTRA_SOURCE, scene)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        ActivityCompat.startActivity(context!!, intent, null)
     }
 
     fun getPermissionsByGroupID(scene: String, permissionGroupID: String): List<String> {

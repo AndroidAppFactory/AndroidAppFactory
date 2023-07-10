@@ -4,8 +4,7 @@ import android.Manifest
 import android.os.Build
 import android.view.View
 import com.bihe0832.android.common.photos.getPhotoContent
-import com.bihe0832.android.common.photos.selectPhotoPermission
-import com.bihe0832.android.common.photos.takePhotoPermission
+import com.bihe0832.android.framework.permission.AAFPermissionManager
 import com.bihe0832.android.framework.permission.PermissionResultOfAAF
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView
@@ -18,7 +17,7 @@ import com.google.zxing.activity.BaseCaptureActivity
 @Module(RouterConstants.MODULE_NAME_QRCODE_SCAN)
 open class QrcodeScanActivity : BaseCaptureActivity() {
     init {
-        PermissionManager.addPermissionGroup(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, takePhotoPermission)
+        PermissionManager.addPermissionGroup(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, AAFPermissionManager.takePhotoPermission)
         PermissionManager.addPermissionGroupDesc(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, "相机")
         PermissionManager.addPermissionGroupScene(RouterConstants.MODULE_NAME_QRCODE_SCAN, Manifest.permission.CAMERA, "扫描、识别二维码")
     }
@@ -49,7 +48,7 @@ open class QrcodeScanActivity : BaseCaptureActivity() {
                     userDeny = true
                 }
 
-            }, takePhotoPermission)
+            }, AAFPermissionManager.takePhotoPermission)
         }
     }
 
@@ -77,7 +76,7 @@ open class QrcodeScanActivity : BaseCaptureActivity() {
                         super.onUserDeny(scene, permissionGroupID, permission)
                         userDeny = true
                     }
-                }, selectPhotoPermission)
+                }, AAFPermissionManager.selectPhotoPermission)
             }
         }
     }

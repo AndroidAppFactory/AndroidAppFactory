@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiConfiguration
@@ -39,6 +40,10 @@ object NetworkChangeManager {
         return cachedNetType
     }
 
+    fun getLastNetTypeName(): String {
+        return NetworkUtil.getNetworkName(getLastNetType())
+    }
+
     fun getLastDtTypeInfo(): DtTypeInfo {
         return cachedDtTypeInfo
     }
@@ -51,129 +56,14 @@ object NetworkChangeManager {
         return cachedWifiSsid
     }
 
-    fun init(context: Context, getNetType: Boolean, getSSID: Boolean = false, getBssID: Boolean = false, curCellId: Boolean = false) {
-        DeviceInfoManager.getInstance().init(context.applicationContext)
-        WifiManagerWrapper.init(context, isDebug())
-
-        canGetNetType = getNetType
-        canGetBSSID = getBssID
-        canGetSSID = getSSID
-        canGetCELLID = curCellId
-
-        if (canGetNetType) {
-            cachedNetType = NetworkUtil.getNetworkState(context)
-            cachedDtTypeInfo = DtTypeInfo.getDtTypeInfo(context)
-        }
-
-        if (NetworkUtil.isWifiNet(cachedNetType)) {
-            if (canGetBSSID) {
-                cachedWifiBssId = WifiManagerWrapper.getBSSID()
-            }
-
-            if (canGetSSID) {
-                cachedWifiSsid = WifiManagerWrapper.getSSID()
-            }
-        } else if (NetworkUtil.isMobileNet(cachedNetType) && canGetCELLID) {
-            cachedCellID = MobileUtil.getPhoneCellInfo(context)
-        }
-        listenNetChange(context)
-    }
-
-
-    private fun listenNetChange(ctx: Context) {
-        mNetReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                innerNetworkChanged(context.applicationContext, intent)
-            }
-        }
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-        ctx.registerReceiver(mNetReceiver, intentFilter)
-
-        WifiManagerWrapper.setWifiChangedListener(object : WifiManagerWrapper.OnWifiChangerListener {
-            override fun onStateChanged(context: Context?, state: Int) {
-                innerNetworkChanged(context, null)
-            }
-
-            override fun onWifiInfoChanged(context: Context?) {
-                innerNetworkChanged(context, null)
-            }
-
-            override fun onScanUpdate(context: Context?, wifiList: List<ScanResult?>?) {
-
-            }
-
-            override fun onConnectUpdate(context: Context?, wifiConfigurationList: List<WifiConfiguration?>?) {
-
-            }
-
-        })
-    }
-
-    private fun innerNetworkChanged(context: Context?, intent: Intent?) {
-        ZLog.d(TAG, "change")
-        var oldNetType = cachedNetType
-        var oldDtType = cachedDtTypeInfo
-        if (canGetNetType) {
-            cachedNetType = NetworkUtil.getNetworkState(context)
-            cachedDtTypeInfo = DtTypeInfo.getDtTypeInfo(context)
-        }
-        ZLog.d(TAG, "network change >> oldNetType: $oldNetType, cachedNetType: $cachedNetType, oldDtType $oldDtType, cachedDtType $cachedDtTypeInfo")
-        ZLog.w(TAG, "network change >> netType correctAfter: $cachedNetType ,intent.getAction():" + intent?.action)
-        if (NetworkUtil.isWifiNet(cachedNetType)) {
-            if (canGetBSSID) {
-                cachedWifiBssId = WifiManagerWrapper.getBSSID()
-            }
-            if (canGetSSID) {
-                cachedWifiSsid = WifiManagerWrapper.getSSID()
-            }
-        } else if (NetworkUtil.isMobileNet(cachedNetType)) {
-            if (canGetCELLID) {
-                cachedCellID = MobileUtil.getPhoneCellInfo(context)
-            }
-        }
-        if (oldNetType != cachedNetType || oldDtType != cachedDtTypeInfo) {
-            postNetworkChangeEvent(oldNetType, cachedNetType, intent)
-        }
-    }
-
-    interface NetworkChangeListener {
-        fun onNetworkChange(sPreNetType: Int, curNetType: Int, intent: Intent?)
-    }
-
-    fun addListener(networkChangeListener: NetworkChangeListener) {
-        if (null != networkChangeListener) {
-            networkChangeListeners.add(networkChangeListener)
-        }
-    }
-
-    fun removeListener(networkChangeListener: NetworkChangeListener) {
-        if (null != networkChangeListener) {
-            networkChangeListeners.remove(networkChangeListener)
-        }
-    }
-
-    fun postNetworkChangeEvent(sPreNetType: Int, curNetType: Int, intent: Intent?) {
-        for (networkChangeListener in networkChangeListeners) {
-            networkChangeListener.onNetworkChange(sPreNetType, curNetType, intent)
-        }
-    }
-
-    fun getNetType(context: Context): Int {
-        return NetworkUtil.getNetworkState(context)
-    }
-
-    fun getCurrentNetType(): Int {
-        return cachedNetType
-    }
-
-    fun getNetTypeName(context: Context): String {
+    fun getRealNetTypeName(context: Context): String {
         return NetworkUtil.getNetworkName(NetworkUtil.getNetworkState(context))
     }
 
-    fun getCurrentNetTypeName(): String {
-        return NetworkUtil.getNetworkName(cachedNetType)
+    fun getRealNetType(context: Context): Int {
+        return NetworkUtil.getNetworkState(context)
     }
+
 
     // 主要提供在WiFi下获取移动网络的网络类型，不保证移动网络已连接，仅是信号类型
     fun getMobileNetType(context: Context): Int {
@@ -210,5 +100,103 @@ object NetworkChangeManager {
 
     fun isBluetoothNet(context: Context): Boolean {
         return NetworkUtil.isBluetoothNet(context)
+    }
+
+    fun init(context: Context, getNetType: Boolean, getSSID: Boolean = false, getBssID: Boolean = false, curCellId: Boolean = false) {
+        DeviceInfoManager.getInstance().init(context.applicationContext)
+        WifiManagerWrapper.init(context, isDebug(), notifyRSSI = false, canScanWifi = false)
+        canGetNetType = getNetType
+        canGetBSSID = getBssID
+        canGetSSID = getSSID
+        canGetCELLID = curCellId
+        refreshInfo(context)
+        listenNetChange(context)
+    }
+
+    fun refreshInfo(context: Context?) {
+        WifiManagerWrapper.refreshWifiInfo()
+        if (canGetNetType) {
+            cachedNetType = NetworkUtil.getNetworkState(context)
+            cachedDtTypeInfo = DtTypeInfo.getDtTypeInfo(context)
+        }
+
+        if (NetworkUtil.isWifiNet(cachedNetType)) {
+            if (canGetBSSID) {
+                cachedWifiBssId = WifiManagerWrapper.getBSSID()
+            }
+
+            if (canGetSSID) {
+                cachedWifiSsid = WifiManagerWrapper.getSSID()
+            }
+        } else if (NetworkUtil.isMobileNet(cachedNetType) && canGetCELLID) {
+            cachedCellID = MobileUtil.getPhoneCellInfo(context)
+        }
+    }
+
+    private fun listenNetChange(ctx: Context) {
+        mNetReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                innerNetworkChanged(context.applicationContext, intent)
+            }
+        }
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        if (canGetSSID || canGetBSSID) {
+            intentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+        }
+        ctx.registerReceiver(mNetReceiver, intentFilter)
+
+        WifiManagerWrapper.setWifiChangedListener(object : WifiManagerWrapper.OnWifiChangerListener {
+            override fun onStateChanged(context: Context?, state: Int) {
+                innerNetworkChanged(context, null)
+            }
+
+            override fun onWifiInfoChanged(context: Context?) {
+                innerNetworkChanged(context, null)
+            }
+
+            override fun onScanUpdate(context: Context?, wifiList: List<ScanResult?>?) {
+
+            }
+
+            override fun onConnectUpdate(context: Context?, wifiConfigurationList: List<WifiConfiguration?>?) {
+
+            }
+
+        })
+    }
+
+    private fun innerNetworkChanged(context: Context?, intent: Intent?) {
+        ZLog.d(TAG, "change")
+        var oldNetType = cachedNetType
+        var oldDtType = cachedDtTypeInfo
+        refreshInfo(context)
+        ZLog.d(TAG, "network change >> oldNetType: $oldNetType, cachedNetType: $cachedNetType, oldDtType $oldDtType, cachedDtType $cachedDtTypeInfo")
+        ZLog.w(TAG, "network change >> netType correctAfter: $cachedNetType ,intent.getAction():" + intent?.action)
+        if (intent?.action?.equals(LocationManager.PROVIDERS_CHANGED_ACTION) == true || oldNetType != cachedNetType || oldDtType != cachedDtTypeInfo) {
+            postNetworkChangeEvent(oldNetType, cachedNetType, intent)
+        }
+    }
+
+    interface NetworkChangeListener {
+        fun onNetworkChange(sPreNetType: Int, curNetType: Int, intent: Intent?)
+    }
+
+    fun addListener(networkChangeListener: NetworkChangeListener) {
+        if (null != networkChangeListener) {
+            networkChangeListeners.add(networkChangeListener)
+        }
+    }
+
+    fun removeListener(networkChangeListener: NetworkChangeListener) {
+        if (null != networkChangeListener) {
+            networkChangeListeners.remove(networkChangeListener)
+        }
+    }
+
+    fun postNetworkChangeEvent(sPreNetType: Int, curNetType: Int, intent: Intent?) {
+        for (networkChangeListener in networkChangeListeners) {
+            networkChangeListener.onNetworkChange(sPreNetType, curNetType, intent)
+        }
     }
 }

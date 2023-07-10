@@ -40,8 +40,8 @@ class DebugNetworkActivity : BaseActivity() {
     }
 
     private fun updateContent() {
-        val builder = StringBuffer().append("当前网络信息：(${NetworkChangeManager.getCurrentNetTypeName()})\n\n")
-        var netTYpe = NetworkChangeManager.getNetType(this)
+        val builder = StringBuffer().append("当前网络信息：(${NetworkChangeManager.getLastNetTypeName()})\n\n")
+        var netTYpe = NetworkChangeManager.getRealNetType(this)
         if (NetworkUtil.isWifiNet(netTYpe)) {
             builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n").append("    SSID(").append(WifiManagerWrapper.getSSID()).append(");\n    BSSID(").append(WifiManagerWrapper.getBSSID()).append(");\n    强度(").append(WifiManagerWrapper.getSignalLevel()).append(");\n    IP(").append(DtTypeInfo.getDtTypeInfo(this).wifiIp).append(");\n    周边数量(").append(WifiManagerWrapper.getScanResultList().size).append(");\n");
         }
