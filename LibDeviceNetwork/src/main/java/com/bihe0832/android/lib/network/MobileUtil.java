@@ -2,38 +2,26 @@ package com.bihe0832.android.lib.network;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Looper;
-import android.telephony.CellIdentityCdma;
-import android.telephony.CellIdentityGsm;
-import android.telephony.CellIdentityLte;
-import android.telephony.CellIdentityWcdma;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
-import android.telephony.CellInfoWcdma;
 import android.telephony.CellLocation;
 import android.telephony.CellSignalStrengthCdma;
 import android.telephony.CellSignalStrengthGsm;
 import android.telephony.CellSignalStrengthLte;
-import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
-import android.util.Log;
-
 
 import com.bihe0832.android.lib.log.ZLog;
-
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * 实现与移动网络相关的网络信息获取方法

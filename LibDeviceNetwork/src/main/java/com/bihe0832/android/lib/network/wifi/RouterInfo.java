@@ -6,12 +6,11 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.network.ARPUtils;
 import com.bihe0832.android.lib.network.IpUtils;
 import com.bihe0832.android.lib.network.MacUtils;
 import com.bihe0832.android.lib.network.NetworkUtil;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -26,8 +25,6 @@ import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author zixie code@bihe0832.com
@@ -35,7 +32,6 @@ import java.util.regex.Pattern;
  * Description: Description
  */
 public class RouterInfo {
-    private static final int SOCKET_TIMEOUT = 5; // second
 
     private static Set<String> ipList = new HashSet<String>();
 
@@ -121,8 +117,7 @@ public class RouterInfo {
         }
         Map<String, String> ipmacMap = MacUtils.getHardwareAddress(ipList);
         int total = ipmacMap != null ? ipmacMap.size() : 0;
-        ZLog.d("neighborPhones wifis:" + (endIp - startIp) + ",valid host:" + total + ",iplists:" + ipList.size()
-                + ",count:" + count);
+        ZLog.d("neighborPhones wifis:" + (endIp - startIp) + ",valid host:" + total + ",iplists:" + ipList.size() + ",count:" + count);
         return total;
     }
 
@@ -223,7 +218,7 @@ public class RouterInfo {
                 public void run() {
                     addIpList(curIpStr);
                     ZLog.d("getRouterInfo1: " + curIpStr);
-                    sendArpReqPacket(curIpStr, 1);
+                    ARPUtils.sendUdpMessage(curIpStr, ARPUtils.UDP_DETECT_PORT, ARPUtils.UDP_DETECT_MSG);
                 }
             });
 
@@ -254,33 +249,9 @@ public class RouterInfo {
         return new RouterInfo(terminals, availableIps, ipMacMap);
     }
 
-    private static void sendArpReqPacket(String ipStr) {
-        try {
-            InetAddress inetAddress = IpUtils.getDomainFirstAddr(ipStr);
-            if (inetAddress != null) {
-                inetAddress.isReachable(SOCKET_TIMEOUT);
-            }
-        } catch (Exception e) {
-            // ignore
-        }
-    }
-
-    private static void sendArpReqPacket(String ipStr, int count) {
-        try {
-            InetAddress inetAddress = IpUtils.getDomainFirstAddr(ipStr);
-            if (inetAddress != null) {
-                for (int i = 0; i < count; i++) {
-                    inetAddress.isReachable(SOCKET_TIMEOUT);
-                }
-            }
-        } catch (Exception e) {
-            ZLog.d("sendArpReqPacketerr" + e.toString());
-            // ignore
-        }
-    }
-
     private static synchronized void addIpList(String IP) {
         ipList.add(IP);
     }
+
 
 }
