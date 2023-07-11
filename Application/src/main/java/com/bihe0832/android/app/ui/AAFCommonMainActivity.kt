@@ -13,8 +13,13 @@ import com.bihe0832.android.framework.ZixieContext
 
 open class AAFCommonMainActivity : CommonActivityWithNavigationDrawer() {
 
-    override fun getNavigationDrawerFragment(): NavigationDrawerFragment? {
+    private val mAAFNavigationDrawerFragment = createAAFNavigationDrawerFragment()
+    open fun createAAFNavigationDrawerFragment(): AAFNavigationDrawerFragment {
         return AAFNavigationDrawerFragment()
+    }
+
+    override fun getNavigationDrawerFragment(): NavigationDrawerFragment? {
+        return mAAFNavigationDrawerFragment
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

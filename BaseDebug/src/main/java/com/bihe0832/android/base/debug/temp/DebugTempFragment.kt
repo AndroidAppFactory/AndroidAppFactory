@@ -9,13 +9,9 @@
 package com.bihe0832.android.base.debug.temp
 
 
-import android.Manifest
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
-import com.bihe0832.android.common.permission.AAFPermissionManager
-import com.bihe0832.android.common.permission.special.LocationPermissionWrapper
-import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 

@@ -3,14 +3,13 @@ package com.bihe0832.android.common.permission
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.provider.Settings
-import com.bihe0832.android.common.permission.special.LocationPermissionWrapper
+import android.location.LocationManager
+import androidx.core.location.LocationManagerCompat
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
-import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 /**
  *
@@ -42,16 +41,21 @@ object AAFPermissionManager {
     }
 
     fun hasNotifyPermission(): Boolean {
-        return NotifyManager.showNotificationsSettings(ZixieContext.applicationContext!!)
+        return NotifyManager.areNotificationsEnabled(ZixieContext.applicationContext!!)
     }
 
     fun openNotifyPermission() {
-        IntentUtils.startAppSettings(ZixieContext.applicationContext!!, Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+        NotifyManager.showNotificationsSettings(ZixieContext.applicationContext!!)
+    }
+
+    fun isLocationEnabled(context: Context): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
     }
 
     fun permissionExtraCheckIsOK(context: Context, permission: String): Boolean {
         if (permission == Manifest.permission.ACCESS_COARSE_LOCATION) {
-            if (!LocationPermissionWrapper.isLocationEnabled(context)) {
+            if (!isLocationEnabled(context)) {
                 return false
             }
         }
