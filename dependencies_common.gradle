@@ -11,7 +11,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonWrapper"         : [
-        "version"            : "6.2.0",
+        "version"            : "6.2.1",
         "artifactId"         : "common-wrapper",
         "apidependenciesList": [
             "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
@@ -28,7 +28,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonQRCode"          : [
-        "version"            : "6.2.0",
+        "version"            : "6.2.1",
         "artifactId"         : "common-qrcode",
         "apidependenciesList": [
             "CommonPhotos"
@@ -49,7 +49,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonNavigationDrawer": [
-        "version"            : "6.2.0",
+        "version"            : "6.2.1",
         "artifactId"         : "common-navigation-drawer",
         "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
     ],
@@ -97,7 +97,7 @@ ext.commonmoduleInfo = [
         ]
     ],
     "CommonPhotos"          : [
-        "version"            : "6.2.0",
+        "version"            : "6.2.1",
         "artifactId"         : "common-photos",
         "apidependenciesList": [
             "Framework","CommonPermission"
@@ -131,7 +131,7 @@ ext.commonmoduleInfo = [
             "apidependenciesList": ["Framework"]
     ],
     "CommonPermission"          : [
-            "version"            : "6.2.0",
+            "version"            : "6.2.1",
             "artifactId"         : "common-permission",
             "apidependenciesList": ["CommonAbout"]
     ],
