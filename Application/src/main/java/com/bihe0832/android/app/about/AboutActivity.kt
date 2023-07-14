@@ -22,17 +22,4 @@ open class AboutActivity : com.bihe0832.android.common.about.AboutActivity() {
         super.onCreate(savedInstanceState)
         UpdateManager.checkUpdateAndShowDialog(this, checkUpdateByUser = false, showIfNeedUpdate = true)
     }
-
-    override fun initView() {
-        super.initView()
-        getVersionIcon()?.setOnClickListener(object : ShowDebugClick() {
-            override fun onClickAction() {
-                showVersionDetail()
-            }
-
-            override fun onDebugAction() {
-
-            }
-        })
-    }
 }

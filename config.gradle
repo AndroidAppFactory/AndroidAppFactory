@@ -12,7 +12,7 @@ ext {
     //Android 最佳适配Android 版本
     targetSdkVersion = 31
     //版本号，正式版本会由自动构建替换
-    versionCode = 102
+    versionCode = 103
     //版本名，正式版本会由自动构建替换
     versionName = "1.2.0"
     //Android 构建包时是否混淆代码
@@ -33,12 +33,16 @@ ext {
 
     //签名信息
     signingConfigs = [
-        keyAlias        : 'androiddebugkey',
-        keyPassword     : 'android',
-        storeFile       : "./../debug.keystore",
-        storePassword   : 'android',
         v1SigningEnabled: true,
         v2SigningEnabled: true,
+        keyAlias        : ZixieSigKeyAlias,
+        keyPassword     : ZixieSigKeyPassword,
+        storeFile       : ZixieSigPath,
+        storePassword   : ZixieSigStorePassword,
+//        keyAlias        : 'androiddebugkey',
+//        keyPassword     : 'android',
+//        storeFile       : "./../debug.keystore",
+//        storePassword   : 'android',
     ]
 
     //使用kotlin版本
