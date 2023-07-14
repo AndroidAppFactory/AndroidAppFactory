@@ -25,6 +25,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.widget.WidgetUpdateManager
+import com.bihe0832.android.services.google.ad.AAFGoogleAD
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsPrivacyAccess
 
@@ -61,7 +62,7 @@ object AppFactoryInit {
             AAFPermissionManager.initPermission()
             DownloadUtils.init(ctx, ZixieContext.isDebug())
             AAFMessageManager.initModule(ctx)
-
+            AAFGoogleAD.initModule(ctx)
             ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)
         }
     }

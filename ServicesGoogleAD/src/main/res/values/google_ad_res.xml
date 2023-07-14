@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- https://support.google.com/admob/answer/7356431?hl=zh-Hans -->
+    <string name="admob_applicaion_id"></string>
+</resources>

@@ -18,7 +18,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "LibTTS,ServicesGooglePay,Application"
+ext.developModule = "ServicesGoogle,ServicesGooglePay,ServicesGoogleAD,Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -52,14 +52,15 @@ ext.coremoduleInfo = [
         "version"            : "",
         "artifactId"         : "",
         "apidependenciesList": [
-            "Application", "CommonDebug", "CommonTBSFeedback", "ServicesGooglePay"
+            "Application", "CommonDebug", "CommonTBSFeedback", "ServicesGooglePay","ServicesGoogle"
         ]
     ],
     "Application": [
         "version"                : "",
         "artifactId"             : "",
         "apidependenciesList"    : [
-            "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper"],
+            "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper","ServicesGoogleAD"
+        ],
         "specialdependenciesList": [
             "kapt"               : ["RouterCompiler"],
             "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"],

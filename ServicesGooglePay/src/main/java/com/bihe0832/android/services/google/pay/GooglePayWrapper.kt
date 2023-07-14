@@ -2,7 +2,6 @@ package com.bihe0832.android.services.google.pay
 
 import android.icu.util.Currency
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.collections.HashMap
 
 
 /**

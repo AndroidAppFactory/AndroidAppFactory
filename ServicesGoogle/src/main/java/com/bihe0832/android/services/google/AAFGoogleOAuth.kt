@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener
  * Description: Description
  *
  */
-class GoogleOAuth(val activity: Activity, val serverClientId: String) {
+class AAFGoogleOAuth(val activity: Activity, val serverClientId: String) {
 
     private val mGoogleSignInClient: GoogleSignInClient by lazy {
         GoogleSignIn.getClient(activity!!, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(serverClientId).requestEmail().build())

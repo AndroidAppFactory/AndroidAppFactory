@@ -17,9 +17,9 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.services.google.GoogleOAuth
+import com.bihe0832.android.services.google.AAFGoogleOAuth
 import com.bihe0832.android.services.google.pay.AAFGooglePayListener
-import com.bihe0832.android.services.google.pay.GooglePayModule
+import com.bihe0832.android.services.google.pay.AAFGooglePay
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import java.util.*
@@ -27,13 +27,13 @@ import java.util.*
 
 class DebugGoogleFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
-    private var mGoogleOAuth: GoogleOAuth? = null
-    private var mGooglePayModule: GooglePayModule? = null
+    private var mAAFGoogleOAuth: AAFGoogleOAuth? = null
+    private var mAAFGooglePay: AAFGooglePay? = null
 
     override fun initView(view: View) {
         super.initView(view)
-        mGoogleOAuth = GoogleOAuth(activity!!, "809676995038-g86cvrvt9thn3qam94n6vcd81oqdevhv.apps.googleusercontent.com")
-        mGooglePayModule = GooglePayModule(activity!!, object : AAFGooglePayListener {
+        mAAFGoogleOAuth = AAFGoogleOAuth(activity!!, "809676995038-g86cvrvt9thn3qam94n6vcd81oqdevhv.apps.googleusercontent.com")
+        mAAFGooglePay = AAFGooglePay(activity!!, object : AAFGooglePayListener {
 
             override fun onPurchasesSuccess(billingResult: BillingResult, purchases: List<Purchase>?) {
                 ZLog.d("onPurchasesSuccess:$billingResult")
@@ -59,30 +59,31 @@ class DebugGoogleFragment : DebugEnvFragment() {
             }
 
         })
-        mGooglePayModule?.startConnection()
+        mAAFGooglePay?.startConnection()
 
     }
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("登录", View.OnClickListener { mGoogleOAuth?.startLogin(100) }))
+            add(getDebugFragmentItemData("Google AD", DebugGoogleADFragment::class.java))
+            add(DebugItemData("登录", View.OnClickListener { mAAFGoogleOAuth?.startLogin(100) }))
             add(DebugItemData("查看个人信息", View.OnClickListener {
-                mGoogleOAuth?.getLastUserInfo()?.let {
+                mAAFGoogleOAuth?.getLastUserInfo()?.let {
                     showUser(it)
                 }
             }))
             add(DebugItemData("刷新Token", View.OnClickListener {
-                mGoogleOAuth?.refreshToken {
+                mAAFGoogleOAuth?.refreshToken {
                     showLastUser()
                 }
             }))
             add(DebugItemData("解除授权", View.OnClickListener {
-                mGoogleOAuth?.revokeAccess {
+                mAAFGoogleOAuth?.revokeAccess {
                     showLastUser()
                 }
             }))
             add(DebugItemData("登出", View.OnClickListener {
-                mGoogleOAuth?.logout {
+                mAAFGoogleOAuth?.logout {
                     showLastUser()
                 }
             }))
@@ -98,7 +99,7 @@ class DebugGoogleFragment : DebugEnvFragment() {
         when (requestCode) {
             100 -> {
                 try {
-                    showUser(mGoogleOAuth?.parseIntent(data))
+                    showUser(mAAFGoogleOAuth?.parseIntent(data))
                 } catch (e: ApiException) {
                     e.printStackTrace()
                 }
@@ -107,7 +108,7 @@ class DebugGoogleFragment : DebugEnvFragment() {
     }
 
     private fun showLastUser() {
-        mGoogleOAuth?.getLastUserInfo()?.let {
+        mAAFGoogleOAuth?.getLastUserInfo()?.let {
             showUser(it)
         }
     }
@@ -132,7 +133,7 @@ class DebugGoogleFragment : DebugEnvFragment() {
 
 
     private fun getSublist() {
-        mGooglePayModule?.querySubsDetails(mutableListOf("vip_new")) { result, productDetails ->
+        mAAFGooglePay?.querySubsDetails(mutableListOf("vip_new")) { result, productDetails ->
             for (productDetail in productDetails) {
                 if (BillingClient.ProductType.SUBS.equals(productDetail.productType) && productDetail.subscriptionOfferDetails != null) {
                     productDetail?.subscriptionOfferDetails?.forEach { item ->
@@ -140,7 +141,7 @@ class DebugGoogleFragment : DebugEnvFragment() {
                                 ?: ""
                         val googleCurrencyCode = item?.pricingPhases?.pricingPhaseList?.get(0)?.priceCurrencyCode
                                 ?: ""
-                        val replacePrice = mGooglePayModule!!.getFinalProductPrice(googleProductPrice, googleCurrencyCode)
+                        val replacePrice = mAAFGooglePay!!.getFinalProductPrice(googleProductPrice, googleCurrencyCode)
                         ZLog.d("productDetails:" + item.basePlanId + " " + replacePrice)
                     }
                 }
@@ -149,7 +150,7 @@ class DebugGoogleFragment : DebugEnvFragment() {
 
 
             productDetails.firstOrNull()?.let { productDetailInfo ->
-                val billingResult = mGooglePayModule!!.startBuy(activity!!, productDetailInfo, productDetailInfo.subscriptionOfferDetails?.get(0)?.offerToken
+                val billingResult = mAAFGooglePay!!.startBuy(activity!!, productDetailInfo, productDetailInfo.subscriptionOfferDetails?.get(0)?.offerToken
                         ?: "")
                 ZLog.d("billingResult:$billingResult")
                 //productDetailsList为可用商 品的集合

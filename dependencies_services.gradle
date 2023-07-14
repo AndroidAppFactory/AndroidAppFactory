@@ -5,18 +5,27 @@ ext.kitmoduleInfo = [
         "version"            : "6.2.2",
         "artifactId"         : "services-google-pay",
         "apidependenciesList": [
-            "ServicesGoogle",
+            "LibThread",
             "com.android.billingclient:billing:6.0.0"
+        ]
+    ],
+    "ServicesGoogleAD"   : [
+        "version"            : "6.2.2",
+        "artifactId"         : "services-google-ad",
+        "apidependenciesList": [
+            "LibLog",
+            "com.google.android.gms:play-services-ads:22.2.0"
         ]
     ],
     "ServicesGoogle"   : [
         "version"            : "6.2.2",
         "artifactId"         : "services-google",
         "apidependenciesList": [
-            "Framework",
             "com.google.android.gms:play-services-auth:20.5.0"
         ]
     ]
+
+
 ]
 
 

@@ -10,9 +10,9 @@ import com.bihe0832.android.lib.thread.ThreadManager
  * Created on 2023/7/14.
  * Description: Description
  */
-open class GooglePayModule(private val mContext: Context, private val purchasesUpdatedListener: AAFGooglePayListener) : BillingClientStateListener {
+open class AAFGooglePay(private val mContext: Context, private val purchasesUpdatedListener: AAFGooglePayListener) : BillingClientStateListener {
 
-    private val reteyTime = 0
+    private var reteyTime = 0
 
     private fun getBillClient(): BillingClient {
         BillingClient.newBuilder(mContext).apply {
@@ -43,15 +43,18 @@ open class GooglePayModule(private val mContext: Context, private val purchasesU
         if (reteyTime > 5) {
             purchasesUpdatedListener.onServiceDisconnected()
         } else {
+            reteyTime++
             ThreadManager.getInstance().start({ mGoogleBillingClient.startConnection(this) }, 1000L)
         }
     }
 
     override fun onBillingSetupFinished(billingResult: BillingResult) {
+        reteyTime = 0
         purchasesUpdatedListener.onBillingSetupFinished(billingResult)
     }
 
     fun startConnection() {
+        reteyTime = 0
         mGoogleBillingClient.startConnection(this)
     }
 
