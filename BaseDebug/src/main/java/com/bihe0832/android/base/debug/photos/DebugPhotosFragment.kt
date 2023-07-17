@@ -25,9 +25,7 @@ class DebugPhotosFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(
-                    DebugTipsData("当前图片地址： ")
-            )
+            add(DebugTipsData("当前图片地址： "))
             add(DebugItemData("仅拍照", View.OnClickListener {
                 needCrop = false
                 takePhosUri = activity!!.getAutoChangedPhotoUri()
@@ -51,10 +49,7 @@ class DebugPhotosFragment : BaseDebugListFragment() {
 
     private fun cropPhotos(sourceUri: Uri?) {
         cropUri = activity!!.getAutoChangedCropUri()
-        activity!!.cropPhoto(
-            sourceUri,
-            cropUri
-        )
+        activity!!.cropPhoto(sourceUri, cropUri)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -66,13 +61,7 @@ class DebugPhotosFragment : BaseDebugListFragment() {
                     if (needCrop) {
                         cropPhotos(takePhosUri)
                     } else {
-                        showResult(
-                            "图片地址:" +
-                                    ZixieFileProvider.uriToFile(
-                                        activity!!,
-                                        takePhosUri
-                                    ).absolutePath
-                        )
+                        showResult("图片地址:" + ZixieFileProvider.uriToFile(activity!!, takePhosUri).absolutePath)
                     }
                 }
 
@@ -81,26 +70,15 @@ class DebugPhotosFragment : BaseDebugListFragment() {
                     if (needCrop) {
                         cropPhotos(data.getData())
                     } else {
-                        showResult(
-                            "图片地址:" +
-                                    ZixieFileProvider.uriToFile(
-                                        activity!!,
-                                        data.getData()
-                                    ).absolutePath
-                        )
+                        showResult("图片地址:" + ZixieFileProvider.uriToFile(activity!!, data.getData()).absolutePath)
                     }
                 } else {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：$requestCode；resultCode：$resultCode")
                 }
                 ZixieActivityRequestCode.CROP_PHOTO -> {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
-                    ZixieFileProvider.uriToFile(
-                        activity!!,
-                        cropUri
-                    ).absolutePath.let {
-                        showResult(
-                            "图片地址:$it"
-                        )
+                    ZixieFileProvider.uriToFile(activity!!, cropUri).absolutePath.let {
+                        showResult("图片地址:$it")
                         ZLog.d("PhotoChooser in cropUri：$it")
                     }
 

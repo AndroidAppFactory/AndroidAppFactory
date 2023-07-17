@@ -13,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -47,6 +49,28 @@ public class BitmapUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
+    }
+
+    public static int getPictureRotateAngel(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 
     /**
@@ -84,43 +108,6 @@ public class BitmapUtil {
         return options;
     }
 
-    public static Bitmap getLocalBitmap(String localPath, int reqWidth, int reqHeight, boolean centerInside) {
-        File file = new File(localPath);
-        if (file.exists()) {
-            try {
-                BitmapFactory.Options options = getLocalBitmapOptions(localPath);
-                calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
-                options.inJustDecodeBounds = false;
-                Bitmap bitmap = BitmapFactory.decodeFile(localPath, options);
-                if (reqWidth > 0 && reqHeight > 0) {
-                    // 缩放 Bitmap 对象
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
-                    // 释放资源
-                    bitmap.recycle();
-                    return scaledBitmap;
-                } else {
-                    return bitmap;
-                }
-            } catch (Exception error) {
-                error.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public static Bitmap getLocalBitmap(String localPath) {
-        Bitmap bitmap = null;
-        File file = new File(localPath);
-        if (file.exists()) {
-            try {
-                bitmap = BitmapFactory.decodeFile(localPath);
-            } catch (Exception error) {
-                error.printStackTrace();
-            }
-        }
-        return bitmap;
-    }
-
     public static BitmapFactory.Options getLocalBitmapOptions(ContentResolver contentResolver, Uri uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         InputStream input = null;
@@ -144,6 +131,7 @@ public class BitmapUtil {
         }
         return options;
     }
+
 
     private static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options, boolean centerInside) {
         calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight, options, centerInside);
@@ -172,20 +160,91 @@ public class BitmapUtil {
         options.inSampleSize = sampleSize;
     }
 
+
+    public static Bitmap getLocalBitmap(String localPath) {
+        Bitmap bitmap = null;
+        File file = new File(localPath);
+        if (file.exists()) {
+            try {
+                bitmap = BitmapFactory.decodeFile(localPath);
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+        }
+        return bitmap;
+    }
+
+    public static Bitmap getLocalBitmap(ContentResolver context, Uri uri) {
+        Bitmap bitmap = null;
+        InputStream input = null;
+        try {
+            input = context.openInputStream(uri);
+            bitmap = BitmapFactory.decodeStream(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != input) {
+                    input.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return bitmap;
+    }
+
     /**
      * 读取一个缩放后的图片，限定图片大小，避免OOM
      *
      * @param uri       图片uri，支持“file://”、“content://”
-     * @param maxWidth  最大允许宽度
-     * @param maxHeight 最大允许高度
+     * @param reqWidth  最大允许宽度
+     * @param reqHeight 最大允许高度
      * @return 返回一个缩放后的Bitmap，失败则返回null
      */
-    public static Bitmap getLocalBitmap(Context context, Uri uri, int maxWidth, int maxHeight, boolean centerInside) {
+    public static Bitmap getLocalBitmap(Context context, Uri uri, int reqWidth, int reqHeight, boolean centerInside) {
         if (context == null) {
             return null;
         }
-        return getLocalBitmap(context.getContentResolver(), uri, maxWidth, maxHeight, centerInside);
+        return getLocalBitmap(context.getContentResolver(), uri, reqWidth, reqHeight, centerInside);
     }
+
+    public static Bitmap getLocalBitmap(String localPath, int reqWidth, int reqHeight, boolean centerInside) {
+        File file = new File(localPath);
+        if (file.exists()) {
+            try {
+                BitmapFactory.Options options = getLocalBitmapOptions(localPath);
+                calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
+                options.inJustDecodeBounds = false;
+                Bitmap bitmap = BitmapFactory.decodeFile(localPath, options);
+
+                Bitmap resizedBitmap = bitmap;
+                int angle = getPictureRotateAngel(localPath);
+                if (angle > 0) {
+                    // 旋转图片 动作
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(angle);
+                    // 创建新的图片
+                    resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                }
+                bitmap.recycle();
+                if (reqWidth > 0 && reqHeight > 0 && (reqWidth < resizedBitmap.getWidth() || reqHeight < resizedBitmap.getHeight())) {
+                    // 缩放 Bitmap 对象
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(resizedBitmap, reqWidth, reqHeight, false);
+                    // 释放资源
+                    resizedBitmap.recycle();
+                    return scaledBitmap;
+                } else {
+                    return resizedBitmap;
+                }
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 
     public static Bitmap getLocalBitmap(ContentResolver contentResolver, Uri uri, int reqWidth, int reqHeight, boolean centerInside) {
 
@@ -199,7 +258,7 @@ public class BitmapUtil {
                 calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
-                if (reqWidth > 0 && reqHeight > 0) {
+                if (reqWidth > 0 && reqHeight > 0 && (reqWidth < bitmap.getWidth() || reqHeight < bitmap.getHeight())) {
                     // 缩放 Bitmap 对象
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
                     // 释放资源
@@ -227,34 +286,13 @@ public class BitmapUtil {
         return null;
     }
 
-    public static Bitmap getLocalBitmap(ContentResolver context, Uri uri) {
-        Bitmap bitmap = null;
-        InputStream input = null;
-        try {
-            input = context.openInputStream(uri);
-            bitmap = BitmapFactory.decodeStream(input);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != input) {
-                    input.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return bitmap;
-    }
 
     public static Bitmap getViewBitmapData(View view) {
         if (view.getMeasuredWidth() > 0 && view.getMeasuredHeight() > 0) {
-            Bitmap mAccBitmap = Bitmap
-                    .createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-            Canvas chartCanvas = new Canvas(mAccBitmap);
+            Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+            Canvas chartCanvas = new Canvas(bitmap);
             view.draw(chartCanvas);
-            return mAccBitmap;
+            return bitmap;
         }
         return null;
     }
@@ -277,8 +315,7 @@ public class BitmapUtil {
         return getBitmapWithCircleLayer(originalBitmap, color, startAngle, sweepAngle);
     }
 
-    public static Bitmap getBitmapWithCircleLayer(Bitmap originalBitmap, int color, float startAngle,
-                                                  float sweepAngle) {
+    public static Bitmap getBitmapWithCircleLayer(Bitmap originalBitmap, int color, float startAngle, float sweepAngle) {
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
         Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -387,8 +424,7 @@ public class BitmapUtil {
      *
      * @return
      */
-    public static String saveBitmapWithName(Context context, Bitmap bitmap, CompressFormat format, String fileName,
-                                            boolean forceNew) {
+    public static String saveBitmapWithName(Context context, Bitmap bitmap, CompressFormat format, String fileName, boolean forceNew) {
         if (null == context) {
             return "";
         }
@@ -407,8 +443,7 @@ public class BitmapUtil {
      *
      * @return
      */
-    public static String saveBitmapWithPath(Context context, Bitmap bitmap, CompressFormat format, String filePath,
-                                            boolean forceNew) {
+    public static String saveBitmapWithPath(Context context, Bitmap bitmap, CompressFormat format, String filePath, boolean forceNew) {
         if (null == context) {
             return "";
         }
@@ -451,8 +486,7 @@ public class BitmapUtil {
      */
     public static Bitmap mergeBitmapLine(Bitmap topBitmap, Bitmap bottomBitmap, boolean isBaseMax) {
 
-        if (topBitmap == null || topBitmap.isRecycled()
-                || bottomBitmap == null || bottomBitmap.isRecycled()) {
+        if (topBitmap == null || topBitmap.isRecycled() || bottomBitmap == null || bottomBitmap.isRecycled()) {
             ZLog.d(TAG, "topBitmap=" + topBitmap + ";bottomBitmap=" + bottomBitmap);
             return null;
         }
@@ -466,11 +500,9 @@ public class BitmapUtil {
         Bitmap tempBitmapB = bottomBitmap;
 
         if (topBitmap.getWidth() != width) {
-            tempBitmapT = Bitmap.createScaledBitmap(topBitmap, width,
-                    (int) (topBitmap.getHeight() * 1f / topBitmap.getWidth() * width), false);
+            tempBitmapT = Bitmap.createScaledBitmap(topBitmap, width, (int) (topBitmap.getHeight() * 1f / topBitmap.getWidth() * width), false);
         } else if (bottomBitmap.getWidth() != width) {
-            tempBitmapB = Bitmap.createScaledBitmap(bottomBitmap, width,
-                    (int) (bottomBitmap.getHeight() * 1f / bottomBitmap.getWidth() * width), false);
+            tempBitmapB = Bitmap.createScaledBitmap(bottomBitmap, width, (int) (bottomBitmap.getHeight() * 1f / bottomBitmap.getWidth() * width), false);
         }
 
         int height = tempBitmapT.getHeight() + tempBitmapB.getHeight();
@@ -496,8 +528,7 @@ public class BitmapUtil {
      */
     public static Bitmap mergeBitmapTogether(Bitmap bottomBitmap, Bitmap iconBitmap, boolean isBaseBottom) {
 
-        if (bottomBitmap == null || bottomBitmap.isRecycled()
-                || iconBitmap == null || iconBitmap.isRecycled()) {
+        if (bottomBitmap == null || bottomBitmap.isRecycled() || iconBitmap == null || iconBitmap.isRecycled()) {
             ZLog.d(TAG, "topBitmap=" + bottomBitmap + ";bottomBitmap=" + iconBitmap);
             return null;
         }
@@ -515,8 +546,7 @@ public class BitmapUtil {
         Bitmap bitmap = Bitmap.createBitmap(bottomBitmap.getWidth(), bottomBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawBitmap(bottomBitmap, 0, 0, null);
-        canvas.drawBitmap(tempBitmapIcon, (bottomBitmap.getWidth() - width) / 2,
-                (bottomBitmap.getHeight() - height) / 2, null);
+        canvas.drawBitmap(tempBitmapIcon, (bottomBitmap.getWidth() - width) / 2, (bottomBitmap.getHeight() - height) / 2, null);
         return bitmap;
     }
 
@@ -536,17 +566,13 @@ public class BitmapUtil {
             if (options < 0) {
                 options = 0;
             }
-            ZLog.d(TAG, "compress start source length " + baos.toByteArray().length + "; target length:"
-                    + size_length * targetSize
-                    + "; options:" + options);
+            ZLog.d(TAG, "compress start source length " + baos.toByteArray().length + "; target length:" + size_length * targetSize + "; options:" + options);
             //重置baos即清空baos
             baos.reset();
             //第一个参数 ：图片格式 ，第二个参数： 图片质量，100为最高，0为最差  ，第三个参数：保存压缩后的数据的流
             //这里压缩options%，把压缩后的数据存放到baos中
             image.compress(CompressFormat.JPEG, options, baos);
-            ZLog.d(TAG, "compress end source length " + baos.toByteArray().length + "; target length:"
-                    + size_length * targetSize
-                    + "; options:" + options);
+            ZLog.d(TAG, "compress end source length " + baos.toByteArray().length + "; target length:" + size_length * targetSize + "; options:" + options);
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
