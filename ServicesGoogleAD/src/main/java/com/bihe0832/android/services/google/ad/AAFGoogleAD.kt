@@ -2,11 +2,12 @@ package com.bihe0832.android.services.google.ad
 
 import android.app.Activity
 import android.content.Context
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.OnPaidEventListener
+import com.bihe0832.android.lib.log.ZLog
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.initialization.AdapterStatus
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -24,6 +25,9 @@ object AAFGoogleAD {
     private val mAdapterStatusMap = ConcurrentHashMap<String, AdapterStatus>()
 
     fun initModule(context: Context) {
+        ZLog.d("============================")
+        ZLog.d("MobileAds.getVersion:" + MobileAds.getVersion())
+
         MobileAds.initialize(context) { initializationStatus ->
             initializationStatus.adapterStatusMap.entries.filter {
                 // 判断适配器初始化的状态
@@ -47,6 +51,7 @@ object AAFGoogleAD {
             InterstitialAdManager.loadInterstitialAd(context, adUnitId, loadCallback)
             true
         } else {
+            ZLog.d(TAG, "loadInterstitialAd : mAdapterStatusMap is bad")
             false
         }
     }
@@ -56,9 +61,56 @@ object AAFGoogleAD {
             InterstitialAdManager.showInterstitialAd(activity, adUnitId, callback, paidEventListener)
             true
         } else {
+            ZLog.d(TAG, "loadInterstitialAd : mAdapterStatusMap is bad")
             false
         }
-
     }
 
+    fun loadRewardedAd(context: Context, adUnitId: String, loadCallback: RewardedAdLoadCallback? = null): Boolean {
+        return if (canLoadAds()) {
+            RewardedAdManager.loadRewardedAd(context, adUnitId, loadCallback)
+            true
+        } else {
+            ZLog.d(TAG, "loadInterstitialAd : mAdapterStatusMap is bad")
+            false
+        }
+    }
+
+    fun showRewardedAd(activity: Activity, adUnitId: String, onUserEarnedRewardListener: OnUserEarnedRewardListener?, callback: FullScreenContentCallback? = null, paidEventListener: OnPaidEventListener? = null): Boolean {
+        return if (canLoadAds()) {
+            RewardedAdManager.showRewardedAd(activity, adUnitId, onUserEarnedRewardListener, callback, paidEventListener)
+            true
+        } else {
+            ZLog.d(TAG, "loadInterstitialAd : mAdapterStatusMap is bad")
+            false
+        }
+    }
+
+    fun loadRewardedInterstitialAd(context: Context, adUnitId: String, loadCallback: RewardedInterstitialAdLoadCallback? = null): Boolean {
+        return if (canLoadAds()) {
+            RewardedInterstitialAdManager.loadRewardedInterstitialAd(context, adUnitId, loadCallback)
+            true
+        } else {
+            ZLog.d(TAG, "loadInterstitialAd : mAdapterStatusMap is bad")
+            false
+        }
+    }
+
+    fun showRewardedInterstitialAd(activity: Activity, adUnitId: String, onUserEarnedRewardListener: OnUserEarnedRewardListener?, callback: FullScreenContentCallback? = null, paidEventListener: OnPaidEventListener? = null): Boolean {
+        return if (canLoadAds()) {
+            RewardedInterstitialAdManager.showRewardedInterstitialAd(activity, adUnitId, onUserEarnedRewardListener, callback, paidEventListener)
+            true
+        } else {
+            ZLog.d(TAG, "loadInterstitialAd : mAdapterStatusMap is bad")
+            false
+        }
+    }
+
+    fun getCurrentOrientationAnchoredAdaptiveBannerAdSize(context: Context, parentSize: Float): AdSize {
+        return BannerADManager.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, parentSize)
+    }
+
+    fun addBanner(adView: AdView, adUnitId: String, size: AdSize, listener: AdListener?) {
+        BannerADManager.addBanner(adView, adUnitId, size, listener)
+    }
 }

@@ -4,5 +4,6 @@
     <string name="admob_applicaion_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="admob_interstitial_unitid">ca-app-pub-3940256099942544/1033173712</string>
     <string name="admob_rewardedvideo_unitid">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="admob_rewardedvideo_interstitial_unitid">ca-app-pub-3940256099942544/5354046379</string>
     <string name="admob_banner_unitid">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
