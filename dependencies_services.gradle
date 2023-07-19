@@ -1,6 +1,13 @@
 apply from: rootDir.toString() + '/config.gradle'
 
 ext.kitmoduleInfo = [
+    "ServicesWrapper"  : [
+        "version"            : "6.2.3",
+        "artifactId"         : "services-wrapper",
+        "apidependenciesList": [
+            "ServicesGooglePay", "ServicesGoogleAD", "ServicesGoogle"
+        ]
+    ],
     "ServicesGooglePay": [
         "version"            : "6.2.3",
         "artifactId"         : "services-google-pay",
@@ -9,7 +16,7 @@ ext.kitmoduleInfo = [
             "com.android.billingclient:billing:6.0.0"
         ]
     ],
-    "ServicesGoogleAD"   : [
+    "ServicesGoogleAD" : [
         "version"            : "6.2.3",
         "artifactId"         : "services-google-ad",
         "apidependenciesList": [
