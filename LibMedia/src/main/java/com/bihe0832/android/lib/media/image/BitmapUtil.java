@@ -227,8 +227,8 @@ public class BitmapUtil {
                     matrix.postRotate(angle);
                     // 创建新的图片
                     resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    bitmap.recycle();
                 }
-                bitmap.recycle();
                 if (reqWidth > 0 && reqHeight > 0 && (reqWidth < resizedBitmap.getWidth() || reqHeight < resizedBitmap.getHeight())) {
                     // 缩放 Bitmap 对象
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(resizedBitmap, reqWidth, reqHeight, false);
