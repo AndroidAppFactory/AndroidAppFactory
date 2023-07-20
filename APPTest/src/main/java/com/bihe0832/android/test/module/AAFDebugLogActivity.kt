@@ -1,5 +1,6 @@
 package com.bihe0832.android.test.module
 
+import android.content.res.Configuration
 import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.common.debug.log.DebugLogActivity
@@ -14,6 +15,11 @@ import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
 class AAFDebugLogActivity : DebugLogActivity() {
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeGridLayoutManager(this, 3)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        newConfig.orientation
     }
 
     override fun getTempData(): List<CardBaseModule> {

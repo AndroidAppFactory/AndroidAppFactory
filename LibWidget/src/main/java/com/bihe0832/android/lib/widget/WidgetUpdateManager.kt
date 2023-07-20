@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/6/8.
  * Description: 所有 AppWidgetProvider 相关的更新处理逻辑
  *

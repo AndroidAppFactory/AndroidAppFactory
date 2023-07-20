@@ -6,7 +6,7 @@ import com.android.billingclient.api.*
 import com.bihe0832.android.lib.thread.ThreadManager
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/7/14.
  * Description: Description
  */

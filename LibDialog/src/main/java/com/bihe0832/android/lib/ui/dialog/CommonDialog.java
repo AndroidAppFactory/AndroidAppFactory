@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.GlideExtKt;
-import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
+import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
@@ -102,8 +102,6 @@ public class CommonDialog extends Dialog {
         setContentView(getLayoutID());
         //初始化界面控件
         initView();
-        //初始化界面数据
-        refreshView();
         //初始化界面控件的事件
         initEvent();
     }
@@ -111,7 +109,7 @@ public class CommonDialog extends Dialog {
     /**
      * 初始化界面的确定和取消监听器
      */
-    private void initEvent() {
+    protected void initEvent() {
         //设置确定按钮被点击后，向外界提供监听
         if (positiveBn != null) {
             positiveBn.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +148,6 @@ public class CommonDialog extends Dialog {
      * 初始化界面控件的显示数据
      */
     protected void refreshView() {
-
         //如果用户自定了title和message
         setCanceledOnTouchOutside(shouldCanceledOutside);
         setCancelable(shouldCanceledOutside);
@@ -289,7 +286,7 @@ public class CommonDialog extends Dialog {
     /**
      * 初始化界面控件
      */
-    private void initView() {
+    protected void initView() {
         try {
             negativeBn = (Button) findViewById(R.id.negative);
             positiveBn = (Button) findViewById(R.id.positive);

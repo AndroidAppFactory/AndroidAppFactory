@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.ui.dialog
 
 import android.app.Activity
-import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -25,9 +24,9 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
         this.itemClickListener = listener
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setShouldCanceled(true)
+    override fun initView() {
+        super.initView()
+        shouldCanceled = true
         initItemListView()
         setOnClickBottomListener(object : OnDialogListener {
             override fun onPositiveClick() {
@@ -44,19 +43,12 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
         })
     }
 
-
     protected open fun initItemListView() {
         layout_List.removeAllViews()
-        val textViewLayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        )
+        val textViewLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         val paddingValue = DisplayUtil.dip2px(context, 16f)
 
-        val lineViewLayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                DisplayUtil.dip2px(context, 1f)
-        )
+        val lineViewLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(context, 1f))
         textList.map { text ->
             TextView(context).apply {
                 layoutParams = textViewLayoutParams

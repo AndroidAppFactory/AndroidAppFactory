@@ -5,7 +5,7 @@ import com.bihe0832.android.common.webview.core.WebViewLoggerFile
 import com.bihe0832.android.lib.jsbridge.BaseJsBridge
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/6/2.
  * Description: Description
  */

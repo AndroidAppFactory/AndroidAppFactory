@@ -16,9 +16,17 @@ open class BottomDialog : CommonDialog {
 
     constructor(context: Context?, themeResId: Int) : super(context, themeResId)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initView() {
+        super.initView()
         showAnimation()
+        getWindow()?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        )
+    }
+
+    override fun initEvent() {
+        super.initEvent()
         getRootView()?.apply {
             setOnClickListener {
                 if (shouldCanceled) {
@@ -27,12 +35,7 @@ open class BottomDialog : CommonDialog {
                 }
             }
         }
-        getWindow()?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
     }
-
     open fun getRootView(): View? {
         return getContentView().parent as View
     }

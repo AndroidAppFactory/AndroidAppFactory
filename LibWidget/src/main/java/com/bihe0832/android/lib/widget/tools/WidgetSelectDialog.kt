@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.widget.tools
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -15,7 +14,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.widget.R
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/6/15.
  * Description: Description
  */
@@ -26,8 +25,7 @@ class WidgetSelectDialog : CommonDialog {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, themeResId: Int) : super(context, themeResId)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initView() {
         val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(-1, -2)
         val margin = DisplayUtil.dip2px(this.context, 16.0f)
         layoutParams.setMargins(0, margin / 2, 0, margin / 2)
@@ -36,10 +34,6 @@ class WidgetSelectDialog : CommonDialog {
             this.setLayoutParams(layoutParams)
         }
         addViewToContent(this.mItemLayout)
-        initView()
-    }
-
-    fun initView() {
         val mAppWidgetManager = AppWidgetManager.getInstance(context)
         val widgetProviders: List<AppWidgetProviderInfo> = mAppWidgetManager.getInstalledProviders()
         this.mItemLayout?.removeAllViews()

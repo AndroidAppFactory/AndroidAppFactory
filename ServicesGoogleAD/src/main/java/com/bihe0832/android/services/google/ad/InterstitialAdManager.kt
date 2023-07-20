@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/7/14.
  * Description:
  * 1. InterstitialAd 是一种全屏广告，可以在应用程序的自然停顿点或用户自愿触发的情况下展示，例如应用程序的主菜单、游戏关卡之间、文章之间等。

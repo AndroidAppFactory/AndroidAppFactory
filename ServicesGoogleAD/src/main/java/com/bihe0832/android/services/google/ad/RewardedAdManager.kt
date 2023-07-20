@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/7/17.
  * Description:
  *  1. 该广告类型可以在应用程序的自然停顿点或用户自愿触发的情况下展示，并要求用户观看指定长度的广告视频才能获得奖励。

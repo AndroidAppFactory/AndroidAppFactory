@@ -19,7 +19,7 @@ import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2023/6/7.
  * Description: 移除前台Service通知栏标志，这个Service选择性使用
  */

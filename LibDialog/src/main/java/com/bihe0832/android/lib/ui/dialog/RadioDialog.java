@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.ui.dialog;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,19 +31,6 @@ public class RadioDialog extends CommonDialog {
     private OnSelectedListener mOnSelectedListener = null;
     private int mCheckedIndex = -1;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mRadioGroup = new RadioGroup(getContext());
-        LinearLayout.LayoutParams radioGroupLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
-        int margin = DisplayUtil.dip2px(getContext(), 16f);
-        radioGroupLayoutParams.setMargins(0, margin / 2, 0, margin / 2);
-        mRadioGroup.setLayoutParams(radioGroupLayoutParams);
-        addViewToContent(mRadioGroup);
-        initView();
-    }
-
     public interface OnSelectedListener {
 
         public void onSelect(int which);
@@ -53,12 +39,6 @@ public class RadioDialog extends CommonDialog {
     @Override
     protected void refreshView() {
         super.refreshView();
-        if (mCheckedIndex < mDataList.size() && null != mRadioGroup) {
-            mRadioGroup.check(mCheckedIndex);
-        }
-    }
-
-    public void initView() {
         if (null == mDataList || mDataList.isEmpty() || null == mRadioGroup) {
             return;
         }
@@ -66,10 +46,9 @@ public class RadioDialog extends CommonDialog {
         for (int i = 0; i < mDataList.size(); i++) {
             RadioButton radioButton = new RadioButton(getContext());
             radioButton.setId(i);
-            radioButton.setButtonDrawable(
-                    getContext().getResources().getDrawable(R.drawable.com_bihe0832_base_radio_selctor));
-            radioButton.setPadding(DisplayUtil.dip2px(getContext(), 8f), DisplayUtil.dip2px(getContext(), 8f), 0,
-                    DisplayUtil.dip2px(getContext(), 8f));
+//            radioButton.setChecked(i == mCheckedIndex);
+            radioButton.setButtonDrawable(getContext().getResources().getDrawable(R.drawable.com_bihe0832_base_radio_selctor));
+            radioButton.setPadding(DisplayUtil.dip2px(getContext(), 8f), DisplayUtil.dip2px(getContext(), 8f), 0, DisplayUtil.dip2px(getContext(), 8f));
             //设置文字
             radioButton.setText(mDataList.get(i));
             radioButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.com_bihe0832_dialog_content_text_size));
@@ -86,10 +65,31 @@ public class RadioDialog extends CommonDialog {
             });
             mRadioGroup.addView(radioButton);
         }
+
+        if (mCheckedIndex < mDataList.size() && null != mRadioGroup) {
+            mRadioGroup.check(mCheckedIndex);
+        }
+    }
+
+    @Override
+    public void initView() {
+        super.initView();
+        mRadioGroup = new RadioGroup(getContext());
+        LinearLayout.LayoutParams radioGroupLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        int margin = DisplayUtil.dip2px(getContext(), 16f);
+        radioGroupLayoutParams.setMargins(0, margin / 2, 0, margin / 2);
+        mRadioGroup.setLayoutParams(radioGroupLayoutParams);
+        addViewToContent(mRadioGroup);
+
     }
 
     public int getCheckedIndex() {
         return mCheckedIndex;
+    }
+
+    @Override
+    public void show() {
+        super.show();
     }
 
     public void setRadioData(List<String> data, int index, final OnSelectedListener listener) {
