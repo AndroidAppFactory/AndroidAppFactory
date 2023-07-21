@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
     "LibWrapper"                : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-wrapper",
         "apidependenciesList": [
             "LibDebug",
@@ -187,7 +187,7 @@ ext.libmoduleInfo = [
         ]
     ],
     "LibDownload"               : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-download",
         "apidependenciesList": [
             "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -209,14 +209,14 @@ ext.libmoduleInfo = [
         ]
     ],
     "LibSuperAPP"               : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-super-app",
         "apidependenciesList": [
             "LibDialog", "LibAPK"
         ]
     ],
     "LibDebug"                  : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-debug",
         "apidependenciesList": [
             "LibDialog", "LibToast", "LibFloatview"
@@ -301,7 +301,7 @@ ext.libmoduleInfo = [
         ]
     ],
     "LibDialog"                 : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-dialog",
         "apidependenciesList": [
             project.androidsupport.constraintlayout,
@@ -372,7 +372,7 @@ ext.libmoduleInfo = [
         ]
     ],
     "LibPermission"             : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-permission",
         "apidependenciesList": [
             "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -389,7 +389,7 @@ ext.libmoduleInfo = [
         ]
     ],
     "LibFileSelect"             : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-file-select",
         "apidependenciesList": [
             "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -397,7 +397,7 @@ ext.libmoduleInfo = [
         ]
     ],
     "LibFloatview"              : [
-        "version"                : "6.3.2",
+        "version"                : "6.3.3",
         "artifactId"             : "lib-float-view",
         "apidependenciesList"    : [
             project.androidsupport.constraintlayout,
@@ -426,7 +426,7 @@ ext.libmoduleInfo = [
         ]
     ],
     "LibAceEditor"              : [
-        "version"            : "6.3.2",
+        "version"            : "6.3.3",
         "artifactId"         : "lib-ace-editor",
         "apidependenciesList": [
             "LibFileSelect", "LibOS", "LibDialog", "LibText"
