@@ -2,7 +2,9 @@ package com.bihe0832.android.lib.ui.dialog;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bihe0832.android.lib.media.image.GlideExtKt;
@@ -15,19 +17,21 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil;
  * Description: Description
  */
 public class ImageDialog extends CommonDialog {
-
     public static final int ORIENTATION_VERTICAL = 1;
     public static final int ORIENTATION_HORIZONTAL = 2;
-
-    private int oritation = ORIENTATION_VERTICAL;
+    private int oritation = 1;
     private String url = "";
     private int res = -1;
+    private int mButtonHeight = 0;
+    private int mButtonLeftMargin = 0;
+    private int mButtonBottomMargin = 0;
+
     private Bitmap bitmap = null;
     private ImageView mContentImageView = null;
-
     private View mDialogLayout = null;
+    private View mButtonLayout = null;
+    private boolean mShowButtonBg = false;
 
-    @Override
     protected int getLayoutID() {
         return R.layout.com_bihe0832_common_image_dialog;
     }
@@ -36,14 +40,25 @@ public class ImageDialog extends CommonDialog {
         super(context);
     }
 
-    @Override
     protected void initView() {
-        setShouldCanceled(true);
-        mDialogLayout = findViewById(R.id.dialog_content_layout);
-        if (mDialogLayout != null) {
-            mDialogLayout.setOnClickListener(v -> dismiss());
+        this.setShouldCanceled(true);
+        this.mDialogLayout = this.findViewById(R.id.dialog_content_layout);
+        if (this.mDialogLayout != null) {
+            this.mDialogLayout.setOnClickListener((v) -> {
+                getOnClickBottomListener().onNegativeClick();
+            });
         }
-        mContentImageView = findViewById(R.id.dialog_image);
+
+        this.mContentImageView = (ImageView) this.findViewById(R.id.dialog_image);
+        this.mButtonLayout = this.findViewById(R.id.dialog_button);
+        if (this.mButtonLayout != null) {
+            this.mButtonLayout.setOnClickListener((v) -> {
+                getOnClickBottomListener().onPositiveClick();
+            });
+        }
+        if (mButtonHeight == 0){
+            mButtonHeight = DisplayUtil.dip2px(getContext(), 100f);
+        }
     }
 
     public ImageDialog setOritation(int oritation) {
@@ -66,26 +81,55 @@ public class ImageDialog extends CommonDialog {
         return this;
     }
 
-    @Override
+    public ImageDialog setShowButton(boolean showButton) {
+        this.mShowButtonBg = showButton;
+        return this;
+    }
+
+    public ImageDialog setButtonHeightAndMargin(int heightDP, int leftMargin, int bottomMargin) {
+        this.mButtonHeight = DisplayUtil.dip2px(getContext(), heightDP);
+        this.mButtonLeftMargin = DisplayUtil.dip2px(getContext(), leftMargin);
+        this.mButtonBottomMargin = DisplayUtil.dip2px(getContext(), bottomMargin);
+        return this;
+    }
+
     protected void refreshView() {
-        int dp32 = DisplayUtil.dip2px(getContext(), 32f);
-        if (null != mDialogLayout) {
-            if (oritation == ORIENTATION_VERTICAL) {
-                mDialogLayout.setPadding(dp32, dp32, dp32, DisplayUtil.dip2px(getContext(), 128f));
+        if (null != this.mDialogLayout) {
+            if (this.oritation == 1) {
+                this.mDialogLayout.setPadding(0, 0, 0, DisplayUtil.dip2px(this.getContext(), 128.0F));
             } else {
-                mDialogLayout.setPadding(dp32, dp32, dp32, dp32);
+                this.mDialogLayout.setPadding(0, 0, 0, 0);
             }
         }
 
-        if (null != mContentImageView) {
-            if (URLUtils.isHTTPUrl(url)) {
-                GlideExtKt.loadCenterInsideImage(mContentImageView, url, R.color.transparent, R.color.transparent);
-            } else if (res > 0) {
-                mContentImageView.setImageResource(res);
+        if (null != this.mButtonLayout) {
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) this.mButtonLayout.getLayoutParams();
+            params.height = mButtonHeight;
+            params.leftMargin = mButtonLeftMargin;
+            params.rightMargin = mButtonLeftMargin;
+            params.bottomMargin = mButtonBottomMargin;
+            this.mButtonLayout.setLayoutParams(params);
+            if (mShowButtonBg) {
+                int colorAccent = getContext().getResources().getColor(R.color.colorAccent);
+                int colorWithAlpha = Color.argb(128, Color.red(colorAccent), Color.green(colorAccent), Color.blue(colorAccent));
+                this.mButtonLayout.setBackgroundColor(colorWithAlpha);
+
             } else {
-                mContentImageView.setImageBitmap(bitmap);
+                this.mButtonLayout.setBackgroundResource(R.color.transparent);
             }
         }
+
+        if (null != this.mContentImageView) {
+            if (URLUtils.isHTTPUrl(this.url)) {
+                GlideExtKt.loadCenterInsideImage(this.mContentImageView, this.url, R.color.transparent, R.color.transparent);
+            } else if (this.res > 0) {
+                this.mContentImageView.setImageResource(this.res);
+            } else {
+                this.mContentImageView.setImageBitmap(this.bitmap);
+            }
+        }
+
+
         super.refreshView();
     }
 }
