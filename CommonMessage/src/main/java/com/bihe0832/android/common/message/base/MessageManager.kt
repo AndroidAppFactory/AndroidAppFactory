@@ -32,8 +32,11 @@ import java.net.HttpURLConnection
  * Description: Description
  *
  */
-abstract class MessageManager {
-    abstract fun fetchNewMsg()
+public open class MessageManager {
+
+    open fun fetchNewMsg() {
+        fetchMessageByURLList(ThemeResourcesManager.getString(R.string.com_bihe0832_message_common_msg_url)!!)
+    }
 
     fun getMessageLiveData(): MessageListLiveData {
         return MessageListLiveData
@@ -58,12 +61,16 @@ abstract class MessageManager {
 
     fun updateMsg() {
         ZLog.d(MessageListLiveData.TAG, "MessageManager updateMsg ")
-        fetchMessageByFile(ThemeResourcesManager.getString(R.string.com_bihe0832_message_common_msg_url)!!)
         fetchNewMsg()
     }
 
+    fun fetchMessageByURLList(url: String) {
+        url?.split(";")?.forEach {
+            fetchMessageByURL(it)
+        }
+    }
 
-    fun fetchMessageByFile(url: String) {
+    private fun fetchMessageByURL(url: String) {
         if (URLUtils.isHTTPUrl(url)) {
             HTTPServer.getInstance().doRequestAsync(object : HttpBasicRequest() {
                 override fun getUrl(): String {

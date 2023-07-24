@@ -29,8 +29,7 @@ object AAFMessageManager : MessageManager() {
     }
 
     override fun fetchNewMsg() {
-        fetchMessageByFile(AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.message_url)
-                ?: "", ""))
+        fetchMessageByURLList(AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.message_url) ?: "", ""))
     }
 
     fun showMessage(activity: Activity, messageInfoItem: MessageInfoItem, showFace: Boolean) {
