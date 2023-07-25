@@ -37,7 +37,7 @@ ext.pubModuleIsApplication = false
 /**
  * 组件所有模块的最新版本，下次发布时使用
  */
-ext.moduleVersionName = "6.3.5"
+ext.moduleVersionName = "6.3.6"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [

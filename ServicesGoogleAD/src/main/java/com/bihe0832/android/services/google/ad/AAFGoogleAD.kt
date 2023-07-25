@@ -66,8 +66,8 @@ object AAFGoogleAD {
         }
     }
 
-    fun hasInterstitialAd(adUnitId: String) {
-        InterstitialAdManager.hasCachedAd(adUnitId)
+    fun hasInterstitialAd(adUnitId: String): Boolean {
+        return InterstitialAdManager.hasCachedAd(adUnitId)
     }
 
     fun loadRewardedAd(context: Context, adUnitId: String, loadCallback: RewardedAdLoadCallback? = null): Boolean {
@@ -90,8 +90,8 @@ object AAFGoogleAD {
         }
     }
 
-    fun hasRewardedAd(adUnitId: String) {
-        RewardedAdManager.hasCachedAd(adUnitId)
+    fun hasRewardedAd(adUnitId: String): Boolean {
+        return RewardedAdManager.hasCachedAd(adUnitId)
     }
 
 
@@ -115,8 +115,8 @@ object AAFGoogleAD {
         }
     }
 
-    fun hasRewardedInterstitialAd(adUnitId: String) {
-        RewardedInterstitialAdManager.hasCachedAd(adUnitId)
+    fun hasRewardedInterstitialAd(adUnitId: String): Boolean {
+        return RewardedInterstitialAdManager.hasCachedAd(adUnitId)
     }
 
 
