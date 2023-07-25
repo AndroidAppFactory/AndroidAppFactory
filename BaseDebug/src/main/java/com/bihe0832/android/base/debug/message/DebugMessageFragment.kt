@@ -12,6 +12,7 @@ import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.common.message.list.card.MessageItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.gson.JsonHelper
+import com.bihe0832.android.lib.log.ZLog
 
 class DebugMessageFragment : BaseDebugListFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -55,6 +56,7 @@ class DebugMessageFragment : BaseDebugListFragment() {
                 "        \"showFace\": 2," +
                 "        \"create_date\": \"202307200600\"" +
                 "    }"
+        ZLog.d(JsonHelper.toJson(messageData).toString())
         JsonHelper.fromJson(messageData, MessageInfoItem::class.java)?.let {
             AAFMessageManager.showMessage(activity!!, it, false)
         }
