@@ -21,4 +21,15 @@ public final class AAFMessageActivity extends CommonActivity {
             loadRootFragment(new AAFMessageListFragment());
         }
     }
+
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (this.findFragment(AAFMessageListFragment.class) != null) {
+                this.findFragment(AAFMessageListFragment.class).setUserVisibleHint(true);
+            }
+        } catch (Exception var2) {
+            var2.printStackTrace();
+        }
+    }
 }

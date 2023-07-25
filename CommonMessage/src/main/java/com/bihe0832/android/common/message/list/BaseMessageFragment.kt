@@ -58,6 +58,7 @@ abstract class BaseMessageFragment : CommonListFragment() {
         }
 
         override fun refresh() {
+            getMessageManager().updateMsg()
             initData()
         }
 
@@ -76,6 +77,13 @@ abstract class BaseMessageFragment : CommonListFragment() {
 
     override fun getDataLiveData(): CommonListLiveData {
         return mCommonListLiveData
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser, hasCreateView)
+        if (isVisibleToUser && hasCreateView) {
+            getMessageManager().updateMsg()
+        }
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
