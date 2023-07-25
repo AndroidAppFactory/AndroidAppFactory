@@ -22,6 +22,10 @@ object InterstitialAdManager {
 
     private val mInterstitialAdList = ConcurrentHashMap<String, LinkedList<InterstitialAd>>()
 
+    fun hasCachedAd(adUnitId: String): Boolean {
+        return mInterstitialAdList[adUnitId]?.isNotEmpty()?:false
+    }
+
     fun addToInterstitialAdList(adUnitId: String, interstitialAd: InterstitialAd) {
         var list = mInterstitialAdList.get(adUnitId)
         if (list == null) {

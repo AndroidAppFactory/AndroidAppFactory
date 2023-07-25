@@ -20,6 +20,11 @@ import java.util.concurrent.ConcurrentHashMap
 object RewardedInterstitialAdManager {
     private val mRewardedInterstitialAdList = ConcurrentHashMap<String, LinkedList<RewardedInterstitialAd>>()
 
+    fun hasCachedAd(adUnitId: String): Boolean {
+        return mRewardedInterstitialAdList[adUnitId]?.isNotEmpty() ?: false
+    }
+
+
     fun addToRewardedInterstitialAdList(adUnitId: String, rewardedAd: RewardedInterstitialAd) {
         var list = mRewardedInterstitialAdList.get(adUnitId)
         if (list == null) {

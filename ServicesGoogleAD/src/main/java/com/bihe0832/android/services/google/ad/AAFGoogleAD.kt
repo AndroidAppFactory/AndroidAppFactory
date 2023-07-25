@@ -66,6 +66,10 @@ object AAFGoogleAD {
         }
     }
 
+    fun hasInterstitialAd(adUnitId: String) {
+        InterstitialAdManager.hasCachedAd(adUnitId)
+    }
+
     fun loadRewardedAd(context: Context, adUnitId: String, loadCallback: RewardedAdLoadCallback? = null): Boolean {
         return if (canLoadAds()) {
             RewardedAdManager.loadRewardedAd(context, adUnitId, loadCallback)
@@ -86,6 +90,11 @@ object AAFGoogleAD {
         }
     }
 
+    fun hasRewardedAd(adUnitId: String) {
+        RewardedAdManager.hasCachedAd(adUnitId)
+    }
+
+
     fun loadRewardedInterstitialAd(context: Context, adUnitId: String, loadCallback: RewardedInterstitialAdLoadCallback? = null): Boolean {
         return if (canLoadAds()) {
             RewardedInterstitialAdManager.loadRewardedInterstitialAd(context, adUnitId, loadCallback)
@@ -105,6 +114,11 @@ object AAFGoogleAD {
             false
         }
     }
+
+    fun hasRewardedInterstitialAd(adUnitId: String) {
+        RewardedInterstitialAdManager.hasCachedAd(adUnitId)
+    }
+
 
     fun getCurrentOrientationAnchoredAdaptiveBannerAdSize(context: Context, parentSize: Float): AdSize {
         return BannerADManager.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, parentSize)

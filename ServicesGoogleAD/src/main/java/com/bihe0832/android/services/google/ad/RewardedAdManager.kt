@@ -23,6 +23,10 @@ import java.util.concurrent.ConcurrentHashMap
 object RewardedAdManager {
     private val mRewardedAdList = ConcurrentHashMap<String, LinkedList<RewardedAd>>()
 
+    fun hasCachedAd(adUnitId: String): Boolean {
+        return mRewardedAdList[adUnitId]?.isNotEmpty()?:false
+    }
+
     fun addTorewardedAdList(adUnitId: String, rewardedAd: RewardedAd) {
         var list = mRewardedAdList.get(adUnitId)
         if (list == null) {
