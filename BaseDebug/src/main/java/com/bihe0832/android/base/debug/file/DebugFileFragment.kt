@@ -87,7 +87,7 @@ class DebugFileFragment : DebugEnvFragment() {
 
     private fun testFolder() {
         mutableListOf<String>(
-                "https://voice-file-1300342614.cos.ap-shanghai.myqcloud.com/voice%2FA6FCC3060878E3B121899003F5B42CD5%2Bf82ca891eb9845c3a743f6e64cf95ffe.mp3?q-sign-algorithm=sha1\\u0026q-ak=AKIDCLEqBF2YnmUv5zcy3rOzKODk0zh9KErD\\u0026q-sign-time=1660720054%3B1660727254\\u0026q-key-time=1660720054%3B1660727254\\u0026q-header-list=host\\u0026q-url-param-list=\\u0026q-signature=b49a8fafe797c3c618acb23d93dc74488643bc27",
+                "https://voice-file-1300342614.aaa.com/voice%2FA6FCC3060878E3B121899003F5B42CD5%2Bf82ca891eb9845c3a743f6e64cf95ffe.mp3?q-sign-algorithm=sha126q-ak=AKIDCLEqBF2YnmUvwqwqzh9KErD026q-sign-time=1660720w054%3B166107272540026",
                 "/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
                 "10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
                 "/storage/emulated/0/Android/data/com.tencent.cmocmna.video/files/mocmna/temp/log//server_20220818.txt",
