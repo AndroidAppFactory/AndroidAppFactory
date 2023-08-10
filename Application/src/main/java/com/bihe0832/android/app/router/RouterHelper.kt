@@ -9,7 +9,6 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterAction.SCHEME
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.lifecycle.AAFActivityLifecycleChangedListener
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -101,9 +100,17 @@ object RouterHelper {
                     if (Routers.ROUTERS_VALUE_PARSE_SOURCE.equals(source, ignoreCase = true)) {
                         goSplash(null)
                     } else {
-                        val resolveActivityPackage = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME).resolveActivity(it.packageManager).packageName
-                        if (!resolveActivityPackage.equals(it.packageName, ignoreCase = true)) {
-                            IntentUtils.jumpToOtherApp(uri.toString(), context)
+                        try {
+                            val resolveActivityPackage = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME).apply {
+                                addCategory(Intent.CATEGORY_BROWSABLE)
+                                setComponent(null)
+                                setSelector(null)
+                            }.resolveActivity(it.packageManager).packageName
+                            if (!resolveActivityPackage.equals(it.packageName, ignoreCase = true)) {
+                                IntentUtils.jumpToOtherApp(uri.toString(), context)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                     }
                 }

@@ -149,6 +149,9 @@ public class Routers {
         } else {
             try {
                 Intent intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setComponent(null);
+                intent.setSelector(null);
                 System.out.println("jumpToOtherApp url:" + uri.toString() + ",intent:" + intent.toString());
                 if (!(context instanceof Activity)) {
                     if (startFlag > 0) {

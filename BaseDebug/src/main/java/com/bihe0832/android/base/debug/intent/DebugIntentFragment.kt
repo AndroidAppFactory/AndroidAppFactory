@@ -30,6 +30,8 @@ import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
+import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.widget.WidgetUpdateManager
 import com.bihe0832.android.lib.widget.tools.WidgetTools
@@ -40,6 +42,9 @@ class DebugIntentFragment : DebugEnvFragment() {
     val mAppWidgetManager = AppWidgetManager.getInstance(ZixieContext.applicationContext);
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("打开指定schema", View.OnClickListener { openSchema() }))
+
+
             add(DebugItemData("默认关于页", View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) }))
 
             add(DebugItemData("打开应用安装界面", View.OnClickListener {
@@ -98,6 +103,14 @@ class DebugIntentFragment : DebugEnvFragment() {
 
             }))
         }
+    }
+
+    private fun openSchema() {
+        DialogUtils.showInputDialog(context!!,"Schma调试","zapk://about",object :InputDialogCompletedCallback{
+            override fun onInputCompleted(p0: String?) {
+                IntentUtils.jumpToOtherApp(p0,context)
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

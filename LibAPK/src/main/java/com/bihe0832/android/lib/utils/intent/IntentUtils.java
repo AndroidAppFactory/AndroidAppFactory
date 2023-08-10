@@ -34,6 +34,9 @@ public class IntentUtils {
         }
         try {
             Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+            intent.addCategory(Intent.CATEGORY_BROWSABLE);
+            intent.setComponent(null);
+            intent.setSelector(null);
             ZLog.d(TAG, "jumpToOtherApp url:" + url + ",intent:" + intent.toString());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);

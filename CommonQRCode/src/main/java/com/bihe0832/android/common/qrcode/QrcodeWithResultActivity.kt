@@ -9,6 +9,7 @@ import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.google.zxing.Result
+import java.lang.Exception
 
 @Module(RouterConstants.MODULE_NAME_QRCODE_SCAN_AND_PARSE)
 class QrcodeWithResultActivity : QrcodeScanActivity() {
@@ -25,18 +26,27 @@ class QrcodeWithResultActivity : QrcodeScanActivity() {
         if (TextUtils.isEmpty(scanResult)) {
             ZixieContext.showToast("扫码失败，" + ThemeResourcesManager.getString(R.string.app_name) + "无法识别该二维码")
         } else {
-            Intent.parseUri(scanResult, Intent.URI_INTENT_SCHEME).let {
-                if (isSelfIntent(it)) {
-                    playBeepSoundAndVibrate()
-                    RouterAction.openFinalURL(scanResult)
-                } else {
-                    if (!IntentUtils.startIntent(this, it)) {
-                        ZixieContext.showToast("扫码失败，" + ThemeResourcesManager.getString(R.string.app_name) + "无法解析该二维码")
-                    } else {
+            try {
+                Intent.parseUri(scanResult, Intent.URI_INTENT_SCHEME).apply{
+                    addCategory(Intent.CATEGORY_BROWSABLE)
+                    setComponent(null)
+                    setSelector(null)
+                }.let {
+                    if (isSelfIntent(it)) {
                         playBeepSoundAndVibrate()
+                        RouterAction.openFinalURL(scanResult)
+                    } else {
+                        if (!IntentUtils.startIntent(this, it)) {
+                            ZixieContext.showToast("扫码失败，" + ThemeResourcesManager.getString(R.string.app_name) + "无法解析该二维码")
+                        } else {
+                            playBeepSoundAndVibrate()
+                        }
                     }
                 }
+            }catch (e:Exception){
+                e
             }
+
         }
         finish()
     }
