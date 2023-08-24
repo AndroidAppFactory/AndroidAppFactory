@@ -23,5 +23,4 @@ class TestSplashActivity : SplashActivity() {
     override fun getMainRouter(): String {
         return RouterConstants.MODULE_NAME_DEBUG
     }
-
 }

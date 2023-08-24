@@ -10,12 +10,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AESUtils {
 
-    private static byte ivBytes[] = new byte[]{0x4D, 0x4E, 0x41, 0x40, 0x32, 0x30, 0x31, 0x37, 0x47, 0x4F, 0x48, 0x45,
-            0x41, 0x44, 0x21, 0x21};
-
     // 默认Key
     public static byte DEFAULT_KEY[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x31, 0x32, 0x33, 0x34, 0x35,
             0x35, 0x37, 0x38};
+    private static byte ivBytes[] = new byte[]{0x4D, 0x4E, 0x41, 0x40, 0x32, 0x30, 0x31, 0x37, 0x47, 0x4F, 0x48, 0x45,
+            0x41, 0x44, 0x21, 0x21};
 
     private static byte[] doAESEncrypt(byte[] content, byte[] key, byte[] ivParaBytes, int mode) {
         try {
@@ -36,9 +35,18 @@ public class AESUtils {
         return null;
     }
 
+    public static byte[] doAESEncryptWithIV(byte[] content, byte[] keyBytes, byte[] ivSpec, int mode) {
+        try {
+            return doAESEncrypt(content, keyBytes, ivSpec, mode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static byte[] doAESEncryptWithDefaultIV(byte[] content, byte[] keyBytes, int mode) {
         try {
-            return doAESEncrypt(content, keyBytes, ivBytes, mode);
+            return doAESEncryptWithIV(content, keyBytes, ivBytes, mode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,7 +56,7 @@ public class AESUtils {
     public static byte[] doAESEncryptWithoutIV(byte[] content, byte[] keyBytes, int mode) {
         try {
             byte[] ivSpec = new byte[16];
-            return doAESEncrypt(content, keyBytes, ivSpec, mode);
+            return doAESEncryptWithIV(content, keyBytes, ivSpec, mode);
         } catch (Exception e) {
             e.printStackTrace();
         }

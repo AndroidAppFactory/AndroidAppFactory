@@ -75,7 +75,7 @@
 -dontwarn androidx.**
 
 
--keepclasseswithmembernames class * {
+-keepclasseswithmembers class * {
     native <methods>;
 }
 
