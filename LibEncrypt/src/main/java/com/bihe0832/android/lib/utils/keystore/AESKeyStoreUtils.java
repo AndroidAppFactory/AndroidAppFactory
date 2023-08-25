@@ -9,22 +9,17 @@ import com.bihe0832.android.lib.utils.time.DateUtil;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Date;
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.security.auth.x500.X500Principal;
 
 /**
@@ -34,7 +29,7 @@ import javax.security.auth.x500.X500Principal;
  *         Created on 2023/8/25.
  *         Description:
  */
-public class AndroidKeyStoreUtils {
+public class AESKeyStoreUtils {
 
     public static final String ANDROID_KEY_STORE = "AndroidKeyStore";
 
@@ -59,7 +54,7 @@ public class AndroidKeyStoreUtils {
     public static void buildKey(Context context, String keyAlias) {
         try {
             // 先获取密钥对生成器，采用RSA算法，AndroidKeyStore类型
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEY_STORE);
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE);
             // 加密算法的相关参数
             AlgorithmParameterSpec spec;
             // 密钥的有效起止时间，从现在到999年后，时间大家自己定
@@ -71,11 +66,10 @@ public class AndroidKeyStoreUtils {
                 // 根据密钥别名生成加密参数，提供加密和解密操作
                 spec = new KeyGenParameterSpec.Builder(keyAlias,
                         KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-                        // SHA (Secure Hash Algorithm，译作安全散列算法) 是美国国家安全局 (NSA) 设计，美国国家标准与技术研究院 (NIST) 发布的一系列密码散列函数。 感兴趣的同学可以了解一下
                         .setDigests(KeyProperties.DIGEST_SHA512)
-                        // 填充模式，一般RSA加密常用PKCS1Padding模式
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
-                        // 限定密钥有效期起止时间
+                        .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                        .setRandomizedEncryptionRequired(true)
                         .setCertificateNotBefore(start)
                         .setCertificateNotAfter(end)
                         .build();
@@ -93,8 +87,8 @@ public class AndroidKeyStoreUtils {
                         .build();
             }
             // 用加密参数初始化密钥对生成器，生成密钥对
-            keyPairGenerator.initialize(spec);
-            keyPairGenerator.generateKeyPair();
+            keyGenerator.init(spec);
+            keyGenerator.generateKey();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchProviderException e) {
@@ -105,7 +99,8 @@ public class AndroidKeyStoreUtils {
     }
 
     // 加密方法
-    public static byte[] encrypt(Context context, String keyAlias, byte[] data) {
+    public static AESKeyStoreResult doEncrypt(int mode, Context context, String keyAlias, byte[] ivParaBytes,
+            byte[] data) {
         if (!hasKey(keyAlias)) {
             buildKey(context, keyAlias);
         }
@@ -115,76 +110,36 @@ public class AndroidKeyStoreUtils {
             keyStore.load(null);
             // 拿到密钥别名对应的Entry
             KeyStore.Entry entry = keyStore.getEntry(keyAlias, null);
-            if (entry instanceof KeyStore.PrivateKeyEntry) {
-                // 通过Entry拿到公钥对象（并不是真实的公钥，仅供加密方法使用）
-                PublicKey publicKey = ((KeyStore.PrivateKeyEntry) entry).getCertificate().getPublicKey();
-                // 使用"RSA/ECB/PKCS1Padding"模式进行加密
-                Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-                cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-                return cipher.doFinal(data);
+            if (entry instanceof KeyStore.SecretKeyEntry) {
+                KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) keyStore.getEntry(keyAlias, null);
+                SecretKey secretKey = secretKeyEntry.getSecretKey();
+                Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+                if (mode == Cipher.DECRYPT_MODE) {
+                    final IvParameterSpec iv = new IvParameterSpec(ivParaBytes);
+                    cipher.init(mode, secretKey, iv);
+                    return new AESKeyStoreResult(ivParaBytes, cipher.doFinal(data));
+                } else {
+                    cipher.init(mode, secretKey);
+                    return new AESKeyStoreResult(cipher.getIV(), cipher.doFinal(data));
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableEntryException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    // 加密方法
+    public static AESKeyStoreResult encrypt(Context context, String keyAlias, byte[] data) {
+        return doEncrypt(Cipher.ENCRYPT_MODE, context, keyAlias, null, data);
+    }
 
     // 解密方法
-    public static byte[] decrypt(Context context, String keyAlias, byte[] data) {
-        if (!hasKey(keyAlias)) {
-            buildKey(context, keyAlias);
-        }
-        try {
-            // 获取"AndroidKeyStore"类型的KeyStore，加载
-            KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE);
-            keyStore.load(null);
-            // 拿到密钥别名对应的Entry
-            KeyStore.Entry entry = keyStore.getEntry(keyAlias, null);
-            if (entry instanceof KeyStore.PrivateKeyEntry) {
-                // 通过Entry拿到私钥对象（并不是真实的私钥，仅供解密方法使用）
-                PrivateKey privateKey = ((KeyStore.PrivateKeyEntry) entry).getPrivateKey();
-                // 使用"RSA/ECB/PKCS1Padding"模式进行解密
-                Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-                cipher.init(Cipher.DECRYPT_MODE, privateKey);
-                return cipher.doFinal(data);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableEntryException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
+    public static byte[] decrypt(Context context, String keyAlias, byte[] ivParaBytes, byte[] data) {
+        AESKeyStoreResult result = doEncrypt(Cipher.DECRYPT_MODE, context, keyAlias, ivParaBytes, data);
+        if (result != null) {
+            return result.result;
         }
         return null;
     }
-
 }

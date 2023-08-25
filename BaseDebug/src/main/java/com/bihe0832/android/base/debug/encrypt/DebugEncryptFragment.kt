@@ -12,7 +12,8 @@ import com.bihe0832.android.lib.utils.encrypt.HexUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
 import com.bihe0832.android.lib.utils.encrypt.SHA256
-import com.bihe0832.android.lib.utils.keystore.AndroidKeyStoreUtils
+import com.bihe0832.android.lib.utils.keystore.AESKeyStoreUtils
+import com.bihe0832.android.lib.utils.keystore.RSAKeyStoreUtils
 import java.util.Arrays
 import javax.crypto.Cipher
 
@@ -22,13 +23,15 @@ open class DebugEncryptFragment : DebugCommonFragment() {
 
     private val KEY = "1234567890ASCDEF1234567890ASCDEF"
     private val IV = "1234567890ASCDEF"
-    private val KEY_ALIAS = "zixie"
+    private val AES_KEY_ALIAS = "aes"
+    private val RSA_KEY_ALIAS = "rsa"
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugTipsData("加解密方案"))
             add(DebugItemData("使用AES 加密解密", View.OnClickListener { aesEncrypt() }))
-            add(DebugItemData("使用系统自带加密解密", View.OnClickListener { androidEncrypt() }))
+            add(DebugItemData("使用系统自带秘钥RSA加密解密", View.OnClickListener { androidRSAEncrypt() }))
+            add(DebugItemData("使用系统自带秘钥AES加密解密", View.OnClickListener { androidAESEncrypt() }))
             add(DebugItemData("通用完整性校验（MD5、SHA256）", View.OnClickListener { testMessageDigest() }))
         }
     }
@@ -119,31 +122,84 @@ open class DebugEncryptFragment : DebugCommonFragment() {
         }
     }
 
-    fun androidEncrypt() {
+    fun androidRSAEncrypt() {
         DialogUtils.showInputDialog(
             context!!,
             "要加密的内容",
             "1234567890ABCDEF",
         ) { p0 ->
             p0?.let { data ->
-                val encryptResult = AndroidKeyStoreUtils.encrypt(context, KEY_ALIAS, data.toByteArray())
+                val encryptResult = RSAKeyStoreUtils.encrypt(context, RSA_KEY_ALIAS, data.toByteArray())
                 ZLog.d(TAG, "-------------------------------------------")
-                ZLog.d(TAG, "系统自带内容加密 ：${Arrays.toString(encryptResult)}")
-                ZLog.d(TAG, "系统自带内容加密 ：${HexUtils.bytes2HexStr(encryptResult)}")
+                ZLog.d(TAG, "系统自带秘钥RSA内容加密 ：${Arrays.toString(encryptResult)}")
+                ZLog.d(TAG, "系统自带秘钥RSA内容加密 ：${HexUtils.bytes2HexStr(encryptResult)}")
                 ZLog.d(TAG, "-------------------------------------------")
                 ZLog.d(TAG, "-------------------------------------------")
                 ZLog.d(
                     TAG,
-                    "系统自带内容解密 ：${String(AndroidKeyStoreUtils.decrypt(context, KEY_ALIAS, encryptResult))}",
+                    "系统自带秘钥RSA内容解密 ：${
+                        String(
+                            RSAKeyStoreUtils.decrypt(
+                                context,
+                                RSA_KEY_ALIAS,
+                                encryptResult,
+                            ),
+                        )
+                    }",
                 )
                 ZLog.d(
                     TAG,
-                    "系统自带内容解密 ：${
+                    "系统自带秘钥RSA内容解密 ：${
                         String(
-                            AndroidKeyStoreUtils.decrypt(
+                            RSAKeyStoreUtils.decrypt(
                                 context,
-                                KEY_ALIAS,
+                                RSA_KEY_ALIAS,
                                 HexUtils.hexStr2Bytes(HexUtils.bytes2HexStr(encryptResult)),
+                            ),
+                        )
+                    }",
+                )
+                ZLog.d(TAG, "-------------------------------------------")
+            }
+        }
+    }
+
+    private fun androidAESEncrypt() {
+        DialogUtils.showInputDialog(
+            context!!,
+            "要加密的内容",
+            "1234567890ABCDEF",
+        ) { p0 ->
+            p0?.let { data ->
+                val encryptResult =
+                    AESKeyStoreUtils.encrypt(context, AES_KEY_ALIAS, data.toByteArray())
+                ZLog.d(TAG, "-------------------------------------------")
+                ZLog.d(TAG, "系统自带秘钥AES内容加密 ：${Arrays.toString(encryptResult.result)}")
+                ZLog.d(TAG, "系统自带秘钥AES内容加密 ：${HexUtils.bytes2HexStr(encryptResult.result)}")
+                ZLog.d(TAG, "-------------------------------------------")
+                ZLog.d(TAG, "-------------------------------------------")
+                ZLog.d(
+                    TAG,
+                    "系统自带秘钥AES内容解密 ：${
+                        String(
+                            AESKeyStoreUtils.decrypt(
+                                context,
+                                AES_KEY_ALIAS,
+                                encryptResult.iv,
+                                encryptResult.result,
+                            ),
+                        )
+                    }",
+                )
+                ZLog.d(
+                    TAG,
+                    "系统自带秘钥AES内容解密 ：${
+                        String(
+                            AESKeyStoreUtils.decrypt(
+                                context,
+                                AES_KEY_ALIAS,
+                                encryptResult.iv,
+                                HexUtils.hexStr2Bytes(HexUtils.bytes2HexStr(encryptResult.result)),
                             ),
                         )
                     }",
