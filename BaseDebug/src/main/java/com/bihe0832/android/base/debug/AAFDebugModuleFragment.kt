@@ -8,7 +8,6 @@
 
 package com.bihe0832.android.base.debug
 
-
 import android.view.View
 import com.bihe0832.android.base.debug.audio.DebugAudioFragment
 import com.bihe0832.android.base.debug.block.DebugEnqueueFragment
@@ -19,6 +18,7 @@ import com.bihe0832.android.base.debug.clipboard.DebugClipboardFragment
 import com.bihe0832.android.base.debug.convert.DebugConvertFragment
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
+import com.bihe0832.android.base.debug.encrypt.DebugEncryptFragment
 import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
 import com.bihe0832.android.base.debug.google.DebugGoogleFragment
@@ -50,7 +50,6 @@ import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
-
 class AAFDebugModuleFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -65,7 +64,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
             add(getDebugFragmentItemData("公告消息 调试", DebugMessageFragment::class.java))
 
-
             add(getDebugFragmentItemData("Google相关 调试", DebugGoogleFragment::class.java))
 
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
@@ -73,10 +71,17 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
+            add(getDebugFragmentItemData("加解密、MD5、SHA256等", DebugEncryptFragment::class.java))
+
             add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
 
             add(getDebugFragmentItemData("UI（换肤、哀悼日、前后台等）测试", DebugUIFragment::class.java))
-            add(getDebugFragmentItemData("UI（Intent跳转、反馈、评分、锁屏、Widget、设置等）测试", DebugIntentFragment::class.java))
+            add(
+                getDebugFragmentItemData(
+                    "UI（Intent跳转、反馈、评分、锁屏、Widget、设置等）测试",
+                    DebugIntentFragment::class.java,
+                ),
+            )
             add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
@@ -87,31 +92,50 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("SVGA 调试", DebugSvgaFragment::class.java))
             add(getDebugFragmentItemData("拍照及相册调试", DebugPhotosFragment::class.java))
             add(getDebugFragmentItemData("Cache、数据中心测试", DebugCacheFragment::class.java))
-            add(DebugItemData("沉浸式状态栏及标题栏调试", View.OnClickListener {
-                startActivityWithException(DebugImmersionActivity::class.java)
-            }))
+            add(
+                DebugItemData(
+                    "沉浸式状态栏及标题栏调试",
+                    View.OnClickListener {
+                        startActivityWithException(DebugImmersionActivity::class.java)
+                    },
+                ),
+            )
             add(getDebugFragmentItemData("多进程调试", AAFDebugIPCFragment::class.java))
             add(getDebugFragmentItemData("日志调试", DebugLogFragment::class.java))
             add(getDebugFragmentItemData("通知栏调试", DebugNotifyFragment::class.java))
             add(getDebugFragmentItemData("TTS 调试", DebugTTSFragment::class.java))
-            add(DebugItemData("WebView 调试", View.OnClickListener {
-                startActivityWithException(DebugWebviewActivity::class.java)
-            }))
+            add(
+                DebugItemData(
+                    "WebView 调试",
+                    View.OnClickListener {
+                        startActivityWithException(DebugWebviewActivity::class.java)
+                    },
+                ),
+            )
 
             add(DebugItemData("网络切换监控") { startActivityWithException(DebugNetworkActivity::class.java) })
-            add(DebugItemData("HTTP Request", View.OnClickListener {
-                startActivityWithException(DebugHttpActivity::class.java)
-            }))
+            add(
+                DebugItemData(
+                    "HTTP Request",
+                    View.OnClickListener {
+                        startActivityWithException(DebugHttpActivity::class.java)
+                    },
+                ),
+            )
 
             add(getDebugFragmentItemData("剪切板调试", DebugClipboardFragment::class.java))
 
             add(getDebugFragmentItemData("列表 Fragment 调试", DebugListFragment::class.java))
             add(getDebugFragmentItemData("Intent及跳转调试", DebugListFragment::class.java))
 
-            add(DebugItemData("列表 Activity 调试", View.OnClickListener {
-                startActivityWithException(TestListActivity::class.java)
-            }))
-
+            add(
+                DebugItemData(
+                    "列表 Activity 调试",
+                    View.OnClickListener {
+                        startActivityWithException(TestListActivity::class.java)
+                    },
+                ),
+            )
         }
     }
 }

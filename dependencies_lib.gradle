@@ -2,499 +2,499 @@ apply from: rootDir.toString() + '/config.gradle'
 def project = ext
 
 ext.libmoduleInfo = [
-    "LibWrapper"                : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-wrapper",
-        "apidependenciesList": [
-            "LibDebug",
-            "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
-            "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
-            "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
-            "LibBlockTask", "LibOkhttpWrapper", "LibDataRepository", "LibCoroutines",
-            "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
-            "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
-            "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibPermission",
-            "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
-            "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme"]
-    ],
-    "RouterAnnotation"          : [
-        "version"            : "4.1.0",
-        "artifactId"         : "lib-router-annotation",
-        "apidependenciesList": []
-    ],
-    "RouterCompiler"            : [
-        "version"                : "5.1.7",
-        "artifactId"             : "lib-router-compiler",
-        "apidependenciesList"    : [
-            project.router.javapoet,
-            project.router.auto_service,
-            "RouterAnnotation"
+        "LibWrapper"                : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-wrapper",
+                "apidependenciesList": [
+                        "LibDebug",
+                        "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
+                        "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
+                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
+                        "LibBlockTask", "LibOkhttpWrapper", "LibDataRepository", "LibCoroutines",
+                        "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
+                        "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
+                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibPermission",
+                        "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
+                        "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme"]
         ],
-        "specialdependenciesList": [
-            "annotationProcessor": ["com.google.auto.service:auto-service:1.0.1"]
-        ]
-    ],
-    "Router"                    : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-router",
-        "apidependenciesList": [
-            "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
-        ]
-    ],
-    "LibAAF"                    : [
-        "version"            : "5.1.7",
-        "artifactId"         : "lib-aaf-tools",
-        "apidependenciesList": []
-    ],
-    "LibAndroid"                : [
-        "version"            : "5.1.7",
-        "artifactId"         : "lib-android",
-        "apidependenciesList": [
-            "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
-        ]
-    ],
-    "LibLog"                    : [
-        "version"            : "5.9.10",
-        "artifactId"         : "lib-log",
-        "apidependenciesList": [
-            "LibAndroid"
-        ]
-    ],
-    "LibCommonUtils"            : [
-        "version"            : "5.15.10",
-        "artifactId"         : "lib-utils-common",
-        "apidependenciesList": [
-            "LibAndroid", "LibLog"
-        ]
-    ],
-    "LibOS"                     : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-android-os",
-        "apidependenciesList": [
-            "LibLog", "LibCommonUtils"
-        ]
-    ],
-    "LibThread"                 : [
-        "version"            : "5.1.7",
-        "artifactId"         : "lib-thread",
-        "apidependenciesList": []
-    ],
-    "LibEncrypt"                : [
-        "version"            : "5.9.10",
-        "artifactId"         : "lib-encrypt",
-        "apidependenciesList": [
-            "LibLog"
-        ]
-    ],
-    "LibChannel"                : [
-        "version"            : "5.9.10",
-        "artifactId"         : "lib-channel",
-        "apidependenciesList": [
-            "LibLog"
-        ]
-    ],
-    "LibRequest"                : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-request",
-        "apidependenciesList": [
-            "LibOS"
-        ]
-    ],
-    "LibGson"                   : [
-        "version"            : "5.15.10",
-        "artifactId"         : "lib-gson",
-        "apidependenciesList": [
-            project.gson_version,
-            "LibCommonUtils", "LibLog",
-        ]
-    ],
-    "LibHttpCommon"             : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-http-common",
-        "apidependenciesList": [
-            "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"
-        ]
-    ],
-    "LibHttpAdvanced"           : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-http-advanced",
-        "apidependenciesList": [
-            "LibHttpCommon", "LibGson", "LibAAF"
-        ]
-    ],
-    "LibSqlite"                 : [
-        "version"            : "5.9.10",
-        "artifactId"         : "lib-sqlite",
-        "apidependenciesList": [
-            "LibLog"
-        ]
-    ],
-    "LibDeviceNetwork"          : [
-        "version"            : "6.2.2",
-        "artifactId"         : "lib-device-network",
-        "apidependenciesList": [
-            project.androidsupport.androidxcore,
-            "LibOS", "LibCommonUtils",
-            "LibText",
-            "LibThread",
-            "LibEncrypt"
-        ]
-    ],
-    "LibTimer"                  : [
-        "version"            : "5.15.10",
-        "artifactId"         : "lib-timer",
-        "apidependenciesList": [
-            "LibThread", "LibLog", "LibCommonUtils"
-        ]
-    ],
-    "LibConfig"                 : [
-        "version"            : "5.15.10",
-        "artifactId"         : "lib-config",
-        "apidependenciesList": [
-            project.tencent.mmkv,
-            "LibCommonUtils"
-
-        ]
-    ],
-    "LibAPK"                    : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-utils-apk",
-        "apidependenciesList": [
-            "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
-        ]
-    ],
-    "LibTTS"                    : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-tts",
-        "apidependenciesList": [
-            "LibConfig", "LibOS"
-        ]
-    ],
-    "LibFile"                   : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-file",
-        "apidependenciesList": [
-            project.androidsupport.androidxcore,
-            "LibEncrypt", "LibCommonUtils", "LibThread",
-            "LibOS", "LibLog", "LibRequest"
-        ]
-    ],
-    "LibZip"                    : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-zip",
-        "apidependenciesList": [
-            "LibLog", "LibThread", "LibFile"
-        ]
-    ],
-    "LibDownload"               : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-download",
-        "apidependenciesList": [
-            "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
-            "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced"
-        ]
-    ],
-    "LibInstall"                : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-install",
-        "apidependenciesList": [
-            "LibFile", "LibZip", "LibAPK"
-        ]
-    ],
-    "LibText"                   : [
-        "version"            : "6.0.1",
-        "artifactId"         : "lib-text",
-        "apidependenciesList": [
-            "LibAndroid", "LibOS"
-        ]
-    ],
-    "LibSuperAPP"               : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-super-app",
-        "apidependenciesList": [
-            "LibDialog", "LibAPK"
-        ]
-    ],
-    "LibDebug"                  : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-debug",
-        "apidependenciesList": [
-            "LibDialog", "LibToast", "LibFloatview"
-        ]
-    ],
-    "LibCommonUIUtils"          : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-ui-common",
-        "apidependenciesList": [
-            "LibAndroid", "LibOS", "LibLog"
-        ]
-    ],
-    "LibFragmentation_core"     : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-fragmentation-core",
-        "apidependenciesList": [
-            project.androidsupport.appcompat,
-            "LibAAFResource", "LibOS"
-        ]
-    ],
-    "LibFragmentation"          : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-fragmentation",
-        "apidependenciesList": [
-            "LibFragmentation_core"
-        ]
-    ],
-    "LibFragmentation_swipeback": [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-fragmentation-swipeback",
-        "apidependenciesList": [
-            "LibFragmentation"
-        ]
-    ],
-    "LibFlycoTabLayout"         : [
-        "version"            : "6.3.1",
-        "artifactId"         : "lib-flycotablayout",
-        "apidependenciesList": [
-            project.androidsupport.androidxcore,
-            "LibAAFResource", "LibOS", "LibRequest", "LibMedia", "LibTextView"
-        ]
-    ],
-    "LibQRCode"                 : [
-        "version"            : "6.3.1",
-        "artifactId"         : "lib-qrcode",
-        "apidependenciesList": [
-            project.androidsupport.appcompat,
-            "com.google.zxing:core:3.3.3",
-            "LibMedia"
-        ]
-    ],
-    "LibAdapter"                : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-adapter",
-        "apidependenciesList": [
-            project.androidsupport.recyclerview,
-            "LibAAFResource", "LibText"
-        ]
-    ],
-    "LibRefresh"                : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-refresh",
-        "apidependenciesList": [
-            "LibAdapter"
-        ]
-    ],
-    "LibToast"                  : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-toast",
-        "apidependenciesList": [
-            "LibThread", "LibText", "LibAAFResource"
-        ]
-    ],
-    "LibMedia"                  : [
-        "version"            : "6.3.1",
-        "artifactId"         : "lib-media",
-        "apidependenciesList": [
-            project.glide.glide,
-            project.glide.glide_okhttp3,
-            "LibLog", "LibOS", "LibFile"
-
-        ]
-    ],
-    "LibDialog"                 : [
-        "version"            : "6.3.3",
-        "artifactId"         : "lib-dialog",
-        "apidependenciesList": [
-            project.androidsupport.constraintlayout,
-            "LibThread", "LibMedia", "LibOS", "LibAAFResource", "LibText", "LibViewExt",
-            "LibBlockTask", "LibTheme"
-        ]
-    ],
-    "LibNotification"           : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-notification",
-        "apidependenciesList": [
-            "LibMedia", "LibAPK", "LibCommonUtils"
-        ]
-    ],
-    "LibBottomTab"              : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-bottom-tab",
-        "apidependenciesList": [
-            "LibAndroid", "LibOS", "LibTextView",
-            project.androidsupport.androidxcore,
-            project.androidsupport.annotation
-        ]
-    ],
-    "LibRecycleviewExt"         : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-recycleview-ext",
-        "apidependenciesList": [
-            "LibRefresh", "LibTheme"
-        ]
-    ],
-    "LibTouchRegion"            : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-touchregion",
-        "apidependenciesList": [
-            "LibAAFResource", "LibOS"
-        ]
-    ],
-    "LibViewExt"                : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-view-ext",
-        "apidependenciesList": [
-            project.androidsupport.androidxcore,
-            "LibAAFResource", "LibText"
-        ]
-    ],
-    "LibViewPager"              : [
-        "version"            : "5.1.7",
-        "artifactId"         : "lib-view-pager",
-        "apidependenciesList": [
-            project.androidsupport.viewpager
-        ]
-    ],
-    "LibJsBridge"               : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-jsbridge",
-        "apidependenciesList": [
-            "LibLog", "LibThread", "LibToast", "LibAPK"
-        ]
-    ],
-    "LibLifecycle"              : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-lifecycle",
-        "apidependenciesList": [
-            project.androidsupport.lifecycle,
-            project.androidsupport.lifecyclecommon,
-            project.androidsupport.lifecycleprocess,
-            "LibLog", "LibConfig", "LibAPK", "LibAAF"
-        ]
-    ],
-    "LibPermission"             : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-permission",
-        "apidependenciesList": [
-            "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
-            project.androidsupport.appcompat
-
-        ]
-    ],
-    "LibImmersive"              : [
-        "version"            : "6.3.1",
-        "artifactId"         : "lib-immersive",
-        "apidependenciesList": [
-            "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibCommonUIUtils",
-            project.androidsupport.appcompat
-        ]
-    ],
-    "LibFileSelect"             : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-file-select",
-        "apidependenciesList": [
-            "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
-
-        ]
-    ],
-    "LibFloatview"              : [
-        "version"                : "6.3.8",
-        "artifactId"             : "lib-float-view",
-        "apidependenciesList"    : [
-            project.androidsupport.constraintlayout,
-            "LibLog", "LibConfig", "LibThread", "LibOS", "LibDialog", "LibToast", "LibPermission", "LibAAF"
+        "RouterAnnotation"          : [
+                "version"            : "4.1.0",
+                "artifactId"         : "lib-router-annotation",
+                "apidependenciesList": []
         ],
-        "specialdependenciesList": [
-            "kapt": [
-                "RouterCompiler"
-            ]
-        ]
-    ],
-    "LibIPC"                    : [
-        "version"            : "5.9.10",
-        "artifactId"         : "lib-ipc",
-        "apidependenciesList": [
-            "LibLog"
-        ]
-    ],
-    "LibTextView"               : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-textview",
-        "apidependenciesList": [
-            project.androidsupport.appcompat,
-            project.androidsupport.constraintlayout,
-            "LibText", "LibTheme"
-        ]
-    ],
-    "LibAceEditor"              : [
-        "version"            : "6.3.8",
-        "artifactId"         : "lib-ace-editor",
-        "apidependenciesList": [
-            "LibFileSelect", "LibOS", "LibDialog", "LibText"
-        ]
-    ],
-    "LibBlockTask"              : [
-        "version"            : "5.15.10",
-        "artifactId"         : "lib-block-task",
-        "apidependenciesList": [
-            "LibLog", "LibCommonUtils"
-        ]
-    ],
-    "LibOkhttpWrapper"          : [
-        "version"            : "5.17.0",
-        "artifactId"         : "lib-okhttp-wrapper",
-        "apidependenciesList": [
-            "LibLog", "LibHttpCommon",
-            project.okhttp.okhttp,
-            project.okhttp.logging_interceptor,
-            project.okhttp.retrofit,
-            project.okhttp.converter_gson
-        ]
-    ],
-    "LibDataRepository"         : [
-        "version"            : "5.11.9",
-        "artifactId"         : "lib-data-repository",
-        "apidependenciesList": [
-            "LibLog", "LibAAF", "LibCoroutines"
-        ]
-    ],
-    "LibCoroutines"             : [
-        "version"            : "5.10.35",
-        "artifactId"         : "lib-coroutines",
-        "apidependenciesList": [
-            project.kotlinx_coroutines.core,
-            project.kotlinx_coroutines.android,
-            "LibAAF"
-        ]
-    ],
-    "LibAudioPlayer"            : [
-        "version"            : "6.3.1",
-        "artifactId"         : "lib-audio-player",
-        "apidependenciesList": [
-            "LibMedia", "LibBlockTask"
-        ]
-    ],
-    "LibCustomView"             : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-custom-view",
-        "apidependenciesList": [
-            project.androidsupport.appcompat,
-            project.androidsupport.constraintlayout,
-            "LibViewExt"
-        ]
-    ],
-    "LibAAFResource"            : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-aaf-res",
-        "apidependenciesList": [
+        "RouterCompiler"            : [
+                "version"                : "5.1.7",
+                "artifactId"             : "lib-router-compiler",
+                "apidependenciesList"    : [
+                        project.router.javapoet,
+                        project.router.auto_service,
+                        "RouterAnnotation"
+                ],
+                "specialdependenciesList": [
+                        "annotationProcessor": ["com.google.auto.service:auto-service:1.0.1"]
+                ]
+        ],
+        "Router"                    : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-router",
+                "apidependenciesList": [
+                        "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
+                ]
+        ],
+        "LibAAF"                    : [
+                "version"            : "5.1.7",
+                "artifactId"         : "lib-aaf-tools",
+                "apidependenciesList": []
+        ],
+        "LibAndroid"                : [
+                "version"            : "5.1.7",
+                "artifactId"         : "lib-android",
+                "apidependenciesList": [
+                        "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
+                ]
+        ],
+        "LibLog"                    : [
+                "version"            : "5.9.10",
+                "artifactId"         : "lib-log",
+                "apidependenciesList": [
+                        "LibAndroid"
+                ]
+        ],
+        "LibCommonUtils"            : [
+                "version"            : "5.15.10",
+                "artifactId"         : "lib-utils-common",
+                "apidependenciesList": [
+                        "LibAndroid", "LibLog"
+                ]
+        ],
+        "LibOS"                     : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-android-os",
+                "apidependenciesList": [
+                        "LibLog", "LibCommonUtils"
+                ]
+        ],
+        "LibThread"                 : [
+                "version"            : "5.1.7",
+                "artifactId"         : "lib-thread",
+                "apidependenciesList": []
+        ],
+        "LibEncrypt"                : [
+                "version"            : "5.9.10",
+                "artifactId"         : "lib-encrypt",
+                "apidependenciesList": [
+                        "LibLog", "LibCommonUtils"
+                ]
+        ],
+        "LibChannel"                : [
+                "version"            : "5.9.10",
+                "artifactId"         : "lib-channel",
+                "apidependenciesList": [
+                        "LibLog"
+                ]
+        ],
+        "LibRequest"                : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-request",
+                "apidependenciesList": [
+                        "LibOS"
+                ]
+        ],
+        "LibGson"                   : [
+                "version"            : "5.15.10",
+                "artifactId"         : "lib-gson",
+                "apidependenciesList": [
+                        project.gson_version,
+                        "LibCommonUtils", "LibLog",
+                ]
+        ],
+        "LibHttpCommon"             : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-http-common",
+                "apidependenciesList": [
+                        "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"
+                ]
+        ],
+        "LibHttpAdvanced"           : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-http-advanced",
+                "apidependenciesList": [
+                        "LibHttpCommon", "LibGson", "LibAAF"
+                ]
+        ],
+        "LibSqlite"                 : [
+                "version"            : "5.9.10",
+                "artifactId"         : "lib-sqlite",
+                "apidependenciesList": [
+                        "LibLog"
+                ]
+        ],
+        "LibDeviceNetwork"          : [
+                "version"            : "6.2.2",
+                "artifactId"         : "lib-device-network",
+                "apidependenciesList": [
+                        project.androidsupport.androidxcore,
+                        "LibOS", "LibCommonUtils",
+                        "LibText",
+                        "LibThread",
+                        "LibEncrypt"
+                ]
+        ],
+        "LibTimer"                  : [
+                "version"            : "5.15.10",
+                "artifactId"         : "lib-timer",
+                "apidependenciesList": [
+                        "LibThread", "LibLog", "LibCommonUtils"
+                ]
+        ],
+        "LibConfig"                 : [
+                "version"            : "5.15.10",
+                "artifactId"         : "lib-config",
+                "apidependenciesList": [
+                        project.tencent.mmkv,
+                        "LibCommonUtils"
 
+                ]
+        ],
+        "LibAPK"                    : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-utils-apk",
+                "apidependenciesList": [
+                        "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
+                ]
+        ],
+        "LibTTS"                    : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-tts",
+                "apidependenciesList": [
+                        "LibConfig", "LibOS"
+                ]
+        ],
+        "LibFile"                   : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-file",
+                "apidependenciesList": [
+                        project.androidsupport.androidxcore,
+                        "LibEncrypt", "LibCommonUtils", "LibThread",
+                        "LibOS", "LibLog", "LibRequest"
+                ]
+        ],
+        "LibZip"                    : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-zip",
+                "apidependenciesList": [
+                        "LibLog", "LibThread", "LibFile"
+                ]
+        ],
+        "LibDownload"               : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-download",
+                "apidependenciesList": [
+                        "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
+                        "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced"
+                ]
+        ],
+        "LibInstall"                : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-install",
+                "apidependenciesList": [
+                        "LibFile", "LibZip", "LibAPK"
+                ]
+        ],
+        "LibText"                   : [
+                "version"            : "6.0.1",
+                "artifactId"         : "lib-text",
+                "apidependenciesList": [
+                        "LibAndroid", "LibOS"
+                ]
+        ],
+        "LibSuperAPP"               : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-super-app",
+                "apidependenciesList": [
+                        "LibDialog", "LibAPK"
+                ]
+        ],
+        "LibDebug"                  : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-debug",
+                "apidependenciesList": [
+                        "LibDialog", "LibToast", "LibFloatview"
+                ]
+        ],
+        "LibCommonUIUtils"          : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-ui-common",
+                "apidependenciesList": [
+                        "LibAndroid", "LibOS", "LibLog"
+                ]
+        ],
+        "LibFragmentation_core"     : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-fragmentation-core",
+                "apidependenciesList": [
+                        project.androidsupport.appcompat,
+                        "LibAAFResource", "LibOS"
+                ]
+        ],
+        "LibFragmentation"          : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-fragmentation",
+                "apidependenciesList": [
+                        "LibFragmentation_core"
+                ]
+        ],
+        "LibFragmentation_swipeback": [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-fragmentation-swipeback",
+                "apidependenciesList": [
+                        "LibFragmentation"
+                ]
+        ],
+        "LibFlycoTabLayout"         : [
+                "version"            : "6.3.1",
+                "artifactId"         : "lib-flycotablayout",
+                "apidependenciesList": [
+                        project.androidsupport.androidxcore,
+                        "LibAAFResource", "LibOS", "LibRequest", "LibMedia", "LibTextView"
+                ]
+        ],
+        "LibQRCode"                 : [
+                "version"            : "6.3.1",
+                "artifactId"         : "lib-qrcode",
+                "apidependenciesList": [
+                        project.androidsupport.appcompat,
+                        "com.google.zxing:core:3.3.3",
+                        "LibMedia"
+                ]
+        ],
+        "LibAdapter"                : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-adapter",
+                "apidependenciesList": [
+                        project.androidsupport.recyclerview,
+                        "LibAAFResource", "LibText"
+                ]
+        ],
+        "LibRefresh"                : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-refresh",
+                "apidependenciesList": [
+                        "LibAdapter"
+                ]
+        ],
+        "LibToast"                  : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-toast",
+                "apidependenciesList": [
+                        "LibThread", "LibText", "LibAAFResource"
+                ]
+        ],
+        "LibMedia"                  : [
+                "version"            : "6.3.1",
+                "artifactId"         : "lib-media",
+                "apidependenciesList": [
+                        project.glide.glide,
+                        project.glide.glide_okhttp3,
+                        "LibLog", "LibOS", "LibFile"
+
+                ]
+        ],
+        "LibDialog"                 : [
+                "version"            : "6.3.3",
+                "artifactId"         : "lib-dialog",
+                "apidependenciesList": [
+                        project.androidsupport.constraintlayout,
+                        "LibThread", "LibMedia", "LibOS", "LibAAFResource", "LibText", "LibViewExt",
+                        "LibBlockTask", "LibTheme"
+                ]
+        ],
+        "LibNotification"           : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-notification",
+                "apidependenciesList": [
+                        "LibMedia", "LibAPK", "LibCommonUtils"
+                ]
+        ],
+        "LibBottomTab"              : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-bottom-tab",
+                "apidependenciesList": [
+                        "LibAndroid", "LibOS", "LibTextView",
+                        project.androidsupport.androidxcore,
+                        project.androidsupport.annotation
+                ]
+        ],
+        "LibRecycleviewExt"         : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-recycleview-ext",
+                "apidependenciesList": [
+                        "LibRefresh", "LibTheme"
+                ]
+        ],
+        "LibTouchRegion"            : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-touchregion",
+                "apidependenciesList": [
+                        "LibAAFResource", "LibOS"
+                ]
+        ],
+        "LibViewExt"                : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-view-ext",
+                "apidependenciesList": [
+                        project.androidsupport.androidxcore,
+                        "LibAAFResource", "LibText"
+                ]
+        ],
+        "LibViewPager"              : [
+                "version"            : "5.1.7",
+                "artifactId"         : "lib-view-pager",
+                "apidependenciesList": [
+                        project.androidsupport.viewpager
+                ]
+        ],
+        "LibJsBridge"               : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-jsbridge",
+                "apidependenciesList": [
+                        "LibLog", "LibThread", "LibToast", "LibAPK"
+                ]
+        ],
+        "LibLifecycle"              : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-lifecycle",
+                "apidependenciesList": [
+                        project.androidsupport.lifecycle,
+                        project.androidsupport.lifecyclecommon,
+                        project.androidsupport.lifecycleprocess,
+                        "LibLog", "LibConfig", "LibAPK", "LibAAF"
+                ]
+        ],
+        "LibPermission"             : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-permission",
+                "apidependenciesList": [
+                        "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
+                        project.androidsupport.appcompat
+
+                ]
+        ],
+        "LibImmersive"              : [
+                "version"            : "6.3.1",
+                "artifactId"         : "lib-immersive",
+                "apidependenciesList": [
+                        "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibCommonUIUtils",
+                        project.androidsupport.appcompat
+                ]
+        ],
+        "LibFileSelect"             : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-file-select",
+                "apidependenciesList": [
+                        "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
+
+                ]
+        ],
+        "LibFloatview"              : [
+                "version"                : "6.3.8",
+                "artifactId"             : "lib-float-view",
+                "apidependenciesList"    : [
+                        project.androidsupport.constraintlayout,
+                        "LibLog", "LibConfig", "LibThread", "LibOS", "LibDialog", "LibToast", "LibPermission", "LibAAF"
+                ],
+                "specialdependenciesList": [
+                        "kapt": [
+                                "RouterCompiler"
+                        ]
+                ]
+        ],
+        "LibIPC"                    : [
+                "version"            : "5.9.10",
+                "artifactId"         : "lib-ipc",
+                "apidependenciesList": [
+                        "LibLog"
+                ]
+        ],
+        "LibTextView"               : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-textview",
+                "apidependenciesList": [
+                        project.androidsupport.appcompat,
+                        project.androidsupport.constraintlayout,
+                        "LibText", "LibTheme"
+                ]
+        ],
+        "LibAceEditor"              : [
+                "version"            : "6.3.8",
+                "artifactId"         : "lib-ace-editor",
+                "apidependenciesList": [
+                        "LibFileSelect", "LibOS", "LibDialog", "LibText"
+                ]
+        ],
+        "LibBlockTask"              : [
+                "version"            : "5.15.10",
+                "artifactId"         : "lib-block-task",
+                "apidependenciesList": [
+                        "LibLog", "LibCommonUtils"
+                ]
+        ],
+        "LibOkhttpWrapper"          : [
+                "version"            : "5.17.0",
+                "artifactId"         : "lib-okhttp-wrapper",
+                "apidependenciesList": [
+                        "LibLog", "LibHttpCommon",
+                        project.okhttp.okhttp,
+                        project.okhttp.logging_interceptor,
+                        project.okhttp.retrofit,
+                        project.okhttp.converter_gson
+                ]
+        ],
+        "LibDataRepository"         : [
+                "version"            : "5.11.9",
+                "artifactId"         : "lib-data-repository",
+                "apidependenciesList": [
+                        "LibLog", "LibAAF", "LibCoroutines"
+                ]
+        ],
+        "LibCoroutines"             : [
+                "version"            : "5.10.35",
+                "artifactId"         : "lib-coroutines",
+                "apidependenciesList": [
+                        project.kotlinx_coroutines.core,
+                        project.kotlinx_coroutines.android,
+                        "LibAAF"
+                ]
+        ],
+        "LibAudioPlayer"            : [
+                "version"            : "6.3.1",
+                "artifactId"         : "lib-audio-player",
+                "apidependenciesList": [
+                        "LibMedia", "LibBlockTask"
+                ]
+        ],
+        "LibCustomView"             : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-custom-view",
+                "apidependenciesList": [
+                        project.androidsupport.appcompat,
+                        project.androidsupport.constraintlayout,
+                        "LibViewExt"
+                ]
+        ],
+        "LibAAFResource"            : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-aaf-res",
+                "apidependenciesList": [
+
+                ]
+        ],
+        "LibTheme"                  : [
+                "version"            : "6.1.12",
+                "artifactId"         : "lib-theme",
+                "apidependenciesList": [
+                        project.androidsupport.androidxcore,
+                        "LibConfig", "LibCustomView"
+                ]
         ]
-    ],
-    "LibTheme"                  : [
-        "version"            : "6.1.12",
-        "artifactId"         : "lib-theme",
-        "apidependenciesList": [
-            project.androidsupport.androidxcore,
-            "LibConfig", "LibCustomView"
-        ]
-    ]
 ]

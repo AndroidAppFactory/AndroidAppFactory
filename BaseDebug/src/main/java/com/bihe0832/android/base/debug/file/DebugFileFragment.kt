@@ -11,13 +11,13 @@ package com.bihe0832.android.base.debug.file
 
 import android.util.Base64
 import android.view.View
-import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.config.OnConfigChangedListener
@@ -29,8 +29,6 @@ import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.encrypt.MD5
-import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
-import com.bihe0832.android.lib.utils.encrypt.SHA256
 import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
@@ -67,7 +65,6 @@ class DebugFileFragment : DebugEnvFragment() {
 
             add(DebugItemData("文本查看器", View.OnClickListener { testEdit() }))
             add(DebugItemData("Assets 操作", View.OnClickListener { testAssets() }))
-            add(DebugItemData("MD5及加解密", View.OnClickListener { testMessageDigest() }))
 
             add(DebugItemData("文件MD5", View.OnClickListener {
                 testMD5()
@@ -87,12 +84,12 @@ class DebugFileFragment : DebugEnvFragment() {
 
     private fun testFolder() {
         mutableListOf<String>(
-                "https://voice-file-1300342614.aaa.com/voice%2FA6FCC3060878E3B121899003F5B42CD5%2Bf82ca891eb9845c3a743f6e64cf95ffe.mp3?q-sign-algorithm=sha126q-ak=AKIDCLEqBF2YnmUvwqwqzh9KErD026q-sign-time=1660720w054%3B166107272540026",
-                "/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
-                "10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
-                "/storage/emulated/0/Android/data/com.tencent.cmocmna.video/files/mocmna/temp/log//server_20220818.txt",
-                "file://cdn.bihe0832.com/app/update/get_apk.json",
-                "https://webcdn.m.qq.com/webapp_myapp/index.html#/"
+            "https://voice-file-1300342614.aaa.com/voice%2FA6FCC3060878E3B121899003F5B42CD5%2Bf82ca891eb9845c3a743f6e64cf95ffe.mp3?q-sign-algorithm=sha126q-ak=AKIDCLEqBF2YnmUvwqwqzh9KErD026q-sign-time=1660720w054%3B166107272540026",
+            "/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
+            "10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
+            "/storage/emulated/0/Android/data/com.tencent.cmocmna.video/files/mocmna/temp/log//server_20220818.txt",
+            "file://cdn.bihe0832.com/app/update/get_apk.json",
+            "https://webcdn.m.qq.com/webapp_myapp/index.html#/"
 
         ).forEach {
             ZLog.d(LOG_TAG, "===============start==================")
@@ -104,9 +101,10 @@ class DebugFileFragment : DebugEnvFragment() {
         }
 
         val logPath = AAFLoggerFile.getLogPathByModuleName(AAFLoggerFile.MODULE_UPDATE)
-        FileUtils.copyFile(File(logPath), File(AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(logPath))).let {
-            ZLog.d(LOG_TAG, "===============$it==================")
-        }
+        FileUtils.copyFile(File(logPath), File(AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(logPath)))
+                .let {
+                    ZLog.d(LOG_TAG, "===============$it==================")
+                }
 
         FileUtils.copyDirectory(File(logPath).parentFile, File(AAFFileWrapper.getFileTempFolder())).let {
             ZLog.d(LOG_TAG, "===============$it==================")
@@ -147,35 +145,35 @@ class DebugFileFragment : DebugEnvFragment() {
 
         var startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-                "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
-                "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927"
+            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
+            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927"
         )
         var duration = System.currentTimeMillis() - startTime
         ZLog.d(
-                LOG_TAG,
-                "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration"
+            LOG_TAG,
+            "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration"
         )
 
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-                "/sdcard/Download/com.garena.game.kgtw.zip",
-                "/sdcard/Download/com.garena.game.kgtw"
+            "/sdcard/Download/com.garena.game.kgtw.zip",
+            "/sdcard/Download/com.garena.game.kgtw"
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.garena.game.kgtw.zip cost:$duration")
 
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-                "/sdcard/Download/com.supercell.brawlstars.zip",
-                "/sdcard/Download/com.supercell.brawlstars"
+            "/sdcard/Download/com.supercell.brawlstars.zip",
+            "/sdcard/Download/com.supercell.brawlstars"
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.supercell.brawlstars.zip cost:$duration")
 
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
-                "/sdcard/Download/jp.co.sumzap.pj0007.zip",
-                "/sdcard/Download/jp.co.sumzap.pj0007"
+            "/sdcard/Download/jp.co.sumzap.pj0007.zip",
+            "/sdcard/Download/jp.co.sumzap.pj0007"
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
@@ -248,26 +246,6 @@ class DebugFileFragment : DebugEnvFragment() {
         }
     }
 
-    private fun testMessageDigest() {
-        "123456".let {
-            MD5.getMd5(it).let { data ->
-                ZLog.d("testAssets", "$it MD5 is: $data")
-                ZLog.d("testAssets", "$it MD5 length is: ${data.length}")
-            }
-            MessageDigestUtils.getDigestData(it, "MD5").let { data ->
-                ZLog.d("testAssets", "$it MD5 is: $data")
-                ZLog.d("testAssets", "$it MD5 length is: ${data.length}")
-            }
-            SHA256.getSHA256(it).let { data ->
-                ZLog.d("testAssets", "$it SHA256 is: $data")
-                ZLog.d("testAssets", "$it SHA256 length is: ${data.length}")
-            }
-            MessageDigestUtils.getDigestData(it, "SHA-256").let { data ->
-                ZLog.d("testAssets", "$it SHA256 is: $data")
-                ZLog.d("testAssets", "$it SHA256 length is: ${data.length}")
-            }
-        }
-    }
     private fun testDB() {
         System.currentTimeMillis().let {
             CommonDBManager.saveData("sss" + it, "Fsdfsd")

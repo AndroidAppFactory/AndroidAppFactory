@@ -6,7 +6,7 @@ ext {
     //Android编译工具版本
     buildToolsVersion = "32.0.0"
     //Lib 最低适配Android 版本
-    libMinSdkVersion = 16
+    libMinSdkVersion = 18
     //APK 最低适配Android 版本
     appMinSdkVersion = 21
     //Android 最佳适配Android 版本
@@ -26,23 +26,23 @@ ext {
     pickFirstList = ['libc++_shared.so']
 
     excludeList = [
-        'META-INF/*.kotlin_module',
-        'META-INF/proguard/androidx-annotations.pro',
-        'META-INF/proguard/coroutines.pro'
+            'META-INF/*.kotlin_module',
+            'META-INF/proguard/androidx-annotations.pro',
+            'META-INF/proguard/coroutines.pro'
     ]
 
     //签名信息
     signingConfigs = [
-        v1SigningEnabled: true,
-        v2SigningEnabled: true,
-        keyAlias        : ZixieSigKeyAlias,
-        keyPassword     : ZixieSigKeyPassword,
-        storeFile       : ZixieSigPath,
-        storePassword   : ZixieSigStorePassword,
-//        keyAlias        : 'androiddebugkey',
-//        keyPassword     : 'android',
-//        storeFile       : "./../debug.keystore",
-//        storePassword   : 'android',
+            v1SigningEnabled: true,
+            v2SigningEnabled: true,
+            keyAlias        : ZixieSigKeyAlias,
+            keyPassword     : ZixieSigKeyPassword,
+            storeFile       : ZixieSigPath,
+            storePassword   : ZixieSigStorePassword,
+//            keyAlias        : 'androiddebugkey',
+//            keyPassword     : 'android',
+//            storeFile       : "./../debug.keystore",
+//            storePassword   : 'android',
     ]
 
     //使用kotlin版本
