@@ -1,6 +1,5 @@
 package com.bihe0832.android.lib.utils.encrypt;
 
-import android.content.Context;
 import android.util.Base64;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,10 +22,13 @@ import javax.crypto.SecretKey;
  */
 public class RSAUtils {
 
+    public static final String MOD_OAEP = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
+    public static final String MOD_PKCS_1 = "RSA/ECB/PKCS1Padding";
+
     // 加密方法
-    public static byte[] encrypt(Context context, PublicKey publicKey, byte[] data) {
+    public static byte[] encrypt(String mod, PublicKey publicKey, byte[] data) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Cipher cipher = Cipher.getInstance(mod);
             int blockSize = 128;
             // 使用"RSA/ECB/PKCS1Padding"模式进行加密
             blockSize = ((RSAKey) publicKey).getModulus().bitLength() / 8 - 11;
@@ -46,9 +48,9 @@ public class RSAUtils {
         return null;
     }
 
-    public static byte[] decrypt(Context context, PrivateKey privateKey, byte[] data) {
+    public static byte[] decrypt(String mod, PrivateKey privateKey, byte[] data) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Cipher cipher = Cipher.getInstance(mod);
             int blockSize = 128;
             // 使用"RSA/ECB/PKCS1Padding"模式进行加密
             blockSize = ((RSAKey) privateKey).getModulus().bitLength() / 8;
@@ -107,9 +109,9 @@ public class RSAUtils {
         return null;
     }
 
-    public static byte[] encryptSecretKeyWithRSAPublicKey(PublicKey publicKey, SecretKey secretKey) {
+    public static byte[] encryptSecretKeyWithRSAPublicKey(String mod, PublicKey publicKey, SecretKey secretKey) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Cipher cipher = Cipher.getInstance(mod);
             cipher.init(Cipher.WRAP_MODE, publicKey);
             return cipher.wrap(secretKey);
         } catch (Exception e) {

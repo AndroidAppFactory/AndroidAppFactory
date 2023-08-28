@@ -92,7 +92,7 @@ public class RSAKeyStoreUtils {
     }
 
     // 加密方法
-    public static byte[] doEencrypt(Context context, String keyAlias, byte[] data, int mode) {
+    public static byte[] doEncrypt(Context context, String mod, String keyAlias, byte[] data, int mode) {
         if (!hasKey(keyAlias)) {
             buildKey(context, keyAlias);
         }
@@ -106,13 +106,12 @@ public class RSAKeyStoreUtils {
                 KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(keyAlias, null);
                 if (Cipher.ENCRYPT_MODE == mode) {
                     PublicKey publicKey = keyEntry.getCertificate().getPublicKey();
-                    return RSAUtils.encrypt(context, publicKey, data);
+                    return RSAUtils.encrypt(mod, publicKey, data);
                 } else {
                     PrivateKey privateKey = keyEntry.getPrivateKey();
-                    return RSAUtils.decrypt(context, privateKey, data);
+                    return RSAUtils.decrypt(mod, privateKey, data);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,13 +119,12 @@ public class RSAKeyStoreUtils {
     }
 
     // 加密方法
-    public static byte[] encrypt(Context context, String keyAlias, byte[] data) {
-        return doEencrypt(context, keyAlias, data, Cipher.ENCRYPT_MODE);
+    public static byte[] encrypt(Context context, String mod, String keyAlias, byte[] data) {
+        return doEncrypt(context, mod, keyAlias, data, Cipher.ENCRYPT_MODE);
     }
 
     // 解密方法
-    public static byte[] decrypt(Context context, String keyAlias, byte[] data) {
-        return doEencrypt(context, keyAlias, data, Cipher.DECRYPT_MODE);
+    public static byte[] decrypt(Context context, String mod, String keyAlias, byte[] data) {
+        return doEncrypt(context, mod, keyAlias, data, Cipher.DECRYPT_MODE);
     }
-
 }

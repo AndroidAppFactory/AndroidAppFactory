@@ -19,7 +19,6 @@ import com.bihe0832.android.lib.utils.encrypt.SHA256
 import com.bihe0832.android.lib.utils.keystore.AESKeyStoreUtils
 import com.bihe0832.android.lib.utils.keystore.RSAKeyStoreUtils
 import java.util.Arrays
-import javax.crypto.Cipher
 
 open class DebugEncryptFragment : DebugCommonFragment() {
 
@@ -51,53 +50,59 @@ open class DebugEncryptFragment : DebugCommonFragment() {
             "1234567890ABCDEF",
         ) { p0 ->
             p0?.let { data ->
-                rsaEncrypt(data)
+                rsaEncrypt(RSAUtils.MOD_OAEP, data)
+                rsaEncrypt(RSAUtils.MOD_PKCS_1, data)
                 var default = TextFactoryUtils.getRandomString(256)
-                rsaEncrypt(default)
+                rsaEncrypt(RSAUtils.MOD_OAEP, default)
+                rsaEncrypt(RSAUtils.MOD_PKCS_1, default)
             }
         }
     }
 
-    private fun rsaEncrypt(shortData: String) {
-        ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(TAG, "RSA 加密原始数据 ：$shortData")
-        val encryptResult = RSAUtils.encrypt(
-            context!!,
-            AAFEncrypt.getRSAPublicKeyFormAssets(context!!, AAFEncryptConstants.RSA_PUB_KEY_NAME),
-            shortData.toByteArray(),
-        )
-        ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(TAG, "RSA 内容加密 ：${Arrays.toString(encryptResult)}")
-        ZLog.d(TAG, "RSA 内容加密：${String(Base64.encode(encryptResult, Base64.DEFAULT))}")
-        ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(
-            TAG,
-            "RSA 内容直接解密 ：${
-                String(
-                    RSAUtils.decrypt(
-                        context,
-                        AAFEncrypt.getRSAPrivateKeyFormAssets(context!!, AAFEncryptConstants.RSA_PRI_KEY_NAME),
-                        encryptResult,
-                    ),
-                )
-            }",
-        )
-        Base64.decode(Base64.encode(encryptResult, Base64.DEFAULT), Base64.DEFAULT).let {
+    private fun rsaEncrypt(mod: String, shortData: String) {
+        try {
+            ZLog.d(TAG, "-------------------------------------------")
+            ZLog.d(TAG, "RSA $mod 加密原始数据 ：$shortData")
+            val encryptResult = RSAUtils.encrypt(
+                mod,
+                AAFEncrypt.getRSAPublicKeyFormAssets(context!!, AAFEncryptConstants.RSA_PUB_KEY_NAME),
+                shortData.toByteArray(),
+            )
+            ZLog.d(TAG, "-------------------------------------------")
+            ZLog.d(TAG, "RSA $mod 内容加密 ：${Arrays.toString(encryptResult)}")
+            ZLog.d(TAG, "RSA $mod 内容加密：${String(Base64.encode(encryptResult, Base64.DEFAULT))}")
+            ZLog.d(TAG, "-------------------------------------------")
+            ZLog.d(TAG, "-------------------------------------------")
             ZLog.d(
                 TAG,
-                "RSA 内容模拟解密 ：${
+                "RSA $mod 内容直接解密 ：${
                     String(
                         RSAUtils.decrypt(
-                            context,
+                            mod,
                             AAFEncrypt.getRSAPrivateKeyFormAssets(context!!, AAFEncryptConstants.RSA_PRI_KEY_NAME),
-                            it,
+                            encryptResult,
                         ),
                     )
                 }",
             )
+            Base64.decode(Base64.encode(encryptResult, Base64.DEFAULT), Base64.DEFAULT).let {
+                ZLog.d(
+                    TAG,
+                    "RSA $mod 内容模拟解密 ：${
+                        String(
+                            RSAUtils.decrypt(
+                                mod,
+                                AAFEncrypt.getRSAPrivateKeyFormAssets(context!!, AAFEncryptConstants.RSA_PRI_KEY_NAME),
+                                it,
+                            ),
+                        )
+                    }",
+                )
+            }
+            ZLog.d(TAG, "-------------------------------------------")
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        ZLog.d(TAG, "-------------------------------------------")
     }
 
     private fun testMessageDigest() {
@@ -131,10 +136,10 @@ open class DebugEncryptFragment : DebugCommonFragment() {
                 ZLog.d(TAG, "-------------------------------------------")
                 ZLog.d(TAG, "AES 加密原始数据 ：$data")
                 val encryptResult = AESUtils.encrypt(KEY.toByteArray(), data)
-                val encryptIVResult = AESUtils.doAESEncryptWithIV(
+                val encryptIVResult = AESUtils.encrypt(
+                    AAFEncryptConstants.AES_MOD,
                     KEY.toByteArray(),
                     AAFEncryptConstants.IV_BYTES,
-                    Cipher.ENCRYPT_MODE,
                     data.toByteArray(),
                 )
                 ZLog.d(TAG, "-------------------------------------------")
@@ -158,10 +163,10 @@ open class DebugEncryptFragment : DebugCommonFragment() {
                     TAG,
                     "AES 内容向量直接解密 ：${
                         String(
-                            AESUtils.doAESEncryptWithIV(
+                            AESUtils.decrypt(
+                                AAFEncryptConstants.AES_MOD,
                                 KEY.toByteArray(),
                                 AAFEncryptConstants.IV_BYTES,
-                                Cipher.DECRYPT_MODE,
                                 encryptIVResult,
                             ),
                         )
@@ -173,10 +178,10 @@ open class DebugEncryptFragment : DebugCommonFragment() {
                         TAG,
                         "AES 内容向量模拟解密 ：${
                             String(
-                                AESUtils.doAESEncryptWithIV(
+                                AESUtils.decrypt(
+                                    AAFEncryptConstants.AES_MOD,
                                     KEY.toByteArray(),
                                     AAFEncryptConstants.IV_BYTES,
-                                    Cipher.DECRYPT_MODE,
                                     it,
                                 ),
                             )
@@ -192,36 +197,31 @@ open class DebugEncryptFragment : DebugCommonFragment() {
         val data = TextFactoryUtils.getRandomString(16)
         ZLog.d(TAG, "-------------------------------------------")
         ZLog.d(TAG, "系统自带秘钥 RSA 加密原始数据 ：$data")
-        val encryptResult = RSAKeyStoreUtils.encrypt(context, RSA_KEY_ALIAS, data.toByteArray())
+        val encryptResult =
+            RSAKeyStoreUtils.encrypt(context, AAFEncryptConstants.RSA_MOD, RSA_KEY_ALIAS, data.toByteArray())
         ZLog.d(TAG, "-------------------------------------------")
         ZLog.d(TAG, "系统自带秘钥 RSA 内容加密 ：${Arrays.toString(encryptResult)}")
         ZLog.d(TAG, "系统自带秘钥 RSA 内容加密 ：${String(Base64.encode(encryptResult, Base64.DEFAULT))}")
         ZLog.d(TAG, "-------------------------------------------")
         ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(
-            TAG,
-            "系统自带秘钥 RSA 内容直接解密 ：${
-                String(
-                    RSAKeyStoreUtils.decrypt(
-                        context,
-                        RSA_KEY_ALIAS,
-                        encryptResult,
-                    ),
-                )
-            }",
-        )
-        ZLog.d(
-            TAG,
-            "系统自带秘钥 RSA 内容模拟解密 ：${
-                String(
-                    RSAKeyStoreUtils.decrypt(
-                        context,
-                        RSA_KEY_ALIAS,
-                        Base64.decode(Base64.encode(encryptResult, Base64.DEFAULT), Base64.DEFAULT),
-                    ),
-                )
-            }",
-        )
+        RSAKeyStoreUtils.decrypt(
+            context,
+            AAFEncryptConstants.RSA_MOD,
+            RSA_KEY_ALIAS,
+            encryptResult,
+        )?.let {
+            ZLog.d(TAG, "系统自带秘钥 RSA 内容直接解密 ：${String(it)}")
+        }
+        encryptResult?.let {
+            RSAKeyStoreUtils.decrypt(
+                context,
+                AAFEncryptConstants.RSA_MOD,
+                RSA_KEY_ALIAS,
+                Base64.decode(Base64.encode(encryptResult, Base64.DEFAULT), Base64.DEFAULT),
+            )?.let {
+                ZLog.d(TAG, "系统自带秘钥 RSA 内容模拟解密 ：${String(it)}")
+            }
+        }
         ZLog.d(TAG, "-------------------------------------------")
     }
 
@@ -233,20 +233,34 @@ open class DebugEncryptFragment : DebugCommonFragment() {
         ) { p0 ->
             p0?.let { data ->
                 ZLog.d(TAG, "-------------------------------------------")
-                ZLog.d(TAG, "系统自带秘钥 AES 加密原始数据 ：$data")
+                ZLog.d(TAG, "系统自带秘钥 AES ${AAFEncryptConstants.AES_MOD} 加密原始数据 ：$data")
                 val encryptResult =
-                    AESKeyStoreUtils.encrypt(context, AES_KEY_ALIAS, data.toByteArray())
+                    AESKeyStoreUtils.encrypt(context, AAFEncryptConstants.AES_MOD, AES_KEY_ALIAS, data.toByteArray())
                 ZLog.d(TAG, "-------------------------------------------")
-                ZLog.d(TAG, "系统自带秘钥 AES 内容加密 ：${Arrays.toString(encryptResult.result)}")
-                ZLog.d(TAG, "系统自带秘钥 AES 内容加密 ：${String(Base64.encode(encryptResult.result, Base64.DEFAULT))}")
+                ZLog.d(
+                    TAG,
+                    "系统自带秘钥 AES ${AAFEncryptConstants.AES_MOD} 内容加密 ：${Arrays.toString(encryptResult.result)}",
+                )
+                ZLog.d(
+                    TAG,
+                    "系统自带秘钥 AES ${AAFEncryptConstants.AES_MOD} 内容加密 ：${
+                        String(
+                            Base64.encode(
+                                encryptResult.result,
+                                Base64.DEFAULT,
+                            ),
+                        )
+                    }",
+                )
                 ZLog.d(TAG, "-------------------------------------------")
                 ZLog.d(TAG, "-------------------------------------------")
                 ZLog.d(
                     TAG,
-                    "系统自带秘钥 AES 内容直接解密 ：${
+                    "系统自带秘钥 AES ${AAFEncryptConstants.AES_MOD} 内容直接解密 ：${
                         String(
                             AESKeyStoreUtils.decrypt(
                                 context,
+                                AAFEncryptConstants.AES_MOD,
                                 AES_KEY_ALIAS,
                                 encryptResult.iv,
                                 encryptResult.result,
@@ -256,10 +270,11 @@ open class DebugEncryptFragment : DebugCommonFragment() {
                 )
                 ZLog.d(
                     TAG,
-                    "系统自带秘钥 AES 内容模拟解密 ：${
+                    "系统自带秘钥 AES ${AAFEncryptConstants.AES_MOD} 内容模拟解密 ：${
                         String(
                             AESKeyStoreUtils.decrypt(
                                 context,
+                                AAFEncryptConstants.AES_MOD,
                                 AES_KEY_ALIAS,
                                 encryptResult.iv,
                                 Base64.decode(Base64.encode(encryptResult.result, Base64.DEFAULT), Base64.DEFAULT),
@@ -275,16 +290,26 @@ open class DebugEncryptFragment : DebugCommonFragment() {
     private fun saveAES() {
         val data = TextFactoryUtils.getRandomString(16)
         ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(TAG, "AES 内容加密原始数据 ：$data")
+        ZLog.d(TAG, "AES ${AAFEncryptConstants.AES_MOD} 内容加密原始数据 ：$data")
         var encryptResult = AAFEncrypt.aesEncrypt(context, AES_KEY_ALIAS, data)
         ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(TAG, "AES 内容加密向量 ：${Arrays.toString(encryptResult.iv)}")
-        ZLog.d(TAG, "AES 内容加密结果 ：${String(Base64.encode(encryptResult.result, Base64.DEFAULT))}")
+        ZLog.d(TAG, "AES ${AAFEncryptConstants.AES_MOD} 内容加密向量 ：${Arrays.toString(encryptResult.iv)}")
+        ZLog.d(
+            TAG,
+            "AES ${AAFEncryptConstants.AES_MOD} 内容加密结果 ：${
+                String(
+                    Base64.encode(
+                        encryptResult.result,
+                        Base64.DEFAULT,
+                    ),
+                )
+            }",
+        )
         ZLog.d(TAG, "-------------------------------------------")
         encryptResult?.let {
             ZLog.d(
                 TAG,
-                "AES 内容模拟解密 ：${
+                "AES ${AAFEncryptConstants.AES_MOD} 内容模拟解密 ：${
                     AAFEncrypt.aesDecrypt(
                         context!!,
                         AES_KEY_ALIAS,
@@ -304,17 +329,47 @@ open class DebugEncryptFragment : DebugCommonFragment() {
         var encryptResult =
             AAFEncrypt.encryptDataWithKeyStore(context, AAFEncryptConstants.RSA_PUB_KEY_NAME, data)
         ZLog.d(TAG, "-------------------------------------------")
-        ZLog.d(TAG, "内容加密 Data：${String(Base64.encode(encryptResult.result, Base64.DEFAULT))}")
-        ZLog.d(TAG, "内容加密 IV：${String(Base64.encode(encryptResult.iv, Base64.DEFAULT))}")
-        ZLog.d(TAG, "内容加密 KEY：${String(Base64.encode(encryptResult.keyEncryptData, Base64.DEFAULT))}")
+        ZLog.d(
+            TAG,
+            "内容 AES ${AAFEncryptConstants.AES_MOD}  加密 Data：${
+                String(
+                    Base64.encode(
+                        encryptResult.result,
+                        Base64.DEFAULT,
+                    ),
+                )
+            }",
+        )
+        ZLog.d(
+            TAG,
+            "内容 AES ${AAFEncryptConstants.AES_MOD}  加密 IV：${
+                String(
+                    Base64.encode(
+                        encryptResult.iv,
+                        Base64.DEFAULT,
+                    ),
+                )
+            }",
+        )
+        ZLog.d(
+            TAG,
+            "内容加密Key  RSA ${AAFEncryptConstants.RSA_MOD}  加密后：${
+                String(
+                    Base64.encode(
+                        encryptResult.keyEncryptData,
+                        Base64.DEFAULT,
+                    ),
+                )
+            }",
+        )
         ZLog.d(TAG, "-------------------------------------------")
         val key = RSAUtils.decrypt(
-            context,
+            AAFEncryptConstants.RSA_MOD,
             AAFEncrypt.getRSAPrivateKeyFormAssets(context, AAFEncryptConstants.RSA_PRI_KEY_NAME),
             encryptResult.keyEncryptData,
         )
-        val result = AESUtils.doAESEncryptWithIV(key, encryptResult.iv, Cipher.DECRYPT_MODE, encryptResult.result)
-        ZLog.d(TAG, "内容解密 Data：${String(result)}")
+        val result = AESUtils.encrypt(AAFEncryptConstants.AES_MOD, key, encryptResult.iv, encryptResult.result)
+        ZLog.d(TAG, "内容 AES ${AAFEncryptConstants.AES_MOD} 解密 Data：${String(result)}")
         ZLog.d(TAG, "-------------------------------------------")
     }
 

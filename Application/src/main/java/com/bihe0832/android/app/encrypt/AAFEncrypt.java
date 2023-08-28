@@ -45,7 +45,7 @@ public class AAFEncrypt {
      */
     public static AESEncryptResult aesEncrypt(Context context, String aesKeyAlias, String data) {
         SecretKey key = AESKeyStoreUtils.getAESKeyByKeystore(context, aesKeyAlias);
-        return AESUtils.doAESEncrypt(key, null, Cipher.ENCRYPT_MODE, data.getBytes());
+        return AESUtils.doAESEncrypt(AAFEncryptConstants.AES_MOD, key, null, Cipher.ENCRYPT_MODE, data.getBytes());
     }
 
     /**
@@ -53,7 +53,9 @@ public class AAFEncrypt {
      */
     public static String aesDecrypt(Context context, String aesKeyAlias, byte[] ivParaBytes, byte[] data) {
         SecretKey key = AESKeyStoreUtils.getAESKeyByKeystore(context, aesKeyAlias);
-        AESEncryptResult result = AESUtils.doAESEncrypt(key, ivParaBytes, Cipher.DECRYPT_MODE, data);
+        AESEncryptResult result = AESUtils.doAESEncrypt(AAFEncryptConstants.AES_MOD, key, ivParaBytes,
+                Cipher.DECRYPT_MODE,
+                data);
         if (result != null) {
             return new String(result.result);
         }
@@ -79,9 +81,11 @@ public class AAFEncrypt {
 
     public static AAFEncryptResult encryptDataWithKeyStore(Context context, SecretKey secretKey, String rsaKeyName,
             String data) {
-        AESEncryptResult result = AESUtils.doAESEncrypt(secretKey, null, Cipher.ENCRYPT_MODE, data.getBytes());
+        AESEncryptResult result = AESUtils.doAESEncrypt(AAFEncryptConstants.AES_MOD, secretKey, null,
+                Cipher.ENCRYPT_MODE,
+                data.getBytes());
         PublicKey rsaKey = getRSAPublicKeyFormAssets(context, rsaKeyName);
-        byte[] key = RSAUtils.encryptSecretKeyWithRSAPublicKey(rsaKey, secretKey);
+        byte[] key = RSAUtils.encryptSecretKeyWithRSAPublicKey(AAFEncryptConstants.RSA_MOD, rsaKey, secretKey);
         return new AAFEncryptResult(key, result.iv, result.result);
     }
 }

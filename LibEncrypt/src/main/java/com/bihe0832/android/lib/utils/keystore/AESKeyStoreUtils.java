@@ -103,13 +103,13 @@ public class AESKeyStoreUtils {
     }
 
     // 加密方法
-    public static AESEncryptResult doEncrypt(Context context, String keyAlias, byte[] ivParaBytes,
+    public static AESEncryptResult doEncrypt(Context context, String aesMode, String keyAlias, byte[] ivParaBytes,
             int mode, byte[] data) {
         if (!hasKey(keyAlias)) {
             buildKey(context, keyAlias);
         }
         try {
-            return AESUtils.doAESEncrypt(getAESKeyByKeystore(context, keyAlias), ivParaBytes, mode, data);
+            return AESUtils.doAESEncrypt(aesMode, getAESKeyByKeystore(context, keyAlias), ivParaBytes, mode, data);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,13 +117,13 @@ public class AESKeyStoreUtils {
     }
 
     // 加密方法
-    public static AESEncryptResult encrypt(Context context, String keyAlias, byte[] data) {
-        return doEncrypt(context, keyAlias, null, Cipher.ENCRYPT_MODE, data);
+    public static AESEncryptResult encrypt(Context context, String aesMode, String keyAlias, byte[] data) {
+        return doEncrypt(context, aesMode, keyAlias, null, Cipher.ENCRYPT_MODE, data);
     }
 
     // 解密方法
-    public static byte[] decrypt(Context context, String keyAlias, byte[] ivParaBytes, byte[] data) {
-        AESEncryptResult result = doEncrypt(context, keyAlias, ivParaBytes, Cipher.DECRYPT_MODE, data);
+    public static byte[] decrypt(Context context, String aesMode, String keyAlias, byte[] ivParaBytes, byte[] data) {
+        AESEncryptResult result = doEncrypt(context, aesMode, keyAlias, ivParaBytes, Cipher.DECRYPT_MODE, data);
         if (result != null) {
             return result.result;
         }
