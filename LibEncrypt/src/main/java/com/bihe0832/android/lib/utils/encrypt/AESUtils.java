@@ -5,58 +5,87 @@ import android.util.Base64;
 import com.bihe0832.android.lib.log.ZLog;
 import java.io.UnsupportedEncodingException;
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESUtils {
 
+    private static final byte[] IV_BYTES = new byte[]{0x4D, 0x4E, 0x41, 0x40, 0x32, 0x30, 0x31, 0x37, 0x47, 0x4F, 0x48,
+            0x45, 0x41, 0x44, 0x21, 0x21};
     // 默认Key
-    public static byte DEFAULT_KEY[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x31, 0x32, 0x33, 0x34, 0x35,
+    public static byte[] DEFAULT_KEY = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x31, 0x32, 0x33, 0x34, 0x35,
             0x35, 0x37, 0x38};
-    private static byte ivBytes[] = new byte[]{0x4D, 0x4E, 0x41, 0x40, 0x32, 0x30, 0x31, 0x37, 0x47, 0x4F, 0x48, 0x45,
-            0x41, 0x44, 0x21, 0x21};
 
-    private static byte[] doAESEncrypt(byte[] content, byte[] key, byte[] ivParaBytes, int mode) {
+    public static AESEncryptResult doAESEncrypt(SecretKey key, byte[] ivParaBytes, int mode, byte[] content) {
         try {
             if ((content == null) || key == null) {
                 return null;
             }
-            SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-            //6.根据指定算法AES自成密码器
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");// 创建密码器
-            //7.初始化密码器，第一个参数为加密(Encrypt_mode)或者解密解密(Decrypt_mode)操作，第二个参数为使用的KEY
-            final IvParameterSpec iv = new IvParameterSpec(ivParaBytes);
-            cipher.init(mode, keySpec, iv);
-            byte[] result = cipher.doFinal(content);
-            return result;
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");// 创建密码器
+            if (null != ivParaBytes) {
+                final IvParameterSpec iv = new IvParameterSpec(ivParaBytes);
+                cipher.init(mode, key, iv);
+                return new AESEncryptResult(ivParaBytes, cipher.doFinal(content));
+            } else {
+                cipher.init(mode, key);
+                if (mode == Cipher.ENCRYPT_MODE) {
+                    return new AESEncryptResult(cipher.getIV(), cipher.doFinal(content));
+                } else {
+                    return new AESEncryptResult(null, cipher.doFinal(content));
+                }
+            }
         } catch (Exception e) {
             ZLog.e("AESUtil", "AES 密文处理异常：" + e);
         }
         return null;
     }
 
-    public static byte[] doAESEncryptWithIV(byte[] content, byte[] keyBytes, byte[] ivSpec, int mode) {
+    public static byte[] doAESEncryptWithDefaultIV(SecretKey key, int mode, byte[] content) {
         try {
-            return doAESEncrypt(content, keyBytes, ivSpec, mode);
+            return doAESEncrypt(key, IV_BYTES, mode, content).result;
+        } catch (Exception e) {
+            ZLog.e("AESUtil", "AES 密文处理异常：" + e);
+        }
+        return null;
+    }
+
+
+    private static byte[] doAESEncrypt(byte[] key, byte[] ivParaBytes, int mode, byte[] content) {
+        try {
+            if (key == null) {
+                return null;
+            }
+            SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+            return doAESEncrypt(keySpec, ivParaBytes, mode, content).result;
+        } catch (Exception e) {
+            ZLog.e("AESUtil", "AES 密文处理异常：" + e);
+        }
+        return null;
+    }
+
+    public static byte[] doAESEncryptWithIV(byte[] keyBytes, byte[] ivSpec, int mode, byte[] content) {
+        try {
+            return doAESEncrypt(keyBytes, ivSpec, mode, content);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static byte[] doAESEncryptWithDefaultIV(byte[] content, byte[] keyBytes, int mode) {
+    public static byte[] doAESEncryptWithDefaultIV(byte[] keyBytes, int mode, byte[] content) {
         try {
-            return doAESEncryptWithIV(content, keyBytes, ivBytes, mode);
+            return doAESEncryptWithIV(keyBytes, IV_BYTES, mode, content);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static byte[] doAESEncryptWithoutIV(byte[] content, byte[] keyBytes, int mode) {
+    public static byte[] doAESEncryptWithoutIV(byte[] keyBytes, int mode, byte[] content) {
         try {
             byte[] ivSpec = new byte[16];
-            return doAESEncryptWithIV(content, keyBytes, ivSpec, mode);
+            return doAESEncryptWithIV(keyBytes, ivSpec, mode, content);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,7 +93,7 @@ public class AESUtils {
     }
 
     public static byte[] encrypt(byte keyBytes[], byte[] content) {
-        return doAESEncryptWithDefaultIV(content, keyBytes, Cipher.ENCRYPT_MODE);
+        return doAESEncryptWithDefaultIV(keyBytes, Cipher.ENCRYPT_MODE, content);
     }
 
     public static byte[] encrypt(byte keyBytes[], String content) {
@@ -78,20 +107,20 @@ public class AESUtils {
     }
 
     public static byte[] encryptWithoutIV(byte keyBytes[], byte[] content) {
-        return doAESEncryptWithoutIV(content, keyBytes, Cipher.ENCRYPT_MODE);
+        return doAESEncryptWithoutIV(keyBytes, Cipher.ENCRYPT_MODE, content);
     }
 
     public static byte[] decrypt(byte keyBytes[], byte[] content) {
-        return doAESEncryptWithDefaultIV(content, keyBytes, Cipher.DECRYPT_MODE);
+        return doAESEncryptWithDefaultIV(keyBytes, Cipher.DECRYPT_MODE, content);
     }
 
     public static byte[] decryptWithoutIV(byte keyBytes[], byte[] content) {
-        return doAESEncryptWithoutIV(content, keyBytes, Cipher.DECRYPT_MODE);
+        return doAESEncryptWithoutIV(keyBytes, Cipher.DECRYPT_MODE, content);
     }
 
     public static String encryptToHex(byte[] data, byte[] key, byte[] ivParaBytes) {
         try {
-            byte[] result = doAESEncrypt(data, key, ivParaBytes, Cipher.ENCRYPT_MODE);
+            byte[] result = doAESEncrypt(key, ivParaBytes, Cipher.ENCRYPT_MODE, data);
             return HexUtils.bytes2HexStr(result);
         } catch (Exception e) {
             ZLog.e("AESUtil", "AES 密文处理异常：" + e);
@@ -99,18 +128,18 @@ public class AESUtils {
         return null;
     }
 
-    public static byte[] decryptHex(String data, byte[] key, byte[] ivParaBytes) {
+    public static byte[] decryptHex(byte[] key, byte[] ivParaBytes, String data) {
         try {
-            return doAESEncrypt(HexUtils.hexStr2Bytes(data), key, ivParaBytes, Cipher.DECRYPT_MODE);
+            return doAESEncrypt(key, ivParaBytes, Cipher.DECRYPT_MODE, HexUtils.hexStr2Bytes(data));
         } catch (Exception e) {
             ZLog.e("AESUtil", "AES 密文处理异常：" + e);
         }
         return null;
     }
 
-    public static String encryptToBase64(byte[] data, byte[] key, byte[] ivParaBytes, int base64Flag) {
+    public static String encryptToBase64(byte[] key, byte[] ivParaBytes, byte[] data, int base64Flag) {
         try {
-            byte[] result = doAESEncrypt(data, key, ivParaBytes, Cipher.ENCRYPT_MODE);
+            byte[] result = doAESEncrypt(key, ivParaBytes, Cipher.ENCRYPT_MODE, data);
             return new String(Base64.encode(result, base64Flag), "UTF-8");
         } catch (Exception e) {
             ZLog.e("AESUtil", "AES 密文处理异常：" + e);
@@ -118,20 +147,21 @@ public class AESUtils {
         return null;
     }
 
-    public static String encryptToBase64(byte[] data, byte[] key, byte[] ivParaBytes) {
-        return encryptToBase64(data, key, ivParaBytes, Base64.URL_SAFE);
+    public static String encryptToBase64(byte[] key, byte[] ivParaBytes, byte[] data) {
+        return encryptToBase64(key, ivParaBytes, data, Base64.URL_SAFE);
     }
 
-    public static byte[] decryptBase64(String data, byte[] key, byte[] ivParaBytes) {
-        return decryptBase64(data, key, ivParaBytes, Base64.URL_SAFE);
+    public static byte[] decryptBase64(byte[] key, byte[] ivParaBytes, String data) {
+        return decryptBase64(key, ivParaBytes, data, Base64.URL_SAFE);
     }
 
-    public static byte[] decryptBase64(String data, byte[] key, byte[] ivParaBytes, int base64Flag) {
+    public static byte[] decryptBase64(byte[] key, byte[] ivParaBytes, String data, int base64Flag) {
         try {
-            return doAESEncrypt(Base64.decode(data, base64Flag), key, ivParaBytes, Cipher.DECRYPT_MODE);
+            return doAESEncrypt(key, ivParaBytes, Cipher.DECRYPT_MODE, Base64.decode(data, base64Flag));
         } catch (Exception e) {
             ZLog.e("AESUtil", "AES 密文处理异常：" + e);
         }
         return null;
     }
+
 }

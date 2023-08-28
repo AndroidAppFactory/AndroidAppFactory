@@ -5,6 +5,9 @@ import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.encrypt.AESEncryptResult;
+import com.bihe0832.android.lib.utils.encrypt.AESUtils;
 import com.bihe0832.android.lib.utils.time.DateUtil;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -13,13 +16,13 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Date;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import javax.security.auth.x500.X500Principal;
 
 /**
@@ -69,6 +72,7 @@ public class AESKeyStoreUtils {
                         .setDigests(KeyProperties.DIGEST_SHA512)
                         .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                        .setKeySize(256)
                         .setRandomizedEncryptionRequired(true)
                         .setCertificateNotBefore(start)
                         .setCertificateNotAfter(end)
@@ -99,8 +103,36 @@ public class AESKeyStoreUtils {
     }
 
     // 加密方法
-    public static AESKeyStoreResult doEncrypt(int mode, Context context, String keyAlias, byte[] ivParaBytes,
-            byte[] data) {
+    public static AESEncryptResult doEncrypt(Context context, String keyAlias, byte[] ivParaBytes,
+            int mode, byte[] data) {
+        if (!hasKey(keyAlias)) {
+            buildKey(context, keyAlias);
+        }
+        try {
+            return AESUtils.doAESEncrypt(getAESKeyByKeystore(context, keyAlias), ivParaBytes, mode, data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 加密方法
+    public static AESEncryptResult encrypt(Context context, String keyAlias, byte[] data) {
+        return doEncrypt(context, keyAlias, null, Cipher.ENCRYPT_MODE, data);
+    }
+
+    // 解密方法
+    public static byte[] decrypt(Context context, String keyAlias, byte[] ivParaBytes, byte[] data) {
+        AESEncryptResult result = doEncrypt(context, keyAlias, ivParaBytes, Cipher.DECRYPT_MODE, data);
+        if (result != null) {
+            return result.result;
+        }
+        return null;
+    }
+
+
+    // 仅能用于本地加密
+    public static SecretKey getAESKeyByKeystore(Context context, String keyAlias) {
         if (!hasKey(keyAlias)) {
             buildKey(context, keyAlias);
         }
@@ -113,15 +145,7 @@ public class AESKeyStoreUtils {
             if (entry instanceof KeyStore.SecretKeyEntry) {
                 KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) keyStore.getEntry(keyAlias, null);
                 SecretKey secretKey = secretKeyEntry.getSecretKey();
-                Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
-                if (mode == Cipher.DECRYPT_MODE) {
-                    final IvParameterSpec iv = new IvParameterSpec(ivParaBytes);
-                    cipher.init(mode, secretKey, iv);
-                    return new AESKeyStoreResult(ivParaBytes, cipher.doFinal(data));
-                } else {
-                    cipher.init(mode, secretKey);
-                    return new AESKeyStoreResult(cipher.getIV(), cipher.doFinal(data));
-                }
+                return secretKey;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,17 +153,18 @@ public class AESKeyStoreUtils {
         return null;
     }
 
-    // 加密方法
-    public static AESKeyStoreResult encrypt(Context context, String keyAlias, byte[] data) {
-        return doEncrypt(Cipher.ENCRYPT_MODE, context, keyAlias, null, data);
-    }
 
-    // 解密方法
-    public static byte[] decrypt(Context context, String keyAlias, byte[] ivParaBytes, byte[] data) {
-        AESKeyStoreResult result = doEncrypt(Cipher.DECRYPT_MODE, context, keyAlias, ivParaBytes, data);
-        if (result != null) {
-            return result.result;
+    //可以随意使用
+    public static SecretKey getAESKeyByKeystore() {
+        try {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            SecureRandom secureRandom = new SecureRandom();
+            keyGenerator.init(256, secureRandom);
+            return keyGenerator.generateKey();
+        } catch (Exception e) {
+            ZLog.e("AESUtil", "AES 密文处理异常：" + e);
         }
         return null;
     }
+
 }

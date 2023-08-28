@@ -1,0 +1,153 @@
+package com.bihe0832.android.lib.utils.encrypt;
+
+import android.content.Context;
+import android.util.Base64;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.interfaces.RSAKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+
+/**
+ * Summary
+ *
+ * @author hardyshi code@bihe0832.com
+ *         Created on 2023/8/28.
+ *         Description:
+ */
+public class RSAUtils {
+
+    // 加密方法
+    public static byte[] encrypt(Context context, PublicKey publicKey, byte[] data) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            int blockSize = 128;
+            // 使用"RSA/ECB/PKCS1Padding"模式进行加密
+            blockSize = ((RSAKey) publicKey).getModulus().bitLength() / 8 - 11;
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[blockSize];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                byte[] encryptedDataBlock = cipher.doFinal(buffer, 0, bytesRead);
+                outputStream.write(encryptedDataBlock);
+            }
+            return outputStream.toByteArray().clone();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static byte[] decrypt(Context context, PrivateKey privateKey, byte[] data) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            int blockSize = 128;
+            // 使用"RSA/ECB/PKCS1Padding"模式进行加密
+            blockSize = ((RSAKey) privateKey).getModulus().bitLength() / 8;
+            // 使用"RSA/ECB/PKCS1Padding"模式进行解密
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+            byte[] buffer = new byte[blockSize];
+            int bytesRead;
+
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                byte[] decryptedDataBlock = cipher.doFinal(buffer, 0, bytesRead);
+                outputStream.write(decryptedDataBlock);
+            }
+            return outputStream.toByteArray().clone();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static PublicKey pemStringToRSAPublicKey(String publicKeyPem) {
+        try {
+            String publicKeyPemFormatted = publicKeyPem
+                    .replace("-----BEGIN PUBLIC KEY-----", "")
+                    .replace("-----END PUBLIC KEY-----", "")
+                    .replaceAll("\\s+", "");
+
+            byte[] publicKeyBytes = Base64.decode(publicKeyPemFormatted, Base64.DEFAULT);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePublic(keySpec);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static PrivateKey pemStringToRSAPrivateKey(String privateKeyPem) {
+        try {
+            String privateKeyPemFormatted = privateKeyPem
+                    .replace("-----BEGIN PRIVATE KEY-----", "")
+                    .replace("-----END PRIVATE KEY-----", "")
+                    .replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                    .replace("-----END RSA PRIVATE KEY-----", "")
+                    .replaceAll("\\s+", "");
+
+            byte[] privateKeyBytes = Base64.decode(privateKeyPemFormatted, Base64.DEFAULT);
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePrivate(keySpec);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static byte[] encryptSecretKeyWithRSAPublicKey(PublicKey publicKey, SecretKey secretKey) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.WRAP_MODE, publicKey);
+            return cipher.wrap(secretKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
+    public static byte[] signDataWithRSAPrivateKey(PrivateKey privateKey, String data) {
+        try {
+            Signature signature = Signature.getInstance("SHA256withRSA");
+            signature.initSign(privateKey);
+
+            byte[] dataBytes = data.getBytes();
+            signature.update(dataBytes);
+
+            byte[] signatureBytes = signature.sign();
+            return signatureBytes;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean verifySignatureWithRSAPublicKey(PublicKey publicKey, String data, byte[] signatureBytes) {
+        try {
+            Signature signature = Signature.getInstance("SHA256withRSA");
+            signature.initVerify(publicKey);
+
+            byte[] dataBytes = data.getBytes();
+            signature.update(dataBytes);
+            return signature.verify(signatureBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+}

@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.utils.keystore;
+package com.bihe0832.android.lib.utils.encrypt;
 
 /**
  * Summary
@@ -7,14 +7,13 @@ package com.bihe0832.android.lib.utils.keystore;
  *         Created on 2023/8/25.
  *         Description:
  */
-public class AESKeyStoreResult {
+public class AESEncryptResult {
 
     public byte[] iv = null;
     public byte[] result = null;
 
-    public AESKeyStoreResult(byte[] iv, byte[] result) {
+    public AESEncryptResult(byte[] iv, byte[] result) {
         this.iv = iv;
         this.result = result;
     }
-
 }

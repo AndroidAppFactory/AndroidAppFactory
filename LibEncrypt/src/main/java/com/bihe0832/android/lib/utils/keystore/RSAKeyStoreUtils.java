@@ -5,26 +5,19 @@ import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import com.bihe0832.android.lib.utils.encrypt.RSAUtils;
 import com.bihe0832.android.lib.utils.time.DateUtil;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Date;
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.security.auth.x500.X500Principal;
 
 /**
@@ -109,38 +102,18 @@ public class RSAKeyStoreUtils {
             keyStore.load(null);
             // 拿到密钥别名对应的Entry
             KeyStore.Entry entry = keyStore.getEntry(keyAlias, null);
-            // 使用"RSA/ECB/PKCS1Padding"模式进行加密
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             if (entry instanceof KeyStore.PrivateKeyEntry) {
+                KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(keyAlias, null);
                 if (Cipher.ENCRYPT_MODE == mode) {
-                    // 通过Entry拿到公钥对象（并不是真实的公钥，仅供加密方法使用）
-                    PublicKey publicKey = ((KeyStore.PrivateKeyEntry) entry).getCertificate().getPublicKey();
-                    cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+                    PublicKey publicKey = keyEntry.getCertificate().getPublicKey();
+                    return RSAUtils.encrypt(context, publicKey, data);
                 } else {
-                    // 通过Entry拿到私钥对象（并不是真实的私钥，仅供解密方法使用）
-                    PrivateKey privateKey = ((KeyStore.PrivateKeyEntry) entry).getPrivateKey();
-                    // 使用"RSA/ECB/PKCS1Padding"模式进行解密
-                    cipher.init(Cipher.DECRYPT_MODE, privateKey);
+                    PrivateKey privateKey = keyEntry.getPrivateKey();
+                    return RSAUtils.decrypt(context, privateKey, data);
                 }
             }
-            return cipher.doFinal(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableEntryException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -150,7 +123,7 @@ public class RSAKeyStoreUtils {
     public static byte[] encrypt(Context context, String keyAlias, byte[] data) {
         return doEencrypt(context, keyAlias, data, Cipher.ENCRYPT_MODE);
     }
-    
+
     // 解密方法
     public static byte[] decrypt(Context context, String keyAlias, byte[] data) {
         return doEencrypt(context, keyAlias, data, Cipher.DECRYPT_MODE);
