@@ -16,5 +16,4 @@ public class AAFEncryptConstants {
     public static final String AES_MOD = AESUtils.MODE_CBC_PKCS7;
     public static final byte[] IV_BYTES = new byte[]{0x4D, 0x4E, 0x41, 0x40, 0x32, 0x30, 0x31, 0x37, 0x47, 0x4F, 0x48,
             0x45, 0x41, 0x44, 0x21, 0x21};
-    public static final String TAG = "AAFEncryptConstants";
 }

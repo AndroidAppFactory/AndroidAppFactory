@@ -91,7 +91,7 @@ open class DebugEncryptCommonFragment : DebugCommonFragment() {
                     String(
                         RSAUtils.decrypt(
                             mod,
-                            AAFEncrypt.getRSAPrivateKeyFormAssets(context!!, AAFSecretEncrypt.RSA_PRI_KEY_NAME),
+                            AAFSecretEncrypt.getRSAPrivateKeyFormAssets(),
                             encryptResult,
                         ),
                     )
@@ -104,7 +104,7 @@ open class DebugEncryptCommonFragment : DebugCommonFragment() {
                         String(
                             RSAUtils.decrypt(
                                 mod,
-                                AAFEncrypt.getRSAPrivateKeyFormAssets(context!!, AAFSecretEncrypt.RSA_PRI_KEY_NAME),
+                                AAFSecretEncrypt.getRSAPrivateKeyFormAssets(),
                                 it,
                             ),
                         )

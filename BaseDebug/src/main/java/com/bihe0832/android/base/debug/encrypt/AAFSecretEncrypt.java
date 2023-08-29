@@ -1,5 +1,10 @@
 package com.bihe0832.android.base.debug.encrypt;
 
+import com.bihe0832.android.framework.ZixieContext;
+import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.utils.encrypt.RSAUtils;
+import java.security.PrivateKey;
+
 public class AAFSecretEncrypt {
 
     public static final String TAG = "AAFSecretEncrypt";
@@ -10,4 +15,13 @@ public class AAFSecretEncrypt {
     public static final String DEMO_RSA_KEY_ALIAS = "rsa";
 
     public static final String DEMO_AES_KEY = "1234567890ASCDEF1234567890ASCDEF";
+
+    /**
+     * 读取Assets的RSA 私钥
+     */
+    public static PrivateKey getRSAPrivateKeyFormAssets() {
+        String content = FileUtils.INSTANCE.getAssetFileContent(ZixieContext.INSTANCE.getApplicationContext(),
+                RSA_PRI_KEY_NAME);
+        return RSAUtils.pemStringToRSAPrivateKey(content);
+    }
 }

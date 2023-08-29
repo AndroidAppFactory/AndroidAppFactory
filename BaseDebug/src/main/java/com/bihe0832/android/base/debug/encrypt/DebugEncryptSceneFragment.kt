@@ -105,7 +105,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
         ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
         val key = RSAUtils.decrypt(
             AAFEncryptConstants.RSA_MOD,
-            AAFEncrypt.getRSAPrivateKeyFormAssets(context, AAFSecretEncrypt.RSA_PRI_KEY_NAME),
+            AAFSecretEncrypt.getRSAPrivateKeyFormAssets(),
             encryptResult.keyEncryptData,
         )
         val result = AESUtils.decrypt(AAFEncryptConstants.AES_MOD, key, encryptResult.iv, encryptResult.result)
@@ -118,10 +118,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
         ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
         ZLog.d(AAFSecretEncrypt.TAG, "数据公私钥签名验证 原始数据 ：\"$data\"")
         var encryptResult = RSAUtils.signDataWithRSAPrivateKey(
-            AAFEncrypt.getRSAPrivateKeyFormAssets(
-                context!!,
-                AAFSecretEncrypt.RSA_PRI_KEY_NAME,
-            ),
+            AAFSecretEncrypt.getRSAPrivateKeyFormAssets(),
             data,
         )
         ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
