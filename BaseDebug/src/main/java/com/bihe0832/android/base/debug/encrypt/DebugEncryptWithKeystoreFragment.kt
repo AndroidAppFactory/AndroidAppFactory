@@ -17,7 +17,7 @@ open class DebugEncryptWithKeystoreFragment : DebugCommonFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugTipsData("通用加解密方案"))
+            add(DebugTipsData("基于 Keystore 的加解密方案"))
             add(DebugItemData("使用系统生成秘钥RSA加密解密", View.OnClickListener { androidRSAEncrypt() }))
             add(DebugItemData("使用系统生成秘钥系统AES加密解密", View.OnClickListener { androidAESEncrypt() }))
         }
