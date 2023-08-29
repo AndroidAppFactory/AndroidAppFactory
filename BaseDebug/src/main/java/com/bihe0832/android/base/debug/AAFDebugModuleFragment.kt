@@ -71,7 +71,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
-            add(getDebugFragmentItemData("加解密、MD5、SHA256等", DebugEncryptFragment::class.java))
+            add(getDebugFragmentItemData("AES、RSA、MD5、SHA256等", DebugEncryptFragment::class.java))
 
             add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
 
