@@ -36,7 +36,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
             "AES ${AAFEncryptConstants.AES_MOD} 内容加密向量 ：${Arrays.toString(encryptResult.iv)}",
         )
         ZLog.d(
-            AAFSecretEncrypt.DEMO_AES_KEY_ALIAS,
+            AAFSecretEncrypt.TAG,
             "AES ${AAFEncryptConstants.AES_MOD} 内容加密结果 ：${
                 String(
                     Base64.encode(
@@ -49,7 +49,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
         ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
         encryptResult?.let {
             ZLog.d(
-                AAFSecretEncrypt.DEMO_AES_KEY_ALIAS,
+                AAFSecretEncrypt.TAG,
                 "AES ${AAFEncryptConstants.AES_MOD} 内容模拟解密 ：${
                     AAFEncrypt.aesDecrypt(
                         context!!,
@@ -70,7 +70,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
         var encryptResult = AAFEncrypt.encryptDataWithKeyStore(context, AAFSecretEncrypt.RSA_PUB_KEY_NAME, data)
         ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
         ZLog.d(
-            AAFSecretEncrypt.DEMO_AES_KEY_ALIAS,
+            AAFSecretEncrypt.TAG,
             "内容 AES ${AAFEncryptConstants.AES_MOD}  加密 Data：${
                 String(
                     Base64.encode(
@@ -81,7 +81,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
             }",
         )
         ZLog.d(
-            AAFSecretEncrypt.DEMO_AES_KEY_ALIAS,
+            AAFSecretEncrypt.TAG,
             "内容 AES ${AAFEncryptConstants.AES_MOD}  加密 IV：${
                 String(
                     Base64.encode(
@@ -92,7 +92,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
             }",
         )
         ZLog.d(
-            AAFSecretEncrypt.DEMO_AES_KEY_ALIAS,
+            AAFSecretEncrypt.TAG,
             "内容加密Key RSA ${AAFEncryptConstants.RSA_MOD} 加密后：\n${
                 String(
                     Base64.encode(
@@ -128,7 +128,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
         )
         ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
         ZLog.d(
-            AAFSecretEncrypt.DEMO_AES_KEY_ALIAS,
+            AAFSecretEncrypt.TAG,
             "数据公私钥签名验证 原始数据验证：${
                 RSAUtils.verifySignatureWithRSAPublicKey(
                     AAFEncrypt.getRSAPublicKeyFormAssets(context, AAFSecretEncrypt.RSA_PUB_KEY_NAME),
@@ -140,7 +140,7 @@ open class DebugEncryptSceneFragment : DebugCommonFragment() {
         data = "$data "
         ZLog.d(AAFSecretEncrypt.TAG, "数据公私钥签名验证 修改后数据 ：\"$data\"")
         ZLog.d(
-            AAFSecretEncrypt.DEMO_AES_KEY_ALIAS,
+            AAFSecretEncrypt.TAG,
             "数据公私钥签名验证 修改后数据验证：${
                 RSAUtils.verifySignatureWithRSAPublicKey(
                     AAFEncrypt.getRSAPublicKeyFormAssets(context, AAFSecretEncrypt.RSA_PUB_KEY_NAME),
