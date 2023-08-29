@@ -9,6 +9,7 @@ buildscript {
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
+        maven { url 'https://developer.huawei.com/repo/' }
         maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1622/content/" }
 
 
@@ -33,6 +34,7 @@ allprojects {
         maven { url "https://repo1.maven.org/maven2" }
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
+        maven { url 'https://developer.huawei.com/repo/' }
         maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1622/content/" }
 
     }
