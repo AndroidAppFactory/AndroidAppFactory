@@ -17,7 +17,6 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
 
-
 /**
  * @author zixie code@bihe0832.com
  * Created on 2020-03-05.
@@ -138,27 +137,31 @@ object LibTTS {
                     it
                 }
             }
-            mSpeech = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
-                if (status == TextToSpeech.SUCCESS) {
-                    ZLog.d(TAG, "onInit: TTS引擎初始化成功")
+            mSpeech = TextToSpeech(
+                mContext,
+                TextToSpeech.OnInitListener { status ->
+                    if (status == TextToSpeech.SUCCESS) {
+                        ZLog.d(TAG, "onInit: TTS引擎初始化成功")
 //                    lastInitTime = System.currentTimeMillis()
-                    initConfig()
-                    setLanguage(mLocale!!)
-                    ttsData?.let {
-                        if (speak(ttsData) == TextToSpeech.ERROR) {
+                        initConfig()
+                        setLanguage(mLocale!!)
+                        ttsData?.let {
+                            if (speak(ttsData) == TextToSpeech.ERROR) {
+                                mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
+                            }
+                        }
+                    } else {
+                        ZLog.e(TAG, "onInit: TTS引擎初始化失败")
+                        mTTSInitListenerList.forEach {
+                            it.onInitError()
+                        }
+                        if (null != ttsData) {
                             mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
                         }
                     }
-                } else {
-                    ZLog.e(TAG, "onInit: TTS引擎初始化失败")
-                    mTTSInitListenerList.forEach {
-                        it.onInitError()
-                    }
-                    if (null != ttsData) {
-                        mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
-                    }
-                }
-            }, enginePackageName)
+                },
+                enginePackageName,
+            )
             if (BuildUtils.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                 mSpeech?.setOnUtteranceCompletedListener { utteranceId ->
                     mTTSResultListener.onUtteranceDone(utteranceId ?: "")
@@ -264,6 +267,9 @@ object LibTTS {
     }
 
     fun speak(tempStr: TTSData, type: Int) {
+        if (TextUtils.isEmpty(tempStr.speakText)) {
+            return
+        }
         when (type) {
             SPEEAK_TYPE_SEQUENCE -> {
                 mMsgList.add(tempStr)
@@ -271,16 +277,19 @@ object LibTTS {
                     startSpeak()
                 }
             }
+
             SPEEAK_TYPE_NEXT -> {
                 mMsgList.add(0, tempStr)
                 if (mSpeech?.isSpeaking != true) {
                     startSpeak()
                 }
             }
+
             SPEEAK_TYPE_FLUSH -> {
                 mMsgList.add(0, tempStr)
                 startSpeak()
             }
+
             SPEEAK_TYPE_CLEAR -> {
                 mMsgList.clear()
                 mMsgList.add(0, tempStr)
@@ -294,7 +303,12 @@ object LibTTS {
         if (!isTTSServiceOK(mSpeech)) {
             initTTSAndSpeak(ttsData)
         } else {
-            var result = speak(ttsData)
+            var result = TextToSpeech.ERROR
+            try {
+                result = speak(ttsData) ?: TextToSpeech.ERROR
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             ZLog.e(TAG, "speakWithTry result: $result ")
             if (result == TextToSpeech.ERROR) {
                 initTTSAndSpeak(ttsData)
@@ -310,7 +324,11 @@ object LibTTS {
         val fields: Array<Field> = tts.javaClass.getDeclaredFields()
         for (j in fields.indices) {
             fields[j].setAccessible(true)
-            if (TextUtils.equals("mServiceConnection", fields[j].getName()) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())) {
+            if (TextUtils.equals(
+                        "mServiceConnection",
+                        fields[j].getName(),
+                    ) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())
+            ) {
                 try {
                     if (fields[j].get(tts) == null) {
                         isBindConnection = false
@@ -332,7 +350,12 @@ object LibTTS {
         var result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
         } else {
-            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakBundle(), ttsData.getUtteranceId())
+            mSpeech?.speak(
+                ttsData.speakText,
+                TextToSpeech.QUEUE_FLUSH,
+                ttsData.getSpeakBundle(),
+                ttsData.getUtteranceId(),
+            )
         }
         ZLog.e(TAG, "speak ttsData result $result ,ttsData: $ttsData ")
         return result
@@ -342,10 +365,15 @@ object LibTTS {
         ZLog.e(TAG, "ttsData: $ttsData")
         val result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
-                    ?: TextToSpeech.ERROR
+                ?: TextToSpeech.ERROR
         } else {
-            mSpeech?.synthesizeToFile(ttsData.speakText, ttsData.getSpeakBundle(), File(finalFileName), ttsData.speakText)
-                    ?: TextToSpeech.ERROR
+            mSpeech?.synthesizeToFile(
+                ttsData.speakText,
+                ttsData.getSpeakBundle(),
+                File(finalFileName),
+                ttsData.speakText,
+            )
+                ?: TextToSpeech.ERROR
         }
         ZLog.i(TAG, "saveAudioFile: $finalFileName 文件保存结果： $result")
         return result
