@@ -11,9 +11,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
@@ -39,24 +37,18 @@ import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class TBSWebViewFragment extends BaseWebViewFragment {
+
     public TBSWebView mWebView;
+    protected WebViewRefreshCallback mRefreshCallback = null;
     private View mCustomView;
     private int mOriginalSystemUiVisibility;
     private int mOriginalOrientation;
     private IX5WebChromeClient.CustomViewCallback mCustomViewCallback;
-
-    protected WebViewRefreshCallback mRefreshCallback = null;
-
-    public interface WebViewRefreshCallback {
-
-        void onRefresh(WebView webView);
-    }
 
     public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback) {
         mRefreshCallback = callback;
@@ -77,9 +69,9 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
     @Override
     protected void addWebviewToLayout(ViewGroup mViewParent) {
-        mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
     }
-
 
     @Override
     protected int getLayoutID() {
@@ -175,17 +167,18 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         }
     }
 
-
     protected WebResourceResponse interceptRequestResult(String url) {
-        if (!mWebView.hasDoActionBeforeLoadURL()) {
+        if (null != mWebView && !mWebView.hasDoActionBeforeLoadURL()) {
             //主要用于解决页面通过webview的reload刷新时没有走 actionBeforeLoadURL 导致一些前置逻辑被跳过
             actionBeforeLoadURL(url);
             mWebView.doActionBeforeLoadURL();
         }
         if (null != getGlobalLocalRes() && getGlobalLocalRes().containsKey(url)) {
             try {
-                String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(FileUtils.INSTANCE.getExtensionName(url));
-                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8, getContext().getAssets().open(getGlobalLocalRes().get(url)));
+                String type = MimeTypeMap.getSingleton()
+                        .getMimeTypeFromExtension(FileUtils.INSTANCE.getExtensionName(url));
+                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8,
+                        getContext().getAssets().open(getGlobalLocalRes().get(url)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -207,6 +200,37 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
     protected TBSJsBridgeProxy getJsBridgeProxy() {
         return new TBSJsBridgeProxy(getActivity(), mWebView);
+    }
+
+    @Override
+    protected void destroyWebView() {
+        if (mWebView != null) {
+            mWebView.setOnScrollChangedCallback(null);
+            mWebView.stopLoading();
+            mWebView.clearHistory();
+            mWebView.destroy();
+            mWebView = null;
+        }
+    }
+
+    @Override
+    public void setCookie(String url, String name, String value) {
+        TBSCookieManager.INSTANCE.setCookie(url, name, value);
+    }
+
+    @Override
+    public void syncCookie() {
+        TBSCookieManager.INSTANCE.syncCookie();
+    }
+
+    @Override
+    public void removeCookiesForDomain(String url) {
+        TBSCookieManager.INSTANCE.removeCookiesForDomain(url);
+    }
+
+    public interface WebViewRefreshCallback {
+
+        void onRefresh(WebView webView);
     }
 
     //WebViewClient就是帮助WebView处理各种通知、请求事件的。
@@ -274,13 +298,15 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         }
 
         @Override
-        public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest, WebResourceError webResourceError) {
+        public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest,
+                WebResourceError webResourceError) {
             onWebClientReceivedError();
             return;
         }
 
         @Override
-        public void onReceivedHttpError(WebView webView, WebResourceRequest webResourceRequest, WebResourceResponse webResourceResponse) {
+        public void onReceivedHttpError(WebView webView, WebResourceRequest webResourceRequest,
+                WebResourceResponse webResourceResponse) {
             super.onReceivedHttpError(webView, webResourceRequest, webResourceResponse);
         }
 
@@ -317,7 +343,8 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
     protected class MyWebChromeClient extends WebChromeClient {
 
         @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
+                FileChooserParams fileChooserParams) {
             mPicUploadCallback = filePathCallback;
             openImageChooserActivity();
             return true;
@@ -364,7 +391,8 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
         //处理confirm弹出框
         @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue,
+                JsPromptResult result) {
             ZLog.d(TAG, "onJsPrompt " + url);
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
@@ -385,7 +413,9 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            ZLog.d(TAG, "onConsoleMessage  From line " + consoleMessage.lineNumber() + " of " + consoleMessage.sourceId() + " \n\t" + consoleMessage.message());
+            ZLog.d(TAG,
+                    "onConsoleMessage  From line " + consoleMessage.lineNumber() + " of " + consoleMessage.sourceId()
+                            + " \n\t" + consoleMessage.message());
             return super.onConsoleMessage(consoleMessage);
         }
 
@@ -403,9 +433,13 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
             mCustomViewCallback = callback;
 
             FrameLayout decor = (FrameLayout) getActivity().getWindow().getDecorView();
-            decor.addView(mCustomView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            decor.addView(mCustomView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
 
-            getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE);
+            getActivity().getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE);
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
@@ -421,32 +455,5 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
             mCustomViewCallback.onCustomViewHidden();
             mCustomViewCallback = null;
         }
-    }
-
-
-    @Override
-    protected void destroyWebView() {
-        if (mWebView != null) {
-            mWebView.setOnScrollChangedCallback(null);
-            mWebView.stopLoading();
-            mWebView.clearHistory();
-            mWebView.destroy();
-            mWebView = null;
-        }
-    }
-
-    @Override
-    public void setCookie(String url, String name, String value) {
-        TBSCookieManager.INSTANCE.setCookie(url, name, value);
-    }
-
-    @Override
-    public void syncCookie() {
-        TBSCookieManager.INSTANCE.syncCookie();
-    }
-
-    @Override
-    public void removeCookiesForDomain(String url) {
-        TBSCookieManager.INSTANCE.removeCookiesForDomain(url);
     }
 }

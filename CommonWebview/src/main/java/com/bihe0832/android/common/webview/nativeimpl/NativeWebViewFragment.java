@@ -22,9 +22,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
@@ -35,19 +33,14 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class NativeWebViewFragment extends BaseWebViewFragment {
+
     public NativeWebView mWebView;
     protected WebViewRefreshCallback mRefreshCallback = null;
-
-    public interface WebViewRefreshCallback {
-
-        void onRefresh(WebView webView);
-    }
 
     public void setOnWebViewRefreshCallback(WebViewRefreshCallback callback) {
         mRefreshCallback = callback;
@@ -68,9 +61,9 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
     @Override
     protected void addWebviewToLayout(ViewGroup mViewParent) {
-        mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
     }
-
 
     @Override
     protected int getLayoutID() {
@@ -166,17 +159,18 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         }
     }
 
-
     protected WebResourceResponse interceptRequestResult(String url) {
-        if (!mWebView.hasDoActionBeforeLoadURL()) {
+        if (null != mWebView && !mWebView.hasDoActionBeforeLoadURL()) {
             //主要用于解决页面通过webview的reload刷新时没有走 actionBeforeLoadURL 导致一些前置逻辑被跳过
             actionBeforeLoadURL(url);
             mWebView.doActionBeforeLoadURL();
         }
         if (null != getGlobalLocalRes() && getGlobalLocalRes().containsKey(url)) {
             try {
-                String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(FileUtils.INSTANCE.getExtensionName(url));
-                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8, getContext().getAssets().open(getGlobalLocalRes().get(url)));
+                String type = MimeTypeMap.getSingleton()
+                        .getMimeTypeFromExtension(FileUtils.INSTANCE.getExtensionName(url));
+                return new WebResourceResponse(type, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8,
+                        getContext().getAssets().open(getGlobalLocalRes().get(url)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -198,6 +192,35 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
     protected NativeJsBridgeProxy getJsBridgeProxy() {
         return new NativeJsBridgeProxy(getActivity(), mWebView);
+    }
+
+    @Override
+    protected void destroyWebView() {
+        if (mWebView != null) {
+            mWebView.stopLoading();
+            mWebView.clearHistory();
+            mWebView.destroy();
+        }
+    }
+
+    @Override
+    public void setCookie(String url, String name, String value) {
+        NativeCookieManager.INSTANCE.setCookie(url, name, value);
+    }
+
+    @Override
+    public void syncCookie() {
+        NativeCookieManager.INSTANCE.syncCookie();
+    }
+
+    @Override
+    public void removeCookiesForDomain(String url) {
+        NativeCookieManager.INSTANCE.removeCookiesForDomain(url);
+    }
+
+    public interface WebViewRefreshCallback {
+
+        void onRefresh(WebView webView);
     }
 
     //WebViewClient就是帮助WebView处理各种通知、请求事件的。
@@ -297,7 +320,8 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
     protected class MyWebChromeClient extends WebChromeClient {
 
         @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
+                FileChooserParams fileChooserParams) {
             mPicUploadCallback = filePathCallback;
             openImageChooserActivity();
             return true;
@@ -344,7 +368,8 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         //处理confirm弹出框
         @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue,
+                JsPromptResult result) {
             ZLog.d(TAG, "onJsPrompt " + url);
             return super.onJsPrompt(view, url, message, defaultValue, result);
         }
@@ -365,33 +390,10 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            ZLog.d(TAG, "onConsoleMessage  From line " + consoleMessage.lineNumber() + " of " + consoleMessage.sourceId() + " \n\t" + consoleMessage.message());
+            ZLog.d(TAG,
+                    "onConsoleMessage  From line " + consoleMessage.lineNumber() + " of " + consoleMessage.sourceId()
+                            + " \n\t" + consoleMessage.message());
             return super.onConsoleMessage(consoleMessage);
         }
-    }
-
-
-    @Override
-    protected void destroyWebView() {
-        if (mWebView != null) {
-            mWebView.stopLoading();
-            mWebView.clearHistory();
-            mWebView.destroy();
-        }
-    }
-
-    @Override
-    public void setCookie(String url, String name, String value) {
-        NativeCookieManager.INSTANCE.setCookie(url, name, value);
-    }
-
-    @Override
-    public void syncCookie() {
-        NativeCookieManager.INSTANCE.syncCookie();
-    }
-
-    @Override
-    public void removeCookiesForDomain(String url) {
-        NativeCookieManager.INSTANCE.removeCookiesForDomain(url);
     }
 }
