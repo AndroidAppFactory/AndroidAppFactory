@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.3.12",
+                "version"            : "6.3.14",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -164,7 +164,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibTTS"                    : [
-                "version"            : "5.17.0",
+                "version"            : "6.3.14",
                 "artifactId"         : "lib-tts",
                 "apidependenciesList": [
                         "LibConfig", "LibOS"
