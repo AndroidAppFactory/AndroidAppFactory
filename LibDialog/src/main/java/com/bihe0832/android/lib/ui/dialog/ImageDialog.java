@@ -13,10 +13,11 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2023/7/20.
- * Description: Description
+ *         Created on 2023/7/20.
+ *         Description: Description
  */
 public class ImageDialog extends CommonDialog {
+
     public static final int ORIENTATION_VERTICAL = 1;
     public static final int ORIENTATION_HORIZONTAL = 2;
     private int oritation = 1;
@@ -32,12 +33,12 @@ public class ImageDialog extends CommonDialog {
     private View mButtonLayout = null;
     private boolean mShowButtonBg = false;
 
-    protected int getLayoutID() {
-        return R.layout.com_bihe0832_common_image_dialog;
-    }
-
     public ImageDialog(Context context) {
         super(context);
+    }
+
+    protected int getLayoutID() {
+        return R.layout.com_bihe0832_common_image_dialog;
     }
 
     protected void initView() {
@@ -45,7 +46,9 @@ public class ImageDialog extends CommonDialog {
         this.mDialogLayout = this.findViewById(R.id.dialog_content_layout);
         if (this.mDialogLayout != null) {
             this.mDialogLayout.setOnClickListener((v) -> {
-                getOnClickBottomListener().onNegativeClick();
+                if (null != getOnClickBottomListener()) {
+                    getOnClickBottomListener().onNegativeClick();
+                }
             });
         }
 
@@ -53,10 +56,12 @@ public class ImageDialog extends CommonDialog {
         this.mButtonLayout = this.findViewById(R.id.dialog_button);
         if (this.mButtonLayout != null) {
             this.mButtonLayout.setOnClickListener((v) -> {
-                getOnClickBottomListener().onPositiveClick();
+                if (null != getOnClickBottomListener()) {
+                    getOnClickBottomListener().onPositiveClick();
+                }
             });
         }
-        if (mButtonHeight == 0){
+        if (mButtonHeight == 0) {
             mButtonHeight = DisplayUtil.dip2px(getContext(), 100f);
         }
     }
@@ -111,7 +116,8 @@ public class ImageDialog extends CommonDialog {
             this.mButtonLayout.setLayoutParams(params);
             if (mShowButtonBg) {
                 int colorAccent = getContext().getResources().getColor(R.color.colorAccent);
-                int colorWithAlpha = Color.argb(128, Color.red(colorAccent), Color.green(colorAccent), Color.blue(colorAccent));
+                int colorWithAlpha = Color.argb(128, Color.red(colorAccent), Color.green(colorAccent),
+                        Color.blue(colorAccent));
                 this.mButtonLayout.setBackgroundColor(colorWithAlpha);
 
             } else {
@@ -121,14 +127,14 @@ public class ImageDialog extends CommonDialog {
 
         if (null != this.mContentImageView) {
             if (URLUtils.isHTTPUrl(this.url)) {
-                GlideExtKt.loadCenterInsideImage(this.mContentImageView, this.url, R.color.transparent, R.color.transparent);
+                GlideExtKt.loadCenterInsideImage(this.mContentImageView, this.url, R.color.transparent,
+                        R.color.transparent);
             } else if (this.res > 0) {
                 this.mContentImageView.setImageResource(this.res);
             } else {
                 this.mContentImageView.setImageBitmap(this.bitmap);
             }
         }
-
 
         super.refreshView();
     }
