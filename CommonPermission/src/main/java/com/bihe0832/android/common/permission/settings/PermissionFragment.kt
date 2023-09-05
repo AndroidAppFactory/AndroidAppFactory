@@ -6,7 +6,6 @@ import com.bihe0832.android.common.settings.SettingsFragment
 import com.bihe0832.android.common.settings.card.PlaceholderData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
-
 open class PermissionFragment : SettingsFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {

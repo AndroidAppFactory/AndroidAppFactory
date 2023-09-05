@@ -22,4 +22,10 @@
     <string name="dialog_button_ok">确认</string>
     <string name="dialog_input_hint">输入完成后点击确认提交</string>
 
+    <string name="dialog_color_button_ok">使用颜色</string>
+    <string name="dialog_color_button_reset">重置到初始值</string>
+    <string name="dialog_color_title">当前颜色：</string>
+    <string name="dialog_color_alpha_title">透明度：</string>
+    <dimen name="dialog_color_pick_size">160dp</dimen>
+
 </resources>

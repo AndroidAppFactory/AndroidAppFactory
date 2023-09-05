@@ -60,7 +60,9 @@ object AppFactoryInit {
 
             RouterHelper.initRouter()
             AAFPermissionManager.initPermission()
-            DownloadUtils.init(ctx, ZixieContext.isDebug())
+            ThreadManager.getInstance().start {
+                DownloadUtils.init(ctx, ZixieContext.isDebug())
+            }
             AAFMessageManager.initModule(ctx)
             AAFGoogleAD.initModule(ctx)
             ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)

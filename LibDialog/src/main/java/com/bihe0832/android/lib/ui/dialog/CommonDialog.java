@@ -17,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
@@ -30,16 +29,18 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil;
 public class CommonDialog extends Dialog {
 
     /**
+     * 设置确定取消按钮的回调
+     */
+    protected OnDialogListener onClickBottomListener = null;
+    /**
      * 显示的标题
      */
     private TextView titleTv;
-
     /**
      * 显示的内容
      */
     private LinearLayout contentLayout;
     private TextView contentTv;
-
     /**
      * 确认和取消按钮
      */
@@ -48,7 +49,6 @@ public class CommonDialog extends Dialog {
      * 中间图片
      */
     private ImageView imageView;
-
     /**
      * 按钮之间的分割线
      */
@@ -56,7 +56,6 @@ public class CommonDialog extends Dialog {
     private TextView feedback;
     private CheckBox nomoreCb;
     private View extraView;
-
     private boolean isShowCheckBox = false;
     private OnCheckedListener onCheckedListener = null;
     private OnDismissListener onDismissListener = null;
@@ -66,7 +65,6 @@ public class CommonDialog extends Dialog {
      * 底部是否只有一个按钮
      */
     private boolean isSingle = false;
-
     /**
      * 都是内容数据
      */
@@ -82,7 +80,6 @@ public class CommonDialog extends Dialog {
     private boolean shouldCanceledOutside = false;
     private int imageContentResId = -1;
     private int imageResId = -1;
-
 
     public CommonDialog(Context context) {
         super(context, R.style.CommonDialog);
@@ -289,42 +286,77 @@ public class CommonDialog extends Dialog {
     protected void initView() {
         try {
             negativeBn = (Button) findViewById(R.id.negative);
-            positiveBn = (Button) findViewById(R.id.positive);
-            titleTv = (TextView) findViewById(R.id.title);
-            contentTv = (TextView) findViewById(R.id.content);
-            columnLineView = findViewById(R.id.column_line);
-            imageView = (ImageView) findViewById(R.id.content_img);
-            feedback = (TextView) findViewById(R.id.feedback);
-            nomoreCb = (CheckBox) findViewById(R.id.nomore_cb);
-            contentLayout = findViewById(R.id.content_layout);
         } catch (Exception e) {
-            ZLog.e("\n\n CommonDialog throw Exception while initView ");
+            ZLog.e("\n\n CommonDialog throw Exception while initView negative");
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 设置确定取消按钮的回调
-     */
-    protected OnDialogListener onClickBottomListener = null;
-
-    public CommonDialog setOnClickBottomListener(OnDialogListener clickBottomListener) {
-        this.onClickBottomListener = clickBottomListener;
-        return this;
+        try {
+            positiveBn = (Button) findViewById(R.id.positive);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView positive");
+            e.printStackTrace();
+        }
+        try {
+            titleTv = (TextView) findViewById(R.id.title);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView title");
+            e.printStackTrace();
+        }
+        try {
+            contentTv = (TextView) findViewById(R.id.content);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView content");
+            e.printStackTrace();
+        }
+        try {
+            columnLineView = findViewById(R.id.column_line);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView column_line");
+            e.printStackTrace();
+        }
+        try {
+            imageView = (ImageView) findViewById(R.id.content_img);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView content_img");
+            e.printStackTrace();
+        }
+        try {
+            feedback = (TextView) findViewById(R.id.feedback);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView feedback");
+            e.printStackTrace();
+        }
+        try {
+            nomoreCb = (CheckBox) findViewById(R.id.nomore_cb);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView nomore_cb");
+            e.printStackTrace();
+        }
+        try {
+            contentLayout = findViewById(R.id.content_layout);
+        } catch (Exception e) {
+            ZLog.e("\n\n CommonDialog throw Exception while initView content_layout");
+            e.printStackTrace();
+        }
     }
 
     public OnDialogListener getOnClickBottomListener() {
         return onClickBottomListener;
     }
 
-    @Override
-    public void setOnDismissListener(OnDismissListener onDismissListener) {
-        this.onDismissListener = onDismissListener;
-        super.setOnDismissListener(this.onDismissListener);
+    public CommonDialog setOnClickBottomListener(OnDialogListener clickBottomListener) {
+        this.onClickBottomListener = clickBottomListener;
+        return this;
     }
 
     public OnDismissListener getOnDismissListener() {
         return onDismissListener;
+    }
+
+    @Override
+    public void setOnDismissListener(OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+        super.setOnDismissListener(this.onDismissListener);
     }
 
     @Override
@@ -389,17 +421,22 @@ public class CommonDialog extends Dialog {
         return positiveString;
     }
 
-    public void addViewToContent(View view) {
-        extraView = view;
-    }
-
     public CommonDialog setPositive(String positive) {
         this.positiveString = positive;
         return this;
     }
 
+    public void addViewToContent(View view) {
+        extraView = view;
+    }
+
     public String getNegative() {
         return negativeString;
+    }
+
+    public CommonDialog setNegative(String negtive) {
+        this.negativeString = negtive;
+        return this;
     }
 
     /**
@@ -421,22 +458,22 @@ public class CommonDialog extends Dialog {
         shouldCanceledOutside = flag;
     }
 
+    public boolean getShouldCanceled() {
+        return shouldCanceledOutside;
+    }
+
     public CommonDialog setShouldCanceled(boolean flag) {
         shouldCanceledOutside = flag;
         return this;
     }
 
-    public boolean getShouldCanceled() {
-        return shouldCanceledOutside;
-    }
-
-    public CommonDialog setNegative(String negtive) {
-        this.negativeString = negtive;
-        return this;
-    }
-
     public int getImageResId() {
         return imageResId;
+    }
+
+    public CommonDialog setImageResId(int imageResId) {
+        this.imageResId = imageResId;
+        return this;
     }
 
     public boolean isSingle() {
@@ -445,11 +482,6 @@ public class CommonDialog extends Dialog {
 
     public CommonDialog setSingle(boolean single) {
         isSingle = single;
-        return this;
-    }
-
-    public CommonDialog setImageResId(int imageResId) {
-        this.imageResId = imageResId;
         return this;
     }
 

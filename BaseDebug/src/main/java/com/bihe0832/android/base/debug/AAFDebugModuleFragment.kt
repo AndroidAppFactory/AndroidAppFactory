@@ -15,6 +15,7 @@ import com.bihe0832.android.base.debug.cache.DebugCacheFragment
 import com.bihe0832.android.base.debug.card.DebugListFragment
 import com.bihe0832.android.base.debug.card.TestListActivity
 import com.bihe0832.android.base.debug.clipboard.DebugClipboardFragment
+import com.bihe0832.android.base.debug.color.DebugColorFragment
 import com.bihe0832.android.base.debug.convert.DebugConvertFragment
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
@@ -83,6 +84,8 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
                 ),
             )
             add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))
+            add(getDebugFragmentItemData("UI（颜色取色器）测试", DebugColorFragment::class.java))
+
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
 

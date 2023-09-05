@@ -15,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * Summary
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  *         Created on 2023/8/28.
  *         推荐使用场景：
  *         1. 登录数据等本地加密，本地解密的数据，可以使用：aesEncrypt && aesDecrypt
