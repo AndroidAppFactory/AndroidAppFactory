@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
+                android:id="@+id/show_color_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:layout_margin="32dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/color_on_primary"
+                app:bgtv_backgroundColor="@color/colorPrimary"
+                app:bgtv_strokeWidth="1dp"
+                app:bgtv_cornerRadius="4dp"
+                android:text="弹出颜色选择框" />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/dialog_color_current"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="当前颜色："
+                    android:textColor="@color/black" />
+
+            <ImageView
+                    android:id="@+id/iv_color"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@color/accent" />
+
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/tv_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black" />
+
+        <TextView
+                android:id="@+id/tv_color_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="颜色" />
+
+        <com.bihe0832.android.lib.color.picker.color.ColorWheelPickerView
+                android:id="@+id/dialog_color_wheel_view"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginVertical="20dp" />
+
+        <TextView
+                android:id="@+id/tv_color_ring_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="色环图" />
+
+        <com.bihe0832.android.lib.color.picker.color.ColorRingPickerView
+                android:id="@+id/color_ring_view"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginVertical="20dp" />
+
+        <TextView
+                android:id="@+id/tv_color_deep_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="深度" />
+
+        <com.bihe0832.android.lib.color.picker.color.ColorSlideView
+                android:id="@+id/color_slide_view"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp" />
+
+        <TextView
+                android:id="@+id/dialog_color_alpha_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="透明度" />
+
+        <com.bihe0832.android.lib.color.picker.alpha.AlphaSlideView
+                android:id="@+id/dialog_color_alpha_slide_view"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
