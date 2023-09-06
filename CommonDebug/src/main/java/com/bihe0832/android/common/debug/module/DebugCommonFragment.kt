@@ -11,7 +11,12 @@ import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
-import com.bihe0832.android.lib.lifecycle.*
+import com.bihe0832.android.lib.lifecycle.ActivityObserver
+import com.bihe0832.android.lib.lifecycle.ApplicationObserver
+import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_APP_FIRST
+import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
+import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_VERSION_FIRST
+import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
@@ -24,26 +29,44 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add(DebugTipsData("APPFactory的通用组件和工具"))
             add(DebugItemData("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
             add(DebugItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
-            add(DebugItemData("查看设备概要信息", View.OnClickListener { showInfoWithHTML("设备概要信息", getMobileInfo(context)) }))
+            add(
+                DebugItemData(
+                    "查看设备概要信息",
+                    View.OnClickListener { showInfoWithHTML("设备概要信息", getMobileInfo(context)) },
+                ),
+            )
             add(getDebugFragmentItemData("查看设备详细信息", DebugDeviceFragment::class.java))
             add(DebugItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
-            add(DebugItemData("<font color ='#3AC8EF'><b>日志管理</b></font>", View.OnClickListener {
-                showLog()
-            }))
-            add(DebugItemData("打开开发者模式") {
-                IntentUtils.startSettings(context, Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
-            })
-            add(DebugItemData("打开应用设置") {
-                IntentUtils.startAppDetailSettings(context)
-            })
-            add(DebugItemData("清除缓存") {
-                FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
-                ZixieContext.restartApp()
-            })
-            add(DebugItemData("清除用户信息授权") {
-                AgreementPrivacy.resetPrivacy()
-                ZixieContext.restartApp()
-            })
+            add(
+                DebugItemData(
+                    "<font color ='#3AC8EF'><b>日志管理</b></font>",
+                    View.OnClickListener {
+                        showLog()
+                    },
+                ),
+            )
+            add(
+                DebugItemData("打开开发者模式") {
+                    IntentUtils.startSettings(context, Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
+                },
+            )
+            add(
+                DebugItemData("打开应用设置") {
+                    IntentUtils.startAppDetailSettings(context)
+                },
+            )
+            add(
+                DebugItemData("清除缓存") {
+                    FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
+                    ZixieContext.restartApp()
+                },
+            )
+            add(
+                DebugItemData("清除用户信息授权") {
+                    AgreementPrivacy.resetPrivacy()
+                    ZixieContext.restartApp()
+                },
+            )
         }
     }
 
@@ -85,9 +108,9 @@ open class DebugCommonFragment : DebugEnvFragment() {
                 "签名MD5: ${
                     APKUtils.getSigMd5ByPkgName(
                         ZixieContext.applicationContext,
-                        ZixieContext.applicationContext?.packageName
+                        ZixieContext.applicationContext?.packageName,
                     )
-                }"
+                }",
             )
         }
     }
@@ -105,16 +128,18 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add("上次启动版本号: ${LifecycleHelper.getAPPLastVersion()}")
             add("上次启动时间: ${DateUtil.getDateEN(LifecycleHelper.getAPPLastStartTime())}")
 
-            add("本次启动类型: ${
-                LifecycleHelper.isFirstStart.let {
-                    when (it) {
-                        INSTALL_TYPE_NOT_FIRST -> "非首次启动"
-                        INSTALL_TYPE_VERSION_FIRST -> "版本首次启动"
-                        INSTALL_TYPE_APP_FIRST -> "应用首次启动"
-                        else -> "类型错误（$it）"
+            add(
+                "本次启动类型: ${
+                    LifecycleHelper.isFirstStart.let {
+                        when (it) {
+                            INSTALL_TYPE_NOT_FIRST -> "非首次启动"
+                            INSTALL_TYPE_VERSION_FIRST -> "版本首次启动"
+                            INSTALL_TYPE_APP_FIRST -> "应用首次启动"
+                            else -> "类型错误（$it）"
+                        }
                     }
-                }
-            }")
+                }",
+            )
             add("本次启动时间: ${DateUtil.getDateEN(ApplicationObserver.getAPPStartTime())}")
             add("累积使用天数: ${LifecycleHelper.getAPPUsedDays()}")
             add("累积使用次数: ${LifecycleHelper.getAPPUsedTimes()}")
@@ -126,7 +151,6 @@ open class DebugCommonFragment : DebugEnvFragment() {
             add("当前页面: ${ActivityObserver.getCurrentActivity()?.javaClass?.name}")
         }
     }
-
 
     protected fun showOtherAPPInfo() {
         val builder = StringBuilder()
@@ -149,7 +173,6 @@ open class DebugCommonFragment : DebugEnvFragment() {
             builder.append("	versionCode: ${info.versionCode}\n")
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

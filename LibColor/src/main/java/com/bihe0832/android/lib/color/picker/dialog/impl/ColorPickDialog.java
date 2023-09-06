@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
+import androidx.core.widget.NestedScrollView;
 import com.bihe0832.android.lib.color.picker.OnAlphaSelectedListener;
 import com.bihe0832.android.lib.color.picker.OnColorSelectedListener;
 import com.bihe0832.android.lib.color.picker.alpha.AlphaSlideView;
@@ -11,6 +12,7 @@ import com.bihe0832.android.lib.color.picker.color.ColorRingPickerView;
 import com.bihe0832.android.lib.color.picker.color.ColorWheelPickerView;
 import com.bihe0832.android.lib.color.utils.ColorUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
+import com.bihe0832.android.lib.utils.os.DisplayUtil;
 import com.ricky.color_picker.R;
 
 /**
@@ -36,6 +38,8 @@ public class ColorPickDialog extends CommonDialog {
     private AlphaSlideView alphaSlideView = null;
 
     private TextView textView = null;
+
+    private NestedScrollView pickLayout = null;
     private OnColorSelectedListener mOnColorSelectedListener = new OnColorSelectedListener() {
         @Override
         public void onColorSelecting(int color) {
@@ -82,6 +86,7 @@ public class ColorPickDialog extends CommonDialog {
 
         alphaSlideView = (AlphaSlideView) findViewById(R.id.dialog_color_alpha_slide_view);
         textView = findViewById(R.id.dialog_color_current);
+        pickLayout = findViewById(R.id.dialog_color_pick);
         updateViewColor(true);
     }
 
@@ -113,8 +118,17 @@ public class ColorPickDialog extends CommonDialog {
     protected void refreshView() {
         super.refreshView();
         updateViewColor(true);
+        if (getFeedback() != null) {
+            int screenWidth = DisplayUtil.getScreenWidth(getContext());
+            int screenHeight = DisplayUtil.getScreenHeight(getContext());
+            float pickViewHeight = getContext().getResources().getDimension(R.dimen.dialog_color_pick_size);
+            if (screenWidth > screenHeight && pickViewHeight > screenHeight * 0.46f) {
+                getFeedback().setVisibility(View.VISIBLE);
+            } else {
+                getFeedback().setVisibility(View.GONE);
+            }
+        }
     }
-
 
     private void updateViewColor(boolean updateAlpha) {
         if (null != textView) {
@@ -155,6 +169,9 @@ public class ColorPickDialog extends CommonDialog {
     public void reset() {
         this.currentAlpha = defaultAlpha;
         this.currentValue = defaultValue;
+        if (pickLayout != null) {
+            pickLayout.scrollTo(0, 0);
+        }
         refreshView();
     }
 }

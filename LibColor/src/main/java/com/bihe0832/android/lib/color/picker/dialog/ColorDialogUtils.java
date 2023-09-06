@@ -25,7 +25,8 @@ import com.ricky.color_picker.R;
 public class ColorDialogUtils {
 
     public static void showColorSelectDialog(final Context context, int pickType, int defaultAlpha, int defaultValue,
-            String positive, String negative, Boolean canCanceledOnTouchOutside, final ColorDialogCallback listener) {
+            String positive, String negative, String tips, Boolean canCanceledOnTouchOutside,
+            final ColorDialogCallback listener) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
@@ -34,6 +35,7 @@ public class ColorDialogUtils {
                 dialog.setCurrentColor(defaultValue);
                 dialog.setPositive(positive);
                 dialog.setNegative(negative);
+                dialog.setFeedBackContent(tips);
                 dialog.setShouldCanceled(canCanceledOnTouchOutside);
                 dialog.setOnClickBottomListener(new OnDialogListener() {
                     @Override
@@ -78,7 +80,9 @@ public class ColorDialogUtils {
                 defaultAlpha,
                 defaultValue,
                 ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_ok),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_reset), true, listener);
+                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_reset),
+                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_tips),
+                true, listener);
     }
 
     public static void showColorSelectDialog(final Context context, String defaultValue,
@@ -95,7 +99,8 @@ public class ColorDialogUtils {
                 defaultAlpha,
                 defaultValue,
                 ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_ok),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_reset), true,
+                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_reset),
+                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_tips), true,
                 new ColorDialogCallback() {
                     @Override
                     public void onPositiveClick(int result) {

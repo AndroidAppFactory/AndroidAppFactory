@@ -3,7 +3,7 @@ package com.bihe0832.android.common.debug
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.bihe0832.android.framework.ui.main.CommonRootActivity
+import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
@@ -44,18 +44,17 @@ object DebugUtils {
     }
 
     fun showInputDialog(
-            context: Context?,
-            titleName: String,
-            msg: String,
-            defaultValue: String,
-            listener: InputDialogCompletedCallback
+        context: Context?,
+        titleName: String,
+        msg: String,
+        defaultValue: String,
+        listener: InputDialogCompletedCallback,
     ) {
         DialogUtils.showInputDialog(context!!, titleName, msg, defaultValue, listener)
     }
 
-
     fun startDebugActivity(context: Context?, cls: Class<*>, titleName: String) {
-        CommonRootActivity.startCommonRootActivity(context, cls, titleName)
+        DebugRootActivity.startDebugRootActivity(context, cls, titleName)
     }
 
     fun startActivityWithException(context: Context?, cls: String) {
@@ -81,7 +80,12 @@ object DebugUtils {
         startActivityForResultWithException(context, cls, requestCode, null)
     }
 
-    fun startActivityForResultWithException(context: Activity?, cls: Class<*>, requestCode: Int, data: Map<String, String>?) {
+    fun startActivityForResultWithException(
+        context: Activity?,
+        cls: Class<*>,
+        requestCode: Int,
+        data: Map<String, String>?,
+    ) {
         val intent = Intent(context, cls)
         data?.let {
             for ((key, value) in it) {
@@ -90,6 +94,4 @@ object DebugUtils {
         }
         context?.startActivityForResult(intent, requestCode)
     }
-
-
 }

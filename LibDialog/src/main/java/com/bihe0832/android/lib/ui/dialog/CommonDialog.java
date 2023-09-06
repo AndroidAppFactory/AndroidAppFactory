@@ -93,6 +93,10 @@ public class CommonDialog extends Dialog {
         return R.layout.com_bihe0832_common_dialog_layout;
     }
 
+    protected TextView getFeedback() {
+        return feedback;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

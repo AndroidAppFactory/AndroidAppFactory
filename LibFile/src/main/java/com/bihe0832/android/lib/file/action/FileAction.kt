@@ -12,9 +12,14 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.nio.channels.FileChannel
-
 
 /**
  *
@@ -22,7 +27,6 @@ import java.nio.channels.FileChannel
  * Created on 2020-01-10.
  */
 object FileAction {
-
 
     /**
      * 仅能打开 [ZixieFileProvider.getZixieFilePath] 对应目录下的文件
@@ -48,7 +52,7 @@ object FileAction {
     }
 
     fun fileAction(context: Context, action: String, actionTitle: String, filePath: String, fileType: String): Boolean {
-        try { //设置intent的data和Type属性
+        try { // 设置intent的data和Type属性
             ZLog.d("fileAction sourceFile:$filePath")
             var sourceFile = File(filePath)
             var targetFile = sourceFile
@@ -79,9 +83,11 @@ object FileAction {
                 }
             }
             return true
-
-        } catch (e: java.lang.Exception) { //当系统没有携带文件打开软件，提示
-            ZLog.e("FileAction", "  \n !!!========================================  \n \n \n !!! FileAction: The fileAction throw an Exception: ${e.javaClass.name} \n \n \n !!!========================================")
+        } catch (e: java.lang.Exception) { // 当系统没有携带文件打开软件，提示
+            ZLog.e(
+                "FileAction",
+                "  \n !!!========================================  \n \n \n !!! FileAction: The fileAction throw an Exception: ${e.javaClass.name} \n \n \n !!!========================================",
+            )
             e.printStackTrace()
             return false
         }
@@ -117,6 +123,7 @@ object FileAction {
             path + File.separator
         }
     }
+
     fun deleteOldAsync(dir: File, duration: Long) {
         ThreadManager.getInstance().start {
             deleteOld(dir, duration)
@@ -171,6 +178,9 @@ object FileAction {
     }
 
     private fun copyFile(source: File, dest: File): Boolean {
+        if (source.absolutePath.equals(dest.absolutePath, ignoreCase = true)) {
+            return true
+        }
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
         try {
@@ -197,6 +207,9 @@ object FileAction {
     }
 
     fun copyFile(srcFile: File, dstFile: File, isMove: Boolean): Boolean {
+        if (srcFile.absolutePath.equals(dstFile.absolutePath, ignoreCase = true)) {
+            return true
+        }
         checkAndCreateFolder(dstFile.parentFile.absolutePath)
         return if (isMove) {
             srcFile.renameTo(dstFile)
@@ -207,6 +220,9 @@ object FileAction {
 
     fun copyDirectory(src: File, dest: File, isMove: Boolean): Boolean {
         try {
+            if (src.absolutePath.equals(dest.absolutePath, ignoreCase = true)) {
+                return true
+            }
             if (src.isDirectory) {
                 if (!dest.exists()) {
                     dest.mkdir()
@@ -264,7 +280,6 @@ object FileAction {
             ZLog.e("copyAssets2Sdcard exception:$e")
             return false
         }
-
     }
 
     fun copyAssetsFolderToFolder(context: Context?, fromAssetPath: String, targetFolder: String): Boolean {
@@ -327,5 +342,4 @@ object FileAction {
         }
         return false
     }
-
 }

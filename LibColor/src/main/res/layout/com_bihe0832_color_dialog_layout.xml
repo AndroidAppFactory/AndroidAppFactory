@@ -5,7 +5,6 @@
         android:background="@drawable/com_bihe0832_base_dialog_bg"
         android:layout_height="wrap_content"
         android:id="@+id/dialog_content_layout"
-        android:layout_margin="6dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -37,51 +36,76 @@
                 android:textColor="@color/com_bihe0832_dialog_title" />
     </LinearLayout>
 
+    <androidx.core.widget.NestedScrollView
+            android:id="@+id/dialog_color_pick"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:scrollbars="none"
+            android:layout_height="wrap_content">
 
-    <com.bihe0832.android.lib.color.picker.color.ColorWheelPickerView
-            android:id="@+id/dialog_color_wheel_view"
-            android:layout_width="@dimen/dialog_color_pick_size"
-            android:layout_height="@dimen/dialog_color_pick_size"
-            android:layout_margin="16dp"
-            android:visibility="gone" />
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:gravity="center">
 
-    <com.bihe0832.android.lib.color.picker.color.ColorRingPickerView
-            android:id="@+id/dialog_color_ring_view"
-            android:layout_width="@dimen/dialog_color_pick_size"
-            android:layout_height="@dimen/dialog_color_pick_size"
-            android:layout_margin="16dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            <com.bihe0832.android.lib.color.picker.color.ColorWheelPickerView
+                    android:id="@+id/dialog_color_wheel_view"
+                    android:layout_width="@dimen/dialog_color_pick_size"
+                    android:layout_height="@dimen/dialog_color_pick_size"
+                    android:visibility="gone" />
 
-    <LinearLayout
+            <com.bihe0832.android.lib.color.picker.color.ColorRingPickerView
+                    android:id="@+id/dialog_color_ring_view"
+                    android:layout_width="@dimen/dialog_color_pick_size"
+                    android:layout_height="@dimen/dialog_color_pick_size"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                <TextView
+                        android:id="@+id/dialog_color_alpha_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
+                        android:textColor="@color/com_bihe0832_dialog_title"
+                        android:text="@string/dialog_color_alpha_title" />
+
+                <com.bihe0832.android.lib.color.picker.alpha.AlphaSlideView
+                        android:id="@+id/dialog_color_alpha_slide_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="8dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+            android:id="@+id/feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
-
-        <TextView
-                android:id="@+id/dialog_color_alpha_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
-                android:textColor="@color/com_bihe0832_dialog_title"
-                android:text="@string/dialog_color_alpha_title" />
-
-        <com.bihe0832.android.lib.color.picker.alpha.AlphaSlideView
-                android:id="@+id/dialog_color_alpha_slide_view"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginLeft="8dp" />
-
-    </LinearLayout>
+            android:layout_marginBottom="6dp"
+            android:gravity="center"
+            android:textColor="@color/com_bihe0832_dialog_tips"
+            android:textSize="@dimen/com_bihe0832_dialog_tips_text_size"
+            android:visibility="gone"
+            tools:text="提示消息提示消息提示消息提示消息"
+            tools:visibility="visible" />
 
     <View
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
             android:background="@color/com_bihe0832_dialog_split" />
 
     <LinearLayout

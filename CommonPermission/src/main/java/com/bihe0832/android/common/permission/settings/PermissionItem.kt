@@ -43,11 +43,9 @@ object PermissionItem {
             description = "开启后，将根据您的喜好为您推荐个性化内容"
             isChecked = false
             onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-
             }
         }
     }
-
 
     fun getPermissionSetting(activity: Activity, permissionGroup: String): SettingsDataV2 {
         return getPermissionSetting(activity, "", permissionGroup)
@@ -55,12 +53,24 @@ object PermissionItem {
 
     fun getPermissionSetting(activity: Activity, scene: String, permissionGroup: String): SettingsDataV2 {
         PermissionManager.logPermissionConfigInfo()
-        val permissionDesc: String = PermissionManager.getPermissionDesc(scene, permissionGroup, useDefault = false, needSpecial = false) + "权限"
-        val permissionScene: String = PermissionManager.getPermissionScene(scene, permissionGroup, useDefault = false, needSpecial = false)
+        val permissionDesc: String = PermissionManager.getPermissionDesc(
+            scene,
+            permissionGroup,
+            useDefault = false,
+            needSpecial = false,
+        ) + "权限"
+        val permissionScene: String =
+            PermissionManager.getPermissionScene(scene, permissionGroup, useDefault = false, needSpecial = false)
         return getPermissionSetting(activity, scene, permissionDesc, permissionScene, permissionGroup)
     }
 
-    fun getPermissionSetting(activity: Activity, scene: String, permissionDesc: String, permissionScene: String, permissionGroup: String): SettingsDataV2 {
+    fun getPermissionSetting(
+        activity: Activity,
+        scene: String,
+        permissionDesc: String,
+        permissionScene: String,
+        permissionGroup: String,
+    ): SettingsDataV2 {
         return SettingsDataV2().apply {
             title = permissionDesc
             description = permissionScene
@@ -72,17 +82,34 @@ object PermissionItem {
             }
             onClickListener = View.OnClickListener {
                 if (hasPermission) {
-                    showPermissionCloseDialog(activity, "关闭$permissionDesc", "关闭${permissionDesc}后将不能$description", permissionGroup)
+                    showPermissionCloseDialog(
+                        activity,
+                        "关闭$permissionDesc",
+                        "关闭${permissionDesc}后将不能$description",
+                        permissionGroup,
+                    )
                 } else {
-                    PermissionManager.checkPermission(activity, scene, true, PermissionsActivityV2::class.java, PermissionResultOfAAF(false), mutableListOf<String>().apply {
-                        add(permissionGroup)
-                    })
+                    PermissionManager.checkPermission(
+                        activity,
+                        scene,
+                        true,
+                        PermissionsActivityV2::class.java,
+                        PermissionResultOfAAF(false),
+                        mutableListOf<String>().apply {
+                            add(permissionGroup)
+                        },
+                    )
                 }
             }
         }
     }
 
-    private fun showPermissionCloseDialog(activity: Activity, titleString: String, permissionCloseDesc: String, permission: String) {
+    private fun showPermissionCloseDialog(
+        activity: Activity,
+        titleString: String,
+        permissionCloseDesc: String,
+        permission: String,
+    ) {
         CommonDialog(activity).apply {
             title = titleString
             setHtmlContent(permissionCloseDesc)
@@ -102,7 +129,6 @@ object PermissionItem {
                 override fun onCancel() {
                     dismiss()
                 }
-
             }
         }.let {
             it.show()

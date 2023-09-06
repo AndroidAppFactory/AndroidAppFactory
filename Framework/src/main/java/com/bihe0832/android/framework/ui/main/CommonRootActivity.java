@@ -4,31 +4,39 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import androidx.annotation.Nullable;
-
 import com.bihe0832.android.framework.R;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ReflecterHelper;
-
 import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2022/8/26.
- * Description: Description
+ *         Created on 2022/8/26.
+ *         Description: Description
  */
 public class CommonRootActivity extends CommonActivity {
 
-    final String TAG = this.getClass().getSimpleName();
-
     public static final String DEBUG_MODULE_CLASS_NAME = "com.bihe0832.android.common.module.class.name";
     public static final String DEBUG_MODULE_TITLE_NAME = "com.bihe0832.android.common.module.title.name";
-
+    final String TAG = this.getClass().getSimpleName();
     private String rootFragmentClassName = "";
     private String rootFragmentTitleName = "";
+
+    public static final void startRootActivity(Context context, Class activityClass, Class cls,
+            String titleName) {
+        Intent intent = new Intent(context, activityClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(DEBUG_MODULE_CLASS_NAME, cls.getName());
+        intent.putExtra(DEBUG_MODULE_TITLE_NAME, titleName);
+        context.startActivity(intent);
+    }
+
+    public static final void startCommonRootActivity(Context context, Class cls, String titleName) {
+        startRootActivity(context, CommonRootActivity.class, cls, titleName);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,13 +106,5 @@ public class CommonRootActivity extends CommonActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static final void startCommonRootActivity(Context context, Class   cls, String titleName) {
-        Intent intent = new Intent(context, CommonRootActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(DEBUG_MODULE_CLASS_NAME, cls.getName());
-        intent.putExtra(DEBUG_MODULE_TITLE_NAME, titleName);
-        context.startActivity(intent);
     }
 }
