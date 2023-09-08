@@ -6,10 +6,13 @@ import android.graphics.Color;
  * Summary
  *
  * @author zixie code@bihe0832.com
- *         Created on 2023/9/5.
- *         Description:
+ * Created on 2023/9/5.
+ * Description:
  */
 public class ColorUtils {
+
+    private static final ThreadLocal<float[]> TEMP_ARRAY = new ThreadLocal();
+
 
     public static int getAlpha(int color) {
         return (color >> 24) & 0xFF;
@@ -19,23 +22,10 @@ public class ColorUtils {
         return color | 0xFF000000;
     }
 
-    public static int getColorDepth(int color) {
-        int tempColor = removeAlpha(color);
-        int red = (tempColor >> 16) & 0xFF;
-        int green = (tempColor >> 8) & 0xFF;
-        int blue = tempColor & 0xFF;
-        // 计算颜色的亮度（使用标准的相对亮度公式）
-        double brightness = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
-        if (brightness > 254) {
-            return 255;
-        } else {
-            return (int) brightness;
-        }
-    }
-
-    public static double getColorBrightness(int color) {
-        // 将亮度映射到 0（最暗）和 1（最亮）之间的范围
-        return getColorDepth(color) / 255.0d;
+    public static float getColorBrightness(int color) {
+        float[] result = new float[3];
+        Color.colorToHSV(color, result);
+        return result[2];
     }
 
     public static boolean hasAlpha(int color) {
@@ -88,7 +78,11 @@ public class ColorUtils {
     }
 
     public static final String color2Hex(int color) {
-        return color2Hex(255, color, false, true);
+        return color2Hex(color, false);
+    }
+
+    public static final String color2Hex(int color, boolean hasAlpha) {
+        return color2Hex(255, color, hasAlpha, true);
     }
 
     public static final String color2Hex(int alpha, int color) {

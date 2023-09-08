@@ -25,6 +25,8 @@ public class DeepSlideView extends BaseColorPickerView implements ColorSlidePick
     private int startColor = Color.BLACK;
     private int endColor = Color.WHITE;
 
+    private float mDepth = 0.5f;
+
     public DeepSlideView(Context context) {
         super(context);
     }
@@ -52,7 +54,7 @@ public class DeepSlideView extends BaseColorPickerView implements ColorSlidePick
                 Shader.TileMode.CLAMP);
         mPaint.setShader(shader);
         if (mTouchX == -1 || mTouchY == -1) {
-            setPosition(0.5f);
+            setPosition(mDepth);
         }
     }
 
@@ -83,22 +85,18 @@ public class DeepSlideView extends BaseColorPickerView implements ColorSlidePick
      * 设置基色
      */
     public void setBaseColor(@ColorInt int color) {
-        this.baseColor = ColorUtils.removeAlpha(color);
+        this.baseColor = color;
         float[] hsv = new float[3];
         Color.colorToHSV(baseColor, hsv);
         hsv[2] = 0;
         int startColor = Color.HSVToColor(hsv);
         hsv[2] = 1;
         int endColor = Color.HSVToColor(hsv);
+        mDepth = (float) (ColorUtils.getColorBrightness(baseColor) / ColorUtils.getColorBrightness(endColor));
         Shader shader = new LinearGradient(0, 0, getWidth() * 1f, getHeight() * 1f, startColor, endColor, Shader.TileMode.CLAMP);
         mPaint.setShader(shader);
         postInvalidate();
     }
-
-    public void setBaseDeep(int brightness) {
-        setPosition(brightness / 255f);
-    }
-
 
     /**
      * 计算当前颜色
@@ -139,7 +137,9 @@ public class DeepSlideView extends BaseColorPickerView implements ColorSlidePick
 
     @Override
     public void setPosition(float ratio) {
-        mTouchX = getMeasuredWidth() * ratio;
+        if (getMeasuredWidth() > 0) {
+            mTouchX = getMeasuredWidth() * ratio;
+        }
         mCurrentColor = getColorAtPoint();
         postInvalidate();
     }

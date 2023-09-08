@@ -12,16 +12,12 @@ import com.bihe0832.android.lib.color.picker.OnColorSelectedListener
 import com.bihe0832.android.lib.color.picker.dialog.ColorDialogCompletedCallback
 import com.bihe0832.android.lib.color.picker.dialog.ColorDialogUtils
 import com.bihe0832.android.lib.color.utils.ColorUtils
-import kotlinx.android.synthetic.main.fragment_test_color.color_ring_view
-import kotlinx.android.synthetic.main.fragment_test_color.color_slide_view
-import kotlinx.android.synthetic.main.fragment_test_color.dialog_color_alpha_slide_view
-import kotlinx.android.synthetic.main.fragment_test_color.dialog_color_wheel_view
-import kotlinx.android.synthetic.main.fragment_test_color.iv_color
-import kotlinx.android.synthetic.main.fragment_test_color.show_color_dialog
-import kotlinx.android.synthetic.main.fragment_test_color.tv_color
+import com.bihe0832.android.lib.log.ZLog
+import kotlinx.android.synthetic.main.fragment_test_color.*
 
 class DebugColorFragment : BaseFragment() {
 
+    private val TAG = "DebugColorFragment"
     override fun getLayoutID(): Int {
         return R.layout.fragment_test_color
     }
@@ -32,19 +28,38 @@ class DebugColorFragment : BaseFragment() {
     override fun initView(view: View) {
         super.initView(view)
         show_color_dialog.setOnClickListener {
-            ColorDialogUtils.showColorSelectDialog(
-                context!!,
-                defaultAlpha,
-                defaultColor,
-                object : ColorDialogCompletedCallback {
-                    override fun onSelectedColor(result: Int) {
-                        defaultAlpha = ColorUtils.getAlpha(result)
-                        defaultColor = result
-                        changeColor()
-                    }
-                },
 
-            )
+            val color = Color.parseColor("#23ddff")
+            ZLog.d(TAG, "color:$color");
+            ZLog.d(TAG, "color:" + ColorUtils.color2Hex(color))
+            ZLog.d(TAG, "color:" + ColorUtils.getColorBrightness(color))
+            ColorUtils.addAlpha(50, color).let { alphaColor ->
+                ZLog.d(TAG, "color alphaColor:$alphaColor")
+                ZLog.d(TAG, "color alphaColor:" + ColorUtils.color2Hex(alphaColor,true))
+                ZLog.d(TAG, "color:" + ColorUtils.getColorBrightness(alphaColor))
+
+                ColorUtils.removeAlpha(alphaColor).let { removeColor ->
+                    ZLog.d(TAG, "color removeColor:$removeColor")
+                    ZLog.d(TAG, "color removeColor:" + ColorUtils.color2Hex(removeColor))
+                    ZLog.d(TAG, "color:" + ColorUtils.getColorBrightness(removeColor))
+                    ZLog.d(TAG, "color removeColor:${Color.parseColor(ColorUtils.color2Hex(removeColor))}")
+                }
+            }
+
+
+            ColorDialogUtils.showColorSelectDialog(
+                    context!!,
+                    defaultAlpha,
+                    defaultColor,
+                    object : ColorDialogCompletedCallback {
+                        override fun onSelectedColor(result: Int) {
+                            defaultAlpha = ColorUtils.getAlpha(result)
+                            defaultColor = result
+                            changeColor()
+                        }
+                    },
+
+                    )
         }
         color_ring_view.hasScaleMirror = true
         dialog_color_wheel_view.setOnColorSelectedListener(object :

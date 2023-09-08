@@ -117,7 +117,6 @@ public class ColorPickDialog extends CommonDialog {
         currentColorBackground = findViewById(R.id.dialog_color_current_background);
         currentColorText = findViewById(R.id.dialog_color_current);
         pickLayout = findViewById(R.id.dialog_color_pick);
-        updateViewColor(true, true);
     }
 
     @Override
@@ -168,11 +167,9 @@ public class ColorPickDialog extends CommonDialog {
                 String inputColor = currentColorText.getText().toString();
                 try {
                     int color = Color.parseColor(inputColor);
-                    if (currentColorAlpha != ColorUtils.getAlpha(color) || currentColorValue != ColorUtils.removeAlpha(color)) {
-                        currentColorValue = ColorUtils.removeAlpha(color);
-                        currentColorAlpha = ColorUtils.getAlpha(color);
-                        updateViewColor(true, true);
-                    }
+                    currentColorValue = ColorUtils.removeAlpha(color);
+                    currentColorAlpha = ColorUtils.getAlpha(color);
+                    updateViewColor(true, true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -215,7 +212,7 @@ public class ColorPickDialog extends CommonDialog {
     private void updateViewColor(boolean updateText, boolean updateDepth) {
         ZLog.d(TAG, "currentValue:" + ColorUtils.color2Hex(ColorUtils.addAlpha(currentColorValue, currentColorValue)));
         ZLog.d(TAG, "currentAlpha:" + currentColorAlpha);
-        ZLog.d(TAG, "currentDepth:" + ColorUtils.getColorDepth(currentColorValue));
+        ZLog.d(TAG, "currentDepth:" + ColorUtils.getColorBrightness(currentColorValue));
         ZLog.d(TAG, "currentValue removeAlpha:" + ColorUtils.color2Hex(ColorUtils.removeAlpha(currentColorValue)));
         ZLog.d(TAG, "currentValue complementary:" + ColorUtils.color2Hex(ColorUtils.getComplementaryColor(currentColorValue)));
 
@@ -241,7 +238,7 @@ public class ColorPickDialog extends CommonDialog {
         }
         if (null != deepSlideView) {
             if (updateDepth) {
-                deepSlideView.setBaseDeep(ColorUtils.getColorDepth(currentColorValue));
+                deepSlideView.setPosition((float) ColorUtils.getColorBrightness(currentColorValue));
                 deepSlideView.setBaseColor(currentColorValue);
             }
         }

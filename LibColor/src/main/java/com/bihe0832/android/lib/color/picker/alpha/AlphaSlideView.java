@@ -47,7 +47,7 @@ public class AlphaSlideView extends BaseColorPickerView implements ColorSlidePic
                 Shader.TileMode.CLAMP);
         mPaint.setShader(shader);
         if (mTouchX == -1 || mTouchY == -1) {
-            setPosition(0f);
+            setPosition(mAlpha);
         }
     }
 
@@ -101,10 +101,10 @@ public class AlphaSlideView extends BaseColorPickerView implements ColorSlidePic
      */
     @Override
     protected void computeCurrent() {
-        if (mAlpha == getCurrentAlpha()) {
+        if (mAlpha == getCurrentAlpha(1.0f)) {
             return;
         }
-        mAlpha = getCurrentAlpha();
+        mAlpha = getCurrentAlpha(1.0f);
         int r = Color.red(mCurrentColor);
         int g = Color.green(mCurrentColor);
         int b = Color.blue(mCurrentColor);
@@ -136,7 +136,7 @@ public class AlphaSlideView extends BaseColorPickerView implements ColorSlidePic
     /**
      * 获取点对应的颜色
      */
-    private float getCurrentAlpha() {
+    private float getCurrentAlpha(float defaultValue) {
         if (getWidth() > 0) {
             float alpha = mTouchX * 1f / getWidth();
             if (alpha >= 1f) {
@@ -147,14 +147,16 @@ public class AlphaSlideView extends BaseColorPickerView implements ColorSlidePic
             }
             return alpha;
         } else {
-            return 1.0f;
+            return defaultValue;
         }
     }
 
     @Override
     public void setPosition(float ratio) {
-        mTouchX = getMeasuredWidth() * ratio;
-        mAlpha = getCurrentAlpha();
+        if (getMeasuredWidth() > 0) {
+            mTouchX = getMeasuredWidth() * ratio;
+        }
+        mAlpha = getCurrentAlpha(ratio);
         postInvalidate();
     }
 
