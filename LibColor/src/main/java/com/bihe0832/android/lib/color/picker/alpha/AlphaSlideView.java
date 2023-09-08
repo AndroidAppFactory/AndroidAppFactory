@@ -7,8 +7,10 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+
 import com.bihe0832.android.lib.color.picker.ColorSlidePicker;
 import com.bihe0832.android.lib.color.picker.OnAlphaSelectedListener;
 import com.bihe0832.android.lib.color.picker.base.BaseColorPickerView;
@@ -86,7 +88,7 @@ public class AlphaSlideView extends BaseColorPickerView implements ColorSlidePic
     }
 
     public void setBaseAlpha(int alpha) {
-        setPosition(1 - alpha / 255f);
+        setPosition(1.0f - alpha / 255f);
     }
 
     @Override
@@ -135,14 +137,18 @@ public class AlphaSlideView extends BaseColorPickerView implements ColorSlidePic
      * 获取点对应的颜色
      */
     private float getCurrentAlpha() {
-        float alpha = mTouchX * 1f / getWidth();
-        if (alpha >= 1f) {
-            alpha = 1f;
+        if (getWidth() > 0) {
+            float alpha = mTouchX * 1f / getWidth();
+            if (alpha >= 1f) {
+                alpha = 1f;
+            }
+            if (alpha <= 0f) {
+                alpha = 0f;
+            }
+            return alpha;
+        } else {
+            return 1.0f;
         }
-        if (alpha <= 0f) {
-            alpha = 0f;
-        }
-        return alpha;
     }
 
     @Override

@@ -4,10 +4,10 @@ import android.graphics.Color
 import android.os.Bundle
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.main.CommonActivity
+import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.ui.common.ColorTools
 
 
 class DebugImmersionActivity : CommonActivity() {
@@ -31,7 +31,7 @@ class DebugImmersionActivity : CommonActivity() {
         ZLog.d("DebugImmersionActivity", "DebugImmersionActivity color: ${ThemeResourcesManager.getColor(R.color.white)}")
         ZLog.d("DebugImmersionActivity", "DebugImmersionActivity color: ${Color.parseColor("#FFFFFF")}")
         ZLog.d("DebugImmersionActivity", "DebugImmersionActivity color: ${Color.parseColor("#00FFFFFF")}")
-        ZLog.d("DebugImmersionActivity", "DebugImmersionActivity color: ${ColorTools.getColorWithAlpha(0f, Color.WHITE)}")
-        ZLog.d("DebugImmersionActivity", "DebugImmersionActivity color: ${ColorTools.getColorWithAlpha(1f, Color.WHITE)}")
+        ZLog.d("DebugImmersionActivity", "DebugImmersionActivity color: ${ColorUtils.addAlpha(0f, Color.WHITE)}")
+        ZLog.d("DebugImmersionActivity", "DebugImmersionActivity color: ${ColorUtils.addAlpha(1f, Color.WHITE)}")
     }
 }

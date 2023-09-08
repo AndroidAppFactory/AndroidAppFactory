@@ -5,8 +5,8 @@ import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.ui.common.ColorTools
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.utils.os.BuildUtils
 
@@ -27,7 +27,7 @@ fun AppCompatActivity.getStatusBarColorBySpecialPostion(): String {
 }
 
 fun AppCompatActivity.enableActivityImmersive(statusBarColor: Int, navigationBarColor: Int) {
-    enableActivityImmersive(statusBarColor, navigationBarColor, ColorTools.isLightColor(statusBarColor))
+    enableActivityImmersive(statusBarColor, navigationBarColor, ColorUtils.isLightColor(statusBarColor))
 }
 
 /**
@@ -56,7 +56,7 @@ fun AppCompatActivity.enableActivityImmersive(statusBarColor: Int, navigationBar
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             }
 
-            LightStatusBarUtils.setLightStatusBar(this, ColorTools.isLightColor(statusBarColor))
+            LightStatusBarUtils.setLightStatusBar(this, ColorUtils.isLightColor(statusBarColor))
         }
     } catch (e: Exception) {
         e.printStackTrace()

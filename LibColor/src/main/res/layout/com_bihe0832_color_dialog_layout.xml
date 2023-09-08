@@ -1,39 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:background="@drawable/com_bihe0832_base_dialog_bg"
-        android:layout_height="wrap_content"
-        android:id="@+id/dialog_content_layout"
-        android:gravity="center"
-        android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_content_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/com_bihe0832_base_dialog_bg"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center">
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:text="@string/dialog_color_title"
+            android:textColor="@color/com_bihe0832_dialog_title"
+            android:textSize="@dimen/com_bihe0832_dialog_title_text_size"
+            android:textStyle="bold" />
 
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:textSize="@dimen/com_bihe0832_dialog_title_text_size"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:layout_marginTop="16dp"
-                android:text="@string/dialog_color_title"
-                android:textColor="@color/com_bihe0832_dialog_title" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:gravity="left">
 
-        <TextView
+
+            <com.bihe0832.android.lib.ui.custom.view.background.ViewWithBackground
+                android:id="@+id/dialog_color_current_background"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignLeft="@+id/dialog_color_current"
+                android:layout_alignRight="@+id/dialog_color_current"
+                app:bgtv_backgroundColor="@color/textColorSecondary"
+                app:bgtv_cornerRadius="4dp" />
+
+            <EditText
                 android:id="@+id/dialog_color_current"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:textSize="@dimen/com_bihe0832_dialog_title_text_size"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@null"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
+                android:imeOptions="actionDone"
+                android:inputType="textVisiblePassword"
+                android:maxLength="9"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"
                 android:text=""
-                android:textColor="@color/com_bihe0832_dialog_title" />
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/com_bihe0832_dialog_content_text_size" />
+
+        </RelativeLayout>
+
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -70,19 +95,42 @@
                     android:layout_marginTop="16dp">
 
                 <TextView
-                        android:id="@+id/dialog_color_alpha_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
-                        android:textColor="@color/com_bihe0832_dialog_title"
-                        android:text="@string/dialog_color_alpha_title" />
+                    android:id="@+id/dialog_color_alpha_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/dialog_color_alpha_title"
+                    android:textColor="@color/com_bihe0832_dialog_title"
+                    android:textSize="@dimen/com_bihe0832_dialog_content_text_size" />
 
                 <com.bihe0832.android.lib.color.picker.alpha.AlphaSlideView
-                        android:id="@+id/dialog_color_alpha_slide_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="8dp" />
+                    android:id="@+id/dialog_color_alpha_slide_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dialog_color_deep_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="深    度："
+                    android:textColor="@color/com_bihe0832_dialog_title"
+                    android:textSize="@dimen/com_bihe0832_dialog_content_text_size" />
+
+                <com.bihe0832.android.lib.color.picker.deep.DeepSlideView
+                    android:id="@+id/dialog_color_deep_slide_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp" />
 
             </LinearLayout>
 

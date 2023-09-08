@@ -19,6 +19,47 @@ public class ColorUtils {
         return color | 0xFF000000;
     }
 
+    public static int getColorDepth(int color) {
+        int tempColor = removeAlpha(color);
+        int red = (tempColor >> 16) & 0xFF;
+        int green = (tempColor >> 8) & 0xFF;
+        int blue = tempColor & 0xFF;
+        // 计算颜色的亮度（使用标准的相对亮度公式）
+        double brightness = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+        if (brightness > 254) {
+            return 255;
+        } else {
+            return (int) brightness;
+        }
+    }
+
+    public static double getColorBrightness(int color) {
+        // 将亮度映射到 0（最暗）和 1（最亮）之间的范围
+        return getColorDepth(color) / 255.0d;
+    }
+
+    public static boolean hasAlpha(int color) {
+        int alpha = (color >> 24) & 0xFF;
+        return alpha < 255;
+    }
+
+    public static int getComplementaryColor(int color) {
+        int alpha = (color >> 24) & 0xFF;
+        int red = (color >> 16) & 0xFF;
+        int green = (color >> 8) & 0xFF;
+        int blue = color & 0xFF;
+
+        int complementaryRed = 255 - red;
+        int complementaryGreen = 255 - green;
+        int complementaryBlue = 255 - blue;
+
+        return (alpha << 24) | (complementaryRed << 16) | (complementaryGreen << 8) | complementaryBlue;
+    }
+
+    public static boolean isLightColor(int color) {
+        return getColorBrightness(color) > 0.5f;
+    }
+
     public static int getRed(int color) {
         return (color >> 16) & 0xFF;
     }
@@ -32,11 +73,18 @@ public class ColorUtils {
     }
 
     public static int addAlpha(int alpha, int color) {
-        if (alpha < 0 || alpha > 255) {
-            return color;
+        int tempAlpha = alpha;
+        if (alpha < 0) {
+            tempAlpha = 0;
         }
+        if (alpha > 255) {
+            tempAlpha = 255;
+        }
+        return (color & 0x00FFFFFF) | (tempAlpha << 24);
+    }
 
-        return (color & 0x00FFFFFF) | (alpha << 24);
+    public static int addAlpha(float alpha, int baseColor) {
+        return addAlpha((int) (255 * alpha), baseColor);
     }
 
     public static final String color2Hex(int color) {

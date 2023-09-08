@@ -26,7 +26,7 @@ class DebugColorFragment : BaseFragment() {
         return R.layout.fragment_test_color
     }
 
-    private var defaultColor = Color.RED
+    private var defaultColor = Color.WHITE
     private var defaultAlpha = 255
 
     override fun initView(view: View) {

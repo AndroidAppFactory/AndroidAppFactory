@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
+import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
@@ -21,7 +22,6 @@ import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
-import com.bihe0832.android.lib.ui.common.ColorTools
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation.SupportActivity
@@ -60,7 +60,7 @@ open class BaseActivity : SupportActivity() {
     override fun onResume() {
         super.onResume()
         if (getStatusBarColor() == Color.TRANSPARENT) {
-            enableActivityImmersive(ColorTools.getColorWithAlpha(0f, ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!), getNavigationBarColor())
+            enableActivityImmersive(ColorUtils.addAlpha(0f, ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!), getNavigationBarColor())
         } else {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         }

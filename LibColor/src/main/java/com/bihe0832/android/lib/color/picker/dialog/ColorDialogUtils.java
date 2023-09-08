@@ -31,8 +31,8 @@ public class ColorDialogUtils {
             @Override
             public void run() {
                 final ColorPickDialog dialog = new ColorPickDialog(context, pickType);
-                dialog.setCurrentAlpha(defaultAlpha);
-                dialog.setCurrentColor(defaultValue);
+                dialog.setCurrentColorAlpha(defaultAlpha);
+                dialog.setCurrentColorText(defaultValue);
                 dialog.setPositive(positive);
                 dialog.setNegative(negative);
                 dialog.setFeedBackContent(tips);
@@ -41,7 +41,7 @@ public class ColorDialogUtils {
                     @Override
                     public void onPositiveClick() {
                         try {
-                            listener.onPositiveClick(dialog.getCurrentColor());
+                            listener.onPositiveClick(dialog.getCurrentColorText());
                             dialog.dismiss();
 
                         } catch (Exception e) {

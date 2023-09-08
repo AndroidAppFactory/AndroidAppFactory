@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="深度" />
 
-        <com.bihe0832.android.lib.color.picker.color.ColorSlideView
+        <com.bihe0832.android.lib.color.picker.deep.DeepSlideView
                 android:id="@+id/color_slide_view"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"

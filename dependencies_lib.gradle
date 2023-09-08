@@ -384,7 +384,7 @@ ext.libmoduleInfo = [
                 "version"            : "6.4.1",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
-                        "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibCommonUIUtils",
+                        "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibColor",
                         project.androidsupport.appcompat
                 ]
         ],

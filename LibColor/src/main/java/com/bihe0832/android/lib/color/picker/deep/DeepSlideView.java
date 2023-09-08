@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.color.picker.color;
+package com.bihe0832.android.lib.color.picker.deep;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,14 +7,16 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+
 import com.bihe0832.android.lib.color.picker.ColorSlidePicker;
 import com.bihe0832.android.lib.color.picker.base.BaseColorPickerView;
 import com.bihe0832.android.lib.color.utils.ColorUtils;
 
 
-public class ColorSlideView extends BaseColorPickerView implements ColorSlidePicker {
+public class DeepSlideView extends BaseColorPickerView implements ColorSlidePicker {
 
     /**
      * 默认基色
@@ -23,15 +25,15 @@ public class ColorSlideView extends BaseColorPickerView implements ColorSlidePic
     private int startColor = Color.BLACK;
     private int endColor = Color.WHITE;
 
-    public ColorSlideView(Context context) {
+    public DeepSlideView(Context context) {
         super(context);
     }
 
-    public ColorSlideView(Context context, @Nullable AttributeSet attrs) {
+    public DeepSlideView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ColorSlideView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public DeepSlideView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -88,11 +90,15 @@ public class ColorSlideView extends BaseColorPickerView implements ColorSlidePic
         int startColor = Color.HSVToColor(hsv);
         hsv[2] = 1;
         int endColor = Color.HSVToColor(hsv);
-        Shader shader = new LinearGradient(0, 0, getWidth() * 1f, getHeight() * 1f, startColor, endColor,
-                Shader.TileMode.CLAMP);
+        Shader shader = new LinearGradient(0, 0, getWidth() * 1f, getHeight() * 1f, startColor, endColor, Shader.TileMode.CLAMP);
         mPaint.setShader(shader);
         postInvalidate();
     }
+
+    public void setBaseDeep(int brightness) {
+        setPosition(brightness / 255f);
+    }
+
 
     /**
      * 计算当前颜色
@@ -113,13 +119,9 @@ public class ColorSlideView extends BaseColorPickerView implements ColorSlidePic
             );
         }
         if (mIsRelease) {
-            if (mCurrentColor != -1) {
-                mListener.onColorSelected(mCurrentColor);
-            }
+            mListener.onColorSelected(mCurrentColor);
         } else {
-            if (mCurrentColor != -1) {
-                mListener.onColorSelecting(mCurrentColor);
-            }
+            mListener.onColorSelecting(mCurrentColor);
         }
     }
 
@@ -129,7 +131,9 @@ public class ColorSlideView extends BaseColorPickerView implements ColorSlidePic
     private int getColorAtPoint() {
         float[] hsv = new float[3];
         Color.colorToHSV(baseColor, hsv);
-        hsv[2] = mTouchX * 1f / getWidth();
+        if (getWidth() > 0) {
+            hsv[2] = mTouchX * 1f / getWidth();
+        }
         return Color.HSVToColor(hsv);
     }
 
