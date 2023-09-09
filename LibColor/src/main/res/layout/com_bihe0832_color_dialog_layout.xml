@@ -76,17 +76,17 @@
                 android:gravity="center">
 
             <com.bihe0832.android.lib.color.picker.color.ColorWheelPickerView
-                    android:id="@+id/dialog_color_wheel_view"
-                    android:layout_width="@dimen/dialog_color_pick_size"
-                    android:layout_height="@dimen/dialog_color_pick_size"
-                    android:visibility="gone" />
+                android:id="@+id/dialog_color_wheel_view"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:visibility="gone" />
 
             <com.bihe0832.android.lib.color.picker.color.ColorRingPickerView
-                    android:id="@+id/dialog_color_ring_view"
-                    android:layout_width="@dimen/dialog_color_pick_size"
-                    android:layout_height="@dimen/dialog_color_pick_size"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                android:id="@+id/dialog_color_ring_view"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <LinearLayout
                     android:layout_width="match_parent"
@@ -96,7 +96,7 @@
 
                 <TextView
                     android:id="@+id/dialog_color_alpha_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="56dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/dialog_color_alpha_title"
@@ -106,8 +106,7 @@
                 <com.bihe0832.android.lib.color.picker.alpha.AlphaSlideView
                     android:id="@+id/dialog_color_alpha_slide_view"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="8dp" />
+                    android:layout_height="20dp" />
 
             </LinearLayout>
 
@@ -119,18 +118,17 @@
 
                 <TextView
                     android:id="@+id/dialog_color_deep_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="56dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="深    度："
+                    android:text="@string/dialog_color_depth_title"
                     android:textColor="@color/com_bihe0832_dialog_title"
                     android:textSize="@dimen/com_bihe0832_dialog_content_text_size" />
 
                 <com.bihe0832.android.lib.color.picker.deep.DeepSlideView
                     android:id="@+id/dialog_color_deep_slide_view"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="8dp" />
+                    android:layout_height="20dp" />
 
             </LinearLayout>
 

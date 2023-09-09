@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
@@ -39,6 +40,7 @@ public class ColorPickDialog extends CommonDialog {
     private int pickType = TYPE_WHELL;
     private int defaultValue = Color.BLACK;
     private int defaultAlpha = 255;
+    private float width = 160.0f;
 
     private int currentColorValue = Color.BLACK;
     private int currentColorAlpha = 255;
@@ -94,22 +96,22 @@ public class ColorPickDialog extends CommonDialog {
     protected void initView() {
         super.initView();
         this.setShouldCanceled(true);
-        if (pickType == TYPE_WHELL) {
-            try {
+        try {
+            if (pickType == TYPE_WHELL) {
                 wheelPickerView = findViewById(R.id.dialog_color_wheel_view);
                 wheelPickerView.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if (pickType == TYPE_RING) {
-            try {
+        try {
+            if (pickType == TYPE_RING) {
                 ringPickerView = findViewById(R.id.dialog_color_ring_view);
                 ringPickerView.setVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         alphaSlideView = findViewById(R.id.dialog_color_alpha_slide_view);
@@ -197,11 +199,33 @@ public class ColorPickDialog extends CommonDialog {
     protected void refreshView() {
         super.refreshView();
         updateViewColor(true, true);
+        ViewGroup.LayoutParams para = null;
+        if (null != wheelPickerView) {
+            para = wheelPickerView.getLayoutParams();
+        }
+        if (null != ringPickerView) {
+            para = ringPickerView.getLayoutParams();
+        }
+        if (null != para) {
+            para.width = (int) width;
+            para.height = (int) width;
+        }
+
+        try {
+            if (null != wheelPickerView && para != null) {
+                wheelPickerView.setLayoutParams(para);
+            }
+            if (null != ringPickerView && para != null) {
+                ringPickerView.setLayoutParams(para);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (getFeedback() != null) {
             int screenWidth = DisplayUtil.getScreenWidth(getContext());
             int screenHeight = DisplayUtil.getScreenHeight(getContext());
-            float pickViewHeight = getContext().getResources().getDimension(R.dimen.dialog_color_pick_size);
-            if (screenWidth > screenHeight && pickViewHeight > screenHeight * 0.46f) {
+            if (screenWidth > screenHeight && width > screenHeight * 0.40f) {
                 getFeedback().setVisibility(View.VISIBLE);
             } else {
                 getFeedback().setVisibility(View.GONE);
@@ -252,6 +276,10 @@ public class ColorPickDialog extends CommonDialog {
         this.defaultValue = value;
         this.currentColorValue = defaultValue;
         refreshView();
+    }
+
+    public void setWidth(float widthDP) {
+        this.width = widthDP;
     }
 
     public int getDefaultColor() {
