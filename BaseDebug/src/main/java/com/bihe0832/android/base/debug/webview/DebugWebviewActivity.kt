@@ -10,7 +10,7 @@ import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 
 class DebugWebviewActivity : BaseDebugListActivity() {
 
@@ -19,17 +19,18 @@ class DebugWebviewActivity : BaseDebugListActivity() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("打开指定Web页面", View.OnClickListener {
-                showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl, InputDialogCompletedCallback { result: String ->
-                    try {
-                        if (!TextUtils.isEmpty(result)) {
-                            lastUrl = result
-                            openWeb(result)
-                        } else {
-                            ZixieContext.showDebug("请输入正确的网页地址")
+                showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl,
+                    DialogCompletedStringCallback { result: String ->
+                        try {
+                            if (!TextUtils.isEmpty(result)) {
+                                lastUrl = result
+                                openWeb(result)
+                            } else {
+                                ZixieContext.showDebug("请输入正确的网页地址")
+                            }
+                        } catch (e: Exception) {
                         }
-                    } catch (e: Exception) {
-                    }
-                })
+                    })
             }))
             add(DebugItemData("原生内核打开JSbridge调试页面", View.OnClickListener { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
             add(DebugItemData("原生内核打开TBS调试页面", View.OnClickListener { openWeb("http://debugtbs.qq.com/") }))

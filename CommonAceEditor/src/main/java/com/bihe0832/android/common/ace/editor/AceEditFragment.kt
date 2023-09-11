@@ -16,9 +16,8 @@ import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.LoadingDialog
+import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
 import kotlinx.android.synthetic.main.fragment_ace_edit.*
-
 
 class AceEditFragment : BaseFragment() {
     private var filePath = ""
@@ -51,11 +50,11 @@ class AceEditFragment : BaseFragment() {
         return main_ace_editor?.isWrap ?: true
     }
 
-
     override fun initView(view: View) {
         super.initView(view)
         main_ace_editor?.apply {
-            isReadOnly = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
+            isReadOnly =
+                Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
             isWrap = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
             textSize = Config.readConfig(AceConstants.KEY_LAST_TEXT_SIZE, AceConstants.VALUE_LAST_TEXT_SIZE)
             setDebug(!ZixieContext.isOfficial())
@@ -69,8 +68,10 @@ class AceEditFragment : BaseFragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
         super.setUserVisibleHint(isVisibleToUser, hasCreateView)
         if (hasCreateView && isVisibleToUser) {
-            main_ace_editor?.isReadOnly = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
-            main_ace_editor?.isWrap = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
+            main_ace_editor?.isReadOnly =
+                Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
+            main_ace_editor?.isWrap =
+                Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
         }
     }
 

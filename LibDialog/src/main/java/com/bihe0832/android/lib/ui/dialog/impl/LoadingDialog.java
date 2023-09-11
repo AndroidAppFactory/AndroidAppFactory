@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.dialog;
+package com.bihe0832.android.lib.ui.dialog.impl;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.ui.dialog.R;
 import com.bihe0832.android.lib.ui.dialog.view.ProgressIndicatorView;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 

@@ -6,7 +6,7 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 
 
 object DownloadAPK {
@@ -82,15 +82,15 @@ object DownloadAPK {
     }
 
     fun startDownloadWithProcess(
-            activity: Activity,
-            title: String,
-            msg: String,
-            url: String,
-            md5: String,
-            canCancel: Boolean,
-            downloadMobile: Boolean,
-            listener: OnDialogListener?,
-            downloadListener: DownloadListener?
+        activity: Activity,
+        title: String,
+        msg: String,
+        url: String,
+        md5: String,
+        canCancel: Boolean,
+        downloadMobile: Boolean,
+        listener: OnDialogListener?,
+        downloadListener: DownloadListener?
     ) {
         DownloadFile.downloadWithProcess(
                 activity,

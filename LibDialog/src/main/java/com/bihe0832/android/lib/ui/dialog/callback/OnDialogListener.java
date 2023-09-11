@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.dialog;
+package com.bihe0832.android.lib.ui.dialog.callback;
 
 /**
  * @author zixie code@bihe0832.com

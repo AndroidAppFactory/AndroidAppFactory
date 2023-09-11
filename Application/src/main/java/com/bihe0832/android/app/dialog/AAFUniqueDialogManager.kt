@@ -1,9 +1,9 @@
 package com.bihe0832.android.app.dialog
 
 import android.content.Context
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
-import com.bihe0832.android.lib.ui.dialog.impl.UniqueDialogManager
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.tools.UniqueDialogManager
 
 /**
  *

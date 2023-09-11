@@ -1,14 +1,11 @@
 package com.bihe0832.android.common.praise
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
 
 class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : CommonDialog(context) {
 
@@ -27,7 +24,6 @@ class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : 
         }
     }
 
-
     fun setHeadTitleContent(content: String) {
         mHeadTitleContent = content
     }
@@ -37,7 +33,5 @@ class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : 
         if (mHeadTitleContent.isNotBlank()) {
             findViewById<TextView>(R.id.head).text = mHeadTitleContent
         }
-
     }
-
 }

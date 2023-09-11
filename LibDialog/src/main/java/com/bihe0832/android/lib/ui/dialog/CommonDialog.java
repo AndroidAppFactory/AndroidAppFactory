@@ -22,6 +22,7 @@ import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 

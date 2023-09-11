@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import kotlinx.android.synthetic.main.dialog_test_permission.*
 
 /**

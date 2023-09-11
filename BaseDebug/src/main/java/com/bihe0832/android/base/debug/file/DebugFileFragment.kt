@@ -8,7 +8,6 @@
 
 package com.bihe0832.android.base.debug.file
 
-
 import android.util.Base64
 import android.view.View
 import com.bihe0832.android.app.log.AAFLoggerFile
@@ -33,7 +32,6 @@ import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
-
 class DebugFileFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
 
@@ -45,7 +43,6 @@ class DebugFileFragment : DebugEnvFragment() {
         override fun onValueAgain(key: String?, value: String?) {
             ZLog.d(LOG_TAG, "onValueSetted config key: $key value: $value")
         }
-
     }
 
     override fun initView(view: View) {
@@ -60,26 +57,61 @@ class DebugFileFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-
             add(DebugItemData("文件及文件夹操作", View.OnClickListener { testFolder() }))
 
             add(DebugItemData("文本查看器", View.OnClickListener { testEdit() }))
             add(DebugItemData("Assets 操作", View.OnClickListener { testAssets() }))
 
-            add(DebugItemData("文件MD5", View.OnClickListener {
-                testMD5()
-            }))
+            add(
+                DebugItemData(
+                    "文件MD5",
+                    View.OnClickListener {
+                        testMD5()
+                    },
+                ),
+            )
 
-            add(DebugItemData("文件选择", View.OnClickListener {
+            add(
+                DebugItemData(
+                    "文件选择",
+                    View.OnClickListener {
 //                activity?.showPhotoChooser()
-            }))
+                    },
+                ),
+            )
 
             add(DebugItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(DebugItemData("配置 Config 管理测试", View.OnClickListener { testConfig() }))
             add(DebugItemData("Sqlite测试", View.OnClickListener { testDB() }))
             add(DebugItemData("数据压缩解压", View.OnClickListener { testZlib() }))
-
+            add(DebugItemData("文件内容读写", View.OnClickListener { testReadAndWrite() }))
         }
+    }
+
+    private fun testReadAndWrite() {
+        val filePath = AAFFileWrapper.getFileTempFolder() + "test.panel"
+        ZLog.d(LOG_TAG, "===============start==================")
+        ZLog.d(LOG_TAG, "filePath: $filePath")
+        "12343434".let {
+            ZLog.d(LOG_TAG, "write : $it")
+            FileUtils.writeToFile(filePath, it, false)
+        }
+        ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
+        "12343434".let {
+            ZLog.d(LOG_TAG, "write : $it")
+            FileUtils.writeToFile(filePath, it, true)
+        }
+        ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
+        "这是个测试仪1".let {
+            ZLog.d(LOG_TAG, "write : $it")
+            FileUtils.writeToFile(filePath, it, true)
+        }
+        ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
+        "这是个测试仪2".let {
+            ZLog.d(LOG_TAG, "write : $it")
+            FileUtils.writeToFile(filePath, it, false)
+        }
+        ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
     }
 
     private fun testFolder() {
@@ -89,7 +121,7 @@ class DebugFileFragment : DebugEnvFragment() {
             "10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk",
             "/storage/emulated/0/Android/data/com.tencent.cmocmna.video/files/mocmna/temp/log//server_20220818.txt",
             "file://cdn.bihe0832.com/app/update/get_apk.json",
-            "https://webcdn.m.qq.com/webapp_myapp/index.html#/"
+            "https://webcdn.m.qq.com/webapp_myapp/index.html#/",
 
         ).forEach {
             ZLog.d(LOG_TAG, "===============start==================")
@@ -102,9 +134,9 @@ class DebugFileFragment : DebugEnvFragment() {
 
         val logPath = AAFLoggerFile.getLogPathByModuleName(AAFLoggerFile.MODULE_UPDATE)
         FileUtils.copyFile(File(logPath), File(AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(logPath)))
-                .let {
-                    ZLog.d(LOG_TAG, "===============$it==================")
-                }
+            .let {
+                ZLog.d(LOG_TAG, "===============$it==================")
+            }
 
         FileUtils.copyDirectory(File(logPath).parentFile, File(AAFFileWrapper.getFileTempFolder())).let {
             ZLog.d(LOG_TAG, "===============$it==================")
@@ -116,8 +148,6 @@ class DebugFileFragment : DebugEnvFragment() {
             ZLog.d(LOG_TAG, MD5.getFileMD5(it))
             ZLog.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
         }
-
-
 
         ThreadManager.getInstance().start {
             File("/sdcard/10053761_com.tencent.hjzqgame_h759087_1.0.1306_lcbw83.apk").let {
@@ -136,28 +166,26 @@ class DebugFileFragment : DebugEnvFragment() {
                 }
                 ZLog.d(LOG_TAG, "total time : " + (System.currentTimeMillis() / 1000 - start))
                 ZLog.d(LOG_TAG, "===============end==================")
-
             }
         }
     }
 
     private fun testZIP() {
-
         var startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
             "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927.zip",
-            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927"
+            "/sdcard/Download/com.herogame.gplay.lastdayrulessurvival_20200927",
         )
         var duration = System.currentTimeMillis() - startTime
         ZLog.d(
             LOG_TAG,
-            "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration"
+            "ZipCompressor unzip com.herogame.gplay.lastdayrulessurvival_20200927.zip cost:$duration",
         )
 
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
             "/sdcard/Download/com.garena.game.kgtw.zip",
-            "/sdcard/Download/com.garena.game.kgtw"
+            "/sdcard/Download/com.garena.game.kgtw",
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.garena.game.kgtw.zip cost:$duration")
@@ -165,7 +193,7 @@ class DebugFileFragment : DebugEnvFragment() {
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
             "/sdcard/Download/com.supercell.brawlstars.zip",
-            "/sdcard/Download/com.supercell.brawlstars"
+            "/sdcard/Download/com.supercell.brawlstars",
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip com.supercell.brawlstars.zip cost:$duration")
@@ -173,7 +201,7 @@ class DebugFileFragment : DebugEnvFragment() {
         startTime = System.currentTimeMillis()
         ZipUtils.unCompress(
             "/sdcard/Download/jp.co.sumzap.pj0007.zip",
-            "/sdcard/Download/jp.co.sumzap.pj0007"
+            "/sdcard/Download/jp.co.sumzap.pj0007",
         )
         duration = System.currentTimeMillis() - startTime
         ZLog.d(LOG_TAG, "ZipCompressor unzip jp.co.sumzap.pj0007.zip cost:$duration")
@@ -271,11 +299,9 @@ class DebugFileFragment : DebugEnvFragment() {
         val b = Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
         val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
 
-
         val res = String(ZlibUtil.uncompress(compres))
         ZLog.d("testZlib", "压缩再解压一致性确认：")
         ZLog.d("testZlib", "text：\n$text\n\n")
         ZLog.d("testZlib", "result：\n$res\n\n")
-
     }
 }

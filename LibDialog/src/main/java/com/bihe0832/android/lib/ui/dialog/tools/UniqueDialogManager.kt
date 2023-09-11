@@ -1,9 +1,9 @@
-package com.bihe0832.android.lib.ui.dialog.impl
+package com.bihe0832.android.lib.ui.dialog.tools
 
 import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.R
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -39,7 +39,8 @@ public class UniqueDialogManager {
     }
 
     fun showUniqueDialog(context: Context, id: String, title: String, content: String, buttonText: String, canCancel: Boolean, listener: (() -> Unit)? = null): Boolean {
-        return showUniqueDialog(context, id, title, content, buttonText, "", canCancel, object : OnDialogListener {
+        return showUniqueDialog(context, id, title, content, buttonText, "", canCancel, object :
+            OnDialogListener {
             override fun onPositiveClick() {
                 listener?.invoke()
             }
@@ -60,7 +61,8 @@ public class UniqueDialogManager {
             return false
         } else {
 
-            val dialogListener = object : OnDialogListener {
+            val dialogListener = object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     currentShowList.remove(id)
                     listener.onPositiveClick()

@@ -8,7 +8,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 
 object LockScreenPermission {
 
@@ -38,7 +38,8 @@ object LockScreenPermission {
                 positive = "授权并开启"
                 needSpecial = true
             }.let {
-                it.show(SCENE, mLockScreenPermission, true, object : OnDialogListener {
+                it.show(SCENE, mLockScreenPermission, true, object :
+                    OnDialogListener {
                     override fun onPositiveClick() {
                         startLockService(context, cls)
                         openFloatSettings(context)

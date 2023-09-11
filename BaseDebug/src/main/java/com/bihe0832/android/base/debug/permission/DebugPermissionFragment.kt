@@ -11,7 +11,7 @@ import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpe
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 
 class DebugPermissionFragment : DebugEnvFragment() {
 
@@ -112,7 +112,8 @@ class DebugPermissionFragment : DebugEnvFragment() {
 
     private fun testCommonPermissionDialog() {
         PermissionDialog(activity!!).let {
-            it.show("", Manifest.permission.SYSTEM_ALERT_WINDOW, true, object : OnDialogListener {
+            it.show("", Manifest.permission.SYSTEM_ALERT_WINDOW, true, object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     it.dismiss()
                 }

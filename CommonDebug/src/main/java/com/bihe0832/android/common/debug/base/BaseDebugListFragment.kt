@@ -16,8 +16,8 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.LoadingDialog
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
+import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 
 open class BaseDebugListFragment : CommonListFragment() {
 
@@ -103,7 +103,7 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugUtils.showInfo(context, title, content)
     }
 
-    fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: InputDialogCompletedCallback) {
+    fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: DialogCompletedStringCallback) {
         DebugUtils.showInputDialog(context, titleName, msg, defaultValue, listener)
     }
 

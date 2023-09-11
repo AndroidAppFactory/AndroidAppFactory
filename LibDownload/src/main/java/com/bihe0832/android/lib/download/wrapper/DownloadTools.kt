@@ -8,8 +8,6 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.impl.UniqueDialogManager
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
@@ -24,7 +22,7 @@ object DownloadTools {
 
     private val UNIQUE_KEY = "DownloadTools"
 
-    //外部注册的全局回调，仅回调，不包含任何逻辑，如果一个URL在多个地方下载，下载状态也只会每个Listener触发一次
+    // 外部注册的全局回调，仅回调，不包含任何逻辑，如果一个URL在多个地方下载，下载状态也只会每个Listener触发一次
     private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
     fun addGlobalDownloadListener(downloadListener: DownloadListener?) {
         mGlobalDownloadListenerList.add(downloadListener)
@@ -35,7 +33,6 @@ object DownloadTools {
             mGlobalDownloadListenerList.remove(downloadListener)
         }
     }
-
 
     // 下载URL与回调的对应关系，基本上一个URL对应一个回调，下载时在这里转换，不进一步到底层，同样的，底层的回调，在这里做进一步的分发
     private var mDownloadKeyListenerList = ConcurrentHashMap<Long, KeyListener>()
@@ -131,14 +128,22 @@ object DownloadTools {
                                     }
                                 } else {
                                     listenerList.forEach {
-                                        it.onFail(DownloadErrorCode.ERR_FILE_RENAME_FAILED, "download success and rename failed", item)
+                                        it.onFail(
+                                            DownloadErrorCode.ERR_FILE_RENAME_FAILED,
+                                            "download success and rename failed",
+                                            item,
+                                        )
                                     }
                                 }
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
                             listenerList.forEach {
-                                it.onFail(DownloadErrorCode.ERR_FILE_RENAME_FAILED, "download success and rename throw Exception:$e", item)
+                                it.onFail(
+                                    DownloadErrorCode.ERR_FILE_RENAME_FAILED,
+                                    "download success and rename throw Exception:$e",
+                                    item,
+                                )
                             }
                         }
                     }
@@ -197,7 +202,12 @@ object DownloadTools {
         }
     }
 
-    private fun addNewKeyListener(downloadID: Long, finalPath: String, isFile: Boolean, downloadListener: DownloadListener?) {
+    private fun addNewKeyListener(
+        downloadID: Long,
+        finalPath: String,
+        isFile: Boolean,
+        downloadListener: DownloadListener?,
+    ) {
         if (!mDownloadKeyListenerList.containsKey(downloadID) || null == mDownloadKeyListenerList[downloadID]) {
             mDownloadKeyListenerList[downloadID] = KeyListener()
         }
@@ -212,7 +222,21 @@ object DownloadTools {
     }
 
     @Synchronized
-    fun startDownload(context: Context, title: String, msg: String, url: String, path: String, isFilePath: Boolean, md5: String, sha256: String, forceDownloadNew: Boolean, UseMobile: Boolean, actionKey: String, forceDownload: Boolean, downloadListener: DownloadListener?) {
+    fun startDownload(
+        context: Context,
+        title: String,
+        msg: String,
+        url: String,
+        path: String,
+        isFilePath: Boolean,
+        md5: String,
+        sha256: String,
+        forceDownloadNew: Boolean,
+        UseMobile: Boolean,
+        actionKey: String,
+        forceDownload: Boolean,
+        downloadListener: DownloadListener?,
+    ) {
         DownloadItem().apply {
             if (FileMimeTypes.isApkFile(URLUtils.getFileName(url))) {
                 setNotificationVisibility(true)

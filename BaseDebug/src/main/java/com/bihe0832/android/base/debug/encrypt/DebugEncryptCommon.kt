@@ -5,7 +5,7 @@ import com.bihe0832.android.app.encrypt.AAFEncrypt
 import com.bihe0832.android.app.encrypt.AAFEncryptConstants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.utils.encrypt.AESUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils

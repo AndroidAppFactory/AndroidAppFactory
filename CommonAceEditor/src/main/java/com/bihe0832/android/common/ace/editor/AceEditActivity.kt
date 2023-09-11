@@ -22,8 +22,8 @@ import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
 import kotlinx.android.synthetic.main.activity_edit_layout.*

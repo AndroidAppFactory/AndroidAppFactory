@@ -8,7 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.widget.BaseWidgetProvider
 import com.bihe0832.android.lib.widget.R
@@ -70,7 +70,8 @@ object WidgetTools {
             setPositive(positiveDesc)
             setNegative(negativeString)
             setShouldCanceled(true)
-            setOnClickBottomListener(object : OnDialogListener {
+            setOnClickBottomListener(object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     dismiss()
                 }

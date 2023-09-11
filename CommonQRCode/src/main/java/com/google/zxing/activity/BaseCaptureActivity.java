@@ -23,7 +23,7 @@ import com.bihe0832.android.framework.ui.BaseActivity;
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView;
 import com.bihe0832.android.lib.qrcode.QRCodeDecodingHandler;
 import com.bihe0832.android.lib.thread.ThreadManager;
-import com.bihe0832.android.lib.ui.dialog.LoadingDialog;
+import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager;
 import com.google.zxing.Result;

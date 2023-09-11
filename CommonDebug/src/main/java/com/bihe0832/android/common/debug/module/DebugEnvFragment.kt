@@ -4,9 +4,9 @@ import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.config.Config
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.RadioDialog
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.RadioDialog
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 
 /**
@@ -26,7 +26,8 @@ open class DebugEnvFragment : BaseDebugListFragment() {
             setPositive("确定")
             setNegative("取消")
             setShouldCanceled(true)
-            setOnClickBottomListener(object : OnDialogListener {
+            setOnClickBottomListener(object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     dismiss()
                     ins.onChanged(checkedIndex)
@@ -80,7 +81,8 @@ open class DebugEnvFragment : BaseDebugListFragment() {
                 else -> "生效"
             }
 
-            DialogUtils.showConfirmDialog(activity!!, "${title}切换", tips, canCancel = false, object : OnDialogListener {
+            DialogUtils.showConfirmDialog(activity!!, "${title}切换", tips, canCancel = false, object :
+                OnDialogListener {
                 fun clickAction(actionType: Int) {
                     when (actionType) {
                         CHANGE_ENV_EXIST_TYPE_EXIST -> ZixieContext.exitAPP()

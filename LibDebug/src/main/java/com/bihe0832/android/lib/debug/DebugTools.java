@@ -8,7 +8,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.ClipboardUtil;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 

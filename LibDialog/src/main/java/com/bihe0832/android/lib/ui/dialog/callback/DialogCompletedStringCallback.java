@@ -6,8 +6,9 @@
  *
  */
 
-package com.bihe0832.android.lib.ui.dialog.input;
+package com.bihe0832.android.lib.ui.dialog.callback;
 
-public interface InputDialogCompletedCallback {
-    void onInputCompleted(String result);
+public interface DialogCompletedStringCallback {
+
+    void onResult(String result);
 }

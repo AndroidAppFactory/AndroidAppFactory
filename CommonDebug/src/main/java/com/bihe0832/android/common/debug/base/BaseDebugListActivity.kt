@@ -12,7 +12,7 @@ import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
 
 abstract class BaseDebugListActivity : CommonListActivity() {
@@ -68,7 +68,7 @@ abstract class BaseDebugListActivity : CommonListActivity() {
             titleName: String,
             msg: String,
             defaultValue: String,
-            listener: InputDialogCompletedCallback
+            listener: DialogCompletedStringCallback
     ) {
         DebugUtils.showInputDialog(this, titleName, msg, defaultValue, listener)
     }

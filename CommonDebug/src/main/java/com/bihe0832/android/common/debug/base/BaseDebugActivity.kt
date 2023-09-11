@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.framework.ui.BaseActivity
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
 
 open class BaseDebugActivity : BaseActivity() {
@@ -39,7 +39,7 @@ open class BaseDebugActivity : BaseActivity() {
             titleName: String,
             msg: String,
             defaultValue: String,
-            listener: InputDialogCompletedCallback
+            listener: DialogCompletedStringCallback
     ) {
         DebugUtils.showInputDialog(this, titleName, msg, defaultValue, listener)
     }

@@ -16,8 +16,8 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
@@ -31,7 +31,8 @@ object UpdateHelper {
 
         var title = String.format(ThemeResourcesManager.getString(R.string.dialog_apk_updating)!!, "$version")
 
-        var dialogListenerWhenDownload = object : OnDialogListener {
+        var dialogListenerWhenDownload = object :
+            OnDialogListener {
             override fun onPositiveClick() {
                 if (!canCancel) {
                     ThreadManager.getInstance().start({ ZixieContext.exitAPP() }, 300L)
@@ -55,7 +56,8 @@ object UpdateHelper {
                             activity, title,
                             ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_desc)!!,
                             ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_positive),
-                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_negative), object : OnDialogListener {
+                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_negative), object :
+                            OnDialogListener {
                         override fun onPositiveClick() {
                             if (canCancel) {
                                 openFeedback()
@@ -92,7 +94,8 @@ object UpdateHelper {
                 setHtmlContent(desc)
                 positive = "现在更新"
                 negative = "稍后更新"
-                setOnClickBottomListener(object : OnDialogListener {
+                setOnClickBottomListener(object :
+                    OnDialogListener {
                     override fun onPositiveClick() {
                         when (type) {
                             UpdateDataFromCloud.UPDATE_TYPE_MUST -> {

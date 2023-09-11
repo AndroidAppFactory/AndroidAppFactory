@@ -7,11 +7,15 @@ import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.install.InstallUtils.ApkInstallType
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.LoadingDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 
-open class SimpleInstallListener(private val activity: Activity, private val packageName: String, private val listener: OnDialogListener?) : SimpleDownloadListener() {
+open class SimpleInstallListener(
+    private val activity: Activity,
+    private val packageName: String,
+    private val listener: OnDialogListener?,
+) : SimpleDownloadListener() {
 
     private val loadingDialog = LoadingDialog(activity).apply {
         setIsFullScreen(true)
@@ -56,6 +60,5 @@ open class SimpleInstallListener(private val activity: Activity, private val pac
     }
 
     override fun onProgress(item: DownloadItem) {
-
     }
 }

@@ -6,29 +6,18 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
-
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2019-11-01.
- * Description: Description
+ *         Created on 2019-11-01.
+ *         Description: Description
  */
 public class WechatOfficialAccount {
-
-    public static class WechatOfficialAccountData {
-
-        public String mAccountID = "";
-        public String mAccountTitle = "";
-        public String mSubContent = "";
-        public int mResID = -1;
-        public View.OnClickListener mOnFinishedClickListener = null;
-
-    }
 
     public static void showSubscribe(final Context context, final WechatOfficialAccountData data) {
 
@@ -80,5 +69,15 @@ public class WechatOfficialAccount {
             }
         });
         dialog.show();
+    }
+
+    public static class WechatOfficialAccountData {
+
+        public String mAccountID = "";
+        public String mAccountTitle = "";
+        public String mSubContent = "";
+        public int mResID = -1;
+        public View.OnClickListener mOnFinishedClickListener = null;
+
     }
 }

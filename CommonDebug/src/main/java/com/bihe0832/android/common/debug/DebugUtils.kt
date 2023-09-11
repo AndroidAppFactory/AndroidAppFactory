@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.lib.debug.DebugTools
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 
 /**
  * @author zixie code@bihe0832.com
@@ -48,7 +48,7 @@ object DebugUtils {
         titleName: String,
         msg: String,
         defaultValue: String,
-        listener: InputDialogCompletedCallback,
+        listener: DialogCompletedStringCallback,
     ) {
         DialogUtils.showInputDialog(context!!, titleName, msg, defaultValue, listener)
     }

@@ -7,7 +7,7 @@ import com.bihe0832.android.common.message.base.MessageManager
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
 
 /**
@@ -35,7 +35,8 @@ object AAFMessageManager : MessageManager() {
     fun showMessage(activity: Activity, messageInfoItem: MessageInfoItem, showFace: Boolean) {
         mDependenceBlockDialogManager.getDependentTaskManager().addTask(messageInfoItem.messageID, {
             ThreadManager.getInstance().runOnUIThread {
-                showMessage(activity, messageInfoItem, showFace, object : OnDialogListener {
+                showMessage(activity, messageInfoItem, showFace, object :
+                    OnDialogListener {
                     override fun onPositiveClick() {
                         mDependenceBlockDialogManager.getDependentTaskManager().finishTask(messageInfoItem.messageID)
                     }

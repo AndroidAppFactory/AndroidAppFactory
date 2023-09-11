@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 /**
@@ -116,7 +116,8 @@ object PermissionItem {
             positive = "去设置"
             negative = "取消"
             shouldCanceled = false
-            onClickBottomListener = object : OnDialogListener {
+            onClickBottomListener = object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     dismiss()
                     IntentUtils.startAppSettings(activity, permission)

@@ -8,7 +8,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.superapp.APPMarketHelper
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.util.concurrent.TimeUnit
@@ -99,7 +99,8 @@ object UserPraiseManager {
             if (mHeadTitle.isNotEmpty()) {
                 setHeadTitleContent(mHeadTitle)
             }
-            onClickBottomListener = object : OnDialogListener {
+            onClickBottomListener = object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     successAction.invoke()
                     doPraiseAction()

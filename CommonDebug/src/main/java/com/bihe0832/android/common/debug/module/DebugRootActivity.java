@@ -6,7 +6,7 @@ import com.bihe0832.android.framework.ui.main.CommonRootActivity;
 /**
  * Summary
  *
- * @author hardyshi code@bihe0832.com
+ * @author code@bihe0832.com
  *         Created on 2023/9/6.
  *         Description:
  */

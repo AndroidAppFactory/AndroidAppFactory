@@ -1,14 +1,15 @@
-package com.bihe0832.android.lib.ui.dialog
+package com.bihe0832.android.lib.ui.dialog.impl
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import com.bihe0832.android.lib.ui.dialog.CommonDialog
+import com.bihe0832.android.lib.ui.dialog.R
 
 
 open class BottomDialog : CommonDialog {

@@ -3,16 +3,13 @@ package com.bihe0832.android.lib.permission.ui;
 import static com.bihe0832.android.lib.permission.PermissionManager.PERMISSION_REQUEST_CODE;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.PermissionsChecker;
 import com.bihe0832.android.lib.permission.R;
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,9 +91,10 @@ public class PermissionsActivity extends AppCompatActivity {
         }
     }
 
-    protected boolean needCheckPermission(String permission){
-        return  permissionsChecker.lacksPermission(permission);
+    protected boolean needCheckPermission(String permission) {
+        return permissionsChecker.lacksPermission(permission);
     }
+
     private void requestPermissions(String... permissions) {
         lastCheckTime = System.currentTimeMillis();
         doRequestPermissionsAction(permissions);
@@ -132,7 +130,8 @@ public class PermissionsActivity extends AppCompatActivity {
         List<String> tempPermissionGroupList = new ArrayList<>();
 
         for (String permissionGroupID : needCheckPermissionGroup) {
-            List<String> permissionsOfGroup = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, permissionGroupID);
+            List<String> permissionsOfGroup = PermissionManager.INSTANCE.getPermissionsByGroupID(scene,
+                    permissionGroupID);
             for (String permission : permissionsOfGroup) {
                 if (permissionsChecker.lacksPermission(permission)) {
                     tempPermissionGroupList.add(permissionGroupID);
@@ -167,7 +166,8 @@ public class PermissionsActivity extends AppCompatActivity {
         }
         String firstPermissionGroupID = tempPermissionGroupList.get(0);
         String firstPermission = "";
-        List<String> permissionsOfGroup = PermissionManager.INSTANCE.getPermissionsByGroupID(scene, firstPermissionGroupID);
+        List<String> permissionsOfGroup = PermissionManager.INSTANCE.getPermissionsByGroupID(scene,
+                firstPermissionGroupID);
         for (String permission : permissionsOfGroup) {
             if (permissionsChecker.lacksPermission(permission)) {
                 firstPermission = permission;
@@ -212,7 +212,8 @@ public class PermissionsActivity extends AppCompatActivity {
     }
 
     protected void notifyUserCancel(String firstPermissionGroupID, String firstPermission) {
-        PermissionManager.INSTANCE.getPermissionCheckResultListener().onUserCancel(scene, firstPermissionGroupID, firstPermission);
+        PermissionManager.INSTANCE.getPermissionCheckResultListener()
+                .onUserCancel(scene, firstPermissionGroupID, firstPermission);
     }
 
     protected void onPermissionDialogPositiveClick(final List<String> tempPermissionGroupList) {

@@ -1,10 +1,16 @@
 package com.bihe0832.android.lib.file.content
 
 import com.bihe0832.android.lib.file.FileUtils
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.util.zip.GZIPInputStream
-
 
 /**
  *
@@ -42,7 +48,6 @@ object FileContent {
         }
         return content
     }
-
 
     fun getFileContent(fis: InputStream?, encoding: String): String {
         val sb = StringBuffer()
@@ -90,7 +95,6 @@ object FileContent {
             }
         }
         return null
-
     }
 
     fun isBinaryFile(filePath: String): Boolean {
@@ -104,17 +108,16 @@ object FileContent {
         return false
     }
 
-    fun writeToFile(filePath: String, data: String, append: Boolean) {
+    fun writeToFile(filePath: String, data: String, encoding: String, append: Boolean) {
         var fileOutputStream: FileOutputStream? = null
         try {
             val file = File(filePath)
             if (!FileUtils.checkFileExist(filePath)) {
                 file.createNewFile()
             }
-
-            //建立数据的输出通道
+            // 建立数据的输出通道
             fileOutputStream = FileOutputStream(file, append)
-            fileOutputStream.write(data.toByteArray(Charset.forName("ISO-8859-1")))
+            fileOutputStream.write(data.toByteArray(Charset.forName(encoding)))
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {

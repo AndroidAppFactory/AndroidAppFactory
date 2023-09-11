@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.dialog;
+package com.bihe0832.android.lib.ui.dialog.impl;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -8,6 +8,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.LayoutParams;
 
+import com.bihe0832.android.lib.ui.dialog.CommonDialog;
+import com.bihe0832.android.lib.ui.dialog.R;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 import java.util.ArrayList;

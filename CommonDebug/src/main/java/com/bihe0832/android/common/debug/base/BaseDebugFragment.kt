@@ -2,7 +2,7 @@ package com.bihe0832.android.common.debug.base
 
 import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.ui.dialog.input.InputDialogCompletedCallback
+import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 
 open class BaseDebugFragment : BaseFragment() {
     val TAG = this.javaClass.simpleName
@@ -27,7 +27,7 @@ open class BaseDebugFragment : BaseFragment() {
             titleName: String,
             msg: String,
             defaultValue: String,
-            listener: InputDialogCompletedCallback
+            listener: DialogCompletedStringCallback
     ) {
         DebugUtils.showInputDialog(context, titleName, msg, defaultValue, listener)
     }

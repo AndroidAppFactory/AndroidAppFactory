@@ -16,7 +16,8 @@ import android.widget.FrameLayout;
 
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener;
+import com.bihe0832.android.lib.ui.dialog.callback.DialogStringCallback;
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.ui.dialog.R;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
@@ -28,7 +29,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil;
 public class InputDialogUtils {
     public static void showInputDialog(final Context context, String titleName, String msg, String positive,
                                        String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue, String hint,
-                                       final InputDialogCallback listener) {
+                                       final DialogStringCallback listener) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {

@@ -1,13 +1,11 @@
 package com.bihe0832.android.lib.permission.ui
 
 import android.content.Context
-import android.text.TextUtils
 import com.bihe0832.android.lib.permission.PermissionManager
-import com.bihe0832.android.lib.permission.PermissionManager.getDefaultPermissionContent
 import com.bihe0832.android.lib.permission.PermissionManager.getPermissionContent
 import com.bihe0832.android.lib.permission.PermissionManager.getPermissionDesc
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 
 /**
  *

@@ -7,10 +7,10 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.DownloadProgressDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
-import com.bihe0832.android.lib.ui.dialog.impl.SimpleDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.DownloadProgressDialog
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.tools.SimpleDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 
 /**
@@ -85,7 +85,8 @@ object DownloadFile {
                 setPositive("取消下载")
             }
 
-            setOnClickListener(object : OnDialogListener {
+            setOnClickListener(object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     if (canCancel) {
                         ToastUtil.showShort(activity, "已切换到后台下载，你可以在通知栏查看下载进度")

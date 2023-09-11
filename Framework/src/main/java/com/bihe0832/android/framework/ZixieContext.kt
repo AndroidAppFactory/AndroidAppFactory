@@ -25,8 +25,8 @@ import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
@@ -258,7 +258,8 @@ object ZixieContext {
 
     fun exitAPP(callbackListener: OnDialogListener?) {
         getCurrentActivity()?.let {
-            DialogUtils.showConfirmDialog(it, ThemeResourcesManager.getString(R.string.common_reminder_title)!!, String.format(ThemeResourcesManager.getString(R.string.exist_msg)!!, ThemeResourcesManager.getString(R.string.app_name)), ThemeResourcesManager.getString(R.string.comfirm), ThemeResourcesManager.getString(R.string.cancel), true, object : OnDialogListener {
+            DialogUtils.showConfirmDialog(it, ThemeResourcesManager.getString(R.string.common_reminder_title)!!, String.format(ThemeResourcesManager.getString(R.string.exist_msg)!!, ThemeResourcesManager.getString(R.string.app_name)), ThemeResourcesManager.getString(R.string.comfirm), ThemeResourcesManager.getString(R.string.cancel), true, object :
+                OnDialogListener {
                 override fun onPositiveClick() {
                     callbackListener?.onPositiveClick()
                     exitAPP()

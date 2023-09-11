@@ -9,8 +9,8 @@ import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.DialogUtils
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import java.io.File
 
 /**
@@ -51,7 +51,8 @@ object AAFFileTools {
     fun openFileWithTips(activity: Activity, filePath: String) {
         try {
             if (FileUtils.checkFileExist(filePath) && File(filePath).length() > DEFAULT_LOG_FILE_SIZE) {
-                DialogUtils.showConfirmDialog(activity, "超大文件查看", "文件 「<font color ='#3AC8EF'><b>${FileUtils.getFileName(filePath)} (${FileUtils.getFileLength(File(filePath).length())})」</b></font> 文件较大，手机打开耗时较久或者打开失败，建议发送到电脑查看。本地路径: <BR> $filePath ", "发送文件", "继续查看", object : OnDialogListener {
+                DialogUtils.showConfirmDialog(activity, "超大文件查看", "文件 「<font color ='#3AC8EF'><b>${FileUtils.getFileName(filePath)} (${FileUtils.getFileLength(File(filePath).length())})」</b></font> 文件较大，手机打开耗时较久或者打开失败，建议发送到电脑查看。本地路径: <BR> $filePath ", "发送文件", "继续查看", object :
+                    OnDialogListener {
                     override fun onPositiveClick() {
                         sendFile(filePath)
                     }

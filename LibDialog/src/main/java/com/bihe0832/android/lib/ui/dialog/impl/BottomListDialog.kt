@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.ui.dialog
+package com.bihe0832.android.lib.ui.dialog.impl
 
 import android.app.Activity
 import android.util.TypedValue
@@ -7,8 +7,10 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.ui.dialog.R
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.os.DisplayUtil
-import kotlinx.android.synthetic.main.com_bihe0832_common_bottom_list_dialog_layout.*
+import kotlinx.android.synthetic.main.com_bihe0832_common_bottom_list_dialog_layout.layout_List
 
 class BottomListDialog(activity: Activity) : BottomDialog(activity) {
 
@@ -28,7 +30,8 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
         super.initView()
         shouldCanceled = true
         initItemListView()
-        setOnClickBottomListener(object : OnDialogListener {
+        setOnClickBottomListener(object :
+            OnDialogListener {
             override fun onPositiveClick() {
                 onNegativeClick()
             }
@@ -45,17 +48,24 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
 
     protected open fun initItemListView() {
         layout_List.removeAllViews()
-        val textViewLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val textViewLayoutParams =
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         val paddingValue = DisplayUtil.dip2px(context, 16f)
 
-        val lineViewLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(context, 1f))
+        val lineViewLayoutParams =
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(context, 1f))
         textList.map { text ->
             TextView(context).apply {
                 layoutParams = textViewLayoutParams
                 gravity = Gravity.CENTER_HORIZONTAL
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.com_bihe0832_dialog_button_text_size))
+                setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    context.resources.getDimension(R.dimen.com_bihe0832_dialog_button_text_size),
+                )
                 this.text = TextFactoryUtils.getSpannedTextByHtml(text)
-                setTextColor(getContext().getResources().getColorStateList(R.drawable.com_bihe0832_base_dialog_positive_style));
+                setTextColor(
+                    getContext().getResources().getColorStateList(R.drawable.com_bihe0832_base_dialog_positive_style),
+                )
                 setOnClickListener {
                     itemClickListener?.invoke(textList.indexOf(text))
                 }
@@ -72,7 +82,6 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
             }
         }
     }
-
 
     override fun getLayoutID(): Int {
         return R.layout.com_bihe0832_common_bottom_list_dialog_layout

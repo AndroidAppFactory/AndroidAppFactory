@@ -22,7 +22,7 @@ import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
-import com.bihe0832.android.lib.ui.dialog.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import java.net.HttpURLConnection
 
 /**
@@ -47,7 +47,6 @@ public open class MessageManager {
         MessageListLiveData.initData(context)
         ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
             override fun onBackground() {
-
             }
 
             override fun onForeground() {
@@ -85,13 +84,17 @@ public open class MessageManager {
                                 ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile result:$msg")
                                 var httpResultList: ArrayList<MessageInfoItem> = ArrayList()
                                 try {
-                                    JsonHelper.fromJsonList(msg, MessageInfoItem::class.java)?.filter { it.isNotExpired }?.let { msgJsonResponse ->
-                                        httpResultList.addAll(msgJsonResponse)
-                                    }
+                                    JsonHelper.fromJsonList(msg, MessageInfoItem::class.java)
+                                        ?.filter { it.isNotExpired }?.let { msgJsonResponse ->
+                                            httpResultList.addAll(msgJsonResponse)
+                                        }
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
-                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile parse result:" + httpResultList.size)
+                                ZLog.d(
+                                    MessageListLiveData.TAG,
+                                    "fetchMessageByFile parse result:" + httpResultList.size,
+                                )
                                 MessageListLiveData.parseMessage(httpResultList)
                             }
                         }
@@ -107,17 +110,20 @@ public open class MessageManager {
                 CommonDialog(activity).apply {
                     setTitle(item.title)
                     setSingle(TextUtils.isEmpty(item.action))
-                    setPositive(if (TextUtils.isEmpty(item.action)) {
-                        "确定"
-                    } else {
-                        if (item.type == MessageInfoItem.TYPE_APK) {
-                            "立刻下载"
+                    setPositive(
+                        if (TextUtils.isEmpty(item.action)) {
+                            "确定"
                         } else {
-                            "前往"
-                        }
-                    })
+                            if (item.type == MessageInfoItem.TYPE_APK) {
+                                "立刻下载"
+                            } else {
+                                "前往"
+                            }
+                        },
+                    )
                     setNegative("关闭")
-                    setOnClickBottomListener(object : OnDialogListener {
+                    setOnClickBottomListener(object :
+                        OnDialogListener {
                         override fun onPositiveClick() {
                             if (!TextUtils.isEmpty(item.action)) {
                                 if (item.type == MessageInfoItem.TYPE_APK) {
@@ -125,8 +131,6 @@ public open class MessageManager {
                                 } else {
                                     RouterAction.openFinalURL(item.action)
                                 }
-
-
                             }
                             listener?.onPositiveClick()
                             dismiss()
@@ -160,7 +164,6 @@ public open class MessageManager {
             item.showFace
         }
         MessageListLiveData.updateMessageLocalStatus(item.messageID, hasRead = true, showFace = showFace, isDel = false)
-
     }
 
     fun deleteMessage(messageInfoItem: MessageInfoItem?) {
@@ -179,7 +182,8 @@ public open class MessageManager {
             if (showAgain) {
                 canShow
             } else {
-                val notShowThisStart = MessageDBManager.getData(messageInfoItem.messageID)?.lastShow ?: messageInfoItem.lastShow < getAPPCurrentStartTime()
+                val notShowThisStart =
+                    MessageDBManager.getData(messageInfoItem.messageID)?.lastShow ?: messageInfoItem.lastShow < getAPPCurrentStartTime()
                 canShow && notShowThisStart
             }
         } else {

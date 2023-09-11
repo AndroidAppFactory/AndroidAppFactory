@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.color.picker.dialog.impl;
+package com.bihe0832.android.lib.color.picker.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-
 import androidx.core.widget.NestedScrollView;
-
 import com.bihe0832.android.lib.color.picker.OnAlphaSelectedListener;
 import com.bihe0832.android.lib.color.picker.OnColorSelectedListener;
 import com.bihe0832.android.lib.color.picker.alpha.AlphaSlideView;
@@ -27,16 +25,14 @@ import com.ricky.color_picker.R;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2023/7/20.
- * Description: Description
+ *         Created on 2023/7/20.
+ *         Description: Description
  */
 public class ColorPickDialog extends CommonDialog {
 
-    private static final String TAG = "ColorPickDialog";
-
     public static final int TYPE_WHELL = 1;
     public static final int TYPE_RING = 2;
-
+    private static final String TAG = "ColorPickDialog";
     private int pickType = TYPE_WHELL;
     private int defaultValue = Color.BLACK;
     private int defaultAlpha = 255;
@@ -153,7 +149,8 @@ public class ColorPickDialog extends CommonDialog {
                 String inputColor = currentColorText.getText().toString();
                 try {
                     int color = Color.parseColor(inputColor);
-                    if (currentColorAlpha != ColorUtils.getAlpha(color) || currentColorValue != ColorUtils.removeAlpha(color)) {
+                    if (currentColorAlpha != ColorUtils.getAlpha(color) || currentColorValue != ColorUtils.removeAlpha(
+                            color)) {
                         currentColorValue = ColorUtils.removeAlpha(color);
                         currentColorAlpha = ColorUtils.getAlpha(color);
                         updateViewColor(false, true);
@@ -165,7 +162,8 @@ public class ColorPickDialog extends CommonDialog {
         });
 
         currentColorText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null
+                    && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                 String inputColor = currentColorText.getText().toString();
                 try {
                     int color = Color.parseColor(inputColor);
@@ -238,7 +236,8 @@ public class ColorPickDialog extends CommonDialog {
         ZLog.d(TAG, "currentAlpha:" + currentColorAlpha);
         ZLog.d(TAG, "currentDepth:" + ColorUtils.getColorBrightness(currentColorValue));
         ZLog.d(TAG, "currentValue removeAlpha:" + ColorUtils.color2Hex(ColorUtils.removeAlpha(currentColorValue)));
-        ZLog.d(TAG, "currentValue complementary:" + ColorUtils.color2Hex(ColorUtils.getComplementaryColor(currentColorValue)));
+        ZLog.d(TAG, "currentValue complementary:" + ColorUtils.color2Hex(
+                ColorUtils.getComplementaryColor(currentColorValue)));
 
         if (null != currentColorText) {
             if (updateText) {
