@@ -474,7 +474,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibCustomView"             : [
-                "version"            : "6.4.1",
+                "version"            : "6.4.2",
                 "artifactId"         : "lib-custom-view",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,

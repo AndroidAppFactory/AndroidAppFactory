@@ -78,49 +78,51 @@ public class ColorDialogUtils {
         });
     }
 
-    public static void showColorSelectDialog(final Context context, int defaultAlpha, int defaultValue,
+    public static void showColorSelectDialog(final Context context, int pickType, int defaultAlpha, int defaultValue,
             final DialogIntCallback listener) {
-        showColorSelectDialog(context, ColorPickDialog.TYPE_WHELL, defaultAlpha, defaultValue,
+        showColorSelectDialog(context, pickType, defaultAlpha, defaultValue,
                 DisplayUtil.dip2px(context, DEFAULT_PICK_DP),
                 ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_ok),
                 ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_reset),
                 ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_tips), true, listener);
     }
 
-    public static void showColorSelectDialog(final Context context, String defaultValue,
-            final DialogIntCallback listener) {
-        int color = Color.parseColor(defaultValue);
-        showColorSelectDialog(context, ColorUtils.getAlpha(color), ColorUtils.removeAlpha(color), listener);
-    }
+    public static void showColorSelectDialog(final Context context, int pickType, int defaultAlpha, int defaultValue,
+            final DialogCompletedIntCallback listener) {
+        showColorSelectDialog(context, pickType, defaultAlpha, defaultValue, new DialogIntCallback() {
+            @Override
+            public void onPositiveClick(int result) {
+                listener.onResult(result);
+            }
 
+            @Override
+            public void onNegativeClick(int result) {
+                listener.onResult(result);
+            }
+
+            @Override
+            public void onCancel(int result) {
+                listener.onResult(result);
+            }
+        });
+    }
 
     public static void showColorSelectDialog(final Context context, int defaultAlpha, int defaultValue,
             final DialogCompletedIntCallback listener) {
-        showColorSelectDialog(context, ColorPickDialog.TYPE_WHELL, defaultAlpha, defaultValue,
-                DisplayUtil.dip2px(context, DEFAULT_PICK_DP),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_ok),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_reset),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_tips), true, new DialogIntCallback() {
-                    @Override
-                    public void onPositiveClick(int result) {
-                        listener.onResult(result);
-                    }
+        showColorSelectDialog(context, ColorPickDialog.TYPE_WHELL, defaultAlpha, defaultValue, listener);
+    }
 
-                    @Override
-                    public void onNegativeClick(int result) {
-                        listener.onResult(result);
-                    }
-
-                    @Override
-                    public void onCancel(int result) {
-                        listener.onResult(result);
-                    }
-                });
+    public static void showColorSelectDialog(final Context context, String defaultValue,
+            final DialogIntCallback listener) {
+        int color = Color.parseColor(defaultValue);
+        showColorSelectDialog(context, ColorPickDialog.TYPE_WHELL, ColorUtils.getAlpha(color),
+                ColorUtils.removeAlpha(color), listener);
     }
 
     public static void showColorSelectDialog(final Context context, String defaultValue,
             final DialogCompletedIntCallback listener) {
         int color = Color.parseColor(defaultValue);
-        showColorSelectDialog(context, ColorUtils.getAlpha(color), ColorUtils.removeAlpha(color), listener);
+        showColorSelectDialog(context, ColorPickDialog.TYPE_WHELL, ColorUtils.getAlpha(color),
+                ColorUtils.removeAlpha(color), listener);
     }
 }
