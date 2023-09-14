@@ -53,7 +53,7 @@ open class DebugPanelFragment : DebugCommonFragment() {
                 DebugItemData(
                     "新建指定文件名竖屏",
                     View.OnClickListener {
-                        PanelUtils.startPanel(context, filePath, Configuration.ORIENTATION_LANDSCAPE)
+                        PanelUtils.startPanel(context, filePath, Configuration.ORIENTATION_PORTRAIT)
                     },
                 ),
             )
