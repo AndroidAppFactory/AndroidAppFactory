@@ -2,153 +2,158 @@ apply from: rootDir.toString() + '/config.gradle'
 def project = ext
 
 ext.commonmoduleInfo = [
-    "CommonDebug"           : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-debug",
-        "apidependenciesList": [
-            "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview",
-            "LibScreenWrapper"
-        ]
-    ],
-    "CommonWrapper"         : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-wrapper",
-        "apidependenciesList": [
-            "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
-            "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
-            "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
-            "CommonQRCode", "CommonAccessibility","CommonPermission"
-        ]
-    ],
-    "CommonAccessibility"   : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-accessibility",
-        "apidependenciesList": [
-            "Framework"
-        ]
-    ],
-    "CommonQRCode"          : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-qrcode",
-        "apidependenciesList": [
-            "CommonPhotos"
-        ]
-    ],
-    "CommonMessage"         : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-message",
-        "apidependenciesList": [
-            "CommonAbout"
-        ]
-    ],
-    "CommonShare"           : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-share",
-        "apidependenciesList": [
-            "Framework"
-        ]
-    ],
-    "CommonNavigationDrawer": [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-navigation-drawer",
-        "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
-    ],
-    "CommonBottomTab"       : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-bottom-tab",
-        "apidependenciesList": [
-            "CommonSvga"
-        ]
-    ],
-    "CommonSvga"            : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-svga",
-        "apidependenciesList": [
-            "Framework",
-            project.svga_dependency
-
-        ]
-    ],
-    "CommonAceEditor"       : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-ace-editor",
-        "apidependenciesList": [
-            "Framework"
-        ]
-    ],
-    "CommonAbout"           : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-about",
-        "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
-    ],
-    "CommonList"            : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-list",
-        "apidependenciesList": [
-            project.androidsupport.swiperefreshlayout,
-            "Framework"
-        ]
-    ],
-    "CommonSplash"          : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-splash",
-        "apidependenciesList": [
-            "Framework"
-        ]
-    ],
-    "CommonPhotos"          : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-photos",
-        "apidependenciesList": [
-            "Framework","CommonPermission"
-        ]
-    ],
-    "CommonNetwork"         : [
-        "version"            : "6.4.2",
-        "artifactId"         : "common-network",
-        "apidependenciesList": [
-            "Framework"
-        ]
-    ],
-    "CommonWebview"         : [
-        "version"                : "6.4.2",
-        "artifactId"             : "common-webview",
-        "apidependenciesList"    : [
-            project.androidsupport.swiperefreshlayout,
-            "Framework", "LibJsBridge"
+        "CommonDebug"           : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-debug",
+                "apidependenciesList": [
+                        "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview",
+                        "LibScreenWrapper"
+                ]
         ],
-        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
-    ],
-    "CommonFeedback"        : [
-        "version"                : "6.4.2",
-        "artifactId"             : "common-feedback",
-        "apidependenciesList"    : ["CommonWebview"],
-        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
-    ],
-    "CommonPraise"          : [
-            "version"            : "6.4.2",
-            "artifactId"         : "common-praise",
-            "apidependenciesList": ["Framework"]
-    ],
-    "CommonPermission"          : [
-            "version"            : "6.4.2",
-            "artifactId"         : "common-permission",
-            "apidependenciesList": ["CommonAbout"]
-    ],
-    "Framework"        : [
-        "version"                : "6.4.2",
-        "artifactId"             : "framework",
-        "apidependenciesList"    : [
-            project.androidsupport.annotation,
-            project.androidsupport.lifecycle_livedata,
-            project.androidsupport.multidex,
-            "LibWrapper", "Router", "RouterAnnotation",
+        "CommonWrapper"         : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-wrapper",
+                "apidependenciesList": [
+                        "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
+                        "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
+                        "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
+                        "CommonQRCode", "CommonAccessibility", "CommonPermission", "CommonPanel"
+                ]
         ],
-        "specialdependenciesList": [
-            "kapt": [project.glide.compiler]
+        "Framework"             : [
+                "version"                : "6.4.2",
+                "artifactId"             : "framework",
+                "apidependenciesList"    : [
+                        project.androidsupport.annotation,
+                        project.androidsupport.lifecycle_livedata,
+                        project.androidsupport.multidex,
+                        "LibWrapper", "Router", "RouterAnnotation",
+                ],
+                "specialdependenciesList": [
+                        "kapt": [project.glide.compiler]
 
+                ]
+        ],
+        "CommonAccessibility"   : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-accessibility",
+                "apidependenciesList": [
+                        "Framework"
+                ]
+        ],
+        "CommonQRCode"          : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-qrcode",
+                "apidependenciesList": [
+                        "CommonPhotos"
+                ]
+        ],
+        "CommonMessage"         : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-message",
+                "apidependenciesList": [
+                        "CommonAbout"
+                ]
+        ],
+        "CommonShare"           : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-share",
+                "apidependenciesList": [
+                        "Framework"
+                ]
+        ],
+        "CommonNavigationDrawer": [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-navigation-drawer",
+                "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
+        ],
+        "CommonBottomTab"       : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-bottom-tab",
+                "apidependenciesList": [
+                        "CommonSvga"
+                ]
+        ],
+        "CommonSvga"            : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-svga",
+                "apidependenciesList": [
+                        "Framework",
+                        project.svga_dependency
+
+                ]
+        ],
+        "CommonAceEditor"       : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-ace-editor",
+                "apidependenciesList": [
+                        "Framework"
+                ]
+        ],
+        "CommonAbout"           : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-about",
+                "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
+        ],
+        "CommonList"            : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-list",
+                "apidependenciesList": [
+                        project.androidsupport.swiperefreshlayout,
+                        "Framework"
+                ]
+        ],
+        "CommonSplash"          : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-splash",
+                "apidependenciesList": [
+                        "Framework"
+                ]
+        ],
+        "CommonPhotos"          : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-photos",
+                "apidependenciesList": [
+                        "Framework", "CommonPermission"
+                ]
+        ],
+        "CommonNetwork"         : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-network",
+                "apidependenciesList": [
+                        "Framework"
+                ]
+        ],
+        "CommonWebview"         : [
+                "version"                : "6.4.2",
+                "artifactId"             : "common-webview",
+                "apidependenciesList"    : [
+                        project.androidsupport.swiperefreshlayout,
+                        "Framework", "LibJsBridge"
+                ],
+                "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+        ],
+        "CommonFeedback"        : [
+                "version"                : "6.4.2",
+                "artifactId"             : "common-feedback",
+                "apidependenciesList"    : ["CommonWebview"],
+                "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+        ],
+        "CommonPraise"          : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-praise",
+                "apidependenciesList": ["Framework"]
+        ],
+        "CommonPermission"      : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-permission",
+                "apidependenciesList": ["CommonAbout"]
+        ],
+        "CommonPanel"           : [
+                "version"            : "6.4.2",
+                "artifactId"         : "common-panel",
+                "apidependenciesList": ["Framework"]
         ]
-    ]
 ]
 
 

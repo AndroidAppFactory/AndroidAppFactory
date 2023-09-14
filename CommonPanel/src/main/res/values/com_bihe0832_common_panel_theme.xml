@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>¬¬
+    <style name="CustomSeekbarStyle">
+        <item name="android:maxHeight">6dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">@color/colorAccent</item>
+        <item name="android:progressDrawable">@drawable/com_bihe0832_base_progress_bar_bg</item>
+        <item name="android:minHeight">6dp</item>
+        <item name="android:thumb">@drawable/com_bihe0832_common_seek_thumb</item>
+    </style>
+
+    <style name="CommonMenuStyle">
+        <item name="android:clickable">true</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">6dp</item>
+    </style>
+</resources>

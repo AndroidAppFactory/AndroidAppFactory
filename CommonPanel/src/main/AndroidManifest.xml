@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.bihe0832.android.common.panel">
+
+    <application>
+        <activity
+                android:name="com.bihe0832.android.common.panel.PanelLandscapeActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="sensorLandscape"
+                android:theme="@style/AAF.ActivityTheme.Fullscreen"></activity>
+
+        <activity
+                android:name="com.bihe0832.android.common.panel.PanelPortraitActivity"
+                android:configChanges="orientation|screenSize|keyboardHidden"
+                android:screenOrientation="sensorPortrait"
+                android:theme="@style/AAF.ActivityTheme.Fullscreen"></activity>
+    </application>
+</manifest>

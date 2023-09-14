@@ -15,7 +15,7 @@ ext.libmoduleInfo = [
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
                         "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibPermission",
                         "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
-                        "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme", "LibColor"]
+                        "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme", "LibColor", "LibPanel"]
         ],
         "RouterAnnotation"          : [
                 "version"            : "4.1.0",
@@ -503,6 +503,14 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         project.androidsupport.annotation,
                         "LibOS", "LibDialog"
+                ]
+        ],
+        "LibPanel"                  : [
+                "version"            : "6.4.2",
+                "artifactId"         : "lib-panel",
+                "apidependenciesList": [
+                        project.androidsupport.annotation,
+                        "LibColor", "LibGson"
                 ]
         ]
 ]

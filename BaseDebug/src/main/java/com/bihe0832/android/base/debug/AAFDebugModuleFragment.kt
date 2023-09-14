@@ -31,6 +31,7 @@ import com.bihe0832.android.base.debug.log.DebugLogFragment
 import com.bihe0832.android.base.debug.message.DebugMessageFragment
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.notify.DebugNotifyFragment
+import com.bihe0832.android.base.debug.panel.DebugPanelFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.base.debug.photos.DebugPhotosFragment
 import com.bihe0832.android.base.debug.qrcode.DebugQRCodeFragment
@@ -85,6 +86,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             )
             add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))
             add(getDebugFragmentItemData("UI（颜色取色器）测试", DebugColorFragment::class.java))
+            add(getDebugFragmentItemData("UI（绘图板）测试", DebugPanelFragment::class.java))
 
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))

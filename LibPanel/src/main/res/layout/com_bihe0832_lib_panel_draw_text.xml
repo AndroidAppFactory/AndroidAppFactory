@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+    <View
+            android:id="@+id/panel_draw_text_outside"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent" />
+
+    <RelativeLayout
+            android:id="@+id/panel_draw_text_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <RelativeLayout
+                android:id="@+id/panel_draw_text_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/com_bihe0832_lib_panel_draw_text_border"
+                android:gravity="center_vertical"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
+
+            <TextView
+                    android:id="@+id/panel_draw_text_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:minWidth="20dp"
+                    android:textSize="32dp"
+                    android:singleLine="true"
+                    android:clickable="true"
+                    android:visibility="visible" />
+        </RelativeLayout>
+
+        <Button
+                android:id="@+id/panel_draw_text_action_delete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:backgroundTint="@color/black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_delete" />
+
+        <Button
+                android:id="@+id/panel_draw_text_action_edit"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@color/black"
+                android:layout_marginLeft="-24dp"
+                android:layout_toRightOf="@+id/panel_draw_text_container"
+                android:background="@drawable/ic_edit" />
+    </RelativeLayout>
+
+</RelativeLayout>
