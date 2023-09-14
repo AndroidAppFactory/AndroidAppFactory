@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.4.2",
+                "version"            : "6.5.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -506,7 +506,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"                  : [
-                "version"            : "6.4.2",
+                "version"            : "6.5.0",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
