@@ -15,6 +15,14 @@
                 android:padding="16dp">
 
             <Button
+                    android:id="@+id/test_text_to_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="文字转图片"
+                    android:textSize="16dp" />
+
+            <Button
                     android:id="@+id/test_basic_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -27,21 +35,20 @@
                     android:id="@+id/test_image_local_source"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter" />
 
             <ImageView
                     android:id="@+id/test_image_remote_source"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
-                    android:scaleType="fitCenter"/>
-
+                    android:scaleType="fitCenter" />
 
 
             <ImageView
                     android:id="@+id/test_image_local_target"
                     android:layout_width="180dp"
                     android:layout_height="180dp"
-                    android:scaleType="fitXY"/>
+                    android:scaleType="fitXY" />
         </LinearLayout>
 
     </ScrollView>

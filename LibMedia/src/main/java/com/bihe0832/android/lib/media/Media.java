@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -14,6 +13,11 @@ import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -60,18 +64,45 @@ public class Media {
             values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
             values.put(MediaStore.MediaColumns.SIZE, file.length());
             values.put(MediaStore.MediaColumns.MIME_TYPE, "video/*");
-            Uri uri = context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
-            MediaScannerConnection mMediaScanner = new MediaScannerConnection(context, null);
-            mMediaScanner.connect();
-            if (mMediaScanner != null && mMediaScanner.isConnected()) {
-                mMediaScanner.scanFile(file.getAbsolutePath(), "video/*");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_MOVIES);
+                values.put(MediaStore.MediaColumns.IS_PENDING, 1);
             }
-            return uri != null;
+            ContentResolver contentResolver = context.getContentResolver();
+            Uri uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+
+            try {
+                InputStream inputStream = new FileInputStream(filePath);
+                OutputStream outputStream = contentResolver.openOutputStream(uri);
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+
+                inputStream.close();
+                outputStream.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                values.clear();
+                values.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                int result = contentResolver.update(uri, values, null, null);
+                return result > 0;
+            } else {
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                return true;
+            }
         } else {
             return false;
         }
     }
-
 
     /**
      * AndroidQ以上创建用于保存相片的uri，(公有目录/pictures/filePath)
@@ -134,7 +165,8 @@ public class Media {
      * @return file uri
      */
     public static Uri createImageUriForCropBelowAndroidQ(Context context, String filePath, String name) {
-        File childDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + filePath);
+        File childDir = new File(
+                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + filePath);
         if (FileUtils.INSTANCE.checkAndCreateFolder(childDir.getAbsolutePath())) {
             File picture = new File(childDir, name);
             return Uri.fromFile(picture);
