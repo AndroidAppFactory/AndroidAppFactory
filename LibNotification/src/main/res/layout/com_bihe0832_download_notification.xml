@@ -1,109 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/download_notification_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/download_notification_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
 
     <ImageView
-        android:id="@+id/download_notification_logo"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:scaleType="centerCrop"
-        tools:src="@mipmap/icon" />
+            android:id="@+id/download_notification_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/icon" />
 
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/download_notification_btn_list"
-        android:layout_toRightOf="@+id/download_notification_logo">
-
-        <TextView
-            android:id="@+id/download_notification_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="3dp"
-            android:singleLine="true"
-            android:text=""
-            android:textColor="@color/textColorPrimary"
-            android:textSize="14dp"
-            tools:text="下载标题"
-            android:textStyle="bold" />
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/download_notification_btn_list"
+            android:layout_toRightOf="@+id/download_notification_logo">
 
         <TextView
-            android:id="@+id/download_notification_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/download_notification_title"
-            android:layout_marginTop="5dp"
-            android:text="2333KB/s"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="10dp" />
+                android:id="@+id/download_notification_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/textColorPrimary"
+                android:textSize="14dp"
+                tools:text="下载标题"
+                android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/download_notification_download_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/download_notification_title"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/textColorSecondary"
-            android:text="233.3MB/1.8GB"
-            android:textSize="10dp" />
+                android:id="@+id/download_notification_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/download_notification_title"
+                android:layout_marginTop="5dp"
+                android:text="2333KB/s"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="10dp" />
+
+        <TextView
+                android:id="@+id/download_notification_download_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/download_notification_title"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/textColorSecondary"
+                android:text="233.3MB/1.8GB"
+                android:textSize="10dp" />
 
         <ProgressBar
-            android:id="@+id/download_notification_progress_bar"
-            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/download_notification_download_progress"
-            android:max="100"
-            android:progress="23" />
+                android:id="@+id/download_notification_progress_bar"
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/download_notification_download_progress"
+                android:max="100"
+                android:progress="23" />
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/download_notification_btn_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+            android:id="@+id/download_notification_btn_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/download_notification_btn_restart"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:paddingLeft="15dp"
-            android:paddingTop="10dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="10dp"
-            android:scaleType="centerInside"
-            android:tint="@color/colorAccent"
-            tools:src="@drawable/ic_pause_fill" />
+                android:id="@+id/download_notification_btn_restart"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:scaleType="centerInside"
+                android:tint="@color/colorAccent"
+                tools:src="@drawable/icon_pause_fill" />
 
         <ImageButton
-            android:id="@+id/download_notification_btn_cancel"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:paddingLeft="15dp"
-            android:paddingTop="10dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="10dp"
-            android:scaleType="centerInside"
-            android:tint="@color/colorAccent"
-            tools:src="@drawable/ic_close_fill" />
+                android:id="@+id/download_notification_btn_cancel"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:scaleType="centerInside"
+                android:tint="@color/colorAccent"
+                tools:src="@drawable/ic_close_fill" />
     </LinearLayout>
 </RelativeLayout>

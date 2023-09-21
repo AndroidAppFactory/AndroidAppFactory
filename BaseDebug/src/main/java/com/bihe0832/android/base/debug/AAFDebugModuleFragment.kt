@@ -23,7 +23,7 @@ import com.bihe0832.android.base.debug.encrypt.DebugEncryptFragment
 import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
 import com.bihe0832.android.base.debug.google.DebugGoogleFragment
-import com.bihe0832.android.base.debug.image.DebugImageFragment
+import com.bihe0832.android.base.debug.image.DebugMediaFragment
 import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
 import com.bihe0832.android.base.debug.intent.DebugIntentFragment
 import com.bihe0832.android.base.debug.ipc.AAFDebugIPCFragment
@@ -93,7 +93,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(getDebugFragmentItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
             add(getDebugFragmentItemData("定时任务、阻塞任务", DebugEnqueueFragment::class.java))
-            add(getDebugFragmentItemData("图片操作调试", DebugImageFragment::class.java))
+            add(getDebugFragmentItemData("图片、视频、音频操作调试", DebugMediaFragment::class.java))
             add(getDebugFragmentItemData("SVGA 调试", DebugSvgaFragment::class.java))
             add(getDebugFragmentItemData("拍照及相册调试", DebugPhotosFragment::class.java))
             add(getDebugFragmentItemData("Cache、数据中心测试", DebugCacheFragment::class.java))

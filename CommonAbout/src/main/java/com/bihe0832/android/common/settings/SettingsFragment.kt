@@ -8,20 +8,18 @@ import com.bihe0832.android.common.settings.card.SettingsData
 import com.bihe0832.android.common.settings.card.SettingsDataV2
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
-
 open class SettingsFragment : CommonListFragment() {
 
     private val mSettingsLiveData = object : CommonListLiveData() {
         override fun initData() {
-            postValue(getDataList())
+            postValue(getDataList(true))
         }
 
         override fun refresh() {
-            postValue(getDataList())
+            postValue(getDataList(true))
         }
 
         override fun loadMore() {
-
         }
 
         override fun hasMore(): Boolean {
@@ -58,16 +56,18 @@ open class SettingsFragment : CommonListFragment() {
         return position
     }
 
-    open fun getDataList(): ArrayList<CardBaseModule> {
+    open fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>()
     }
 
-    fun List<CardBaseModule>.processLastItemDriver() {
+    fun List<CardBaseModule>.processLastItemDriver(processLast: Boolean) {
         try {
-            if (last() is SettingsData) {
-                (last() as SettingsData)?.mShowDriver = false
-            } else if (last() is SettingsDataV2) {
-                (last() as SettingsDataV2)?.mShowDriver = false
+            if (processLast) {
+                if (last() is SettingsData) {
+                    (last() as SettingsData)?.mShowDriver = false
+                } else if (last() is SettingsDataV2) {
+                    (last() as SettingsDataV2)?.mShowDriver = false
+                }
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()

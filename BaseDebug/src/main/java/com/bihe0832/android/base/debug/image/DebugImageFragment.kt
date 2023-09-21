@@ -1,24 +1,19 @@
 package com.bihe0832.android.base.debug.image
 
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.text.Layout
 import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.photos.HeadIconBuildFactory
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.ZixieContext.applicationContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.media.image.HeadIconBuilder
-import com.bihe0832.android.lib.media.image.TextToImageUtils
 import com.bihe0832.android.lib.media.image.blur.BlurTransformation
 import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -31,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_test_image.test_basic_button
 import kotlinx.android.synthetic.main.fragment_test_image.test_image_local_source
 import kotlinx.android.synthetic.main.fragment_test_image.test_image_local_target
 import kotlinx.android.synthetic.main.fragment_test_image.test_image_remote_source
-import kotlinx.android.synthetic.main.fragment_test_image.test_text_to_image
 import java.io.File
 
 public class DebugImageFragment : BaseFragment() {
@@ -40,15 +34,6 @@ public class DebugImageFragment : BaseFragment() {
         return R.layout.fragment_test_image
     }
 
-    fun createImageFromText(width: Int, height: Int, text: String?): Bitmap? {
-        return TextToImageUtils.createImageFromText(
-            context,
-            width, height, "#FFFFFF", 16,
-            BitmapUtil.getLocalBitmap(applicationContext, R.mipmap.icon, 1), 18,
-            DateUtil.getCurrentDateEN(), "#000000", 10, 1f, Layout.Alignment.ALIGN_NORMAL, 10,
-            text, "#FF00FF", 10, 1.25f, 3, Layout.Alignment.ALIGN_NORMAL, 12,
-        )
-    }
 
     override fun initView(view: View) {
 //        test_image_local_source.setImageBitmap(
@@ -58,16 +43,6 @@ public class DebugImageFragment : BaseFragment() {
 //                1
 //            )
 //        )
-        test_text_to_image.setOnClickListener {
-            createImageFromText(
-                480,
-                640,
-                "这是一段非常长的文字这是一段非常长的文字这是一段非常长的文字",
-            )?.let {
-                val output_image = BitmapUtil.saveBitmap(applicationContext, it)
-                Media.addPicToPhotos(context, output_image)
-            }
-        }
 
 //        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author, 120)
 

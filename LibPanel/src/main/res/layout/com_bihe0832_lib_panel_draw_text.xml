@@ -47,7 +47,7 @@
                 android:backgroundTint="@color/black"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/ic_delete" />
+                android:background="@drawable/icon_delete_fill" />
 
         <Button
                 android:id="@+id/panel_draw_text_action_edit"
@@ -57,7 +57,7 @@
                 android:backgroundTint="@color/black"
                 android:layout_marginLeft="-24dp"
                 android:layout_toRightOf="@+id/panel_draw_text_container"
-                android:background="@drawable/ic_edit" />
+                android:background="@drawable/icon_edit_fill" />
     </RelativeLayout>
 
 </RelativeLayout>

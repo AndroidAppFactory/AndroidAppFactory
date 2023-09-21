@@ -17,6 +17,6 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_pause_fill" android:state_checked="false" />
-    <item android:drawable="@drawable/ic_start_fill" android:state_checked="true" />
+    <item android:drawable="@drawable/icon_pause_fill" android:state_checked="false" />
+    <item android:drawable="@drawable/icon_start_fill" android:state_checked="true" />
 </selector>

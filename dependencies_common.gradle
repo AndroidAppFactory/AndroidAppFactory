@@ -17,7 +17,7 @@ ext.commonmoduleInfo = [
                         "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
                         "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
                         "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
-                        "CommonQRCode", "CommonAccessibility", "CommonPermission", "CommonPanel"
+                        "CommonQRCode", "CommonAccessibility", "CommonPermission", "CommonPanel", "CommonMedia"
                 ]
         ],
         "Framework"             : [
@@ -153,6 +153,11 @@ ext.commonmoduleInfo = [
                 "version"            : "6.5.1",
                 "artifactId"         : "common-panel",
                 "apidependenciesList": ["Framework"]
+        ],
+        "CommonMedia"           : [
+                "version"            : "6.5.1",
+                "artifactId"         : "common-media",
+                "apidependenciesList": ["Framework", project.ffmpeg.min]
         ]
 ]
 

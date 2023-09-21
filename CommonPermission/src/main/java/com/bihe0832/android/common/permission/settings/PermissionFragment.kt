@@ -8,13 +8,13 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 
 open class PermissionFragment : SettingsFragment() {
 
-    override fun getDataList(): ArrayList<CardBaseModule> {
+    override fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(PermissionItem.getRecommandSetting())
             add(PlaceholderData(context!!, 4f, R.color.divider))
             add(PermissionItem.getPermissionSetting(activity!!, Manifest.permission.CAMERA))
         }.apply {
-            processLastItemDriver()
+            processLastItemDriver(processLast)
         }
     }
 }

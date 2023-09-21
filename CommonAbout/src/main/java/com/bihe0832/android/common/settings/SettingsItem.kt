@@ -5,12 +5,20 @@ import android.view.View
 import com.bihe0832.android.common.about.R
 import com.bihe0832.android.common.settings.card.SettingsData
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.router.*
-import com.bihe0832.android.framework.ui.main.CommonRootActivity
+import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.framework.router.RouterAction
+import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.framework.router.openFeedback
+import com.bihe0832.android.framework.router.openZixieWeb
+import com.bihe0832.android.framework.router.shareAPP
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.lib.superapp.QQHelper
 import com.bihe0832.android.lib.superapp.WechatOfficialAccount
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
+import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
@@ -62,8 +70,12 @@ object SettingsItem {
     }
 
     fun getUpdate(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
-        return getUpdate(ThemeResourcesManager.getString(R.string.settings_update_title)
-                ?: "", cloud, listener).apply {
+        return getUpdate(
+            ThemeResourcesManager.getString(R.string.settings_update_title)
+                ?: "",
+            cloud,
+            listener,
+        ).apply {
             mItemIconRes = R.drawable.icon_update
         }
     }
@@ -103,9 +115,17 @@ object SettingsItem {
             mItemIconRes = R.drawable.icon_message
             mShowDriver = true
             mShowGo = true
-            mTipsText = "<u>${mail}</u>"
+            mTipsText = "<u>$mail</u>"
             mHeaderTipsListener = View.OnClickListener {
-                IntentUtils.sendMail(activity, mail, String.format(ThemeResourcesManager.getString(R.string.feedback_mail_title)!!, APKUtils.getAppName(activity)), "").let { res ->
+                IntentUtils.sendMail(
+                    activity,
+                    mail,
+                    String.format(
+                        ThemeResourcesManager.getString(R.string.feedback_mail_title)!!,
+                        APKUtils.getAppName(activity),
+                    ),
+                    "",
+                ).let { res ->
                     if (!res) {
                         openFeedback()
                     }
@@ -120,7 +140,7 @@ object SettingsItem {
             mItemIconRes = R.drawable.icon_qq
             mShowDriver = true
             mShowGo = true
-            mTipsText = "<u>${feedbackQQnumber}</u>"
+            mTipsText = "<u>$feedbackQQnumber</u>"
             mHeaderTipsListener = View.OnClickListener {
                 var res = QQHelper.openQQChat(activity, feedbackQQnumber)
                 if (!res) {
@@ -149,11 +169,14 @@ object SettingsItem {
             mTipsText = "<u>前往关注</u>"
             mHeaderTipsListener = View.OnClickListener {
                 activity?.let {
-                    WechatOfficialAccount.showSubscribe(activity, WechatOfficialAccount.WechatOfficialAccountData().apply {
-                        this.mAccountID = ThemeResourcesManager.getString(R.string.wechat_id)
-                        this.mAccountTitle = ThemeResourcesManager.getString(R.string.wechat_name)
-                        this.mSubContent = ThemeResourcesManager.getString(R.string.wechat_sub_content)
-                    })
+                    WechatOfficialAccount.showSubscribe(
+                        activity,
+                        WechatOfficialAccount.WechatOfficialAccountData().apply {
+                            this.mAccountID = ThemeResourcesManager.getString(R.string.wechat_id)
+                            this.mAccountTitle = ThemeResourcesManager.getString(R.string.wechat_name)
+                            this.mSubContent = ThemeResourcesManager.getString(R.string.wechat_sub_content)
+                        },
+                    )
                 }
             }
         }
@@ -181,5 +204,42 @@ object SettingsItem {
         }
     }
 
+    open fun clearCache(activity: Activity) {
+        DialogUtils.showConfirmDialog(
+            activity,
+            ThemeResourcesManager.getString(R.string.clear_tips) ?: "",
+            true,
+            object : OnDialogListener {
+                override fun onPositiveClick() {
+                    val loadingDialog = LoadingDialog(activity)
+                    loadingDialog.setCanCanceled(false)
+                    loadingDialog.setIsFullScreen(true)
+                    loadingDialog.setHtmlTitle("正在清理，请稍候~")
+                    loadingDialog.show()
+                    ThreadManager.getInstance().start {
+                        AAFFileWrapper.clear()
+                        ThreadManager.getInstance().runOnUIThread { ZixieContext.exitAPP() }
+                    }
+                }
 
+                override fun onNegativeClick() {
+                }
+
+                override fun onCancel() {
+                    onNegativeClick()
+                }
+            },
+        )
+    }
+
+    fun getClearCache(activity: Activity): SettingsData {
+        return SettingsData("清理缓存").apply {
+            mItemIconRes = R.drawable.icon_delete_fill
+            mShowDriver = true
+            mShowGo = true
+            mHeaderListener = View.OnClickListener {
+                clearCache(activity)
+            }
+        }
+    }
 }

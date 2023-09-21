@@ -20,7 +20,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.immersion.AppCompatActivityImmersiveExtKt;
 import com.bihe0832.android.lib.permission.PermissionManager;
@@ -29,15 +28,12 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.ui.touchregion.ViewExtForTouchRegionKt;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-
 import me.yokeyword.fragmentation.SupportActivity;
+import org.jetbrains.annotations.NotNull;
 
 public class FileActivity extends SupportActivity {
 
@@ -49,21 +45,22 @@ public class FileActivity extends SupportActivity {
     File mFile = null;
     File[] mFileArr = null;
     String mSelectedPath = null;
-    private boolean needSDcard = false;
     FileSearchTask mFSTask = null;
     Handler mHandler;
+    private boolean needSDcard = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_bihe0832_activity_file);
 
-        AppCompatActivityImmersiveExtKt.enableActivityImmersive(this, ThemeResourcesManager.INSTANCE.getColor(R.color.colorPrimaryDark), ThemeResourcesManager.INSTANCE.getColor(R.color.navigationBarColor));
+        AppCompatActivityImmersiveExtKt.enableActivityImmersive(this,
+                ThemeResourcesManager.INSTANCE.getColor(R.color.colorPrimaryDark),
+                ThemeResourcesManager.INSTANCE.getColor(R.color.navigationBarColor));
         initPermission();
         initHandler();
         initView();
         initViewAction();
-
 
         String path = getIntent().getStringExtra(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL);
         if (!TextUtils.isEmpty(path)) {
@@ -77,8 +74,11 @@ public class FileActivity extends SupportActivity {
     private void initPermission() {
         needSDcard = getIntent().getBooleanExtra(FileSelectTools.INTENT_EXTRA_KEY_NEED_SDCARD_PERMISSION, false);
         if (needSDcard) {
-            PermissionManager.INSTANCE.addPermissionGroupDesc("FileSelect", Manifest.permission.WRITE_EXTERNAL_STORAGE, "访问存储卡");
-            PermissionManager.INSTANCE.addPermissionGroupContent("FileSelect", Manifest.permission.WRITE_EXTERNAL_STORAGE, "如果你需要选择非应用目录的文件，需要授权当前应用访问存储卡的权限");
+            PermissionManager.INSTANCE.addPermissionGroupDesc("FileSelect", Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    "访问存储卡");
+            PermissionManager.INSTANCE.addPermissionGroupContent("FileSelect",
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    "如果你需要选择非应用目录的文件，需要授权当前应用访问存储卡的权限");
 
             ArrayList permission = new ArrayList();
             permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -165,7 +165,8 @@ public class FileActivity extends SupportActivity {
                     File mTempFile = mFileArr[position];
                     if (mTempFile.isDirectory()) {
                         stopSearch();
-                        if (mTempFile.list() == null || mTempFile.listFiles() == null || mTempFile.listFiles().length < 1) {
+                        if (mTempFile.list() == null || mTempFile.listFiles() == null
+                                || mTempFile.listFiles().length < 1) {
                             ToastUtil.showShort(FileActivity.this, "当前为空目录");
                         } else {
                             mFSTask = new FileSearchTask();
@@ -239,6 +240,28 @@ public class FileActivity extends SupportActivity {
         }
     }
 
+    private void onBackAction() {
+        if (mSelectedPath != null) {
+            mSelectedPath = null;
+            mAdapter.notifyDataSetChanged();
+            return;
+        }
+        if (mFileArr != null) {
+            File mTempFile = mFile.getParentFile();
+            if (mTempFile != null) {
+                mFSTask = new FileSearchTask();
+                mFSTask.execute(mTempFile);
+            } else {
+                ToastUtil.showShort(FileActivity.this, "已经是最上层目录了");
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressedSupport() {
+        onBackAction();
+    }
+
     private class FileSearchTask extends AsyncTask {
 
         @Override
@@ -275,6 +298,25 @@ public class FileActivity extends SupportActivity {
 
     class FileAdapter extends BaseAdapter {
 
+        CompoundButton.OnCheckedChangeListener MyCheckListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.getTag() != null) {
+                    int position = (int) buttonView.getTag();
+                    File mTempFile = mFileArr[position];
+                    if (isChecked) {
+                        mSelectedPath = mTempFile.getAbsolutePath();
+                    } else {
+                        if (mSelectedPath != null && mTempFile.getAbsolutePath().equals(mSelectedPath)) {
+                            mSelectedPath = null;
+                        }
+                    }
+                    mHandler.sendEmptyMessage(HANDLER_MSG_SELECTED);
+                    FileAdapter.this.notifyDataSetChanged();
+                }
+            }
+        };
+
         @Override
         public int getCount() {
             return mFileArr == null ? 0 : mFileArr.length;
@@ -295,7 +337,8 @@ public class FileActivity extends SupportActivity {
             FileViewHolder mHolder;
             if (convertView == null) {
                 mHolder = new FileViewHolder();
-                convertView = LayoutInflater.from(FileActivity.this).inflate(R.layout.com_bihe0832_card_item_file, null);
+                convertView = LayoutInflater.from(FileActivity.this)
+                        .inflate(R.layout.com_bihe0832_card_item_file, null);
                 mHolder.iv_icon = (ImageView) convertView.findViewById(R.id.item_file_iv_icon);
                 mHolder.tv_fileName = (TextView) convertView.findViewById(R.id.item_file_tv_filename);
                 mHolder.cb_selected = (CheckBox) convertView.findViewById(R.id.item_file_cb_selected);
@@ -307,22 +350,22 @@ public class FileActivity extends SupportActivity {
 
             File mTempFile = mFileArr[position];
             if (mTempFile.isDirectory()) {
-                mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_folder);
+                mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_folder);
             } else {
                 if (FileMimeTypes.INSTANCE.isTextFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_text);
+                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_text);
                 } else if (FileMimeTypes.INSTANCE.isApkFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_apk);
+                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_apk);
                 } else if (FileMimeTypes.INSTANCE.isImageFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_image);
+                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_image);
                 } else if (FileMimeTypes.INSTANCE.isArchive(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_archive);
+                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_archive);
                 } else if (FileMimeTypes.INSTANCE.isVideoFile(mTempFile)) {
-                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_video);
+                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_video);
                 } else if (FileMimeTypes.INSTANCE.isAudioFile(mTempFile)) {
-                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_audio);
+                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_audio);
                 } else {
-                    mHolder.iv_icon.setImageResource(R.drawable.ic_file_type_file);
+                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_file);
                 }
             }
             mHolder.cb_selected.setVisibility(View.VISIBLE);
@@ -337,46 +380,5 @@ public class FileActivity extends SupportActivity {
 
             return convertView;
         }
-
-        CompoundButton.OnCheckedChangeListener MyCheckListener = new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.getTag() != null) {
-                    int position = (int) buttonView.getTag();
-                    File mTempFile = mFileArr[position];
-                    if (isChecked) {
-                        mSelectedPath = mTempFile.getAbsolutePath();
-                    } else {
-                        if (mSelectedPath != null && mTempFile.getAbsolutePath().equals(mSelectedPath)) {
-                            mSelectedPath = null;
-                        }
-                    }
-                    mHandler.sendEmptyMessage(HANDLER_MSG_SELECTED);
-                    FileAdapter.this.notifyDataSetChanged();
-                }
-            }
-        };
-    }
-
-    private void onBackAction() {
-        if (mSelectedPath != null) {
-            mSelectedPath = null;
-            mAdapter.notifyDataSetChanged();
-            return;
-        }
-        if (mFileArr != null) {
-            File mTempFile = mFile.getParentFile();
-            if (mTempFile != null) {
-                mFSTask = new FileSearchTask();
-                mFSTask.execute(mTempFile);
-            } else {
-                ToastUtil.showShort(FileActivity.this, "已经是最上层目录了");
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressedSupport() {
-        onBackAction();
     }
 }

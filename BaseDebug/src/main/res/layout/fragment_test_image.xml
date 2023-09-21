@@ -15,14 +15,6 @@
                 android:padding="16dp">
 
             <Button
-                    android:id="@+id/test_text_to_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="文字转图片"
-                    android:textSize="16dp" />
-
-            <Button
                     android:id="@+id/test_basic_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

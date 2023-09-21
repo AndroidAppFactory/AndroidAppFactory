@@ -9,10 +9,9 @@ import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 
-
 open class AboutFragment : SettingsFragment() {
 
-    override fun getDataList(): ArrayList<CardBaseModule> {
+    override fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>()
     }
 
@@ -32,12 +31,15 @@ open class AboutFragment : SettingsFragment() {
         val position = getSettingsDataPositionByTitle(title)
         if (cloud?.canShowNew() == true) {
             if (showTips) {
-                updateItemRedDot(position, 0, ThemeResourcesManager.getString(R.string.settings_update_tips)
-                        ?: "")
+                updateItemRedDot(
+                    position,
+                    0,
+                    ThemeResourcesManager.getString(R.string.settings_update_tips)
+                        ?: "",
+                )
             } else {
                 updateItemRedDot(position, 0, "")
             }
-
         } else {
             updateItemRedDot(position, -1, "")
         }

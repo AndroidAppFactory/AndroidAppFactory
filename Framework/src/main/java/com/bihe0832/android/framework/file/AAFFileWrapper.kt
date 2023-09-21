@@ -18,55 +18,74 @@ object AAFFileWrapper {
         FileUtils.deleteOldAsync(File(getTempFolder()), FILE_DELETE_DUREATION)
     }
 
+    fun clear() {
+        FileUtils.deleteDirectory(File(getCacheFolder()))
+        FileUtils.deleteDirectory(File(getTempFolder()))
+    }
+
     fun getFolder(): String {
         return FileUtils.getFolderPathWithSeparator(ZixieContext.getZixieFolder())
     }
 
+    fun getFolder(name: String): String {
+        return FileUtils.getFolderPathWithSeparator(ZixieContext.getZixieFolder() + name)
+    }
+
     fun getCacheFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getFolder() + "cache")
+        return getFolder("cache")
+    }
+
+    fun getCacheFolder(name: String): String {
+        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + name)
     }
 
     fun getTempFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getFolder() + "temp")
+        return getFolder("temp")
+    }
+
+    fun getTempFolder(name: String): String {
+        val file = getTempFolder() + name + File.separator
+        FileUtils.checkAndCreateFolder(file)
+        return file
+    }
+
+    fun getMediaFolder(): String {
+        return getFolder("media")
     }
 
     fun getMediaTempFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getTempFolder() + "media")
+        return getTempFolder("media")
+    }
+
+    fun getTempImagePath(ext: String = ".jpg"): String {
+        return getMediaTempFolder() + System.currentTimeMillis() + ext
+    }
+
+    fun getTempVideoPath(ext: String = ".mp4"): String {
+        return getMediaTempFolder() + System.currentTimeMillis() + ext
     }
 
     fun getMediaCacheFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "media")
+        return getCacheFolder("media")
+    }
+
+    fun getCacheImagePath(ext: String = ".jpg"): String {
+        return getMediaCacheFolder() + System.currentTimeMillis() + ext
+    }
+
+    fun getCacheVideoPath(ext: String = ".mp4"): String {
+        return getMediaCacheFolder() + System.currentTimeMillis() + ext
+    }
+
+    fun getFileFolder(): String {
+        return getFolder("file")
     }
 
     fun getFileTempFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getTempFolder() + "file")
+        return getTempFolder("file")
     }
 
     fun getFileCacheFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "file")
-    }
-
-    fun getSoundTempFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "sound")
-    }
-
-    fun getSoundCacheFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "sound")
-    }
-
-    fun getImageTempFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "image")
-    }
-
-    fun getImageCacheFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "image")
-    }
-
-    fun getVideoTempFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "video")
-    }
-
-    fun getVideoCacheFolder(): String {
-        return FileUtils.getFolderPathWithSeparator(getCacheFolder() + "video" + File.separator)
+        return getCacheFolder("file")
     }
 }

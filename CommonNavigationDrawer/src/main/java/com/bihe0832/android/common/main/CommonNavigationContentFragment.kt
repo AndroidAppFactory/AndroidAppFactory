@@ -23,14 +23,16 @@ open class CommonNavigationContentFragment : AboutFragment() {
         }
     }
 
-    override fun getDataList(): ArrayList<CardBaseModule> {
+    override fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(SettingsItem.getVersionList())
             if (!ZixieContext.isOfficial()) {
                 add(SettingsItem.getDebug())
             }
         }.apply {
-            processLastItemDriver()
+            if (processLast) {
+                processLastItemDriver(processLast)
+            }
         }
     }
 }

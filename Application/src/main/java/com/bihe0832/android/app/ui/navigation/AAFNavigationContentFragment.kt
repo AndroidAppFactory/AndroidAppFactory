@@ -26,38 +26,45 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
     override fun initView(view: View) {
         super.initView(view)
         AAFMessageManager.getMessageLiveData().observe(this) { t ->
-            changeMessageRedDot(ThemeResourcesManager.getString(R.string.settings_message_title), AAFMessageManager.getUnreadNum())
+            changeMessageRedDot(
+                ThemeResourcesManager.getString(R.string.settings_message_title),
+                AAFMessageManager.getUnreadNum(),
+            )
         }
         UpdateInfoLiveData.observe(this) { t ->
             changeUpdateRedDot(SettingsItem.getAboutTitle(), t, false)
         }
     }
 
-    override fun getDataList(): ArrayList<CardBaseModule> {
+    override fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(SettingsItem.getAboutAPP(UpdateInfoLiveData.value) {
-                RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT)
-            })
+            add(
+                SettingsItem.getAboutAPP(UpdateInfoLiveData.value) {
+                    RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT)
+                },
+            )
             if (AAFMessageManager.getUnreadNum() > 0) {
-                add(SettingsItem.getMessage(AAFMessageManager.getUnreadNum()) {
-                    RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
-                })
+                add(
+                    SettingsItem.getMessage(AAFMessageManager.getUnreadNum()) {
+                        RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
+                    },
+                )
             } else {
-                add(SettingsItem.getMessage(-1) {
-                    RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
-                })
+                add(
+                    SettingsItem.getMessage(-1) {
+                        RouterAction.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
+                    },
+                )
             }
 
             add(PermissionItem.getPermission(PermissionFragment::class.java))
-            add(SettingsItem.getFeedbackURL())
             add(getFeedbackItem(activity))
             add(SettingsItem.getShareAPP(true))
-            addAll(super.getDataList())
+            addAll(super.getDataList(false))
+            add(SettingsItem.getClearCache(activity!!))
             add(SettingsItem.getZixie())
         }.apply {
-            processLastItemDriver()
+            processLastItemDriver(processLast)
         }
     }
-
-
 }

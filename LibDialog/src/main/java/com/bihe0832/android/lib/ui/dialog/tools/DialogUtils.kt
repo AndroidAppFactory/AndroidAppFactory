@@ -162,6 +162,24 @@ object DialogUtils {
 
     fun showConfirmDialog(
         context: Context,
+        message: String,
+        positiveStr: String?,
+        negativeStr: String?,
+        callback: OnDialogListener,
+    ) {
+        showConfirmDialog(
+            context,
+            ThemeResourcesManager.getString(R.string.dialog_title)!!,
+            message,
+            positiveStr,
+            negativeStr,
+            true,
+            callback,
+        )
+    }
+
+    fun showConfirmDialog(
+        context: Context,
         title: String,
         message: String,
         canCancel: Boolean,
