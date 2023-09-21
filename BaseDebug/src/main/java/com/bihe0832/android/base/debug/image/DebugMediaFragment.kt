@@ -28,7 +28,14 @@ class DebugMediaFragment : DebugEnvFragment() {
             add(DebugItemData("文字转图片1（有图标，有标题）", View.OnClickListener { textToImage() }))
             add(DebugItemData("文字转图片2（无图标，无标题）", View.OnClickListener { textToImage2() }))
             add(DebugItemData("音频转视频", View.OnClickListener { audioToVideo() }))
+            add(DebugItemData("图片无损存图库", View.OnClickListener { saveImage() }))
         }
+    }
+
+    private fun saveImage() {
+        val path = AAFFileWrapper.getTempImagePath()
+        FileUtils.copyAssetsFileToPath(context, "MVIMG_20230921_211547.jpg", path)
+        Media.addPicToPhotos(context, path)
     }
 
     private fun audioToVideo() {

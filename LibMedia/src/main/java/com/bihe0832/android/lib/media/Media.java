@@ -38,17 +38,48 @@ public class Media {
     }
 
 
-    public static void addPicToPhotos(Context context, String filePath) {
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+    private static boolean writeToPhotos(Context context, ContentResolver contentResolver, ContentValues contentValues,
+            Uri targetUri, String sourceFile) {
         try {
-            MediaStore.Images.Media.insertImage(context.getContentResolver(), filePath, "", "");
-        } catch (Exception e) {
+            InputStream inputStream = new FileInputStream(sourceFile);
+            OutputStream outputStream = contentResolver.openOutputStream(targetUri);
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            inputStream.close();
+            outputStream.close();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.clear();
+            contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
+            int result = contentResolver.update(targetUri, contentValues, null, null);
+            return result > 0;
+        } else {
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, targetUri));
+            return true;
+        }
+    }
 
-        Uri uri = Uri.parse(filePath);
-        intent.setData(uri);
-        context.sendBroadcast(intent);
+    public static boolean addPicToPhotos(Context context, String imagePath) {
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, FileUtils.INSTANCE.getFileName(imagePath));
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/*");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+        }
+        Uri imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+        return writeToPhotos(context, contentResolver, contentValues, imageUri, imagePath);
+
     }
 
 
@@ -70,35 +101,7 @@ public class Media {
             }
             ContentResolver contentResolver = context.getContentResolver();
             Uri uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
-
-            try {
-                InputStream inputStream = new FileInputStream(filePath);
-                OutputStream outputStream = contentResolver.openOutputStream(uri);
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
-
-                inputStream.close();
-                outputStream.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return false;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                values.clear();
-                values.put(MediaStore.MediaColumns.IS_PENDING, 0);
-                int result = contentResolver.update(uri, values, null, null);
-                return result > 0;
-            } else {
-                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-                return true;
-            }
+            return writeToPhotos(context, contentResolver, values, uri, filePath);
         } else {
             return false;
         }
