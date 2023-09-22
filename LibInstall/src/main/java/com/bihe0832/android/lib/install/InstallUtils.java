@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
@@ -17,11 +16,9 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.zip.ZipUtils;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.LinkedList;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -37,14 +34,6 @@ import java.util.LinkedList;
 public class InstallUtils {
 
     private static final String TAG = "InstallUtils";
-
-    public enum ApkInstallType {
-        NULL,
-        APK,
-        OBB,
-        SPLIT_APKS
-    }
-
 
     public static ApkInstallType getFileType(String filepath) {
         if (TextUtils.isEmpty(filepath)) {
@@ -100,7 +89,7 @@ public class InstallUtils {
     }
 
     public static void installAPP(final Context context, final String filePath, final String packageName,
-                                  final InstallListener listener) {
+            final InstallListener listener) {
         if (hasInstallAPPPermission(context, true, true)) {
             ThreadManager.getInstance().start(new Runnable() {
                 @Override
@@ -143,9 +132,8 @@ public class InstallUtils {
         }
     }
 
-
     static void installAllAPK(final Context context, final String filePath, final String packageName,
-                              final InstallListener listener) {
+            final InstallListener listener) {
         try {
             final File downloadedFile = new File(filePath);
             ZLog.d(TAG + "installAllApk downloadedFile:" + downloadedFile.getAbsolutePath());
@@ -172,7 +160,7 @@ public class InstallUtils {
     }
 
     static void installSpecialAPKByZip(@NotNull Context context, String zipFilePath, String packageName,
-                                       final InstallListener listener) {
+            final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByZip:" + zipFilePath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
@@ -185,14 +173,14 @@ public class InstallUtils {
         if (apkInstallType == ApkInstallType.OBB) {
             ObbFileInstall.installObbAPKByZip(context, zipFilePath, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
-            String fileDir = ZixieFileProvider.getZixieFilePath(context) + "/" + packageName;
+            String fileDir = ZixieFileProvider.getZixieCacheFolder(context) + packageName;
             ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
             listener.onUnCompress();
             ZipUtils.unCompress(zipFilePath, fileDir);
             ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
             SplitApksInstallHelper.INSTANCE.installApk(context, new File(fileDir), finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.APK) {
-            String fileDir = ZixieFileProvider.getZixieFilePath(context) + "/" + packageName;
+            String fileDir = ZixieFileProvider.getZixieCacheFolder(context) + packageName;
             ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
             listener.onUnCompress();
             ZipUtils.unCompress(zipFilePath, fileDir);
@@ -204,7 +192,7 @@ public class InstallUtils {
     }
 
     static void installSpecialAPKByFolder(@NotNull Context context, String folderPath, String packageName,
-                                          final InstallListener listener) {
+            final InstallListener listener) {
         ZLog.d(TAG + "installSpecialAPKByFolder:" + folderPath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
@@ -310,5 +298,12 @@ public class InstallUtils {
         } else {
             return ApkInstallType.NULL;
         }
+    }
+
+    public enum ApkInstallType {
+        NULL,
+        APK,
+        OBB,
+        SPLIT_APKS
     }
 }

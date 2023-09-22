@@ -3,7 +3,10 @@ package com.bihe0832.android.lib.download.core
 import android.content.Context
 import android.content.pm.PackageManager
 import android.text.TextUtils
-import com.bihe0832.android.lib.download.DownloadErrorCode.*
+import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_BAD_URL
+import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_MD5_BAD
+import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_URL_IS_TOO_OLD_THAN_DOWNLOADING
+import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_URL_IS_TOO_OLD_THAN_LOACL
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
@@ -23,7 +26,6 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import java.io.File
-
 
 object DownloadManager {
 
@@ -54,12 +56,15 @@ object DownloadManager {
     fun init(context: Context, isDebug: Boolean = false) {
         init(context, DEFAULT_MAX_NUM, isDebug)
     }
-    
+
     fun init(context: Context, maxNum: Int, isDebug: Boolean = false) {
         initContext(context)
         mMaxNum = maxNum
         if (mMaxNum > MAX_MAX_NUM) {
-            ZLog.e(TAG, "  \n !!!========================================  \n \n \n !!! zixie download: The max download mum is recommended less than 5 \n \n \n !!!========================================")
+            ZLog.e(
+                TAG,
+                "  \n !!!========================================  \n \n \n !!! zixie download: The max download mum is recommended less than 5 \n \n \n !!!========================================",
+            )
         }
         mIsDebug = isDebug
         if (!mHasInit) {
@@ -140,7 +145,10 @@ object DownloadManager {
             }
             item.finished = item.fileLength
             if (FileMimeTypes.isApkFile(filePath)) {
-                mContext?.packageManager?.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES)?.packageName?.let {
+                mContext?.packageManager?.getPackageArchiveInfo(
+                    filePath,
+                    PackageManager.GET_ACTIVITIES,
+                )?.packageName?.let {
                     item.packageName = it
                 }
             }
@@ -166,7 +174,6 @@ object DownloadManager {
         }
 
         override fun onDelete(item: DownloadItem) {
-
             item.downloadListener?.onDelete(item)
             if (item.notificationVisibility()) {
                 DownloadNotify.notifyDelete(item)
@@ -264,9 +271,7 @@ object DownloadManager {
         }
     }
 
-
     private fun checkBeforeDownloadFile(info: DownloadItem): String {
-
         if (FileUtils.checkFileExist(info.filePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
             return info.filePath
         }
@@ -306,7 +311,7 @@ object DownloadManager {
                 return
             }
 
-            //本地已有更高版本
+            // 本地已有更高版本
             if (checkIsInstalledAndLocalVersionIsNew(info)) {
                 ZLog.e(TAG, "no need download:$info")
                 innerDownloadListener.onFail(ERR_URL_IS_TOO_OLD_THAN_LOACL, "install is new", info)
@@ -322,7 +327,7 @@ object DownloadManager {
 
             addDownloadItemToList(info)
             Thread {
-                //本地已下载
+                // 本地已下载
                 var filePath = checkBeforeDownloadFile(info)
                 if (!TextUtils.isEmpty(filePath)) {
                     ZLog.e(TAG, "has download:$info")
@@ -370,7 +375,7 @@ object DownloadManager {
 
     private fun getFilePath(downloadURL: String, backFileName: String, filePath: String, prefix: String): String {
         var folder = if (TextUtils.isEmpty(filePath)) {
-            ZixieFileProvider.getZixieFilePath(mContext!!)
+            ZixieFileProvider.getZixieCacheFolder(mContext!!)
         } else {
             filePath
         }
@@ -387,7 +392,6 @@ object DownloadManager {
             }
         }
     }
-
 
     fun addTask(info: DownloadItem) {
         ZLog.d(TAG, "addTask:$info")
@@ -419,7 +423,12 @@ object DownloadManager {
         }
     }
 
-    fun resumeTask(downloadId: Long, downloadListener: DownloadListener?, startByUser: Boolean, downloadWhenUseMobile: Boolean) {
+    fun resumeTask(
+        downloadId: Long,
+        downloadListener: DownloadListener?,
+        startByUser: Boolean,
+        downloadWhenUseMobile: Boolean,
+    ) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             ZLog.d(TAG, "resumeTask:$info")
             if (startByUser) {
@@ -504,9 +513,10 @@ object DownloadManager {
         return DownloadTaskList.getDownloadTasKList()
     }
 
-
     fun getFinishedTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD }.toList<DownloadItem>()
+        return DownloadTaskList.getDownloadTasKList()
+            .filter { it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD }
+            .toList<DownloadItem>()
     }
 
     fun getDownloadingTask(): List<DownloadItem> {
@@ -514,6 +524,7 @@ object DownloadManager {
     }
 
     fun getWaitingTask(): List<DownloadItem> {
-        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }.toList<DownloadItem>()
+        return DownloadTaskList.getDownloadTasKList().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_WAITING }
+            .toList<DownloadItem>()
     }
 }

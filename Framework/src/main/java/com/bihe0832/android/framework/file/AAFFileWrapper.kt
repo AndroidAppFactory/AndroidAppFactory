@@ -2,6 +2,7 @@ package com.bihe0832.android.framework.file
 
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import java.io.File
 
 /**
@@ -32,7 +33,7 @@ object AAFFileWrapper {
     }
 
     fun getCacheFolder(): String {
-        return getFolder("cache")
+        return ZixieFileProvider.getZixieCacheFolder(ZixieContext.applicationContext)
     }
 
     fun getCacheFolder(name: String): String {
@@ -40,7 +41,7 @@ object AAFFileWrapper {
     }
 
     fun getTempFolder(): String {
-        return getFolder("temp")
+        return ZixieFileProvider.getZixieTempFolder(ZixieContext.applicationContext)
     }
 
     fun getTempFolder(name: String): String {

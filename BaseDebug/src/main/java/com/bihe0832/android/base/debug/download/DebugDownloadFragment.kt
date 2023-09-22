@@ -21,7 +21,6 @@ import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -111,7 +110,6 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             add(DebugItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
             add(DebugItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
             add(DebugItemData("多位置触发下载", View.OnClickListener { testDownloadMoreThanOnce() }))
-            add(DebugItemData("下载图片或者视频并添加到相册", View.OnClickListener { testDownImage() }))
         }
     }
 
@@ -198,7 +196,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     private fun testInstallOOBByFolder() {
         testInstallOOB(
-            ZixieFileProvider.getZixieFilePath(context!!) + "/test/",
+            ZixieFileProvider.getZixieTempFolder(context!!) + "/test/",
             "jp.co.sumzap.pj0007",
         )
     }
@@ -252,7 +250,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     private fun testInstallSplitByFolder() {
         testInstallSplit(
-            ZixieFileProvider.getZixieFilePath(context!!) + "/com.supercell.brawlstars",
+            ZixieFileProvider.getZixieTempFolder(context!!) + "/com.supercell.brawlstars",
             "com.supercell.brawlstars",
         )
     }
@@ -554,42 +552,5 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 }, currentNum)
             }
         }
-    }
-
-    private fun testDownImage() {
-        DownloadFile.download(
-            context!!,
-            "https://vfx.mtime.cn/Video/2018/11/09/mp4/181109123910577905.mp4",
-            object :
-                SimpleDownloadListener() {
-                override fun onProgress(item: DownloadItem) {
-                }
-
-                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                }
-
-                override fun onComplete(filePath: String, item: DownloadItem): String {
-                    Media.addVideoToPhotos(context, filePath)
-                    return filePath
-                }
-            },
-        )
-//        DownloadFile.download(
-//            context!!,
-//            "https://cdn.bihe0832.com/images/cv_v.png",
-//            object :
-//                SimpleDownloadListener() {
-//                override fun onProgress(item: DownloadItem) {
-//                }
-//
-//                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-//                }
-//
-//                override fun onComplete(filePath: String, item: DownloadItem): String {
-//                    Media.addPicToPhotos(context, filePath)
-//                    return filePath
-//                }
-//            },
-//        )
     }
 }

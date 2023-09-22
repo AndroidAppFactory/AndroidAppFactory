@@ -5,13 +5,14 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
-import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,16 +28,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Media {
 
-    public static final String getZixiePhotosPath(@NotNull Context context) {
-        String filePath = ZixieFileProvider.getZixieFilePath(context) + File.separator + Environment.DIRECTORY_PICTURES;
-        if (BuildUtils.INSTANCE.getSDK_INT() >= 30) {
+    public static final String getZixieMediaPath(@NotNull Context context, String folderType) {
+        String filePath = Environment.getExternalStoragePublicDirectory(folderType).getPath();
+        if (TextUtils.isEmpty(filePath)) {
             //android 11以上，将文件创建在公有目录
-            filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
+            filePath = ZixieFileProvider.getZixieFilePath(context) + folderType;
         }
-
         return FileUtils.INSTANCE.getFolderPathWithSeparator(filePath);
     }
-
 
     private static boolean writeToPhotos(Context context, ContentResolver contentResolver, ContentValues contentValues,
             Uri targetUri, String sourceFile) {
@@ -68,44 +67,29 @@ public class Media {
         }
     }
 
-    public static boolean addPicToPhotos(Context context, String imagePath) {
-        ContentResolver contentResolver = context.getContentResolver();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, FileUtils.INSTANCE.getFileName(imagePath));
-        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/*");
+    private static void updateContentValues(ContentValues contentValues, File file, String fileType) {
+        if (fileType.equals(Environment.DIRECTORY_PICTURES)) {
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*");//文件类型
+        } else if (fileType.equals(Environment.DIRECTORY_MOVIES)) {
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "video/*");//文件类型
+        }
+        String fileName = file.getName();
+        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        contentValues.put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis());
+        contentValues.put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis());
+        contentValues.put(MediaStore.MediaColumns.TITLE, fileName);
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
 
+        String parentDir = file.getParent();
+        String newFileName = System.currentTimeMillis() + "_" + fileName;
+        contentValues.put(MediaStore.MediaColumns.DATA, (new File(parentDir, newFileName)).getAbsolutePath());
+        contentValues.put(MediaStore.MediaColumns.SIZE, file.length());
+        contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, fileType);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
-        }
-        Uri imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-        return writeToPhotos(context, contentResolver, contentValues, imageUri, imagePath);
-
-    }
-
-
-    public static boolean addVideoToPhotos(Context context, String filePath) {
-        File file = new File(filePath);
-        if (FileUtils.INSTANCE.checkFileExist(filePath)) {
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.MediaColumns.TITLE, file.getName());
-            values.put(MediaStore.MediaColumns.DISPLAY_NAME, file.getName());
-            values.put(MediaStore.Video.VideoColumns.DATE_TAKEN, System.currentTimeMillis());
-            values.put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis());
-            values.put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis());
-            values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
-            values.put(MediaStore.MediaColumns.SIZE, file.length());
-            values.put(MediaStore.MediaColumns.MIME_TYPE, "video/*");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_MOVIES);
-                values.put(MediaStore.MediaColumns.IS_PENDING, 1);
-            }
-            ContentResolver contentResolver = context.getContentResolver();
-            Uri uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
-            return writeToPhotos(context, contentResolver, values, uri, filePath);
-        } else {
-            return false;
+            contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
         }
     }
+
 
     /**
      * AndroidQ以上创建用于保存相片的uri，(公有目录/pictures/filePath)
@@ -136,18 +120,19 @@ public class Media {
      * Android7以下：file类型的uri
      * Android7以上：content类型的uri
      *
-     * @param activity activity
+     * @param context activity
      * @param name 文件名
      * @param filePath 子文件夹
      * @return content uri
      */
-    public static Uri createImageUriForCameraBelowAndroidQ(Activity activity, String filePath, String name) {
-        File picFolder = new File(getZixiePhotosPath(activity) + filePath);
-        if (FileUtils.INSTANCE.checkAndCreateFolder(picFolder.getAbsolutePath())) {
+    public static Uri createImageUriForCameraBelowAndroidQ(Context context, String filePath, String name) {
+        String picFolder = FileUtils.INSTANCE.getFolderPathWithSeparator(
+                ZixieFileProvider.getZixieCacheFolder(context) + filePath);
+        if (FileUtils.INSTANCE.checkAndCreateFolder(picFolder)) {
             File picture = new File(picFolder, name);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 //适配Android7以上的path转uri，该方法得到的uri为content类型的
-                return ZixieFileProvider.getZixieFileProvider(activity, picture);
+                return ZixieFileProvider.getZixieFileProvider(context, picture);
             } else {
                 //Android7以下，该方法得到的uri为file类型的
                 return Uri.fromFile(picture);
@@ -168,13 +153,90 @@ public class Media {
      * @return file uri
      */
     public static Uri createImageUriForCropBelowAndroidQ(Context context, String filePath, String name) {
-        File childDir = new File(
-                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + filePath);
-        if (FileUtils.INSTANCE.checkAndCreateFolder(childDir.getAbsolutePath())) {
-            File picture = new File(childDir, name);
-            return Uri.fromFile(picture);
+        String picFolder = FileUtils.INSTANCE.getFolderPathWithSeparator(
+                ZixieFileProvider.getZixieCacheFolder(context) + filePath);
+        if (FileUtils.INSTANCE.checkAndCreateFolder(picFolder)) {
+            File picture = new File(picFolder, name);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                //适配Android7以上的path转uri，该方法得到的uri为content类型的
+                return ZixieFileProvider.getZixieFileProvider(context, picture);
+            } else {
+                //Android7以下，该方法得到的uri为file类型的
+                return Uri.fromFile(picture);
+            }
         } else {
             return null;
         }
     }
+
+    public static boolean addPicToPhotos(Context context, String imagePath) {
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues contentValues = new ContentValues();
+        File image = new File(imagePath);
+        updateContentValues(contentValues, image, Environment.DIRECTORY_PICTURES);
+        Uri imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+        if (imageUri != null) {
+            return writeToPhotos(context, contentResolver, contentValues, imageUri, imagePath);
+        } else {
+            try {
+                String path = getZixieMediaPath(context, Environment.DIRECTORY_PICTURES) + System.currentTimeMillis()
+                        + "." + FileUtils.INSTANCE.getExtensionName(imagePath);
+                File newFile = new File(path);
+                FileUtils.INSTANCE.copyFile(image, newFile, false);
+                ContentValues newValues = new ContentValues();
+                updateContentValues(newValues, newFile, Environment.DIRECTORY_PICTURES);
+                imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, newValues);
+                if (imageUri == null) {
+                    MediaScannerConnection.scanFile(context, new String[]{path}, null, null);
+                }
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    MediaStore.Images.Media.insertImage(context.getContentResolver(), imagePath, "", "");
+                    return true;
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                    return false;
+                }
+            }
+        }
+    }
+
+
+    public static boolean addVideoToPhotos(Context context, String filePath) {
+        File video = new File(filePath);
+        if (FileUtils.INSTANCE.checkFileExist(filePath)) {
+            ContentResolver contentResolver = context.getContentResolver();
+            ContentValues values = new ContentValues();
+            updateContentValues(values, video, Environment.DIRECTORY_MOVIES);
+            values.put(MediaStore.Video.VideoColumns.DATE_TAKEN, System.currentTimeMillis());
+            Uri uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+            if (uri != null) {
+                return writeToPhotos(context, contentResolver, values, uri, filePath);
+            } else {
+                try {
+                    String path =
+                            getZixieMediaPath(context, Environment.DIRECTORY_MOVIES) + System.currentTimeMillis() + "."
+                                    + FileUtils.INSTANCE.getExtensionName(filePath);
+                    File newFile = new File(path);
+                    FileUtils.INSTANCE.copyFile(video, newFile, false);
+                    ContentValues newValues = new ContentValues();
+                    updateContentValues(newValues, newFile, Environment.DIRECTORY_MOVIES);
+                    newValues.put(MediaStore.Video.VideoColumns.DATE_TAKEN, System.currentTimeMillis());
+                    uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, newValues);
+                    if (uri == null) {
+                        MediaScannerConnection.scanFile(context, new String[]{path}, null, null);
+                    }
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
+
 }

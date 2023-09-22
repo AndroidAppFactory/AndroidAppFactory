@@ -7,27 +7,26 @@ import static com.bihe0832.android.lib.install.InstallErrorCode.UNZIP_FAILED;
 
 import android.content.Context;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.zip.ZipUtils;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2020/9/25.
- * Description: Description
+ *         Created on 2020/9/25.
+ *         Description: Description
  */
 class ObbFileInstall {
+
     private static final String TAG = "ObbFileInstall";
 
-    static void installObbAPKByFile(@NotNull Context context, String fileDir, String packageName, final InstallListener listener) {
+    static void installObbAPKByFile(@NotNull Context context, String fileDir, String packageName,
+            final InstallListener listener) {
         try {
 
             if (!FileUtils.INSTANCE.checkStoragePermissions(context)) {
@@ -43,10 +42,11 @@ class ObbFileInstall {
             listener.onInstallPrepare();
             String result = prepareInstallOBB(new File(fileDir), obbFolder, listener);
             if (!TextUtils.isEmpty(result)) {
-                if (result.startsWith(ZixieFileProvider.getZixieFilePath(context))) {
+                if (result.startsWith(ZixieFileProvider.getZixieCacheFolder(context))) {
                     APKInstall.installAPK(context, result, listener);
                 } else {
-                    String realInstallPath = ZixieFileProvider.getZixieFilePath(context) + "/" + FileUtils.INSTANCE.getFileName(result);
+                    String realInstallPath =
+                            ZixieFileProvider.getZixieCacheFolder(context) + FileUtils.INSTANCE.getFileName(result);
                     ZLog.d(TAG + "installObbAPKByFile start copy apk File");
                     FileUtils.INSTANCE.copyFile(new File(result), new File(realInstallPath));
                     ZLog.d(TAG + "installObbAPKByFile finished copy apk File");
@@ -74,7 +74,8 @@ class ObbFileInstall {
                 }
             } else {
                 if (OBBFormats.isObbFile(file2.getAbsolutePath())) {
-                    File targetObbFile = new File(obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(file2.getAbsolutePath()));
+                    File targetObbFile = new File(obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(
+                            file2.getAbsolutePath()));
                     ZLog.d(TAG + "installObbAPKByFile start copy obb File");
                     if (targetObbFile.exists()) {
                         targetObbFile.deleteOnExit();
@@ -94,7 +95,8 @@ class ObbFileInstall {
 
     }
 
-    static void installObbAPKByZip(@NotNull Context context, String zipFile, String packageName, final InstallListener listener) {
+    static void installObbAPKByZip(@NotNull Context context, String zipFile, String packageName,
+            final InstallListener listener) {
         try {
             if (!FileUtils.INSTANCE.checkStoragePermissions(context)) {
                 ZLog.d(TAG + "prepare4InstallObb checkPermissions failed");
@@ -103,7 +105,7 @@ class ObbFileInstall {
             }
 
             File obbFolder = OBBFormats.getObbDir(packageName);
-            File targetAPKFolder = new File(ZixieFileProvider.getZixieFilePath(context) + "/" + packageName);
+            File targetAPKFolder = new File(ZixieFileProvider.getZixieCacheFolder(context) + packageName);
             if (!targetAPKFolder.exists() && !targetAPKFolder.mkdirs()) {
                 listener.onInstallFailed(UNZIP_FAILED);
                 return;
@@ -115,9 +117,11 @@ class ObbFileInstall {
                         listener.onInstallFailed(UNZIP_FAILED);
                         return;
                     }
-                    File newTargetObbFile = new File(obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(fileName));
+                    File newTargetObbFile = new File(
+                            obbFolder.getAbsolutePath() + "/" + FileUtils.INSTANCE.getFileName(fileName));
                     newTargetObbFile.deleteOnExit();
-                    ZLog.d(TAG + " installObbAPKByZip unCompress to " + newTargetObbFile.getAbsolutePath() + " obb start");
+                    ZLog.d(TAG + " installObbAPKByZip unCompress to " + newTargetObbFile.getAbsolutePath()
+                            + " obb start");
                     listener.onUnCompress();
                     ZipUtils.unCompressWithOutPath(zipFile, fileName, obbFolder.getAbsolutePath());
                     ZLog.d(TAG + " installObbAPKByZip unCompress obb finish");

@@ -33,7 +33,6 @@ import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.notify.DebugNotifyFragment
 import com.bihe0832.android.base.debug.panel.DebugPanelFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
-import com.bihe0832.android.base.debug.photos.DebugPhotosFragment
 import com.bihe0832.android.base.debug.qrcode.DebugQRCodeFragment
 import com.bihe0832.android.base.debug.request.DebugHttpActivity
 import com.bihe0832.android.base.debug.shake.DebugShakeAndVibratorFragment
@@ -93,9 +92,8 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(getDebugFragmentItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
             add(getDebugFragmentItemData("定时任务、阻塞任务", DebugEnqueueFragment::class.java))
-            add(getDebugFragmentItemData("图片、视频、音频操作调试", DebugMediaFragment::class.java))
+            add(getDebugFragmentItemData("拍照、相册、图片、视频、音频操作调试", DebugMediaFragment::class.java))
             add(getDebugFragmentItemData("SVGA 调试", DebugSvgaFragment::class.java))
-            add(getDebugFragmentItemData("拍照及相册调试", DebugPhotosFragment::class.java))
             add(getDebugFragmentItemData("Cache、数据中心测试", DebugCacheFragment::class.java))
             add(
                 DebugItemData(

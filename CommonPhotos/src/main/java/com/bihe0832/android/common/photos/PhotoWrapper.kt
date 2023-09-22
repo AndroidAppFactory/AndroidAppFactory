@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import com.bihe0832.android.common.permission.AAFPermissionManager
@@ -18,19 +19,18 @@ import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.OSUtils
-import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.*
+import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.choosePhotoBtn
+import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.takePhotoBtn
 import java.io.File
 
-
 const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
-
 
 fun getAutoChangedPhotoName(): String {
     return "zixie_" + System.currentTimeMillis() + ".jpg"
 }
 
 fun Activity.getPhotosFolder(): String {
-    return Media.getZixiePhotosPath(this)
+    return Media.getZixieMediaPath(this, Environment.DIRECTORY_PICTURES)
 }
 
 fun Activity.getAutoChangedPhotoUri(): Uri? {
@@ -44,15 +44,15 @@ fun Activity.getAutoChangedCropUri(): Uri? {
 fun Activity.getCropUri(fileName: String): Uri? {
     return if (OSUtils.isAndroidQVersion()) {
         Media.createImageUriAboveAndroidQ(
-                this,
-                "",
-                fileName
+            this,
+            "",
+            fileName,
         )
     } else {
         Media.createImageUriForCropBelowAndroidQ(
-                this,
-                "",
-                fileName
+            this,
+            "",
+            fileName,
         )
     }
 }
@@ -60,15 +60,15 @@ fun Activity.getCropUri(fileName: String): Uri? {
 fun Activity.getPhotosUri(fileName: String): Uri? {
     return if (OSUtils.isAndroidQVersion()) {
         Media.createImageUriAboveAndroidQ(
-                this,
-                "",
-                fileName
+            this,
+            "",
+            fileName,
         )
     } else {
         Media.createImageUriForCameraBelowAndroidQ(
-                this,
-                "",
-                fileName
+            this,
+            "",
+            fileName,
         )
     }
 }
@@ -78,10 +78,9 @@ fun Activity.getPhotosUri(fileName: String): Uri? {
  */
 fun Activity.cropPhoto(sourceFile: String, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1) {
     var sourceFileProvider =
-            ZixieFileProvider.getZixieFileProvider(this, File(sourceFile))
+        ZixieFileProvider.getZixieFileProvider(this, File(sourceFile))
     cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
 }
-
 
 fun Activity.cropPhoto(sourceFile: Intent?, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1) {
     var file = ZixieFileProvider.uriToFile(this, sourceFile?.data)
@@ -89,10 +88,10 @@ fun Activity.cropPhoto(sourceFile: Intent?, targetFile: Uri?, aspectX: Int = 1, 
 }
 
 fun Activity.cropPhoto(
-        sourceFile: Uri?,
-        targetFile: Uri?,
-        aspectX: Int = 1,
-        aspectY: Int = 1
+    sourceFile: Uri?,
+    targetFile: Uri?,
+    aspectX: Int = 1,
+    aspectY: Int = 1,
 ) {
     ZLog.d("Activity cropPhoto sourceFile ：$sourceFile")
     ZLog.d("Activity cropPhoto targetFile ：$targetFile")
@@ -164,6 +163,36 @@ fun Activity.showPhotoChooser() {
 
     view.takePhotoBtn.setOnClickListener {
         PermissionManager.checkPermission(
+            this,
+            "PhotoSelect",
+            false,
+            object : PermissionManager.OnPermissionResult {
+                override fun onFailed(msg: String) {
+                    dialog.dismiss()
+                }
+
+                override fun onSuccess() {
+                    dialog.dismiss()
+                    takePhoto(getAutoChangedPhotoUri())
+                }
+
+                override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                    dialog.dismiss()
+                }
+
+                override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                    dialog.dismiss()
+                }
+            },
+            AAFPermissionManager.takePhotoPermission,
+        )
+    }
+
+    view.choosePhotoBtn.setOnClickListener {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
+            choosePhoto()
+        } else {
+            PermissionManager.checkPermission(
                 this,
                 "PhotoSelect",
                 false,
@@ -174,7 +203,7 @@ fun Activity.showPhotoChooser() {
 
                     override fun onSuccess() {
                         dialog.dismiss()
-                        takePhoto(getAutoChangedPhotoUri())
+                        choosePhoto()
                     }
 
                     override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
@@ -184,35 +213,9 @@ fun Activity.showPhotoChooser() {
                     override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
                         dialog.dismiss()
                     }
-
                 },
-                AAFPermissionManager.takePhotoPermission
-        )
-    }
-
-    view.choosePhotoBtn.setOnClickListener {
-        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
-            choosePhoto()
-        } else {
-            PermissionManager.checkPermission(this, "PhotoSelect", false, object : PermissionManager.OnPermissionResult {
-                override fun onFailed(msg: String) {
-                    dialog.dismiss()
-                }
-
-                override fun onSuccess() {
-                    dialog.dismiss()
-                    choosePhoto()
-                }
-
-                override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
-                    dialog.dismiss()
-                }
-
-                override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
-                    dialog.dismiss()
-                }
-            }, com.bihe0832.android.common.permission.AAFPermissionManager.selectPhotoPermission)
+                com.bihe0832.android.common.permission.AAFPermissionManager.selectPhotoPermission,
+            )
         }
     }
 }
-
