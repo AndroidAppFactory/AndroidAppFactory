@@ -100,6 +100,7 @@ class DebugMediaFragment : DebugEnvFragment() {
     }
 
     private fun audioToVideo() {
+        AAFFileWrapper.clear()
         FileUtils.copyAssetsFileToPath(context, audio, audioPath)
         MediaTools.convertAudioWithTextToVideo(
             context,
