@@ -56,6 +56,7 @@ public class Media {
             e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.clear();
             contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
             int result = contentResolver.update(targetUri, contentValues, null, null);
             if (result == 0) {
@@ -83,11 +84,8 @@ public class Media {
         contentValues.put(MediaStore.MediaColumns.DATE_ADDED, System.currentTimeMillis());
         contentValues.put(MediaStore.MediaColumns.TITLE, fileName);
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
-
-        contentValues.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
         contentValues.put(MediaStore.MediaColumns.SIZE, file.length());
-        contentValues.put(MediaStore.Video.Media.RELATIVE_PATH,
-                Environment.DIRECTORY_DCIM + File.separator + fileType);
+        contentValues.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + File.separator + fileType);
     }
 
 
