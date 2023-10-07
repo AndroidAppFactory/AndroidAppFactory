@@ -128,4 +128,39 @@ object FileContent {
             }
         }
     }
+
+    fun mergeFile(firstFile: String, secondFile: String, resultFile: String) {
+        var firstInputStream: FileInputStream? = null
+        var secondInputStream: FileInputStream? = null
+        var outputFileStream: FileOutputStream? = null
+        try {
+            firstInputStream = FileInputStream(firstFile)
+            secondInputStream = FileInputStream(secondFile)
+            outputFileStream = FileOutputStream(resultFile)
+            var buffer = ByteArray(firstInputStream.available())
+            firstInputStream.read(buffer)
+            outputFileStream.write(buffer)
+            buffer = ByteArray(secondInputStream.available())
+            secondInputStream.read(buffer)
+            outputFileStream.write(buffer)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                firstInputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            try {
+                secondInputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            try {
+                outputFileStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

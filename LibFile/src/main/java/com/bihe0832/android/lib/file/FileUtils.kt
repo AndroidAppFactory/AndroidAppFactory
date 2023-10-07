@@ -8,6 +8,7 @@ import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.file.content.FileContent
+import com.bihe0832.android.lib.file.content.FileContentPattern
 import com.bihe0832.android.lib.file.content.FileName
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.utils.encrypt.MD5
@@ -356,5 +357,17 @@ object FileUtils {
 
     fun writeToFile(filePath: String, data: String, encoding: String, append: Boolean) {
         FileContent.writeToFile(filePath, data, encoding, append)
+    }
+
+    fun mergeFile(firstFile: String, secondFile: String, resultFile: String) {
+        FileContent.mergeFile(firstFile, secondFile, resultFile)
+    }
+
+    fun findPattern(filePath: String, dataToFind: String): Int {
+        return FileContentPattern.findPattern(filePath, dataToFind)
+    }
+
+    fun findPattern(fileContent: ByteArray, dataToFind: ByteArray): Int {
+        return FileContentPattern.findPattern(fileContent, dataToFind)
     }
 }

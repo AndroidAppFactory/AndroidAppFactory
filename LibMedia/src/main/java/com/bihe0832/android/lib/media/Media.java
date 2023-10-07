@@ -56,7 +56,6 @@ public class Media {
             e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            contentValues.clear();
             contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
             int result = contentResolver.update(targetUri, contentValues, null, null);
             if (result == 0) {
@@ -72,6 +71,9 @@ public class Media {
     private static void updateContentValues(ContentValues contentValues, File file, String fileType) {
         if (fileType.equals(Environment.DIRECTORY_PICTURES)) {
             contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*");//文件类型
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
+            }
         } else if (fileType.equals(Environment.DIRECTORY_MOVIES)) {
             contentValues.put(MediaStore.Images.Media.MIME_TYPE, "video/*");//文件类型
         }
@@ -84,10 +86,8 @@ public class Media {
 
         contentValues.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
         contentValues.put(MediaStore.MediaColumns.SIZE, file.length());
-        contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, fileType);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
-        }
+        contentValues.put(MediaStore.Video.Media.RELATIVE_PATH,
+                Environment.DIRECTORY_DCIM + File.separator + fileType);
     }
 
 
@@ -196,9 +196,9 @@ public class Media {
             }
         }
         try {
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri));
             MediaScannerConnection.scanFile(context,
                     new String[]{getZixieMediaPath(context, Environment.DIRECTORY_PICTURES)}, null, null);
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -230,12 +230,13 @@ public class Media {
                     e.printStackTrace();
                 }
             }
-        }
-        try {
-            MediaScannerConnection.scanFile(context,
-                    new String[]{getZixieMediaPath(context, Environment.DIRECTORY_MOVIES)}, null, null);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                MediaScannerConnection.scanFile(context,
+                        new String[]{getZixieMediaPath(context, Environment.DIRECTORY_MOVIES)}, null, null);
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
