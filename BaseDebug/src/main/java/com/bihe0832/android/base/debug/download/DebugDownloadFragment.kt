@@ -26,7 +26,6 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
-import com.bihe0832.android.lib.utils.encrypt.GzipUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
 import com.bihe0832.android.lib.utils.encrypt.SHA256
@@ -332,12 +331,12 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         )
 
         ZixieRequestHttp.getOrigin("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")?.let {
-            val filePath =
-                "/storage/emulated/0/Android/data/com.bihe0832.android.test/files/zixie/new_${System.currentTimeMillis()}.json.gzip"
+            val filePath = AAFFileWrapper.getFileTempFolder() + "a.gzip"
 
             FileUtils.writeToFile(filePath, it, false)
+            FileUtils.writeHexToFile(filePath, "00FFDD", true)
             ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
-            ZLog.d(LOG_TAG, "hhh 1" + GzipUtils.decompress(it))
+//            ZLog.d(LOG_TAG, "hhh 1" + GzipUtils.decompress(it))
             ZLog.d(LOG_TAG, "hhh 2" + FileUtils.getFileContent(filePath, true))
         }
 

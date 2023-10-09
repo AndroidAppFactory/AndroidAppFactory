@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.file.content.FileContent
 import com.bihe0832.android.lib.file.content.FileContentPattern
 import com.bihe0832.android.lib.file.content.FileName
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
+import com.bihe0832.android.lib.utils.encrypt.HexUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
 import com.bihe0832.android.lib.utils.encrypt.SHA256
@@ -355,8 +356,16 @@ object FileUtils {
         FileContent.writeToFile(filePath, data, "UTF-8", append)
     }
 
+    fun writeHexToFile(filePath: String, hexData: String, append: Boolean) {
+        writeToFile(filePath, HexUtils.hexStr2Bytes(hexData), append)
+    }
+
     fun writeToFile(filePath: String, data: String, encoding: String, append: Boolean) {
         FileContent.writeToFile(filePath, data, encoding, append)
+    }
+
+    fun writeToFile(filePath: String, data: ByteArray, append: Boolean) {
+        FileContent.writeToFile(filePath, data, append)
     }
 
     fun mergeFile(firstFile: String, secondFile: String, resultFile: String) {

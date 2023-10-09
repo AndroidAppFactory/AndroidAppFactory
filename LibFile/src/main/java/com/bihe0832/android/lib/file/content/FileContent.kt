@@ -109,6 +109,10 @@ object FileContent {
     }
 
     fun writeToFile(filePath: String, data: String, encoding: String, append: Boolean) {
+        writeToFile(filePath, data.toByteArray(Charset.forName(encoding)), append)
+    }
+
+    fun writeToFile(filePath: String, data: ByteArray, append: Boolean) {
         var fileOutputStream: FileOutputStream? = null
         try {
             val file = File(filePath)
@@ -117,7 +121,7 @@ object FileContent {
             }
             // 建立数据的输出通道
             fileOutputStream = FileOutputStream(file, append)
-            fileOutputStream.write(data.toByteArray(Charset.forName(encoding)))
+            fileOutputStream.write(data)
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
