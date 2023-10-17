@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.image
+package com.bihe0832.android.base.debug.media
 
 import android.text.Layout
 import android.text.TextUtils
@@ -91,11 +91,11 @@ class DebugMediaFragment : DebugEnvFragment() {
 
     private fun save() {
         if (!TextUtils.isEmpty(videoPath)) {
-            Media.addVideoToPhotos(context, videoPath)
+            Media.addVideoToPhotos(context, videoPath, "zixie")
         }
 
         if (!TextUtils.isEmpty(imagePath)) {
-            Media.addPicToPhotos(context, imagePath)
+            Media.addPicToPhotos(context, imagePath, "zixie")
         }
     }
 

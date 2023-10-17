@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.image
+package com.bihe0832.android.base.debug.media
 
 import android.graphics.Color
 import android.text.TextUtils
@@ -33,7 +33,6 @@ public class DebugImageFragment : BaseFragment() {
     override fun getLayoutID(): Int {
         return R.layout.fragment_test_image
     }
-
 
     override fun initView(view: View) {
 //        test_image_local_source.setImageBitmap(

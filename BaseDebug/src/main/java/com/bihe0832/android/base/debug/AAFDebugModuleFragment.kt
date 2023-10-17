@@ -23,11 +23,11 @@ import com.bihe0832.android.base.debug.encrypt.DebugEncryptFragment
 import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
 import com.bihe0832.android.base.debug.google.DebugGoogleFragment
-import com.bihe0832.android.base.debug.image.DebugMediaFragment
 import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
 import com.bihe0832.android.base.debug.intent.DebugIntentFragment
 import com.bihe0832.android.base.debug.ipc.AAFDebugIPCFragment
 import com.bihe0832.android.base.debug.log.DebugLogFragment
+import com.bihe0832.android.base.debug.media.DebugMediaFragment
 import com.bihe0832.android.base.debug.message.DebugMessageFragment
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.notify.DebugNotifyFragment

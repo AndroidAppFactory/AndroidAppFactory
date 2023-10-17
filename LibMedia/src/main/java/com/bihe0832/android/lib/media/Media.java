@@ -69,7 +69,7 @@ public class Media {
         }
     }
 
-    private static void updateContentValues(ContentValues contentValues, File file, String fileType) {
+    private static void updateContentValues(ContentValues contentValues, File file, String fileType, String subDir) {
         if (fileType.equals(Environment.DIRECTORY_PICTURES)) {
             contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*");//文件类型
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -85,7 +85,7 @@ public class Media {
         contentValues.put(MediaStore.MediaColumns.TITLE, fileName);
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
         contentValues.put(MediaStore.MediaColumns.SIZE, file.length());
-        contentValues.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + File.separator + fileType);
+        contentValues.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM + File.separator + subDir);
     }
 
 
@@ -168,21 +168,25 @@ public class Media {
     }
 
     public static void addPicToPhotos(Context context, String imagePath) {
+        addPicToPhotos(context, imagePath, Environment.DIRECTORY_PICTURES);
+    }
+
+    public static void addPicToPhotos(Context context, String imagePath, String subDir) {
         ContentResolver contentResolver = context.getContentResolver();
         ContentValues contentValues = new ContentValues();
         File image = new File(imagePath);
-        updateContentValues(contentValues, image, Environment.DIRECTORY_PICTURES);
+        updateContentValues(contentValues, image, Environment.DIRECTORY_PICTURES, subDir);
         Uri imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
         if (imageUri != null) {
             writeToPhotos(contentResolver, contentValues, imageUri, imagePath);
         } else {
             try {
-                String path = getZixieMediaPath(context, Environment.DIRECTORY_PICTURES) + System.currentTimeMillis()
+                String path = getZixieMediaPath(context, subDir) + System.currentTimeMillis()
                         + "." + FileUtils.INSTANCE.getExtensionName(imagePath);
                 File newFile = new File(path);
                 FileUtils.INSTANCE.copyFile(image, newFile, false);
                 ContentValues newValues = new ContentValues();
-                updateContentValues(newValues, newFile, Environment.DIRECTORY_PICTURES);
+                updateContentValues(newValues, newFile, Environment.DIRECTORY_PICTURES, subDir);
                 contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, newValues);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -195,20 +199,23 @@ public class Media {
         }
         try {
             MediaScannerConnection.scanFile(context,
-                    new String[]{getZixieMediaPath(context, Environment.DIRECTORY_PICTURES)}, null, null);
+                    new String[]{getZixieMediaPath(context, subDir)}, null, null);
             context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public static void addVideoToPhotos(Context context, String imagePath) {
+        addPicToPhotos(context, imagePath, Environment.DIRECTORY_MOVIES);
+    }
 
-    public static void addVideoToPhotos(Context context, String filePath) {
+    public static void addVideoToPhotos(Context context, String filePath, String subDir) {
         File video = new File(filePath);
         if (FileUtils.INSTANCE.checkFileExist(filePath)) {
             ContentResolver contentResolver = context.getContentResolver();
             ContentValues values = new ContentValues();
-            updateContentValues(values, video, Environment.DIRECTORY_MOVIES);
+            updateContentValues(values, video, Environment.DIRECTORY_MOVIES, subDir);
             values.put(MediaStore.Video.VideoColumns.DATE_TAKEN, System.currentTimeMillis());
             Uri uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
             if (uri != null) {
@@ -216,12 +223,12 @@ public class Media {
             } else {
                 try {
                     String path =
-                            getZixieMediaPath(context, Environment.DIRECTORY_MOVIES) + System.currentTimeMillis() + "."
+                            getZixieMediaPath(context, subDir) + System.currentTimeMillis() + "."
                                     + FileUtils.INSTANCE.getExtensionName(filePath);
                     File newFile = new File(path);
                     FileUtils.INSTANCE.copyFile(video, newFile, false);
                     ContentValues newValues = new ContentValues();
-                    updateContentValues(newValues, newFile, Environment.DIRECTORY_MOVIES);
+                    updateContentValues(newValues, newFile, Environment.DIRECTORY_MOVIES, subDir);
                     newValues.put(MediaStore.Video.VideoColumns.DATE_TAKEN, System.currentTimeMillis());
                     contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, newValues);
                 } catch (Exception e) {
@@ -230,7 +237,7 @@ public class Media {
             }
             try {
                 MediaScannerConnection.scanFile(context,
-                        new String[]{getZixieMediaPath(context, Environment.DIRECTORY_MOVIES)}, null, null);
+                        new String[]{getZixieMediaPath(context, subDir)}, null, null);
                 context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
             } catch (Exception e) {
                 e.printStackTrace();
