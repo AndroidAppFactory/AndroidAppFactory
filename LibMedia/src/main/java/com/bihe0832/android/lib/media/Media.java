@@ -168,10 +168,10 @@ public class Media {
     }
 
     public static void addPicToPhotos(Context context, String imagePath) {
-        addPicToPhotos(context, imagePath, Environment.DIRECTORY_PICTURES);
+        addPicToPhotos(context, imagePath, Environment.DIRECTORY_PICTURES, false);
     }
 
-    public static void addPicToPhotos(Context context, String imagePath, String subDir) {
+    public static void addPicToPhotos(Context context, String imagePath, String subDir, boolean isSameName) {
         ContentResolver contentResolver = context.getContentResolver();
         ContentValues contentValues = new ContentValues();
         File image = new File(imagePath);
@@ -181,8 +181,12 @@ public class Media {
             writeToPhotos(contentResolver, contentValues, imageUri, imagePath);
         } else {
             try {
-                String path = getZixieMediaPath(context, subDir) + System.currentTimeMillis()
-                        + "." + FileUtils.INSTANCE.getExtensionName(imagePath);
+                String path = getZixieMediaPath(context, subDir);
+                if (isSameName) {
+                    path = path + FileUtils.INSTANCE.getFileName(imagePath);
+                } else {
+                    path = path + System.currentTimeMillis() + "." + FileUtils.INSTANCE.getExtensionName(imagePath);
+                }
                 File newFile = new File(path);
                 FileUtils.INSTANCE.copyFile(image, newFile, false);
                 ContentValues newValues = new ContentValues();
@@ -198,8 +202,7 @@ public class Media {
             }
         }
         try {
-            MediaScannerConnection.scanFile(context,
-                    new String[]{getZixieMediaPath(context, subDir)}, null, null);
+            MediaScannerConnection.scanFile(context, new String[]{getZixieMediaPath(context, subDir)}, null, null);
             context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri));
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,10 +210,10 @@ public class Media {
     }
 
     public static void addVideoToPhotos(Context context, String imagePath) {
-        addPicToPhotos(context, imagePath, Environment.DIRECTORY_MOVIES);
+        addPicToPhotos(context, imagePath, Environment.DIRECTORY_MOVIES, false);
     }
 
-    public static void addVideoToPhotos(Context context, String filePath, String subDir) {
+    public static void addVideoToPhotos(Context context, String filePath, String subDir, boolean isSameName) {
         File video = new File(filePath);
         if (FileUtils.INSTANCE.checkFileExist(filePath)) {
             ContentResolver contentResolver = context.getContentResolver();
@@ -222,9 +225,12 @@ public class Media {
                 writeToPhotos(contentResolver, values, uri, filePath);
             } else {
                 try {
-                    String path =
-                            getZixieMediaPath(context, subDir) + System.currentTimeMillis() + "."
-                                    + FileUtils.INSTANCE.getExtensionName(filePath);
+                    String path = getZixieMediaPath(context, subDir);
+                    if (isSameName) {
+                        path = path + FileUtils.INSTANCE.getFileName(filePath);
+                    } else {
+                        path = path + System.currentTimeMillis() + "." + FileUtils.INSTANCE.getExtensionName(filePath);
+                    }
                     File newFile = new File(path);
                     FileUtils.INSTANCE.copyFile(video, newFile, false);
                     ContentValues newValues = new ContentValues();
@@ -236,8 +242,7 @@ public class Media {
                 }
             }
             try {
-                MediaScannerConnection.scanFile(context,
-                        new String[]{getZixieMediaPath(context, subDir)}, null, null);
+                MediaScannerConnection.scanFile(context, new String[]{getZixieMediaPath(context, subDir)}, null, null);
                 context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
             } catch (Exception e) {
                 e.printStackTrace();
