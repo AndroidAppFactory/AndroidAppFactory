@@ -1,7 +1,9 @@
 package com.bihe0832.android.framework.file
 
+import android.os.Environment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.R
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import java.io.File
 
@@ -22,6 +24,24 @@ object AAFFileWrapper {
     fun clear() {
         FileUtils.deleteDirectory(File(getCacheFolder()))
         FileUtils.deleteDirectory(File(getTempFolder()))
+    }
+
+    // 需要授权存储卡权限
+    fun getShareFolder(fileType: String, subDir: String): String {
+        val documentsDirectory = Environment.getExternalStoragePublicDirectory(fileType)
+        val sharedDirectory = File(documentsDirectory, subDir)
+        return FileUtils.getFolderPathWithSeparator(sharedDirectory.absolutePath)
+    }
+
+    fun getShareFolder(subDir: String): String {
+        return getShareFolder(Environment.DIRECTORY_DOWNLOADS, subDir)
+    }
+
+    fun getShareFolder(): String {
+        return getShareFolder(
+            Environment.DIRECTORY_DOWNLOADS,
+            ZixieContext.applicationContext!!.resources.getString(R.string.lib_bihe0832_file_folder),
+        )
     }
 
     fun getFolder(): String {

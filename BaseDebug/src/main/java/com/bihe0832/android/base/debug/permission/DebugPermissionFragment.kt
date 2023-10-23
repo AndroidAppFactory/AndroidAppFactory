@@ -4,7 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.module.DebugEnvFragment
+import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 
-class DebugPermissionFragment : DebugEnvFragment() {
+class DebugPermissionFragment : DebugCommonFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
@@ -23,7 +23,26 @@ class DebugPermissionFragment : DebugEnvFragment() {
             add(DebugItemData("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
             add(DebugItemData("申请通用权限（相机）", View.OnClickListener { checkCommonPermision() }))
             add(DebugItemData("申请特殊权限（位置）", View.OnClickListener { checkSpecialPermision() }))
-            add(DebugItemData("查看当前自定义的权限信息", View.OnClickListener { PermissionManager.logPermissionConfigInfo() }))
+            add(
+                DebugItemData(
+                    "调试中临时申请指定权限",
+                    View.OnClickListener {
+                        requestPermissionForDebug(
+                            listOf(
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                            ),
+                        )
+                    },
+                ),
+            )
+
+            add(
+                DebugItemData(
+                    "查看当前自定义的权限信息",
+                    View.OnClickListener { PermissionManager.logPermissionConfigInfo() },
+                ),
+            )
         }
     }
 
@@ -32,42 +51,52 @@ class DebugPermissionFragment : DebugEnvFragment() {
     }
 
     private fun checkSpecialPermision() {
-        AAFPermissionManager.checkSpecialPermission(activity!!, "", true, mutableListOf(Manifest.permission.ACCESS_COARSE_LOCATION), PermissionsActivityWithSpecial::class.java, PermissionResultOfAAF(false));
+        AAFPermissionManager.checkSpecialPermission(
+            activity!!,
+            "",
+            true,
+            mutableListOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+            PermissionsActivityWithSpecial::class.java,
+            PermissionResultOfAAF(false),
+        )
     }
 
-
     private fun testCustomPermission(activity: Activity?) {
-        PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {
-            put(
+        PermissionManager.addPermissionGroupContent(
+            HashMap<String, String>().apply {
+                put(
                     Manifest.permission.CAMERA,
-                    "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！"
-            )
-        })
+                    "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！",
+                )
+            },
+        )
         activity?.let { it ->
             DebugPermissionDialog(it).let { permissionDialog ->
                 permissionDialog.show(
-                        "",
-                        Manifest.permission.CAMERA,
-                        true,
-                        object : OnDialogListener {
-                            override fun onPositiveClick() {
+                    "",
+                    Manifest.permission.CAMERA,
+                    true,
+                    object : OnDialogListener {
+                        override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
-                                permissionDialog.dismiss()
-                            }
+                            permissionDialog.dismiss()
+                        }
 
-                            override fun onNegativeClick() {
-                                permissionDialog.dismiss()
+                        override fun onNegativeClick() {
+                            permissionDialog.dismiss()
+                        }
 
-                            }
+                        override fun onCancel() {
+                            permissionDialog.dismiss()
+                        }
+                    },
+                )
 
-                            override fun onCancel() {
-                                permissionDialog.dismiss()
-                            }
-                        })
-
-                PermissionManager.addPermissionGroupContent(HashMap<String, String>().apply {
-                    put(Manifest.permission.CAMERA, "fsdf")
-                })
+                PermissionManager.addPermissionGroupContent(
+                    HashMap<String, String>().apply {
+                        put(Manifest.permission.CAMERA, "fsdf")
+                    },
+                )
             }
         }
     }
@@ -76,57 +105,62 @@ class DebugPermissionFragment : DebugEnvFragment() {
         activity?.let { it ->
             PermissionDialog(it).let { permissionDialog ->
                 permissionDialog.show(
-                        "",
-                        Manifest.permission.CAMERA,
-                        true,
-                        object : OnDialogListener {
-                            override fun onPositiveClick() {
+                    "",
+                    Manifest.permission.CAMERA,
+                    true,
+                    object : OnDialogListener {
+                        override fun onPositiveClick() {
 //                    openFloatPermissionSettings(context)
-                                permissionDialog.dismiss()
-                            }
+                            permissionDialog.dismiss()
+                        }
 
-                            override fun onNegativeClick() {
-                                permissionDialog.dismiss()
+                        override fun onNegativeClick() {
+                            permissionDialog.dismiss()
+                        }
 
-                            }
-
-                            override fun onCancel() {
-                                permissionDialog.dismiss()
-                            }
-                        })
+                        override fun onCancel() {
+                            permissionDialog.dismiss()
+                        }
+                    },
+                )
             }
         }
     }
 
     private fun testCommonPermissionV2(activity: Activity?) {
         PermissionManager.checkPermission(
-                activity,
-                "",
-                false,
-                DebugPermissionsActivity::class.java,
-                null,
-                mutableListOf<String>().apply {
-                    add(Manifest.permission.ACCESS_COARSE_LOCATION)
-                })
+            activity,
+            "",
+            false,
+            DebugPermissionsActivity::class.java,
+            null,
+            mutableListOf<String>().apply {
+                add(Manifest.permission.ACCESS_COARSE_LOCATION)
+            },
+        )
     }
 
     private fun testCommonPermissionDialog() {
         PermissionDialog(activity!!).let {
-            it.show("", Manifest.permission.SYSTEM_ALERT_WINDOW, true, object :
-                OnDialogListener {
-                override fun onPositiveClick() {
-                    it.dismiss()
-                }
+            it.show(
+                "",
+                Manifest.permission.SYSTEM_ALERT_WINDOW,
+                true,
+                object :
+                    OnDialogListener {
+                    override fun onPositiveClick() {
+                        it.dismiss()
+                    }
 
-                override fun onNegativeClick() {
-                    it.dismiss()
-                }
+                    override fun onNegativeClick() {
+                        it.dismiss()
+                    }
 
-                override fun onCancel() {
-                    it.dismiss()
-                }
-
-            })
+                    override fun onCancel() {
+                        it.dismiss()
+                    }
+                },
+            )
         }
     }
 }
