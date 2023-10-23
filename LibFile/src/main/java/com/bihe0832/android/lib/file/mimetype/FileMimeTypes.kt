@@ -13,6 +13,12 @@ import com.bihe0832.android.lib.file.FileUtils
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
+const val FILE_TYPE_ALL = "*/*"
+const val FILE_TYPE_IMAGE = "image/*"
+const val FILE_TYPE_VIDEO = "video/*"
+const val FILE_TYPE_AUDIO = "audio/*"
+const val FILE_TYPE_TEXT = "text/*"
+
 object FileMimeTypes {
 
     private val mMimeTypes = ConcurrentHashMap<String, String>()
@@ -32,7 +38,7 @@ object FileMimeTypes {
     fun getMimeType(filename: String?): String {
         val extension = FileUtils.getExtensionName(filename)
         if (TextUtils.isEmpty(extension)) {
-            return "*/*"
+            return FILE_TYPE_ALL
         }
         getTypeByExtension(extension).let {
             if (TextUtils.isEmpty(it)) {
@@ -40,14 +46,13 @@ object FileMimeTypes {
                     webkitMimeType?.let {
                         putTypeByExtension(extension, webkitMimeType)
                     }
-                    return webkitMimeType ?: "*/*"
+                    return webkitMimeType ?: FILE_TYPE_ALL
                 }
             } else {
                 return it
             }
         }
     }
-
 
     fun isTextFile(file: String): Boolean {
         return getMimeType(file).startsWith("text")
@@ -58,9 +63,9 @@ object FileMimeTypes {
         return if (getMimeType(file).startsWith("image/")) {
             true
         } else {
-            ext.equals("png", ignoreCase = true) || ext.equals("jpg", ignoreCase = true)
-                    || ext.equals("jpeg", ignoreCase = true) || ext.equals("gif", ignoreCase = true)
-                    || ext.equals("tiff", ignoreCase = true) || ext.equals("tif", ignoreCase = true)
+            ext.equals("png", ignoreCase = true) || ext.equals("jpg", ignoreCase = true) ||
+                ext.equals("jpeg", ignoreCase = true) || ext.equals("gif", ignoreCase = true) ||
+                ext.equals("tiff", ignoreCase = true) || ext.equals("tif", ignoreCase = true)
         }
     }
 
@@ -81,24 +86,29 @@ object FileMimeTypes {
             return true
         }
         val ext = FileUtils.getExtensionName(path)
-        return (ext.equals("mp4", ignoreCase = true) || ext.equals("3gp", ignoreCase = true)
-                || ext.equals("avi", ignoreCase = true) || ext.equals("webm", ignoreCase = true)
-                || ext.equals("m4v", ignoreCase = true))
+        return (
+            ext.equals("mp4", ignoreCase = true) || ext.equals("3gp", ignoreCase = true) ||
+                ext.equals("avi", ignoreCase = true) || ext.equals("webm", ignoreCase = true) ||
+                ext.equals("m4v", ignoreCase = true)
+            )
     }
-
 
     fun isAudioFile(file: File): Boolean {
         return !file.isDirectory && isAudioFile(file.name)
     }
-
 
     fun isAudioFile(path: String): Boolean {
         if (getMimeType(path).startsWith("audio/")) {
             return true
         }
         val ext = FileUtils.getExtensionName(path)
-        return (ext.equals("mp3", ignoreCase = true) || ext.equals("wma", ignoreCase = true) || ext.equals("flac", ignoreCase = true)
-                || ext.equals("wav", ignoreCase = true) || ext.equals("aac", ignoreCase = true)
-                || ext.equals("ogg", ignoreCase = true) || ext.equals("m4a", ignoreCase = true))
+        return (
+            ext.equals("mp3", ignoreCase = true) || ext.equals("wma", ignoreCase = true) || ext.equals(
+                "flac",
+                ignoreCase = true,
+            ) ||
+                ext.equals("wav", ignoreCase = true) || ext.equals("aac", ignoreCase = true) ||
+                ext.equals("ogg", ignoreCase = true) || ext.equals("m4a", ignoreCase = true)
+            )
     }
 }

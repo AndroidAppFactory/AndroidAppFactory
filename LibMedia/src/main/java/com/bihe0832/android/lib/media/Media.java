@@ -13,12 +13,12 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypesKt;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +41,7 @@ public class Media {
     private static void writeToPhotos(ContentResolver contentResolver, ContentValues contentValues,
             Uri targetUri, String sourceFile) {
         try {
-            InputStream inputStream = new FileInputStream(sourceFile);
+            FileInputStream inputStream = new FileInputStream(sourceFile);
             OutputStream outputStream = contentResolver.openOutputStream(targetUri);
             byte[] buffer = new byte[1024];
             int bytesRead;
@@ -71,12 +71,12 @@ public class Media {
 
     private static void updateContentValues(ContentValues contentValues, File file, String fileType, String subDir) {
         if (fileType.equals(Environment.DIRECTORY_PICTURES)) {
-            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*");//文件类型
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, FileMimeTypesKt.FILE_TYPE_IMAGE);//文件类型
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
             }
         } else if (fileType.equals(Environment.DIRECTORY_MOVIES)) {
-            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "video/*");//文件类型
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, FileMimeTypesKt.FILE_TYPE_VIDEO);//文件类型
         }
         String fileName = file.getName();
         contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
@@ -101,7 +101,7 @@ public class Media {
         ContentValues contentValues = new ContentValues();//内容
         ContentResolver resolver = activity.getContentResolver();//内容解析器
         contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, name);//文件名
-        contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/*");//文件类型
+        contentValues.put(MediaStore.Images.Media.MIME_TYPE, FileMimeTypesKt.FILE_TYPE_IMAGE);//文件类型
         if (filePath != null && !filePath.equals("")) {
             //存放子文件夹
             contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/" + filePath);

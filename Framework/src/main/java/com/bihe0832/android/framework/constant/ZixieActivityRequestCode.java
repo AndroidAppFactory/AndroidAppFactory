@@ -6,8 +6,8 @@ import com.bihe0832.android.lib.permission.PermissionManager;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2019-11-07.
- * Description: 管理所有加速器相关的常量
+ *         Created on 2019-11-07.
+ *         Description: 管理所有加速器相关的常量
  */
 public class ZixieActivityRequestCode {
 
@@ -16,18 +16,18 @@ public class ZixieActivityRequestCode {
     public static final int PERMISSION_REQUEST_CODE = PermissionManager.PERMISSION_REQUEST_CODE;
 
     public static final int FILE_CHOOSER = FileSelectTools.FILE_CHOOSER;
+    public static final int FILE_CHOOSER_SYSTEM = FileSelectTools.FILE_CHOOSER_SYSTEM;
 
-    public static final int TAKE_PHOTO = 2;
+    public static final int TAKE_PHOTO = 3;
 
-    public static final int CHOOSE_PHOTO = 3;
+    public static final int CHOOSE_PHOTO = 4;
 
-    public static final int CROP_PHOTO = 4;
+    public static final int CROP_PHOTO = 5;
 
-    public static final int QRCODE_SCAN = 5;
+    public static final int QRCODE_SCAN = 6;
     // 二维码扫描结果
     public static final String INTENT_EXTRA_KEY_QR_SCAN = "qr_scan_result";
 
-    public static final int SELECT_WIDGET = 6;
-
+    public static final int SELECT_WIDGET = 7;
 
 }

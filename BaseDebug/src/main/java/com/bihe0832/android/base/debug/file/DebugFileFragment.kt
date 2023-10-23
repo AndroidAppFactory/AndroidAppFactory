@@ -8,6 +8,8 @@
 
 package com.bihe0832.android.base.debug.file
 
+import android.app.Activity
+import android.content.Intent
 import android.util.Base64
 import android.view.View
 import com.bihe0832.android.app.log.AAFLoggerFile
@@ -16,12 +18,15 @@ import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.config.OnConfigChangedListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.action.FileAction
+import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_ALL
+import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.sqlite.BaseDBHelper
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
@@ -75,7 +80,16 @@ class DebugFileFragment : DebugEnvFragment() {
                 DebugItemData(
                     "文件选择",
                     View.OnClickListener {
-//                activity?.showPhotoChooser()
+                        FileSelectTools.openFileSelect(activity, ZixieContext.getZixieFolder())
+                    },
+                ),
+            )
+
+            add(
+                DebugItemData(
+                    "系统文件选择",
+                    View.OnClickListener {
+                        FileSelectTools.openAndroidFileSelect(activity, FILE_TYPE_ALL)
                     },
                 ),
             )
@@ -85,6 +99,26 @@ class DebugFileFragment : DebugEnvFragment() {
             add(DebugItemData("Sqlite测试", View.OnClickListener { testDB() }))
             add(DebugItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(DebugItemData("文件内容读写", View.OnClickListener { testReadAndWrite() }))
+            add(DebugItemData("读取共享文件内容", View.OnClickListener { share() }))
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+        if (requestCode === ZixieActivityRequestCode.FILE_CHOOSER && resultCode === Activity.RESULT_OK) {
+            if (resultData != null) {
+                resultData.getStringExtra(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL)?.let {
+                    ZLog.d(LOG_TAG, "File : $it")
+                    ZLog.d(LOG_TAG, "File Content : ${FileUtils.getFileContent(it)}")
+                }
+            }
+        } else if (requestCode === ZixieActivityRequestCode.FILE_CHOOSER_SYSTEM && resultCode === Activity.RESULT_OK) {
+            if (resultData != null) {
+                resultData.getData()?.let {
+                    ZLog.d(LOG_TAG, "File : $it")
+                    ZLog.d(LOG_TAG, "File Content : ${FileUtils.getFileContent(context!!, it)}")
+                }
+            }
         }
     }
 
@@ -303,5 +337,18 @@ class DebugFileFragment : DebugEnvFragment() {
         ZLog.d("testZlib", "压缩再解压一致性确认：")
         ZLog.d("testZlib", "text：\n$text\n\n")
         ZLog.d("testZlib", "result：\n$res\n\n")
+    }
+
+    private fun share() {
+        var sharedFile = AAFFileWrapper.getShareFolder() + "shared_file.txt"
+        ZLog.d("AAF", "File :$sharedFile")
+        ZLog.d("AAF", "File Content:" + FileUtils.getFileContent(sharedFile))
+        FileUtils.writeToFile(sharedFile, "fsdfs", true)
+        ZLog.d("AAF", "File Content:" + FileUtils.getFileContent(sharedFile))
+        sharedFile = AAFFileWrapper.getShareFolder() + "shared_file1.txt"
+        ZLog.d("AAF", "File :$sharedFile")
+        ZLog.d("AAF", "File Content:" + FileUtils.getFileContent(sharedFile))
+        FileUtils.writeToFile(sharedFile, "fsdfs", true)
+        ZLog.d("AAF", "File Content:" + FileUtils.getFileContent(sharedFile))
     }
 }

@@ -91,11 +91,11 @@ class DebugMediaFragment : DebugEnvFragment() {
 
     private fun save() {
         if (!TextUtils.isEmpty(videoPath)) {
-            Media.addVideoToPhotos(context, videoPath, "zixie")
+            Media.addVideoToPhotos(context, videoPath, "zixie", true)
         }
 
         if (!TextUtils.isEmpty(imagePath)) {
-            Media.addPicToPhotos(context, imagePath, "zixie")
+            Media.addPicToPhotos(context, imagePath, "zixie", true)
         }
     }
 

@@ -1,5 +1,7 @@
 package com.bihe0832.android.lib.file.content
 
+import android.content.Context
+import android.net.Uri
 import com.bihe0832.android.lib.file.FileUtils
 import java.io.BufferedInputStream
 import java.io.BufferedReader
@@ -19,31 +21,73 @@ import java.util.zip.GZIPInputStream
  */
 object FileContent {
 
+    fun getFileContent(contetxt: Context, uri: Uri, encoding: String): String {
+        return getFileContent(contetxt, uri, encoding, false)
+    }
+
+    fun getFileContent(contetxt: Context, uri: Uri, encoding: String, isGzip: Boolean): String {
+        var content = ""
+        var inputStream: InputStream? = null
+        try {
+            inputStream = contetxt.getContentResolver().openInputStream(uri)
+            content = getFileContent(inputStream, encoding, isGzip)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                inputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        return content
+    }
+
     fun getFileContent(filePath: String?, encoding: String): String {
         return getFileContent(filePath, encoding, false)
     }
 
     fun getFileContent(filePath: String?, encoding: String, isGzip: Boolean): String {
         var content = ""
-        filePath?.let { it ->
+        filePath?.let {
             if (FileUtils.checkFileExist(it)) {
-                var fis: InputStream? = null
+                var inputStream: InputStream? = null
                 try {
-                    fis = if (isGzip) {
-                        GZIPInputStream(FileInputStream(File(it)))
-                    } else {
-                        FileInputStream(File(it))
-                    }
-                    content = getFileContent(fis, encoding)
+                    inputStream = FileInputStream(File(it))
+                    content = getFileContent(inputStream, encoding, isGzip)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 } finally {
                     try {
-                        fis?.close()
+                        inputStream?.close()
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
                 }
+            }
+        }
+
+        return content
+    }
+
+    fun getFileContent(fileInputStream: InputStream?, encoding: String, isGzip: Boolean): String {
+        var content = ""
+        var fis: InputStream? = null
+        try {
+            fis = if (isGzip) {
+                GZIPInputStream(fileInputStream)
+            } else {
+                fileInputStream
+            }
+            content = getFileContent(fis, encoding)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fis?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
         return content

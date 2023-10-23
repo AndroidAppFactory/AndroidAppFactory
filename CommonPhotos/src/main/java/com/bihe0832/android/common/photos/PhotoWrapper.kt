@@ -13,6 +13,7 @@ import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_IMAGE
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.Media
@@ -110,7 +111,7 @@ fun Activity.cropPhoto(
     // 开始切割
     val intent = Intent("com.android.camera.action.CROP").apply {
         addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        setDataAndType(finalSourceFile, "image/*")
+        setDataAndType(finalSourceFile, FILE_TYPE_IMAGE)
         putExtra("crop", "true")
         putExtra("aspectX", aspectX) // 裁剪框比例
         putExtra("aspectY", aspectY)
@@ -133,9 +134,9 @@ fun Activity.takePhoto(outputUri: Uri?) {
     startActivityForResult(intent, ZixieActivityRequestCode.TAKE_PHOTO)
 }
 
-fun Activity.choosePhoto() {
+fun Activity.choosePhoto(fileType: String) {
     val intent = Intent(Intent.ACTION_PICK)
-    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, fileType)
     try {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
     } catch (e: Exception) {
@@ -144,9 +145,13 @@ fun Activity.choosePhoto() {
     }
 }
 
+fun Activity.choosePhoto() {
+    choosePhoto(FILE_TYPE_IMAGE)
+}
+
 fun Activity.getPhotoContent() {
     val intent = Intent(Intent.ACTION_GET_CONTENT)
-    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, FILE_TYPE_IMAGE)
     try {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
     } catch (e: Exception) {

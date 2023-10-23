@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.file
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.StatFs
 import android.text.TextUtils
 import androidx.core.content.ContextCompat
@@ -318,6 +319,14 @@ object FileUtils {
 
     fun isInvalidFilename(fileName: String): Boolean {
         return FileName.isInvalidFilename(fileName)
+    }
+
+    fun getFileContent(contetxt: Context, uri: Uri): String {
+        return FileContent.getFileContent(contetxt, uri, "UTF-8")
+    }
+
+    fun getFileContent(contetxt: Context, uri: Uri, encoding: String, isGzip: Boolean): String {
+        return FileContent.getFileContent(contetxt, uri, encoding, isGzip)
     }
 
     fun getFileContent(filePath: String?): String {

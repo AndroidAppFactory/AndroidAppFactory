@@ -177,15 +177,12 @@ object FileAction {
         return false
     }
 
-    private fun copyFile(source: File, dest: File): Boolean {
-        if (source.absolutePath.equals(dest.absolutePath, ignoreCase = true)) {
-            return true
-        }
+    fun copyFile(source: FileInputStream, dest: FileOutputStream): Boolean {
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
         try {
-            inputChannel = FileInputStream(source).getChannel()
-            outputChannel = FileOutputStream(dest).getChannel()
+            inputChannel = source.getChannel()
+            outputChannel = dest.getChannel()
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size())
             return true
         } catch (e: Exception) {
@@ -204,6 +201,35 @@ object FileAction {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun copyFile(source: File, dest: File): Boolean {
+        if (source.absolutePath.equals(dest.absolutePath, ignoreCase = true)) {
+            return true
+        }
+        var fileInputStream: FileInputStream? = null
+        var fileOutputStream: FileOutputStream? = null
+        try {
+            fileInputStream = FileInputStream(source)
+            fileOutputStream = FileOutputStream(dest)
+            return copyFile(fileInputStream, fileOutputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        } finally {
+            try {
+                fileInputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            try {
+                fileInputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return false
     }
 
     fun copyFile(srcFile: File, dstFile: File, isMove: Boolean): Boolean {
