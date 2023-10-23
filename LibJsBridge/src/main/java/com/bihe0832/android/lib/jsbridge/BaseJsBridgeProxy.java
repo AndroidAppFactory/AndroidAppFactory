@@ -1,24 +1,23 @@
 package com.bihe0832.android.lib.jsbridge;
 
 
+import static com.bihe0832.android.lib.jsbridge.BaseJsBridge.TAG;
+
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -28,7 +27,6 @@ import java.util.List;
  */
 public abstract class BaseJsBridgeProxy {
 
-    private static final String TAG = "BaseJsBridgeProxy";
     private static final String ACTIVITY_STATE_CHANGE_CALLBACK = "activityStateCallback";
 
     private final int PAGE_CONTROL_RELOAD = 0;
@@ -38,6 +36,10 @@ public abstract class BaseJsBridgeProxy {
     protected Activity mActivity;
 
     private boolean canPullRefresh = true;
+
+    public BaseJsBridgeProxy(Activity activity) {
+        mActivity = activity;
+    }
 
     protected abstract BaseJsBridge getJsBridge();
 
@@ -51,11 +53,6 @@ public abstract class BaseJsBridgeProxy {
 
     public abstract boolean canGoForward();
 
-
-    public BaseJsBridgeProxy(Activity activity) {
-        mActivity = activity;
-    }
-
     /**
      * 负责url的调用处理逻辑
      *
@@ -68,6 +65,37 @@ public abstract class BaseJsBridgeProxy {
                 invokeAsync(url);
             }
         });
+    }
+
+    private void callNativeMethod(Uri uri, String hostAsMethodName, int seqid, String callbackName) {
+        try {
+            ZLog.e(TAG, uri.toString());
+            if (!TextUtils.isEmpty(hostAsMethodName)) {
+                Object obj = this;
+                ZLog.e(TAG, this.getClass().getName());
+                Method method = this.getClass()
+                        .getMethod(hostAsMethodName, Uri.class, Integer.TYPE, String.class, String.class);
+                method.invoke(obj, uri, seqid, hostAsMethodName, callbackName);
+
+            } else {
+                if (!TextUtils.isEmpty(callbackName)) {
+                    getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_None);
+                }
+            }
+        } catch (NoSuchMethodException e) {
+            ZLog.e(TAG, "JSBridge method 404");
+            ZLog.d(TAG, e.toString());
+            if (!TextUtils.isEmpty(callbackName)) {
+                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.NOT_SUPPORT);
+            }
+        } catch (Exception ex) {
+            ZLog.e(TAG, "JSBridge method has error");
+            ZLog.d(TAG, ex.toString());
+            if (!TextUtils.isEmpty(callbackName)) {
+                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception);
+            }
+        }
+
     }
 
     private void invokeAsync(String url) {
@@ -101,12 +129,17 @@ public abstract class BaseJsBridgeProxy {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String method = jsonObject.getString("method");
                     int seqidOfCall = jsonObject.getInt("seqid");
-                    String callback = null;
+                    String callback = "";
                     if (jsonObject.has("ZixieCallback")) {
                         callback = jsonObject.optString("ZixieCallback");
                     }
+                    if (TextUtils.isEmpty(callback)) {
+                        callback = "";
+                    }
+
                     StringBuilder uriBuilder = new StringBuilder();
-                    uriBuilder.append(BaseJsBridge.JS_BRIDGE_SCHEME).append(method).append("/").append(seqidOfCall).append("/").append(!TextUtils.isEmpty(callback) ? callback : "").append("?");
+                    uriBuilder.append(BaseJsBridge.JS_BRIDGE_SCHEME).append(method).append("/").append(seqidOfCall)
+                            .append("/").append(callback).append("?");
 
                     if (jsonObject.has("args")) {
                         JSONObject args = jsonObject.getJSONObject("args");
@@ -119,13 +152,15 @@ public abstract class BaseJsBridgeProxy {
                             }
                         }
                     }
-
                     Uri uriForCall = Uri.parse(uriBuilder.toString());
                     callAMethod(uriForCall, method, seqidOfCall, callback);
                 }
             } catch (Exception ex) {
+                ZLog.e(TAG, "JSBridge method has error");
                 ZLog.d(TAG, ex.toString());
-                ex.printStackTrace();
+                if (!TextUtils.isEmpty(callbackName)) {
+                    getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception);
+                }
             }
         } else {
             callAMethod(uri, hostAsMethodName, seqid, callbackName);
@@ -133,37 +168,13 @@ public abstract class BaseJsBridgeProxy {
     }
 
     /**
-     * @param uri              为伪协议的详细内容
+     * @param uri 为伪协议的详细内容
      * @param hostAsMethodName 为函数名称，主要用于回调时返回给web端
-     * @param seqid            为序列号，主要用于回调时返回给web端
-     * @param callbackName     回调方法，回调时回调的web端方法名
+     * @param seqid 为序列号，主要用于回调时返回给web端
+     * @param callbackName 回调方法，回调时回调的web端方法名
      */
     protected void callAMethod(Uri uri, String hostAsMethodName, int seqid, String callbackName) {
-        try {
-            if (!TextUtils.isEmpty(hostAsMethodName)) {
-                Object obj = this;
-                ZLog.e(TAG, this.getClass().getName());
-                Method method = this.getClass().getMethod(hostAsMethodName, Uri.class, Integer.TYPE, String.class, String.class);
-                method.invoke(obj, uri, seqid, hostAsMethodName, callbackName);
-
-            } else {
-                if (!TextUtils.isEmpty(callbackName)) {
-                    getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_None);
-                }
-            }
-        } catch (NoSuchMethodException e) {
-            ZLog.e(TAG, "JSBridge method 404");
-            ZLog.d(TAG, e.toString());
-            if (!TextUtils.isEmpty(callbackName)) {
-                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.NOT_SUPPORT);
-            }
-        } catch (Exception ex) {
-            ZLog.e(TAG, "JSBridge method has error");
-            ZLog.d(TAG, ex.toString());
-            if (!TextUtils.isEmpty(callbackName)) {
-                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception);
-            }
-        }
+        callNativeMethod(uri, hostAsMethodName, seqid, callbackName);
     }
 
     public void pageControl(final Uri uri, final int seqid, final String method, final String function) {
@@ -218,12 +229,14 @@ public abstract class BaseJsBridgeProxy {
 
     public void onResume() {
         ZLog.e(TAG, "JSBridge onResume");
-        getJsBridge().response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, ACTIVITY_STATE_CHANGE_CALLBACK, "onResume", null, BaseJsBridge.ResponseType.Event);
+        getJsBridge().response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, ACTIVITY_STATE_CHANGE_CALLBACK, "onResume", null,
+                BaseJsBridge.ResponseType.Event);
     }
 
     public void onPause() {
         ZLog.e(TAG, "JSBridge onPause");
-        getJsBridge().response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, ACTIVITY_STATE_CHANGE_CALLBACK, "onPause", null, BaseJsBridge.ResponseType.Event);
+        getJsBridge().response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, ACTIVITY_STATE_CHANGE_CALLBACK, "onPause", null,
+                BaseJsBridge.ResponseType.Event);
     }
 
     public void getAppInfo(final Uri uri, final int seqid, final String method, final String callbackFun) {
@@ -275,6 +288,4 @@ public abstract class BaseJsBridgeProxy {
             getJsBridge().responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument);
         }
     }
-
-
 }

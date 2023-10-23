@@ -14,7 +14,6 @@ import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -22,15 +21,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.bihe0832.android.common.webview.R;
-import com.bihe0832.android.common.webview.core.WebViewViewModel;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewViewModel;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterAction;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
+import com.bihe0832.android.lib.file.mimetype.FileMimeTypesKt;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridge;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridgeProxy;
@@ -38,21 +37,44 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
-
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-public abstract class BaseWebViewFragment extends BaseFragment implements ActivityCompat.OnRequestPermissionsResultCallback {
-
-    protected static final String TAG = "WebPageFragment -> :";
+public abstract class BaseWebViewFragment extends BaseFragment implements
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final String INTENT_KEY_URL = RouterConstants.INTENT_EXTRA_KEY_WEB_URL;
     public static final String INTENT_KEY_REFRESH = "refresh";
     public static final String INTENT_KEY_DATA = "WebviewFragment.data";
     public static final String INTENT_KEY_THIRD_PART = "http://localhost";
-
+    protected static final String TAG = "WebPageFragment -> :";
     protected static final String HEADER_NAME_REFERER = "Referer";
+    protected ConstraintLayout mErrorPage;
+    protected SwipeRefreshLayout mNormalPage;
+    protected ProgressBar mProgressBar;
+    protected SwipeRefreshLayout mSwipeLayout;
+    protected Boolean isLoadSuccess = true;
+    protected TextView mErrorUrl;
+    protected WebViewViewModel mWebViewViewModel;
+    protected BaseJsBridgeProxy mJSBridgeProxy = null;
+    protected ValueCallback<Uri[]> mPicUploadCallback;
+    protected String mIntentUrl;
+    protected String mPostData;
+    protected boolean mRefreshable = false;
+    protected MutableLiveData<Integer> _webViewScrollTopLiveData = new MutableLiveData<>();
+    private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
+        put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.new.js");
+    }};
+    private View mCustomView;
+    private TextView mRetry;
+    private TextView mRedirect;
+    private ViewGroup mViewParent;
+    private int mOriginalSystemUiVisibility;
+    private int mOriginalOrientation;
+    private LiveData<Integer> mWebViewScrollTopLiveData = _webViewScrollTopLiveData;
+    private long lastResumeTime = 0L;
+    private long lastPauseTime = 0L;
 
     public static Bundle getWebviewDataBundle(String url, String data) {
         Bundle bundle = new Bundle();
@@ -62,10 +84,6 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
         }
         return bundle;
     }
-
-    private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
-        put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.new.js");
-    }};
 
     // 追加业务参数
     protected abstract String getFinalURL(String url);
@@ -107,7 +125,6 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
         return mWebViewScrollTopLiveData;
     }
 
-
     public HashMap<String, String> getGlobalLocalRes() {
         return globalLocalRes;
     }
@@ -123,7 +140,6 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
         }
     }
 
-
     protected void onWebClientPageStarted() {
         mNormalPage.setVisibility(View.VISIBLE);
         mErrorPage.setVisibility(View.GONE);
@@ -133,36 +149,6 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
         isLoadSuccess = false;
         mErrorUrl.setText(mIntentUrl);
     }
-
-
-    private View mCustomView;
-
-    protected ConstraintLayout mErrorPage;
-    protected SwipeRefreshLayout mNormalPage;
-    private TextView mRetry;
-    private TextView mRedirect;
-    private ViewGroup mViewParent;
-    protected ProgressBar mProgressBar;
-    protected SwipeRefreshLayout mSwipeLayout;
-    protected Boolean isLoadSuccess = true;
-    protected TextView mErrorUrl;
-
-    protected WebViewViewModel mWebViewViewModel;
-    protected BaseJsBridgeProxy mJSBridgeProxy = null;
-    protected ValueCallback<Uri[]> mPicUploadCallback;
-
-    protected String mIntentUrl;
-    protected String mPostData;
-    protected boolean mRefreshable = false;
-
-    private int mOriginalSystemUiVisibility;
-    private int mOriginalOrientation;
-
-    protected MutableLiveData<Integer> _webViewScrollTopLiveData = new MutableLiveData<>();
-    private LiveData<Integer> mWebViewScrollTopLiveData = _webViewScrollTopLiveData;
-
-    private long lastResumeTime = 0L;
-    private long lastPauseTime = 0L;
 
     @Override
     protected void initView(@NonNull View view) {
@@ -228,7 +214,8 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
         if (url.startsWith(INTENT_KEY_THIRD_PART)) {
             String value = URLUtils.getValueByName(url, "value");
             try {
-                return processWebClientOverrideUrlLoading(URLDecoder.decode(value, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8), "");
+                return processWebClientOverrideUrlLoading(
+                        URLDecoder.decode(value, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8), "");
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -308,7 +295,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
     protected void openImageChooserActivity() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
+        intent.setType(FileMimeTypesKt.FILE_TYPE_IMAGE);
         startActivityForResult(Intent.createChooser(intent, "Image Chooser"), ZixieActivityRequestCode.FILE_CHOOSER);
     }
 
@@ -381,7 +368,8 @@ public abstract class BaseWebViewFragment extends BaseFragment implements Activi
             }
         } else {
             try {
-                Field sConfigCallback = Class.forName("android.webkit.BrowserFrame").getDeclaredField("sConfigCallback");
+                Field sConfigCallback = Class.forName("android.webkit.BrowserFrame")
+                        .getDeclaredField("sConfigCallback");
                 if (sConfigCallback != null) {
                     sConfigCallback.setAccessible(true);
                     sConfigCallback.set(null, null);

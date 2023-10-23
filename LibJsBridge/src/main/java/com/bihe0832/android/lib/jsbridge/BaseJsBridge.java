@@ -4,60 +4,50 @@ import android.content.Context;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.bihe0832.android.lib.thread.ThreadManager;
-
-import org.json.JSONObject;
-
 import java.util.Map;
+import org.json.JSONObject;
 
 
 public abstract class BaseJsBridge {
 
-    protected abstract void loadUrl(String s);
-
-    private static final String TAG = "JsBridge";
+    public static final String TAG = "JsBridge";
     // 默认值
     public static final int ST_PAGE_ORIGINAL = 2000;
-
-    public Context mContext;
-
     public static final String JS_BRIDGE_SCHEME = "jsb://";
     public static final String CALL_BATCH_NAME = "callBatch";
-
     public static final String FILE_CHOOSER_CALLBACK_FUNCTION_NAME = "fileChooserCallback"; //文件选择的回调
-
-    public enum ResponseType {
-        Method, // 默认，直接调用js的方法
-        Event // 采用事件分发的方式，传给js
-    }
+    public Context mContext;
 
     public BaseJsBridge(Context context) {
         this.mContext = context;
     }
 
+    protected abstract void loadUrl(String s);
+
     public void response(String function, int seqid, String method, String result) {
-        response(function, seqid, method, result,null);
+        response(function, seqid, method, result, null);
     }
 
     public void response(String function, int seqid, String method, String result, Map<String, String> extMap) {
-        response(function, seqid, method, result,extMap, ResponseType.Method);
+        response(function, seqid, method, result, extMap, ResponseType.Method);
     }
 
-    public void response(String function, int seqid, String method, String result, Map<String, String> extMap, ResponseType type){
-        if(TextUtils.isEmpty(function)){
+    public void response(String function, int seqid, String method, String result, Map<String, String> extMap,
+            ResponseType type) {
+        if (TextUtils.isEmpty(function)) {
             return;
         }
         JSONObject json = new JSONObject();
         try {
             json.put("result", JsResult.Result_OK);
             json.put("data", result);
-            if(!TextUtils.isEmpty(method)){
+            if (!TextUtils.isEmpty(method)) {
                 json.put("method", method);
             }
             json.put("seqid", seqid);
             if (extMap != null) {
-                for(String key:extMap.keySet()){
+                for (String key : extMap.keySet()) {
                     json.put(key, extMap.get(key));
                 }
             }
@@ -76,8 +66,9 @@ public abstract class BaseJsBridge {
         responseFail(callbackFun, seqid, method, code, null, ResponseType.Method);
     }
 
-    public void responseFail(String callbackFun, int seqid, String method, int code, Map<String, String> extMap, ResponseType type){
-        if(TextUtils.isEmpty(callbackFun)){
+    public void responseFail(String callbackFun, int seqid, String method, int code, Map<String, String> extMap,
+            ResponseType type) {
+        if (TextUtils.isEmpty(callbackFun)) {
             return;
         }
         JSONObject json = new JSONObject();
@@ -87,7 +78,7 @@ public abstract class BaseJsBridge {
             json.put("method", method);
             json.put("seqid", seqid);
             if (extMap != null) {
-                for(String key:extMap.keySet()){
+                for (String key : extMap.keySet()) {
                     json.put(key, extMap.get(key));
                 }
             }
@@ -106,8 +97,7 @@ public abstract class BaseJsBridge {
                     callbackUiThread(function, result, type);
                 }
             });
-        }
-        else {
+        } else {
             callbackUiThread(function, result, type);
         }
     }
@@ -117,7 +107,7 @@ public abstract class BaseJsBridge {
         StringBuffer sb = new StringBuffer("javascript:");
         switch (type) {
             case Method:
-                sb.append("if(!!").append("window."+function).append("){");
+                sb.append("if(!!").append("window." + function).append("){");
                 sb.append(function);
                 sb.append("(");
                 sb.append(result);
@@ -136,5 +126,10 @@ public abstract class BaseJsBridge {
         } catch (Exception e) {
 
         }
+    }
+
+    public enum ResponseType {
+        Method, // 默认，直接调用js的方法
+        Event // 采用事件分发的方式，传给js
     }
 }
