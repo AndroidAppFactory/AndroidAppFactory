@@ -116,7 +116,13 @@ class DebugFileFragment : DebugEnvFragment() {
             if (resultData != null) {
                 resultData.getData()?.let {
                     ZLog.d(LOG_TAG, "File : $it")
-                    ZLog.d(LOG_TAG, "File Content : ${FileUtils.getFileContent(context!!, it)}")
+                    val filePath: String = it.getPath() ?: ""
+                    var tempFile = AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(filePath)
+                    var result = FileUtils.copyFile(context!!, it, File(tempFile))
+                    ZLog.d(LOG_TAG, "File Copy : $result $tempFile")
+                    tempFile = "/" + FileUtils.getFileName(filePath)
+                    result = FileUtils.copyFile(context!!, it, File(tempFile))
+                    ZLog.d(LOG_TAG, "File Copy : $result $tempFile")
                 }
             }
         }

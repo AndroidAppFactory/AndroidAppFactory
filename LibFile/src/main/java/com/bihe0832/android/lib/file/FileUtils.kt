@@ -265,6 +265,14 @@ object FileUtils {
         return FileAction.deleteFile(filePath)
     }
 
+    fun copyFile(input: InputStream?, dest: File?): Boolean {
+        return FileAction.copyFile(input, dest)
+    }
+
+    fun copyFile(context: Context, source: Uri, dest: File): Boolean {
+        return FileAction.copyFile(context, source, dest)
+    }
+
     fun copyFile(source: File, dest: File): Boolean {
         return FileAction.copyFile(source, dest, false)
     }

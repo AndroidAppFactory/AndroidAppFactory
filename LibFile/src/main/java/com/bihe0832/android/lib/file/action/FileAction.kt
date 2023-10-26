@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.file.action
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
 import com.bihe0832.android.lib.file.FileUtils
@@ -178,16 +179,17 @@ object FileAction {
     }
 
     fun copyFile(source: FileInputStream, dest: FileOutputStream): Boolean {
+        var result = false
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
         try {
             inputChannel = source.getChannel()
             outputChannel = dest.getChannel()
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size())
-            return true
+            result = true
         } catch (e: Exception) {
             e.printStackTrace()
-            return false
+            result = false
         } finally {
             try {
                 inputChannel?.close()
@@ -201,21 +203,88 @@ object FileAction {
                 e.printStackTrace()
             }
         }
+        return result
+    }
+
+    fun copyFile(input: InputStream?, output: OutputStream?): Boolean {
+        if (input == null || output == null) {
+            return false
+        }
+        try {
+            val buff = ByteArray(1024 * 8)
+            var read = 0
+            do {
+                read = input.read(buff)
+                if (read > 0) {
+                    output.write(buff, 0, read)
+                }
+            } while (read > 0)
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    fun copyFile(input: InputStream?, dest: File?): Boolean {
+        if (input == null || dest == null) {
+            return false
+        }
+        var result = false
+        var fileOutputStream: FileOutputStream? = null
+        try {
+            FileUtils.checkAndCreateFolder(dest.parentFile.absolutePath)
+            fileOutputStream = FileOutputStream(dest)
+            result = copyFile(input, fileOutputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fileOutputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return result
+    }
+
+    fun copyFile(context: Context, source: Uri, dest: File): Boolean {
+        if (source.path.equals(dest.absolutePath, ignoreCase = true)) {
+            return true
+        }
+        var result = false
+        var inputStream: InputStream? = null
+        try {
+            inputStream = context.contentResolver.openInputStream(source)
+            result = copyFile(inputStream, dest)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            result = false
+        } finally {
+            try {
+                inputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return result
     }
 
     fun copyFile(source: File, dest: File): Boolean {
         if (source.absolutePath.equals(dest.absolutePath, ignoreCase = true)) {
             return true
         }
+        var result = false
         var fileInputStream: FileInputStream? = null
         var fileOutputStream: FileOutputStream? = null
         try {
+            FileUtils.checkAndCreateFolder(dest.parentFile.absolutePath)
             fileInputStream = FileInputStream(source)
             fileOutputStream = FileOutputStream(dest)
-            return copyFile(fileInputStream, fileOutputStream)
+            result = copyFile(fileInputStream, fileOutputStream)
         } catch (e: Exception) {
             e.printStackTrace()
-            return false
+            result = false
         } finally {
             try {
                 fileInputStream?.close()
@@ -229,7 +298,7 @@ object FileAction {
                 e.printStackTrace()
             }
         }
-        return false
+        return result
     }
 
     fun copyFile(srcFile: File, dstFile: File, isMove: Boolean): Boolean {
@@ -244,68 +313,29 @@ object FileAction {
         }
     }
 
-    fun copyDirectory(src: File, dest: File, isMove: Boolean): Boolean {
-        try {
-            if (src.absolutePath.equals(dest.absolutePath, ignoreCase = true)) {
-                return true
-            }
-            if (src.isDirectory) {
-                if (!dest.exists()) {
-                    dest.mkdir()
-                }
-                val files = src.list()
-                for (file in files) {
-                    val srcFile = File(src, file)
-                    val destFile = File(dest, file)
-                    // 递归复制
-                    copyDirectory(srcFile, destFile, isMove).let {
-                        if (!it) {
-                            return false
-                        }
-                    }
-                }
-                return true
-            } else {
-                return copyFile(src, dest, isMove)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
-        }
-    }
-
-    private fun copyStream(input: InputStream, output: OutputStream) {
-        val buff = ByteArray(1024)
-        var read = 0
-        do {
-            read = input.read(buff)
-            if (read > 0) {
-                output.write(buff, 0, read)
-            }
-        } while (read > 0)
-    }
-
     fun copyAssetsFileToPath(context: Context?, fromFileName: String, targetPath: String): Boolean {
         if (context == null) {
             ZLog.e("copyAssetsToSdcard context is null")
             return false
         }
+        var inputStream: InputStream? = null
+        var result = false
         try {
-            FileUtils.checkAndCreateFolder(File(targetPath).parentFile.absolutePath)
             deleteFile(targetPath)
-            context.assets.open(fromFileName).use { input ->
-                FileOutputStream(targetPath).use { output ->
-                    copyStream(input, output)
-                    input.close()
-                    output.close()
-                }
-            }
-            return true
+            inputStream = context.assets.open(fromFileName)
+            result = copyFile(inputStream, File(targetPath))
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             ZLog.e("copyAssets2Sdcard exception:$e")
-            return false
+            result = false
+        } finally {
+            try {
+                inputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+        return result
     }
 
     fun copyAssetsFolderToFolder(context: Context?, fromAssetPath: String, targetFolder: String): Boolean {
@@ -367,5 +397,35 @@ object FileAction {
             }
         }
         return false
+    }
+
+    fun copyDirectory(src: File, dest: File, isMove: Boolean): Boolean {
+        try {
+            if (src.absolutePath.equals(dest.absolutePath, ignoreCase = true)) {
+                return true
+            }
+            if (src.isDirectory) {
+                if (!dest.exists()) {
+                    dest.mkdir()
+                }
+                val files = src.list()
+                for (file in files) {
+                    val srcFile = File(src, file)
+                    val destFile = File(dest, file)
+                    // 递归复制
+                    copyDirectory(srcFile, destFile, isMove).let {
+                        if (!it) {
+                            return false
+                        }
+                    }
+                }
+                return true
+            } else {
+                return copyFile(src, dest, isMove)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
     }
 }
