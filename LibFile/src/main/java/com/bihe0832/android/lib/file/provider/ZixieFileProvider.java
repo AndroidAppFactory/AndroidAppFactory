@@ -22,9 +22,6 @@ import com.bihe0832.android.lib.file.R;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author zixie code@bihe0832.com
@@ -143,27 +140,11 @@ public class ZixieFileProvider extends FileProvider {
                 ContentResolver resolver = context.getContentResolver();
                 Cursor cursor = resolver.query(uri, null, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
-                    String fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                     try {
-                        InputStream inputStream = resolver.openInputStream(uri);
-                        if (context.getExternalCacheDir() != null) {
-                            //该文件放入cache缓存文件夹中
-                            File cache = new File(context.getExternalCacheDir(), fileName);
-                            FileOutputStream fileOutputStream = new FileOutputStream(cache);
-                            if (inputStream != null) {
-//                                    FileUtils.copy(inputStream, fileOutputStream);
-                                //上面的copy方法在低版本的手机中会报java.lang.NoSuchMethodError错误，使用原始的读写流操作进行复制
-                                byte[] len = new byte[Math.min(inputStream.available(), 1024 * 1024)];
-                                int read;
-                                while ((read = inputStream.read(len)) != -1) {
-                                    fileOutputStream.write(len, 0, read);
-                                }
-                                file = cache;
-                                fileOutputStream.close();
-                                inputStream.close();
-                            }
-                        }
-                    } catch (IOException e) {
+                        String fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        file = new File(ZixieFileProvider.getZixieCacheFolder(context), fileName);
+                        FileUtils.INSTANCE.copyFile(context, uri, file);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -171,4 +152,5 @@ public class ZixieFileProvider extends FileProvider {
         }
         return file;
     }
+
 }

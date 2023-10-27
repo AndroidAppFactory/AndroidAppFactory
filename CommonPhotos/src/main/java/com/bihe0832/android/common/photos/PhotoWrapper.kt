@@ -44,13 +44,14 @@ fun Activity.getAutoChangedCropUri(): Uri? {
 
 fun Activity.getCropUri(fileName: String): Uri? {
     return if (OSUtils.isAndroidQVersion()) {
-        Media.createImageUriAboveAndroidQ(
+        Media.createUriAboveAndroidQ(
             this,
+            FILE_TYPE_IMAGE,
             "",
             fileName,
         )
     } else {
-        Media.createImageUriForCropBelowAndroidQ(
+        Media.createUriBelowAndroidQ(
             this,
             "",
             fileName,
@@ -60,13 +61,14 @@ fun Activity.getCropUri(fileName: String): Uri? {
 
 fun Activity.getPhotosUri(fileName: String): Uri? {
     return if (OSUtils.isAndroidQVersion()) {
-        Media.createImageUriAboveAndroidQ(
+        Media.createUriAboveAndroidQ(
             this,
+            FILE_TYPE_IMAGE,
             "",
             fileName,
         )
     } else {
-        Media.createImageUriForCameraBelowAndroidQ(
+        Media.createUriBelowAndroidQ(
             this,
             "",
             fileName,
@@ -77,13 +79,23 @@ fun Activity.getPhotosUri(fileName: String): Uri? {
 /**
  * TargetFile 建议使用 [getPhotosFolder] 获取
  */
-fun Activity.cropPhoto(sourceFile: String, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1) {
+fun Activity.cropPhoto(
+    sourceFile: String,
+    targetFile: Uri?,
+    aspectX: Int = 1,
+    aspectY: Int = 1,
+) {
     var sourceFileProvider =
         ZixieFileProvider.getZixieFileProvider(this, File(sourceFile))
     cropPhoto(sourceFileProvider, targetFile, aspectX, aspectY)
 }
 
-fun Activity.cropPhoto(sourceFile: Intent?, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1) {
+fun Activity.cropPhoto(
+    sourceFile: Intent?,
+    targetFile: Uri?,
+    aspectX: Int = 1,
+    aspectY: Int = 1,
+) {
     var file = ZixieFileProvider.uriToFile(this, sourceFile?.data)
     cropPhoto(ZixieFileProvider.getZixieFileProvider(this, file), targetFile, aspectX, aspectY)
 }
@@ -102,7 +114,8 @@ fun Activity.cropPhoto(
     } else {
         sourceFile
     }
-    val file = ZixieFileProvider.uriToFile(this, targetFile)
+    val file = Media.uriToFile(this, targetFile)
+
     if (file != null) {
         FileUtils.checkAndCreateFolder(file.parent)
     }

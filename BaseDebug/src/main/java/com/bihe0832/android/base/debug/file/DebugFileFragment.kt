@@ -26,6 +26,7 @@ import com.bihe0832.android.lib.config.OnConfigChangedListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_ALL
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.sqlite.BaseDBHelper
@@ -123,6 +124,10 @@ class DebugFileFragment : DebugEnvFragment() {
                     tempFile = "/" + FileUtils.getFileName(filePath)
                     result = FileUtils.copyFile(context!!, it, File(tempFile))
                     ZLog.d(LOG_TAG, "File Copy : $result $tempFile")
+                    ZixieFileProvider.uriToFile(context!!, it)?.let { file ->
+                        ZLog.d(LOG_TAG, "File Copy : $file")
+                        ZLog.d(LOG_TAG, "File Content : ${FileUtils.getFileContent(file.absolutePath)}")
+                    }
                 }
             }
         }
