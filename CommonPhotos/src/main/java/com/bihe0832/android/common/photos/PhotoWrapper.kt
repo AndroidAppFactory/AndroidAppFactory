@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import com.bihe0832.android.common.permission.AAFPermissionManager
@@ -31,7 +30,7 @@ fun getAutoChangedPhotoName(): String {
 }
 
 fun Activity.getPhotosFolder(): String {
-    return Media.getZixieMediaPath(this, Environment.DIRECTORY_PICTURES)
+    return Media.getZixieMediaPath(this, FILE_TYPE_IMAGE, "")
 }
 
 fun Activity.getAutoChangedPhotoUri(): Uri? {

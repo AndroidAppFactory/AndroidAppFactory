@@ -242,7 +242,7 @@ public class PanelDrawFragment extends BaseFragment {
             mContentLayout.buildDrawingCache();
             String fileName = BitmapUtil.getViewBitmap(mContentLayout);
             mContentLayout.destroyDrawingCache();
-            Media.addPicToPhotos(getContext(), fileName);
+            Media.addToPhotos(getContext(), fileName);
             ZixieContext.INSTANCE.showToast(getString(R.string.white_board_export_tip) + fileName);
         } catch (Exception e) {
             ZixieContext.INSTANCE.showToast(getString(R.string.white_board_export_fail));
@@ -255,7 +255,7 @@ public class PanelDrawFragment extends BaseFragment {
      * 重新显示白板
      */
     private void showPoints() {
-        if (isRootViewCreated()){
+        if (isRootViewCreated()) {
             mDrawPenView.showPoints();
             mDrawTextView.showPoints();
         }

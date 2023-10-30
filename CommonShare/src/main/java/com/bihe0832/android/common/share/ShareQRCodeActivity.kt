@@ -20,7 +20,6 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.net.URLDecoder
 
-
 /**
  * 不同分享的公共代码，分享的Activity的基类，提供基础的UI样式
  *
@@ -52,18 +51,23 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mShareData = parseShareString(intent, RouterConstants.INTENT_EXTRA_KEY_SHARE_DATA_WITH_ENCODE)
-                ?: getShareData()
+            ?: getShareData()
         mShareTitle = parseShareString(intent, RouterConstants.INTENT_EXTRA_KEY_SHARE_TITLE_WITH_ENCODE)
-                ?: getShareTitle()
+            ?: getShareTitle()
         mShareDesc = parseShareString(intent, RouterConstants.INTENT_EXTRA_KEY_SHARE_DESC_WITH_ENCODE)
-                ?: getShareDesc()
+            ?: getShareDesc()
         if (TextUtils.isEmpty(mShareData)) {
             finish()
         }
 
         ThreadManager.getInstance().start {
             val log = BitmapUtil.getLocalBitmap(ZixieContext.applicationContext, R.mipmap.icon, 1)
-            QRCodeEncodingHandler.createQRCode(mShareData, DisplayUtil.dip2px(this, 200f), DisplayUtil.dip2px(this, 200f), log)?.let {
+            QRCodeEncodingHandler.createQRCode(
+                mShareData,
+                DisplayUtil.dip2px(this, 200f),
+                DisplayUtil.dip2px(this, 200f),
+                log,
+            )?.let {
                 findViewById<ImageView>(R.id.share_qrcode_icon)?.apply {
                     post { setImageBitmap(it) }
                 }
@@ -92,7 +96,7 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
             ThreadManager.getInstance().start {
                 BitmapUtil.getViewBitmap(findViewById(R.id.share_qrcode_desc_layout)).let {
                     ThreadManager.getInstance().runOnUIThread {
-                        Media.addPicToPhotos(this, it)
+                        Media.addToPhotos(this, it)
                         ZixieContext.showToast("二维码已添加到相册")
                     }
                 }
@@ -132,7 +136,6 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
     open fun getShareLink(): String {
         return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_link)!!, mShareData)
     }
-
 
     open fun getShareDialogTitle(): String {
         return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_dialog_title)!!, "")

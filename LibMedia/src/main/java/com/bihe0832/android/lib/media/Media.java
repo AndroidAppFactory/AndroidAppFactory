@@ -55,13 +55,34 @@ public class Media {
         }
     }
 
-    public static final String getZixieMediaPath(@NotNull Context context, String folderType) {
+    public static final String getFolderType(String mimeType) {
+        String folderType = Environment.DIRECTORY_DCIM;
+        if (FileMimeTypes.INSTANCE.isImageFileByMimeType(mimeType)) {
+            folderType = Environment.DIRECTORY_PICTURES;
+        } else if (FileMimeTypes.INSTANCE.isVideoFileByMimeType(mimeType)) {
+            folderType = Environment.DIRECTORY_MOVIES;
+        } else if (FileMimeTypes.INSTANCE.isAudioFileByMimeType(mimeType)) {
+            folderType = Environment.DIRECTORY_MUSIC;
+        }
+        return folderType;
+    }
+
+    public static final String getZixieMediaPath(@NotNull Context context, String mimeType, String subDir) {
+        String folderType = Environment.DIRECTORY_DCIM;
+        if (TextUtils.isEmpty(subDir)) {
+            folderType = getFolderType(mimeType);
+        }
         String filePath = Environment.getExternalStoragePublicDirectory(folderType).getPath();
         if (TextUtils.isEmpty(filePath)) {
             //android 11以上，将文件创建在公有目录
             filePath = ZixieFileProvider.getZixieFilePath(context) + folderType;
         }
-        return FileUtils.INSTANCE.getFolderPathWithSeparator(filePath);
+        if (TextUtils.isEmpty(subDir)) {
+            return FileUtils.INSTANCE.getFolderPathWithSeparator(filePath) + subDir;
+        } else {
+            return FileUtils.INSTANCE.getFolderPathWithSeparator(
+                    FileUtils.INSTANCE.getFolderPathWithSeparator(filePath) + subDir);
+        }
     }
 
     private static void updateContentValues(ContentValues contentValues, String mimeType, String subDir, File file) {
@@ -173,7 +194,7 @@ public class Media {
             writeToPhotos(contentResolver, contentValues, targetUri, filePath);
         } else {
             try {
-                String path = getZixieMediaPath(context, subDir);
+                String path = getZixieMediaPath(context, mimeType, subDir);
                 if (isSameName) {
                     path = path + FileUtils.INSTANCE.getFileName(filePath);
                 } else {
@@ -196,19 +217,16 @@ public class Media {
             }
         }
         try {
-            MediaScannerConnection.scanFile(context, new String[]{getZixieMediaPath(context, subDir)}, null, null);
+            MediaScannerConnection.scanFile(context, new String[]{getZixieMediaPath(context, mimeType, subDir)}, null,
+                    null);
             context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, targetUri));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void addVideoToPhotos(Context context, String imagePath) {
-        addToPhotos(context, imagePath, Environment.DIRECTORY_MOVIES, false);
-    }
-
-    public static void addPicToPhotos(Context context, String imagePath) {
-        addToPhotos(context, imagePath, Environment.DIRECTORY_PICTURES, false);
+    public static void addToPhotos(Context context, String imagePath) {
+        addToPhotos(context, imagePath, "", false);
     }
 
     public static File uriToFile(Context context, Uri uri) {
