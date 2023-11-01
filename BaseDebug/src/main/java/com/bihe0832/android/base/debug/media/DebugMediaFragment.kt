@@ -123,17 +123,15 @@ class DebugMediaFragment : DebugEnvFragment() {
     private fun audioImageToVideo() {
         AAFFileWrapper.clear()
         textToImage()
-        val AUDIO = "audio.wav"
         val IMAGE = "cv_v.jpg"
-        val audioPath = AAFFileWrapper.getMediaTempFolder() + AUDIO
         val imagePath1 = AAFFileWrapper.getMediaTempFolder() + IMAGE
-        FileUtils.copyAssetsFileToPath(context, AUDIO, audioPath)
         FileUtils.copyAssetsFileToPath(context, IMAGE, imagePath1)
+        FileUtils.copyAssetsFileToPath(context, audio, audioPath)
 
         try {
             val width = 720
-            val height = 1080
-            val textNum = 100L
+            val height = 720
+            val textNum = 100L * 1000
             FFmpegTools.convertAudioWithImageToVideo(
                 width,
                 height,
