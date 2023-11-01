@@ -8,6 +8,7 @@ import com.bihe0832.android.base.debug.photos.DebugPhotosFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.media.MediaTools
+import com.bihe0832.android.common.video.FFmpegTools
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
@@ -34,6 +35,7 @@ class DebugMediaFragment : DebugEnvFragment() {
             add(DebugItemData("文字转图片1（有图标，有标题）", View.OnClickListener { textToImage() }))
             add(DebugItemData("文字转图片2（无图标，无标题）", View.OnClickListener { textToImage2() }))
             add(DebugItemData("音频转视频", View.OnClickListener { audioToVideo() }))
+            add(DebugItemData("音频图片转视频", View.OnClickListener { audioImageToVideo() }))
             add(DebugItemData("图片无损存图库", View.OnClickListener { saveImage() }))
             add(DebugItemData("视频图片存图库", View.OnClickListener { save() }))
             add(DebugItemData("下载图片并添加到相册", View.OnClickListener { testDownImage() }))
@@ -116,6 +118,42 @@ class DebugMediaFragment : DebugEnvFragment() {
                 }
             },
         )
+    }
+
+    private fun audioImageToVideo() {
+        AAFFileWrapper.clear()
+        textToImage()
+        val AUDIO = "audio.wav"
+        val IMAGE = "cv_v.jpg"
+        val audioPath = AAFFileWrapper.getMediaTempFolder() + AUDIO
+        val imagePath1 = AAFFileWrapper.getMediaTempFolder() + IMAGE
+        FileUtils.copyAssetsFileToPath(context, AUDIO, audioPath)
+        FileUtils.copyAssetsFileToPath(context, IMAGE, imagePath1)
+
+        try {
+            val width = 720
+            val height = 1080
+            val textNum = 100L
+            FFmpegTools.convertAudioWithImageToVideo(
+                width,
+                height,
+                audioPath,
+                textNum / 50,
+                mutableListOf<String>().apply {
+                    add(imagePath1)
+                    add(imagePath ?: "")
+                    add(imagePath1)
+                },
+                object :
+                    AAFDataCallback<String>() {
+                    override fun onSuccess(result: String?) {
+                        Media.addToPhotos(context, result)
+                    }
+                },
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun textToImage() {

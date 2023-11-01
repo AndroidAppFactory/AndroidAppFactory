@@ -59,4 +59,9 @@ ext {
     ffmpeg = [
             min: "com.arthenica:mobile-ffmpeg-min:4.4.LTS"
     ]
+
+    metadata = [
+            drewnoakes: "com.drewnoakes:metadata-extractor:2.16.0",
+    ]
+
 }

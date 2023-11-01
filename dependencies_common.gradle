@@ -157,7 +157,9 @@ ext.commonmoduleInfo = [
         "CommonMedia"           : [
                 "version"            : "6.6.12",
                 "artifactId"         : "common-media",
-                "apidependenciesList": ["Framework", project.ffmpeg.min]
+                "apidependenciesList": [
+                        "Framework", project.ffmpeg.min, project.metadata.drewnoakes
+                ]
         ]
 ]
 
