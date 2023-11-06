@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.photos
+package com.bihe0832.android.base.debug.media.photos
 
 import android.Manifest
 import android.app.Activity

@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -16,7 +15,6 @@ import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.action.FileAction;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
-import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.os.OSUtils;
 import java.io.File;
 import java.io.FileInputStream;
@@ -230,36 +228,6 @@ public class Media {
     }
 
     public static File uriToFile(Context context, Uri uri) {
-        if (uri == null) {
-            ZLog.e("uri is null");
-            return null;
-        }
-        File file = null;
-        if (uri.getScheme() != null) {
-            ZLog.e("uri.getScheme()：" + uri.getScheme());
-            if (uri.getScheme().equals(ContentResolver.SCHEME_FILE) && uri.getPath() != null) {
-                //此uri为文件，并且path不为空(保存在沙盒内的文件可以随意访问，外部文件path则为空)
-                file = new File(uri.getPath());
-            } else if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-                //此uri为content类型，将该文件复制到沙盒内
-                ContentResolver resolver = context.getContentResolver();
-                Cursor cursor = resolver.query(uri, null, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    try {
-                        String filePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-                        if (FileUtils.INSTANCE.checkFileExist(filePath)) {
-                            file = new File(filePath);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (file == null) {
-                            file = ZixieFileProvider.uriToFile(context, uri);
-                        }
-                    }
-                }
-            }
-        }
-        return file;
+        return ZixieFileProvider.uriToFile(context, uri);
     }
 }

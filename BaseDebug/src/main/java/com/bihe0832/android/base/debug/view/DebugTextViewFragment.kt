@@ -21,8 +21,12 @@ import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
 import com.bihe0832.android.lib.utils.os.DisplayUtil
-import kotlinx.android.synthetic.main.fragment_test_text.*
-
+import kotlinx.android.synthetic.main.fragment_test_text.info_content_0
+import kotlinx.android.synthetic.main.fragment_test_text.info_content_00
+import kotlinx.android.synthetic.main.fragment_test_text.info_content_drawable
+import kotlinx.android.synthetic.main.fragment_test_text.rtv_msg_tip
+import kotlinx.android.synthetic.main.fragment_test_text.test_basic_button
+import kotlinx.android.synthetic.main.fragment_test_text.text_marquee
 
 class DebugTextViewFragment : BaseFragment() {
     private var index = 0
@@ -32,26 +36,24 @@ class DebugTextViewFragment : BaseFragment() {
     }
 
     var testList = mutableListOf<String>(
-            "这是一个测个测个测测个测测个fdsfsdsf测个测个测试测试0 fdsfsdf\ndsd ",
-            "这是一个测试测试这是一个测试测试这是一个测试1",
-            "这是一个测试测试这是一个测试测试这是一个测试测试这是一",
-            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试3",
-            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试测试4",
-            "这是一个两个个三个四个五测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是测试5",
-            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这试测试6",
-            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试试这是这是一个测试测7",
-            "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个试测这是一个试测这是一个试测这是一个试测试这是一个测试测试8"
+        "这是一个测个测个测测个测测个fdsfsdsf测个测个测试测试0 fdsfsdf\ndsd ",
+        "这是一个测试测试这是一个测试测试这是一个测试1",
+        "这是一个测试测试这是一个测试测试这是一个测试测试这是一",
+        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试3",
+        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试测试4",
+        "这是一个两个个三个四个五测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是测试5",
+        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这试测试6",
+        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试试这是这是一个测试测7",
+        "这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个测试测试这是一个试测这是一个试测这是一个试测这是一个试测试这是一个测试测试8",
     )
 
     override fun initView(view: View) {
-
-
         text_marquee.apply {
 //            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
             setDrawableLeft(R.drawable.ic_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             setText(":fds")
             startScroll()
-            setOnScrollListener(object :OnScrollListener{
+            setOnScrollListener(object : OnScrollListener {
                 override fun OnComplete() {
                     text_marquee.setText(text_marquee.text.toString() + "fdsffsd ")
                 }
@@ -67,20 +69,22 @@ class DebugTextViewFragment : BaseFragment() {
                 override fun onStart() {
                     ZLog.d("onPause")
                 }
-
             })
         }
 
-
         var text = "这是普通颜色文字" + TextFactoryUtils.getSpecialText("这是高亮测试", Color.parseColor("#E66633"))
 
-
-        info_content_drawable.setText(TextFactoryUtils.getCharSequenceWithClickAction(text, "这是高亮测试", object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                ZixieContext.showToast(text)
-            }
-
-        }))
+        info_content_drawable.setText(
+            TextFactoryUtils.getCharSequenceWithClickAction(
+                text,
+                "这是高亮测试",
+                object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        ZixieContext.showToast(text)
+                    }
+                },
+            ),
+        )
         info_content_drawable.setMovementMethod(LinkMovementMethod.getInstance())
         info_content_drawable.apply {
 //            setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getSpecialText("这是一个测试",Color.WHITE)))
@@ -93,7 +97,6 @@ class DebugTextViewFragment : BaseFragment() {
 //                    DisplayUtil.dip2px(context!!, 30f)
 //            )
         }
-
 
         testSpecialText(testList[0])
 //        info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
@@ -141,25 +144,23 @@ class DebugTextViewFragment : BaseFragment() {
 //                }
             }
         }
-
-
     }
-
 
     fun testFun() {
         SpannableStringBuilder("a").apply {
             append("aaaaaaa")
             setSpan(
-                    ZixieTextImageSpan(
-                            context!!,
-                            BitmapUtil.getLocalBitmap(
-                                    context!!,
-                                    R.drawable.icon_author, 1
-                            )
+                ZixieTextImageSpan(
+                    context!!,
+                    BitmapUtil.getLocalBitmap(
+                        context!!,
+                        R.drawable.icon_author,
+                        1,
                     ),
-                    2,
-                    3,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                ),
+                2,
+                3,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
             )
             append("aaaaaaa")
         }.let {
@@ -169,13 +170,13 @@ class DebugTextViewFragment : BaseFragment() {
         SpannableStringBuilder("测试").apply {
             append("测试测试测试测试测试")
             setSpan(
-                    ZixieTextImageSpan(
-                            context!!,
-                            BitmapUtil.getLocalBitmap(context!!, R.drawable.icon_author, 1)
-                    ),
-                    2,
-                    3,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                ZixieTextImageSpan(
+                    context!!,
+                    BitmapUtil.getLocalBitmap(context!!, R.drawable.icon_author, 1),
+                ),
+                2,
+                3,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE,
             )
             append("这是一个测试")
         }.let {
@@ -190,18 +191,18 @@ class DebugTextViewFragment : BaseFragment() {
         var start: Int = content.indexOf("测试", startIndex, true)
         var end = start + "测试".length
         spanString.setSpan(
-                ZixieTextRadiusBackgroundSpan(
-                        Color.YELLOW,
-                        Color.RED,
-                        2,
-                        10,
-                        60,
-                        20,
-                        20,
-                        info_content_0.textSize * 3 / 5,
-                        0,
-                        Typeface.DEFAULT
-                )
+            ZixieTextRadiusBackgroundSpan(
+                Color.YELLOW,
+                Color.RED,
+                2,
+                10,
+                60,
+                20,
+                20,
+                info_content_0.textSize * 3 / 5,
+                0,
+                Typeface.DEFAULT,
+            ),
 //                ZixieTextRadiusBackgroundSpan(
 //                        Color.parseColor("#998D8D8D"),
 //                        Color.parseColor("#998D8D8D"),
@@ -214,38 +215,38 @@ class DebugTextViewFragment : BaseFragment() {
 //                        Color.WHITE,
 //                        Typeface.DEFAULT_BOLD
 //                )
-        ,
-                start,
-                end,
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            start,
+            end,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE,
         )
 
         spanString.setSpan(
-                ZixieTextClickableSpan(object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        ZixieContext.showToast("test")
-                    }
-
-                }), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-        );
+            ZixieTextClickableSpan(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    ZixieContext.showToast("test")
+                }
+            }),
+            start,
+            end,
+            Spanned.SPAN_INCLUSIVE_EXCLUSIVE,
+        )
 
 //        }
-
 
         info_content_0.setText(spanString)
 
 //        SpannableStringBuilder(" ").apply {
 //
 //            append("1")
-////            setSpan(
-////                ZixieTextImageSpan(
-////                    context!!,
-////                    R.drawable.ic_left_arrow_white
-////                ),
-////                0,
-////                1,
-////                Spannable.SPAN_INCLUSIVE_INCLUSIVE
-////            )
+// //            setSpan(
+// //                ZixieTextImageSpan(
+// //                    context!!,
+// //                    R.drawable.ic_left_arrow_white
+// //                ),
+// //                0,
+// //                1,
+// //                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+// //            )
 //            setSpan(
 //                    ZixieTextImageSpan(
 //                            context!!,
@@ -268,7 +269,7 @@ class DebugTextViewFragment : BaseFragment() {
 //            )
 //        }.let {
 //            info_content_0.append(it)
-////            info_content_0.setMovementMethod(LinkMovementMethod.getInstance());
+// //            info_content_0.setMovementMethod(LinkMovementMethod.getInstance());
 //
 //        }
 

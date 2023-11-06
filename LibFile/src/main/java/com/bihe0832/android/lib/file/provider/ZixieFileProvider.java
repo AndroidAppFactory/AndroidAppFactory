@@ -8,20 +8,29 @@
 
 package com.bihe0832.android.lib.file.provider;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import androidx.core.content.FileProvider;
+import androidx.core.content.PermissionChecker;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.R;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.bihe0832.android.lib.utils.os.OSUtils;
 import java.io.File;
+import java.util.Locale;
 
 /**
  * @author zixie code@bihe0832.com
@@ -115,6 +124,127 @@ public class ZixieFileProvider extends FileProvider {
         return getZixieFilePath(context, FOLDER_CACHE);
     }
 
+
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return uri != null && uri.getAuthority().startsWith("com.google.android.apps.photos.content");
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for MediaStore Uris, and other file-based
+     * ContentProviders.
+     *
+     * @param context The context.
+     * @param uri The Uri to query.
+     * @param selection (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     * @author paulburke
+     */
+    public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } catch (IllegalArgumentException ex) {
+            ZLog.d(String.format(Locale.getDefault(), "getDataColumn: _data - [%s]", ex.getMessage()));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return "";
+    }
+
+
+    public static String getPath(final Context ctx, final Uri uri) {
+        if (uri == null || uri.getScheme() == null) {
+            ZLog.e("uri is null");
+            return "";
+        }
+        ZLog.e("uri.getScheme()：" + uri.getScheme());
+        Context context = ctx.getApplicationContext();
+        // DocumentProvider
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context,
+                uri)) {
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                if ("primary".equalsIgnoreCase(type)) {
+                    if (OSUtils.isAndroidQVersion()) {
+                        return context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + split[1];
+                    } else {
+                        return Environment.getExternalStorageDirectory() + "/" + split[1];
+                    }
+                }
+            } else if (isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), ConvertUtils.parseLong(id, 0L));
+
+                return getDataColumn(context, contentUri, null, null);
+            } else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{split[1]};
+                return getDataColumn(context, contentUri, selection, selectionArgs);
+            }
+        } else if (ContentResolver.SCHEME_CONTENT.equalsIgnoreCase(uri.getScheme())) {
+            if (PermissionChecker.checkSelfPermission(ctx, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PermissionChecker.PERMISSION_GRANTED) {
+                return getDataColumn(context, uri, null, null);
+            } else {
+                ContentResolver resolver = context.getContentResolver();
+                Cursor cursor = resolver.query(uri, null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    try {
+                        String fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        File file = new File(ZixieFileProvider.getZixieCacheFolder(context), fileName);
+                        FileUtils.INSTANCE.copyFile(context, uri, file);
+                        return file.getAbsolutePath();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return "";
+                    }
+                }
+            }
+        } else if (ContentResolver.SCHEME_FILE.equalsIgnoreCase(uri.getScheme())) {
+            //此uri为文件，并且path不为空(保存在沙盒内的文件可以随意访问，外部文件path则为空)
+            return uri.getPath();
+        }
+        return "";
+    }
+
+
     /**
      * 将uri转换为file
      * uri类型为file的直接转换出路径
@@ -125,32 +255,11 @@ public class ZixieFileProvider extends FileProvider {
      * @return file
      */
     public static File uriToFile(Context context, Uri uri) {
-        if (uri == null) {
-            ZLog.e("uri is null");
+        String filePath = getPath(context, uri);
+        if (FileUtils.INSTANCE.checkFileExist(filePath)) {
+            return new File(filePath);
+        } else {
             return null;
         }
-        File file = null;
-        if (uri.getScheme() != null) {
-            ZLog.e("uri.getScheme()：" + uri.getScheme());
-            if (uri.getScheme().equals(ContentResolver.SCHEME_FILE) && uri.getPath() != null) {
-                //此uri为文件，并且path不为空(保存在沙盒内的文件可以随意访问，外部文件path则为空)
-                file = new File(uri.getPath());
-            } else if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-                //此uri为content类型，将该文件复制到沙盒内
-                ContentResolver resolver = context.getContentResolver();
-                Cursor cursor = resolver.query(uri, null, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    try {
-                        String fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                        file = new File(ZixieFileProvider.getZixieCacheFolder(context), fileName);
-                        FileUtils.INSTANCE.copyFile(context, uri, file);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        return file;
     }
-
 }

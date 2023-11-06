@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
         <SurfaceView
-            android:id="@+id/common_qrcode_scanner_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                android:id="@+id/common_qrcode_scanner_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         <ImageView
-            android:id="@+id/common_qrcode_scanner_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="@dimen/toolbar_padding_top"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_left_arrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/common_qrcode_scanner_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/toolbar_padding_top"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_left_arrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.zxing.view.ViewfinderView
-            android:id="@+id/common_qrcode_viewfinder_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:corner_color="@color/corner_color"
-            app:frame_color="@color/viewfinder_frame"
-            app:label_text="二维码/条形码扫描"
-            app:label_text_color="@color/colorOnPrimary"
-            app:laser_color="@color/laser_color"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:mask_color="@color/viewfinder_mask"
-            app:result_color="@color/result_view"
-            app:result_point_color="@color/result_point_color" />
+                android:id="@+id/common_qrcode_viewfinder_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:corner_color="@color/corner_color"
+                app:frame_color="@color/viewfinder_frame"
+                app:label_text="二维码/条形码扫描"
+                app:label_text_color="@color/colorOnPrimary"
+                app:laser_color="@color/laser_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mask_color="@color/viewfinder_mask"
+                app:result_color="@color/result_view"
+                app:result_point_color="@color/result_point_color" />
 
         <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-            android:id="@+id/common_qrcode_flash"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="48dp"
-            android:padding="18dp"
-            android:scaleType="centerInside"
-            android:tint="@color/icons"
-            android:src="@drawable/com_bihe0832_common_qrcode_flash_select"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/common_qrcode_album"
-            app:layout_constraintStart_toStartOf="parent" />
+                android:id="@+id/common_qrcode_flash"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="48dp"
+                android:padding="18dp"
+                android:scaleType="centerInside"
+                android:tint="@color/icons"
+                android:src="@drawable/com_bihe0832_common_qrcode_flash_select"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/common_qrcode_album"
+                app:layout_constraintStart_toStartOf="parent" />
 
         <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-            android:id="@+id/common_qrcode_album"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="18dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/icon_photos"
-            android:tint="@color/icons"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/common_qrcode_flash"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/common_qrcode_flash" />
+                android:id="@+id/common_qrcode_album"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="18dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_photos"
+                android:tint="@color/icons"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/common_qrcode_flash"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/common_qrcode_flash" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

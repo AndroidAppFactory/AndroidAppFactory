@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.cho
 import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.takePhotoBtn
 import java.io.File
 
-const val GOOGLE_PHOTO_PREFIX = "content://com.google.android.apps.photos.contentprovider"
-
 fun getAutoChangedPhotoName(): String {
     return "zixie_" + System.currentTimeMillis() + ".jpg"
 }
@@ -108,11 +106,8 @@ fun Activity.cropPhoto(
     ZLog.d("Activity cropPhoto sourceFile ：$sourceFile")
     ZLog.d("Activity cropPhoto targetFile ：$targetFile")
 
-    var finalSourceFile: Uri? = if (sourceFile.toString().startsWith(GOOGLE_PHOTO_PREFIX, true)) {
+    var finalSourceFile: Uri? =
         ZixieFileProvider.getZixieFileProvider(this, ZixieFileProvider.uriToFile(this, sourceFile))
-    } else {
-        sourceFile
-    }
     val file = Media.uriToFile(this, targetFile)
 
     if (file != null) {

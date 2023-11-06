@@ -11,9 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-
 import androidx.annotation.NonNull;
-
 import com.bihe0832.android.common.photos.PhotoWrapperKt;
 import com.bihe0832.android.common.qrcode.R;
 import com.bihe0832.android.framework.ZixieContext;
@@ -31,7 +29,6 @@ import com.google.zxing.camera.CameraManager;
 import com.google.zxing.decoding.CaptureActivityHandler;
 import com.google.zxing.decoding.InactivityTimer;
 import com.google.zxing.view.ViewfinderView;
-
 import java.io.IOException;
 
 public class BaseCaptureActivity extends BaseActivity implements Callback {
@@ -115,10 +112,12 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
 
     private void initData(Intent intent) {
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND)) {
-            opensound = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND), true);
+            opensound = ConvertUtils.parseBoolean(
+                    intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND), true);
         }
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE)) {
-            openvibrate = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND), true);
+            openvibrate = ConvertUtils.parseBoolean(
+                    intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND), true);
         }
     }
 
@@ -270,8 +269,8 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
 
         if (openvibrate) {
 
-            Vibrator vibrator = (Vibrator)getSystemService(Service.VIBRATOR_SERVICE);
-            if (vibrator != null){
+            Vibrator vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
+            if (vibrator != null) {
                 vibrator.vibrate(VIBRATE_DURATION);
             }
         }

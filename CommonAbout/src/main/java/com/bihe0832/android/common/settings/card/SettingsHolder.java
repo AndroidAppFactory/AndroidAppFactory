@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bihe0832.android.common.about.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
@@ -20,8 +19,8 @@ import com.bumptech.glide.request.RequestOptions;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2019-11-21.
- * Description: Description
+ *         Created on 2019-11-21.
+ *         Description: Description
  */
 public class SettingsHolder extends CardBaseHolder {
 
@@ -50,7 +49,7 @@ public class SettingsHolder extends CardBaseHolder {
     public void initData(CardBaseModule item) {
         SettingsData data = (SettingsData) item;
         itemView.setOnClickListener(data.mHeaderListener);
-        
+
         if (data.mHeaderTipsListener != null) {
             mHeaderTips.setOnClickListener(data.mHeaderTipsListener);
         } else {
@@ -60,7 +59,8 @@ public class SettingsHolder extends CardBaseHolder {
             if (data.mItemIconRes < 0) {
                 mHeaderIcon.setVisibility(View.GONE);
             } else {
-                GlideExtKt.loadImage(mHeaderIcon, ThemeResourcesManager.INSTANCE.getDrawable(data.mItemIconRes), 0, 0, new RequestOptions());
+                GlideExtKt.loadImage(mHeaderIcon, ThemeResourcesManager.INSTANCE.getDrawable(data.mItemIconRes), 0, 0,
+                        new RequestOptions());
                 mHeaderIcon.setVisibility(View.VISIBLE);
             }
         } else {
@@ -82,8 +82,9 @@ public class SettingsHolder extends CardBaseHolder {
             mHeaderTips.setVisibility(View.VISIBLE);
         }
 
-        if (data.mItemNewNum >=0) {
-            TextViewWithBackgroundExtKt.changeStatusWithUnreadMsg(mHeaderIsNew, data.mItemNewNum, DisplayUtil.dip2px(getContext(), 8));
+        if (data.mItemNewNum >= 0) {
+            TextViewWithBackgroundExtKt.changeStatusWithUnreadMsg(mHeaderIsNew, data.mItemNewNum,
+                    DisplayUtil.dip2px(getContext(), 8));
         } else {
             mHeaderIsNew.setVisibility(View.GONE);
         }

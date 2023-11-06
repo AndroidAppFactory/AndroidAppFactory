@@ -13,7 +13,7 @@ ext.libmoduleInfo = [
                         "LibBlockTask", "LibOkhttpWrapper", "LibDataRepository", "LibCoroutines",
                         "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
                         "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
-                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibPermission",
+                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibPermission", "LibMedia",
                         "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
                         "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme", "LibColor", "LibPanel"]
         ],
@@ -305,8 +305,8 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         project.androidsupport.constraintlayout,
-                        "LibThread", "LibMedia", "LibOS", "LibAAFResource", "LibText", "LibViewExt",
-                        "LibBlockTask", "LibTheme"
+                        "LibThread", "LibOS", "LibAAFResource", "LibText", "LibViewExt", "LibBlockTask", "LibTheme",
+                        "LibMedia"
                 ]
         ],
         "LibNotification"           : [

@@ -28,7 +28,6 @@ class DebugQRCodeFragment : BaseFragment() {
         resetQRcodeData()
         view.findViewById<EditText>(R.id.qrcode_input).addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -53,7 +52,8 @@ class DebugQRCodeFragment : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.qrcode_share).setOnClickListener {
-            shareByQrcode(view.findViewById<EditText>(R.id.qrcode_input).text.toString()
+            shareByQrcode(
+                view.findViewById<EditText>(R.id.qrcode_input).text.toString(),
 //                    "我发现了一个好玩的#—#",
 //                    "我发现了一个好玩的#—#，快扫码一起体验一下吧"
             )
@@ -84,7 +84,9 @@ class DebugQRCodeFragment : BaseFragment() {
                 BitmapUtil.getViewBitmap(rootview.findViewById<ImageView>(R.id.qrcode_image)).let {
                     val data = QrcodeUtils.decodeQRcode(it)
                     ThreadManager.getInstance().runOnUIThread {
-                        rootview.findViewById<TextView>(R.id.qrcode_result).text = "源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data?.text?:""
+                        rootview.findViewById<TextView>(R.id.qrcode_result).text =
+                            "源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data?.text
+                                ?: ""
                     }
                 }
             }

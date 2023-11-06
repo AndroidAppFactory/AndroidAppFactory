@@ -17,16 +17,34 @@ import com.bihe0832.android.lib.ui.textview.ext.setDrawableLeft
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.flyco.tablayout.SlidingTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
-import kotlinx.android.synthetic.main.activity_sliding_tab.*
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_1
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_10
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_11
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_2
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_3
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_4
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_5
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_6
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_7
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_8
+import kotlinx.android.synthetic.main.activity_sliding_tab.tl_9
+import kotlinx.android.synthetic.main.activity_sliding_tab.vp
 
 class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
     private val mContext: Context = this
     private val mFragments = ArrayList<Fragment>()
 
     private val mTitles = arrayOf(
-        "热门", "iOS", "Android", "前端", "后端", "设计", "工具资源"
+        "热门",
+        "iOS",
+        "Android",
+        "前端",
+        "后端",
+        "设计",
+        "工具资源",
     )
-//    private val mTitles = arrayOf(
+
+    //    private val mTitles = arrayOf(
 //        "https://cdn.bihe0832.com/images/zixie_32.ico",
 //        "https://cdn.bihe0832.com/images/head.jpg",
 //        "https://cdn.bihe0832.com/images/head.jpg",
@@ -120,17 +138,16 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
                 "https://alifei01.cfp.cn/creative/vcg/nowater800/new/VCG21ba1a56cfe.jpg"
             } else {
                 "https://alifei01.cfp.cn/creative/vcg/nowarter800/new/VCG211154718095.jpg"
-            }
+            },
         )
 
         (tl_10.getChildAt(0) as ViewGroup).let { rootView ->
             ((rootView.getChildAt(1) as ViewGroup).getChildAt(0) as AppCompatTextView).apply {
-
-                compoundDrawablePadding  = DisplayUtil.dip2px(context!!, 4f)
+                compoundDrawablePadding = DisplayUtil.dip2px(context!!, 4f)
                 setDrawableLeft(
                     R.mipmap.icon,
                     DisplayUtil.dip2px(context!!, 20f),
-                    DisplayUtil.dip2px(context!!, 20f)
+                    DisplayUtil.dip2px(context!!, 20f),
                 )
             }
         }
@@ -138,8 +155,6 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
 
     override fun onTabReselect(position: Int) {
         Toast.makeText(mContext, "onTabReselect&position--->$position", Toast.LENGTH_SHORT).show()
-
-
     }
 
     private inner class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

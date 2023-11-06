@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.qrcode;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-
 import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -12,7 +11,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -20,10 +18,11 @@ import java.util.Map;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2023/4/6.
- * Description: Description
+ *         Created on 2023/4/6.
+ *         Description: Description
  */
 public final class QRCodeDecodingHandler {
+
     public static final Map<DecodeHintType, Object> HINTS = new EnumMap<>(DecodeHintType.class);
 
     static {
@@ -75,7 +74,8 @@ public final class QRCodeDecodingHandler {
             e.printStackTrace();
             if (source != null) {
                 try {
-                    return new MultiFormatReader().decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)), HINTS);
+                    return new MultiFormatReader().decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)),
+                            HINTS);
                 } catch (Throwable e2) {
                     e2.printStackTrace();
                 }

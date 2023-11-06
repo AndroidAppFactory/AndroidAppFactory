@@ -10,8 +10,8 @@ package com.bihe0832.android.common.photos
 
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.media.image.HeadIconBuilder
+import com.bihe0832.android.lib.thread.ThreadManager
 import java.io.File
 
 /**
@@ -23,12 +23,20 @@ import java.io.File
  */
 object HeadIconBuildFactory {
 
-    fun generateBitmap(headIconBuilder: HeadIconBuilder, filepath: String, call: HeadIconBuilder.GenerateBitmapCallback) {
+    fun generateBitmap(
+        headIconBuilder: HeadIconBuilder,
+        filepath: String,
+        call: HeadIconBuilder.GenerateBitmapCallback,
+    ) {
         generateBitmap(headIconBuilder, filepath, 30 * 1000, call)
     }
 
-    fun generateBitmap(headIconBuilder: HeadIconBuilder, filepath: String, cacheDuration: Long, call: HeadIconBuilder.GenerateBitmapCallback) {
-
+    fun generateBitmap(
+        headIconBuilder: HeadIconBuilder,
+        filepath: String,
+        cacheDuration: Long,
+        call: HeadIconBuilder.GenerateBitmapCallback,
+    ) {
         if (FileUtils.checkFileExist(filepath)) {
             (System.currentTimeMillis() - File(filepath).lastModified()).let {
                 if (it < cacheDuration) {
@@ -46,7 +54,7 @@ object HeadIconBuildFactory {
             FileUtils.copyFile(File(source), File(filepath)).let {
                 ZLog.d("HeadIconBuildFactory", "new copyFile:$it")
             }
-            //更新到最新
+            // 更新到最新
             ThreadManager.getInstance().runOnUIThread {
                 call.onResult(bitmap, filepath)
             }

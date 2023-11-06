@@ -18,7 +18,11 @@ class DebugNetworkActivity : BaseActivity() {
     private val networkChangeListener = object : NetworkChangeManager.NetworkChangeListener {
         override fun onNetworkChange(sPreNetType: Int, curNetType: Int, intent: Intent?) {
             if (sPreNetType != curNetType) {
-                ZixieContext.showDebug("网络切换：从 " + NetworkUtil.getNetworkName(sPreNetType) + " 切换到" + NetworkUtil.getNetworkName(curNetType))
+                ZixieContext.showDebug(
+                    "网络切换：从 " + NetworkUtil.getNetworkName(sPreNetType) + " 切换到" + NetworkUtil.getNetworkName(
+                        curNetType,
+                    ),
+                )
             }
             updateContent()
         }
@@ -30,8 +34,7 @@ class DebugNetworkActivity : BaseActivity() {
         common_toolbar.setNavigationOnClickListener { onBackPressed() }
         NetworkChangeManager.addListener(networkChangeListener)
         updateContent()
-        WifiManagerWrapper.init(this, !ZixieContext.isOfficial(), true, true)
-
+        WifiManagerWrapper.init(this, !ZixieContext.isOfficial(), notifyRSSI = true, canScanWifi = true)
     }
 
     override fun onDestroy() {
@@ -43,11 +46,20 @@ class DebugNetworkActivity : BaseActivity() {
         val builder = StringBuffer().append("当前网络信息：(${NetworkChangeManager.getLastNetTypeName()})\n\n")
         var netTYpe = NetworkChangeManager.getRealNetType(this)
         if (NetworkUtil.isWifiNet(netTYpe)) {
-            builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n").append("    SSID(").append(WifiManagerWrapper.getSSID()).append(");\n    BSSID(").append(WifiManagerWrapper.getBSSID()).append(");\n    强度(").append(WifiManagerWrapper.getSignalLevel()).append(");\n    IP(").append(DtTypeInfo.getDtTypeInfo(this).wifiIp).append(");\n    周边数量(").append(WifiManagerWrapper.getScanResultList().size).append(");\n");
+            builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n").append("    SSID(")
+                .append(NetworkChangeManager.getLastWifiSSID()).append(");\n    BSSID(")
+                .append(NetworkChangeManager.getLastWifiBssId())
+                .append(");\n    强度(").append(WifiManagerWrapper.getSignalLevel()).append(");\n    IP(")
+                .append(DtTypeInfo.getDtTypeInfo(this).wifiIp).append(");\n    周边数量(")
+                .append(WifiManagerWrapper.getScanResultList().size).append(");\n")
         }
 
         if (NetworkUtil.isMobileNet(netTYpe)) {
-            builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n").append("    CellInfo(").append(MobileUtil.getPhoneCellInfo(this)).append(");\n    运营商(").append(DeviceInfoManager.getInstance().operatorName).append(");\n    强度(").append(MobileUtil.getSignalLevel()).append(");\n    IP(").append(DtTypeInfo.getDtTypeInfo(this).mobileIp).append(")")
+            builder.append("\n").append(NetworkUtil.getNetworkName(this)).append(":\n").append("    CellInfo(")
+                .append(MobileUtil.getPhoneCellInfo(this)).append(");\n    运营商(")
+                .append(DeviceInfoManager.getInstance().operatorName).append(");\n    强度(")
+                .append(MobileUtil.getSignalLevel()).append(");\n    IP(")
+                .append(DtTypeInfo.getDtTypeInfo(this).mobileIp).append(")")
         }
         runOnUiThread { result.text = builder.toString() }
     }

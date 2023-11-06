@@ -64,7 +64,6 @@ object NetworkChangeManager {
         return NetworkUtil.getNetworkState(context)
     }
 
-
     // 主要提供在WiFi下获取移动网络的网络类型，不保证移动网络已连接，仅是信号类型
     fun getMobileNetType(context: Context): Int {
         return NetworkUtil.getMobileNetworkClass(context, null)
@@ -102,7 +101,13 @@ object NetworkChangeManager {
         return NetworkUtil.isBluetoothNet(context)
     }
 
-    fun init(context: Context, getNetType: Boolean, getSSID: Boolean = false, getBssID: Boolean = false, curCellId: Boolean = false) {
+    fun init(
+        context: Context,
+        getNetType: Boolean,
+        getSSID: Boolean = false,
+        getBssID: Boolean = false,
+        curCellId: Boolean = false,
+    ) {
         DeviceInfoManager.getInstance().init(context.applicationContext)
         WifiManagerWrapper.init(context, isDebug(), notifyRSSI = false, canScanWifi = false)
         canGetNetType = getNetType
@@ -110,6 +115,7 @@ object NetworkChangeManager {
         canGetSSID = getSSID
         canGetCELLID = curCellId
         refreshInfo(context)
+        updateInfo(context)
         listenNetChange(context)
     }
 
@@ -119,7 +125,9 @@ object NetworkChangeManager {
             cachedNetType = NetworkUtil.getNetworkState(context)
             cachedDtTypeInfo = DtTypeInfo.getDtTypeInfo(context)
         }
+    }
 
+    fun updateInfo(context: Context?) {
         if (NetworkUtil.isWifiNet(cachedNetType)) {
             if (canGetBSSID) {
                 cachedWifiBssId = WifiManagerWrapper.getBSSID()
@@ -156,13 +164,10 @@ object NetworkChangeManager {
             }
 
             override fun onScanUpdate(context: Context?, wifiList: List<ScanResult?>?) {
-
             }
 
             override fun onConnectUpdate(context: Context?, wifiConfigurationList: List<WifiConfiguration?>?) {
-
             }
-
         })
     }
 
@@ -171,10 +176,15 @@ object NetworkChangeManager {
         var oldNetType = cachedNetType
         var oldDtType = cachedDtTypeInfo
         refreshInfo(context)
-        ZLog.d(TAG, "network change >> oldNetType: $oldNetType, cachedNetType: $cachedNetType, oldDtType $oldDtType, cachedDtType $cachedDtTypeInfo")
+        ZLog.d(
+            TAG,
+            "network change >> oldNetType: $oldNetType, cachedNetType: $cachedNetType, oldDtType $oldDtType, cachedDtType $cachedDtTypeInfo",
+        )
+
         ZLog.w(TAG, "network change >> netType correctAfter: $cachedNetType ,intent.getAction():" + intent?.action)
         if (intent?.action?.equals(LocationManager.PROVIDERS_CHANGED_ACTION) == true || oldNetType != cachedNetType || oldDtType != cachedDtTypeInfo) {
             postNetworkChangeEvent(oldNetType, cachedNetType, intent)
+            updateInfo(context)
         }
     }
 

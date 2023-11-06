@@ -4,7 +4,7 @@ import android.text.Layout
 import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.base.debug.photos.DebugPhotosFragment
+import com.bihe0832.android.base.debug.media.photos.DebugPhotosFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.media.MediaTools

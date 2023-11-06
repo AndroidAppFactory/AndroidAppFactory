@@ -1,84 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
 
             <com.bihe0832.android.lib.ui.dialog.view.ProgressIndicatorView
-                android:id="@+id/dots_loading_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="center" />
+                    android:id="@+id/dots_loading_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center" />
 
             <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-                android:id="@+id/checkbox2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/test_selector"
-                android:visibility="visible" />
+                    android:id="@+id/checkbox2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/test_selector"
+                    android:visibility="visible" />
 
 
             <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-                android:id="@+id/checkbox1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/test_selector"
-                android:visibility="visible" />
+                    android:id="@+id/checkbox1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/test_selector"
+                    android:visibility="visible" />
 
             <ImageView
-                android:id="@+id/test_basic_content"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                tools:src="@mipmap/share_qq" />
+                    android:id="@+id/test_basic_content"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    tools:src="@mipmap/share_qq" />
 
             <Button
-                android:id="@+id/test_basic_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="加载网络JPG"
-                android:textSize="16sp" />
-
-
-            <Button
-                android:id="@+id/test_basic_button_local_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="加载网络PNG"
-                android:textSize="16dp" />
+                    android:id="@+id/test_basic_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="加载网络JPG"
+                    android:textSize="16sp" />
 
 
             <Button
-                android:id="@+id/test_basic_button_local_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="加载本地图片2"
-                android:textSize="16dp" />
+                    android:id="@+id/test_basic_button_local_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="加载网络PNG"
+                    android:textSize="16dp" />
+
 
             <Button
-                android:id="@+id/test_basic_button_local_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="加载网络图"
-                android:textSize="16dp" />
+                    android:id="@+id/test_basic_button_local_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="加载本地图片2"
+                    android:textSize="16dp" />
+
+            <Button
+                    android:id="@+id/test_basic_button_local_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="加载网络图"
+                    android:textSize="16dp" />
         </LinearLayout>
 
     </ScrollView>

@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.bihe0832.android.framework.R
@@ -33,16 +34,24 @@ open class BaseActivity : SupportActivity() {
     private var mNavigationImageButton: ImageButton? = null
     private val mNeedEnableLayerToGray by lazy {
         (LifecycleHelper.getCurrentTime() / 1000).let {
-            return@lazy it in Config.readConfig(Constants.CONFIG_KEY_LAYER_START_VALUE, 0L)..Config.readConfig(Constants.CONFIG_KEY_LAYER_END_VALUE, 0L)
+            return@lazy it in Config.readConfig(
+                Constants.CONFIG_KEY_LAYER_START_VALUE,
+                0L,
+            )..Config.readConfig(Constants.CONFIG_KEY_LAYER_END_VALUE, 0L)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (resetDensity()) {
-            DisplayUtil.resetDensity(this, ConvertUtils.parseFloat(ThemeResourcesManager.getString(R.string.custom_density), Constants.CUSTOM_DENSITY))
+            DisplayUtil.resetDensity(
+                this,
+                ConvertUtils.parseFloat(
+                    ThemeResourcesManager.getString(R.string.custom_density),
+                    Constants.CUSTOM_DENSITY,
+                ),
+            )
         }
-
     }
 
     open fun resetDensity(): Boolean {
@@ -60,13 +69,16 @@ open class BaseActivity : SupportActivity() {
     override fun onResume() {
         super.onResume()
         if (getStatusBarColor() == Color.TRANSPARENT) {
-            enableActivityImmersive(ColorUtils.addAlpha(0f, ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!), getNavigationBarColor())
+            enableActivityImmersive(
+                ColorUtils.addAlpha(0f, ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!),
+                getNavigationBarColor(),
+            )
         } else {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         }
 
         mToolbar?.setBackgroundColor(ThemeResourcesManager.getColor(R.color.colorPrimary)!!)
-        
+
         if (mNeedEnableLayerToGray) {
             setLayerToGray()
         }
@@ -111,14 +123,18 @@ open class BaseActivity : SupportActivity() {
         }
     }
 
-    protected open fun updateIcon(iconURL: String?, iconRes: Int, listener: View.OnClickListener?) {
+    protected open fun updateIcon(image: ImageView?, iconURL: String?, iconRes: Int) {
         if (iconRes > 0) {
-            mNavigationImageButton?.loadImage(iconRes)
+            image?.loadImage(iconRes)
         } else if (URLUtils.isHTTPUrl(iconURL)) {
-            mNavigationImageButton?.loadImage(iconURL!!)
+            image?.loadImage(iconURL!!)
         } else if (null == iconURL) {
-            mNavigationImageButton?.clearImage()
+            image?.clearImage()
         }
+    }
+
+    protected open fun updateIcon(iconURL: String?, iconRes: Int, listener: View.OnClickListener?) {
+        updateIcon(mNavigationImageButton, iconURL, iconRes)
         mToolbar?.setNavigationOnClickListener(listener)
     }
 
@@ -130,7 +146,13 @@ open class BaseActivity : SupportActivity() {
         initToolbar(resID, titleString, true, needBack, 0)
     }
 
-    protected fun initToolbar(resID: Int, titleString: String?, needTitleCenter: Boolean, needBack: Boolean, iconRes: Int) {
+    protected fun initToolbar(
+        resID: Int,
+        titleString: String?,
+        needTitleCenter: Boolean,
+        needBack: Boolean,
+        iconRes: Int,
+    ) {
         initToolbar(resID, titleString, needTitleCenter, {
             if (needBack) {
                 onBackPressedSupport()
@@ -138,8 +160,13 @@ open class BaseActivity : SupportActivity() {
         }, iconRes)
     }
 
-
-    protected fun initToolbar(resID: Int, titleString: String?, needTitleCenter: Boolean, nevagationListener: View.OnClickListener, iconRes: Int) {
+    protected fun initToolbar(
+        resID: Int,
+        titleString: String?,
+        needTitleCenter: Boolean,
+        nevagationListener: View.OnClickListener,
+        iconRes: Int,
+    ) {
         try {
             if (null == mToolbar) {
                 mToolbar = findViewById(resID)
@@ -186,7 +213,6 @@ open class BaseActivity : SupportActivity() {
                 }
                 updateIcon("", iconRes, nevagationListener)
             }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
