@@ -70,7 +70,6 @@ public class FFmpegTools {
         ThreadManager.getInstance().start(() -> {
             try {
                 String videoPath = AAFFileWrapper.INSTANCE.getCacheVideoPath(".mp4");
-
                 // 获取音频时长
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 retriever.setDataSource(audioPath);

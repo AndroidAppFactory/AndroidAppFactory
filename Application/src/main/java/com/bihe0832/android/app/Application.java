@@ -53,7 +53,6 @@ public class Application extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         ZLog.d("Application", "Application onCreate start");
-        AppFactoryInit.INSTANCE.initAll(this);
         ZLog.d("Application", "Application onCreate end");
     }
 }

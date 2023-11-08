@@ -6,8 +6,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiConfiguration
+import android.os.Build
 import com.bihe0832.android.framework.ZixieContext.isDebug
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.DeviceInfoManager
@@ -16,6 +20,7 @@ import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import com.bihe0832.android.lib.network.wifi.WifiUtil
+import com.bihe0832.android.lib.utils.os.BuildUtils
 
 object NetworkChangeManager {
 
@@ -34,6 +39,7 @@ object NetworkChangeManager {
     private var cachedCellID: String? = "-1_-1_-1_-1"
 
     private var mNetReceiver: BroadcastReceiver? = null
+    private var mNetworkCallback: ConnectivityManager.NetworkCallback? = null
     private val networkChangeListeners = ArrayList<NetworkChangeListener>()
 
     fun getLastNetType(): Int {
@@ -169,6 +175,24 @@ object NetworkChangeManager {
             override fun onConnectUpdate(context: Context?, wifiConfigurationList: List<WifiConfiguration?>?) {
             }
         })
+
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mNetworkCallback = object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    innerNetworkChanged(ctx, null)
+                }
+
+                override fun onLost(network: Network) {
+                    innerNetworkChanged(ctx, null)
+                }
+            }
+            val networkRequest =
+                NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR).build()
+            (ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?)?.registerNetworkCallback(
+                networkRequest,
+                mNetworkCallback as ConnectivityManager.NetworkCallback,
+            )
+        }
     }
 
     private fun innerNetworkChanged(context: Context?, intent: Intent?) {
