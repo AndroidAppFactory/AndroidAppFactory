@@ -11,7 +11,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.6.13",
+                "version"            : "6.6.14",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview",
@@ -118,7 +118,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonNetwork"         : [
-                "version"            : "6.6.13",
+                "version"            : "6.6.14",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "Framework"
