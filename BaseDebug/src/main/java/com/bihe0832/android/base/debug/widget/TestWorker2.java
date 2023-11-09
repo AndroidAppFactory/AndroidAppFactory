@@ -12,6 +12,7 @@ import com.bihe0832.android.app.router.RouterConstants;
 import com.bihe0832.android.app.router.RouterHelper;
 import com.bihe0832.android.base.debug.R;
 import com.bihe0832.android.framework.debug.ShowDebugClick;
+import com.bihe0832.android.lib.media.image.BitmapTransUtils;
 import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.bihe0832.android.lib.notification.NotifyManager;
 import com.bihe0832.android.lib.thread.ThreadManager;
@@ -54,7 +55,7 @@ public class TestWorker2 extends BaseWidgetWorker {
                     }
                 }
                 remoteViews.setImageViewBitmap(R.id.widget_icon,
-                        BitmapUtil.getBitmapWithRound(bitmap, bitmap.getWidth() * 0.15f));
+                        BitmapTransUtils.getBitmapWithRound(bitmap, bitmap.getWidth() * 0.15f));
                 //获得所有本程序创建的appwidget
                 ComponentName componentName = new ComponentName(context, TestWidgetProvider2.class);
                 //更新appwidget

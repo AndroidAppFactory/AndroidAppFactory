@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.utils.time;
 
 import com.bihe0832.android.lib.log.ZLog;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,14 +13,14 @@ import java.util.Locale;
  * 各式日期转换
  */
 public class DateUtil {
-    private static final String TAG = "DateUtil";
+
     public static final long MILLISECOND_OF_MINUTE = 60 * 1000;
     public static final long MILLISECOND_OF_HOUR = MILLISECOND_OF_MINUTE * 60;
     public static final long MILLISECOND_OF_DAY = MILLISECOND_OF_HOUR * 24;
     public static final long MILLISECOND_OF_MONTH = MILLISECOND_OF_DAY * 30;
     public static final long MILLISECOND_OF_YEAR = MILLISECOND_OF_MONTH * 12;
-
     public static final int ONE_DAY_MILLSEC = 24 * 60 * 60 * 1000;
+    private static final String TAG = "DateUtil";
 
     public static String getDateEN(long currentTime, String pattern) {
         SimpleDateFormat format = SimpleDateFormatFactory.getSimpleDateFormat(pattern);
@@ -68,6 +67,10 @@ public class DateUtil {
 
     public static String getCurrentDateEN() {
         return getCurrentDateEN("yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String getCurrentTimeAsFileName() {
+        return getCurrentDateEN("yyyyMMddHHmmssSSS");
     }
 
     //单位：s
@@ -190,7 +193,25 @@ public class DateUtil {
         }
     }
 
-    public final String getDateCompareResult(long oldTimestamp, long currentTimestamp, String yearPattern, String monthPattern, String weekPattern, String yesterdayPattern, String timePattern) {
+    public static boolean isToady(long timestamp) {
+        Calendar pre = Calendar.getInstance();
+        pre.setTimeInMillis(timestamp);
+        Calendar cur = Calendar.getInstance();
+        cur.setTimeInMillis(System.currentTimeMillis());
+        ZLog.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(
+                Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
+        if (pre.get(Calendar.YEAR) == cur.get(Calendar.YEAR)) {
+            int diffDay = cur.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
+            if (0 == diffDay) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public final String getDateCompareResult(long oldTimestamp, long currentTimestamp, String yearPattern,
+            String monthPattern, String weekPattern, String yesterdayPattern, String timePattern) {
         long todayStart = currentTimestamp;
         try {
             SimpleDateFormat dayFormat = SimpleDateFormatFactory.getSimpleDateFormat("yyyyMMdd");
@@ -215,22 +236,5 @@ public class DateUtil {
         } else {
             return DateUtil.getDateEN(oldTimestamp, timePattern);
         }
-    }
-
-
-    public static boolean isToady(long timestamp) {
-        Calendar pre = Calendar.getInstance();
-        pre.setTimeInMillis(timestamp);
-        Calendar cur = Calendar.getInstance();
-        cur.setTimeInMillis(System.currentTimeMillis());
-        ZLog.d(TAG, "isToady --" + pre.get(Calendar.YEAR) + "--" + cur.get(Calendar.YEAR) + "--" + cur.get(Calendar.DAY_OF_YEAR) + "--" + pre.get(Calendar.DAY_OF_YEAR));
-        if (pre.get(Calendar.YEAR) == cur.get(Calendar.YEAR)) {
-            int diffDay = cur.get(Calendar.DAY_OF_YEAR) - pre.get(Calendar.DAY_OF_YEAR);
-            if (0 == diffDay) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

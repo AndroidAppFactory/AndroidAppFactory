@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.RemoteViews
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.format.Formatter
+import com.bihe0832.android.lib.media.image.BitmapTransUtils
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.IdGenerator
@@ -246,7 +247,7 @@ object DownloadNotifyManager {
                         ThreadManager.getInstance().runOnUIThread {
                             remoteViews.setImageViewBitmap(
                                 R.id.download_notification_logo,
-                                BitmapUtil.getBitmapWithRound(bitmap, bitmap.width * 0.15f),
+                                BitmapTransUtils.getBitmapWithRound(bitmap, bitmap.width * 0.15f),
                             )
                             NotifyManager.sendNotifyNow(context, remoteViews, channelID, notifyID)
                         }
@@ -256,7 +257,7 @@ object DownloadNotifyManager {
                 mIconList[notifyID]?.let {
                     remoteViews.setImageViewBitmap(
                         R.id.download_notification_logo,
-                        BitmapUtil.getBitmapWithRound(it, it.width * 0.15f),
+                        BitmapTransUtils.getBitmapWithRound(it, it.width * 0.15f),
                     )
                     NotifyManager.sendNotifyNow(context, remoteViews, channelID, notifyID)
                 }
