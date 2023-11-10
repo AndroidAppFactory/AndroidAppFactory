@@ -29,7 +29,6 @@ import com.bihe0832.android.framework.router.RouterAction;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypesKt;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridge;
 import com.bihe0832.android.lib.jsbridge.BaseJsBridgeProxy;
@@ -292,10 +291,11 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     }
 
 
-    protected void openImageChooserActivity() {
+    protected void openChooserActivity(String[] fileTypes) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType(FileMimeTypesKt.FILE_TYPE_IMAGE);
+        intent.setType(String.join(",", fileTypes));
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, fileTypes);
         startActivityForResult(Intent.createChooser(intent, "Image Chooser"), ZixieActivityRequestCode.FILE_CHOOSER);
     }
 

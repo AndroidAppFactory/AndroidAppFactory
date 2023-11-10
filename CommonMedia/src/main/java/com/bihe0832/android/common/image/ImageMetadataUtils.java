@@ -118,6 +118,53 @@ public class ImageMetadataUtils {
         }
     }
 
+    public int getImageOrientation(String imagePath) {
+        try {
+            ExifInterface exifInterface = new ExifInterface(imagePath);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+            return orientation;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ExifInterface.ORIENTATION_UNDEFINED;
+        }
+    }
+
+    public static int exifToTranslation(int exifOrientation) {
+        int translation;
+        switch (exifOrientation) {
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_VERTICAL:
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSPOSE:
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSVERSE:
+                translation = -1;
+                break;
+            default:
+                translation = 1;
+        }
+        return translation;
+    }
+
+    public static int exifToDegrees(int exifOrientation) {
+        int rotation;
+        switch (exifOrientation) {
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90:
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSPOSE:
+                rotation = 90;
+                break;
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180:
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                rotation = 180;
+                break;
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270:
+            case androidx.exifinterface.media.ExifInterface.ORIENTATION_TRANSVERSE:
+                rotation = 270;
+                break;
+            default:
+                rotation = 0;
+        }
+        return rotation;
+    }
 
     public static void rotateImageToV(String sourceImage) {
         try {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.OpenableColumns
 import android.text.TextUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.content.FileName
@@ -246,6 +247,28 @@ object FileAction {
             }
         }
         return result
+    }
+
+    fun copyFileToFolder(context: Context, source: Uri, tartFolder: String): String {
+        val resolver = context.contentResolver
+        val cursor = resolver.query(source, null, null, null, null)
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                val fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                val file = File(tartFolder, fileName)
+                FileUtils.copyFile(context, source, file).let {
+                    if (it) {
+                        return file.absolutePath
+                    } else {
+                        return ""
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                return ""
+            }
+        }
+        return ""
     }
 
     fun copyFile(context: Context, source: Uri, dest: File): Boolean {

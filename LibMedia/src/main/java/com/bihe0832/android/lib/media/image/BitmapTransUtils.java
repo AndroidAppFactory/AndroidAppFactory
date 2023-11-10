@@ -1,5 +1,7 @@
 package com.bihe0832.android.lib.media.image;
 
+import static com.bihe0832.android.lib.media.image.BitmapUtil.TAG;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +14,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.widget.ImageView;
+import androidx.annotation.NonNull;
 import com.bihe0832.android.lib.log.ZLog;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,14 +38,14 @@ public class BitmapTransUtils {
             if (options < 0) {
                 options = 0;
             }
-            ZLog.d(BitmapUtil.TAG, "compress start source length " + baos.toByteArray().length + "; target length:"
+            ZLog.d(TAG, "compress start source length " + baos.toByteArray().length + "; target length:"
                     + size_length * targetSize + "; options:" + options);
             //重置baos即清空baos
             baos.reset();
             //第一个参数 ：图片格式 ，第二个参数： 图片质量，100为最高，0为最差  ，第三个参数：保存压缩后的数据的流
             //这里压缩options%，把压缩后的数据存放到baos中
             image.compress(image.hasAlpha() ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, options, baos);
-            ZLog.d(BitmapUtil.TAG, "compress end source length " + baos.toByteArray().length + "; target length:"
+            ZLog.d(TAG, "compress end source length " + baos.toByteArray().length + "; target length:"
                     + size_length * targetSize + "; options:" + options);
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
@@ -51,8 +54,7 @@ public class BitmapTransUtils {
     }
 
     //根据width 和 height 与 reqWidth 和 reqHeight 的差异，计算出如果缩放到一样大，使用的 BitmapFactory.Options
-    public static void calculateInSampleSize(int reqWidth, int reqHeight, int width, int height,
-            BitmapFactory.Options options, boolean centerInside) {
+    public static int calculateInSampleSize(int reqWidth, int reqHeight, int width, int height, boolean centerInside) {
         int sampleSize = 1;
         if (height > reqHeight || width > reqWidth) {
             final int heightRatio;
@@ -71,7 +73,7 @@ public class BitmapTransUtils {
                 }
             }
         }
-        options.inSampleSize = sampleSize;
+        return sampleSize;
     }
 
 
@@ -82,11 +84,22 @@ public class BitmapTransUtils {
      * @return
      */
     public static Bitmap toHorizontalMirror(Bitmap bmp) {
-        int w = bmp.getWidth();
-        int h = bmp.getHeight();
         Matrix matrix = new Matrix();
         matrix.postScale(-1F, 1F);
-        return Bitmap.createBitmap(bmp, 0, 0, w, h, matrix, true);
+        return transformBitmap(bmp, matrix);
+    }
+
+    public static Bitmap transformBitmap(@NonNull Bitmap bitmap, @NonNull Matrix transformMatrix) {
+        try {
+            Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), transformMatrix,
+                    true);
+            if (!bitmap.sameAs(converted)) {
+                bitmap = converted;
+            }
+        } catch (OutOfMemoryError error) {
+            ZLog.e(TAG, "transformBitmap: " + error);
+        }
+        return bitmap;
     }
 
     public static int getPictureRotateAngel(String path) {
@@ -121,25 +134,10 @@ public class BitmapTransUtils {
      * @return 旋转后的图片
      */
     public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
-
-        Bitmap resultBitmap = null;
-
         // 根据旋转角度，生成旋转矩阵
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
-        try {
-            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
-            resultBitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (null == resultBitmap) {
-            resultBitmap = bm;
-        }
-        if (bm != resultBitmap) {
-            bm.recycle();
-        }
-        return resultBitmap;
+        return transformBitmap(bm, matrix);
     }
 
     /**
@@ -150,7 +148,7 @@ public class BitmapTransUtils {
      */
     public static Bitmap mergeBitmapLine(Bitmap topBitmap, Bitmap bottomBitmap, boolean isBaseMax) {
         if (topBitmap == null || topBitmap.isRecycled() || bottomBitmap == null || bottomBitmap.isRecycled()) {
-            ZLog.d(BitmapUtil.TAG, "topBitmap=" + topBitmap + ";bottomBitmap=" + bottomBitmap);
+            ZLog.d(TAG, "topBitmap=" + topBitmap + ";bottomBitmap=" + bottomBitmap);
             return null;
         }
         int width = 0;
@@ -193,7 +191,7 @@ public class BitmapTransUtils {
      */
     public static Bitmap mergeBitmapTogether(Bitmap bottomBitmap, Bitmap iconBitmap, boolean isBaseBottom) {
         if (bottomBitmap == null || bottomBitmap.isRecycled() || iconBitmap == null || iconBitmap.isRecycled()) {
-            ZLog.d(BitmapUtil.TAG, "topBitmap=" + bottomBitmap + ";bottomBitmap=" + iconBitmap);
+            ZLog.d(TAG, "topBitmap=" + bottomBitmap + ";bottomBitmap=" + iconBitmap);
             return null;
         }
         int width = iconBitmap.getWidth();

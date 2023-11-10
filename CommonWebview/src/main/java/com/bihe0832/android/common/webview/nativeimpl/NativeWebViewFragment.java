@@ -323,9 +323,14 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
                 FileChooserParams fileChooserParams) {
             mPicUploadCallback = filePathCallback;
-            openImageChooserActivity();
+            String[] fileTypes = new String[]{"*/*"};
+            if (BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.LOLLIPOP) {
+                fileTypes = fileChooserParams.getAcceptTypes();
+            }
+            openChooserActivity(fileTypes);
             return true;
         }
+
 
         @Override
         public void onProgressChanged(WebView view, int newProgress) {

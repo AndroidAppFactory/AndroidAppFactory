@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -98,10 +97,11 @@ public class BitmapUtil {
     }
 
 
-    private static void calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options,
+    private static void calculateAndResetInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options,
             boolean centerInside) {
-        BitmapTransUtils.calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight, options,
+        int size = BitmapTransUtils.calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight,
                 centerInside);
+        options.inSampleSize = size;
     }
 
 
@@ -159,20 +159,14 @@ public class BitmapUtil {
         if (file.exists()) {
             try {
                 BitmapFactory.Options options = getLocalBitmapOptions(localPath);
-                calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
+                calculateAndResetInSampleSize(reqWidth, reqHeight, options, centerInside);
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeFile(localPath, options);
 
                 Bitmap resizedBitmap = bitmap;
                 int angle = BitmapTransUtils.getPictureRotateAngel(localPath);
                 if (angle > 0) {
-                    // 旋转图片 动作
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(angle);
-                    // 创建新的图片
-                    resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix,
-                            true);
-                    bitmap.recycle();
+                    resizedBitmap = BitmapTransUtils.rotateBitmapByDegree(bitmap, angle);
                 }
                 if (reqWidth > 0 && reqHeight > 0 && (reqWidth < resizedBitmap.getWidth()
                         || reqHeight < resizedBitmap.getHeight())) {
@@ -202,7 +196,7 @@ public class BitmapUtil {
             try {
                 input = contentResolver.openInputStream(uri);
                 BitmapFactory.Options options = getLocalBitmapOptions(contentResolver, uri);
-                calculateInSampleSize(reqWidth, reqHeight, options, centerInside);
+                calculateAndResetInSampleSize(reqWidth, reqHeight, options, centerInside);
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
                 if (reqWidth > 0 && reqHeight > 0 && (reqWidth < bitmap.getWidth() || reqHeight < bitmap.getHeight())) {
@@ -263,7 +257,7 @@ public class BitmapUtil {
             inputStream.close();
 
             // 计算采样率
-            calculateInSampleSize(reqWidth, reqHeight, options, true);
+            calculateAndResetInSampleSize(reqWidth, reqHeight, options, true);
 
             // 重新打开输入流并解码为 Bitmap 对象
             inputStream = url.openConnection().getInputStream();

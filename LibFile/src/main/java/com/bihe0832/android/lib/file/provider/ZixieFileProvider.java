@@ -8,7 +8,6 @@
 
 package com.bihe0832.android.lib.file.provider;
 
-import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -19,12 +18,11 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import androidx.core.content.FileProvider;
-import androidx.core.content.PermissionChecker;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.R;
+import com.bihe0832.android.lib.file.action.FileAction;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
@@ -199,7 +197,13 @@ public class ZixieFileProvider extends FileProvider {
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), ConvertUtils.parseLong(id, 0L));
 
-                return getDataColumn(context, contentUri, null, null);
+                String path = getDataColumn(context, contentUri, null, null);
+                if (TextUtils.isEmpty(path)) {
+                    return FileAction.INSTANCE.copyFileToFolder(context, uri,
+                            ZixieFileProvider.getZixieCacheFolder(context));
+                } else {
+                    return path;
+                }
             } else if (isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
@@ -216,26 +220,22 @@ public class ZixieFileProvider extends FileProvider {
 
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[]{split[1]};
-                return getDataColumn(context, contentUri, selection, selectionArgs);
+
+                String path = getDataColumn(context, contentUri, selection, selectionArgs);
+                if (TextUtils.isEmpty(path)) {
+                    return FileAction.INSTANCE.copyFileToFolder(context, uri,
+                            ZixieFileProvider.getZixieCacheFolder(context));
+                } else {
+                    return path;
+                }
             }
         } else if (ContentResolver.SCHEME_CONTENT.equalsIgnoreCase(uri.getScheme())) {
-            if (PermissionChecker.checkSelfPermission(ctx, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PermissionChecker.PERMISSION_GRANTED) {
-                return getDataColumn(context, uri, null, null);
+            String path = getDataColumn(context, uri, null, null);
+            if (TextUtils.isEmpty(path)) {
+                return FileAction.INSTANCE.copyFileToFolder(context, uri,
+                        ZixieFileProvider.getZixieCacheFolder(context));
             } else {
-                ContentResolver resolver = context.getContentResolver();
-                Cursor cursor = resolver.query(uri, null, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    try {
-                        String fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                        File file = new File(ZixieFileProvider.getZixieCacheFolder(context), fileName);
-                        FileUtils.INSTANCE.copyFile(context, uri, file);
-                        return file.getAbsolutePath();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return "";
-                    }
-                }
+                return path;
             }
         } else if (ContentResolver.SCHEME_FILE.equalsIgnoreCase(uri.getScheme())) {
             //此uri为文件，并且path不为空(保存在沙盒内的文件可以随意访问，外部文件path则为空)
