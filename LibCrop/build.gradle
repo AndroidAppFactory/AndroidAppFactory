@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: rootDir.toString() + '/build_aar.gradle'
 
 android {
     compileSdkVersion project.compileSdkVersion
