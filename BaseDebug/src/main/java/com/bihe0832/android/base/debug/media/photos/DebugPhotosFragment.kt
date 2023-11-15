@@ -154,8 +154,11 @@ class DebugPhotosFragment : DebugCommonFragment() {
             activity!!,
             ZixieFileProvider.getZixieFileProvider(context, File(sourceFile)),
             CropUtils.Options().apply {
-                setHideBottomControls(true)
-            })
+//                setHideBottomControls(true)
+                withAspectRatio(3f, 2f)
+                setCircleDimmedLayer(true)
+            },
+        )
     }
 
     private fun cropPhotos(sourceUri: Uri?) {
@@ -207,6 +210,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     } else if (needAAFCrop) {
                         ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
                         showResult("图片地址:${data?.data}")
+                        Media.addToPhotos(context!!, Media.uriToFile(context, data?.data).absolutePath)
                     }
                 }
 

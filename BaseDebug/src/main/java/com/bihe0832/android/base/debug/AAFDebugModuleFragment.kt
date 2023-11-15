@@ -64,10 +64,10 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("TAB 调试", DebugTabFragment::class.java))
             add(getDebugFragmentItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
             add(getDebugFragmentItemData("公告消息 调试", DebugMessageFragment::class.java))
+            add(getDebugFragmentItemData("拍照、相册、图片、视频、音频操作调试", DebugMediaFragment::class.java))
 
             add(getDebugFragmentItemData("Google相关 调试", DebugGoogleFragment::class.java))
 
-            add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
             add(getDebugFragmentItemData("协程及多线程调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
             add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))
 
@@ -76,7 +76,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
 
-            add(getDebugFragmentItemData("UI（换肤、哀悼日、前后台等）测试", DebugUIFragment::class.java))
+
             add(
                 getDebugFragmentItemData(
                     "UI（Intent跳转、反馈、评分、锁屏、Widget、设置等）测试",
@@ -86,13 +86,13 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))
             add(getDebugFragmentItemData("UI（颜色取色器）测试", DebugColorFragment::class.java))
             add(getDebugFragmentItemData("UI（绘图板）测试", DebugPanelFragment::class.java))
+            add(getDebugFragmentItemData("UI（换肤、哀悼日、前后台等）测试", DebugUIFragment::class.java))
 
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
 
             add(getDebugFragmentItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
             add(getDebugFragmentItemData("定时任务、阻塞任务", DebugEnqueueFragment::class.java))
-            add(getDebugFragmentItemData("拍照、相册、图片、视频、音频操作调试", DebugMediaFragment::class.java))
             add(getDebugFragmentItemData("SVGA 调试", DebugSvgaFragment::class.java))
             add(getDebugFragmentItemData("Cache、数据中心测试", DebugCacheFragment::class.java))
             add(

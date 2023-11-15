@@ -31,6 +31,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.bottom.bar.BottomBar
 import java.util.Locale
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Summary
@@ -50,15 +51,19 @@ class CropActivity : BaseActivity() {
     private var mOverlayView: OverlayView? = null
     private var mBlockingView: View? = null
 
+    private var showAspectTab = true
+    private var showRotateTab = true
+    private var showScaleTab = true
+
     private var mCompressFormat = CropConstants.DEFAULT_COMPRESS_FORMAT
     private var mCompressQuality = CropConstants.DEFAULT_COMPRESS_QUALITY
     private val mCropAspectRatioViews = mutableListOf<ViewGroup>()
 
-    private var mAllowedGestures = intArrayOf(
-        CropConstants.GESTURE_TYPES_ALL,
-        CropConstants.GESTURE_TYPES_ROTATE,
-        CropConstants.GESTURE_TYPES_SCALE,
-    )
+    private var mAllowedGestures = ConcurrentHashMap<Int, Int>().apply {
+        put(TAB_ID_ASPECT, CropConstants.GESTURE_TYPES_ALL)
+        put(TAB_ID_ROTATE, CropConstants.GESTURE_TYPES_ROTATE)
+        put(TAB_ID_SCALE, CropConstants.GESTURE_TYPES_SCALE)
+    }
 
     private val mImageListener: TransformImageView.TransformImageListener = object :
         TransformImageView.TransformImageListener {
@@ -85,10 +90,10 @@ class CropActivity : BaseActivity() {
         initMenu()
         parseBundle(intent)
         initiateRootViews(intent)
-        initTab()
         setupAspectRatioWidget(intent)
         setupRotateWidget()
         setupScaleWidget()
+        initTab()
         addBlockingView()
         setImageData(intent)
     }
@@ -164,48 +169,60 @@ class CropActivity : BaseActivity() {
     }
 
     private fun initTab() {
-        this.mBottomBar = findViewById<View>(R.id.crop_controls) as BottomBar
-        this.mBottomBar?.apply {
-            addItem(
-                CropBottomTab(
-                    context,
-                    R.drawable.ic_crop,
-                    ThemeResourcesManager.getString(R.string.menu_crop),
-                    TAB_ID_ASPECT,
-                ),
-            )
-            addItem(
-                CropBottomTab(
-                    context,
-                    R.drawable.ic_rotate,
-                    ThemeResourcesManager.getString(R.string.menu_rotate),
-                    TAB_ID_ROTATE,
-                ),
-            )
-            addItem(
-                CropBottomTab(
-                    context,
-                    R.drawable.ic_scale,
-                    ThemeResourcesManager.getString(R.string.menu_scale),
-                    TAB_ID_SCALE,
-                ),
-            )
-            setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
-
-                override fun onTabSelected(position: Int, prePosition: Int) {
-                    updateControl(prePosition, false)
-                    updateControl(position, true)
+        if (showAspectTab || showRotateTab || showScaleTab) {
+            mBottomBar = findViewById<View>(R.id.crop_controls) as BottomBar
+            mBottomBar?.apply {
+                if (showAspectTab) {
+                    addItem(
+                        CropBottomTab(
+                            context,
+                            R.drawable.ic_crop,
+                            ThemeResourcesManager.getString(R.string.menu_crop),
+                            TAB_ID_ASPECT,
+                        ),
+                    )
                 }
 
-                override fun onTabUnselected(position: Int) {
+                if (showRotateTab) {
+                    addItem(
+                        CropBottomTab(
+                            context,
+                            R.drawable.ic_rotate,
+                            ThemeResourcesManager.getString(R.string.menu_rotate),
+                            TAB_ID_ROTATE,
+                        ),
+                    )
                 }
 
-                override fun onTabReselected(position: Int) {
-                    updateControl(position, true)
+                if (showScaleTab) {
+                    addItem(
+                        CropBottomTab(
+                            context,
+                            R.drawable.ic_scale,
+                            ThemeResourcesManager.getString(R.string.menu_scale),
+                            TAB_ID_SCALE,
+                        ),
+                    )
                 }
-            })
 
-            setCurrentItem(0)
+                setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
+
+                    override fun onTabSelected(position: Int, prePosition: Int) {
+                        updateControl(prePosition, false)
+                        updateControl(position, true)
+                    }
+
+                    override fun onTabUnselected(position: Int) {
+                    }
+
+                    override fun onTabReselected(position: Int) {
+                        updateControl(position, true)
+                    }
+                })
+                setCurrentItem(0)
+            }
+        } else {
+            findViewById<View>(R.id.wrapper_controls)?.visibility = View.GONE
         }
     }
 
@@ -225,21 +242,21 @@ class CropActivity : BaseActivity() {
             } else {
                 changeAspect(layout_aspect_ratio, selected)
             }
-        }
 
-        if (selected) {
-            setAllowedGestures(position)
+            if (selected) {
+                setAllowedGestures(it.getTabID())
+            }
         }
     }
 
-    private fun setAllowedGestures(tab: Int) {
+    private fun setAllowedGestures(tabID: Int) {
         mGestureCropImageView!!.isScaleEnabled = (
-            mAllowedGestures[tab] == CropConstants.GESTURE_TYPES_ALL ||
-                mAllowedGestures[tab] == CropConstants.GESTURE_TYPES_SCALE
+            mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ALL ||
+                mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_SCALE
             )
         mGestureCropImageView!!.isRotateEnabled = (
-            mAllowedGestures[tab] == CropConstants.GESTURE_TYPES_ALL ||
-                mAllowedGestures[tab] == CropConstants.GESTURE_TYPES_ROTATE
+            mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ALL ||
+                mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ROTATE
             )
     }
 
@@ -315,7 +332,15 @@ class CropActivity : BaseActivity() {
 
         val allowedGestures = bundle.getIntArrayExtra(CropUtils.Options.EXTRA_ALLOWED_GESTURES)
         if (allowedGestures != null && allowedGestures.size == TABS_COUNT) {
-            mAllowedGestures = allowedGestures
+            mAllowedGestures[TAB_ID_ASPECT] = allowedGestures[0]
+            mAllowedGestures[TAB_ID_ROTATE] = allowedGestures[1]
+            mAllowedGestures[TAB_ID_SCALE] = allowedGestures[2]
+        }
+        val hideTab = bundle.getBooleanExtra(CropUtils.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false)
+        if (hideTab) {
+            showAspectTab = false
+            showRotateTab = false
+            showScaleTab = false
         }
     }
 
@@ -386,19 +411,25 @@ class CropActivity : BaseActivity() {
         )
 
         if (aspectRatioX >= 0 && aspectRatioY >= 0) {
+            showAspectTab = false
             val targetAspectRatio = aspectRatioX / aspectRatioY
-            mGestureCropImageView!!.targetAspectRatio =
-                if (java.lang.Float.isNaN(targetAspectRatio)) CropImageView.SOURCE_IMAGE_ASPECT_RATIO else targetAspectRatio
+            mGestureCropImageView!!.targetAspectRatio = if (java.lang.Float.isNaN(targetAspectRatio)) {
+                CropImageView.SOURCE_IMAGE_ASPECT_RATIO
+            } else {
+                targetAspectRatio
+            }
         } else if (aspectRatioList != null && aspectRationSelectedByDefault < aspectRatioList.size) {
             val targetAspectRatio =
                 aspectRatioList[aspectRationSelectedByDefault].aspectRatioX / aspectRatioList[aspectRationSelectedByDefault].aspectRatioY
             mGestureCropImageView!!.targetAspectRatio =
-                if (java.lang.Float.isNaN(targetAspectRatio)) CropImageView.SOURCE_IMAGE_ASPECT_RATIO else targetAspectRatio
+                if (java.lang.Float.isNaN(targetAspectRatio)) {
+                    CropImageView.SOURCE_IMAGE_ASPECT_RATIO
+                } else {
+                    targetAspectRatio
+                }
         } else {
             mGestureCropImageView!!.targetAspectRatio = CropImageView.SOURCE_IMAGE_ASPECT_RATIO
         }
-
-        // Result bitmap max size options
 
         // Result bitmap max size options
         val maxSizeX = intent.getIntExtra(CropUtils.Options.EXTRA_MAX_SIZE_X, 0)

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="crop_default_crop_grid">#80ffffff</color>
-    <dimen name="crop_default_crop_grid_stoke_width">1dp</dimen>
-    <color name="crop_default_crop_frame">@color/icons</color>
+
+    <color name="crop_default_crop_frame">#80ffffff</color>
     <dimen name="crop_default_crop_frame_stoke_width">1dp</dimen>
+
+    <color name="crop_default_crop_grid">#40ffffff</color>
+    <dimen name="crop_default_crop_grid_stoke_width">1dp</dimen>
+
     <dimen name="crop_default_crop_rect_corner_touch_threshold">30dp</dimen>
     <dimen name="crop_default_crop_rect_min_size">100dp</dimen>
     <dimen name="crop_default_crop_rect_corner_touch_area_line_length">10dp</dimen>
-    <color name="crop_color_default_dimmed">#8c000000</color>
+    <color name="crop_color_default_dimmed">#80000000</color>
 
 
     <!--uCrop Activity-->
