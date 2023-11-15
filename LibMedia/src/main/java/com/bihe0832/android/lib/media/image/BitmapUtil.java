@@ -97,8 +97,8 @@ public class BitmapUtil {
     }
 
 
-    private static void calculateAndResetInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options) {
-        int size = BitmapTransUtils.calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight);
+    private static void calculateAndResetInSampleSize(int maxWidth, int maxHeight, BitmapFactory.Options options) {
+        int size = BitmapTransUtils.calculateInSampleSize(maxWidth, maxHeight, options.outWidth, options.outHeight);
         options.inSampleSize = size;
     }
 
@@ -141,23 +141,23 @@ public class BitmapUtil {
      * 读取一个缩放后的图片，限定图片大小，避免OOM
      *
      * @param uri 图片uri，支持“file://”、“content://”
-     * @param reqWidth 最大允许宽度
-     * @param reqHeight 最大允许高度
+     * @param maxWidth 最大允许宽度
+     * @param maxHeight 最大允许高度
      * @return 返回一个缩放后的Bitmap，失败则返回null
      */
-    public static Bitmap getLocalBitmap(Context context, Uri uri, int reqWidth, int reqHeight) {
+    public static Bitmap getLocalBitmap(Context context, Uri uri, int maxWidth, int maxHeight) {
         if (context == null) {
             return null;
         }
-        return getLocalBitmap(context.getContentResolver(), uri, reqWidth, reqHeight);
+        return getLocalBitmap(context.getContentResolver(), uri, maxWidth, maxHeight);
     }
 
-    public static Bitmap getLocalBitmap(String localPath, int reqWidth, int reqHeight) {
+    public static Bitmap getLocalBitmap(String localPath, int maxWidth, int maxHeight) {
         File file = new File(localPath);
         if (file.exists()) {
             try {
                 BitmapFactory.Options options = getLocalBitmapOptions(localPath);
-                calculateAndResetInSampleSize(reqWidth, reqHeight, options);
+                calculateAndResetInSampleSize(maxWidth, maxHeight, options);
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeFile(localPath, options);
 
@@ -166,10 +166,10 @@ public class BitmapUtil {
                 if (angle > 0) {
                     resizedBitmap = BitmapTransUtils.rotateBitmapByDegree(bitmap, angle);
                 }
-                if (reqWidth > 0 && reqHeight > 0 && (reqWidth < resizedBitmap.getWidth()
-                        || reqHeight < resizedBitmap.getHeight())) {
+                if (maxWidth > 0 && maxHeight > 0 && (maxWidth < resizedBitmap.getWidth()
+                        || maxHeight < resizedBitmap.getHeight())) {
                     // 缩放 Bitmap 对象
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(resizedBitmap, reqWidth, reqHeight, false);
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(resizedBitmap, maxWidth, maxHeight, false);
                     // 释放资源
                     resizedBitmap.recycle();
                     return scaledBitmap;
@@ -184,7 +184,7 @@ public class BitmapUtil {
     }
 
 
-    public static Bitmap getLocalBitmap(ContentResolver contentResolver, Uri uri, int reqWidth, int reqHeight) {
+    public static Bitmap getLocalBitmap(ContentResolver contentResolver, Uri uri, int maxWidth, int maxHeight) {
 
         String scheme = uri.getScheme();
         if (ContentResolver.SCHEME_CONTENT.equals(scheme) || ContentResolver.SCHEME_FILE.equals(scheme)) {
@@ -193,12 +193,12 @@ public class BitmapUtil {
             try {
                 input = contentResolver.openInputStream(uri);
                 BitmapFactory.Options options = getLocalBitmapOptions(contentResolver, uri);
-                calculateAndResetInSampleSize(reqWidth, reqHeight, options);
+                calculateAndResetInSampleSize(maxWidth, maxHeight, options);
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
-                if (reqWidth > 0 && reqHeight > 0 && (reqWidth < bitmap.getWidth() || reqHeight < bitmap.getHeight())) {
+                if (maxWidth > 0 && maxHeight > 0 && (maxWidth < bitmap.getWidth() || maxHeight < bitmap.getHeight())) {
                     // 缩放 Bitmap 对象
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, false);
                     // 释放资源
                     bitmap.recycle();
                     return scaledBitmap;
@@ -241,7 +241,7 @@ public class BitmapUtil {
         return filePath;
     }
 
-    public static Bitmap getRemoteBitmap(String urlString, int reqWidth, int reqHeight) {
+    public static Bitmap getRemoteBitmap(String urlString, int maxWidth, int maxHeight) {
         try {
             // 创建 URL 对象
             URL url = new URL(urlString);
@@ -254,16 +254,16 @@ public class BitmapUtil {
             inputStream.close();
 
             // 计算采样率
-            calculateAndResetInSampleSize(reqWidth, reqHeight, options);
+            calculateAndResetInSampleSize(maxWidth, maxHeight, options);
 
             // 重新打开输入流并解码为 Bitmap 对象
             inputStream = url.openConnection().getInputStream();
             options.inJustDecodeBounds = false;
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
             inputStream.close();
-            if (reqWidth > 0 && reqHeight > 0) {
+            if (maxWidth > 0 && maxHeight > 0) {
                 // 缩放 Bitmap 对象
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, false);
                 // 释放资源
                 bitmap.recycle();
                 return scaledBitmap;

@@ -9,9 +9,12 @@ import com.bihe0832.android.common.photos.choosePhoto
 import com.bihe0832.android.common.photos.cropPhoto
 import com.bihe0832.android.common.photos.getAutoChangedCropUri
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.Media
+import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.media.image.loadImage
 import kotlinx.android.synthetic.main.fragment_test_image.test_basic_button
 import kotlinx.android.synthetic.main.fragment_test_image.test_image_local_source
@@ -23,13 +26,15 @@ public class DebugImageFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-//        test_image_local_source.setImageBitmap(
-//            BitmapUtil.getLocalBitmap(
-//                context,
-//                R.mipmap.icon_author,
-//                1
-//            )
-//        )
+        val sourceFile = AAFFileWrapper.getTempFolder() + "cv_v.jpg"
+        FileUtils.copyAssetsFileToPath(context, "cv_v.jpg", sourceFile)
+        test_image_local_source.setImageBitmap(
+            BitmapUtil.getLocalBitmap(
+                sourceFile,
+                300,
+                600,
+            ),
+        )
 
 //        test_image_local_source.loadRoundCropImage(R.mipmap.icon_author, 120)
 
@@ -168,7 +173,7 @@ public class DebugImageFragment : BaseFragment() {
                 ZixieActivityRequestCode.CROP_PHOTO -> {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
 
-                    Media.uriToFile(activity!!, cropUri,true).absolutePath.let {
+                    Media.uriToFile(activity!!, cropUri, true).absolutePath.let {
                         ZLog.d("PhotoChooser in cropUri：$it")
                         test_image_local_source.loadImage(it)
                     }
