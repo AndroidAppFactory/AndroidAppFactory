@@ -118,7 +118,7 @@ public class ImageMetadataUtils {
         }
     }
 
-    public int getImageOrientation(String imagePath) {
+    public static int getImageOrientation(String imagePath) {
         try {
             ExifInterface exifInterface = new ExifInterface(imagePath);
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
@@ -171,7 +171,7 @@ public class ImageMetadataUtils {
             File file = new File(sourceImage);
             // 读取图片的 Exif 信息
             BitmapFactory.Options options = BitmapUtil.getLocalBitmapOptions(sourceImage);
-            Bitmap bitmap = BitmapUtil.getLocalBitmap(sourceImage, options.outHeight, options.outWidth, false);
+            Bitmap bitmap = BitmapUtil.getLocalBitmap(sourceImage, options.outHeight, options.outWidth);
             String result = BitmapUtil.saveBitmap(ZixieContext.INSTANCE.getApplicationContext(), bitmap);
             FileUtils.INSTANCE.copyFile(new File(result), file);
         } catch (Exception e) {

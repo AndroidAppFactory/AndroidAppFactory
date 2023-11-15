@@ -97,10 +97,8 @@ public class BitmapUtil {
     }
 
 
-    private static void calculateAndResetInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options,
-            boolean centerInside) {
-        int size = BitmapTransUtils.calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight,
-                centerInside);
+    private static void calculateAndResetInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options) {
+        int size = BitmapTransUtils.calculateInSampleSize(reqWidth, reqHeight, options.outWidth, options.outHeight);
         options.inSampleSize = size;
     }
 
@@ -147,19 +145,19 @@ public class BitmapUtil {
      * @param reqHeight 最大允许高度
      * @return 返回一个缩放后的Bitmap，失败则返回null
      */
-    public static Bitmap getLocalBitmap(Context context, Uri uri, int reqWidth, int reqHeight, boolean centerInside) {
+    public static Bitmap getLocalBitmap(Context context, Uri uri, int reqWidth, int reqHeight) {
         if (context == null) {
             return null;
         }
-        return getLocalBitmap(context.getContentResolver(), uri, reqWidth, reqHeight, centerInside);
+        return getLocalBitmap(context.getContentResolver(), uri, reqWidth, reqHeight);
     }
 
-    public static Bitmap getLocalBitmap(String localPath, int reqWidth, int reqHeight, boolean centerInside) {
+    public static Bitmap getLocalBitmap(String localPath, int reqWidth, int reqHeight) {
         File file = new File(localPath);
         if (file.exists()) {
             try {
                 BitmapFactory.Options options = getLocalBitmapOptions(localPath);
-                calculateAndResetInSampleSize(reqWidth, reqHeight, options, centerInside);
+                calculateAndResetInSampleSize(reqWidth, reqHeight, options);
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeFile(localPath, options);
 
@@ -186,8 +184,7 @@ public class BitmapUtil {
     }
 
 
-    public static Bitmap getLocalBitmap(ContentResolver contentResolver, Uri uri, int reqWidth, int reqHeight,
-            boolean centerInside) {
+    public static Bitmap getLocalBitmap(ContentResolver contentResolver, Uri uri, int reqWidth, int reqHeight) {
 
         String scheme = uri.getScheme();
         if (ContentResolver.SCHEME_CONTENT.equals(scheme) || ContentResolver.SCHEME_FILE.equals(scheme)) {
@@ -196,7 +193,7 @@ public class BitmapUtil {
             try {
                 input = contentResolver.openInputStream(uri);
                 BitmapFactory.Options options = getLocalBitmapOptions(contentResolver, uri);
-                calculateAndResetInSampleSize(reqWidth, reqHeight, options, centerInside);
+                calculateAndResetInSampleSize(reqWidth, reqHeight, options);
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
                 if (reqWidth > 0 && reqHeight > 0 && (reqWidth < bitmap.getWidth() || reqHeight < bitmap.getHeight())) {
@@ -257,7 +254,7 @@ public class BitmapUtil {
             inputStream.close();
 
             // 计算采样率
-            calculateAndResetInSampleSize(reqWidth, reqHeight, options, true);
+            calculateAndResetInSampleSize(reqWidth, reqHeight, options);
 
             // 重新打开输入流并解码为 Bitmap 对象
             inputStream = url.openConnection().getInputStream();

@@ -227,7 +227,11 @@ public class Media {
         addToPhotos(context, imagePath, "", false);
     }
 
+    public static File uriToFile(Context context, Uri uri, boolean needReadFileByPath) {
+        return ZixieFileProvider.uriToFile(context, uri, needReadFileByPath);
+    }
+
     public static File uriToFile(Context context, Uri uri) {
-        return ZixieFileProvider.uriToFile(context, uri);
+        return ZixieFileProvider.uriToFile(context, uri, true);
     }
 }

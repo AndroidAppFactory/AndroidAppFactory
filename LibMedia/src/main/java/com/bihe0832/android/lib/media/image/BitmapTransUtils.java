@@ -54,26 +54,16 @@ public class BitmapTransUtils {
     }
 
     //根据width 和 height 与 reqWidth 和 reqHeight 的差异，计算出如果缩放到一样大，使用的 BitmapFactory.Options
-    public static int calculateInSampleSize(int reqWidth, int reqHeight, int width, int height, boolean centerInside) {
-        int sampleSize = 1;
+    public static int calculateInSampleSize(int reqWidth, int reqHeight, int width, int height) {
+        int inSampleSize = 1;
         if (height > reqHeight || width > reqWidth) {
-            final int heightRatio;
-            final int widthRatio;
-            if (reqHeight == 0) {
-                if (reqWidth != 0) {
-                    sampleSize = (int) Math.floor((float) width / (float) reqWidth);
-                }
-            } else {
-                if (reqWidth == 0) {
-                    sampleSize = (int) Math.floor((float) height / (float) reqHeight);
-                } else {
-                    heightRatio = (int) Math.floor((float) height / (float) reqHeight);
-                    widthRatio = (int) Math.floor((float) width / (float) reqWidth);
-                    sampleSize = centerInside ? Math.max(heightRatio, widthRatio) : Math.min(heightRatio, widthRatio);
-                }
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width lower or equal to the requested height and width.
+            while ((height / inSampleSize) > reqHeight || (width / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
             }
         }
-        return sampleSize;
+        return inSampleSize;
     }
 
 

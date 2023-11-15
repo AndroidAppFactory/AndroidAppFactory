@@ -106,9 +106,13 @@ fun Activity.cropPhoto(
     ZLog.d("Activity cropPhoto sourceFile ：$sourceFile")
     ZLog.d("Activity cropPhoto targetFile ：$targetFile")
 
-    var finalSourceFile: Uri? =
+    var finalSourceFile: Uri? = if (ZixieFileProvider.isZixieFileProvider(this, sourceFile)) {
+        sourceFile
+    } else {
         ZixieFileProvider.getZixieFileProvider(this, ZixieFileProvider.uriToFile(this, sourceFile))
-    val file = Media.uriToFile(this, targetFile)
+    }
+
+    val file = Media.uriToFile(this, targetFile,false)
 
     if (file != null) {
         FileUtils.checkAndCreateFolder(file.parent)

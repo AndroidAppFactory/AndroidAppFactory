@@ -8,6 +8,7 @@
 
 package com.bihe0832.android.lib.file.provider;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import androidx.core.content.FileProvider;
+import androidx.core.content.PermissionChecker;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.R;
 import com.bihe0832.android.lib.file.action.FileAction;
@@ -72,6 +74,15 @@ public class ZixieFileProvider extends FileProvider {
         }
 
         return uri;
+    }
+
+    public static boolean isZixieFileProvider(Context context, Uri uri) {
+        if (uri == null) {
+            return false;
+        }
+
+        return uri.getAuthority().startsWith(getZixieFileProviderName(context)) || uri.getAuthority()
+                .startsWith(getAAFInnerFileProviderName(context));
     }
 
     public static final String getZixieFileProviderName(Context context) {
@@ -171,7 +182,7 @@ public class ZixieFileProvider extends FileProvider {
     }
 
 
-    public static String getPath(final Context ctx, final Uri uri) {
+    public static String getPath(final Context ctx, final Uri uri, boolean needReadFileByPath) {
         if (uri == null || uri.getScheme() == null) {
             ZLog.e("uri is null");
             return "";
@@ -198,12 +209,14 @@ public class ZixieFileProvider extends FileProvider {
                         Uri.parse("content://downloads/public_downloads"), ConvertUtils.parseLong(id, 0L));
 
                 String path = getDataColumn(context, contentUri, null, null);
-                if (TextUtils.isEmpty(path)) {
-                    return FileAction.INSTANCE.copyFileToFolder(context, uri,
-                            ZixieFileProvider.getZixieCacheFolder(context));
-                } else {
-                    return path;
+                if (PermissionChecker.checkSelfPermission(ctx, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PermissionChecker.PERMISSION_GRANTED || !needReadFileByPath) {
+                    if (!TextUtils.isEmpty(path)) {
+                        return path;
+                    }
                 }
+                return FileAction.INSTANCE.copyFileToFolder(context, uri,
+                        ZixieFileProvider.getZixieCacheFolder(context));
             } else if (isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
@@ -222,28 +235,33 @@ public class ZixieFileProvider extends FileProvider {
                 final String[] selectionArgs = new String[]{split[1]};
 
                 String path = getDataColumn(context, contentUri, selection, selectionArgs);
-                if (TextUtils.isEmpty(path)) {
-                    return FileAction.INSTANCE.copyFileToFolder(context, uri,
-                            ZixieFileProvider.getZixieCacheFolder(context));
-                } else {
-                    return path;
+                if (PermissionChecker.checkSelfPermission(ctx, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PermissionChecker.PERMISSION_GRANTED || !needReadFileByPath) {
+                    if (!TextUtils.isEmpty(path)) {
+                        return path;
+                    }
                 }
-            }
-        } else if (ContentResolver.SCHEME_CONTENT.equalsIgnoreCase(uri.getScheme())) {
-            String path = getDataColumn(context, uri, null, null);
-            if (TextUtils.isEmpty(path)) {
                 return FileAction.INSTANCE.copyFileToFolder(context, uri,
                         ZixieFileProvider.getZixieCacheFolder(context));
             } else {
-                return path;
+                return FileAction.INSTANCE.copyFileToFolder(context, uri,
+                        ZixieFileProvider.getZixieCacheFolder(context));
             }
+        } else if (ContentResolver.SCHEME_CONTENT.equalsIgnoreCase(uri.getScheme())) {
+            if (PermissionChecker.checkSelfPermission(ctx, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PermissionChecker.PERMISSION_GRANTED || !needReadFileByPath) {
+                String path = getDataColumn(context, uri, null, null);
+                if (!TextUtils.isEmpty(path)) {
+                    return path;
+                }
+            }
+            return FileAction.INSTANCE.copyFileToFolder(context, uri, ZixieFileProvider.getZixieCacheFolder(context));
         } else if (ContentResolver.SCHEME_FILE.equalsIgnoreCase(uri.getScheme())) {
             //此uri为文件，并且path不为空(保存在沙盒内的文件可以随意访问，外部文件path则为空)
             return uri.getPath();
         }
         return "";
     }
-
 
     /**
      * 将uri转换为file
@@ -254,12 +272,12 @@ public class ZixieFileProvider extends FileProvider {
      * @param uri uri
      * @return file
      */
+    public static File uriToFile(Context context, Uri uri, boolean needReadFileByPath) {
+        String filePath = getPath(context, uri, needReadFileByPath);
+        return new File(filePath);
+    }
+
     public static File uriToFile(Context context, Uri uri) {
-        String filePath = getPath(context, uri);
-        if (FileUtils.INSTANCE.checkFileExist(filePath)) {
-            return new File(filePath);
-        } else {
-            return null;
-        }
+        return uriToFile(context, uri, true);
     }
 }

@@ -1,5 +1,6 @@
 ext {
 
+    cmake_version = "3.22.1"
     // AAF 基础库依赖的第三方库基本信息
     gson_version = "com.google.code.gson:gson:2.8.2"
     svga_dependency = "com.github.yyued:SVGAPlayer-Android:2.6.1"

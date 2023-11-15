@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="crop_default_crop_grid">#80ffffff</color>
+    <dimen name="crop_default_crop_grid_stoke_width">1dp</dimen>
+    <color name="crop_default_crop_frame">@color/icons</color>
+    <dimen name="crop_default_crop_frame_stoke_width">1dp</dimen>
+    <dimen name="crop_default_crop_rect_corner_touch_threshold">30dp</dimen>
+    <dimen name="crop_default_crop_rect_min_size">100dp</dimen>
+    <dimen name="crop_default_crop_rect_corner_touch_area_line_length">10dp</dimen>
+    <color name="crop_color_default_dimmed">#8c000000</color>
+
+
+    <!--uCrop Activity-->
+    <dimen name="crop_page_padding">16dp</dimen>
+    <color name="crop_default_logo_color">#4f212121</color>
+    <dimen name="crop_default_logo_size">160dp</dimen>
+
+    <color name="crop_color_progress_wheel_line">@color/com_bihe0832_tab_background</color>
+    <dimen name="crop_height_horizontal_wheel_progress_line">20dp</dimen>
+    <dimen name="crop_width_horizontal_wheel_progress_line">2dp</dimen>
+    <dimen name="crop_width_middle_wheel_progress_line">4dp</dimen>
+    <dimen name="crop_margin_horizontal_wheel_progress_line">10dp</dimen>
+</resources>

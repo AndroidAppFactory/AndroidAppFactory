@@ -14,10 +14,10 @@ ext.commonmoduleInfo = [
                 "version"            : "6.6.15",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
-                        "CommonFeedback", "CommonSplash", "CommonPhotos",  "CommonWebview",
-                        "CommonNetwork", "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor",
-                        "CommonSvga", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare", "CommonMessage",
-                        "CommonQRCode", "CommonAccessibility", "CommonPermission", "CommonPanel", "CommonMedia"
+                        "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview", "CommonNetwork",
+                        "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor", "CommonSvga", "CommonBottomTab",
+                        "CommonNavigationDrawer", "CommonShare", "CommonMessage", "CommonQRCode", "CommonAccessibility",
+                        "CommonPermission", "CommonPanel", "CommonMedia", "CommonCrop"
                 ]
         ],
         "Framework"             : [
@@ -166,6 +166,13 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
                         "Framework", project.ffmpeg.min, project.metadata.drewnoakes
+                ]
+        ],
+        "CommonCrop"            : [
+                "version"            : "6.6.15",
+                "artifactId"         : "common-crop",
+                "apidependenciesList": [
+                        "Framework", "CommonBottomTab", "CommonMedia"
                 ]
         ]
 ]

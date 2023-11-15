@@ -168,7 +168,7 @@ public class DebugImageFragment : BaseFragment() {
                 ZixieActivityRequestCode.CROP_PHOTO -> {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
 
-                    Media.uriToFile(activity!!, cropUri).absolutePath.let {
+                    Media.uriToFile(activity!!, cropUri,true).absolutePath.let {
                         ZLog.d("PhotoChooser in cropUri：$it")
                         test_image_local_source.loadImage(it)
                     }

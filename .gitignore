@@ -39,6 +39,7 @@ build
 captures
 gradle.properties
 .externalNativeBuild
+.cxx
 
 ######################
 # mac

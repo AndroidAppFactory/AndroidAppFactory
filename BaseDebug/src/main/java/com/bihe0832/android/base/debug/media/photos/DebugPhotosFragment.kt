@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.View
+import com.bihe0832.android.common.crop.CropUtils
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
@@ -14,18 +15,22 @@ import com.bihe0832.android.common.photos.getAutoChangedCropUri
 import com.bihe0832.android.common.photos.getAutoChangedPhotoUri
 import com.bihe0832.android.common.photos.takePhoto
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_ALL
 import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_IMAGE
 import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_VIDEO
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.Media
+import java.io.File
 
 class DebugPhotosFragment : DebugCommonFragment() {
     val LOG_TAG = this.javaClass.simpleName
 
     var needCrop = false
+    var needAAFCrop = false
 
     var takePhosUri: Uri? = null
     var cropUri: Uri? = null
@@ -47,9 +52,21 @@ class DebugPhotosFragment : DebugCommonFragment() {
             )
             add(
                 DebugItemData(
+                    "AAF 裁剪",
+                    View.OnClickListener {
+                        needCrop = false
+                        needAAFCrop = true
+                        aafcrop()
+                    },
+                ),
+
+            )
+            add(
+                DebugItemData(
                     "仅拍照",
                     View.OnClickListener {
                         needCrop = false
+                        needAAFCrop = false
                         takePhosUri = activity!!.getAutoChangedPhotoUri()
                         activity?.takePhoto(takePhosUri)
                     },
@@ -57,9 +74,21 @@ class DebugPhotosFragment : DebugCommonFragment() {
             )
             add(
                 DebugItemData(
-                    "拍照并裁剪",
+                    "拍照并系统裁剪",
                     View.OnClickListener {
                         needCrop = true
+                        needAAFCrop = false
+                        takePhosUri = activity!!.getAutoChangedPhotoUri()
+                        activity?.takePhoto(takePhosUri)
+                    },
+                ),
+            )
+            add(
+                DebugItemData(
+                    "拍照并AAF裁剪",
+                    View.OnClickListener {
+                        needCrop = false
+                        needAAFCrop = true
                         takePhosUri = activity!!.getAutoChangedPhotoUri()
                         activity?.takePhoto(takePhosUri)
                     },
@@ -70,6 +99,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     "选择图片",
                     View.OnClickListener {
                         needCrop = false
+                        needAAFCrop = false
                         activity?.choosePhoto(FILE_TYPE_IMAGE)
                     },
                 ),
@@ -79,6 +109,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     "选择视频",
                     View.OnClickListener {
                         needCrop = false
+                        needAAFCrop = false
                         activity?.choosePhoto(FILE_TYPE_VIDEO)
                     },
                 ),
@@ -88,20 +119,43 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     "选择图片或者视频",
                     View.OnClickListener {
                         needCrop = false
+                        needAAFCrop = false
                         activity?.choosePhoto(FILE_TYPE_ALL)
                     },
                 ),
             )
             add(
                 DebugItemData(
-                    "选择并裁剪",
+                    "选择并系统裁剪",
                     View.OnClickListener {
                         needCrop = true
+                        needAAFCrop = false
+                        activity?.choosePhoto()
+                    },
+                ),
+            )
+            add(
+                DebugItemData(
+                    "选择并AAF裁剪",
+                    View.OnClickListener {
+                        needCrop = false
+                        needAAFCrop = true
                         activity?.choosePhoto()
                     },
                 ),
             )
         }
+    }
+
+    private fun aafcrop() {
+        val sourceFile = AAFFileWrapper.getTempFolder() + "cv_v.jpg"
+        FileUtils.copyAssetsFileToPath(context, "cv_v.jpg", sourceFile)
+        CropUtils.startCrop(
+            activity!!,
+            ZixieFileProvider.getZixieFileProvider(context, File(sourceFile)),
+            CropUtils.Options().apply {
+                setHideBottomControls(true)
+            })
     }
 
     private fun cropPhotos(sourceUri: Uri?) {
@@ -116,6 +170,8 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ZixieActivityRequestCode.TAKE_PHOTO -> {
                     if (needCrop) {
                         cropPhotos(takePhosUri)
+                    } else if (needAAFCrop) {
+                        CropUtils.startCrop(activity!!, takePhosUri)
                     } else {
                         showResult("图片地址:" + Media.uriToFile(context!!, takePhosUri))
 //                        showResult("图片地址:" + ZixieFileProvider.uriToFile(activity!!, takePhosUri).absolutePath)
@@ -131,6 +187,8 @@ class DebugPhotosFragment : DebugCommonFragment() {
                                 Media.uriToFile(activity!!, data.getData()),
                             ),
                         )
+                    } else if (needAAFCrop) {
+                        CropUtils.startCrop(activity!!, data.getData())
                     } else {
                         showResult("图片地址:" + Media.uriToFile(activity!!, data.getData()).absolutePath)
                     }
@@ -140,9 +198,15 @@ class DebugPhotosFragment : DebugCommonFragment() {
 
                 ZixieActivityRequestCode.CROP_PHOTO -> {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
-                    Media.uriToFile(activity!!, cropUri).absolutePath.let {
-                        showResult("图片地址:$it")
-                        ZLog.d("PhotoChooser in cropUri：$it")
+                    if (needCrop) {
+                        ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
+                        Media.uriToFile(activity!!, cropUri).absolutePath.let {
+                            showResult("图片地址:$it")
+                            ZLog.d("PhotoChooser in cropUri：$it")
+                        }
+                    } else if (needAAFCrop) {
+                        ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
+                        showResult("图片地址:${data?.data}")
                     }
                 }
 

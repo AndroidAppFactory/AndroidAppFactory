@@ -1,11 +1,14 @@
 package com.bihe0832.android.lib.file.content
 
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.text.TextUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.request.URLUtils
 import java.io.File
-import java.util.*
-
+import java.util.Arrays
 
 /**
  *
@@ -73,4 +76,16 @@ object FileName {
         return false
     }
 
+    fun getFileName(context: Context, uri: Uri): String {
+        val resolver: ContentResolver = context.getContentResolver()
+        val cursor = resolver.query(uri, null, null, null, null)
+        if (cursor != null && cursor.moveToFirst()) {
+            try {
+                return cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return ""
+    }
 }

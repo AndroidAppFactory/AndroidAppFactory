@@ -12,7 +12,10 @@ package com.bihe0832.android.base.debug.temp
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
+import java.io.File
 
 
 class DebugTempFragment : DebugEnvFragment() {
@@ -30,5 +33,9 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
     private fun testFunc() {
+        val targetFile = AAFFileWrapper.getTempFolder() + System.currentTimeMillis() + ".png"
+
+        val uri = ZixieFileProvider.getZixieFileProvider(context, File(targetFile))
+        val file = ZixieFileProvider.uriToFile(context, uri)
     }
 }

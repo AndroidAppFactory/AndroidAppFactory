@@ -1,0 +1,179 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:id="@+id/crop_page"
+        android:fitsSystemWindows="true"
+        android:background="@color/black"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/crop_toolbar"
+            android:layout_width="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/colorPrimary"
+            android:layout_height="@dimen/com_bihe0832_tab_main_bottom_bar_height">
+
+        <ImageView
+                android:id="@+id/crop_back"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:layout_marginLeft="@dimen/crop_page_padding"
+                android:src="@drawable/ic_left_arrow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <ImageView
+                android:id="@+id/crop_done"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:layout_marginRight="@dimen/crop_page_padding"
+                android:src="@drawable/ic_done"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+            android:id="@+id/image_view_logo"
+            android:layout_width="@dimen/crop_default_logo_size"
+            android:layout_height="@dimen/crop_default_logo_size"
+            android:layout_gravity="center"
+            android:src="@mipmap/icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/crop_toolbar"
+            app:layout_constraintBottom_toTopOf="@+id/wrapper_controls"
+            app:tint="@color/crop_default_logo_color" />
+
+    <com.bihe0832.android.common.crop.view.CropView
+            android:id="@+id/ucrop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/crop_toolbar"
+            app:layout_constraintBottom_toTopOf="@+id/wrapper_controls"
+            android:alpha="0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wrapper_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/com_bihe0832_android_common_crop_shape">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/angel_control"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/crop_page_padding"
+                android:paddingRight="@dimen/crop_page_padding"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/crop_controls"
+                android:visibility="visible"
+                tools:visibility="visible">
+
+            <ImageView
+                    android:id="@+id/angel_reset"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:adjustViewBounds="true"
+                    android:visibility="gone"
+                    android:tint="@color/colorPrimary"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_close_fill"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                    android:id="@+id/angel_angel"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_angle"
+                    android:visibility="gone"
+                    android:tint="@color/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+
+            <LinearLayout
+                    android:id="@+id/layout_aspect_ratio"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/com_bihe0832_tab_main_bottom_bar_height"
+                    android:gravity="center_vertical"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="horizontal" />
+
+            <com.bihe0832.android.common.crop.view.widget.HorizontalProgressWheelView
+                    android:id="@+id/rotate_scroll_wheel"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/com_bihe0832_tab_main_bottom_bar_height"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/angel_reset"
+                    app:layout_constraintEnd_toStartOf="@+id/angel_angel"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            <com.bihe0832.android.common.crop.view.widget.HorizontalProgressWheelView
+                    android:id="@+id/scale_scroll_wheel"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/com_bihe0832_tab_main_bottom_bar_height"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/angel_reset"
+                    app:layout_constraintEnd_toStartOf="@+id/angel_angel"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+
+            <TextView
+                    android:id="@+id/angel_value"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/angel_angel"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:visibility="gone"
+                    android:textColor="@color/colorAccent"
+                    tools:text="100°" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.bihe0832.android.lib.ui.bottom.bar.BottomBar
+                android:id="@+id/crop_controls"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/com_bihe0832_tab_main_bottom_bar_height"
+                android:layout_gravity="bottom"
+                android:background="@color/com_bihe0832_tab_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,15 +50,15 @@ public final class QRCodeDecodingHandler {
     }
 
     public static Result decodeQRcode(String filePath) {
-        return decodeQRcode(BitmapUtil.getLocalBitmap(filePath, 300, 300, true));
+        return decodeQRcode(BitmapUtil.getLocalBitmap(filePath, 300, 300));
     }
 
     public static Result decodeQRcode(String filePath, int width) {
-        return decodeQRcode(BitmapUtil.getLocalBitmap(filePath, width, width, true));
+        return decodeQRcode(BitmapUtil.getLocalBitmap(filePath, width, width));
     }
 
     public static Result decodeQRcode(Context context, Uri uri, int width) {
-        return decodeQRcode(BitmapUtil.getLocalBitmap(context, uri, width, width, true));
+        return decodeQRcode(BitmapUtil.getLocalBitmap(context, uri, width, width));
     }
 
     public static Result decodeQRcode(Bitmap bitmap) {

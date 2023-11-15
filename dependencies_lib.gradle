@@ -7,15 +7,16 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
-                        "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest",
-                        "LibGson", "LibHttpAdvanced", "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall",
-                        "LibAPK", "LibTTS", "LibText", "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC",
-                        "LibBlockTask", "LibOkhttpWrapper", "LibDataRepository", "LibCoroutines",
-                        "LibCommonUIUtils", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibQRCode",
-                        "LibAdapter", "LibRefresh", "LibToast", "LibDialog", "LibNotification", "LibBottomTab",
-                        "LibRecycleviewExt", "LibTouchRegion", "LibViewExt", "LibPermission", "LibMedia",
-                        "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor", "LibViewPager",
-                        "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme", "LibColor", "LibPanel"]
+                        "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
+                        "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall", "LibAPK", "LibTTS", "LibText",
+                        "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC", "LibBlockTask", "LibOkhttpWrapper",
+                        "LibDataRepository", "LibCoroutines", "LibCommonUIUtils", "LibFragmentation_swipeback",
+                        "LibFlycoTabLayout", "LibQRCode", "LibAdapter", "LibRefresh", "LibToast", "LibDialog",
+                        "LibNotification", "LibBottomTab", "LibRecycleviewExt", "LibTouchRegion", "LibViewExt",
+                        "LibPermission", "LibMedia", "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor",
+                        "LibViewPager", "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme",
+                        "LibColor", "LibPanel", "LibCrop"
+                ]
         ],
         "RouterAnnotation"          : [
                 "version"            : "4.1.0",
@@ -511,6 +512,13 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         project.androidsupport.annotation,
                         "LibColor", "LibGson"
+                ]
+        ],
+        "LibCrop"                   : [
+                "version"            : "6.6.15",
+                "artifactId"         : "lib-crop",
+                "apidependenciesList": [
+
                 ]
         ]
 ]
