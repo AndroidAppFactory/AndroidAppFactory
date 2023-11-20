@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.7.4",
+                "version"            : "6.7.5",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -102,7 +102,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibGson"                   : [
-                "version"            : "5.15.10",
+                "version"            : "6.7.5",
                 "artifactId"         : "lib-gson",
                 "apidependenciesList": [
                         project.gson_version,
@@ -117,7 +117,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpAdvanced"           : [
-                "version"            : "6.7.4",
+                "version"            : "6.7.5",
                 "artifactId"         : "lib-http-advanced",
                 "apidependenciesList": [
                         "LibHttpCommon", "LibGson", "LibAAF"
@@ -188,7 +188,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"               : [
-                "version"            : "6.7.4",
+                "version"            : "6.7.5",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -507,7 +507,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"                  : [
-                "version"            : "6.7.4",
+                "version"            : "6.7.5",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
