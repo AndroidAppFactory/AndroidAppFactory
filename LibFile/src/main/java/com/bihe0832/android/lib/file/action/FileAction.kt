@@ -370,13 +370,17 @@ object FileAction {
             var source = if (TextUtils.isEmpty(fromAssetPath)) {
                 fromAssetPath
             } else {
-                fromAssetPath + File.separator
+                if (fromAssetPath.endsWith(File.separator)) {
+                    fromAssetPath
+                } else {
+                    fromAssetPath + File.separator
+                }
             }
 
             var target = getFolderPathWithSeparator(targetFolder)
-            var res = true
+            var res = false
             context.assets.list(fromAssetPath)?.forEach { file: String ->
-                var dataArray = context.assets.list(file) ?: emptyArray()
+                var dataArray = context.assets.list(source + file) ?: emptyArray()
                 res = if (dataArray.isNotEmpty()) {
                     res && copyAssetsFolderToFolder(context, "$source$file", "$target$file")
                 } else {

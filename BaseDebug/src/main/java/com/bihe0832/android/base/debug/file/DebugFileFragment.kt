@@ -20,10 +20,13 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.framework.file.AAFFileWrapper.getTempFolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.config.OnConfigChangedListener
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.FileUtils.copyAssetsFolderToFolder
+import com.bihe0832.android.lib.file.FileUtils.getFolderPathWithSeparator
 import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_ALL
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
@@ -310,10 +313,24 @@ class DebugFileFragment : DebugEnvFragment() {
             ZLog.d(LOG_TAG, " " + FileUtils.checkFileExist(path))
             FileUtils.deleteFile(path)
         }
+//
+//        FileAction.copyAssetsFolderToFolder(context, "", ZixieContext.getLogFolder()).let {
+//            ZLog.d(LOG_TAG, "result:$it")
+//            File(ZixieContext.getLogFolder()).listFiles().forEach { file ->
+//                ZLog.d(LOG_TAG, file.absolutePath)
+//            }
+//        }
 
-        FileAction.copyAssetsFolderToFolder(context, "", ZixieContext.getLogFolder()).let {
+        val tempFolder = getFolderPathWithSeparator(
+            getTempFolder("book") + "dsfsdfs",
+        )
+        copyAssetsFolderToFolder(
+            context,
+            "imageList" + File.separator + "111" + File.separator,
+            tempFolder,
+        ).let {
             ZLog.d(LOG_TAG, "result:$it")
-            File(ZixieContext.getLogFolder()).listFiles().forEach { file ->
+            File(tempFolder).listFiles().forEach { file ->
                 ZLog.d(LOG_TAG, file.absolutePath)
             }
         }
