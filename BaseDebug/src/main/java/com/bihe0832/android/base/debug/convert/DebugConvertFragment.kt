@@ -8,9 +8,9 @@
 
 package com.bihe0832.android.base.debug.convert
 
-
 import android.util.Base64
 import android.view.View
+import com.bihe0832.android.app.api.AAFResponse
 import com.bihe0832.android.base.debug.json.IntegerDebugAdapter
 import com.bihe0832.android.base.debug.json.JsonTest
 import com.bihe0832.android.base.debug.tree.TreeNode
@@ -30,7 +30,6 @@ import com.bihe0832.android.lib.utils.time.TimeUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-
 class DebugConvertFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
     var taskIDTree: TreeNode<String>? = null
@@ -43,12 +42,9 @@ class DebugConvertFragment : DebugEnvFragment() {
 
             add(DebugItemData("树结构", View.OnClickListener { testTree() }))
 
-
             add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
             add(DebugItemData("时间数据格式化", View.OnClickListener { testFormat() }))
             add(DebugItemData("版本号比较", View.OnClickListener { testVersion() }))
-
-
         }
     }
 
@@ -66,12 +62,22 @@ class DebugConvertFragment : DebugEnvFragment() {
         list.let {
             ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(it, JsonTest::class.java))
             ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(JsonHelper.getGson(), it, JsonTest::class.java))
-            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(JsonHelper.getGsonBuilder().apply {
-                registerTypeAdapter(Int::class.java, IntegerDebugAdapter())
-                registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDebugAdapter())
-            }.create(), it, JsonTest::class.java))
+            ZLog.d(
+                LOG_TAG,
+                "result:" + fromJsonList<JsonTest>(
+                    JsonHelper.getGsonBuilder().apply {
+                        registerTypeAdapter(Int::class.java, IntegerDebugAdapter())
+                        registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDebugAdapter())
+                    }.create(),
+                    it,
+                    JsonTest::class.java,
+                ),
+            )
         }
 
+        val enerics =
+            "{\"content\":{\"key\":\"value1\",\"value1\":[1222,2222],\"value2\":true},\"err_code\":0,\"message\":\"\"}"
+        ZLog.d(LOG_TAG, "result:" + JsonHelper.fromJson(enerics, AAFResponse::class.java, JsonTest::class.java))
 
         JsonTest().apply {
             key = 1212
@@ -79,7 +85,6 @@ class DebugConvertFragment : DebugEnvFragment() {
         }.let {
             ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
         }
-
     }
 
     fun testConvertBoolean() {
@@ -90,7 +95,6 @@ class DebugConvertFragment : DebugEnvFragment() {
     }
 
     private fun testFormat() {
-
         mutableListOf(1645771904111, 1345775904112, 1625775904313, 1645775304114, 1645772904115, 1645772404116).forEach { data ->
             ZLog.d(LOG_TAG, "DateEN $data trans result is:" + DateUtil.getDateEN(data))
             ZLog.d(LOG_TAG, "DateEN $data start is:" + DateUtil.getDayStartTimestamp(data))
@@ -123,7 +127,6 @@ class DebugConvertFragment : DebugEnvFragment() {
         mutableListOf("2022-02-25 00:00", "2022-02-25 51:44", "2012-08-24 00:00").forEach {
             ZLog.d(LOG_TAG, "Day start $it to ${DateUtil.getDayStartTimestamp(it, "yyyy-MM-dd mm:ss")}")
         }
-
     }
 
     private fun testConvertFloat() {
@@ -135,8 +138,6 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "3.6 " + "3.6".toDouble() + " " + ConvertUtils.parseDouble("3.6", 0.0))
         ZLog.d(LOG_TAG, "0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
         ZLog.d(LOG_TAG, "0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
-
-
     }
 
     private fun testZlib() {
@@ -152,14 +153,11 @@ class DebugConvertFragment : DebugEnvFragment() {
         val b = Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
         val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
 
-
         val res = String(ZlibUtil.uncompress(compres))
         ZLog.d(LOG_TAG, "压缩再解压一致性确认：")
         ZLog.d(LOG_TAG, "text：\n$text\n\n")
         ZLog.d(LOG_TAG, "result：\n$res\n\n")
-
     }
-
 
     fun testPercent() {
         testPercentItem(MathUtils.getFormatPercent(1, 1, 4))
@@ -178,7 +176,6 @@ class DebugConvertFragment : DebugEnvFragment() {
         }
     }
 
-
     private fun testVersion() {
         val v1 = "1.0.1"
         val v2 = "1.0.02"
@@ -194,7 +191,6 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
         ZLog.d(LOG_TAG, "v3 VS v2:" + APKUtils.compareVersion(v3, v2))
         ZLog.d(LOG_TAG, "v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
-
     }
 
     fun testTree() {
@@ -222,6 +218,4 @@ class DebugConvertFragment : DebugEnvFragment() {
             ZLog.e("node is :$it")
         }
     }
-
-
 }

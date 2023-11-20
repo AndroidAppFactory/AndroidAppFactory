@@ -6,9 +6,9 @@ import com.bihe0832.android.lib.gson.type.ParameterizedTypeImpl
 import com.bihe0832.android.lib.log.ZLog
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import java.lang.reflect.Type
-
 
 /**
  * @author zixie code@bihe0832.com
@@ -31,17 +31,17 @@ object JsonHelper {
 
     fun getGsonBuilder(): GsonBuilder {
         return GsonBuilder()
-                .registerTypeAdapter(Double::class.java, DoubleDefaultAdapter())
-                .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
-                .registerTypeAdapter(Boolean::class.java, BooleanTypeAdapter())
-                .registerTypeAdapter(Boolean::class.javaPrimitiveType, BooleanTypeAdapter())
-                .registerTypeAdapter(Float::class.java, FloatDefaultAdapter())
-                .registerTypeAdapter(Float::class.javaPrimitiveType, FloatDefaultAdapter())
-                .registerTypeAdapter(Int::class.java, IntegerDefaultAdapter())
-                .registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDefaultAdapter())
-                .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
-                .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
-                .registerTypeAdapter(String::class.java, StringNullAdapter())
+            .registerTypeAdapter(Double::class.java, DoubleDefaultAdapter())
+            .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
+            .registerTypeAdapter(Boolean::class.java, BooleanTypeAdapter())
+            .registerTypeAdapter(Boolean::class.javaPrimitiveType, BooleanTypeAdapter())
+            .registerTypeAdapter(Float::class.java, FloatDefaultAdapter())
+            .registerTypeAdapter(Float::class.javaPrimitiveType, FloatDefaultAdapter())
+            .registerTypeAdapter(Int::class.java, IntegerDefaultAdapter())
+            .registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDefaultAdapter())
+            .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
+            .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
+            .registerTypeAdapter(String::class.java, StringNullAdapter())
     }
 
     /**
@@ -52,7 +52,7 @@ object JsonHelper {
      * @return json的String格式
      *
      * i.e: String json = JsonHelper.toJson(beanObject);
-    </T> */
+     </T> */
     fun <T> toJson(beanObject: T): String? {
         return toJson(getGson(), beanObject)
     }
@@ -79,6 +79,33 @@ object JsonHelper {
      */
     fun <T> fromJson(json: String, beanClass: Class<T>): T? {
         return fromJson(getGson(), json, beanClass)
+    }
+
+    /**
+     * 将json字符串转为bean类
+     *
+     * @param <T> bean的类型
+     * @param json json的String格式
+     * @param responseClass 泛型的外层Class类型
+     * @param contentClass 泛型的内层Class类型
+     * @return T类型的bean类
+     *
+     * i.e: BeanClass beanClass = JsonHelper.fromJson(json, BeanClass.class);
+     */
+    open fun <R, T> fromJson(json: String?, responseClass: Class<R>, contentClass: Class<T>): R? {
+        try {
+            TypeToken.getParameterized(responseClass, contentClass).type.let {
+                return getGson().fromJson(json, it)
+            }
+        } catch (e: Exception) {
+            ZLog.e("JsonHelper", "------------------------------------")
+            ZLog.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
+            ZLog.e("JsonHelper", "JsonParserWrapper json:$json")
+            ZLog.e("JsonHelper", "JsonParserWrapper responseClass:$responseClass")
+            ZLog.e("JsonHelper", "JsonParserWrapper contentClass:$contentClass")
+            ZLog.e("JsonHelper", "------------------------------------")
+        }
+        return null
     }
 
     fun <T> fromJson(gson: Gson, json: String, beanClass: Class<T>): T? {
