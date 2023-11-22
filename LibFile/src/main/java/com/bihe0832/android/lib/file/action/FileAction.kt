@@ -377,21 +377,24 @@ object FileAction {
                 }
             }
 
-            var target = getFolderPathWithSeparator(targetFolder)
-            var res = false
-            context.assets.list(fromAssetPath)?.forEach { file: String ->
+            var target = FileAction.getFolderPathWithSeparator(targetFolder)
+
+            context.assets.list(source)?.forEach { file: String ->
                 var dataArray = context.assets.list(source + file) ?: emptyArray()
-                res = if (dataArray.isNotEmpty()) {
-                    res && copyAssetsFolderToFolder(context, "$source$file", "$target$file")
+                val res = if (dataArray.isNotEmpty()) {
+                    copyAssetsFolderToFolder(context, "$source$file", "$target$file")
                 } else {
-                    if (isAssetsExists(context, "$source$file")) {
-                        res && copyAssetsFileToPath(context, "$source$file", "$target$file")
+                    if (FileAction.isAssetsExists(context, "$source$file")) {
+                        FileAction.copyAssetsFileToPath(context, "$source$file", "$target$file")
                     } else {
-                        res
+                        false
                     }
                 }
+                if (!res) {
+                    return false
+                }
             }
-            return res
+            return true
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             ZLog.e("copyAssetsFolder exception:$e")
