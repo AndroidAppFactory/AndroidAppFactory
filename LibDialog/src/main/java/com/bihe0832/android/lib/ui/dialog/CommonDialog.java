@@ -240,13 +240,19 @@ public class CommonDialog extends Dialog {
         /**
          * 只显示一个按钮的时候隐藏取消按钮，回掉只执行确定的事件
          */
-        if (columnLineView != null && negativeBn != null) {
-            if (isSingle || TextUtils.isEmpty(negativeString)) {
+        if (isSingle || TextUtils.isEmpty(negativeString)) {
+            if (columnLineView != null) {
                 columnLineView.setVisibility(View.GONE);
+            }
+            if (negativeBn != null) {
                 negativeBn.setVisibility(View.GONE);
-            } else {
-                negativeBn.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (columnLineView != null) {
                 columnLineView.setVisibility(View.VISIBLE);
+            }
+            if (negativeBn != null) {
+                negativeBn.setVisibility(View.VISIBLE);
             }
         }
 
