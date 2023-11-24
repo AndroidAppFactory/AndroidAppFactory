@@ -5,6 +5,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -224,6 +227,30 @@ public class BitmapUtil {
         return null;
     }
 
+
+    public static Bitmap resizeAndCenterBitmap(Bitmap source, int targetWidth, int targetHeight, int color) {
+        Bitmap output = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        canvas.drawColor(color);
+
+        Matrix matrix = new Matrix();
+        RectF sourceRect = new RectF(0, 0, source.getWidth(), source.getHeight());
+        RectF targetRect = new RectF(0, 0, targetWidth, targetHeight);
+        matrix.setRectToRect(sourceRect, targetRect, Matrix.ScaleToFit.CENTER);
+
+        float scaleX = targetRect.width() / sourceRect.width();
+        float scaleY = targetRect.height() / sourceRect.height();
+        float scale = Math.min(scaleX, scaleY);
+
+        matrix.setScale(scale, scale);
+
+        float dx = (targetWidth - source.getWidth() * scale) / 2;
+        float dy = (targetHeight - source.getHeight() * scale) / 2;
+        matrix.postTranslate(dx, dy);
+
+        canvas.drawBitmap(source, matrix, new Paint(Paint.FILTER_BITMAP_FLAG));
+        return output;
+    }
 
     public static Bitmap getViewBitmapData(View view) {
         if (view.getMeasuredWidth() > 0 && view.getMeasuredHeight() > 0) {
