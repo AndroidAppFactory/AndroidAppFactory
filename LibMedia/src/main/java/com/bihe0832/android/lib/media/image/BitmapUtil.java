@@ -308,12 +308,12 @@ public class BitmapUtil {
             return "";
         }
         String filePath = ZixieFileProvider.getZixieTempFolder(context) + fileName;
-        return saveBitmapWithPath(context, bitmap, filePath, forceNew);
+        return saveBitmapWithPath(bitmap, filePath, forceNew);
     }
 
 
-    public static String saveBitmapWithPath(Context context, Bitmap bitmap, String filePath) {
-        return saveBitmapWithPath(context, bitmap, filePath, true);
+    public static String saveBitmapWithPath(Bitmap bitmap, String filePath) {
+        return saveBitmapWithPath(bitmap, filePath, true);
 
     }
 
@@ -322,10 +322,7 @@ public class BitmapUtil {
      *
      * @return
      */
-    public static String saveBitmapWithPath(Context context, Bitmap bitmap, String filePath, boolean forceNew) {
-        if (null == context) {
-            return "";
-        }
+    public static String saveBitmapWithPath(Bitmap bitmap, String filePath, boolean forceNew) {
         if (null == bitmap) {
             return "";
         }

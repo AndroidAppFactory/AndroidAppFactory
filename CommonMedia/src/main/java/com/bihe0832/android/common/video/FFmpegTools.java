@@ -6,9 +6,13 @@ import com.arthenica.mobileffmpeg.FFmpeg;
 import com.bihe0832.android.common.media.MediaTools;
 import com.bihe0832.android.framework.file.AAFFileWrapper;
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback;
+import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.ConvertUtils;
+import com.bihe0832.android.lib.utils.encrypt.MD5;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,10 +69,19 @@ public class FFmpegTools {
     }
 
     public static void convertAudioWithImageToVideo(int width, int height, String audioPath, long coverDuration,
-            List<String> imagePaths,
+            List<String> images,
             AAFDataCallback<String> callback) {
         ThreadManager.getInstance().start(() -> {
             try {
+                ArrayList<String> realImageList = new ArrayList<>();
+                String mergeFileFolder = FileUtils.INSTANCE.getFolderPathWithSeparator(
+                        AAFFileWrapper.INSTANCE.getTempFolder("aaf_video_merge"));
+                for (String file : images) {
+                    String newFile = mergeFileFolder + MD5.getFileMD5(file) + ".jpg";
+                    BitmapUtil.saveBitmapWithPath(BitmapUtil.getLocalBitmap(file, 720, 720), newFile);
+                    realImageList.add(newFile);
+                }
+
                 String videoPath = AAFFileWrapper.INSTANCE.getCacheVideoPath(".mp4");
                 // 获取音频时长
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -81,34 +94,34 @@ public class FFmpegTools {
                 }
 
                 long remainingImageDuration =
-                        (audioDuration - coverImageDuration) / (imagePaths.size() - 1); // 其余图片持续时间（毫秒）
+                        (audioDuration - coverImageDuration) / (realImageList.size() - 1); // 其余图片持续时间（毫秒）
 
                 // 生成输入文件参数
                 StringBuilder inputArgsBuilder = new StringBuilder();
-                inputArgsBuilder.append(String.format("-loop 1 -i %s ", imagePaths.get(0))); // 封面图
-                for (int i = 1; i < imagePaths.size(); i++) {
-                    inputArgsBuilder.append(String.format("-loop 1 -i %s ", imagePaths.get(i)));
+                inputArgsBuilder.append(String.format("-loop 1 -i %s ", realImageList.get(0))); // 封面图
+                for (int i = 1; i < realImageList.size(); i++) {
+                    inputArgsBuilder.append(String.format("-loop 1 -i %s ", realImageList.get(i)));
                 }
                 String inputArgs = inputArgsBuilder.toString();
 
                 // 设置滤镜
                 StringBuilder filterArgsBuilder = new StringBuilder();
-                for (int i = 0; i < imagePaths.size(); i++) {
+                for (int i = 0; i < realImageList.size(); i++) {
                     filterArgsBuilder.append(String.format(
                             "[%d:v]scale=iw*min(%d/iw\\,%d/ih):ih*min(%d/iw\\,%d/ih),pad=%d:%d:(%d-iw)/2:(%d-ih)/2,trim=duration=%.2f[v%d];",
                             i, width, height, width, height, width, height, width,
                             height, (i == 0 ? coverImageDuration : remainingImageDuration) / 1000.0, i));
                 }
-                for (int i = 0; i < imagePaths.size(); i++) {
+                for (int i = 0; i < realImageList.size(); i++) {
                     filterArgsBuilder.append(String.format("[v%d]", i));
                 }
-                filterArgsBuilder.append(String.format("concat=n=%d:v=1:a=0[v]", imagePaths.size()));
+                filterArgsBuilder.append(String.format("concat=n=%d:v=1:a=0[v]", realImageList.size()));
                 String filterComplex = filterArgsBuilder.toString();
 
                 // -b:v 2000k（视频比特率为 2000 kbps）、-c:a aac（音频编码器为 AAC）、-b:a 192k（音频比特率为 192 kbps）和 -pix_fmt yuv420p（像素格式为 yuv420p）
                 String command = String.format(
                         "-y %s -i %s -filter_complex \"%s\" -map \"[v]\" -map %d:a -shortest -b:v 2000k -c:a aac -b:a 192k -pix_fmt yuv420p %s",
-                        inputArgs, audioPath, filterComplex, imagePaths.size(), videoPath);
+                        inputArgs, audioPath, filterComplex, realImageList.size(), videoPath);
                 int result = FFmpegTools.executeFFmpegCommand(command);
                 if (result == Config.RETURN_CODE_SUCCESS) {
                     callback.onSuccess(videoPath);
