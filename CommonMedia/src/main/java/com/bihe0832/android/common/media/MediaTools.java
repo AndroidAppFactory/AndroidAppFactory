@@ -36,7 +36,7 @@ public class MediaTools {
             int width = 720;
             int height = 1280;
             Bitmap imageData = MediaTools.createImageFromText(context, text, width, height);
-            String imagePath = BitmapUtil.saveBitmapWithPath(ZixieContext.INSTANCE.getApplicationContext(),
+            String imagePath = BitmapUtil.saveBitmapWithPath(
                     imageData,
                     AAFFileWrapper.INSTANCE.getTempImagePath(".jpg"));
 
