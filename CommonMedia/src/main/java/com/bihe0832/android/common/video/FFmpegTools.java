@@ -78,7 +78,7 @@ public class FFmpegTools {
                         AAFFileWrapper.INSTANCE.getTempFolder("aaf_video_merge"));
                 for (String file : images) {
                     String newFile = mergeFileFolder + MD5.getFileMD5(file) + ".jpg";
-                    BitmapUtil.saveBitmapWithPath(BitmapUtil.getLocalBitmap(file, 720, 720), newFile);
+                    BitmapUtil.saveBitmapWithPath(BitmapUtil.getLocalBitmap(file, width, height), newFile);
                     realImageList.add(newFile);
                 }
 
