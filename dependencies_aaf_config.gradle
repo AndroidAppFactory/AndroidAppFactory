@@ -58,7 +58,8 @@ ext {
     ]
 
     ffmpeg = [
-            min: "com.arthenica:mobile-ffmpeg-min:4.4.LTS"
+            min: "com.arthenica:mobile-ffmpeg-min:4.4.LTS",
+            min_gpl: "com.arthenica:mobile-ffmpeg-min-gpl:4.4.LTS"
     ]
 
     metadata = [

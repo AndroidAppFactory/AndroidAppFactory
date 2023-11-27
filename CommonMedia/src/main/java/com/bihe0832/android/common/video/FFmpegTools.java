@@ -52,16 +52,9 @@ public class FFmpegTools {
             AAFDataCallback<String> callback) {
         ThreadManager.getInstance().start(() -> {
             try {
-                String videoPath = AAFFileWrapper.INSTANCE.getCacheVideoPath(".mp4");
-                String[] combineCommand = {"-y", "-loop", "1", "-i", imagePath, "-i", audioPath, "-vf",
-                        "scale=" + width + ":" + height, "-b:v", "2000k", "-c:a", "aac", "-b:a", "192k", "-pix_fmt",
-                        "yuv420p", "-shortest", videoPath};
-                int result = FFmpegTools.executeFFmpegCommand(combineCommand);
-                if (result == Config.RETURN_CODE_SUCCESS) {
-                    callback.onSuccess(videoPath);
-                } else {
-                    callback.onError(result, "executeFFmpegCommand failed");
-                }
+                ArrayList<String> realImageList = new ArrayList<>();
+                realImageList.add(imagePath);
+                convertAudioWithImageToVideo(width, height, audioPath, 0, realImageList, callback);
             } catch (Exception e) {
                 callback.onError(-1, "executeFFmpegCommand exception:" + e);
             }
@@ -89,12 +82,17 @@ public class FFmpegTools {
                 long audioDuration = ConvertUtils.parseLong(
                         retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION), 0L);
                 long coverImageDuration = coverDuration;
-                if (audioDuration < coverDuration) {
+                long remainingImageDuration = 0;
+                if (realImageList.size() > 1) {
+                    if (audioDuration < coverDuration) {
+                        coverImageDuration = audioDuration;
+                    } else {
+                        remainingImageDuration =
+                                (audioDuration - coverImageDuration) / (realImageList.size() - 1); // 其余图片持续时间（毫秒）
+                    }
+                } else {
                     coverImageDuration = audioDuration;
                 }
-
-                long remainingImageDuration =
-                        (audioDuration - coverImageDuration) / (realImageList.size() - 1); // 其余图片持续时间（毫秒）
 
                 // 生成输入文件参数
                 StringBuilder inputArgsBuilder = new StringBuilder();
@@ -118,9 +116,20 @@ public class FFmpegTools {
                 filterArgsBuilder.append(String.format("concat=n=%d:v=1:a=0[v]", realImageList.size()));
                 String filterComplex = filterArgsBuilder.toString();
 
-                // -b:v 2000k（视频比特率为 2000 kbps）、-c:a aac（音频编码器为 AAC）、-b:a 192k（音频比特率为 192 kbps）和 -pix_fmt yuv420p（像素格式为 yuv420p）
+                /**
+                 * -b:v 2000k（视频比特率为 2000 kbps）、
+                 * -c:v libx264 将视频编解码器设置为 H.264
+                 * -profile:v baseline 将 H.264 编码配置文件设置为基线配置文件，以获得更广泛的兼容性。
+                 * -level 3.0 H.264 编码级别设置为 3.0，这是许多设备和应用程序所支持的级别
+                 * -pix_fmt yuv420p 将像素格式设置为 YUV 4:2:0，这是许多设备和应用程序所支持的格式。
+                 * -c:a aac（音频编码器为 AAC）、
+                 * -strict -2 允许使用实验性 AAC 编码器
+                 * -movflags +faststart 添加 faststart 标志以优化视频流的播放
+                 * -b:a 192k（音频比特率为 192 kbps）
+                 */
+
                 String command = String.format(
-                        "-y %s -i %s -filter_complex \"%s\" -map \"[v]\" -map %d:a -shortest -b:v 2000k -c:a aac -b:a 192k -pix_fmt yuv420p %s",
+                        "-y %s -i %s -filter_complex \"%s\" -map \"[v]\" -map %d:a -shortest -b:v 2000k -c:v libx264 -profile:v baseline -level 3.0 -pix_fmt yuv420p -c:a aac -strict -2 -b:a 192k -movflags +faststart %s",
                         inputArgs, audioPath, filterComplex, realImageList.size(), videoPath);
                 int result = FFmpegTools.executeFFmpegCommand(command);
                 if (result == Config.RETURN_CODE_SUCCESS) {
