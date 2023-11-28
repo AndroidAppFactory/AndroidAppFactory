@@ -1,23 +1,20 @@
 package com.bihe0832.android.base.debug.request.basic;
 
 
-import com.bihe0832.android.lib.http.common.core.HttpRequest;
 import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 import com.bihe0832.android.base.debug.request.Constants;
+import com.bihe0832.android.lib.http.common.core.HttpBasicRequest;
 
-public class BasicPostRequest extends HttpRequest {
+public class BasicPostRequest extends HttpBasicRequest {
 
-	private HttpResponseHandler mResponseHandlerHandler;
 
-	public BasicPostRequest(String para, HttpResponseHandler handler) {
-        this.mResponseHandlerHandler = handler;
+	public BasicPostRequest(String para) {
         String encodedParam = Constants.PARA_PARA + HTTP_REQ_ENTITY_MERGE + para;
         try {
             this.data = encodedParam.getBytes("UTF-8");
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
 	@Override
@@ -25,9 +22,4 @@ public class BasicPostRequest extends HttpRequest {
         return Constants.HTTP_DOMAIN + Constants.PATH_POST;
 	}
 
-
-    @Override
-    protected void onResponse(int statusCode, String result) {
-        this.mResponseHandlerHandler.onResponse(statusCode,result);
-    }
 }

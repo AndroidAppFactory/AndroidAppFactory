@@ -4,7 +4,6 @@ import android.app.Activity
 import android.text.TextUtils
 import com.bihe0832.android.app.R
 import com.bihe0832.android.app.api.AAFNetWorkApi
-import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
@@ -13,8 +12,6 @@ import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.framework.update.setUpdateType
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.http.common.HTTPServer
-import com.bihe0832.android.lib.http.common.HttpResponseHandler
-import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager.getInstance
@@ -44,40 +41,37 @@ object UpdateManager {
         })
     }
 
-    private fun fetchUpdate(activity: Activity, successAction: (info: UpdateDataFromCloud) -> Unit, failedAction: () -> Unit) {
-        object : HttpBasicRequest() {
-            override fun getUrl(): String {
-                return AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.update_url), "")
-            }
-
-            override fun getResponseHandler(): HttpResponseHandler {
-                return HttpResponseHandler { statusCode, updateString ->
-                    AAFLoggerFile.logUpdate("statusCode:$statusCode")
-                    AAFLoggerFile.logUpdate("updateString:$updateString")
-                    if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(updateString)) {
-                        try {
-//                            var updateString = "{\"newVersionName\":\"1.3.1\",\"newVersionCode\":\"140\",\"newVersionURL\":\"https://android.bihe0832.com/app/release/ZAPK_official.apk\",\"newVersionMD5\":\"12973fbecaceaf6e1426d1936eb56d91\",\"newVersionInfo\":\"1. 添加邮件通知<BR>2. 修复下拉刷新的问题\",\"showRedMaxVersionCode\":\"139\",\"needUpdateMinVersionCode\":\"139\",\"forceUpdateMinVersionCode\":\"1\",\"needUpdateList\":\"\",\"forceUpdateList\":\"\"}"
-                            var updateInfo = JsonHelper.fromJson(updateString, UpdateDataFromCloud::class.java)
-                            if (null == updateInfo) {
-                                ZLog.d("${TAG}:updateInfo null:")
-                                failedAction()
-                            } else {
-                                updateInfo.setUpdateType()
-                                ZLog.d("${TAG}:fetchUpdate: $statusCode $updateString updateType:${updateInfo.updateType}")
-                                successAction(updateInfo)
-                            }
-                        } catch (e: Exception) {
-                            ZLog.d("${TAG}:fetchUpdate:" + e.message)
-                            failedAction()
-                        }
-                    } else {
-                        ZLog.d("${TAG}:fetchUpdate: $statusCode $updateString")
+    private fun fetchUpdate(
+        activity: Activity,
+        successAction: (info: UpdateDataFromCloud) -> Unit,
+        failedAction: () -> Unit,
+    ) {
+        HTTPServer.getInstance().doRequestAsync(
+            AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.update_url), ""),
+        ) { statusCode, updateString ->
+            AAFLoggerFile.logUpdate("statusCode:$statusCode")
+            AAFLoggerFile.logUpdate("updateString:$updateString")
+            if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(updateString)) {
+                try {
+                    //                            var updateString = "{\"newVersionName\":\"1.3.1\",\"newVersionCode\":\"140\",\"newVersionURL\":\"https://android.bihe0832.com/app/release/ZAPK_official.apk\",\"newVersionMD5\":\"12973fbecaceaf6e1426d1936eb56d91\",\"newVersionInfo\":\"1. 添加邮件通知<BR>2. 修复下拉刷新的问题\",\"showRedMaxVersionCode\":\"139\",\"needUpdateMinVersionCode\":\"139\",\"forceUpdateMinVersionCode\":\"1\",\"needUpdateList\":\"\",\"forceUpdateList\":\"\"}"
+                    var updateInfo =
+                        JsonHelper.fromJson(updateString ?: "", UpdateDataFromCloud::class.java)
+                    if (null == updateInfo) {
+                        ZLog.d("$TAG:updateInfo null:")
                         failedAction()
+                    } else {
+                        updateInfo.setUpdateType()
+                        ZLog.d("$TAG:fetchUpdate: $statusCode $updateString updateType:${updateInfo.updateType}")
+                        successAction(updateInfo)
                     }
+                } catch (e: Exception) {
+                    ZLog.d("$TAG:fetchUpdate:" + e.message)
+                    failedAction()
                 }
+            } else {
+                ZLog.d("$TAG:fetchUpdate: $statusCode $updateString")
+                failedAction()
             }
-        }.let {
-            HTTPServer.getInstance().doRequestAsync(it)
         }
     }
 }

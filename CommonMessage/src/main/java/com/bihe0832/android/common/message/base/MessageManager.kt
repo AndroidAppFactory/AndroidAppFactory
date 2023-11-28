@@ -12,8 +12,6 @@ import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.http.common.HTTPServer
-import com.bihe0832.android.lib.http.common.HttpResponseHandler
-import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getAPPCurrentStartTime
@@ -71,36 +69,28 @@ public open class MessageManager {
 
     private fun fetchMessageByURL(url: String) {
         if (URLUtils.isHTTPUrl(url)) {
-            HTTPServer.getInstance().doRequestAsync(object : HttpBasicRequest() {
-                override fun getUrl(): String {
-                    return url
-                }
-
-                override fun getResponseHandler(): HttpResponseHandler {
-                    return HttpResponseHandler { statusCode, msg ->
-                        if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
-                            ThreadManager.getInstance().start {
-                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile url:$url")
-                                ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile result:$msg")
-                                var httpResultList: ArrayList<MessageInfoItem> = ArrayList()
-                                try {
-                                    JsonHelper.fromJsonList(msg, MessageInfoItem::class.java)
-                                        ?.filter { it.isNotExpired }?.let { msgJsonResponse ->
-                                            httpResultList.addAll(msgJsonResponse)
-                                        }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
+            HTTPServer.getInstance().doRequestAsync(url) { statusCode, msg ->
+                if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
+                    ThreadManager.getInstance().start {
+                        ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile url:$url")
+                        ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile result:$msg")
+                        var httpResultList: ArrayList<MessageInfoItem> = ArrayList()
+                        try {
+                            JsonHelper.fromJsonList(msg, MessageInfoItem::class.java)
+                                ?.filter { it.isNotExpired }?.let { msgJsonResponse ->
+                                    httpResultList.addAll(msgJsonResponse)
                                 }
-                                ZLog.d(
-                                    MessageListLiveData.TAG,
-                                    "fetchMessageByFile parse result:" + httpResultList.size,
-                                )
-                                MessageListLiveData.parseMessage(httpResultList)
-                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
+                        ZLog.d(
+                            MessageListLiveData.TAG,
+                            "fetchMessageByFile parse result:" + httpResultList.size,
+                        )
+                        MessageListLiveData.parseMessage(httpResultList)
                     }
                 }
-            })
+            }
         }
     }
 

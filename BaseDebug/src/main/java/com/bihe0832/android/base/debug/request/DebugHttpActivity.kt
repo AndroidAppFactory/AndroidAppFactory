@@ -3,14 +3,11 @@ package com.bihe0832.android.base.debug.request
 import android.net.Uri
 import android.os.Bundle
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.base.debug.request.advanced.AdvancedGetRequest
-import com.bihe0832.android.base.debug.request.advanced.AdvancedPostRequest
 import com.bihe0832.android.base.debug.request.advanced.TestResponse
 import com.bihe0832.android.base.debug.request.basic.BasicPostRequest
 import com.bihe0832.android.base.debug.request.okhttp.debugOKHttp
 import com.bihe0832.android.common.debug.base.BaseDebugActivity
-import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
-import com.bihe0832.android.lib.http.advanced.HttpAdvancedRequest
+import com.bihe0832.android.lib.http.advanced.HttpAdvancedResponseHandler
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.http.common.core.BaseConnection
@@ -18,8 +15,17 @@ import com.bihe0832.android.lib.http.common.core.FileInfo
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
-import com.bihe0832.android.lib.router.annotation.Module
-import kotlinx.android.synthetic.main.activity_http_test.*
+import kotlinx.android.synthetic.main.activity_http_test.clearResult
+import kotlinx.android.synthetic.main.activity_http_test.common_toolbar
+import kotlinx.android.synthetic.main.activity_http_test.getAdvanced
+import kotlinx.android.synthetic.main.activity_http_test.getBasic
+import kotlinx.android.synthetic.main.activity_http_test.paraEditText
+import kotlinx.android.synthetic.main.activity_http_test.postAdvanced
+import kotlinx.android.synthetic.main.activity_http_test.postBasic
+import kotlinx.android.synthetic.main.activity_http_test.postFile
+import kotlinx.android.synthetic.main.activity_http_test.postOkHttp
+import kotlinx.android.synthetic.main.activity_http_test.result
+import kotlinx.android.synthetic.main.activity_http_test.testGzip
 import java.io.File
 import java.net.URLDecoder
 
@@ -52,21 +58,20 @@ class DebugHttpActivity : BaseDebugActivity() {
                 put("fsdf", "fsdf")
             }
 
-
             var files = mutableListOf<FileInfo>()
             files.add(
-                    FileInfo(
-                            Uri.fromFile(File(filePath)),
-                            "media",
-                            BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM
-                    )
+                FileInfo(
+                    Uri.fromFile(File(filePath)),
+                    "media",
+                    BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM,
+                ),
             )
 
             HTTPServer.getInstance().doFileUpload(
-                    this,
-                    "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1",
-                    b,
-                    files
+                this,
+                "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1",
+                b,
+                files,
             ).let {
                 ZLog.d(HTTPServer.LOG_TAG, "restult $it")
                 runOnUiThread { result.text = it }
@@ -75,11 +80,10 @@ class DebugHttpActivity : BaseDebugActivity() {
 
         testGzip.setOnClickListener {
             HTTPServer.getInstance()
-                    .doRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
-                    .let {
-                        showResult("同步请求结果：$it")
-                    }
-
+                .doRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+                .let {
+                    showResult("同步请求结果：$it")
+                }
         }
         clearResult.setOnClickListener { result.text = "" }
     }
@@ -95,12 +99,11 @@ class DebugHttpActivity : BaseDebugActivity() {
             add("https%3A%2F%2Fsupport.qq.com%2Fproduct%2F290858 1")
         }.forEach {
             ZLog.d("----------------------------")
-            ZLog.d("Source: ${it}")
+            ZLog.d("Source: $it")
             ZLog.d("Zixie: ${URLUtils.encode(it)}")
             ZLog.d("Zixie: ${URLDecoder.decode(URLUtils.encode(it))})")
             ZLog.d("Zixie: ${URLDecoder.decode(URLUtils.encode(it)).equals(it)}")
             ZLog.d("----------------------------")
-
         }
     }
 
@@ -112,10 +115,10 @@ class DebugHttpActivity : BaseDebugActivity() {
 //            HTTPServer.getInstance().doRequest(request)
 
             HTTPServer.getInstance()
-                    .doRequestSync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result)
-                    .let {
-                        showResult("同步请求结果：$it")
-                    }
+                .doRequestSync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result)
+                .let {
+                    showResult("同步请求结果：$it")
+                }
         } else {
             showResult("请在输入框输入请求内容！")
         }
@@ -124,9 +127,16 @@ class DebugHttpActivity : BaseDebugActivity() {
     private fun sendGetAdvancedRequest() {
         var result = paraEditText.text?.toString()
         if (result?.length ?: 0 > 0) {
+            HTTPServer.getInstance().doRequestAsync(
+                object : HttpBasicRequest() {
 
-            HTTPServer.getInstance().doRequestAsync(object : HttpAdvancedRequest<TestResponse>() {
-                var res = object : AAFDataCallback<TestResponse>() {
+                    override fun getUrl(): String {
+                        val builder = StringBuilder()
+                        builder.append(Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result)
+                        return Constants.HTTP_DOMAIN + Constants.PATH_GET + "?" + builder.toString()
+                    }
+                },
+                object : HttpAdvancedResponseHandler<TestResponse>() {
                     override fun onSuccess(result: TestResponse?) {
                         showResult(result.toString())
                     }
@@ -134,22 +144,8 @@ class DebugHttpActivity : BaseDebugActivity() {
                     override fun onError(statusCode: Int, msg: String) {
                         showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$msg")
                     }
-                }
-
-                override fun getUrl(): String {
-                    val builder = StringBuilder()
-                    builder.append(Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result)
-                    return Constants.HTTP_DOMAIN + Constants.PATH_GET + "?" + builder.toString()
-                }
-
-                override fun getAdvancedResponseHandler(): AAFDataCallback<*> {
-                    return res
-                }
-            })
-
-            AdvancedGetRequest(result, TestAdvancedResponseHandler()).let {
-                HTTPServer.getInstance().doRequestAsync(it)
-            }
+                },
+            )
         } else {
             showResult("请在输入框输入请求内容！")
         }
@@ -159,11 +155,10 @@ class DebugHttpActivity : BaseDebugActivity() {
         var result = paraEditText.text?.toString()
         if (result?.length ?: 0 > 0) {
             val handle = TestBasicResponseHandler()
-            val request = BasicPostRequest(result, handle)
-            HTTPServer.getInstance().doRequestAsync(request)
+            val request = BasicPostRequest(result)
+            HTTPServer.getInstance().doRequestAsync(request, handle)
         } else {
             showResult("请在输入框输入请求内容！")
-
         }
     }
 
@@ -171,27 +166,31 @@ class DebugHttpActivity : BaseDebugActivity() {
         var result = paraEditText.text?.toString()
 
         if (result?.length ?: 0 > 0) {
-
-            HTTPServer.getInstance().doRequestAsync(object : HttpAdvancedRequest<TestResponse>() {
-                init {
-                    try {
-                        this.data =
+            HTTPServer.getInstance().doRequestAsync(
+                object : HttpBasicRequest() {
+                    init {
+                        try {
+                            this.data =
                                 (Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result).toByteArray(
-                                        charset("UTF-8")
+                                    charset("UTF-8"),
                                 )
 
-                        HashMap<String, String?>().apply {
-                            put(Constants.PARA_PARA, result ?: "")
-                            put("sdfdsf", "dfd")
-                        }.let {
-                            this.data = getFormData(it)
+                            HashMap<String, String?>().apply {
+                                put(Constants.PARA_PARA, result ?: "")
+                                put("sdfdsf", "dfd")
+                            }.let {
+                                this.data = getFormData(it)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
                     }
-                }
 
-                var res = object : AAFDataCallback<TestResponse>() {
+                    override fun getUrl(): String {
+                        return Constants.HTTP_DOMAIN + Constants.PATH_POST
+                    }
+                },
+                object : HttpAdvancedResponseHandler<TestResponse>() {
                     override fun onSuccess(response: TestResponse?) {
                         showResult(response.toString())
                     }
@@ -199,20 +198,8 @@ class DebugHttpActivity : BaseDebugActivity() {
                     override fun onError(statusCode: Int, msg: String) {
                         showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$msg")
                     }
-                }
-
-                override fun getUrl(): String {
-                    return Constants.HTTP_DOMAIN + Constants.PATH_POST
-                }
-
-                override fun getAdvancedResponseHandler(): AAFDataCallback<*> {
-                    return res
-                }
-            })
-
-            AdvancedPostRequest(result, TestAdvancedResponseHandler()).let {
-                HTTPServer.getInstance().doRequestAsync(it)
-            }
+                },
+            )
         } else {
             showResult("请在输入框输入请求内容！")
         }
@@ -222,20 +209,9 @@ class DebugHttpActivity : BaseDebugActivity() {
 
         override fun onResponse(statusCode: Int, response: String) {
             showResult(
-                    "HTTP状态码：\n\t" + statusCode + " \n " +
-                            "网络请求内容：\n\t" + response
+                "HTTP状态码：\n\t" + statusCode + " \n " +
+                    "网络请求内容：\n\t" + response,
             )
-        }
-    }
-
-    private inner class TestAdvancedResponseHandler :
-            AAFDataCallback<TestResponse>() {
-        override fun onSuccess(response: TestResponse?) {
-            showResult(response.toString())
-        }
-
-        override fun onError(statusCode: Int, response: String) {
-            showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$response")
         }
     }
 }

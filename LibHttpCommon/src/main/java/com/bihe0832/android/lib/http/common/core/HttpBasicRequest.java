@@ -22,8 +22,6 @@ public abstract class HttpBasicRequest {
 
     public abstract String getUrl();
 
-    public abstract HttpResponseHandler getResponseHandler();
-
     public void setRequestTime(long requestTime) {
         this.requestTime = requestTime;
     }

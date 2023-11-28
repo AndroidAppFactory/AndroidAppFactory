@@ -1,10 +1,8 @@
 package com.bihe0832.android.framework.request
 
-
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
 import com.bihe0832.android.lib.http.common.core.BaseConnection
-import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import java.nio.charset.Charset
 
 /**
@@ -42,7 +40,6 @@ object ZixieRequestHttp {
         innerRequest(url, null, responseHandler, true)
     }
 
-
     fun post(url: String, postData: ByteArray, responseHandler: HttpResponseHandler) {
         innerRequest(url, postData, responseHandler, false)
     }
@@ -55,26 +52,22 @@ object ZixieRequestHttp {
         url: String,
         postData: ByteArray?,
         responseHandler: HttpResponseHandler,
-        isOrigin: Boolean
+        isOrigin: Boolean,
     ) {
-        object : HttpBasicRequest() {
-            override fun getUrl(): String {
-                return url
-            }
-
-            override fun getResponseHandler(): HttpResponseHandler {
-                return responseHandler
-            }
-        }.apply {
-            postData?.let {
-                data = postData
-            }
-        }.let {
-            if (isOrigin) {
-                HTTPServer.getInstance().doOriginRequestAsync(it)
-            } else {
-                HTTPServer.getInstance().doRequestAsync(it)
-            }
+        if (isOrigin) {
+            HTTPServer.getInstance().doOriginRequestAsync(
+                url,
+                postData,
+                BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD,
+                responseHandler,
+            )
+        } else {
+            HTTPServer.getInstance().doRequestAsync(
+                url,
+                postData,
+                BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD,
+                responseHandler,
+            )
         }
     }
 }
