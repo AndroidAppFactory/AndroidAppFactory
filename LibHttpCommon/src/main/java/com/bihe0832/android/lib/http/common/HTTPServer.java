@@ -68,7 +68,7 @@ public class HTTPServer {
                         }
                         break;
                     case MSG_REQUEST_CONVERT:
-                        if (msg.obj != null && msg.obj instanceof HttpBasicRequest) {
+                        if (msg.obj != null && msg.obj instanceof RequestInfo) {
                             executeRequestInExecutor(((RequestInfo) msg.obj).request, ((RequestInfo) msg.obj).handler,
                                     true);
                         } else {
