@@ -5,8 +5,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
-
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.tencent.smtt.export.external.extension.proxy.ProxyWebViewClientExtension;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
@@ -76,6 +76,7 @@ public class TBSWebView extends WebView {
         mOnScrollChangedCallback = onScrollChangedCallback;
     }
 
+
     private void initWebViewSettings() {
         //防webview远程代码执行漏洞
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.HONEYCOMB) {
@@ -102,6 +103,16 @@ public class TBSWebView extends WebView {
             }
             //接口禁止(直接或反射)调用，避免视频画面无法显示
             setDrawingCacheEnabled(true);
+
+            // 终端覆盖内核长按事件，禁用复制粘贴
+            getX5WebViewExtension().setWebViewClientExtension(new ProxyWebViewClientExtension() {
+                @Override
+                public boolean onShowLongClickPopupMenu() {
+                    //展示终端自定义菜单
+                    return false;
+                }
+            });
+
         }
     }
 
