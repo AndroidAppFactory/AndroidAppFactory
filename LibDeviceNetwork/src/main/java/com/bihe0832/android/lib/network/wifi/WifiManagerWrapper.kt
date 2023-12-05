@@ -5,15 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.NetworkInfo
+import android.net.NetworkRequest
 import android.net.wifi.ScanResult
 import android.net.wifi.SupplicantState
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION
+import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import android.text.TextUtils
+import androidx.annotation.RequiresApi
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.IpUtils
 import com.bihe0832.android.lib.text.TextFactoryUtils
@@ -331,8 +335,45 @@ object WifiManagerWrapper {
 
         return null
     }
+    
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun connectWifiAboveQ(
+        context: Context?,
+        ssid: String,
+        password: String,
+        type: Int,
+        networkCallback: ConnectivityManager.NetworkCallback,
+    ) {
+        val wifiNetworkSpecifier = WifiNetworkSpecifier.Builder().apply {
+            setSsid(ssid)
+            when (type) {
+                3 -> {
+                    setWpa3Passphrase(password)
+                }
 
-    fun connectWifi(context: Context?, ssid: String, password: String, type: Int, forceDeleteIfExist: Boolean = true) {
+                else -> {
+                    setWpa2Passphrase(password)
+                }
+            }
+        }.build()
+
+        val networkRequest = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .setNetworkSpecifier(wifiNetworkSpecifier)
+            .build()
+
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager?.requestNetwork(networkRequest, networkCallback)
+    }
+
+    fun connectWifi(
+        context: Context?,
+        ssid: String,
+        password: String,
+        type: Int,
+        forceDeleteIfExist: Boolean = true,
+    ): Boolean {
         var networkId = -1
         var tempConfig = getConfiguredBySSID(ssid)
         // 如果该SSID已经连接过，而且本次连接需要强制重连，直接remove历史
@@ -348,19 +389,22 @@ object WifiManagerWrapper {
             mWifiManager?.addNetwork(wcg) ?: -1
         }
 
-        connectWifi(context, networkId)
+        return connectWifi(context, networkId)
     }
 
     // 指定配置好的网络进行连接
-    fun connectWifi(context: Context?, networkId: Int) {
+    fun connectWifi(context: Context?, networkId: Int): Boolean {
         if (networkId > -1 && mWifiManager?.connectionInfo?.networkId != networkId) {
             mWifiManager?.disconnect()
             mWifiManager?.enableNetwork(networkId, true)
             mWifiManager?.reconnect()
+            return true
         } else {
             mWifiChangeListener?.let {
                 it.onWifiInfoChanged(context)
             }
+
+            return false
         }
     }
 
