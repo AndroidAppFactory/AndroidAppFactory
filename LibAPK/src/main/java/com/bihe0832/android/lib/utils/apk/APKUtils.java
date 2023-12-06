@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
@@ -18,15 +17,16 @@ import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import com.bihe0832.android.lib.utils.encrypt.MD5;
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.MessageDigest;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.HashSet;
 import java.util.List;
 
@@ -348,6 +348,50 @@ public class APKUtils {
             // ignore
         }
         return hexString;
+    }
+
+
+    public static String getSigPublicKey(Context context, String pkgName) {
+        if (pkgName != null && pkgName.length() > 0) {
+            try {
+                PackageInfo packageInfo = context.getPackageManager()
+                        .getPackageInfo(pkgName, PackageManager.GET_SIGNATURES);
+                Signature[] signatures = packageInfo.signatures;
+                for (Signature signature : signatures) {
+                    try {
+                        CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+                        ByteArrayInputStream certInputStream = new ByteArrayInputStream(signature.toByteArray());
+                        Certificate x509Certificate = certFactory.generateCertificate(certInputStream);
+                        RSAPublicKey publicKey = (RSAPublicKey) x509Certificate.getPublicKey();
+                        StringBuffer result = new StringBuffer();
+                        if (null != publicKey && null != publicKey.getEncoded() && publicKey.getEncoded().length > 0) {
+                            for (byte b : publicKey.getEncoded()) {
+                                result.append(String.format("%02X ", b));
+                            }
+                        }
+                        try {
+                            certInputStream.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (result.length() > 0) {
+                            return result.toString().trim();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
+    public static String transAndroidPublicKeyToWindows(String keyString) {
+        return keyString.replace(
+                "30 82 01 22 30 0D 06 09 2A 86 48 86 F7 0D 01 01 01 05 00 03 82 01 0F 00 30 82 01 0A 02 82 01 01 00 ",
+                "30 82 01 0a 02 82 01 01 00 ");
     }
 
 }

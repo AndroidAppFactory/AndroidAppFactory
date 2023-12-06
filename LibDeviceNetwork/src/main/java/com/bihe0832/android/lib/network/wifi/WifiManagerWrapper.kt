@@ -16,6 +16,7 @@ import android.net.wifi.WifiManager
 import android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
+import android.provider.Settings
 import android.text.TextUtils
 import androidx.annotation.RequiresApi
 import com.bihe0832.android.lib.log.ZLog
@@ -335,7 +336,7 @@ object WifiManagerWrapper {
 
         return null
     }
-    
+
     @RequiresApi(Build.VERSION_CODES.Q)
     fun connectWifiAboveQ(
         context: Context?,
@@ -422,7 +423,12 @@ object WifiManagerWrapper {
             if (it.type == ConnectivityManager.TYPE_WIFI) {
                 return
             } else {
-                mWifiManager?.isWifiEnabled = true
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val intent = Intent(Settings.Panel.ACTION_WIFI)
+                    mContext?.startActivity(intent)
+                } else {
+                    mWifiManager?.isWifiEnabled = true
+                }
                 startScan()
             }
         }
