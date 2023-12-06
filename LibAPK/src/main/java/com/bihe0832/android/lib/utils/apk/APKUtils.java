@@ -351,7 +351,7 @@ public class APKUtils {
     }
 
 
-    public static String getSigPublicKey(Context context, String pkgName) {
+    public static RSAPublicKey getSigPublicKey(Context context, String pkgName) {
         if (pkgName != null && pkgName.length() > 0) {
             try {
                 PackageInfo packageInfo = context.getPackageManager()
@@ -363,19 +363,13 @@ public class APKUtils {
                         ByteArrayInputStream certInputStream = new ByteArrayInputStream(signature.toByteArray());
                         Certificate x509Certificate = certFactory.generateCertificate(certInputStream);
                         RSAPublicKey publicKey = (RSAPublicKey) x509Certificate.getPublicKey();
-                        StringBuffer result = new StringBuffer();
-                        if (null != publicKey && null != publicKey.getEncoded() && publicKey.getEncoded().length > 0) {
-                            for (byte b : publicKey.getEncoded()) {
-                                result.append(String.format("%02X ", b));
-                            }
-                        }
                         try {
                             certInputStream.close();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        if (result.length() > 0) {
-                            return result.toString().trim();
+                        if (null != publicKey && null != publicKey.getEncoded() && publicKey.getEncoded().length > 0) {
+                            return publicKey;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -385,13 +379,6 @@ public class APKUtils {
                 e.printStackTrace();
             }
         }
-        return "";
+        return null;
     }
-
-    public static String transAndroidPublicKeyToWindows(String keyString) {
-        return keyString.replace(
-                "30 82 01 22 30 0D 06 09 2A 86 48 86 F7 0D 01 01 01 05 00 03 82 01 0F 00 30 82 01 0A 02 82 01 01 00 ",
-                "30 82 01 0a 02 82 01 01 00 ");
-    }
-
 }

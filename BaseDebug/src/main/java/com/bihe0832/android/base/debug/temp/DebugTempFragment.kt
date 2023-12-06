@@ -8,17 +8,10 @@
 
 package com.bihe0832.android.base.debug.temp
 
-
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
-import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.file.provider.ZixieFileProvider
-import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.utils.apk.APKUtils
-import java.io.File
-
 
 class DebugTempFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -29,12 +22,9 @@ class DebugTempFragment : DebugEnvFragment() {
         }
     }
 
-
     private fun preTest(itemView: View) {
-
     }
 
     private fun testFunc() {
-        ZLog.d(APKUtils.transAndroidPublicKeyToWindows(APKUtils.getSigPublicKey(context,"com.bihe0832.android.temp.sender3")))
     }
 }

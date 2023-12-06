@@ -25,6 +25,10 @@ public class RSAUtils {
     public static final String MOD_OAEP = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
     public static final String MOD_PKCS_1 = "RSA/ECB/PKCS1Padding";
 
+    public static final String PUBLIC_KEY_BEGIN = "-----BEGIN PUBLIC KEY-----";
+    public static final String PUBLIC_KEY_END = "-----END PUBLIC KEY-----";
+
+
     // 加密方法
     public static byte[] encrypt(String mod, PublicKey publicKey, byte[] data) {
         try {
@@ -73,11 +77,67 @@ public class RSAUtils {
         return null;
     }
 
+    public static String getPublicKeyContent(PublicKey publicKey, int wrapSize) {
+        try {
+            if (null != publicKey) {
+                String publicKeyBase64 = Base64.encodeToString(publicKey.getEncoded(), Base64.NO_WRAP);
+                if (wrapSize > 0) {
+                    return RSAUtils.wrapString(publicKeyBase64, wrapSize);
+                } else {
+                    return publicKeyBase64;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+    public static String getPublicKeyPemString(PublicKey publicKey) {
+        return PUBLIC_KEY_BEGIN + "\n" + getPublicKeyContent(publicKey, 64) + PUBLIC_KEY_END + "\n";
+    }
+
+
+    public static String getPublicKeyByteString(PublicKey publicKey) {
+        try {
+
+            StringBuffer result = new StringBuffer();
+            if (null != publicKey && null != publicKey.getEncoded()) {
+                publicKey.getEncoded();
+                for (byte b : publicKey.getEncoded()) {
+                    result.append(String.format("%02X ", b));
+                }
+            }
+            return result.toString().trim();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String transPublicKeyByteStringToWindows(String keyString) {
+        return keyString.replace(
+                "30 82 01 22 30 0D 06 09 2A 86 48 86 F7 0D 01 01 01 05 00 03 82 01 0F 00 30 82 01 0A 02 82 01 01 00 ",
+                "30 82 01 0a 02 82 01 01 00 ");
+    }
+
+    public static String wrapString(String source, int wrapLength) {
+        StringBuilder result = new StringBuilder();
+        int index = 0;
+        while (index < source.length()) {
+            int endIndex = Math.min(index + wrapLength, source.length());
+            result.append(source.substring(index, endIndex)).append("\n");
+            index = endIndex;
+        }
+        return result.toString();
+    }
+
     public static PublicKey pemStringToRSAPublicKey(String publicKeyPem) {
         try {
             String publicKeyPemFormatted = publicKeyPem
-                    .replace("-----BEGIN PUBLIC KEY-----", "")
-                    .replace("-----END PUBLIC KEY-----", "")
+                    .replace(PUBLIC_KEY_BEGIN, "")
+                    .replace(PUBLIC_KEY_END, "")
                     .replaceAll("\\s+", "");
 
             byte[] publicKeyBytes = Base64.decode(publicKeyPemFormatted, Base64.DEFAULT);

@@ -6,6 +6,7 @@ import com.bihe0832.android.app.encrypt.AAFEncryptConstants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
+import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.encrypt.AESUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
@@ -38,6 +39,18 @@ fun DebugEncryptFragment.testMessageDigest() {
             ZLog.d(AAFSecretEncrypt.TAG, "$it SHA256 length is: ${data.length}")
         }
         ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
+        APKUtils.getSigPublicKey(context, context!!.packageName).let {
+            ZLog.d(
+                "PublicKeyByteStringToWindows:\n" + RSAUtils.transPublicKeyByteStringToWindows(
+                    RSAUtils.getPublicKeyByteString(
+                        it,
+                    ),
+                ),
+            )
+            ZLog.d("getPublicKeyByteString:\n" + RSAUtils.getPublicKeyByteString(it))
+            ZLog.d("getPublicKeyContent:\n" + RSAUtils.getPublicKeyContent(it, 0))
+            ZLog.d("getPublicKeyPemString:\n" + RSAUtils.getPublicKeyPemString(it))
+        }
     }
 }
 
