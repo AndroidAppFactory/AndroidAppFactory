@@ -80,10 +80,10 @@ object FileUtils {
     fun checkStoragePermissions(context: Context?): Boolean {
         context?.let {
             return PackageManager.PERMISSION_GRANTED ==
-                    ContextCompat.checkSelfPermission(
-                        it,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    )
+                ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                )
         }
         return false
     }
@@ -120,7 +120,7 @@ object FileUtils {
      *
      * 检查文件是否存在，只有校验通过才算存在
      *
-     * @param ignoreWhenMd5IsBad 当fileMD5 为空时，认为文件存在还是不存在
+     * @param ignoreDigestCheck 当fileMD5 为空时，认为文件存在还是不存在
      *
      *  true 文件存在
      *  false 文件不存在
@@ -129,9 +129,9 @@ object FileUtils {
         filePath: String,
         fileLength: Long,
         fileMD5: String,
-        ignoreWhenMd5IsBad: Boolean,
+        ignoreDigestCheck: Boolean,
     ): Boolean {
-        return checkFileExist(filePath, fileLength, fileMD5, "", ignoreWhenMd5IsBad)
+        return checkFileExist(filePath, fileLength, fileMD5, "", ignoreDigestCheck)
     }
 
     fun checkFileExist(
@@ -139,7 +139,7 @@ object FileUtils {
         fileLength: Long,
         fileMD5: String,
         fileSHA256: String,
-        ignoreWhenMd5IsBad: Boolean,
+        ignoreDigestCheck: Boolean,
     ): Boolean {
         return if (TextUtils.isEmpty(fileMD5)) {
             checkFileExistByMessageDigest(
@@ -147,7 +147,7 @@ object FileUtils {
                 fileLength,
                 fileSHA256,
                 SHA256.MESSAGE_DIGEST_TYPE_SHA256,
-                ignoreWhenMd5IsBad,
+                ignoreDigestCheck,
             )
         } else {
             checkFileExistByMessageDigest(
@@ -155,43 +155,43 @@ object FileUtils {
                 fileLength,
                 fileMD5,
                 MD5.MESSAGE_DIGEST_TYPE_MD5,
-                ignoreWhenMd5IsBad,
+                ignoreDigestCheck,
             )
         }
     }
 
     fun checkFileExistByMessageDigest(
-        filePath: String,
-        fileLength: Long,
+        paraFilePath: String,
+        paraFileLength: Long,
         digestValue: String,
         digestType: String,
-        ignoreWhenMd5IsBad: Boolean,
+        ignoreDigestCheck: Boolean,
     ): Boolean {
-        return if (TextUtils.isEmpty(filePath)) {
+        return if (TextUtils.isEmpty(paraFilePath)) {
             false
         } else {
-            val file = File(filePath)
+            val file = File(paraFilePath)
             if (!file.exists() || !file.isFile) {
                 false
             } else {
                 var hasMD5 = !TextUtils.isEmpty(digestValue)
-                if (fileLength > 0) {
-                    if (fileLength == file.length()) {
+                if (paraFileLength > 0) {
+                    if (paraFileLength == file.length()) {
                         if (hasMD5) {
-                            MessageDigestUtils.getFileDigestData(filePath, digestType)
-                                    .equals(digestValue, ignoreCase = true)
+                            MessageDigestUtils.getFileDigestData(paraFilePath, digestType)
+                                .equals(digestValue, ignoreCase = true)
                         } else {
-                            true
+                            ignoreDigestCheck
                         }
                     } else {
                         false
                     }
                 } else {
                     if (hasMD5) {
-                        MessageDigestUtils.getFileDigestData(filePath, digestType)
-                                .equals(digestValue, ignoreCase = true)
+                        MessageDigestUtils.getFileDigestData(paraFilePath, digestType)
+                            .equals(digestValue, ignoreCase = true)
                     } else {
-                        ignoreWhenMd5IsBad
+                        ignoreDigestCheck
                     }
                 }
             }
