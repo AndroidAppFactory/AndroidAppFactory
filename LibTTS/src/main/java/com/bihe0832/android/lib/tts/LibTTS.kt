@@ -16,6 +16,7 @@ import java.lang.reflect.Field
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * @author zixie code@bihe0832.com
@@ -50,8 +51,8 @@ object LibTTS {
         mutableListOf<TTSData>()
     }
 
-    private val mTTSSpeakListenerList = mutableListOf<TTSSpeakListener>()
-    private val mTTSInitListenerList = mutableListOf<TTSInitListener>()
+    private val mTTSSpeakListenerList = CopyOnWriteArrayList<TTSSpeakListener>()
+    private val mTTSInitListenerList = CopyOnWriteArrayList<TTSInitListener>()
 
     fun addTTSSpeakListener(listener: TTSSpeakListener) {
         mTTSSpeakListenerList.add(listener)
@@ -221,7 +222,13 @@ object LibTTS {
     }
 
     private fun setLanguage(loc: Locale): Int {
-        val supported = mSpeech?.setLanguage(loc)
+        var supported = TextToSpeech.ERROR
+        try {
+            supported = mSpeech?.setLanguage(loc) ?: TextToSpeech.ERROR
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         if (supported != TextToSpeech.LANG_AVAILABLE && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
             ZLog.i(TAG, "onInit: 不支持当前语言")
             mTTSInitListenerList.forEach {
@@ -234,7 +241,7 @@ object LibTTS {
             ZLog.i(TAG, "onInit: 支持当前选择语言")
             startSpeak()
         }
-        return supported ?: TextToSpeech.ERROR
+        return supported
     }
 
     fun isSpeak(): Boolean {
@@ -325,9 +332,9 @@ object LibTTS {
         for (j in fields.indices) {
             fields[j].setAccessible(true)
             if (TextUtils.equals(
-                        "mServiceConnection",
-                        fields[j].getName(),
-                    ) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())
+                    "mServiceConnection",
+                    fields[j].getName(),
+                ) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())
             ) {
                 try {
                     if (fields[j].get(tts) == null) {
