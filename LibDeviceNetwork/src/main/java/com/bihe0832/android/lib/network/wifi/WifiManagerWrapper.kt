@@ -285,12 +285,36 @@ object WifiManagerWrapper {
         return getConfiguredByNetworkID(getNetworkId())
     }
 
-    // wifi网络是否连接
-    fun isWifiAvailable(): Boolean {
-        mWiFiNetworkInfo?.let {
-            return it.type == ConnectivityManager.TYPE_WIFI
+    enum class WifiStatus {
+        NOT_CONNECTED, CONNECTED_NO_INTERNET, CONNECTED
+    }
+
+    fun getWifiStatus(): WifiStatus? {
+        val connectivityManager = mContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        return if (mWifiManager?.isWifiEnabled == true) {
+            val wifiNetworkInfo = connectivityManager?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            if (wifiNetworkInfo?.isConnected == true) {
+                if (BuildUtils.SDK_INT >= Build.VERSION_CODES.M) {
+                    val activeNetwork = connectivityManager.activeNetwork
+                    val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+                    if (networkCapabilities != null && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+                        WifiStatus.CONNECTED
+                    } else {
+                        WifiStatus.CONNECTED_NO_INTERNET
+                    }
+                } else {
+                    if (wifiNetworkInfo.isConnectedOrConnecting) {
+                        WifiStatus.CONNECTED
+                    } else {
+                        WifiStatus.CONNECTED_NO_INTERNET
+                    }
+                }
+            } else {
+                WifiStatus.NOT_CONNECTED
+            }
+        } else {
+            WifiStatus.NOT_CONNECTED
         }
-        return false
     }
 
     // 得到WifiInfo的所有信息包
@@ -306,7 +330,7 @@ object WifiManagerWrapper {
         getWifiConfiguration()?.let {
             buffer.append("\n\tWifiConfiguration-> ").append(getWifiConfigurationString(it))
         }
-        buffer.append("\n\twifi state-> $wifiState").append(";network state-> ${isWifiAvailable()}")
+        buffer.append("\n\twifi state-> $wifiState").append(";network state-> ${mWifiManager?.isWifiEnabled}")
         buffer.append("\n\tmWifiList-> " + getScanResultList().size)
             .append(";mWifiConfigurationList-> " + getConfigurationList().size)
         return buffer.toString()
@@ -342,28 +366,24 @@ object WifiManagerWrapper {
         context: Context?,
         ssid: String,
         password: String,
-        type: Int,
         networkCallback: ConnectivityManager.NetworkCallback,
     ) {
-        val wifiNetworkSpecifier = WifiNetworkSpecifier.Builder().apply {
+        val wpa2Specifier = WifiNetworkSpecifier.Builder().apply {
             setSsid(ssid)
-            when (type) {
-                3 -> {
-                    setWpa3Passphrase(password)
-                }
-
-                else -> {
-                    setWpa2Passphrase(password)
-                }
-            }
+            setWpa2Passphrase(password)
         }.build()
 
-        val networkRequest = NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .setNetworkSpecifier(wifiNetworkSpecifier)
-            .build()
+        val wpa3Specifier = WifiNetworkSpecifier.Builder().apply {
+            setSsid(ssid)
+            setWpa3Passphrase(password)
+        }.build()
 
+        val networkRequest = NetworkRequest.Builder().apply {
+            addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            setNetworkSpecifier(wpa2Specifier)
+            setNetworkSpecifier(wpa3Specifier)
+        }.build()
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager?.requestNetwork(networkRequest, networkCallback)
     }
@@ -372,8 +392,8 @@ object WifiManagerWrapper {
         context: Context?,
         ssid: String,
         password: String,
-        type: Int,
         forceDeleteIfExist: Boolean = true,
+        isWep: Boolean = false,
     ): Boolean {
         var networkId = -1
         var tempConfig = getConfiguredBySSID(ssid)
@@ -386,7 +406,7 @@ object WifiManagerWrapper {
         networkId = if (null != tempConfig && tempConfig.networkId > -1) {
             tempConfig.networkId
         } else {
-            val wcg = createWifiInfo(ssid, password, type)
+            val wcg = createWifiInfo(ssid, password, isWep)
             mWifiManager?.addNetwork(wcg) ?: -1
         }
 
@@ -395,17 +415,16 @@ object WifiManagerWrapper {
 
     // 指定配置好的网络进行连接
     fun connectWifi(context: Context?, networkId: Int): Boolean {
-        if (networkId > -1 && mWifiManager?.connectionInfo?.networkId != networkId) {
+        return if (networkId > -1 && mWifiManager?.connectionInfo?.networkId != networkId) {
             mWifiManager?.disconnect()
             mWifiManager?.enableNetwork(networkId, true)
             mWifiManager?.reconnect()
-            return true
+            true
         } else {
             mWifiChangeListener?.let {
                 it.onWifiInfoChanged(context)
             }
-
-            return false
+            false
         }
     }
 
@@ -425,6 +444,7 @@ object WifiManagerWrapper {
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     val intent = Intent(Settings.Panel.ACTION_WIFI)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     mContext?.startActivity(intent)
                 } else {
                     mWifiManager?.isWifiEnabled = true
@@ -439,6 +459,10 @@ object WifiManagerWrapper {
         if (mWifiManager?.isWifiEnabled == true) {
             mWifiManager?.isWifiEnabled = false
         }
+    }
+
+    fun getWifiManager(): WifiManager? {
+        return mWifiManager
     }
 
     // 扫描列表
@@ -590,49 +614,30 @@ object WifiManagerWrapper {
         return null
     }
 
-    private fun createWifiInfo(ssid: String, Password: String, Type: Int): WifiConfiguration {
-        val config = WifiConfiguration()
-        config.allowedAuthAlgorithms.clear()
-        config.allowedGroupCiphers.clear()
-        config.allowedKeyManagement.clear()
-        config.allowedPairwiseCiphers.clear()
-        config.allowedProtocols.clear()
-        config.SSID = "\"" + ssid + "\""
-
-        when (Type) {
-            1 -> {
-                // WIFICIPHER_NOPASS
-                config.wepKeys[0] = ""
-                config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
-                config.wepTxKeyIndex = 0
-            }
-
-            2 -> {
-                // WIFICIPHER_WEP
-                config.hiddenSSID = true
-                config.wepKeys[0] = "\"" + Password + "\""
-                config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED)
-                config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP)
-                config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP)
-                config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40)
-                config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104)
-                config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
-                config.wepTxKeyIndex = 0
-            }
-
-            3 -> {
-                // WIFICIPHER_WPA
-                config.preSharedKey = "\"" + Password + "\""
-                config.hiddenSSID = true
-                config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN)
-                config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP)
-                config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK)
-                config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP)
-                config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP)
-                config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP)
-                config.status = WifiConfiguration.Status.ENABLED
-            }
+    private fun createWifiInfo(
+        ssid: String,
+        password: String,
+        isWep: Boolean = false,
+    ): WifiConfiguration {
+        val wifiConfig = WifiConfiguration()
+        wifiConfig.SSID = "\"" + ssid + "\""
+        if (TextUtils.isEmpty(password)) {
+            // Open network
+            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
+        } else if (isWep) {
+            // WEP network
+            wifiConfig.wepKeys[0] = "\"" + password + "\""
+            wifiConfig.wepTxKeyIndex = 0
+            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
+            wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40)
+            wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104)
+            wifiConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN)
+            wifiConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED)
+        } else {
+            // WPA/WPA2 network
+            wifiConfig.preSharedKey = "\"" + password + "\""
+            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK)
         }
-        return config
+        return wifiConfig
     }
 }

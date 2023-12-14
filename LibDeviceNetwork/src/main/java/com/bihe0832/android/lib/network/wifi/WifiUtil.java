@@ -1,12 +1,17 @@
 package com.bihe0832.android.lib.network.wifi;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
+import android.os.Build;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.network.IpUtils;
 import com.bihe0832.android.lib.network.MacUtils;
@@ -437,6 +442,5 @@ public class WifiUtil {
         ZLog.i("wifi_ip -> " + ipAddress);
         return ipAddress;
     }
-
 
 }
