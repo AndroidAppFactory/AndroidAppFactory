@@ -1,0 +1,83 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <EditText
+            android:id="@+id/qrcode_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="zixie://about"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/qrcode_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="32dp"
+            android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/qrcode_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_vertical"
+            android:lineHeight="24dp"
+            android:text=""
+            android:textColor="#FF0000">
+
+        </TextView>
+
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
+            android:id="@+id/qrcode_again"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="点击刷新二维码数据"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16dp"
+            app:bgtv_backgroundColor="@color/colorPrimary"
+            app:bgtv_cornerRadius="8dp" />
+
+
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
+            android:id="@+id/qrcode_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="点击唤起相机扫描"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16dp"
+            app:bgtv_backgroundColor="@color/colorPrimary"
+            app:bgtv_cornerRadius="8dp" />
+
+
+
+        <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
+            android:id="@+id/wifi_dric"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="创建 Wi-Fi 热点"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16dp"
+            app:bgtv_backgroundColor="@color/colorPrimary"
+            app:bgtv_cornerRadius="8dp" />
+
+    </LinearLayout>
+</ScrollView>

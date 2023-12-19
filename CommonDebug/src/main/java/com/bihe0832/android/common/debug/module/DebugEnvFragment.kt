@@ -2,8 +2,13 @@ package com.bihe0832.android.common.debug.module
 
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.permission.AAFPermissionManager
+import com.bihe0832.android.common.permission.PermissionResultOfAAF
+import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.impl.RadioDialog
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
@@ -21,7 +26,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
     fun getChangeEnvSelectDialog(title: String, data: List<String>, index: Int, ins: OnEnvChangedListener): RadioDialog {
         RadioDialog(activity).apply {
             setTitle("${title}切换")
-            setHtmlContent("点击下方列表选择将 <font color='#38ADFF'> ${title} </font> 切换为：")
+            setHtmlContent("点击下方列表选择将 <font color='#38ADFF'> $title </font> 切换为：")
             setRadioData(data, index, null)
             setPositive("确定")
             setNegative("取消")
@@ -50,7 +55,6 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         }
     }
 
-
     fun showChangeEnvResult(title: String, key: String, value: String, actionType: Int) {
         showChangeEnvResult(title, key, value, value, actionType)
     }
@@ -68,7 +72,6 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         }
     }
 
-
     val CHANGE_ENV_EXIST_TYPE_NOTHING = 0
     val CHANGE_ENV_EXIST_TYPE_EXIST = 1
     val CHANGE_ENV_EXIST_TYPE_RESTART = 2
@@ -81,27 +84,33 @@ open class DebugEnvFragment : BaseDebugListFragment() {
                 else -> "生效"
             }
 
-            DialogUtils.showConfirmDialog(activity!!, "${title}切换", tips, canCancel = false, object :
-                OnDialogListener {
-                fun clickAction(actionType: Int) {
-                    when (actionType) {
-                        CHANGE_ENV_EXIST_TYPE_EXIST -> ZixieContext.exitAPP()
-                        CHANGE_ENV_EXIST_TYPE_RESTART -> ZixieContext.restartApp(0L)
+            DialogUtils.showConfirmDialog(
+                activity!!,
+                "${title}切换",
+                tips,
+                canCancel = false,
+                object :
+                    OnDialogListener {
+                    fun clickAction(actionType: Int) {
+                        when (actionType) {
+                            CHANGE_ENV_EXIST_TYPE_EXIST -> ZixieContext.exitAPP()
+                            CHANGE_ENV_EXIST_TYPE_RESTART -> ZixieContext.restartApp(0L)
+                        }
                     }
-                }
 
-                override fun onPositiveClick() {
-                    clickAction(actionType)
-                }
+                    override fun onPositiveClick() {
+                        clickAction(actionType)
+                    }
 
-                override fun onNegativeClick() {
-                    clickAction(actionType)
-                }
+                    override fun onNegativeClick() {
+                        clickAction(actionType)
+                    }
 
-                override fun onCancel() {
-                    clickAction(actionType)
-                }
-            })
+                    override fun onCancel() {
+                        clickAction(actionType)
+                    }
+                },
+            )
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -111,4 +120,55 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         return DebugItemData(itemContent) { showInfo("应用调试信息", itemContent) }
     }
 
+    fun requestPermissionForDebug(
+        permissonList: List<String>,
+        permissionResult: PermissionManager.OnPermissionResult? = null,
+    ) {
+        if (permissonList.isNullOrEmpty()) {
+            return
+        }
+        val scene = "AAFDebug"
+        val groupID = permissonList.first()
+
+        PermissionManager.addPermissionGroup(scene, groupID, permissonList)
+        PermissionManager.addPermissionGroupDesc(scene, groupID, "调试权限")
+        PermissionManager.addPermissionGroupContent(
+            scene,
+            groupID,
+            "这是一个用于调试过程中的临时权限申请，请同意授权方便开发调试",
+        )
+
+        AAFPermissionManager.checkSpecialPermission(
+            activity!!,
+            scene,
+            true,
+            mutableListOf(groupID),
+            PermissionsActivityWithSpecial::class.java,
+            object : PermissionResultOfAAF(false) {
+                override fun onSuccess() {
+                    super.onSuccess()
+                    ZixieContext.showToast("授权成功")
+                    permissionResult?.onSuccess()
+                }
+
+                override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                    super.onUserCancel(scene, permissionGroupID, permission)
+                    ZLog.d("放弃授权")
+                    permissionResult?.onUserCancel(scene, permissionGroupID, permission)
+                }
+
+                override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                    super.onUserDeny(scene, permissionGroupID, permission)
+                    ZLog.d("拒绝授权")
+                    permissionResult?.onUserDeny(scene, permissionGroupID, permission)
+                }
+
+                override fun onFailed(msg: String) {
+                    super.onFailed(msg)
+                    ZLog.d("授权失败")
+                    permissionResult?.onFailed(msg)
+                }
+            },
+        )
+    }
 }

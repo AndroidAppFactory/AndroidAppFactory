@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.debug.module
 
 import android.app.ActivityManager
+import android.bluetooth.BluetoothManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -65,6 +66,7 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(DebugItemData("开启悬浮常驻内存展示", { startShowSimpleInfo() }))
             add(DebugItemData("关闭悬浮常驻内存展示", { stopAutoShowSimpleInfo() }))
             add(DebugTipsData("设备信息"))
+            add(getInfoItem("设备名： ${getDeivceName(context)}"))
             add(getInfoItem("Android ID： ${ZixieContext.deviceId}"))
             add(getInfoItem("Build ID： ${Build.ID}"))
             add(getInfoItem("显示ID： ${Build.DISPLAY}"))
@@ -181,13 +183,11 @@ class DebugDeviceFragment : DebugEnvFragment() {
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
-
             }
 
             override fun getTaskName(): String {
                 return TASK
             }
-
         })
     }
 
@@ -204,8 +204,22 @@ class DebugDeviceFragment : DebugEnvFragment() {
             val info: Debug.MemoryInfo = Debug.MemoryInfo()
             Debug.getMemoryInfo(info)
             StringBuffer().apply {
-                append("系统内存：${Formatter.formatFileSize(context, outInfo.availMem)}/ ${Formatter.formatFileSize(context, outInfo.totalMem)}").append("<BR>")
-                append("系统触发GC时内存临界值：${Formatter.formatFileSize(context, outInfo.threshold)}").append("系统是否处于低内存运行：${outInfo.lowMemory}").append("<BR>")
+                append(
+                    "系统内存：${Formatter.formatFileSize(context, outInfo.availMem)}/ ${
+                        Formatter.formatFileSize(
+                            context,
+                            outInfo.totalMem,
+                        )
+                    }",
+                ).append("<BR>")
+                append(
+                    "系统触发GC时内存临界值：${
+                        Formatter.formatFileSize(
+                            context,
+                            outInfo.threshold,
+                        )
+                    }",
+                ).append("系统是否处于低内存运行：${outInfo.lowMemory}").append("<BR>")
                 append("当前应用占用内存：${Formatter.formatFileSize(context, (info.totalPss * 1024).toLong())}")
             }.let {
                 return it.toString()
@@ -213,23 +227,27 @@ class DebugDeviceFragment : DebugEnvFragment() {
         }
         return ""
     }
+}
 
-
+fun getDeivceName(context: Context?): String {
+    val bluetoothManager = context?.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+    return bluetoothManager?.adapter?.name ?: ""
 }
 
 fun getMobileInfo(context: Context?): List<String> {
     return mutableListOf<String>().apply {
         add("应用包名: ${context?.packageName}")
         add("设备ID: ${ZixieContext.deviceId}")
+        add("设备名称: ${getDeivceName(context)}")
         add("厂商型号: ${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}")
-        var sdkVersion = "系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
-            ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
-        } else {
-            ""
-        }
+        var sdkVersion =
+            "系统版本: Android ${BuildUtils.RELEASE}, API  ${BuildUtils.SDK_INT}" + if (ManufacturerUtil.isHarmonyOs()) {
+                ", Harmony(${ManufacturerUtil.getHarmonyVersion()})"
+            } else {
+                ""
+            }
         add("<font color ='#3AC8EF'>$sdkVersion</font>")
 
         add("系统指纹: ${ManufacturerUtil.FINGERPRINT}")
-
     }
 }

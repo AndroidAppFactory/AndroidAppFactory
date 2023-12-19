@@ -9,7 +9,6 @@
 package com.bihe0832.android.base.debug
 
 import android.view.View
-import com.bihe0832.android.base.debug.audio.DebugAudioFragment
 import com.bihe0832.android.base.debug.block.DebugEnqueueFragment
 import com.bihe0832.android.base.debug.cache.DebugCacheFragment
 import com.bihe0832.android.base.debug.card.DebugListFragment
@@ -30,6 +29,7 @@ import com.bihe0832.android.base.debug.log.DebugLogFragment
 import com.bihe0832.android.base.debug.media.DebugMediaFragment
 import com.bihe0832.android.base.debug.message.DebugMessageFragment
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
+import com.bihe0832.android.base.debug.network.DebugWiFiFragment
 import com.bihe0832.android.base.debug.notify.DebugNotifyFragment
 import com.bihe0832.android.base.debug.panel.DebugPanelFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
@@ -76,7 +76,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(getDebugFragmentItemData("二维码调试", DebugQRCodeFragment::class.java))
 
-
             add(
                 getDebugFragmentItemData(
                     "UI（Intent跳转、反馈、评分、锁屏、Widget、设置等）测试",
@@ -117,6 +116,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             )
 
             add(DebugItemData("网络切换监控") { startActivityWithException(DebugNetworkActivity::class.java) })
+            add(getDebugFragmentItemData("Wi-Fi 相关信息", DebugWiFiFragment::class.java))
             add(
                 DebugItemData(
                     "HTTP Request",

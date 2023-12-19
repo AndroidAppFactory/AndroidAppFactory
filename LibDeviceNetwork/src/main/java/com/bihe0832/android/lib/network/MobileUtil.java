@@ -17,10 +17,8 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.cdma.CdmaCellLocation;
 import android.telephony.gsm.GsmCellLocation;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
-
 import java.lang.reflect.Method;
 
 /**
@@ -45,7 +43,7 @@ public class MobileUtil {
         try {
             // 保证只register一个
             if(sMobileSignalListener == null) {
-                sMobileSignalListener = new MobileSignalListener(context);
+                sMobileSignalListener = new MobileSignalListener();
                 TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 if (telephonyManager != null) {
                     telephonyManager.listen(sMobileSignalListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
@@ -81,11 +79,6 @@ public class MobileUtil {
 
     // 注意PhoneStateListener的构造方法会调用Looper.myLooper()，所以构造函数的线程需要有Looper
     static class MobileSignalListener extends PhoneStateListener {
-        private Context mContext;
-
-        public MobileSignalListener(Context context) {
-            mContext = context.getApplicationContext(); // 获取Application的context
-        }
 
         // 得到信号的强度由每个tiome供应商,有更新
         @Override

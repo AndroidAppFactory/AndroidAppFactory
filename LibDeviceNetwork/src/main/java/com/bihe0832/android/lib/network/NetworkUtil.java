@@ -119,7 +119,7 @@ public class NetworkUtil {
     }
 
     public static int getMobileNetworkClass(Context context, NetworkInfo info) {
-        int netTypeFormInfo = NETWORK_CLASS_NONET;
+        int netTypeFormInfo = NETWORK_CLASS_4_G;
         if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE) {
             netTypeFormInfo = getMobileNetworkClass(info.getSubtype());
             if (netTypeFormInfo == NETWORK_CLASS_NONET &&
@@ -135,19 +135,24 @@ public class NetworkUtil {
             // NetworkInfo的subtype有可能未更新，进一步获取
         }
 
-        TelephonyManager telephonyManager = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
-        if (telephonyManager != null) {
-            int netTypeFromManager = getMobileNetworkClass(telephonyManager.getNetworkType());
-            if (netTypeFromManager != NETWORK_CLASS_NONET) {
-                return netTypeFromManager;
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager)
+                    context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (telephonyManager != null) {
+                int netTypeFromManager = getMobileNetworkClass(telephonyManager.getNetworkType());
+                if (netTypeFromManager != NETWORK_CLASS_NONET) {
+                    return netTypeFromManager;
+                }
+                if (netTypeFormInfo == NETWORK_CLASS_NONET &&
+                        telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED) {
+                    // 再次修正netTypeFormInfo
+                    netTypeFormInfo = NETWORK_CLASS_4_G;
+                }
             }
-            if (netTypeFormInfo == NETWORK_CLASS_NONET &&
-                    telephonyManager.getDataState() == TelephonyManager.DATA_CONNECTED) {
-                // 再次修正netTypeFormInfo
-                netTypeFormInfo = NETWORK_CLASS_4_G;
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return netTypeFormInfo;
     }
 
