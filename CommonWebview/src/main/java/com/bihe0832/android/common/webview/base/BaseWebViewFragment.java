@@ -201,6 +201,10 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
                     mPicUploadCallback.onReceiveValue(uris);
                     mPicUploadCallback = null;
                 }
+            } else {
+                if (mPicUploadCallback != null) {
+                    mPicUploadCallback.onReceiveValue(null);
+                }
             }
         }
     }
