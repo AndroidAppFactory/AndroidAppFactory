@@ -165,7 +165,7 @@ ext.commonmoduleInfo = [
                 "version"            : "6.7.18",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
-                        "Framework", project.ffmpeg.min_gpl, project.metadata.drewnoakes
+                        "Framework", project.ffmpeg.final, project.metadata.drewnoakes
                 ]
         ],
         "CommonCrop"            : [
