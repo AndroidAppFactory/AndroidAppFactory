@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.1",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -110,14 +110,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpCommon"             : [
-                "version"            : "6.7.16",
+                "version"            : "6.8.1",
                 "artifactId"         : "lib-http-common",
                 "apidependenciesList": [
                         "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"
                 ]
         ],
         "LibHttpAdvanced"           : [
-                "version"            : "6.7.16",
+                "version"            : "6.8.1",
                 "artifactId"         : "lib-http-advanced",
                 "apidependenciesList": [
                         "LibHttpCommon", "LibGson", "LibAAF"
@@ -188,7 +188,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"               : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.1",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -441,7 +441,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"          : [
-                "version"            : "6.7.16",
+                "version"            : "6.8.1",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon",
