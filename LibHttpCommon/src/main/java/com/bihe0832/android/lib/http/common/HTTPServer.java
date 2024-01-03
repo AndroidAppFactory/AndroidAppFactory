@@ -240,7 +240,7 @@ public class HTTPServer {
     }
 
     public String doOriginRequestSync(final String url, byte[] bytes, final String contentType) {
-        return convertOriginToUTF8Data(doRequest(url, bytes, contentType, null, false));
+        return doRequest(url, bytes, contentType, null, false);
     }
 
     public String doRequestSync(final String url, byte[] bytes, final String contentType) {
