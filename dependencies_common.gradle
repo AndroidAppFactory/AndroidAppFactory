@@ -11,7 +11,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.7.20",
+                "version"            : "6.8.0",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview", "CommonNetwork",
@@ -162,14 +162,14 @@ ext.commonmoduleInfo = [
                 "apidependenciesList": ["Framework"]
         ],
         "CommonMedia"           : [
-                "version"            : "6.7.20",
+                "version"            : "6.8.0",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
                         "Framework", project.metadata.drewnoakes, "LibFFmpegMobile"
                 ]
         ],
         "CommonCrop"            : [
-                "version"            : "6.7.20",
+                "version"            : "6.8.0",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
                         "Framework", "CommonBottomTab", "CommonMedia"

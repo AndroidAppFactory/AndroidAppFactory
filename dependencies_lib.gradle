@@ -522,7 +522,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFFmpegMobile"           : [
-                "version"            : "6.6.16",
+                "version"            : "6.8.0",
                 "artifactId"         : "lib-ffmpeg-mobile-aaf",
                 "apidependenciesList": [
 
