@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.encrypt.MD5;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +77,13 @@ public class FFmpegTools {
                 }
 
                 String videoPath = AAFFileWrapper.INSTANCE.getCacheVideoPath(".mp4");
+                try {
+                    File videoFile = new File(videoPath);
+                    videoFile.createNewFile();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 // 获取音频时长
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 retriever.setDataSource(audioPath);
@@ -118,9 +126,7 @@ public class FFmpegTools {
 
                 /**
                  * -b:v 2000k（视频比特率为 2000 kbps）、
-                 * -c:v libx264 将视频编解码器设置为 H.264
-                 * -profile:v baseline 将 H.264 编码配置文件设置为基线配置文件，以获得更广泛的兼容性。
-                 * -level 3.0 H.264 编码级别设置为 3.0，这是许多设备和应用程序所支持的级别
+                 * -c:v libopenh264 将视频编解码器设置为 H.264
                  * -pix_fmt yuv420p 将像素格式设置为 YUV 4:2:0，这是许多设备和应用程序所支持的格式。
                  * -c:a aac（音频编码器为 AAC）、
                  * -strict -2 允许使用实验性 AAC 编码器
@@ -129,7 +135,7 @@ public class FFmpegTools {
                  */
 
                 String command = String.format(
-                        "-y %s -i %s -filter_complex \"%s\" -map \"[v]\" -map %d:a -shortest -b:v 2000k -pix_fmt yuv420p -c:a aac -strict -2 -b:a 192k -movflags +faststart %s",
+                        "-y %s -i %s -filter_complex \"%s\" -map \"[v]\" -map %d:a -shortest -b:v 2000k -c:v libopenh264 -pix_fmt yuv420p -c:a aac -strict -2 -b:a 192k -movflags +faststart %s",
                         inputArgs, audioPath, filterComplex, realImageList.size(), videoPath);
                 int result = FFmpegTools.executeFFmpegCommand(command);
                 if (result == Config.RETURN_CODE_SUCCESS) {

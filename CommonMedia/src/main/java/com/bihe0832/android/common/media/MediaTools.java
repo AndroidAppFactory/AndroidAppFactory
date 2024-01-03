@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.Layout;
 import com.bihe0832.android.common.video.FFmpegTools;
-import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.file.AAFFileWrapper;
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback;
 import com.bihe0832.android.lib.media.image.BitmapUtil;

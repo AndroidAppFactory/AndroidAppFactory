@@ -165,7 +165,7 @@ ext.commonmoduleInfo = [
                 "version"            : "6.7.20",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
-                        "Framework", project.ffmpeg.final, project.metadata.drewnoakes
+                        "Framework", project.metadata.drewnoakes, "LibFFmpegMobile"
                 ]
         ],
         "CommonCrop"            : [
