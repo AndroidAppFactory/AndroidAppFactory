@@ -51,6 +51,20 @@ class DebugIntentFragment : DebugEnvFragment() {
 
             add(
                 DebugItemData(
+                    "打开指定应用设置",
+                    View.OnClickListener {
+                        IntentUtils.startAppSettings(
+                            context?.applicationContext,
+                            "com.bihe0832.android.app.test",
+                            "",
+                            true,
+                        )
+                    },
+                ),
+            )
+
+            add(
+                DebugItemData(
                     "打开应用安装界面",
                     View.OnClickListener {
                         IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
@@ -172,7 +186,7 @@ class DebugIntentFragment : DebugEnvFragment() {
             object :
                 DialogCompletedStringCallback {
                 override fun onResult(p0: String?) {
-                    IntentUtils.jumpToOtherApp(p0, context)
+                    IntentUtils.jumpToOtherApp(context, p0)
                 }
             },
         )

@@ -19,40 +19,38 @@ import com.bihe0832.android.lib.router.RouterMappingManager
 import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
-
 /**
  * Created by zixie on 2017/6/27.
  *
  */
 object RouterHelper {
 
-    //需要拦截
+    // 需要拦截
     private val needCheckInterceptHostList by lazy {
         getNeedCheckInterceptHostList()
     }
 
-    //需要登录
+    // 需要登录
     private val needLoginInterceptHostList by lazy {
         getNeedLoginInterceptHostList()
     }
 
-    //不需要检查，直接跳过的路由
+    // 不需要检查，直接跳过的路由
     private val skipListHostList by lazy {
         getSkipListHostList()
     }
 
-    //一些特殊场景，需要直接跳过的URL（完整URL）
+    // 一些特殊场景，需要直接跳过的URL（完整URL）
     private val tempSkipRouterList = mutableListOf<String>()
 
     fun initRouter() {
-        //应用前后台检测
+        // 应用前后台检测
         ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
             override fun onForeground() {
                 ZLog.d("onForeground")
             }
 
             override fun onBackground() {
-
             }
         })
 
@@ -69,7 +67,7 @@ object RouterHelper {
             }
         })
 
-        //路由拦截初始化
+        // 路由拦截初始化
         RouterInterrupt.init(object : RouterInterrupt.RouterProcess {
 
             override fun needLogin(uri: Uri, source: String): Boolean {
@@ -80,7 +78,7 @@ object RouterHelper {
                 return if (skipListHostList.contains(uri.host)) {
                     false
                 } else {
-                    //需要被拦截
+                    // 需要被拦截
                     needCheckInterceptHostList.contains(uri.host) || !AgreementPrivacy.hasAgreedPrivacy()
                 }
             }
@@ -107,7 +105,7 @@ object RouterHelper {
                                 setSelector(null)
                             }.resolveActivity(it.packageManager).packageName
                             if (!resolveActivityPackage.equals(it.packageName, ignoreCase = true)) {
-                                IntentUtils.jumpToOtherApp(uri.toString(), context)
+                                IntentUtils.jumpToOtherApp(context, uri.toString())
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()

@@ -10,12 +10,12 @@ public class PermissionIntent {
     /**
      * 跳转到miui的权限管理页面
      */
-    public static boolean gotoMiuiPermission(Context context) {
+    public static boolean gotoMiuiPermission(Context context,String packageName) {
         try { // MIUI 8
             Intent localIntent = new Intent("miui.intent.action.APP_PERM_EDITOR");
             localIntent.setClassName("com.miui.securitycenter",
                     "com.miui.permcenter.permissions.PermissionsEditorActivity");
-            localIntent.putExtra("extra_pkgname", context.getPackageName());
+            localIntent.putExtra("extra_pkgname", packageName);
             context.startActivity(localIntent);
             return true;
         } catch (Exception e) {
@@ -23,7 +23,7 @@ public class PermissionIntent {
                 Intent localIntent = new Intent("miui.intent.action.APP_PERM_EDITOR");
                 localIntent.setClassName("com.miui.securitycenter",
                         "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
-                localIntent.putExtra("extra_pkgname", context.getPackageName());
+                localIntent.putExtra("extra_pkgname", packageName);
                 context.startActivity(localIntent);
                 return true;
             } catch (Exception e1) { // 否则跳转到应用详情
@@ -36,11 +36,11 @@ public class PermissionIntent {
     /**
      * 跳转到魅族的权限管理系统
      */
-    public static boolean gotoMeizuPermission(Context context) {
+    public static boolean gotoMeizuPermission(Context context,String packageName) {
         try {
             Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
             intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.putExtra("packageName", context.getPackageName());
+            intent.putExtra("packageName",packageName);
             context.startActivity(intent);
             return true;
         } catch (Exception e) {

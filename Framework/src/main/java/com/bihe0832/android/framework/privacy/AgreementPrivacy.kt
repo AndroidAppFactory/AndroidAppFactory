@@ -37,13 +37,13 @@ object AgreementPrivacy {
             put(
                 ThemeResourcesManager.getString(R.string.privacy_title)!!,
                 View.OnClickListener {
-                    IntentUtils.openWebPage(ThemeResourcesManager.getString(R.string.privacy_url), context)
+                    IntentUtils.openWebPage(context,ThemeResourcesManager.getString(R.string.privacy_url))
                 },
             )
             put(
                 ThemeResourcesManager.getString(R.string.agreement_title)!!,
                 View.OnClickListener {
-                    IntentUtils.openWebPage(ThemeResourcesManager.getString(R.string.agreement_url), context)
+                    IntentUtils.openWebPage(context,ThemeResourcesManager.getString(R.string.agreement_url))
                 },
             )
         }

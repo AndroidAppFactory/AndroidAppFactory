@@ -5,19 +5,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.bihe0832.android.common.webview.R;
-import com.bihe0832.android.common.webview.core.WebViewViewModel;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
+import com.bihe0832.android.common.webview.core.WebViewViewModel;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
-
 import java.net.URLDecoder;
 
 public abstract class BaseWebviewActivity extends CommonActivity {
@@ -54,11 +51,9 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     }
 
     protected void handleIntent(Intent intent) {
-
-
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL)) {
             String redirectURL = URLDecoder.decode(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_REDIRECT_URL));
-            IntentUtils.openWebPage(redirectURL, this);
+            IntentUtils.openWebPage(this, redirectURL);
             finish();
         } else {
             mURL = parseURL(intent);

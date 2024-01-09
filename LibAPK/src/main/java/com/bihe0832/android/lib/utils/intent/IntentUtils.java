@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -11,24 +12,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.intent.wrapper.PermissionIntent;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.json.JSONObject;
 
 
 public class IntentUtils {
 
     private static final String TAG = "IntentUtils";
 
-    public static boolean jumpToOtherApp(String url, Context context) {
+    public static boolean jumpToOtherApp(Context context, String url) {
         if (context == null) {
             return false;
         }
@@ -48,7 +46,7 @@ public class IntentUtils {
         }
     }
 
-    public static boolean openWebPage(String url, Context context) {
+    public static boolean openWebPage(Context context, String url) {
         if (context == null || TextUtils.isEmpty(url)) {
             return false;
         }
@@ -105,18 +103,22 @@ public class IntentUtils {
 
     // 启动应用的设置
     public static boolean startAppDetailSettings(Context ctx) {
+        return startAppDetailSettings(ctx, ctx.getPackageName());
+    }
+
+    public static boolean startAppDetailSettings(Context ctx, String packageName) {
         boolean result = false;
         if (BuildUtils.INSTANCE.getSDK_INT() <= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            result = startAppSettings(ctx, Settings.ACTION_SETTINGS, false);
+            result = startAppSettings(ctx, packageName, Settings.ACTION_SETTINGS, false);
         } else {
-            result = startAppSettings(ctx, Settings.ACTION_APPLICATION_DETAILS_SETTINGS, false);
+            result = startAppSettings(ctx, packageName, Settings.ACTION_APPLICATION_DETAILS_SETTINGS, false);
         }
 
         if (!result) {
             if (ManufacturerUtil.INSTANCE.isXiaomi()) {
-                result = PermissionIntent.gotoMiuiPermission(ctx);
+                result = PermissionIntent.gotoMiuiPermission(ctx, packageName);
             } else if (ManufacturerUtil.INSTANCE.isMeizu()) {
-                result = PermissionIntent.gotoMeizuPermission(ctx);
+                result = PermissionIntent.gotoMeizuPermission(ctx, packageName);
             } else if (ManufacturerUtil.INSTANCE.isHuawei()) {
                 result = PermissionIntent.gotoHuaweiPermission(ctx);
             }
@@ -129,8 +131,12 @@ public class IntentUtils {
         return startAppSettings(ctx, data, true);
     }
 
-    // 启动应用的设置
     public static boolean startAppSettings(Context ctx, String data, boolean showDetail) {
+        return startAppSettings(ctx, ctx.getPackageName(), data, showDetail);
+    }
+
+    // 启动应用的设置
+    public static boolean startAppSettings(Context ctx, String packageName, String data, boolean showDetail) {
         if (null == ctx) {
             ZLog.d("startAppSettings ctx == null");
             return false;
@@ -139,7 +145,7 @@ public class IntentUtils {
         if (TextUtils.isEmpty(data)) {
             ZLog.d("startAppSettings data == null");
             if (showDetail) {
-                return startAppDetailSettings(ctx);
+                return startAppDetailSettings(ctx, packageName);
             } else {
                 return false;
             }
@@ -148,19 +154,25 @@ public class IntentUtils {
         Intent intent = new Intent(data);
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.LOLLIPOP) {
             //5.0以上
-            intent.putExtra("app_package", ctx.getPackageName());
-            if (null != ctx.getApplicationInfo()) {
-                intent.putExtra("app_uid", ctx.getApplicationInfo().uid);
+            intent.putExtra("app_package", packageName);
+            try {
+                ApplicationInfo applicationInfo = ctx.getPackageManager()
+                        .getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+                if (null != applicationInfo) {
+                    intent.putExtra("app_uid", applicationInfo.uid);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
             // 8.0 以上
-            intent.putExtra("android.provider.extra.APP_PACKAGE", ctx.getPackageName());
+            intent.putExtra("android.provider.extra.APP_PACKAGE", packageName);
         }
 
         Intent intent2 = (Intent) intent.clone();
-        intent2.setData(Uri.fromParts("package", ctx.getPackageName(), null));
+        intent2.setData(Uri.fromParts("package", packageName, null));
         boolean result;
         if (intent2.resolveActivity(ctx.getPackageManager()) != null) {
             result = startIntent(ctx, intent2);
@@ -169,7 +181,7 @@ public class IntentUtils {
         }
         if (!result) {
             if (showDetail) {
-                return startAppDetailSettings(ctx);
+                return startAppDetailSettings(ctx, packageName);
             } else {
                 return false;
             }
