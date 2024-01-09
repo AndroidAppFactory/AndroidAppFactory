@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.8.1",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -158,7 +158,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAPK"                    : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-utils-apk",
                 "apidependenciesList": [
                         "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
@@ -188,7 +188,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"               : [
-                "version"            : "6.8.1",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -196,7 +196,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibInstall"                : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-install",
                 "apidependenciesList": [
                         "LibFile", "LibZip", "LibAPK"
@@ -210,14 +210,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibSuperAPP"               : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
                 ]
         ],
         "LibDebug"                  : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": [
                         "LibDialog", "LibToast", "LibFloatview"
@@ -311,7 +311,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibNotification"           : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibMedia", "LibAPK", "LibCommonUtils"
@@ -356,14 +356,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibJsBridge"               : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-jsbridge",
                 "apidependenciesList": [
                         "LibLog", "LibThread", "LibToast", "LibAPK"
                 ]
         ],
         "LibLifecycle"              : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         project.androidsupport.lifecycle,
@@ -373,7 +373,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -390,7 +390,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFileSelect"             : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -398,7 +398,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFloatview"              : [
-                "version"                : "6.7.18",
+                "version"                : "6.8.2",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         project.androidsupport.constraintlayout,
@@ -427,7 +427,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAceEditor"              : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.2",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
