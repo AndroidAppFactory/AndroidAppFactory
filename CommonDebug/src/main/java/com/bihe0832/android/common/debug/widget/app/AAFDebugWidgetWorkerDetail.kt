@@ -16,7 +16,6 @@ import com.bihe0832.android.framework.router.RouterAction.getFinalURL
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper.getVersionInstalledTime
-import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.notification.NotifyManager.getPendingIntent
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils

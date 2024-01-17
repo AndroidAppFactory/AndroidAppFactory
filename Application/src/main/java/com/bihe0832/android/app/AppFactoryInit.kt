@@ -128,7 +128,10 @@ object AppFactoryInit {
                 if (it.pid == Process.myPid() && it.processName != null &&
                     it.processName.contains(application.getPackageName())
                 ) {
-                    ZLog.e("Application initCore process: name:" + it.processName + " and id:" + it.pid)
+                    ZLog.e(
+                        ZixieCoreInit.TAG,
+                        "Application initCore process: name:" + it.processName + " and id:" + it.pid,
+                    )
                     val processName = it.processName
                     initCore(application, processName)
                     if (processName.equals(application.packageName, ignoreCase = true)) {
@@ -138,6 +141,10 @@ object AppFactoryInit {
                             ignoreCase = true,
                         )
                     ) {
+                        ZLog.e(
+                            ZixieCoreInit.TAG,
+                            "Application WidgetUpdateManager initModuleWithOtherProcess  process: name:" + it.processName + " and id:" + it.pid,
+                        )
                         WidgetUpdateManager.initModuleWithOtherProcess(application.applicationContext)
                     }
                     initWebview(application, it)

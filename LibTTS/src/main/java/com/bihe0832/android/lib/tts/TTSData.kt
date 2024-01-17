@@ -16,7 +16,6 @@ class TTSData(val speakText: String = "") {
 
     private val speakBundle: Bundle = Bundle()
 
-
     fun getUtteranceId(): String {
         return mUtteranceId.toString()
     }
@@ -57,5 +56,4 @@ class TTSData(val speakText: String = "") {
     override fun toString(): String {
         return "TTSData(speakText='$speakText', mUtteranceId=$mUtteranceId, speakBundle=$speakBundle)"
     }
-
 }

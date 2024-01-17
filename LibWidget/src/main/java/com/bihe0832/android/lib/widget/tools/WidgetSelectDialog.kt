@@ -26,6 +26,7 @@ class WidgetSelectDialog : CommonDialog {
     constructor(context: Context?, themeResId: Int) : super(context, themeResId)
 
     override fun initView() {
+        super.initView()
         val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(-1, -2)
         val margin = DisplayUtil.dip2px(this.context, 16.0f)
         layoutParams.setMargins(0, margin / 2, 0, margin / 2)

@@ -13,27 +13,26 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.CommonDialog;
+import com.bihe0832.android.lib.ui.dialog.R;
 import com.bihe0832.android.lib.ui.dialog.callback.DialogStringCallback;
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
-import com.bihe0832.android.lib.ui.dialog.R;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2022/5/25.
- * Description: Description
+ *         Created on 2022/5/25.
+ *         Description: Description
  */
 public class InputDialogUtils {
-    public static void showInputDialog(final Context context, String titleName, String msg, String positive,
-                                       String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue, String hint,
-                                       final DialogStringCallback listener) {
+
+    public static void showInputDialog(final Context context, final CommonDialog dialog, String titleName, String msg,
+            String positive, String negtive, Boolean canCanceledOnTouchOutside, int inputType, String defaultValue,
+            String hint, final DialogStringCallback listener) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
-                final CommonDialog dialog = new CommonDialog(context,R.style.InputDialog);
                 dialog.setTitle(titleName);
                 dialog.setHtmlContent(msg);
                 dialog.setPositive(positive);
@@ -97,6 +96,5 @@ public class InputDialogUtils {
                 dialog.show();
             }
         });
-
     }
 }

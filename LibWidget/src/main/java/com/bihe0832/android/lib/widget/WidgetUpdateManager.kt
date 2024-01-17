@@ -5,7 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.text.TextUtils
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Configuration
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
@@ -14,7 +21,6 @@ import com.bihe0832.android.lib.widget.tools.WidgetTools
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker
 import java.time.Duration
 import java.util.concurrent.TimeUnit
-
 
 /**
  *
@@ -32,9 +38,7 @@ object WidgetUpdateManager {
     const val WIDGET_HOST_ID = 0x100
     const val ADD_WIDGET = 1
 
-
     fun initModuleWithOtherProcess(context: Context) {
-
         // provide custom configuration
         Configuration.Builder().setMinimumLoggingLevel(android.util.Log.INFO).build().let { myConfig ->
             // initialize WorkManager
@@ -46,7 +50,6 @@ object WidgetUpdateManager {
     fun initModuleWithMainProcess(context: Context) {
         updateAllWidgets(context)
     }
-
 
     fun enqueueAutoStart(context: Context) {
         cancelAutoStart(context)
@@ -93,7 +96,7 @@ object WidgetUpdateManager {
         Config.readConfig(LockScreenService.SERVICE_NAME_KEY, "").let {
             if (TextUtils.isEmpty("")) {
                 ZLog.d(TAG, "startLockScreen by worker : $it")
-                val intent = Intent();
+                val intent = Intent()
                 intent.setComponent(ComponentName(context.packageName, it))
                 if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
                     context!!.startForegroundService(intent)
@@ -106,7 +109,7 @@ object WidgetUpdateManager {
 
     private fun updateAllWidgets(context: Context, sourceClass: Class<out BaseWidgetWorker>?) {
         ZLog.e(TAG, "updateAll: durtaion is :${System.currentTimeMillis() - mlastUpdateAllTime}")
-        //执行一次任务
+        // 执行一次任务
         if (System.currentTimeMillis() - mlastUpdateAllTime > 20 * 1000) {
             mlastUpdateAllTime = System.currentTimeMillis()
             WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(UpdateAllWork::class.java))
@@ -131,7 +134,6 @@ object WidgetUpdateManager {
                     ZLog.e(TAG, "!!!!! updateByName by $name error, Bad name !!!!!")
                     removeFromAutoUpdateList(name)
                 }
-
             } catch (e: java.lang.Exception) {
                 removeFromAutoUpdateList(name)
                 e.printStackTrace()
@@ -156,11 +158,9 @@ object WidgetUpdateManager {
         }
     }
 
-
     fun updateAllWidgets(context: Context) {
         updateAllWidgets(context, null)
     }
-
 
     fun updateWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean) {
         ZLog.d(TAG, "updateWidget:" + clazz.name + ",canAutoUpdateByOthers: $canAutoUpdateByOthers ; updateAll: $updateAll")
@@ -169,7 +169,7 @@ object WidgetUpdateManager {
         } else {
             removeFromAutoUpdateList(clazz.name)
         }
-        //执行一次任务
+        // 执行一次任务
         if (updateAll) {
             updateAllWidgets(context, clazz)
         } else {
@@ -192,5 +192,4 @@ object WidgetUpdateManager {
             updateAllWidgets(context)
         }
     }
-
 }
