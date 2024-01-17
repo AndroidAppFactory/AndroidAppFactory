@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -158,7 +158,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAPK"                    : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-utils-apk",
                 "apidependenciesList": [
                         "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
@@ -188,7 +188,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"               : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -196,7 +196,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibInstall"                : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-install",
                 "apidependenciesList": [
                         "LibFile", "LibZip", "LibAPK"
@@ -210,14 +210,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibSuperAPP"               : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
                 ]
         ],
         "LibDebug"                  : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": [
                         "LibDialog", "LibToast", "LibFloatview"
@@ -231,7 +231,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFragmentation_core"     : [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-fragmentation-core",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -239,21 +239,21 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFragmentation"          : [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-fragmentation",
                 "apidependenciesList": [
                         "LibFragmentation_core"
                 ]
         ],
         "LibFragmentation_swipeback": [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-fragmentation-swipeback",
                 "apidependenciesList": [
                         "LibFragmentation"
                 ]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "6.7.16",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -270,7 +270,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAdapter"                : [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-adapter",
                 "apidependenciesList": [
                         project.androidsupport.recyclerview,
@@ -278,14 +278,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibRefresh"                : [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-refresh",
                 "apidependenciesList": [
                         "LibAdapter"
                 ]
         ],
         "LibToast"                  : [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-toast",
                 "apidependenciesList": [
                         "LibThread", "LibText", "LibAAFResource"
@@ -302,7 +302,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDialog"                 : [
-                "version"            : "6.7.16",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         project.androidsupport.constraintlayout,
@@ -311,14 +311,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibNotification"           : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibMedia", "LibAPK", "LibCommonUtils"
                 ]
         ],
         "LibBottomTab"              : [
-                "version"            : "6.6.15",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",
@@ -327,21 +327,21 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibRecycleviewExt"         : [
-                "version"            : "6.6.15",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-recycleview-ext",
                 "apidependenciesList": [
                         "LibRefresh", "LibTheme"
                 ]
         ],
         "LibTouchRegion"            : [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-touchregion",
                 "apidependenciesList": [
                         "LibAAFResource", "LibOS"
                 ]
         ],
         "LibViewExt"                : [
-                "version"            : "6.6.15",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-view-ext",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -356,14 +356,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibJsBridge"               : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-jsbridge",
                 "apidependenciesList": [
                         "LibLog", "LibThread", "LibToast", "LibAPK"
                 ]
         ],
         "LibLifecycle"              : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         project.androidsupport.lifecycle,
@@ -373,7 +373,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -382,7 +382,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibImmersive"              : [
-                "version"            : "6.7.18",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibColor",
@@ -390,7 +390,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFileSelect"             : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -398,7 +398,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFloatview"              : [
-                "version"                : "6.8.2",
+                "version"                : "6.8.3",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         project.androidsupport.constraintlayout,
@@ -418,7 +418,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibTextView"               : [
-                "version"            : "6.6.15",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-textview",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -427,7 +427,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAceEditor"              : [
-                "version"            : "6.8.2",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
@@ -475,7 +475,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibCustomView"             : [
-                "version"            : "6.6.15",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-custom-view",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -484,14 +484,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAAFResource"            : [
-                "version"            : "6.6.0",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-aaf-res",
                 "apidependenciesList": [
 
                 ]
         ],
         "LibTheme"                  : [
-                "version"            : "6.6.15",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-theme",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -499,7 +499,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibColor"                  : [
-                "version"            : "6.7.16",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-color",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
@@ -507,7 +507,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"                  : [
-                "version"            : "6.7.16",
+                "version"            : "6.8.3",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
