@@ -39,14 +39,16 @@ import com.tencent.smtt.sdk.TbsPrivacyAccess
 
 object AppFactoryInit {
     // 全局变量的初始化
-    var hasInit = false
+    var hasInitCore = false
+    var hasInitExtra = false
 
     // 目前仅仅主进程和web进程需要初始化
     @Synchronized
     private fun initCore(application: android.app.Application, processName: String) {
+        ZLog.d(ZixieCoreInit.TAG, "Application process $processName initCore ")
         val ctx = application.applicationContext
-        if (!hasInit) {
-            hasInit = true
+        if (!hasInitCore) {
+            hasInitCore = true
             ZixieCoreInit.initAfterAgreePrivacy(application)
             Log.e(ZixieCoreInit.TAG, "———————————————————————— 设备信息 ————————————————————————")
             Log.e(ZixieCoreInit.TAG, "设备ID: ${ZixieContext.deviceId}")
@@ -70,16 +72,18 @@ object AppFactoryInit {
                 DownloadUtils.init(ctx, ZixieContext.isDebug())
             }
             AAFMessageManager.initModule(ctx)
-            AAFGoogleAD.initModule(ctx)
-            ZLog.d("Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL)
+            ZLog.d(
+                ZixieCoreInit.TAG,
+                "Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL,
+            )
         }
     }
 
     private fun initWebview(application: android.app.Application, processInfo: ActivityManager.RunningAppProcessInfo) {
         if (processInfo.processName.equals(application.packageName, ignoreCase = true)) {
             ThreadManager.getInstance().start({
-                ZLog.e("Application process initCore web start")
-                ZLog.d("" + QbSdk.getTbsVersion(application.applicationContext))
+                ZLog.e(ZixieCoreInit.TAG, "Application process initWebview：" + processInfo.processName)
+                ZLog.d(ZixieCoreInit.TAG, "" + QbSdk.getTbsVersion(application.applicationContext))
 
                 WebViewHelper.init(
                     application.applicationContext,
@@ -97,6 +101,7 @@ object AppFactoryInit {
             }, 5)
         } else {
             if (BuildUtils.SDK_INT >= Build.VERSION_CODES.P) {
+                ZLog.d(ZixieCoreInit.TAG, "Application setDataDirectorySuffix " + processInfo.processName)
                 WebView.setDataDirectorySuffix(processInfo.processName)
             }
         }
@@ -104,23 +109,29 @@ object AppFactoryInit {
 
     @Synchronized
     private fun initExtra(application: android.app.Application) {
-        // 初始化网络变量和监听
-        NetworkChangeManager.init(
-            application.applicationContext,
-            getNetType = true,
-            getSSID = true,
-            getBssID = true,
-            curCellId = true,
-        )
-        // 监听信号变化，统一到MobileUtil
-        MobileUtil.registerMobileSignalListener(application.applicationContext)
-        CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
-        ShakeManager.init(application.applicationContext)
-        ThemeManager.init(application, !ZixieContext.isOfficial())
-        WidgetUpdateManager.initModuleWithMainProcess(application.applicationContext)
+        ZLog.d(ZixieCoreInit.TAG, "Application initExtra ")
+        if (!hasInitExtra) {
+            hasInitExtra = true
+            // 初始化网络变量和监听
+            NetworkChangeManager.init(
+                application.applicationContext,
+                getNetType = true,
+                getSSID = true,
+                getBssID = true,
+                curCellId = true,
+            )
+            // 监听信号变化，统一到MobileUtil
+            MobileUtil.registerMobileSignalListener(application.applicationContext)
+            CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
+            ShakeManager.init(application.applicationContext)
+            ThemeManager.init(application, !ZixieContext.isOfficial())
+            WidgetUpdateManager.initModuleWithMainProcess(application.applicationContext)
+            AAFGoogleAD.initModule(application.applicationContext)
+        }
     }
 
     fun initAll(application: android.app.Application) {
+        ZLog.d(ZixieCoreInit.TAG, "Application initAll ")
         if (AgreementPrivacy.hasAgreedPrivacy()) {
             val am = application.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             val runningApps = am.runningAppProcesses

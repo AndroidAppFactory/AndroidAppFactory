@@ -3,12 +3,12 @@ package com.bihe0832.android.base.debug.widget;
 import android.content.ComponentName;
 import android.content.Context;
 import android.widget.RemoteViews;
-
 import androidx.annotation.NonNull;
 import androidx.work.WorkerParameters;
-
 import com.bihe0832.android.base.debug.R;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.time.DateUtil;
+import com.bihe0832.android.lib.widget.WidgetUpdateManager;
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker;
 
 
@@ -20,6 +20,7 @@ public class TestWorker1 extends BaseWidgetWorker {
 
     @Override
     protected void updateWidget(Context context) {
+        ZLog.d(WidgetUpdateManager.TAG, "updateWidget TestWorker1");
         String data = DateUtil.getCurrentDateEN();
         //只能通过远程对象来设置appwidget中的控件状态
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout_1);

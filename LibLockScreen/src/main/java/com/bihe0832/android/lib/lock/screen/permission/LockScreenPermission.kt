@@ -1,14 +1,17 @@
 package com.bihe0832.android.lib.lock.screen.permission
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.utils.os.BuildUtils
 
 object LockScreenPermission {
 
@@ -24,9 +27,18 @@ object LockScreenPermission {
 
     fun startLockService(context: Context, cls: Class<out LockScreenService?>) {
         ZLog.e(LockScreenService.TAG, "startLockService ${cls.name}")
-        val intent = Intent(context, cls)
-        intent.setPackage(context.packageName)
-        context.startService(intent)
+        try {
+            val intent = Intent()
+            intent.setComponent(ComponentName(context.packageName, cls.name))
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
+                context!!.startForegroundService(intent)
+            } else {
+                context!!.startService(intent)
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
     }
 
     fun startLockServiceWithPermission(context: Context, cls: Class<out LockScreenService?>) {
@@ -38,26 +50,30 @@ object LockScreenPermission {
                 positive = "授权并开启"
                 needSpecial = true
             }.let {
-                it.show(SCENE, mLockScreenPermission, true, object :
-                    OnDialogListener {
-                    override fun onPositiveClick() {
-                        startLockService(context, cls)
-                        openFloatSettings(context)
-                        it.dismiss()
-                    }
+                it.show(
+                    SCENE,
+                    mLockScreenPermission,
+                    true,
+                    object :
+                        OnDialogListener {
+                        override fun onPositiveClick() {
+                            startLockService(context, cls)
+                            openFloatSettings(context)
+                            it.dismiss()
+                        }
 
-                    override fun onNegativeClick() {
-                        startLockService(context, cls)
-                        it.dismiss()
-                    }
+                        override fun onNegativeClick() {
+                            startLockService(context, cls)
+                            it.dismiss()
+                        }
 
-                    override fun onCancel() {
-                        startLockService(context, cls)
-                        it.dismiss()
-                    }
-                })
+                        override fun onCancel() {
+                            startLockService(context, cls)
+                            it.dismiss()
+                        }
+                    },
+                )
             }
         }
     }
-
 }

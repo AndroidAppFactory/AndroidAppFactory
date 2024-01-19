@@ -51,8 +51,9 @@ public class Application extends BaseApplication {
 
     @Override
     public void onCreate() {
-        super.onCreate();
         ZLog.d("Application", "Application onCreate start");
+        super.onCreate();
+        AppFactoryInit.INSTANCE.initAll(this);
         ZLog.d("Application", "Application onCreate end");
     }
 }
