@@ -6,11 +6,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
-
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.widget.BaseWidgetProvider;
@@ -37,10 +35,16 @@ public abstract class BaseWidgetWorker extends Worker {
         return Result.failure();
     }
 
-    public PendingIntent getWidgetRefreshPendingIntent(Context context, Class<? extends BaseWidgetProvider> classT, boolean updateAll) {
+    public PendingIntent getWidgetRefreshPendingIntent(Context context, Class<? extends BaseWidgetProvider> classT,
+            boolean updateAll) {
+        return getWidgetPendingIntent(context, BaseWidgetProvider.REFRESH_ACTION, classT, updateAll);
+    }
+
+    public PendingIntent getWidgetPendingIntent(Context context, String action,
+            Class<? extends BaseWidgetProvider> classT, boolean updateAll) {
         Intent intent = new Intent();
         intent.setClass(context, classT);
-        intent.setAction(BaseWidgetProvider.REFRESH_ACTION);
+        intent.setAction(action);
         intent.putExtra(BaseWidgetProvider.REFRESH_INTENT_KEY_UPDATE_ALL, updateAll);
 
         //设置pendingIntent
@@ -53,6 +57,7 @@ public abstract class BaseWidgetWorker extends Worker {
         //Retrieve a PendingIntent that will perform a broadcast
         return pendingIntent;
     }
+
 
     protected void updateWidget(Context context, ComponentName componentName, RemoteViews remoteViews) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
