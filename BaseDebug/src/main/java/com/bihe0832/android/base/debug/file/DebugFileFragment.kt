@@ -36,6 +36,7 @@ import com.bihe0832.android.lib.sqlite.BaseDBHelper
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
 import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
 import com.bihe0832.android.lib.zip.ZipUtils
@@ -70,7 +71,7 @@ class DebugFileFragment : DebugEnvFragment() {
 
             add(DebugItemData("文本查看器", View.OnClickListener { testEdit() }))
             add(DebugItemData("Assets 操作", View.OnClickListener { testAssets() }))
-
+            add(DebugItemData("文件长度测试", View.OnClickListener { testFileLength() }))
             add(
                 DebugItemData(
                     "文件MD5",
@@ -378,5 +379,18 @@ class DebugFileFragment : DebugEnvFragment() {
         ZLog.d("AAF", "File Content:" + FileUtils.getFileContent(sharedFile))
         FileUtils.writeToFile(sharedFile, "fsdfs", true)
         ZLog.d("AAF", "File Content:" + FileUtils.getFileContent(sharedFile))
+    }
+
+    private fun testFileLength() {
+        mutableListOf<Int>().apply {
+            add((1024 * 1204 * 3.514f).toInt())
+            for (i in 0..5) {
+                add(MathUtils.getRandNumByLimit(0, FileUtils.SPACE_KB.toInt()))
+                add(MathUtils.getRandNumByLimit(FileUtils.SPACE_KB.toInt(), FileUtils.SPACE_MB.toInt()))
+                add(MathUtils.getRandNumByLimit(FileUtils.SPACE_MB.toInt(), FileUtils.SPACE_GB.toInt()))
+            }
+        }.forEach {
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong())}")
+        }
     }
 }
