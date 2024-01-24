@@ -293,14 +293,19 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            onWebClientReceivedError();
+            ZLog.e(TAG, "onReceivedError: errorCode=" + errorCode + " description=" + description + " failingUrl="
+                    + failingUrl);
+            onWebClientReceivedError(errorCode);
             return;
         }
 
         @Override
         public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest,
                 WebResourceError webResourceError) {
-            onWebClientReceivedError();
+            ZLog.e(TAG, "onReceivedError: errorCode=" + webResourceError.getErrorCode() + " description="
+                    + webResourceError.getDescription() + " failingUrl="
+                    + webResourceRequest.getUrl().toString());
+            onWebClientReceivedError(webResourceError.getErrorCode());
             return;
         }
 

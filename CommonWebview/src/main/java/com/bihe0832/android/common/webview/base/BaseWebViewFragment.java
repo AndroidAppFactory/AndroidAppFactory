@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -144,9 +145,15 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         mErrorPage.setVisibility(View.GONE);
     }
 
-    protected void onWebClientReceivedError() {
-        isLoadSuccess = false;
-        mErrorUrl.setText(mIntentUrl);
+    protected void onWebClientReceivedError(int errorCode) {
+        ZLog.e(TAG, "onWebClientReceivedError");
+        if (errorCode == WebViewClient.ERROR_CONNECT) {
+            // 处理网络连接错误
+            isLoadSuccess = false;
+            mErrorUrl.setText(mIntentUrl);
+        } else {
+            // 处理其他类型的错误
+        }
     }
 
     @Override

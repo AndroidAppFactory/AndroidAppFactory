@@ -17,11 +17,13 @@ import android.webkit.MimeTypeMap;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import androidx.annotation.RequiresApi;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
@@ -283,8 +285,16 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            onWebClientReceivedError();
+            onWebClientReceivedError(errorCode);
             return;
+        }
+
+        @RequiresApi(api = VERSION_CODES.M)
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.M) {
+                onWebClientReceivedError(error.getErrorCode());
+            }
         }
 
         @Override
