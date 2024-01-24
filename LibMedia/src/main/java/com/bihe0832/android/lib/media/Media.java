@@ -15,6 +15,7 @@ import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.action.FileAction;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.os.OSUtils;
 import java.io.File;
 import java.io.FileInputStream;
@@ -166,7 +167,7 @@ public class Media {
                 ZixieFileProvider.getZixieCacheFolder(context) + subFilePath);
         if (FileUtils.INSTANCE.checkAndCreateFolder(picFolder)) {
             File picture = new File(picFolder, name);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.N) {
                 //适配Android7以上的path转uri，该方法得到的uri为content类型的
                 return ZixieFileProvider.getZixieFileProvider(context, picture);
             } else {

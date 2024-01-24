@@ -24,6 +24,7 @@ import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 class DebugWiFiFragment : BaseFragment() {
@@ -133,7 +134,7 @@ class DebugWiFiFragment : BaseFragment() {
         password: String,
         connectCallback: AAFDataCallback<Boolean>? = null,
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
             val networkCallback = object : ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)

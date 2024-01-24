@@ -18,7 +18,6 @@ package com.google.zxing.camera;
 
 import android.os.IBinder;
 import android.util.Log;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -53,9 +52,7 @@ final class FlashlightManager {
   private FlashlightManager() {
   }
 
-  /**
-   * �����������ƿ���
-   */
+
   //FIXME
   static void enableFlashlight() {
     setFlashlight(false);

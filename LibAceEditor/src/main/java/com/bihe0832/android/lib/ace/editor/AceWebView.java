@@ -170,7 +170,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
         setHTMLSupport(this.getSettings());
         resetCacheType(this.getSettings());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN) {
             configureActionMode();
         }
         super.setWebChromeClient(mWebChromeClient);
@@ -337,7 +337,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
 
     @Override
     public ActionMode startActionMode(ActionMode.Callback callback) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN) {
             return null;
         }
         return super.startActionMode(callback);
@@ -347,7 +347,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
 
     @Override
     public ActionMode startActionMode(ActionMode.Callback callback, int type) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN) {
             return null;
         }
         return super.startActionMode(callback, type);
@@ -737,7 +737,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             // Need to proper load the ace editor in version lower than KitKat
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.KITKAT) {
                 try {
                     Thread.sleep(350L);
                 } catch (InterruptedException e) {

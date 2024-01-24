@@ -442,7 +442,7 @@ object WifiManagerWrapper {
             if (it.type == ConnectivityManager.TYPE_WIFI) {
                 return
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
                     val intent = Intent(Settings.Panel.ACTION_WIFI)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     mContext?.startActivity(intent)

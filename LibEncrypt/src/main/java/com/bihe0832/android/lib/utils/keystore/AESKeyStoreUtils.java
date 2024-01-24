@@ -8,6 +8,7 @@ import android.security.keystore.KeyProperties;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.encrypt.AESEncryptResult;
 import com.bihe0832.android.lib.utils.encrypt.AESUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.time.DateUtil;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -65,7 +66,7 @@ public class AESKeyStoreUtils {
             Date start = new Date(todayStart);
             Date end = new Date(todayStart + DateUtil.MILLISECOND_OF_YEAR * 999);
             // 生成加密参数，从Android6.0（API23）开始有所不同
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.M) {
                 // 根据密钥别名生成加密参数，提供加密和解密操作
                 spec = new KeyGenParameterSpec.Builder(keyAlias,
                         KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)

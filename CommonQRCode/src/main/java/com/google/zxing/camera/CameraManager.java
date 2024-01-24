@@ -21,10 +21,8 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Handler;
 import android.view.SurfaceHolder;
-
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.IOException;
 import java.util.List;
@@ -36,18 +34,12 @@ import java.util.List;
  */
 public final class CameraManager {
 
-    private static final String TAG = CameraManager.class.getSimpleName();
-
     private static final int MIN_FRAME_WIDTH = 240;
     private static final int MIN_FRAME_HEIGHT = 240;
     private static final int MAX_FRAME_WIDTH = 480;
     private static final int MAX_FRAME_HEIGHT = 360;
 
     private static CameraManager cameraManager;
-
-    static final int SDK_INT = BuildUtils.INSTANCE.getSDK_INT(); // Later we can use Build.VERSION.SDK_INT
-
-
 
     private final Context context;
     private final CameraConfigurationManager configManager;
@@ -123,12 +115,6 @@ public final class CameraManager {
             }
             configManager.setDesiredCameraParameters(camera);
 
-            //FIXME
-            //     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            //�Ƿ�ʹ��ǰ��
-//      if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
-//        FlashlightManager.enableFlashlight();
-//      }
             FlashlightManager.enableFlashlight();
         }
     }

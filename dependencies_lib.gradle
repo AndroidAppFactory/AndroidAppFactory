@@ -84,7 +84,7 @@ ext.libmoduleInfo = [
                 "version"            : "6.7.15",
                 "artifactId"         : "lib-encrypt",
                 "apidependenciesList": [
-                        "LibLog", "LibCommonUtils"
+                        "LibLog", "LibCommonUtils","LibOS"
                 ]
         ],
         "LibChannel"                : [

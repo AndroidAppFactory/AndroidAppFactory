@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import com.bihe0832.android.common.crop.R;
 import com.bihe0832.android.common.crop.callback.OverlayViewChangeListener;
 import com.bihe0832.android.lib.media.image.RectUtils;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -263,7 +264,7 @@ public class OverlayView extends View {
     }
 
     protected void init() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.JELLY_BEAN_MR2) {
             setLayerType(LAYER_TYPE_SOFTWARE, null);
         }
     }

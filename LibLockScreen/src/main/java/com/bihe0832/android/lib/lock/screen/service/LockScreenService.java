@@ -82,7 +82,7 @@ public abstract class LockScreenService extends Service {
 
     private void initForegroundNotify() {
         String channelId = NOTICE_CHANNEL_ID;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O) {
             NotifyManager.INSTANCE.createNotificationChannel(this, NOTICE_CHANNEL_NAME, channelId);
         }
         //如果API大于18，需要弹出一个可见通知

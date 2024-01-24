@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.audio.AudioTools
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.lib.audio.player.AudioItem
 import com.bihe0832.lib.audio.player.AudioPlayListener
 import java.util.concurrent.ConcurrentHashMap
@@ -30,7 +31,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
     private val mAudioInfoMap = ConcurrentHashMap<Int, AudioItem>()
 
     private val mSoundPool by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //设置描述音频流信息的属性
             val abs = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
             SoundPool.Builder().setMaxStreams(1).setAudioAttributes(abs).build()

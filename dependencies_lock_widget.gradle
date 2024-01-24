@@ -5,15 +5,15 @@ ext.widgetmoduleInfo = [
         "version"            : "6.8.5",
         "artifactId"         : "lib-wrapper-screen",
         "apidependenciesList": [
-            "LibWidget"
+                "LibWidget", "LibLockScreen"
         ]
     ],
     "LibWidget"       : [
         "version"            : "6.8.5",
         "artifactId"         : "lib-widget",
         "apidependenciesList": [
-            "LibLockScreen",
-            project.androidsupport.worker
+                "LibLog", "LibConfig", "LibOS", "LibDialog",
+                project.androidsupport.worker
         ]
     ],
     "LibLockScreen"   : [
