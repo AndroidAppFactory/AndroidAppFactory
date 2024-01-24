@@ -25,7 +25,6 @@ import com.bihe0832.android.lib.utils.os.BuildUtils;
 public abstract class LockScreenService extends Service {
 
     public static final String TAG = "LockScreenService";
-    public static final String SERVICE_NAME_KEY = "com.bihe0832.android.common.lock.screen.service";
 
     public static final int NOTICE_ID = 99999;
     public static final String NOTICE_CHANNEL_NAME = "正在运行中";
@@ -49,7 +48,6 @@ public abstract class LockScreenService extends Service {
 
     private void init() {
         ZLog.d(LockScreenService.TAG, "onCreate被调用，启动前台service");
-        Config.writeConfig(LockScreenService.SERVICE_NAME_KEY, getClass().getName());
         initForegroundNotify();
         initReceiver();
     }

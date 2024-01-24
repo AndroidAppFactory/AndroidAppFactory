@@ -11,6 +11,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.widget.BaseWidgetProvider;
 import com.bihe0832.android.lib.widget.WidgetUpdateManager;
 
@@ -49,7 +50,7 @@ public abstract class BaseWidgetWorker extends Worker {
 
         //设置pendingIntent
         PendingIntent pendingIntent;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+        if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.S) {
             pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         } else {
             pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);

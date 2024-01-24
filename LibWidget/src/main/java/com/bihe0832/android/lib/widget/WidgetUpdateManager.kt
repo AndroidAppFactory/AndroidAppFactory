@@ -14,7 +14,6 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bihe0832.android.lib.config.Config
-import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.widget.tools.WidgetTools
@@ -34,9 +33,11 @@ object WidgetUpdateManager {
     const val TAG = "WidgetUpdateManager"
 
     private const val WIDGET_WORK_NAME = "WidgetUpdaterWorkaround"
+    private const val WIDGET_AUTO_UPDATE_KEY = "WidgetAutoUpdateManager"
+    const val WIDGET_AUTO_START_SERVICE = "WidgetAutoStartService"
+
     private var mlastUpdateAllTime = 0L
-    const val WIDGET_HOST_ID = 0x100
-    const val ADD_WIDGET = 1
+
 
     fun initModuleWithOtherProcess(context: Context) {
         // provide custom configuration
@@ -70,18 +71,18 @@ object WidgetUpdateManager {
     }
 
     private fun addToAutoUpdateList(clazzName: String) {
-        Config.readConfig(TAG, "").let {
+        Config.readConfig(WIDGET_AUTO_UPDATE_KEY, "").let {
             if (!it.contains(clazzName)) {
-                Config.writeConfig(TAG, "$clazzName $it")
+                Config.writeConfig(WIDGET_AUTO_UPDATE_KEY, "$clazzName $it")
             }
         }
     }
 
     private fun removeFromAutoUpdateList(clazzName: String) {
-        Config.readConfig(TAG, "").let {
+        Config.readConfig(WIDGET_AUTO_UPDATE_KEY, "").let {
             if (it.contains(clazzName)) {
                 it.replace("$clazzName ", "").let { result ->
-                    Config.writeConfig(TAG, result)
+                    Config.writeConfig(WIDGET_AUTO_UPDATE_KEY, result)
                     if (TextUtils.isEmpty(result)) {
                         WorkManager.getInstance().cancelUniqueWork(WIDGET_WORK_NAME)
                     }
@@ -90,11 +91,11 @@ object WidgetUpdateManager {
         }
     }
 
-    // 通过widget 唤起锁屏的前台服务
-    private fun startLockScreen(context: Context) {
+    // 通过widget 唤起前台服务
+    private fun startServiceByWidget(context: Context) {
         ZLog.d(TAG, "startLockScreen by worker")
-        Config.readConfig(LockScreenService.SERVICE_NAME_KEY, "").let {
-            if (TextUtils.isEmpty("")) {
+        Config.readConfig(WIDGET_AUTO_START_SERVICE, "").let {
+            if (!TextUtils.isEmpty(it)) {
                 ZLog.d(TAG, "startLockScreen by worker : $it")
                 val intent = Intent()
                 intent.setComponent(ComponentName(context.packageName, it))
@@ -144,8 +145,8 @@ object WidgetUpdateManager {
         override fun doWork(): Result {
             ZLog.d(TAG, "do update all work")
             try {
-                startLockScreen(applicationContext)
-                Config.readConfig(TAG, "").split(" ").distinct().forEach {
+                startServiceByWidget(applicationContext)
+                Config.readConfig(WIDGET_AUTO_UPDATE_KEY, "").split(" ").distinct().forEach {
                     if (!TextUtils.isEmpty(it)) {
                         updateByName(it)
                     }
@@ -174,7 +175,7 @@ object WidgetUpdateManager {
             updateAllWidgets(context, clazz)
         } else {
             WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(clazz))
-            startLockScreen(context)
+            startServiceByWidget(context)
         }
     }
 
