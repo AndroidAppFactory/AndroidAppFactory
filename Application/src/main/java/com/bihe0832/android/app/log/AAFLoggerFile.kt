@@ -15,6 +15,11 @@ import com.bihe0832.android.framework.log.LoggerFile
 object AAFLoggerFile {
 
     const val MODULE_UPDATE = "udpate"
+    const val MODULE_SERVER = "server"
+
+    fun logServer(msg: String) {
+        logFile(MODULE_SERVER, msg)
+    }
 
     fun logUpdate(msg: String) {
         logFile(MODULE_UPDATE, msg)
