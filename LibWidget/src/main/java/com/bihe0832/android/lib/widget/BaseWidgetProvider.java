@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker;
 
@@ -32,12 +31,15 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        ZLog.d(WidgetUpdateManager.TAG, "onReceive start:" + getClass().getName());
+        ZLog.d(WidgetUpdateManager.TAG, "onReceive start:" + this);
+        ZLog.d(WidgetUpdateManager.TAG, "onReceive start:" + intent.getAction());
         if (TextUtils.equals(intent.getAction(), REFRESH_ACTION)) {
             boolean updateAll = intent.getBooleanExtra(REFRESH_INTENT_KEY_UPDATE_ALL, true);
             //执行一次任务
-            WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(), updateAll);
-        } else if (TextUtils.equals(intent.getAction(), REFRESH_ACTION_APPWIDGET_UPDATE) || TextUtils.equals(intent.getAction(), REFRESH_ACTION_SCREEN_ON)) {
+            WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(),
+                    updateAll);
+        } else if (TextUtils.equals(intent.getAction(), REFRESH_ACTION_APPWIDGET_UPDATE) || TextUtils.equals(
+                intent.getAction(), REFRESH_ACTION_SCREEN_ON)) {
             WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(), false);
         }
         ZLog.d(WidgetUpdateManager.TAG, "onReceive end:" + getClass().getName());

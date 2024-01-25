@@ -3,11 +3,9 @@ package com.bihe0832.android.base.debug.lock;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import com.bihe0832.android.lib.config.Config;
 import com.bihe0832.android.lib.lock.screen.permission.LockScreenPermission;
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.widget.WidgetUpdateManager;
 
 /**
  * @author zixie code@bihe0832.com
@@ -19,7 +17,6 @@ public class DebugLockService extends LockScreenService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Config.writeConfig(WidgetUpdateManager.INSTANCE.WIDGET_AUTO_START_SERVICE, getClass().getName());
         ZLog.d(LockScreenService.TAG, "onCreate被调用，启动前台service");
     }
 

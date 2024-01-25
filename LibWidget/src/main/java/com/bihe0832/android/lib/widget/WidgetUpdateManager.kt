@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.widget
 
+import android.app.ActivityManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -34,10 +35,8 @@ object WidgetUpdateManager {
 
     private const val WIDGET_WORK_NAME = "WidgetUpdaterWorkaround"
     private const val WIDGET_AUTO_UPDATE_KEY = "WidgetAutoUpdateManager"
-    const val WIDGET_AUTO_START_SERVICE = "WidgetAutoStartService"
 
     private var mlastUpdateAllTime = 0L
-
 
     fun initModuleWithOtherProcess(context: Context) {
         // provide custom configuration
@@ -92,20 +91,34 @@ object WidgetUpdateManager {
     }
 
     // 通过widget 唤起前台服务
-    private fun startServiceByWidget(context: Context) {
-        ZLog.d(TAG, "startLockScreen by worker")
-        Config.readConfig(WIDGET_AUTO_START_SERVICE, "").let {
-            if (!TextUtils.isEmpty(it)) {
-                ZLog.d(TAG, "startLockScreen by worker : $it")
+    fun startService(context: Context, clazzName: String) {
+        ZLog.d(TAG, "startServiceByWidget by worker: $clazzName")
+        if (!TextUtils.isEmpty(clazzName)) {
+            if (!isServiceRunning(context, clazzName)) {
                 val intent = Intent()
-                intent.setComponent(ComponentName(context.packageName, it))
+                intent.setComponent(ComponentName(context.packageName, clazzName))
                 if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
                     context!!.startForegroundService(intent)
                 } else {
                     context!!.startService(intent)
                 }
+            } else {
+                ZLog.d(TAG, "startServiceByWidget by worker: service is running $clazzName")
             }
         }
+    }
+
+    fun isServiceRunning(context: Context, serviceClass: String): Boolean {
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
+        if (activityManager != null) {
+            val runningServices = activityManager.getRunningServices(Int.MAX_VALUE)
+            for (serviceInfo in runningServices) {
+                if (serviceClass == serviceInfo.service.className) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     private fun updateAllWidgets(context: Context, sourceClass: Class<out BaseWidgetWorker>?) {
@@ -145,7 +158,6 @@ object WidgetUpdateManager {
         override fun doWork(): Result {
             ZLog.d(TAG, "do update all work")
             try {
-                startServiceByWidget(applicationContext)
                 Config.readConfig(WIDGET_AUTO_UPDATE_KEY, "").split(" ").distinct().forEach {
                     if (!TextUtils.isEmpty(it)) {
                         updateByName(it)
@@ -175,7 +187,6 @@ object WidgetUpdateManager {
             updateAllWidgets(context, clazz)
         } else {
             WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(clazz))
-            startServiceByWidget(context)
         }
     }
 
