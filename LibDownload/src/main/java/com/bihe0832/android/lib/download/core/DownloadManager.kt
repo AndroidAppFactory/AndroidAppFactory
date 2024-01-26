@@ -81,7 +81,7 @@ object DownloadManager {
     }
 
     fun onDestroy() {
-        pauseAllTask(false)
+        pauseAllTask(startByUser = false, pauseMaxDownload = true)
         DownloadNotify.destroy()
     }
 
@@ -473,20 +473,42 @@ object DownloadManager {
         }
     }
 
-    fun pauseAllTask(startByUser: Boolean) {
+    fun pauseAllTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
         ZLog.d(TAG, "pauseAllTask")
-        pauseWaitingTask(startByUser)
-        pauseDownloadingTask(startByUser)
+        pauseWaitingTask(startByUser, pauseMaxDownload)
+        pauseDownloadingTask(startByUser, pauseMaxDownload)
     }
 
-    fun pauseDownloadingTask(startByUser: Boolean) {
+    fun pauseDownloadingTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
         ZLog.d(TAG, "pauseDownloadingTask")
-        getDownloadingTask().forEach { pauseTask(it.downloadID, startByUser, false) }
+        getDownloadingTask().forEach {
+            if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
+                if (pauseMaxDownload) {
+                    pauseTask(it.downloadID, startByUser, false)
+                } else {
+                    ZLog.e(TAG, "skip pause maxPriority download:$it")
+                    ZLog.e(TAG, "skip pause maxPriority download:$it")
+                }
+            } else {
+                pauseTask(it.downloadID, startByUser, false)
+            }
+        }
     }
 
-    fun pauseWaitingTask(startByUser: Boolean) {
+    fun pauseWaitingTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
         ZLog.d(TAG, "pauseWaitingTask")
-        getWaitingTask().forEach { pauseTask(it.downloadID, startByUser, false) }
+        getWaitingTask().forEach {
+            if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
+                if (pauseMaxDownload) {
+                    pauseTask(it.downloadID, startByUser, false)
+                } else {
+                    ZLog.e(TAG, "skip pause maxPriority download:$it")
+                    ZLog.e(TAG, "skip pause maxPriority download:$it")
+                }
+            } else {
+                pauseTask(it.downloadID, startByUser, false)
+            }
+        }
     }
 
     fun resumeAllTask(pauseOnMobile: Boolean) {

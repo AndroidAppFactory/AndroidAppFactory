@@ -491,31 +491,32 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             "https://imtt.dd.qq.com/16891/apk/6670A2D979F70D880519412D6E951162.apk?fsname=com.qqgame.hlddz_7.012.001_217.apk&csr=1bbd"
         val URL_FILE = "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a"
         val URL_CONFIG = "https://cdn.bihe0832.com/app/update/get_apk.json"
-        var listener = object : SimpleDownloadListener() {
-            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                ZLog.d(LOG_TAG, "testDownloadList onFail: $errorCode $msg $item")
-            }
-
-            override fun onComplete(filePath: String, item: DownloadItem): String {
-                ZLog.d(LOG_TAG, "testDownload onComplete : $filePath")
-                return filePath
-            }
-
-            override fun onProgress(item: DownloadItem) {
-            }
-
-            override fun onWait(item: DownloadItem) {
-                ZLog.d(LOG_TAG, "testDownloadList onWait: $item")
-            }
-        }
+        var listener = null
+//        var listener = object : SimpleDownloadListener() {
+//            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+//                ZLog.d(LOG_TAG, "testDownloadList onFail: $errorCode $msg $item")
+//            }
+//
+//            override fun onComplete(filePath: String, item: DownloadItem): String {
+//                ZLog.d(LOG_TAG, "testDownload onComplete : $filePath")
+//                return filePath
+//            }
+//
+//            override fun onProgress(item: DownloadItem) {
+//            }
+//
+//            override fun onWait(item: DownloadItem) {
+//                ZLog.d(LOG_TAG, "testDownloadList onWait: $item")
+//            }
+//        }
         mutableListOf<String>(
 //                URL_YYB_DDZ, URL_YYB_QQ, URL_YYB_TTS, URL_YYB_GG, URL_FILE, URL_CONFIG
             URL_YYB_WZ,
-            URL_YYB_DDZ,
-            URL_YYB_TTS,
-            URL_YYB_CHANNEL,
-            URL_FILE,
-            URL_CONFIG,
+//            URL_YYB_DDZ,
+//            URL_YYB_TTS,
+//            URL_YYB_CHANNEL,
+//            URL_FILE,
+//            URL_CONFIG,
         ).let {
             for (currentNum in 0 until it.size) {
                 ThreadManager.getInstance().start({
@@ -546,7 +547,8 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                     ) {
                         DownloadFile.download(requireContext(), it.get(currentNum), listener)
                     } else {
-                        DownloadAPK.download(requireContext(), it.get(currentNum), "", "")
+                        DownloadFile.download(requireContext(), it.get(currentNum), listener)
+//                        DownloadAPK.download(requireContext(), it.get(currentNum), "", "")
                     }
                 }, currentNum)
             }

@@ -1,15 +1,11 @@
 package com.bihe0832.android.lib.download.wrapper;
 
 import android.content.Context;
-
 import com.bihe0832.android.lib.download.DownloadItem;
-import com.bihe0832.android.lib.download.DownloadListener;
 import com.bihe0832.android.lib.download.core.DownloadManager;
 import com.bihe0832.android.lib.download.core.list.DownloadTaskList;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -103,22 +99,22 @@ public class DownloadUtils {
     /**
      * 暂停所有下载任务
      */
-    public static final void pauseAll() {
-        DownloadManager.INSTANCE.pauseAllTask(true);
+    public static final void pauseAll(boolean pauseMaxPriorityDownload) {
+        DownloadManager.INSTANCE.pauseAllTask(true, pauseMaxPriorityDownload);
     }
 
     /**
      * 暂停所有下载中的任务
      */
-    public static final void pauseDownloading() {
-        DownloadManager.INSTANCE.pauseDownloadingTask(true);
+    public static final void pauseDownloading(boolean pauseMaxPriorityDownload) {
+        DownloadManager.INSTANCE.pauseDownloadingTask(true, pauseMaxPriorityDownload);
     }
 
     /**
      * 暂停所有在等待的下载任务
      */
-    public static final void pauseWaiting() {
-        DownloadManager.INSTANCE.pauseWaitingTask(true);
+    public static final void pauseWaiting(boolean pauseMaxPriorityDownload) {
+        DownloadManager.INSTANCE.pauseWaitingTask(true, pauseMaxPriorityDownload);
     }
 
     /**

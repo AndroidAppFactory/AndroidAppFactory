@@ -38,12 +38,12 @@ object DownloadTools {
     private var mDownloadKeyListenerList = ConcurrentHashMap<Long, KeyListener>()
 
     private class KeyListener {
-        private var nameListener = ConcurrentHashMap<String, CopyOnWriteArrayList<DownloadListener>>()
+        private var nameListener = ConcurrentHashMap<String, CopyOnWriteArrayList<DownloadListener?>>()
         private val mListener = object : DownloadListener {
             override fun onWait(item: DownloadItem) {
                 nameListener.values.forEach { list ->
                     list.forEach {
-                        it.onWait(item)
+                        it?.onWait(item)
                     }
                 }
 
@@ -55,7 +55,7 @@ object DownloadTools {
             override fun onStart(item: DownloadItem) {
                 nameListener.values.forEach { list ->
                     list.forEach {
-                        it.onStart(item)
+                        it?.onStart(item)
                     }
                 }
 
@@ -67,7 +67,7 @@ object DownloadTools {
             override fun onProgress(item: DownloadItem) {
                 nameListener.values.forEach { list ->
                     list.forEach {
-                        it.onProgress(item)
+                        it?.onProgress(item)
                     }
                 }
 
@@ -79,7 +79,7 @@ object DownloadTools {
             override fun onPause(item: DownloadItem) {
                 nameListener.values.forEach { list ->
                     list.forEach {
-                        it.onPause(item)
+                        it?.onPause(item)
                     }
                 }
 
@@ -92,7 +92,7 @@ object DownloadTools {
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                 nameListener.values.forEach { list ->
                     list.forEach {
-                        it.onFail(errorCode, msg, item)
+                        it?.onFail(errorCode, msg, item)
                     }
                 }
                 nameListener.clear()
@@ -106,7 +106,9 @@ object DownloadTools {
             fun notifySuccess(downloadPath: String, item: DownloadItem): String {
                 var path = downloadPath
                 nameListener[UNIQUE_KEY]?.forEach {
-                    it.onComplete(path, item)
+                    it?.let {
+                        path = it.onComplete(path, item)
+                    }
                 }
                 nameListener.remove(UNIQUE_KEY)
                 val iterator = nameListener.entries.iterator()
@@ -116,7 +118,9 @@ object DownloadTools {
                     val listenerList = next.value
                     if (filePath == path) {
                         listenerList.forEach {
-                            it.onComplete(path, item)
+                            it?.let {
+                                path = it.onComplete(path, item)
+                            }
                         }
                     } else {
                         try {
@@ -124,11 +128,13 @@ object DownloadTools {
                                 if (result) {
                                     path = filePath
                                     listenerList.forEach {
-                                        it.onComplete(path, item)
+                                        it?.let {
+                                            path = it.onComplete(path, item)
+                                        }
                                     }
                                 } else {
                                     listenerList.forEach {
-                                        it.onFail(
+                                        it?.onFail(
                                             DownloadErrorCode.ERR_FILE_RENAME_FAILED,
                                             "download success and rename failed",
                                             item,
@@ -139,7 +145,7 @@ object DownloadTools {
                         } catch (e: Exception) {
                             e.printStackTrace()
                             listenerList.forEach {
-                                it.onFail(
+                                it?.onFail(
                                     DownloadErrorCode.ERR_FILE_RENAME_FAILED,
                                     "download success and rename throw Exception:$e",
                                     item,
@@ -164,7 +170,7 @@ object DownloadTools {
             override fun onDelete(item: DownloadItem) {
                 nameListener.values.forEach { list ->
                     list.forEach {
-                        it.onDelete(item)
+                        it?.onDelete(item)
                     }
                 }
                 nameListener.clear()
@@ -179,18 +185,18 @@ object DownloadTools {
             return mListener
         }
 
-        private fun getKeyDownloadListenerList(finalPath: String): CopyOnWriteArrayList<DownloadListener> {
+        private fun getKeyDownloadListenerList(finalPath: String): CopyOnWriteArrayList<DownloadListener?> {
             var file = finalPath
             if (TextUtils.isEmpty(file)) {
                 file = UNIQUE_KEY
             }
-            var list = nameListener[file] ?: CopyOnWriteArrayList<DownloadListener>()
+            var list = nameListener[file] ?: CopyOnWriteArrayList<DownloadListener?>()
             nameListener[file] = list
             return list
         }
 
         fun addNameListener(downloadListener: DownloadListener?) {
-            getKeyDownloadListenerList("").add(downloadListener)
+            addNameListener("", downloadListener)
         }
 
         fun addNameListener(finalPath: String, downloadListener: DownloadListener?) {

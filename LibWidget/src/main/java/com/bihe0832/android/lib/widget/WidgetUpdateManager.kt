@@ -94,16 +94,15 @@ object WidgetUpdateManager {
     fun startService(context: Context, clazzName: String) {
         ZLog.d(TAG, "startServiceByWidget by worker: $clazzName")
         if (!TextUtils.isEmpty(clazzName)) {
-            if (!isServiceRunning(context, clazzName)) {
-                val intent = Intent()
-                intent.setComponent(ComponentName(context.packageName, clazzName))
-                if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
-                    context!!.startForegroundService(intent)
-                } else {
-                    context!!.startService(intent)
-                }
+            if (isServiceRunning(context, clazzName)) {
+                ZLog.e(TAG, "startServiceByWidget by worker: service is running $clazzName")
+            }
+            val intent = Intent()
+            intent.setComponent(ComponentName(context.packageName, clazzName))
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
+                context!!.startForegroundService(intent)
             } else {
-                ZLog.d(TAG, "startServiceByWidget by worker: service is running $clazzName")
+                context!!.startService(intent)
             }
         }
     }
