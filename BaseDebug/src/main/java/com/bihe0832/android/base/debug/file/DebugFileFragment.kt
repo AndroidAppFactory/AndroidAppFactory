@@ -390,7 +390,11 @@ class DebugFileFragment : DebugEnvFragment() {
                 add(MathUtils.getRandNumByLimit(FileUtils.SPACE_MB.toInt(), FileUtils.SPACE_GB.toInt()))
             }
         }.forEach {
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong())}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),0)}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),1)}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),2)}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),3)}")
+
         }
     }
 }

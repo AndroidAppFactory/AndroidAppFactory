@@ -199,8 +199,12 @@ object FileUtils {
     }
 
     fun getFileLength(sizeInBytes: Long): String {
-        val nf: NumberFormat = DecimalFormat("#.##").apply {
-            maximumFractionDigits = 2
+        return getFileLength(sizeInBytes, 2)
+    }
+
+    fun getFileLength(sizeInBytes: Long, maximumFractionDigitsValues: Int): String {
+        val nf: NumberFormat = DecimalFormat("#.#").apply {
+            maximumFractionDigits = maximumFractionDigitsValues
         }
 
         return try {
