@@ -195,7 +195,7 @@ class DebugFileFragment : DebugEnvFragment() {
     private fun testMD5() {
         File("/sdcard/screen.png").let {
             ZLog.d(LOG_TAG, MD5.getFileMD5(it))
-            ZLog.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
+            ZLog.d(LOG_TAG, MD5.getFilePartMD5(it, 0, it.length()))
         }
 
         ThreadManager.getInstance().start {
@@ -211,7 +211,7 @@ class DebugFileFragment : DebugEnvFragment() {
                 ZLog.d(LOG_TAG, "===============start==================")
                 start = System.currentTimeMillis() / 1000
                 for (i in 0..5) {
-                    ZLog.d(LOG_TAG, MD5.getFileMD5(it, 0, it.length()))
+                    ZLog.d(LOG_TAG, MD5.getFilePartMD5(it, 0, it.length()))
                 }
                 ZLog.d(LOG_TAG, "total time : " + (System.currentTimeMillis() / 1000 - start))
                 ZLog.d(LOG_TAG, "===============end==================")

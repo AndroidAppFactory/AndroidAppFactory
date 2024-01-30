@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.utils.encrypt;
 
 import android.text.TextUtils;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,15 +19,6 @@ public class MessageDigestUtils {
 
     private static final int BUFFER_SIZE = 2048;
 
-    public static String getDigestData(String string, String digestType) {
-        try {
-            return getDigestData(string.getBytes("UTF-8"), digestType);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
     public static String getDigestData(byte[] bytes, String digestType) {
         try {
             byte[] hash = MessageDigest.getInstance(digestType).digest(bytes);
@@ -46,36 +36,61 @@ public class MessageDigestUtils {
         return "";
     }
 
+    public static String getDigestData(String string, String digestType) {
+        try {
+            return getDigestData(string.getBytes("UTF-8"), digestType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     public static String getFileDigestData(String fileName, String digestType) {
         if (TextUtils.isEmpty(fileName)) {
             return "";
         }
-        return getFileDigestData(new File(fileName), digestType);
+        File sourceFile = new File(fileName);
+        if (null != sourceFile && sourceFile.exists() && sourceFile.length() > 0) {
+            return getFilePartDigestData(sourceFile, digestType, 0, sourceFile.length());
+        }
+        return "";
     }
 
     public static String getFileDigestData(File sourceFile, String digestType) {
         String ret = "";
-        if (null != sourceFile && sourceFile.exists() && sourceFile.length() > 0) {
-            return getFileDigestData(sourceFile, digestType, 0, sourceFile.length());
+        BufferedInputStream is = null;
+        try {
+            is = new BufferedInputStream(new FileInputStream(sourceFile));
+            ret = getInputStreamDigestData(is, digestType);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
         return ret;
     }
 
-    public static String getFileDigestData(String fileName, String digestType, long start, long end) {
+    public static String getFilePartDigestData(String fileName, String digestType, long start, long end) {
         if (TextUtils.isEmpty(fileName)) {
             return "";
         }
-        return getFileDigestData(new File(fileName), digestType, start, end);
+        return getFilePartDigestData(new File(fileName), digestType, start, end);
     }
 
-    public static String getFileDigestData(File sourceFile, String digestType, long start, long end) {
+    public static String getFilePartDigestData(File sourceFile, String digestType, long start, long end) {
         String ret = "";
         if (null != sourceFile && sourceFile.exists() && sourceFile.length() > 0) {
             BufferedInputStream is = null;
             try {
                 is = new BufferedInputStream(new FileInputStream(sourceFile));
-                ret = getInputStreamDigestData(is, digestType, start, end);
+                ret = getInputStreamPartDigestData(is, digestType, start, end);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } finally {
@@ -91,28 +106,26 @@ public class MessageDigestUtils {
         return ret;
     }
 
-    public static String getInputStreamDigestData(InputStream bis, String digestType, long start, long end) {
+    public static String getInputStreamPartDigestData(InputStream bis, String digestType, long start, long end) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance(digestType);
-            if (start < 1) {
-                start = 1;
+            MessageDigest md = MessageDigest.getInstance(digestType);
+            if (start < 0) {
+                start = 0;
             }
-            bis.skip(start - 1);
             if (end < start) {
                 return "";
             }
-
-            int total = (int) (end - start + 1);
+            long length = end - start;
             byte[] buffer = new byte[BUFFER_SIZE];
-            for (int i = 0; i < total / BUFFER_SIZE; i++) {
-                bis.read(buffer, 0, BUFFER_SIZE);
-                md5.update(buffer, 0, BUFFER_SIZE);
+            int read = 0;
+            long totalRead = 0;
+            bis.skip(start);
+            while ((read = bis.read(buffer, 0, (int) Math.min(buffer.length, length - totalRead))) != -1
+                    && totalRead < length) {
+                md.update(buffer, 0, read);
+                totalRead += read;
             }
-            if (total % BUFFER_SIZE > 0) {
-                bis.read(buffer, 0, total % BUFFER_SIZE);
-                md5.update(buffer, 0, total % BUFFER_SIZE);
-            }
-            byte[] md5Bytes = md5.digest();
+            byte[] md5Bytes = md.digest();
             return HexUtils.bytes2HexStr(md5Bytes);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -125,20 +138,13 @@ public class MessageDigestUtils {
 
     public static String getInputStreamDigestData(InputStream is, String digestType) {
         try {
-            MessageDigest md5 = MessageDigest.getInstance(digestType);
-
+            MessageDigest md = MessageDigest.getInstance(digestType);
             byte[] buffer = new byte[BUFFER_SIZE];
-            int len;
-            int readSize = 0;
-            while ((len = is.read(buffer, 0, buffer.length)) != -1) {
-                if (len > 0) {
-                    md5.update(buffer, 0, len);
-                    readSize += len;
-                }
+            int length;
+            while ((length = is.read(buffer)) != -1) {
+                md.update(buffer, 0, length);
             }
-            if (readSize == 0)
-                return "";
-            byte[] md5Bytes = md5.digest();
+            byte[] md5Bytes = md.digest();
             return HexUtils.bytes2HexStr(md5Bytes);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

@@ -31,15 +31,15 @@ public class MD5 {
         return MessageDigestUtils.getInputStreamDigestData(is, MESSAGE_DIGEST_TYPE_MD5);
     }
 
-    public static String getFileMD5(String fileName, long start, long end) {
-        return MessageDigestUtils.getFileDigestData(fileName, MESSAGE_DIGEST_TYPE_MD5, start, end);
+    public static String getFilePartMD5(String fileName, long start, long end) {
+        return MessageDigestUtils.getFilePartDigestData(fileName, MESSAGE_DIGEST_TYPE_MD5, start, end);
     }
 
-    public static String getFileMD5(File sourceFile, long start, long end) {
-        return MessageDigestUtils.getFileDigestData(sourceFile, MESSAGE_DIGEST_TYPE_MD5, start, end);
+    public static String getFilePartMD5(File sourceFile, long start, long end) {
+        return MessageDigestUtils.getFilePartDigestData(sourceFile, MESSAGE_DIGEST_TYPE_MD5, start, end);
     }
 
     public static String getInputStreamMd5(InputStream bis, long start, long end) {
-        return MessageDigestUtils.getInputStreamDigestData(bis, MESSAGE_DIGEST_TYPE_MD5, start, end);
+        return MessageDigestUtils.getInputStreamPartDigestData(bis, MESSAGE_DIGEST_TYPE_MD5, start, end);
     }
 }
