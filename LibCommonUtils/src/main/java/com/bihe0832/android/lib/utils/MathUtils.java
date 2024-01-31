@@ -59,38 +59,44 @@ public class MathUtils {
     }
 
     public static float getFormatPercent(int fenzi, int fenmu, int scale) {
-        return getFormatPercent((double) fenzi, (double) fenmu, scale);
+        BigDecimal fenziBig = new BigDecimal(fenzi);
+        BigDecimal fenmuBig = new BigDecimal(fenmu);
+        return getFormatPercent(fenziBig, fenmuBig, scale);
     }
 
     public static float getFormatPercent(long fenzi, long fenmu, int scale) {
-        return getFormatPercent((double) fenzi, (double) fenmu, scale);
+        BigDecimal fenziBig = new BigDecimal(fenzi);
+        BigDecimal fenmuBig = new BigDecimal(fenmu);
+        return getFormatPercent(fenziBig, fenmuBig, scale);
     }
 
     public static float getFormatPercent(double fenzi, double fenmu, int scale) {
+        BigDecimal fenziBig = new BigDecimal(fenzi);
+        BigDecimal fenmuBig = new BigDecimal(fenmu);
+        return getFormatPercent(fenziBig, fenmuBig, scale);
+    }
+
+    public static float getFormatPercent(BigDecimal fenziBig, BigDecimal fenmuBig, int scale) {
         float percent = 0f;
-        if (fenmu > 0) {
-            try {
-                percent = new BigDecimal(fenzi).divide(new BigDecimal(fenmu), scale, BigDecimal.ROUND_HALF_UP).floatValue();
-            } catch (Exception e) {
-                e.printStackTrace();
-                try {
-                    percent = (float) (fenzi / fenmu);
-                } catch (Exception ee) {
-                    ee.printStackTrace();
-                }
-            }
+        try {
+            percent = fenziBig.divide(fenmuBig, scale, BigDecimal.ROUND_DOWN)
+                    .floatValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            percent = (float) (fenziBig.doubleValue() / fenmuBig.doubleValue());
         }
         if (percent < 0) {
             percent = 0f;
         }
+        if (percent >= 1 && fenmuBig.compareTo(fenziBig) == 1) {
+            return (float) (percent - Math.pow(0.1, scale));
+        }
         return percent;
     }
 
-    public static String getFormatPercentDesc(double fenzi, double fenmu, int scale) {
-        return NumberFormat.getPercentInstance().format(getFormatPercent(fenzi, fenmu, scale));
-    }
-
-    public static String getFormatPercentDesc(float percent) {
-        return NumberFormat.getPercentInstance().format(percent);
+    public static String getFormatPercentDesc(float percent, int scale) {
+        NumberFormat format = NumberFormat.getPercentInstance();
+        format.setMaximumFractionDigits(scale);
+        return format.format(percent);
     }
 }

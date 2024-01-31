@@ -160,19 +160,33 @@ class DebugConvertFragment : DebugEnvFragment() {
     }
 
     fun testPercent() {
-        testPercentItem(MathUtils.getFormatPercent(1, 1, 4))
-        testPercentItem(MathUtils.getFormatPercent(3, 1, 4))
-        testPercentItem(MathUtils.getFormatPercent(3, 0, 4))
-        testPercentItem(MathUtils.getFormatPercent(0, 3, 4))
-        testPercentItem(MathUtils.getFormatPercent(1L, 3L, 4))
-        testPercentItem(MathUtils.getFormatPercent(212121212121212121, 32121212121212121, 4))
-        testPercentItem(MathUtils.getFormatPercent(4344343.43434, 4344343.43434, 4))
-        testPercentItem(MathUtils.getFormatPercent(43443434343434343.43434, 434434343434343.43434, 4))
+        mutableListOf(0, 1, 2, 3, 4, 5).forEach { data ->
+//            testPercentItem(data, MathUtils.getFormatPercent(1, 1, data))
+//            testPercentItem(data, MathUtils.getFormatPercent(3, 1, data))
+//            testPercentItem(data, MathUtils.getFormatPercent(3, 0, data))
+//            testPercentItem(data, MathUtils.getFormatPercent(0, 3, data))
+//            testPercentItem(data, MathUtils.getFormatPercent(1L, 3L, data))
+            testPercentItem(data, MathUtils.getFormatPercent(212121212121212121, 32121212121212121, data))
+            testPercentItem(data, MathUtils.getFormatPercent(4344341.43434, 4344343.43434, data))
+            testPercentItem(data, MathUtils.getFormatPercent(43443434343434340, 43443434343434342, data))
+        }
+        mutableListOf(0.0f, 1.0f, 0.02f, 0.003f, 0.0004f, 0.00005f, 0.00006f, 1.0f).forEach { data ->
+            ZLog.d(LOG_TAG, "testPercent 0: $data " + MathUtils.getFormatPercentDesc(data, 0))
+            ZLog.d(LOG_TAG, "testPercent 1: $data " + MathUtils.getFormatPercentDesc(data, 1))
+            ZLog.d(LOG_TAG, "testPercent 2: $data " + MathUtils.getFormatPercentDesc(data, 2))
+            ZLog.d(LOG_TAG, "testPercent 3: $data " + MathUtils.getFormatPercentDesc(data, 3))
+            ZLog.d(LOG_TAG, "testPercent 4: $data " + MathUtils.getFormatPercentDesc(data, 4))
+            ZLog.d(LOG_TAG, "testPercent 5: $data " + MathUtils.getFormatPercentDesc(data, 5))
+            ZLog.d(LOG_TAG, "testPercent 6: $data " + MathUtils.getFormatPercentDesc(data, 6))
+        }
     }
 
-    private fun testPercentItem(data: Float) {
+    private fun testPercentItem(scale: Int, data: Float) {
         data.let {
-            ZLog.d(LOG_TAG, "testPercent " + data.toString() + " " + MathUtils.getFormatPercentDesc(data))
+            ZLog.d(
+                LOG_TAG,
+                "testPercent ($scale):" + data.toString() + " " + MathUtils.getFormatPercentDesc(data, scale),
+            )
         }
     }
 

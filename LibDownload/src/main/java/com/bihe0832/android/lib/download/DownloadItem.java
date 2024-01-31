@@ -150,7 +150,7 @@ public class DownloadItem implements Serializable {
 
     // 下载进度
     public String getProcessDesc() {
-        return MathUtils.getFormatPercentDesc(getProcess());
+        return MathUtils.getFormatPercentDesc(getProcess(),2);
     }
 
     //下载进度

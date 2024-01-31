@@ -24,7 +24,7 @@ data class BatteryStatus(
     }
 
     fun getBatteryPercentDesc(): String {
-        return MathUtils.getFormatPercentDesc(getBatteryPercent())
+        return MathUtils.getFormatPercentDesc(getBatteryPercent(),2)
     }
 
     fun getBatteryPercent(): Float {
