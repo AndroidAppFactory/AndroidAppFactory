@@ -272,9 +272,11 @@ object DownloadManager {
     }
 
     private fun checkBeforeDownloadFile(info: DownloadItem): String {
+        ZLog.d(TAG, "本地文件是否完整检查开始: $info ")
         if (FileUtils.checkFileExist(info.filePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
             return info.filePath
         }
+        ZLog.d(TAG, "本地文件是否完整检查结束：$info ")
         return ""
     }
 
