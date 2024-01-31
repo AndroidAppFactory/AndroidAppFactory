@@ -274,7 +274,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     if (System.currentTimeMillis() - lastUpdateTime > DOWNLOAD_SVAE_TIMER || hasDownloadLength - lastUpdateLength > DOWNLOAD_SVAE_SIZE) {
                         ZLog.w(
                             TAG,
-                            "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储： 距离上次存储时间：${System.currentTimeMillis() - lastUpdateTime}, 新增${hasDownloadLength - lastUpdateLength} 已下载长度：$hasDownloadLength 上次存储下载长度：$lastUpdateLength",
+                            "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储： 距离上次存储时间：${System.currentTimeMillis() - lastUpdateTime}, 新增：${hasDownloadLength - lastUpdateLength} 已下载长度：$hasDownloadLength 上次存储下载长度：$lastUpdateLength",
                         )
                         DownloadInfoDBManager.updateDownloadFinished(
                             mDownloadPartInfo.downloadPartID,
