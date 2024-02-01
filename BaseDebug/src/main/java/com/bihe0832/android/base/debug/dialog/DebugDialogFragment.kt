@@ -18,18 +18,18 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
+import com.bihe0832.android.lib.ui.dialog.CommonDialog
+import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
+import com.bihe0832.android.lib.ui.dialog.blockdialog.PriorityBlockDialogManager
+import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.impl.BottomDialog
 import com.bihe0832.android.lib.ui.dialog.impl.BottomListDialog
-import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.impl.DownloadProgressDialog
 import com.bihe0832.android.lib.ui.dialog.impl.ImageDialog
 import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
-import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.impl.RadioDialog
-import com.bihe0832.android.lib.ui.dialog.blockdialog.DependenceBlockDialogManager
-import com.bihe0832.android.lib.ui.dialog.blockdialog.PriorityBlockDialogManager
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
-import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
@@ -83,10 +83,33 @@ class DebugDialogFragment : DebugEnvFragment() {
             add(DebugItemData("带输入弹框", View.OnClickListener { tesInput(activity!!) }))
             add(DebugItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(DebugItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
+            add(DebugItemData("唯一弹框", View.OnClickListener { testAlertTools() }))
             add(changeEnv("模拟环境切换并自动重启", CHANGE_ENV_EXIST_TYPE_RESTART))
             add(changeEnv("模拟环境切换并自动退出", CHANGE_ENV_EXIST_TYPE_EXIST))
             add(changeEnv("模拟环境切换并立即生效", CHANGE_ENV_EXIST_TYPE_NOTHING))
         }
+    }
+
+    private fun testAlertTools() {
+        DialogUtils.showAlertDialog(
+            activity!!,
+            "Alert 测试",
+            "Alert 测试",
+            false,
+            object : OnDialogListener {
+                override fun onPositiveClick() {
+                    ThreadManager.getInstance().start({
+                        DialogUtils.showAlertDialog(activity!!, "Alert 测试")
+                    }, 2)
+                }
+
+                override fun onNegativeClick() {
+                }
+
+                override fun onCancel() {
+                }
+            },
+        )
     }
 
     private fun testVURLImage() {
