@@ -18,7 +18,7 @@ ext {
     zixieVersionName = ext.moduleVersionName
     zixieModuleInfo = ext.moduleInfo
     zixieModules = new ArrayList<>()
-    zixieIsDebug = true
+    zixieIsDebug = false
     zixieIsPublish = ext.isPublish
     zixieIncludeALL = includeALLDependOnDevelopModule
     zixieIncludeList = new ArrayList()
