@@ -19,7 +19,7 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  *
  */
-ext.developModule = "Application"
+ext.developModule = "LibFFmpegMobile"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -33,6 +33,11 @@ ext.includeALLDependOnDevelopModule = false
  * false 表示以 Android Library 模式运行
  */
 ext.pubModuleIsApplication = false
+
+/**
+ * 当前是否为发布模式，发布模式下为了提升速度，仅能包含一个模块
+ */
+ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用

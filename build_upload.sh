@@ -75,6 +75,10 @@ dst="ext.developModule = \\\"${libName}\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
+src=" *ext.isPublish *="
+dst="ext.isPublish = true"
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
 src=" *ext.includeALLDependOnDevelopModule *= *"
 dst="ext.includeALLDependOnDevelopModule = false"
@@ -115,6 +119,11 @@ dst="ext.developModule = \\\"Application\\\""
 cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
 mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 checkResult $libName
+
+src=" *ext.isPublish *="
+dst="ext.isPublish = false"
+cat $localPath/dependencies.gradle | sed "/$src/s/.*/$dst/" >$localPath/bin/dependencies.gradle
+mv -f $localPath/bin/dependencies.gradle $localPath/dependencies.gradle
 
 git status
 for index in "${!configFile[@]}"
