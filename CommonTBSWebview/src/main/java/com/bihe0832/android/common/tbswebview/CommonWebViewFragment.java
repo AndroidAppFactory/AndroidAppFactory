@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.bihe0832.android.common.webview.tbsimpl.TBSWebViewFragment;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.constant.Constants;
-import com.bihe0832.android.lib.ace.editor.AceConstants;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.URLUtils;
 
@@ -18,8 +17,8 @@ public class CommonWebViewFragment extends TBSWebViewFragment {
     public static final String VERSION_NAME = "1.0.0";
     public static final int VERSION_CODE = 1;
 
-    private static final String URL_PARAM_VERSION_NAME = AceConstants.URL_USER_AGENT_VERSION + "Name";
-    private static final String URL_PARAM_VERSION_CODE = AceConstants.URL_USER_AGENT_VERSION + "Code";
+    private static final String URL_PARAM_VERSION_NAME = Constants.URL_USER_AGENT_VERSION + "Name";
+    private static final String URL_PARAM_VERSION_CODE = Constants.URL_USER_AGENT_VERSION + "Code";
     private static final String URL_PARAM_CLIENT_TIME = "ClientTime";
     private static final String URL_PARAM_PLATFORM = "OSVersion";
 
@@ -54,10 +53,10 @@ public class CommonWebViewFragment extends TBSWebViewFragment {
 
     @Override
     protected String getUserAgentString() {
-        return " " + AceConstants.URL_USER_AGENT_VERSION
+        return " " + Constants.URL_USER_AGENT_VERSION
                 + "/" + ZixieContext.INSTANCE.getVersionName()
                 + "/" + ZixieContext.INSTANCE.getVersionCode() + "/" + Constants.SYSTEM_CONSTANT + "/" +
-                AceConstants.URL_USER_AGENT_JS_BRIDGE_VERSION + "/" + VERSION_NAME + "/" + VERSION_CODE;
+                Constants.URL_USER_AGENT_JS_BRIDGE_VERSION + "/" + VERSION_NAME + "/" + VERSION_CODE;
     }
 
     @Override

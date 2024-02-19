@@ -230,7 +230,7 @@ fun Activity.showPhotoChooser() {
                         dialog.dismiss()
                     }
                 },
-                com.bihe0832.android.common.permission.AAFPermissionManager.selectPhotoPermission,
+                AAFPermissionManager.selectPhotoPermission,
             )
         }
     }

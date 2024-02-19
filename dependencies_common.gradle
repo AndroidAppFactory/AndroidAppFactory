@@ -6,18 +6,25 @@ ext.commonmoduleInfo = [
                 "version"            : "6.8.15",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
-                        "Framework", "CommonPraise", "CommonList", "CommonAceEditor", "CommonWebview", "CommonPermission",
-                        "LibScreenWrapper"
+                        "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper"
                 ]
         ],
         "CommonWrapper"         : [
                 "version"            : "6.8.15",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
-                        "CommonFeedback", "CommonSplash", "CommonPhotos", "CommonWebview", "CommonNetwork",
-                        "CommonPraise", "CommonAbout", "CommonList", "CommonAceEditor", "CommonSvga", "CommonBottomTab",
-                        "CommonNavigationDrawer", "CommonShare", "CommonMessage", "CommonQRCode", "CommonAccessibility",
-                        "CommonPermission", "CommonPanel", "CommonMedia", "CommonCrop"
+                        "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
+                        "CommonPanel", "CommonMedia", "CommonCrop"
+                ]
+        ],
+        "CommonWrapperMin"      : [
+                "version"            : "6.8.15",
+                "artifactId"         : "common-wrapper-min",
+                "apidependenciesList": [
+                        "CommonFeedback", "CommonSplash", "CommonWebview", "CommonNetwork",
+                        "CommonPraise", "CommonAbout", "CommonList", "CommonBottomTab",
+                        "CommonNavigationDrawer", "CommonShare", "CommonMessage", "CommonQRCode",
+                        "CommonPermission", "CommonPhotos",
                 ]
         ],
         "Framework"             : [
@@ -27,7 +34,7 @@ ext.commonmoduleInfo = [
                         project.androidsupport.annotation,
                         project.androidsupport.lifecycle_livedata,
                         project.androidsupport.multidex,
-                        "LibWrapper", "Router", "RouterAnnotation",
+                        "LibWrapper", "Router", "RouterAnnotation", "LibTheme",
                 ],
                 "specialdependenciesList": [
                         "kapt": [project.glide.compiler]
@@ -79,6 +86,7 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-svga",
                 "apidependenciesList": [
                         "Framework",
+                        "LibSvga",
                         project.svga_dependency
 
                 ]
@@ -87,7 +95,7 @@ ext.commonmoduleInfo = [
                 "version"            : "6.8.14",
                 "artifactId"         : "common-ace-editor",
                 "apidependenciesList": [
-                        "Framework"
+                        "Framework", "LibAceEditor"
                 ]
         ],
         "CommonAbout"           : [
@@ -152,20 +160,21 @@ ext.commonmoduleInfo = [
         "CommonPanel"           : [
                 "version"            : "6.8.14",
                 "artifactId"         : "common-panel",
-                "apidependenciesList": ["Framework"]
+                "apidependenciesList": ["Framework", "LibPanel"
+                ]
         ],
         "CommonMedia"           : [
                 "version"            : "6.8.14",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
-                        "Framework", project.metadata.drewnoakes, "LibFFmpegMobile"
+                        "Framework", "LibFFmpegMobile"
                 ]
         ],
         "CommonCrop"            : [
                 "version"            : "6.8.14",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
-                        "Framework", "CommonBottomTab", "CommonMedia"
+                        "Framework", "CommonBottomTab", "LibImageMetadata", "LibCrop"
                 ]
         ]
 ]

@@ -13,9 +13,8 @@ ext.libmoduleInfo = [
                         "LibDataRepository", "LibCoroutines", "LibCommonUIUtils", "LibFragmentation_swipeback",
                         "LibFlycoTabLayout", "LibQRCode", "LibAdapter", "LibRefresh", "LibToast", "LibDialog",
                         "LibNotification", "LibBottomTab", "LibRecycleviewExt", "LibTouchRegion", "LibViewExt",
-                        "LibPermission", "LibMedia", "LibImmersive", "LibFloatview", "LibTextView", "LibAceEditor",
-                        "LibViewPager", "LibSvga", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibTheme",
-                        "LibColor", "LibPanel", "LibCrop"
+                        "LibPermission", "LibMedia", "LibImmersive", "LibFloatview", "LibTextView",
+                        "LibViewPager", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibColor", "LibFileSelect"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -527,7 +526,12 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
 
                 ]
+        ],
+        "LibImageMetadata"          : [
+                "version"            : "6.8.0",
+                "artifactId"         : "lib-image-meta",
+                "apidependenciesList": [
+                        project.metadata.drewnoakes, "LibCommonUtils", "LibLog", "LibFile", "LibMedia",
+                ]
         ]
-
-
 ]

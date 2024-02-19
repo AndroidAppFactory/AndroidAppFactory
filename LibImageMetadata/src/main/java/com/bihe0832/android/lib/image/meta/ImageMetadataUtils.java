@@ -1,9 +1,9 @@
-package com.bihe0832.android.common.image;
+package com.bihe0832.android.lib.image.meta;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
-import com.bihe0832.android.framework.ZixieContext;
+import androidx.exifinterface.media.ExifInterface;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.BitmapUtil;
@@ -166,18 +166,16 @@ public class ImageMetadataUtils {
         return rotation;
     }
 
-    public static void rotateImageToV(String sourceImage) {
+    public static void rotateImageToV(Context context, String sourceImage) {
         try {
             File file = new File(sourceImage);
             // 读取图片的 Exif 信息
             BitmapFactory.Options options = BitmapUtil.getLocalBitmapOptions(sourceImage);
             Bitmap bitmap = BitmapUtil.getLocalBitmap(sourceImage, options.outHeight, options.outWidth);
-            String result = BitmapUtil.saveBitmap(ZixieContext.INSTANCE.getApplicationContext(), bitmap);
+            String result = BitmapUtil.saveBitmap(context, bitmap);
             FileUtils.INSTANCE.copyFile(new File(result), file);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }

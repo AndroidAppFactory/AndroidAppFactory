@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import com.bihe0832.android.common.crop.model.ExifInfo;
 import com.bihe0832.android.common.crop.util.EglUtils;
-import com.bihe0832.android.common.image.ImageMetadataUtils;
+import com.bihe0832.android.lib.image.meta.ImageMetadataUtils;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
