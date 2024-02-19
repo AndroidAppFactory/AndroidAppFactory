@@ -4,58 +4,58 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application>
-        <activity
-            android:name="com.bihe0832.android.common.webview.WebPageActivity"
-            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:process="@string/com_bihe0832_web_process_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme"
-            android:windowSoftInputMode="adjustPan|stateHidden">
+        <!--        <activity-->
+        <!--            android:name="com.bihe0832.android.common.webview.WebPageActivity"-->
+        <!--            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"-->
+        <!--            android:exported="true"-->
+        <!--            android:hardwareAccelerated="true"-->
+        <!--            android:process="@string/com_bihe0832_web_process_name"-->
+        <!--            android:screenOrientation="portrait"-->
+        <!--            android:theme="@style/AAF.ActivityTheme"-->
+        <!--            android:windowSoftInputMode="adjustPan|stateHidden">-->
 
-            <!-- 两个 intent-filter 二选一，一个只打开指定域名，一个直接支持设为默认浏览器 -->
+        <!-- 两个 intent-filter 二选一，一个只打开指定域名，一个直接支持设为默认浏览器 -->
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
 
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
+        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
 
-                <data
-                    android:host="*.ptlogin2.qq.com"
-                    android:scheme="https" />
+        <!--                <data-->
+        <!--                    android:host="*.ptlogin2.qq.com"-->
+        <!--                    android:scheme="https" />-->
 
-            </intent-filter>
+        <!--            </intent-filter>-->
 
 
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.VIEW" />-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
 
-            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
-            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
 
-            <!--                <data-->
-            <!--                        android:host="*"-->
-            <!--                        android:scheme="http" />-->
-            <!--                <data-->
-            <!--                        android:host="*"-->
-            <!--                        android:scheme="https" />-->
-            <!--            </intent-filter>-->
+        <!--                <data-->
+        <!--                        android:host="*"-->
+        <!--                        android:scheme="http" />-->
+        <!--                <data-->
+        <!--                        android:host="*"-->
+        <!--                        android:scheme="https" />-->
+        <!--            </intent-filter>-->
 
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.VIEW" />-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
 
-            <!--                <category android:name="android.intent.category.DEFAULT" />-->
-            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--                <category android:name="android.intent.category.BROWSABLE" />-->
 
-            <!--                <data android:scheme="http" />-->
-            <!--                <data android:scheme="https" />-->
-            <!--                <data android:scheme="about" />-->
-            <!--                <data android:scheme="javascript" />-->
+        <!--                <data android:scheme="http" />-->
+        <!--                <data android:scheme="https" />-->
+        <!--                <data android:scheme="about" />-->
+        <!--                <data android:scheme="javascript" />-->
 
-            <!--            </intent-filter>-->
+        <!--            </intent-filter>-->
 
-        </activity>
+        <!--        </activity>-->
     </application>
 </manifest>
