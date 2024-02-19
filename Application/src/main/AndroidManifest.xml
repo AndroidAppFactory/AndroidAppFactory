@@ -32,7 +32,13 @@
 
         <activity
                 android:name="com.bihe0832.android.common.tbswebview.WebPageActivity"
-                android:exported="true">
+                android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:exported="true"
+                android:hardwareAccelerated="true"
+                android:process="@string/com_bihe0832_web_process_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AAF.ActivityTheme"
+                android:windowSoftInputMode="adjustPan|stateHidden">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -50,7 +56,13 @@
 
         <activity
                 android:name="com.bihe0832.android.common.webview.WebPageActivity"
-                android:exported="true">
+                android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+                android:exported="true"
+                android:hardwareAccelerated="true"
+                android:process="@string/com_bihe0832_web_process_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AAF.ActivityTheme"
+                android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
