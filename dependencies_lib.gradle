@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.8.14",
+                "version"            : "6.9.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -521,14 +521,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFFmpegMobile"           : [
-                "version"            : "6.8.0",
+                "version"            : "6.9.0",
                 "artifactId"         : "lib-ffmpeg-mobile-aaf",
                 "apidependenciesList": [
 
                 ]
         ],
         "LibImageMetadata"          : [
-                "version"            : "6.8.0",
+                "version"            : "6.9.0",
                 "artifactId"         : "lib-image-meta",
                 "apidependenciesList": [
                         project.metadata.drewnoakes, "LibCommonUtils", "LibLog", "LibFile", "LibMedia",

@@ -3,20 +3,20 @@ def project = ext
 
 ext.tbsmoduleInfo = [
     "CommonTBSWrapper"   : [
-        "version"            : "6.8.15",
+        "version"            : "6.9.0",
         "artifactId"         : "common-wrapper-tbs",
         "apidependenciesList": [
             "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
         ]
     ],
     "CommonTBSFeedback": [
-        "version"                : "6.8.15",
+        "version"                : "6.9.0",
         "artifactId"             : "common-feedback-tbs",
         "apidependenciesList"    : ["CommonTBSWebview", "CommonFeedback"],
         "specialdependenciesList": ["kapt": ["RouterCompiler"]]
     ],
     "CommonTBSWebview" : [
-        "version"                : "6.8.15",
+        "version"                : "6.9.0",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
