@@ -10,7 +10,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.9.0",
+                "version"            : "6.9.1",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -164,7 +164,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonMedia"           : [
-                "version"            : "6.9.0",
+                "version"            : "6.9.1",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
                         "Framework", "LibFFmpegMobile"
