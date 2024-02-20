@@ -71,9 +71,13 @@ public class FFmpegTools {
                 String mergeFileFolder = FileUtils.INSTANCE.getFolderPathWithSeparator(
                         AAFFileWrapper.INSTANCE.getTempFolder("aaf_video_merge"));
                 for (String file : images) {
-                    String newFile = mergeFileFolder + MD5.getFileMD5(file) + ".jpg";
-                    BitmapUtil.saveBitmapWithPath(BitmapUtil.getLocalBitmap(file, width, height), newFile);
-                    realImageList.add(newFile);
+                    if (FileUtils.INSTANCE.checkFileExist(file)) {
+                        String newFile = mergeFileFolder + MD5.getFileMD5(file) + ".jpg";
+                        BitmapUtil.saveBitmapWithPath(BitmapUtil.getLocalBitmap(file, width, height), newFile);
+                        realImageList.add(newFile);
+                    } else {
+                        ZLog.e("!!! merge video, File not exist:" + file);
+                    }
                 }
 
                 String videoPath = AAFFileWrapper.INSTANCE.getCacheVideoPath(".mp4");
