@@ -72,7 +72,7 @@ public abstract class BaseConnection {
         HttpURLConnection connection = getURLConnection();
         for (Map.Entry<String, String> entry : requestProperty.entrySet()) {
             if (TextUtils.isEmpty(entry.getKey()) || TextUtils.isEmpty(entry.getValue())) {
-                ZLog.d(LOG_TAG, "requestProperty is bad");
+                ZLog.d(LOG_TAG, "requestProperty is bad:" + entry.getKey());
             } else {
                 connection.setRequestProperty(entry.getKey(), entry.getValue());
             }
@@ -92,7 +92,7 @@ public abstract class BaseConnection {
         }
         for (Map.Entry<String, String> entry : cookieInfo.entrySet()) {
             if (TextUtils.isEmpty(entry.getKey()) || TextUtils.isEmpty(entry.getValue())) {
-                ZLog.d(LOG_TAG, "cookie inf is bad");
+                ZLog.d(LOG_TAG, "cookie inf is bad:" + entry.getKey());
             } else {
                 cookieString =
                         cookieString + entry.getKey() + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + entry.getValue() + ";";

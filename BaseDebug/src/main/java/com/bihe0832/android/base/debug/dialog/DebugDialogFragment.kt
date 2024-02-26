@@ -80,7 +80,7 @@ class DebugDialogFragment : DebugEnvFragment() {
             add(DebugItemData("URL图片竖弹框", View.OnClickListener { testVURLImage() }))
             add(DebugItemData("URL图片横弹框", View.OnClickListener { testHURLImage() }))
             add(DebugItemData("本地资源竖弹框", View.OnClickListener { testImage(activity) }))
-            add(DebugItemData("带输入弹框", View.OnClickListener { tesInput(activity!!) }))
+            add(DebugItemData("带输入弹框", View.OnClickListener { testInput(activity!!) }))
             add(DebugItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
             add(DebugItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
             add(DebugItemData("唯一弹框", View.OnClickListener { testAlertTools() }))
@@ -349,7 +349,7 @@ class DebugDialogFragment : DebugEnvFragment() {
         }
     }
 
-    fun tesInput(activity: Activity) {
+    fun testInput(activity: Activity) {
         DialogUtils.showInputDialog(
             activity,
             "测试标题",
