@@ -105,6 +105,8 @@ class DebugFileFragment : DebugEnvFragment() {
             add(DebugItemData("数据压缩解压", View.OnClickListener { testZlib() }))
             add(DebugItemData("文件内容读写", View.OnClickListener { testReadAndWrite() }))
             add(DebugItemData("读取共享文件内容", View.OnClickListener { share() }))
+            add(DebugItemData("创建指定大小文件", View.OnClickListener { createFile() }))
+            add(DebugItemData("修改文件指定位置内容", View.OnClickListener { modifyFile() }))
         }
     }
 
@@ -390,11 +392,39 @@ class DebugFileFragment : DebugEnvFragment() {
                 add(MathUtils.getRandNumByLimit(FileUtils.SPACE_MB.toInt(), FileUtils.SPACE_GB.toInt()))
             }
         }.forEach {
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),0)}")
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),1)}")
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),2)}")
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(),3)}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 0)}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 1)}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 2)}")
+            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 3)}")
 
         }
+    }
+
+    fun createFile() {
+        val filePath = AAFFileWrapper.getFileTempFolder() + "Temp.file"
+        FileUtils.deleteFile(filePath)
+        var fileLength = 100L
+        ZLog.d("AAF", "File create:${FileUtils.createFile(filePath, fileLength)}")
+        fileLength = 200L
+        ZLog.d("AAF", "File create:${FileUtils.createFile(filePath, fileLength)}")
+    }
+
+    fun modifyFile() {
+        val file = File(AAFFileWrapper.getFileTempFolder() + "Temp.file")
+        FileUtils.deleteFile(file.absolutePath)
+        var fileLength = 100L
+        var datas = "zixie".encodeToByteArray()
+
+        ZLog.d("AAF", "File create:${FileUtils.createFile(file.absolutePath, fileLength)}")
+        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 50L, datas)}")
+        ZLog.d("AAF", "File writeDataToFile:${file.length()}")
+        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 50L, 5))}")
+        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 98L, datas)}")
+        ZLog.d("AAF", "File writeDataToFile:${file.length()}")
+        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 98L, 5))}")
+        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 200L, datas)}")
+        ZLog.d("AAF", "File writeDataToFile:${file.length()}")
+        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 200L, 5))}")
+
     }
 }

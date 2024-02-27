@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.file.action.FileAction
 import com.bihe0832.android.lib.file.content.FileContent
 import com.bihe0832.android.lib.file.content.FileContentPattern
 import com.bihe0832.android.lib.file.content.FileName
+import com.bihe0832.android.lib.file.content.RandomAccessFileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.utils.encrypt.HexUtils
 import com.bihe0832.android.lib.utils.encrypt.MD5
@@ -253,6 +254,10 @@ object FileUtils {
         return FileAction.sendFile(context, actionTitle, filePath, fileType)
     }
 
+    fun createFile(filePath: String, fileSize: Long): Boolean {
+        return RandomAccessFileUtils.createFile(filePath, fileSize)
+    }
+
     fun deleteOldAsync(dir: File, duration: Long) {
         FileAction.deleteOldAsync(dir, duration)
     }
@@ -365,12 +370,20 @@ object FileUtils {
         return FileContent.getFileContent(filePath, encoding, isGzip)
     }
 
+    fun readDataFromFile(filePath: String?, offset: Long, length: Int): ByteArray {
+        return RandomAccessFileUtils.readDataFromFile(filePath, offset, length)
+    }
+
     fun getFileBytes(filePath: String?): ByteArray? {
         return FileContent.getFileBytes(filePath)
     }
 
     fun isBinaryFile(filePath: String): Boolean {
         return FileContent.isBinaryFile(filePath)
+    }
+
+    fun writeDataToFile(filePath: String, offset: Long, bytes: ByteArray): Boolean {
+        return RandomAccessFileUtils.writeDataToFile(filePath, offset, bytes)
     }
 
     fun writeToFile(filePath: String, data: String, append: Boolean) {
