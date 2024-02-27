@@ -417,14 +417,18 @@ class DebugFileFragment : DebugEnvFragment() {
 
         ZLog.d("AAF", "File create:${FileUtils.createFile(file.absolutePath, fileLength)}")
         ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 50L, datas)}")
-        ZLog.d("AAF", "File writeDataToFile:${file.length()}")
-        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 50L, 5))}")
+        readFile(file)
         ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 98L, datas)}")
-        ZLog.d("AAF", "File writeDataToFile:${file.length()}")
-        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 98L, 5))}")
+        readFile(file)
         ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 200L, datas)}")
-        ZLog.d("AAF", "File writeDataToFile:${file.length()}")
+        readFile(file)
+    }
+
+    fun readFile(file: File) {
+        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 50L, 5))}")
+        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 98L, 5))}")
         ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 200L, 5))}")
+        ZLog.d("AAF", "File readDataFromFile:${file.length()}")
 
     }
 }
