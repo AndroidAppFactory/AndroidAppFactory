@@ -12,6 +12,7 @@ import com.bihe0832.android.common.media.MediaTools
 import com.bihe0832.android.common.video.FFmpegTools
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.framework.file.AAFFileWrapper.getTempImagePath
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
@@ -36,7 +37,8 @@ class DebugMediaFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("拍照及相册调试", DebugPhotosFragment::class.java))
             add(DebugItemData("文字转图片1（有图标，有标题）", View.OnClickListener { textToImage() }))
             add(DebugItemData("文字转图片2（无图标，无标题）", View.OnClickListener { textToImage2() }))
-            add(DebugItemData("音频转视频", View.OnClickListener { audioToVideo() }))
+            add(DebugItemData("音频转视频1", View.OnClickListener { audioToVideo(1) }))
+            add(DebugItemData("音频转视频2", View.OnClickListener { audioToVideo(2) }))
             add(DebugItemData("音频图片转视频", View.OnClickListener { audioImageToVideo() }))
             add(DebugItemData("图片无损存图库", View.OnClickListener { saveImage() }))
             add(DebugItemData("视频图片存图库", View.OnClickListener { save() }))
@@ -103,14 +105,35 @@ class DebugMediaFragment : DebugEnvFragment() {
         }
     }
 
-    private fun audioToVideo() {
+    private fun audioToVideo(type: Int) {
         AAFFileWrapper.clear()
         FileUtils.copyAssetsFileToPath(context, audio, audioPath)
-        MediaTools.convertAudioWithTextToVideo(
-            context,
-            audioPath,
-            "这是一个测试" + DateUtil.getCurrentDateEN(),
-            object : AAFDataCallback<String>() {
+        if (type == 1) {
+            MediaTools.convertAudioWithTextToVideo(
+                context,
+                audioPath,
+                "这是一个测试" + DateUtil.getCurrentDateEN(),
+                object : AAFDataCallback<String>() {
+                    override fun onSuccess(result: String?) {
+                        ZixieContext.showToast("转换成功，已经添加到相册")
+                        if (!TextUtils.isEmpty(result)) {
+                            videoPath = result
+                            save()
+                        }
+                    }
+                },
+            )
+        } else {
+
+            val width = 720
+            val height = 1280
+            val imageData =
+                MediaTools.createImageFromText(context, "这是一个测试" + DateUtil.getCurrentDateEN(), width, height)
+            val imagePath = BitmapUtil.saveBitmapWithPath(
+                imageData,
+                getTempImagePath(".jpg")
+            )
+            MediaTools.convertAudioWithImageToVideo(imagePath, audioPath, object : AAFDataCallback<String>() {
                 override fun onSuccess(result: String?) {
                     ZixieContext.showToast("转换成功，已经添加到相册")
                     if (!TextUtils.isEmpty(result)) {
@@ -118,8 +141,8 @@ class DebugMediaFragment : DebugEnvFragment() {
                         save()
                     }
                 }
-            },
-        )
+            })
+        }
     }
 
     private fun audioImageToVideo() {

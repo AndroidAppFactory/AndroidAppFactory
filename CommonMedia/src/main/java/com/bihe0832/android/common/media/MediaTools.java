@@ -8,6 +8,7 @@ import com.bihe0832.android.framework.file.AAFFileWrapper;
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback;
 import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.bihe0832.android.lib.media.image.TextToImageUtils;
+import java.util.List;
 
 /**
  * Summary
@@ -39,7 +40,26 @@ public class MediaTools {
                     imageData,
                     AAFFileWrapper.INSTANCE.getTempImagePath(".jpg"));
 
-            FFmpegTools.convertAudioWithImageToVideo(width, height, audioPath, imagePath, callback);
+            FFmpegTools.convertAudioWithImageCoverToVideo(imagePath, audioPath, callback);
+        } catch (Exception e) {
+            callback.onError(-1, "convertAudioWithTextToVideo exception:" + e);
+        }
+    }
+
+    public static void convertAudioWithImageToVideo(String imagePath, String audioPath,
+            AAFDataCallback<String> callback) {
+        try {
+            FFmpegTools.convertAudioWithImageCoverToVideo(imagePath, audioPath, callback);
+        } catch (Exception e) {
+            callback.onError(-1, "convertAudioWithTextToVideo exception:" + e);
+        }
+    }
+
+    public static void convertAudioWithImagesToVideo(int width, int height, String audioPath, long coverDuration,
+            List<String> images,
+            AAFDataCallback<String> callback) {
+        try {
+            FFmpegTools.convertAudioWithImageToVideo(width, height, audioPath, coverDuration, images, callback);
         } catch (Exception e) {
             callback.onError(-1, "convertAudioWithTextToVideo exception:" + e);
         }

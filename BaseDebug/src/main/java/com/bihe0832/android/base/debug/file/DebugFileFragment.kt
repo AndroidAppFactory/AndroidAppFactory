@@ -355,12 +355,14 @@ class DebugFileFragment : DebugEnvFragment() {
         }
     }
 
-    private fun testSegment(byteArray: ByteArray, size: Int): ByteArray? {
+    private fun testSegment(dataKey: String, content: ByteArray, size: Int): ByteArray? {
         ZLog.d(LOG_TAG, "=============================")
-        ZLog.d(LOG_TAG, "byteArray 数据长度:${byteArray.size}")
-        val sorce = DataSegmentTools.splitToDataSegmentList(byteArray, size, MD5.MESSAGE_DIGEST_TYPE_MD5)
-        ZLog.d(LOG_TAG, "DataSegment 源数据 MD5:${sorce.firstOrNull()?.signatureValue}")
-        ZLog.d(LOG_TAG, "DataSegment 源数据 数据长度:${sorce.firstOrNull()?.totalLength}")
+        ZLog.d(LOG_TAG, "byteArray 数据长度:${content.size}")
+        val sorce = DataSegmentTools.splitToDataSegmentList(dataKey, content, size)
+        val signatureValue = MD5.getMd5(content)
+        val totalLength = content.size
+        ZLog.d(LOG_TAG, "DataSegment 源数据 MD5:${signatureValue}")
+        ZLog.d(LOG_TAG, "DataSegment 源数据 数据长度:${totalLength}")
         sorce.let {
             ZLog.d(LOG_TAG, "DataSegment 源数据 分片数量:${it.size}")
             ZLog.d(LOG_TAG, "DataSegment 源数据 首片长度:${it.firstOrNull()?.content?.size}")
@@ -385,7 +387,13 @@ class DebugFileFragment : DebugEnvFragment() {
 
         }
         ZLog.d(LOG_TAG, "=============================")
-        return DataSegmentTools.mergeDataSegment(data, sorce.first().totalLength, sorce.first().signatureValue)
+        return DataSegmentTools.mergeDataSegment(
+            dataKey,
+            data,
+            totalLength,
+            MD5.MESSAGE_DIGEST_TYPE_MD5,
+            signatureValue
+        )
     }
 
     private fun testSegment() {
@@ -394,19 +402,22 @@ class DebugFileFragment : DebugEnvFragment() {
             builder.append('a' + (TextFactoryUtils.getRandomString(26)))
         }
         val text = builder.toString()
-        ZLog.d(LOG_TAG, "testSegment 原始数据： " + text)
-        testSegment(text.toByteArray(), 40)?.let {
+        ZLog.d(LOG_TAG, "testSegment 原始数据： $text")
+        testSegment("key1", text.toByteArray(), 40)?.let {
             ZLog.d(LOG_TAG, "testSegment 再次合并后数据： " + String(it))
         }
         val compres = CompressionUtils.compress(text.toByteArray())
         ZLog.d(LOG_TAG, "testSegment CompressionUtils compres 前后： " + compres.size + " : " + text.toByteArray().size)
-        testSegment(compres, 40)?.let {
-            ZLog.d(LOG_TAG, "testSegment CompressionUtils 再次合并后解压数据： " + String(CompressionUtils.uncompress(it)))
+        testSegment("key2", compres, 40)?.let {
+            ZLog.d(
+                LOG_TAG,
+                "testSegment CompressionUtils 再次合并后解压数据： " + String(CompressionUtils.uncompress(it))
+            )
         }
 
         val gizpData = GzipUtils.compress(text)
         ZLog.d(LOG_TAG, "testSegment GzipUtils compres 前后： " + gizpData.size + " : " + text.toByteArray().size)
-        testSegment(gizpData, 40)?.let {
+        testSegment("key3", gizpData, 40)?.let {
             ZLog.d(LOG_TAG, "testSegment GzipUtils 再次合并后解压数据： " + GzipUtils.uncompressToString(it))
         }
     }

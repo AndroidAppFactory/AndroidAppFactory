@@ -49,19 +49,6 @@ public class FFmpegTools {
         return result;
     }
 
-    public static void convertAudioWithImageToVideo(int width, int height, String audioPath, String imagePath,
-            AAFDataCallback<String> callback) {
-        ThreadManager.getInstance().start(() -> {
-            try {
-                ArrayList<String> realImageList = new ArrayList<>();
-                realImageList.add(imagePath);
-                convertAudioWithImageToVideo(width, height, audioPath, 0, realImageList, callback);
-            } catch (Exception e) {
-                callback.onError(-1, "executeFFmpegCommand exception:" + e);
-            }
-        });
-    }
-
     public static void convertAudioWithImageToVideo(int width, int height, String audioPath, long coverDuration,
             List<String> images,
             AAFDataCallback<String> callback) {
@@ -141,6 +128,38 @@ public class FFmpegTools {
                 String command = String.format(
                         "-y %s -i %s -filter_complex \"%s\" -map \"[v]\" -map %d:a -shortest -b:v 2000k -c:v libopenh264 -pix_fmt yuv420p -c:a aac -strict -2 -b:a 192k -movflags +faststart %s",
                         inputArgs, audioPath, filterComplex, realImageList.size(), videoPath);
+                int result = FFmpegTools.executeFFmpegCommand(command);
+                if (result == Config.RETURN_CODE_SUCCESS) {
+                    callback.onSuccess(videoPath);
+                } else {
+                    callback.onError(result, "executeFFmpegCommand failed");
+                }
+            } catch (Exception e) {
+                callback.onError(-1, "executeFFmpegCommand exception:" + e);
+            }
+        });
+    }
+
+    public static void convertAudioWithImageToVideo(int width, int height, String audioPath, String imagePath,
+            AAFDataCallback<String> callback) {
+        try {
+            ArrayList<String> realImageList = new ArrayList<>();
+            realImageList.add(imagePath);
+            convertAudioWithImageToVideo(width, height, audioPath, 0, realImageList, callback);
+        } catch (Exception e) {
+            callback.onError(-1, "executeFFmpegCommand exception:" + e);
+        }
+    }
+
+    public static void convertAudioWithImageCoverToVideo(String imagePath, String audioPath,
+            AAFDataCallback<String> callback) {
+        ThreadManager.getInstance().start(() -> {
+            try {
+
+                String videoPath = AAFFileWrapper.INSTANCE.getCacheVideoPath(".mp4");
+                String command = String.format(
+                        "-y -r 1 -loop 1 -i %s -i %s -c:v libopenh264 -shortest -b:v 2000k -c:v libopenh264 -pix_fmt yuv420p -c:a aac -strict -2 -b:a 192k -movflags +faststart %s",
+                        imagePath, audioPath, videoPath);
                 int result = FFmpegTools.executeFFmpegCommand(command);
                 if (result == Config.RETURN_CODE_SUCCESS) {
                     callback.onSuccess(videoPath);
