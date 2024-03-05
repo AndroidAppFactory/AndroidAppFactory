@@ -20,8 +20,8 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.utils.encrypt.MD5
-import com.bihe0832.android.lib.utils.encrypt.SHA256
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL

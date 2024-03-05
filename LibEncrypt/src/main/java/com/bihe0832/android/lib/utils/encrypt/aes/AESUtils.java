@@ -1,8 +1,9 @@
-package com.bihe0832.android.lib.utils.encrypt;
+package com.bihe0832.android.lib.utils.encrypt.aes;
 
 
 import android.util.Base64;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import java.io.UnsupportedEncodingException;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

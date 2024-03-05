@@ -6,7 +6,7 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.utils.encrypt.SHA256
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.opensource.svgaplayer.*
 import com.opensource.svgaplayer.utils.log.SVGALogger

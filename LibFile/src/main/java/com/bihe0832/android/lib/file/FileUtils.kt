@@ -14,9 +14,9 @@ import com.bihe0832.android.lib.file.content.FileName
 import com.bihe0832.android.lib.file.content.RandomAccessFileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.utils.encrypt.HexUtils
-import com.bihe0832.android.lib.utils.encrypt.MD5
-import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
-import com.bihe0832.android.lib.utils.encrypt.SHA256
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MessageDigestUtils
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import java.io.File
 import java.io.InputStream
 import java.text.DecimalFormat
@@ -81,20 +81,28 @@ object FileUtils {
     fun checkStoragePermissions(context: Context?): Boolean {
         context?.let {
             return PackageManager.PERMISSION_GRANTED ==
-                ContextCompat.checkSelfPermission(
-                    it,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                )
+                    ContextCompat.checkSelfPermission(
+                        it,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    )
         }
         return false
+    }
+
+    fun getDirectoryTotalSpace(filePath: String): Long {
+        return try {
+            val mStatFs = StatFs(filePath)
+            mStatFs.totalBytes
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            0L
+        }
     }
 
     fun getDirectoryAvailableSpace(filePath: String): Long {
         return try {
             val mStatFs = StatFs(filePath)
-            val blockSize = mStatFs.blockSizeLong
-            val availableBlocks = mStatFs.availableBlocksLong
-            (availableBlocks * blockSize)
+            mStatFs.availableBytes
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             0L

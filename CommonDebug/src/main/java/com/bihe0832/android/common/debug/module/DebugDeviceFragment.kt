@@ -17,6 +17,8 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.device.DeviceIDUtils
 import com.bihe0832.android.lib.device.battery.BatteryHelper
+import com.bihe0832.android.lib.device.cpu.CPUHelper
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.network.DtTypeInfo
 import com.bihe0832.android.lib.network.MobileUtil
@@ -107,15 +109,78 @@ class DebugDeviceFragment : DebugEnvFragment() {
             val info: Debug.MemoryInfo = Debug.MemoryInfo()
             Debug.getMemoryInfo(info)
             if (memInfo.isNotEmpty()) {
-                add(getInfoItem("当前应用占用内存（精度低，实时获取）：${Formatter.formatFileSize(context, (info.totalPss * 1024).toLong())}"))
-                add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其中栈内存：${Formatter.formatFileSize(context, (info.dalvikPss * 1024).toLong())}"))
-                add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其中堆内存：${Formatter.formatFileSize(context, (info.nativePss * 1024).toLong())}"))
-                add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;其他内存：${Formatter.formatFileSize(context, (info.otherPss * 1024).toLong())}"))
+                add(
+                    getInfoItem(
+                        "当前应用占用内存（精度低，实时获取）：${
+                            Formatter.formatFileSize(
+                                context,
+                                (info.totalPss * 1024).toLong()
+                            )
+                        }"
+                    )
+                )
+                add(
+                    getInfoItem(
+                        "&nbsp;&nbsp;&nbsp;&nbsp;其中栈内存：${
+                            Formatter.formatFileSize(
+                                context,
+                                (info.dalvikPss * 1024).toLong()
+                            )
+                        }"
+                    )
+                )
+                add(
+                    getInfoItem(
+                        "&nbsp;&nbsp;&nbsp;&nbsp;其中堆内存：${
+                            Formatter.formatFileSize(
+                                context,
+                                (info.nativePss * 1024).toLong()
+                            )
+                        }"
+                    )
+                )
+                add(
+                    getInfoItem(
+                        "&nbsp;&nbsp;&nbsp;&nbsp;其他内存：${
+                            Formatter.formatFileSize(
+                                context,
+                                (info.otherPss * 1024).toLong()
+                            )
+                        }"
+                    )
+                )
             }
 
-            add(getInfoItem("Dalvik 单应用最大内存：${Formatter.formatFileSize(context, Runtime.getRuntime().totalMemory())}"))
-            add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;当前应用栈内存已用量：${Formatter.formatFileSize(context, Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())}"))
-            add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;当前应用栈内存可用量：${Formatter.formatFileSize(context, Runtime.getRuntime().freeMemory())}"))
+            add(
+                getInfoItem(
+                    "Dalvik 单应用最大内存：${
+                        Formatter.formatFileSize(
+                            context,
+                            Runtime.getRuntime().totalMemory()
+                        )
+                    }"
+                )
+            )
+            add(
+                getInfoItem(
+                    "&nbsp;&nbsp;&nbsp;&nbsp;当前应用栈内存已用量：${
+                        Formatter.formatFileSize(
+                            context,
+                            Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
+                        )
+                    }"
+                )
+            )
+            add(
+                getInfoItem(
+                    "&nbsp;&nbsp;&nbsp;&nbsp;当前应用栈内存可用量：${
+                        Formatter.formatFileSize(
+                            context,
+                            Runtime.getRuntime().freeMemory()
+                        )
+                    }"
+                )
+            )
 
             add(DebugTipsData("硬件信息"))
             add(getInfoItem("厂商、型号、品牌：${ManufacturerUtil.MANUFACTURER}, ${ManufacturerUtil.MODEL}, ${ManufacturerUtil.BRAND}"))
@@ -123,10 +188,23 @@ class DebugDeviceFragment : DebugEnvFragment() {
             add(getInfoItem("产品名：${Build.PRODUCT}"))
             add(getInfoItem("主板名：${Build.BOARD}"))
             add(getInfoItem("CPU 类型：${Build.CPU_ABI}"))
+            add(getInfoItem("CPU 核心数：${CPUHelper.getNumberOfCores()}"))
+            add(getInfoItem("CPU 温度：${CPUHelper.getCPUTemperature()}"))
+            add(getInfoItem("CPU 最大频率：${CPUHelper.getMaxCpuFreq()}"))
+            add(getInfoItem("CPU 当前系统使用率：${CPUHelper.getTotalCPURate()}"))
+            add(getInfoItem("CPU 当前系统使用时长：${CPUHelper.getTotalCPURate()}"))
+            add(getInfoItem("CPU 当前应用使用率：${CPUHelper.getProcessCPURate()}"))
+            add(getInfoItem("CPU 当前应用使用时长：${CPUHelper.getProcessCpuTime()}"))
+            CPUHelper.getCpuInfo().forEach {
+                add(getInfoItem("&nbsp;&nbsp;&nbsp;&nbsp;CPU 信息：${it.key} - ${it.value}"))
+            }
+
             add(getInfoItem("设备宽度：${DisplayUtil.getRealScreenSizeX(context)}"))
             add(getInfoItem("设备高度：${DisplayUtil.getRealScreenSizeY(context)}"))
             add(getInfoItem("状态栏高度：${DisplayUtil.getStatusBarHeight(context)}"))
             add(getInfoItem("虚拟按键高度：${DisplayUtil.getNavigationBarHeight(context)}"))
+            add(getInfoItem("存储空间（大小）：${FileUtils.getFileLength(FileUtils.getDirectoryTotalSpace(context!!.filesDir.absolutePath))}"))
+            add(getInfoItem("存储空间（当前可用）：${FileUtils.getFileLength(FileUtils.getDirectoryAvailableSpace(context!!.filesDir.absolutePath))}"))
 
             add(DebugTipsData("网络信息"))
             add(getInfoItem("网络类型：${NetworkUtil.getNetworkName(context)}"))
@@ -163,6 +241,7 @@ class DebugDeviceFragment : DebugEnvFragment() {
                 add(getInfoItem("充电状态：" + if (it.isCharging) "充电中" else "未充电"))
                 add(getInfoItem("充电类型：${it.getChargeTypeDesc()} — ${it.plugged}"))
                 add(getInfoItem("当前电量：${it.getBatteryPercentDesc()} - ${it.getBatteryPercent()}"))
+                add(getInfoItem("电池温度：${BatteryHelper.getBatteryTemperature(ZixieContext.applicationContext!!)}"))
             }
         }
     }

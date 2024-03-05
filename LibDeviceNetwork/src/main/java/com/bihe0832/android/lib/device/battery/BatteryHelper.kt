@@ -45,4 +45,33 @@ object BatteryHelper {
         }
         return null
     }
+
+    /**
+     * 获取电池温度
+     *
+     * @param mContext the m context
+     * @return the battery temperature
+     */
+    fun getBatteryTemperature(context: Context?): Float {
+        var temperature = -1f
+        if (context == null) {
+            return temperature
+        }
+        try {
+            context.registerReceiver(
+                null, IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+            )?.let { batteryIntent ->
+                batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0).let { temp ->
+                    temperature = if (temp == 0) {
+                        return temperature
+                    } else {
+                        (temp / 10).toFloat()
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return temperature
+    }
 }

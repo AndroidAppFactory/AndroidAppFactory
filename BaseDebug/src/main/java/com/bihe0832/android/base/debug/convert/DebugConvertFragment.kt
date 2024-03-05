@@ -24,7 +24,7 @@ import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
+import com.bihe0832.android.lib.utils.encrypt.compression.CompressionUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.time.TimeUtil
 import java.math.BigDecimal
@@ -138,25 +138,6 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "3.6 " + "3.6".toDouble() + " " + ConvertUtils.parseDouble("3.6", 0.0))
         ZLog.d(LOG_TAG, "0.6 " + "0.6".toDouble() + " " + ConvertUtils.parseDouble("0.6.1", 0.0))
         ZLog.d(LOG_TAG, "0.61 " + "0.61".toDouble() + " " + ConvertUtils.parseDouble("0.61", 0.0))
-    }
-
-    private fun testZlib() {
-        val builder = StringBuilder()
-        for (i in 0..50) {
-            builder.append('a' + (TextFactoryUtils.getRandomString(26)))
-        }
-        val text = builder.toString()
-
-        val compres = ZlibUtil.compress(text.toByteArray())
-        ZLog.d(LOG_TAG, "compres 前后： " + compres.size + " : " + text.toByteArray().size)
-
-        val b = Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
-        val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
-
-        val res = String(ZlibUtil.uncompress(compres))
-        ZLog.d(LOG_TAG, "压缩再解压一致性确认：")
-        ZLog.d(LOG_TAG, "text：\n$text\n\n")
-        ZLog.d(LOG_TAG, "result：\n$res\n\n")
     }
 
     fun testPercent() {

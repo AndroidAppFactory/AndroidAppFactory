@@ -5,8 +5,8 @@ import com.bihe0832.android.app.encrypt.AAFEncrypt
 import com.bihe0832.android.app.encrypt.AAFEncryptConstants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.utils.encrypt.AESUtils
-import com.bihe0832.android.lib.utils.encrypt.RSAUtils
+import com.bihe0832.android.lib.utils.encrypt.aes.AESUtils
+import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils
 import java.util.Arrays
 
 fun DebugEncryptFragment.saveAES() {

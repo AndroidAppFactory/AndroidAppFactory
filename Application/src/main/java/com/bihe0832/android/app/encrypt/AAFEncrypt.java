@@ -2,9 +2,9 @@ package com.bihe0832.android.app.encrypt;
 
 import android.content.Context;
 import com.bihe0832.android.lib.file.FileUtils;
-import com.bihe0832.android.lib.utils.encrypt.AESEncryptResult;
-import com.bihe0832.android.lib.utils.encrypt.AESUtils;
-import com.bihe0832.android.lib.utils.encrypt.RSAUtils;
+import com.bihe0832.android.lib.utils.encrypt.aes.AESEncryptResult;
+import com.bihe0832.android.lib.utils.encrypt.aes.AESUtils;
+import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils;
 import com.bihe0832.android.lib.utils.keystore.AESKeyStoreUtils;
 import java.security.PrivateKey;
 import java.security.PublicKey;

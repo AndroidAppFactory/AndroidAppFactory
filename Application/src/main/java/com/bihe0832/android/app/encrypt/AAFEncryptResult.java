@@ -1,6 +1,6 @@
 package com.bihe0832.android.app.encrypt;
 
-import com.bihe0832.android.lib.utils.encrypt.AESEncryptResult;
+import com.bihe0832.android.lib.utils.encrypt.aes.AESEncryptResult;
 
 /**
  * Summary

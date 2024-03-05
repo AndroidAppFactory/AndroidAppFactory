@@ -11,7 +11,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.ConvertUtils;
-import com.bihe0832.android.lib.utils.encrypt.MD5;
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,7 @@ import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.utils.encrypt.RSAUtils
+import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils
 
 open class DebugEncryptFragment : DebugCommonFragment() {
 

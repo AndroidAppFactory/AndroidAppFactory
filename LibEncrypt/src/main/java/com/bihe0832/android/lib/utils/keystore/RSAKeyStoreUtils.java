@@ -5,7 +5,7 @@ import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import com.bihe0832.android.lib.utils.encrypt.RSAUtils;
+import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.utils.time.DateUtil;
 import java.math.BigInteger;

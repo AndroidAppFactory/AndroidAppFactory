@@ -83,7 +83,7 @@ ext.libmoduleInfo = [
                 "version"            : "6.8.13",
                 "artifactId"         : "lib-encrypt",
                 "apidependenciesList": [
-                        "LibLog", "LibCommonUtils","LibOS"
+                        "LibLog", "LibCommonUtils", "LibOS", "LibThread"
                 ]
         ],
         "LibChannel"                : [

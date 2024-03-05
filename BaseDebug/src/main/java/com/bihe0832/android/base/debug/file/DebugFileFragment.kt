@@ -37,8 +37,11 @@ import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.MathUtils
-import com.bihe0832.android.lib.utils.encrypt.MD5
-import com.bihe0832.android.lib.utils.encrypt.ZlibUtil
+import com.bihe0832.android.lib.utils.encrypt.compression.CompressionUtils
+import com.bihe0832.android.lib.utils.encrypt.compression.GzipUtils
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
+import com.bihe0832.android.lib.utils.encrypt.part.DataSegment
+import com.bihe0832.android.lib.utils.encrypt.part.DataSegmentTools
 import com.bihe0832.android.lib.zip.ZipUtils
 import java.io.File
 
@@ -102,7 +105,8 @@ class DebugFileFragment : DebugEnvFragment() {
             add(DebugItemData("ZIP测试", View.OnClickListener { testZIP() }))
             add(DebugItemData("配置 Config 管理测试", View.OnClickListener { testConfig() }))
             add(DebugItemData("Sqlite测试", View.OnClickListener { testDB() }))
-            add(DebugItemData("数据压缩解压", View.OnClickListener { testZlib() }))
+            add(DebugItemData("数据压缩解压", View.OnClickListener { testZLib() }))
+            add(DebugItemData("数据分片与合并", View.OnClickListener { testSegment() }))
             add(DebugItemData("文件内容读写", View.OnClickListener { testReadAndWrite() }))
             add(DebugItemData("读取共享文件内容", View.OnClickListener { share() }))
             add(DebugItemData("创建指定大小文件", View.OnClickListener { createFile() }))
@@ -351,20 +355,76 @@ class DebugFileFragment : DebugEnvFragment() {
         }
     }
 
-    private fun testZlib() {
+    private fun testSegment(byteArray: ByteArray, size: Int): ByteArray? {
+        ZLog.d(LOG_TAG, "=============================")
+        ZLog.d(LOG_TAG, "byteArray 数据长度:${byteArray.size}")
+        val sorce = DataSegmentTools.splitToDataSegmentList(byteArray, size, MD5.MESSAGE_DIGEST_TYPE_MD5)
+        ZLog.d(LOG_TAG, "DataSegment 源数据 MD5:${sorce.firstOrNull()?.signatureValue}")
+        ZLog.d(LOG_TAG, "DataSegment 源数据 数据长度:${sorce.firstOrNull()?.totalLength}")
+        sorce.let {
+            ZLog.d(LOG_TAG, "DataSegment 源数据 分片数量:${it.size}")
+            ZLog.d(LOG_TAG, "DataSegment 源数据 首片长度:${it.firstOrNull()?.content?.size}")
+            ZLog.d(
+                LOG_TAG,
+                "DataSegment 源数据 首片数据:${String(Base64.encode(it.firstOrNull()?.content, Base64.NO_WRAP))}"
+            )
+        }
+        val data = mutableListOf<DataSegment>().apply {
+            addAll(sorce.shuffled())
+            add(sorce.random())
+            add(sorce.random())
+        }
+        ZLog.d(LOG_TAG, "-----------------------------------------------------")
+        data.let {
+            ZLog.d(LOG_TAG, "DataSegment 乱序后 分片数量:${it.size}")
+            ZLog.d(LOG_TAG, "DataSegment 乱序后 首片长度:${it.firstOrNull()?.content?.size}")
+            ZLog.d(
+                LOG_TAG,
+                "DataSegment 乱序后 首片数据:${String(Base64.encode(it.firstOrNull()?.content, Base64.NO_WRAP))}"
+            )
+
+        }
+        ZLog.d(LOG_TAG, "=============================")
+        return DataSegmentTools.mergeDataSegment(data, sorce.first().totalLength, sorce.first().signatureValue)
+    }
+
+    private fun testSegment() {
+        val builder = StringBuilder()
+        for (i in 0..50) {
+            builder.append('a' + (TextFactoryUtils.getRandomString(26)))
+        }
+        val text = builder.toString()
+        ZLog.d(LOG_TAG, "testSegment 原始数据： " + text)
+        testSegment(text.toByteArray(), 40)?.let {
+            ZLog.d(LOG_TAG, "testSegment 再次合并后数据： " + String(it))
+        }
+        val compres = CompressionUtils.compress(text.toByteArray())
+        ZLog.d(LOG_TAG, "testSegment CompressionUtils compres 前后： " + compres.size + " : " + text.toByteArray().size)
+        testSegment(compres, 40)?.let {
+            ZLog.d(LOG_TAG, "testSegment CompressionUtils 再次合并后解压数据： " + String(CompressionUtils.uncompress(it)))
+        }
+
+        val gizpData = GzipUtils.compress(text)
+        ZLog.d(LOG_TAG, "testSegment GzipUtils compres 前后： " + gizpData.size + " : " + text.toByteArray().size)
+        testSegment(gizpData, 40)?.let {
+            ZLog.d(LOG_TAG, "testSegment GzipUtils 再次合并后解压数据： " + GzipUtils.uncompressToString(it))
+        }
+    }
+
+    private fun testZLib() {
         val builder = StringBuilder()
         for (i in 0..50) {
             builder.append('a' + (TextFactoryUtils.getRandomString(26)))
         }
         val text = builder.toString()
 
-        val compres = ZlibUtil.compress(text.toByteArray())
+        val compres = CompressionUtils.compress(text.toByteArray())
         ZLog.d("testZlib", "compres 前后： " + compres.size + " : " + text.toByteArray().size)
 
-        val b = Base64.encode(ZlibUtil.compress(text.toByteArray()), Base64.DEFAULT)
-        val uncompressResult = String(ZlibUtil.uncompress(Base64.decode(b, Base64.DEFAULT)))
+        val b = Base64.encode(CompressionUtils.compress(text.toByteArray()), Base64.DEFAULT)
+        val uncompressResult = String(CompressionUtils.uncompress(Base64.decode(b, Base64.DEFAULT)))
 
-        val res = String(ZlibUtil.uncompress(compres))
+        val res = String(CompressionUtils.uncompress(compres))
         ZLog.d("testZlib", "压缩再解压一致性确认：")
         ZLog.d("testZlib", "text：\n$text\n\n")
         ZLog.d("testZlib", "result：\n$res\n\n")

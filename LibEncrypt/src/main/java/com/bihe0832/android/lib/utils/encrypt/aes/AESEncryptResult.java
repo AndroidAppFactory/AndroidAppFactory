@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.utils.encrypt;
+package com.bihe0832.android.lib.utils.encrypt.aes;
 
 /**
  * Summary

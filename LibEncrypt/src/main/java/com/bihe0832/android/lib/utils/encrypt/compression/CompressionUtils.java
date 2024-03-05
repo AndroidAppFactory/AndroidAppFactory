@@ -1,11 +1,11 @@
-package com.bihe0832.android.lib.utils.encrypt;
+package com.bihe0832.android.lib.utils.encrypt.compression;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-public class ZlibUtil {
+public class CompressionUtils {
 
     public static byte[] uncompress(byte[] data) {
         if (data == null || data.length <= 0) {

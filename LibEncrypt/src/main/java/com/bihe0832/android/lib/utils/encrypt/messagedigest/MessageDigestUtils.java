@@ -1,6 +1,7 @@
-package com.bihe0832.android.lib.utils.encrypt;
+package com.bihe0832.android.lib.utils.encrypt.messagedigest;
 
 import android.text.TextUtils;
+import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;

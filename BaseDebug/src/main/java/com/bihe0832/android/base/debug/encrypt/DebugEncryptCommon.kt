@@ -7,11 +7,11 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import com.bihe0832.android.lib.utils.encrypt.AESUtils
-import com.bihe0832.android.lib.utils.encrypt.MD5
-import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
-import com.bihe0832.android.lib.utils.encrypt.RSAUtils
-import com.bihe0832.android.lib.utils.encrypt.SHA256
+import com.bihe0832.android.lib.utils.encrypt.aes.AESUtils
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MessageDigestUtils
+import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import java.util.Arrays
 
 fun DebugEncryptFragment.testMessageDigest() {

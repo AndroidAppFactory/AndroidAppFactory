@@ -135,6 +135,32 @@ public class ConvertUtils {
         return value;
     }
 
+    /**
+     * 将整形转为低字节在前，高字节在后的byte数组
+     *
+     * @param n the n
+     * @return the byte [ ]
+     */
+    public static byte[] intToByte(int n) {
+        byte[] b = new byte[4];
+        b[0] = (byte) (n & 0xff);
+        b[1] = (byte) (n >> 8 & 0xff);
+        b[2] = (byte) (n >> 16 & 0xff);
+        b[3] = (byte) (n >> 24 & 0xff);
+        return b;
+    }
+
+    /**
+     * 将转为低字节在前，高字节在后的byte数组转换为整形
+     *
+     * @param b the b
+     * @return the int
+     */
+    public static int byteArrayToInt(byte[] b) {
+        return b[0] & 0xFF | (b[1] & 0xFF) << 8 | (b[2] & 0xFF) << 16 | (b[3] & 0xFF) << 24;
+    }
+
+
     public static float[] floatArrayList2Array(List<Float> origin) {
         if (origin == null || origin.size() <= 0) {
             return null;

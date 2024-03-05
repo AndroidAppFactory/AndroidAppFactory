@@ -26,9 +26,9 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
-import com.bihe0832.android.lib.utils.encrypt.MD5
-import com.bihe0832.android.lib.utils.encrypt.MessageDigestUtils
-import com.bihe0832.android.lib.utils.encrypt.SHA256
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MessageDigestUtils
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.io.File
 

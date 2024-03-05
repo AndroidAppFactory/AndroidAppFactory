@@ -2,7 +2,7 @@ package com.bihe0832.android.base.debug.encrypt;
 
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
-import com.bihe0832.android.lib.utils.encrypt.RSAUtils;
+import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils;
 import java.security.PrivateKey;
 
 public class AAFSecretEncrypt {

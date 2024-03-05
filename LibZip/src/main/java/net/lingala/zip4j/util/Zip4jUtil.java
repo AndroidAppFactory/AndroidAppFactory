@@ -130,12 +130,12 @@ public class Zip4jUtil {
 		}
 		return file.exists();
 	}
-	
-	public static boolean isWindows(){
-		String os = System.getProperty("os.name").toLowerCase();
-	    return (os.indexOf( "win" ) >= 0); 
-	}
-	
+
+//	public static boolean isWindows(){
+//		String os = System.getProperty("os.name").toLowerCase();
+//	    return (os.indexOf( "win" ) >= 0);
+//	}
+//
 	public static void setFileReadOnly(File file) throws ZipException {
 		if (file == null) {
 			throw new ZipException("input file is null. cannot set read only file attribute");
