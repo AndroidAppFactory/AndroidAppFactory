@@ -158,7 +158,7 @@ public class FFmpegTools {
 
                 String videoPath = AAFFileWrapper.INSTANCE.getCacheVideoPath(".mp4");
                 String command = String.format(
-                        "-y -r 1 -loop 1 -i %s -i %s -c:v libopenh264 -shortest -b:v 2000k -c:v libopenh264 -pix_fmt yuv420p -c:a aac -strict -2 -b:a 192k -movflags +faststart %s",
+                        "-y -r 1 -loop 1 -i %s -i %s -b:v 2000k -c:v libopenh264 -shortest  -movflags +faststart %s",
                         imagePath, audioPath, videoPath);
                 int result = FFmpegTools.executeFFmpegCommand(command);
                 if (result == Config.RETURN_CODE_SUCCESS) {

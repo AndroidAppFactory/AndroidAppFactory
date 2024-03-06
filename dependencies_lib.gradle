@@ -344,7 +344,7 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-view-ext",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
-                        "LibAAFResource", "LibText"
+                        "LibAAFResource", "LibText", "LibThread"
                 ]
         ],
         "LibViewPager"              : [

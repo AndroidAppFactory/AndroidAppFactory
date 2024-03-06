@@ -1,13 +1,25 @@
 package com.bihe0832.android.base.debug.view
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.widget.TextView
+import androidx.core.view.setPadding
+import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.touch.TouchRegionActivity
 import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.DebugTools
+import com.bihe0832.android.lib.media.Media
+import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
+import com.bihe0832.android.lib.ui.view.ext.ViewCaptureLayout
+import com.bihe0832.android.lib.utils.time.DateUtil
 
 class DebugBaseViewFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -16,7 +28,14 @@ class DebugBaseViewFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("特殊TextView 调试", DebugTextViewFragment::class.java))
             add(getDebugFragmentItemData("自定义View 调试", DebugCustomViewFragment::class.java))
-
+            add(
+                DebugItemData(
+                    "View 导出图片",
+                    View.OnClickListener {
+                        debugExport(it)
+                    },
+                ),
+            )
             add(
                 DebugItemData(
                     "TextView对HTML的支持测试",
@@ -49,6 +68,48 @@ class DebugBaseViewFragment : DebugEnvFragment() {
                     },
                 ),
             )
+        }
+    }
+
+    private fun debugExport(it: View?) {
+        Media.addToPhotos(context, BitmapUtil.getViewBitmap(it))
+
+        TextView(context).apply {
+            setText("BitmapUtil.getViewBitmap:" + DateUtil.getCurrentDateEN())
+        }.let {
+            Media.addToPhotos(context, BitmapUtil.getViewBitmap(it))
+        }
+
+        TextView(context).apply {
+            setText("Bitmap createBitmap:" + DateUtil.getCurrentDateEN())
+            gravity = Gravity.CENTER
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            width = 200
+        }.let { view ->
+            val bitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            view.setDrawingCacheEnabled(true)
+            view.measure(
+                View.MeasureSpec.makeMeasureSpec(canvas.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(canvas.height, View.MeasureSpec.EXACTLY)
+            )
+            view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+            canvas.drawBitmap(view.drawingCache, 0f, 0f, Paint())
+            Media.addToPhotos(context, BitmapUtil.saveBitmap(context, bitmap))
+        }
+
+        TextView(context).apply {
+            setText("ViewCaptureLayout getViewBitmap:" + DateUtil.getCurrentDateEN())
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20f)
+            setTextColor(context.getColor(R.color.accent))
+            setPadding(40)
+        }.let {
+            ViewCaptureLayout(context).apply {
+                addView(it, 0)
+                setBackground(context.getDrawable(R.drawable.com_bihe0832_base_dialog_bg))
+            }.getViewBitmap { data ->
+                Media.addToPhotos(context, BitmapUtil.saveBitmap(context, data))
+            }
         }
     }
 }
