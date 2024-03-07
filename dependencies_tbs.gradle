@@ -12,17 +12,14 @@ ext.tbsmoduleInfo = [
     "CommonTBSFeedback": [
         "version"                : "6.9.4",
         "artifactId"             : "common-feedback-tbs",
-        "apidependenciesList"    : ["CommonTBSWebview", "CommonFeedback"],
-        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+        "apidependenciesList": ["CommonTBSWebview", "CommonFeedback"]
     ],
     "CommonTBSWebview" : [
         "version"                : "6.9.4",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
-            "CommonWebview", "CommonTBS"
-        ],
-        "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+            "CommonWebview", "CommonTBS"]
     ],
     "CommonTBS"        : [
         "version"            : "6.9.3",

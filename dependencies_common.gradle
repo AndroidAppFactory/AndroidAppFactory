@@ -36,9 +36,7 @@ ext.commonmoduleInfo = [
                         project.androidsupport.multidex,
                         "LibWrapper", "Router", "RouterAnnotation", "LibTheme",
                 ],
-                "specialdependenciesList": [
-                        "kapt": [project.glide.compiler]
-
+                "specialdependenciesList": ["kapt": [project.glide.compiler, "RouterCompiler"]
                 ]
         ],
         "CommonAccessibility"   : [
@@ -137,15 +135,12 @@ ext.commonmoduleInfo = [
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         project.androidsupport.swiperefreshlayout,
-                        "Framework", "LibJsBridge"
-                ],
-                "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+                        "Framework", "LibJsBridge"]
         ],
         "CommonFeedback"        : [
                 "version"                : "6.9.4",
                 "artifactId"             : "common-feedback",
-                "apidependenciesList"    : ["CommonWebview"],
-                "specialdependenciesList": ["kapt": ["RouterCompiler"]]
+                "apidependenciesList": ["CommonWebview"]
         ],
         "CommonPraise"          : [
                 "version"            : "6.9.4",
