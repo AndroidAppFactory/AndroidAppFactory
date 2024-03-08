@@ -1,7 +1,9 @@
 package com.bihe0832.android.lib.utils;
 
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
-
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -135,32 +137,34 @@ public class ConvertUtils {
         return value;
     }
 
-    /**
-     * 将整形转为低字节在前，高字节在后的byte数组
-     *
-     * @param n the n
-     * @return the byte [ ]
-     */
-    public static byte[] intToByte(int n) {
-        byte[] b = new byte[4];
-        b[0] = (byte) (n & 0xff);
-        b[1] = (byte) (n >> 8 & 0xff);
-        b[2] = (byte) (n >> 16 & 0xff);
-        b[3] = (byte) (n >> 24 & 0xff);
-        return b;
+    public static byte[] intToBytes(int value) {
+        int size;
+        if (VERSION.SDK_INT >= VERSION_CODES.N) {
+            size = Integer.BYTES;
+        } else {
+            size = 4;
+        }
+        return ByteBuffer.allocate(size).putInt(value).array();
     }
 
-    /**
-     * 将转为低字节在前，高字节在后的byte数组转换为整形
-     *
-     * @param b the b
-     * @return the int
-     */
-    public static int byteArrayToInt(byte[] b) {
-        return b[0] & 0xFF | (b[1] & 0xFF) << 8 | (b[2] & 0xFF) << 16 | (b[3] & 0xFF) << 24;
+    public static int bytesToInt(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getInt();
     }
 
+    public static byte[] longToBytes(long value) {
+        int size;
+        if (VERSION.SDK_INT >= VERSION_CODES.N) {
+            size = Long.BYTES;
+        } else {
+            size = 8;
+        }
+        return ByteBuffer.allocate(size).putLong(value).array();
+    }
 
+    public static long bytesToLong(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getLong();
+    }
+    
     public static float[] floatArrayList2Array(List<Float> origin) {
         if (origin == null || origin.size() <= 0) {
             return null;
