@@ -164,7 +164,7 @@ public class ConvertUtils {
     public static long bytesToLong(byte[] bytes) {
         return ByteBuffer.wrap(bytes).getLong();
     }
-    
+
     public static float[] floatArrayList2Array(List<Float> origin) {
         if (origin == null || origin.size() <= 0) {
             return null;
@@ -180,6 +180,10 @@ public class ConvertUtils {
 
     public static long getUnsignedInt(int x) {
         return x & 0x00000000FFFFFFFFL;
+    }
+
+    public static int longToIntWithLossOfPrecision(long value) {
+        return (int) (value & 0xFFFFFFFFL);
     }
 
     public static String getSafeValueFromArray(String[] valueList, int index, String defaultValue) {

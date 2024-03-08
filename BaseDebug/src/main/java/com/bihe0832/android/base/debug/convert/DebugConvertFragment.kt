@@ -8,7 +8,6 @@
 
 package com.bihe0832.android.base.debug.convert
 
-import android.util.Base64
 import android.view.View
 import com.bihe0832.android.app.api.AAFResponse
 import com.bihe0832.android.base.debug.json.IntegerDebugAdapter
@@ -20,15 +19,14 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.gson.JsonHelper.fromJsonList
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
-import com.bihe0832.android.lib.utils.encrypt.compression.CompressionUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.utils.time.TimeUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.Arrays
 
 class DebugConvertFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -39,6 +37,8 @@ class DebugConvertFragment : DebugEnvFragment() {
             add(DebugItemData("JsonHelper", View.OnClickListener { testJson() }))
             add(DebugItemData("Boolean 转化", View.OnClickListener { testConvertBoolean() }))
             add(DebugItemData("Float 转化", View.OnClickListener { testConvertFloat() }))
+            add(DebugItemData("Int Long 与 Byte 数组转化", View.OnClickListener { testToByte() }))
+
 
             add(DebugItemData("树结构", View.OnClickListener { testTree() }))
 
@@ -46,6 +46,117 @@ class DebugConvertFragment : DebugEnvFragment() {
             add(DebugItemData("时间数据格式化", View.OnClickListener { testFormat() }))
             add(DebugItemData("版本号比较", View.OnClickListener { testVersion() }))
         }
+    }
+
+    private fun testToByte() {
+        mutableListOf("1", "-1", "4294967298", "100", "-100", "2147483647", "3147483647", "3456788147483647","899167231","8589934590","8589934591").forEach {
+            testToByte(it)
+        }
+    }
+
+    private fun testToByte(data: String) {
+        ZLog.d(LOG_TAG, "==========================================")
+        ZLog.d(LOG_TAG, "testToByte data: $data")
+        ConvertUtils.parseInt(data).let { intValue ->
+            ZLog.d(LOG_TAG, "intValue data parseInt: ${intValue}")
+            ZLog.d(
+                LOG_TAG, "intValue data parseInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(intValue))}"
+            )
+            intValue.toLong().let {
+                ZLog.d(LOG_TAG, "long data kotlin toLong: $it")
+                ZLog.d(
+                    LOG_TAG,
+                    "long data kotlin toLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
+                )
+            }
+
+            ConvertUtils.getUnsignedInt(intValue).let { longValue ->
+                ZLog.d(LOG_TAG, "longValue data getUnsignedInt: ${longValue}")
+                ZLog.d(
+                    LOG_TAG,
+                    "longValue data getUnsignedInt longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
+                )
+                try {
+                    longValue.toInt().let {
+                        ZLog.d(LOG_TAG, "int data kotlin toInt: $it")
+                        ZLog.d(
+                            LOG_TAG,
+                            "int data kotlin toInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(it))}"
+                        )
+                    }
+
+                    longValue.toUInt().let {
+                        ZLog.d(LOG_TAG, "int data kotlin toUInt: $it")
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                ConvertUtils.longToIntWithLossOfPrecision(longValue).let {
+                    ZLog.d(LOG_TAG, "int data longToIntWithLossOfPrecision: ${it}")
+                    ZLog.d(
+                        LOG_TAG, "int data longToIntWithLossOfPrecision intToBytes: ${
+                            Arrays.toString(
+                                ConvertUtils.intToBytes(it)
+                            )
+                        }"
+                    )
+                }
+            }
+        }
+
+        ZLog.d(LOG_TAG, "-------------------------------------------")
+
+        ConvertUtils.parseLong(data, -1).let { longValue ->
+            ZLog.d(LOG_TAG, "testToByte data parseLong: $longValue")
+            ZLog.d(
+                LOG_TAG,
+                "testToByte data parseLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
+            )
+            try {
+                longValue.toInt().let {
+                    ZLog.d(LOG_TAG, "longValue data kotlin toInt: $it")
+                    ZLog.d(
+                        LOG_TAG,
+                        "longValue data kotlin toInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(it))}"
+                    )
+                }
+                longValue.toUInt().let {
+                    ZLog.d(LOG_TAG, "int data kotlin toUInt: $it")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            ConvertUtils.longToIntWithLossOfPrecision(longValue).let { intValue ->
+                ZLog.d(LOG_TAG, "intValue data longToIntWithLossOfPrecision: $intValue")
+                ZLog.d(
+                    LOG_TAG, "intValue data longToIntWithLossOfPrecision intToBytes: ${
+                        Arrays.toString(
+                            ConvertUtils.intToBytes(intValue)
+                        )
+                    }"
+                )
+                try {
+                    intValue.toLong().let {
+                        ZLog.d(LOG_TAG, "intValue data kotlin toLong: $it")
+                        ZLog.d(
+                            LOG_TAG,
+                            "intValue data kotlin toLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                ConvertUtils.getUnsignedInt(intValue).let {
+                    ZLog.d(LOG_TAG, "long data getUnsignedInt: ${it}")
+                    ZLog.d(
+                        LOG_TAG,
+                        "long data getUnsignedInt longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
+                    )
+                }
+            }
+            ZLog.d(LOG_TAG, "==========================================")
+        }
+
     }
 
     private fun testJson() {
