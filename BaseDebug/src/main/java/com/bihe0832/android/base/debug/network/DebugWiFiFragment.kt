@@ -149,7 +149,7 @@ class DebugWiFiFragment : BaseFragment() {
                     connectCallback?.onSuccess(false)
                 }
             }
-            WifiManagerWrapper.connectWifiAboveQ(context, ssid, password, networkCallback)
+            WifiManagerWrapper.connectWifiAboveQ(context, ssid, password, networkCallback, false)
         } else {
             val isConnected = WifiManagerWrapper.connectWifi(context, ssid, password)
             if (isConnected) {

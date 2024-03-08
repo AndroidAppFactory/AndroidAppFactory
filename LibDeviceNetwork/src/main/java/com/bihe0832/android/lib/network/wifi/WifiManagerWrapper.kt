@@ -367,22 +367,21 @@ object WifiManagerWrapper {
         ssid: String,
         password: String,
         networkCallback: ConnectivityManager.NetworkCallback,
+        isWap3: Boolean = false
     ) {
-        val wpa2Specifier = WifiNetworkSpecifier.Builder().apply {
+        val wpaSpecifier = WifiNetworkSpecifier.Builder().apply {
             setSsid(ssid)
-            setWpa2Passphrase(password)
-        }.build()
-
-        val wpa3Specifier = WifiNetworkSpecifier.Builder().apply {
-            setSsid(ssid)
-            setWpa3Passphrase(password)
+            if (isWap3) {
+                setWpa3Passphrase(password)
+            } else {
+                setWpa2Passphrase(password)
+            }
         }.build()
 
         val networkRequest = NetworkRequest.Builder().apply {
             addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            setNetworkSpecifier(wpa2Specifier)
-            setNetworkSpecifier(wpa3Specifier)
+            setNetworkSpecifier(wpaSpecifier)
         }.build()
         val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager?.requestNetwork(networkRequest, networkCallback)

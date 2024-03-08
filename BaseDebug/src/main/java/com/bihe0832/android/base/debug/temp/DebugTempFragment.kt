@@ -26,5 +26,6 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
     private fun testFunc() {
+
     }
 }
