@@ -58,43 +58,49 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "==========================================")
         ZLog.d(LOG_TAG, "testToByte data: $data")
         ConvertUtils.parseInt(data).let { intValue ->
-            ZLog.d(LOG_TAG, "intValue data parseInt: ${intValue}")
+            ZLog.d(LOG_TAG, "data parseInt: ${intValue}")
             ZLog.d(
-                LOG_TAG, "intValue data parseInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(intValue))}"
+                LOG_TAG, "data parseInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(intValue))}"
             )
             intValue.toLong().let {
-                ZLog.d(LOG_TAG, "long data kotlin toLong: $it")
+                ZLog.d(LOG_TAG, "parseInt kotlin toLong: $it")
                 ZLog.d(
                     LOG_TAG,
-                    "long data kotlin toLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
+                    "parseInt kotlin toLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
                 )
             }
 
             ConvertUtils.getUnsignedInt(intValue).let { longValue ->
-                ZLog.d(LOG_TAG, "longValue data getUnsignedInt: ${longValue}")
+                ZLog.d(LOG_TAG, "parseInt getUnsignedInt(long): ${longValue}")
                 ZLog.d(
                     LOG_TAG,
-                    "longValue data getUnsignedInt longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
+                    "parseInt getUnsignedInt(long) longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
                 )
                 try {
                     longValue.toInt().let {
-                        ZLog.d(LOG_TAG, "int data kotlin toInt: $it")
+                        ZLog.d(LOG_TAG, "parseInt getUnsignedInt(long) kotlin toInt: $it")
                         ZLog.d(
                             LOG_TAG,
-                            "int data kotlin toInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(it))}"
+                            "parseInt getUnsignedInt(long) kotlin toInt intToBytes: ${
+                                Arrays.toString(
+                                    ConvertUtils.intToBytes(
+                                        it
+                                    )
+                                )
+                            }"
                         )
                     }
 
                     longValue.toUInt().let {
-                        ZLog.d(LOG_TAG, "int data kotlin toUInt: $it")
+                        ZLog.d(LOG_TAG, "parseInt getUnsignedInt(long) kotlin toUInt: $it")
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
                 ConvertUtils.longToIntWithLossOfPrecision(longValue).let {
-                    ZLog.d(LOG_TAG, "int data longToIntWithLossOfPrecision: ${it}")
+                    ZLog.d(LOG_TAG, "parseInt getUnsignedInt(long) longToIntWithLossOfPrecision: ${it}")
                     ZLog.d(
-                        LOG_TAG, "int data longToIntWithLossOfPrecision intToBytes: ${
+                        LOG_TAG, "parseInt getUnsignedInt(long) longToIntWithLossOfPrecision intToBytes: ${
                             Arrays.toString(
                                 ConvertUtils.intToBytes(it)
                             )
@@ -107,29 +113,29 @@ class DebugConvertFragment : DebugEnvFragment() {
         ZLog.d(LOG_TAG, "-------------------------------------------")
 
         ConvertUtils.parseLong(data, -1).let { longValue ->
-            ZLog.d(LOG_TAG, "testToByte data parseLong: $longValue")
+            ZLog.d(LOG_TAG, "data parseLong: $longValue")
             ZLog.d(
                 LOG_TAG,
-                "testToByte data parseLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
+                "data parseLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
             )
             try {
                 longValue.toInt().let {
-                    ZLog.d(LOG_TAG, "longValue data kotlin toInt: $it")
+                    ZLog.d(LOG_TAG, "parseLong kotlin toInt: $it")
                     ZLog.d(
                         LOG_TAG,
-                        "longValue data kotlin toInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(it))}"
+                        "parseLong kotlin toInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(it))}"
                     )
                 }
                 longValue.toUInt().let {
-                    ZLog.d(LOG_TAG, "int data kotlin toUInt: $it")
+                    ZLog.d(LOG_TAG, "parseLong kotlin toUInt: $it")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             ConvertUtils.longToIntWithLossOfPrecision(longValue).let { intValue ->
-                ZLog.d(LOG_TAG, "intValue data longToIntWithLossOfPrecision: $intValue")
+                ZLog.d(LOG_TAG, "parseLong longToIntWithLossOfPrecision: $intValue")
                 ZLog.d(
-                    LOG_TAG, "intValue data longToIntWithLossOfPrecision intToBytes: ${
+                    LOG_TAG, "parseLong longToIntWithLossOfPrecision intToBytes: ${
                         Arrays.toString(
                             ConvertUtils.intToBytes(intValue)
                         )
@@ -137,20 +143,28 @@ class DebugConvertFragment : DebugEnvFragment() {
                 )
                 try {
                     intValue.toLong().let {
-                        ZLog.d(LOG_TAG, "intValue data kotlin toLong: $it")
+                        ZLog.d(LOG_TAG, "parseLong longToIntWithLossOfPrecision kotlin toLong: $it")
                         ZLog.d(
                             LOG_TAG,
-                            "intValue data kotlin toLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
+                            "parseLong longToIntWithLossOfPrecision kotlin toLong longToBytes: ${
+                                Arrays.toString(
+                                    ConvertUtils.longToBytes(it)
+                                )
+                            }"
                         )
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
                 ConvertUtils.getUnsignedInt(intValue).let {
-                    ZLog.d(LOG_TAG, "long data getUnsignedInt: ${it}")
+                    ZLog.d(LOG_TAG, "parseLong longToIntWithLossOfPrecision getUnsignedInt(long): ${it}")
                     ZLog.d(
                         LOG_TAG,
-                        "long data getUnsignedInt longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
+                        "parseLong longToIntWithLossOfPrecision getUnsignedInt(long) longToBytes: ${
+                            Arrays.toString(
+                                ConvertUtils.longToBytes(it)
+                            )
+                        }"
                     )
                 }
             }
