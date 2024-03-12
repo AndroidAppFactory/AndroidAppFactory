@@ -32,6 +32,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
+import java.lang.Exception
 
 /**
  *
@@ -309,8 +310,13 @@ class DebugDeviceFragment : DebugEnvFragment() {
 }
 
 fun getDeivceName(context: Context?): String {
-    val bluetoothManager = context?.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
-    return bluetoothManager?.adapter?.name ?: ""
+    try {
+        val bluetoothManager = context?.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager
+        bluetoothManager?.adapter?.name ?: ""
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return ""
 }
 
 fun getMobileInfo(context: Context?): List<String> {
