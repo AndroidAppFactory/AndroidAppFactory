@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.9.8",
+                "version"            : "6.9.9",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -260,7 +260,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibQRCode"                 : [
-                "version"            : "6.9.8",
+                "version"            : "6.9.9",
                 "artifactId"         : "lib-qrcode",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
