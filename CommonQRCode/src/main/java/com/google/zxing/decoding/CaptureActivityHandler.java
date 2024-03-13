@@ -21,10 +21,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
-import com.google.zxing.activity.BaseCaptureActivity;
+import com.bihe0832.android.lib.media.Media;
+import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.google.zxing.MessageConstants;
 import com.google.zxing.Result;
+import com.google.zxing.activity.BaseCaptureActivity;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.view.ViewfinderResultPointCallback;
 import com.google.zxing.view.ViewfinderView;
@@ -76,9 +77,10 @@ public final class CaptureActivityHandler extends Handler {
                 Bundle bundle = message.getData();
 
                 /***********************************************************************/
-                Bitmap barcode = bundle == null ? null : (Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);//���ñ����߳�
-
-                activity.handleDecode((Result) message.obj);//���ؽ��
+//                Bitmap barcode = bundle == null ? null : (Bitmap) bundle.getParcelable(DecodeThread.BARCODE_BITMAP);
+//                String path = BitmapUtil.saveBitmap(activity, barcode);
+//                Media.addToPhotos(activity, path);
+                activity.handleDecode((Result) message.obj);
                 /***********************************************************************/
                 break;
             case MessageConstants.MSG_DECODE_FAILED:

@@ -11,9 +11,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.qrcode.QrcodeUtils
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.router.shareByQrcode
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
@@ -25,7 +27,13 @@ class DebugQRCodeFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+
         resetQRcodeData()
+        view.findViewById<ImageView>(R.id.qrcode_image).setOnLongClickListener { v ->
+            Media.addToPhotos(context!!, BitmapUtil.getViewBitmap(v))
+            ZixieContext.showToast("已经添加到相册")
+            true
+        }
         view.findViewById<EditText>(R.id.qrcode_input).addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -43,6 +51,10 @@ class DebugQRCodeFragment : BaseFragment() {
             resetQRcodeData()
         }
 
+        view.findViewById<View>(R.id.qrcode_again).setOnClickListener {
+            resetQRcodeData()
+        }
+
         view.findViewById<View>(R.id.qrcode_scan).setOnClickListener {
             QrcodeUtils.openQrScan(activity, true, true)
         }
@@ -50,6 +62,12 @@ class DebugQRCodeFragment : BaseFragment() {
         view.findViewById<View>(R.id.qrcode_scan_parse).setOnClickListener {
             QrcodeUtils.openQrScanAndParse(true, true)
         }
+
+        view.findViewById<View>(R.id.qrcode_scan_selected).setOnClickListener {
+            QrcodeUtils.openQrScanAndParse(true, true)
+        }
+
+
 
         view.findViewById<View>(R.id.qrcode_share).setOnClickListener {
             shareByQrcode(

@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.qrcode.QRCodeDecodingHandler;
 import com.bihe0832.android.lib.qrcode.QRCodeEncodingHandler;
 import com.google.zxing.Result;
 
+import com.google.zxing.activity.BaseCaptureActivity;
 import java.util.HashMap;
 
 /**
@@ -39,7 +40,7 @@ public class QrcodeUtils {
     }
 
     public static final Result decodeQRcode(String filePath) {
-        return QRCodeDecodingHandler.decodeQRcode(filePath);
+        return QRCodeDecodingHandler.decodeQRcode(filePath, BaseCaptureActivity.BITMAP_WIDTH);
     }
 
     public static final Result decodeQRcode(String filePath, int width) {

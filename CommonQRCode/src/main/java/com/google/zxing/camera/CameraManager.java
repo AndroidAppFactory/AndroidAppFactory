@@ -16,6 +16,8 @@
 
 package com.google.zxing.camera;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -23,7 +25,9 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.view.SurfaceHolder;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+import com.google.zxing.ResultPoint;
 import java.io.IOException;
 import java.util.List;
 
@@ -34,10 +38,10 @@ import java.util.List;
  */
 public final class CameraManager {
 
-    private static final int MIN_FRAME_WIDTH = 240;
-    private static final int MIN_FRAME_HEIGHT = 240;
-    private static final int MAX_FRAME_WIDTH = 480;
-    private static final int MAX_FRAME_HEIGHT = 360;
+    private static final int MIN_FRAME_WIDTH = 480;
+    private static final int MAX_FRAME_WIDTH = 600;
+    private static final int MIN_FRAME_HEIGHT = 480;
+    private static final int MAX_FRAME_HEIGHT = 600;
 
     private static CameraManager cameraManager;
 
@@ -197,55 +201,29 @@ public final class CameraManager {
      */
     public Rect getFramingRect() {
         Point screenResolution = configManager.getScreenResolution();
-        if (screenResolution == null)
-            return null;
         if (framingRect == null) {
             if (camera == null) {
                 return null;
             }
-
-            //修改之后
-            int width = screenResolution.x * 7 / 10;
-            int height = screenResolution.y * 7 / 10;
-
-            if (height >= width) { //竖屏
-                height = width;
-            } else { //黑屏
-                width = height;
+            int width = screenResolution.x * 3 / 4;
+            if (width < MIN_FRAME_WIDTH) {
+                width = MIN_FRAME_WIDTH;
+            } else if (width > MAX_FRAME_WIDTH) {
+                width = MAX_FRAME_WIDTH;
             }
-
+            int height = screenResolution.y * 3 / 4;
+            if (height < MIN_FRAME_HEIGHT) {
+                height = MIN_FRAME_HEIGHT;
+            } else if (height > MAX_FRAME_HEIGHT) {
+                height = MAX_FRAME_HEIGHT;
+            }
             int leftOffset = (screenResolution.x - width) / 2;
-            int topOffset = (screenResolution.y - height) / 3;
+            int topOffset = (screenResolution.y - height) / 2;
             framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
-
+            ZLog.d(TAG, "Calculated framing rect: " + framingRect);
         }
         return framingRect;
     }
-//  public Rect getFramingRect() {
-//    Point screenResolution = configManager.getScreenResolution();
-//    if (framingRect == null) {
-//      if (camera == null) {
-//        return null;
-//      }
-//      int width = screenResolution.x * 3 / 4;
-//      if (width < MIN_FRAME_WIDTH) {
-//        width = MIN_FRAME_WIDTH;
-//      } else if (width > MAX_FRAME_WIDTH) {
-//        width = MAX_FRAME_WIDTH;
-//      }
-//      int height = screenResolution.y * 3 / 4;
-//      if (height < MIN_FRAME_HEIGHT) {
-//        height = MIN_FRAME_HEIGHT;
-//      } else if (height > MAX_FRAME_HEIGHT) {
-//        height = MAX_FRAME_HEIGHT;
-//      }
-//      int leftOffset = (screenResolution.x - width) / 2;
-//      int topOffset = (screenResolution.y - height) / 2;
-//      framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
-//      Log.d(TAG, "Calculated framing rect: " + framingRect);
-//    }
-//    return framingRect;
-//  }
 
     /**
      * Like {@link #getFramingRect} but coordinates are in terms of the preview frame,
@@ -257,10 +235,10 @@ public final class CameraManager {
             Point cameraResolution = configManager.getCameraResolution();
             Point screenResolution = configManager.getScreenResolution();
             //modify here
-//      rect.left = rect.left * cameraResolution.x / screenResolution.x;
-//      rect.right = rect.right * cameraResolution.x / screenResolution.x;
-//      rect.top = rect.top * cameraResolution.y / screenResolution.y;
-//      rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
+            rect.left = rect.left * cameraResolution.x / screenResolution.x;
+            rect.right = rect.right * cameraResolution.x / screenResolution.x;
+            rect.top = rect.top * cameraResolution.y / screenResolution.y;
+            rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
             rect.left = rect.left * cameraResolution.y / screenResolution.x;
             rect.right = rect.right * cameraResolution.y / screenResolution.x;
             rect.top = rect.top * cameraResolution.x / screenResolution.y;
@@ -277,26 +255,26 @@ public final class CameraManager {
      * @return An array of Points scaled to the size of the framing rect and offset appropriately
      *         so they can be drawn in screen coordinates.
      */
-  /*
-  public Point[] convertResultPoints(ResultPoint[] points) {
-    Rect frame = getFramingRectInPreview();
-    int count = points.length;
-    Point[] output = new Point[count];
-    for (int x = 0; x < count; x++) {
-      output[x] = new Point();
-      output[x].x = frame.left + (int) (points[x].getX() + 0.5f);
-      output[x].y = frame.top + (int) (points[x].getY() + 0.5f);
+
+    public Point[] convertResultPoints(ResultPoint[] points) {
+        Rect frame = getFramingRectInPreview();
+        int count = points.length;
+        Point[] output = new Point[count];
+        for (int x = 0; x < count; x++) {
+            output[x] = new Point();
+            output[x].x = frame.left + (int) (points[x].getX() + 0.5f);
+            output[x].y = frame.top + (int) (points[x].getY() + 0.5f);
+        }
+        return output;
     }
-    return output;
-  }
-   */
+
 
     /**
      * A factory method to build the appropriate LuminanceSource object based on the format
      * of the preview buffers, as described by Camera.Parameters.
      *
-     * @param data   A preview frame.
-     * @param width  The width of the image.
+     * @param data A preview frame.
+     * @param width The width of the image.
      * @param height The height of the image.
      * @return A PlanarYUVLuminanceSource instance.
      */
@@ -329,6 +307,7 @@ public final class CameraManager {
 
     /**
      * 打开或关闭闪光灯
+     *
      * @param isOpen 是否开启闪光灯
      * @return boolean 操作成功/失败。
      */

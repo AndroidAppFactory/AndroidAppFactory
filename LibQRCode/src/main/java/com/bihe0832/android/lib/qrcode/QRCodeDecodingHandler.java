@@ -22,7 +22,6 @@ import java.util.Map;
  *         Description: Description
  */
 public final class QRCodeDecodingHandler {
-
     public static final Map<DecodeHintType, Object> HINTS = new EnumMap<>(DecodeHintType.class);
 
     static {
@@ -47,10 +46,6 @@ public final class QRCodeDecodingHandler {
         HINTS.put(DecodeHintType.TRY_HARDER, BarcodeFormat.QR_CODE);
         HINTS.put(DecodeHintType.POSSIBLE_FORMATS, allFormats);
         HINTS.put(DecodeHintType.CHARACTER_SET, "UTF-8");
-    }
-
-    public static Result decodeQRcode(String filePath) {
-        return decodeQRcode(BitmapUtil.getLocalBitmap(filePath, 300, 300));
     }
 
     public static Result decodeQRcode(String filePath, int width) {

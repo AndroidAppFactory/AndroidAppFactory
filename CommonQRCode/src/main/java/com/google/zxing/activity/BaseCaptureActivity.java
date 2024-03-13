@@ -35,6 +35,7 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
 
     private static final long VIBRATE_DURATION = 300L;
     private static final float BEEP_VOLUME = 0.80f;
+    public static final int BITMAP_WIDTH = 600;
 
     private CaptureActivityHandler handler;
     private ViewfinderView viewfinderView;
@@ -169,7 +170,7 @@ public class BaseCaptureActivity extends BaseActivity implements Callback {
         mLoading.setCanCanceled(false);
         ThreadManager.getInstance().runOnUIThread(() -> {
             mLoading.show("识别中，请稍候...");
-            Result result = QRCodeDecodingHandler.decodeQRcode(this, uri, 300);
+            Result result = QRCodeDecodingHandler.decodeQRcode(this, uri, BITMAP_WIDTH);
             mLoading.dismiss();
             if (result != null) {
                 handleDecode(result);
