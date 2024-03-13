@@ -264,7 +264,7 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-qrcode",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
-                        "com.google.zxing:core:3.3.3",
+                        project.zxing.core,
                         "LibMedia"
                 ]
         ],

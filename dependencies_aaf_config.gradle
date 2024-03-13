@@ -61,6 +61,11 @@ ext {
             min    : "com.arthenica:mobile-ffmpeg-min:4.4.LTS",
     ]
 
+
+    zxing = [
+            core: "com.google.zxing:core:3.5.3"
+    ]
+
     metadata = [
             drewnoakes: "com.drewnoakes:metadata-extractor:2.16.0",
     ]
