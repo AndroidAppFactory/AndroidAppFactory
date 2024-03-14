@@ -201,3 +201,5 @@
 -keepclassmembers class * extends com.bihe0832.android.lib.adapter.CardBaseHolder {
        public <init>(android.content.Context,android.view.View);
 }
+
+-keep class com.arthenica.mobileffmpeg.** { *; }
