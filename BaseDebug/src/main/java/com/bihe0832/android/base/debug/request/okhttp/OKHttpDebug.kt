@@ -8,6 +8,8 @@
 package com.bihe0832.android.base.debug.request.okhttp
 
 import com.bihe0832.android.app.api.AAFNetWorkApi
+import com.bihe0832.android.app.api.AAFNetworkCallback
+import com.bihe0832.android.app.api.BaseResponse
 import com.bihe0832.android.base.debug.request.Constants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -29,6 +31,9 @@ interface ApiService {
     @POST("/AndroidHTTP/post.php")
     fun getData(@Body body: RequestBody): Call<ResponseBody>
 
+    @POST("/AndroidHTTP/post.php")
+    fun getData1(@Body body: RequestBody): Call<BaseResponse>
+
     @POST("/article/query/0/json")
     fun getNewData(@Body body: RequestBody): Call<ResponseBody>
 }
@@ -36,9 +41,19 @@ interface ApiService {
 fun debugOKHttp() {
     ThreadManager.getInstance().start {
 
-        AAFNetWorkApi.getRetrofit(Constants.HTTP_DOMAIN).create(ApiService::class.java).getData(AAFNetWorkApi.getRequestBody()).apply {
+        AAFNetWorkApi
+                .getRetrofit(Constants.HTTP_DOMAIN)
+                .create(ApiService::class.java)
+//                .getData(AAFNetWorkApi.getRequestBody()).apply {
+//
+//                }.enqueue(ResultCall<ResponseBody>())
+                .getData1(AAFNetWorkApi.getRequestBody()).apply {
 
-                }.enqueue(ResultCall<ResponseBody>())
+                }.enqueue(object : AAFNetworkCallback<BaseResponse>() {
+                    override fun onSuccess(result: BaseResponse) {
+                        ZLog.d("NetworkResult", result.toString())
+                    }
+                })
     }
 }
 
@@ -53,3 +68,4 @@ private class ResultCall<T> : Callback<T> {
 
     }
 }
+

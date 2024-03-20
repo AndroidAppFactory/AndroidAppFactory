@@ -24,9 +24,9 @@ abstract class AAFNetworkCallback<T : BaseResponse> : Callback<T> {
     open fun onLoginError(errorCode: Int, msg: String) {
     }
 
-    private fun onInnerError(errorCode: Int, msg: String) {
-        AAFLoggerFile.logServer("\n------------------------------------")
-        AAFLoggerFile.logServer("${AAFNetWorkApi.LOG_TAG} onError: $errorCode, $msg")
+    private fun onInnerError(call: Call<T>, errorCode: Int, msg: String) {
+        AAFLoggerFile.logServer("------------------------------------")
+        AAFLoggerFile.logServer("${AAFNetWorkApi.LOG_TAG}  call: ${call.hashCode()}, onError: $errorCode, $msg")
         AAFLoggerFile.logServer("------------------------------------\n")
         when (errorCode) {
             else -> {
@@ -36,32 +36,36 @@ abstract class AAFNetworkCallback<T : BaseResponse> : Callback<T> {
     }
 
     override fun onResponse(call: Call<T>, response: Response<T>) {
-        ZLog.d("${AAFNetWorkApi.LOG_TAG} onResponse:$response")
+        ZLog.d(AAFNetWorkApi.LOG_TAG, "call: ${call.hashCode()},  onResponse:$response")
         try {
             if (response.isSuccessful) {
                 if (null != response.body()) {
                     response.body()!!.let { networkResponse ->
-                        ZLog.d("${AAFNetWorkApi.LOG_TAG} networkResponse ->$networkResponse")
+                        ZLog.d(AAFNetWorkApi.LOG_TAG, "networkResponse ->: $networkResponse")
                         if (networkResponse.errCode == FLAG_SUCCESS) {
                             onSuccess(networkResponse)
                         } else {
-                            onInnerError(networkResponse.errCode, networkResponse.message)
+                            onInnerError(call, networkResponse.errCode, networkResponse.message)
                         }
                     }
                 } else {
-                    onInnerError(FLAG_FAILED_BODY_EMPTY, "onResponse is empty")
+                    onInnerError(call, FLAG_FAILED_BODY_EMPTY, "onResponse is empty")
                 }
             } else {
-                onInnerError(FLAG_FAILED_HTTP, "response HTTP Failed:$response + ")
+                onInnerError(call, FLAG_FAILED_HTTP, "response HTTP Failed:$response + ")
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            onInnerError(FLAG_FAILED_HTTP_EXCEPTION, "${call.request().url()} response Exception:$response + ")
+            onInnerError(call, FLAG_FAILED_HTTP_EXCEPTION, "${call.request().url()} response Exception:$response + ")
         }
     }
 
     override fun onFailure(call: Call<T>, t: Throwable) {
         t.printStackTrace()
-        onInnerError(FLAG_FAILED_HTTP, "${call.request().url()} onFailure :${t.message} + ")
+        onInnerError(
+            call,
+            FLAG_FAILED_HTTP,
+            " call: ${call.hashCode()}, ${call.request().url()} onFailure :${t.message} + "
+        )
     }
 }
