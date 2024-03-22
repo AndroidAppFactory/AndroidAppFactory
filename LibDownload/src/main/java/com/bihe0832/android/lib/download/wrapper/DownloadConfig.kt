@@ -44,7 +44,7 @@ object DownloadConfig {
             downloadPriority = DownloadItem.MAX_DOWNLOAD_PRIORITY
             downloadURL = url
             fileMD5 = md5
-            actionKey = "DownloadConfig"
+            actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_CONFIG
             isDownloadWhenUseMobile = true
             isForceDownloadNew = TextUtils.isEmpty(md5)
             this.downloadListener = object : SimpleDownloadListener() {

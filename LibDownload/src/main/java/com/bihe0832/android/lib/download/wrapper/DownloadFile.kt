@@ -7,8 +7,8 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.impl.DownloadProgressDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.impl.DownloadProgressDialog
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.tools.SimpleDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
@@ -217,6 +217,20 @@ object DownloadFile {
     }
 
     private fun startDownload(context: Context, title: String, msg: String, url: String, path: String, isFile: Boolean, md5: String, sha256: String, forceDownloadNew: Boolean, UseMobile: Boolean, forceDownload: Boolean, downloadListener: DownloadListener?) {
-        DownloadTools.startDownload(context, title, msg, url, path, isFile, md5, sha256, forceDownloadNew, UseMobile, "DownloadFile", forceDownload, downloadListener)
+        DownloadTools.startDownload(
+            context,
+            title,
+            msg,
+            url,
+            path,
+            isFile,
+            md5,
+            sha256,
+            forceDownloadNew,
+            UseMobile,
+            DownloadUtils.DOWNLOAD_ACTION_KEY_FILE,
+            forceDownload,
+            downloadListener
+        )
     }
 }

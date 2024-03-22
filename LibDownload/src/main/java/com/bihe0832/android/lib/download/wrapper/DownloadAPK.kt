@@ -149,34 +149,39 @@ object DownloadAPK {
 
     //直接下载，不显示进度，4G下载不弹框直接下载，下载完成自动安装
     fun forceDownload(context: Context, url: String, md5: String, packageName: String) {
-        DownloadFile.forceDownload(
-                context,
-                "",
-                "",
-                url,
-                "",
-                false,
-                md5,
-                "",
-                forceDownloadNew = false,
-                UseMobile = true,
-                downloadListener = SimpleAPKDownloadListener(context, packageName)
+        DownloadTools.startDownload(
+            context,
+            "",
+            "",
+            url,
+            "",
+            false,
+            md5,
+            sha256 = "",
+            forceDownloadNew = true,
+            UseMobile = true,
+            actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_APK,
+            forceDownload = false,
+            downloadListener = SimpleAPKDownloadListener(context, packageName)
         )
     }
 
     fun download(context: Context, url: String, md5: String, packageName: String) {
-        DownloadFile.download(
-                context,
-                "",
-                "",
-                url,
-                "",
-                false,
-                md5,
-                "",
-                forceDownloadNew = false,
-                UseMobile = true,
-                downloadListener = SimpleAPKDownloadListener(context, packageName)
+        DownloadTools.startDownload(
+            context,
+            "",
+            "",
+            url,
+            "",
+            false,
+            md5,
+            sha256 = "",
+            forceDownloadNew = false,
+            UseMobile = true,
+            actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_APK,
+            forceDownload = false,
+            downloadListener = SimpleAPKDownloadListener(context, packageName)
         )
+
     }
 }
