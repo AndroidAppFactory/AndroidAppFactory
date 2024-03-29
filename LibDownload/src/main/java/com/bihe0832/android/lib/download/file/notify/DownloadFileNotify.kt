@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.download.notify
+package com.bihe0832.android.lib.download.file.notify
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,8 +6,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
-import com.bihe0832.android.lib.download.core.DownloadManager
-import com.bihe0832.android.lib.download.core.list.DownloadTaskList
+import com.bihe0832.android.lib.download.file.DownloadFileManager
+import com.bihe0832.android.lib.download.file.DownloadFileTaskList
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
@@ -20,7 +20,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
  * Description: Description
  *
  */
-object DownloadNotify {
+object DownloadFileNotify {
 
     private const val NOTIFY_CHANNEL = "DOWNLOAD"
     private val downloadReceiver by lazy {
@@ -35,20 +35,25 @@ object DownloadNotify {
                     ZLog.d(TAG, "[DownloadNotificationsManager] onReceive: $action")
                     when (action) {
                         DownloadNotifyManager.ACTION_RESUME -> {
-                            DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, true, item.isDownloadWhenUseMobile)
+                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                                DownloadFileManager.resumeTask(
+                                    item.downloadID,
+                                    item.downloadListener,
+                                    true,
+                                    item.isDownloadWhenUseMobile
+                                )
                             }
                         }
 
                         DownloadNotifyManager.ACTION_PAUSE -> {
-                            DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.pauseTask(item.downloadID, startByUser = true, clearHistory = false)
+                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                                DownloadFileManager.pauseTask(item.downloadID, startByUser = true, clearHistory = false)
                             }
                         }
 
                         DownloadNotifyManager.ACTION_DELETE -> {
-                            DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.deleteTask(item.downloadID, startByUser = false, deleteFile = false)
+                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                                DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = false)
                                 notifyDelete(item)
                             }
 
@@ -60,15 +65,20 @@ object DownloadNotify {
 
                         }
                         DownloadNotifyManager.ACTION_INSTALL -> {
-                            DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
+                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
                                 InstallUtils.installAPP(context, item.filePath)
                                 notifyDelete(item)
                             }
                         }
 
                         DownloadNotifyManager.ACTION_RETRY -> {
-                            DownloadTaskList.getTaskByDownloadURL(downloadURL)?.let { item ->
-                                DownloadManager.resumeTask(item.downloadID, item.downloadListener, startByUser = true, downloadWhenUseMobile = true)
+                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                                DownloadFileManager.resumeTask(
+                                    item.downloadID,
+                                    item.downloadListener,
+                                    startByUser = true,
+                                    downloadWhenUseMobile = true
+                                )
                                 notifyDelete(item)
                             }
                         }

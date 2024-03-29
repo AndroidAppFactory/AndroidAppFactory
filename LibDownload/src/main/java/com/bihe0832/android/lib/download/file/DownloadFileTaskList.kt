@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.download.core.list
+package com.bihe0832.android.lib.download.file
 
 import com.bihe0832.android.lib.download.DownloadItem
 import java.util.concurrent.ConcurrentHashMap
@@ -8,10 +8,10 @@ import java.util.concurrent.CopyOnWriteArrayList
  *
  * @author zixie code@bihe0832.com
  * Created on 2020/9/30.
- * Description: Description
+ * Description: 在下载队列中的任务列表
  *
  */
-object DownloadTaskList {
+object DownloadFileTaskList {
 
 
     private val mDownloadList = ConcurrentHashMap<Long, DownloadItem>()
@@ -74,7 +74,7 @@ object DownloadTaskList {
     }
 
     @Synchronized
-    fun getTaskByDownloadURL(downloadURL: String): DownloadItem? {
-        return mDownloadList[DownloadItem.getDownloadIDByURL(downloadURL)]
+    fun getTaskByDownloadURL(downloadURL: String, downloadActionKey: String): DownloadItem? {
+        return mDownloadList[DownloadItem.getDownloadIDByURL(downloadURL, downloadActionKey)]
     }
 }

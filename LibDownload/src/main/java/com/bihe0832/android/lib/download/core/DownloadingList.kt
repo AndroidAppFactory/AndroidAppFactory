@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.download.core.list
+package com.bihe0832.android.lib.download.core
 
 import com.bihe0832.android.lib.download.DownloadItem
 import java.util.concurrent.ConcurrentHashMap
@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  *
  * @author zixie code@bihe0832.com
  * Created on 2020/9/30.
- * Description: Description
+ * Description: 正在下载的任务列表
  *
  */
 object DownloadingList {

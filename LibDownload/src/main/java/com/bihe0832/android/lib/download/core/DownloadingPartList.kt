@@ -1,8 +1,8 @@
-package com.bihe0832.android.lib.download.core.list
+package com.bihe0832.android.lib.download.core
 
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadStatus
-import com.bihe0832.android.lib.download.part.DownloadThread
+import com.bihe0832.android.lib.download.core.part.DownloadThread
 import com.bihe0832.android.lib.log.ZLog
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList

@@ -10,13 +10,14 @@ import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
-import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.download.wrapper.DownloadConfig
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
+import com.bihe0832.android.lib.download.wrapper.DownloadRangeUtils
 import com.bihe0832.android.lib.download.wrapper.DownloadTools
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.file.content.FileContent
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
@@ -60,7 +61,10 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("下载并计算文件的具体信息", View.OnClickListener { testDownload() }))
             add(DebugItemData("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
+            add(DebugItemData("测试区间下载", View.OnClickListener { testDownloadRange() }))
             add(DebugItemData("测试下载队列", View.OnClickListener { testDownloadList() }))
+            add(DebugItemData("多位置触发下载", View.OnClickListener { testDownloadMoreThanOnce() }))
+
             add(
                 DebugItemData(
                     "打开应用安装界面",
@@ -108,7 +112,6 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             )
             add(DebugItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
             add(DebugItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
-            add(DebugItemData("多位置触发下载", View.OnClickListener { testDownloadMoreThanOnce() }))
         }
     }
 
@@ -345,18 +348,51 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         }
     }
 
+
+    fun testDownloadRange() {
+        val file = File(AAFFileWrapper.getFileCacheFolder() + "a.m4a")
+        file.createNewFile()
+        DownloadRangeUtils.startDownload(
+            activity!!,
+            "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a",
+            file.absolutePath,
+            0,
+            20000, object : SimpleDownloadListener() {
+                override fun onProgress(item: DownloadItem) {
+                    ZLog.d(
+                        "testDownloadRange",
+                        "onProgress : ${item.downloadID} - ${item.processDesc}",
+                    )
+                }
+
+                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                    ZLog.w(
+                        "testDownloadRange",
+                        "onFail : ${item.downloadID} - ${errorCode} ${msg}",
+                    )
+                }
+
+                override fun onComplete(filePath: String, item: DownloadItem): String {
+                    ZLog.w(
+                        "testDownloadRange",
+                        "onComplete : ${item.downloadID} - ${MD5.getMd5(FileUtils.readDataFromFile(filePath,0,20000))}",
+                    )
+
+                    return filePath
+                }
+            }
+        )
+    }
+
     fun testDownloadProcess() {
-        DownloadAPK.startDownloadWithProcess(
+        DownloadFile.downloadWithProcess(
             activity!!,
             String.format(
                 ThemeResourcesManager.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating)!!,
                 "（V.2.2.21)",
             ),
-            "这是一个Desc测试",
-            "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a",
-            "340190503EE8DACBF2FE8DCC133C304E",
-            "",
-            canCancel = true, downloadMobile = true,
+            "这是一个Desc测试", "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a", "", false,
+            "4ef99863858b0ee17177f773580e4f2a", "", true, false, true, true,
             listener = object : OnDialogListener {
                 override fun onPositiveClick() {
                 }
@@ -366,7 +402,30 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
                 override fun onCancel() {
                 }
-            },
+            }, object : SimpleDownloadListener() {
+                override fun onProgress(item: DownloadItem) {
+                    ZLog.d(
+                        "testDownloadProcess",
+                        "onProgress : ${item.downloadID} - ${item.processDesc}",
+                    )
+                }
+
+                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                    ZLog.w(
+                        "testDownloadProcess",
+                        "onFail : ${item.downloadID} - ${errorCode} ${msg}",
+                    )
+                }
+
+                override fun onComplete(filePath: String, item: DownloadItem): String {
+                    ZLog.w(
+                        "testDownloadProcess",
+                        "onComplete : ${item.downloadID} - ${MD5.getMd5(FileUtils.readDataFromFile(filePath,0,20000))}",
+                    )
+                    return filePath
+                }
+
+            }
         )
     }
 

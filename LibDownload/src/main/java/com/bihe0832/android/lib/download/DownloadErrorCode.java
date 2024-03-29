@@ -41,4 +41,10 @@ public @interface DownloadErrorCode {
     int ERR_DOWNLOAD_PART_EXCEPTION = -12;
     // 启动分片下载时异常
     int ERR_DOWNLOAD_PART_START_EXCEPTION = -13;
+    // 分片下载必须提供文件完整路径
+    int ERR_RANGE_BAD_PATH = -14;
+
+    int ERR_RANGE_NOT_SUPPORT = -15;
+
+    int ERR_RANGE_BAD_SERVER_LENGTH = -16;
 }

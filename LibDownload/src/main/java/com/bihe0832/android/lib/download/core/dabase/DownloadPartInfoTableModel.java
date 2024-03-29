@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.download.dabase;
+package com.bihe0832.android.lib.download.core.dabase;
 
 import android.content.ContentValues;
 import android.database.Cursor;

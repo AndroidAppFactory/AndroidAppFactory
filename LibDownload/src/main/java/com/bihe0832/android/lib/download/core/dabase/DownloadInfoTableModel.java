@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.download.dabase;
+package com.bihe0832.android.lib.download.core.dabase;
 
 import android.content.ContentValues;
 import android.content.pm.PackageInfo;
@@ -6,22 +6,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Base64;
-
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadStatus;
-import com.bihe0832.android.lib.download.core.DownloadManager;
-import com.bihe0832.android.lib.download.core.list.DownloadTaskList;
+import com.bihe0832.android.lib.download.file.DownloadFileTaskList;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
 import com.bihe0832.android.lib.sqlite.BaseTableModel;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import kotlin.jvm.Synchronized;
 
 /**
@@ -82,10 +78,14 @@ public class DownloadInfoTableModel extends BaseTableModel {
                 item.setStatus(DownloadStatus.STATUS_DOWNLOAD_PAUSED);
             } else if (status == DownloadStatus.STATUS_HAS_DOWNLOAD
                     || status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED) {
-                PackageInfo info = APKUtils
-                        .getInstalledPackage(DownloadManager.INSTANCE.getContext(), item.getPackageName());
-                if (info != null && info.versionCode == item.getVersionCode()) {
-                    item.setStatus(status);
+                if (DownloadInfoDBManager.INSTANCE.getApplicationContext() != null) {
+                    PackageInfo info = APKUtils.getInstalledPackage(
+                            DownloadInfoDBManager.INSTANCE.getApplicationContext(), item.getPackageName());
+                    if (info != null && info.versionCode == item.getVersionCode()) {
+                        item.setStatus(status);
+                    } else {
+                        item.setStatus(DownloadStatus.NO_DOWNLOAD);
+                    }
                 } else {
                     item.setStatus(DownloadStatus.NO_DOWNLOAD);
                 }
@@ -104,14 +104,14 @@ public class DownloadInfoTableModel extends BaseTableModel {
         try {
             Cursor cursor = helper.queryInfo(TABLE_NAME, null, null, null, null, null, null, null);
             try {
-                DownloadTaskList.INSTANCE.clear();
+                DownloadFileTaskList.INSTANCE.clear();
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     DownloadItem item = cv2data(cursor);
                     item.setFinishedLengthBefore(
                             DownloadInfoDBManager.INSTANCE.getFinishedBefore(item.getDownloadID()));
                     item.setFinished(item.getFinishedLengthBefore());
-                    DownloadTaskList.INSTANCE.addToDownloadTaskList(item);
+                    DownloadFileTaskList.INSTANCE.addToDownloadTaskList(item);
                     if (FileUtils.INSTANCE.checkFileExist(item.getFilePath())) {
                         item.setFinished(item.getFileLength());
                         item.setStatus(DownloadStatus.STATUS_DOWNLOAD_SUCCEED);
@@ -150,10 +150,10 @@ public class DownloadInfoTableModel extends BaseTableModel {
         return (rows != 0);
     }
 
-    static boolean hasData(BaseDBHelper helper, String url) {
+    static boolean hasData(BaseDBHelper helper, String url, String downloadAction) {
         String[] columns = null;
         String selection = " " + col_download_id + " = ? ";
-        String[] selectionArgs = {String.valueOf(DownloadItem.getDownloadIDByURL(url))};
+        String[] selectionArgs = {String.valueOf(DownloadItem.getDownloadIDByURL(url, downloadAction))};
         String groupBy = null;
         String having = null;
         String orderBy = null;
@@ -212,9 +212,9 @@ public class DownloadInfoTableModel extends BaseTableModel {
         return dataItem;
     }
 
-    static DownloadItem getDownloadInfo(BaseDBHelper helper, String url) {
+    static DownloadItem getDownloadInfo(BaseDBHelper helper, String url, String downloadAction) {
         String selection = " " + col_download_id + " = ? ";
-        String[] selectionArgs = {String.valueOf(DownloadItem.getDownloadIDByURL(url))};
+        String[] selectionArgs = {String.valueOf(DownloadItem.getDownloadIDByURL(url, downloadAction))};
         return getDownloadInfoFromDBBySection(helper, selection, selectionArgs);
 
     }
@@ -225,7 +225,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
         }
 
         boolean success;
-        if (hasData(helper, item.getDownloadURL())) {
+        if (hasData(helper, item.getDownloadURL(), item.getDownloadActionKey())) {
             success = updateData(helper, item);
         } else {
             success = insertData(helper, item);

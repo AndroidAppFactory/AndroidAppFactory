@@ -3,12 +3,9 @@ package com.bihe0832.android.lib.download;
 
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.MathUtils;
-
 import java.io.Serializable;
-
 import kotlin.jvm.Synchronized;
 
 
@@ -25,6 +22,8 @@ public class DownloadItem implements Serializable {
 
     // 下载URL，必填
     private String downloadURL = "";
+    // 一次下载的标识，非必填，对于完整文件的下载，建议传空，主要针对一个URL存在多个下载，且内容不一致的场景（不分文件的分片下载）
+    private String downloadActionKey = "";
     // 文件MD5，非必填
     private String fileMD5 = "";
     // 文件SHA256，非必填
@@ -105,6 +104,19 @@ public class DownloadItem implements Serializable {
         }
     }
 
+    public void setDownloadActionKey(String downloadActionKey) {
+        this.downloadActionKey = downloadActionKey;
+    }
+
+    public void setDownloadActionKey(long start, long length) {
+        this.downloadActionKey = getDownloadActionKey(start, length);
+    }
+
+
+    public String getDownloadActionKey() {
+        return downloadActionKey;
+    }
+
     public boolean notificationVisibility() {
         return notificationVisibility;
     }
@@ -129,7 +141,7 @@ public class DownloadItem implements Serializable {
 
     //下载ID,一个任务的唯一标示
     public long getDownloadID() {
-        return getDownloadIDByURL(downloadURL);
+        return getDownloadIDByURL(downloadURL, downloadActionKey);
     }
 
     public boolean isForceDeleteBad() {
@@ -243,9 +255,14 @@ public class DownloadItem implements Serializable {
         return forceDownloadNew;
     }
 
-    public static long getDownloadIDByURL(String url) {
-        return ConvertUtils.getUnsignedInt(url.hashCode());
+    public static long getDownloadIDByURL(String url, String actionKey) {
+        return ConvertUtils.getUnsignedInt((actionKey + url).hashCode());
     }
+
+    public static String getDownloadActionKey(long start, long length) {
+        return start + "-" + length + "-" + (start + length);
+    }
+
 
     public void setForceDownloadNew(boolean forceDownloadNew) {
         this.forceDownloadNew = forceDownloadNew;
@@ -358,6 +375,7 @@ public class DownloadItem implements Serializable {
     public String getActionKey() {
         return actionKey;
     }
+
 
     public void setActionKey(String actionKey) {
         if (!TextUtils.isEmpty(actionKey)) {

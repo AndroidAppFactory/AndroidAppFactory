@@ -4,8 +4,15 @@ import com.bihe0832.android.lib.log.ZLog;
 
 public class DownloadPartInfo {
 
-    private int mPartID;
+    public static int TYPE_FILE = 1;
+    public static int TYPE_RANGE = 2;
+
+    private int mDownloadType = TYPE_FILE;
+
     private long mDownloadID;
+
+    private int mPartNo;
+
     private String mRealDownloadURL;
     private String mFinalFileName;
     private long mPartStart;
@@ -13,7 +20,6 @@ public class DownloadPartInfo {
     private long mPartFinished;
     private long mPartFinishedBefore;
     private int mPartStatus;
-
 
     public DownloadPartInfo() {
     }
@@ -43,7 +49,7 @@ public class DownloadPartInfo {
     }
 
     public String getDownloadPartID() {
-        return mDownloadID + "-" + mPartID;
+        return mDownloadID + "-" + mPartNo;
     }
 
     public int getPartStatus() {
@@ -51,7 +57,8 @@ public class DownloadPartInfo {
     }
 
     public void setPartStatus(int mPartStatus) {
-        ZLog.d(DownloadItem.TAG, mDownloadID + "-" + mPartID + " status change , before: " + this.mPartStatus + " after : "
+        ZLog.d(DownloadItem.TAG,
+                mDownloadID + "-" + mPartNo + " status change , before: " + this.mPartStatus + " after : "
                 + mPartStatus);
 //        if(this.mPartStatus != mPartStatus){
 //            reportDownloadPartStatusChange(this, this.mPartStatus, mPartStatus);
@@ -60,11 +67,19 @@ public class DownloadPartInfo {
     }
 
     public int getPartID() {
-        return mPartID;
+        return mPartNo;
     }
 
     public void setPartID(int mPartID) {
-        this.mPartID = mPartID;
+        this.mPartNo = mPartID;
+    }
+
+    public void setDownloadType(int mDownloadType) {
+        this.mDownloadType = mDownloadType;
+    }
+
+    public int getDownloadType() {
+        return mDownloadType;
     }
 
     public String getRealDownloadURL() {
@@ -101,9 +116,9 @@ public class DownloadPartInfo {
 
     @Override
     public String toString() {
-        return "DownloadPartInfo{"
-                + "mPartID=" + mPartID
+        return "DownloadPartInfo{" + "mPartID=" + mPartNo
                 + ", mDownloadID=" + mDownloadID
+                + ", mDownloadType=" + mDownloadType
                 + ", mDownloadURL='" + mRealDownloadURL + '\''
                 + ", mFinalFileName='" + mFinalFileName + '\''
                 + ", mPartStart=" + mPartStart
