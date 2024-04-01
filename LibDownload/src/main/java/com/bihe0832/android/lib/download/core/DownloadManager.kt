@@ -26,7 +26,7 @@ abstract class DownloadManager {
     abstract fun addWaitToDownload()
 
     internal var mContext: Context? = null
-    internal val DEFAULT_MAX_NUM = 3
+    internal val DEFAULT_MAX_NUM = 1
     internal val MAX_MAX_NUM = 5
 
     internal var mMaxNum = DEFAULT_MAX_NUM

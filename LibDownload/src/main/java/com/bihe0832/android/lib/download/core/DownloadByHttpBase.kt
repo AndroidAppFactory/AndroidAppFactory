@@ -66,7 +66,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                         addToDownloadList(info)
                         notifyStart(info)
                         if (downloadType == DownloadPartInfo.TYPE_FILE) {
-                            goDownload(info, downloadType, 0, info.fileLength)
+                            goDownload(info, downloadType, 0, info.fileLength - 1)
                         } else {
                             goDownload(info, downloadType, rangeStart, rangeStart + rangeLength - 1)
                         }
@@ -92,11 +92,19 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
     }
 
     /**
-     * 备注：从此处开始，参数的传递从下载内容的长度转化为了下载内容的起始位置点
+     * 备注：从此处开始，参数的传递从下载内容的长度转化为了下载内容的起始位置点!!!
      */
     @SuppressLint("Range")
     protected fun goDownload(info: DownloadItem, downloadType: Int, rangeStart: Long, rangeEnd: Long) {
-        ZLog.d(TAG, "goDownload:$info")
+        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload ~~~~~~~~~~~~~~~~~~")
+        ZLog.e(TAG, "goDownload downloadID:${info.downloadID}")
+        ZLog.e(TAG, "goDownload downloadType:${downloadType}")
+        ZLog.e(TAG, "goDownload rangeStart:${rangeStart}")
+        ZLog.e(TAG, "goDownload rangeEnd:${rangeEnd}")
+        ZLog.e(TAG, "goDownload fileLength:${info.fileLength}")
+        ZLog.e(TAG, "goDownload info:${info}")
+        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload ~~~~~~~~~~~~~~~~~~")
+
 
         val file = File(info.filePath)
         val rangeLength = rangeEnd - rangeStart + 1

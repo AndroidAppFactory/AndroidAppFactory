@@ -47,4 +47,6 @@ public @interface DownloadErrorCode {
     int ERR_RANGE_NOT_SUPPORT = -15;
 
     int ERR_RANGE_BAD_SERVER_LENGTH = -16;
+
+    int ERR_RANGE_BAD_DOWNLOAD_LENGTH = -17;
 }

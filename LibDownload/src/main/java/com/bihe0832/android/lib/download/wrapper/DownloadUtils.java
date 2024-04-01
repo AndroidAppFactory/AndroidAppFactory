@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * ZTSDKApiForDownload
+ * AAF 文件下载
  *
  * @author zixie code@bihe0832.com Created on 2020/9/23.
  */

@@ -1,10 +1,9 @@
 package com.bihe0832.android.lib.download.range
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.pm.PackageManager
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_BAD_URL
+import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_RANGE_BAD_DOWNLOAD_LENGTH
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_RANGE_BAD_PATH
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_URL_IS_TOO_OLD_THAN_LOACL
 import com.bihe0832.android.lib.download.DownloadItem
@@ -14,9 +13,6 @@ import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadingList
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
-import com.bihe0832.android.lib.download.file.notify.DownloadFileNotify
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
-import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -30,20 +26,11 @@ object DownloadRangeManager : DownloadManager() {
         DownloadByHttpForRange(mContext!!, innerDownloadListener, mMaxNum, mIsDebug)
     }
 
-
     private val mDownloadStart = HashMap<Long, Long>()
     private val mDownloadLength = HashMap<Long, Long>()
-    override fun init(context: Context, maxNum: Int, isDebug: Boolean) {
-        super.init(context, maxNum, isDebug)
-        if (!mHasInit) {
-            mHasInit = true
-            DownloadFileNotify.init(context)
-        }
-    }
 
     fun onDestroy() {
         pauseAllTask(startByUser = false, pauseMaxDownload = true)
-        DownloadFileNotify.destroy()
     }
 
     private val innerDownloadListener = object : DownloadListener {
@@ -51,9 +38,6 @@ object DownloadRangeManager : DownloadManager() {
             item.status = DownloadStatus.STATUS_DOWNLOAD_WAITING
             item.downloadListener?.onWait(item)
             DownloadInfoDBManager.saveDownloadInfo(item)
-            if (item.notificationVisibility()) {
-                DownloadFileNotify.notifyProcess(item)
-            }
         }
 
         override fun onStart(item: DownloadItem) {
@@ -62,25 +46,16 @@ object DownloadRangeManager : DownloadManager() {
             item.startTime = System.currentTimeMillis()
             item.downloadListener?.onStart(item)
             DownloadInfoDBManager.saveDownloadInfo(item)
-            if (item.notificationVisibility()) {
-                DownloadFileNotify.notifyProcess(item)
-            }
         }
 
         override fun onProgress(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOADING
             item.downloadListener?.onProgress(item)
-            if (item.notificationVisibility()) {
-                DownloadFileNotify.notifyProcess(item)
-            }
         }
 
         override fun onPause(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
             item.downloadListener?.onPause(item)
-            if (item.notificationVisibility()) {
-                DownloadFileNotify.notifyPause(item)
-            }
             addWaitToDownload()
         }
 
@@ -91,51 +66,37 @@ object DownloadRangeManager : DownloadManager() {
                 ToastUtil.showLong(mContext, "本机已有更高版本的${item.downloadTitle}，下载已取消")
             }
             item.downloadListener?.onFail(errorCode, msg, item)
-            if (item.notificationVisibility()) {
-                DownloadFileNotify.notifyFailed(item)
-            }
         }
 
         override fun onComplete(filePath: String, item: DownloadItem): String {
-            item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-            if (item.fileLength < 1) {
-                item.fileLength = File(filePath).length()
-            }
-            item.finished = item.fileLength
-            if (FileMimeTypes.isApkFile(filePath)) {
-                mContext?.packageManager?.getPackageArchiveInfo(
-                    filePath,
-                    PackageManager.GET_ACTIVITIES,
-                )?.packageName?.let {
-                    item.packageName = it
-                }
-            }
-            DownloadInfoDBManager.saveDownloadInfo(item)
-            addDownloadItemToList(item)
-            addWaitToDownload()
-
-            ThreadManager.getInstance().start {
-                ZLog.d(TAG, "onComplete start: $filePath ")
-                var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
-                ZLog.d(TAG, "onComplete end: $newPath ")
-                item.filePath = newPath
+            val file = File(filePath)
+            val needDownload = (mDownloadLength.get(item.downloadID) ?: 0)
+            if (file.length() < needDownload) {
+                onFail(
+                    ERR_RANGE_BAD_DOWNLOAD_LENGTH,
+                    "file length（${file.length()}） is less than need downlaod（$needDownload） length",
+                    item
+                )
+            } else {
+                item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
                 DownloadInfoDBManager.saveDownloadInfo(item)
-                if (item.notificationVisibility()) {
-                    DownloadFileNotify.notifyFinished(item)
-                }
-                if (item.isAutoInstall) {
-                    InstallUtils.installAPP(mContext, newPath)
+                addDownloadItemToList(item)
+                addWaitToDownload()
+                ThreadManager.getInstance().start {
+                    ZLog.d(TAG, "onComplete start: $filePath ")
+                    var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
+                    ZLog.d(TAG, "onComplete end: $newPath ")
+                    item.filePath = newPath
+                    DownloadInfoDBManager.saveDownloadInfo(item)
                 }
             }
+
 
             return filePath
         }
 
         override fun onDelete(item: DownloadItem) {
             item.downloadListener?.onDelete(item)
-            if (item.notificationVisibility()) {
-                DownloadFileNotify.notifyDelete(item)
-            }
         }
     }
 
@@ -324,7 +285,6 @@ object DownloadRangeManager : DownloadManager() {
             if (deleteFile) {
                 mDownloadEngine.deleteFile(info)
             }
-            DownloadFileNotify.notifyDelete(info)
             innerDownloadListener.onDelete(info)
         }
     }

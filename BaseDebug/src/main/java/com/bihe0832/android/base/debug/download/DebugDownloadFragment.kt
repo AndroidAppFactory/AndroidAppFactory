@@ -17,7 +17,6 @@ import com.bihe0832.android.lib.download.wrapper.DownloadTools
 import com.bihe0832.android.lib.download.wrapper.DownloadUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.content.FileContent
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
@@ -34,6 +33,15 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.io.File
 
 class DebugDownloadFragment : BaseDebugListFragment() {
+    val URL_YYB_WZ =
+        "https://dlied4.myapp.com/myapp/1104922185/cos.release-77942/10053761_com.tencent.tmgp.speedmobile_a2238881_1.32.0.2188_uPIKoV.apk"
+
+    val URL_YYB_TTS = "http://dldir1.qq.com/INO/assistant/com.google.android.tts.apk"
+    val URL_YYB_CHANNEL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
+    val URL_YYB_DDZ =
+        "https://imtt.dd.qq.com/16891/apk/6670A2D979F70D880519412D6E951162.apk?fsname=com.qqgame.hlddz_7.012.001_217.apk&csr=1bbd"
+    val URL_FILE = "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a"
+    val URL_CONFIG = "https://cdn.bihe0832.com/app/update/get_apk.json"
 
     companion object {
         val LOG_TAG = "DebugDownloadFragment"
@@ -350,38 +358,55 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
 
     fun testDownloadRange() {
-        val file = File(AAFFileWrapper.getFileCacheFolder() + "a.m4a")
+        val file = File(AAFFileWrapper.getFileCacheFolder() + "a.apk")
         file.createNewFile()
-        DownloadRangeUtils.startDownload(
-            activity!!,
-            "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a",
-            file.absolutePath,
-            0,
-            20000, object : SimpleDownloadListener() {
-                override fun onProgress(item: DownloadItem) {
-                    ZLog.d(
-                        "testDownloadRange",
-                        "onProgress : ${item.downloadID} - ${item.processDesc}",
-                    )
-                }
+        for (i in 0 until 1) {
+            val start = i * 10000L
+            DownloadRangeUtils.startDownload(activity!!,
+                URL_YYB_WZ,
+                file.absolutePath,
+                start,
+                1000000000,
+                object : SimpleDownloadListener() {
+                    override fun onStart(item: DownloadItem) {
+                        ZLog.d(
+                            "testDownloadRange", "onStart : ${item.downloadID}"
+                        )
 
-                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                    ZLog.w(
-                        "testDownloadRange",
-                        "onFail : ${item.downloadID} - ${errorCode} ${msg}",
-                    )
-                }
+                    }
 
-                override fun onComplete(filePath: String, item: DownloadItem): String {
-                    ZLog.w(
-                        "testDownloadRange",
-                        "onComplete : ${item.downloadID} - ${MD5.getMd5(FileUtils.readDataFromFile(filePath,0,20000))}",
-                    )
+                    override fun onProgress(item: DownloadItem) {
+                        ZLog.d(
+                            "testDownloadRange",
+                            "onProgress : ${item.downloadID} - ${item.processDesc}",
+                        )
+                    }
 
-                    return filePath
-                }
-            }
-        )
+                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                        ZLog.w(
+                            "testDownloadRange",
+                            "onFail : ${item.downloadID} - ${errorCode} ${msg}",
+                        )
+                    }
+
+                    override fun onComplete(filePath: String, item: DownloadItem): String {
+                        ZLog.w(
+                            "testDownloadRange",
+                            "onComplete start $start : ${item.downloadID} - ${
+                                MD5.getMd5(
+                                    FileUtils.readDataFromFile(
+                                        filePath, start, 10000
+                                    )
+                                )
+                            }",
+                        )
+
+                        return filePath
+                    }
+                })
+        }
+
+
     }
 
     fun testDownloadProcess() {
@@ -422,6 +447,20 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         "testDownloadProcess",
                         "onComplete : ${item.downloadID} - ${MD5.getMd5(FileUtils.readDataFromFile(filePath,0,20000))}",
                     )
+                    for (i in 0 until 6) {
+                        val start = i * 10000L
+                        ZLog.w(
+                            "testDownloadProcess",
+                            "onComplete  start $start: ${item.downloadID} - ${
+                                MD5.getMd5(
+                                    FileUtils.readDataFromFile(
+                                        filePath, start, 10000
+                                    )
+                                )
+                            }",
+                        )
+                    }
+                    FileUtils.deleteFile(filePath)
                     return filePath
                 }
 
@@ -542,14 +581,8 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     private var currentNum = 0
     fun testDownloadList() {
-        val URL_YYB_WZ =
-            "https://dlied4.myapp.com/myapp/1104922185/cos.release-77942/10053761_com.tencent.tmgp.speedmobile_a2238881_1.32.0.2188_uPIKoV.apk"
-        val URL_YYB_TTS = "http://dldir1.qq.com/INO/assistant/com.google.android.tts.apk"
-        val URL_YYB_CHANNEL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
-        val URL_YYB_DDZ =
-            "https://imtt.dd.qq.com/16891/apk/6670A2D979F70D880519412D6E951162.apk?fsname=com.qqgame.hlddz_7.012.001_217.apk&csr=1bbd"
-        val URL_FILE = "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a"
-        val URL_CONFIG = "https://cdn.bihe0832.com/app/update/get_apk.json"
+
+
         var listener = null
 //        var listener = object : SimpleDownloadListener() {
 //            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
