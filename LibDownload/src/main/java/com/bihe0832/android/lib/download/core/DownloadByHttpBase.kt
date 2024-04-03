@@ -212,10 +212,13 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         }
         //太小的文件分小片
         if (rangeLength / threadNum < DOWNLOAD_MIN_SIZE) {
-            threadNum = (info.fileLength / DOWNLOAD_MIN_SIZE).toInt()
+            threadNum = (rangeLength / DOWNLOAD_MIN_SIZE).toInt()
         }
         if (threadNum < 1) {
             threadNum = 1
+        }
+        if (threadNum > MAX_DOWNLOAD_THREAD){
+            threadNum = MAX_DOWNLOAD_THREAD
         }
         val partSize = rangeLength / threadNum
         if ((rangeLength - partSize * (threadNum - 1)) < partSize / 5) {
