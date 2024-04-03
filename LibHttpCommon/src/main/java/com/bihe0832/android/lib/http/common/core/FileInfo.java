@@ -16,19 +16,26 @@ public class FileInfo {
     private File file = null;
     private Uri fileUri = null;
     private String keyName = "";
+    private long fileLength = 0L;
+    private String fileName = "";
+
     private String fileDataType = "";
 
-    public FileInfo(String fileName, String key, String fileType) {
-        this.file = new File(fileName);
+    public FileInfo(String filePath, String key, String fileType) {
+        this.file = new File(filePath);
         this.keyName = key;
         this.fileDataType = fileType;
+        this.fileLength = this.file.length();
+        this.fileName = this.file.getName();
     }
 
 
-    public FileInfo(Uri uri, String key, String fileType) {
+    public FileInfo(Uri uri, String key, String fileType, String fileName, long fileLength) {
         this.fileUri = uri;
         this.keyName = key;
         this.fileDataType = fileType;
+        this.fileName = fileName;
+        this.fileLength = fileLength;
     }
 
     public File getFile() {
@@ -40,7 +47,8 @@ public class FileInfo {
     }
 
     public String getRequesetData(String uuid) {
-        if (null == file) {
+        if (null == file && fileUri == null) {
+            ZLog.e(LOG_TAG, "getFormDataString bad file path and uri");
             return "";
         }
         StringBuffer stringBuffer = new StringBuffer();
@@ -54,10 +62,10 @@ public class FileInfo {
                  * 此处的ContentType不同于 请求头 中Content-Type
                  */
                 .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(": ").append("form-data")
-                .append(";")
-                .append(" name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(keyName).append("\";")
-                .append(" filename").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(file.getName()).append("\";")
-                .append(" filelength").append(HTTP_REQ_ENTITY_MERGE).append(file.length())
+                .append(";").append(" name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(keyName).append("\";")
+                .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
+                .append("filename").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(fileName).append("\";")
+                .append(" filelength").append(HTTP_REQ_ENTITY_MERGE).append(fileLength)
                 .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                 .append(HTTP_REQ_PROPERTY_CONTENT_TYPE).append(": ").append(fileDataType)
                 .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)

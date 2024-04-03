@@ -7,6 +7,8 @@ import com.bihe0832.android.base.debug.request.advanced.TestResponse
 import com.bihe0832.android.base.debug.request.basic.BasicPostRequest
 import com.bihe0832.android.base.debug.request.okhttp.debugOKHttp
 import com.bihe0832.android.common.debug.base.BaseDebugActivity
+import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedResponseHandler
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
@@ -52,28 +54,32 @@ class DebugHttpActivity : BaseDebugActivity() {
         postAdvanced.setOnClickListener { sendPostAdvancedRequest() }
 
         postFile.setOnClickListener {
-            var filePath = "/sdcard/shumei.txt"
+
+            val file = File(AAFFileWrapper.getTempFolder() + "a.text")
+            file.createNewFile()
+            FileUtils.writeToFile(file.absolutePath, "fsdfsdfsd", false)
 
             var b = HashMap<String, String>().apply {
-                put("fsdf", "fsdf")
+                put("fsdf1", "fsdf1")
+                put("fsdf2", "fsdf2")
             }
 
             var files = mutableListOf<FileInfo>()
             files.add(
                 FileInfo(
-                    Uri.fromFile(File(filePath)),
+                    Uri.fromFile(file),
                     "media",
-                    BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM,
+                    BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM, file.name, file.length()
                 ),
             )
 
             HTTPServer.getInstance().doFileUpload(
                 this,
-                "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX&type=file&debug=1",
+                "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX0&type=file&debug=1",
                 b,
                 files,
             ).let {
-                ZLog.d(HTTPServer.LOG_TAG, "restult $it")
+                ZLog.d(HTTPServer.LOG_TAG, "result $it")
                 runOnUiThread { result.text = it }
             }
         }

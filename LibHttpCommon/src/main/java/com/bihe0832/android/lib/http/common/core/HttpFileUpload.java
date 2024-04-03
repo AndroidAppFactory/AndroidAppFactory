@@ -145,7 +145,7 @@ public class HttpFileUpload {
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                         .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(": ").append("form-data")
                         .append(";")
-                        .append(" name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(entry.getKey()).append("\"")
+                        .append("name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(entry.getKey()).append("\"")
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                         .append(HTTP_REQ_PROPERTY_CONTENT_TYPE).append(": ")
                         .append(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_TEXT).append("; ")
@@ -159,7 +159,7 @@ public class HttpFileUpload {
             }
         }
         String result = stringBuffer.toString();
-        ZLog.e(LOG_TAG, "getFormDataString = " + result);
+        ZLog.e(LOG_TAG, "getFormDataString = \n" + result);
         return stringBuffer.toString();
 
     }
