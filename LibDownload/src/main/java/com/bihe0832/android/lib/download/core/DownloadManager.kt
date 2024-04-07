@@ -73,7 +73,7 @@ abstract class DownloadManager {
 
     fun checkBeforeDownloadFile(info: DownloadItem): String {
         ZLog.d(TAG, "本地文件是否完整检查开始: $info ")
-        if (FileUtils.checkFileExist(info.filePath, info.fileLength, info.fileMD5, info.fileSHA256, false)) {
+        if (FileUtils.checkFileExist(info.filePath, info.contentLength, info.fileMD5, info.fileSHA256, false)) {
             return info.filePath
         }
         ZLog.d(TAG, "本地文件是否完整检查结束：$info ")
@@ -91,8 +91,8 @@ abstract class DownloadManager {
             if (!TextUtils.isEmpty(savedInfo.realURL)) {
                 info.realURL = savedInfo.realURL
             }
-            if (savedInfo.fileLength > 0) {
-                info.fileLength = savedInfo.fileLength
+            if (savedInfo.contentLength > 0) {
+                info.contentLength = savedInfo.contentLength
                 info.finishedLengthBefore = DownloadInfoDBManager.getFinishedBefore(info.downloadID)
                 info.finished = info.finishedLengthBefore
             }

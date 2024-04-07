@@ -67,7 +67,7 @@ public class DownloadItem implements Serializable {
     // 之前已经下载完的文件长度，不填
     private long finishedLengthBefore = 0;
     // 文件总长度，不填
-    private long fileLength = 0;
+    private long contentLength = 0;
     // 最终实际下载的URL，不填
     private String realURL = "";
     // 实时下载速度，不填
@@ -167,7 +167,7 @@ public class DownloadItem implements Serializable {
 
     //下载进度
     public float getProcess() {
-        return MathUtils.getFormatPercent(finishedLength, fileLength, 4);
+        return MathUtils.getFormatPercent(finishedLength, contentLength, 4);
     }
 
     public boolean isDownloadWhenUseMobile() {
@@ -272,14 +272,6 @@ public class DownloadItem implements Serializable {
         this.status = downloadStatus;
     }
 
-    public long getFileLength() {
-        return fileLength;
-    }
-
-    public void setFileLength(long fileLength) {
-        this.fileLength = fileLength;
-    }
-
     public long getFinishedLengthBefore() {
         return finishedLengthBefore;
     }
@@ -372,6 +364,14 @@ public class DownloadItem implements Serializable {
         }
     }
 
+    public void setContentLength(long rangeLength) {
+        this.contentLength = rangeLength;
+    }
+
+    public long getContentLength() {
+        return contentLength;
+    }
+
     public String getActionKey() {
         return actionKey;
     }
@@ -415,6 +415,15 @@ public class DownloadItem implements Serializable {
         if (mDownloadListener != null){
             code = mDownloadListener.hashCode();
         }
-        return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + " listener='" + code + '\'' + ", downloadTitle='" + downloadTitle + '\'' + ", fileFolder='" + fileFolder + '\'' + ", tempFilePath='" + filePath + '\'' + ", fileMD5='" + fileMD5 + '\'' + ", fileSHA256='" + fileSHA256 + '\'' + ", forceDownloadNew=" + forceDownloadNew + ", downloadDesc='" + downloadDesc + '\'' + ", actionKey='" + actionKey + '\'' + ", extraInfo='" + extraInfo + '\'' + ", packageName='" + packageName + '\'' + ", versionCode=" + versionCode + ", downloadIcon='" + downloadIcon + '\'' + ", finishedLength=" + finishedLength + ", finishedLengthBefore=" + finishedLengthBefore + ", fileLength=" + fileLength + ", lastSpeed=" + lastSpeed + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", autoInstall=" + autoInstall + ", status=" + status + ", downloadWhenUseMobile=" + downloadWhenUseMobile + ", downloadWhenAdd=" + downloadWhenAdd + '}';
+        return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + " listener='" + code + '\'' + ", downloadTitle='"
+                + downloadTitle + '\'' + ", fileFolder='" + fileFolder + '\'' + ", tempFilePath='" + filePath + '\''
+                + ", fileMD5='" + fileMD5 + '\'' + ", fileSHA256='" + fileSHA256 + '\'' + ", forceDownloadNew="
+                + forceDownloadNew + ", downloadDesc='" + downloadDesc + '\'' + ", actionKey='" + actionKey + '\''
+                + ", extraInfo='" + extraInfo + '\'' + ", packageName='" + packageName + '\'' + ", versionCode="
+                + versionCode + ", downloadIcon='" + downloadIcon + '\'' + ", finishedLength=" + finishedLength
+                + ", finishedLengthBefore=" + finishedLengthBefore + ", rangeLength=" + contentLength + ", lastSpeed="
+                + lastSpeed + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", autoInstall=" + autoInstall
+                + ", status=" + status + ", downloadWhenUseMobile=" + downloadWhenUseMobile + ", downloadWhenAdd="
+                + downloadWhenAdd + '}';
     }
 }

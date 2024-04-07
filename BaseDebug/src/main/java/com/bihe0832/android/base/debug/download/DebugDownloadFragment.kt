@@ -185,7 +185,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 }
 
                 override fun onProgress(item: DownloadItem) {
-                    showResult("${item.finished}/${item.fileLength}")
+                    showResult("${item.finished}/${item.contentLength}")
                 }
             }
         }.let {
@@ -356,57 +356,62 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         }
     }
 
+    private fun startDownload(
+        url: String?, start: Long, length: Long
+    ) {
+        val file = File(AAFFileWrapper.getFileCacheFolder() + FileUtils.getFileName(url))
+        file.createNewFile()
+        DownloadRangeUtils.startDownload(
+            activity!!,
+            url,
+            file.absolutePath,
+            start,
+            length,
+            object : SimpleDownloadListener() {
+                override fun onStart(item: DownloadItem) {
+                    ZLog.d(
+                        "testDownloadRange", "onStart : ${item.downloadID}"
+                    )
+
+                }
+
+                override fun onProgress(item: DownloadItem) {
+                    ZLog.d(
+                        "testDownloadRange",
+                        "onProgress : ${item.downloadID} - ${item.processDesc}",
+                    )
+                }
+
+                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                    ZLog.w(
+                        "testDownloadRange",
+                        "onFail : ${item.downloadID} - ${errorCode} ${msg}",
+                    )
+                }
+
+                override fun onComplete(filePath: String, item: DownloadItem): String {
+                    ZLog.w(
+                        "testDownloadRange",
+                        "onComplete start $start : ${item.downloadID} - ${
+                            MD5.getMd5(
+                                FileUtils.readDataFromFile(
+                                    filePath, start, 10000
+                                )
+                            )
+                        }",
+                    )
+
+                    return filePath
+                }
+            })
+    }
 
     fun testDownloadRange() {
-        val file = File(AAFFileWrapper.getFileCacheFolder() + "a.apk")
-        file.createNewFile()
         for (i in 0 until 1) {
-            val start = i * 10000L
-            DownloadRangeUtils.startDownload(activity!!,
-                URL_YYB_WZ,
-                file.absolutePath,
-                start,
-                1000000000,
-                object : SimpleDownloadListener() {
-                    override fun onStart(item: DownloadItem) {
-                        ZLog.d(
-                            "testDownloadRange", "onStart : ${item.downloadID}"
-                        )
-
-                    }
-
-                    override fun onProgress(item: DownloadItem) {
-                        ZLog.d(
-                            "testDownloadRange",
-                            "onProgress : ${item.downloadID} - ${item.processDesc}",
-                        )
-                    }
-
-                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                        ZLog.w(
-                            "testDownloadRange",
-                            "onFail : ${item.downloadID} - ${errorCode} ${msg}",
-                        )
-                    }
-
-                    override fun onComplete(filePath: String, item: DownloadItem): String {
-                        ZLog.w(
-                            "testDownloadRange",
-                            "onComplete start $start : ${item.downloadID} - ${
-                                MD5.getMd5(
-                                    FileUtils.readDataFromFile(
-                                        filePath, start, 10000
-                                    )
-                                )
-                            }",
-                        )
-
-                        return filePath
-                    }
-                })
+            val url = URL_YYB_WZ
+            val start = i * 10000000L
+            startDownload(url, start, 10000L)
         }
-
-
     }
 
     fun testDownloadProcess() {
@@ -460,7 +465,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             }",
                         )
                     }
-                    FileUtils.deleteFile(filePath)
+//                    FileUtils.deleteFile(filePath)
                     return filePath
                 }
 

@@ -72,7 +72,7 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
 
     static boolean hasData(BaseDBHelper helper, long download_id, boolean showDetail) {
         boolean hasData = hasData(helper, download_id);
-        ZLog.d("数据库信息：hasData of :" + download_id + "is :" + hasData);
+        ZLog.d("数据库信息：hasData of :" + download_id + " is :" + hasData);
         if (showDetail) {
             Cursor cursor = helper.queryInfo(TABLE_NAME, null, null, null, null, null, null, null);
             try {

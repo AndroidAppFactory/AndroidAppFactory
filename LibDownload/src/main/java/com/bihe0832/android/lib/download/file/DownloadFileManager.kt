@@ -98,10 +98,10 @@ object DownloadFileManager : DownloadManager() {
 
         override fun onComplete(filePath: String, item: DownloadItem): String {
             item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-            if (item.fileLength < 1) {
-                item.fileLength = File(filePath).length()
+            if (item.contentLength < 1) {
+                item.contentLength = File(filePath).length()
             }
-            item.finished = item.fileLength
+            item.finished = item.contentLength
             if (FileMimeTypes.isApkFile(filePath)) {
                 mContext?.packageManager?.getPackageArchiveInfo(
                     filePath,

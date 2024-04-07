@@ -113,7 +113,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
                     item.setFinished(item.getFinishedLengthBefore());
                     DownloadFileTaskList.INSTANCE.addToDownloadTaskList(item);
                     if (FileUtils.INSTANCE.checkFileExist(item.getFilePath())) {
-                        item.setFinished(item.getFileLength());
+                        item.setFinished(item.getContentLength());
                         item.setStatus(DownloadStatus.STATUS_DOWNLOAD_SUCCEED);
                     }
                     long id = getLongByName(cursor, col_id);

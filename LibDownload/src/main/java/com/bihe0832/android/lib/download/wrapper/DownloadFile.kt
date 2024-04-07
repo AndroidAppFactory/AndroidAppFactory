@@ -114,7 +114,7 @@ object DownloadFile {
         startDownload(activity.applicationContext, title, msg, url, path, isFile, md5, sha256, forceDownloadNew, useMobile, forceDownload, object : DownloadListener {
             fun updateProcess(item: DownloadItem) {
                 activity.runOnUiThread {
-                    progressDialog.setAPKSize(item.fileLength)
+                    progressDialog.setAPKSize(item.contentLength)
                     progressDialog.setCurrentSize(item.finished)
                 }
             }

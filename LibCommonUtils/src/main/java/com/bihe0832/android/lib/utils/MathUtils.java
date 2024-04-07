@@ -78,6 +78,9 @@ public class MathUtils {
 
     public static float getFormatPercent(BigDecimal fenziBig, BigDecimal fenmuBig, int scale) {
         float percent = 0f;
+        if (fenmuBig.equals(0)) {
+            return percent;
+        }
         try {
             percent = fenziBig.divide(fenmuBig, scale, BigDecimal.ROUND_DOWN)
                     .floatValue();

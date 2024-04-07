@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.download.file
 import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
-import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_DOWNLOAD_PART_EXCEPTION
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_FILE_RENAME_FAILED
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_MD5_BAD
 import com.bihe0832.android.lib.download.DownloadItem
@@ -38,7 +37,7 @@ class DownloadByHttpForFile(
             applicationContext = context.applicationContext
         }
         try {
-            startDownload(info, DownloadPartInfo.TYPE_FILE, 0, info.fileLength)
+            startDownload(info, DownloadPartInfo.TYPE_FILE, 0, info.contentLength)
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {

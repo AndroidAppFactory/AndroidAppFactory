@@ -56,9 +56,9 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
             return
         }
 
-        if (updateDownItemByServerInfo(info, rangeStart, rangeLength)) {
+        if (updateDownItemByServerInfo(info, downloadType, rangeStart, rangeLength)) {
             try {
-                ZLog.e(TAG, "开始下载:${info}")
+                ZLog.e(TAG, "开始下载 updateDownItemByServerInfo 后:${info}")
                 //强制下载的数量也要控制
                 if (DownloadingList.getDownloadingNum() < maxNum || DownloadingPartList.getDownloadingPartNum() < MAX_DOWNLOAD_TOTAL_THREAD || DownloadItem.MAX_DOWNLOAD_PRIORITY == info.downloadPriority) {
                     if (DownloadingList.getDownloadingNum() < maxNum || info.downloadPriority >= DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
@@ -66,8 +66,10 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                         addToDownloadList(info)
                         notifyStart(info)
                         if (downloadType == DownloadPartInfo.TYPE_FILE) {
-                            goDownload(info, downloadType, 0, info.fileLength - 1)
+                            info.contentLength = info.contentLength
+                            goDownload(info, downloadType, 0, info.contentLength - 1)
                         } else {
+                            info.contentLength = rangeLength
                             goDownload(info, downloadType, rangeStart, rangeStart + rangeLength - 1)
                         }
                     } else {
@@ -101,7 +103,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         ZLog.e(TAG, "goDownload downloadType:${downloadType}")
         ZLog.e(TAG, "goDownload rangeStart:${rangeStart}")
         ZLog.e(TAG, "goDownload rangeEnd:${rangeEnd}")
-        ZLog.e(TAG, "goDownload fileLength:${info.fileLength}")
+        ZLog.e(TAG, "goDownload rangeLength:${info.contentLength}")
         ZLog.e(TAG, "goDownload info:${info}")
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload ~~~~~~~~~~~~~~~~~~")
 
@@ -234,7 +236,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                 ZLog.d("开启新下载：开始第$i 片，共$threadNum 片")
                 when (i) {
                     0 -> {
-                        startDownloadPart(info, downloadType, i, rangeStart, partSize, 0)
+                        startDownloadPart(info, downloadType, i, rangeStart, rangeStart + partSize, 0)
                     }
 
                     threadNum - 1 -> {
@@ -285,7 +287,9 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         }
     }
 
-    private fun updateDownItemByServerInfo(info: DownloadItem, rangeStart: Long, rangeLength: Long): Boolean {
+    private fun updateDownItemByServerInfo(
+        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long
+    ): Boolean {
         ZLog.d(TAG, "updateDownItemByServerInfo:$info")
         // 重新启动，获取文件总长度
         var times = 0
@@ -316,7 +320,9 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                 if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL) {
                     info.realURL = realURL
                     if (contentLength > 0) {
-                        info.fileLength = contentLength
+                        if (DownloadPartInfo.TYPE_FILE == downloadType) {
+                            info.contentLength = contentLength
+                        }
                         if (rangeLength > 0 && contentLength < rangeStart + rangeLength) {
                             //请求长度小于服务器获取的长度
                             notifyDownloadFailed(
@@ -340,7 +346,9 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                                 )
                                 return false
                             } else {
-                                info.fileLength = 0
+                                if (DownloadPartInfo.TYPE_FILE == downloadType) {
+                                    info.contentLength = contentLength
+                                }
                                 return true
                             }
                         } else {
@@ -435,7 +443,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                         )
                         if (isDebug) ZLog.d(
                             TAG, "分片下载汇总 - ${downloadItem.downloadID}: " + "文件长度 :${
-                                FileUtils.getFileLength(downloadItem.fileLength)
+                                FileUtils.getFileLength(downloadItem.contentLength)
                             }" + ";完成长度 :${FileUtils.getFileLength(downloadItem.finished)}" + ";之前下载长度 :${
                                 FileUtils.getFileLength(
                                     downloadItem.finishedLengthBefore
@@ -446,14 +454,14 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                                 )
                             }"
                         )
-                        if (downloadItem.fileLength > 0 && downloadItem.finished >= downloadItem.fileLength) {
-                            downloadItem.finished = downloadItem.fileLength
+                        if (downloadItem.contentLength > 0 && downloadItem.finished >= downloadItem.contentLength) {
+                            downloadItem.finished = downloadItem.contentLength
                         }
                         notifyProcess(downloadItem)
                     }
                     if (!notFinished) {
                         notifyDownloadAfterFinish(downloadItem)
-                    } else if (downloadItem.fileLength > 0 && downloadItem.finished == downloadItem.fileLength) {
+                    } else if (downloadItem.contentLength > 0 && downloadItem.finished == downloadItem.contentLength) {
                         notifyDownloadAfterFinish(downloadItem)
                     } else if (hasFail) {
                         notifyDownloadFailed(downloadItem, DownloadErrorCode.ERR_DOWNLOAD_PART_EXCEPTION, errorInfo)

@@ -115,7 +115,7 @@ object DownloadFileNotify {
                             item.downloadTitle,
                             item.downloadIcon,
                             item.finished,
-                            item.fileLength,
+                            item.contentLength,
                             item.lastSpeed,
                             (item.process * 100).toInt(),
                             type,
