@@ -38,7 +38,7 @@ open class DownloadByHttpForRange(
     }
 
     override fun notifyProcess(downloadItem: DownloadItem) {
-        innerDownloadListener.onStart(downloadItem)
+        innerDownloadListener.onProgress(downloadItem)
     }
 
     override fun notifyWait(info: DownloadItem) {
