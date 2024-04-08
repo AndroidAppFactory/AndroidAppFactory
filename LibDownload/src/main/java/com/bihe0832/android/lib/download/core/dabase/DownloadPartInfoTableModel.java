@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
@@ -21,8 +20,9 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
     public static final String col_download_part_id = "download_part_id";
     public static final String col_part_id = "part_id";
     public static final String col_download_id = "download_id";
-    public static final String col_start = "start";
-    public static final String col_end = "end";
+    public static final String col_range_start = "range_start";
+    public static final String col_local_start = "local_start";
+    public static final String col_length = "length";
     public static final String col_finished = "finished";
     static final String TABLE_NAME = "download_part_info";
     static final String TABLE_CREATE_SQL = "CREATE TABLE IF NOT EXISTS ["
@@ -32,8 +32,9 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
             + "[" + col_download_part_id + "] NVARCHAR(128) NOT NULL,"
             + "[" + col_part_id + "] INT  NULL,"
             + "[" + col_download_id + "] NVARCHAR(128)  NULL,"
-            + "[" + col_start + "] VARCHAR(256)  NULL,"
-            + "[" + col_end + "] VARCHAR(256)  NULL,"
+            + "[" + col_range_start + "] VARCHAR(256)  NULL,"
+            + "[" + col_local_start + "] VARCHAR(256)  NULL,"
+            + "[" + col_length + "] VARCHAR(256)  NULL,"
             + "[" + col_finished + "] VARCHAR(256) NULL"
             + ")";
     static final String TABLE_DROP_SQL = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -42,28 +43,29 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
         return deleteAll(helper, TABLE_NAME);
     }
 
-    private static ContentValues data2CV(String download_part_id, int partID, long download_id, long start, long end,
-                                         long finished) {
+    private static ContentValues data2CV(String download_part_id, int partID, long download_id, long rangeStart,
+            long localStart, long length, long finished) {
         ContentValues cv = new ContentValues();
         putValues(cv, col_download_part_id, download_part_id);
         putValues(cv, col_part_id, partID);
         putValues(cv, col_download_id, download_id);
-        putValues(cv, col_start, start);
-        putValues(cv, col_end, end);
+        putValues(cv, col_range_start, rangeStart);
+        putValues(cv, col_range_start, localStart);
+        putValues(cv, col_length, length);
         putValues(cv, col_finished, finished);
         return cv;
     }
 
-    static boolean insertData(BaseDBHelper helper, String download_part_id, int partID, long download_id, long start,
-                              long end, long finished) {
-        ContentValues values = data2CV(download_part_id, partID, download_id, start, end, finished);
+    static boolean insertData(BaseDBHelper helper, String download_part_id, int partID, long download_id,
+            long rangeStart, long localStart, long length, long finished) {
+        ContentValues values = data2CV(download_part_id, partID, download_id, rangeStart, localStart, length, finished);
         long id = helper.insert(TABLE_NAME, null, values);
         return (id != -1);
     }
 
-    static boolean updateData(BaseDBHelper helper, String download_part_id, int partID, long download_id, long start,
-                              long end, long finished) {
-        ContentValues values = data2CV(download_part_id, partID, download_id, start, end, finished);
+    static boolean updateData(BaseDBHelper helper, String download_part_id, int partID, long download_id,
+            long rangeStart, long localStart, long length, long finished) {
+        ContentValues values = data2CV(download_part_id, partID, download_id, rangeStart, localStart, length, finished);
         String whereClause = " `" + col_download_part_id + "` = ? ";
         String[] whereArgs = new String[]{download_part_id};
         int rows = helper.update(TABLE_NAME, values, whereClause, whereArgs);
@@ -149,17 +151,19 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
         return find;
     }
 
-    static boolean saveData(BaseDBHelper helper, String download_part_id, int partID, long download_id, long start,
-                            long end, long finished) {
+    static boolean saveData(BaseDBHelper helper, String download_part_id, int partID, long download_id, long rangeStart,
+            long localStart, long length, long finished) {
         if (TextUtils.isEmpty(download_part_id)) {
             return false;
         }
 
         boolean success;
         if (hasData(helper, download_part_id)) {
-            success = updateData(helper, download_part_id, partID, download_id, start, end, finished);
+            success = updateData(helper, download_part_id, partID, download_id, rangeStart, localStart, length,
+                    finished);
         } else {
-            success = insertData(helper, download_part_id, partID, download_id, start, end, finished);
+            success = insertData(helper, download_part_id, partID, download_id, rangeStart, localStart, length,
+                    finished);
         }
 
         return success;

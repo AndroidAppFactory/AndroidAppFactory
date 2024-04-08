@@ -26,7 +26,9 @@ object DownloadRangeManager : DownloadManager() {
         DownloadByHttpForRange(mContext!!, innerDownloadListener, mMaxNum, mIsDebug)
     }
 
-    private val mDownloadStart = HashMap<Long, Long>()
+    private val mDownloadRangeStart = HashMap<Long, Long>()
+    private val mDownloadLocalStart = HashMap<Long, Long>()
+
     private val mDownloadLength = HashMap<Long, Long>()
 
     fun onDestroy() {
@@ -106,9 +108,8 @@ object DownloadRangeManager : DownloadManager() {
                 list.maxByOrNull { it.downloadPriority }?.let {
                     ThreadManager.getInstance().start {
                         startTask(
-                            it,
-                            mDownloadStart.get(it.downloadID) ?: 0,
-                            mDownloadLength.get(it.downloadID) ?: 0,
+                            it, mDownloadRangeStart.get(it.downloadID) ?: 0,
+                            mDownloadLength.get(it.downloadID) ?: 0, mDownloadLocalStart.get(it.downloadID) ?: 0,
                             it.isDownloadWhenAdd,
                             it.isDownloadWhenUseMobile
                         )
@@ -122,7 +123,7 @@ object DownloadRangeManager : DownloadManager() {
     private fun startTask(
         info: DownloadItem,
         rangeStart: Long,
-        rangeLength: Long,
+        rangeLength: Long, localStart: Long,
         downloadAfterAdd: Boolean,
         downloadWhenUseMobile: Boolean
     ) {
@@ -133,21 +134,23 @@ object DownloadRangeManager : DownloadManager() {
         if (downloadAfterAdd) {
             if (!isWifi()) {
                 if (downloadWhenUseMobile) {
-                    realStartTask(info, rangeStart, rangeLength, true)
+                    realStartTask(info, rangeStart, rangeLength, localStart, true)
                 } else {
-                    realStartTask(info, rangeStart, rangeLength, false)
+                    realStartTask(info, rangeStart, rangeLength, localStart, false)
                 }
             } else {
-                realStartTask(info, rangeStart, rangeLength, true)
+                realStartTask(info, rangeStart, rangeLength, localStart, true)
             }
         } else {
             ZLog.d(TAG, "startTask do nothing: $ $info ")
-            realStartTask(info, rangeStart, rangeLength, false)
+            realStartTask(info, rangeStart, rangeLength, localStart, false)
         }
     }
 
 
-    private fun realStartTask(info: DownloadItem, rangeStart: Long, rangeLength: Long, downloadAfterAdd: Boolean) {
+    private fun realStartTask(
+        info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long, downloadAfterAdd: Boolean
+    ) {
         ZLog.d(TAG, "startTask:$info")
         try {
             if (TextUtils.isEmpty(info.downloadActionKey)) {
@@ -165,7 +168,7 @@ object DownloadRangeManager : DownloadManager() {
                 innerDownloadListener.onFail(ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info)
                 return
             }
-            addDownloadItemToList(info, rangeStart, rangeLength)
+            addDownloadItemToList(info, rangeStart, rangeLength, localStart)
             Thread {
                 // 本地已下载
                 if (downloadAfterAdd) {
@@ -180,7 +183,7 @@ object DownloadRangeManager : DownloadManager() {
                             }
                         }
                     }
-                    mDownloadEngine.startDownload(mContext!!, info, rangeStart, rangeLength)
+                    mDownloadEngine.startDownload(mContext!!, info, rangeStart, rangeLength, localStart)
                 } else {
                     info.setPause()
                 }
@@ -191,16 +194,17 @@ object DownloadRangeManager : DownloadManager() {
         }
     }
 
-    fun addDownloadItemToList(info: DownloadItem, rangeStart: Long, rangeLength: Long) {
+    fun addDownloadItemToList(info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
         if (TextUtils.isEmpty(info.downloadActionKey)) {
             info.setDownloadActionKey(rangeStart, rangeLength)
         }
-        mDownloadStart.put(info.downloadID, rangeStart)
+        mDownloadRangeStart.put(info.downloadID, rangeStart)
         mDownloadLength.put(info.downloadID, rangeLength)
+        mDownloadLocalStart.put(info.downloadID, localStart)
         addDownloadItemToList(info)
     }
 
-    fun addTask(info: DownloadItem, rangeStart: Long, rangeLength: Long) {
+    fun addTask(info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
         ZLog.d(TAG, "addTask:$info")
         if (TextUtils.isEmpty(info.downloadActionKey)) {
             info.setDownloadActionKey(rangeStart, rangeLength)
@@ -229,7 +233,9 @@ object DownloadRangeManager : DownloadManager() {
                 DownloadRangeTaskList.updateDownloadTaskListItem(info)
                 resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile)
             } else {
-                startTask(info, rangeStart, rangeLength, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile)
+                startTask(
+                    info, rangeStart, rangeLength, localStart, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile
+                )
             }
         }
     }
@@ -250,9 +256,8 @@ object DownloadRangeManager : DownloadManager() {
             }
             innerDownloadListener.onWait(info)
             startTask(
-                info,
-                mDownloadStart.get(info.downloadID) ?: 0,
-                mDownloadLength.get(info.downloadID) ?: 0,
+                info, mDownloadRangeStart.get(info.downloadID) ?: 0,
+                mDownloadLength.get(info.downloadID) ?: 0, mDownloadLocalStart.get(info.downloadID) ?: 0,
                 startByUser,
                 downloadWhenUseMobile
             )

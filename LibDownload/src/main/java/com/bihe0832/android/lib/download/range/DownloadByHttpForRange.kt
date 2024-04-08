@@ -2,7 +2,6 @@ package com.bihe0832.android.lib.download.range
 
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadErrorCode
-import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_DOWNLOAD_PART_EXCEPTION
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
@@ -49,7 +48,7 @@ open class DownloadByHttpForRange(
         innerDownloadListener.onStart(info)
     }
 
-    fun startDownload(context: Context, info: DownloadItem, rangeStart: Long, rangeLength: Long) {
+    fun startDownload(context: Context, info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
 
         ZLog.e(TAG, "开始下载:${info}")
         if (applicationContext == null) {
@@ -57,7 +56,7 @@ open class DownloadByHttpForRange(
         }
 
         try {
-            startDownload(info, DownloadPartInfo.TYPE_RANGE, rangeStart, rangeLength)
+            startDownload(info, DownloadPartInfo.TYPE_RANGE, rangeStart, rangeLength, localStart)
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {

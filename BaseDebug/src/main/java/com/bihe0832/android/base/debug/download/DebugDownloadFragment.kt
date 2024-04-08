@@ -409,8 +409,8 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     fun testDownloadRange() {
         for (i in 0 until 1) {
             val url = URL_YYB_WZ
-            val start = i * 10000000L
-            startDownload(url, start, 10000L)
+            val start = i * 50000000L
+            startDownload(url, start, 500000000L)
         }
     }
 
@@ -465,7 +465,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             }",
                         )
                     }
-//                    FileUtils.deleteFile(filePath)
+                    FileUtils.deleteFile(filePath)
                     return filePath
                 }
 

@@ -58,8 +58,9 @@ object DownloadInfoDBManager {
             downloadPartInfo.downloadPartID,
             downloadPartInfo.partID,
             downloadPartInfo.downloadID,
-            downloadPartInfo.partStart,
-            downloadPartInfo.partEnd,
+            downloadPartInfo.partRangeStart,
+            downloadPartInfo.partLocalStart,
+            downloadPartInfo.partLength,
             downloadPartInfo.partFinished
         )
     }

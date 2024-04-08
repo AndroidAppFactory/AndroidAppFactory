@@ -42,6 +42,7 @@ public class DownloadRangeUtils {
         info.setDownloadURL(url);
         info.setDownloadListener(listener);
         info.setFilePath(filePath);
+        info.setForceDownloadNew(true);
         startDownload(context, info, start, length);
     }
 
@@ -51,16 +52,16 @@ public class DownloadRangeUtils {
      * @param info 添加任务的信息，除 downloadURL ，其余都非必填，下载本地仅支持传入文件夹，不支持传入下载文件路径，如果是要下载到指定文件，请参考 DownloadTools 二次分封装
      */
     public static final void startDownload(Context context, @NotNull DownloadItem info, long start, long length,
-            boolean forceDownload) {
+            long localStart, boolean forceDownload) {
         DownloadRangeManager.INSTANCE.init(context);
         if (forceDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
             info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
         }
-        DownloadRangeManager.INSTANCE.addTask(info, start, length);
+        DownloadRangeManager.INSTANCE.addTask(info, start, length, localStart);
     }
 
     public static final void startDownload(Context context, @NotNull DownloadItem info, long start, long length) {
-        startDownload(context, info, start, length, info.isForceDownloadNew());
+        startDownload(context, info, start, length, start, info.isForceDownloadNew());
     }
 
     /**

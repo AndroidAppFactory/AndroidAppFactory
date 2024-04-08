@@ -37,7 +37,7 @@ class DownloadByHttpForFile(
             applicationContext = context.applicationContext
         }
         try {
-            startDownload(info, DownloadPartInfo.TYPE_FILE, 0, info.contentLength)
+            startDownload(info, DownloadPartInfo.TYPE_FILE, 0, info.contentLength, 0)
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {

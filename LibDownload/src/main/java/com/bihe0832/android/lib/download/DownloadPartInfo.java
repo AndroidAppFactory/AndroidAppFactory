@@ -15,8 +15,9 @@ public class DownloadPartInfo {
 
     private String mRealDownloadURL;
     private String mFinalFileName;
-    private long mPartStart;
-    private long mPartEnd;
+    private long mPartRangeStart;
+    private long mPartLocalStart;
+    private long mPartLength;
     private long mPartFinished;
     private long mPartFinishedBefore;
     private int mPartStatus;
@@ -78,10 +79,6 @@ public class DownloadPartInfo {
         this.mDownloadType = mDownloadType;
     }
 
-    public int getDownloadType() {
-        return mDownloadType;
-    }
-
     public String getRealDownloadURL() {
         return mRealDownloadURL;
     }
@@ -90,24 +87,40 @@ public class DownloadPartInfo {
         this.mRealDownloadURL = mDownloadURL;
     }
 
-    public long getPartStart() {
-        return mPartStart;
-    }
-
-    public void setPartStart(long mPartStart) {
-        this.mPartStart = mPartStart;
-    }
-
-    public long getPartEnd() {
-        return mPartEnd;
-    }
-
-    public void setPartEnd(long mPartEnd) {
-        this.mPartEnd = mPartEnd;
-    }
-
     public long getPartFinished() {
         return mPartFinished;
+    }
+
+    public long getPartLength() {
+        return mPartLength;
+    }
+
+    public void setPartLength(long mPartLength) {
+        this.mPartLength = mPartLength;
+    }
+
+    public long getPartLocalStart() {
+        return mPartLocalStart;
+    }
+
+    public void setPartLocalStart(long mPartLocalStart) {
+        this.mPartLocalStart = mPartLocalStart;
+    }
+
+    public long getPartRangeStart() {
+        return mPartRangeStart;
+    }
+
+    public void setPartRangeStart(long mPartRangeStart) {
+        this.mPartRangeStart = mPartRangeStart;
+    }
+
+    public long getPartRangeEnd() {
+        if (mPartLength > 0) {
+            return mPartRangeStart + mPartLength - 1;
+        } else {
+            return 0;
+        }
     }
 
     public void setPartFinished(long mPartFinished) {
@@ -120,9 +133,8 @@ public class DownloadPartInfo {
                 + ", mDownloadID=" + mDownloadID
                 + ", mDownloadType=" + mDownloadType
                 + ", mDownloadURL='" + mRealDownloadURL + '\''
-                + ", mFinalFileName='" + mFinalFileName + '\''
-                + ", mPartStart=" + mPartStart
-                + ", mPartEnd=" + mPartEnd
+                + ", mFinalFileName='" + mFinalFileName + '\'' + ", mPartRangeStart=" + mPartRangeStart
+                + ", mPartLocalStart=" + mPartLocalStart + ", mPartLength=" + mPartLength
                 + ", mPartFinished=" + mPartFinished
                 + ", mPartFinishedBefore=" + mPartFinishedBefore
                 + ", mPartStatus=" + mPartStatus

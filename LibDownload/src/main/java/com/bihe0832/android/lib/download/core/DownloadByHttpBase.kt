@@ -49,7 +49,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
 
     abstract fun onFail(item: DownloadItem, errorCode: Int, msg: String)
 
-    fun startDownload(info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long) {
+    fun startDownload(info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long) {
         if (DownloadingList.isDownloading(info)) {
             ZLog.d(TAG, "download has start")
             DownloadingList.addToDownloadingList(info)
@@ -66,11 +66,10 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                         addToDownloadList(info)
                         notifyStart(info)
                         if (downloadType == DownloadPartInfo.TYPE_FILE) {
-                            info.contentLength = info.contentLength
-                            goDownload(info, downloadType, 0, info.contentLength - 1)
+                            goDownload(info, downloadType, 0, info.contentLength, localStart)
                         } else {
                             info.contentLength = rangeLength
-                            goDownload(info, downloadType, rangeStart, rangeStart + rangeLength - 1)
+                            goDownload(info, downloadType, rangeStart, rangeLength, localStart)
                         }
                     } else {
                         notifyWait(info)
@@ -93,23 +92,22 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
 
     }
 
-    /**
-     * 备注：从此处开始，参数的传递从下载内容的长度转化为了下载内容的起始位置点!!!
-     */
     @SuppressLint("Range")
-    protected fun goDownload(info: DownloadItem, downloadType: Int, rangeStart: Long, rangeEnd: Long) {
-        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload ~~~~~~~~~~~~~~~~~~")
+    protected fun goDownload(
+        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long
+    ) {
+        ZLog.e(TAG, "\n")
+        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload 最终入参 ~~~~~~~~~~~~~~~~~~")
         ZLog.e(TAG, "goDownload downloadID:${info.downloadID}")
         ZLog.e(TAG, "goDownload downloadType:${downloadType}")
         ZLog.e(TAG, "goDownload rangeStart:${rangeStart}")
-        ZLog.e(TAG, "goDownload rangeEnd:${rangeEnd}")
-        ZLog.e(TAG, "goDownload rangeLength:${info.contentLength}")
+        ZLog.e(TAG, "goDownload rangeLength:${rangeLength} ${FileUtils.getFileLength(rangeLength)}")
+        ZLog.e(TAG, "goDownload localStart:${localStart}")
+        ZLog.e(TAG, "goDownload contentLength:${info.contentLength} ${FileUtils.getFileLength(info.contentLength)}")
         ZLog.e(TAG, "goDownload info:${info}")
-        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload ~~~~~~~~~~~~~~~~~~")
 
 
         val file = File(info.filePath)
-        val rangeLength = rangeEnd - rangeStart + 1
         var hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, isDebug)
         if (file.exists() && hasDownload && rangeLength > 0 && file.length() <= rangeLength) {
             ZLog.e(TAG, "断点续传逻辑:$info")
@@ -142,14 +140,15 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                 cursor.moveToFirst()
                 while (!cursor.isAfterLast) {
                     val id = cursor.getInt(cursor.getColumnIndex(DownloadPartInfoTableModel.col_part_id))
-                    val start = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_start))
-                    val end = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_end))
+                    val rangeStart = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_range_start))
+                    val localStart = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_local_start))
+                    val length = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_length))
                     val finished = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_finished))
                     ZLog.e(
                         TAG,
-                        "分片下载数据 - ${info.downloadID} - 继续已有分片:${info.downloadID - id} start:$start end:$end finished:$finished"
+                        "分片下载数据 - ${info.downloadID} - 继续已有分片:${info.downloadID - id} rangeStart:$rangeStart localStart:$localStart length:$length finished:$finished"
                     )
-                    startDownloadPart(info, downloadType, id, start, end, finished)
+                    startDownloadPart(info, id, rangeStart, localStart, length, finished)
                     cursor.moveToNext()
                 }
             } catch (e: Exception) {
@@ -166,16 +165,15 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
             if (hasDownload) {
                 DownloadInfoDBManager.clearDownloadPartByID(info.downloadID)
             }
-            startNew(info, downloadType, rangeStart, rangeEnd)
+            startNew(info, rangeStart, rangeLength, localStart)
         }
     }
 
 
-    protected fun startNew(
-        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeEnd: Long
-    ) {
-        val rangeLength = rangeEnd - rangeStart + 1
-        ZLog.d(TAG, "开启新下载: startNew:$info start：$rangeStart, rangeLength: $rangeLength")
+    protected fun startNew(info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
+        ZLog.e(TAG, "\n")
+        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ startNew ~~~~~~~~~~~~~~~~~~")
+        ZLog.e(TAG, "开启新下载: startNew: start：$rangeStart, rangeLength: $rangeLength,localStart:$localStart $info ")
         var threadNum = 1
         if (rangeLength > DOWNLOAD_PART_SIZE) {
             // 先分大片
@@ -232,43 +230,44 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         ZLog.e(TAG, "开启新下载: 最后一片长度: ${rangeLength - partSize * (threadNum - 1)}")
         if (threadNum > 1) {
             for (i in 0 until threadNum) {
-                var start = rangeStart + i * partSize
                 ZLog.d("开启新下载：开始第$i 片，共$threadNum 片")
                 when (i) {
-                    0 -> {
-                        startDownloadPart(info, downloadType, i, rangeStart, rangeStart + partSize, 0)
-                    }
-
                     threadNum - 1 -> {
-                        startDownloadPart(info, downloadType, i, start, rangeEnd, 0)
+                        startDownloadPart(
+                            info, i, rangeStart + i * partSize, localStart + i * partSize, rangeLength - i * partSize, 0
+                        )
                     }
 
                     else -> {
-                        startDownloadPart(info, downloadType, i, start, start + partSize, 0)
+                        startDownloadPart(info, i, rangeStart + i * partSize, localStart + i * partSize, partSize, 0)
                     }
                 }
             }
         } else {
             ZLog.d("开启新下载：不分片")
-            startDownloadPart(info, downloadType, 0, rangeStart, rangeEnd, 0)
+            startDownloadPart(info, 0, rangeStart, localStart, rangeLength, 0)
         }
     }
 
     protected fun startDownloadPart(
-        info: DownloadItem, downloadType: Int, partNo: Int, oldStart: Long, end: Long, finished: Long
+        info: DownloadItem, partNo: Int, oldRangeStart: Long, oldLocalStart: Long, length: Long, finished: Long
     ) {
+        ZLog.e(TAG, "\n")
+        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ 分片下载数据 ~~~~~~~~~~~~~~~~~~")
         ZLog.e(
             TAG,
-            "分片下载数据 第${partNo}分片 start: $oldStart, end:$end,finished: $finished ,length :${end - oldStart}"
+            "分片下载数据 第${partNo}分片 rangeStart: $oldRangeStart, localStart:$oldLocalStart ,length :${length} ${
+                FileUtils.getFileLength(length)
+            },finished: $finished"
         )
         val downloadThreadForPart = DownloadThread(DownloadPartInfo().apply {
             this.downloadID = info.downloadID
-            this.downloadType = downloadType
             this.partID = partNo
             this.realDownloadURL = info.realURL
             this.finalFileName = info.filePath
-            this.partStart = oldStart
-            this.partEnd = end
+            this.partRangeStart = oldRangeStart
+            this.partLocalStart = oldLocalStart
+            this.partLength = length
             this.partFinished = finished
             this.partFinishedBefore = finished
         }.also {

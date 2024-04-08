@@ -40,7 +40,12 @@ public class APKUtils {
      * 获取APP版本号
      */
     public static long getAppVersionCode(Context context) {
-        return getAppVersionCode(context, context.getPackageName());
+        try {
+            return getAppVersionCode(context, context.getPackageName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     /**
@@ -64,7 +69,12 @@ public class APKUtils {
     }
 
     public static String getAppVersionName(Context context) {
-        return getAppVersionName(context, context.getPackageName());
+        try {
+            return getAppVersionName(context, context.getPackageName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static String getAppVersionName(Context context, String packageName) {
@@ -119,7 +129,12 @@ public class APKUtils {
 
 
     public static String getAppName(Context context) {
-        return getAppName(context, context.getPackageName());
+        try {
+            return getAppName(context, context.getPackageName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static String getAppName(Context context, String packageName) {
@@ -175,8 +190,7 @@ public class APKUtils {
         }
     }
 
-    public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass,
-                                   boolean showTips) {
+    public static boolean startApp(Context ctx, String appName, String pkgName, String launcerClass, boolean showTips) {
         try {
             Intent intent = new Intent();
             ComponentName cmp = new ComponentName(pkgName, launcerClass);
