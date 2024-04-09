@@ -5,6 +5,7 @@ import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadListener;
 import com.bihe0832.android.lib.download.range.DownloadRangeManager;
 import com.bihe0832.android.lib.download.range.DownloadRangeTaskList;
+import com.bihe0832.android.lib.file.FileUtils;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,12 +39,21 @@ public class DownloadRangeUtils {
 
     public static final void startDownload(Context context, String url, String filePath, long start, long length,
             DownloadListener listener) {
+        startDownload(context, url, filePath, start, length, start, listener);
+    }
+
+    public static final void startDownload(Context context, String url, String filePath, long start, long length,
+            long localStart, DownloadListener listener) {
         DownloadItem info = new DownloadItem();
         info.setDownloadURL(url);
         info.setDownloadListener(listener);
         info.setFilePath(filePath);
-        info.setForceDownloadNew(true);
-        startDownload(context, info, start, length);
+        startDownload(context, info, start, length, localStart);
+    }
+
+    public static final void startDownload(Context context, @NotNull DownloadItem info, long start, long length,
+            long localStart) {
+        startDownload(context, info, start, length, localStart, info.isForceDownloadNew());
     }
 
     /**
@@ -57,11 +67,10 @@ public class DownloadRangeUtils {
         if (forceDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
             info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
         }
+        if (!FileUtils.INSTANCE.checkFileExist(info.getFilePath())) {
+            info.setForceDownloadNew(true);
+        }
         DownloadRangeManager.INSTANCE.addTask(info, start, length, localStart);
-    }
-
-    public static final void startDownload(Context context, @NotNull DownloadItem info, long start, long length) {
-        startDownload(context, info, start, length, start, info.isForceDownloadNew());
     }
 
     /**
