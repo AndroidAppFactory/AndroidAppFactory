@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.media.image;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -350,6 +351,17 @@ public class BitmapUtil {
      * @return
      */
     public static String saveBitmapWithPath(Bitmap bitmap, String filePath, boolean forceNew) {
+        return saveBitmapWithPath(bitmap, bitmap.hasAlpha() ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG,
+                100, filePath, forceNew);
+    }
+
+    /**
+     * 把bitmap保存到本地
+     *
+     * @return
+     */
+    public static String saveBitmapWithPath(Bitmap bitmap, CompressFormat format, int quality, String filePath,
+            boolean forceNew) {
         if (null == bitmap) {
             return "";
         }
@@ -368,8 +380,7 @@ public class BitmapUtil {
                     file.createNewFile();
                 }
                 FileOutputStream outputStream = new FileOutputStream(file);
-                bitmap.compress(bitmap.hasAlpha() ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, 100,
-                        outputStream);
+                bitmap.compress(format, quality, outputStream);
                 outputStream.flush();
                 outputStream.close();
                 return filePath;
