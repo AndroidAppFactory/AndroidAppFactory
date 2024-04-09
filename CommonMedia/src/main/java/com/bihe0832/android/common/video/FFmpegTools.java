@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.video;
 
+import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -60,8 +61,10 @@ public class FFmpegTools {
                 for (String file : images) {
                     if (FileUtils.INSTANCE.checkFileExist(file)) {
                         String newFile = mergeFileFolder + MD5.getFileMD5(file) + ".jpg";
-                        BitmapUtil.saveBitmapWithPath(BitmapUtil.getLocalBitmap(file, width, height), newFile);
-                        realImageList.add(newFile);
+                        boolean copyResult = FileUtils.INSTANCE.copyFile(new File(file), new File(newFile));
+                        if (copyResult) {
+                            realImageList.add(newFile);
+                        }
                     } else {
                         ZLog.e("!!! merge video, File not exist:" + file);
                     }
@@ -139,6 +142,8 @@ public class FFmpegTools {
             }
         });
     }
+
+
 
     public static void convertAudioWithImageToVideo(int width, int height, String audioPath, String imagePath,
             AAFDataCallback<String> callback) {

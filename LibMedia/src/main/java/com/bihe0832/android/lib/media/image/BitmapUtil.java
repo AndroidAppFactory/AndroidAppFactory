@@ -7,6 +7,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Matrix.ScaleToFit;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.net.Uri;
@@ -229,7 +230,8 @@ public class BitmapUtil {
     }
 
 
-    public static Bitmap resizeAndCenterBitmap(Bitmap source, int targetWidth, int targetHeight, int color) {
+    public static Bitmap resizeAndCenterBitmap(Bitmap source, int targetWidth, int targetHeight, int color,
+            ScaleToFit stf) {
         Bitmap output = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         canvas.drawColor(color);
@@ -237,7 +239,7 @@ public class BitmapUtil {
         Matrix matrix = new Matrix();
         RectF sourceRect = new RectF(0, 0, source.getWidth(), source.getHeight());
         RectF targetRect = new RectF(0, 0, targetWidth, targetHeight);
-        matrix.setRectToRect(sourceRect, targetRect, Matrix.ScaleToFit.CENTER);
+        matrix.setRectToRect(sourceRect, targetRect, stf);
 
         float scaleX = targetRect.width() / sourceRect.width();
         float scaleY = targetRect.height() / sourceRect.height();
@@ -251,6 +253,19 @@ public class BitmapUtil {
 
         canvas.drawBitmap(source, matrix, new Paint(Paint.FILTER_BITMAP_FLAG));
         return output;
+    }
+
+    public static String transImageFileToRequiredSize(String sourceFile, String targetFile, int targetWidth,
+            int targetHeight, int fillColor) {
+        try {
+            Bitmap source = BitmapUtil.getLocalBitmap(sourceFile, targetWidth, targetHeight);
+            Bitmap output = BitmapUtil.resizeAndCenterBitmap(source, targetWidth, targetHeight, fillColor,
+                    Matrix.ScaleToFit.CENTER);
+            return BitmapUtil.saveBitmapWithPath(output, targetFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static Bitmap getViewBitmapData(View view) {
@@ -311,7 +326,12 @@ public class BitmapUtil {
      */
     public static String saveBitmap(Context context, Bitmap bitmap) {
         String packageName = context.getPackageName();
-        String filePath = packageName + "_pic_" + System.currentTimeMillis() + ".png";
+        String filePath = packageName + "_pic_" + System.currentTimeMillis();
+        if (bitmap.hasAlpha()) {
+            filePath = filePath + ".png";
+        } else {
+            filePath = filePath + ".jpg";
+        }
         return saveBitmapWithName(context, bitmap, filePath);
     }
 
