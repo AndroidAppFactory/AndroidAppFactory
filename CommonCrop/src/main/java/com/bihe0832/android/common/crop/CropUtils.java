@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class CropUtils {
 
-    private static final String EXTRA_PREFIX = "fsdfsdfsd";
+    private static final String EXTRA_PREFIX = "com.bihe0832.android.common.crop";
 
     public static final String EXTRA_INPUT_URI = EXTRA_PREFIX + ".InputUri";
     public static final String EXTRA_OUTPUT_URI = EXTRA_PREFIX + ".OutputUri";
@@ -93,9 +93,16 @@ public class CropUtils {
     }
 
     public static void startCrop(Activity activity, Uri source) {
-        startCrop(activity, source, new Options());
+        Options options =new Options();
+        options.setAllowedGestures(CropConstants.GESTURE_TYPES_ALL, CropConstants.GESTURE_TYPES_ROTATE, CropConstants.GESTURE_TYPES_SCALE);
+        startCrop(activity, source, options);
     }
 
+    public static void startSimpleCrop(Activity activity, Uri source) {
+        Options options =new Options();
+        options.setHideBottomControls(true);
+        startCrop(activity, source, options);
+    }
 
     /**
      * Class that helps to setup advanced configs that are not commonly used.

@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import com.bihe0832.android.common.crop.CropUtils
 import com.bihe0832.android.common.crop.R
 import com.bihe0832.android.common.crop.callback.BitmapCropCallback
@@ -60,7 +61,7 @@ class CropActivity : BaseActivity() {
     private val mCropAspectRatioViews = mutableListOf<ViewGroup>()
 
     private var mAllowedGestures = ConcurrentHashMap<Int, Int>().apply {
-        put(TAB_ID_ASPECT, CropConstants.GESTURE_TYPES_ALL)
+        put(TAB_ID_ASPECT, CropConstants.GESTURE_TYPES_SCALE)
         put(TAB_ID_ROTATE, CropConstants.GESTURE_TYPES_ROTATE)
         put(TAB_ID_SCALE, CropConstants.GESTURE_TYPES_SCALE)
     }
@@ -223,6 +224,7 @@ class CropActivity : BaseActivity() {
             }
         } else {
             findViewById<View>(R.id.wrapper_controls)?.visibility = View.GONE
+            setAllowedGestures(TAB_ID_ASPECT)
         }
     }
 
@@ -342,6 +344,31 @@ class CropActivity : BaseActivity() {
             showRotateTab = false
             showScaleTab = false
         }
+
+        ConstraintSet().apply {
+            clone(findViewById<ConstraintLayout>(R.id.crop_page))
+            clear(R.id.crop_toolbar, ConstraintSet.BOTTOM)
+            clear(R.id.crop_toolbar, ConstraintSet.TOP)
+
+            connect(R.id.crop_toolbar, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+            connect(R.id.crop_toolbar, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+            if (hideTab) {
+                connect(
+                    R.id.crop_toolbar,
+                    ConstraintSet.BOTTOM,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.BOTTOM
+                )
+            } else {
+                connect(
+                    R.id.crop_toolbar,
+                    ConstraintSet.TOP,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.TOP,
+                    resources.getDimension(R.dimen.toolbar_padding_top).toInt()
+                )
+            }
+        }.applyTo(findViewById(R.id.crop_page))
     }
 
     private fun initiateRootViews(intent: Intent) {

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import com.bihe0832.android.common.crop.CropUtils
+import com.bihe0832.android.common.crop.constants.CropConstants
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
@@ -191,7 +192,10 @@ class DebugPhotosFragment : DebugCommonFragment() {
                             ),
                         )
                     } else if (needAAFCrop) {
-                        CropUtils.startCrop(activity!!, data.getData())
+                        CropUtils.startCrop(activity!!, data.getData(), CropUtils.Options().apply {
+                            withAspectRatio(3.0f, 4.0f)
+                            setHideBottomControls(true)
+                        })
                     } else {
                         showResult("图片地址:" + Media.uriToFile(activity!!, data.getData()).absolutePath)
                     }

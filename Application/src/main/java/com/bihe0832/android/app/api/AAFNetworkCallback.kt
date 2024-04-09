@@ -9,7 +9,7 @@ import retrofit2.Response
 
 /**
  * Symmary
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2020-02-24.
  * Description: 所有的网络请求都使用MnaNetworkCallback来处理
  */
