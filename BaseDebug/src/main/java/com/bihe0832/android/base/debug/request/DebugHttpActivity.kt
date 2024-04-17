@@ -9,6 +9,7 @@ import com.bihe0832.android.base.debug.request.okhttp.debugOKHttp
 import com.bihe0832.android.common.debug.base.BaseDebugActivity
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.http.advanced.HttpAdvancedResponseHandler
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.http.common.HttpResponseHandler
@@ -30,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_http_test.result
 import kotlinx.android.synthetic.main.activity_http_test.testGzip
 import java.io.File
 import java.net.URLDecoder
+
 
 class DebugHttpActivity : BaseDebugActivity() {
 
@@ -176,14 +178,17 @@ class DebugHttpActivity : BaseDebugActivity() {
                 object : HttpBasicRequest() {
                     init {
                         try {
-                            this.data =
-                                (Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result).toByteArray(
-                                    charset("UTF-8"),
-                                )
+//                            this.data =
+//                                (Constants.PARA_PARA + HttpBasicRequest.HTTP_REQ_ENTITY_MERGE + result).toByteArray(
+//                                    charset("UTF-8"),
+//                                )
+                            val taskArr = ArrayList<String>()
+                            taskArr.add("111")
 
                             HashMap<String, String?>().apply {
                                 put(Constants.PARA_PARA, result ?: "")
                                 put("sdfdsf", "dfd")
+                                put("ewewe", JsonHelper.toJson(taskArr).toString())
                             }.let {
                                 this.data = getFormData(it)
                             }
