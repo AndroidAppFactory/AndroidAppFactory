@@ -50,7 +50,7 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
         putValues(cv, col_part_id, partID);
         putValues(cv, col_download_id, download_id);
         putValues(cv, col_range_start, rangeStart);
-        putValues(cv, col_range_start, localStart);
+        putValues(cv, col_local_start, localStart);
         putValues(cv, col_length, length);
         putValues(cv, col_finished, finished);
         return cv;

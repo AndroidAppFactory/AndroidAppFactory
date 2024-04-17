@@ -42,6 +42,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         "https://imtt.dd.qq.com/16891/apk/6670A2D979F70D880519412D6E951162.apk?fsname=com.qqgame.hlddz_7.012.001_217.apk&csr=1bbd"
     val URL_FILE = "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a"
     val URL_CONFIG = "https://cdn.bihe0832.com/app/update/get_apk.json"
+    val MD5_FILE = "4ef99863858b0ee17177f773580e4f2a"
 
     companion object {
         val LOG_TAG = "DebugDownloadFragment"
@@ -367,6 +368,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             file.absolutePath,
             start,
             length,
+            0,
             object : SimpleDownloadListener() {
                 override fun onStart(item: DownloadItem) {
                     ZLog.d(
@@ -410,7 +412,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         for (i in 0 until 1) {
             val url = URL_YYB_WZ
             val start = i * 50000000L
-            startDownload(url, start, 500000000L)
+            startDownload(url, start, 200000000L)
         }
     }
 
@@ -421,8 +423,8 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 ThemeResourcesManager.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating)!!,
                 "（V.2.2.21)",
             ),
-            "这是一个Desc测试", "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a", "", false,
-            "4ef99863858b0ee17177f773580e4f2a", "", true, false, true, true,
+            "这是一个Desc测试", URL_FILE, "", false,
+            MD5_FILE, "", true, false, true, true,
             listener = object : OnDialogListener {
                 override fun onPositiveClick() {
                 }
@@ -525,59 +527,63 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             object : DialogCompletedStringCallback {
                 override fun onResult(p0: String?) {
                     if (URLUtils.isHTTPUrl(p0)) {
+//                        DownloadFile.download(
+//                            activity!!,
+//                            p0!!,
+//                            AAFFileWrapper.getFileTempFolder(),
+//                            false,
+//                            null,
+//                        )
                         DownloadFile.download(
                             activity!!,
-                            p0!!,
-                            ZixieContext.getLogFolder() + System.currentTimeMillis().toString() + URLUtils.getFileName(
-                                p0,
-                            ),
-                            true,
-                            null,
-                        )
-//                            DownloadFile.download(activity!!, p0!!, ZixieContext.getLogFolder() + URLUtils.getFileName(p0), true, object : SimpleDownloadListener() {
-//
-//                                override fun onComplete(filePath: String, item: DownloadItem): String {
-//                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
-//                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
-//                                    filePath.let {
-//                                        ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
+                            URL_FILE,
+                            ZixieContext.getLogFolder(),
+                            false,
+                            MD5_FILE,
+                            object : SimpleDownloadListener() {
+
+                                override fun onComplete(filePath: String, item: DownloadItem): String {
+                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+                                    filePath.let {
+                                        ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
+                                        ZLog.d(
+                                            LOG_TAG,
+                                            "getExtensionName: ${FileUtils.getExtensionName(it)}"
+                                        )
+                                        ZLog.d(
+                                            LOG_TAG,
+                                            "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}"
+                                        )
+                                        ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
 //                                        ZLog.d(
-//                                                LOG_TAG,
-//                                                "getExtensionName: ${FileUtils.getExtensionName(it)}"
-//                                        )
-//                                        ZLog.d(
-//                                                LOG_TAG,
-//                                                "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}"
-//                                        )
-//                                        ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
-//                                        ZLog.d(
-//                                                LOG_TAG,
-//                                                "getFileMD5: ${MD5.getFileMD5(it, 0, File(it).length())}"
+//                                            LOG_TAG,
+//                                            "getFileMD5: ${MD5.getFileMD5(it, 0, File(it).length())}"
 //                                        )
 //                                        ZLog.d(LOG_TAG, "getFileSHA256: ${FileUtils.getFileSHA256(it)}")
 //                                        ZLog.d(
-//                                                LOG_TAG,
-//                                                "getFileSHA256: ${
-//                                                    SHA256.getFileSHA256(
-//                                                            it,
-//                                                            0,
-//                                                            File(it).length()
-//                                                    )
-//                                                }"
+//                                            LOG_TAG,
+//                                            "getFileSHA256: ${
+//                                                SHA256.getFileSHA256(
+//                                                    it,
+//                                                    0,
+//                                                    File(it).length()
+//                                                )
+//                                            }"
 //                                        )
-//                                    }
-//                                    return filePath
-//                                }
-//
-//                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-//                                    ZLog.d(LOG_TAG, "testDownload onFail : ${errorCode} ${msg} $item")
-//                                }
-//
-//                                override fun onProgress(item: DownloadItem) {
-//                                    ZLog.d(LOG_TAG, "testDownload : ${item.process}")
-//                                }
-//
-//                            })
+                                    }
+                                    return filePath
+                                }
+
+                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                                    ZLog.d(LOG_TAG, "testDownload onFail : ${errorCode} ${msg} $item")
+                                }
+
+                                override fun onProgress(item: DownloadItem) {
+                                    ZLog.d(LOG_TAG, "testDownload : ${item.process}")
+                                }
+
+                            })
                     }
                 }
             },

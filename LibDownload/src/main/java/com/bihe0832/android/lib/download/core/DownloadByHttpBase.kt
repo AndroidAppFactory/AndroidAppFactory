@@ -253,7 +253,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         info: DownloadItem, partNo: Int, oldRangeStart: Long, oldLocalStart: Long, length: Long, finished: Long
     ) {
         ZLog.e(TAG, "\n")
-        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ 分片下载数据 ~~~~~~~~~~~~~~~~~~")
+        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ 分片下载数据 ${info.downloadID} - $partNo ~~~~~~~~~~~~~~~~~~")
         ZLog.e(
             TAG,
             "分片下载数据 第${partNo}分片 rangeStart: $oldRangeStart, localStart:$oldLocalStart ,length :${length} ${
