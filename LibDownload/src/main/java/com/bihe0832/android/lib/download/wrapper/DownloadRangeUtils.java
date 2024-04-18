@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- *  AAF Range 下载,range 用法相对比较复杂，因此不建议自行封装 DownloadItem ，直接使用DownloadRangeUtils对外暴漏的方法
+ * AAF Range 下载,range 用法相对比较复杂，因此不建议自行封装 DownloadItem ，直接使用DownloadRangeUtils对外暴漏的方法
  *
  * @author zixie code@bihe0832.com Created on 2020/9/23.
  */
@@ -48,6 +48,7 @@ public class DownloadRangeUtils {
         info.setDownloadURL(url);
         info.setDownloadListener(listener);
         info.setFilePath(filePath);
+        info.setNeedRecord(false);
         startDownload(context, info, start, length, localStart);
     }
 

@@ -47,6 +47,7 @@ object DownloadConfig {
             actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_CONFIG
             isDownloadWhenUseMobile = true
             isForceDownloadNew = TextUtils.isEmpty(md5)
+            isNeedRecord = false
             this.downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     if (DownloadErrorCode.ERR_MD5_BAD == errorCode) {

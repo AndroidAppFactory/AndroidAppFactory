@@ -110,7 +110,12 @@ object DownloadFileManager : DownloadManager() {
                     item.packageName = it
                 }
             }
-            DownloadInfoDBManager.saveDownloadInfo(item)
+            if (item.isNeedRecord) {
+                DownloadInfoDBManager.saveDownloadInfo(item)
+            } else {
+                closeDownloadAndRemoveRecord(item)
+            }
+
             addDownloadItemToList(item)
             addWaitToDownload()
 
@@ -119,7 +124,9 @@ object DownloadFileManager : DownloadManager() {
                 var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
                 ZLog.d(TAG, "onComplete end: $newPath ")
                 item.filePath = newPath
-                DownloadInfoDBManager.saveDownloadInfo(item)
+                if (item.isNeedRecord) {
+                    DownloadInfoDBManager.saveDownloadInfo(item)
+                }
                 if (item.notificationVisibility()) {
                     DownloadFileNotify.notifyFinished(item)
                 }
@@ -137,6 +144,10 @@ object DownloadFileManager : DownloadManager() {
                 DownloadFileNotify.notifyDelete(item)
             }
         }
+    }
+
+    private fun closeDownloadAndRemoveRecord(item: DownloadItem) {
+        mDownloadEngine.closeDownload(item.downloadID, isFinished = true, false)
     }
 
     override fun addWaitToDownload() {
@@ -202,7 +213,6 @@ object DownloadFileManager : DownloadManager() {
             }
         }
     }
-
 
 
     @Synchronized
@@ -294,7 +304,7 @@ object DownloadFileManager : DownloadManager() {
                 currentDownload?.downloadListener = info.downloadListener
             }
         } else {
-            updateInfo(info,true)
+            updateInfo(info, true)
             innerDownloadListener.onWait(info)
             if (info.isForceDownloadNew) {
                 // 此前下载的文件不完整
@@ -354,10 +364,11 @@ object DownloadFileManager : DownloadManager() {
             }
             DownloadFileTaskList.removeFromDownloadTaskList(downloadId)
             info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
-            mDownloadEngine.closeDownload(downloadId, false, deleteFile)
-            DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
+            mDownloadEngine.closeDownload(downloadId, isFinished = false, deleteFile)
             if (deleteFile) {
                 mDownloadEngine.deleteFile(info)
+            } else {
+                DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
             }
             DownloadFileNotify.notifyDelete(info)
             innerDownloadListener.onDelete(info)

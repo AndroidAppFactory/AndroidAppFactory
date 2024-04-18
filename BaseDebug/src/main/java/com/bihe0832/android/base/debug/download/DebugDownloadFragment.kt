@@ -424,7 +424,12 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 "（V.2.2.21)",
             ),
             "这是一个Desc测试", URL_FILE, "", false,
-            MD5_FILE, "", true, false, true, true,
+            MD5_FILE, "",
+            canCancel = true,
+            forceDownloadNew = false,
+            useMobile = true,
+            forceDownload = true,
+            needRecord = false,
             listener = object : OnDialogListener {
                 override fun onPositiveClick() {
                 }
@@ -434,7 +439,8 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
                 override fun onCancel() {
                 }
-            }, object : SimpleDownloadListener() {
+            },
+            downloadListener = object : SimpleDownloadListener() {
                 override fun onProgress(item: DownloadItem) {
                     ZLog.d(
                         "testDownloadProcess",

@@ -478,16 +478,16 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
     }
 
     fun closeDownload(downloadID: Long, isFinished: Boolean, clearHistory: Boolean) {
-        ZLog.d(TAG, "cancelDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
-        ZLog.d(TAG, "cancelDownload downloadList:" + DownloadingList.getDownloadingNum())
+        ZLog.d(TAG, "closeDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
+        ZLog.d(TAG, "closeDownload downloadList:" + DownloadingList.getDownloadingNum())
         DownloadingPartList.removeItem(downloadID, isFinished)
         if (clearHistory) {
             DownloadInfoDBManager.clearDownloadInfoByID(downloadID)
             DownloadInfoDBManager.clearDownloadPartByID(downloadID)
         }
         DownloadingList.removeFromDownloadingList(downloadID)
-        ZLog.d(TAG, "cancelDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
-        ZLog.d(TAG, "cancelDownload downloadList:" + DownloadingList.getDownloadingNum())
+        ZLog.d(TAG, "closeDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
+        ZLog.d(TAG, "closeDownload downloadList:" + DownloadingList.getDownloadingNum())
     }
 
     fun deleteFile(downloadInfo: DownloadItem) {

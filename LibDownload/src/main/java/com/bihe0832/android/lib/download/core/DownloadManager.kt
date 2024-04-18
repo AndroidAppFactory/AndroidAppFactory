@@ -118,19 +118,15 @@ abstract class DownloadManager {
     }
 
 
-    fun getDownladTempFilePath(downloadURL: String, backFileName: String, fileName: String): String {
-        return getFilePath(downloadURL, backFileName, fileName, "Temp_")
+    fun getDownladTempFilePath(downloadURL: String, backFileName: String, fileFolder: String): String {
+        return getFilePath(downloadURL, backFileName, fileFolder, "Temp_")
     }
 
-    fun getFinalFileName(downloadURL: String, backFileName: String, filePath: String): String {
-        return getFilePath(downloadURL, backFileName, filePath, "")
-    }
-
-    fun getFilePath(downloadURL: String, backFileName: String, filePath: String, prefix: String): String {
-        var folder = if (TextUtils.isEmpty(filePath)) {
+    fun getFilePath(downloadURL: String, backFileName: String, fileFolder: String, prefix: String): String {
+        var folder = if (TextUtils.isEmpty(fileFolder)) {
             ZixieFileProvider.getZixieCacheFolder(mContext!!)
         } else {
-            filePath
+            fileFolder
         }
         FileUtils.checkAndCreateFolder(folder)
         return FileUtils.getFolderPathWithSeparator(folder) + prefix + URLUtils.getFileName(downloadURL).let {

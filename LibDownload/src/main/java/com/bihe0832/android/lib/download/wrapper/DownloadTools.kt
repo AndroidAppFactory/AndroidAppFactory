@@ -238,9 +238,10 @@ object DownloadTools {
         md5: String,
         sha256: String,
         forceDownloadNew: Boolean,
-        UseMobile: Boolean,
+        useMobile: Boolean,
         actionKey: String,
         forceDownload: Boolean,
+        needRecord: Boolean,
         downloadListener: DownloadListener?,
     ) {
         DownloadItem().apply {
@@ -249,22 +250,31 @@ object DownloadTools {
             } else {
                 setNotificationVisibility(false)
             }
-            downloadURL = url
-            downloadTitle = title
-            downloadDesc = msg
+            this.downloadURL = url
+            this.downloadTitle = title
+            this.downloadDesc = msg
             if (!TextUtils.isEmpty(path)) {
-                fileFolder = if (isFilePath) {
+                this.fileFolder = if (isFilePath) {
                     File(path).parent
                 } else {
                     path
                 }
             }
-            fileMD5 = md5
-            fileSHA256 = sha256
-            isForceDownloadNew = forceDownloadNew
+            this.fileMD5 = md5
+            this.fileSHA256 = sha256
+            this.isForceDownloadNew = forceDownloadNew
             this.actionKey = actionKey
-            isDownloadWhenUseMobile = UseMobile
+            this.isDownloadWhenUseMobile = useMobile
+            this.isNeedRecord = needRecord || isFilePath
         }.let {
+            // 文件已经存在，直接回调
+            if (isFilePath && (!TextUtils.isEmpty(md5) || !TextUtils.isEmpty(sha256))
+                    && FileUtils.checkFileExist(path, 0, md5, sha256, false)
+            ) {
+                downloadListener?.onComplete(path, it)
+                return
+            }
+
             addNewKeyListener(it.downloadID, path, isFilePath, downloadListener)
             it.downloadListener = mDownloadKeyListenerList[it.downloadID]?.getDownloadListener()
             DownloadUtils.startDownload(context, it, forceDownload)

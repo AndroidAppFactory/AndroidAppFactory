@@ -81,7 +81,11 @@ object DownloadRangeManager : DownloadManager() {
                 )
             } else {
                 item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-                DownloadInfoDBManager.saveDownloadInfo(item)
+                if (item.isNeedRecord) {
+                    DownloadInfoDBManager.saveDownloadInfo(item)
+                } else {
+                    closeDownloadAndRemoveRecord(item)
+                }
                 addDownloadItemToList(item)
                 addWaitToDownload()
                 ThreadManager.getInstance().start {
@@ -89,7 +93,9 @@ object DownloadRangeManager : DownloadManager() {
                     var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
                     ZLog.d(TAG, "onComplete end: $newPath ")
                     item.filePath = newPath
-                    DownloadInfoDBManager.saveDownloadInfo(item)
+                    if (item.isNeedRecord) {
+                        DownloadInfoDBManager.saveDownloadInfo(item)
+                    }
                 }
             }
 
@@ -100,6 +106,10 @@ object DownloadRangeManager : DownloadManager() {
         override fun onDelete(item: DownloadItem) {
             item.downloadListener?.onDelete(item)
         }
+    }
+
+    private fun closeDownloadAndRemoveRecord(item: DownloadItem) {
+        mDownloadEngine.closeDownload(item.downloadID, isFinished = true, false)
     }
 
     override fun addWaitToDownload() {
@@ -286,9 +296,10 @@ object DownloadRangeManager : DownloadManager() {
             DownloadRangeTaskList.removeFromDownloadTaskList(downloadId)
             info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
             mDownloadEngine.closeDownload(downloadId, false, deleteFile)
-            DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
             if (deleteFile) {
                 mDownloadEngine.deleteFile(info)
+            } else {
+                DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
             }
             innerDownloadListener.onDelete(info)
         }

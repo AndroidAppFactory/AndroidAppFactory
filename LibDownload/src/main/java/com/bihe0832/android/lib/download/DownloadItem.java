@@ -19,7 +19,10 @@ import kotlin.jvm.Synchronized;
 public class DownloadItem implements Serializable {
 
     public static final String TAG = "Download";
-
+    public static final int MAX_DOWNLOAD_PRIORITY = 100;
+    public static final int FORCE_DOWNLOAD_PRIORITY = 50;
+    public static final int MIN_DOWNLOAD_PRIORITY = 0;
+    public static final int DEFAULT_DOWNLOAD_PRIORITY = 10;
     // 下载URL，必填
     private String downloadURL = "";
     // 一次下载的标识，非必填，对于完整文件的下载，建议传空，主要针对一个URL存在多个下载，且内容不一致的场景（不分文件的分片下载）
@@ -50,6 +53,8 @@ public class DownloadItem implements Serializable {
     private String downloadTitle = "";
     // 下载时指定的本地目录，建议不填
     private String fileFolder = "";
+    // 下载时，最终下载的文件路径
+    private String filePath = "";
     // 扩展信息，会一路透传到该下载相关的所有事件，包括安装
     private String actionKey = "";
     // 扩展信息，会一路透传到该下载相关的所有事件，包括安装
@@ -60,8 +65,7 @@ public class DownloadItem implements Serializable {
     private long versionCode = 0;
     // 下载显示的Icon，非必填
     private String downloadIcon = "";
-    // 下载时，最终下载的文件路径，外部参数不要填，交给内部处理!!!!
-    private String filePath = "";
+
     // 累积已经下载完的文件长度，不填
     private long finishedLength = 0;
     // 之前已经下载完的文件长度，不填
@@ -76,13 +80,18 @@ public class DownloadItem implements Serializable {
     private transient long startTime = 0;
     //最后暂停时间，不填
     private transient long pauseTime = 0;
-
-    public static final int MAX_DOWNLOAD_PRIORITY = 100;
-    public static final int FORCE_DOWNLOAD_PRIORITY = 50;
-    public static final int MIN_DOWNLOAD_PRIORITY = 0;
-    public static final int DEFAULT_DOWNLOAD_PRIORITY = 10;
     //下载优先级
     private int downloadPriority = DEFAULT_DOWNLOAD_PRIORITY;
+    //是否保存本次的下载记录
+    private boolean needRecord = false;
+
+    public static long getDownloadIDByURL(String url, String actionKey) {
+        return ConvertUtils.getUnsignedInt((actionKey + url).hashCode());
+    }
+
+    public static String getDownloadActionKey(long start, long length) {
+        return start + "-" + length + "-" + (start + length);
+    }
 
     public void setNotificationVisibility(boolean visibility) {
         notificationVisibility = visibility;
@@ -104,17 +113,16 @@ public class DownloadItem implements Serializable {
         }
     }
 
-    public void setDownloadActionKey(String downloadActionKey) {
-        this.downloadActionKey = downloadActionKey;
-    }
-
     public void setDownloadActionKey(long start, long length) {
         this.downloadActionKey = getDownloadActionKey(start, length);
     }
 
-
     public String getDownloadActionKey() {
         return downloadActionKey;
+    }
+
+    public void setDownloadActionKey(String downloadActionKey) {
+        this.downloadActionKey = downloadActionKey;
     }
 
     public boolean notificationVisibility() {
@@ -162,7 +170,7 @@ public class DownloadItem implements Serializable {
 
     // 下载进度
     public String getProcessDesc() {
-        return MathUtils.getFormatPercentDesc(getProcess(),2);
+        return MathUtils.getFormatPercentDesc(getProcess(), 2);
     }
 
     //下载进度
@@ -214,12 +222,12 @@ public class DownloadItem implements Serializable {
         return fileMD5;
     }
 
-    public String getFileSHA256() {
-        return fileSHA256;
-    }
-
     public void setFileMD5(String fileMD5) {
         this.fileMD5 = fileMD5;
+    }
+
+    public String getFileSHA256() {
+        return fileSHA256;
     }
 
     public void setFileSHA256(String fileSHA256) {
@@ -254,15 +262,6 @@ public class DownloadItem implements Serializable {
         //强制重新下载，或者不支持分片，就算是不强制重新下载也要强制重新下载
         return forceDownloadNew;
     }
-
-    public static long getDownloadIDByURL(String url, String actionKey) {
-        return ConvertUtils.getUnsignedInt((actionKey + url).hashCode());
-    }
-
-    public static String getDownloadActionKey(long start, long length) {
-        return start + "-" + length + "-" + (start + length);
-    }
-
 
     public void setForceDownloadNew(boolean forceDownloadNew) {
         this.forceDownloadNew = forceDownloadNew;
@@ -328,8 +327,7 @@ public class DownloadItem implements Serializable {
         this.startTime = startTime;
     }
 
-    public @DownloadStatus
-    int getStatus() {
+    public @DownloadStatus int getStatus() {
         return status;
     }
 
@@ -364,12 +362,20 @@ public class DownloadItem implements Serializable {
         }
     }
 
-    public void setContentLength(long rangeLength) {
-        this.contentLength = rangeLength;
+    public boolean isNeedRecord() {
+        return needRecord;
+    }
+
+    public void setNeedRecord(boolean needRecord) {
+        this.needRecord = needRecord;
     }
 
     public long getContentLength() {
         return contentLength;
+    }
+
+    public void setContentLength(long rangeLength) {
+        this.contentLength = rangeLength;
     }
 
     public String getActionKey() {
@@ -386,24 +392,29 @@ public class DownloadItem implements Serializable {
     public void update(DownloadItem item) {
         if (item.getDownloadID() == getDownloadID()) {
             this.downloadURL = item.downloadURL;
+            this.downloadActionKey = item.downloadActionKey;
             this.fileMD5 = item.fileMD5;
             this.fileSHA256 = item.fileSHA256;
             this.forceDownloadNew = item.forceDownloadNew;
+            this.forceDeleteBad = item.forceDeleteBad;
             this.autoInstall = item.autoInstall;
-            this.notificationVisibility = item.notificationVisibility;
             this.downloadWhenUseMobile = item.downloadWhenUseMobile;
             this.downloadWhenAdd = item.downloadWhenAdd;
             this.mDownloadListener = item.mDownloadListener;
             this.downloadDesc = item.downloadDesc;
             this.downloadTitle = item.downloadTitle;
             this.fileFolder = item.fileFolder;
+            this.filePath = item.filePath;
             this.actionKey = item.actionKey;
             this.extraInfo = item.extraInfo;
             this.packageName = item.packageName;
             this.versionCode = item.versionCode;
             this.downloadIcon = item.downloadIcon;
-            this.filePath = item.filePath;
+            if (!TextUtils.isEmpty(item.realURL)) {
+                this.realURL = item.realURL;
+            }
             this.downloadPriority = item.downloadPriority;
+            this.needRecord = item.needRecord;
         } else {
             Log.e(TAG, "update error , download id is bad ");
         }
@@ -412,7 +423,7 @@ public class DownloadItem implements Serializable {
     @Override
     public String toString() {
         long code = 0;
-        if (mDownloadListener != null){
+        if (mDownloadListener != null) {
             code = mDownloadListener.hashCode();
         }
         return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + " listener='" + code + '\'' + ", downloadTitle='"
