@@ -26,14 +26,23 @@ import java.util.Map;
  */
 public class HttpFileUpload {
 
+    public String postRequest(final Context context, final BaseConnection baseConnection,
+            final Map<String, String> strParams,
+            final List<FileInfo> fileParams) {
+        return postRequest(context, baseConnection, BaseConnection.CONNECT_TIMEOUT, BaseConnection.DEFAULT_READ_TIMEOUT,
+                false,
+                strParams, fileParams);
+
+    }
+
     /**
      * post请求方法
      */
     public String postRequest(final Context context, final BaseConnection baseConnection,
+            int connectTimeOut, int readTimeOut, boolean useCaches,
             final Map<String, String> strParams,
             final List<FileInfo> fileParams) {
-
-        baseConnection.setURLConnectionCommonPara();
+        baseConnection.setURLConnectionCommonPara(connectTimeOut, readTimeOut, useCaches);
         HashMap<String, String> requestProperty = new HashMap<>();
         requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET_UTF8);
         requestProperty.put(HTTP_REQ_PROPERTY_CONTENT_TYPE, HTTP_REQ_VALUE_CONTENT_TYPE_FORM);

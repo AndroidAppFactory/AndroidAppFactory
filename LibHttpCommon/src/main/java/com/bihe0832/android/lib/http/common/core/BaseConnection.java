@@ -18,32 +18,24 @@ import java.util.Map;
  */
 public abstract class BaseConnection {
 
-    private static final String LOG_TAG = "bihe0832 REQUEST";
     public static final String HTTP_REQ_PROPERTY_CHARSET = "Charset";
     public static final String HTTP_REQ_VALUE_CHARSET_UTF8 = "UTF-8";
     public static final String HTTP_REQ_VALUE_CHARSET_ISO_8599_1 = "ISO-8859-1";
-
     public static final String HTTP_REQ_PROPERTY_CONTENT_DISPOSITION = "Content-Disposition";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
-
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD = "application/x-www-form-urlencoded";
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_TEXT = "text/plain";
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_FORM = "multipart/form-data";     //内容类型
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM = "application/octet-stream";     //内容类型
-
     public static final String HTTP_REQ_ENTITY_MERGE = "=";
     public static final String HTTP_REQ_ENTITY_JOIN = "&";
-
     public static final String HTTP_REQ_ENTITY_PREFIX = "--";
     public static final String HTTP_REQ_ENTITY_LINE_END = "\r\n";
-
-
     public static final String HTTP_REQ_PROPERTY_CONTENT_LENGTH = "Content-Length";
     public static final String HTTP_REQ_METHOD_GET = "GET";
     public static final String HTTP_REQ_METHOD_POST = "POST";
     public static final String HTTP_REQ_COOKIE = "Cookie";
-
     /**
      * 建立连接的超时时间
      */
@@ -52,19 +44,20 @@ public abstract class BaseConnection {
      * 建立到资源的连接后从 input 流读入时的超时时间
      */
     protected static final int DEFAULT_READ_TIMEOUT = 10 * 1000;
+    private static final String LOG_TAG = "bihe0832 REQUEST";
 
     public BaseConnection() {
 
     }
 
-    protected void setURLConnectionCommonPara() {
+    protected void setURLConnectionCommonPara(int connectTimeOut, int readTimeOut, boolean useCaches) {
         HttpURLConnection connection = getURLConnection();
         if (null == connection) {
             return;
         }
-        connection.setConnectTimeout(CONNECT_TIMEOUT);
-        connection.setReadTimeout(DEFAULT_READ_TIMEOUT);
-        connection.setUseCaches(false);
+        connection.setConnectTimeout(connectTimeOut);
+        connection.setReadTimeout(readTimeOut);
+        connection.setUseCaches(useCaches);
     }
 
 
@@ -106,7 +99,7 @@ public abstract class BaseConnection {
             ZLog.e(LOG_TAG, "URLConnection is null");
             return "";
         }
-        setURLConnectionCommonPara();
+        setURLConnectionCommonPara(request.getConnectTimeOut(), request.getReadTimeOut(),request.useCaches());
         HashMap<String, String> requestProperty = new HashMap<>();
         if (request.getRequestProperties() != null) {
             requestProperty.putAll(request.getRequestProperties());

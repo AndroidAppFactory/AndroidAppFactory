@@ -14,6 +14,11 @@ public class BasicGetRequest extends HttpBasicRequest {
     }
 
     @Override
+    public boolean useCaches() {
+        return true;
+    }
+
+    @Override
     public String getUrl() {
         StringBuilder builder = new StringBuilder();
         builder.append(Constants.PARA_PARA + HTTP_REQ_ENTITY_MERGE + mPara);

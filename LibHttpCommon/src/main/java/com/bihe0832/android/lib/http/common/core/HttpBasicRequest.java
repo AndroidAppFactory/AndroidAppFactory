@@ -3,7 +3,6 @@ package com.bihe0832.android.lib.http.common.core;
 
 import android.text.TextUtils;
 import com.bihe0832.android.lib.http.common.HTTPServer;
-import com.bihe0832.android.lib.http.common.HttpResponseHandler;
 import com.bihe0832.android.lib.log.ZLog;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,12 +14,23 @@ public abstract class HttpBasicRequest {
 
     public static final String HTTP_REQ_ENTITY_MERGE = BaseConnection.HTTP_REQ_ENTITY_MERGE;
     public static final String HTTP_REQ_ENTITY_JOIN = BaseConnection.HTTP_REQ_ENTITY_JOIN;
-
-    protected long requestTime = 0;
     public byte[] data = null;
     public HashMap<String, String> cookieInfo = new HashMap<>();
+    protected long requestTime = 0;
 
     public abstract String getUrl();
+
+    public int getConnectTimeOut() {
+        return BaseConnection.CONNECT_TIMEOUT;
+    }
+
+    public int getReadTimeOut() {
+        return BaseConnection.DEFAULT_READ_TIMEOUT;
+    }
+
+    public boolean useCaches() {
+        return false;
+    }
 
     public void setRequestTime(long requestTime) {
         this.requestTime = requestTime;
@@ -40,10 +50,8 @@ public abstract class HttpBasicRequest {
             if (TextUtils.isEmpty(entry.getKey()) && TextUtils.isEmpty(entry.getValue())) {
                 break;
             } else {
-                stringBuffer.append(entry.getKey())
-                        .append(HttpBasicRequest.HTTP_REQ_ENTITY_MERGE)
-                        .append(entry.getValue())
-                        .append(HttpBasicRequest.HTTP_REQ_ENTITY_JOIN);
+                stringBuffer.append(entry.getKey()).append(HttpBasicRequest.HTTP_REQ_ENTITY_MERGE)
+                        .append(entry.getValue()).append(HttpBasicRequest.HTTP_REQ_ENTITY_JOIN);
 
             }
         }
@@ -56,4 +64,6 @@ public abstract class HttpBasicRequest {
             return null;
         }
     }
+
+
 }
