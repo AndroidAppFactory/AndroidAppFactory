@@ -61,7 +61,7 @@ abstract class DownloadManager {
         mIsDebug = isDebug
         if (!mHasInit) {
             mHasInit = true
-            DownloadInfoDBManager.init(context)
+            DownloadInfoDBManager.init(context, isDebug)
         }
     }
 

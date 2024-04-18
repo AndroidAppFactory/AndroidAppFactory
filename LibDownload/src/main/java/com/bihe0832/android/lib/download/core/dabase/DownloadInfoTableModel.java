@@ -100,7 +100,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
     }
 
     @Synchronized
-    static void initData(BaseDBHelper helper) {
+    static void initData(BaseDBHelper helper, boolean isDebug) {
         try {
             Cursor cursor = helper.queryInfo(TABLE_NAME, null, null, null, null, null, null, null);
             try {
@@ -117,7 +117,9 @@ public class DownloadInfoTableModel extends BaseTableModel {
                         item.setStatus(DownloadStatus.STATUS_DOWNLOAD_SUCCEED);
                     }
                     long id = getLongByName(cursor, col_id);
-                    ZLog.d("数据库信息：id:" + id + "info :" + item.toString());
+                    if (isDebug){
+                        ZLog.d("数据库信息：id:" + id + "，info :" + item.toString());
+                    }
                     cursor.moveToNext();
                 }
             } catch (Exception e) {

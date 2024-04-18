@@ -84,7 +84,7 @@ public class DownloadPartInfoTableModel extends BaseTableModel {
                     long finished = getLongByName(cursor, col_finished);
                     long downloadINfo = getLongByName(cursor, col_download_id);
                     String partID = getStringByName(cursor, col_download_part_id);
-                    ZLog.d("数据库信息：id:" + id + "partID :" + partID + "download_id :" + downloadINfo + "finished :"
+                    ZLog.d("数据库信息：id:" + id + "，partID :" + partID + "，download_id :" + downloadINfo + "finished :"
                             + finished);
                     cursor.moveToNext();
                 }

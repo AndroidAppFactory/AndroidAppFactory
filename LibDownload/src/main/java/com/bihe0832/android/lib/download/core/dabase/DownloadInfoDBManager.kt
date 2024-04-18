@@ -15,17 +15,18 @@ object DownloadInfoDBManager {
     public const val TAG = "DownloadInfoDBManager"
     private var mApplicationContext: Context? = null
     private var commonDBHelperInstance: DownloadInfoDBHelper? = null
-    fun init(context: Context) {
+    fun init(context: Context, isDebug: Boolean) {
         mApplicationContext = context
         if (commonDBHelperInstance == null) {
             commonDBHelperInstance = DownloadInfoDBHelper(mApplicationContext)
-            DownloadInfoTableModel.initData(getDownloadInfoDBHelper())
+            DownloadInfoTableModel.initData(getDownloadInfoDBHelper(), isDebug)
         }
     }
 
     fun getApplicationContext(): Context? {
         return mApplicationContext
     }
+
     @Synchronized
     private fun getDownloadInfoDBHelper(): DownloadInfoDBHelper? {
         return commonDBHelperInstance
@@ -78,6 +79,7 @@ object DownloadInfoDBManager {
     fun clearDownloadPartByID(downloadID: Long): Boolean {
         return DownloadPartInfoTableModel.clearData(getDownloadInfoDBHelper(), downloadID)
     }
+
     fun clearDownloadInfoByID(downloadID: Long): Boolean {
         return DownloadInfoTableModel.clearData(getDownloadInfoDBHelper(), downloadID)
     }
