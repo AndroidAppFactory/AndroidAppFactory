@@ -265,7 +265,7 @@ object DownloadTools {
             this.isForceDownloadNew = forceDownloadNew
             this.actionKey = actionKey
             this.isDownloadWhenUseMobile = useMobile
-            this.isNeedRecord = needRecord || isFilePath
+            this.isNeedRecord = needRecord
         }.let {
             // 文件已经存在，直接回调
             if (isFilePath && (!TextUtils.isEmpty(md5) || !TextUtils.isEmpty(sha256))

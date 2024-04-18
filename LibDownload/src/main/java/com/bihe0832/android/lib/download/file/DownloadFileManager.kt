@@ -124,7 +124,7 @@ object DownloadFileManager : DownloadManager() {
                 var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
                 ZLog.d(TAG, "onComplete end: $newPath ")
                 item.filePath = newPath
-                if (item.isNeedRecord) {
+                if (item.isNeedRecord || !newPath.equals(filePath)) {
                     DownloadInfoDBManager.saveDownloadInfo(item)
                 }
                 if (item.notificationVisibility()) {
