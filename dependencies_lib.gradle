@@ -222,6 +222,82 @@ ext.libmoduleInfo = [
                         "LibDialog", "LibToast", "LibFloatview"
                 ]
         ],
+        "LibIPC"                    : [
+                "version"            : "5.9.10",
+                "artifactId"         : "lib-ipc",
+                "apidependenciesList": [
+                        "LibLog"
+                ]
+        ],
+        "LibBlockTask"              : [
+                "version"            : "6.9.12",
+                "artifactId"         : "lib-block-task",
+                "apidependenciesList": [
+                        "LibLog", "LibCommonUtils"
+                ]
+        ],
+        "LibOkhttpWrapper"          : [
+                "version"            : "6.9.19",
+                "artifactId"         : "lib-okhttp-wrapper",
+                "apidependenciesList": [
+                        "LibLog", "LibHttpCommon",
+                        project.okhttp.okhttp,
+                        project.okhttp.logging_interceptor,
+                        project.okhttp.retrofit,
+                        project.okhttp.converter_gson
+                ]
+        ],
+        "LibCoroutines"             : [
+                "version"            : "5.10.35",
+                "artifactId"         : "lib-coroutines",
+                "apidependenciesList": [
+                        project.kotlinx_coroutines.core,
+                        project.kotlinx_coroutines.android,
+                        "LibAAF"
+                ]
+        ],
+        "LibDataRepository"         : [
+                "version"            : "5.11.9",
+                "artifactId"         : "lib-data-repository",
+                "apidependenciesList": [
+                        "LibLog", "LibAAF", "LibCoroutines"
+                ]
+        ],
+        "LibAudioPlayer"            : [
+                "version"            : "6.9.15",
+                "artifactId"         : "lib-audio-player",
+                "apidependenciesList": [
+                        "LibMedia", "LibBlockTask"
+                ]
+        ],
+        "LibFFmpegMobile"           : [
+                "version"            : "6.9.0",
+                "artifactId"         : "lib-ffmpeg-mobile-aaf",
+                "apidependenciesList": [
+
+                ]
+        ],
+        "LibCrop"                   : [
+                "version"            : "6.6.16",
+                "artifactId"         : "lib-crop",
+                "apidependenciesList": [
+
+                ]
+        ],
+        "LibImageMetadata"          : [
+                "version"            : "6.9.15",
+                "artifactId"         : "lib-image-meta",
+                "apidependenciesList": [
+                        project.metadata.drewnoakes, "LibCommonUtils", "LibLog", "LibFile", "LibMedia",
+                ]
+        ],
+        "LibAAFResource"            : [
+                "version"            : "6.8.3",
+                "artifactId"         : "lib-aaf-res",
+                "apidependenciesList": [
+
+                ]
+        ],
         "LibCommonUIUtils"          : [
                 "version"            : "6.9.12",
                 "artifactId"         : "lib-ui-common",
@@ -409,13 +485,6 @@ ext.libmoduleInfo = [
                         ]
                 ]
         ],
-        "LibIPC"                    : [
-                "version"            : "5.9.10",
-                "artifactId"         : "lib-ipc",
-                "apidependenciesList": [
-                        "LibLog"
-                ]
-        ],
         "LibTextView"               : [
                 "version"            : "6.9.12",
                 "artifactId"         : "lib-textview",
@@ -432,47 +501,6 @@ ext.libmoduleInfo = [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
                 ]
         ],
-        "LibBlockTask"              : [
-                "version"            : "6.9.12",
-                "artifactId"         : "lib-block-task",
-                "apidependenciesList": [
-                        "LibLog", "LibCommonUtils"
-                ]
-        ],
-        "LibOkhttpWrapper"          : [
-                "version"            : "6.9.19",
-                "artifactId"         : "lib-okhttp-wrapper",
-                "apidependenciesList": [
-                        "LibLog", "LibHttpCommon",
-                        project.okhttp.okhttp,
-                        project.okhttp.logging_interceptor,
-                        project.okhttp.retrofit,
-                        project.okhttp.converter_gson
-                ]
-        ],
-        "LibDataRepository"         : [
-                "version"            : "5.11.9",
-                "artifactId"         : "lib-data-repository",
-                "apidependenciesList": [
-                        "LibLog", "LibAAF", "LibCoroutines"
-                ]
-        ],
-        "LibCoroutines"             : [
-                "version"            : "5.10.35",
-                "artifactId"         : "lib-coroutines",
-                "apidependenciesList": [
-                        project.kotlinx_coroutines.core,
-                        project.kotlinx_coroutines.android,
-                        "LibAAF"
-                ]
-        ],
-        "LibAudioPlayer"            : [
-                "version"            : "6.9.15",
-                "artifactId"         : "lib-audio-player",
-                "apidependenciesList": [
-                        "LibMedia", "LibBlockTask"
-                ]
-        ],
         "LibCustomView"             : [
                 "version"            : "6.9.12",
                 "artifactId"         : "lib-custom-view",
@@ -480,13 +508,6 @@ ext.libmoduleInfo = [
                         project.androidsupport.appcompat,
                         project.androidsupport.constraintlayout,
                         "LibViewExt"
-                ]
-        ],
-        "LibAAFResource"            : [
-                "version"            : "6.8.3",
-                "artifactId"         : "lib-aaf-res",
-                "apidependenciesList": [
-
                 ]
         ],
         "LibTheme"                  : [
@@ -511,27 +532,6 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         project.androidsupport.annotation,
                         "LibColor", "LibGson"
-                ]
-        ],
-        "LibCrop"                   : [
-                "version"            : "6.6.16",
-                "artifactId"         : "lib-crop",
-                "apidependenciesList": [
-
-                ]
-        ],
-        "LibFFmpegMobile"           : [
-                "version"            : "6.9.0",
-                "artifactId"         : "lib-ffmpeg-mobile-aaf",
-                "apidependenciesList": [
-
-                ]
-        ],
-        "LibImageMetadata"          : [
-                "version"            : "6.9.15",
-                "artifactId"         : "lib-image-meta",
-                "apidependenciesList": [
-                        project.metadata.drewnoakes, "LibCommonUtils", "LibLog", "LibFile", "LibMedia",
                 ]
         ]
 ]
