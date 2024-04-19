@@ -13,8 +13,8 @@ import com.bihe0832.android.common.crop.callback.OverlayViewChangeListener;
 
 public class CropView extends FrameLayout {
 
-    private GestureCropImageView mGestureCropImageView;
     private final OverlayView mViewOverlay;
+    private GestureCropImageView mGestureCropImageView;
 
     public CropView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -45,7 +45,19 @@ public class CropView extends FrameLayout {
         mViewOverlay.setOverlayViewChangeListener(new OverlayViewChangeListener() {
             @Override
             public void onCropRectUpdated(RectF cropRect) {
-                mGestureCropImageView.setCropRect(cropRect);
+                float newAspectRatio = (cropRect.right - cropRect.left) / (cropRect.bottom - cropRect.top);
+                if (mViewOverlay.getTargetAspectRatio() == newAspectRatio) {
+                    mGestureCropImageView.setCropRect(cropRect);
+                } else {
+                    postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewOverlay.setTargetAspectRatio(newAspectRatio);
+                            mGestureCropImageView.setImageToWrapCropBounds();
+                        }
+                    }, 200);
+
+                }
             }
         });
     }

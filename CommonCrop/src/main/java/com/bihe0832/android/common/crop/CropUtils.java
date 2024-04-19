@@ -93,13 +93,14 @@ public class CropUtils {
     }
 
     public static void startCrop(Activity activity, Uri source) {
-        Options options =new Options();
-        options.setAllowedGestures(CropConstants.GESTURE_TYPES_ALL, CropConstants.GESTURE_TYPES_ROTATE, CropConstants.GESTURE_TYPES_SCALE);
+        Options options = new Options();
+        options.setAllowedGestures(CropConstants.GESTURE_TYPES_ALL, CropConstants.GESTURE_TYPES_ROTATE,
+                CropConstants.GESTURE_TYPES_SCALE);
         startCrop(activity, source, options);
     }
 
     public static void startSimpleCrop(Activity activity, Uri source) {
-        Options options =new Options();
+        Options options = new Options();
         options.setHideBottomControls(true);
         startCrop(activity, source, options);
     }
@@ -243,11 +244,9 @@ public class CropUtils {
             mOptionBundle.putBoolean(EXTRA_HIDE_BOTTOM_CONTROLS, hide);
         }
 
-        /**
-         * @param enabled - set to true to let user resize crop bounds (disabled by default)
-         */
-        public void setFreeStyleCropEnabled(boolean enabled) {
-            mOptionBundle.putBoolean(EXTRA_FREE_STYLE_CROP, enabled);
+
+        public void setFreeStyleCropType(int type) {
+            mOptionBundle.putInt(EXTRA_FREE_STYLE_CROP, type);
         }
 
         /**

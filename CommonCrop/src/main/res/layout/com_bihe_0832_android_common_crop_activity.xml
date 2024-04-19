@@ -6,6 +6,7 @@
         android:fitsSystemWindows="true"
         android:background="@color/black"
         android:layout_height="match_parent">
+
     <ImageView
             android:id="@+id/image_view_logo"
             android:layout_width="@dimen/crop_default_logo_size"
@@ -141,8 +142,9 @@
             android:id="@+id/crop_toolbar"
             android:layout_width="match_parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:background="@color/crop_color_default_dimmed"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_height="@dimen/com_bihe0832_tab_main_bottom_bar_height">
 
         <ImageView

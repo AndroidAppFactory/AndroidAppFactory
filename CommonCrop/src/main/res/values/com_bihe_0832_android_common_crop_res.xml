@@ -14,7 +14,7 @@
 
 
     <!--uCrop Activity-->
-    <dimen name="crop_page_padding">16dp</dimen>
+    <dimen name="crop_page_padding">28dp</dimen>
     <color name="crop_default_logo_color">#4f212121</color>
     <dimen name="crop_default_logo_size">160dp</dimen>
 

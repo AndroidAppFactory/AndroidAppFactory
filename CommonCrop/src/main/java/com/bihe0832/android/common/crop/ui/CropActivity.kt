@@ -108,6 +108,10 @@ class CropActivity : BaseActivity() {
         }
     }
 
+    override fun getStatusBarColor(): Int {
+        return resources.getColor(R.color.crop_color_default_dimmed)
+    }
+
     override fun onBack() {
         setResult(RESULT_CANCELED, Intent())
         finish()
@@ -253,13 +257,13 @@ class CropActivity : BaseActivity() {
 
     private fun setAllowedGestures(tabID: Int) {
         mGestureCropImageView!!.isScaleEnabled = (
-            mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ALL ||
-                mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_SCALE
-            )
+                mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ALL ||
+                        mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_SCALE
+                )
         mGestureCropImageView!!.isRotateEnabled = (
-            mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ALL ||
-                mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ROTATE
-            )
+                mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ALL ||
+                        mAllowedGestures[tabID] == CropConstants.GESTURE_TYPES_ROTATE
+                )
     }
 
     private fun changeAspect(layout_aspect_ratio: View, selected: Boolean) {
@@ -349,9 +353,8 @@ class CropActivity : BaseActivity() {
             clone(findViewById<ConstraintLayout>(R.id.crop_page))
             clear(R.id.crop_toolbar, ConstraintSet.BOTTOM)
             clear(R.id.crop_toolbar, ConstraintSet.TOP)
-
-            connect(R.id.crop_toolbar, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-            connect(R.id.crop_toolbar, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+            clear(R.id.ucrop, ConstraintSet.BOTTOM)
+            clear(R.id.ucrop, ConstraintSet.TOP)
             if (hideTab) {
                 connect(
                     R.id.crop_toolbar,
@@ -359,12 +362,37 @@ class CropActivity : BaseActivity() {
                     ConstraintSet.PARENT_ID,
                     ConstraintSet.BOTTOM
                 )
+                connect(
+                    R.id.ucrop,
+                    ConstraintSet.TOP,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.TOP
+                )
+                connect(
+                    R.id.ucrop,
+                    ConstraintSet.BOTTOM,
+                    R.id.crop_toolbar,
+                    ConstraintSet.TOP
+                )
             } else {
                 connect(
                     R.id.crop_toolbar,
                     ConstraintSet.TOP,
                     ConstraintSet.PARENT_ID,
+                    ConstraintSet.TOP
+                )
+                connect(
+                    R.id.ucrop,
+                    ConstraintSet.BOTTOM,
+                    R.id.wrapper_controls,
                     ConstraintSet.TOP,
+                )
+
+                connect(
+                    R.id.ucrop,
+                    ConstraintSet.TOP,
+                    R.id.crop_toolbar,
+                    ConstraintSet.BOTTOM,
                     resources.getDimension(R.dimen.toolbar_padding_top).toInt()
                 )
             }
@@ -374,11 +402,9 @@ class CropActivity : BaseActivity() {
     private fun initiateRootViews(intent: Intent) {
         mCropView = findViewById(R.id.ucrop)
         mOverlayView = mCropView!!.overlayView
-        mOverlayView!!.isFreestyleCropEnabled = intent.getBooleanExtra(
-            CropUtils.Options.EXTRA_FREE_STYLE_CROP,
-            OverlayView.DEFAULT_FREESTYLE_CROP_MODE != OverlayView.FREESTYLE_CROP_MODE_DISABLE,
+        mOverlayView!!.setFreestyleCropMode(
+            intent.getIntExtra(CropUtils.Options.EXTRA_FREE_STYLE_CROP, OverlayView.DEFAULT_FREESTYLE_CROP_MODE)
         )
-
         mOverlayView!!.setDimmedColor(resources.getColor(R.color.crop_color_default_dimmed))
         mOverlayView!!.setCircleDimmedLayer(
             intent.getBooleanExtra(
@@ -489,19 +515,19 @@ class CropActivity : BaseActivity() {
 
     private fun setupRotateWidget() {
         (findViewById<View>(R.id.rotate_scroll_wheel) as HorizontalProgressWheelView)
-            .setScrollingListener(object : HorizontalProgressWheelView.ScrollingListener {
-                override fun onScroll(delta: Float, totalDistance: Float) {
-                    mGestureCropImageView!!.postRotate(delta / ROTATE_WIDGET_SENSITIVITY_COEFFICIENT)
-                }
+                .setScrollingListener(object : HorizontalProgressWheelView.ScrollingListener {
+                    override fun onScroll(delta: Float, totalDistance: Float) {
+                        mGestureCropImageView!!.postRotate(delta / ROTATE_WIDGET_SENSITIVITY_COEFFICIENT)
+                    }
 
-                override fun onScrollEnd() {
-                    mGestureCropImageView!!.setImageToWrapCropBounds()
-                }
+                    override fun onScrollEnd() {
+                        mGestureCropImageView!!.setImageToWrapCropBounds()
+                    }
 
-                override fun onScrollStart() {
-                    mGestureCropImageView!!.cancelAllAnimations()
-                }
-            })
+                    override fun onScrollStart() {
+                        mGestureCropImageView!!.cancelAllAnimations()
+                    }
+                })
         findViewById<View>(R.id.angel_reset).setOnClickListener { resetRotation() }
         findViewById<View>(R.id.angel_angel).setOnClickListener { rotateByAngle(90) }
     }
@@ -559,37 +585,37 @@ class CropActivity : BaseActivity() {
 
     private fun setupScaleWidget() {
         (findViewById<View>(R.id.scale_scroll_wheel) as HorizontalProgressWheelView)
-            .setScrollingListener(object : HorizontalProgressWheelView.ScrollingListener {
-                override fun onScroll(delta: Float, totalDistance: Float) {
-                    if (delta > 0) {
-                        mGestureCropImageView!!.zoomInImage(
-                            mGestureCropImageView!!.currentScale +
-                                delta * (
-                                    (mGestureCropImageView!!.maxScale - mGestureCropImageView!!.minScale) /
-                                        SCALE_WIDGET_SENSITIVITY_COEFFICIENT
-                                    ),
-                        )
-                    } else {
-                        mGestureCropImageView!!.zoomOutImage(
-                            (
+                .setScrollingListener(object : HorizontalProgressWheelView.ScrollingListener {
+                    override fun onScroll(delta: Float, totalDistance: Float) {
+                        if (delta > 0) {
+                            mGestureCropImageView!!.zoomInImage(
                                 mGestureCropImageView!!.currentScale +
-                                    delta * (
+                                        delta * (
                                         (mGestureCropImageView!!.maxScale - mGestureCropImageView!!.minScale) /
-                                            SCALE_WIDGET_SENSITIVITY_COEFFICIENT
-                                        )
-                                ),
-                        )
+                                                SCALE_WIDGET_SENSITIVITY_COEFFICIENT
+                                        ),
+                            )
+                        } else {
+                            mGestureCropImageView!!.zoomOutImage(
+                                (
+                                        mGestureCropImageView!!.currentScale +
+                                                delta * (
+                                                (mGestureCropImageView!!.maxScale - mGestureCropImageView!!.minScale) /
+                                                        SCALE_WIDGET_SENSITIVITY_COEFFICIENT
+                                                )
+                                        ),
+                            )
+                        }
                     }
-                }
 
-                override fun onScrollEnd() {
-                    mGestureCropImageView!!.setImageToWrapCropBounds()
-                }
+                    override fun onScrollEnd() {
+                        mGestureCropImageView!!.setImageToWrapCropBounds()
+                    }
 
-                override fun onScrollStart() {
-                    mGestureCropImageView!!.cancelAllAnimations()
-                }
-            })
+                    override fun onScrollStart() {
+                        mGestureCropImageView!!.cancelAllAnimations()
+                    }
+                })
     }
 
     private fun addBlockingView() {

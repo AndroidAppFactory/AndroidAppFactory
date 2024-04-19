@@ -7,6 +7,7 @@ import android.net.Uri
 import android.view.View
 import com.bihe0832.android.common.crop.CropUtils
 import com.bihe0832.android.common.crop.constants.CropConstants
+import com.bihe0832.android.common.crop.view.OverlayView
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.DebugTipsData
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
@@ -61,7 +62,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     },
                 ),
 
-            )
+                )
             add(
                 DebugItemData(
                     "仅拍照",
@@ -193,7 +194,11 @@ class DebugPhotosFragment : DebugCommonFragment() {
                         )
                     } else if (needAAFCrop) {
                         CropUtils.startCrop(activity!!, data.getData(), CropUtils.Options().apply {
-                            withAspectRatio(3.0f, 4.0f)
+                            setAllowedGestures(
+                                CropConstants.GESTURE_TYPES_SCALE, CropConstants.GESTURE_TYPES_ROTATE,
+                                CropConstants.GESTURE_TYPES_SCALE
+                            )
+                            setFreeStyleCropType(OverlayView.FREESTYLE_CROP_MODE_ENABLE_WITH_PASS_THROUGH)
                             setHideBottomControls(true)
                         })
                     } else {
