@@ -10,7 +10,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.9.19",
+                "version"            : "6.9.20",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -183,7 +183,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonCrop"            : [
-                "version"            : "6.9.19",
+                "version"            : "6.9.20",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
                         "Framework", "CommonBottomTab", "LibImageMetadata", "LibCrop"
