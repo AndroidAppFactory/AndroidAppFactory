@@ -4,6 +4,7 @@
         package="com.bihe0832.android.base.debug">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!--    Widget-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />

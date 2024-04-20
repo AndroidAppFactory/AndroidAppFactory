@@ -18,17 +18,8 @@ import com.bihe0832.android.lib.http.common.core.FileInfo
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
-import kotlinx.android.synthetic.main.activity_http_test.clearResult
-import kotlinx.android.synthetic.main.activity_http_test.common_toolbar
-import kotlinx.android.synthetic.main.activity_http_test.getAdvanced
-import kotlinx.android.synthetic.main.activity_http_test.getBasic
-import kotlinx.android.synthetic.main.activity_http_test.paraEditText
-import kotlinx.android.synthetic.main.activity_http_test.postAdvanced
-import kotlinx.android.synthetic.main.activity_http_test.postBasic
-import kotlinx.android.synthetic.main.activity_http_test.postFile
-import kotlinx.android.synthetic.main.activity_http_test.postOkHttp
-import kotlinx.android.synthetic.main.activity_http_test.result
-import kotlinx.android.synthetic.main.activity_http_test.testGzip
+import com.bihe0832.android.lib.utils.encrypt.compression.GzipUtils
+import kotlinx.android.synthetic.main.activity_http_test.*
 import java.io.File
 import java.net.URLDecoder
 
@@ -88,9 +79,9 @@ class DebugHttpActivity : BaseDebugActivity() {
 
         testGzip.setOnClickListener {
             HTTPServer.getInstance()
-                .doRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+                .doOriginRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
                 .let {
-                    showResult("同步请求结果：$it")
+                    showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
                 }
         }
         clearResult.setOnClickListener { result.text = "" }
@@ -123,7 +114,7 @@ class DebugHttpActivity : BaseDebugActivity() {
 //            HTTPServer.getInstance().doRequest(request)
 
             HTTPServer.getInstance()
-                .doRequestSync("https://microdemo.bihe0832.com/AndroidHTTP/get.php?para=" + result)
+                .doRequestSync(Constants.HTTP_DOMAIN + Constants.PATH_GET+ "?para=" + result)
                 .let {
                     showResult("同步请求结果：$it")
                 }
