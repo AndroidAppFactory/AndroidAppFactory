@@ -1,6 +1,10 @@
 package com.bihe0832.android.lib.http.common;
 
+import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CHARSET;
+import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE;
+import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
+import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 
 import android.content.Context;
 import android.os.Handler;
@@ -13,6 +17,7 @@ import com.bihe0832.android.lib.http.common.core.HTTPSConnection;
 import com.bihe0832.android.lib.http.common.core.HttpBasicRequest;
 import com.bihe0832.android.lib.http.common.core.HttpFileUpload;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.request.HTTPRequestUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -31,28 +36,10 @@ public class HTTPServer {
 
     //是否为测试版本
     private static final boolean DEBUG = true;
-    private Handler mCallHandler;
     private static final int MSG_REQUEST_ORIGIN = 0;
     private static final int MSG_REQUEST_CONVERT = 1;
-
     private static volatile HTTPServer instance;
-
-    public static HTTPServer getInstance() {
-        if (instance == null) {
-            synchronized (HTTPServer.class) {
-                if (instance == null) {
-                    instance = new HTTPServer();
-                }
-            }
-        }
-        return instance;
-    }
-
-    private class RequestInfo {
-
-        public HttpBasicRequest request;
-        public HttpResponseHandler handler;
-    }
+    private Handler mCallHandler;
 
     private HTTPServer() {
         mCallHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_HIGHER)) {
@@ -82,15 +69,58 @@ public class HTTPServer {
         };
     }
 
+    public static HTTPServer getInstance() {
+        if (instance == null) {
+            synchronized (HTTPServer.class) {
+                if (instance == null) {
+                    instance = new HTTPServer();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * 对post参数进行编码处理
+     */
+    public static String getFormDataString(Map<String, String> strParams) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (Map.Entry<String, String> entry : strParams.entrySet()) {
+            if (TextUtils.isEmpty(entry.getKey()) && TextUtils.isEmpty(entry.getValue())) {
+                break;
+            } else {
+                stringBuffer.append(BaseConnection.HTTP_REQ_ENTITY_PREFIX)
+                        .append(HTTPServer.BOUNDARY)
+                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
+                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(": ").append("form-data")
+                        .append(";")
+                        .append("name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(entry.getKey()).append("\"")
+                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
+                        .append(HTTP_REQ_PROPERTY_CONTENT_TYPE).append(": ")
+                        .append(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_TEXT).append("; ")
+                        .append(HTTP_REQ_PROPERTY_CHARSET).append(HTTP_REQ_ENTITY_MERGE)
+                        .append(HTTP_REQ_VALUE_CHARSET_UTF8).append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
+                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING).append(": 8bit")
+                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
+                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)// 参数头设置完以后需要两个换行，然后才是参数内容
+                        .append(entry.getValue())
+                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END);
+            }
+        }
+        String result = stringBuffer.toString();
+        ZLog.e(LOG_TAG, "getFormDataString = \n" + result);
+        return stringBuffer.toString();
+    }
 
     private String executeRequest(HttpBasicRequest request, BaseConnection connection) {
         String url = request.getUrl();
         if (DEBUG) {
             ZLog.w(LOG_TAG, "=======================================");
             ZLog.w(LOG_TAG, request.getClass().toString());
-            ZLog.w(LOG_TAG, url);
+            ZLog.w(LOG_TAG, "request url:" + url);
+            ZLog.w(LOG_TAG, "connection url:" + connection.getURLConnection().getURL());
             if (request.data != null) {
-                ZLog.w(LOG_TAG, new String(request.data));
+                ZLog.w(LOG_TAG, "request data:" + new String(request.data));
             }
             ZLog.w(LOG_TAG, "=======================================");
         }
@@ -106,6 +136,7 @@ public class HTTPServer {
         }
         return result;
     }
+
     private String executeRequest(HttpBasicRequest request, HttpResponseHandler handler, boolean needConvert) {
 
         String url = request.getUrl();
@@ -139,6 +170,7 @@ public class HTTPServer {
             return "";
         }
     }
+
     private void executeRequestInExecutor(final HttpBasicRequest request, HttpResponseHandler handler,
             final boolean needConvert) {
         ThreadManager.getInstance().start(new Runnable() {
@@ -179,7 +211,7 @@ public class HTTPServer {
         }
     }
 
-    public String doFileUpload(Context context, final String requestUrl, final Map<String, String> strParams,
+    public String doFileUpload(Context context, final String requestUrl, final String strParams,
             final List<FileInfo> fileParams) {
         return new HttpFileUpload()
                 .postRequest(context, HTTPServer.getInstance().getConnection(requestUrl), strParams, fileParams);
@@ -214,11 +246,14 @@ public class HTTPServer {
     }
 
     public BaseConnection getConnection(String url) {
+        ZLog.e(LOG_TAG, "getConnection:" + url);
+        String finalUrl = HTTPRequestUtils.getRedirectUrl(url);
+        ZLog.e(LOG_TAG, "getConnection getRedirectUrl:" + finalUrl);
         BaseConnection connection = null;
-        if (url.startsWith("https:")) {
-            connection = new HTTPSConnection(url);
+        if (finalUrl.startsWith("https:")) {
+            connection = new HTTPSConnection(finalUrl);
         } else {
-            connection = new HTTPConnection(url);
+            connection = new HTTPConnection(finalUrl);
         }
         return connection;
     }
@@ -287,6 +322,9 @@ public class HTTPServer {
         return doOriginRequestSync(url, bytes, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
     }
 
+    private class RequestInfo {
 
-
+        public HttpBasicRequest request;
+        public HttpResponseHandler handler;
+    }
 }

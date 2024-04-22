@@ -4,11 +4,9 @@ import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_FORM;
-import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.LOG_TAG;
 
 import android.content.Context;
-import android.text.TextUtils;
 import com.bihe0832.android.lib.http.common.HTTPServer;
 import com.bihe0832.android.lib.log.ZLog;
 import java.io.ByteArrayOutputStream;
@@ -19,29 +17,23 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author zixie code@bihe0832.com Created on 2021/11/18.
  */
 public class HttpFileUpload {
 
-    public String postRequest(final Context context, final BaseConnection baseConnection,
-            final Map<String, String> strParams,
+    public String postRequest(final Context context, final BaseConnection baseConnection, final String strParams,
             final List<FileInfo> fileParams) {
         return postRequest(context, baseConnection, BaseConnection.CONNECT_TIMEOUT, BaseConnection.DEFAULT_READ_TIMEOUT,
-                false,
-                strParams, fileParams);
-
+                false, strParams, fileParams);
     }
 
     /**
      * post请求方法
      */
-    public String postRequest(final Context context, final BaseConnection baseConnection,
-            int connectTimeOut, int readTimeOut, boolean useCaches,
-            final Map<String, String> strParams,
-            final List<FileInfo> fileParams) {
+    public String postRequest(final Context context, final BaseConnection baseConnection, int connectTimeOut,
+            int readTimeOut, boolean useCaches, final String strParams, final List<FileInfo> fileParams) {
         baseConnection.setURLConnectionCommonPara(connectTimeOut, readTimeOut, useCaches);
         HashMap<String, String> requestProperty = new HashMap<>();
         requestProperty.put(HTTP_REQ_PROPERTY_CHARSET, HTTP_REQ_VALUE_CHARSET_UTF8);
@@ -61,7 +53,8 @@ public class HttpFileUpload {
                     HTTP_REQ_VALUE_CONTENT_TYPE_FORM + ";boundary=" + HTTPServer.BOUNDARY);
 
             paramDataOutputStream = new DataOutputStream(urlConnection.getOutputStream());
-            paramDataOutputStream.writeBytes(getFormDataString(strParams).toString());
+            ZLog.e(LOG_TAG, "Request Params：" + strParams);
+            paramDataOutputStream.writeBytes(strParams);
             paramDataOutputStream.flush();
 
             for (FileInfo fileInfo : fileParams) {
@@ -70,8 +63,7 @@ public class HttpFileUpload {
                 InputStream paramInputStream = null;
 
                 if (fileInfo.getFileUri() != null) {
-                    paramInputStream =
-                            context.getContentResolver().openInputStream(fileInfo.getFileUri());
+                    paramInputStream = context.getContentResolver().openInputStream(fileInfo.getFileUri());
                 } else {
                     paramInputStream = new FileInputStream(fileInfo.getFile());
                 }
@@ -138,38 +130,5 @@ public class HttpFileUpload {
             }
         }
         return "";
-    }
-
-    /**
-     * 对post参数进行编码处理
-     */
-    public String getFormDataString(Map<String, String> strParams) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (Map.Entry<String, String> entry : strParams.entrySet()) {
-            if (TextUtils.isEmpty(entry.getKey()) && TextUtils.isEmpty(entry.getValue())) {
-                break;
-            } else {
-                stringBuffer.append(BaseConnection.HTTP_REQ_ENTITY_PREFIX)
-                        .append(HTTPServer.BOUNDARY)
-                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(": ").append("form-data")
-                        .append(";")
-                        .append("name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(entry.getKey()).append("\"")
-                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                        .append(HTTP_REQ_PROPERTY_CONTENT_TYPE).append(": ")
-                        .append(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_TEXT).append("; ")
-                        .append(HTTP_REQ_PROPERTY_CHARSET).append(HTTP_REQ_ENTITY_MERGE)
-                        .append(HTTP_REQ_VALUE_CHARSET_UTF8).append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING).append(": 8bit")
-                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)// 参数头设置完以后需要两个换行，然后才是参数内容
-                        .append(entry.getValue())
-                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END);
-            }
-        }
-        String result = stringBuffer.toString();
-        ZLog.e(LOG_TAG, "getFormDataString = \n" + result);
-        return stringBuffer.toString();
-
     }
 }

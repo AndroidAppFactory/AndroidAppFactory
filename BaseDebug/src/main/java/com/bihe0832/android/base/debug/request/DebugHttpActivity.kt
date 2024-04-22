@@ -19,7 +19,18 @@ import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.utils.encrypt.compression.GzipUtils
-import kotlinx.android.synthetic.main.activity_http_test.*
+import kotlinx.android.synthetic.main.activity_http_test.clearResult
+import kotlinx.android.synthetic.main.activity_http_test.common_toolbar
+import kotlinx.android.synthetic.main.activity_http_test.getAdvanced
+import kotlinx.android.synthetic.main.activity_http_test.getBasic
+import kotlinx.android.synthetic.main.activity_http_test.paraEditText
+import kotlinx.android.synthetic.main.activity_http_test.postAdvanced
+import kotlinx.android.synthetic.main.activity_http_test.postBasic
+import kotlinx.android.synthetic.main.activity_http_test.postFile
+import kotlinx.android.synthetic.main.activity_http_test.postOkHttp
+import kotlinx.android.synthetic.main.activity_http_test.result
+import kotlinx.android.synthetic.main.activity_http_test.testGzip
+import org.json.JSONObject
 import java.io.File
 import java.net.URLDecoder
 
@@ -55,6 +66,9 @@ class DebugHttpActivity : BaseDebugActivity() {
             var b = HashMap<String, String>().apply {
                 put("fsdf1", "fsdf1")
                 put("fsdf2", "fsdf2")
+            }.let {
+//                HTTPServer.getFormDataString(it)
+                JSONObject(it as Map<*, *>?).toString()
             }
 
             var files = mutableListOf<FileInfo>()
@@ -79,10 +93,10 @@ class DebugHttpActivity : BaseDebugActivity() {
 
         testGzip.setOnClickListener {
             HTTPServer.getInstance()
-                .doOriginRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
-                .let {
-                    showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
-                }
+                    .doOriginRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+                    .let {
+                        showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
+                    }
         }
         clearResult.setOnClickListener { result.text = "" }
     }
@@ -114,10 +128,10 @@ class DebugHttpActivity : BaseDebugActivity() {
 //            HTTPServer.getInstance().doRequest(request)
 
             HTTPServer.getInstance()
-                .doRequestSync(Constants.HTTP_DOMAIN + Constants.PATH_GET+ "?para=" + result)
-                .let {
-                    showResult("同步请求结果：$it")
-                }
+                    .doRequestSync(Constants.HTTP_DOMAIN + Constants.PATH_GET + "?para=" + result)
+                    .let {
+                        showResult("同步请求结果：$it")
+                    }
         } else {
             showResult("请在输入框输入请求内容！")
         }
@@ -212,7 +226,7 @@ class DebugHttpActivity : BaseDebugActivity() {
         override fun onResponse(statusCode: Int, response: String) {
             showResult(
                 "HTTP状态码：\n\t" + statusCode + " \n " +
-                    "网络请求内容：\n\t" + response,
+                        "网络请求内容：\n\t" + response,
             )
         }
     }

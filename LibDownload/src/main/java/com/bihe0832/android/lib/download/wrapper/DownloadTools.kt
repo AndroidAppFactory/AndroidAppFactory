@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.request.URLUtils
@@ -90,13 +91,13 @@ object DownloadTools {
 
             @Synchronized
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = true);
                 nameListener.values.forEach { list ->
                     list.forEach {
                         it?.onFail(errorCode, msg, item)
                     }
                 }
                 nameListener.clear()
-
                 mGlobalDownloadListenerList.forEach {
                     it.onFail(errorCode, msg, item)
                 }

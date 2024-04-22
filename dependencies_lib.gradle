@@ -112,7 +112,7 @@ ext.libmoduleInfo = [
                 "version"            : "6.9.19",
                 "artifactId"         : "lib-http-common",
                 "apidependenciesList": [
-                        "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils"
+                        "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils","LibRequest",
                 ]
         ],
         "LibHttpAdvanced"           : [

@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.http.common.core;
 
 import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.request.HTTPRequestUtils;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public abstract class BaseConnection {
     public static final String HTTP_REQ_VALUE_CHARSET_ISO_8599_1 = "ISO-8859-1";
     public static final String HTTP_REQ_PROPERTY_CONTENT_DISPOSITION = "Content-Disposition";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
-    public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
+    public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = HTTPRequestUtils.HTTP_REQ_PROPERTY_CONTENT_TYPE;
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD = "application/x-www-form-urlencoded";
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_TEXT = "text/plain";
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_FORM = "multipart/form-data";     //内容类型
@@ -36,14 +37,9 @@ public abstract class BaseConnection {
     public static final String HTTP_REQ_METHOD_GET = "GET";
     public static final String HTTP_REQ_METHOD_POST = "POST";
     public static final String HTTP_REQ_COOKIE = "Cookie";
-    /**
-     * 建立连接的超时时间
-     */
-    protected static final int CONNECT_TIMEOUT = 5 * 1000;
-    /**
-     * 建立到资源的连接后从 input 流读入时的超时时间
-     */
-    protected static final int DEFAULT_READ_TIMEOUT = 10 * 1000;
+    public static final int CONNECT_TIMEOUT = HTTPRequestUtils.CONNECT_TIMEOUT;
+    public static final int DEFAULT_READ_TIMEOUT = HTTPRequestUtils.DEFAULT_READ_TIMEOUT;
+
     private static final String LOG_TAG = "bihe0832 REQUEST";
 
     public BaseConnection() {
@@ -99,7 +95,7 @@ public abstract class BaseConnection {
             ZLog.e(LOG_TAG, "URLConnection is null");
             return "";
         }
-        setURLConnectionCommonPara(request.getConnectTimeOut(), request.getReadTimeOut(),request.useCaches());
+        setURLConnectionCommonPara(request.getConnectTimeOut(), request.getReadTimeOut(), request.useCaches());
         HashMap<String, String> requestProperty = new HashMap<>();
         if (request.getRequestProperties() != null) {
             requestProperty.putAll(request.getRequestProperties());
@@ -252,7 +248,7 @@ public abstract class BaseConnection {
         }
     }
 
-    protected abstract HttpURLConnection getURLConnection();
+    public abstract HttpURLConnection getURLConnection();
 
 
 }

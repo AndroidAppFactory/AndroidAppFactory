@@ -41,7 +41,7 @@ public class HTTPSConnection extends BaseConnection {
     }
 
     @Override
-    protected HttpURLConnection getURLConnection() {
+    public HttpURLConnection getURLConnection() {
         return mConn;
     }
 

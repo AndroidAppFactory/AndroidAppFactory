@@ -26,13 +26,25 @@ public class HTTPRequestUtils {
     
     public static final String USER_AGENT_COMMON_ZIXIE = "Mozilla/5.0 (Linux; Android 10; UNKnown) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 Mobile Safari/537.36/ ";
 
+    /**
+     * 建立连接的超时时间
+     */
+    public static final int CONNECT_TIMEOUT = 5 * 1000;
+    /**
+     * 建立到资源的连接后从 input 流读入时的超时时间
+     */
+    public static final int DEFAULT_READ_TIMEOUT = 10 * 1000;
+
+    public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = "Content-Type";
+
+
     public static String getPageTitle(String url) {
         try {
             URL e = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) e.openConnection();
             conn.addRequestProperty("User-Agent", USER_AGENT_COMMON_ZIXIE);
-            conn.setConnectTimeout(1000);
-            conn.setReadTimeout(1000);
+            conn.setConnectTimeout(CONNECT_TIMEOUT);
+            conn.setReadTimeout(DEFAULT_READ_TIMEOUT);
 
             HTTPRequestUtils.ContentType contentType = getContentTypeHeader(conn);
             if (contentType != null && contentType.contentType.equals("text/html")) {
@@ -74,7 +86,7 @@ public class HTTPRequestUtils {
             do {
                 String headerName = conn.getHeaderFieldKey(e);
                 String headerValue = conn.getHeaderField(e);
-                if (headerName != null && headerName.equalsIgnoreCase("Content-Type")) {
+                if (headerName != null && headerName.equalsIgnoreCase(HTTP_REQ_PROPERTY_CONTENT_TYPE)) {
                     return new HTTPRequestUtils.ContentType(headerValue);
                 }
                 ++e;
@@ -105,7 +117,7 @@ public class HTTPRequestUtils {
         try {
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setInstanceFollowRedirects(false);
-            conn.setConnectTimeout(5000);
+            conn.setConnectTimeout(CONNECT_TIMEOUT);
             String redirectUrl = conn.getHeaderField("Location");
             if (TextUtils.isEmpty(redirectUrl)) {
                 return url;

@@ -370,9 +370,14 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             length,
             0,
             object : SimpleDownloadListener() {
+                override fun onWait(item: DownloadItem) {
+                    ZLog.d(
+                        "testDownloadRange", "onStart : ${item.downloadID} ${item.processDesc}"
+                    )
+                }
                 override fun onStart(item: DownloadItem) {
                     ZLog.d(
-                        "testDownloadRange", "onStart : ${item.downloadID}"
+                        "testDownloadRange", "onStart : ${item.downloadID} ${item.processDesc}"
                     )
 
                 }
@@ -402,6 +407,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             )
                         }",
                     )
+                    DownloadRangeUtils.deleteTask(item.downloadID,true)
 
                     return filePath
                 }
