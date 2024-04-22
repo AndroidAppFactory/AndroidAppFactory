@@ -10,10 +10,7 @@ buildscript {
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
         maven { url 'https://developer.huawei.com/repo/' }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1783/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1784/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1785/content/" }
-
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1786/content/" }
     }
 
     dependencies {
@@ -36,9 +33,7 @@ allprojects {
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
         maven { url 'https://developer.huawei.com/repo/' }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1783/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1784/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1785/content/" }
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1786/content/" }
     }
 
     afterEvaluate { Project subproject ->
