@@ -1,5 +1,6 @@
 package com.bihe0832.android.base.debug.encrypt
 
+import android.content.Context
 import android.util.Base64
 import com.bihe0832.android.app.encrypt.AAFEncrypt
 import com.bihe0832.android.app.encrypt.AAFEncryptConstants
@@ -10,9 +11,43 @@ import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.encrypt.aes.AESUtils
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.MessageDigestUtils
-import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
+import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils
 import java.util.Arrays
+
+fun testMessageDigest(context: Context, content: String) {
+    ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
+    MD5.getMd5(content).let { data ->
+        ZLog.d(AAFSecretEncrypt.TAG, "$content MD5 is: $data")
+        ZLog.d(AAFSecretEncrypt.TAG, "$content MD5 length is: ${data.length}")
+    }
+    MessageDigestUtils.getDigestData(content, "MD5").let { data ->
+        ZLog.d(AAFSecretEncrypt.TAG, "$content MD5 is: $data")
+        ZLog.d(AAFSecretEncrypt.TAG, "$content MD5 length is: ${data.length}")
+    }
+    ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
+    SHA256.getSHA256(content).let { data ->
+        ZLog.d(AAFSecretEncrypt.TAG, "$content SHA256 is: $data")
+        ZLog.d(AAFSecretEncrypt.TAG, "$content SHA256 length is: ${data.length}")
+    }
+    MessageDigestUtils.getDigestData(content, "SHA-256").let { data ->
+        ZLog.d(AAFSecretEncrypt.TAG, "$content SHA256 is: $data")
+        ZLog.d(AAFSecretEncrypt.TAG, "$content SHA256 length is: ${data.length}")
+    }
+    ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
+    APKUtils.getSigPublicKey(context, context!!.packageName).let {
+        ZLog.d(
+            "PublicKeyByteStringToWindows:\n" + RSAUtils.transPublicKeyByteStringToWindows(
+                RSAUtils.getPublicKeyByteString(
+                    it,
+                ),
+            ),
+        )
+        ZLog.d("getPublicKeyByteString:\n" + RSAUtils.getPublicKeyByteString(it))
+        ZLog.d("getPublicKeyContent:\n" + RSAUtils.getPublicKeyContent(it, 0))
+        ZLog.d("getPublicKeyPemString:\n" + RSAUtils.getPublicKeyPemString(it))
+    }
+}
 
 fun DebugEncryptFragment.testMessageDigest() {
     DialogUtils.showInputDialog(
@@ -20,37 +55,10 @@ fun DebugEncryptFragment.testMessageDigest() {
         "要加密的内容",
         "1234567890ABCDEF",
     ) {
-        ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
-        MD5.getMd5(it).let { data ->
-            ZLog.d(AAFSecretEncrypt.TAG, "$it MD5 is: $data")
-            ZLog.d(AAFSecretEncrypt.TAG, "$it MD5 length is: ${data.length}")
-        }
-        MessageDigestUtils.getDigestData(it, "MD5").let { data ->
-            ZLog.d(AAFSecretEncrypt.TAG, "$it MD5 is: $data")
-            ZLog.d(AAFSecretEncrypt.TAG, "$it MD5 length is: ${data.length}")
-        }
-        ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
-        SHA256.getSHA256(it).let { data ->
-            ZLog.d(AAFSecretEncrypt.TAG, "$it SHA256 is: $data")
-            ZLog.d(AAFSecretEncrypt.TAG, "$it SHA256 length is: ${data.length}")
-        }
-        MessageDigestUtils.getDigestData(it, "SHA-256").let { data ->
-            ZLog.d(AAFSecretEncrypt.TAG, "$it SHA256 is: $data")
-            ZLog.d(AAFSecretEncrypt.TAG, "$it SHA256 length is: ${data.length}")
-        }
-        ZLog.d(AAFSecretEncrypt.TAG, "-------------------------------------------")
-        APKUtils.getSigPublicKey(context, context!!.packageName).let {
-            ZLog.d(
-                "PublicKeyByteStringToWindows:\n" + RSAUtils.transPublicKeyByteStringToWindows(
-                    RSAUtils.getPublicKeyByteString(
-                        it,
-                    ),
-                ),
-            )
-            ZLog.d("getPublicKeyByteString:\n" + RSAUtils.getPublicKeyByteString(it))
-            ZLog.d("getPublicKeyContent:\n" + RSAUtils.getPublicKeyContent(it, 0))
-            ZLog.d("getPublicKeyPemString:\n" + RSAUtils.getPublicKeyPemString(it))
-        }
+        Thread { testMessageDigest(context!!, it) }.start()
+//        Thread { testMessageDigest(context!!, it) }.start()
+//        Thread { testMessageDigest(context!!, it) }.start()
+//        Thread { testMessageDigest(context!!, it) }.start()
     }
 }
 

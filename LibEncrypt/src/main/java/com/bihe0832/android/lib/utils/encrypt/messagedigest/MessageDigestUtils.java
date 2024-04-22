@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.utils.encrypt.messagedigest;
 
 import android.text.TextUtils;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -10,19 +11,49 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2022/8/15.
- * Description: Description
+ *         Created on 2022/8/15.
+ *         Description: Description
  */
 public class MessageDigestUtils {
 
     private static final int BUFFER_SIZE = 2048;
 
+    private static final ThreadLocal<Map<String, MessageDigest>> sMessageDigestHolder = new ThreadLocal<Map<String, MessageDigest>>() {
+        @Override
+        protected Map<String, MessageDigest> initialValue() {
+            return new HashMap<>();
+        }
+    };
+
+    public static MessageDigest getMessageDigest(String digestType) {
+        Map<String, MessageDigest> digestMap = sMessageDigestHolder.get();
+        MessageDigest digest = digestMap.get(digestType);
+        if (digest == null) {
+            try {
+                digest = MessageDigest.getInstance(digestType);
+                digestMap.put(digestType, digest);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        digest.reset();
+        ZLog.e(String.valueOf(digest.hashCode()));
+        return digest;
+    }
+
     public static String getDigestData(byte[] bytes, String digestType) {
         try {
-            byte[] hash = MessageDigest.getInstance(digestType).digest(bytes);
+            MessageDigest digest = getMessageDigest(digestType);
+            if (digest == null) {
+                return "";
+            }
+            byte[] hash = digest.digest(bytes);
             StringBuilder hex = new StringBuilder(hash.length * 2);
             for (byte b : hash) {
                 if ((b & 0xFF) < 0x10) {
@@ -109,7 +140,11 @@ public class MessageDigestUtils {
 
     public static String getInputStreamPartDigestData(InputStream bis, String digestType, long start, long end) {
         try {
-            MessageDigest md = MessageDigest.getInstance(digestType);
+            MessageDigest digest = getMessageDigest(digestType);
+            if (digest == null) {
+                return "";
+            }
+
             if (start < 0) {
                 start = 0;
             }
@@ -123,14 +158,11 @@ public class MessageDigestUtils {
             bis.skip(start);
             while ((read = bis.read(buffer, 0, (int) Math.min(buffer.length, length - totalRead))) != -1
                     && totalRead < length) {
-                md.update(buffer, 0, read);
+                digest.update(buffer, 0, read);
                 totalRead += read;
             }
-            byte[] md5Bytes = md.digest();
+            byte[] md5Bytes = digest.digest();
             return HexUtils.bytes2HexStr(md5Bytes);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return "";
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -139,20 +171,22 @@ public class MessageDigestUtils {
 
     public static String getInputStreamDigestData(InputStream is, String digestType) {
         try {
-            MessageDigest md = MessageDigest.getInstance(digestType);
+            MessageDigest digest = getMessageDigest(digestType);
+            if (digest == null) {
+                return "";
+            }
             byte[] buffer = new byte[BUFFER_SIZE];
             int length;
             while ((length = is.read(buffer)) != -1) {
-                md.update(buffer, 0, length);
+                digest.update(buffer, 0, length);
             }
-            byte[] md5Bytes = md.digest();
+            byte[] md5Bytes = digest.digest();
             return HexUtils.bytes2HexStr(md5Bytes);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return "";
         } catch (IOException e) {
             e.printStackTrace();
             return "";
         }
     }
+
+
 }
