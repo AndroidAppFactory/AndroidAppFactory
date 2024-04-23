@@ -12,6 +12,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.widget.ImageView
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.router.RouterConstants
@@ -26,7 +27,6 @@ import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
-import kotlinx.android.synthetic.main.activity_edit_layout.*
 import java.net.URLDecoder
 
 
@@ -44,9 +44,9 @@ class AceEditActivity : BaseActivity() {
     }
 
     private fun initView() {
-        edit_menu_more.apply {
+        findViewById<ImageView>(R.id.edit_menu_more).apply {
             setOnClickListener {
-                PopMenu(this@AceEditActivity, edit_menu_more).apply {
+                PopMenu(this@AceEditActivity, this).apply {
                     ArrayList<PopMenuItem>().apply {
                         add(PopMenuItem().apply {
                             actionName = ThemeResourcesManager.getString(R.string.ace_editor_menu_open_new)

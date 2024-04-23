@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.photos.choosePhoto
 import com.bihe0832.android.common.photos.cropPhoto
@@ -16,8 +18,6 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.media.image.loadImage
-import kotlinx.android.synthetic.main.fragment_test_image.test_basic_button
-import kotlinx.android.synthetic.main.fragment_test_image.test_image_local_source
 
 public class DebugImageFragment : BaseFragment() {
 
@@ -28,7 +28,7 @@ public class DebugImageFragment : BaseFragment() {
     override fun initView(view: View) {
         val sourceFile = AAFFileWrapper.getTempFolder() + "cv_v.jpg"
         FileUtils.copyAssetsFileToPath(context, "cv_v.jpg", sourceFile)
-        test_image_local_source.setImageBitmap(
+        view.findViewById<ImageView>(R.id.test_image_local_source).setImageBitmap(
             BitmapUtil.getLocalBitmap(
                 sourceFile,
                 300,
@@ -99,7 +99,7 @@ public class DebugImageFragment : BaseFragment() {
 //        )
 
         var num = 0
-        test_basic_button.setOnClickListener {
+        view.findViewById<Button>(R.id.test_basic_button).setOnClickListener {
             activity?.choosePhoto()
 //            val filepath = ZixieContext.getLogFolder() + "aaa.jpg"
 //            val headIconBuilder = HeadIconBuilder(context!!).apply {
@@ -175,7 +175,7 @@ public class DebugImageFragment : BaseFragment() {
 
                     Media.uriToFile(activity!!, cropUri, true).absolutePath.let {
                         ZLog.d("PhotoChooser in cropUri：$it")
-                        test_image_local_source.loadImage(it)
+                        view?.findViewById<ImageView>(R.id.test_image_local_source)?.loadImage(it)
                     }
                 }
 

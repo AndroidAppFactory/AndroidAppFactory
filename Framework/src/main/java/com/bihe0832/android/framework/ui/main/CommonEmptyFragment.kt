@@ -3,11 +3,11 @@ package com.bihe0832.android.framework.ui.main
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
-import kotlinx.android.synthetic.main.common_fragment_empty.*
 
 /**
  * @author zixie code@bihe0832.com Created on 4/9/22.
@@ -29,11 +29,12 @@ open class CommonEmptyFragment : BaseFragment() {
         mContentString = bundle.getString(INTENT_KEY_TITLE, this.toString())
         mContentBackgroundColor = bundle.getInt(
             INTENT_KEY_COLOR,
-                ThemeResourcesManager.getColor(R.color.windowBackground)!!
+            ThemeResourcesManager.getColor(R.color.windowBackground)!!
         )
     }
 
     protected override fun initView(view: View) {
+        val fragment_content = view.findViewById<TextView>(R.id.fragment_content)
         fragment_content.setText(mContentString)
         fragment_content.setBackgroundColor(mContentBackgroundColor)
     }

@@ -2,10 +2,10 @@ package com.bihe0832.android.base.debug.permission
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
-import kotlinx.android.synthetic.main.dialog_test_permission.*
 
 /**
  *
@@ -23,10 +23,10 @@ class DebugPermissionDialog : PermissionDialog {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dialog_content.setOnClickListener {
+        findViewById<TextView>(R.id.dialog_content).setOnClickListener {
             onClickBottomListener?.onPositiveClick()
         }
-        dialog_title.setOnClickListener {
+        findViewById<TextView>(R.id.dialog_title).setOnClickListener {
             onClickBottomListener?.onNegativeClick()
         }
     }

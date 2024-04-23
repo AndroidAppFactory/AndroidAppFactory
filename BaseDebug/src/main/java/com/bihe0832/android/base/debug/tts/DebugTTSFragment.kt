@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
@@ -16,7 +18,6 @@ import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.tts.TTSData
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import kotlinx.android.synthetic.main.fragment_test_tts.*
 import java.util.*
 
 class DebugTTSFragment : BaseFragment() {
@@ -32,26 +33,26 @@ class DebugTTSFragment : BaseFragment() {
 
     override fun initView(view: View) {
         LibTTS.init(
-                view.context,
-                Locale.CHINA,
-                "com.iflytek.vflynote",
-                object : LibTTS.TTSInitListener {
-                    override fun onInitError() {
-                        showGuide()
-                    }
+            view.context,
+            Locale.CHINA,
+            "com.iflytek.vflynote",
+            object : LibTTS.TTSInitListener {
+                override fun onInitError() {
+                    showGuide()
+                }
 
-                    override fun onLangUnAvailable() {
-                        showGuide()
-                    }
+                override fun onLangUnAvailable() {
+                    showGuide()
+                }
 
-                    override fun onLangAvailable() {
-                        hideGuide()
-                    }
+                override fun onLangAvailable() {
+                    hideGuide()
+                }
 
-                    override fun onTTSError() {
-                        ZixieContext.showToast("TTS引擎异常，正在重新初始化")
-                    }
-                })
+                override fun onTTSError() {
+                    ZixieContext.showToast("TTS引擎异常，正在重新初始化")
+                }
+            })
 
         LibTTS.addTTSSpeakListener(object : LibTTS.TTSSpeakListener {
 
@@ -86,21 +87,21 @@ class DebugTTSFragment : BaseFragment() {
 
     fun showGuide() {
         if (null != APKUtils.getInstalledPackage(context, "com.google.android.tts")) {
-            tts_tips.visibility = View.VISIBLE
-            tts_download.visibility = View.GONE
-            tts_set.visibility = View.VISIBLE
+            view!!.findViewById<TextView>(R.id.tts_tips).visibility = View.VISIBLE
+            view!!.findViewById<Button>(R.id.tts_download).visibility = View.GONE
+            view!!.findViewById<Button>(R.id.tts_set).visibility = View.VISIBLE
         } else {
-            tts_tips.visibility = View.VISIBLE
-            tts_download.visibility = View.VISIBLE
-            tts_set.visibility = View.GONE
+            view!!.findViewById<TextView>(R.id.tts_tips).visibility = View.VISIBLE
+            view!!.findViewById<Button>(R.id.tts_download).visibility = View.VISIBLE
+            view!!.findViewById<Button>(R.id.tts_set).visibility = View.GONE
         }
     }
 
     fun hideGuide() {
-        if (isRootViewCreated()){
-            tts_tips.visibility = View.GONE
-            tts_download.visibility = View.GONE
-            tts_set.visibility = View.GONE
+        if (isRootViewCreated()) {
+            view!!.findViewById<TextView>(R.id.tts_tips).visibility = View.GONE
+            view!!.findViewById<Button>(R.id.tts_download).visibility = View.GONE
+            view!!.findViewById<Button>(R.id.tts_set).visibility= View.GONE
         }
 
     }
@@ -109,76 +110,76 @@ class DebugTTSFragment : BaseFragment() {
     fun initViewItem() {
         updateTTSTitle()
 
-        tts_download?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_download)?.setOnClickListener {
             DownloadAPK.startDownloadWithCheckAndProcess(
-                    activity!!,
-                    ThemeResourcesManager.getString(R.string.app_name) + ":谷歌TTS下载 ",
-                    ThemeResourcesManager.getString(R.string.app_name) + ":谷歌TTS下载 ",
-                    "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
-                    "",
-                    ""
+                activity!!,
+                ThemeResourcesManager.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                ThemeResourcesManager.getString(R.string.app_name) + ":谷歌TTS下载 ",
+                "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
+                "",
+                ""
             )
 
         }
 
-        tts_set?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_set)?.setOnClickListener {
             IntentUtils.startSettings(context, "com.android.settings.TTS_SETTINGS")
         }
 
-        tts_speak?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_speak)?.setOnClickListener {
             LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_SEQUENCE)
         }
 
-        tts_save?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_save)?.setOnClickListener {
             LibTTS.save(
-                    getTTSData(),
-                    context!!.filesDir.absolutePath + "/audio_" + System.currentTimeMillis() + ".wav"
+                getTTSData(),
+                context!!.filesDir.absolutePath + "/audio_" + System.currentTimeMillis() + ".wav"
             )
         }
 
-        tts_voice_incre?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_voice_incre)?.setOnClickListener {
             LibTTS.setSpeechRate(LibTTS.getSpeechRate() + 0.1f)
             updateTTSTitle()
         }
 
-        tts_voice_decre?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_voice_decre)?.setOnClickListener {
             LibTTS.setSpeechRate(LibTTS.getSpeechRate() - 0.1f)
             updateTTSTitle()
         }
 
-        tts_pitch_incre?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_pitch_incre)?.setOnClickListener {
             LibTTS.setPitch(LibTTS.getPitch() + 0.1f)
             updateTTSTitle()
         }
 
-        tts_pitch_decre?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_pitch_decre)?.setOnClickListener {
             LibTTS.setPitch(LibTTS.getPitch() - 0.1f)
             updateTTSTitle()
         }
 
-        tts_volume_incre?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_volume_incre)?.setOnClickListener {
             volume += 0.1f
             updateTTSTitle()
         }
 
-        tts_volume_decre?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_volume_decre)?.setOnClickListener {
             volume -= 0.1f
             updateTTSTitle()
         }
 
-        tts_sequence?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_sequence)?.setOnClickListener {
             LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_SEQUENCE)
         }
 
-        tts_next?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_next)?.setOnClickListener {
             LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_NEXT)
         }
 
-        tts_now?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_now)?.setOnClickListener {
             LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_FLUSH)
         }
 
-        tts_clear?.setOnClickListener {
+        view!!.findViewById<Button>(R.id.tts_clear)?.setOnClickListener {
             LibTTS.speak(getTTSData(), LibTTS.SPEEAK_TYPE_CLEAR)
         }
 
@@ -204,7 +205,7 @@ class DebugTTSFragment : BaseFragment() {
     private fun getTTSData(): TTSData {
         times++
         updateTTSTitle()
-        return TTSData(tts_test_text?.text.toString()).apply {
+        return TTSData(view!!.findViewById<TextView>(R.id.tts_test_text)?.text.toString()).apply {
             addSpeakParams(Bundle().apply {
                 putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
             })
@@ -212,6 +213,6 @@ class DebugTTSFragment : BaseFragment() {
     }
 
     private fun updateTTSTitle() {
-        tts_title?.text = String.format(FORMAT, LibTTS.getSpeechRate(), LibTTS.getPitch(), volume, times)
+        view!!.findViewById<TextView>(R.id.tts_title)?.text = String.format(FORMAT, LibTTS.getSpeechRate(), LibTTS.getPitch(), volume, times)
     }
 }

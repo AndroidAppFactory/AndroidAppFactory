@@ -8,4 +8,4 @@
     android:padding="16dp"
     android:textColor="@color/textColorPrimary"
     android:textStyle="bold"
-    tools:text="dfsfd" />
+    tools:text="" />

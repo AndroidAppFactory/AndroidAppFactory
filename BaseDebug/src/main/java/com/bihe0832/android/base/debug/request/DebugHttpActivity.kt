@@ -2,6 +2,10 @@ package com.bihe0832.android.base.debug.request
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.request.advanced.TestResponse
 import com.bihe0832.android.base.debug.request.basic.BasicPostRequest
@@ -19,17 +23,6 @@ import com.bihe0832.android.lib.http.common.core.HttpBasicRequest
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.utils.encrypt.compression.GzipUtils
-import kotlinx.android.synthetic.main.activity_http_test.clearResult
-import kotlinx.android.synthetic.main.activity_http_test.common_toolbar
-import kotlinx.android.synthetic.main.activity_http_test.getAdvanced
-import kotlinx.android.synthetic.main.activity_http_test.getBasic
-import kotlinx.android.synthetic.main.activity_http_test.paraEditText
-import kotlinx.android.synthetic.main.activity_http_test.postAdvanced
-import kotlinx.android.synthetic.main.activity_http_test.postBasic
-import kotlinx.android.synthetic.main.activity_http_test.postFile
-import kotlinx.android.synthetic.main.activity_http_test.postOkHttp
-import kotlinx.android.synthetic.main.activity_http_test.result
-import kotlinx.android.synthetic.main.activity_http_test.testGzip
 import org.json.JSONObject
 import java.io.File
 import java.net.URLDecoder
@@ -41,23 +34,23 @@ class DebugHttpActivity : BaseDebugActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_http_test)
 
-        common_toolbar.setNavigationOnClickListener { onBackPressed() }
+        findViewById<Toolbar>(R.id.common_toolbar).setNavigationOnClickListener { onBackPressed() }
 
-        postOkHttp.setOnClickListener {
+        findViewById<View>(R.id.postOkHttp).setOnClickListener {
             debugOKHttp()
         }
 
-        getBasic.setOnClickListener { sendGetBasicRequest() }
+        findViewById<View>(R.id.getBasic).setOnClickListener { sendGetBasicRequest() }
 
-        postBasic.setOnClickListener {
+        findViewById<View>(R.id.postBasic).setOnClickListener {
             sendPostBasicRequest()
         }
 
-        getAdvanced.setOnClickListener { sendGetAdvancedRequest() }
+        findViewById<View>(R.id.getAdvanced).setOnClickListener { sendGetAdvancedRequest() }
 
-        postAdvanced.setOnClickListener { sendPostAdvancedRequest() }
+        findViewById<View>(R.id.postAdvanced).setOnClickListener { sendPostAdvancedRequest() }
 
-        postFile.setOnClickListener {
+        findViewById<View>(R.id.postFile).setOnClickListener {
 
             val file = File(AAFFileWrapper.getTempFolder() + "a.text")
             file.createNewFile()
@@ -87,22 +80,22 @@ class DebugHttpActivity : BaseDebugActivity() {
                 files,
             ).let {
                 ZLog.d(HTTPServer.LOG_TAG, "result $it")
-                runOnUiThread { result.text = it }
+                showResult(it)
             }
         }
 
-        testGzip.setOnClickListener {
+        findViewById<View>(R.id.testGzip).setOnClickListener {
             HTTPServer.getInstance()
                     .doOriginRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
                     .let {
                         showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
                     }
         }
-        clearResult.setOnClickListener { result.text = "" }
+        findViewById<View>(R.id.clearResult).setOnClickListener { showResult("") }
     }
 
     private fun showResult(tips: String) {
-        runOnUiThread { result.text = tips }
+        runOnUiThread { findViewById<TextView>(R.id.result).text = tips }
     }
 
     fun testURL() {
@@ -121,7 +114,7 @@ class DebugHttpActivity : BaseDebugActivity() {
     }
 
     private fun sendGetBasicRequest() {
-        var result = paraEditText.text?.toString()
+        var result = findViewById<EditText>(R.id.paraEditText).text?.toString()
         if (result?.length ?: 0 > 0) {
 //            val handle = TestBasicResponseHandler()
 //            val request = BasicGetRequest(result, handle)
@@ -138,7 +131,7 @@ class DebugHttpActivity : BaseDebugActivity() {
     }
 
     private fun sendGetAdvancedRequest() {
-        var result = paraEditText.text?.toString()
+        var result = findViewById<EditText>(R.id.paraEditText).text?.toString()
         if (result?.length ?: 0 > 0) {
             HTTPServer.getInstance().doRequestAsync(
                 object : HttpBasicRequest() {
@@ -165,7 +158,7 @@ class DebugHttpActivity : BaseDebugActivity() {
     }
 
     private fun sendPostBasicRequest() {
-        var result = paraEditText.text?.toString()
+        var result = findViewById<EditText>(R.id.paraEditText).text?.toString()
         if (result?.length ?: 0 > 0) {
             val handle = TestBasicResponseHandler()
             val request = BasicPostRequest(result)
@@ -176,7 +169,7 @@ class DebugHttpActivity : BaseDebugActivity() {
     }
 
     private fun sendPostAdvancedRequest() {
-        var result = paraEditText.text?.toString()
+        var result = findViewById<EditText>(R.id.paraEditText).text?.toString()
 
         if (result?.length ?: 0 > 0) {
             HTTPServer.getInstance().doRequestAsync(

@@ -2,6 +2,8 @@ package com.bihe0832.android.base.debug.network
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.framework.ZixieContext
@@ -11,7 +13,6 @@ import com.bihe0832.android.lib.network.DtTypeInfo
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
-import kotlinx.android.synthetic.main.activity_test_text.*
 
 class DebugNetworkActivity : BaseActivity() {
 
@@ -31,7 +32,7 @@ class DebugNetworkActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_text)
-        common_toolbar.setNavigationOnClickListener { onBackPressed() }
+        findViewById<Toolbar>(R.id.common_toolbar).setNavigationOnClickListener { onBackPressed() }
         NetworkChangeManager.addListener(networkChangeListener)
         updateContent()
         WifiManagerWrapper.init(this, !ZixieContext.isOfficial(), notifyRSSI = true, canScanWifi = true)
@@ -61,6 +62,6 @@ class DebugNetworkActivity : BaseActivity() {
                 .append(MobileUtil.getSignalLevel()).append(");\n    IP(")
                 .append(DtTypeInfo.getDtTypeInfo(this).mobileIp).append(")")
         }
-        runOnUiThread { result.text = builder.toString() }
+        runOnUiThread { findViewById<TextView>(R.id.result).text = builder.toString() }
     }
 }

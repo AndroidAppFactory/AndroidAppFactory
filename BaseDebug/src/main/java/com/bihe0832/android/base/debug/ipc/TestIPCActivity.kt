@@ -2,6 +2,7 @@ package com.bihe0832.android.base.debug.ipc
 
 import android.os.Bundle
 import android.os.Process
+import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.ipc.iservice.IZixieIPCTestServiceForMain
 import com.bihe0832.android.base.debug.ipc.iservice.IZixieIPCTestServiceForTest
@@ -9,7 +10,6 @@ import com.bihe0832.android.base.debug.ipc.iservice.impl.ZixieIPCTestServiceForM
 import com.bihe0832.android.lib.ipc.ServiceManager
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.log.ZLog
-import kotlinx.android.synthetic.main.activity_test_text.*
 
 
 open class TestIPCActivity : BaseActivity() {
@@ -17,7 +17,7 @@ open class TestIPCActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         super.setContentView(R.layout.activity_test_text)
-        result.apply {
+        findViewById<TextView>(R.id.result).apply {
             text = "点击测试多进程"
             setOnClickListener {
                 ZLog.d(ZixieIPCTestServiceForMain.TAG, "-------")

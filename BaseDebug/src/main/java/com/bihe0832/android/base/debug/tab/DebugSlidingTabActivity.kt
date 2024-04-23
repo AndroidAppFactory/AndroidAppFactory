@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment.Companion.newInstance
@@ -16,19 +17,8 @@ import com.bihe0832.android.lib.media.image.loadCircleCropImage
 import com.bihe0832.android.lib.ui.textview.ext.setDrawableLeft
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.flyco.tablayout.SlidingTabLayout
+import com.flyco.tablayout.SlidingTabLayoutWithBackground
 import com.flyco.tablayout.listener.OnTabSelectListener
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_1
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_10
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_11
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_2
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_3
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_4
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_5
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_6
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_7
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_8
-import kotlinx.android.synthetic.main.activity_sliding_tab.tl_9
-import kotlinx.android.synthetic.main.activity_sliding_tab.vp
 
 class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
     private val mContext: Context = this
@@ -61,36 +51,37 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
             mFragments.add(newInstance(title))
         }
         mAdapter = MyPagerAdapter(supportFragmentManager)
+        val vp = findViewById<ViewPager>(R.id.vp)
         vp.adapter = mAdapter
         /** 默认  */
-        val tabLayout_1: SlidingTabLayout = tl_1
+        val tabLayout_1: SlidingTabLayout = findViewById(R.id.tl_1)
 
         /**自定义部分属性 */
-        val tabLayout_2: SlidingTabLayout = tl_2
+        val tabLayout_2: SlidingTabLayout = findViewById(R.id.tl_2)
 
         /** 字体加粗,大写  */
-        val tabLayout_3: SlidingTabLayout = tl_3
+        val tabLayout_3: SlidingTabLayout = findViewById(R.id.tl_3)
 
         /** tab固定宽度  */
-        val tabLayout_4: SlidingTabLayout = tl_4
+        val tabLayout_4: SlidingTabLayout = findViewById(R.id.tl_4)
 
         /** indicator固定宽度  */
-        val tabLayout_5: SlidingTabLayout = tl_5
+        val tabLayout_5: SlidingTabLayout = findViewById(R.id.tl_5)
 
         /** indicator圆  */
-        val tabLayout_6: SlidingTabLayout = tl_6
+        val tabLayout_6: SlidingTabLayout = findViewById(R.id.tl_6)
 
         /** indicator矩形圆角  */
-        val tabLayout_7: SlidingTabLayout = tl_7
+        val tabLayout_7: SlidingTabLayout = findViewById(R.id.tl_7)
 
         /** indicator三角形  */
-        val tabLayout_8: SlidingTabLayout = tl_8
+        val tabLayout_8: SlidingTabLayout = findViewById(R.id.tl_8)
 
         /** indicator圆角色块  */
-        val tabLayout_9: SlidingTabLayout = tl_9
+        val tabLayout_9: SlidingTabLayout = findViewById(R.id.tl_9)
 
         /** indicator圆角色块  */
-        val tabLayout_10: SlidingTabLayout = tl_10
+        val tabLayout_10: SlidingTabLayout = findViewById(R.id.tl_10)
         tabLayout_1.setViewPager(vp)
         tabLayout_2.setViewPager(vp)
         tabLayout_2.setOnTabSelectListener(this)
@@ -102,7 +93,7 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
         tabLayout_8.setViewPager(vp, mTitles, this, mFragments)
         tabLayout_9.setViewPager(vp)
         tabLayout_10.setViewPager(vp)
-        tl_11.setViewPager(vp)
+        findViewById<SlidingTabLayoutWithBackground>(R.id.tl_11).setViewPager(vp)
         vp.currentItem = 4
         tabLayout_1.showDot(4)
         tabLayout_3.showDot(4)
@@ -133,7 +124,7 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
 
     override fun onTabSelect(position: Int) {
         Toast.makeText(mContext, "onTabSelect&position--->$position", Toast.LENGTH_SHORT).show()
-        tl_11.backgroundImageView.loadCircleCropImage(
+        findViewById<SlidingTabLayoutWithBackground>(R.id.tl_11).backgroundImageView.loadCircleCropImage(
             if (position == 0) {
                 "https://alifei01.cfp.cn/creative/vcg/nowater800/new/VCG21ba1a56cfe.jpg"
             } else {
@@ -141,7 +132,7 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
             },
         )
 
-        (tl_10.getChildAt(0) as ViewGroup).let { rootView ->
+        (findViewById<SlidingTabLayout>(R.id.tl_10).getChildAt(0) as ViewGroup).let { rootView ->
             ((rootView.getChildAt(1) as ViewGroup).getChildAt(0) as AppCompatTextView).apply {
                 compoundDrawablePadding = DisplayUtil.dip2px(context!!, 4f)
                 setDrawableLeft(

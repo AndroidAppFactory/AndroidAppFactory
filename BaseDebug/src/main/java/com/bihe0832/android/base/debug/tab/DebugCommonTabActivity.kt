@@ -3,6 +3,7 @@ package com.bihe0832.android.base.debug.tab
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -11,9 +12,11 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment
 import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
+import com.bihe0832.android.lib.ui.viewpager.NoScrollViewPager
+import com.flyco.tablayout.CommonTabLayout
+import com.flyco.tablayout.SlidingTabLayout
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
-import kotlinx.android.synthetic.main.activity_common_tab.*
 import java.util.*
 
 class DebugCommonTabActivity : BaseActivity() {
@@ -40,30 +43,30 @@ class DebugCommonTabActivity : BaseActivity() {
         for (i in mTitles.indices) {
             mTabEntities.add(TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]))
         }
-        vp_2.setAdapter(MyPagerAdapter(getSupportFragmentManager()))
+        findViewById<NoScrollViewPager>(R.id.vp_2).setAdapter(MyPagerAdapter(getSupportFragmentManager()))
         /** with nothing  */
-        val mTabLayout_1 = tl_1
+        val mTabLayout_1 = findViewById<CommonTabLayout>(R.id.tl_1)
 
         /** with ViewPager  */
-        val mTabLayout_2 = tl_2
+        val mTabLayout_2 = findViewById<CommonTabLayout>(R.id.tl_2)
 
         /** with Fragments  */
-        val mTabLayout_3 = tl_3
+        val mTabLayout_3 = findViewById<CommonTabLayout>(R.id.tl_3)
 
         /** indicator固定宽度  */
-        val mTabLayout_4 = tl_4
+        val mTabLayout_4 = findViewById<CommonTabLayout>(R.id.tl_4)
 
         /** indicator固定宽度  */
-        val mTabLayout_5 = tl_5
+        val mTabLayout_5 = findViewById<CommonTabLayout>(R.id.tl_5)
 
         /** indicator矩形圆角  */
-        val mTabLayout_6 = tl_6
+        val mTabLayout_6 = findViewById<CommonTabLayout>(R.id.tl_6)
 
         /** indicator三角形  */
-        val mTabLayout_7 = tl_7
+        val mTabLayout_7 = findViewById<CommonTabLayout>(R.id.tl_7)
 
         /** indicator圆角色块  */
-        val mTabLayout_8 = tl_8
+        val mTabLayout_8 = findViewById<CommonTabLayout>(R.id.tl_8)
         mTabLayout_1.setTabData(mTabEntities)
         tl_2()
         mTabLayout_3.setTabData(mTabEntities, this, R.id.fl_change, mFragments2)
@@ -120,28 +123,28 @@ class DebugCommonTabActivity : BaseActivity() {
 
     var mRandom = Random()
     private fun tl_2() {
-        tl_2.setTabData(mTabEntities)
-        tl_2.setOnTabSelectListener(object : OnTabSelectListener {
+        findViewById<CommonTabLayout>(R.id.tl_2).setTabData(mTabEntities)
+        findViewById<CommonTabLayout>(R.id.tl_2).setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
-                vp_2.setCurrentItem(position)
+                findViewById<NoScrollViewPager>(R.id.vp_2).setCurrentItem(position)
             }
 
             override fun onTabReselect(position: Int) {
                 if (position == 0) {
-                    tl_2.showMsg(0, mRandom.nextInt(100) + 1)
+                    findViewById<CommonTabLayout>(R.id.tl_2).showMsg(0, mRandom.nextInt(100) + 1)
                     //                    UnreadMsgUtils.show(mTabLayout_2.getMsgView(0), mRandom.nextInt(100) + 1);
                 }
             }
         })
-        vp_2.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        findViewById<NoScrollViewPager>(R.id.vp_2).addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
-                tl_2.setCurrentTab(position)
+                findViewById<CommonTabLayout>(R.id.tl_2).setCurrentTab(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        vp_2.setCurrentItem(1)
+        findViewById<NoScrollViewPager>(R.id.vp_2).setCurrentItem(1)
     }
 
     private inner class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

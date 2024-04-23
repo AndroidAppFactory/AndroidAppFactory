@@ -8,25 +8,23 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.BitmapUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
 import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnreadMsg
 import com.bihe0832.android.lib.ui.textview.ext.setDrawableLeft
+import com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView
 import com.bihe0832.android.lib.ui.textview.marquee.MarqueeTextView.OnScrollListener
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextClickableSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextImageSpan
 import com.bihe0832.android.lib.ui.textview.span.ZixieTextRadiusBackgroundSpan
 import com.bihe0832.android.lib.utils.os.DisplayUtil
-import kotlinx.android.synthetic.main.fragment_test_text.info_content_0
-import kotlinx.android.synthetic.main.fragment_test_text.info_content_00
-import kotlinx.android.synthetic.main.fragment_test_text.info_content_drawable
-import kotlinx.android.synthetic.main.fragment_test_text.rtv_msg_tip
-import kotlinx.android.synthetic.main.fragment_test_text.test_basic_button
-import kotlinx.android.synthetic.main.fragment_test_text.text_marquee
 
 class DebugTextViewFragment : BaseFragment() {
     private var index = 0
@@ -48,14 +46,14 @@ class DebugTextViewFragment : BaseFragment() {
     )
 
     override fun initView(view: View) {
-        text_marquee.apply {
+        view.findViewById<MarqueeTextView>(R.id.text_marquee).apply {
 //            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
             setDrawableLeft(R.drawable.ic_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             setText(":fds")
             startScroll()
             setOnScrollListener(object : OnScrollListener {
                 override fun OnComplete() {
-                    text_marquee.setText(text_marquee.text.toString() + "fdsffsd ")
+                    setText(text.toString() + "fdsffsd ")
                 }
 
                 override fun onPause() {
@@ -74,20 +72,21 @@ class DebugTextViewFragment : BaseFragment() {
 
         var text = "这是普通颜色文字" + TextFactoryUtils.getSpecialText("这是高亮测试", Color.parseColor("#E66633"))
 
-        info_content_drawable.setText(
-            TextFactoryUtils.getCharSequenceWithClickAction(
-                text,
-                "这是高亮测试",
-                object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        ZixieContext.showToast(text)
-                    }
-                },
-            ),
-        )
-        info_content_drawable.setMovementMethod(LinkMovementMethod.getInstance())
-        info_content_drawable.apply {
-//            setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getSpecialText("这是一个测试",Color.WHITE)))
+        view.findViewById<TextView>(R.id.info_content_drawable).apply {
+
+            setText(
+                TextFactoryUtils.getCharSequenceWithClickAction(
+                    text,
+                    "这是高亮测试",
+                    object : View.OnClickListener {
+                        override fun onClick(v: View?) {
+                            ZixieContext.showToast(text)
+                        }
+                    },
+                ),
+            )
+            setMovementMethod(LinkMovementMethod.getInstance())
+            //            setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getSpecialText("这是一个测试",Color.WHITE)))
 //            setDrawable(
 //                    R.drawable.icon,
 //                    R.drawable.icon,
@@ -95,18 +94,20 @@ class DebugTextViewFragment : BaseFragment() {
 //                    R.drawable.icon,
 //                    DisplayUtil.dip2px(context!!, 30f),
 //                    DisplayUtil.dip2px(context!!, 30f)
-//            )
         }
+
 
         testSpecialText(testList[0])
 //        info_content_0.setText(TextFactoryUtils.getTextHtmlAfterTransform("这是一个         一个测试                 fdsfsdf\ndsd   fdf "))
 
 //        rtv_msg_tip.setDrawableBackground(resources.getColor(R.color.red_dot), 15, 0, Color.parseColor("#0000ff"))
-        rtv_msg_tip.changeStatusWithUnreadMsg(90, DisplayUtil.dip2px(context, 8f))
-        test_basic_button.apply {
+        view.findViewById<TextViewWithBackground>(R.id.rtv_msg_tip)
+                .changeStatusWithUnreadMsg(90, DisplayUtil.dip2px(context, 8f))
+        view.findViewById<Button>(R.id.test_basic_button).apply {
             var num = -1
             setOnClickListener {
-                rtv_msg_tip.changeStatusWithUnreadMsg(num, DisplayUtil.dip2px(context, 8f))
+                view.findViewById<TextViewWithBackground>(R.id.rtv_msg_tip)
+                        .changeStatusWithUnreadMsg(num, DisplayUtil.dip2px(context, 8f))
 
 //                setTextColor(Color.WHITE)
                 num++
@@ -164,7 +165,7 @@ class DebugTextViewFragment : BaseFragment() {
             )
             append("aaaaaaa")
         }.let {
-            info_content_0.setText(it)
+            view!!.findViewById<TextView>(R.id.info_content_0).setText(it)
         }
 
         SpannableStringBuilder("测试").apply {
@@ -180,7 +181,7 @@ class DebugTextViewFragment : BaseFragment() {
             )
             append("这是一个测试")
         }.let {
-            info_content_00.setText(it)
+            view!!.findViewById<TextView>(R.id.info_content_00).setText(it)
         }
     }
 
@@ -199,7 +200,7 @@ class DebugTextViewFragment : BaseFragment() {
                 60,
                 20,
                 20,
-                info_content_0.textSize * 3 / 5,
+                view!!.findViewById<TextView>(R.id.info_content_00).textSize * 3 / 5,
                 0,
                 Typeface.DEFAULT,
             ),
@@ -233,7 +234,7 @@ class DebugTextViewFragment : BaseFragment() {
 
 //        }
 
-        info_content_0.setText(spanString)
+        view!!.findViewById<TextView>(R.id.info_content_0).setText(spanString)
 
 //        SpannableStringBuilder(" ").apply {
 //

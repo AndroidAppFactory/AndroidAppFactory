@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.view.LayoutInflater
+import android.widget.TextView
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
@@ -19,8 +20,6 @@ import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.OSUtils
-import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.choosePhotoBtn
-import kotlinx.android.synthetic.main.com_bihe0832_dialog_photo_chooser.view.takePhotoBtn
 import java.io.File
 
 fun getAutoChangedPhotoName(): String {
@@ -177,7 +176,7 @@ fun Activity.showPhotoChooser() {
     dialog.setCanceledOnTouchOutside(true)
     dialog.show()
 
-    view.takePhotoBtn.setOnClickListener {
+    view.findViewById<TextView>(R.id.takePhotoBtn).setOnClickListener {
         PermissionManager.checkPermission(
             this,
             "PhotoSelect",
@@ -203,8 +202,7 @@ fun Activity.showPhotoChooser() {
             AAFPermissionManager.takePhotoPermission,
         )
     }
-
-    view.choosePhotoBtn.setOnClickListener {
+    view.findViewById<TextView>(R.id.choosePhotoBtn).setOnClickListener {
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
             choosePhoto()
         } else {

@@ -10,9 +10,9 @@ import androidx.viewpager.widget.ViewPager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment.Companion.newInstance
+import com.bihe0832.android.lib.ui.viewpager.NoScrollViewPager
 import com.flyco.tablayout.SegmentTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
-import kotlinx.android.synthetic.main.activity_segment_tab.*
 
 class DebugSegmentTabActivity : BaseActivity() {
     private val mFragments = ArrayList<Fragment>()
@@ -32,17 +32,17 @@ class DebugSegmentTabActivity : BaseActivity() {
             mFragments2.add(newInstance("Switch Fragment $title"))
         }
         mDecorView = window.decorView
-        val tabLayout_1: SegmentTabLayout = tl_1
-        val tabLayout_2: SegmentTabLayout = tl_2
-        mTabLayout_3 = tl_3
-        val tabLayout_4: SegmentTabLayout = tl_4
-        val tabLayout_5: SegmentTabLayout = tl_5
+        val tabLayout_1: SegmentTabLayout = findViewById(R.id.tl_1)
+        val tabLayout_2: SegmentTabLayout = findViewById(R.id.tl_2)
+        mTabLayout_3 = findViewById(R.id.tl_3)
+        val tabLayout_4: SegmentTabLayout = findViewById(R.id.tl_4)
+        val tabLayout_5: SegmentTabLayout = findViewById(R.id.tl_5)
         tabLayout_1.setTabData(mTitles)
         tabLayout_2.setTabData(mTitles_2)
         tl_3()
         tabLayout_4.setTabData(mTitles_2, this, R.id.fl_change, mFragments2)
         tabLayout_5.setTabData(mTitles_3)
-        tl_6.setTabData(mTitles_3)
+        findViewById<SegmentTabLayout>(R.id.tl_6).setTabData(mTitles_3)
         //显示未读红点
         tabLayout_1.showDot(2)
         tabLayout_2.showDot(2)
@@ -58,16 +58,16 @@ class DebugSegmentTabActivity : BaseActivity() {
     }
 
     private fun tl_3() {
-        vp_2.setAdapter(MyPagerAdapter(supportFragmentManager))
+        findViewById<NoScrollViewPager>(R.id.vp_2).setAdapter(MyPagerAdapter(supportFragmentManager))
         mTabLayout_3!!.setTabData(mTitles_3)
         mTabLayout_3!!.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
-                vp_2.setCurrentItem(position)
+                findViewById<NoScrollViewPager>(R.id.vp_2).setCurrentItem(position)
             }
 
             override fun onTabReselect(position: Int) {}
         })
-        vp_2.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        findViewById<NoScrollViewPager>(R.id.vp_2).addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
                 mTabLayout_3!!.currentTab = position
@@ -75,7 +75,7 @@ class DebugSegmentTabActivity : BaseActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        vp_2.setCurrentItem(1)
+        findViewById<NoScrollViewPager>(R.id.vp_2).setCurrentItem(1)
     }
 
     private inner class MyPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

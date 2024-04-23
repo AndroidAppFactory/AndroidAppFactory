@@ -12,12 +12,12 @@ import android.view.View
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.ace.editor.AceConstants
+import com.bihe0832.android.lib.ace.editor.AceEditorView
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
-import kotlinx.android.synthetic.main.fragment_ace_edit.*
 
 class AceEditFragment : BaseFragment() {
     private var filePath = ""
@@ -34,25 +34,25 @@ class AceEditFragment : BaseFragment() {
 
     fun setReadOnly(readOnly: Boolean) {
         Config.writeConfig(AceConstants.KEY_LAST_IS_READ_ONLY, readOnly)
-        main_ace_editor?.isReadOnly = readOnly
+        view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.isReadOnly = readOnly
     }
 
     fun isReadOnly(): Boolean {
-        return main_ace_editor?.isReadOnly ?: true
+        return view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.isReadOnly ?: true
     }
 
     fun setAutoWrap(autoWrap: Boolean) {
         Config.writeConfig(AceConstants.KEY_LAST_IS_AUTO_WRAP, autoWrap)
-        main_ace_editor?.setWrap(autoWrap)
+        view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.setWrap(autoWrap)
     }
 
     fun isAutoWrap(): Boolean {
-        return main_ace_editor?.isWrap ?: true
+        return view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.isWrap ?: true
     }
 
     override fun initView(view: View) {
         super.initView(view)
-        main_ace_editor?.apply {
+        view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.apply {
             isReadOnly =
                 Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
             isWrap = Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
@@ -68,9 +68,9 @@ class AceEditFragment : BaseFragment() {
     override fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
         super.setUserVisibleHint(isVisibleToUser, hasCreateView)
         if (hasCreateView && isVisibleToUser) {
-            main_ace_editor?.isReadOnly =
+            view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.isReadOnly =
                 Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_READ_ONLY, AceConstants.VALUE_LAST_IS_READ_ONLY)
-            main_ace_editor?.isWrap =
+            view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.isWrap =
                 Config.isSwitchEnabled(AceConstants.KEY_LAST_IS_AUTO_WRAP, AceConstants.VALUE_LAST_IS_AUTO_WRAP)
         }
     }
@@ -81,7 +81,7 @@ class AceEditFragment : BaseFragment() {
             mLoadingDialog?.show(ThemeResourcesManager.getString(R.string.ace_editor_load_file_tips))
             ThreadManager.getInstance().start {
                 FileUtils.getFileBytes(filePath).let {
-                    main_ace_editor?.loadContent(filePath, it)
+                    view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.loadContent(filePath, it)
                     mLoadingDialog?.dismiss()
                 }
             }

@@ -9,8 +9,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment
+import com.bihe0832.android.lib.ui.viewpager.NoScrollViewPager
+import com.flyco.tablayout.SlidingTabLayout
 import com.flyco.tablayout.listener.OnTabSelectListener
-import kotlinx.android.synthetic.main.debug_tab_sliding_fragment.*
 
 class DebugSlidingFragment : BaseFragment() {
 
@@ -24,7 +25,7 @@ class DebugSlidingFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        framework_viewPager.apply {
+        view.findViewById<NoScrollViewPager>(R.id.framework_viewPager).apply {
             offscreenPageLimit = mFragments.size - 1
             isScrollable = true
             adapter = object : FragmentPagerAdapter(childFragmentManager) {
@@ -41,7 +42,7 @@ class DebugSlidingFragment : BaseFragment() {
                 }
             }
         }?.let {
-            framework_tab.apply {
+            view.findViewById<SlidingTabLayout>(R.id.framework_tab).apply {
                 setViewPager(it)
                 setOnTabSelectListener(object : OnTabSelectListener {
                     override fun onTabSelect(position: Int) {
@@ -64,7 +65,7 @@ class DebugSlidingFragment : BaseFragment() {
         showUnreadMsg(currentTab, -1)
         var index = currentTab
         try {
-            framework_tab?.apply {
+            view?.findViewById<SlidingTabLayout>(R.id.framework_tab)?.apply {
                 setCurrentTab(index)
                 (getChildAt(0) as ViewGroup).let { rootView ->
                     for (i in 0 until tabCount) {
@@ -89,12 +90,12 @@ class DebugSlidingFragment : BaseFragment() {
 
     fun showUnreadMsg(position: Int, p0: Int) {
         if (p0 > 0) {
-            framework_tab.showMsg(position, p0)
+            view?.findViewById<SlidingTabLayout>(R.id.framework_tab)?.showMsg(position, p0)
 //            framework_tab.getMsgView(position)?.run {
 //                this.textSize = 14f
 //            }
         } else {
-            framework_tab.hideMsg(position)
+            view?.findViewById<SlidingTabLayout>(R.id.framework_tab)?.hideMsg(position)
         }
     }
 
