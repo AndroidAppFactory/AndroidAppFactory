@@ -10,9 +10,6 @@ buildscript {
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
         maven { url 'https://developer.huawei.com/repo/' }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1787/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1788/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1789/content/" }
         maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1790/content/" }
 
     }
@@ -37,10 +34,9 @@ allprojects {
         maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
         maven { url "https://s01.oss.sonatype.org/content/groups/public" }
         maven { url 'https://developer.huawei.com/repo/' }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1787/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1788/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1789/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1790/content/" }    }
+
+        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1790/content/" }
+    }
 
     afterEvaluate { Project subproject ->
         if (subproject.name == rootProject.name) {
@@ -85,9 +81,7 @@ subprojects {
             delete ".externalNativeBuild"
         }
 
-        if (subproject.name.startsWith("Lib")
-                || subproject.name.startsWith("Common")
-                || subproject.name.startsWith("Framework")) {
+        if (subproject.name.startsWith("Lib") || subproject.name.startsWith("Common") || subproject.name.startsWith("Framework")) {
 
 //            subproject.getTasks().create("copyAAR", Copy.class) {
 //                group = "zixieDev"

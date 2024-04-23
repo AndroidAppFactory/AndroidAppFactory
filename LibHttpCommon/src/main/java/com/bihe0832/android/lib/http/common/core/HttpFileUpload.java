@@ -55,13 +55,9 @@ public class HttpFileUpload {
             paramDataOutputStream = new DataOutputStream(urlConnection.getOutputStream());
             ZLog.e(LOG_TAG, "Request Params：" + strParams);
             paramDataOutputStream.writeBytes(strParams);
-            paramDataOutputStream.flush();
-
             for (FileInfo fileInfo : fileParams) {
                 paramDataOutputStream.writeBytes(fileInfo.getRequesetData(HTTPServer.BOUNDARY));
-                paramDataOutputStream.flush();
                 InputStream paramInputStream = null;
-
                 if (fileInfo.getFileUri() != null) {
                     paramInputStream = context.getContentResolver().openInputStream(fileInfo.getFileUri());
                 } else {

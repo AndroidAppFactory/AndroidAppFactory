@@ -92,23 +92,15 @@ public class HTTPServer {
                 stringBuffer.append(BaseConnection.HTTP_REQ_ENTITY_PREFIX)
                         .append(HTTPServer.BOUNDARY)
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(": ").append("form-data")
-                        .append(";")
+                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(":").append("form-data")
+                        .append(BaseConnection.HTTP_REQ_ENTITY_END)
                         .append("name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(entry.getKey()).append("\"")
-                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                        .append(HTTP_REQ_PROPERTY_CONTENT_TYPE).append(": ")
-                        .append(BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_TEXT).append("; ")
-                        .append(HTTP_REQ_PROPERTY_CHARSET).append(HTTP_REQ_ENTITY_MERGE)
-                        .append(HTTP_REQ_VALUE_CHARSET_UTF8).append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                        .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING).append(": 8bit")
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)// 参数头设置完以后需要两个换行，然后才是参数内容
                         .append(entry.getValue())
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END);
             }
         }
-        String result = stringBuffer.toString();
-        ZLog.e(LOG_TAG, "getFormDataString = \n" + result);
         return stringBuffer.toString();
     }
 

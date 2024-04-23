@@ -23,7 +23,6 @@ public abstract class BaseConnection {
     public static final String HTTP_REQ_VALUE_CHARSET_UTF8 = "UTF-8";
     public static final String HTTP_REQ_VALUE_CHARSET_ISO_8599_1 = "ISO-8859-1";
     public static final String HTTP_REQ_PROPERTY_CONTENT_DISPOSITION = "Content-Disposition";
-    public static final String HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding";
     public static final String HTTP_REQ_PROPERTY_CONTENT_TYPE = HTTPRequestUtils.HTTP_REQ_PROPERTY_CONTENT_TYPE;
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD = "application/x-www-form-urlencoded";
     public static final String HTTP_REQ_VALUE_CONTENT_TYPE_TEXT = "text/plain";
@@ -32,6 +31,7 @@ public abstract class BaseConnection {
     public static final String HTTP_REQ_ENTITY_MERGE = "=";
     public static final String HTTP_REQ_ENTITY_JOIN = "&";
     public static final String HTTP_REQ_ENTITY_PREFIX = "--";
+    public static final String HTTP_REQ_ENTITY_END = "; ";
     public static final String HTTP_REQ_ENTITY_LINE_END = "\r\n";
     public static final String HTTP_REQ_PROPERTY_CONTENT_LENGTH = "Content-Length";
     public static final String HTTP_REQ_METHOD_GET = "GET";

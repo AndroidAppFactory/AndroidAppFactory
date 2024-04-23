@@ -1,6 +1,5 @@
 package com.bihe0832.android.lib.http.common.core;
 
-import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.LOG_TAG;
 
@@ -52,8 +51,7 @@ public class FileInfo {
             return "";
         }
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(BaseConnection.HTTP_REQ_ENTITY_PREFIX)
-                .append(uuid)
+        stringBuffer.append(BaseConnection.HTTP_REQ_ENTITY_PREFIX).append(uuid)
                 .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                 /**
                  * 这里重点注意： name里面的值为服务端需要的key 只有这个key 才可以得到对应的文件
@@ -62,20 +60,18 @@ public class FileInfo {
                  * 此处的ContentType不同于 请求头 中Content-Type
                  */
                 .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(": ").append("form-data")
-                .append(";").append(" name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(keyName).append("\";")
-                .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                .append("filename").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(fileName).append("\";")
-                .append(" filelength").append(HTTP_REQ_ENTITY_MERGE).append(fileLength)
-                .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                .append(HTTP_REQ_PROPERTY_CONTENT_TYPE).append(": ").append(fileDataType)
-                .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
-                .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TRANSFER_ENCODING).append(": 8bit")
+                .append(BaseConnection.HTTP_REQ_ENTITY_END)
+                .append("name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(keyName).append("\"")
+                .append(BaseConnection.HTTP_REQ_ENTITY_END)
+                .append("filename").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(fileName).append("\"")
+                .append(BaseConnection.HTTP_REQ_ENTITY_END)
+                .append("filelength").append(HTTP_REQ_ENTITY_MERGE).append(fileLength)
                 .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                 .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END);
         String result = stringBuffer.toString();
-        ZLog.e(LOG_TAG, "getFormDataString 000 : \n " + result);
-        ZLog.e(LOG_TAG, "getFormDataString 000 : \n " + result.length());
+        ZLog.w(LOG_TAG, "getFormDataString 000 : \n" + result + " ");
+        ZLog.w(LOG_TAG, "getFormDataString 000 : \n" + result.length() + " ");
 
-        return stringBuffer.toString();
+        return result;
     }
 }
