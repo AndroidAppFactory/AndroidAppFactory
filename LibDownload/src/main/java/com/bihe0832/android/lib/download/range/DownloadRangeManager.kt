@@ -109,7 +109,7 @@ object DownloadRangeManager : DownloadManager() {
     }
 
     private fun closeDownloadAndRemoveRecord(item: DownloadItem) {
-        mDownloadEngine.closeDownload(item.downloadID, isFinished = true, false)
+        mDownloadEngine.closeDownload(item.downloadID, finishDownload = true, true)
     }
 
     override fun addWaitToDownload() {
@@ -289,20 +289,20 @@ object DownloadRangeManager : DownloadManager() {
     }
 
     fun deleteTask(downloadId: Long, startByUser: Boolean, deleteFile: Boolean) {
+        mDownloadEngine.closeDownload(downloadId, finishDownload = true, clearHistory = true)
         DownloadRangeTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             if (info.status == DownloadStatus.STATUS_DOWNLOADING) {
                 addWaitToDownload()
             }
             DownloadRangeTaskList.removeFromDownloadTaskList(downloadId)
             info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
-            mDownloadEngine.closeDownload(downloadId, false, deleteFile)
+
             if (deleteFile) {
                 mDownloadEngine.deleteFile(info)
-            } else {
-                DownloadInfoDBManager.clearDownloadInfoByID(info.downloadID)
             }
             innerDownloadListener.onDelete(info)
         }
+
     }
 
     fun pauseAllTask(startByUser: Boolean, pauseMaxDownload: Boolean) {

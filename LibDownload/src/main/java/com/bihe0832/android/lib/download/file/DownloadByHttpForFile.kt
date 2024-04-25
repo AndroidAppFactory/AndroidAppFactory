@@ -49,7 +49,7 @@ class DownloadByHttpForFile(
     }
 
     override fun notifyDownloadAfterFinish(downloadInfo: DownloadItem) {
-        closeDownload(downloadInfo.downloadID, true, false)
+        closeDownload(downloadInfo.downloadID, finishDownload = true, clearHistory = false)
         var downloadFile = downloadInfo.filePath
         ThreadManager.getInstance().start {
             try {

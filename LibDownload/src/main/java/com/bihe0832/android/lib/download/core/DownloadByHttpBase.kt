@@ -477,10 +477,10 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         }.start()
     }
 
-    fun closeDownload(downloadID: Long, isFinished: Boolean, clearHistory: Boolean) {
+    fun closeDownload(downloadID: Long, finishDownload: Boolean, clearHistory: Boolean) {
         ZLog.d(TAG, "closeDownload connectList:" + DownloadingPartList.getDownloadingPartNum())
         ZLog.d(TAG, "closeDownload downloadList:" + DownloadingList.getDownloadingNum())
-        DownloadingPartList.removeItem(downloadID, isFinished)
+        DownloadingPartList.removeItem(downloadID, finishDownload)
         if (clearHistory) {
             DownloadInfoDBManager.clearDownloadInfoByID(downloadID)
             DownloadInfoDBManager.clearDownloadPartByID(downloadID)
@@ -498,7 +498,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
 
     fun notifyDownloadFailed(item: DownloadItem, errorCode: Int, msg: String) {
         ZLog.e(TAG, "notifyDownloadFailed errorCode $errorCode, msg: $msg, item: $item")
-        closeDownload(item.downloadID, isFinished = false, clearHistory = true)
+        closeDownload(item.downloadID, finishDownload = true, clearHistory = true)
         if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
             onFail(item, errorCode, msg)
         }

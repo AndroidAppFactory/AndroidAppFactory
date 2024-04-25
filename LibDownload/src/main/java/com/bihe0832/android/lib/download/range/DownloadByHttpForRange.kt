@@ -32,7 +32,7 @@ open class DownloadByHttpForRange(
     }
 
     override fun notifyDownloadAfterFinish(downloadInfo: DownloadItem) {
-        closeDownload(downloadInfo.downloadID, isFinished = true, clearHistory = false)
+        closeDownload(downloadInfo.downloadID, finishDownload = true, clearHistory = false)
         innerDownloadListener.onComplete(downloadInfo.filePath, downloadInfo)
     }
 
