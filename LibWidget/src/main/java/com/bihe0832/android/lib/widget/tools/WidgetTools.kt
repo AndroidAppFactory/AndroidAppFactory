@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.fragment.app.Fragment
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.widget.BaseWidgetProvider
@@ -24,16 +25,32 @@ import com.bihe0832.android.lib.widget.R
 
 object WidgetTools {
 
-    fun pickWidget(activity: Activity, code: Int) {
-        val mAppWidgetHost = AppWidgetHost(activity, code)
+    private fun getPickWidgetIntent(context: Context, code: Int): Intent {
+        val mAppWidgetHost = AppWidgetHost(context, code)
         val appWidgetId = mAppWidgetHost.allocateAppWidgetId()
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_PICK)
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        return intent;
+    }
+
+    fun pickWidget(activity: Activity, code: Int) {
+        val intent = getPickWidgetIntent(activity, code)
         activity.startActivityForResult(intent, code)
     }
 
+    fun pickWidget(fragment: Fragment, code: Int) {
+        val intent = getPickWidgetIntent(fragment.requireContext(), code)
+        fragment.startActivityForResult(intent, code)
+    }
+
     fun pickWidget(context: Context) {
-        pickWidget(context, "小组件快捷添加", "<font color ='" + context.resources.getColor(R.color.colorAccent) + "'><b>长按组件信息</b></font>可快速添加小组件到手机", "关闭", "")
+        pickWidget(
+            context,
+            "小组件快捷添加",
+            "<font color ='" + context.resources.getColor(R.color.colorAccent) + "'><b>长按组件信息</b></font>可快速添加小组件到手机",
+            "关闭",
+            ""
+        )
     }
 
     fun hasAddWidget(context: Context): Boolean {
@@ -70,8 +87,7 @@ object WidgetTools {
             setPositive(positiveDesc)
             setNegative(negativeString)
             setShouldCanceled(true)
-            setOnClickBottomListener(object :
-                OnDialogListener {
+            setOnClickBottomListener(object : OnDialogListener {
                 override fun onPositiveClick() {
                     dismiss()
                 }

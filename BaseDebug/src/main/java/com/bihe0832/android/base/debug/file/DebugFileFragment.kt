@@ -88,7 +88,7 @@ class DebugFileFragment : DebugEnvFragment() {
                 DebugItemData(
                     "文件选择",
                     View.OnClickListener {
-                        FileSelectTools.openFileSelect(activity, ZixieContext.getZixieFolder())
+                        FileSelectTools.openFileSelect(this@DebugFileFragment, ZixieContext.getZixieFolder())
                     },
                 ),
             )
@@ -97,7 +97,7 @@ class DebugFileFragment : DebugEnvFragment() {
                 DebugItemData(
                     "系统文件选择",
                     View.OnClickListener {
-                        FileSelectTools.openAndroidFileSelect(activity, FILE_TYPE_ALL)
+                        FileSelectTools.openAndroidFileSelect(this@DebugFileFragment, FILE_TYPE_ALL)
                     },
                 ),
             )

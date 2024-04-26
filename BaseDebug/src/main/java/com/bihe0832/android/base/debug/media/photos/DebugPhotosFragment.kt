@@ -2,6 +2,7 @@ package com.bihe0832.android.base.debug.media.photos
 
 import android.Manifest
 import android.app.Activity
+import android.app.Fragment
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -70,7 +71,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                         needCrop = false
                         needAAFCrop = false
                         takePhosUri = activity!!.getAutoChangedPhotoUri()
-                        activity?.takePhoto(takePhosUri)
+                        takePhoto(takePhosUri)
                     },
                 ),
             )
@@ -81,7 +82,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                         needCrop = true
                         needAAFCrop = false
                         takePhosUri = activity!!.getAutoChangedPhotoUri()
-                        activity?.takePhoto(takePhosUri)
+                        takePhoto(takePhosUri)
                     },
                 ),
             )
@@ -92,7 +93,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                         needCrop = false
                         needAAFCrop = true
                         takePhosUri = activity!!.getAutoChangedPhotoUri()
-                        activity?.takePhoto(takePhosUri)
+                        takePhoto(takePhosUri)
                     },
                 ),
             )
@@ -102,7 +103,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     View.OnClickListener {
                         needCrop = false
                         needAAFCrop = false
-                        activity?.choosePhoto(FILE_TYPE_IMAGE)
+                        choosePhoto(FILE_TYPE_IMAGE)
                     },
                 ),
             )
@@ -112,7 +113,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     View.OnClickListener {
                         needCrop = false
                         needAAFCrop = false
-                        activity?.choosePhoto(FILE_TYPE_VIDEO)
+                        choosePhoto(FILE_TYPE_VIDEO)
                     },
                 ),
             )
@@ -122,7 +123,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     View.OnClickListener {
                         needCrop = false
                         needAAFCrop = false
-                        activity?.choosePhoto(FILE_TYPE_ALL)
+                        choosePhoto(FILE_TYPE_ALL)
                     },
                 ),
             )
@@ -132,7 +133,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     View.OnClickListener {
                         needCrop = true
                         needAAFCrop = false
-                        activity?.choosePhoto()
+                        choosePhoto()
                     },
                 ),
             )
@@ -142,7 +143,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     View.OnClickListener {
                         needCrop = false
                         needAAFCrop = true
-                        activity?.choosePhoto()
+                        choosePhoto()
                     },
                 ),
             )
@@ -153,8 +154,8 @@ class DebugPhotosFragment : DebugCommonFragment() {
         val sourceFile = AAFFileWrapper.getTempFolder() + "cv_v.jpg"
         FileUtils.copyAssetsFileToPath(context, "cv_v.jpg", sourceFile)
         CropUtils.startCrop(
-            activity!!,
-            ZixieFileProvider.getZixieFileProvider(context, File(sourceFile)),
+            this,
+            ZixieFileProvider.getZixieFileProvider(context!!, File(sourceFile)),
             CropUtils.Options().apply {
 //                setHideBottomControls(true)
                 withAspectRatio(3f, 2f)
@@ -165,7 +166,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
 
     private fun cropPhotos(sourceUri: Uri?) {
         cropUri = activity!!.getAutoChangedCropUri()
-        activity!!.cropPhoto(sourceUri, cropUri, 2, 1)
+        cropPhoto(sourceUri, cropUri, 2, 1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -193,7 +194,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                             ),
                         )
                     } else if (needAAFCrop) {
-                        CropUtils.startCrop(activity!!, data.getData(), CropUtils.Options().apply {
+                        CropUtils.startCrop(activity, data.getData(), CropUtils.Options().apply {
                             setAllowedGestures(
                                 CropConstants.GESTURE_TYPES_SCALE, CropConstants.GESTURE_TYPES_ROTATE,
                                 CropConstants.GESTURE_TYPES_SCALE

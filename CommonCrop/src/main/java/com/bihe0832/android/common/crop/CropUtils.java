@@ -1,6 +1,8 @@
 package com.bihe0832.android.common.crop;
 
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,6 +11,7 @@ import android.os.Parcelable;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import com.bihe0832.android.common.crop.constants.CropConstants;
 import com.bihe0832.android.common.crop.model.AspectRatio;
 import com.bihe0832.android.common.crop.ui.CropActivity;
@@ -75,7 +78,8 @@ public class CropUtils {
      * @param activity Activity to receive result
      * @param requestCode requestCode for result
      */
-    public static void startCrop(Activity activity, int requestCode, Uri source, Options options) {
+
+    private static Intent getCropIntent(Context context, Uri source, Options options) {
         Intent cropIntent = new Intent();
         Bundle cropOptionsBundle = new Bundle();
         cropOptionsBundle.putParcelable(EXTRA_INPUT_URI, source);
@@ -83,13 +87,27 @@ public class CropUtils {
             cropOptionsBundle.putAll(options.getOptionBundle());
         }
 
-        cropIntent.setClass(activity, CropActivity.class);
+        cropIntent.setClass(context, CropActivity.class);
         cropIntent.putExtras(cropOptionsBundle);
+        return cropIntent;
+    }
+
+    public static void startCrop(Activity activity, int requestCode, Uri source, Options options) {
+        Intent cropIntent = getCropIntent(activity, source, options);
         activity.startActivityForResult(cropIntent, requestCode);
+    }
+
+    public static void startCrop(Fragment fragment, int requestCode, Uri source, Options options) {
+        Intent cropIntent = getCropIntent(fragment.getActivity().getApplicationContext(), source, options);
+        fragment.startActivityForResult(cropIntent, requestCode);
     }
 
     public static void startCrop(Activity activity, Uri source, Options options) {
         startCrop(activity, ZixieActivityRequestCode.CROP_PHOTO, source, options);
+    }
+
+    public static void startCrop(Fragment fragment, Uri source, Options options) {
+        startCrop(fragment, ZixieActivityRequestCode.CROP_PHOTO, source, options);
     }
 
     public static void startCrop(Activity activity, Uri source) {
@@ -99,10 +117,23 @@ public class CropUtils {
         startCrop(activity, source, options);
     }
 
+    public static void startCrop(Fragment fragment,  Uri source) {
+        Options options = new Options();
+        options.setAllowedGestures(CropConstants.GESTURE_TYPES_ALL, CropConstants.GESTURE_TYPES_ROTATE,
+                CropConstants.GESTURE_TYPES_SCALE);
+        startCrop(fragment, source, options);
+    }
+
     public static void startSimpleCrop(Activity activity, Uri source) {
         Options options = new Options();
         options.setHideBottomControls(true);
         startCrop(activity, source, options);
+    }
+
+    public static void startSimpleCrop(Fragment fragment, Uri source) {
+        Options options = new Options();
+        options.setHideBottomControls(true);
+        startCrop(fragment, source, options);
     }
 
     /**
@@ -171,8 +202,7 @@ public class CropUtils {
          * Choose what set of gestures will be enabled on each tab - if any.
          */
         public void setAllowedGestures(@CropConstants.GestureTypes int tabScale,
-                @CropConstants.GestureTypes int tabRotate,
-                @CropConstants.GestureTypes int tabAspectRatio) {
+                @CropConstants.GestureTypes int tabRotate, @CropConstants.GestureTypes int tabAspectRatio) {
             mOptionBundle.putIntArray(EXTRA_ALLOWED_GESTURES, new int[]{tabScale, tabRotate, tabAspectRatio});
         }
 

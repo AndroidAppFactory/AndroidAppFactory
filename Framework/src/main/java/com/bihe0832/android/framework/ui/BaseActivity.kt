@@ -237,15 +237,21 @@ open class BaseActivity : SupportActivity() {
         super.finish()
     }
 
+    fun dispatchOnActivityResult(): Boolean {
+        return false
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
-        try {
-            for (fragment in supportFragmentManager.fragments) {
-                fragment.onActivityResult(requestCode, resultCode, data)
+        if (dispatchOnActivityResult()) {
+            ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
+            try {
+                for (fragment in supportFragmentManager.fragments) {
+                    fragment.onActivityResult(requestCode, resultCode, data)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 }

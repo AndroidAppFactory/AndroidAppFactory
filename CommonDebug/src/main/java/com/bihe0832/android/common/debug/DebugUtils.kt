@@ -3,6 +3,7 @@ package com.bihe0832.android.common.debug
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.fragment.app.Fragment
 import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
@@ -76,22 +77,41 @@ object DebugUtils {
         context?.startActivity(intent)
     }
 
-    fun startActivityForResultWithException(context: Activity?, cls: Class<*>, requestCode: Int) {
+    fun startActivityForResultWithException(context: Activity, cls: Class<*>, requestCode: Int) {
         startActivityForResultWithException(context, cls, requestCode, null)
     }
 
-    fun startActivityForResultWithException(
-        context: Activity?,
-        cls: Class<*>,
-        requestCode: Int,
-        data: Map<String, String>?,
-    ) {
+    fun startActivityForResultWithException(fragment: Fragment, cls: Class<*>, requestCode: Int) {
+        startActivityForResultWithException(fragment, cls, requestCode, null)
+    }
+
+    private fun getIntent(context: Context, cls: Class<*>, data: Map<String, String>?): Intent {
         val intent = Intent(context, cls)
         data?.let {
             for ((key, value) in it) {
                 intent.putExtra(key, value)
             }
         }
-        context?.startActivityForResult(intent, requestCode)
+        return intent
+    }
+
+    fun startActivityForResultWithException(
+        activity: Activity,
+        cls: Class<*>,
+        requestCode: Int,
+        data: Map<String, String>?,
+    ) {
+        val intent = getIntent(activity, cls, data)
+        activity.startActivityForResult(intent, requestCode)
+    }
+
+    fun startActivityForResultWithException(
+        fragment: Fragment,
+        cls: Class<*>,
+        requestCode: Int,
+        data: Map<String, String>?,
+    ) {
+        val intent = getIntent(fragment.context!!, cls, data)
+        fragment.startActivityForResult(intent, requestCode)
     }
 }
