@@ -237,7 +237,7 @@ open class BaseActivity : SupportActivity() {
         super.finish()
     }
 
-    fun dispatchOnActivityResult(): Boolean {
+    open fun dispatchOnActivityResult(): Boolean {
         return false
     }
 
