@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.9.25",
+                "version"            : "6.9.26",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -465,7 +465,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFileSelect"             : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.26",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -495,7 +495,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAceEditor"              : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.26",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
