@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.9.26",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -187,7 +187,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"               : [
-                "version"            : "6.9.25",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -209,14 +209,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibSuperAPP"               : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
                 ]
         ],
         "LibDebug"                  : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": [
                         "LibDialog", "LibToast", "LibFloatview"
@@ -264,7 +264,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAudioPlayer"            : [
-                "version"            : "6.9.22",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-audio-player",
                 "apidependenciesList": [
                         "LibMedia", "LibBlockTask"
@@ -285,7 +285,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibImageMetadata"          : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-image-meta",
                 "apidependenciesList": [
                         project.metadata.drewnoakes, "LibCommonUtils", "LibLog", "LibFile", "LibMedia",
@@ -328,7 +328,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "6.9.22",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -336,7 +336,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibQRCode"                 : [
-                "version"            : "6.9.22",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-qrcode",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -367,7 +367,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibMedia"                  : [
-                "version"            : "6.9.22",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-media",
                 "apidependenciesList": [
                         project.glide.glide,
@@ -377,7 +377,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDialog"                 : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         project.androidsupport.constraintlayout,
@@ -386,7 +386,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibNotification"           : [
-                "version"            : "6.9.22",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibMedia", "LibAPK", "LibCommonUtils"
@@ -448,7 +448,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPermission"             : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -457,7 +457,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibImmersive"              : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibColor",
@@ -465,7 +465,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFileSelect"             : [
-                "version"            : "6.9.26",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -473,7 +473,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFloatview"              : [
-                "version"                : "6.9.24",
+                "version"                : "6.9.28",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         project.androidsupport.constraintlayout,
@@ -495,7 +495,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAceEditor"              : [
-                "version"            : "6.9.26",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
@@ -519,7 +519,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibColor"                  : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-color",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
@@ -527,7 +527,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"                  : [
-                "version"            : "6.9.24",
+                "version"            : "6.9.28",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
