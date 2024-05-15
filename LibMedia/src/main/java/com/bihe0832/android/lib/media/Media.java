@@ -103,8 +103,8 @@ public class Media {
         contentValues.put(MediaStore.MediaColumns.SIZE, file.length());
     }
 
-    private static void writeToPhotos(ContentResolver contentResolver, ContentValues contentValues,
-            Uri targetUri, String sourceFile) {
+    private static String writeToPhotos(ContentResolver contentResolver, ContentValues contentValues, Uri targetUri,
+            String sourceFile) {
         try {
             FileInputStream inputStream = new FileInputStream(sourceFile);
             OutputStream outputStream = contentResolver.openOutputStream(targetUri);
@@ -121,6 +121,7 @@ public class Media {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return "";
         }
         if (OSUtils.isAndroidQVersion()) {
             contentValues.clear();
@@ -131,9 +132,9 @@ public class Media {
                 String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(targetUri))};
                 contentResolver.update(getRealPathUri(FileMimeTypes.INSTANCE.getMimeType(sourceFile)), contentValues,
                         selection, selectionArgs);
-
             }
         }
+        return targetUri.toString();
     }
 
     public static Uri createUriAboveAndroidQ(Context context, String fileMimeType, String subFilePath, String name) {
@@ -179,10 +180,11 @@ public class Media {
         }
     }
 
-    public static void addToPhotos(Context context, String filePath, String subDir, boolean isSameName) {
+    public static String addToPhotos(Context context, String filePath, String subDir, boolean isSameName) {
         if (!FileUtils.INSTANCE.checkFileExist(filePath)) {
-            return;
+            return "";
         }
+        String targetPath = "";
         File image = new File(filePath);
         String mimeType = FileMimeTypes.INSTANCE.getMimeType(filePath);
         ContentResolver contentResolver = context.getContentResolver();
@@ -190,7 +192,7 @@ public class Media {
         updateContentValues(contentValues, mimeType, subDir, image);
         Uri targetUri = contentResolver.insert(getRealPathUri(mimeType), contentValues);
         if (targetUri != null) {
-            writeToPhotos(contentResolver, contentValues, targetUri, filePath);
+            targetPath = writeToPhotos(contentResolver, contentValues, targetUri, filePath);
         } else {
             try {
                 String path = getZixieMediaPath(context, mimeType, subDir);
@@ -203,12 +205,13 @@ public class Media {
                 FileUtils.INSTANCE.copyFile(image, newFile, false);
                 ContentValues newValues = new ContentValues();
                 updateContentValues(newValues, mimeType, subDir, image);
-                contentResolver.insert(getRealPathUri(mimeType), newValues);
+                targetPath = contentResolver.insert(getRealPathUri(mimeType), newValues).toString();
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
                     if (FileMimeTypes.INSTANCE.isImageFileByMimeType(mimeType)) {
-                        MediaStore.Images.Media.insertImage(context.getContentResolver(), filePath, "", "");
+                        targetPath = MediaStore.Images.Media.insertImage(context.getContentResolver(), filePath, "",
+                                "");
                     }
                 } catch (Exception ee) {
                     ee.printStackTrace();
@@ -222,10 +225,22 @@ public class Media {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return targetPath;
     }
 
-    public static void addToPhotos(Context context, String imagePath) {
-        addToPhotos(context, imagePath, "", false);
+    public static String addToPhotos(Context context, String imagePath) {
+        return addToPhotos(context, imagePath, "", false);
+    }
+
+    public static boolean removeFromPhotos(Context context, String contentUriString) {
+        try {
+            ContentResolver contentResolver = context.getContentResolver();
+            int count = contentResolver.delete(Uri.parse(contentUriString), null, null);
+            return count == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static File uriToFile(Context context, Uri uri, boolean needReadFileByPath) {

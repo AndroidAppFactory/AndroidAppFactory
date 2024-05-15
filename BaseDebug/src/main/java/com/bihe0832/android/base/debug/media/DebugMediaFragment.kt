@@ -32,6 +32,7 @@ class DebugMediaFragment : DebugEnvFragment() {
     val audioPath = AAFFileWrapper.getMediaTempFolder() + audio
     var videoPath: String? = null
     var imagePath: String? = null
+    var lastPath: String = ""
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("图片操作调试", DebugImageFragment::class.java))
@@ -47,6 +48,7 @@ class DebugMediaFragment : DebugEnvFragment() {
             add(DebugItemData("视频图片存图库", View.OnClickListener { save() }))
             add(DebugItemData("下载图片并添加到相册", View.OnClickListener { testDownImage() }))
             add(DebugItemData("下载视频并添加到相册", View.OnClickListener { testDownVideo() }))
+            add(DebugItemData("从相册删除最后一次的照片", View.OnClickListener { testDelete() }))
         }
     }
 
@@ -54,8 +56,7 @@ class DebugMediaFragment : DebugEnvFragment() {
         DownloadFile.download(
             context!!,
             "https://vfx.mtime.cn/Video/2018/11/09/mp4/181109123910577905.mp4",
-            object :
-                SimpleDownloadListener() {
+            object : SimpleDownloadListener() {
                 override fun onProgress(item: DownloadItem) {
                 }
 
@@ -75,8 +76,7 @@ class DebugMediaFragment : DebugEnvFragment() {
         DownloadFile.download(
             context!!,
             "https://cdn.bihe0832.com/images/cv_v.png",
-            object :
-                SimpleDownloadListener() {
+            object : SimpleDownloadListener() {
                 override fun onProgress(item: DownloadItem) {
                 }
 
@@ -100,11 +100,11 @@ class DebugMediaFragment : DebugEnvFragment() {
 
     private fun save() {
         if (!TextUtils.isEmpty(videoPath)) {
-            Media.addToPhotos(context, videoPath, "zixie", true)
+            lastPath = Media.addToPhotos(context, videoPath, "zixie", true)
         }
 
         if (!TextUtils.isEmpty(imagePath)) {
-            Media.addToPhotos(context, imagePath, "zixie", true)
+            lastPath = Media.addToPhotos(context, imagePath, "zixie", true)
         }
     }
 
@@ -133,8 +133,7 @@ class DebugMediaFragment : DebugEnvFragment() {
             val imageData =
                 MediaTools.createImageFromText(context, "这是一个测试" + DateUtil.getCurrentDateEN(), width, height)
             val imagePath = BitmapUtil.saveBitmapWithPath(
-                imageData,
-                getTempImagePath(".jpg")
+                imageData, getTempImagePath(".jpg")
             )
             MediaTools.convertAudioWithImageToVideo(imagePath, audioPath, object : AAFDataCallback<String>() {
                 override fun onSuccess(result: String?) {
@@ -159,12 +158,20 @@ class DebugMediaFragment : DebugEnvFragment() {
         val cv_v = AAFFileWrapper.getMediaTempFolder() + IMAGE
         FileUtils.copyAssetsFileToPath(context, IMAGE, cv_v)
         FileUtils.copyAssetsFileToPath(context, audio, audioPath)
-        val imagePath1 = BitmapUtil.transImageFileToRequiredSize(cv_v, AAFFileWrapper.getMediaTempFolder() + System.currentTimeMillis() + ".jpg", width, height, Color.YELLOW)
-        val imagePath2 = BitmapUtil.transImageFileToRequiredSize(imagePath ?: "", AAFFileWrapper.getMediaTempFolder() + System.currentTimeMillis() + ".jpg", width, height, Color.YELLOW)
+        val imagePath1 = BitmapUtil.transImageFileToRequiredSize(
+            cv_v, AAFFileWrapper.getMediaTempFolder() + System.currentTimeMillis() + ".jpg", width, height, Color.YELLOW
+        )
+        val imagePath2 = BitmapUtil.transImageFileToRequiredSize(
+            imagePath ?: "",
+            AAFFileWrapper.getMediaTempFolder() + System.currentTimeMillis() + ".jpg",
+            width,
+            height,
+            Color.YELLOW
+        )
         try {
 
             val textNum = 100L * 1000
-            if (type == 1){
+            if (type == 1) {
                 FFmpegTools.convertAudioWithImageToVideo(
                     width,
                     height,
@@ -175,14 +182,13 @@ class DebugMediaFragment : DebugEnvFragment() {
                         add(imagePath2)
                         add(imagePath1)
                     },
-                    object :
-                        AAFDataCallback<String>() {
+                    object : AAFDataCallback<String>() {
                         override fun onSuccess(result: String?) {
-                            Media.addToPhotos(context, result)
+                            lastPath = Media.addToPhotos(context, result)
                         }
                     },
                 )
-            }else{
+            } else {
                 FFmpegTools.convertAudioWithImageToVideo(
                     width,
                     height,
@@ -193,10 +199,9 @@ class DebugMediaFragment : DebugEnvFragment() {
                         add(imagePath ?: "")
                         add(cv_v)
                     },
-                    object :
-                        AAFDataCallback<String>() {
+                    object : AAFDataCallback<String>() {
                         override fun onSuccess(result: String?) {
-                            Media.addToPhotos(context, result)
+                            lastPath = Media.addToPhotos(context, result)
                         }
                     },
                 )
@@ -232,50 +237,43 @@ class DebugMediaFragment : DebugEnvFragment() {
             imagePath = BitmapUtil.saveBitmap(ZixieContext.applicationContext, it)
             Media.addToPhotos(ZixieContext.applicationContext, imagePath)
             Media.addToPhotos(
-                ZixieContext.applicationContext,
-                BitmapUtil.saveBitmap(
+                ZixieContext.applicationContext, BitmapUtil.saveBitmap(
                     ZixieContext.applicationContext,
                     BitmapUtil.resizeAndCenterBitmap(it, 300, 500, Color.TRANSPARENT, Matrix.ScaleToFit.CENTER)
                 )
             )
             Media.addToPhotos(
-                ZixieContext.applicationContext,
-                BitmapUtil.saveBitmap(
+                ZixieContext.applicationContext, BitmapUtil.saveBitmap(
                     ZixieContext.applicationContext,
                     BitmapUtil.resizeAndCenterBitmap(it, 1300, 500, Color.TRANSPARENT, Matrix.ScaleToFit.FILL)
                 )
             )
             Media.addToPhotos(
-                ZixieContext.applicationContext,
-                BitmapUtil.saveBitmap(
+                ZixieContext.applicationContext, BitmapUtil.saveBitmap(
                     ZixieContext.applicationContext,
                     BitmapUtil.resizeAndCenterBitmap(it, 2300, 500, Color.TRANSPARENT, Matrix.ScaleToFit.START)
                 )
             )
             Media.addToPhotos(
-                ZixieContext.applicationContext,
-                BitmapUtil.saveBitmap(
+                ZixieContext.applicationContext, BitmapUtil.saveBitmap(
                     ZixieContext.applicationContext,
                     BitmapUtil.resizeAndCenterBitmap(it, 300, 1500, Color.TRANSPARENT, Matrix.ScaleToFit.END)
                 )
             )
             Media.addToPhotos(
-                ZixieContext.applicationContext,
-                BitmapUtil.saveBitmap(
+                ZixieContext.applicationContext, BitmapUtil.saveBitmap(
                     ZixieContext.applicationContext,
                     BitmapUtil.resizeAndCenterBitmap(it, 300, 2500, Color.TRANSPARENT, Matrix.ScaleToFit.CENTER)
                 )
             )
             Media.addToPhotos(
-                ZixieContext.applicationContext,
-                BitmapUtil.saveBitmap(
+                ZixieContext.applicationContext, BitmapUtil.saveBitmap(
                     ZixieContext.applicationContext,
                     BitmapUtil.resizeAndCenterBitmap(it, 1300, 1500, Color.TRANSPARENT, Matrix.ScaleToFit.CENTER)
                 )
             )
             Media.addToPhotos(
-                ZixieContext.applicationContext,
-                BitmapUtil.saveBitmap(
+                ZixieContext.applicationContext, BitmapUtil.saveBitmap(
                     ZixieContext.applicationContext,
                     BitmapUtil.resizeAndCenterBitmap(it, 1300, 2500, Color.TRANSPARENT, Matrix.ScaleToFit.CENTER)
                 )
@@ -310,5 +308,10 @@ class DebugMediaFragment : DebugEnvFragment() {
             imagePath = BitmapUtil.saveBitmap(ZixieContext.applicationContext, it)
             save()
         }
+    }
+
+    private fun testDelete() {
+        Media.removeFromPhotos(context!!, lastPath)
+
     }
 }
