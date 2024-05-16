@@ -70,7 +70,7 @@ public abstract class BaseWidgetWorker extends Worker {
                 try {
                     int[] widgetIds = appWidgetManager.getAppWidgetIds(componentName);
                     appWidgetManager.updateAppWidget(widgetIds, remoteViews);
-                } finally {
+                } catch (Exception e) {
                     appWidgetManager.updateAppWidget(componentName, remoteViews);
                 }
             }

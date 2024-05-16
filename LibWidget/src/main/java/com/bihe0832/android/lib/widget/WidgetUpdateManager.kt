@@ -60,7 +60,8 @@ object WidgetUpdateManager {
             setInitialDelay((100 * 356).toLong(), TimeUnit.DAYS)
         }.build().let { workRequest ->
             ZLog.w(TAG, "enqueueAutoStart")
-            WorkManager.getInstance(context).enqueueUniqueWork(WIDGET_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+            WorkManager.getInstance(context)
+                    .enqueueUniqueWork(WIDGET_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
         }
     }
 
@@ -96,6 +97,7 @@ object WidgetUpdateManager {
         if (!TextUtils.isEmpty(clazzName)) {
             if (isServiceRunning(context, clazzName)) {
                 ZLog.e(TAG, "startServiceByWidget by worker: service is running $clazzName")
+                return
             }
             val intent = Intent()
             intent.setComponent(ComponentName(context.packageName, clazzName))
@@ -123,11 +125,11 @@ object WidgetUpdateManager {
     private fun updateAllWidgets(context: Context, sourceClass: Class<out BaseWidgetWorker>?) {
         ZLog.e(TAG, "updateAll: durtaion is :${System.currentTimeMillis() - mlastUpdateAllTime}")
         // 执行一次任务
-        if (System.currentTimeMillis() - mlastUpdateAllTime > 20 * 1000) {
+        if (System.currentTimeMillis() - mlastUpdateAllTime > 60 * 1000) {
             mlastUpdateAllTime = System.currentTimeMillis()
             WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(UpdateAllWork::class.java))
         } else {
-            ZLog.e(TAG, "updateAll: durtaion is less than 200000")
+            ZLog.e(TAG, "updateAll: durtaion is less than 60000")
             sourceClass?.let { clazz ->
                 WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(clazz))
             }
@@ -174,8 +176,12 @@ object WidgetUpdateManager {
         updateAllWidgets(context, null)
     }
 
-    fun updateWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean) {
-        ZLog.d(TAG, "updateWidget:" + clazz.name + ",canAutoUpdateByOthers: $canAutoUpdateByOthers ; updateAll: $updateAll")
+    fun updateWidget(
+        context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean
+    ) {
+        ZLog.d(
+            TAG, "updateWidget:" + clazz.name + ",canAutoUpdateByOthers: $canAutoUpdateByOthers ; updateAll: $updateAll"
+        )
         if (canAutoUpdateByOthers) {
             addToAutoUpdateList(clazz.name)
         } else {
