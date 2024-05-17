@@ -92,12 +92,17 @@ object WidgetUpdateManager {
     }
 
     // 通过widget 唤起前台服务
-    fun startService(context: Context, clazzName: String) {
+    fun startService(context: Context, clazzName: String, startAgain: Boolean) {
         ZLog.d(TAG, "startServiceByWidget by worker: $clazzName")
         if (!TextUtils.isEmpty(clazzName)) {
             if (isServiceRunning(context, clazzName)) {
-                ZLog.e(TAG, "startServiceByWidget by worker: service is running $clazzName")
-                return
+                ZLog.e(
+                    TAG,
+                    "startServiceByWidget by worker: service is running $clazzName, need start again:$startAgain"
+                )
+                if (!startAgain) {
+                    return
+                }
             }
             val intent = Intent()
             intent.setComponent(ComponentName(context.packageName, clazzName))
