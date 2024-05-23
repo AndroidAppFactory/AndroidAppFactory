@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.file.DownloadFileManager;
-import com.bihe0832.android.lib.download.file.DownloadFileTaskList;
+import com.bihe0832.android.lib.download.core.DownloadTaskList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,9 +25,9 @@ public class DownloadUtils {
     /**
      * 初始化
      *
-     * @param context        Application Context
+     * @param context Application Context
      * @param maxDownloadNum 同时容许下载的最大数量，如果主要用于大文件下载：建议3个，最大不建议超过5个
-     * @param isDebug        是否开启调试模式
+     * @param isDebug 是否开启调试模式
      */
     public static final void init(Context context, int maxDownloadNum, Boolean isDebug) {
         DownloadFileManager.INSTANCE.init(context, maxDownloadNum, isDebug);
@@ -55,7 +55,7 @@ public class DownloadUtils {
     }
 
     public static final void startDownload(Context context, @NotNull DownloadItem info) {
-        info.setForceDownloadNew(TextUtils.isEmpty(info.getFileMD5()) || TextUtils.isEmpty(info.getFileSHA256()));
+        info.setForceDownloadNew(TextUtils.isEmpty(info.getContentMD5()) || TextUtils.isEmpty(info.getContentSHA256()));
         startDownload(context, info, info.isForceDownloadNew());
     }
 
@@ -65,7 +65,7 @@ public class DownloadUtils {
      * @param downloadURL 下载地址
      */
     public static final DownloadItem getTaskByDownloadURL(@NotNull final String downloadURL) {
-        return DownloadFileTaskList.INSTANCE.getTaskByDownloadURL(downloadURL, "");
+        return DownloadTaskList.INSTANCE.getTaskByDownloadURL(downloadURL, "");
     }
 
     public static long getDownloadIDByURL(String url) {
@@ -78,13 +78,13 @@ public class DownloadUtils {
      * @param downloadID 添加任务的信息
      */
     public static final void pauseDownload(@NotNull final long downloadID) {
-        DownloadFileManager.INSTANCE.pauseTask(downloadID, true, false);
+        DownloadFileManager.INSTANCE.pauseTask(downloadID, true, false, false);
     }
 
     /**
      * 恢复一个下载任务
      *
-     * @param downloadID    恢复任务的信息
+     * @param downloadID 恢复任务的信息
      * @param pauseOnMobile 4G是否暂停下载
      */
     public static final void resumeDownload(long downloadID, boolean pauseOnMobile) {

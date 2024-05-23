@@ -5,7 +5,6 @@ import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
 import com.bihe0832.android.lib.log.ZLog
@@ -54,9 +53,8 @@ open class DownloadByHttpForRange(
         if (applicationContext == null) {
             applicationContext = context.applicationContext
         }
-
         try {
-            startDownload(info, DownloadPartInfo.TYPE_RANGE, rangeStart, rangeLength, localStart)
+            startDownload(info, DownloadItem.TYPE_RANGE, rangeStart, rangeLength, localStart)
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {

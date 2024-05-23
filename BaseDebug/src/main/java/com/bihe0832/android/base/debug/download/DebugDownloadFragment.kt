@@ -535,7 +535,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
         showInputDialog(
             "文件下载到本地",
             "请输入要下载文件的URL",
-            "https://cdn.bihe0832.com/audio/xiangsi.mp3",
+            URL_YYB_TTS,
             object : DialogCompletedStringCallback {
                 override fun onResult(p0: String?) {
                     if (URLUtils.isHTTPUrl(p0)) {

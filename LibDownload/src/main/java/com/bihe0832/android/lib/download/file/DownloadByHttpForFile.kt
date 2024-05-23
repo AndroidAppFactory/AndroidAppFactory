@@ -8,7 +8,6 @@ import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_MD5_BAD
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.range.DownloadByHttpForRange
 import com.bihe0832.android.lib.log.ZLog
@@ -37,7 +36,7 @@ class DownloadByHttpForFile(
             applicationContext = context.applicationContext
         }
         try {
-            startDownload(info, DownloadPartInfo.TYPE_FILE, 0, info.contentLength, 0)
+            startDownload(info, DownloadItem.TYPE_FILE, 0, info.contentLength, 0)
         } catch (e: Throwable) {
             e.printStackTrace()
             if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
@@ -56,14 +55,14 @@ class DownloadByHttpForFile(
                 val oldfile = File(downloadFile)
                 ZLog.e(TAG, " oldfile:$oldfile")
                 ZLog.e(TAG, " oldfile length:" + oldfile.length())
-                if (TextUtils.isEmpty(downloadInfo.fileMD5)) {
-                    if (TextUtils.isEmpty(downloadInfo.fileSHA256)) {
+                if (TextUtils.isEmpty(downloadInfo.contentMD5)) {
+                    if (TextUtils.isEmpty(downloadInfo.contentSHA256)) {
                         notifyDownloadSucc(downloadInfo)
                     } else {
                         val sha256 = SHA256.getFileSHA256(downloadFile)
                         ZLog.e(TAG, " oldfile SHA256:$sha256")
-                        ZLog.e(TAG, " downloadInfo md5:" + downloadInfo.fileSHA256)
-                        if (sha256.equals(downloadInfo.fileSHA256, ignoreCase = true)) {
+                        ZLog.e(TAG, " downloadInfo md5:" + downloadInfo.contentSHA256)
+                        if (sha256.equals(downloadInfo.contentSHA256, ignoreCase = true)) {
                             notifyDownloadSucc(downloadInfo)
                         } else {
                             notifyDownloadFailed(downloadInfo, ERR_MD5_BAD, "Sorry! the file SHA256 is bad")
@@ -75,8 +74,8 @@ class DownloadByHttpForFile(
                 } else {
                     val md5 = MD5.getFileMD5(downloadFile)
                     ZLog.e(TAG, " oldfile md5:$md5")
-                    ZLog.e(TAG, " downloadInfo md5:" + downloadInfo.fileMD5)
-                    if (md5.equals(downloadInfo.fileMD5, ignoreCase = true)) {
+                    ZLog.e(TAG, " downloadInfo md5:" + downloadInfo.contentMD5)
+                    if (md5.equals(downloadInfo.contentMD5, ignoreCase = true)) {
                         notifyDownloadSucc(downloadInfo)
                     } else {
                         notifyDownloadFailed(downloadInfo, ERR_MD5_BAD, "Sorry! the file md5 is bad")

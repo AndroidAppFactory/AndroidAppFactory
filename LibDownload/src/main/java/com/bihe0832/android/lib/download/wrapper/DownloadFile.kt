@@ -418,7 +418,7 @@ object DownloadFile {
             md5,
             "",
             forceDownloadNew = false,
-            UseMobile = true,
+            UseMobile = false,
             downloadListener = downloadListener
         )
     }

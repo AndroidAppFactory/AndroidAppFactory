@@ -43,7 +43,7 @@ object DownloadConfig {
             setNotificationVisibility(false)
             downloadPriority = DownloadItem.MAX_DOWNLOAD_PRIORITY
             downloadURL = url
-            fileMD5 = md5
+            contentMD5 = md5
             actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_CONFIG
             isDownloadWhenUseMobile = true
             isForceDownloadNew = TextUtils.isEmpty(md5)

@@ -4,10 +4,7 @@ import com.bihe0832.android.lib.log.ZLog;
 
 public class DownloadPartInfo {
 
-    public static int TYPE_FILE = 1;
-    public static int TYPE_RANGE = 2;
-
-    private int mDownloadType = TYPE_FILE;
+    private int mDownloadType = DownloadItem.TYPE_FILE;
 
     private long mDownloadID;
 
@@ -24,7 +21,7 @@ public class DownloadPartInfo {
 
     public DownloadPartInfo() {
     }
-    
+
     public String getFinalFileName() {
         return mFinalFileName;
     }
@@ -60,7 +57,7 @@ public class DownloadPartInfo {
     public void setPartStatus(int mPartStatus) {
         ZLog.d(DownloadItem.TAG,
                 mDownloadID + "-" + mPartNo + " status change , before: " + this.mPartStatus + " after : "
-                + mPartStatus);
+                        + mPartStatus);
 //        if(this.mPartStatus != mPartStatus){
 //            reportDownloadPartStatusChange(this, this.mPartStatus, mPartStatus);
 //        }
@@ -89,6 +86,10 @@ public class DownloadPartInfo {
 
     public long getPartFinished() {
         return mPartFinished;
+    }
+
+    public void setPartFinished(long mPartFinished) {
+        this.mPartFinished = mPartFinished;
     }
 
     public long getPartLength() {
@@ -121,10 +122,6 @@ public class DownloadPartInfo {
         } else {
             return 0;
         }
-    }
-
-    public void setPartFinished(long mPartFinished) {
-        this.mPartFinished = mPartFinished;
     }
 
     @Override

@@ -252,6 +252,7 @@ object DownloadTools {
                 setNotificationVisibility(false)
             }
             this.downloadURL = url
+            this.downloadType = DownloadItem.TYPE_FILE
             this.downloadTitle = title
             this.downloadDesc = msg
             if (!TextUtils.isEmpty(path)) {
@@ -261,8 +262,8 @@ object DownloadTools {
                     path
                 }
             }
-            this.fileMD5 = md5
-            this.fileSHA256 = sha256
+            this.contentMD5 = md5
+            this.contentSHA256 = sha256
             this.isForceDownloadNew = forceDownloadNew
             this.actionKey = actionKey
             this.isDownloadWhenUseMobile = useMobile

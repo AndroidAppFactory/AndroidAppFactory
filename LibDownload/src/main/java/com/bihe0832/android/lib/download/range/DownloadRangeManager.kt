@@ -2,7 +2,9 @@ package com.bihe0832.android.lib.download.range
 
 import android.annotation.SuppressLint
 import android.text.TextUtils
+import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_BAD_URL
+import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_CONTENT_LENGTH_EXCEPTION
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_RANGE_BAD_DOWNLOAD_LENGTH
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_RANGE_BAD_PATH
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_URL_IS_TOO_OLD_THAN_LOACL
@@ -10,7 +12,9 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadStatus
+import com.bihe0832.android.lib.download.core.DownloadByHttpBase
 import com.bihe0832.android.lib.download.core.DownloadManager
+import com.bihe0832.android.lib.download.core.DownloadTaskList
 import com.bihe0832.android.lib.download.core.DownloadingList
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.log.ZLog
@@ -24,15 +28,6 @@ object DownloadRangeManager : DownloadManager() {
 
     private val mDownloadEngine by lazy {
         DownloadByHttpForRange(mContext!!, innerDownloadListener, mMaxNum, mIsDebug)
-    }
-
-    private val mDownloadRangeStart = HashMap<Long, Long>()
-    private val mDownloadLocalStart = HashMap<Long, Long>()
-
-    private val mDownloadLength = HashMap<Long, Long>()
-
-    fun onDestroy() {
-        pauseAllTask(startByUser = false, pauseMaxDownload = true)
     }
 
     private val innerDownloadListener = object : DownloadListener {
@@ -72,11 +67,10 @@ object DownloadRangeManager : DownloadManager() {
 
         override fun onComplete(filePath: String, item: DownloadItem): String {
             val file = File(filePath)
-            val needDownload = (mDownloadLength.get(item.downloadID) ?: 0)
-            if (file.length() < needDownload) {
+            if (file.length() < item.contentLength) {
                 onFail(
                     ERR_RANGE_BAD_DOWNLOAD_LENGTH,
-                    "file length（${file.length()}） is less than need downlaod（$needDownload） length",
+                    "file length（${file.length()}） is less than need downlaod（${item.contentLength}） length",
                     item
                 )
             } else {
@@ -86,7 +80,7 @@ object DownloadRangeManager : DownloadManager() {
                 } else {
                     closeDownloadAndRemoveRecord(item)
                 }
-                addDownloadItemToList(item)
+                addDownloadItemToListAndSaveLocal(item)
                 addWaitToDownload()
                 ThreadManager.getInstance().start {
                     ZLog.d(TAG, "onComplete start: $filePath ")
@@ -108,94 +102,100 @@ object DownloadRangeManager : DownloadManager() {
         }
     }
 
-    private fun closeDownloadAndRemoveRecord(item: DownloadItem) {
-        mDownloadEngine.closeDownload(item.downloadID, finishDownload = true, true)
+    override fun getDownloadEngine(): DownloadByHttpBase {
+        return mDownloadEngine
     }
 
-    override fun addWaitToDownload() {
-        getWaitingTask().let { list ->
-            if (list.isNotEmpty()) {
-                list.maxByOrNull { it.downloadPriority }?.let {
-                    ThreadManager.getInstance().start {
-                        startTask(
-                            it, mDownloadRangeStart.get(it.downloadID) ?: 0,
-                            mDownloadLength.get(it.downloadID) ?: 0, mDownloadLocalStart.get(it.downloadID) ?: 0,
-                            it.isDownloadWhenAdd,
-                            it.isDownloadWhenUseMobile
-                        )
-                    }
-                }
-            }
-        }
+    override fun getInnerDownloadListener(): DownloadListener {
+        return innerDownloadListener
     }
 
-    @Synchronized
-    private fun startTask(
+
+    override fun updateItemByServer(
         info: DownloadItem,
         rangeStart: Long,
-        rangeLength: Long, localStart: Long,
-        downloadAfterAdd: Boolean,
-        downloadWhenUseMobile: Boolean
-    ) {
-        if (TextUtils.isEmpty(info.downloadActionKey)) {
-            info.setDownloadActionKey(rangeStart, rangeLength)
-        }
-        innerDownloadListener.onWait(info)
-        if (downloadAfterAdd) {
-            if (!isWifi()) {
-                if (downloadWhenUseMobile) {
-                    realStartTask(info, rangeStart, rangeLength, localStart, true)
-                } else {
-                    realStartTask(info, rangeStart, rangeLength, localStart, false)
-                }
-            } else {
-                realStartTask(info, rangeStart, rangeLength, localStart, true)
-            }
-        } else {
-            ZLog.d(TAG, "startTask do nothing: $ $info ")
-            realStartTask(info, rangeStart, rangeLength, localStart, false)
-        }
-    }
-
-
-    private fun realStartTask(
-        info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long, downloadAfterAdd: Boolean
-    ) {
+        rangeLength: Long,
+        localStart: Long,
+        realURL: String,
+        serverContentLength: Long,
+        downloadAfterAdd: Boolean
+    ): Boolean {
         ZLog.d(TAG, "startTask:$info")
         try {
-            if (TextUtils.isEmpty(info.downloadActionKey)) {
-                info.setDownloadActionKey(rangeStart, rangeLength)
+            if (serverContentLength > 0) {
+                if (rangeLength > 0 && serverContentLength < rangeStart + rangeLength) {
+                    //请求长度小于服务器获取的长度
+                    innerDownloadListener.onFail(
+                        DownloadErrorCode.ERR_RANGE_BAD_SERVER_LENGTH, "download length is less than need", info
+                    )
+                    return false
+                }
+            } else {
+                // 区间下载，但是源数据不支持分片，返回失败
+                innerDownloadListener.onFail(
+                    DownloadErrorCode.ERR_RANGE_NOT_SUPPORT, "download maybe not support range download", info
+                )
+                return false
             }
-            // 不合法的URl
-            if (!URLUtils.isHTTPUrl(info.downloadURL)) {
-                ZLog.e(TAG, "bad para:$info")
-                innerDownloadListener.onFail(ERR_BAD_URL, "bad para", info)
-                return
-            }
+
             val file = File(info.filePath)
             if (!file.exists() || (file.exists() && !File(info.filePath).isFile)) {
                 ZLog.e(TAG, "bad file path:$info")
                 innerDownloadListener.onFail(ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info)
-                return
+                return false
             }
-            addDownloadItemToList(info, rangeStart, rangeLength, localStart)
+            info.realURL = realURL
+            info.rangeStart = rangeStart
+            info.contentLength = rangeLength
+            info.localStart = localStart
+            ZLog.d(TAG, "获取文件长度 保存信息:${info}")
+            DownloadInfoDBManager.saveDownloadInfo(info)
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ZLog.e(TAG, "download:$e")
+            innerDownloadListener.onFail(ERR_CONTENT_LENGTH_EXCEPTION, "update server content exception", info)
+            return false
+        }
+
+    }
+
+
+    @Synchronized
+    override fun startTask(info: DownloadItem, downloadAfterAdd: Boolean) {
+        // 不合法的URl
+        if (!URLUtils.isHTTPUrl(info.downloadURL)) {
+            ZLog.e(TAG, "bad para:$info")
+            innerDownloadListener.onFail(ERR_BAD_URL, "bad para", info)
+            return
+        }
+        ZLog.d(TAG, "startTask:$info")
+        try {
+            addDownloadItemToListAndSaveLocal(info)
             Thread {
                 // 本地已下载
                 if (downloadAfterAdd) {
-                    var currentTime = System.currentTimeMillis()
-                    if (currentTime - info.pauseTime < 3000L) {
-                        ZLog.e(TAG, "resume to quick:$info")
-                        innerDownloadListener.onWait(info)
-                        info.isDownloadWhenAdd = true
-                        (info.pauseTime + 3000L - currentTime).let {
-                            if (it > 0) {
-                                Thread.sleep(it)
+                    if (isMobileNet() && !info.isDownloadWhenUseMobile) {
+                        pauseTask(info, startByUser = false, clearHistory = false, pauseByNetwork = true)
+                        ZLog.e(TAG, "当前网络为移动网络，任务暂停:$info")
+                    } else {
+                        var currentTime = System.currentTimeMillis()
+                        if (currentTime - info.pauseTime < 3000L) {
+                            ZLog.e(TAG, "resume to quick:$info")
+                            innerDownloadListener.onWait(info)
+                            info.isDownloadWhenAdd = true
+                            (info.pauseTime + 3000L - currentTime).let {
+                                if (it > 0) {
+                                    Thread.sleep(it)
+                                }
                             }
                         }
+                        mDownloadEngine.startDownload(
+                            mContext!!, info, info.rangeStart, info.contentLength, info.localStart
+                        )
                     }
-                    mDownloadEngine.startDownload(mContext!!, info, rangeStart, rangeLength, localStart)
                 } else {
-                    info.setPause()
+                    pauseTask(info, startByUser = true, clearHistory = false, pauseByNetwork = false)
                 }
             }.start()
         } catch (e: Exception) {
@@ -204,179 +204,49 @@ object DownloadRangeManager : DownloadManager() {
         }
     }
 
-    fun addDownloadItemToList(info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
-        if (TextUtils.isEmpty(info.downloadActionKey)) {
-            info.setDownloadActionKey(rangeStart, rangeLength)
-        }
-        mDownloadRangeStart.put(info.downloadID, rangeStart)
-        mDownloadLength.put(info.downloadID, rangeLength)
-        mDownloadLocalStart.put(info.downloadID, localStart)
-        addDownloadItemToList(info)
-    }
 
     fun addTask(info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
-        ZLog.d(TAG, "addTask:$info")
-        if (TextUtils.isEmpty(info.downloadActionKey)) {
-            info.setDownloadActionKey(rangeStart, rangeLength)
-        }
-        if (DownloadingList.isDownloading(info)) {
-            val currentDownload = DownloadRangeTaskList.getTaskByDownloadID(info.downloadID)
-            currentDownload?.downloadListener = info.downloadListener
-        } else {
-            updateInfo(info, false)
-            val file = File(info.filePath)
-            if (!file.exists() || (file.exists() && !File(info.filePath).isFile)) {
-                ZLog.e(TAG, "bad file path:$info")
-                innerDownloadListener.onFail(ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info)
-                return
-            }
-            innerDownloadListener.onWait(info)
-            if (info.isForceDownloadNew) {
-                // 此前下载的文件不完整
-                if (TextUtils.isEmpty(checkBeforeDownloadFile(info))) {
-                    deleteTask(info.downloadID, startByUser = false, deleteFile = true)
-                }
-                File(info.filePath).createNewFile()
-            }
-            if (DownloadRangeTaskList.hadAddTask(info)) {
-                ZLog.d(TAG, "mDownloadList contains:$info")
-                DownloadRangeTaskList.updateDownloadTaskListItem(info)
-                resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile)
+        ThreadManager.getInstance().start {
+            ZLog.d(TAG, "addTask:$info")
+            info.downloadType = DownloadItem.TYPE_RANGE
+            if (DownloadingList.isDownloading(info)) {
+                val currentDownload = DownloadTaskList.getTaskByDownloadID(info.downloadID)
+                currentDownload?.downloadListener = info.downloadListener
             } else {
-                startTask(
-                    info, rangeStart, rangeLength, localStart, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile
-                )
-            }
-        }
-    }
-
-    fun resumeTask(
-        downloadId: Long,
-        downloadListener: DownloadListener?,
-        startByUser: Boolean,
-        downloadWhenUseMobile: Boolean,
-    ) {
-        DownloadRangeTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            ZLog.d(TAG, "resumeTask:$info")
-            if (startByUser) {
-                info.isDownloadWhenAdd = true
-            }
-            downloadListener?.let {
-                info.downloadListener = it
-            }
-            innerDownloadListener.onWait(info)
-            startTask(
-                info, mDownloadRangeStart.get(info.downloadID) ?: 0,
-                mDownloadLength.get(info.downloadID) ?: 0, mDownloadLocalStart.get(info.downloadID) ?: 0,
-                startByUser,
-                downloadWhenUseMobile
-            )
-        }
-    }
-
-    fun pauseTask(downloadId: Long, startByUser: Boolean, clearHistory: Boolean) {
-        DownloadRangeTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            ZLog.d(TAG, "pause:$info")
-            ZLog.d(TAG, "pause:$info")
-            mDownloadEngine.closeDownload(info.downloadID, false, clearHistory)
-            info.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
-            info.setPause()
-
-            if (startByUser) {
-                innerDownloadListener.onPause(info)
-            }
-        }
-    }
-
-    fun deleteTask(downloadId: Long, startByUser: Boolean, deleteFile: Boolean) {
-        mDownloadEngine.closeDownload(downloadId, finishDownload = true, clearHistory = true)
-        DownloadRangeTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            if (info.status == DownloadStatus.STATUS_DOWNLOADING) {
-                addWaitToDownload()
-            }
-            DownloadRangeTaskList.removeFromDownloadTaskList(downloadId)
-            info.status = DownloadStatus.STATUS_DOWNLOAD_DELETE
-
-            if (deleteFile) {
-                mDownloadEngine.deleteFile(info)
-            }
-            innerDownloadListener.onDelete(info)
-        }
-
-    }
-
-    fun pauseAllTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
-        ZLog.d(TAG, "pauseAllTask")
-        pauseWaitingTask(startByUser, pauseMaxDownload)
-        pauseDownloadingTask(startByUser, pauseMaxDownload)
-    }
-
-    fun pauseDownloadingTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
-        ZLog.d(TAG, "pauseDownloadingTask")
-        getDownloadingTask().forEach {
-            if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
-                if (pauseMaxDownload) {
-                    pauseTask(it.downloadID, startByUser, false)
+                innerDownloadListener.onWait(info)
+                if (!updateDownItemByServerInfo(info, rangeStart, rangeLength, localStart, info.isDownloadWhenAdd)) {
+                    ZLog.d(TAG, "has notify in updateDownItemByServerInfo")
+                    return@start
+                }
+                updateInfo(info, false)
+                val file = File(info.filePath)
+                if (!file.exists() || (file.exists() && !File(info.filePath).isFile)) {
+                    ZLog.e(TAG, "bad file path:$info")
+                    innerDownloadListener.onFail(ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info)
+                    return@start
+                }
+                if (info.isForceDownloadNew) {
+                    // 此前下载的文件不完整
+                    if (TextUtils.isEmpty(checkBeforeDownloadFile(info))) {
+                        deleteTask(info.downloadID, startByUser = false, deleteFile = true)
+                    }
+                    File(info.filePath).createNewFile()
+                }
+                if (DownloadTaskList.hadAddTask(info)) {
+                    ZLog.d(TAG, "mDownloadList contains:$info")
+                    DownloadTaskList.updateDownloadTaskListItem(info)
+                    resumeTask(
+                        info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile
+                    )
                 } else {
-                    ZLog.e(TAG, "skip pause maxPriority download:$it")
-                    ZLog.e(TAG, "skip pause maxPriority download:$it")
+                    startTask(info, info.isDownloadWhenAdd)
                 }
-            } else {
-                pauseTask(it.downloadID, startByUser, false)
             }
         }
     }
 
-    fun pauseWaitingTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
-        ZLog.d(TAG, "pauseWaitingTask")
-        getWaitingTask().forEach {
-            if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
-                if (pauseMaxDownload) {
-                    pauseTask(it.downloadID, startByUser, false)
-                } else {
-                    ZLog.e(TAG, "skip pause maxPriority download:$it")
-                    ZLog.e(TAG, "skip pause maxPriority download:$it")
-                }
-            } else {
-                pauseTask(it.downloadID, startByUser, false)
-            }
-        }
-    }
-
-    fun resumeAllTask(pauseOnMobile: Boolean) {
-        ZLog.d(TAG, "resumeAllTask")
-        resumePauseTask(pauseOnMobile)
-        resumeFailedTask(pauseOnMobile)
-    }
-
-    fun resumeFailedTask(pauseOnMobile: Boolean) {
-        ZLog.d(TAG, "resumeFailedTask")
-        getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_FAILED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
-        }
-    }
-
-    fun resumePauseTask(pauseOnMobile: Boolean) {
-        ZLog.d(TAG, "resumePauseTask")
-        getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED }.forEach {
-            resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
-        }
-    }
 
     override fun getAllTask(): List<DownloadItem> {
-        return DownloadRangeTaskList.getDownloadTasKList()
-    }
-
-    override fun getTaskByDownloadID(downloadID: Long): DownloadItem? {
-        return DownloadRangeTaskList.getTaskByDownloadID(downloadID)
-    }
-
-    override fun addToDownloadTaskList(info: DownloadItem) {
-        DownloadRangeTaskList.addToDownloadTaskList(info)
-
-    }
-
-    override fun removeFromDownloadTaskList(downloadId: Long) {
-        DownloadRangeTaskList.removeFromDownloadTaskList(downloadId)
+        return DownloadTaskList.getDownloadTasKList(DownloadItem.TYPE_RANGE)
     }
 }

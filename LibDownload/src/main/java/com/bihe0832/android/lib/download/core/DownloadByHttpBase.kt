@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.download.core
 
 import android.annotation.SuppressLint
-import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_DOWNLOAD_PART_START_EXCEPTION
 import com.bihe0832.android.lib.download.DownloadItem
@@ -15,11 +14,8 @@ import com.bihe0832.android.lib.download.core.part.DOWNLOAD_PART_SIZE
 import com.bihe0832.android.lib.download.core.part.DownloadThread
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.request.HTTPRequestUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 
 
 /**
@@ -35,7 +31,6 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
 
     private val MAX_DOWNLOAD_THREAD = 5
     private val MAX_DOWNLOAD_TOTAL_THREAD = 30
-    private val MAX_RETRY_TIMES = 2
 
     private var hasStart = false
 
@@ -49,48 +44,39 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
 
     abstract fun onFail(item: DownloadItem, errorCode: Int, msg: String)
 
-    fun startDownload(info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long) {
+     fun startDownload(
+        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long
+    ) {
         if (DownloadingList.isDownloading(info)) {
             ZLog.d(TAG, "download has start")
             DownloadingList.addToDownloadingList(info)
             return
         }
-
-        if (updateDownItemByServerInfo(info, downloadType, rangeStart, rangeLength)) {
-            try {
-                ZLog.e(TAG, "开始下载 updateDownItemByServerInfo 后:${info}")
-                //强制下载的数量也要控制
-                if (DownloadingList.getDownloadingNum() < maxNum || DownloadingPartList.getDownloadingPartNum() < MAX_DOWNLOAD_TOTAL_THREAD || DownloadItem.MAX_DOWNLOAD_PRIORITY == info.downloadPriority) {
-                    if (DownloadingList.getDownloadingNum() < maxNum || info.downloadPriority >= DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
-                        ZLog.d(TAG, "getDownloadList() is good")
-                        addToDownloadList(info)
-                        notifyStart(info)
-                        if (downloadType == DownloadPartInfo.TYPE_FILE) {
-                            goDownload(info, downloadType, 0, info.contentLength, localStart)
-                        } else {
-                            info.contentLength = rangeLength
-                            goDownload(info, downloadType, rangeStart, rangeLength, localStart)
-                        }
-                    } else {
-                        notifyWait(info)
-                    }
+        try {
+            ZLog.e(TAG, "开始下载 updateDownItemByServerInfo 后:${info}")
+            //强制下载的数量也要控制
+            if (DownloadingList.getDownloadingNum() < maxNum || DownloadingPartList.getDownloadingPartNum() < MAX_DOWNLOAD_TOTAL_THREAD || DownloadItem.MAX_DOWNLOAD_PRIORITY == info.downloadPriority) {
+                if (DownloadingList.getDownloadingNum() < maxNum || info.downloadPriority >= DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
+                    ZLog.d(TAG, "getDownloadList() is good")
+                    addToDownloadList(info)
+                    notifyStart(info)
+                    goDownload(info, downloadType, rangeStart, rangeLength, localStart)
                 } else {
                     notifyWait(info)
                 }
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
-                    notifyDownloadFailed(
-                        info, DownloadErrorCode.ERR_DOWNLOAD_EXCEPTION, "download with exception$e"
-                    )
-                }
+            } else {
+                notifyWait(info)
             }
-
-        } else {
-            ZLog.d(TAG, "has notify in updateDownItemByServerInfo")
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            if (info.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {
+                notifyDownloadFailed(
+                    info, DownloadErrorCode.ERR_DOWNLOAD_EXCEPTION, "download with exception$e"
+                )
+            }
         }
-
     }
+
 
     @SuppressLint("Range")
     protected fun goDownload(
@@ -217,7 +203,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         if (threadNum < 1) {
             threadNum = 1
         }
-        if (threadNum > MAX_DOWNLOAD_THREAD){
+        if (threadNum > MAX_DOWNLOAD_THREAD) {
             threadNum = MAX_DOWNLOAD_THREAD
         }
         val partSize = rangeLength / threadNum
@@ -286,107 +272,6 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         }
     }
 
-    private fun updateDownItemByServerInfo(
-        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long
-    ): Boolean {
-        ZLog.d(TAG, "updateDownItemByServerInfo:$info")
-        // 重新启动，获取文件总长度
-        var times = 0
-        var realURL = if (TextUtils.isEmpty(info.realURL)) {
-            HTTPRequestUtils.getRedirectUrl(info.downloadURL)
-        } else {
-            info.realURL
-        }
-        do {
-            times++
-            try {
-                ZLog.e(TAG, "获取文件长度 $times:$realURL")
-                val url = URL(realURL)
-                val connection = (url.openConnection() as HttpURLConnection).apply {
-                    upateRequestInfo()
-                }
-                val time = System.currentTimeMillis()
-                connection.connect()
-                ZLog.e(TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~")
-                if (isDebug) {
-                    connection.logHeaderFields("获取文件长度")
-                }
-                val contentLength = HTTPRequestUtils.getContentLength(connection)
-                ZLog.e(TAG, "获取文件长度 getContentType:${connection.contentType}")
-                ZLog.e(TAG, "获取文件长度 getContentLength:${contentLength}")
-                ZLog.e(TAG, "计划下载的信息 rangeStart:${rangeStart}, rangeLength:${rangeLength}")
-                ZLog.e(TAG, "获取文件长度 responseCode:${connection.responseCode}")
-                if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL) {
-                    info.realURL = realURL
-                    if (contentLength > 0) {
-                        if (DownloadPartInfo.TYPE_FILE == downloadType) {
-                            info.contentLength = contentLength
-                        }
-                        if (rangeLength > 0 && contentLength < rangeStart + rangeLength) {
-                            //请求长度小于服务器获取的长度
-                            notifyDownloadFailed(
-                                info, DownloadErrorCode.ERR_RANGE_BAD_SERVER_LENGTH, "download length is less than need"
-                            )
-                            return false
-                        } else {
-                            ZLog.d(TAG, "获取文件长度 保存信息:${info}")
-                            DownloadInfoDBManager.saveDownloadInfo(info)
-                            return true
-                        }
-                    } else {
-                        ZLog.e(TAG, "获取文件长度 长度为0: $times ${info.downloadID}")
-                        if (times > MAX_RETRY_TIMES) {
-                            if (rangeStart > 0) {
-                                // 区间下载，但是源数据不支持分片，返回失败
-                                notifyDownloadFailed(
-                                    info,
-                                    DownloadErrorCode.ERR_RANGE_NOT_SUPPORT,
-                                    "download maybe not support range download"
-                                )
-                                return false
-                            } else {
-                                if (DownloadPartInfo.TYPE_FILE == downloadType) {
-                                    info.contentLength = contentLength
-                                }
-                                return true
-                            }
-                        } else {
-                            realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
-                        }
-                    }
-                } else {
-                    if (times > MAX_RETRY_TIMES) {
-                        ZLog.e(
-                            TAG, "download with error file length after max times:${connection.responseCode} " + info
-                        )
-                        //请求三次都失败在结束
-                        notifyDownloadFailed(
-                            info,
-                            DownloadErrorCode.ERR_HTTP_LENGTH_FAILED,
-                            "download with error file length after max times"
-                        )
-                        return false
-                    } else {
-                        ZLog.e(TAG, "download with error file length :${connection.responseCode} " + info)
-                        realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ZLog.e(TAG, "获取文件长度 异常: download with exception: $times ${e.javaClass.name}")
-                if (times > MAX_RETRY_TIMES) {
-                    //累积请求三次都失败在结束
-                    notifyDownloadFailed(
-                        info,
-                        DownloadErrorCode.ERR_HTTP_EXCEPTION,
-                        "download with exception after three times:${e.javaClass.name}"
-                    )
-                    ZLog.e(TAG, "获取文件长度 异常: download with exception after three times:${e.javaClass.name}")
-                    return false
-                }
-            }
-        } while (true)
-    }
 
     private fun addToDownloadList(info: DownloadItem) {
         DownloadingList.addToDownloadingList(info)

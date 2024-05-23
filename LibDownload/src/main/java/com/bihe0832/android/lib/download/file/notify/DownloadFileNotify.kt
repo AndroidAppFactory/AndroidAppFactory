@@ -7,7 +7,7 @@ import android.content.IntentFilter
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.file.DownloadFileManager
-import com.bihe0832.android.lib.download.file.DownloadFileTaskList
+import com.bihe0832.android.lib.download.core.DownloadTaskList
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
@@ -31,11 +31,11 @@ object DownloadFileNotify {
                     val notificationId = it.getIntExtra(DownloadNotifyManager.NOTIFICATION_ID_KEY, -1)
                     val action = it.getStringExtra(DownloadNotifyManager.ACTION_KEY)
                     val downloadURL = it.getStringExtra(DownloadNotifyManager.NOTIFICATION_URL_KEY)
-                            ?: ""
+                        ?: ""
                     ZLog.d(TAG, "[DownloadNotificationsManager] onReceive: $action")
                     when (action) {
                         DownloadNotifyManager.ACTION_RESUME -> {
-                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                            DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
                                 DownloadFileManager.resumeTask(
                                     item.downloadID,
                                     item.downloadListener,
@@ -46,13 +46,18 @@ object DownloadFileNotify {
                         }
 
                         DownloadNotifyManager.ACTION_PAUSE -> {
-                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
-                                DownloadFileManager.pauseTask(item.downloadID, startByUser = true, clearHistory = false)
+                            DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                                DownloadFileManager.pauseTask(
+                                    item.downloadID,
+                                    startByUser = true,
+                                    clearHistory = false,
+                                    pauseByNetwork = false
+                                )
                             }
                         }
 
                         DownloadNotifyManager.ACTION_DELETE -> {
-                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                            DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
                                 DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = false)
                                 notifyDelete(item)
                             }
@@ -64,15 +69,16 @@ object DownloadFileNotify {
                             }, 1)
 
                         }
+
                         DownloadNotifyManager.ACTION_INSTALL -> {
-                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                            DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
                                 InstallUtils.installAPP(context, item.filePath)
                                 notifyDelete(item)
                             }
                         }
 
                         DownloadNotifyManager.ACTION_RETRY -> {
-                            DownloadFileTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
+                            DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
                                 DownloadFileManager.resumeTask(
                                     item.downloadID,
                                     item.downloadListener,
@@ -82,6 +88,7 @@ object DownloadFileNotify {
                                 notifyDelete(item)
                             }
                         }
+
                         else -> {
 
                         }
@@ -94,7 +101,10 @@ object DownloadFileNotify {
 
     fun init(context: Context) {
         mApplicationContext = context.applicationContext
-        mApplicationContext?.registerReceiver(downloadReceiver, IntentFilter(DownloadNotifyManager.getDownloadBroadcastFilter(context)))
+        mApplicationContext?.registerReceiver(
+            downloadReceiver,
+            IntentFilter(DownloadNotifyManager.getDownloadBroadcastFilter(context))
+        )
     }
 
     fun destroy() {
@@ -110,16 +120,16 @@ object DownloadFileNotify {
                 mApplicationContext?.let {
 
                     var realID = DownloadNotifyManager.sendDownloadNotify(
-                            it,
-                            item.downloadURL,
-                            item.downloadTitle,
-                            item.downloadIcon,
-                            item.finished,
-                            item.contentLength,
-                            item.lastSpeed,
-                            (item.process * 100).toInt(),
-                            type,
-                            NOTIFY_CHANNEL
+                        it,
+                        item.downloadURL,
+                        item.downloadTitle,
+                        item.downloadIcon,
+                        item.finished,
+                        item.contentLength,
+                        item.lastSpeed,
+                        (item.process * 100).toInt(),
+                        type,
+                        NOTIFY_CHANNEL
                     )
                 }
             }

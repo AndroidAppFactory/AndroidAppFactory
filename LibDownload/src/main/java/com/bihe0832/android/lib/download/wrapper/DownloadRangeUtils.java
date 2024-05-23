@@ -3,8 +3,8 @@ package com.bihe0832.android.lib.download.wrapper;
 import android.content.Context;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadListener;
+import com.bihe0832.android.lib.download.core.DownloadTaskList;
 import com.bihe0832.android.lib.download.range.DownloadRangeManager;
-import com.bihe0832.android.lib.download.range.DownloadRangeTaskList;
 import com.bihe0832.android.lib.file.FileUtils;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -79,13 +79,15 @@ public class DownloadRangeUtils {
      *
      * @param downloadURL 下载地址
      */
-    public static final DownloadItem getTaskByDownloadURL(@NotNull final String downloadURL, long start, long length) {
-        return DownloadRangeTaskList.INSTANCE.getTaskByDownloadURL(downloadURL,
-                DownloadItem.getDownloadActionKey(start, length));
+    public static final DownloadItem getTaskByDownloadURL(@NotNull final String downloadURL, long start, long length,
+            long localStart) {
+        return DownloadTaskList.INSTANCE.getTaskByDownloadID(getDownloadIDByURL(downloadURL, start, length, localStart));
     }
 
-    public static long getDownloadIDByURL(String url, long start, long length) {
-        return DownloadItem.getDownloadIDByURL(url, DownloadItem.getDownloadActionKey(start, length));
+    public static long getDownloadIDByURL(String url, long start, long length,
+            long localStart) {
+        return DownloadItem.getDownloadIDByURL(url,
+                DownloadItem.getDownloadActionKey(DownloadItem.TYPE_RANGE, start, length, localStart));
     }
 
     /**
@@ -94,7 +96,7 @@ public class DownloadRangeUtils {
      * @param downloadID 添加任务的信息
      */
     public static final void pauseDownload(@NotNull final long downloadID) {
-        DownloadRangeManager.INSTANCE.pauseTask(downloadID, true, false);
+        DownloadRangeManager.INSTANCE.pauseTask(downloadID, true, false, false);
     }
 
     /**

@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadStatus;
-import com.bihe0832.android.lib.download.file.DownloadFileTaskList;
+import com.bihe0832.android.lib.download.core.DownloadTaskList;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.sqlite.BaseDBHelper;
@@ -104,14 +104,14 @@ public class DownloadInfoTableModel extends BaseTableModel {
         try {
             Cursor cursor = helper.queryInfo(TABLE_NAME, null, null, null, null, null, null, null);
             try {
-                DownloadFileTaskList.INSTANCE.clear();
+                DownloadTaskList.INSTANCE.clear();
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     DownloadItem item = cv2data(cursor);
                     item.setFinishedLengthBefore(
                             DownloadInfoDBManager.INSTANCE.getFinishedBefore(item.getDownloadID()));
                     item.setFinished(item.getFinishedLengthBefore());
-                    DownloadFileTaskList.INSTANCE.addToDownloadTaskList(item);
+                    DownloadTaskList.INSTANCE.addToDownloadTaskList(item);
                     if (FileUtils.INSTANCE.checkFileExist(item.getFilePath())) {
                         item.setFinished(item.getContentLength());
                         item.setStatus(DownloadStatus.STATUS_DOWNLOAD_SUCCEED);

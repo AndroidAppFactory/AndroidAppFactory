@@ -23,14 +23,26 @@ public class DownloadItem implements Serializable {
     public static final int FORCE_DOWNLOAD_PRIORITY = 50;
     public static final int MIN_DOWNLOAD_PRIORITY = 0;
     public static final int DEFAULT_DOWNLOAD_PRIORITY = 10;
+
+    public static int TYPE_FILE = 1;
+    public static int TYPE_RANGE = 2;
     // 下载URL，必填
     private String downloadURL = "";
-    // 一次下载的标识，非必填，对于完整文件的下载，建议传空，主要针对一个URL存在多个下载，且内容不一致的场景（不分文件的分片下载）
-    private String downloadActionKey = "";
+
+    // 最终实际下载的URL，不填
+    private int downloadType = TYPE_FILE;
+    // 最终实际下载的URL，不填
+    private String realURL = "";
+    // 下载起始位置，非必填
+    private long rangeStart = 0L;
+    // 本地文件的起始位置，非必填
+    private long localStart = 0L;
+    // 下载内容总长度，非必填
+    private long contentLength = -1;
     // 文件MD5，非必填
-    private String fileMD5 = "";
+    private String contentMD5 = "";
     // 文件SHA256，非必填
-    private String fileSHA256 = "";
+    private String contentSHA256 = "";
     // 如果本地有同名文件是否重新下载，非必填
     private boolean forceDownloadNew = false;
     // 如果本地有同名文件但是下载完判断MD5不一致，是否自动删除，非必填
@@ -70,10 +82,7 @@ public class DownloadItem implements Serializable {
     private long finishedLength = 0;
     // 之前已经下载完的文件长度，不填
     private long finishedLengthBefore = 0;
-    // 文件总长度，不填
-    private long contentLength = 0;
-    // 最终实际下载的URL，不填
-    private String realURL = "";
+
     // 实时下载速度，不填
     private transient long lastSpeed = 0;
     //开始下载的时间，不填
@@ -89,8 +98,12 @@ public class DownloadItem implements Serializable {
         return ConvertUtils.getUnsignedInt((actionKey + url).hashCode());
     }
 
-    public static String getDownloadActionKey(long start, long length) {
-        return start + "-" + length + "-" + (start + length);
+    public static String getDownloadActionKey(int downloadType, long start, long length, long localStart) {
+        if (downloadType == DownloadItem.TYPE_FILE) {
+            return "";
+        } else {
+            return start + "-" + length + "-" + (start + length - 1) + "-" + localStart;
+        }
     }
 
     public void setNotificationVisibility(boolean visibility) {
@@ -111,18 +124,6 @@ public class DownloadItem implements Serializable {
         } else {
             this.downloadPriority = MIN_DOWNLOAD_PRIORITY;
         }
-    }
-
-    public void setDownloadActionKey(long start, long length) {
-        this.downloadActionKey = getDownloadActionKey(start, length);
-    }
-
-    public String getDownloadActionKey() {
-        return downloadActionKey;
-    }
-
-    public void setDownloadActionKey(String downloadActionKey) {
-        this.downloadActionKey = downloadActionKey;
     }
 
     public boolean notificationVisibility() {
@@ -149,7 +150,36 @@ public class DownloadItem implements Serializable {
 
     //下载ID,一个任务的唯一标示
     public long getDownloadID() {
-        return getDownloadIDByURL(downloadURL, downloadActionKey);
+        return getDownloadIDByURL(downloadURL, getDownloadActionKey());
+    }
+
+
+    public String getDownloadActionKey() {
+        return getDownloadActionKey(downloadType, rangeStart, contentLength, localStart);
+    }
+
+    public int getDownloadType() {
+        return downloadType;
+    }
+
+    public void setDownloadType(int downloadType) {
+        this.downloadType = downloadType;
+    }
+
+    public long getRangeStart() {
+        return rangeStart;
+    }
+
+    public void setRangeStart(long rangeStart) {
+        this.rangeStart = rangeStart;
+    }
+
+    public long getLocalStart() {
+        return localStart;
+    }
+
+    public void setLocalStart(long localStart) {
+        this.localStart = localStart;
     }
 
     public boolean isForceDeleteBad() {
@@ -218,20 +248,20 @@ public class DownloadItem implements Serializable {
         this.downloadIcon = downloadIcon;
     }
 
-    public String getFileMD5() {
-        return fileMD5;
+    public String getContentMD5() {
+        return contentMD5;
     }
 
-    public void setFileMD5(String fileMD5) {
-        this.fileMD5 = fileMD5;
+    public void setContentMD5(String contentMD5) {
+        this.contentMD5 = contentMD5;
     }
 
-    public String getFileSHA256() {
-        return fileSHA256;
+    public String getContentSHA256() {
+        return contentSHA256;
     }
 
-    public void setFileSHA256(String fileSHA256) {
-        this.fileSHA256 = fileSHA256;
+    public void setContentSHA256(String contentSHA256) {
+        this.contentSHA256 = contentSHA256;
     }
 
     public String getPackageName() {
@@ -314,8 +344,8 @@ public class DownloadItem implements Serializable {
         return pauseTime;
     }
 
-    public void setPause() {
-        this.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED;
+    public void setPause(int status) {
+        this.status = status;
         this.pauseTime = System.currentTimeMillis();
     }
 
@@ -392,12 +422,19 @@ public class DownloadItem implements Serializable {
     public void update(DownloadItem item) {
         if (item.getDownloadID() == getDownloadID()) {
             this.downloadURL = item.downloadURL;
-            this.downloadActionKey = item.downloadActionKey;
-            this.fileMD5 = item.fileMD5;
-            this.fileSHA256 = item.fileSHA256;
+            this.downloadType = item.downloadType;
+            if (!TextUtils.isEmpty(item.realURL)) {
+                this.realURL = item.realURL;
+            }
+            this.rangeStart = item.rangeStart;
+            this.localStart = item.localStart;
+            this.contentLength = item.contentLength;
+            this.contentMD5 = item.contentMD5;
+            this.contentSHA256 = item.contentSHA256;
             this.forceDownloadNew = item.forceDownloadNew;
             this.forceDeleteBad = item.forceDeleteBad;
             this.autoInstall = item.autoInstall;
+            this.notificationVisibility = item.notificationVisibility;
             this.downloadWhenUseMobile = item.downloadWhenUseMobile;
             this.downloadWhenAdd = item.downloadWhenAdd;
             this.mDownloadListener = item.mDownloadListener;
@@ -410,9 +447,7 @@ public class DownloadItem implements Serializable {
             this.packageName = item.packageName;
             this.versionCode = item.versionCode;
             this.downloadIcon = item.downloadIcon;
-            if (!TextUtils.isEmpty(item.realURL)) {
-                this.realURL = item.realURL;
-            }
+
             this.downloadPriority = item.downloadPriority;
             this.needRecord = item.needRecord;
         } else {
@@ -428,7 +463,7 @@ public class DownloadItem implements Serializable {
         }
         return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + " listener='" + code + '\'' + ", downloadTitle='"
                 + downloadTitle + '\'' + ", fileFolder='" + fileFolder + '\'' + ", tempFilePath='" + filePath + '\''
-                + ", fileMD5='" + fileMD5 + '\'' + ", fileSHA256='" + fileSHA256 + '\'' + ", forceDownloadNew="
+                + ", fileMD5='" + contentMD5 + '\'' + ", fileSHA256='" + contentSHA256 + '\'' + ", forceDownloadNew="
                 + forceDownloadNew + ", downloadDesc='" + downloadDesc + '\'' + ", actionKey='" + actionKey + '\''
                 + ", extraInfo='" + extraInfo + '\'' + ", packageName='" + packageName + '\'' + ", versionCode="
                 + versionCode + ", downloadIcon='" + downloadIcon + '\'' + ", finishedLength=" + finishedLength

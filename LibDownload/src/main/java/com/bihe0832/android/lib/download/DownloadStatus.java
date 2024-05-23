@@ -26,10 +26,12 @@ public @interface DownloadStatus {
     //下载成功
     int STATUS_DOWNLOAD_SUCCEED = 5;
     //暂停
-    int STATUS_DOWNLOAD_PAUSED = 6;
+    int STATUS_DOWNLOAD_PAUSED_BY_NETWORK = 6;
+    //暂停
+    int STATUS_DOWNLOAD_PAUSED = 7;
     //下载失败，失败原因在回调时会回调
-    int STATUS_DOWNLOAD_FAILED = 7;
+    int STATUS_DOWNLOAD_FAILED = 8;
     // 删除任务
-    int STATUS_DOWNLOAD_DELETE = 8;
+    int STATUS_DOWNLOAD_DELETE = 9;
 
 }
