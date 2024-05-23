@@ -80,11 +80,10 @@ object FileUtils {
 
     fun checkStoragePermissions(context: Context?): Boolean {
         context?.let {
-            return PackageManager.PERMISSION_GRANTED ==
-                    ContextCompat.checkSelfPermission(
-                        it,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    )
+            return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                it,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
         }
         return false
     }
@@ -188,7 +187,7 @@ object FileUtils {
                     if (paraFileLength == file.length()) {
                         if (hasMD5) {
                             MessageDigestUtils.getFileDigestData(paraFilePath, digestType)
-                                .equals(digestValue, ignoreCase = true)
+                                    .equals(digestValue, ignoreCase = true)
                         } else {
                             ignoreDigestCheck
                         }
@@ -198,7 +197,7 @@ object FileUtils {
                 } else {
                     if (hasMD5) {
                         MessageDigestUtils.getFileDigestData(paraFilePath, digestType)
-                            .equals(digestValue, ignoreCase = true)
+                                .equals(digestValue, ignoreCase = true)
                     } else {
                         ignoreDigestCheck
                     }
@@ -322,12 +321,28 @@ object FileUtils {
         return FileAction.isAssetsExists(context, filePath)
     }
 
+    fun getFileDigestData(filePath: String, digestType: String): String {
+        return MessageDigestUtils.getFileDigestData(filePath, digestType)
+    }
+
+    fun getFilePartDigestData(fileName: String, digestType: String, start: Long, end: Long): String {
+        return MessageDigestUtils.getFilePartDigestData(fileName, digestType, start, end)
+    }
+
     fun getFileMD5(filePath: String): String {
         return MD5.getFileMD5(filePath)
     }
 
+    fun getFilePartMD5(fileName: String, start: Long, end: Long): String {
+        return MD5.getFilePartMD5(fileName, start, end)
+    }
+
     fun getFileSHA256(filePath: String): String {
         return SHA256.getFileSHA256(filePath)
+    }
+
+    fun getFilePartSHA256(fileName: String, start: Long, end: Long): String {
+        return SHA256.getFilePartSHA256(fileName, start, end)
     }
 
     fun getExtensionName(filename: String?): String {
