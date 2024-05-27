@@ -1,5 +1,6 @@
 package com.bihe0832.android.base.debug.widget;
 
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.widget.RemoteViews;
@@ -24,12 +25,16 @@ public class TestWorker1 extends BaseWidgetWorker {
         String data = DateUtil.getCurrentDateEN();
         //只能通过远程对象来设置appwidget中的控件状态
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout_1);
-
+//        PendingIntent intent =
+//                getWidgetUriPendingIntent(context, "zixie://about", 1);
+//        PendingIntent intent =
+//                getWidgetActivityPendingIntent(context, TestIPCActivity.class, null, 1);
+        PendingIntent intent = getWidgetRefreshPendingIntent(context, TestWidgetProvider1.class, true);
         //为刷新按钮绑定一个事件便于发送广播
-        remoteViews.setOnClickPendingIntent(R.id.iv_refresh, getWidgetRefreshPendingIntent(context, TestWidgetProvider1.class, true));
+        remoteViews.setOnClickPendingIntent(R.id.iv_refresh, intent);
         //通过远程对象修改textview
         remoteViews.setTextViewText(R.id.widget_text, data);
-//        remoteViews.setOnClickPendingIntent(R.id.widget_text, getWidgetRefreshPendingIntent(context, TestWidgetProvider1.class, false));
+        remoteViews.setOnClickPendingIntent(R.id.widget_text, intent);
 
         ComponentName componentName = new ComponentName(context, TestWidgetProvider1.class);
         //更新appwidget

@@ -1,10 +1,13 @@
 package com.bihe0832.android.lib.widget.worker;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -38,10 +41,10 @@ public abstract class BaseWidgetWorker extends Worker {
 
     public PendingIntent getWidgetRefreshPendingIntent(Context context, Class<? extends BaseWidgetProvider> classT,
             boolean updateAll) {
-        return getWidgetPendingIntent(context, BaseWidgetProvider.REFRESH_ACTION, classT, updateAll);
+        return getWidgetBroadcastPendingIntent(context, BaseWidgetProvider.REFRESH_ACTION, classT, updateAll);
     }
 
-    public PendingIntent getWidgetPendingIntent(Context context, String action,
+    public PendingIntent getWidgetBroadcastPendingIntent(Context context, String action,
             Class<? extends BaseWidgetProvider> classT, boolean updateAll) {
         Intent intent = new Intent();
         intent.setClass(context, classT);
@@ -59,6 +62,24 @@ public abstract class BaseWidgetWorker extends Worker {
         return pendingIntent;
     }
 
+    public PendingIntent getWidgetActivityPendingIntent(Context context, Class<? extends Activity> action,
+            Bundle bundle, int requestCode) {
+        final Intent activityIntent = new Intent(context, action);
+        Bundle finalBundle = new Bundle();
+        if (null != bundle) {
+            finalBundle.putAll(bundle);
+        }
+        activityIntent.putExtras(finalBundle);
+        activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public PendingIntent getWidgetUriPendingIntent(Context context, String uri, int requestCode) {
+        final Intent activityIntent = new Intent();
+        activityIntent.setData(Uri.parse(uri));
+        activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 
     protected void updateWidget(Context context, ComponentName componentName, RemoteViews remoteViews) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
