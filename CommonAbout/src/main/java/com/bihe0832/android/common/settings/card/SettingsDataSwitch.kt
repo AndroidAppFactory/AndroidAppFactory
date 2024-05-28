@@ -10,6 +10,8 @@ open class SettingsDataSwitch : CardBaseModule() {
     var title: String = ""
     var mItemIconURL = ""
     var mItemIconRes = -1
+    var mItemIconResColorFilter: Int? = null
+    var mAutoGenerateColorFilter = true
 
     var description: String = ""
     var tips: String = ""

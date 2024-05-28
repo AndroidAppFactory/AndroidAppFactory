@@ -42,8 +42,19 @@ open class SettingsHolderSwitch(view: View, context: Context) : CardBaseHolder(v
                     if (settingData.mItemIconRes < 0) {
                         setVisibility(View.GONE)
                     } else {
-                        loadImage(getDrawable(settingData.mItemIconRes)!!, 0, 0, RequestOptions())
-                        setVisibility(View.VISIBLE)
+                        getDrawable(settingData.mItemIconRes)?.let { drawable ->
+                            loadImage(drawable, 0, 0, RequestOptions())
+                            if (item.mItemIconResColorFilter == null) {
+                                if (item.mAutoGenerateColorFilter) {
+                                    setColorFilter(context.resources.getColor(R.color.textColorPrimary))
+                                } else {
+                                    setColorFilter(null)
+                                }
+                            } else {
+                                setColorFilter(item.mItemIconResColorFilter!!)
+                            }
+                            setVisibility(View.VISIBLE)
+                        }
                     }
                 } else {
                     loadImage(settingData.mItemIconURL, R.mipmap.icon, R.mipmap.icon)

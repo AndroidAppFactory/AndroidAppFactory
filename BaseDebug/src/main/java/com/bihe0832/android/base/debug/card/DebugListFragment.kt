@@ -1,5 +1,6 @@
 package com.bihe0832.android.base.debug.card
 
+import android.graphics.Color
 import android.view.View
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
@@ -14,8 +15,6 @@ import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.text.TextFactoryUtils
-import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
@@ -102,6 +101,42 @@ class DebugListFragment : CommonListFragment() {
         num++
         mutableListOf<CardBaseModule>().apply {
             add(SettingsDataSwitchForDebug().apply {
+                mItemIconRes = R.mipmap.icon
+                mAutoGenerateColorFilter = false
+                title = "fdsfsf"
+                description = "fsdfsdfsdfsfsdfsdfs"
+                tips = "已开启"
+                onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                }
+            })
+            add(SettingsDataSwitchForDebug().apply {
+                mItemIconRes = R.mipmap.icon
+                title = "fdsfsf"
+                description = "fsdfsdfsdfsfsdfsdfs"
+                tips = "已开启"
+                onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                }
+            })
+            add(SettingsDataSwitchForDebug().apply {
+                mItemIconRes = R.drawable.icon_help
+                mAutoGenerateColorFilter = false
+                title = "fdsfsf"
+                description = "fsdfsdfsdfsfsdfsdfs"
+                tips = "已开启"
+                onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                }
+            })
+            add(SettingsDataSwitchForDebug().apply {
+                mItemIconRes = R.drawable.icon_help
+                mItemIconResColorFilter = Color.RED
+                title = "fdsfsf"
+                description = "fsdfsdfsdfsfsdfsdfs"
+                tips = "已开启"
+                onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                }
+            })
+            add(SettingsDataSwitchForDebug().apply {
+                mItemIconRes = R.drawable.icon_help
                 title = "fdsfsf"
                 description = "fsdfsdfsdfsfsdfsdfs"
                 tips = "已开启"

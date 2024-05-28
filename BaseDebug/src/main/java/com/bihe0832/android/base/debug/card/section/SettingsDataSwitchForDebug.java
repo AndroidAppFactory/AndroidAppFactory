@@ -12,6 +12,6 @@ public class SettingsDataSwitchForDebug extends SettingsDataSwitch {
 
 
     public Class<? extends CardBaseHolder> getViewHolderClass() {
-        return SectionHolderContent3.class;
+        return SettingsHolderSwitchForDebug.class;
     }
 }

@@ -2,6 +2,7 @@ package com.bihe0832.android.common.settings.card;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,13 +56,27 @@ public class SettingsHolderGo extends CardBaseHolder {
         } else {
             mHeaderTips.setOnClickListener(data.mHeaderListener);
         }
+
         if (TextUtils.isEmpty(data.mItemIconURL)) {
             if (data.mItemIconRes < 0) {
                 mHeaderIcon.setVisibility(View.GONE);
             } else {
-                GlideExtKt.loadImage(mHeaderIcon, ThemeResourcesManager.INSTANCE.getDrawable(data.mItemIconRes), 0, 0,
-                        new RequestOptions());
-                mHeaderIcon.setVisibility(View.VISIBLE);
+                Drawable drawable = ThemeResourcesManager.INSTANCE.getDrawable(data.mItemIconRes);
+                if (drawable != null) {
+                    mHeaderIcon.setVisibility(View.VISIBLE);
+                    GlideExtKt.loadImage(mHeaderIcon, drawable, 0, 0, new RequestOptions());
+                    if (data.mItemIconResColorFilter == null) {
+                        if (data.mAutoGenerateColorFilter) {
+                            mHeaderIcon.setColorFilter(getContext().getResources().getColor(R.color.textColorPrimary));
+                        } else {
+                            mHeaderIcon.setColorFilter(null);
+                        }
+                    } else {
+                        mHeaderIcon.setColorFilter(data.mItemIconResColorFilter);
+                    }
+                } else {
+                    mHeaderIcon.setVisibility(View.INVISIBLE);
+                }
             }
         } else {
             GlideExtKt.loadImage(mHeaderIcon, data.mItemIconURL, R.mipmap.icon, R.mipmap.icon);

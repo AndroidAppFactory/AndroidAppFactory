@@ -1,15 +1,14 @@
 package com.bihe0832.android.common.settings.card;
 
 import android.view.View;
-
 import com.bihe0832.android.common.about.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2019-11-21.
- * Description: Description
+ *         Created on 2019-11-21.
+ *         Description: Description
  */
 public class SettingsDataGo extends CardBaseModule {
 
@@ -18,6 +17,8 @@ public class SettingsDataGo extends CardBaseModule {
     public String mItemText = "";
     public String mItemIconURL = "";
     public int mItemIconRes = -1;
+    public Integer mItemIconResColorFilter = null;
+    public boolean mAutoGenerateColorFilter = true;
     public int mItemNewNum = -1;
     public boolean mShowGo = true;
     public boolean mShowDriver = false;
