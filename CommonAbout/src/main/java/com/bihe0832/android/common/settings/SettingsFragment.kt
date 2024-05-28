@@ -4,8 +4,8 @@ import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
 import com.bihe0832.android.common.settings.card.PlaceholderData
-import com.bihe0832.android.common.settings.card.SettingsData
-import com.bihe0832.android.common.settings.card.SettingsDataV2
+import com.bihe0832.android.common.settings.card.SettingsDataGo
+import com.bihe0832.android.common.settings.card.SettingsDataSwitch
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 open class SettingsFragment : CommonListFragment() {
@@ -38,8 +38,8 @@ open class SettingsFragment : CommonListFragment() {
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(PlaceholderData::class.java))
-            add(CardItemForCommonList(SettingsData::class.java))
-            add(CardItemForCommonList(SettingsDataV2::class.java))
+            add(CardItemForCommonList(SettingsDataGo::class.java))
+            add(CardItemForCommonList(SettingsDataSwitch::class.java))
         }
     }
 
@@ -47,7 +47,7 @@ open class SettingsFragment : CommonListFragment() {
         var position: Int = -1
         if (!title.isNullOrEmpty()) {
             for (i in mAdapter.data.indices) {
-                if (mAdapter.data[i] is SettingsData && title == (mAdapter.data[i] as? SettingsData)?.mItemText) {
+                if (mAdapter.data[i] is SettingsDataGo && title == (mAdapter.data[i] as? SettingsDataGo)?.mItemText) {
                     position = i
                     break
                 }
@@ -63,10 +63,10 @@ open class SettingsFragment : CommonListFragment() {
     fun List<CardBaseModule>.processLastItemDriver(processLast: Boolean) {
         try {
             if (processLast) {
-                if (last() is SettingsData) {
-                    (last() as SettingsData)?.mShowDriver = false
-                } else if (last() is SettingsDataV2) {
-                    (last() as SettingsDataV2)?.mShowDriver = false
+                if (last() is SettingsDataGo) {
+                    (last() as SettingsDataGo)?.mShowDriver = false
+                } else if (last() is SettingsDataSwitch) {
+                    (last() as SettingsDataSwitch)?.mShowDriver = false
                 }
             }
         } catch (e: java.lang.Exception) {

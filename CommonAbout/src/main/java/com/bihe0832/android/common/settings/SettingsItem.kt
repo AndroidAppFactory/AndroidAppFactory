@@ -3,7 +3,7 @@ package com.bihe0832.android.common.settings
 import android.app.Activity
 import android.view.View
 import com.bihe0832.android.common.about.R
-import com.bihe0832.android.common.settings.card.SettingsData
+import com.bihe0832.android.common.settings.card.SettingsDataGo
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.router.RouterAction
@@ -29,8 +29,8 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
  */
 object SettingsItem {
 
-    fun getVersionList(): SettingsData {
-        return SettingsData("版本介绍").apply {
+    fun getVersionList(): SettingsDataGo {
+        return SettingsDataGo("版本介绍").apply {
             mItemIconRes = R.drawable.ic_menu
             mShowDriver = true
             mShowGo = true
@@ -46,8 +46,8 @@ object SettingsItem {
         }
     }
 
-    fun getUpdate(titile: String, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
-        return SettingsData(titile).apply {
+    fun getUpdate(titile: String, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsDataGo {
+        return SettingsDataGo(titile).apply {
             mItemIconRes = R.drawable.icon_update
             mHeaderTextBold = true
             mShowDriver = true
@@ -63,13 +63,13 @@ object SettingsItem {
         return "关于" + ThemeResourcesManager.getString(R.string.about_app)
     }
 
-    fun getAboutAPP(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
+    fun getAboutAPP(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsDataGo {
         return getUpdate(getAboutTitle(), cloud, listener).apply {
             mItemIconRes = R.drawable.icon_android
         }
     }
 
-    fun getUpdate(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsData {
+    fun getUpdate(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsDataGo {
         return getUpdate(
             ThemeResourcesManager.getString(R.string.settings_update_title)
                 ?: "",
@@ -80,8 +80,12 @@ object SettingsItem {
         }
     }
 
-    fun getMessage(msgNum: Int, listener: View.OnClickListener): SettingsData {
-        return SettingsData(ThemeResourcesManager.getString(R.string.settings_message_title)).apply {
+    fun getMessage(msgNum: Int, listener: View.OnClickListener): SettingsDataGo {
+        return SettingsDataGo(
+            ThemeResourcesManager.getString(
+                R.string.settings_message_title
+            )
+        ).apply {
             mItemIconRes = R.drawable.icon_message
             mShowDriver = true
             mShowGo = true
@@ -90,12 +94,12 @@ object SettingsItem {
         }
     }
 
-    fun getFeedbackURL(): SettingsData {
+    fun getFeedbackURL(): SettingsDataGo {
         return getFeedbackURL(ThemeResourcesManager.getString(R.string.feedback))
     }
 
-    fun getFeedbackURL(title: String?): SettingsData {
-        return SettingsData(title).apply {
+    fun getFeedbackURL(title: String?): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_feedback
             mShowDriver = true
             mShowGo = true
@@ -105,13 +109,13 @@ object SettingsItem {
         }
     }
 
-    fun getFeedbackMail(activity: Activity?): SettingsData {
+    fun getFeedbackMail(activity: Activity?): SettingsDataGo {
         return getFeedbackMail(activity, ThemeResourcesManager.getString(R.string.feedback))
     }
 
-    fun getFeedbackMail(activity: Activity?, title: String?): SettingsData {
+    fun getFeedbackMail(activity: Activity?, title: String?): SettingsDataGo {
         val mail = ThemeResourcesManager.getString(R.string.feedback_mail)
-        return SettingsData(title).apply {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_message
             mShowDriver = true
             mShowGo = true
@@ -134,8 +138,8 @@ object SettingsItem {
         }
     }
 
-    fun getQQService(activity: Activity?): SettingsData {
-        return SettingsData("客服QQ").apply {
+    fun getQQService(activity: Activity?): SettingsDataGo {
+        return SettingsDataGo("客服QQ").apply {
             var feedbackQQnumber = ThemeResourcesManager.getString(R.string.feedback_qq)
             mItemIconRes = R.drawable.icon_qq
             mShowDriver = true
@@ -150,8 +154,8 @@ object SettingsItem {
         }
     }
 
-    fun getDebug(): SettingsData {
-        return SettingsData("调试").apply {
+    fun getDebug(): SettingsDataGo {
+        return SettingsDataGo("调试").apply {
             mItemIconRes = R.drawable.icon_android
             mShowDriver = true
             mShowGo = true
@@ -161,8 +165,8 @@ object SettingsItem {
         }
     }
 
-    fun getWechat(activity: Activity?): SettingsData {
-        return SettingsData("微信公众号").apply {
+    fun getWechat(activity: Activity?): SettingsDataGo {
+        return SettingsDataGo("微信公众号").apply {
             mItemIconRes = R.drawable.icon_wechat
             mShowDriver = true
             mShowGo = true
@@ -182,8 +186,8 @@ object SettingsItem {
         }
     }
 
-    fun getZixie(): SettingsData {
-        return SettingsData("关于开发者").apply {
+    fun getZixie(): SettingsDataGo {
+        return SettingsDataGo("关于开发者").apply {
             mItemIconRes = R.drawable.icon_author
             mShowDriver = true
             mShowGo = true
@@ -193,8 +197,8 @@ object SettingsItem {
         }
     }
 
-    fun getShareAPP(canSendAPK: Boolean): SettingsData {
-        return SettingsData("分享给好友").apply {
+    fun getShareAPP(canSendAPK: Boolean): SettingsDataGo {
+        return SettingsDataGo("分享给好友").apply {
             mItemIconRes = R.drawable.icon_share
             mShowDriver = true
             mShowGo = true
@@ -232,8 +236,8 @@ object SettingsItem {
         )
     }
 
-    fun getClearCache(activity: Activity): SettingsData {
-        return SettingsData("清理缓存").apply {
+    fun getClearCache(activity: Activity): SettingsDataGo {
+        return SettingsDataGo("清理缓存").apply {
             mItemIconRes = R.drawable.icon_delete_fill
             mShowDriver = true
             mShowGo = true

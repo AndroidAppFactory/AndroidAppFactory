@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.CompoundButton
 import com.bihe0832.android.common.about.R
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
-import com.bihe0832.android.common.settings.card.SettingsData
-import com.bihe0832.android.common.settings.card.SettingsDataV2
+import com.bihe0832.android.common.settings.card.SettingsDataGo
+import com.bihe0832.android.common.settings.card.SettingsDataSwitch
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
@@ -25,9 +25,9 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
  */
 object PermissionItem {
 
-    fun getPermission(cls: Class<out PermissionFragment>): SettingsData {
+    fun getPermission(cls: Class<out PermissionFragment>): SettingsDataGo {
         val title = "隐私及权限设置"
-        return SettingsData(title).apply {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_privacy_tip
             mShowDriver = true
             mShowGo = true
@@ -37,8 +37,8 @@ object PermissionItem {
         }
     }
 
-    fun getRecommandSetting(): SettingsDataV2 {
-        return SettingsDataV2().apply {
+    fun getRecommandSetting(): SettingsDataSwitch {
+        return SettingsDataSwitch().apply {
             title = "个性化内容推荐"
             description = "开启后，将根据您的喜好为您推荐个性化内容"
             isChecked = false
@@ -47,11 +47,11 @@ object PermissionItem {
         }
     }
 
-    fun getPermissionSetting(activity: Activity, permissionGroup: String): SettingsDataV2 {
+    fun getPermissionSetting(activity: Activity, permissionGroup: String): SettingsDataSwitch {
         return getPermissionSetting(activity, "", permissionGroup)
     }
 
-    fun getPermissionSetting(activity: Activity, scene: String, permissionGroup: String): SettingsDataV2 {
+    fun getPermissionSetting(activity: Activity, scene: String, permissionGroup: String): SettingsDataSwitch {
         PermissionManager.logPermissionConfigInfo()
         val permissionDesc: String = PermissionManager.getPermissionDesc(
             scene,
@@ -70,8 +70,8 @@ object PermissionItem {
         permissionDesc: String,
         permissionScene: String,
         permissionGroup: String,
-    ): SettingsDataV2 {
-        return SettingsDataV2().apply {
+    ): SettingsDataSwitch {
+        return SettingsDataSwitch().apply {
             title = permissionDesc
             description = permissionScene
             val hasPermission: Boolean = PermissionManager.isAllPermissionOK(activity, permissionGroup)
@@ -116,8 +116,7 @@ object PermissionItem {
             positive = "去设置"
             negative = "取消"
             shouldCanceled = false
-            onClickBottomListener = object :
-                OnDialogListener {
+            onClickBottomListener = object : OnDialogListener {
                 override fun onPositiveClick() {
                     dismiss()
                     IntentUtils.startAppSettings(activity, permission)

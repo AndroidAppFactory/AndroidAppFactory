@@ -4,7 +4,7 @@ import android.app.Activity
 import android.view.View
 import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.common.settings.SettingsItem
-import com.bihe0832.android.common.settings.card.SettingsData
+import com.bihe0832.android.common.settings.card.SettingsDataGo
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
@@ -34,6 +34,6 @@ open class AboutFragment : com.bihe0832.android.common.about.AboutFragment() {
     }
 }
 
-fun getFeedbackItem(activity: Activity?): SettingsData {
+fun getFeedbackItem(activity: Activity?): SettingsDataGo {
     return SettingsItem.getFeedbackURL()
 }

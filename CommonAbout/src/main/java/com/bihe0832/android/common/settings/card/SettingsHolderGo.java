@@ -22,7 +22,7 @@ import com.bumptech.glide.request.RequestOptions;
  *         Created on 2019-11-21.
  *         Description: Description
  */
-public class SettingsHolder extends CardBaseHolder {
+public class SettingsHolderGo extends CardBaseHolder {
 
     public TextView mHeader;
     public ImageView mHeaderIcon;
@@ -31,7 +31,7 @@ public class SettingsHolder extends CardBaseHolder {
     public ImageView mHeadergo;
     public View settings_driver;
 
-    public SettingsHolder(View itemView, Context context) {
+    public SettingsHolderGo(View itemView, Context context) {
         super(itemView, context);
     }
 
@@ -47,7 +47,7 @@ public class SettingsHolder extends CardBaseHolder {
 
     @Override
     public void initData(CardBaseModule item) {
-        SettingsData data = (SettingsData) item;
+        SettingsDataGo data = (SettingsDataGo) item;
         itemView.setOnClickListener(data.mHeaderListener);
 
         if (data.mHeaderTipsListener != null) {

@@ -11,7 +11,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule;
  * Created on 2019-11-21.
  * Description: Description
  */
-public class SettingsData extends CardBaseModule {
+public class SettingsDataGo extends CardBaseModule {
 
     public View.OnClickListener mHeaderListener = null;
     public View.OnClickListener mHeaderTipsListener = null;
@@ -25,18 +25,18 @@ public class SettingsData extends CardBaseModule {
     public String mTipsText = "";
 
 
-    public SettingsData(String netType) {
+    public SettingsDataGo(String netType) {
         mItemText = netType;
     }
 
     @Override
     public int getResID() {
-        return R.layout.card_setting;
+        return R.layout.card_setting_go;
     }
 
     @Override
     public Class<? extends CardBaseHolder> getViewHolderClass() {
-        return SettingsHolder.class;
+        return SettingsHolderGo.class;
     }
 
     @Override

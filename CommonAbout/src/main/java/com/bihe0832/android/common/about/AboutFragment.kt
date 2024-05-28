@@ -2,7 +2,7 @@ package com.bihe0832.android.common.about
 
 import android.view.View
 import com.bihe0832.android.common.settings.SettingsFragment
-import com.bihe0832.android.common.settings.card.SettingsData
+import com.bihe0832.android.common.settings.card.SettingsDataGo
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.adapter.CardBaseHolder
@@ -56,7 +56,7 @@ open class AboutFragment : SettingsFragment() {
 
     open fun updateItemRedDot(position: Int, newNum: Int, tips: String) {
         if (position >= 0) {
-            (mAdapter.data[position] as? SettingsData)?.apply {
+            (mAdapter.data[position] as? SettingsDataGo)?.apply {
                 mTipsText = tips
                 mItemNewNum = newNum
             }?.let { newData ->

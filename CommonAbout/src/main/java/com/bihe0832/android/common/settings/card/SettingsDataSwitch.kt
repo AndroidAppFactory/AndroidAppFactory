@@ -6,8 +6,11 @@ import com.bihe0832.android.common.about.R
 import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
-class SettingsDataV2 : CardBaseModule() {
+open class SettingsDataSwitch : CardBaseModule() {
     var title: String = ""
+    var mItemIconURL = ""
+    var mItemIconRes = -1
+
     var description: String = ""
     var tips: String = ""
 
@@ -17,10 +20,10 @@ class SettingsDataV2 : CardBaseModule() {
     var mShowDriver = true
 
     override fun getResID(): Int {
-        return R.layout.card_privacy_setting
+        return R.layout.card_setting_switch
     }
 
     override fun getViewHolderClass(): Class<out CardBaseHolder> {
-        return SettingsHolderV2::class.java
+        return SettingsHolderSwitch::class.java
     }
 }

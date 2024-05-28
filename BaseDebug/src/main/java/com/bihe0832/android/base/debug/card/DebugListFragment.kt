@@ -1,16 +1,21 @@
 package com.bihe0832.android.base.debug.card
 
 import android.view.View
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bihe0832.android.base.debug.card.section.SectionDataContent2
 import com.bihe0832.android.base.debug.card.section.SectionDataContent3
+import com.bihe0832.android.base.debug.card.section.SettingsDataSwitchForDebug
+import com.bihe0832.android.base.debug.card.section.SettingsHolderSwitchForDebug
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.recycleview.ext.GridDividerItemDecoration
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
@@ -55,6 +60,14 @@ class DebugListFragment : CommonListFragment() {
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(SectionDataContent3::class.java, true))
+            add(
+                CardItemForCommonList(
+                    SettingsDataSwitchForDebug::class.java,
+                    SettingsHolderSwitchForDebug::class.java,
+                    true
+                )
+            )
+
         }
     }
 
@@ -62,11 +75,12 @@ class DebugListFragment : CommonListFragment() {
         super.initView(view)
         mRecyclerView?.apply {
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-            addItemDecoration(GridDividerItemDecoration.Builder(context).apply {
-                setShowLastLine(false)
-                setColor(R.color.divider)
-                setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
-            }.build()
+            addItemDecoration(
+                GridDividerItemDecoration.Builder(context).apply {
+                    setShowLastLine(false)
+                    setColor(R.color.divider)
+                    setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
+                }.build()
             )
         }
     }
@@ -87,6 +101,13 @@ class DebugListFragment : CommonListFragment() {
     private fun getTempData(): List<CardBaseModule> {
         num++
         mutableListOf<CardBaseModule>().apply {
+            add(SettingsDataSwitchForDebug().apply {
+                title = "fdsfsf"
+                description = "fsdfsdfsdfsfsdfsdfs"
+                tips = "已开启"
+                onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                }
+            })
             for (i in 0..2) {
 //                add(if (i < 2) {
 //                    SectionDataHeader("标题1:${System.currentTimeMillis()}")

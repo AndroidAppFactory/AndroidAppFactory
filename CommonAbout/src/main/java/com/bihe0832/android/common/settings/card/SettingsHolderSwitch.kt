@@ -3,15 +3,19 @@ package com.bihe0832.android.common.settings.card;
 import android.content.Context
 import android.text.TextUtils
 import android.view.View
+import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import com.bihe0832.android.common.about.R
 import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager.getDrawable
+import com.bumptech.glide.request.RequestOptions
 
-class SettingsHolderV2(view: View, context: Context) : CardBaseHolder(view, context) {
-
+open class SettingsHolderSwitch(view: View, context: Context) : CardBaseHolder(view, context) {
+    private var mHeaderIcon: ImageView? = null
     private var settingTitle: TextView? = null
     private var settingDesc: TextView? = null
     private var clickEntrance: TextView? = null
@@ -19,6 +23,7 @@ class SettingsHolderV2(view: View, context: Context) : CardBaseHolder(view, cont
     private var divider: View? = null
 
     override fun initView() {
+        mHeaderIcon = getView(R.id.settings_icon)
         settingTitle = getView<TextView>(R.id.setting_title)
         settingDesc = getView<TextView>(R.id.setting_desc)
         clickEntrance = getView<TextView>(R.id.settings_tips)
@@ -27,12 +32,33 @@ class SettingsHolderV2(view: View, context: Context) : CardBaseHolder(view, cont
     }
 
     override fun initData(item: CardBaseModule?) {
-        (item as? SettingsDataV2)?.let { settingData ->
+        (item as? SettingsDataSwitch)?.let { settingData ->
             settingData.onClickListener?.let {
                 itemView.setOnClickListener(it)
             }
 
-            settingTitle?.text = TextFactoryUtils.getSpannedTextByHtml(settingData.title)
+            mHeaderIcon?.apply {
+                if (TextUtils.isEmpty(settingData.mItemIconURL)) {
+                    if (settingData.mItemIconRes < 0) {
+                        setVisibility(View.GONE)
+                    } else {
+                        loadImage(getDrawable(settingData.mItemIconRes)!!, 0, 0, RequestOptions())
+                        setVisibility(View.VISIBLE)
+                    }
+                } else {
+                    loadImage(settingData.mItemIconURL, R.mipmap.icon, R.mipmap.icon)
+                    setVisibility(View.VISIBLE)
+                }
+            }
+
+            if (TextUtils.isEmpty(settingData.title)) {
+                settingTitle?.visibility = View.GONE
+            } else {
+                settingTitle?.apply {
+                    text = TextFactoryUtils.getSpannedTextByHtml(settingData.title)
+                    visibility = View.VISIBLE
+                }
+            }
 
             if (TextUtils.isEmpty(settingData.description)) {
                 settingDesc?.visibility = View.GONE

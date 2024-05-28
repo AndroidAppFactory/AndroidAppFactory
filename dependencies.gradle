@@ -9,68 +9,50 @@ apply from: rootDir.toString() + '/dependencies_services.gradle'
 /************************************ 组件化开发常用配置 ************************************/
 /**
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
- * 当前如果全量填"APPTest"
- */
+ * 当前如果全量填"APPTest"*/
 ext.mainProject = "APPTest"
 
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
- *
- */
-ext.developModule = "Application,LibWidget"
+ **/
+ext.developModule = "Application,CommonAbout,LibWidget"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
- *  false 仅加载与 mainProject 相关的模块
- */
+ *  false 仅加载与 mainProject 相关的模块*/
 ext.includeALLDependOnDevelopModule = false
 
 /**
  * 应用组件 （Pub 开头，各个外发APP的发布模块）是否以application模式运行，当需要独立运行应用组件时修改，默认为false
  * true 表示以 application 模式运行
- * false 表示以 Android Library 模式运行
- */
+ * false 表示以 Android Library 模式运行*/
 ext.pubModuleIsApplication = false
 
 /**
- * 当前是否为发布模式，发布模式下为了提升速度，仅能包含一个模块
- */
+ * 当前是否为发布模式，发布模式下为了提升速度，仅能包含一个模块*/
 ext.isPublish = false
 
 /**
- * 组件所有模块的最新版本，下次发布时使用
- */
-ext.moduleVersionName = "6.9.31"
+ * 组件所有模块的最新版本，下次发布时使用*/
+ext.moduleVersionName = "6.9.32"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
 
-        "APPTest"    : [
-                "version"                : "",
-                "artifactId"             : "",
-                "apidependenciesList"    : ["Application", "BaseDebug"],
-                "specialdependenciesList": ["kapt": ["RouterCompiler"]]
-        ],
-        "BaseDebug"  : [
-                "version"            : "",
-                "artifactId"         : "",
-                "apidependenciesList": [
-                        "Application", "CommonDebug", "CommonTBSFeedback"
-                ]
-        ],
-        "Application": [
-                "version"                : "",
-                "artifactId"             : "",
-                "apidependenciesList"    : [
-                        "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper"
-                ],
-                "specialdependenciesList": [
-                        "kapt"               : ["RouterCompiler"],
-                        "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"],
-                ]]
-]
+        "APPTest"    : ["version"                : "",
+                        "artifactId"             : "",
+                        "apidependenciesList"    : ["Application", "BaseDebug"],
+                        "specialdependenciesList": ["kapt": ["RouterCompiler"]]],
+        "BaseDebug"  : ["version"            : "",
+                        "artifactId"         : "",
+                        "apidependenciesList": ["Application", "CommonDebug", "CommonTBSFeedback"]],
+        "Application": ["version"                : "",
+                        "artifactId"             : "",
+                        "apidependenciesList"    : ["CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper"],
+                        "specialdependenciesList": ["kapt"               : ["RouterCompiler"],
+                                                    "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"],]]]
 
 ext.moduleInfo = ext.coremoduleInfo + ext.libmoduleInfo + ext.tbsmoduleInfo + ext.commonmoduleInfo + ext.widgetmoduleInfo + ext.kitmoduleInfo
 
