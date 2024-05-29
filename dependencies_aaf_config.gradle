@@ -24,9 +24,9 @@ ext {
 
 
     okhttp = [
-            okhttp             : "com.squareup.okhttp3:okhttp:3.9.1",
-            logging_interceptor: "com.squareup.okhttp3:logging-interceptor:3.8.0",
-            retrofit           : "com.squareup.retrofit2:retrofit:2.4.0",
+            okhttp             : "com.squareup.okhttp3:okhttp:3.14.9",
+            logging_interceptor: "com.squareup.okhttp3:logging-interceptor:3.14.9",
+            retrofit           : "com.squareup.retrofit2:retrofit:2.9.0",
             converter_gson     : "com.squareup.retrofit2:converter-gson:$gson_version_name"
     ]
 
