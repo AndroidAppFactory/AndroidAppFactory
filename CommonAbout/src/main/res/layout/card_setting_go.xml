@@ -23,7 +23,7 @@
             android:id="@+id/settings_icon"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/icon_android"
             app:tint="@color/textColorPrimary"
             android:visibility="visible"

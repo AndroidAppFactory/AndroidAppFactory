@@ -19,7 +19,7 @@
                 android:id="@+id/settings_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icon_android"
                 android:visibility="gone"
                 tools:visibility="visible"
