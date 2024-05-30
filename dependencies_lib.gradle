@@ -243,8 +243,7 @@ ext.libmoduleInfo = [
                         "LibLog", "LibHttpCommon",
                         project.okhttp.okhttp,
                         project.okhttp.logging_interceptor,
-                        project.okhttp.retrofit,
-                        project.okhttp.converter_gson
+                        project.okhttp.retrofit
                 ]
         ],
         "LibCoroutines"             : [
