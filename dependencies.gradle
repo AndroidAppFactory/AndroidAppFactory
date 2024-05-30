@@ -10,7 +10,7 @@ apply from: rootDir.toString() + '/dependencies_services.gradle'
 /**
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
  * 当前如果全量填"APPTest"*/
-ext.mainProject = "CommonWrapper,CommonTBSWrapper"
+ext.mainProject = "APPTest"
 
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
@@ -51,8 +51,7 @@ ext.coremoduleInfo = [
         "Application": ["version"                : "",
                         "artifactId"             : "",
                         "apidependenciesList"    : [
-                                "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper",
-                                "com.squareup.retrofit2:converter-gson:2.10.0"
+                                "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper"
                         ],
                         "specialdependenciesList": ["kapt"               : ["RouterCompiler"],
                                                     "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"],]]]

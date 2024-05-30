@@ -3,15 +3,14 @@ package com.bihe0832.android.app.api
 import android.text.TextUtils
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
-import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
+import com.bihe0832.android.lib.okhttp.wrapper.convert.GsonConverterFactory
 import com.bihe0832.android.lib.okhttp.wrapper.getRequestBodyByJsonString
 import com.bihe0832.android.lib.request.URLUtils
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import org.json.JSONObject
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -45,7 +44,7 @@ object AAFNetWorkApi {
     }
 
     fun getRetrofit(url: String): Retrofit {
-        return Retrofit.Builder().client(mHttpClient).addConverterFactory(GsonConverterFactory.create(JsonHelper.getGson())).baseUrl(url).build()
+        return Retrofit.Builder().client(mHttpClient).addConverterFactory(GsonConverterFactory()).baseUrl(url).build()
     }
 
     fun getRetrofitWithoutJsonParse(url: String): Retrofit {

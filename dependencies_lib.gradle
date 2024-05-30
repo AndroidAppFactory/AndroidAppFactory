@@ -112,7 +112,7 @@ ext.libmoduleInfo = [
                 "version"            : "6.10.0",
                 "artifactId"         : "lib-http-common",
                 "apidependenciesList": [
-                        "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils","LibRequest",
+                        "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils", "LibRequest",
                 ]
         ],
         "LibHttpAdvanced"           : [
@@ -240,7 +240,7 @@ ext.libmoduleInfo = [
                 "version"            : "6.10.0",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
-                        "LibLog", "LibHttpCommon",
+                        "LibLog", "LibHttpCommon", "LibGson",
                         project.okhttp.okhttp,
                         project.okhttp.logging_interceptor,
                         project.okhttp.retrofit
