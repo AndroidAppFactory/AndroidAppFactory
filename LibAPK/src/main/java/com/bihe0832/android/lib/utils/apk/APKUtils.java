@@ -90,37 +90,41 @@ public class APKUtils {
         return "";
     }
 
+    /**
+     *
+     * @param oldVersion
+     * @param newVersion
+     * @return 版本一致 0， oldVersion 更高 1， newVersion 更高 2，无法比较 -1
+     * @throws AAFException
+     */
     public static int compareVersion(String oldVersion, String newVersion) throws AAFException {
-        ZLog.d("testVerion", "oldVersion:" + oldVersion + "； oldVersion:" + newVersion);
+        ZLog.d("testVerion", "oldVersion:" + oldVersion + "； newVersion:" + newVersion);
         if (TextUtils.isEmpty(oldVersion) || TextUtils.isEmpty(newVersion)) {
             return -1;
         }
         if (oldVersion.equals(newVersion)) {
             return 0; //版本相同
         }
-        String[] v1Array = oldVersion.split("\\.");
-        String[] v2Array = newVersion.split("\\.");
-        int v1Len = v1Array.length;
-        int v2Len = v2Array.length;
+        String[] oldVersionArray = oldVersion.split("\\.");
+        String[] newVersionArray = newVersion.split("\\.");
+        int oldVersionLen = oldVersionArray.length;
+        int newVersionLen = newVersionArray.length;
         int baseLen = 0;
-        if (v1Len > v2Len) {
-            baseLen = v2Len;
+        if (oldVersionLen > newVersionLen) {
+            baseLen = newVersionLen;
         } else {
-            baseLen = v1Len;
+            baseLen = oldVersionLen;
         }
         //基础版本号比较
         for (int i = 0; i < baseLen; i++) {
-            //同位版本号相同
-            if (v1Array[i].equals(v2Array[i])) {
-                //比较下一位
-                continue;
-            } else {
-                return ConvertUtils.parseInt(v1Array[i]) > ConvertUtils.parseInt(v2Array[i]) ? 1 : -1;
+            //同位版本号比较
+            if (!oldVersionArray[i].equals(newVersionArray[i])) {
+                return ConvertUtils.parseInt(oldVersionArray[i]) > ConvertUtils.parseInt(newVersionArray[i]) ? 1 : 2;
             }
         }
         //基础版本相同，再比较子版本号
-        if (v1Len != v2Len) {
-            return v1Len > v2Len ? 1 : 2;
+        if (oldVersionLen != newVersionLen) {
+            return oldVersionLen > newVersionLen ? 1 : 2;
         } else {
             //基础版本相同，无子版本号
             return 0;

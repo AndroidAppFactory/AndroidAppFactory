@@ -303,14 +303,14 @@ class DebugConvertFragment : DebugEnvFragment() {
         val v2_2 = "1.0.2.02"
         val v3 = "1.0.3"
 
-        ZLog.d(LOG_TAG, "v1 VS v1:" + APKUtils.compareVersion(v1, v1))
-        ZLog.d(LOG_TAG, "v1 VS v2:" + APKUtils.compareVersion(v1, v2))
-        ZLog.d(LOG_TAG, "v2 VS v1:" + APKUtils.compareVersion(v2, v1))
-        ZLog.d(LOG_TAG, "v2_1 VS v1:" + APKUtils.compareVersion(v2_1, v1))
-        ZLog.d(LOG_TAG, "v2_1 VS v2:" + APKUtils.compareVersion(v2_1, v2))
-        ZLog.d(LOG_TAG, "v2_2 VS v2_1:" + APKUtils.compareVersion(v2_2, v2_1))
-        ZLog.d(LOG_TAG, "v3 VS v2:" + APKUtils.compareVersion(v3, v2))
-        ZLog.d(LOG_TAG, "v3 VS v2_2:" + APKUtils.compareVersion(v3, v2_2))
+        ZLog.d(LOG_TAG, "$v1 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v1, v1))
+        ZLog.d(LOG_TAG, "$v1 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v1, v2))
+        ZLog.d(LOG_TAG, "$v2 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2, v1))
+        ZLog.d(LOG_TAG, "$v2_1 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2_1, v1))
+        ZLog.d(LOG_TAG, "$v2_1 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2_1, v2))
+        ZLog.d(LOG_TAG, "$v2_2 VS $v2_1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2_2, v2_1))
+        ZLog.d(LOG_TAG, "$v3 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v3, v2))
+        ZLog.d(LOG_TAG, "$v3 VS $v2_2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v3, v2_2))
     }
 
     fun testTree() {
