@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bihe0832.android.base.debug.AAFDebugModuleFragment;
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment;
+import com.bihe0832.android.base.debug.media.photos.DebugPhotosFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
 import com.bihe0832.android.common.debug.module.DebugCommonFragment;
 import com.bihe0832.android.test.module.AAFDebugCommonFragment;
@@ -31,7 +32,7 @@ public class TestMainFragment extends DebugMainFragment {
 
     protected Fragment getFragmentByIndex(String title) {
         if (title.equals(TAB_FOR_DEV)) {
-            return new DebugDownloadFragment();
+            return new DebugPhotosFragment();
         } else if (title.equals(TAB_FOR_DEV_MODULE)) {
             return new AAFDebugModuleFragment();
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {

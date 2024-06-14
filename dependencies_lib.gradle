@@ -38,6 +38,7 @@ ext.libmoduleInfo = [
                 "version"            : "6.10.0",
                 "artifactId"         : "lib-router",
                 "apidependenciesList": [
+                        project.androidsupport.fragment,
                         "org.jetbrains.kotlin:kotlin-stdlib:${project.kotlin_version}"
                 ]
         ],

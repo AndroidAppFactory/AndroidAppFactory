@@ -48,6 +48,9 @@ public class OverlayView extends View {
     private boolean mShowCropFrame, mShowCropGrid;
     private boolean mCircleDimmedLayer;
     private int mDimmedColor;
+    private int mDimmedPressColor;
+    private int mDimmedOverlayColor;
+
     private Path mCircularPath = new Path();
     private Paint mDimmedStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mCropGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -97,14 +100,6 @@ public class OverlayView extends View {
     @NonNull
     public RectF getCropViewRect() {
         return mCropViewRect;
-    }
-
-    @Deprecated
-    /***
-     * Please use the new method {@link #getFreestyleCropMode() getFreestyleCropMode} method as we have more than 1 freestyle crop mode.
-     */
-    public boolean isFreestyleCropEnabled() {
-        return mFreestyleCropMode == FREESTYLE_CROP_MODE_ENABLE;
     }
 
     @FreestyleMode
@@ -206,6 +201,10 @@ public class OverlayView extends View {
         mCropFrameCornersPaint.setColor(color);
     }
 
+    public float getTargetAspectRatio() {
+        return mTargetAspectRatio;
+    }
+
     /**
      * This method sets aspect ratio for crop bounds.
      *
@@ -219,10 +218,6 @@ public class OverlayView extends View {
         } else {
             mShouldSetupCropBounds = true;
         }
-    }
-
-    public float getTargetAspectRatio() {
-        return mTargetAspectRatio;
     }
 
     /**
@@ -304,6 +299,7 @@ public class OverlayView extends View {
 
         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
             mCurrentTouchCornerIndex = getCurrentTouchIndex(x, y);
+            mDimmedColor = mDimmedPressColor;
             boolean shouldHandle = mCurrentTouchCornerIndex != -1;
             if (!shouldHandle) {
                 mPreviousTouchX = -1;
@@ -331,6 +327,7 @@ public class OverlayView extends View {
         }
 
         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
+            mDimmedColor = mDimmedOverlayColor;
             mPreviousTouchX = -1;
             mPreviousTouchY = -1;
             mCurrentTouchCornerIndex = -1;
@@ -416,7 +413,8 @@ public class OverlayView extends View {
             }
         }
 
-        if (mFreestyleCropMode == FREESTYLE_CROP_MODE_ENABLE && closestPointIndex < 0 && mCropViewRect.contains(touchX,
+        if (getFreestyleCropMode() == FREESTYLE_CROP_MODE_ENABLE && closestPointIndex < 0 && mCropViewRect.contains(
+                touchX,
                 touchY)) {
             return 4;
         }
@@ -530,8 +528,11 @@ public class OverlayView extends View {
     protected void processStyledAttributes(@NonNull TypedArray a) {
         mCircleDimmedLayer = a.getBoolean(R.styleable.CropView_circle_dimmed_layer,
                 DEFAULT_CIRCLE_DIMMED_LAYER);
-        mDimmedColor = a.getColor(R.styleable.CropView_dimmed_color,
+        mDimmedOverlayColor = a.getColor(R.styleable.CropView_dimmed_color,
                 getResources().getColor(R.color.crop_color_default_dimmed));
+        mDimmedPressColor = a.getColor(R.styleable.CropView_dimmed_press_color,
+                getResources().getColor(R.color.crop_color_press_dimmed));
+        mDimmedColor = mDimmedOverlayColor;
         mDimmedStrokePaint.setColor(mDimmedColor);
         mDimmedStrokePaint.setStyle(Paint.Style.STROKE);
         mDimmedStrokePaint.setStrokeWidth(1);

@@ -1,20 +1,20 @@
 package com.bihe0832.android.lib.router;
 
 import android.app.Activity;
+import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zixie code@bihe0832.com
- * Created on 2019-07-19.
- * Description: Description
+ *         Created on 2019-07-19.
+ *         Description: Description
  */
 public class Routers {
 
@@ -27,7 +27,8 @@ public class Routers {
     public static final String HTTP_REQ_ENTITY_JOIN = "&";
 
     private static void initIfNeed(String format) {
-        if (!RouterMappingManager.getInstance().getRouterMapping().isEmpty() && RouterMappingManager.getInstance().getRouterMapping().containsKey(format)) {
+        if (!RouterMappingManager.getInstance().getRouterMapping().isEmpty() && RouterMappingManager.getInstance()
+                .getRouterMapping().containsKey(format)) {
             return;
         }
         RouterMappingManager.getInstance().initMapping(format);
@@ -37,40 +38,108 @@ public class Routers {
         return open(context, Uri.parse(url), source, Intent.FLAG_ACTIVITY_SINGLE_TOP);
     }
 
+    public static boolean open(Activity activity, String source, String url) {
+        return open(activity, Uri.parse(url), source, Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    }
+
+    public static boolean open(Fragment fragment, String source, String url) {
+        return open(fragment, Uri.parse(url), source, Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    }
+
     public static boolean open(Context context, String url, String source, int startFlag) {
         return open(context, Uri.parse(url), source, startFlag);
     }
 
+    public static boolean open(Activity activity, String url, String source, int startFlag) {
+        return open(activity, Uri.parse(url), source, startFlag);
+    }
 
-    public static boolean open(Context context, String url, String source, int startFlag, RouterContext.RouterCallback callback) {
+    public static boolean open(Fragment fragment, String url, String source, int startFlag) {
+        return open(fragment, Uri.parse(url), source, startFlag);
+    }
+
+    public static boolean open(Context context, String url, String source, int startFlag,
+            RouterContext.RouterCallback callback) {
         return open(context, Uri.parse(url), source, startFlag, callback);
+    }
+
+    public static boolean open(Activity activity, String url, String source, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(activity, Uri.parse(url), source, startFlag, callback);
+    }
+
+    public static boolean open(Fragment fragment, String url, String source, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(fragment, Uri.parse(url), source, startFlag, callback);
     }
 
     public static boolean open(Context context, Uri uri, String source, int startFlag) {
         return open(context, uri, source, startFlag, RouterContext.INSTANCE.getGlobalRouterCallback());
     }
 
-    public static boolean open(Context context, Uri uri, String source, int startFlag, RouterContext.RouterCallback callback) {
-        return open(context, uri, source, -1, startFlag, callback);
+    public static boolean open(Activity activity, Uri uri, String source, int startFlag) {
+        return open(activity, uri, source, startFlag, RouterContext.INSTANCE.getGlobalRouterCallback());
+    }
+
+    public static boolean open(Fragment fragment, Uri uri, String source, int startFlag) {
+        return open(fragment, uri, source, startFlag, RouterContext.INSTANCE.getGlobalRouterCallback());
+    }
+
+    public static boolean open(Context context, Uri uri, String source, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(context, null, null, uri, source, -1, startFlag, callback);
+    }
+
+    public static boolean open(Activity activity, Uri uri, String source, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(activity, activity, null, uri, source, -1, startFlag, callback);
+    }
+
+    public static boolean open(Fragment fragment, Uri uri, String source, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(fragment.getContext(), null, fragment, uri, source, -1, startFlag, callback);
     }
 
     public static boolean openForResult(Activity activity, String url, String source, int requestCode, int startFlag) {
         return openForResult(activity, Uri.parse(url), source, requestCode, startFlag);
     }
 
-    public static boolean openForResult(Activity activity, String url, String source, int requestCode, int startFlag, RouterContext.RouterCallback callback) {
+    public static boolean openForResult(Fragment fragment, String url, String source, int requestCode, int startFlag) {
+        return openForResult(fragment, Uri.parse(url), source, requestCode, startFlag);
+    }
+
+    public static boolean openForResult(Activity activity, String url, String source, int requestCode, int startFlag,
+            RouterContext.RouterCallback callback) {
         return openForResult(activity, Uri.parse(url), source, requestCode, startFlag, callback);
     }
 
+    public static boolean openForResult(Fragment fragment, String url, String source, int requestCode, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return openForResult(fragment, Uri.parse(url), source, requestCode, startFlag, callback);
+    }
+
     public static boolean openForResult(Activity activity, Uri uri, String source, int requestCode, int startFlag) {
-        return openForResult(activity, uri, source, requestCode, startFlag, RouterContext.INSTANCE.getGlobalRouterCallback());
+        return openForResult(activity, uri, source, requestCode, startFlag,
+                RouterContext.INSTANCE.getGlobalRouterCallback());
     }
 
-    public static boolean openForResult(Activity activity, Uri uri, String source, int requestCode, int startFlag, RouterContext.RouterCallback callback) {
-        return open(activity, uri, source, requestCode, startFlag, callback);
+    public static boolean openForResult(Fragment fragment, Uri uri, String source, int requestCode, int startFlag) {
+        return openForResult(fragment, uri, source, requestCode, startFlag,
+                RouterContext.INSTANCE.getGlobalRouterCallback());
     }
 
-    private static boolean open(Context context, Uri uri, String source, int requestCode, int startFlag, RouterContext.RouterCallback callback) {
+    public static boolean openForResult(Activity activity, Uri uri, String source, int requestCode, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(activity, activity, null, uri, source, requestCode, startFlag, callback);
+    }
+
+    public static boolean openForResult(Fragment fragment, Uri uri, String source, int requestCode, int startFlag,
+            RouterContext.RouterCallback callback) {
+        return open(fragment.getContext(), null, fragment, uri, source, requestCode, startFlag, callback);
+    }
+
+    private static boolean open(Context context, Activity activity, Fragment fragment, Uri uri, String source,
+            int requestCode, int startFlag, RouterContext.RouterCallback callback) {
         boolean success = false;
         if (callback != null) {
             if (callback.beforeOpen(context, uri, source)) {
@@ -79,7 +148,7 @@ public class Routers {
         }
 
         try {
-            success = doOpen(context, uri, source, requestCode, startFlag);
+            success = doOpen(context, activity, fragment, uri, source, requestCode, startFlag);
         } catch (Throwable e) {
             e.printStackTrace();
             if (callback != null) {
@@ -116,30 +185,35 @@ public class Routers {
         return null;
     }
 
-    private static boolean doOpen(Context context, Uri uri, String source, int requestCode, int startFlag) {
+    private static boolean doOpen(Context context, Activity activity, Fragment fragment, Uri uri, String source,
+            int requestCode, int startFlag) {
         initIfNeed(uri.getHost());
         if (RouterMappingManager.getInstance().getRouterMapping().containsKey(uri.getHost())) {
-            Class<? extends Activity> activityClass = RouterMappingManager.getInstance().getRouterMapping().get(uri.getHost());
+            Class<? extends Activity> activityClass = RouterMappingManager.getInstance().getRouterMapping()
+                    .get(uri.getHost());
             if (null != activityClass) {
                 try {
                     Intent intent = new Intent(context, activityClass);
                     intent.putExtras(parseExtras(uri));
                     intent.putExtra(ROUTERS_KEY_RAW_URL, uri.toString());
                     intent.putExtra(ROUTERS_KEY_PARSE_SOURCE_KEY, source);
-                    if (!(context instanceof Activity)) {
-                        if (startFlag > 0) {
-                            intent.addFlags(startFlag);
-                        }
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (startFlag > 0) {
+                        intent.addFlags(startFlag);
                     }
                     if (requestCode >= 0) {
-                        if (context instanceof Activity) {
-                            ((Activity) context).startActivityForResult(intent, requestCode);
+                        if (null != fragment) {
+                            fragment.startActivityForResult(intent, requestCode);
                         } else {
-                            throw new RuntimeException("can not startActivityForResult context " + context);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            activity.startActivityForResult(intent, requestCode);
                         }
                     } else {
-                        context.startActivity(intent);
+                        if (null != fragment) {
+                            context.startActivity(intent);
+                        } else {
+                            context.startActivity(intent);
+                        }
+
                     }
                     return true;
                 } catch (Exception e) {
@@ -153,20 +227,24 @@ public class Routers {
                 intent.setComponent(null);
                 intent.setSelector(null);
                 System.out.println("jumpToOtherApp url:" + uri.toString() + ",intent:" + intent.toString());
-                if (!(context instanceof Activity)) {
-                    if (startFlag > 0) {
-                        intent.addFlags(startFlag);
-                    }
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (startFlag > 0) {
+                    intent.addFlags(startFlag);
                 }
+
                 if (requestCode >= 0) {
-                    if (context instanceof Activity) {
-                        ((Activity) context).startActivityForResult(intent, requestCode);
+                    if (null != fragment) {
+                        fragment.startActivityForResult(intent, requestCode);
                     } else {
-                        throw new RuntimeException("can not startActivityForResult context " + context);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        activity.startActivityForResult(intent, requestCode);
                     }
                 } else {
-                    context.startActivity(intent);
+                    if (null != fragment) {
+                        context.startActivity(intent);
+                    } else {
+                        context.startActivity(intent);
+                    }
+
                 }
                 return true;
             } catch (Exception e) {

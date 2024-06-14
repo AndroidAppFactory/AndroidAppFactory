@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import androidx.fragment.app.Fragment;
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode;
 import com.bihe0832.android.framework.router.RouterAction;
 import com.bihe0832.android.framework.router.RouterConstants;
@@ -28,6 +29,16 @@ public class QrcodeUtils {
         dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
         RouterAction.INSTANCE.openForResult(
                 activity,
+                RouterAction.INSTANCE.getFinalURL(RouterConstants.MODULE_NAME_QRCODE_SCAN, dataParam),
+                ZixieActivityRequestCode.QRCODE_SCAN);
+    }
+
+    public static final void openQrScan(Fragment fragment, boolean needSound, boolean needVibrate) {
+        HashMap dataParam = new HashMap();
+        dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND, String.valueOf(needSound));
+        dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE, String.valueOf(needVibrate));
+        RouterAction.INSTANCE.openForResult(
+                fragment,
                 RouterAction.INSTANCE.getFinalURL(RouterConstants.MODULE_NAME_QRCODE_SCAN, dataParam),
                 ZixieActivityRequestCode.QRCODE_SCAN);
     }

@@ -1,11 +1,14 @@
 package com.bihe0832.android.common.crop.view;
 
+import static com.bihe0832.android.common.crop.view.OverlayView.FREESTYLE_CROP_MODE_DISABLE;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import com.bihe0832.android.common.crop.util.RotationGestureDetector;
+import com.bihe0832.android.common.crop.view.OverlayView.FreestyleMode;
 
 
 public class GestureCropImageView extends CropImageView {
@@ -16,6 +19,9 @@ public class GestureCropImageView extends CropImageView {
     private RotationGestureDetector mRotateDetector;
     private GestureDetector mGestureDetector;
 
+    private boolean needResize = false;
+    @FreestyleMode
+    private int mFreestyleCropMode = FREESTYLE_CROP_MODE_DISABLE;
     private float mMidPntX, mMidPntY;
 
     private boolean mIsRotateEnabled = true, mIsScaleEnabled = true, mIsGestureEnabled = true;
@@ -33,36 +39,40 @@ public class GestureCropImageView extends CropImageView {
         super(context, attrs, defStyle);
     }
 
-    public void setScaleEnabled(boolean scaleEnabled) {
-        mIsScaleEnabled = scaleEnabled;
-    }
-
     public boolean isScaleEnabled() {
         return mIsScaleEnabled;
     }
 
-    public void setRotateEnabled(boolean rotateEnabled) {
-        mIsRotateEnabled = rotateEnabled;
+    public void setScaleEnabled(boolean scaleEnabled) {
+        mIsScaleEnabled = scaleEnabled;
     }
 
     public boolean isRotateEnabled() {
         return mIsRotateEnabled;
     }
 
-    public void setGestureEnabled(boolean gestureEnabled) {
-        mIsGestureEnabled = gestureEnabled;
+    public void setRotateEnabled(boolean rotateEnabled) {
+        mIsRotateEnabled = rotateEnabled;
     }
 
     public boolean isGestureEnabled() {
         return mIsGestureEnabled;
     }
 
-    public void setDoubleTapScaleSteps(int doubleTapScaleSteps) {
-        mDoubleTapScaleSteps = doubleTapScaleSteps;
+    public void setGestureEnabled(boolean gestureEnabled) {
+        mIsGestureEnabled = gestureEnabled;
     }
 
     public int getDoubleTapScaleSteps() {
         return mDoubleTapScaleSteps;
+    }
+
+    public void setDoubleTapScaleSteps(int doubleTapScaleSteps) {
+        mDoubleTapScaleSteps = doubleTapScaleSteps;
+    }
+
+    public void setFreestyleCropMode(@FreestyleMode int mFreestyleCropMode) {
+        this.mFreestyleCropMode = mFreestyleCropMode;
     }
 
     /**
@@ -94,8 +104,9 @@ public class GestureCropImageView extends CropImageView {
             mRotateDetector.onTouchEvent(event);
         }
 
-        if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
+        if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP && needResize) {
             setImageToWrapCropBounds();
+            needResize = false;
         }
         return true;
     }
@@ -125,6 +136,7 @@ public class GestureCropImageView extends CropImageView {
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
+            needResize = true;
             postScale(detector.getScaleFactor(), mMidPntX, mMidPntY);
             return true;
         }
@@ -134,12 +146,16 @@ public class GestureCropImageView extends CropImageView {
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
+            needResize = true;
             zoomImageToPosition(getDoubleTapTargetScale(), e.getX(), e.getY(), DOUBLE_TAP_ZOOM_DURATION);
             return super.onDoubleTap(e);
         }
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (mFreestyleCropMode > FREESTYLE_CROP_MODE_DISABLE) {
+                needResize = true;
+            }
             postTranslate(-distanceX, -distanceY);
             return true;
         }
@@ -150,6 +166,7 @@ public class GestureCropImageView extends CropImageView {
 
         @Override
         public boolean onRotation(RotationGestureDetector rotationDetector) {
+            needResize = true;
             postRotate(rotationDetector.getAngle(), mMidPntX, mMidPntY);
             return true;
         }

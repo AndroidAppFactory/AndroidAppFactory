@@ -10,6 +10,7 @@
         <attr name="show_oval_crop_frame" format="boolean" />
         <attr name="circle_dimmed_layer" format="boolean" />
         <attr name="dimmed_color" format="color" />
+        <attr name="dimmed_press_color" format="color" />
 
         <attr name="grid_stroke_size" format="dimension" />
         <attr name="grid_color" format="color" />

@@ -31,6 +31,7 @@ ext {
     androidsupport = [
             viewpager          : "androidx.viewpager:viewpager:1.0.0",
             appcompat          : "androidx.appcompat:appcompat:1.5.0",
+            fragment          : "androidx.fragment:fragment:1.3.6",
             androidxcore       : "androidx.core:core:1.8.0",
             constraintlayout   : "androidx.constraintlayout:constraintlayout:2.1.4",
             annotation         : "androidx.annotation:annotation:1.3.0",

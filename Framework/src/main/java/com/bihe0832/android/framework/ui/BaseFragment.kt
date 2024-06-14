@@ -128,9 +128,6 @@ open class BaseFragment : SwipeBackFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         ZLog.d("onActivityResult： $this, $requestCode, $resultCode, ${data?.data}")
-        if (needDispatchActivityResult()) {
-            dispatchActivityResult(requestCode, resultCode, data)
-        }
     }
 
 
@@ -179,10 +176,6 @@ open class BaseFragment : SwipeBackFragment() {
 
 
     open fun resetDensity(): Boolean {
-        return true
-    }
-
-    fun needDispatchActivityResult(): Boolean {
         return true
     }
 

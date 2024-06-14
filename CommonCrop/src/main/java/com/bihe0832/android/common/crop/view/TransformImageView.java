@@ -3,7 +3,9 @@ package com.bihe0832.android.common.crop.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Matrix.ScaleToFit;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -15,10 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import com.bihe0832.android.common.crop.model.ExifInfo;
 import com.bihe0832.android.common.crop.util.EglUtils;
-import com.bihe0832.android.lib.image.meta.ImageMetadataUtils;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
+import com.bihe0832.android.lib.image.meta.ImageMetadataUtils;
 import com.bihe0832.android.lib.media.image.BitmapTransUtils;
 import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.bihe0832.android.lib.media.image.RectUtils;
@@ -42,32 +44,14 @@ public class TransformImageView extends AppCompatImageView {
     protected int mThisWidth, mThisHeight;
 
     protected TransformImageListener mTransformImageListener;
-
-    private float[] mInitialImageCorners;
-    private float[] mInitialImageCenter;
-
     protected boolean mBitmapDecoded = false;
     protected boolean mBitmapLaidOut = false;
-
+    private float[] mInitialImageCorners;
+    private float[] mInitialImageCenter;
     private int mMaxBitmapSize = 0;
 
     private String mImageInputPath, mImageOutputPath;
     private ExifInfo mExifInfo;
-
-    /**
-     * Interface for rotation and scale change notifying.
-     */
-    public interface TransformImageListener {
-
-        void onLoadComplete();
-
-        void onLoadFailure(@NonNull Exception e);
-
-        void onRotate(float currentAngle);
-
-        void onScale(float currentScale);
-
-    }
 
     public TransformImageView(Context context) {
         this(context, null);
@@ -95,16 +79,6 @@ public class TransformImageView extends AppCompatImageView {
         }
     }
 
-    /**
-     * Setter for {@link #mMaxBitmapSize} value.
-     * Be sure to call it before {@link #setImageURI(Uri)} or other image setters.
-     *
-     * @param maxBitmapSize - max size for both width and height of bitmap that will be used in the view.
-     */
-    public void setMaxBitmapSize(int maxBitmapSize) {
-        mMaxBitmapSize = maxBitmapSize;
-    }
-
     public int getMaxBitmapSize() {
         if (mMaxBitmapSize <= 0) {
             int width = ZixieContext.INSTANCE.getScreenWidth();
@@ -130,6 +104,15 @@ public class TransformImageView extends AppCompatImageView {
         return mMaxBitmapSize;
     }
 
+    /**
+     * Setter for {@link #mMaxBitmapSize} value.
+     * Be sure to call it before {@link #setImageURI(Uri)} or other image setters.
+     *
+     * @param maxBitmapSize - max size for both width and height of bitmap that will be used in the view.
+     */
+    public void setMaxBitmapSize(int maxBitmapSize) {
+        mMaxBitmapSize = maxBitmapSize;
+    }
 
     @Override
     public void setImageBitmap(final Bitmap bitmap) {
@@ -182,8 +165,13 @@ public class TransformImageView extends AppCompatImageView {
                 if (exifTranslation != 1) {
                     matrix.postScale(exifTranslation, 1);
                 }
-                Bitmap decodeSampledBitmap = BitmapUtil.getLocalBitmap(getContext().getContentResolver(), imageUri,
-                        maxBitmapSize, maxBitmapSize);
+//                Bitmap decodeSampledBitmap = BitmapUtil.getLocalBitmap(getContext().getContentResolver(), imageUri,
+//                        maxBitmapSize, maxBitmapSize);
+                Bitmap bitmap = BitmapUtil.getLocalBitmap(getContext().getContentResolver(), imageUri, maxBitmapSize,
+                        maxBitmapSize);
+                Bitmap decodeSampledBitmap = BitmapUtil.resizeAndCenterBitmap(bitmap,
+                        Math.min(bitmap.getWidth(), maxBitmapSize), Math.min(bitmap.getHeight(), maxBitmapSize),
+                        Color.WHITE, ScaleToFit.CENTER);
                 if (!matrix.isIdentity()) {
                     setImageBitmap(BitmapTransUtils.transformBitmap(decodeSampledBitmap, matrix));
                 }
@@ -205,8 +193,9 @@ public class TransformImageView extends AppCompatImageView {
      * This method calculates scale value for given Matrix object.
      */
     public float getMatrixScale(@NonNull Matrix matrix) {
-        return (float) Math.sqrt(Math.pow(getMatrixValue(matrix, Matrix.MSCALE_X), 2)
-                + Math.pow(getMatrixValue(matrix, Matrix.MSKEW_Y), 2));
+        return (float) Math.sqrt(
+                Math.pow(getMatrixValue(matrix, Matrix.MSCALE_X), 2) + Math.pow(getMatrixValue(matrix, Matrix.MSKEW_Y),
+                        2));
     }
 
     /**
@@ -220,8 +209,8 @@ public class TransformImageView extends AppCompatImageView {
      * This method calculates rotation angle for given Matrix object.
      */
     public float getMatrixAngle(@NonNull Matrix matrix) {
-        return (float) -(Math.atan2(getMatrixValue(matrix, Matrix.MSKEW_X),
-                getMatrixValue(matrix, Matrix.MSCALE_X)) * (180 / Math.PI));
+        return (float) -(Math.atan2(getMatrixValue(matrix, Matrix.MSKEW_X), getMatrixValue(matrix, Matrix.MSCALE_X)) * (
+                180 / Math.PI));
     }
 
     @Override
@@ -368,6 +357,21 @@ public class TransformImageView extends AppCompatImageView {
     private void updateCurrentImagePoints() {
         mCurrentImageMatrix.mapPoints(mCurrentImageCorners, mInitialImageCorners);
         mCurrentImageMatrix.mapPoints(mCurrentImageCenter, mInitialImageCenter);
+    }
+
+    /**
+     * Interface for rotation and scale change notifying.
+     */
+    public interface TransformImageListener {
+
+        void onLoadComplete();
+
+        void onLoadFailure(@NonNull Exception e);
+
+        void onRotate(float currentAngle);
+
+        void onScale(float currentScale);
+
     }
 
 }

@@ -200,7 +200,6 @@ class DebugPhotosFragment : DebugCommonFragment() {
                                 CropConstants.GESTURE_TYPES_SCALE
                             )
                             setFreeStyleCropType(OverlayView.FREESTYLE_CROP_MODE_ENABLE_WITH_PASS_THROUGH)
-                            setHideBottomControls(true)
                         })
                     } else {
                         showResult("图片地址:" + Media.uriToFile(activity!!, data.getData()).absolutePath)

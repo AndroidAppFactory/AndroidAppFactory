@@ -98,7 +98,7 @@ public class CropUtils {
     }
 
     public static void startCrop(Fragment fragment, int requestCode, Uri source, Options options) {
-        Intent cropIntent = getCropIntent(fragment.getActivity().getApplicationContext(), source, options);
+        Intent cropIntent = getCropIntent(fragment.getContext(), source, options);
         fragment.startActivityForResult(cropIntent, requestCode);
     }
 

@@ -3,11 +3,14 @@ package com.bihe0832.android.lib.qrcode;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import androidx.annotation.NonNull;
 import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
@@ -22,6 +25,7 @@ import java.util.Map;
  *         Description: Description
  */
 public final class QRCodeDecodingHandler {
+
     public static final Map<DecodeHintType, Object> HINTS = new EnumMap<>(DecodeHintType.class);
 
     static {
@@ -56,26 +60,72 @@ public final class QRCodeDecodingHandler {
         return decodeQRcode(BitmapUtil.getLocalBitmap(context, uri, width, width));
     }
 
+
     public static Result decodeQRcode(Bitmap bitmap) {
-        com.google.zxing.RGBLuminanceSource source = null;
+        return decodeQRcode(getRGBLuminanceSource(bitmap), HINTS);
+    }
+
+    public static Result decodeQRcode(Bitmap bitmap, Map<DecodeHintType, Object> hints) {
         try {
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-            int[] pixels = new int[width * height];
-            bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-            source = new com.google.zxing.RGBLuminanceSource(width, height, pixels);
-            return new MultiFormatReader().decode(new BinaryBitmap(new HybridBinarizer(source)), HINTS);
+            return decodeQRcode(getRGBLuminanceSource(bitmap), hints);
         } catch (Exception e) {
             e.printStackTrace();
-            if (source != null) {
-                try {
-                    return new MultiFormatReader().decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)),
-                            HINTS);
-                } catch (Throwable e2) {
-                    e2.printStackTrace();
-                }
-            }
-            return null;
         }
+        return null;
+    }
+
+    public static Result decodeQRcode(LuminanceSource source, Map<DecodeHintType, Object> hints) {
+        Result result = null;
+        MultiFormatReader reader = new MultiFormatReader();
+        try {
+            reader.setHints(hints);
+            result = decodeQRcode(reader, source);
+            if (result == null) {
+                result = decodeQRcode(reader, source.invert());
+            }
+            if (result == null && source.isRotateSupported()) {
+                result = decodeQRcode(reader, source.rotateCounterClockwise());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            reader.reset();
+        }
+        return result;
+    }
+
+    private static Result decodeQRcode(MultiFormatReader reader, LuminanceSource source) {
+        Result result = null;
+        try {
+            try {
+                //采用HybridBinarizer解析
+                result = reader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
+            } catch (Exception e) {
+
+            }
+            if (result == null) {
+                //如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
+                result = reader.decodeWithState(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 获取RGBLuminanceSource
+     *
+     * @param bitmap
+     * @return
+     */
+    private static RGBLuminanceSource getRGBLuminanceSource(@NonNull Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int[] pixels = new int[width * height];
+        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        return new RGBLuminanceSource(width, height, pixels);
+
     }
 }

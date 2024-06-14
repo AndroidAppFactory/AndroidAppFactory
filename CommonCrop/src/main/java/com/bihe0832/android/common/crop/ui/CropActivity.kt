@@ -372,7 +372,8 @@ class CropActivity : BaseActivity() {
                     R.id.ucrop,
                     ConstraintSet.BOTTOM,
                     R.id.crop_toolbar,
-                    ConstraintSet.TOP
+                    ConstraintSet.TOP,
+                    0
                 )
             } else {
                 connect(
@@ -393,7 +394,7 @@ class CropActivity : BaseActivity() {
                     ConstraintSet.TOP,
                     R.id.crop_toolbar,
                     ConstraintSet.BOTTOM,
-                    resources.getDimension(R.dimen.toolbar_padding_top).toInt()
+                    0
                 )
             }
         }.applyTo(findViewById(R.id.crop_page))
@@ -402,9 +403,7 @@ class CropActivity : BaseActivity() {
     private fun initiateRootViews(intent: Intent) {
         mCropView = findViewById(R.id.ucrop)
         mOverlayView = mCropView!!.overlayView
-        mOverlayView!!.setFreestyleCropMode(
-            intent.getIntExtra(CropUtils.Options.EXTRA_FREE_STYLE_CROP, OverlayView.DEFAULT_FREESTYLE_CROP_MODE)
-        )
+
         mOverlayView!!.setDimmedColor(resources.getColor(R.color.crop_color_default_dimmed))
         mOverlayView!!.setCircleDimmedLayer(
             intent.getBooleanExtra(
@@ -491,6 +490,11 @@ class CropActivity : BaseActivity() {
         if (maxSizeX > 0 && maxSizeY > 0) {
             mGestureCropImageView!!.setMaxResultImageSizeX(maxSizeX)
             mGestureCropImageView!!.setMaxResultImageSizeY(maxSizeY)
+        }
+
+        intent.getIntExtra(CropUtils.Options.EXTRA_FREE_STYLE_CROP, OverlayView.DEFAULT_FREESTYLE_CROP_MODE).let {
+            mOverlayView!!.setFreestyleCropMode(it)
+            mGestureCropImageView!!.setFreestyleCropMode(it)
         }
     }
 

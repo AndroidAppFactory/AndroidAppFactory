@@ -10,8 +10,8 @@
     <dimen name="crop_default_crop_rect_corner_touch_threshold">30dp</dimen>
     <dimen name="crop_default_crop_rect_min_size">100dp</dimen>
     <dimen name="crop_default_crop_rect_corner_touch_area_line_length">16dp</dimen>
-    <color name="crop_color_default_dimmed">#80000000</color>
-
+    <color name="crop_color_default_dimmed">#A6000000</color>
+    <color name="crop_color_press_dimmed">#1A000000</color>
 
     <!--uCrop Activity-->
     <dimen name="crop_page_padding">28dp</dimen>
