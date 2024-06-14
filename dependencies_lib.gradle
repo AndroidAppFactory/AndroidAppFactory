@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.10.2",
+                "version"            : "6.10.3",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -35,7 +35,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "Router"                    : [
-                "version"            : "6.10.0",
+                "version"            : "6.10.3",
                 "artifactId"         : "lib-router",
                 "apidependenciesList": [
                         project.androidsupport.fragment,
@@ -278,7 +278,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibCrop"                   : [
-                "version"            : "6.6.16",
+                "version"            : "6.10.3",
                 "artifactId"         : "lib-crop",
                 "apidependenciesList": [
 
@@ -336,7 +336,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibQRCode"                 : [
-                "version"            : "6.10.0",
+                "version"            : "6.10.3",
                 "artifactId"         : "lib-qrcode",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
