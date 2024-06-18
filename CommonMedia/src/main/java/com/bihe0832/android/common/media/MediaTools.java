@@ -6,7 +6,7 @@ import android.text.Layout;
 import com.bihe0832.android.common.video.FFmpegTools;
 import com.bihe0832.android.framework.file.AAFFileWrapper;
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback;
-import com.bihe0832.android.lib.media.image.BitmapUtil;
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil;
 import com.bihe0832.android.lib.media.image.TextToImageUtils;
 import java.util.List;
 

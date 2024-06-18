@@ -7,7 +7,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.utils.os.BuildUtils
 
 fun AppCompatActivity.getStatusBarColorBySpecialPostion(): String {

@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import androidx.exifinterface.media.ExifInterface;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.media.image.BitmapUtil;
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;

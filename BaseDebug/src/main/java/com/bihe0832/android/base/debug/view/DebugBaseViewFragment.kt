@@ -16,7 +16,7 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.media.Media
-import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.view.ext.ViewCaptureLayout
 import com.bihe0832.android.lib.utils.time.DateUtil

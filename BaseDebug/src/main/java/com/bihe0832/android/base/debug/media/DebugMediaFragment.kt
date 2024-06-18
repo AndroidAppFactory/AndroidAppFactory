@@ -22,7 +22,7 @@ import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.media.Media
-import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.media.image.TextToImageUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 

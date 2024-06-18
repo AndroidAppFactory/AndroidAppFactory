@@ -16,7 +16,7 @@ import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.Media
-import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.media.image.loadImage
 
 public class DebugImageFragment : BaseFragment() {

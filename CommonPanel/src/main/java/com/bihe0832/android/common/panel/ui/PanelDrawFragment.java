@@ -7,7 +7,7 @@ import com.bihe0832.android.common.panel.R;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.media.Media;
-import com.bihe0832.android.lib.media.image.BitmapUtil;
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil;
 import com.bihe0832.android.lib.panel.PanelManager;
 import com.bihe0832.android.lib.panel.constants.DrawEvent;
 import com.bihe0832.android.lib.panel.event.DrawEventLiveData;

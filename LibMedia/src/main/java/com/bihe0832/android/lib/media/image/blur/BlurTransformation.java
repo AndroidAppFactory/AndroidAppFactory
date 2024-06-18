@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.renderscript.RSRuntimeException;
 
+import com.bihe0832.android.lib.media.image.bitmap.FastBlur;
+import com.bihe0832.android.lib.media.image.bitmap.RSBlur;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;

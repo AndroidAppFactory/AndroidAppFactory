@@ -14,17 +14,17 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
-                        "CommonPanel", "CommonMedia", "CommonCrop"
+                        "CommonPanel", "CommonMedia", "CommonNetwork"
                 ]
         ],
         "CommonWrapperMin"      : [
                 "version"            : "6.10.3",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
-                        "CommonFeedback", "CommonSplash", "CommonWebview", "CommonNetwork",
-                        "CommonPraise", "CommonAbout", "CommonList", "CommonBottomTab",
-                        "CommonNavigationDrawer", "CommonShare", "CommonMessage", "CommonQRCode",
-                        "CommonPermission", "CommonPhotos",
+                        "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
+                        "CommonList", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare",
+                        "CommonMessage", "CommonPermission", "CommonPhotos", "CommonCrop",
+                        "CommonQRCode", "CommonWebview"
                 ]
         ],
         "Framework"             : [
@@ -47,10 +47,10 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonQRCode"          : [
-                "version"            : "6.10.3",
-                "artifactId"         : "common-qrcode",
-                "apidependenciesList": [
-                        "CommonPhotos"
+                "version"                : "6.10.3",
+                "artifactId"             : "common-qrcode",
+                "apidependenciesList"    : [
+                        "CommonPhotos", "LibCameraScan"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
@@ -64,9 +64,9 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonShare"           : [
-                "version"            : "6.10.3",
-                "artifactId"         : "common-share",
-                "apidependenciesList": [
+                "version"                : "6.10.3",
+                "artifactId"             : "common-share",
+                "apidependenciesList"    : [
                         "Framework"
                 ],
                 "specialdependenciesList": [
@@ -96,9 +96,9 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonAceEditor"       : [
-                "version"            : "6.10.3",
-                "artifactId"         : "common-ace-editor",
-                "apidependenciesList": [
+                "version"                : "6.10.3",
+                "artifactId"             : "common-ace-editor",
+                "apidependenciesList"    : [
                         "Framework", "LibAceEditor"
                 ],
                 "specialdependenciesList": [
@@ -153,7 +153,7 @@ ext.commonmoduleInfo = [
         "CommonFeedback"        : [
                 "version"                : "6.10.3",
                 "artifactId"             : "common-feedback",
-                "apidependenciesList": ["CommonWebview"
+                "apidependenciesList"    : ["CommonWebview"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]

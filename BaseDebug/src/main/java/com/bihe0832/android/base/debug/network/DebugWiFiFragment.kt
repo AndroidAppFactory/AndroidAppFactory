@@ -20,7 +20,7 @@ import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.ConvertUtils
@@ -53,7 +53,7 @@ class DebugWiFiFragment : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.qrcode_scan).setOnClickListener {
-            QrcodeUtils.openQrScan(activity, true, true)
+            QrcodeUtils.openQrScan(activity, true, true, true)
         }
 
         view.findViewById<View>(R.id.wifi_dric).setOnClickListener {

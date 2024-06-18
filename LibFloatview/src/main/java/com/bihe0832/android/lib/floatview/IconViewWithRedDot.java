@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import com.bihe0832.android.lib.aaf.tools.AAFException;
-import com.bihe0832.android.lib.media.image.BitmapUtil;
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 public class IconViewWithRedDot extends IconView {

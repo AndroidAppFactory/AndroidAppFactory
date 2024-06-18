@@ -533,5 +533,18 @@ ext.libmoduleInfo = [
                         project.androidsupport.annotation,
                         "LibColor", "LibGson"
                 ]
+        ],
+        "LibCameraScan"             : [
+                "version"            : "6.10.3",
+                "artifactId"         : "lib-camera-scan",
+                "apidependenciesList": [
+                        project.androidsupport.annotation,
+                        project.androidsupport.appcompat,
+                        project.androidsupport.camera_core,
+                        project.androidsupport.camera_camera2,
+                        project.androidsupport.camera_camerax,
+                        project.androidsupport.camera_view,
+                        "LibCommonUtils", "LibMedia", "LibQRCode", "LibDeviceNetwork"
+                ]
         ]
 ]

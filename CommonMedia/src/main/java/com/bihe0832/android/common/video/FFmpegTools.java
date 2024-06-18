@@ -1,6 +1,5 @@
 package com.bihe0832.android.common.video;
 
-import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.FFmpeg;
@@ -9,7 +8,6 @@ import com.bihe0832.android.framework.file.AAFFileWrapper;
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.log.ZLog;
-import com.bihe0832.android.lib.media.image.BitmapUtil;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5;

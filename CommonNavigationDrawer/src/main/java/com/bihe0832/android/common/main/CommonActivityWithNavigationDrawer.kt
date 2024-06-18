@@ -42,11 +42,11 @@ open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
         }
     }
 
-    fun showQrcodeScan(needSound: Boolean, needVibrate: Boolean) {
+    fun showQrcodeScan(needSound: Boolean, needVibrate: Boolean, onlyQRCode: Boolean) {
         findViewById<ImageView>(R.id.title_scan).apply {
             visibility = View.VISIBLE
             setOnClickListener {
-                QrcodeUtils.openQrScanAndParse(needSound, needVibrate)
+                QrcodeUtils.openQrScanAndParse(needSound, needVibrate, onlyQRCode)
             }
         }
     }

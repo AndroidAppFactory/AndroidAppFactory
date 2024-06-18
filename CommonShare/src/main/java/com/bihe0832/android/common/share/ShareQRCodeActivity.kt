@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.media.Media
-import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.qrcode.QRCodeEncodingHandler
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.theme.ThemeResourcesManager

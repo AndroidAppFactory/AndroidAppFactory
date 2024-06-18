@@ -95,7 +95,7 @@ open class BottomDialog : CommonDialog {
         val animatorSet = AnimatorSet()
         animatorSet.play(showAnimator).with(alphaAnimator)
         animatorSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
                 realDismiss()
             }

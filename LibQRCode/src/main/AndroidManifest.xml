@@ -1,4 +1,3 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.bihe0832.android.lib.qrcode">
+<manifest package="com.bihe0832.android.lib.qrcode">
 
 </manifest>

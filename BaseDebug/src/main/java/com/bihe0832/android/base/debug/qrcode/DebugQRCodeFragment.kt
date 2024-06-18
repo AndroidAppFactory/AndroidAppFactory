@@ -16,7 +16,7 @@ import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.router.shareByQrcode
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.media.Media
-import com.bihe0832.android.lib.media.image.BitmapUtil
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
@@ -56,11 +56,11 @@ class DebugQRCodeFragment : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.qrcode_scan).setOnClickListener {
-            QrcodeUtils.openQrScan(this@DebugQRCodeFragment, true, true)
+            QrcodeUtils.openQrScan(this@DebugQRCodeFragment, true, true,true)
         }
 
         view.findViewById<View>(R.id.qrcode_scan_parse).setOnClickListener {
-            QrcodeUtils.openQrScanAndParse(true, true)
+            QrcodeUtils.openQrScanAndParse(true, true,true)
         }
 
         view.findViewById<View>(R.id.qrcode_share).setOnClickListener {
@@ -97,7 +97,7 @@ class DebugQRCodeFragment : BaseFragment() {
                     val data = QrcodeUtils.decodeQRcode(it)
                     ThreadManager.getInstance().runOnUIThread {
                         rootview.findViewById<TextView>(R.id.qrcode_result).text =
-                            "源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data?.text
+                            ("源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data?.text)
                                 ?: ""
                     }
                 }

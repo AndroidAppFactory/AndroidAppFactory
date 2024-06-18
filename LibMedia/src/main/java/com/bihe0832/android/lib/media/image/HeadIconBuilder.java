@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.media.R;
 import com.bumptech.glide.Glide;

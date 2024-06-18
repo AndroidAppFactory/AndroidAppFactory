@@ -4,8 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import androidx.annotation.NonNull;
-import com.bihe0832.android.lib.media.image.BitmapUtil;
-import com.google.zxing.BarcodeFormat;
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
@@ -14,9 +13,7 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
+import com.google.zxing.qrcode.QRCodeReader;
 import java.util.Map;
 
 /**
@@ -26,65 +23,75 @@ import java.util.Map;
  */
 public final class QRCodeDecodingHandler {
 
-    public static final Map<DecodeHintType, Object> HINTS = new EnumMap<>(DecodeHintType.class);
-
-    static {
-        List<BarcodeFormat> allFormats = new ArrayList<>();
-        allFormats.add(BarcodeFormat.AZTEC);
-        allFormats.add(BarcodeFormat.CODABAR);
-        allFormats.add(BarcodeFormat.CODE_39);
-        allFormats.add(BarcodeFormat.CODE_93);
-        allFormats.add(BarcodeFormat.CODE_128);
-        allFormats.add(BarcodeFormat.DATA_MATRIX);
-        allFormats.add(BarcodeFormat.EAN_8);
-        allFormats.add(BarcodeFormat.EAN_13);
-        allFormats.add(BarcodeFormat.ITF);
-        allFormats.add(BarcodeFormat.MAXICODE);
-        allFormats.add(BarcodeFormat.PDF_417);
-        allFormats.add(BarcodeFormat.QR_CODE);
-        allFormats.add(BarcodeFormat.RSS_14);
-        allFormats.add(BarcodeFormat.RSS_EXPANDED);
-        allFormats.add(BarcodeFormat.UPC_A);
-        allFormats.add(BarcodeFormat.UPC_E);
-        allFormats.add(BarcodeFormat.UPC_EAN_EXTENSION);
-        HINTS.put(DecodeHintType.TRY_HARDER, BarcodeFormat.QR_CODE);
-        HINTS.put(DecodeHintType.POSSIBLE_FORMATS, allFormats);
-        HINTS.put(DecodeHintType.CHARACTER_SET, "UTF-8");
+    public static Result decodeCode(String filePath, int width, int height) {
+        return decodeCode(BitmapUtil.getLocalBitmap(filePath, width, height));
     }
 
-    public static Result decodeQRcode(String filePath, int width) {
-        return decodeQRcode(BitmapUtil.getLocalBitmap(filePath, width, width));
+    public static Result decodeQRCode(String filePath, int width, int height) {
+        return decodeQRCode(BitmapUtil.getLocalBitmap(filePath, width, height));
     }
 
-    public static Result decodeQRcode(Context context, Uri uri, int width) {
-        return decodeQRcode(BitmapUtil.getLocalBitmap(context, uri, width, width));
+    public static Result decodeCode(Context context, Uri uri, int width, int height) {
+        return decodeCode(BitmapUtil.getLocalBitmap(context, uri, width, height));
     }
 
-
-    public static Result decodeQRcode(Bitmap bitmap) {
-        return decodeQRcode(getRGBLuminanceSource(bitmap), HINTS);
+    public static Result decodeQRCode(Context context, Uri uri, int width, int height) {
+        return decodeQRCode(BitmapUtil.getLocalBitmap(context, uri, width, height));
     }
 
-    public static Result decodeQRcode(Bitmap bitmap, Map<DecodeHintType, Object> hints) {
+    public static Result decodeCode(Bitmap bitmap) {
+        return decodeCode(getRGBLuminanceSource(bitmap), DecodeFormatManager.ALL_HINTS);
+    }
+
+    public static Result decodeQRCode(Bitmap bitmap) {
+        return decodeQRCode(getRGBLuminanceSource(bitmap));
+    }
+
+    public static Result decodeCode(Bitmap bitmap, Map<DecodeHintType, Object> hints) {
         try {
-            return decodeQRcode(getRGBLuminanceSource(bitmap), hints);
+            return decodeCode(getRGBLuminanceSource(bitmap), hints);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static Result decodeQRcode(LuminanceSource source, Map<DecodeHintType, Object> hints) {
+    public static Result decodeCode(LuminanceSource source, Map<DecodeHintType, Object> hints) {
         Result result = null;
         MultiFormatReader reader = new MultiFormatReader();
         try {
             reader.setHints(hints);
-            result = decodeQRcode(reader, source);
+            result = decodeCode(reader, source, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            reader.reset();
+        }
+        return result;
+    }
+
+    public static Result decodeQRCode(LuminanceSource source) {
+        Result result = null;
+        QRCodeReader reader = new QRCodeReader();
+        try {
+            result = decodeQRCode(reader, source, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            reader.reset();
+        }
+        return result;
+    }
+
+    public static Result decodeCode(MultiFormatReader reader, LuminanceSource source, boolean isMultiDecode) {
+        Result result = null;
+        try {
+            result = decodeOnce(reader, source, isMultiDecode);
             if (result == null) {
-                result = decodeQRcode(reader, source.invert());
+                result = decodeOnce(reader, source.invert(), isMultiDecode);
             }
             if (result == null && source.isRotateSupported()) {
-                result = decodeQRcode(reader, source.rotateCounterClockwise());
+                result = decodeOnce(reader, source.rotateCounterClockwise(), isMultiDecode);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,18 +101,55 @@ public final class QRCodeDecodingHandler {
         return result;
     }
 
-    private static Result decodeQRcode(MultiFormatReader reader, LuminanceSource source) {
+    public static Result decodeQRCode(QRCodeReader reader, LuminanceSource source, boolean isMultiDecode) {
+        Result result = null;
+        try {
+            result = decodeOnce(reader, source, isMultiDecode);
+            if (result == null) {
+                result = decodeOnce(reader, source.invert(), isMultiDecode);
+            }
+            if (result == null && source.isRotateSupported()) {
+                result = decodeOnce(reader, source.rotateCounterClockwise(), isMultiDecode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            reader.reset();
+        }
+        return result;
+    }
+
+    public static Result decodeOnce(MultiFormatReader reader, LuminanceSource source, boolean isMultiDecode) {
         Result result = null;
         try {
             try {
                 //采用HybridBinarizer解析
                 result = reader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
-            if (result == null) {
+            if (isMultiDecode && result == null) {
                 //如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
                 result = reader.decodeWithState(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static Result decodeOnce(QRCodeReader reader, LuminanceSource source, boolean isMultiDecode) {
+        Result result = null;
+        try {
+            try {
+                //采用HybridBinarizer解析
+                result = reader.decode(new BinaryBitmap(new HybridBinarizer(source)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (isMultiDecode && result == null) {
+                //如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
+                result = reader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,13 +163,14 @@ public final class QRCodeDecodingHandler {
      * @param bitmap
      * @return
      */
-    private static RGBLuminanceSource getRGBLuminanceSource(@NonNull Bitmap bitmap) {
+    public static RGBLuminanceSource getRGBLuminanceSource(@NonNull Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
         int[] pixels = new int[width * height];
         bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
         return new RGBLuminanceSource(width, height, pixels);
-
     }
+
+
 }

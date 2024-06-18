@@ -17,7 +17,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  **/
-ext.developModule = "Application"
+ext.developModule = "Router,LibCommonUtils,LibMedia,LibQRCode"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -36,25 +36,40 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "6.10.3"
+ext.moduleVersionName = "6.11.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
 
-        "APPTest"    : ["version"                : "",
-                        "artifactId"             : "",
-                        "apidependenciesList"    : ["Application", "BaseDebug"],
-                        "specialdependenciesList": ["kapt": ["RouterCompiler"]]],
-        "BaseDebug"  : ["version"            : "",
-                        "artifactId"         : "",
-                        "apidependenciesList": ["Application", "CommonDebug", "CommonTBSFeedback"]],
-        "Application": ["version"                : "",
-                        "artifactId"             : "",
-                        "apidependenciesList"    : [
-                                "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper"
-                        ],
-                        "specialdependenciesList": ["kapt"               : ["RouterCompiler"],
-                                                    "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"],]]]
+        "APPTest"    : [
+                "version"                : "",
+                "artifactId"             : "",
+                "apidependenciesList"    : [
+                        "Application", "BaseDebug"
+                ],
+                "specialdependenciesList": [
+                        "kapt": ["RouterCompiler"]
+                ]
+        ],
+        "BaseDebug"  : [
+                "version"            : "",
+                "artifactId"         : "",
+                "apidependenciesList": [
+                        "Application", "CommonDebug", "CommonTBSFeedback"
+                ]
+        ],
+        "Application": [
+                "version"                : "",
+                "artifactId"             : "",
+                "apidependenciesList"    : [
+                        "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper"
+                ],
+                "specialdependenciesList": [
+                        "kapt"               : ["RouterCompiler"],
+                        "debugImplementation": ["com.squareup.leakcanary:leakcanary-android:2.11"]
+                ]
+        ]
+]
 
 ext.moduleInfo = ext.coremoduleInfo + ext.libmoduleInfo + ext.tbsmoduleInfo + ext.commonmoduleInfo + ext.widgetmoduleInfo + ext.kitmoduleInfo
 

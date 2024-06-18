@@ -1,12 +1,12 @@
 package com.bihe0832.android.lib.router;
 
 import android.app.Activity;
-import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import androidx.fragment.app.Fragment;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -209,14 +209,15 @@ public class Routers {
                         }
                     } else {
                         if (null != fragment) {
-                            context.startActivity(intent);
+                            fragment.startActivity(intent);
                         } else {
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                         }
-
                     }
                     return true;
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return false;
                 }
             }
@@ -240,14 +241,15 @@ public class Routers {
                     }
                 } else {
                     if (null != fragment) {
-                        context.startActivity(intent);
+                        fragment.startActivity(intent);
                     } else {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
-
                 }
                 return true;
             } catch (Exception e) {
+                e.printStackTrace();
                 return false;
             }
         }
