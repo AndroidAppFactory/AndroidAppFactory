@@ -1,9 +1,13 @@
 package com.bihe0832.android.base.debug.empty
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import com.bihe0832.android.base.debug.R
+import com.bihe0832.android.common.qrcode.QrcodeUtils
 import com.bihe0832.android.common.share.ShareBaseActivity
+import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.loadCenterInsideImage
 
 class DebugBottomActivity : ShareBaseActivity() {
@@ -18,7 +22,7 @@ class DebugBottomActivity : ShareBaseActivity() {
     }
 
     override fun onShareToQQSessionBtnClick() {
-
+        QrcodeUtils.openQrScan(this, true, true, true)
     }
 
     override fun onShareToQZoneBtnClick() {
@@ -39,6 +43,13 @@ class DebugBottomActivity : ShareBaseActivity() {
 
     override fun showSavePic(): Boolean {
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ZixieActivityRequestCode.QRCODE_SCAN){
+            ZLog.d("ffdf:" + data?.getStringExtra(ZixieActivityRequestCode.INTENT_EXTRA_KEY_QR_SCAN))
+        }
     }
 }
 

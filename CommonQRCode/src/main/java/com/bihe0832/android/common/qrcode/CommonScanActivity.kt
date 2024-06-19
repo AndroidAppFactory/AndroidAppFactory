@@ -40,7 +40,6 @@ open class CommonScanActivity : BaseScanActivity() {
     }
 
     override fun startCamera() {
-
         if (PermissionManager.isAllPermissionOK(this, Manifest.permission.CAMERA)) {
             startScanAction()
         } else if (!userDeny) {

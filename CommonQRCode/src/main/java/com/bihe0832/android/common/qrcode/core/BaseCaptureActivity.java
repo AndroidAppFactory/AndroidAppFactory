@@ -99,6 +99,7 @@ public abstract class BaseCaptureActivity extends BaseActivity {
             flashlightView.setOnClickListener(v -> onClickFlashlight());
         }
         initCameraScan();
+        startCamera();
     }
 
     /**
@@ -106,8 +107,6 @@ public abstract class BaseCaptureActivity extends BaseActivity {
      */
     public void initCameraScan() {
         mCameraScan = createCameraScan();
-        //二维码太小时可自动缩放，默认为false
-        mCameraScan.setNeedAutoZoom(true);
         //设置分析器,如果内置实现的一些分析器不满足您的需求，你也可以自定义去实现
         mCameraScan.setAnalyzer(createAnalyzer());
         mCameraScan.setOnScanResultCallback(getOnScanResultCallback());

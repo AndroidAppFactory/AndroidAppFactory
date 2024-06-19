@@ -197,21 +197,28 @@ public class Routers {
                     intent.putExtras(parseExtras(uri));
                     intent.putExtra(ROUTERS_KEY_RAW_URL, uri.toString());
                     intent.putExtra(ROUTERS_KEY_PARSE_SOURCE_KEY, source);
-                    if (startFlag > 0) {
-                        intent.addFlags(startFlag);
+                    if (!(context instanceof Activity)) {
+                        if (startFlag > 0) {
+                            intent.addFlags(startFlag);
+                        }
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     }
                     if (requestCode >= 0) {
                         if (null != fragment) {
                             fragment.startActivityForResult(intent, requestCode);
-                        } else {
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        } else if (null != activity) {
                             activity.startActivityForResult(intent, requestCode);
+                        } else if (context instanceof Activity) {
+                            ((Activity) context).startActivityForResult(intent, requestCode);
+                        } else {
+                            throw new RuntimeException("can not startActivityForResult context " + context);
                         }
                     } else {
                         if (null != fragment) {
                             fragment.startActivity(intent);
+                        } else if (null != activity) {
+                            activity.startActivity(intent);
                         } else {
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startActivity(intent);
                         }
                     }
@@ -228,22 +235,22 @@ public class Routers {
                 intent.setComponent(null);
                 intent.setSelector(null);
                 System.out.println("jumpToOtherApp url:" + uri.toString() + ",intent:" + intent.toString());
-                if (startFlag > 0) {
-                    intent.addFlags(startFlag);
+                if (!(context instanceof Activity)) {
+                    if (startFlag > 0) {
+                        intent.addFlags(startFlag);
+                    }
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 }
-
                 if (requestCode >= 0) {
                     if (null != fragment) {
                         fragment.startActivityForResult(intent, requestCode);
                     } else {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         activity.startActivityForResult(intent, requestCode);
                     }
                 } else {
                     if (null != fragment) {
                         fragment.startActivity(intent);
                     } else {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }
                 }
