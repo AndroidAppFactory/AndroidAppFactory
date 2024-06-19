@@ -27,6 +27,7 @@ import com.bihe0832.android.lib.utils.time.TimeUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Arrays
+import java.util.Locale
 
 class DebugConvertFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -45,11 +46,25 @@ class DebugConvertFragment : DebugEnvFragment() {
             add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
             add(DebugItemData("时间数据格式化", View.OnClickListener { testFormat() }))
             add(DebugItemData("版本号比较", View.OnClickListener { testVersion() }))
+
+            add(DebugItemData("坐标映射", View.OnClickListener { testPoint() }))
         }
     }
 
     private fun testToByte() {
-        mutableListOf("1", "-1", "4294967298", "100", "-100", "2147483647", "3147483647", "3456788147483647","899167231","8589934590","8589934591").forEach {
+        mutableListOf(
+            "1",
+            "-1",
+            "4294967298",
+            "100",
+            "-100",
+            "2147483647",
+            "3147483647",
+            "3456788147483647",
+            "899167231",
+            "8589934590",
+            "8589934591"
+        ).forEach {
             testToByte(it)
         }
     }
@@ -65,8 +80,7 @@ class DebugConvertFragment : DebugEnvFragment() {
             intValue.toLong().let {
                 ZLog.d(LOG_TAG, "parseInt kotlin toLong: $it")
                 ZLog.d(
-                    LOG_TAG,
-                    "parseInt kotlin toLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
+                    LOG_TAG, "parseInt kotlin toLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(it))}"
                 )
             }
 
@@ -80,8 +94,7 @@ class DebugConvertFragment : DebugEnvFragment() {
                     longValue.toInt().let {
                         ZLog.d(LOG_TAG, "parseInt getUnsignedInt(long) kotlin toInt: $it")
                         ZLog.d(
-                            LOG_TAG,
-                            "parseInt getUnsignedInt(long) kotlin toInt intToBytes: ${
+                            LOG_TAG, "parseInt getUnsignedInt(long) kotlin toInt intToBytes: ${
                                 Arrays.toString(
                                     ConvertUtils.intToBytes(
                                         it
@@ -115,15 +128,13 @@ class DebugConvertFragment : DebugEnvFragment() {
         ConvertUtils.parseLong(data, -1).let { longValue ->
             ZLog.d(LOG_TAG, "data parseLong: $longValue")
             ZLog.d(
-                LOG_TAG,
-                "data parseLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
+                LOG_TAG, "data parseLong longToBytes: ${Arrays.toString(ConvertUtils.longToBytes(longValue))}"
             )
             try {
                 longValue.toInt().let {
                     ZLog.d(LOG_TAG, "parseLong kotlin toInt: $it")
                     ZLog.d(
-                        LOG_TAG,
-                        "parseLong kotlin toInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(it))}"
+                        LOG_TAG, "parseLong kotlin toInt intToBytes: ${Arrays.toString(ConvertUtils.intToBytes(it))}"
                     )
                 }
                 longValue.toUInt().let {
@@ -145,8 +156,7 @@ class DebugConvertFragment : DebugEnvFragment() {
                     intValue.toLong().let {
                         ZLog.d(LOG_TAG, "parseLong longToIntWithLossOfPrecision kotlin toLong: $it")
                         ZLog.d(
-                            LOG_TAG,
-                            "parseLong longToIntWithLossOfPrecision kotlin toLong longToBytes: ${
+                            LOG_TAG, "parseLong longToIntWithLossOfPrecision kotlin toLong longToBytes: ${
                                 Arrays.toString(
                                     ConvertUtils.longToBytes(it)
                                 )
@@ -159,8 +169,7 @@ class DebugConvertFragment : DebugEnvFragment() {
                 ConvertUtils.getUnsignedInt(intValue).let {
                     ZLog.d(LOG_TAG, "parseLong longToIntWithLossOfPrecision getUnsignedInt(long): ${it}")
                     ZLog.d(
-                        LOG_TAG,
-                        "parseLong longToIntWithLossOfPrecision getUnsignedInt(long) longToBytes: ${
+                        LOG_TAG, "parseLong longToIntWithLossOfPrecision getUnsignedInt(long) longToBytes: ${
                             Arrays.toString(
                                 ConvertUtils.longToBytes(it)
                             )
@@ -182,7 +191,8 @@ class DebugConvertFragment : DebugEnvFragment() {
             ZLog.d(LOG_TAG, "JsonHelper: end $end; duration : ${end - start}")
         }
 
-        var list = "[" + "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," + "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," + "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," + "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," + "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," + "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," + "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," + "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" + "]"
+        var list =
+            "[" + "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," + "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," + "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," + "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," + "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," + "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," + "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," + "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" + "]"
 
         list.let {
             ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(it, JsonTest::class.java))
@@ -220,7 +230,9 @@ class DebugConvertFragment : DebugEnvFragment() {
     }
 
     private fun testFormat() {
-        mutableListOf(1645771904111, 1345775904112, 1625775904313, 1645775304114, 1645772904115, 1645772404116).forEach { data ->
+        mutableListOf(
+            1645771904111, 1345775904112, 1625775904313, 1645775304114, 1645772904115, 1645772404116
+        ).forEach { data ->
             ZLog.d(LOG_TAG, "DateEN $data trans result is:" + DateUtil.getDateEN(data))
             ZLog.d(LOG_TAG, "DateEN $data start is:" + DateUtil.getDayStartTimestamp(data))
             ZLog.d(LOG_TAG, "DateEN $data start is:" + DateUtil.getDateEN(DateUtil.getDayStartTimestamp(data)))
@@ -232,13 +244,28 @@ class DebugConvertFragment : DebugEnvFragment() {
 
         mutableListOf(1, 37, 67, 2434, 24064, 2403564).forEach {
             ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong()))
-            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, false))
-            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true))
-            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false))
-            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true))
+            ZLog.d(
+                LOG_TAG,
+                "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, false)
+            )
+            ZLog.d(
+                LOG_TAG,
+                "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), false, false, true)
+            )
+            ZLog.d(
+                LOG_TAG,
+                "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, false)
+            )
+            ZLog.d(
+                LOG_TAG,
+                "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsTo00(it.toLong(), true, true, true)
+            )
         }
         mutableListOf(1, 37, 67, 2434, 3600, 3602, 24064, 86400, 86440, 2403564).forEach {
-            ZLog.d(LOG_TAG, "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong()))
+            ZLog.d(
+                LOG_TAG,
+                "formatSecondsTo00 Value $it trans to :" + TimeUtil.formatSecondsToDurationDesc(context, it.toLong())
+            )
         }
 
         mutableListOf(2.6, 2.699, 2.722, 2.70, 2.73888888).forEach {
@@ -303,14 +330,54 @@ class DebugConvertFragment : DebugEnvFragment() {
         val v2_2 = "1.0.2.02"
         val v3 = "1.0.3"
 
-        ZLog.d(LOG_TAG, "$v1 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v1, v1))
-        ZLog.d(LOG_TAG, "$v1 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v1, v2))
-        ZLog.d(LOG_TAG, "$v2 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2, v1))
-        ZLog.d(LOG_TAG, "$v2_1 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2_1, v1))
-        ZLog.d(LOG_TAG, "$v2_1 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2_1, v2))
-        ZLog.d(LOG_TAG, "$v2_2 VS $v2_1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v2_2, v2_1))
-        ZLog.d(LOG_TAG, "$v3 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v3, v2))
-        ZLog.d(LOG_TAG, "$v3 VS $v2_2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(v3, v2_2))
+        ZLog.d(
+            LOG_TAG,
+            "$v1 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v1, v1
+            )
+        )
+        ZLog.d(
+            LOG_TAG,
+            "$v1 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v1, v2
+            )
+        )
+        ZLog.d(
+            LOG_TAG,
+            "$v2 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v2, v1
+            )
+        )
+        ZLog.d(
+            LOG_TAG,
+            "$v2_1 VS $v1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v2_1, v1
+            )
+        )
+        ZLog.d(
+            LOG_TAG,
+            "$v2_1 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v2_1, v2
+            )
+        )
+        ZLog.d(
+            LOG_TAG,
+            "$v2_2 VS $v2_1 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v2_2, v2_1
+            )
+        )
+        ZLog.d(
+            LOG_TAG,
+            "$v3 VS $v2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v3, v2
+            )
+        )
+        ZLog.d(
+            LOG_TAG,
+            "$v3 VS $v2_2 结果（版本一致 0，oldVersion 更高 1， newVersion 更高 2，无法比较 -1）:" + APKUtils.compareVersion(
+                v3, v2_2
+            )
+        )
     }
 
     fun testTree() {
@@ -338,4 +405,55 @@ class DebugConvertFragment : DebugEnvFragment() {
             ZLog.e("node is :$it")
         }
     }
+
+    fun testPoint() {
+        mutableListOf(0, 10, 50, 90, 100).forEach {
+            transform(it, 0, 100f, 100f, 100f, 100f, true)
+            transform(it, 0, 100f, 100f, 100f, 1000f, true)
+            transform(it, 0, 100f, 100f, 1000f, 100f, true)
+            transform(it, 0, 100f, 100f, 1000f, 1000f, true)
+
+            transform(0, it, 100f, 100f, 100f, 100f, true)
+            transform(0, it, 100f, 100f, 100f, 1000f, true)
+            transform(0, it, 100f, 100f, 1000f, 100f, true)
+            transform(0, it, 100f, 100f, 1000f, 1000f, true)
+
+            transform(it, it, 100f, 100f, 100f, 100f, true)
+            transform(it, it, 100f, 100f, 100f, 1000f, true)
+            transform(it, it, 100f, 100f, 1000f, 100f, true)
+            transform(it, it, 100f, 100f, 1000f, 1000f, true)
+        }
+    }
+
+    private fun transform(
+        x: Int,
+        y: Int,
+        srcWidth: Float,
+        srcHeight: Float,
+        destWidth: Float,
+        destHeight: Float,
+        isFit: Boolean
+    ) {
+//        val point = PointUtils.transform(x, y, srcWidth, srcHeight, destWidth, destHeight, isFit)
+        ZLog.d(
+            LOG_TAG,
+            String.format(
+                Locale.getDefault(),
+                "transform ( %d, %d ): %f,%f | %f,%f",
+                x,
+                y,
+                srcWidth,
+                srcHeight,
+                destWidth,
+                destHeight
+            )
+        )
+//        ZLog.d(
+//            LOG_TAG,
+//            String.format(
+//                Locale.getDefault(), "transform ( %d, %d ) : ( %d, %d )", x, y, point.x, point.y
+//            )
+//        )
+    }
+
 }

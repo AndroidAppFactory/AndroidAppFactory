@@ -56,9 +56,15 @@ public class CropView extends FrameLayout {
             public void onCropRectUpdated(RectF newCropRect) {
                 ZLog.d("CropView", "-----------");
                 float newAspectRatio = (newCropRect.right - newCropRect.left) / (newCropRect.bottom - newCropRect.top);
-                ZLog.d("CropView", "裁剪框 新的宽高比 newAspectRatio:" + newAspectRatio);
                 ZLog.d("CropView", "裁剪框 原有宽高比 newAspectRatio:" + mViewOverlay.getTargetAspectRatio());
-                if (floatEquals(mViewOverlay.getTargetAspectRatio(), newAspectRatio, 0.001f)) {
+                ZLog.d("CropView", "裁剪框 新的宽高比 newAspectRatio:" + newAspectRatio);
+                if (!floatEquals(mViewOverlay.getTargetAspectRatio(), newAspectRatio, 0.001f)) {
+                    ZLog.d("CropView", "裁剪框宽高比变化，记录调整后的截图框:" + newCropRect);
+                    postDelayed(() -> {
+                        lastCropRect = new RectF(newCropRect);
+                        mViewOverlay.setTargetAspectRatio(newAspectRatio);
+                    }, 200);
+                } else {
                     if (null != lastCropRect) {
                         ZLog.d("CropView", "上次比例变动前的 RectF:" + lastCropRect);
                         ZLog.d("CropView", "上次比例变动后的 RectF:" + newCropRect);
@@ -68,7 +74,7 @@ public class CropView extends FrameLayout {
                         float scaleY = (float) newCropRect.height() / lastCropRect.height();
                         ZLog.d("CropView", "从上次的 RectF 到本次 RectF 的 scaleX:" + scaleX + ",scaleY: " + scaleY);
 
-                        float scale = Math.max(scaleX, scaleY);
+                        float scale = Math.min(scaleX, scaleY);
                         ZLog.d("CropView", "从上次的 RectF 到本次 RectF 的 scale:" + scale);
                         // 新的宽高比
                         ZLog.d("CropView", "框宽高比一致，执行缩放截图:" + scale);
@@ -87,9 +93,13 @@ public class CropView extends FrameLayout {
                         ZLog.d("CropView", "缩放截图，页面中心坐标 X:" + centerX);
                         ZLog.d("CropView", "缩放截图，页面中心坐标 Y:" + centerY);
                         ZLog.d("CropView", "缩放截图，newCenterY 与 centerY 差额:" + (newCenterY - centerY));
-                        ZLog.d("CropView", "缩放截图，newCenterY 与 centerY 差额DP:" + DisplayUtil.px2dip(getContext(),(newCenterY - centerY)));
-                        ZLog.d("CropView", "缩放截图，getNavigationBarHeight 差额:" + (DisplayUtil.getNavigationBarHeight(getContext())));
-                        ZLog.d("CropView", "缩放截图，图片平移  mViewOverlay.getPaddingTop:" + mViewOverlay.getPaddingTop());
+                        ZLog.d("CropView", "缩放截图，newCenterY 与 centerY 差额DP:" + DisplayUtil.px2dip(getContext(),
+                                (newCenterY - centerY)));
+                        ZLog.d("CropView",
+                                "缩放截图，getNavigationBarHeight 差额:" + (DisplayUtil.getNavigationBarHeight(
+                                        getContext())));
+                        ZLog.d("CropView",
+                                "缩放截图，图片平移  mViewOverlay.getPaddingTop:" + mViewOverlay.getPaddingTop());
                         ZLog.d("CropView", "缩放截图，图片平移  getPaddingTop:" + getPaddingTop());
 
                         if (lastCropRect != null) {
@@ -105,13 +115,6 @@ public class CropView extends FrameLayout {
                             }, 200);
                         }
                     }
-                } else {
-                    ZLog.d("CropView", "裁剪框宽高比变化，记录调整后的截图框:" + newCropRect);
-                    postDelayed(() -> {
-                        lastCropRect = new RectF(newCropRect);
-                        mViewOverlay.setTargetAspectRatio(newAspectRatio);
-                    }, 200);
-
                 }
             }
         });
