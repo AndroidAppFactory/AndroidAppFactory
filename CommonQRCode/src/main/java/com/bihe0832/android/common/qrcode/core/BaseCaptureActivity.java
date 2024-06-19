@@ -27,7 +27,6 @@ import com.bihe0832.android.lib.camera.scan.CameraScan.OnScanResultCallback;
 import com.bihe0832.android.lib.camera.scan.DefaultCameraScan;
 import com.bihe0832.android.lib.camera.scan.analyze.Analyzer;
 import com.bihe0832.android.lib.camera.scan.analyze.MultiFormatAnalyzer;
-import com.bihe0832.android.lib.camera.scan.analyze.QRCodeAnalyzer;
 import com.bihe0832.android.lib.camera.scan.config.DecodeConfig;
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView;
 import com.bihe0832.android.lib.qrcode.DecodeFormatManager;
@@ -38,6 +37,7 @@ public abstract class BaseCaptureActivity extends BaseActivity {
     protected ViewfinderView viewfinderView;
     protected CheckedEnableImageView flashlightView;
     private CameraScan mCameraScan;
+    private boolean hasStopCamera = false;
 
     public abstract int getLayoutId();
 
@@ -130,6 +130,7 @@ public abstract class BaseCaptureActivity extends BaseActivity {
 
     public void stopCamera() {
         if (mCameraScan != null) {
+            hasStopCamera = true;
             mCameraScan.stopCamera();
         }
     }
@@ -164,7 +165,9 @@ public abstract class BaseCaptureActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startCamera();
+        if (hasStopCamera) {
+            startCamera();
+        }
     }
 
 
