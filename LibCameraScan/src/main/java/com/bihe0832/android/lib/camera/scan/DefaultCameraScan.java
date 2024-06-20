@@ -223,6 +223,7 @@ public class DefaultCameraScan extends CameraScan {
     @Override
     public void startCamera() {
         initConfig();
+        mLastAutoZoomTime = System.currentTimeMillis();
         mCameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
         mCameraProviderFuture.addListener(() -> {
 
