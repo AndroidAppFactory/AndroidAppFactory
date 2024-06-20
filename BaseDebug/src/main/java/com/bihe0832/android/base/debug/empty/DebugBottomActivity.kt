@@ -22,7 +22,7 @@ class DebugBottomActivity : ShareBaseActivity() {
     }
 
     override fun onShareToQQSessionBtnClick() {
-        QrcodeUtils.openQrScan(this, true, true, true)
+        QrcodeUtils.openQrScan(this)
     }
 
     override fun onShareToQZoneBtnClick() {

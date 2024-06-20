@@ -53,7 +53,7 @@ class DebugWiFiFragment : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.qrcode_scan).setOnClickListener {
-            QrcodeUtils.openQrScan(activity, true, true, true)
+            QrcodeUtils.openQrScan(this)
         }
 
         view.findViewById<View>(R.id.wifi_dric).setOnClickListener {

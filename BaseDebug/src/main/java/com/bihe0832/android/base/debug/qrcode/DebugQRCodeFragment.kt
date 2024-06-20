@@ -56,11 +56,11 @@ class DebugQRCodeFragment : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.qrcode_scan).setOnClickListener {
-            QrcodeUtils.openQrScan(this@DebugQRCodeFragment, true, true,true)
+            QrcodeUtils.openQrScan(this@DebugQRCodeFragment, true, true, true, true)
         }
 
         view.findViewById<View>(R.id.qrcode_scan_parse).setOnClickListener {
-            QrcodeUtils.openQrScanAndParse(true, true,false)
+            QrcodeUtils.openQrScanAndParse(true, true, false, false)
         }
 
         view.findViewById<View>(R.id.qrcode_share).setOnClickListener {

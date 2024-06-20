@@ -46,7 +46,7 @@ open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
         findViewById<ImageView>(R.id.title_scan).apply {
             visibility = View.VISIBLE
             setOnClickListener {
-                QrcodeUtils.openQrScanAndParse(needSound, needVibrate, onlyQRCode)
+                QrcodeUtils.openQrScanAndParse(needSound, needVibrate, onlyQRCode,true)
             }
         }
     }

@@ -30,12 +30,14 @@ public class BaseScanActivity extends BaseCaptureActivity {
     public static final int BITMAP_WIDTH = 600;
     private static final long VIBRATE_DURATION = 300L;
     private static final float BEEP_VOLUME = 0.80f;
-    private LoadingDialog mLoading = null;
-    private AudioPLayerManager blockAudioPlayerManager = null;
-
     protected boolean opensound = true;
     protected boolean openvibrate = true;
+    protected boolean autoZoom = false;
+
     protected boolean onlyQRCode = true;
+
+    private LoadingDialog mLoading = null;
+    private AudioPLayerManager blockAudioPlayerManager = null;
 
     @Override
     public int getLayoutId() {
@@ -117,6 +119,12 @@ public class BaseScanActivity extends BaseCaptureActivity {
         }
     }
 
+    @Override
+    public void initCameraScan() {
+        super.initCameraScan();
+        getCameraScan().setNeedAutoZoom(autoZoom);
+    }
+
     private void initData(Intent intent) {
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND)) {
             opensound = ConvertUtils.parseBoolean(
@@ -128,8 +136,13 @@ public class BaseScanActivity extends BaseCaptureActivity {
         }
 
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_ONLY)) {
-            onlyQRCode = ConvertUtils.parseBoolean(
-                    intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_ONLY), onlyQRCode);
+            onlyQRCode = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_ONLY),
+                    onlyQRCode);
+        }
+
+        if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_AUTO_ZOOM)) {
+            autoZoom = ConvertUtils.parseBoolean(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_AUTO_ZOOM),
+                    autoZoom);
         }
     }
 

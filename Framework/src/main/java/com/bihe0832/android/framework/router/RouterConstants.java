@@ -38,6 +38,7 @@ public class RouterConstants {
     public static final String INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND = "opensound";
     public static final String INTENT_EXTRA_KEY_QRCODE_SCAN_VIBRATE = "openvibrate";
     public static final String INTENT_EXTRA_KEY_QRCODE_ONLY = "qrcodeOnly";
+    public static final String INTENT_EXTRA_KEY_AUTO_ZOOM = "autoZoom";
 
     // 扫码并且完成解析与跳转
     public static final String MODULE_NAME_QRCODE_SCAN_AND_PARSE = "qrparse";

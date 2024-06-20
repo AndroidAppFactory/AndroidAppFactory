@@ -49,14 +49,17 @@ public class DefaultCameraScan extends CameraScan {
      */
     private static final int HOVER_TAP_SLOP = 20;
 
-    private static final float ZOOM_STEP = 0.1f;
+    private static final float ZOOM_STEP = 0.6f;
+
+    private static final int ZOOM_DURATION = 2500;
+
     private static final float LINE_ZOOM_STEP = 0.1f;
     private static final int AUTO_ZOOM_OUT = 2;
     private static final int AUTO_ZOOM_IN = 1;
     private final Context mContext;
     private final LifecycleOwner mLifecycleOwner;
     private final PreviewView mPreviewView;
-    private float maxZoom = 2.0f;
+    private float maxZoom = 3f;
     private int zoomType = AUTO_ZOOM_IN;
     private ListenableFuture<ProcessCameraProvider> mCameraProviderFuture;
     private Camera mCamera;
@@ -109,7 +112,7 @@ public class DefaultCameraScan extends CameraScan {
     }
 
     void autoZoom() {
-        if (isNeedAutoZoom() && mLastAutoZoomTime + 120 < System.currentTimeMillis()) {
+        if (isNeedAutoZoom() && mLastAutoZoomTime + ZOOM_DURATION < System.currentTimeMillis()) {
             ZLog.d("autoZoom:" + mLastAutoZoomTime);
             if (zoomType == AUTO_ZOOM_IN) {
                 zoomIn();
@@ -267,7 +270,7 @@ public class DefaultCameraScan extends CameraScan {
         }
         isAnalyzeResult = true;
         if (result.getBarcodeFormat() == BarcodeFormat.QR_CODE && isNeedAutoZoom()
-                && mLastAutoZoomTime + 100 < System.currentTimeMillis()) {
+                && mLastAutoZoomTime + ZOOM_DURATION < System.currentTimeMillis()) {
             ResultPoint[] points = result.getResultPoints();
             if (points != null && points.length >= 2) {
                 float distance1 = ResultPoint.distance(points[0], points[1]);
