@@ -57,6 +57,10 @@ public abstract class BarcodeFormatAnalyzer extends AreaRectAnalyzer {
                         rawResult = decodeInternal(source.invert(),
                                 mDecodeConfig.isSupportLuminanceInvertMultiDecode());
                     }
+
+                    if (rawResult == null && source.isRotateSupported()) {
+                        rawResult = decodeInternal(source.rotateCounterClockwise(), isMultiDecode);
+                    }
                 }
                 if (rawResult != null) {
                     long end = System.currentTimeMillis();

@@ -35,7 +35,7 @@ public class BaseScanActivity extends BaseCaptureActivity {
 
     protected boolean opensound = true;
     protected boolean openvibrate = true;
-    protected boolean onlyQRCode = false;
+    protected boolean onlyQRCode = true;
 
     @Override
     public int getLayoutId() {

@@ -16,12 +16,9 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.MeteringPoint;
 import androidx.camera.core.Preview;
 import androidx.camera.core.TorchState;
-import androidx.camera.core.ZoomState;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import com.bihe0832.android.lib.camera.scan.analyze.Analyzer;
@@ -52,25 +49,17 @@ public class DefaultCameraScan extends CameraScan {
      */
     private static final int HOVER_TAP_SLOP = 20;
 
-    private final FragmentActivity mFragmentActivity;
+    private static final float ZOOM_STEP = 0.1f;
+    private static final float LINE_ZOOM_STEP = 0.1f;
+    private static final int AUTO_ZOOM_OUT = 2;
+    private static final int AUTO_ZOOM_IN = 1;
     private final Context mContext;
     private final LifecycleOwner mLifecycleOwner;
     private final PreviewView mPreviewView;
-
+    private float maxZoom = 2.0f;
+    private int zoomType = AUTO_ZOOM_IN;
     private ListenableFuture<ProcessCameraProvider> mCameraProviderFuture;
     private Camera mCamera;
-    private final ScaleGestureDetector.OnScaleGestureListener mOnScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            float scale = detector.getScaleFactor();
-            if (mCamera != null) {
-                float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio();
-                zoomTo(ratio * scale);
-            }
-            return true;
-        }
-
-    };
     private CameraConfig mCameraConfig;
     private Analyzer mAnalyzer;
     /**
@@ -89,34 +78,56 @@ public class DefaultCameraScan extends CameraScan {
     private int mScreenWidth;
     private int mScreenHeight;
     private long mLastAutoZoomTime;
+    private final ScaleGestureDetector.OnScaleGestureListener mOnScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float scale = detector.getScaleFactor();
+            if (mCamera != null) {
+                float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio();
+                if (scale > 1.0f) {
+                    zoomType = AUTO_ZOOM_IN;
+                } else if (scale < 1.0f) {
+                    zoomType = AUTO_ZOOM_OUT;
+                }
+                zoomToTarget(ratio * scale, mCamera.getCameraInfo().getZoomState().getValue().getMinZoomRatio(),
+                        mCamera.getCameraInfo().getZoomState().getValue().getMaxZoomRatio());
+            }
+            return true;
+        }
+
+    };
     private long mLastHoveTapTime;
     private boolean isClickTap;
     private float mDownX;
     private float mDownY;
 
-    public DefaultCameraScan(@NonNull FragmentActivity activity, @NonNull PreviewView previewView) {
-        this.mFragmentActivity = activity;
-        this.mLifecycleOwner = activity;
-        this.mContext = activity;
+    public DefaultCameraScan(Context mContext, LifecycleOwner lifecycleOwner, @NonNull PreviewView previewView) {
+        this.mLifecycleOwner = lifecycleOwner;
+        this.mContext = mContext;
         this.mPreviewView = previewView;
         initData();
     }
 
-    public DefaultCameraScan(@NonNull Fragment fragment, @NonNull PreviewView previewView) {
-        this.mFragmentActivity = fragment.getActivity();
-        this.mLifecycleOwner = fragment;
-        this.mContext = fragment.getContext();
-        this.mPreviewView = previewView;
-        initData();
+    void autoZoom() {
+        if (isNeedAutoZoom() && mLastAutoZoomTime + 120 < System.currentTimeMillis()) {
+            ZLog.d("autoZoom:" + mLastAutoZoomTime);
+            if (zoomType == AUTO_ZOOM_IN) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        }
     }
 
     private void initData() {
         mResultLiveData = new MutableLiveData<>();
         mResultLiveData.observe(mLifecycleOwner, result -> {
+            ZLog.d("handleAnalyzeResult");
             if (result != null) {
                 handleAnalyzeResult(result);
             } else if (mOnScanResultCallback != null) {
                 mOnScanResultCallback.onScanResultFailure();
+                autoZoom();
             }
         });
 
@@ -161,6 +172,7 @@ public class DefaultCameraScan extends CameraScan {
         if (event.getPointerCount() == 1) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    setNeedAutoZoom(false);
                     isClickTap = true;
                     mDownX = event.getX();
                     mDownY = event.getY();
@@ -220,9 +232,9 @@ public class DefaultCameraScan extends CameraScan {
                 preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
 
                 //图像分析
-                ImageAnalysis imageAnalysis = mCameraConfig.options(new ImageAnalysis.Builder()
-                        .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
+                ImageAnalysis imageAnalysis = mCameraConfig.options(
+                        new ImageAnalysis.Builder().setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
+                                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
                 imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), image -> {
                     if (isAnalyze && !isAnalyzeResult && mAnalyzer != null) {
                         Result result = mAnalyzer.analyze(image, mOrientation);
@@ -277,8 +289,8 @@ public class DefaultCameraScan extends CameraScan {
     private boolean handleAutoZoom(int distance, Result result) {
         int size = Math.min(mScreenWidth, mScreenHeight);
         if (distance * 4 < size) {
+            autoZoom();
             mLastAutoZoomTime = System.currentTimeMillis();
-            zoomIn();
             scanResultCallback(result);
             return true;
         }
@@ -321,64 +333,86 @@ public class DefaultCameraScan extends CameraScan {
         return this;
     }
 
+    public void setMaxZoom(float maxZoom) {
+        this.maxZoom = maxZoom;
+    }
+
     @Override
     public void zoomIn() {
         if (mCamera != null) {
-            float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio() + 0.1f;
-            float maxRatio = mCamera.getCameraInfo().getZoomState().getValue().getMaxZoomRatio();
-            if (ratio <= maxRatio) {
-                mCamera.getCameraControl().setZoomRatio(ratio);
-            }
+            float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio() + ZOOM_STEP;
+            zoomTo(ratio);
         }
     }
 
     @Override
     public void zoomOut() {
         if (mCamera != null) {
-            float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio() - 0.1f;
-            float minRatio = mCamera.getCameraInfo().getZoomState().getValue().getMinZoomRatio();
-            if (ratio >= minRatio) {
-                mCamera.getCameraControl().setZoomRatio(ratio);
-            }
+            float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio() - ZOOM_STEP;
+            zoomTo(ratio);
         }
     }
-
 
     @Override
     public void zoomTo(float ratio) {
         if (mCamera != null) {
-            ZoomState zoomState = mCamera.getCameraInfo().getZoomState().getValue();
-            float maxRatio = zoomState.getMaxZoomRatio();
-            float minRatio = zoomState.getMinZoomRatio();
-            float zoom = Math.max(Math.min(ratio, maxRatio), minRatio);
-            mCamera.getCameraControl().setZoomRatio(zoom);
+//            float maxRatio = mCamera.getCameraInfo().getZoomState().getValue().getMaxZoomRatio();
+            float maxRatio = maxZoom;
+            float minRatio = mCamera.getCameraInfo().getZoomState().getValue().getMinZoomRatio();
+            zoomToTarget(ratio, minRatio, maxRatio);
+        }
+    }
+
+    private void zoomToTarget(float ratio, float minRatio, float maxRatio) {
+        if (mCamera != null) {
+            float finalZoom = ratio;
+            if (ratio >= maxRatio) {
+                zoomType = AUTO_ZOOM_OUT;
+                finalZoom = maxRatio;
+            } else if (ratio <= minRatio) {
+                zoomType = AUTO_ZOOM_IN;
+                finalZoom = minRatio;
+            }
+            mLastAutoZoomTime = System.currentTimeMillis();
+            mCamera.getCameraControl().setZoomRatio(finalZoom);
         }
     }
 
     @Override
     public void lineZoomIn() {
         if (mCamera != null) {
-            float zoom = mCamera.getCameraInfo().getZoomState().getValue().getLinearZoom() + 0.1f;
-            if (zoom <= 1f) {
-                mCamera.getCameraControl().setLinearZoom(zoom);
-            }
+            float zoom = mCamera.getCameraInfo().getZoomState().getValue().getLinearZoom() + LINE_ZOOM_STEP;
+            lineZoomTo(zoom);
         }
     }
 
     @Override
     public void lineZoomOut() {
         if (mCamera != null) {
-            float zoom = mCamera.getCameraInfo().getZoomState().getValue().getLinearZoom() - 0.1f;
-            if (zoom >= 0f) {
-                mCamera.getCameraControl().setLinearZoom(zoom);
-            }
+            float zoom = mCamera.getCameraInfo().getZoomState().getValue().getLinearZoom() - LINE_ZOOM_STEP;
+            lineZoomTo(zoom);
         }
     }
 
     @Override
     public void lineZoomTo(@FloatRange(from = 0.0, to = 1.0) float linearZoom) {
         if (mCamera != null) {
-            mCamera.getCameraControl().setLinearZoom(linearZoom);
+            lineZoomToTarget(linearZoom, 0f, 1f);
+        }
+    }
+
+    private void lineZoomToTarget(float ratio, float minRatio, float maxRatio) {
+        if (mCamera != null) {
+            float finalZoom = ratio;
+            if (ratio >= maxRatio) {
+                zoomType = AUTO_ZOOM_OUT;
+                finalZoom = maxRatio;
+            } else if (ratio <= minRatio) {
+                zoomType = AUTO_ZOOM_IN;
+                finalZoom = minRatio;
+            }
+            mLastAutoZoomTime = System.currentTimeMillis();
+            mCamera.getCameraControl().setLinearZoom(finalZoom);
         }
     }
 

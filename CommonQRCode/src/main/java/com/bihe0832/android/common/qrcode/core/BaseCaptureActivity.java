@@ -28,6 +28,7 @@ import com.bihe0832.android.lib.camera.scan.DefaultCameraScan;
 import com.bihe0832.android.lib.camera.scan.analyze.Analyzer;
 import com.bihe0832.android.lib.camera.scan.analyze.MultiFormatAnalyzer;
 import com.bihe0832.android.lib.camera.scan.config.DecodeConfig;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView;
 import com.bihe0832.android.lib.qrcode.DecodeFormatManager;
 
@@ -37,7 +38,7 @@ public abstract class BaseCaptureActivity extends BaseActivity {
     protected ViewfinderView viewfinderView;
     protected CheckedEnableImageView flashlightView;
     private CameraScan mCameraScan;
-    private boolean hasStopCamera = false;
+    private boolean hasStartCamera = false;
 
     public abstract int getLayoutId();
 
@@ -50,7 +51,7 @@ public abstract class BaseCaptureActivity extends BaseActivity {
     public abstract OnScanResultCallback getOnScanResultCallback();
 
     protected CameraScan createCameraScan() {
-        return new DefaultCameraScan(this, previewView);
+        return new DefaultCameraScan(this.getApplicationContext(), this, previewView);
     }
 
     public CameraScan getCameraScan() {
@@ -66,16 +67,16 @@ public abstract class BaseCaptureActivity extends BaseActivity {
     protected DecodeConfig createDecodeConfig() {
         //初始化解码配置
         DecodeConfig decodeConfig = new DecodeConfig();
-        //如果只有识别二维码的需求，这样设置效率会更高，不设置默认为DecodeFormatManager.DEFAULT_HINTS
-        decodeConfig.setHints(DecodeFormatManager.ALL_HINTS);
+        decodeConfig.setHints(DecodeFormatManager.DEFAULT_HINTS);
         //设置是否全区域识别，默认false
         decodeConfig.setFullAreaScan(true);
-        //设置识别区域比例，默认0.8，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
-        decodeConfig.setAreaRectRatio(0.8f);
         //设置识别区域垂直方向偏移量，默认为0，为0表示居中，可以为负数
         decodeConfig.setAreaRectVerticalOffset(0);
         //设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数
         decodeConfig.setAreaRectHorizontalOffset(0);
+        decodeConfig.setSupportLuminanceInvert(true);
+        decodeConfig.setSupportLuminanceInvertMultiDecode(true);
+        decodeConfig.setMultiDecode(true);
         return decodeConfig;
     }
 
@@ -123,20 +124,26 @@ public abstract class BaseCaptureActivity extends BaseActivity {
      * 启动相机预览
      */
     public void startCamera() {
-        if (mCameraScan != null) {
-            mCameraScan.startCamera();
+        if (!hasStartCamera) {
+            if (mCameraScan != null) {
+                hasStartCamera = true;
+                mCameraScan.startCamera();
+            }
+        } else {
+            ZLog.d("camera has start");
         }
     }
 
     public void stopCamera() {
         if (mCameraScan != null) {
-            hasStopCamera = true;
+            hasStartCamera = false;
             mCameraScan.stopCamera();
         }
     }
 
     private void releaseCamera() {
         if (mCameraScan != null) {
+            hasStartCamera = false;
             mCameraScan.release();
         }
     }
@@ -165,9 +172,7 @@ public abstract class BaseCaptureActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (hasStopCamera) {
-            startCamera();
-        }
+        startCamera();
     }
 
 

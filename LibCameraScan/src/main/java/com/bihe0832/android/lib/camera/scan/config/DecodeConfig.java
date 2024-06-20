@@ -52,19 +52,19 @@ public class DecodeConfig {
     /**
      * 是否支持识别反色码（条码黑白颜色反转的码）
      */
-    private boolean isSupportLuminanceInvert;
+    private boolean isSupportLuminanceInvert = true;
     /**
      * 是否支持识别反色码（条码黑白颜色反转的码）使用多解码
      */
-    private boolean isSupportLuminanceInvertMultiDecode;
+    private boolean isSupportLuminanceInvertMultiDecode = true;
     /**
      * 是否支持垂直的条码
      */
-    private boolean isSupportVerticalCode;
+    private boolean isSupportVerticalCode = false;
     /**
      * 是否支持垂直的条码，使用多解码
      */
-    private boolean isSupportVerticalCodeMultiDecode;
+    private boolean isSupportVerticalCodeMultiDecode = false;
 
     /**
      * 需要分析识别区域

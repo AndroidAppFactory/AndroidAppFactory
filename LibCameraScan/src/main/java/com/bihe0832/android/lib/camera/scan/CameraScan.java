@@ -30,7 +30,7 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     /**
      * 是否需要支持自动缩放
      */
-    private boolean isNeedAutoZoom = true;
+    private boolean isNeedAutoZoom = false;
 
     /**
      * 是否需要支持触摸缩放

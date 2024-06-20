@@ -21,6 +21,18 @@ import java.util.HashMap;
  */
 public class QrcodeUtils {
 
+    public static final void openQrScan(Activity activity) {
+        openQrScan(activity, true, true, true);
+    }
+
+    public static final void openQrScan(Fragment fragment) {
+        openQrScan(fragment, true, true, true);
+    }
+
+    public static final void openQrScanAndParse() {
+        openQrScanAndParse(true, true, true);
+    }
+    
     public static final void openQrScan(Activity activity, boolean needSound, boolean needVibrate, boolean onlyQRCode) {
         HashMap dataParam = new HashMap();
         dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND, String.valueOf(needSound));
@@ -40,7 +52,7 @@ public class QrcodeUtils {
                 RouterAction.INSTANCE.getFinalURL(RouterConstants.MODULE_NAME_QRCODE_SCAN, dataParam),
                 ZixieActivityRequestCode.QRCODE_SCAN);
     }
-
+    
     public static final void openQrScanAndParse(boolean needSound, boolean needVibrate, boolean onlyQRCode) {
         HashMap dataParam = new HashMap();
         dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND, String.valueOf(needSound));
