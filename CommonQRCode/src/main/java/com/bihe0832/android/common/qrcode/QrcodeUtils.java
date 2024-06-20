@@ -32,7 +32,7 @@ public class QrcodeUtils {
     public static final void openQrScanAndParse() {
         openQrScanAndParse(true, true, true);
     }
-    
+
     public static final void openQrScan(Activity activity, boolean needSound, boolean needVibrate, boolean onlyQRCode) {
         HashMap dataParam = new HashMap();
         dataParam.put(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND, String.valueOf(needSound));
