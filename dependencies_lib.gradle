@@ -535,7 +535,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibCameraScan"             : [
-                "version"            : "6.11.3",
+                "version"            : "6.11.4",
                 "artifactId"         : "lib-camera-scan",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
