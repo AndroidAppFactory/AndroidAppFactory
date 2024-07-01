@@ -47,6 +47,7 @@ import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebviewActivity
+import com.bihe0832.android.base.debug.widget.DebugWidgetFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -78,8 +79,14 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(
                 getDebugFragmentItemData(
-                    "UI（Intent跳转、反馈、评分、锁屏、Widget、设置等）测试",
+                    "UI（Intent跳转、反馈、评分、锁屏、设置等）测试",
                     DebugIntentFragment::class.java,
+                ),
+            )
+            add(
+                getDebugFragmentItemData(
+                    "UI（Widget）测试",
+                    DebugWidgetFragment::class.java,
                 ),
             )
             add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))

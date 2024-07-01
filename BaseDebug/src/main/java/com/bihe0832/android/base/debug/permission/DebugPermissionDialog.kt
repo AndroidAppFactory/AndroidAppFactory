@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
  * @author zixie code@bihe0832.com Created on 12/24/20.
  *
  */
-class DebugPermissionDialog : PermissionDialog {
+class  DebugPermissionDialog : PermissionDialog {
 
     constructor(context: Context) : super(context)
 

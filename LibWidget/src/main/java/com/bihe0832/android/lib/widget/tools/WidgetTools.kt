@@ -11,8 +11,10 @@ import android.os.Build
 import androidx.fragment.app.Fragment
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.widget.BaseWidgetProvider
 import com.bihe0832.android.lib.widget.R
+import com.bihe0832.android.lib.widget.permission.ShortcutPermission
 
 
 /**
@@ -107,6 +109,13 @@ object WidgetTools {
 
     fun getAppWidgetId(data: Intent?): Int {
         return data?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1) ?: -1
+    }
+
+    fun hasAddWidgetPermission(context: Context): Boolean {
+        if (ManufacturerUtil.isMiRom) {
+            return ShortcutPermission.hasPermission(context)
+        }
+        return true
     }
 
     fun addWidgetToHome(context: Context, classT: Class<out BaseWidgetProvider>?) {

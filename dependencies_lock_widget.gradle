@@ -12,7 +12,7 @@ ext.widgetmoduleInfo = [
         "version"            : "6.11.1",
         "artifactId"         : "lib-widget",
         "apidependenciesList": [
-                "LibLog", "LibConfig", "LibOS", "LibDialog",
+                "LibLog", "LibConfig", "LibOS", "LibDialog", "LibPermission",
                 project.androidsupport.worker
         ]
     ],

@@ -63,7 +63,7 @@ object AAFFileTools {
                                 filePath,
                             ).length(),
                         )
-                    })」</b></font> 文件较大，手机打开耗时较久或者打开失败，建议发送到电脑查看。本地路径: <BR> $filePath ",
+                    })」</b></font> 文件较大，手机打开耗时较久或者容易出现打开失败的情况，建议发送到电脑查看。本地路径: <BR> $filePath ",
                     "发送文件",
                     "继续查看",
                     object :

@@ -8,6 +8,7 @@
 
 package com.bihe0832.android.base.debug.temp
 
+import android.content.Intent
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -23,6 +24,7 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
     private fun preTest(itemView: View) {
+
     }
 
     private fun testFunc() {
