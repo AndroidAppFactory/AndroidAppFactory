@@ -74,10 +74,12 @@ public abstract class BaseWidgetWorker extends Worker {
         return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public PendingIntent getWidgetUriPendingIntent(Context context, String uri, int requestCode) {
+    public PendingIntent getWidgetUriPendingIntent(Context context, String uri, int requestCode, boolean needNewTask) {
         final Intent activityIntent = new Intent();
         activityIntent.setData(Uri.parse(uri));
-        activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if (needNewTask) {
+            activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
         return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
