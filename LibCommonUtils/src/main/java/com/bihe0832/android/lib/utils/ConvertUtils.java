@@ -137,6 +137,13 @@ public class ConvertUtils {
         return value;
     }
 
+    public static byte[] mergeBytes(byte[] bt1, byte[] bt2) {
+        byte[] bt3 = new byte[bt1.length + bt2.length];
+        System.arraycopy(bt1, 0, bt3, 0, bt1.length);
+        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);
+        return bt3;
+    }
+
     public static byte[] intToBytes(int value) {
         int size;
         if (VERSION.SDK_INT >= VERSION_CODES.N) {
@@ -147,8 +154,17 @@ public class ConvertUtils {
         return ByteBuffer.allocate(size).putInt(value).array();
     }
 
-    public static int bytesToInt(byte[] bytes) {
-        return ByteBuffer.wrap(bytes).getInt();
+    /**
+     * short 转 byte[]
+     */
+    public static byte[] shortToBytes(short value) {
+        int size;
+        if (VERSION.SDK_INT >= VERSION_CODES.N) {
+            size = Float.BYTES;
+        } else {
+            size = 4;
+        }
+        return ByteBuffer.allocate(size).putFloat(value).array();
     }
 
     public static byte[] longToBytes(long value) {
@@ -161,21 +177,32 @@ public class ConvertUtils {
         return ByteBuffer.allocate(size).putLong(value).array();
     }
 
+    public static int bytesToInt(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getInt();
+    }
+
     public static long bytesToLong(byte[] bytes) {
         return ByteBuffer.wrap(bytes).getLong();
     }
 
-    public static float[] floatArrayList2Array(List<Float> origin) {
-        if (origin == null || origin.size() <= 0) {
-            return null;
-        }
+    public static short bytesToShort(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getShort();
+    }
 
-        float[] result = new float[origin.size()];
-        for (int i = 0; i < origin.size(); i++) {
-            result[i] = origin.get(i);
-        }
 
-        return result;
+    public static double getMax(double[] doubles) {
+        double max = doubles[0];
+        for (int i = 1; i < doubles.length; i++) {
+            if (doubles[i] > max) {
+                max = doubles[i];
+            }
+        }
+        return max;
+    }
+
+    private static double getNormalizationFactor(double[] doubles, double maxValue) {
+        double max = getMax(doubles);
+        return max > maxValue ? max / (maxValue + 1) : 1f;
     }
 
     public static long getUnsignedInt(int x) {
@@ -199,4 +226,6 @@ public class ConvertUtils {
         }
         return defaultValue;
     }
+
+
 }

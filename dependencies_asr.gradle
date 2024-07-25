@@ -1,0 +1,31 @@
+apply from: rootDir.toString() + '/config.gradle'
+ext.asrmoduleInfo = [
+        "LibASR"              : [
+                "version"            : "6.12.1",
+                "artifactId"         : "lib-asr-wrapper",
+                "apidependenciesList": [
+                        "LibSpeechRecognition"
+                ]
+        ],
+        "LibSherpaOnnx"       : [
+                "version"            : "6.12.1",
+                "artifactId"         : "lib-sherpa-onnx",
+                "apidependenciesList": [
+
+                ]
+        ],
+        "LibVoiceRecord"      : [
+                "version"            : "6.12.1",
+                "artifactId"         : "lib-voice_record",
+                "apidependenciesList": [
+                        "LibSherpaOnnx", "LibAAF", "LibLog", "LibCommonUtils", "LibFile"
+                ]
+        ],
+        "LibSpeechRecognition": [
+                "version"            : "6.12.1",
+                "artifactId"         : "lib-speech-recognition",
+                "apidependenciesList": [
+                        "LibVoiceRecord"
+                ]
+        ]
+]

@@ -437,19 +437,17 @@ object WifiManagerWrapper {
 
     // 打开WIFI
     fun openWifi() {
-        mConnectivityManager?.activeNetworkInfo?.let {
-            if (it.type == ConnectivityManager.TYPE_WIFI) {
-                return
+        if (mConnectivityManager?.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI) {
+            return
+        } else {
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
+                val intent = Intent(Settings.Panel.ACTION_WIFI)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                mContext?.startActivity(intent)
             } else {
-                if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
-                    val intent = Intent(Settings.Panel.ACTION_WIFI)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    mContext?.startActivity(intent)
-                } else {
-                    mWifiManager?.isWifiEnabled = true
-                }
-                startScan()
+                mWifiManager?.isWifiEnabled = true
             }
+            startScan()
         }
     }
 

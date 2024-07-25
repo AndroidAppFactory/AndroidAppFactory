@@ -143,15 +143,6 @@ class DebugWidgetFragment : DebugEnvFragment() {
                     },
                 ),
             )
-
-            add(
-                DebugItemData(
-                    "弹出评分页面",
-                    View.OnClickListener {
-                        UserPraiseManager.showUserPraiseDialog(activity!!, getFeedBackURL())
-                    },
-                ),
-            )
         }
     }
 

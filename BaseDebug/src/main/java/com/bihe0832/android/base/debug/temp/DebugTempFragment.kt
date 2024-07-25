@@ -13,6 +13,7 @@ import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
 
 class DebugTempFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -24,7 +25,6 @@ class DebugTempFragment : DebugEnvFragment() {
     }
 
     private fun preTest(itemView: View) {
-
     }
 
     private fun testFunc() {
