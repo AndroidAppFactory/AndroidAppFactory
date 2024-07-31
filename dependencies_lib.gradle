@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.12.2",
+                "version"            : "6.13.0",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -14,7 +14,8 @@ ext.libmoduleInfo = [
                         "LibFlycoTabLayout", "LibQRCode", "LibAdapter", "LibRefresh", "LibToast", "LibDialog",
                         "LibNotification", "LibBottomTab", "LibRecycleviewExt", "LibTouchRegion", "LibViewExt",
                         "LibPermission", "LibMedia", "LibImmersive", "LibFloatview", "LibTextView",
-                        "LibViewPager", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibColor", "LibFileSelect"
+                        "LibViewPager", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibColor", "LibFileSelect",
+                        "LibForegroundService"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -548,14 +549,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAudio"                  : [
-                "version"            : "6.12.0",
+                "version"            : "6.13.0",
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibFile", "LibForegroundService"
                 ]
         ],
         "LibForegroundService"      : [
-                "version"            : "6.12.0",
+                "version"            : "6.13.0",
                 "artifactId"         : "lib-foreground-service",
                 "apidependenciesList": [
                         "LibNotification", "LibThread", "LibLog"
