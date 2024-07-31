@@ -546,5 +546,21 @@ ext.libmoduleInfo = [
                         project.androidsupport.camera_view,
                         "LibCommonUtils", "LibMedia", "LibQRCode", "LibDeviceNetwork"
                 ]
+        ],
+        "LibAudio"                  : [
+                "version"            : "6.12.0",
+                "artifactId"         : "lib-audio",
+                "apidependenciesList": [
+                        "LibCommonUtils", "LibFile", "LibForegroundService"
+                ]
+        ],
+        "LibForegroundService"      : [
+                "version"            : "6.12.0",
+                "artifactId"         : "lib-foreground-service",
+                "apidependenciesList": [
+                        "LibNotification", "LibThread", "LibLog"
+                ]
         ]
+
+
 ]

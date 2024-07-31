@@ -71,7 +71,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("Google相关 调试", DebugGoogleFragment::class.java))
             add(getDebugFragmentItemData("TTS、ARS 调试", DebugTTSAndASRFragment::class.java))
 
-            add(getDebugFragmentItemData("协程及多线程调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
+            add(getDebugFragmentItemData("协程及多线程、前台服务调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
             add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))

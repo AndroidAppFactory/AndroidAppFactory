@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.voice.record.utils;
+package com.bihe0832.android.lib.audio.wav;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -71,9 +71,9 @@ public class PcmToWav {
      * @param inFilename 源文件路径
      * @param outFilename 目标文件路径
      */
-    public void convert(String inFilename, String outFilename) {
-        FileInputStream in;
-        FileOutputStream out;
+    public void convertToFile(String inFilename, String outFilename) {
+        FileInputStream in = null;
+        FileOutputStream out = null;
         long totalAudioLen;
         long totalDataLen;
         byte[] data = new byte[mBufferSize];
@@ -86,15 +86,29 @@ public class PcmToWav {
             while (in.read(data) != -1) {
                 out.write(data);
             }
-            in.close();
-            out.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (null != in) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (null != out) {
+                try {
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    public void convert(byte[] pcmData, String outFilename) {
-        FileOutputStream out;
+    public void convertToFile(byte[] pcmData, String outFilename) {
+        FileOutputStream out = null;
         long totalAudioLen;
         long totalDataLen;
         byte[] data = new byte[mBufferSize];
@@ -104,9 +118,16 @@ public class PcmToWav {
             totalDataLen = totalAudioLen + 36;
             out.write(getWaveFileHeader(totalAudioLen, totalDataLen, mSampleRate, getChannelInInt(mChannel), byteRate));
             out.write(pcmData);
-            out.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (null != out) {
+                try {
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

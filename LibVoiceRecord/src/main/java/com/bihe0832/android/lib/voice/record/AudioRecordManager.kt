@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioRecord
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
+import com.bihe0832.android.lib.audio.wav.AudioUtils
+import com.bihe0832.android.lib.audio.wav.PcmToWav
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.voice.record.utils.PcmToWav
 import com.k2fsa.sherpa.onnx.EndpointConfig
 import com.k2fsa.sherpa.onnx.EndpointRule
 import com.k2fsa.sherpa.onnx.FeatureConfig
@@ -36,6 +37,7 @@ object AudioRecordManager {
 
     @Volatile
     private var isRecording: Boolean = false
+    private var needForceEnding: Boolean = false
 
     fun init(
         context: Context,
@@ -78,20 +80,32 @@ object AudioRecordManager {
                 val temp = ShortArray(ret)
                 System.arraycopy(buffer, 0, temp, 0, ret)
                 samplesBuffer.add(temp)
-                val samples = SherpaAudioConvertTools.shortArrayToSherpaArray(buffer, ret)
-                stream.acceptWaveform(samples, sampleRate = sampleRateInHz)
-                while (onlineRecognizer.isReady(stream)) {
-                    onlineRecognizer.decode(stream)
-                }
-                val isEndpoint = onlineRecognizer.isEndpoint(stream)
-                if (isEndpoint) {
-                    ZLog.d(TAG, "processSamples isEndpoint")
+                if (needForceEnding) {
+                    needForceEnding = false
+                    ZLog.d(TAG, "processSamples forceEnding")
                     onlineRecognizer.reset(stream)
                     val totalData = samplesBuffer.flatMap { it.asList() }.toShortArray()
                     ZLog.d(TAG, "processSamples isEndpoint totalData:" + totalData.size)
                     samplesBuffer.clear()
                     ThreadManager.getInstance().start {
                         callback.onSuccess(totalData)
+                    }
+                } else {
+                    val samples = SherpaAudioConvertTools.shortArrayToSherpaArray(buffer, ret)
+                    stream.acceptWaveform(samples, sampleRate = sampleRateInHz)
+                    while (onlineRecognizer.isReady(stream)) {
+                        onlineRecognizer.decode(stream)
+                    }
+                    val isEndpoint = onlineRecognizer.isEndpoint(stream)
+                    if (isEndpoint) {
+                        ZLog.d(TAG, "processSamples isEndpoint")
+                        onlineRecognizer.reset(stream)
+                        val totalData = samplesBuffer.flatMap { it.asList() }.toShortArray()
+                        ZLog.d(TAG, "processSamples isEndpoint totalData:" + totalData.size)
+                        samplesBuffer.clear()
+                        ThreadManager.getInstance().start {
+                            callback.onSuccess(totalData)
+                        }
                     }
                 }
             }
@@ -114,6 +128,10 @@ object AudioRecordManager {
         samplesBuffer.clear()
         stopRecord()
         onlineRecognizer.release()
+    }
+
+    fun forceEndCurrent() {
+        needForceEnding = true
     }
 
     @SuppressLint("MissingPermission")
@@ -164,8 +182,12 @@ object AudioRecordManager {
                         if (FileUtils.checkAndCreateFolder(fileFolder)) {
                             val file =
                                 FileUtils.getFolderPathWithSeparator(fileFolder) + System.currentTimeMillis() + ".wav"
-                            val byteArray = SherpaAudioConvertTools.shortArrayToByteArray(pcmData)
-                            PcmToWav(sampleRateInHz, channelConfig, audioFormat).convert(byteArray, file)
+                            val byteArray = AudioUtils.shortArrayToByteArray(pcmData)
+                            PcmToWav(
+                                sampleRateInHz,
+                                channelConfig,
+                                audioFormat
+                            ).convertToFile(byteArray, file)
                             callback.onSuccess(file)
                         } else {
                             callback.onError(-1, "File folder is bad")

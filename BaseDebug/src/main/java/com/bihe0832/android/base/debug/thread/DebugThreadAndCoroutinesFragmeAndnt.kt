@@ -1,10 +1,19 @@
 package com.bihe0832.android.base.debug.thread
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
+import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import kotlinx.coroutines.*
+import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * @author zixie code@bihe0832.com
@@ -16,6 +25,12 @@ class DebugThreadAndCoroutinesFragmeAndnt : DebugCommonFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("并发测试", View.OnClickListener { getSpecialData() }))
+            add(DebugItemData("多层调用验证", View.OnClickListener { testThread() }))
+            add(DebugItemData("前台服务任务1开启", View.OnClickListener { start1() }))
+            add(DebugItemData("前台服务任务2开启", View.OnClickListener { start2() }))
+            add(DebugItemData("前台服务任务1结束", View.OnClickListener { stop1() }))
+            add(DebugItemData("前台服务任务2结束", View.OnClickListener { stop2() }))
+
         }
     }
 
@@ -55,5 +70,75 @@ class DebugThreadAndCoroutinesFragmeAndnt : DebugCommonFragment() {
         return "D"
     }
 
+    fun testThread() {
+        ThreadManager.getInstance().start {
+            ZLog.d("testThread: 1")
+            ThreadManager.getInstance().start {
+                ZLog.d("testThread: 2")
+                ThreadManager.getInstance().start {
+                    ZLog.d("testThread: 3")
+                    ThreadManager.getInstance().start {
+                        ZLog.d("testThread: 4")
+                        ThreadManager.getInstance().start {
+                            ZLog.d("testThread: 5")
+                            ThreadManager.getInstance().start {
+                                ZLog.d("testThread: 6")
+                                ThreadManager.getInstance().start {
+                                    ZLog.d("testThread: 7")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    val scene1 = "scene1"
+    val scene2 = "scene2"
+    fun start1() {
+        AAFForegroundServiceManager.sendToForegroundService(context!!, Intent().apply {
+            putExtra("fdsfsd1", "Fsdfsf1")
+        }, object : AAFForegroundServiceManager.ForegroundServiceAction {
+            override fun getScene(): String {
+                return scene1
+            }
+
+            override fun getNotifyContent(): String {
+                return "预下载"
+            }
+
+            override fun onStartCommand(context: Context, intent: Intent, flags: Int, startId: Int) {
+                ZLog.d(intent)
+            }
+
+        })
+    }
+
+    fun start2() {
+        AAFForegroundServiceManager.sendToForegroundService(context!!, Intent().apply {
+            putExtra("fdsfsd2", "Fsdfsf2")
+        }, object : AAFForegroundServiceManager.ForegroundServiceAction {
+            override fun getScene(): String {
+                return scene2
+            }
+
+            override fun getNotifyContent(): String {
+                return "预下载2"
+            }
+
+            override fun onStartCommand(context: Context, intent: Intent, flags: Int, startId: Int) {
+                ZLog.d(intent)
+            }
+
+        })
+    }
+
+    fun stop1() {
+        AAFForegroundServiceManager.deleteFromForegroundService(context!!, scene1)
+    }
+
+    fun stop2() {
+        AAFForegroundServiceManager.deleteFromForegroundService(context!!, scene2)
+    }
 }

@@ -17,6 +17,8 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.audio.wav.PcmToWav
+import com.bihe0832.android.lib.audio.wav.AudioUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.speech.kws.KeywordSpotterManager
@@ -48,6 +50,7 @@ class DebugTTSAndASRFragment : DebugEnvFragment() {
             )
             add(DebugItemData("ARS 初始化", View.OnClickListener { init() }))
             add(DebugItemData("ARS 开始实时直接识别", View.OnClickListener { startReal() }))
+            add(DebugItemData("ARS 开始实时识别后读取部分区间", View.OnClickListener { testSplit() }))
             add(DebugItemData("ARS 开始实时基于文件识别", View.OnClickListener { startRealFile() }))
             add(DebugItemData("ARS 结束实时识别", View.OnClickListener { stop() }))
             add(DebugItemData("ARS 开始文件识别", View.OnClickListener { startFile() }))
@@ -77,12 +80,12 @@ class DebugTTSAndASRFragment : DebugEnvFragment() {
                         Log.i(TAG, "====================")
                         val samples = SherpaAudioConvertTools.shortArrayToSherpaArray(data, data.size)
                         recognise(samples)
-                        SherpaAudioConvertTools.shortArrayToByteArray(data).let {
+                        AudioUtils.shortArrayToByteArray(data).let {
                             SherpaAudioConvertTools.byteArrayToSherpaArray(it).let { float ->
                                 recognise(float)
                             }
 
-                            SherpaAudioConvertTools.byteArrayToShortArray(it, it.size).let { short ->
+                            AudioUtils.byteArrayToShortArray(it, it.size).let { short ->
                                 val erer = SherpaAudioConvertTools.shortArrayToSherpaArray(short, short.size)
                                 recognise(erer)
                             }
@@ -122,6 +125,51 @@ class DebugTTSAndASRFragment : DebugEnvFragment() {
 
     fun stop() {
         AudioRecordManager.stopRecord()
+    }
+
+
+    fun testSplit() {
+        AudioRecordManager.startRecord(audioSource,
+            sampleRateInHz,
+            channelConfig,
+            audioFormat,
+            object : AAFDataCallback<ShortArray>() {
+                override fun onSuccess(pcmData: ShortArray?) {
+                    ZLog.d(TAG, "Started recording callback:${pcmData?.size}")
+                    val fileFolder = AAFFileWrapper.getMediaTempFolder()
+                    pcmData?.let {
+                        if (FileUtils.checkAndCreateFolder(fileFolder)) {
+                            val file =
+                                FileUtils.getFolderPathWithSeparator(fileFolder) + System.currentTimeMillis() + ".wav"
+                            ZLog.d(TAG, "record data:${file}")
+                            val byteArray = AudioUtils.shortArrayToByteArray(pcmData)
+                            recognise(SherpaAudioConvertTools.byteArrayToSherpaArray(byteArray))
+                            PcmToWav(
+                                sampleRateInHz,
+                                channelConfig,
+                                audioFormat
+                            ).convertToFile(byteArray, file)
+
+                            val length = it.size * 1.0f / sampleRateInHz
+                            if (length > 3.2) {
+                                val shortArray = ShortArray((sampleRateInHz * 3.2).toInt() + sampleRateInHz)
+                                System.arraycopy(it, it.size - (sampleRateInHz * 3.2).toInt(), shortArray, sampleRateInHz, (sampleRateInHz * 3.2).toInt())
+                                val file2 =
+                                    FileUtils.getFolderPathWithSeparator(fileFolder) + System.currentTimeMillis() + ".wav"
+                                val byteArray2 = AudioUtils.shortArrayToByteArray(shortArray)
+                                recognise(SherpaAudioConvertTools.byteArrayToSherpaArray(byteArray2))
+                                PcmToWav(
+                                    sampleRateInHz,
+                                    channelConfig,
+                                    audioFormat
+                                ).convertToFile(byteArray2, file2)
+                                ZLog.d(TAG, "record data:${file2}")
+                            }
+
+                        }
+                    }
+                }
+            })
     }
 
     fun recognise(data: FloatArray?) {
