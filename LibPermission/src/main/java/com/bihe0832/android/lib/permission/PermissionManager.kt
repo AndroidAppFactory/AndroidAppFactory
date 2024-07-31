@@ -182,17 +182,31 @@ object PermissionManager {
         fun onFailed(scene: String, msg: String)
     }
 
-    fun isAllPermissionOK(context: Context, permissionGroupID: String): Boolean {
-        return if (mPermissionGroup.containsKey(permissionGroupID)) {
-            !PermissionsChecker(context).lacksPermissions(mPermissionGroup.get(permissionGroupID))
+    fun isAllPermissionOK(context: Context, permissionKey: String): Boolean {
+        return if (mPermissionGroup.containsKey(permissionKey)) {
+            !PermissionsChecker(context).lacksPermissions(mPermissionGroup.get(permissionKey))
         } else {
-            !PermissionsChecker(context).lacksPermission(permissionGroupID)
+            !PermissionsChecker(context).lacksPermission(permissionKey)
         }
     }
 
-    fun isAllPermissionOK(context: Context, permissionGroupIDList: List<String>): Boolean {
-        for (permissionGroupID in permissionGroupIDList) {
-            if (!isAllPermissionOK(context, permissionGroupID)) {
+    fun isAllPermissionOK(context: Context, scene: String, permissionGroupID: String): Boolean {
+        val groupKey = getPermissionKey(scene, permissionGroupID)
+        return isAllPermissionOK(context, groupKey)
+    }
+
+    fun isAllPermissionOK(context: Context, permissionKeyList: List<String>): Boolean {
+        for (permissionKey in permissionKeyList) {
+            if (!isAllPermissionOK(context, permissionKey)) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun isAllPermissionOK(context: Context, scene: String, permissionGroupIDList: List<String>): Boolean {
+        for (permissionKey in permissionGroupIDList) {
+            if (!isAllPermissionOK(context, scene, permissionKey)) {
                 return false
             }
         }
@@ -217,11 +231,24 @@ object PermissionManager {
         checkPermission(context, "", canCancel, null, permissionGroupIDList)
     }
 
-    fun checkPermission(context: Context?, scene: String, canCancel: Boolean, result: OnPermissionResult?, permissionGroupIDList: List<String>) {
+    fun checkPermission(
+        context: Context?,
+        scene: String,
+        canCancel: Boolean,
+        result: OnPermissionResult?,
+        permissionGroupIDList: List<String>,
+    ) {
         checkPermission(context, scene, canCancel, PermissionsActivityV2::class.java, result, permissionGroupIDList)
     }
 
-    fun checkPermission(context: Context?, scene: String, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, result: OnPermissionResult?, permissionGroupIDList: List<String>) {
+    fun checkPermission(
+        context: Context?,
+        scene: String,
+        canCancel: Boolean,
+        permissionsActivityClass: Class<out PermissionsActivity>,
+        result: OnPermissionResult?,
+        permissionGroupIDList: List<String>,
+    ) {
         result?.let {
             mOuterResultListenerList.put(scene, it)
         }
@@ -242,7 +269,13 @@ object PermissionManager {
         }
     }
 
-    fun startPermissionActivity(context: Context?, scene: String, canCancel: Boolean, permissionsActivityClass: Class<out PermissionsActivity>, permissionGroupIDList: List<String>) {
+    fun startPermissionActivity(
+        context: Context?,
+        scene: String,
+        canCancel: Boolean,
+        permissionsActivityClass: Class<out PermissionsActivity>,
+        permissionGroupIDList: List<String>,
+    ) {
         val intent = Intent(context, permissionsActivityClass)
         intent.putExtra(PermissionsActivity.EXTRA_PERMISSIONS, permissionGroupIDList.toTypedArray())
         intent.putExtra(PermissionsActivity.EXTRA_CAN_CANCEL, canCancel)
@@ -259,15 +292,15 @@ object PermissionManager {
         }
     }
 
-    private fun getPermissionsByGroupID(permissionGroupID: String, isPermission: Boolean): List<String> {
+    private fun getPermissionsByGroupID(permissionKey: String, isPermission: Boolean): List<String> {
         var permissionList = mutableListOf<String>()
-        if (mPermissionGroup.containsKey(permissionGroupID)) {
-            mPermissionGroup.get(permissionGroupID)?.let {
+        if (mPermissionGroup.containsKey(permissionKey)) {
+            mPermissionGroup.get(permissionKey)?.let {
                 permissionList.addAll(it)
             }
         }
         if (permissionList.isEmpty() && isPermission) {
-            permissionList.add(permissionGroupID)
+            permissionList.add(permissionKey)
         }
         return permissionList
     }
@@ -289,7 +322,12 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionScene(scene: String, permissionGroupID: String, useDefault: Boolean, needSpecial: Boolean): String {
+    fun getPermissionScene(
+        scene: String,
+        permissionGroupID: String,
+        useDefault: Boolean,
+        needSpecial: Boolean,
+    ): String {
         return if (mPermissionScene.containsKey(getPermissionKey(scene, permissionGroupID))) {
             return getPermissionScene(getPermissionKey(scene, permissionGroupID), needSpecial)
         } else if (useDefault) {
@@ -358,7 +396,12 @@ object PermissionManager {
         return getDefaultPermissionContent(context, permissionGroupID, needSpecial)
     }
 
-    fun getPermissionScene(sceneID: String, tempPermissionList: List<String>, useDefault: Boolean, needSpecial: Boolean): String {
+    fun getPermissionScene(
+        sceneID: String,
+        tempPermissionList: List<String>,
+        useDefault: Boolean,
+        needSpecial: Boolean,
+    ): String {
         tempPermissionList.map {
             getPermissionScene(sceneID, it, useDefault, needSpecial)
         }.filter { it.isNotBlank() }.let {
@@ -366,7 +409,12 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionDesc(sceneID: String, tempPermissionList: List<String>, useDefault: Boolean, needSpecial: Boolean): String {
+    fun getPermissionDesc(
+        sceneID: String,
+        tempPermissionList: List<String>,
+        useDefault: Boolean,
+        needSpecial: Boolean,
+    ): String {
         tempPermissionList.map {
             getPermissionDesc(sceneID, it, useDefault, needSpecial)
         }.filter { it.isNotBlank() }.let {
@@ -374,9 +422,19 @@ object PermissionManager {
         }
     }
 
-    fun getPermissionContent(context: Context, sceneID: String, tempPermissionGroupList: List<String>, useDefault: Boolean, needSpecial: Boolean): String {
+    fun getPermissionContent(
+        context: Context,
+        sceneID: String,
+        tempPermissionGroupList: List<String>,
+        useDefault: Boolean,
+        needSpecial: Boolean,
+    ): String {
         return if (tempPermissionGroupList.size > 1) {
-            getDefaultPermissionContent(context, getPermissionScene(sceneID, tempPermissionGroupList, useDefault, needSpecial), getPermissionDesc(sceneID, tempPermissionGroupList, useDefault, needSpecial))
+            getDefaultPermissionContent(
+                context,
+                getPermissionScene(sceneID, tempPermissionGroupList, useDefault, needSpecial),
+                getPermissionDesc(sceneID, tempPermissionGroupList, useDefault, needSpecial)
+            )
         } else if (tempPermissionGroupList.size > 0) {
             getPermissionContent(context, sceneID, tempPermissionGroupList.get(0), needSpecial)
         } else {
@@ -385,19 +443,28 @@ object PermissionManager {
     }
 
     fun getDefaultPermissionContent(context: Context, showPermissionGroupID: String, needSpecial: Boolean): String {
-        return getDefaultPermissionContent(context, getPermissionScene(showPermissionGroupID, needSpecial), getPermissionDesc(showPermissionGroupID, needSpecial))
+        return getDefaultPermissionContent(
+            context,
+            getPermissionScene(showPermissionGroupID, needSpecial),
+            getPermissionDesc(showPermissionGroupID, needSpecial)
+        )
     }
 
     fun getDefaultPermissionContent(context: Context, sceneText: String, permissionDesc: String): String {
-        return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_permission_default_content)!!, APKUtils.getAppName(context), if (TextUtils.isEmpty(sceneText)) {
-            mDefaultScene
-        } else {
-            sceneText
-        }, if (TextUtils.isEmpty(permissionDesc)) {
-            mDefaultDesc
-        } else {
-            permissionDesc
-        })
+        return String.format(
+            ThemeResourcesManager.getString(R.string.com_bihe0832_permission_default_content)!!,
+            APKUtils.getAppName(context),
+            if (TextUtils.isEmpty(sceneText)) {
+                mDefaultScene
+            } else {
+                sceneText
+            },
+            if (TextUtils.isEmpty(permissionDesc)) {
+                mDefaultDesc
+            } else {
+                permissionDesc
+            }
+        )
     }
 
     fun getTitle(context: Context): String {
