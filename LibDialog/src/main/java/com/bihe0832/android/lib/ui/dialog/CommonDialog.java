@@ -271,24 +271,24 @@ public class CommonDialog extends Dialog {
 
     private void showAction() {
         if (!isShowing()) {
-            super.show();
+            Activity activity = ViewExtKt.getActivity(getContext());
+            if (null != activity && !activity.isFinishing()) {
+                super.show();
+            } else {
+                ZLog.e("activity is null or isFinishing");
+            }
         }
         refreshView();
     }
 
     @Override
     public void show() {
-        Activity activity = ViewExtKt.getActivity(getContext());
-        if (null != activity && !activity.isFinishing()) {
-            ThreadManager.getInstance().runOnUIThread(new Runnable() {
-                @Override
-                public void run() {
-                    showAction();
-                }
-            });
-        } else {
-            ZLog.e("LoadingDialog", "activity is null or isFinishing");
-        }
+        ThreadManager.getInstance().runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                showAction();
+            }
+        });
     }
 
     /**

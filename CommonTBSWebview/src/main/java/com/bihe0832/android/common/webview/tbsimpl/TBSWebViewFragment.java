@@ -159,11 +159,13 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
 
     @Override
     protected void loadFinalURL(String finalURL, String data) {
-        mWebView.doActionBeforeLoadURL();
-        if (TextUtils.isEmpty(data)) {
-            mWebView.loadUrl(finalURL);
-        } else {
-            mWebView.postUrl(finalURL, data.getBytes());
+        if (null != mWebView) {
+            mWebView.doActionBeforeLoadURL();
+            if (TextUtils.isEmpty(data)) {
+                mWebView.loadUrl(finalURL);
+            } else {
+                mWebView.postUrl(finalURL, data.getBytes());
+            }
         }
     }
 
