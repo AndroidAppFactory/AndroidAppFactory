@@ -8,14 +8,14 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         "LibDebug",
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
-                        "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall", "LibAPK", "LibTTS", "LibText",
+                        "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall", "LibAPK", "LibText",
                         "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC", "LibBlockTask", "LibOkhttpWrapper",
                         "LibDataRepository", "LibCoroutines", "LibCommonUIUtils", "LibFragmentation_swipeback",
                         "LibFlycoTabLayout", "LibQRCode", "LibAdapter", "LibRefresh", "LibToast", "LibDialog",
                         "LibNotification", "LibBottomTab", "LibRecycleviewExt", "LibTouchRegion", "LibViewExt",
                         "LibPermission", "LibMedia", "LibImmersive", "LibFloatview", "LibTextView",
-                        "LibViewPager", "LibAudioPlayer", "LibCustomView", "LibAAFResource", "LibColor", "LibFileSelect",
-                        "LibForegroundService"
+                        "LibViewPager", "LibCustomView", "LibAAFResource", "LibColor", "LibFileSelect",
+                        "LibForegroundService","LibASRMin"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -165,13 +165,6 @@ ext.libmoduleInfo = [
                         "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
                 ]
         ],
-        "LibTTS"                    : [
-                "version"            : "6.12.0",
-                "artifactId"         : "lib-tts",
-                "apidependenciesList": [
-                        "LibConfig", "LibOS"
-                ]
-        ],
         "LibFile"                   : [
                 "version"            : "6.12.0",
                 "artifactId"         : "lib-file",
@@ -262,13 +255,6 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-data-repository",
                 "apidependenciesList": [
                         "LibLog", "LibAAF", "LibCoroutines"
-                ]
-        ],
-        "LibAudioPlayer"            : [
-                "version"            : "6.12.0",
-                "artifactId"         : "lib-audio-player",
-                "apidependenciesList": [
-                        "LibMedia", "LibBlockTask"
                 ]
         ],
         "LibFFmpegMobile"           : [
@@ -546,13 +532,6 @@ ext.libmoduleInfo = [
                         project.androidsupport.camera_camerax,
                         project.androidsupport.camera_view,
                         "LibCommonUtils", "LibMedia", "LibQRCode", "LibDeviceNetwork"
-                ]
-        ],
-        "LibAudio"                  : [
-                "version"            : "6.13.0",
-                "artifactId"         : "lib-audio",
-                "apidependenciesList": [
-                        "LibCommonUtils", "LibFile", "LibForegroundService"
                 ]
         ],
         "LibForegroundService"      : [

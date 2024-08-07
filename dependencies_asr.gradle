@@ -4,7 +4,35 @@ ext.asrmoduleInfo = [
                 "version"            : "6.13.0",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
-                        "LibSpeechRecognition"
+                        "LibSpeechRecognition", "LibASRMin"
+                ]
+        ],
+        "LibASRMin"           : [
+                "version"            : "6.13.0",
+                "artifactId"         : "lib-asr-min",
+                "apidependenciesList": [
+                        "LibAudioPlayer", "LibTTS", "LibAudio"
+                ]
+        ],
+        "LibAudioPlayer"      : [
+                "version"            : "6.12.0",
+                "artifactId"         : "lib-audio-player",
+                "apidependenciesList": [
+                        "LibMedia", "LibBlockTask"
+                ]
+        ],
+        "LibTTS"              : [
+                "version"            : "6.12.0",
+                "artifactId"         : "lib-tts",
+                "apidependenciesList": [
+                        "LibConfig", "LibOS"
+                ]
+        ],
+        "LibAudio"            : [
+                "version"            : "6.13.0",
+                "artifactId"         : "lib-audio",
+                "apidependenciesList": [
+                        "LibCommonUtils", "LibFile", "LibForegroundService"
                 ]
         ],
         "LibSherpaOnnx"       : [
@@ -14,9 +42,9 @@ ext.asrmoduleInfo = [
                         "LibAudio"
                 ]
         ],
-        "LibVoiceRecord"      : [
+        "LibAudioRecord"      : [
                 "version"            : "6.13.0",
-                "artifactId"         : "lib-voice_record",
+                "artifactId"         : "lib-audio-record",
                 "apidependenciesList": [
                         "LibSherpaOnnx", "LibAAF", "LibLog", "LibCommonUtils", "LibFile"
                 ]
@@ -25,7 +53,7 @@ ext.asrmoduleInfo = [
                 "version"            : "6.13.0",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
-                        "LibVoiceRecord"
+                        "LibAudioRecord"
                 ]
         ]
 ]
