@@ -23,7 +23,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.speech.kws.KeywordSpotterManager
 import com.bihe0832.android.lib.speech.recognition.ASRManager
-import com.bihe0832.android.lib.voice.record.AudioRecordManager
+import com.bihe0832.android.lib.audio.record.AudioRecordManager
 import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
 import java.io.File
 

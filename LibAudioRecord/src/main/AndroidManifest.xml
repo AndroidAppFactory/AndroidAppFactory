@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.bihe0832.android.lib.voice.record">
+<manifest package="com.bihe0832.android.lib.audio.record">
 
     <!--    <uses-permission android:name="android.permission.RECORD_AUDIO" />-->
 

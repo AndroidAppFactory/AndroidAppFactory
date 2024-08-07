@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.voice.record
+package com.bihe0832.android.lib.audio.record
 
 import android.annotation.SuppressLint
 import android.content.Context
