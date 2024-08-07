@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
@@ -74,30 +73,31 @@ public class LoadingDialog extends Dialog {
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
             findViewById(R.id.loading_main_layout).setLayoutParams(lp);
         } else {
-            findViewById(R.id.loading_main_layout).setBackgroundResource(R.drawable.com_bihe0832_base_loading_progress_bg);
+            findViewById(R.id.loading_main_layout).setBackgroundResource(
+                    R.drawable.com_bihe0832_base_loading_progress_bg);
         }
     }
 
     private void showAction() {
         if (!isShowing()) {
-            super.show();
+            Activity activity = ViewExtKt.getActivity(getContext());
+            if (null != activity && !activity.isFinishing()) {
+                super.show();
+            } else {
+                ZLog.e("activity is null or isFinishing");
+            }
         }
         refreshView();
     }
 
     @Override
     public void show() {
-        Activity activity = ViewExtKt.getActivity(getContext());
-        if (null != activity && !activity.isFinishing()) {
-            ThreadManager.getInstance().runOnUIThread(new Runnable() {
-                @Override
-                public void run() {
-                    showAction();
-                }
-            });
-        } else {
-            ZLog.e("LoadingDialog", "activity is null or isFinishing");
-        }
+        ThreadManager.getInstance().runOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                showAction();
+            }
+        });
     }
 
     public void show(String msg) {

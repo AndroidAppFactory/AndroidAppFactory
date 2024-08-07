@@ -15,7 +15,7 @@ import java.io.File
 import java.lang.reflect.Field
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
@@ -48,7 +48,7 @@ object LibTTS {
     private var needStopAfterSpeak = false
 
     private val mMsgList by lazy {
-        mutableListOf<TTSData>()
+        CopyOnWriteArrayList<TTSData>()
     }
 
     private val mTTSSpeakListenerList = CopyOnWriteArrayList<TTSSpeakListener>()
@@ -249,9 +249,10 @@ object LibTTS {
     }
 
     fun hasMoreSpeak(): Boolean {
-        return mMsgList.size > 0
+        return mMsgList.isNotEmpty()
     }
 
+    @Synchronized
     fun startSpeak() {
         if (mMsgList.isNotEmpty()) {
             var s = mMsgList[0]
@@ -332,9 +333,9 @@ object LibTTS {
         for (j in fields.indices) {
             fields[j].setAccessible(true)
             if (TextUtils.equals(
-                    "mServiceConnection",
-                    fields[j].getName(),
-                ) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())
+                        "mServiceConnection",
+                        fields[j].getName(),
+                    ) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())
             ) {
                 try {
                     if (fields[j].get(tts) == null) {
