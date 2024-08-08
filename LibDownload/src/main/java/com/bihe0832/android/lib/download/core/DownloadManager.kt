@@ -175,14 +175,14 @@ abstract class DownloadManager {
     fun updateDownItemByServerInfo(
         info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long, downloadAfterAdd: Boolean
     ): Boolean {
-        ZLog.d(TAG, "updateDownItemByServerInfo:$info")
+        ZLog.w(TAG, "updateDownItemByServerInfo:$info")
         // 重新启动，获取文件总长度
         var times = 0
         var realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
         do {
             times++
             try {
-                ZLog.e(TAG, "获取文件长度 $times:$realURL")
+                ZLog.w(TAG, "获取文件长度 $times:$realURL")
                 val url = URL(realURL)
                 val connection = (url.openConnection() as HttpURLConnection).apply {
                     upateRequestInfo()

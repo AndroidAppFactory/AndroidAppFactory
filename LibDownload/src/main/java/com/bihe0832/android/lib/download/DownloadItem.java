@@ -461,15 +461,15 @@ public class DownloadItem implements Serializable {
         if (mDownloadListener != null) {
             code = mDownloadListener.hashCode();
         }
-        return "下载资源：{" + " downloadURL='" + downloadURL + '\'' + " listener='" + code + '\'' + ", downloadTitle='"
-                + downloadTitle + '\'' + ", fileFolder='" + fileFolder + '\'' + ", tempFilePath='" + filePath + '\''
-                + ", fileMD5='" + contentMD5 + '\'' + ", fileSHA256='" + contentSHA256 + '\'' + ", forceDownloadNew="
-                + forceDownloadNew + ", downloadDesc='" + downloadDesc + '\'' + ", actionKey='" + actionKey + '\''
-                + ", extraInfo='" + extraInfo + '\'' + ", packageName='" + packageName + '\'' + ", versionCode="
-                + versionCode + ", downloadIcon='" + downloadIcon + '\'' + ", finishedLength=" + finishedLength
-                + ", finishedLengthBefore=" + finishedLengthBefore + ", rangeLength=" + contentLength + ", lastSpeed="
-                + lastSpeed + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", autoInstall=" + autoInstall
-                + ", status=" + status + ", downloadWhenUseMobile=" + downloadWhenUseMobile + ", downloadWhenAdd="
-                + downloadWhenAdd + '}';
+        return "下载资源：{" + " downloadURL='" + downloadURL + " ,realURL='" + realURL + ", listener=" + code
+                + ", title='" + downloadTitle + ", actionKey='" + actionKey + ", extraInfo='" + extraInfo
+                + ", rangeStart=" + rangeStart + ", localStart=" + localStart + ", contentLength=" + contentLength
+                + ", fileFolder='" + fileFolder + ", filePath='" + filePath + ", fileMD5='" + contentMD5
+                + ", fileSHA256='" + contentSHA256 + ", forceDownloadNew=" + forceDownloadNew + ", downloadDesc='"
+                + downloadDesc + ", packageName='" + packageName + ", versionCode=" + versionCode + ", finishedLength="
+                + finishedLength + ", finishedLengthBefore=" + finishedLengthBefore + ", lastSpeed=" + lastSpeed
+                + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", downloadIcon='" + downloadIcon
+                + ", autoInstall=" + autoInstall + ", status=" + status + ", downloadWhenUseMobile="
+                + downloadWhenUseMobile + ", downloadWhenAdd=" + downloadWhenAdd + '}';
     }
 }

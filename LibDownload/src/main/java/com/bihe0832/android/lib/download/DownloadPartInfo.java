@@ -126,15 +126,11 @@ public class DownloadPartInfo {
 
     @Override
     public String toString() {
-        return "DownloadPartInfo{" + "mPartID=" + mPartNo
-                + ", mDownloadID=" + mDownloadID
-                + ", mDownloadType=" + mDownloadType
-                + ", mDownloadURL='" + mRealDownloadURL + '\''
-                + ", mFinalFileName='" + mFinalFileName + '\'' + ", mPartRangeStart=" + mPartRangeStart
-                + ", mPartLocalStart=" + mPartLocalStart + ", mPartLength=" + mPartLength
-                + ", mPartFinished=" + mPartFinished
-                + ", mPartFinishedBefore=" + mPartFinishedBefore
-                + ", mPartStatus=" + mPartStatus
-                + '}';
+        return "DownloadPartInfo{" + "mPartID=" + mPartNo + ", mDownloadID=" + mDownloadID
+                + ", mDownloadType=" + mDownloadType + ", mDownloadURL='" + mRealDownloadURL
+                + ", mPartRangeStart=" + mPartRangeStart + ", mPartLocalStart=" + mPartLocalStart
+                + ", mPartLength=" + mPartLength + ", mPartFinishedBefore=" + mPartFinishedBefore
+                + ", mPartFinished=" + mPartFinished + ", mFinalFileName='" + mFinalFileName
+                + ", mPartStatus=" + mPartStatus + '}';
     }
 }

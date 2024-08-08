@@ -91,8 +91,8 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         ZLog.e(TAG, "goDownload localStart:${localStart}")
         ZLog.e(TAG, "goDownload contentLength:${info.contentLength} ${FileUtils.getFileLength(info.contentLength)}")
         ZLog.e(TAG, "goDownload info:${info}")
-
-
+        ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload 最终入参 ~~~~~~~~~~~~~~~~~~")
+        ZLog.e(TAG, "\n")
         val file = File(info.filePath)
         var hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, isDebug)
         if (file.exists() && hasDownload && rangeLength > 0 && file.length() <= rangeLength) {
@@ -242,7 +242,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ 分片下载数据 ${info.downloadID} - $partNo ~~~~~~~~~~~~~~~~~~")
         ZLog.e(
             TAG,
-            "分片下载数据 第${partNo}分片 rangeStart: $oldRangeStart, localStart:$oldLocalStart ,length :${length} ${
+            "分片下载数据 ${info.downloadID} - $partNo rangeStart: $oldRangeStart, localStart:$oldLocalStart ,length :${length} ${
                 FileUtils.getFileLength(length)
             },finished: $finished"
         )
@@ -257,7 +257,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
             this.partFinished = finished
             this.partFinishedBefore = finished
         }.also {
-            ZLog.d(TAG, "分片下载数据 - ${info.downloadID}: 开始第$partNo 段开始:$it")
+            ZLog.d(TAG, "分片下载数据 ${info.downloadID} - $partNo: 开始:$it")
         })
         DownloadingPartList.addDownloadingPart(downloadThreadForPart)
         DownloadInfoDBManager.saveDownloadPartInfo(downloadThreadForPart.getDownloadPartInfo())
