@@ -3,12 +3,15 @@ package com.bihe0832.android.base.debug.thread
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.timer.BaseTask
+import com.bihe0832.android.lib.timer.TaskManager
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -109,7 +112,6 @@ class DebugThreadAndCoroutinesFragmeAndnt : DebugCommonFragment() {
             }
 
             override fun onStartCommand(context: Context, intent: Intent, flags: Int, startId: Int) {
-                ZLog.d(intent)
             }
 
         })
@@ -128,7 +130,6 @@ class DebugThreadAndCoroutinesFragmeAndnt : DebugCommonFragment() {
             }
 
             override fun onStartCommand(context: Context, intent: Intent, flags: Int, startId: Int) {
-                ZLog.d(intent)
             }
 
         })

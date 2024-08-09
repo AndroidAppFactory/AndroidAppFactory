@@ -1,12 +1,12 @@
 package com.bihe0832.android.lib.foreground.service
 
 import android.app.Notification
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.text.TextUtils
 import androidx.core.app.NotificationCompat
-import com.bihe0832.android.lib.foreground.service.R
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.utils.apk.APKUtils
@@ -31,6 +31,7 @@ object AAFForegroundServiceManager {
     const val TAG = "AAFForegroundService"
     const val ACTION_UPADTE = "AAFForegroundServiceManager.update"
     const val ACTION_STOP = "AAFForegroundServiceManager.stop"
+    const val INTENT_KEY_PERMISSION = "AAFForegroundServiceManager.notify.permission"
 
     private const val NOTICE_ID = 99998
     private const val NOTICE_CHANNEL_ID = "ForegroundService"
@@ -46,26 +47,14 @@ object AAFForegroundServiceManager {
         actionList[action.getScene()] = action
     }
 
-    private fun startService(context: Context, action: String, intent: Intent): Boolean {
-        try {
-            intent.setClass(context, AAFForegroundService::class.java)
-            intent.setAction(action)
-            context.startService(intent)
-            return true
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return false
-    }
-
-    private fun stopService(context: Context, action: String) {
+    private fun stopService(context: Context, clazz: String, action: String) {
         if (actionList.containsKey(action)) {
             actionList.remove(action)
         }
         if (actionList.isEmpty()) {
-            startService(context, ACTION_STOP, Intent())
+            startForegroundService(context, context.packageName, clazz, ACTION_STOP, Intent())
         } else {
-            startService(context, ACTION_UPADTE, Intent())
+            startForegroundService(context, context.packageName, clazz, ACTION_UPADTE, Intent())
         }
     }
 
@@ -76,7 +65,6 @@ object AAFForegroundServiceManager {
         } else {
             mChannelName
         }
-
     }
 
     private fun getNotifyContent(context: Context): String {
@@ -135,7 +123,14 @@ object AAFForegroundServiceManager {
             ZLog.e(TAG, "sendToForegroundService bad action name:$actionName")
             return false
         }
-        return if (startService(context, actionName, intent)) {
+        return if (startForegroundService(
+                    context,
+                    context.packageName,
+                    AAFForegroundService::class.java.name,
+                    actionName,
+                    intent
+                )
+        ) {
             startByAction(action)
             ZLog.e(TAG, "sendToForegroundService success")
             true
@@ -146,6 +141,34 @@ object AAFForegroundServiceManager {
     }
 
     fun deleteFromForegroundService(context: Context, scene: String) {
-        stopService(context, scene)
+        stopService(context, AAFForegroundService::class.java.name, scene)
+    }
+
+    fun startForegroundService(
+        context: Context,
+        packageName: String,
+        clazzName: String,
+        action: String,
+        intent: Intent,
+    ): Boolean {
+        try {
+            intent.setComponent(ComponentName(packageName, clazzName))
+            intent.setAction(action)
+            if (NotifyManager.areNotificationsEnabled(context)) {
+                intent.putExtra(INTENT_KEY_PERMISSION, "1")
+                if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+            } else {
+                intent.putExtra(INTENT_KEY_PERMISSION, "0")
+                context.startService(intent)
+            }
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
     }
 }
