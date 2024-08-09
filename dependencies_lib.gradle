@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.13.3",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -535,7 +535,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibForegroundService"      : [
-                "version"            : "6.13.1",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-foreground-service",
                 "apidependenciesList": [
                         "LibNotification", "LibThread", "LibLog"

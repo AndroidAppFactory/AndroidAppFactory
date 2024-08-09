@@ -1,14 +1,14 @@
 apply from: rootDir.toString() + '/config.gradle'
 ext.asrmoduleInfo = [
         "LibASR"              : [
-                "version"            : "6.13.2",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
                         "LibSpeechRecognition", "LibASRMin"
                 ]
         ],
         "LibASRMin"           : [
-                "version"            : "6.13.2",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
                         "LibAudioPlayer", "LibTTS", "LibAudio"
@@ -29,28 +29,28 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibAudio"            : [
-                "version"            : "6.13.1",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibFile", "LibForegroundService"
                 ]
         ],
         "LibSherpaOnnx"       : [
-                "version"            : "6.13.1",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-sherpa-onnx",
                 "apidependenciesList": [
                         "LibAudio"
                 ]
         ],
         "LibAudioRecord"      : [
-                "version"            : "6.13.1",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-audio-record",
                 "apidependenciesList": [
                         "LibSherpaOnnx", "LibAAF", "LibLog", "LibCommonUtils", "LibFile"
                 ]
         ],
         "LibSpeechRecognition": [
-                "version"            : "6.13.1",
+                "version"            : "6.13.4",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
                         "LibAudioRecord"
