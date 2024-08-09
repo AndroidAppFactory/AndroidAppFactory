@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.IBinder
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager.ACTION_STOP
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager.ACTION_UPADTE
+import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager.INTENT_KEY_PERMISSION
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager.TAG
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
@@ -22,27 +23,29 @@ open class AAFForegroundService : Service() {
 
 
     private var hasInit = false
+    private var hasForeground = false
+    private var hasPermission = false
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
     override fun onCreate() {
         super.onCreate()
-        ZLog.d(TAG, "$TAG onCreate被调用，service 初始化:${this.hashCode()}")
-        init()
+        ZLog.d(TAG, "\nonCreate被调用:${this.hashCode()}")
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        ZLog.d(TAG, "\nonDestroy被调用:${this.hashCode()}")
         cancelNotify(this, AAFForegroundServiceManager.getNoticeID())
     }
 
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        ZLog.d(TAG, "$TAG onStartCommand 被调用:${this.hashCode()} $hasInit")
-        if (!hasInit) {
-            init()
-        }
+        ZLog.d(TAG, "\nonStartCommand 被调用:${this.hashCode()} $hasInit")
+        ZLog.d(TAG, intent)
+        hasPermission = "1" == intent.getStringExtra(INTENT_KEY_PERMISSION)
+        init()
         NotifyManager.sendNotifyNow(
             this,
             AAFForegroundServiceManager.getChannelID(),
@@ -50,13 +53,13 @@ open class AAFForegroundService : Service() {
             AAFForegroundServiceManager.getNoticeID()
         )
         if (ACTION_UPADTE == intent.action) {
-            ZLog.d(TAG, "$TAG do noting")
+            ZLog.d(TAG, " do noting")
         } else if (ACTION_STOP == intent.action) {
-            ZLog.d(TAG, "$TAG do stop")
+            ZLog.d(TAG, " do stop")
             ThreadManager.getInstance().start({
-                ZLog.d(TAG, "$TAG start stop")
+                ZLog.d(TAG, " start stop")
                 stopSelf()
-            }, 6)
+            }, 1)
         } else {
             ThreadManager.getInstance().start {
                 AAFForegroundServiceManager.doAction(this, intent, flags, startId)
@@ -65,21 +68,23 @@ open class AAFForegroundService : Service() {
         return START_NOT_STICKY
     }
 
-    private fun init() {
-        ZLog.d(TAG, "$TAG init:${this.hashCode()} $hasInit")
-        if (hasInit) {
-            ZLog.d(TAG, "$TAG onCreate被调用，service 已经被初始化:${this.hashCode()}")
-            return
+    protected open fun init() {
+        ZLog.d(TAG, "init:${this.hashCode()} hasInit：$hasInit hasForeground：$hasForeground")
+        if (!hasInit || !hasForeground) {
+            initForegroundNotify()
         }
-        initForegroundNotify()
         hasInit = true
     }
 
     private fun initForegroundNotify() {
-        startForeground(
-            AAFForegroundServiceManager.getNoticeID(),
-            AAFForegroundServiceManager.getCurrentNotification(this)
-        )
+        if (hasPermission) {
+            hasForeground = true
+            ZLog.d(TAG, "startForeground:${this.hashCode()}")
+            startForeground(
+                AAFForegroundServiceManager.getNoticeID(), AAFForegroundServiceManager.getCurrentNotification(this)
+            )
+        } else {
+            ZLog.d(TAG, "startForeground skip:${this.hashCode()}")
+        }
     }
-
 }

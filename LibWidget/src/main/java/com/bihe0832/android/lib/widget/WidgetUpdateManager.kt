@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.widget
 
 import android.app.ActivityManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -15,6 +14,7 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.widget.tools.WidgetTools
@@ -92,7 +92,13 @@ object WidgetUpdateManager {
     }
 
     // 通过widget 唤起前台服务
-    fun startService(context: Context, clazzName: String, startAgain: Boolean) {
+    fun startForegroundService(
+        context: Context,
+        clazzName: String,
+        action: String,
+        intent: Intent,
+        startAgain: Boolean,
+    ) {
         ZLog.d(TAG, "startServiceByWidget by worker: $clazzName")
         if (!TextUtils.isEmpty(clazzName)) {
             if (isServiceRunning(context, clazzName)) {
@@ -104,13 +110,36 @@ object WidgetUpdateManager {
                     return
                 }
             }
-            val intent = Intent()
-            intent.setComponent(ComponentName(context.packageName, clazzName))
-            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
-                context!!.startForegroundService(intent)
-            } else {
-                context!!.startService(intent)
+            AAFForegroundServiceManager.startForegroundService(
+                context,
+                context.packageName,
+                clazzName,
+                action,
+                intent
+            )
+        }
+    }
+
+    // 通过widget 唤起前台服务
+    fun startForegroundService(context: Context, clazzName: String, startAgain: Boolean) {
+        ZLog.d(TAG, "startServiceByWidget by worker: $clazzName")
+        if (!TextUtils.isEmpty(clazzName)) {
+            if (isServiceRunning(context, clazzName)) {
+                ZLog.e(
+                    TAG,
+                    "startServiceByWidget by worker: service is running $clazzName, need start again:$startAgain"
+                )
+                if (!startAgain) {
+                    return
+                }
             }
+            AAFForegroundServiceManager.startForegroundService(
+                context,
+                context.packageName,
+                clazzName,
+                "",
+                Intent()
+            )
         }
     }
 
@@ -182,7 +211,7 @@ object WidgetUpdateManager {
     }
 
     fun updateWidget(
-        context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean
+        context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean,
     ) {
         ZLog.d(
             TAG, "updateWidget:" + clazz.name + ",canAutoUpdateByOthers: $canAutoUpdateByOthers ; updateAll: $updateAll"
