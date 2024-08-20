@@ -17,13 +17,13 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.audio.wav.PcmToWav
+import com.bihe0832.android.lib.audio.record.AudioRecordManager
 import com.bihe0832.android.lib.audio.wav.AudioUtils
+import com.bihe0832.android.lib.audio.wav.PcmToWav
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.speech.kws.KeywordSpotterManager
 import com.bihe0832.android.lib.speech.recognition.ASRManager
-import com.bihe0832.android.lib.audio.record.AudioRecordManager
 import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
 import java.io.File
 
@@ -50,6 +50,7 @@ class DebugTTSAndASRFragment : DebugEnvFragment() {
             )
             add(DebugItemData("ARS 初始化", View.OnClickListener { init() }))
             add(DebugItemData("ARS 开始实时直接识别", View.OnClickListener { startReal() }))
+            add(DebugItemData("ARS 实时立刻打断", View.OnClickListener { forceEndCurrent() }))
             add(DebugItemData("ARS 开始实时识别后读取部分区间", View.OnClickListener { testSplit() }))
             add(DebugItemData("ARS 开始实时基于文件识别", View.OnClickListener { startRealFile() }))
             add(DebugItemData("ARS 结束实时识别", View.OnClickListener { stop() }))
@@ -128,6 +129,12 @@ class DebugTTSAndASRFragment : DebugEnvFragment() {
     }
 
 
+    fun forceEndCurrent() {
+        AudioRecordManager.forceEndCurrent().let {
+            ZLog.d(TAG, "forceEndCurrent:$it")
+        }
+    }
+
     fun testSplit() {
         AudioRecordManager.startRecord(audioSource,
             sampleRateInHz,
@@ -153,7 +160,13 @@ class DebugTTSAndASRFragment : DebugEnvFragment() {
                             val length = it.size * 1.0f / sampleRateInHz
                             if (length > 3.2) {
                                 val shortArray = ShortArray((sampleRateInHz * 3.2).toInt() + sampleRateInHz)
-                                System.arraycopy(it, it.size - (sampleRateInHz * 3.2).toInt(), shortArray, sampleRateInHz, (sampleRateInHz * 3.2).toInt())
+                                System.arraycopy(
+                                    it,
+                                    it.size - (sampleRateInHz * 3.2).toInt(),
+                                    shortArray,
+                                    sampleRateInHz,
+                                    (sampleRateInHz * 3.2).toInt()
+                                )
                                 val file2 =
                                     FileUtils.getFolderPathWithSeparator(fileFolder) + System.currentTimeMillis() + ".wav"
                                 val byteArray2 = AudioUtils.shortArrayToByteArray(shortArray)

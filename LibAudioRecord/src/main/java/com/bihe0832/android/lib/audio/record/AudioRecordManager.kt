@@ -35,9 +35,13 @@ object AudioRecordManager {
     private var recordingThread: Thread? = null
     private var samplesBuffer = arrayListOf<ShortArray>()
 
+    private val interval = 0.1
+
     @Volatile
     private var isRecording: Boolean = false
     private var needForceEnding: Boolean = false
+    private var lastForceTime = 0L
+
 
     fun init(
         context: Context,
@@ -71,7 +75,7 @@ object AudioRecordManager {
     private fun splitVoiceByEndpoint(sampleRateInHz: Int, callback: AAFDataCallback<ShortArray>) {
         ZLog.d(TAG, "splitVoiceByEndpoint")
         val stream = onlineRecognizer.createStream()
-        val interval = 0.1
+        val interval = interval
         val bufferSize = (interval * sampleRateInHz).toInt()
         val buffer = ShortArray(bufferSize)
         while (isRecording) {
@@ -130,8 +134,12 @@ object AudioRecordManager {
         onlineRecognizer.release()
     }
 
-    fun forceEndCurrent() {
-        needForceEnding = true
+    fun forceEndCurrent(): Boolean {
+        if (System.currentTimeMillis() - lastForceTime > interval * 1000) {
+            needForceEnding = true
+            return true
+        }
+        return false
     }
 
     @SuppressLint("MissingPermission")
@@ -151,13 +159,18 @@ object AudioRecordManager {
         audioRecord = AudioRecord(audioSource, sampleRateInHz, channelConfig, audioFormat, numBytes * 2)
         audioRecord?.let {
             ZLog.d(TAG, "state: ${it.state}")
-            it.startRecording()
-            isRecording = true
-            recordingThread = thread(true) {
-                splitVoiceByEndpoint(sampleRateInHz, callback)
+            if (it.state == AudioRecord.STATE_INITIALIZED) {
+                it.startRecording();
+                isRecording = true
+                recordingThread = thread(true) {
+                    splitVoiceByEndpoint(sampleRateInHz, callback)
+                }
+                ZLog.d(TAG, "Start recording")
+                return true
+            } else {
+                ZLog.e(TAG, "AudioRecord initialization failed");
             }
-            ZLog.d(TAG, "Start recording")
-            return true
+
         }
         return false
     }

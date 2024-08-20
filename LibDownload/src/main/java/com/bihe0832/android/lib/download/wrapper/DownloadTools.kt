@@ -91,16 +91,15 @@ object DownloadTools {
 
             @Synchronized
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = true);
                 nameListener.values.forEach { list ->
                     list.forEach {
                         it?.onFail(errorCode, msg, item)
                     }
                 }
-                nameListener.clear()
                 mGlobalDownloadListenerList.forEach {
                     it.onFail(errorCode, msg, item)
                 }
+                DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = true)
             }
 
             @Synchronized
