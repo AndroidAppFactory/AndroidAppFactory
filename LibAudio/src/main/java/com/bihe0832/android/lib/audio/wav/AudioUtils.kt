@@ -10,7 +10,6 @@ import java.io.IOException
 
 object AudioUtils {
     val TAG = "Audio"
-
     fun byteArrayToShortArray(bytes: ByteArray, size: Int): ShortArray {
         val shorts = ShortArray(size / 2)
         for (i in 0 until size step 2) {

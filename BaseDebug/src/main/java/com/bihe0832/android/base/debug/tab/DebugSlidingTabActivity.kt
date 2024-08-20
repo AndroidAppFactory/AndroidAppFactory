@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
@@ -133,7 +134,7 @@ class DebugSlidingTabActivity : BaseActivity(), OnTabSelectListener {
         )
 
         (findViewById<SlidingTabLayout>(R.id.tl_10).getChildAt(0) as ViewGroup).let { rootView ->
-            ((rootView.getChildAt(1) as ViewGroup).getChildAt(0) as AppCompatTextView).apply {
+            ((rootView.getChildAt(1) as ViewGroup).getChildAt(0) as TextView).apply {
                 compoundDrawablePadding = DisplayUtil.dip2px(context!!, 4f)
                 setDrawableLeft(
                     R.mipmap.icon,

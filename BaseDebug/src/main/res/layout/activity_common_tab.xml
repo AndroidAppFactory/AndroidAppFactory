@@ -14,7 +14,7 @@
 
 
 
-        <androidx.viewpager.widget.ViewPager
+        <com.bihe0832.android.lib.ui.viewpager.NoScrollViewPager
             android:id="@+id/vp_2"
             android:layout_width="match_parent"
             android:layout_height="84dp"/>
