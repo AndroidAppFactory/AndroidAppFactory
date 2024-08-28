@@ -1,14 +1,14 @@
 apply from: rootDir.toString() + '/config.gradle'
 ext.asrmoduleInfo = [
         "LibASR"              : [
-                "version"            : "6.13.5",
+                "version"            : "6.14.0",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
                         "LibSpeechRecognition", "LibASRMin", "LibSherpaEndpoint"
                 ]
         ],
         "LibASRMin"           : [
-                "version"            : "6.13.5",
+                "version"            : "6.14.0",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
                         "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
@@ -29,14 +29,14 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibAudio"            : [
-                "version"            : "6.13.5",
+                "version"            : "6.14.0",
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibFile", "LibGson"
                 ]
         ],
         "LibAudioRecord"      : [
-                "version"            : "6.13.5",
+                "version"            : "6.14.0",
                 "artifactId"         : "lib-audio-record",
                 "apidependenciesList": [
                         "LibAudio", "LibAAF", "LibLog", "LibCommonUtils", "LibFile"
@@ -50,21 +50,21 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibSherpaOnnx"       : [
-                "version"            : "6.13.5",
+                "version"            : "6.14.0",
                 "artifactId"         : "lib-sherpa-onnx",
                 "apidependenciesList": [
                         "LibAudio", "LibOnnx"
                 ]
         ],
         "LibSherpaEndpoint"   : [
-                "version"            : "6.13.5",
+                "version"            : "6.14.0",
                 "artifactId"         : "lib-sherpa-endpoint",
                 "apidependenciesList": [
                         "LibAudioRecord", "LibSherpaOnnx"
                 ]
         ],
         "LibSpeechRecognition": [
-                "version"            : "6.13.5",
+                "version"            : "6.14.0",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
                         "LibSherpaOnnx"
