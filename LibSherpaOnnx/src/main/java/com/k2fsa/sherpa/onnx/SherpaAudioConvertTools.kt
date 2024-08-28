@@ -1,6 +1,6 @@
 package com.k2fsa.sherpa.onnx
 
-import com.bihe0832.android.lib.audio.wav.AudioUtils
+import com.bihe0832.android.lib.audio.AudioUtils
 import java.io.IOException
 
 /**

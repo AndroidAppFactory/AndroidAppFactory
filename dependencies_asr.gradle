@@ -4,14 +4,14 @@ ext.asrmoduleInfo = [
                 "version"            : "6.13.5",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
-                        "LibSpeechRecognition", "LibASRMin"
+                        "LibSpeechRecognition", "LibASRMin", "LibSherpaEndpoint"
                 ]
         ],
         "LibASRMin"           : [
                 "version"            : "6.13.5",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
-                        "LibAudioPlayer", "LibTTS", "LibAudio"
+                        "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
                 ]
         ],
         "LibAudioPlayer"      : [
@@ -32,10 +32,17 @@ ext.asrmoduleInfo = [
                 "version"            : "6.13.5",
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
-                        "LibCommonUtils", "LibFile", "LibForegroundService"
+                        "LibCommonUtils", "LibFile", "LibGson"
                 ]
         ],
-        "LibOnnx"       : [
+        "LibAudioRecord"      : [
+                "version"            : "6.13.5",
+                "artifactId"         : "lib-audio-record",
+                "apidependenciesList": [
+                        "LibAudio", "LibAAF", "LibLog", "LibCommonUtils", "LibFile"
+                ]
+        ],
+        "LibOnnx"             : [
                 "version"            : "6.13.5",
                 "artifactId"         : "lib-onnx",
                 "apidependenciesList": [
@@ -46,21 +53,21 @@ ext.asrmoduleInfo = [
                 "version"            : "6.13.5",
                 "artifactId"         : "lib-sherpa-onnx",
                 "apidependenciesList": [
-                        "LibAudio","LibOnnx"
+                        "LibAudio", "LibOnnx"
                 ]
         ],
-        "LibAudioRecord"      : [
+        "LibSherpaEndpoint"   : [
                 "version"            : "6.13.5",
-                "artifactId"         : "lib-audio-record",
+                "artifactId"         : "lib-sherpa-endpoint",
                 "apidependenciesList": [
-                        "LibSherpaOnnx", "LibAAF", "LibLog", "LibCommonUtils", "LibFile"
+                        "LibAudioRecord", "LibSherpaOnnx"
                 ]
         ],
         "LibSpeechRecognition": [
                 "version"            : "6.13.5",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
-                        "LibAudioRecord"
+                        "LibSherpaOnnx"
                 ]
         ]
 ]

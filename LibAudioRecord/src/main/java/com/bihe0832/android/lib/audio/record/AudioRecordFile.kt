@@ -1,0 +1,68 @@
+package com.bihe0832.android.lib.audio.record
+
+import com.bihe0832.android.lib.audio.AudioRecordConfig
+import com.bihe0832.android.lib.audio.wav.WavHeader
+import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.log.ZLog
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+
+/**
+ * Summary
+ * @author code@bihe0832.com
+ * Created on 2024/7/18.
+ * Description:
+ *
+ */
+class AudioRecordFile(private val scene: String, private val file: File) {
+
+    private lateinit var config: AudioRecordConfig
+    private var outputStream: OutputStream? = null
+
+    private var hasStart = false
+
+    fun stopRecord() {
+        ZLog.d("${AudioRecordManager.TAG} AudioRecordFile stopRecord:$scene $file")
+        if (hasStart){
+            AudioRecordManager.stopRecord(scene)
+            FileUtils.writeDataToFile(file.absolutePath, 0, WavHeader(config, file.length()).toBytes())
+            if (outputStream != null) {
+                try {
+                    outputStream!!.flush()
+                    outputStream!!.close()
+                    outputStream = null
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        hasStart = false
+    }
+
+    fun startRecord(): Boolean {
+        ZLog.d("${AudioRecordManager.TAG} AudioRecordFile startRecord:$scene ${file.absoluteFile}")
+        if (hasStart) {
+            return true
+        }
+        try {
+            if (!FileUtils.checkAndCreateFolder(file.parentFile.absolutePath)) {
+                return false
+            }
+            hasStart = true
+            if (outputStream == null) {
+                outputStream = FileOutputStream(file)
+            }
+            return AudioRecordManager.startRecord(scene) { audioRecordConfig, audioChunk, ret ->
+                if (audioChunk != null && ret > 0) {
+                    config = audioRecordConfig
+                    outputStream!!.write(audioChunk.toBytes()) // 将数据写入文件
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return false
+        }
+    }
+}

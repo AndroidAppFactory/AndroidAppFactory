@@ -1,20 +1,23 @@
-package com.bihe0832.android.lib.audio.wav
+package com.bihe0832.android.lib.audio
 
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import com.bihe0832.android.lib.audio.wav.PcmToWav
+import com.bihe0832.android.lib.audio.wav.WaveFileReader
 import com.bihe0832.android.lib.file.FileUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 
 object AudioUtils {
     val TAG = "Audio"
+
     fun byteArrayToShortArray(bytes: ByteArray, size: Int): ShortArray {
         val shorts = ShortArray(size / 2)
-        for (i in 0 until size step 2) {
-            shorts[i / 2] = ((bytes[i].toInt() and 0xFF) or ((bytes[i + 1].toInt() and 0xFF) shl 8)).toShort()
-        }
+        ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer()[shorts]
         return shorts
     }
 
@@ -27,13 +30,12 @@ object AudioUtils {
         return bytes
     }
 
-    fun getDurationByWavFile(filePath: String): Long {
+    fun getDurationByWavFile(filePath: String): Int {
         if (!FileUtils.checkFileExist(filePath)) {
             return -1
         }
-        val wavFileReader = WavFileReader()
-        wavFileReader.parseWavFileHeader(filePath)
-        return wavFileReader.getAudioLength()
+        val wavFileReader = WaveFileReader(filePath)
+        return wavFileReader.duration
     }
 
     fun getDurationWithMediaMetadataRetriever(filePath: String): Long {

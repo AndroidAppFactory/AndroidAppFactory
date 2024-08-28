@@ -15,7 +15,7 @@ ext.libmoduleInfo = [
                         "LibNotification", "LibBottomTab", "LibRecycleviewExt", "LibTouchRegion", "LibViewExt",
                         "LibPermission", "LibMedia", "LibImmersive", "LibFloatview", "LibTextView",
                         "LibViewPager", "LibCustomView", "LibAAFResource", "LibColor", "LibFileSelect",
-                        "LibForegroundService","LibASRMin"
+                        "LibForegroundService", "LibASRMin"
                 ]
         ],
         "RouterAnnotation"          : [
