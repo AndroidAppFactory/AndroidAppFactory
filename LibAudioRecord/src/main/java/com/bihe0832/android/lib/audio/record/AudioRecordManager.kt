@@ -1,23 +1,14 @@
 package com.bihe0832.android.lib.audio.record
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.media.AudioRecord
-import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
-import com.bihe0832.android.lib.audio.wav.AudioUtils
-import com.bihe0832.android.lib.audio.wav.PcmToWav
-import com.bihe0832.android.lib.file.FileUtils
+import android.Manifest
+import android.text.TextUtils
+import androidx.annotation.RequiresPermission
+import com.bihe0832.android.lib.audio.AudioRecordConfig
+import com.bihe0832.android.lib.audio.record.common.AudioChunk
+import com.bihe0832.android.lib.audio.record.common.AudioDataRecorder
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.k2fsa.sherpa.onnx.EndpointConfig
-import com.k2fsa.sherpa.onnx.EndpointRule
-import com.k2fsa.sherpa.onnx.FeatureConfig
-import com.k2fsa.sherpa.onnx.OnlineModelConfig
-import com.k2fsa.sherpa.onnx.OnlineRecognizer
-import com.k2fsa.sherpa.onnx.OnlineRecognizerConfig
-import com.k2fsa.sherpa.onnx.OnlineTransducerModelConfig
-import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
-import kotlin.concurrent.thread
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Summary
@@ -28,185 +19,95 @@ import kotlin.concurrent.thread
  */
 object AudioRecordManager {
 
-    private const val TAG = "AudioRecordManager"
+     const val TAG = "AudioRecordManager"
 
-    private lateinit var onlineRecognizer: OnlineRecognizer
-    private var audioRecord: AudioRecord? = null
-    private var recordingThread: Thread? = null
-    private var samplesBuffer = arrayListOf<ShortArray>()
+    private var mInterval = 0.1f
+    private lateinit var mAudioDataRecorder: AudioDataRecorder
 
-    private val interval = 0.1
+    @get:Synchronized
+    private val sceneWithListener = ConcurrentHashMap<String, AudioRecordItem>()
 
-    @Volatile
-    private var isRecording: Boolean = false
-    private var needForceEnding: Boolean = false
-    private var lastForceTime = 0L
+    internal class AudioRecordItem(val scene: String, val listener: AudioChunk.OnAudioChunkPulledListener) {
+        var isRecord: Boolean = true
+    }
 
-
-    fun init(
-        context: Context,
-        sampleRateInHz: Int,
-        minTrailingForNone: Float,
-        minTrailingForBetween: Float,
-        maxUtteranceLength: Float,
-    ) {
-        val modelAssetsDir = "sherpa-onnx-streaming-zipformer-zh-14M-2023-02-23"
-        val config = OnlineRecognizerConfig(
-            featConfig = FeatureConfig(sampleRate = sampleRateInHz, featureDim = 80),
-            modelConfig = OnlineModelConfig(
-                transducer = OnlineTransducerModelConfig(
-                    encoder = "$modelAssetsDir/encoder-epoch-99-avg-1.int8.onnx",
-                    decoder = "$modelAssetsDir/decoder-epoch-99-avg-1.onnx",
-                    joiner = "$modelAssetsDir/joiner-epoch-99-avg-1.int8.onnx",
-                ),
-                tokens = "$modelAssetsDir/tokens.txt",
-                modelType = "zipformer",
+    @RequiresPermission(Manifest.permission.RECORD_AUDIO)
+    fun init(audioSource: Int, sampleRateInHz: Int, channelConfig: Int, audioFormat: Int, interval: Float) {
+        mInterval = interval
+        mAudioDataRecorder = AudioDataRecorder(
+            AudioRecordConfig(
+                audioSource,
+                sampleRateInHz,
+                channelConfig,
+                audioFormat
             ),
-            endpointConfig = EndpointConfig(
-                rule1 = EndpointRule(false, minTrailingForNone, 0.0f),
-                rule2 = EndpointRule(true, minTrailingForBetween, 0.0f),
-                rule3 = EndpointRule(false, 0.0f, maxUtteranceLength)
-            ),
-            enableEndpoint = true,
-        )
-        onlineRecognizer = OnlineRecognizer(assetManager = context.assets, config = config)
-    }
-
-    private fun splitVoiceByEndpoint(sampleRateInHz: Int, callback: AAFDataCallback<ShortArray>) {
-        ZLog.d(TAG, "splitVoiceByEndpoint")
-        val stream = onlineRecognizer.createStream()
-        val interval = interval
-        val bufferSize = (interval * sampleRateInHz).toInt()
-        val buffer = ShortArray(bufferSize)
-        while (isRecording) {
-            val ret = audioRecord?.read(buffer, 0, buffer.size)
-            if (ret != null && ret > 0) {
-                val temp = ShortArray(ret)
-                System.arraycopy(buffer, 0, temp, 0, ret)
-                samplesBuffer.add(temp)
-                if (needForceEnding) {
-                    needForceEnding = false
-                    ZLog.d(TAG, "processSamples forceEnding")
-                    onlineRecognizer.reset(stream)
-                    val totalData = samplesBuffer.flatMap { it.asList() }.toShortArray()
-                    ZLog.d(TAG, "processSamples isEndpoint totalData:" + totalData.size)
-                    samplesBuffer.clear()
-                    ThreadManager.getInstance().start {
-                        callback.onSuccess(totalData)
-                    }
-                } else {
-                    val samples = SherpaAudioConvertTools.shortArrayToSherpaArray(buffer, ret)
-                    stream.acceptWaveform(samples, sampleRate = sampleRateInHz)
-                    while (onlineRecognizer.isReady(stream)) {
-                        onlineRecognizer.decode(stream)
-                    }
-                    val isEndpoint = onlineRecognizer.isEndpoint(stream)
-                    if (isEndpoint) {
-                        ZLog.d(TAG, "processSamples isEndpoint")
-                        onlineRecognizer.reset(stream)
-                        val totalData = samplesBuffer.flatMap { it.asList() }.toShortArray()
-                        ZLog.d(TAG, "processSamples isEndpoint totalData:" + totalData.size)
-                        samplesBuffer.clear()
-                        ThreadManager.getInstance().start {
-                            callback.onSuccess(totalData)
-                        }
-                    }
-                }
-            }
-        }
-        stream.release()
-    }
-
-    fun stopRecord() {
-        ZLog.d(TAG, "Stopped recording start")
-        isRecording = false
-        audioRecord?.let {
-            it.stop()
-            it.release()
-        }
-        audioRecord = null
-        ZLog.d(TAG, "Stopped recording end")
-    }
-
-    fun destroy() {
-        samplesBuffer.clear()
-        stopRecord()
-        onlineRecognizer.release()
-    }
-
-    fun forceEndCurrent(): Boolean {
-        if (System.currentTimeMillis() - lastForceTime > interval * 1000) {
-            needForceEnding = true
-            return true
-        }
-        return false
-    }
-
-    @SuppressLint("MissingPermission")
-    fun startRecord(
-        audioSource: Int,
-        sampleRateInHz: Int,
-        channelConfig: Int,
-        audioFormat: Int,
-        callback: AAFDataCallback<ShortArray>,
-    ): Boolean {
-        ZLog.d(TAG, "Started recording call")
-        if (isRecording) {
-            ZLog.d(TAG, "recording has start before")
-            return false
-        }
-        val numBytes = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat)
-        audioRecord = AudioRecord(audioSource, sampleRateInHz, channelConfig, audioFormat, numBytes * 2)
-        audioRecord?.let {
-            ZLog.d(TAG, "state: ${it.state}")
-            if (it.state == AudioRecord.STATE_INITIALIZED) {
-                it.startRecording();
-                isRecording = true
-                recordingThread = thread(true) {
-                    splitVoiceByEndpoint(sampleRateInHz, callback)
-                }
-                ZLog.d(TAG, "Start recording")
-                return true
-            } else {
-                ZLog.e(TAG, "AudioRecord initialization failed");
-            }
-
-        }
-        return false
-    }
-
-    @SuppressLint("MissingPermission")
-    fun startRecord(
-        audioSource: Int,
-        sampleRateInHz: Int,
-        channelConfig: Int,
-        audioFormat: Int,
-        fileFolder: String,
-        callback: AAFDataCallback<String>,
-    ): Boolean {
-        return startRecord(audioSource,
-            sampleRateInHz,
-            channelConfig,
-            audioFormat,
-            object : AAFDataCallback<ShortArray>() {
-                override fun onSuccess(pcmData: ShortArray?) {
-                    ZLog.d(TAG, "Started recording callback:${pcmData?.size}")
-                    pcmData?.let {
-                        if (FileUtils.checkAndCreateFolder(fileFolder)) {
-                            val file =
-                                FileUtils.getFolderPathWithSeparator(fileFolder) + System.currentTimeMillis() + ".wav"
-                            val byteArray = AudioUtils.shortArrayToByteArray(pcmData)
-                            PcmToWav(
-                                sampleRateInHz,
-                                channelConfig,
-                                audioFormat
-                            ).convertToFile(byteArray, file)
-                            callback.onSuccess(file)
-                        } else {
-                            callback.onError(-1, "File folder is bad")
+            interval,
+            object : AudioChunk.OnAudioChunkPulledListener {
+                override fun onAudioChunkPulled(
+                    audioRecordConfig: AudioRecordConfig,
+                    audioChunk: AudioChunk?,
+                    dataLength: Int,
+                ) {
+                    sceneWithListener.forEach {
+                        if (it.value.isRecord) {
+                            ThreadManager.getInstance().start {
+                                it.value.listener.onAudioChunkPulled(audioRecordConfig, audioChunk, dataLength)
+                            }
                         }
                     }
                 }
             })
+    }
+
+    /**
+     * 开始，请确保当前app有 RECORD_AUDIO 权限
+     */
+    fun startRecord(scene: String, listener: AudioChunk.OnAudioChunkPulledListener?): Boolean {
+        ZLog.d(TAG, "startRecord recording:$scene")
+        if (TextUtils.isEmpty(scene) || listener == null) {
+            return false
+        }
+        return if (sceneWithListener.containsKey(scene)) {
+            ZLog.d(TAG, "startRecord record failed, start before:$scene")
+            false
+        } else {
+            ZLog.d(TAG, "startRecord record success:$scene")
+            sceneWithListener[scene] = AudioRecordItem(scene, listener)
+            mAudioDataRecorder.startRecord()
+            true
+        }
+    }
+
+    /**
+     * 暂停
+     */
+    fun pauseRecord(scene: String) {
+        ZLog.d(TAG, "pauseRecord recording:$scene")
+        sceneWithListener[scene]?.isRecord = false
+        if (sceneWithListener.filter { it.value.isRecord }.isEmpty()) {
+            mAudioDataRecorder.pauseRecord()
+        }
+    }
+
+    /**
+     * 继续
+     */
+    fun resumeRecord(scene: String) {
+        ZLog.d(TAG, "resumeRecord recording:$scene")
+        if (sceneWithListener[scene]?.isRecord == false && sceneWithListener.filter { it.value.isRecord }.isEmpty()) {
+            sceneWithListener[scene]?.isRecord = true
+            mAudioDataRecorder.resumeRecord()
+        }
+    }
+
+    /**
+     * 停止
+     */
+    fun stopRecord(scene: String) {
+        ZLog.d(TAG, "stopRecord recording:$scene")
+        sceneWithListener.remove(scene)
+        if (sceneWithListener.isEmpty()) {
+            mAudioDataRecorder.stopRecord()
+        }
     }
 }

@@ -20,7 +20,7 @@ public class ASRManager {
     private val TAG = "ASRManager"
     private lateinit var offlineRecognizer: OfflineRecognizer
 
-    fun initRecognizer(context: Context,modelDir:String, sampleRateInHz: Int) {
+    fun initRecognizer(context: Context, modelDir: String, sampleRateInHz: Int) {
 
         val config = OfflineRecognizerConfig(
             featConfig = FeatureConfig(sampleRate = sampleRateInHz, featureDim = 80),
@@ -30,7 +30,9 @@ public class ASRManager {
                 ),
                 tokens = "$modelDir/tokens.txt",
                 modelType = "paraformer",
-            )
+            ),
+            hotwordsFile = "$modelDir/hotword.txt",
+
         )
         offlineRecognizer = OfflineRecognizer(
             assetManager = context.assets,
