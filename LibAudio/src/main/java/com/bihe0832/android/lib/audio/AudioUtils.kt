@@ -69,13 +69,15 @@ object AudioUtils {
 
     fun readWavAudioData(filePath: String?): ByteArray? {
         var bytes: ByteArray? = null
-        if (FileUtils.checkFileExist(filePath ?: "")) {
-            val file = File(filePath)
+        val file = File(filePath)
+        val WAV_LENGTH = 44
+        if (file.exists() && file.length() > WAV_LENGTH) {
+
             var inputStream: FileInputStream? = null
             try {
                 inputStream = FileInputStream(file)
                 // 跳过WAV文件头
-                val headerSize = 44
+                val headerSize = WAV_LENGTH
                 inputStream.skip(headerSize.toLong())
                 // 读取音频数据
                 bytes = ByteArray(file.length().toInt() - headerSize)
@@ -115,5 +117,15 @@ object AudioUtils {
         PcmToWav(
             sampleRateInHz, channelConfig, audioFormat
         ).convertToFile(pcmFile, targetFile)
+    }
+
+
+    fun isOverSilence(shorts: ShortArray, max: Short): Boolean {
+        for (sh in shorts) {
+            if (sh > max || sh < -max) {
+                return true
+            }
+        }
+        return false
     }
 }

@@ -43,7 +43,6 @@ import com.bihe0832.android.base.debug.temp.DebugBasicFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
 import com.bihe0832.android.base.debug.thread.DebugThreadAndCoroutinesFragmeAndnt
 import com.bihe0832.android.base.debug.toast.DebugToastFragment
-import com.bihe0832.android.base.debug.tts.DebugTTSAndASRFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
@@ -69,7 +68,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("拍照、相册、图片、视频、音频操作调试", DebugMediaFragment::class.java))
 
             add(getDebugFragmentItemData("Google相关 调试", DebugGoogleFragment::class.java))
-            add(getDebugFragmentItemData("TTS、ARS 调试", DebugTTSAndASRFragment::class.java))
+            add(getDebugFragmentItemData("TTS 调试", DebugTTSFragment::class.java))
 
             add(getDebugFragmentItemData("协程及多线程、前台服务调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
             add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))

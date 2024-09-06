@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.audio.DebugAudioFragment
+import com.bihe0832.android.base.debug.audio.asr.DebugRecordAndASRFragRecment
 import com.bihe0832.android.base.debug.media.photos.DebugPhotosFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -22,8 +23,8 @@ import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.media.Media
-import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.media.image.TextToImageUtils
+import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
 
 class DebugMediaFragment : DebugEnvFragment() {
@@ -37,6 +38,7 @@ class DebugMediaFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("图片操作调试", DebugImageFragment::class.java))
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
+            add(getDebugFragmentItemData("WAV 录制及 ARS 调试", DebugRecordAndASRFragRecment::class.java))
             add(getDebugFragmentItemData("拍照及相册调试", DebugPhotosFragment::class.java))
             add(DebugItemData("文字转图片1（有图标，有标题）", View.OnClickListener { textToImage() }))
             add(DebugItemData("文字转图片2（无图标，无标题）", View.OnClickListener { textToImage2() }))

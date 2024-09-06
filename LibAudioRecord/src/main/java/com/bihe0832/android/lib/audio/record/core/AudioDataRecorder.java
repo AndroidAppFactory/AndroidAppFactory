@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.audio.record.common;
+package com.bihe0832.android.lib.audio.record.core;
 
 import android.annotation.SuppressLint;
 import android.media.AudioRecord;
@@ -110,10 +110,15 @@ public class AudioDataRecorder implements Recorder {
     public void stopRecord() {
         ZLog.d(TAG, "AudioDataRecorder stopRecord");
         pauseRecord();
-        if (audioRecord != null) {
-            audioRecord.stop();
-            audioRecord.release();
-            audioRecord = null;
+        try {
+            if (audioRecord != null && audioRecord.getState() != AudioRecord.STATE_UNINITIALIZED) {
+                audioRecord.stop();
+                audioRecord.release();
+                audioRecord = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 }

@@ -1,12 +1,11 @@
 package com.bihe0832.android.lib.audio.wav;
 
-import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.utils.time.TimeUtil;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 /**
  * wav文件 解析器
@@ -15,6 +14,7 @@ import java.nio.ByteOrder;
  * @time 2018/2/1 下午4:06
  */
 public class WaveFileReader {
+
     private int len = 0;
 
     private int numChannels = 0;
@@ -79,6 +79,14 @@ public class WaveFileReader {
                 + getDataLen() + "；音频长度：" + getDuration();
     }
 
+
+    public String toShowString() {
+        return "采样率：" + getSampleRate() + "；声道数：" + getNumChannels() + "；编码长度：" + getBitPerSample() + "；数据长度："
+                + FileUtils.INSTANCE.getFileLength(getDataLen()) + "；音频时长：" + TimeUtil.formatSecondsTo00(
+                getDuration()/1000);
+    }
+
+
     private void initReader(String filename) {
         try {
             File file = new File(filename);
@@ -108,7 +116,6 @@ public class WaveFileReader {
             long byteRate = readLong();// ByteRate(数据传输速率): 每秒数据字节数，该数值为:声道数×采样频率×采样位数/8。
             int blockAlign = readInt();// BlockAlign(数据块对齐): 采样帧大小。该数值为:声道数×采样位数/8。
             this.bitsPerSample = readInt();// BitsPerSample(采样位数): 每个采样存储的bit数。常见的位数有 8、16
-
 
             //时长（秒） = 数据大小（字节） / (采样率 * 位深度 / 8 * 声道数)
             duration = (int) (chunkSize * 1000f / byteRate);

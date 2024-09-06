@@ -9,6 +9,7 @@ import android.text.TextUtils
 import androidx.core.app.NotificationCompat
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.concurrent.ConcurrentHashMap
@@ -47,17 +48,23 @@ object AAFForegroundServiceManager {
         actionList[action.getScene()] = action
     }
 
+    @Synchronized
     private fun stopService(context: Context, clazz: String, action: String) {
         if (actionList.containsKey(action)) {
             actionList.remove(action)
         }
         if (actionList.isEmpty()) {
-            startForegroundService(context, context.packageName, clazz, ACTION_STOP, Intent())
+            ThreadManager.getInstance().start({ stop(context, clazz) }, 1)
         } else {
             startForegroundService(context, context.packageName, clazz, ACTION_UPADTE, Intent())
         }
     }
 
+    private fun stop(context: Context, clazz: String) {
+        if (actionList.isEmpty()) {
+            startForegroundService(context, context.packageName, clazz, ACTION_STOP, Intent())
+        }
+    }
 
     private fun getChannelName(context: Context): String {
         return if (TextUtils.isEmpty(mChannelName)) {
@@ -124,11 +131,7 @@ object AAFForegroundServiceManager {
             return false
         }
         return if (startForegroundService(
-                    context,
-                    context.packageName,
-                    AAFForegroundService::class.java.name,
-                    actionName,
-                    intent
+                    context, context.packageName, AAFForegroundService::class.java.name, actionName, intent
                 )
         ) {
             startByAction(action)

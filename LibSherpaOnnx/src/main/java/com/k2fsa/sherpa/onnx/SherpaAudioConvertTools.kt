@@ -17,6 +17,24 @@ object SherpaAudioConvertTools {
         return samples
     }
 
+    fun isOverSilence(shorts: ShortArray, maxShort: Short): Boolean {
+        return AudioUtils.isOverSilence(shorts, maxShort)
+    }
+
+    fun isOverSilence(floats: FloatArray, maxShort: Short): Boolean {
+        val max = maxShort / Byte.MAX_VALUE * 2.0F
+        return isOverSilence(floats, max)
+    }
+
+    fun isOverSilence(floats: FloatArray, max: Float): Boolean {
+        for (fl in floats) {
+            if (fl > max || fl < -max) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun byteArrayToSherpaArray(bytes: ByteArray): FloatArray {
         val result = FloatArray(bytes.size / 2)
         var index = 0

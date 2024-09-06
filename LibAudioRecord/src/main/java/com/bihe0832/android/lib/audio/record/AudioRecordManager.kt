@@ -1,11 +1,15 @@
 package com.bihe0832.android.lib.audio.record
 
 import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.text.TextUtils
 import androidx.annotation.RequiresPermission
 import com.bihe0832.android.lib.audio.AudioRecordConfig
-import com.bihe0832.android.lib.audio.record.common.AudioChunk
-import com.bihe0832.android.lib.audio.record.common.AudioDataRecorder
+import com.bihe0832.android.lib.audio.record.core.AudioChunk
+import com.bihe0832.android.lib.audio.record.core.AudioDataRecorder
+import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.util.concurrent.ConcurrentHashMap
@@ -19,10 +23,10 @@ import java.util.concurrent.ConcurrentHashMap
  */
 object AudioRecordManager {
 
-     const val TAG = "AudioRecordManager"
+    const val TAG = "AudioRecordManager"
 
     private var mInterval = 0.1f
-    private lateinit var mAudioDataRecorder: AudioDataRecorder
+    private var mAudioDataRecorder: AudioDataRecorder? = null
 
     @get:Synchronized
     private val sceneWithListener = ConcurrentHashMap<String, AudioRecordItem>()
@@ -34,29 +38,51 @@ object AudioRecordManager {
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
     fun init(audioSource: Int, sampleRateInHz: Int, channelConfig: Int, audioFormat: Int, interval: Float) {
         mInterval = interval
-        mAudioDataRecorder = AudioDataRecorder(
-            AudioRecordConfig(
-                audioSource,
-                sampleRateInHz,
-                channelConfig,
-                audioFormat
-            ),
-            interval,
-            object : AudioChunk.OnAudioChunkPulledListener {
-                override fun onAudioChunkPulled(
-                    audioRecordConfig: AudioRecordConfig,
-                    audioChunk: AudioChunk?,
-                    dataLength: Int,
-                ) {
-                    sceneWithListener.forEach {
-                        if (it.value.isRecord) {
-                            ThreadManager.getInstance().start {
-                                it.value.listener.onAudioChunkPulled(audioRecordConfig, audioChunk, dataLength)
-                            }
+        mAudioDataRecorder = AudioDataRecorder(AudioRecordConfig(
+            audioSource, sampleRateInHz, channelConfig, audioFormat
+        ), interval, object : AudioChunk.OnAudioChunkPulledListener {
+            override fun onAudioChunkPulled(
+                audioRecordConfig: AudioRecordConfig,
+                audioChunk: AudioChunk?,
+                dataLength: Int,
+            ) {
+                sceneWithListener.forEach {
+                    if (it.value.isRecord) {
+                        ThreadManager.getInstance().start {
+                            it.value.listener.onAudioChunkPulled(audioRecordConfig, audioChunk, dataLength)
                         }
                     }
                 }
-            })
+            }
+        })
+    }
+
+    fun startRecord(
+        activity: Activity?,
+        scene: String,
+        notifyContent: String,
+        listener: AudioChunk.OnAudioChunkPulledListener?,
+    ): Boolean {
+        if (activity == null) {
+            return startRecord(scene, listener)
+        } else {
+            return AAFForegroundServiceManager.sendToForegroundService(
+                activity,
+                Intent(),
+                object : AAFForegroundServiceManager.ForegroundServiceAction {
+                    override fun getScene(): String {
+                        return scene
+                    }
+
+                    override fun getNotifyContent(): String {
+                        return notifyContent
+                    }
+
+                    override fun onStartCommand(context: Context, intent: Intent, flags: Int, startId: Int) {
+                        startRecord(scene, listener)
+                    }
+                })
+        }
     }
 
     /**
@@ -73,7 +99,7 @@ object AudioRecordManager {
         } else {
             ZLog.d(TAG, "startRecord record success:$scene")
             sceneWithListener[scene] = AudioRecordItem(scene, listener)
-            mAudioDataRecorder.startRecord()
+            mAudioDataRecorder?.startRecord()
             true
         }
     }
@@ -85,7 +111,7 @@ object AudioRecordManager {
         ZLog.d(TAG, "pauseRecord recording:$scene")
         sceneWithListener[scene]?.isRecord = false
         if (sceneWithListener.filter { it.value.isRecord }.isEmpty()) {
-            mAudioDataRecorder.pauseRecord()
+            mAudioDataRecorder?.pauseRecord()
         }
     }
 
@@ -96,18 +122,19 @@ object AudioRecordManager {
         ZLog.d(TAG, "resumeRecord recording:$scene")
         if (sceneWithListener[scene]?.isRecord == false && sceneWithListener.filter { it.value.isRecord }.isEmpty()) {
             sceneWithListener[scene]?.isRecord = true
-            mAudioDataRecorder.resumeRecord()
+            mAudioDataRecorder?.resumeRecord()
         }
     }
 
     /**
      * 停止
      */
-    fun stopRecord(scene: String) {
+    fun stopRecord(context: Context, scene: String) {
         ZLog.d(TAG, "stopRecord recording:$scene")
         sceneWithListener.remove(scene)
         if (sceneWithListener.isEmpty()) {
-            mAudioDataRecorder.stopRecord()
+            mAudioDataRecorder?.stopRecord()
         }
+        AAFForegroundServiceManager.deleteFromForegroundService(context, scene)
     }
 }
