@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.audio.record.common;
+package com.bihe0832.android.lib.audio.record.core;
 
 import com.bihe0832.android.lib.audio.AudioUtils;
 import com.bihe0832.android.lib.audio.AudioRecordConfig;

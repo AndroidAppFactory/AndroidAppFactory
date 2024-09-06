@@ -39,7 +39,7 @@ ext.asrmoduleInfo = [
                 "version"            : "6.14.0",
                 "artifactId"         : "lib-audio-record",
                 "apidependenciesList": [
-                        "LibAudio", "LibAAF", "LibLog", "LibCommonUtils", "LibFile"
+                        "LibAudio", "LibAAF", "LibLog", "LibCommonUtils", "LibFile", "LibPermission", "LibForegroundService"
                 ]
         ],
         "LibOnnx"             : [

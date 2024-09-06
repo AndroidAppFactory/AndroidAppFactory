@@ -1,6 +1,4 @@
-package com.bihe0832.android.lib.audio.record.common;
-
-import java.io.FileNotFoundException;
+package com.bihe0832.android.lib.audio.record.core;
 
 /**
  * 录音接口

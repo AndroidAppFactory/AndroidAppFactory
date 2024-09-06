@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/audio_layout"
+        android:layout_width="match_parent"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_height="wrap_content">
+
+    <ImageView
+            android:id="@+id/audio_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="6dp"
+            android:background="@color/transparent_background"
+            android:src="@drawable/icon_file_type_audio" />
+
+    <TextView
+            android:id="@+id/audio_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintStart_toEndOf="@+id/audio_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/audio_desc"
+            android:textColor="@color/textColorPrimary"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:textSize="14dp"
+            tools:text="XXXX.wav" />
+
+    <TextView
+            android:id="@+id/audio_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/audio_title"
+            app:layout_constraintEnd_toEndOf="@+id/audio_title"
+            app:layout_constraintTop_toBottomOf="@+id/audio_title"
+            app:layout_constraintBottom_toTopOf="@+id/audio_recognise"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="12dp"
+            tools:text="1.32 M" />
+
+
+    <TextView
+            android:id="@+id/audio_recognise"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/audio_title"
+            app:layout_constraintEnd_toEndOf="@+id/audio_title"
+            app:layout_constraintTop_toBottomOf="@+id/audio_desc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="12dp"
+            android:visibility="gone"
+            tools:text="1.32 M" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
