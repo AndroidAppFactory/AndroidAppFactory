@@ -31,27 +31,6 @@ public abstract class AAFBaseWorker extends Worker {
         return Result.failure();
     }
 
-    public PendingIntent getActivityPendingIntent(Context context, Class<? extends Activity> action,
-            Bundle bundle, int requestCode) {
-        final Intent activityIntent = new Intent(context, action);
-        Bundle finalBundle = new Bundle();
-        if (null != bundle) {
-            finalBundle.putAll(bundle);
-        }
-        activityIntent.putExtras(finalBundle);
-        activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    public PendingIntent getUriPendingIntent(Context context, String uri, int requestCode, boolean needNewTask) {
-        final Intent activityIntent = new Intent();
-        activityIntent.setData(Uri.parse(uri));
-        if (needNewTask) {
-            activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        }
-        return PendingIntent.getActivity(context, requestCode, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     /**
      * 刷新widget
      */

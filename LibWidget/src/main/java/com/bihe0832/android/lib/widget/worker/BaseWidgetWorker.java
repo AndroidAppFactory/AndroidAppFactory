@@ -5,11 +5,13 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import androidx.annotation.NonNull;
 import androidx.work.WorkerParameters;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.utils.intent.PendingIntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.widget.BaseWidgetProvider;
 import com.bihe0832.android.lib.widget.WidgetUpdateManager;
@@ -23,25 +25,9 @@ public abstract class BaseWidgetWorker extends AAFBaseWorker {
 
     public PendingIntent getWidgetRefreshPendingIntent(Context context, Class<? extends BaseWidgetProvider> classT,
             boolean updateAll) {
-        return getWidgetBroadcastPendingIntent(context, BaseWidgetProvider.REFRESH_ACTION, classT, updateAll);
-    }
-
-    public PendingIntent getWidgetBroadcastPendingIntent(Context context, String action,
-            Class<? extends BaseWidgetProvider> classT, boolean updateAll) {
-        Intent intent = new Intent();
-        intent.setClass(context, classT);
-        intent.setAction(action);
-        intent.putExtra(BaseWidgetProvider.REFRESH_INTENT_KEY_UPDATE_ALL, updateAll);
-
-        //设置pendingIntent
-        PendingIntent pendingIntent;
-        if (BuildUtils.INSTANCE.getSDK_INT() >= android.os.Build.VERSION_CODES.S) {
-            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
-        } else {
-            pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        }
-        //Retrieve a PendingIntent that will perform a broadcast
-        return pendingIntent;
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(BaseWidgetProvider.REFRESH_INTENT_KEY_UPDATE_ALL, updateAll);
+        return PendingIntentUtils.getBroadcastPendingIntent(context, BaseWidgetProvider.REFRESH_ACTION, classT, bundle);
     }
 
     protected void updateWidget(Context context, ComponentName componentName, RemoteViews remoteViews) {

@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.media.image.bitmap.BitmapTransUtils
 import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.IdGenerator
+import com.bihe0832.android.lib.utils.intent.PendingIntentUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.util.concurrent.ConcurrentHashMap
 
@@ -273,16 +274,11 @@ object DownloadNotifyManager {
     }
 
     fun getPendingIntent(context: Context, url: String, notifyID: Int, action: String): PendingIntent {
-        return PendingIntent.getBroadcast(
-            context,
-            mIntentID.generate(),
-            Intent().apply {
-                setAction(getDownloadBroadcastFilter(context))
-                putExtra(NOTIFICATION_ID_KEY, notifyID)
-                putExtra(ACTION_KEY, action)
-                putExtra(NOTIFICATION_URL_KEY, url)
-            },
-            PendingIntent.FLAG_UPDATE_CURRENT,
-        )
+        return PendingIntentUtils.getBroadcastPendingIntent(context, mIntentID.generate(), Intent().apply {
+            setAction(getDownloadBroadcastFilter(context))
+            putExtra(NOTIFICATION_ID_KEY, notifyID)
+            putExtra(ACTION_KEY, action)
+            putExtra(NOTIFICATION_URL_KEY, url)
+        })
     }
 }
