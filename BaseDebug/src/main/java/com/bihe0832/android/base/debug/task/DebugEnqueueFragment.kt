@@ -6,20 +6,27 @@
  *
  */
 
-package com.bihe0832.android.base.debug.block
+package com.bihe0832.android.base.debug.task
 
 
+import android.content.Context
+import android.content.Intent
 import android.view.View
+import androidx.work.WorkerParameters
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
+import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.timer.BaseTask
 import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.timer.TimerProcessManager
+import com.bihe0832.android.lib.worker.AAFBaseWorker
+import com.bihe0832.android.lib.worker.AAFWorkerManager
 
+val scene = "fdsfsfds"
 
 class DebugEnqueueFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -30,6 +37,10 @@ class DebugEnqueueFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(DebugItemData("定时任务测试", View.OnClickListener { testTask() }))
+            add(DebugItemData("开启单次任务", View.OnClickListener { startOneTimeWork() }))
+            add(DebugItemData("开启单次延迟任务", View.OnClickListener { startOneTimeDelayWork() }))
+            add(DebugItemData("开启重复任务", View.OnClickListener { startRepeatUniqueWork() }))
+            add(DebugItemData("取消任务", View.OnClickListener { cancelUniqueWork() }))
             add(DebugItemData("定时计数任务(自动结束)", View.OnClickListener { testTimerProcess(true) }))
             add(DebugItemData("定时计数任务(延迟结束)", View.OnClickListener { testTimerProcess(false) }))
 
@@ -63,12 +74,17 @@ class DebugEnqueueFragment : DebugEnvFragment() {
         }
     }
 
-    private fun testTimerProcess(autoEnd:Boolean) {
-        TimerProcessManager.startProcessWithDuration(1, 20, 5, 1, autoEnd, object : TimerProcessManager.ProgressCallback {
-            override fun onProgress(name: String, progress: Int) {
-                ZLog.d("TimerProcessManager", "TASK_NAME $name  and progress $progress")
-            }
-        }).let {
+    private fun testTimerProcess(autoEnd: Boolean) {
+        TimerProcessManager.startProcessWithDuration(1,
+            20,
+            5,
+            1,
+            autoEnd,
+            object : TimerProcessManager.ProgressCallback {
+                override fun onProgress(name: String, progress: Int) {
+                    ZLog.d("TimerProcessManager", "TASK_NAME $name  and progress $progress")
+                }
+            }).let {
             ThreadManager.getInstance().start({ TimerProcessManager.stopProcess(it) }, 7)
         }
     }
@@ -110,5 +126,53 @@ class DebugEnqueueFragment : DebugEnvFragment() {
         ThreadManager.getInstance().start({
             TaskManager.getInstance().removeTask(TASK_NAME)
         }, 60)
+    }
+
+
+    fun startOneTimeWork() {
+        AAFWorkerManager.enqueueOneTimeWork(context!!, TestWork::class.java)
+    }
+
+    fun startOneTimeDelayWork() {
+        ZLog.d(LOG_TAG, "startOneTimeUniqueWork")
+        AAFWorkerManager.enqueueOneTimeUniqueWork(context!!, scene, 10, TestWork::class.java)
+    }
+
+    fun startRepeatUniqueWork() {
+        ZLog.d(LOG_TAG, "startRepeatUniqueWork")
+        AAFWorkerManager.enqueueRepeatUniqueWorker(context!!, scene, 15, TestWork::class.java)
+    }
+
+
+    fun cancelUniqueWork() {
+        ZLog.d(LOG_TAG, "cancelUniqueWork")
+        AAFWorkerManager.cancelUniqueWork(context!!, scene)
+    }
+
+    class TestWork(context: Context, workerParams: WorkerParameters) : AAFBaseWorker(context, workerParams) {
+        override fun doAction(context: Context?) {
+            ZLog.d(AAFWorkerManager.TAG, "TestWork doAction")
+            AAFForegroundServiceManager.sendToForegroundService(context!!, Intent().apply {
+                putExtra(scene, "Fsdfsf1")
+            }, object : AAFForegroundServiceManager.ForegroundServiceAction {
+                override fun getScene(): String {
+                    return scene
+                }
+
+                override fun getNotifyContent(): String {
+                    return scene
+                }
+
+                override fun onStartCommand(context: Context, intent: Intent, flags: Int, startId: Int) {
+                    ZLog.d(AAFWorkerManager.TAG, "TestWork onStartCommand")
+                    if (intent.action.equals(scene)) {
+                        ThreadManager.getInstance().start({
+                            ZLog.d(AAFWorkerManager.TAG, "TestWork onStartCommand deleteFromForegroundService")
+                            AAFForegroundServiceManager.deleteFromForegroundService(context, scene)
+                        }, 5)
+                    }
+                }
+            })
+        }
     }
 }

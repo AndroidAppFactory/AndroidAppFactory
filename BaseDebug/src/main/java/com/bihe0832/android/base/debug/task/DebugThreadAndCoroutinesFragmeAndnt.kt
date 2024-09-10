@@ -1,23 +1,28 @@
-package com.bihe0832.android.base.debug.thread
+package com.bihe0832.android.base.debug.task
 
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import androidx.work.WorkerParameters
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.timer.BaseTask
-import com.bihe0832.android.lib.timer.TaskManager
-import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.worker.AAFBaseWorker
+import com.bihe0832.android.lib.worker.AAFWorkerManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * @author zixie code@bihe0832.com
+ * Created on 2023/3/2.
+ * Description: Description
+ */
 /**
  * @author zixie code@bihe0832.com
  * Created on 2023/3/2.

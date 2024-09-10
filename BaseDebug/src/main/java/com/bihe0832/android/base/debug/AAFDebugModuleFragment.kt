@@ -9,7 +9,6 @@
 package com.bihe0832.android.base.debug
 
 import android.view.View
-import com.bihe0832.android.base.debug.block.DebugEnqueueFragment
 import com.bihe0832.android.base.debug.cache.DebugCacheFragment
 import com.bihe0832.android.base.debug.card.DebugListFragment
 import com.bihe0832.android.base.debug.card.TestListActivity
@@ -39,9 +38,10 @@ import com.bihe0832.android.base.debug.shake.DebugShakeAndVibratorFragment
 import com.bihe0832.android.base.debug.share.DebugShareFragment
 import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
 import com.bihe0832.android.base.debug.tab.DebugTabFragment
+import com.bihe0832.android.base.debug.task.DebugEnqueueFragment
+import com.bihe0832.android.base.debug.task.DebugThreadAndCoroutinesFragmeAndnt
 import com.bihe0832.android.base.debug.temp.DebugBasicFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
-import com.bihe0832.android.base.debug.thread.DebugThreadAndCoroutinesFragmeAndnt
 import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
@@ -70,7 +70,8 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("Google相关 调试", DebugGoogleFragment::class.java))
             add(getDebugFragmentItemData("TTS 调试", DebugTTSFragment::class.java))
 
-            add(getDebugFragmentItemData("协程及多线程、前台服务调用测试", DebugThreadAndCoroutinesFragmeAndnt::class.java))
+            add(getDebugFragmentItemData("定时任务、阻塞任务、延迟任务", DebugEnqueueFragment::class.java))
+            add(getDebugFragmentItemData("协程、多线程、前台服务", DebugThreadAndCoroutinesFragmeAndnt::class.java))
             add(getDebugFragmentItemData("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java))
 
             add(getDebugFragmentItemData("数据转化", DebugConvertFragment::class.java))
@@ -99,7 +100,6 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
 
             add(getDebugFragmentItemData("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java))
-            add(getDebugFragmentItemData("定时任务、阻塞任务", DebugEnqueueFragment::class.java))
             add(getDebugFragmentItemData("SVGA 调试", DebugSvgaFragment::class.java))
             add(getDebugFragmentItemData("Cache、数据中心测试", DebugCacheFragment::class.java))
             add(
