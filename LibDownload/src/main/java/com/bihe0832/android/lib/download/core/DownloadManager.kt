@@ -86,6 +86,9 @@ abstract class DownloadManager {
         init(context, DEFAULT_MAX_NUM, isDebug)
     }
 
+    fun hasInit(): Boolean {
+        return mHasInit
+    }
     open fun init(context: Context, maxNum: Int, isDebug: Boolean = false) {
         initContext(context)
         mMaxNum = maxNum
@@ -185,13 +188,14 @@ abstract class DownloadManager {
                 ZLog.w(TAG, "获取文件长度 $times:$realURL")
                 val url = URL(realURL)
                 val connection = (url.openConnection() as HttpURLConnection).apply {
-                    upateRequestInfo()
+                    upateRequestInfo(info.requestHeader)
+                    logRequestHeaderFields("获取文件长度")
                 }
                 val time = System.currentTimeMillis()
                 connection.connect()
                 ZLog.e(TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~")
                 if (mIsDebug) {
-                    connection.logHeaderFields("获取文件长度")
+                    connection.logResponseHeaderFields("获取文件长度")
                 }
                 val contentLength = HTTPRequestUtils.getContentLength(connection)
                 ZLog.e(TAG, "获取文件长度 getContentType:${connection.contentType}")

@@ -358,7 +358,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     }
 
     private fun startDownload(
-        url: String?, start: Long, length: Long
+        url: String?, start: Long, length: Long,
     ) {
         val file = File(AAFFileWrapper.getFileCacheFolder() + FileUtils.getFileName(url))
         file.createNewFile()
@@ -375,6 +375,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         "testDownloadRange", "onStart : ${item.downloadID} ${item.processDesc}"
                     )
                 }
+
                 override fun onStart(item: DownloadItem) {
                     ZLog.d(
                         "testDownloadRange", "onStart : ${item.downloadID} ${item.processDesc}"
@@ -407,7 +408,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             )
                         }",
                     )
-                    DownloadRangeUtils.deleteTask(item.downloadID,true)
+                    DownloadRangeUtils.deleteTask(item.downloadID, true)
 
                     return filePath
                 }
@@ -423,14 +424,21 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     }
 
     fun testDownloadProcess() {
+        val url = URL_FILE
+        val md5 = MD5_FILE
+//        val url = ""
+//        val md5 = ""
+        val header = HashMap<String, String>().apply {
+            put("zixie", "AAA")
+        }
         DownloadFile.downloadWithProcess(
             activity!!,
             String.format(
                 ThemeResourcesManager.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating)!!,
                 "（V.2.2.21)",
             ),
-            "这是一个Desc测试", URL_FILE, "", false,
-            MD5_FILE, "",
+            "这是一个Desc测试", url, header, "", false,
+            md5, "",
             canCancel = true,
             forceDownloadNew = false,
             useMobile = true,
@@ -464,7 +472,15 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 override fun onComplete(filePath: String, item: DownloadItem): String {
                     ZLog.w(
                         "testDownloadProcess",
-                        "onComplete : ${item.downloadID} - ${MD5.getMd5(FileUtils.readDataFromFile(filePath,0,20000))}",
+                        "onComplete : ${item.downloadID} - ${
+                            MD5.getMd5(
+                                FileUtils.readDataFromFile(
+                                    filePath,
+                                    0,
+                                    20000
+                                )
+                            )
+                        }",
                     )
                     for (i in 0 until 6) {
                         val start = i * 10000L
@@ -658,7 +674,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             },
                         )
                     } else if (it.get(currentNum).equals(URL_FILE) || it.get(currentNum)
-                            .equals(URL_YYB_CHANNEL)
+                                    .equals(URL_YYB_CHANNEL)
                     ) {
                         DownloadFile.download(requireContext(), it.get(currentNum), listener)
                     } else {

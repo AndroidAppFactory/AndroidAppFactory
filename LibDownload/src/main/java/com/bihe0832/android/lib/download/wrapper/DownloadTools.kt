@@ -233,6 +233,7 @@ object DownloadTools {
         title: String,
         msg: String,
         url: String,
+        header: Map<String, String>,
         path: String,
         isFilePath: Boolean,
         md5: String,
@@ -251,6 +252,7 @@ object DownloadTools {
                 setNotificationVisibility(false)
             }
             this.downloadURL = url
+            this.requestHeader = header
             this.downloadType = DownloadItem.TYPE_FILE
             this.downloadTitle = title
             this.downloadDesc = msg

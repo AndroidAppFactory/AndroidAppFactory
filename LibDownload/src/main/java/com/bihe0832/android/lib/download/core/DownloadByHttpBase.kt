@@ -44,8 +44,8 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
 
     abstract fun onFail(item: DownloadItem, errorCode: Int, msg: String)
 
-     fun startDownload(
-        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long
+    fun startDownload(
+        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long,
     ) {
         if (DownloadingList.isDownloading(info)) {
             ZLog.d(TAG, "download has start")
@@ -80,7 +80,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
 
     @SuppressLint("Range")
     protected fun goDownload(
-        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long
+        info: DownloadItem, downloadType: Int, rangeStart: Long, rangeLength: Long, localStart: Long,
     ) {
         ZLog.e(TAG, "\n")
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload 最终入参 ~~~~~~~~~~~~~~~~~~")
@@ -94,7 +94,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload 最终入参 ~~~~~~~~~~~~~~~~~~")
         ZLog.e(TAG, "\n")
         val file = File(info.filePath)
-        var hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, isDebug)
+        val hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, isDebug)
         if (file.exists() && hasDownload && rangeLength > 0 && file.length() <= rangeLength) {
             ZLog.e(TAG, "断点续传逻辑:$info")
             //断点续传逻辑
@@ -120,21 +120,23 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                     FileUtils.getFileLength(info.finishedLengthBefore)
                 }, need download ${FileUtils.getFileLength(rangeLength - info.finishedLengthBefore)}"
             )
-            var cursor = DownloadInfoDBManager.getDownloadPartInfo(info.downloadID)
+            val cursor = DownloadInfoDBManager.getDownloadPartInfo(info.downloadID)
             ZLog.e(TAG, "分片下载数据 - ${info.downloadID} - 已有分片:${cursor.count}")
             try {
                 cursor.moveToFirst()
                 while (!cursor.isAfterLast) {
                     val id = cursor.getInt(cursor.getColumnIndex(DownloadPartInfoTableModel.col_part_id))
-                    val rangeStart = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_range_start))
-                    val localStart = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_local_start))
+                    val rangeStartInDB =
+                        cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_range_start))
+                    val localStartInDB =
+                        cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_local_start))
                     val length = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_length))
                     val finished = cursor.getLong(cursor.getColumnIndex(DownloadPartInfoTableModel.col_finished))
                     ZLog.e(
                         TAG,
-                        "分片下载数据 - ${info.downloadID} - 继续已有分片:${info.downloadID - id} rangeStart:$rangeStart localStart:$localStart length:$length finished:$finished"
+                        "分片下载数据 - ${info.downloadID} - 继续已有分片:${info.downloadID - id}  rangeStart:$rangeStart rangeStartInDB:$rangeStartInDB localStartInDB:$localStart localStart:$localStartInDB length:$length finished:$finished"
                     )
-                    startDownloadPart(info, id, rangeStart, localStart, length, finished)
+                    startDownloadPart(info, id, rangeStartInDB, localStartInDB, length, finished)
                     cursor.moveToNext()
                 }
             } catch (e: Exception) {
@@ -236,7 +238,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
     }
 
     protected fun startDownloadPart(
-        info: DownloadItem, partNo: Int, oldRangeStart: Long, oldLocalStart: Long, length: Long, finished: Long
+        info: DownloadItem, partNo: Int, oldRangeStart: Long, oldLocalStart: Long, length: Long, finished: Long,
     ) {
         ZLog.e(TAG, "\n")
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ 分片下载数据 ${info.downloadID} - $partNo ~~~~~~~~~~~~~~~~~~")
@@ -249,6 +251,7 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         val downloadThreadForPart = DownloadThread(DownloadPartInfo().apply {
             this.downloadID = info.downloadID
             this.partID = partNo
+            this.requestHeader = info.requestHeader
             this.realDownloadURL = info.realURL
             this.finalFileName = info.filePath
             this.partRangeStart = oldRangeStart

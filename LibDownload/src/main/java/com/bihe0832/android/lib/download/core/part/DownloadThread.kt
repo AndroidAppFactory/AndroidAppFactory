@@ -5,7 +5,8 @@ import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
-import com.bihe0832.android.lib.download.core.logHeaderFields
+import com.bihe0832.android.lib.download.core.logRequestHeaderFields
+import com.bihe0832.android.lib.download.core.logResponseHeaderFields
 import com.bihe0832.android.lib.download.core.upateRequestInfo
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -183,10 +184,12 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         )
         val url = URL(mDownloadPartInfo.realDownloadURL)
         val connection = (url.openConnection() as HttpURLConnection).apply {
-            upateRequestInfo()
+            upateRequestInfo(mDownloadPartInfo.requestHeader)
+
             if (rangeEnd > 0 && rangeEnd > rangeStart) {
                 setRequestProperty("Range", "bytes=$rangeStart-${rangeEnd}")
             }
+            logRequestHeaderFields("分片下载数据 第${mDownloadPartInfo.downloadPartID}分片")
         }
         var time = System.currentTimeMillis()
         connection.connect()
@@ -194,7 +197,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             TAG,
             "分片下载 第${mDownloadPartInfo.downloadPartID}分片: 请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~",
         )
-        connection.logHeaderFields("分片下载数据 第${mDownloadPartInfo.downloadPartID}分片")
+
+        connection.logResponseHeaderFields("分片下载数据 第${mDownloadPartInfo.downloadPartID}分片")
 
         var serverContentLength = HTTPRequestUtils.getContentLength(connection)
         var localContentLength = mDownloadPartInfo.partLength - mDownloadPartInfo.partFinished

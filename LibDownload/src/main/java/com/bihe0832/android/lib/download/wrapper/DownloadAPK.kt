@@ -24,12 +24,12 @@ object DownloadAPK {
         msg: String,
         url: String,
         md5: String,
-        packageName: String
+        packageName: String,
     ) {
         startDownloadWithCheckAndProcess(
             activity,
             title, msg,
-            url, md5,
+            url, emptyMap(), md5,
             packageName,
             true, null
         )
@@ -42,15 +42,16 @@ object DownloadAPK {
         title: String,
         msg: String,
         url: String,
+        header: Map<String, String>,
         md5: String,
         packageName: String,
         canCancel: Boolean,
-        listener: OnDialogListener?
+        listener: OnDialogListener?,
     ) {
         DownloadFile.downloadWithCheckAndProcess(
             activity,
             title, msg,
-            url, "", false, md5, "",
+            url, header, "", false, md5, "",
             canCancel,
             true,
             forceDownload = false,
@@ -70,12 +71,12 @@ object DownloadAPK {
         packageName: String,
         canCancel: Boolean,
         downloadMobile: Boolean,
-        listener: OnDialogListener?
+        listener: OnDialogListener?,
     ) {
         startDownloadWithProcess(
             activity,
             title, msg,
-            url, md5,
+            url, emptyMap(), md5,
             canCancel, downloadMobile,
             listener,
             SimpleInstallListener(activity, packageName, listener)
@@ -87,16 +88,17 @@ object DownloadAPK {
         title: String,
         msg: String,
         url: String,
+        header: Map<String, String>,
         md5: String,
         canCancel: Boolean,
         downloadMobile: Boolean,
         listener: OnDialogListener?,
-        downloadListener: DownloadListener?
+        downloadListener: DownloadListener?,
     ) {
         DownloadFile.downloadWithProcess(
             activity,
             title, msg,
-            url, "", false, md5, "",
+            url, header,"", false, md5, "",
             canCancel, forceDownloadNew = false, downloadMobile, forceDownload = true, needRecord = false,
             listener,
             downloadListener
@@ -108,7 +110,7 @@ object DownloadAPK {
         DownloadFile.downloadWithCheckAndProcess(
             activity,
             "", "",
-            url, "", false, md5, "",
+            url, emptyMap(),"", false, md5, "",
             canCancel = true, useProcess = false,
             forceDownload = true, needRecord = false,
             listener = null,
@@ -131,7 +133,7 @@ object DownloadAPK {
 
     private class SimpleAPKDownloadListener(
         private val context: Context,
-        private val packageName: String
+        private val packageName: String,
     ) : SimpleDownloadListener() {
         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
         }
@@ -155,6 +157,7 @@ object DownloadAPK {
             "",
             "",
             url,
+            emptyMap(),
             "",
             false,
             md5,
@@ -174,6 +177,7 @@ object DownloadAPK {
             "",
             "",
             url,
+            emptyMap(),
             "",
             false,
             md5,
