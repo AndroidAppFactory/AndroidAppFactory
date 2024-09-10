@@ -221,7 +221,8 @@ public class IntentUtils {
 
     public static boolean sendMail(final Context context, final String mail, final String title, final String content) {
         Uri uri = Uri.parse("mailto:" + mail);
-        List<ResolveInfo> packageInfos = context.getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_SENDTO, uri), 0);
+        List<ResolveInfo> packageInfos = context.getPackageManager()
+                .queryIntentActivities(new Intent(Intent.ACTION_SENDTO, uri), 0);
         List<String> tempPkgNameList = new ArrayList<>();
         List<Intent> emailIntents = new ArrayList<>();
         for (ResolveInfo info : packageInfos) {
@@ -286,7 +287,8 @@ public class IntentUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         int mPendingIntentId = (int) (System.currentTimeMillis() / 1000);
-        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
@@ -294,8 +296,8 @@ public class IntentUtils {
 
     public static Class getLaunchActivityName(Context context, String packageName) {
         PackageManager localPackageManager = context.getPackageManager();
-        Intent localIntent = new Intent("android.intent.action.MAIN");
-        localIntent.addCategory("android.intent.category.LAUNCHER");
+        Intent localIntent = new Intent(Intent.ACTION_MAIN);
+        localIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         for (ResolveInfo localResolveInfo : localPackageManager.queryIntentActivities(localIntent, 0)) {
             if (!localResolveInfo.activityInfo.applicationInfo.packageName.equalsIgnoreCase(packageName)) {
                 continue;

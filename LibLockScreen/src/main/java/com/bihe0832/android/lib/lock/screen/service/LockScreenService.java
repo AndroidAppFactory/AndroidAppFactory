@@ -20,6 +20,7 @@ import com.bihe0832.android.lib.config.Config;
 import com.bihe0832.android.lib.lock.screen.R;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.notification.NotifyManager;
+import com.bihe0832.android.lib.utils.intent.PendingIntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 public abstract class LockScreenService extends Service {
@@ -118,13 +119,8 @@ public abstract class LockScreenService extends Service {
         Intent sendIntent = new Intent(context, getLockScreenActivity());
         sendIntent.setPackage(context.getPackageName());
         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_FROM_BACKGROUND | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        PendingIntent pendingIntent;
-        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.M) {
-            pendingIntent = PendingIntent.getBroadcast(context, 0, sendIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT);
-        } else {
-            pendingIntent = PendingIntent.getBroadcast(context, 0, sendIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        }
         try {
+            PendingIntent pendingIntent = PendingIntentUtils.getBroadcastPendingIntent(context,0, sendIntent);
             context.startActivity(sendIntent);
             pendingIntent.send();
         } catch (Exception e) {
