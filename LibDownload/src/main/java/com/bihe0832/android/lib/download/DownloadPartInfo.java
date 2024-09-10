@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.download;
 
 import com.bihe0832.android.lib.log.ZLog;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DownloadPartInfo {
 
@@ -11,6 +13,8 @@ public class DownloadPartInfo {
     private int mPartNo;
 
     private String mRealDownloadURL;
+    private Map<String,String> requestHeader = null;
+
     private String mFinalFileName;
     private long mPartRangeStart;
     private long mPartLocalStart;
@@ -122,6 +126,14 @@ public class DownloadPartInfo {
         } else {
             return 0;
         }
+    }
+
+    public Map<String, String> getRequestHeader() {
+        return requestHeader;
+    }
+
+    public void setRequestHeader(Map<String, String> requestHeader) {
+        this.requestHeader = requestHeader;
     }
 
     @Override

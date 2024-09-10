@@ -4,6 +4,7 @@ import android.content.Context;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadListener;
 import com.bihe0832.android.lib.download.core.DownloadTaskList;
+import com.bihe0832.android.lib.download.file.DownloadFileManager;
 import com.bihe0832.android.lib.download.range.DownloadRangeManager;
 import com.bihe0832.android.lib.file.FileUtils;
 import java.util.List;
@@ -64,7 +65,9 @@ public class DownloadRangeUtils {
      */
     public static final void startDownload(Context context, @NotNull DownloadItem info, long start, long length,
             long localStart, boolean forceDownload) {
-        DownloadRangeManager.INSTANCE.init(context);
+        if (!DownloadRangeManager.INSTANCE.hasInit()) {
+            DownloadFileManager.INSTANCE.init(context);
+        }
         if (forceDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
             info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
         }
@@ -81,11 +84,11 @@ public class DownloadRangeUtils {
      */
     public static final DownloadItem getTaskByDownloadURL(@NotNull final String downloadURL, long start, long length,
             long localStart) {
-        return DownloadTaskList.INSTANCE.getTaskByDownloadID(getDownloadIDByURL(downloadURL, start, length, localStart));
+        return DownloadTaskList.INSTANCE.getTaskByDownloadID(
+                getDownloadIDByURL(downloadURL, start, length, localStart));
     }
 
-    public static long getDownloadIDByURL(String url, long start, long length,
-            long localStart) {
+    public static long getDownloadIDByURL(String url, long start, long length, long localStart) {
         return DownloadItem.getDownloadIDByURL(url,
                 DownloadItem.getDownloadActionKey(DownloadItem.TYPE_RANGE, start, length, localStart));
     }

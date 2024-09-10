@@ -6,6 +6,9 @@ import android.util.Log;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.MathUtils;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import kotlin.jvm.Synchronized;
 
 
@@ -29,6 +32,8 @@ public class DownloadItem implements Serializable {
     // 下载URL，必填
     private String downloadURL = "";
 
+    // 下载头，特定的预下载头信息
+    private Map<String,String> requestHeader = null;
     // 最终实际下载的URL，不填
     private int downloadType = TYPE_FILE;
     // 最终实际下载的URL，不填
@@ -412,6 +417,13 @@ public class DownloadItem implements Serializable {
         return actionKey;
     }
 
+    public Map<String, String> getRequestHeader() {
+        return requestHeader;
+    }
+
+    public void setRequestHeader(Map<String, String> requestHeader) {
+        this.requestHeader = requestHeader;
+    }
 
     public void setActionKey(String actionKey) {
         if (!TextUtils.isEmpty(actionKey)) {

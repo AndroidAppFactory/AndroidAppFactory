@@ -84,7 +84,7 @@ object UpdateHelper {
                 }
             }
         }
-        DownloadAPK.startDownloadWithProcess(activity, title, desc, url, md5, canCancel, true, dialogListenerWhenDownload, downloadListener)
+        DownloadAPK.startDownloadWithProcess(activity, title, desc, url, emptyMap(), md5, canCancel, true, dialogListenerWhenDownload, downloadListener)
     }
 
     private fun showUpdateDialogWithTitle(activity: Activity, versionName: String, titleString: String, desc: String, url: String, md5: String, type: Int) {

@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.download.core
 
+import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
@@ -16,7 +17,7 @@ import javax.net.ssl.SSLSession
  *
  */
 
-fun HttpURLConnection.upateRequestInfo() {
+fun HttpURLConnection.upateRequestInfo(customProperties: Map<String, String>?) {
     connectTimeout = 5000
     readTimeout = 10000
     requestMethod = "GET"
@@ -34,10 +35,24 @@ fun HttpURLConnection.upateRequestInfo() {
             }
         }
     }
+    if (customProperties?.isNotEmpty() == true) {
+        for ((key, value) in customProperties.entries) {
+            if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
+                ZLog.d(DownloadItem.TAG, "requestProperty is bad:$key")
+            } else {
+                setRequestProperty(key, value)
+            }
+        }
+    }
 }
 
-fun HttpURLConnection.logHeaderFields(msg: String) {
+fun HttpURLConnection.logRequestHeaderFields(msg: String) {
+    for ((key, value) in requestProperties.entries) {
+        ZLog.w(DownloadItem.TAG, "$msg  Request - :${key} - $value ")
+    }
+}
 
+fun HttpURLConnection.logResponseHeaderFields(msg: String) {
     ZLog.w(DownloadItem.TAG, "$msg  Response - responseCode:$responseCode ")
     ZLog.w(DownloadItem.TAG, "$msg  Response - contentType:$contentType ")
     ZLog.w(DownloadItem.TAG, "$msg  Response - contentLength:${HTTPRequestUtils.getContentLength(this)} ")
@@ -49,5 +64,4 @@ fun HttpURLConnection.logHeaderFields(msg: String) {
         }
         ZLog.w(DownloadItem.TAG, "$msg  Response - :${key} - $values ")
     }
-
 }
