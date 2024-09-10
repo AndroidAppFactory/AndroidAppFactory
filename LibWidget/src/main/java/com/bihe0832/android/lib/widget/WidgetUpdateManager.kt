@@ -1,26 +1,15 @@
 package com.bihe0832.android.lib.widget
 
-import android.app.ActivityManager
 import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.text.TextUtils
-import androidx.work.BackoffPolicy
-import androidx.work.Configuration
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bihe0832.android.lib.config.Config
-import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.widget.tools.WidgetTools
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker
-import java.time.Duration
-import java.util.concurrent.TimeUnit
+import com.bihe0832.android.lib.worker.AAFWorkerManager
 
 /**
  *
@@ -38,36 +27,17 @@ object WidgetUpdateManager {
 
     private var mlastUpdateAllTime = 0L
 
-    fun initModuleWithOtherProcess(context: Context) {
-        // provide custom configuration
-        Configuration.Builder().setMinimumLoggingLevel(android.util.Log.INFO).build().let { myConfig ->
-            // initialize WorkManager
-            WorkManager.initialize(context, myConfig)
-        }
-        initModuleWithMainProcess(context)
-    }
-
     fun initModuleWithMainProcess(context: Context) {
         updateAllWidgets(context)
     }
 
     fun enqueueAutoStart(context: Context) {
         cancelAutoStart(context)
-        OneTimeWorkRequest.Builder(UpdateAllWork::class.java).apply {
-            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
-                setBackoffCriteria(BackoffPolicy.EXPONENTIAL, Duration.ofSeconds(10))
-            }
-            setInitialDelay((100 * 356).toLong(), TimeUnit.DAYS)
-        }.build().let { workRequest ->
-            ZLog.w(TAG, "enqueueAutoStart")
-            WorkManager.getInstance(context)
-                    .enqueueUniqueWork(WIDGET_WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
-        }
+        AAFWorkerManager.enqueueOneTimeUniqueWork(context, WIDGET_WORK_NAME, 5, UpdateAllWork::class.java)
     }
 
     fun cancelAutoStart(context: Context) {
-        ZLog.w(TAG, "cancelAutoStart")
-        WorkManager.getInstance(context).cancelUniqueWork(WIDGET_WORK_NAME)
+        AAFWorkerManager.cancelUniqueWork(context, WIDGET_WORK_NAME)
     }
 
     private fun addToAutoUpdateList(clazzName: String) {
@@ -91,81 +61,16 @@ object WidgetUpdateManager {
         }
     }
 
-    // 通过widget 唤起前台服务
-    fun startForegroundService(
-        context: Context,
-        clazzName: String,
-        action: String,
-        intent: Intent,
-        startAgain: Boolean,
-    ) {
-        ZLog.d(TAG, "startServiceByWidget by worker: $clazzName")
-        if (!TextUtils.isEmpty(clazzName)) {
-            if (isServiceRunning(context, clazzName)) {
-                ZLog.e(
-                    TAG,
-                    "startServiceByWidget by worker: service is running $clazzName, need start again:$startAgain"
-                )
-                if (!startAgain) {
-                    return
-                }
-            }
-            AAFForegroundServiceManager.startForegroundService(
-                context,
-                context.packageName,
-                clazzName,
-                action,
-                intent
-            )
-        }
-    }
-
-    // 通过widget 唤起前台服务
-    fun startForegroundService(context: Context, clazzName: String, startAgain: Boolean) {
-        ZLog.d(TAG, "startServiceByWidget by worker: $clazzName")
-        if (!TextUtils.isEmpty(clazzName)) {
-            if (isServiceRunning(context, clazzName)) {
-                ZLog.e(
-                    TAG,
-                    "startServiceByWidget by worker: service is running $clazzName, need start again:$startAgain"
-                )
-                if (!startAgain) {
-                    return
-                }
-            }
-            AAFForegroundServiceManager.startForegroundService(
-                context,
-                context.packageName,
-                clazzName,
-                "",
-                Intent()
-            )
-        }
-    }
-
-    fun isServiceRunning(context: Context, serviceClass: String): Boolean {
-        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager?
-        if (activityManager != null) {
-            val runningServices = activityManager.getRunningServices(Int.MAX_VALUE)
-            for (serviceInfo in runningServices) {
-                if (serviceClass == serviceInfo.service.className) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
     private fun updateAllWidgets(context: Context, sourceClass: Class<out BaseWidgetWorker>?) {
         ZLog.e(TAG, "updateAll: durtaion is :${System.currentTimeMillis() - mlastUpdateAllTime}")
         // 执行一次任务
         if (System.currentTimeMillis() - mlastUpdateAllTime > 60 * 1000) {
             mlastUpdateAllTime = System.currentTimeMillis()
-            WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(UpdateAllWork::class.java))
+            AAFWorkerManager.enqueueOneTimeUniqueWork(context, WIDGET_WORK_NAME, 0, UpdateAllWork::class.java)
         } else {
             ZLog.e(TAG, "updateAll: durtaion is less than 60000")
             sourceClass?.let { clazz ->
-                WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(clazz))
+                AAFWorkerManager.enqueueOneTimeWork(context, clazz)
             }
         }
     }
@@ -177,7 +82,7 @@ object WidgetUpdateManager {
             try {
                 if (!name.contains("$")) {
                     (Class.forName(name) as? Class<out Worker>)?.let {
-                        WorkManager.getInstance().enqueue(OneTimeWorkRequest.from(it))
+                        AAFWorkerManager.enqueueOneTimeWork(applicationContext, it)
                     }
                 } else {
                     ZLog.e(TAG, "!!!!! updateByName by $name error, Bad name !!!!!")
@@ -225,13 +130,13 @@ object WidgetUpdateManager {
         if (updateAll) {
             updateAllWidgets(context, clazz)
         } else {
-            WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(clazz))
+            AAFWorkerManager.enqueueOneTimeWork(context, clazz)
         }
     }
 
     fun enableWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean) {
         enqueueAutoStart(context)
-        WorkManager.getInstance(context).enqueue(PeriodicWorkRequest.Builder(clazz, 15, TimeUnit.MINUTES).build())
+        AAFWorkerManager.enqueueRepeatWork(context, 15 * 60L, clazz)
         updateWidget(context, clazz, canAutoUpdateByOthers, true)
     }
 

@@ -156,7 +156,6 @@ object AppFactoryInit {
                             ZixieCoreInit.TAG,
                             "Application WidgetUpdateManager initModuleWithOtherProcess  process: name:" + it.processName + " and id:" + it.pid,
                         )
-                        WidgetUpdateManager.initModuleWithOtherProcess(application.applicationContext)
                     }
                     initWebview(application, it)
                 }

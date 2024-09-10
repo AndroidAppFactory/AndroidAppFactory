@@ -12,8 +12,8 @@ ext.widgetmoduleInfo = [
                 "version"            : "6.14.1",
                 "artifactId"         : "lib-widget",
                 "apidependenciesList": [
-                        "LibLog", "LibConfig", "LibOS", "LibDialog", "LibPermission",
-                        "LibForegroundService", project.androidsupport.worker
+                        "LibLog", "LibConfig", "LibOS", "LibDialog", "LibPermission","LibWorker",
+                        "LibForegroundService"
                 ]
         ],
         "LibLockScreen"   : [

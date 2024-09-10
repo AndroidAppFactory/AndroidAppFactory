@@ -15,7 +15,7 @@ ext.libmoduleInfo = [
                         "LibNotification", "LibBottomTab", "LibRecycleviewExt", "LibTouchRegion", "LibViewExt",
                         "LibPermission", "LibMedia", "LibImmersive", "LibFloatview", "LibTextView",
                         "LibViewPager", "LibCustomView", "LibAAFResource", "LibColor", "LibFileSelect",
-                        "LibForegroundService", "LibASRMin"
+                        "LibForegroundService", "LibASRMin", "LibWorker"
                 ]
         ],
         "RouterAnnotation"          : [
@@ -149,6 +149,20 @@ ext.libmoduleInfo = [
                         "LibThread", "LibLog", "LibCommonUtils"
                 ]
         ],
+        "LibBlockTask"              : [
+                "version"            : "6.12.0",
+                "artifactId"         : "lib-block-task",
+                "apidependenciesList": [
+                        "LibLog", "LibCommonUtils"
+                ]
+        ],
+        "LibWorker"                 : [
+                "version"            : "6.12.0",
+                "artifactId"         : "lib-worker-task",
+                "apidependenciesList": [
+                        "LibLog", "LibConfig", "LibOS", "LibForegroundService", project.androidsupport.worker
+                ]
+        ],
         "LibConfig"                 : [
                 "version"            : "6.12.0",
                 "artifactId"         : "lib-config",
@@ -222,13 +236,6 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-ipc",
                 "apidependenciesList": [
                         "LibLog"
-                ]
-        ],
-        "LibBlockTask"              : [
-                "version"            : "6.12.0",
-                "artifactId"         : "lib-block-task",
-                "apidependenciesList": [
-                        "LibLog", "LibCommonUtils"
                 ]
         ],
         "LibOkhttpWrapper"          : [
