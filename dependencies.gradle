@@ -10,7 +10,8 @@ apply from: rootDir.toString() + '/dependencies_asr.gradle'
 /************************************ 组件化开发常用配置 ************************************/
 /**
  * 当前开发中，最终运行的主工程，多个用 "," 分隔
- * 当前如果全量填"APPTest"*/
+ * 当前如果全量填"APPTest"
+ */
 ext.mainProject = "APPTest"
 
 /**
@@ -18,7 +19,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  **/
-ext.developModule = "Application,LibAudio,LibMedia,LibFile"
+ext.developModule = "Application"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
