@@ -14,13 +14,6 @@ ext.asrmoduleInfo = [
                         "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
                 ]
         ],
-        "LibAudioPlayer"      : [
-                "version"            : "6.12.0",
-                "artifactId"         : "lib-audio-player",
-                "apidependenciesList": [
-                        "LibMedia", "LibBlockTask"
-                ]
-        ],
         "LibTTS"              : [
                 "version"            : "6.13.2",
                 "artifactId"         : "lib-tts",
@@ -33,6 +26,13 @@ ext.asrmoduleInfo = [
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibFile", "LibGson"
+                ]
+        ],
+        "LibAudioPlayer"      : [
+                "version"            : "6.12.0",
+                "artifactId"         : "lib-audio-player",
+                "apidependenciesList": [
+                        "LibBlockTask","LibAudio"
                 ]
         ],
         "LibAudioRecord"      : [

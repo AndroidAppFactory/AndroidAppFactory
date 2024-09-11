@@ -1,6 +1,6 @@
-package com.bihe0832.android.base.debug.card.audio;
+package com.bihe0832.android.common.debug.audio.card;
 
-import com.bihe0832.android.base.debug.R;
+import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 

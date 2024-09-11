@@ -24,16 +24,15 @@ class AudioRecordFile(
     private val file: File,
 ) {
 
-    private lateinit var config: AudioRecordConfig
+    private var config: AudioRecordConfig? = null
     private var outputStream: OutputStream? = null
 
     private var hasStart = false
 
     fun stopRecord(context: Context) {
         ZLog.d("${AudioRecordManager.TAG} AudioRecordFile stopRecord:$scene $file")
-        if (hasStart) {
+        if (config != null) {
             AudioRecordManager.stopRecord(context, scene)
-            FileUtils.writeDataToFile(file.absolutePath, 0, WavHeader(config, file.length()).toBytes())
             if (outputStream != null) {
                 try {
                     outputStream!!.flush()
@@ -43,6 +42,9 @@ class AudioRecordFile(
                     e.printStackTrace()
                 }
             }
+            ZLog.d("${AudioRecordManager.TAG} AudioRecordFile stopRecord:$scene $file ${file.length()}")
+            FileUtils.writeDataToFile(file.absolutePath, 0, WavHeader(config, file.length()).toBytes(),false)
+            ZLog.d("${AudioRecordManager.TAG} AudioRecordFile stopRecord:$scene $file ${file.length()}")
         }
         hasStart = false
     }

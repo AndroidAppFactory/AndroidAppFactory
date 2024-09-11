@@ -6,10 +6,10 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Build
 import androidx.annotation.NonNull
+import com.bihe0832.android.lib.audio.AudioUtils
 import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
 import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.media.audio.AudioTools
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.lib.audio.player.AudioItem
@@ -137,7 +137,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
         val soundid = mSoundPool.load(context, resId, PRIORITY_DEFAULT)
-        val duration = AudioTools.getAudioDuration(context, resId)
+        val duration = AudioUtils.getDurationWithMediaPlayer(context, resId)
         mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
             listener?.let {
                 playListener = it
@@ -167,7 +167,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
         val soundid = mSoundPool.load(path, PRIORITY_DEFAULT)
-        val duration = AudioTools.getAudioDuration(path)
+        val duration = AudioUtils.getDurationWithMediaPlayer(path)
         mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
             listener?.let {
                 playListener = it

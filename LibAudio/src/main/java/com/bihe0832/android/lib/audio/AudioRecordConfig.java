@@ -8,6 +8,8 @@ import android.media.MediaRecorder;
  */
 public class AudioRecordConfig {
 
+    public static final String TAG = "Audio";
+
     /**
      * 音频源，详见 {@link MediaRecorder.AudioSource}
      */

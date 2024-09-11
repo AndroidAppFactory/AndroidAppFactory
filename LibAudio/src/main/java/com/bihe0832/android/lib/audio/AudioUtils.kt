@@ -1,7 +1,9 @@
 package com.bihe0832.android.lib.audio
 
+import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import android.net.Uri
 import com.bihe0832.android.lib.audio.wav.PcmToWav
 import com.bihe0832.android.lib.audio.wav.WaveFileReader
 import com.bihe0832.android.lib.file.FileUtils
@@ -11,9 +13,9 @@ import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-
+val TAG = "Audio"
 object AudioUtils {
-    val TAG = "Audio"
+
 
     fun byteArrayToShortArray(bytes: ByteArray, size: Int): ShortArray {
         val shorts = ShortArray(size / 2)
@@ -28,6 +30,36 @@ object AudioUtils {
             bytes[i * 2 + 1] = (shorts[i].toInt() shr 8).toByte()
         }
         return bytes
+    }
+
+    fun getDurationWithMediaPlayer(player: MediaPlayer): Long {
+        var duration = 0L
+        try {
+            player.prepare()
+            duration = player.duration.toLong()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            player.release()
+        }
+        return duration
+    }
+
+    fun getDurationWithMediaPlayer(filePath: String): Long {
+        val player = MediaPlayer()
+        player.setDataSource(filePath)
+        return getDurationWithMediaPlayer(player)
+    }
+
+    fun getDurationWithMediaPlayer(context: Context, uri: Uri): Long {
+        val player = MediaPlayer()
+        player.setDataSource(context, uri)
+        return getDurationWithMediaPlayer(player)
+    }
+
+    fun getDurationWithMediaPlayer(context: Context, resID: Int): Long {
+        val uri = Uri.parse("android.resource://" + context.packageName.toString() + "/" + resID)
+        return getDurationWithMediaPlayer(context, uri)
     }
 
     fun getDurationByWavFile(filePath: String): Int {
@@ -48,21 +80,6 @@ object AudioUtils {
             duration = tempLong
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-        return duration
-    }
-
-    fun getDurationWithMediaPlayer(filePath: String): Long {
-        var duration = 0L
-        val player = MediaPlayer()
-        try {
-            player.setDataSource(filePath)
-            player.prepare()
-            duration = player.duration.toLong()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            player.release()
         }
         return duration
     }

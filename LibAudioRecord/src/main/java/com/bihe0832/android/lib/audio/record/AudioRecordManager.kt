@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 object AudioRecordManager {
 
-    const val TAG = "AudioRecordManager"
+    const val TAG = AudioRecordConfig.TAG
 
     private var mInterval = 0.1f
     private var mAudioDataRecorder: AudioDataRecorder? = null

@@ -178,37 +178,28 @@ object FileContent {
     }
 
     fun mergeFile(firstFile: String, secondFile: String, resultFile: String) {
-        var firstInputStream: FileInputStream? = null
-        var secondInputStream: FileInputStream? = null
-        var outputFileStream: FileOutputStream? = null
         try {
-            firstInputStream = FileInputStream(firstFile)
-            secondInputStream = FileInputStream(secondFile)
-            outputFileStream = FileOutputStream(resultFile)
-            var buffer = ByteArray(firstInputStream.available())
-            firstInputStream.read(buffer)
-            outputFileStream.write(buffer)
-            buffer = ByteArray(secondInputStream.available())
-            secondInputStream.read(buffer)
-            outputFileStream.write(buffer)
+            val bufferSize = 4096
+            var buffer = ByteArray(bufferSize)
+            var bytesRead: Int
+            FileInputStream(firstFile).use { firstInputStream ->
+                FileOutputStream(resultFile).use { outputFileStream ->
+                    while (firstInputStream.read(buffer).also { bytesRead = it } != -1) {
+                        outputFileStream.write(buffer, 0, bytesRead)
+                    }
+                }
+            }
+
+            buffer = ByteArray(bufferSize)
+            FileInputStream(secondFile).use { secondInputStream ->
+                FileOutputStream(resultFile, true).use { outputFileStream -> // 使用追加模式
+                    while (secondInputStream.read(buffer).also { bytesRead = it } != -1) {
+                        outputFileStream.write(buffer, 0, bytesRead)
+                    }
+                }
+            }
         } catch (e: IOException) {
             e.printStackTrace()
-        } finally {
-            try {
-                firstInputStream?.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            try {
-                secondInputStream?.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            try {
-                outputFileStream?.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
         }
     }
 }

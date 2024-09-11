@@ -1,11 +1,11 @@
-package com.bihe0832.android.base.debug.card.audio;
+package com.bihe0832.android.common.debug.audio.card;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-import com.bihe0832.android.base.debug.R;
+import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.audio.wav.WaveFileReader;
@@ -40,7 +40,9 @@ public class AudioHolder extends CardBaseHolder {
         String title = FileUtils.INSTANCE.getFileName(filePath) + "  |  " + DateUtil.getDateEN(file.lastModified());
         ((TextView) getView(R.id.audio_title)).setText(title);
         WaveFileReader waveFileReader = new WaveFileReader(filePath);
-        ((TextView) getView(R.id.audio_desc)).setText(waveFileReader.toShowString() + "，" + data.amplitude);
+        String fileLength = "文件大小：" + FileUtils.INSTANCE.getFileLength(file.length());
+        ((TextView) getView(R.id.audio_desc)).setText(
+                fileLength + "，" + waveFileReader.toShowString() + "，" + data.amplitude);
         TextView result = (TextView) getView(R.id.audio_recognise);
         if (TextUtils.isEmpty(data.recogniseResult)) {
             result.setVisibility(View.GONE);

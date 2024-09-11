@@ -10,6 +10,7 @@ import com.bihe0832.android.lib.audio.AudioRecordConfig;
  * @time 2018/4/10.
  */
 public class WavHeader {
+
     private final AudioRecordConfig config;// wav录音配置参数
     private final long totalAudioLength;// 音频数据总长度
 
@@ -26,8 +27,8 @@ public class WavHeader {
         int channels = (config.getChannelConfig() == AudioFormat.CHANNEL_IN_MONO ? 1 : 2);
         byte bitsPerSample = config.bitsPerSample();
         return wavFileHeader(
-                totalAudioLength - 44,
-                totalAudioLength - 8,
+                totalAudioLength,
+                totalAudioLength +36,
                 sampleRateInHz,
                 channels,
                 bitsPerSample * sampleRateInHz * channels / 8,
@@ -38,16 +39,16 @@ public class WavHeader {
     /**
      * 获取wav文件头
      *
-     * @param totalAudioLen  - 音频数据总长度
-     * @param totalDataLen   - 文件总长度-8
+     * @param totalAudioLen - 音频数据总长度
+     * @param totalDataLen - 文件总长度-8
      * @param longSampleRate - 采样率
-     * @param channels       - 通道数
-     * @param byteRate       - 每秒数据字节数
-     * @param bitsPerSample  - 采样位数，16/8 bit
+     * @param channels - 通道数
+     * @param byteRate - 每秒数据字节数
+     * @param bitsPerSample - 采样位数，16/8 bit
      * @return 文件头
      */
     private byte[] wavFileHeader(long totalAudioLen, long totalDataLen, long longSampleRate,
-                                 int channels, long byteRate, byte bitsPerSample) {
+            int channels, long byteRate, byte bitsPerSample) {
         byte[] header = new byte[44];
         // --- RIFF区块 ---
         // 文档标识: 大写字符串"RIFF"，标明该文件为有效的 RIFF 格式文档。
@@ -55,11 +56,13 @@ public class WavHeader {
         header[1] = 'I';
         header[2] = 'F';
         header[3] = 'F';
+
         // 文件数据长度: 从下一个字段首地址开始到文件末尾的总字节数。该值 = fileSize - 8。
         header[4] = (byte) (totalDataLen & 0xff);
         header[5] = (byte) ((totalDataLen >> 8) & 0xff);
         header[6] = (byte) ((totalDataLen >> 16) & 0xff);
         header[7] = (byte) ((totalDataLen >> 24) & 0xff);
+
         // 文件格式类型: 所有 WAV 格式的文件此处为字符串"WAVE"，标明该文件是 WAV 格式文件。
         header[8] = 'W';
         header[9] = 'A';

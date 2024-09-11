@@ -37,7 +37,7 @@ public class RandomAccessFileUtils {
         return false;
     }
 
-    public static boolean writeDataToFile(String filePath, long offset, byte[] bytes) {
+    public static boolean writeDataToFile(String filePath, long insertPosition, byte[] bytes,boolean replace) {
         try {
             if (!FileUtils.INSTANCE.checkFileExist(filePath)) {
                 ZLog.d("File " + filePath + " not exist");
@@ -45,10 +45,44 @@ public class RandomAccessFileUtils {
             }
             // 创建一个 RandomAccessFile 对象
             RandomAccessFile raf = new RandomAccessFile(filePath, "rw");
+            ZLog.d("File " + filePath + " :" + raf.length());
             // 移动文件指针到指定位置
-            raf.seek(offset); // 在这里，我们移动文件指针到文件的第 10 个字节
-            // 写入二进制内容
-            raf.write(bytes);
+            raf.seek(insertPosition); // 在这里，我们移动文件指针到文件的第 10 个字节
+            if (replace){
+                // 写入二进制内容
+                raf.write(bytes);
+            }else {
+                // 将插入位置及其之后的所有数据移到临时缓冲区
+                // 缓冲区大小
+                int bufferSize = 4096;
+                byte[] buffer = new byte[bufferSize];
+
+                // 将文件指针移动到插入位置
+                raf.seek(insertPosition);
+
+                // 使用临时文件存储插入位置及其之后的数据
+                File tempFile = File.createTempFile("temp", ".tmp");
+                RandomAccessFile tempRaf = new RandomAccessFile(tempFile, "rw");
+
+                int bytesRead;
+                while ((bytesRead = raf.read(buffer)) != -1) {
+                    tempRaf.write(buffer, 0, bytesRead);
+                }
+
+                // 将新内容写入插入位置
+                raf.seek(insertPosition);
+                raf.write(bytes);
+
+                // 将临时文件的数据写回原始位置
+                tempRaf.seek(0);
+                while ((bytesRead = tempRaf.read(buffer)) != -1) {
+                    raf.write(buffer, 0, bytesRead);
+                }
+                // 关闭 RandomAccessFile 和临时文件
+                tempRaf.close();
+                tempFile.delete();
+            }
+            ZLog.d("File " + filePath + " :" + raf.length());
             // 关闭 RandomAccessFile
             raf.close();
             return true;

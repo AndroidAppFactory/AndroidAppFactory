@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginLeft="6dp"
-            android:background="@color/transparent_background"
+            android:tint="@color/textColorPrimary"
             android:src="@drawable/icon_file_type_audio" />
 
     <TextView

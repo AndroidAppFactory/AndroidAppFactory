@@ -110,7 +110,8 @@ class DebugFileFragment : DebugEnvFragment() {
             add(DebugItemData("文件内容读写", View.OnClickListener { testReadAndWrite() }))
             add(DebugItemData("读取共享文件内容", View.OnClickListener { share() }))
             add(DebugItemData("创建指定大小文件", View.OnClickListener { createFile() }))
-            add(DebugItemData("修改文件指定位置内容", View.OnClickListener { modifyFile() }))
+            add(DebugItemData("修改文件指定位置内容", View.OnClickListener { modifyFile(true) }))
+            add(DebugItemData("文件指定位置插入内容", View.OnClickListener { modifyFile(false) }))
         }
     }
 
@@ -147,24 +148,39 @@ class DebugFileFragment : DebugEnvFragment() {
         val filePath = AAFFileWrapper.getFileTempFolder() + "test.panel"
         ZLog.d(LOG_TAG, "===============start==================")
         ZLog.d(LOG_TAG, "filePath: $filePath")
-        "12343434".let {
+        "1234567890".let {
             ZLog.d(LOG_TAG, "write : $it")
             FileUtils.writeToFile(filePath, it, false)
         }
         ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
-        "12343434".let {
+        "1234567890".let {
             ZLog.d(LOG_TAG, "write : $it")
             FileUtils.writeToFile(filePath, it, true)
         }
         ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
-        "这是个测试仪1".let {
+        "ABCDEFG".let {
             ZLog.d(LOG_TAG, "write : $it")
             FileUtils.writeToFile(filePath, it, true)
         }
         ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
-        "这是个测试仪2".let {
+        "ABCDEFG".let {
             ZLog.d(LOG_TAG, "write : $it")
             FileUtils.writeToFile(filePath, it, false)
+        }
+        ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
+        "1234567890".let {
+            ZLog.d(LOG_TAG, "write : $it")
+            FileUtils.writeDataToFile(filePath, 0, it.toByteArray(), false)
+        }
+        ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
+        "HIJKLMN".let {
+            ZLog.d(LOG_TAG, "write : $it")
+            FileUtils.writeDataToFile(filePath, 0, it.toByteArray(), false)
+        }
+        ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
+        "OPQ".let {
+            ZLog.d(LOG_TAG, "write : $it")
+            FileUtils.writeDataToFile(filePath, 0, it.toByteArray(), true)
         }
         ZLog.d(LOG_TAG, "read : ${FileUtils.getFileContent(filePath)}")
     }
@@ -178,7 +194,7 @@ class DebugFileFragment : DebugEnvFragment() {
             "file://cdn.bihe0832.com/app/update/get_apk.json",
             "https://webcdn.m.qq.com/webapp_myapp/index.html#/",
 
-        ).forEach {
+            ).forEach {
             ZLog.d(LOG_TAG, "===============start==================")
             ZLog.d(LOG_TAG, "source :$it")
             ZLog.d(LOG_TAG, "${FileUtils.getFileName(it)}")
@@ -189,9 +205,9 @@ class DebugFileFragment : DebugEnvFragment() {
 
         val logPath = AAFLoggerFile.getLogPathByModuleName(AAFLoggerFile.MODULE_UPDATE)
         FileUtils.copyFile(File(logPath), File(AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(logPath)))
-            .let {
-                ZLog.d(LOG_TAG, "===============$it==================")
-            }
+                .let {
+                    ZLog.d(LOG_TAG, "===============$it==================")
+                }
 
         FileUtils.copyDirectory(File(logPath).parentFile, File(AAFFileWrapper.getFileTempFolder())).let {
             ZLog.d(LOG_TAG, "===============$it==================")
@@ -480,18 +496,18 @@ class DebugFileFragment : DebugEnvFragment() {
         ZLog.d("AAF", "File create:${FileUtils.createFile(filePath, fileLength)}")
     }
 
-    fun modifyFile() {
+    fun modifyFile(replace: Boolean) {
         val file = File(AAFFileWrapper.getFileTempFolder() + "Temp.file")
         FileUtils.deleteFile(file.absolutePath)
         var fileLength = 100L
         var datas = "zixie".encodeToByteArray()
 
         ZLog.d("AAF", "File create:${FileUtils.createFile(file.absolutePath, fileLength)}")
-        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 50L, datas)}")
+        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 50L, datas, replace)}")
         readFile(file)
-        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 98L, datas)}")
+        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 98L, datas, replace)}")
         readFile(file)
-        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 200L, datas)}")
+        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 200L, datas, replace)}")
         readFile(file)
     }
 
