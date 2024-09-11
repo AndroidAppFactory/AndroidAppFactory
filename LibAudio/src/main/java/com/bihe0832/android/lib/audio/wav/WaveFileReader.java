@@ -153,7 +153,6 @@ public class WaveFileReader {
                     case "data":
                         // 读取音频数据
                         long audioLength = tempChunkSize;
-                        ZLog.e(AudioRecordConfig.TAG, "tempChunkSize: " + tempChunkSize);
                         //时长（毫秒） = 数据大小（字节） * 1000f  / (采样率 * 位深度 / 8 * 声道数)
                         duration = (int) (audioLength * 1000f / byteRate);
                         this.len = (int) (audioLength / (this.bitsPerSample * 8) / this.numChannels);
