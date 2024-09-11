@@ -13,12 +13,13 @@ import android.view.View
 import com.bihe0832.android.common.debug.audio.DebugWAVListFragment
 import com.bihe0832.android.common.debug.audio.card.AudioData
 import com.bihe0832.android.lib.audio.AudioRecordConfig
-import com.bihe0832.android.lib.audio.record.wrapper.AAFAudioTools
 import com.bihe0832.android.lib.speech.recognition.ASRManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
+import java.io.File
 
 class DebugWAVWithASRListFragment : DebugWAVListFragment() {
+    private var hasInitSuccess = false
     private val mASRManager by lazy { ASRManager() }
 
 
@@ -30,27 +31,39 @@ class DebugWAVWithASRListFragment : DebugWAVListFragment() {
                 "sherpa-onnx-paraformer-zh-2023-09-14",
                 AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ
             )
+            showResult("")
+            hasInitSuccess = true
         }
     }
 
+    override fun filter(filePath: String): Boolean {
+        return File(filePath).length() > 44
+    }
+
     override fun palyAndRecognise(data: AudioData, play: Boolean) {
-        super.palyAndRecognise(data, play)
-        SherpaAudioConvertTools.readWavAudioToSherpaArray(data.filePath)?.let { audioData ->
-            val max = (Short.MAX_VALUE * 0.1f).toInt().toShort()
-            data.amplitude = "最大振幅：" + (audioData.max() * Byte.MAX_VALUE * 2.0F).toInt() + ", 基准：$max"
-            Log.i(
-                TAG, "record data size:${audioData.size} max:$max, audioMax: ${audioData.max() * Byte.MAX_VALUE * 2.0F}"
-            )
-            var msg = "未能识别数据"
-            if (SherpaAudioConvertTools.isOverSilence(audioData, max)) {
-                mASRManager.startRecognizer(AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, audioData).let { result ->
-                    Log.i(TAG, "mRecognizerManager Start to recognizer:$result")
-                    msg = result
+        if (hasInitSuccess) {
+            super.palyAndRecognise(data, play)
+            SherpaAudioConvertTools.readWavAudioToSherpaArray(data.filePath)?.let { audioData ->
+                val max = (Short.MAX_VALUE * 0.1f).toInt().toShort()
+                data.amplitude = "最大振幅：" + (audioData.max() * Byte.MAX_VALUE * 2.0F).toInt() + ", 基准：$max"
+                Log.i(
+                    TAG,
+                    "record data size:${audioData.size} max:$max, audioMax: ${audioData.max() * Byte.MAX_VALUE * 2.0F}"
+                )
+                var msg = "未能识别数据"
+                if (SherpaAudioConvertTools.isOverSilence(audioData, max)) {
+                    mASRManager.startRecognizer(AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, audioData).let { result ->
+                        Log.i(TAG, "mRecognizerManager Start to recognizer:$result")
+                        msg = result
+                    }
+                } else {
+                    msg = "无效音频，无有效内容"
                 }
-            } else {
-                msg = "无效音频，无有效内容"
+                data.recogniseResult = msg
             }
-            data.recogniseResult = msg
+        } else {
+            showResult("初始化未完成，请稍候")
         }
+
     }
 }
