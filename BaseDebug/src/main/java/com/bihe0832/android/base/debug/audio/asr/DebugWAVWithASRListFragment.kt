@@ -12,17 +12,25 @@ import android.util.Log
 import android.view.View
 import com.bihe0832.android.common.debug.audio.DebugWAVListFragment
 import com.bihe0832.android.common.debug.audio.card.AudioData
+import com.bihe0832.android.lib.audio.AudioRecordConfig
+import com.bihe0832.android.lib.audio.record.wrapper.AAFAudioTools
 import com.bihe0832.android.lib.speech.recognition.ASRManager
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
 
 class DebugWAVWithASRListFragment : DebugWAVListFragment() {
-    private val sampleRateInHz = 16000
     private val mASRManager by lazy { ASRManager() }
 
 
     override fun initView(view: View) {
         super.initView(view)
-        mASRManager.initRecognizer(context!!, "sherpa-onnx-paraformer-zh-2023-09-14", sampleRateInHz)
+        ThreadManager.getInstance().start {
+            mASRManager.initRecognizer(
+                context!!,
+                "sherpa-onnx-paraformer-zh-2023-09-14",
+                AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ
+            )
+        }
     }
 
     override fun palyAndRecognise(data: AudioData, play: Boolean) {
@@ -35,7 +43,7 @@ class DebugWAVWithASRListFragment : DebugWAVListFragment() {
             )
             var msg = "未能识别数据"
             if (SherpaAudioConvertTools.isOverSilence(audioData, max)) {
-                mASRManager.startRecognizer(sampleRateInHz, audioData).let { result ->
+                mASRManager.startRecognizer(AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, audioData).let { result ->
                     Log.i(TAG, "mRecognizerManager Start to recognizer:$result")
                     msg = result
                 }
