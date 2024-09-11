@@ -14,8 +14,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 val TAG = "Audio"
-object AudioUtils {
 
+object AudioUtils {
 
     fun byteArrayToShortArray(bytes: ByteArray, size: Int): ShortArray {
         val shorts = ShortArray(size / 2)

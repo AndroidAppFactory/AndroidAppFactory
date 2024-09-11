@@ -1,7 +1,9 @@
 package com.k2fsa.sherpa.onnx
 
+import com.bihe0832.android.lib.audio.AudioRecordConfig
+
 data class FeatureConfig(
-    var sampleRate: Int = 16000,
+    var sampleRate: Int = AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ,
     var featureDim: Int = 80,
 )
 

@@ -73,15 +73,15 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
         AAFAudioTools.startRecordPermissionCheck(activity, scene, object : PermissionResultOfAAF(false) {
             override fun onSuccess() {
                 AAFAudioTools.init()
-                AudioRecordManagerWithEndPoint.init(context!!, AAFAudioTools.SAMPLE_RATE_IN_HZ, 2.4f, 1.4f, 30f)
+                AudioRecordManagerWithEndPoint.init(context!!, AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, 2.4f, 1.4f, 30f)
                 mASRManager.initRecognizer(
-                    context!!, "sherpa-onnx-paraformer-zh-2023-09-14", AAFAudioTools.SAMPLE_RATE_IN_HZ
+                    context!!, "sherpa-onnx-paraformer-zh-2023-09-14", AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ
                 )
                 mKeywordSpotterManager.initRecognizer(
                     context!!,
                     "sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01",
                     "keywords.txt",
-                    AAFAudioTools.SAMPLE_RATE_IN_HZ
+                    AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ
                 )
             }
         })
@@ -133,10 +133,10 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
             FileUtils.writeDataToFile(
                 file, 0, WavHeader(
                     AudioRecordConfig(
-                        AAFAudioTools.AUDIO_SOURCE,
-                        AAFAudioTools.SAMPLE_RATE_IN_HZ,
-                        AAFAudioTools.CHANNEL_CONFIG,
-                        AAFAudioTools.AUDIO_FORMAT
+                        AudioRecordConfig.DEFAULT_AUDIO_SOURCE,
+                        AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ,
+                        AudioRecordConfig.DEFAULT_CHANNEL_CONFIG,
+                        AudioRecordConfig.DEFAULT_AUDIO_FORMAT
                     ), it.length()
                 ).toBytes(), false
             )

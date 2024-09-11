@@ -5,8 +5,7 @@ import android.Manifest.permission;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.media.AudioFormat;
-import android.media.MediaRecorder;
+import com.bihe0832.android.lib.audio.AudioRecordConfig;
 import com.bihe0832.android.lib.audio.record.AudioRecordManager;
 import com.bihe0832.android.lib.audio.record.core.AudioChunk;
 import com.bihe0832.android.lib.permission.PermissionManager;
@@ -26,15 +25,12 @@ public class AAFAudioTools {
     public static final List<String> PERMISSION_LIST = Collections.singletonList(permission.RECORD_AUDIO);
 
     public static final String PERMISSION_GROUP_ID = Manifest.permission.RECORD_AUDIO;
-    public static final int AUDIO_SOURCE = MediaRecorder.AudioSource.MIC;
-    public static final int SAMPLE_RATE_IN_HZ = 16000;
-    public static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
-    public static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
-
 
     @SuppressLint("MissingPermission")
     public static void init() {
-        AudioRecordManager.INSTANCE.init(AUDIO_SOURCE, SAMPLE_RATE_IN_HZ, CHANNEL_CONFIG, AUDIO_FORMAT, 0.1F);
+        AudioRecordManager.INSTANCE.init(AudioRecordConfig.DEFAULT_AUDIO_SOURCE,
+                AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, AudioRecordConfig.DEFAULT_CHANNEL_CONFIG,
+                AudioRecordConfig.DEFAULT_AUDIO_FORMAT, 0.1F);
     }
 
     public static void addRecordScene(String scene, String permissionDesc, String permissionSceneDesc) {
