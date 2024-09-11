@@ -21,7 +21,7 @@ public class AudioData extends CardBaseModule {
     }
 
     public int getResID() {
-        return R.layout.card_audio_view;
+        return R.layout.com_bihe0832_card_debug_audio_view;
     }
 
     public Class<? extends CardBaseHolder> getViewHolderClass() {
