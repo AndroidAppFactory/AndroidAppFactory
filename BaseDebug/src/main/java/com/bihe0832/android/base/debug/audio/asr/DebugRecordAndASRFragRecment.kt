@@ -21,10 +21,10 @@ import com.bihe0832.android.lib.audio.AudioRecordConfig
 import com.bihe0832.android.lib.audio.AudioUtils
 import com.bihe0832.android.lib.audio.record.AudioRecordManager
 import com.bihe0832.android.lib.audio.record.AudioRecordManagerWithEndPoint
-import com.bihe0832.android.lib.audio.record.core.AudioChunk
 import com.bihe0832.android.lib.audio.record.wrapper.AAFAudioTools
 import com.bihe0832.android.lib.audio.record.wrapper.AudioRecordFile
 import com.bihe0832.android.lib.audio.wav.PcmToWav
+import com.bihe0832.android.lib.audio.wav.WavHeader
 import com.bihe0832.android.lib.audio.wav.WaveFileReader
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -42,8 +42,9 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
     private val scene = "debugRecord"
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("指定文件 WAV头 信息查看", View.OnClickListener { readWavHead() }))
-            add(getDebugFragmentItemData("本地 WAV 查看及识别", DebugWAVListFragment::class.java))
+            add(DebugItemData("指定文件 WAV头 信息查看", View.OnClickListener { readWavHead(preFile()) }))
+            add(DebugItemData("空文件 WAV头 信息查看", View.OnClickListener { readWavHead(preEmpty()) }))
+            add(getDebugFragmentItemData("本地 WAV 查看及识别", DebugWAVWithASRListFragment::class.java))
 
 //            add(DebugItemData(
 //                "清空本地音频临时缓存"
@@ -72,15 +73,15 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
         AAFAudioTools.startRecordPermissionCheck(activity, scene, object : PermissionResultOfAAF(false) {
             override fun onSuccess() {
                 AAFAudioTools.init()
-                AudioRecordManagerWithEndPoint.init(context!!, AAFAudioTools.sampleRateInHz, 2.4f, 1.4f, 30f)
+                AudioRecordManagerWithEndPoint.init(context!!, AAFAudioTools.SAMPLE_RATE_IN_HZ, 2.4f, 1.4f, 30f)
                 mASRManager.initRecognizer(
-                    context!!, "sherpa-onnx-paraformer-zh-2023-09-14", AAFAudioTools.sampleRateInHz
+                    context!!, "sherpa-onnx-paraformer-zh-2023-09-14", AAFAudioTools.SAMPLE_RATE_IN_HZ
                 )
                 mKeywordSpotterManager.initRecognizer(
                     context!!,
                     "sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01",
                     "keywords.txt",
-                    AAFAudioTools.sampleRateInHz
+                    AAFAudioTools.SAMPLE_RATE_IN_HZ
                 )
             }
         })
@@ -90,16 +91,14 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
         AAFAudioTools.startRecordPermissionCheck(activity, scene, object : PermissionResultOfAAF(false) {
             override fun onSuccess() {
                 AudioRecordManager.startRecord(
-                    activity,
-                    scene,
-                    "rere"
+                    activity, scene, "rere"
                 ) { config, audioChunk, dataLength -> ZLog.d(TAG, "Started recording callback:${dataLength}") }
             }
         })
     }
 
     fun stopWav() {
-        AudioRecordManager.stopRecord(context!!,scene)
+        AudioRecordManager.stopRecord(context!!, scene)
     }
 
     fun startWaveFile() {
@@ -123,13 +122,31 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
     fun preFile(): String {
         val file = AAFFileWrapper.getMediaTempFolder() + "temp.wav"
         FileUtils.copyAssetsFileToPath(context!!, "0.wav", file)
-        val wavFileReader = WaveFileReader(file)
-        ZLog.d(wavFileReader.toString())
         return file
     }
 
-    fun readWavHead() {
-        preFile()
+    fun preEmpty(): String {
+        val file = AAFFileWrapper.getMediaTempFolder() + "temp.wav"
+        File(file).let {
+            FileUtils.deleteFile(file)
+            it.createNewFile()
+            FileUtils.writeDataToFile(
+                file, 0, WavHeader(
+                    AudioRecordConfig(
+                        AAFAudioTools.AUDIO_SOURCE,
+                        AAFAudioTools.SAMPLE_RATE_IN_HZ,
+                        AAFAudioTools.CHANNEL_CONFIG,
+                        AAFAudioTools.AUDIO_FORMAT
+                    ), it.length()
+                ).toBytes(), false
+            )
+        }
+        return file
+    }
+
+    fun readWavHead(filePath: String) {
+        val wavFileReader = WaveFileReader(filePath)
+        ZLog.d(wavFileReader.toString())
     }
 
     fun startRecord() {
@@ -247,14 +264,14 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
 
     var lastArray: FloatArray? = null
     fun startRealFile() {
-        AudioRecordManagerWithEndPoint.startFileRecord(
-            activity,
+        AudioRecordManagerWithEndPoint.startFileRecord(activity,
             "File",
             AAFFileWrapper.getMediaTempFolder(),
             object : AAFDataCallback<String>() {
                 override fun onSuccess(result: String?) {
                     ZLog.d(TAG, "record data:${result}")
                     result?.let {
+                        readWavHead(it)
                         SherpaAudioConvertTools.readWavAudioToSherpaArray(result)?.let {
 //                            val combinedFloatArray = concatenate(lastArray, it)
                             val max = (Short.MAX_VALUE * 0.1f).toInt().toShort()
@@ -291,6 +308,7 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
     }
 
     fun startFile(file: String) {
+        readWavHead(file)
         SherpaAudioConvertTools.readWavAudioToSherpaArray(file)?.let {
             recognise(WaveFileReader(file).sampleRate.toInt(), it)
         }

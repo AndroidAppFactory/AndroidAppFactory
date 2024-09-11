@@ -1,11 +1,15 @@
 package com.bihe0832.android.lib.audio.wav;
 
+import com.bihe0832.android.lib.audio.AudioRecordConfig;
 import com.bihe0832.android.lib.file.FileUtils;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.time.TimeUtil;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 /**
  * wav文件 解析器
@@ -83,7 +87,7 @@ public class WaveFileReader {
     public String toShowString() {
         return "采样率：" + getSampleRate() + "；声道数：" + getNumChannels() + "；编码长度：" + getBitPerSample() + "；数据长度："
                 + FileUtils.INSTANCE.getFileLength(getDataLen()) + "；音频时长：" + TimeUtil.formatSecondsTo00(
-                getDuration()/1000);
+                getDuration() / 1000);
     }
 
 
@@ -96,17 +100,25 @@ public class WaveFileReader {
             // --- RIFF区块 ---
             String riffFlag = readString(4);
             if (!"RIFF".equals(riffFlag)) {
+                ZLog.e(AudioRecordConfig.TAG, "RIFF miss, " + filename + " is not a wave file.");
                 throw new IllegalArgumentException("RIFF miss, " + filename + " is not a wave file.");
             }
             long chunkSize = readLong();// 文件数据长度: 该值 = fileSize - 8。
+            if (chunkSize != file.length() - 8) {
+                ZLog.e(AudioRecordConfig.TAG,
+                        "chunkSize error,  " + filename + " chunkSize is " + chunkSize + ", but file length is:"
+                                + file.length());
+            }
             String waveFlag = readString(4);
             if (!"WAVE".equals(waveFlag)) {
+                ZLog.e(AudioRecordConfig.TAG, "WAVE miss, " + filename + " is not a wave file.");
                 throw new IllegalArgumentException("WAVE miss, " + filename + " is not a wave file.");
             }
 
             // --- FORMAT区块 ---
             String fmtFlag = readString(4);
             if (!"fmt ".equals(fmtFlag)) {
+                ZLog.e(AudioRecordConfig.TAG, "fmt miss, " + filename + " is not a wave file.");
                 throw new IllegalArgumentException("fmt miss, " + filename + " is not a wave file.");
             }
             long subChunk1Size = readLong();// 格式块长度: 取决于编码格式，可以是 16、18、20、40 等
@@ -117,22 +129,44 @@ public class WaveFileReader {
             int blockAlign = readInt();// BlockAlign(数据块对齐): 采样帧大小。该数值为:声道数×采样位数/8。
             this.bitsPerSample = readInt();// BitsPerSample(采样位数): 每个采样存储的bit数。常见的位数有 8、16
 
-            //时长（秒） = 数据大小（字节） / (采样率 * 位深度 / 8 * 声道数)
-            duration = (int) (chunkSize * 1000f / byteRate);
-
-            // --- DATA区块 ---
             byte[] chunkId = new byte[4];
-            while (fis.read(chunkId) != -1) {
+            byte[] chunkSizeBytes = new byte[4];
+
+            boolean needCheck = true;
+            while (bis.read(chunkId) != -1 && needCheck) {
                 String chunkIdStr = new String(chunkId);
-                if ("data".equals(chunkIdStr)) {
-                    // 获取音频数据的大小
-                    break;
+                // 读取当前块的大小
+                bis.read(chunkSizeBytes);
+                int tempChunkSize = ByteBuffer.wrap(chunkSizeBytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
+
+                switch (chunkIdStr) {
+                    case "LIST":
+                        // 处理 "LIST" 块
+                        // 在此处解析扩展数据
+                        bis.skip(tempChunkSize);
+                        break;
+                    case "fact":
+                        // 处理 "fact" 块
+                        // 在此处解析扩展数据
+                        bis.skip(tempChunkSize);
+                        break;
+                    case "data":
+                        // 读取音频数据
+                        long audioLength = tempChunkSize;
+                        ZLog.e(AudioRecordConfig.TAG, "tempChunkSize: " + tempChunkSize);
+                        //时长（毫秒） = 数据大小（字节） * 1000f  / (采样率 * 位深度 / 8 * 声道数)
+                        duration = (int) (audioLength * 1000f / byteRate);
+                        this.len = (int) (audioLength / (this.bitsPerSample * 8) / this.numChannels);
+                        needCheck = false;
+                        break;
+                    // 在此处处理音频数据（audioData）
+                    default:
+                        // 跳过未知块
+                        bis.skip(tempChunkSize);
+                        break;
                 }
             }
-            long audioLength = readLong();// 音频数据长度: N = ByteRate * seconds
 
-            // 读取数据
-            this.len = (int) (audioLength / (this.bitsPerSample * 8) / this.numChannels);
             isSuccess = true;
         } catch (Exception e) {
             e.printStackTrace();

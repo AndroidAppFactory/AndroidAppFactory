@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.audio.asr;
+package com.bihe0832.android.common.debug.audio;
 
 import java.io.File;
 import java.util.ArrayList;

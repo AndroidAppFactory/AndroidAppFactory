@@ -85,11 +85,12 @@ object AudioRecordManagerWithEndPoint {
         }
     }
 
-    private fun writeFile(config: AudioRecordConfig, file: String) {
+    private fun writeFile(config: AudioRecordConfig, filePath: String) {
         closeOutput()
-        if (FileUtils.checkFileExist(file)) {
-            FileUtils.writeDataToFile(file, 0, WavHeader(config, File(file).length()).toBytes())
-        }
+        val file = File(filePath)
+        ZLog.d(AudioRecordManager.TAG,"$scene writeFile:$scene $file ${file.length()}")
+        FileUtils.writeDataToFile(filePath, 0, WavHeader(config, file.length()).toBytes(),false)
+        ZLog.d(AudioRecordManager.TAG,"$scene writeFile:$scene $file ${file.length()}")
     }
 
     private fun newFile(fileFolder: String) {
@@ -202,20 +203,15 @@ object AudioRecordManagerWithEndPoint {
                         }
                         val isEndpoint = onlineRecognizer.isEndpoint(stream)
                         if (isEndpoint) {
-                            ZLog.d("${AudioRecordManager.TAG} AudioRecordManagerWithEndPoint  processSamples isEndpoint")
-                            ZLog.d(
-                                "${AudioRecordManager.TAG} AudioRecordManagerWithEndPoint processSamples isEndpoint:" + onlineRecognizer.getResult(
-                                    stream
-                                ).text
-                            )
                             val finalFile = file
+                            ZLog.d("${AudioRecordManager.TAG} AudioRecordManagerWithEndPoint  processSamples isEndpoint")
+                            ZLog.d("${AudioRecordManager.TAG} AudioRecordManagerWithEndPoint  processSamples :$finalFile")
                             writeFile(audioRecordConfig, finalFile)
                             newFile(fileFolder)
+                            onlineRecognizer.reset(stream)
                             ThreadManager.getInstance().start {
                                 callback.onSuccess(finalFile)
                             }
-                            onlineRecognizer.reset(stream)
-
                         }
                     }
                 }
@@ -241,7 +237,7 @@ object AudioRecordManagerWithEndPoint {
 
 
     fun stopRecord(context: Context) {
-        AudioRecordManager.stopRecord(context,scene)
+        AudioRecordManager.stopRecord(context, scene)
         if (config != null) {
             writeFile(config!!, file)
         }

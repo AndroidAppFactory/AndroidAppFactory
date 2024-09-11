@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.media.audio
+package com.bihe0832.android.lib.audio
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -14,7 +14,7 @@ import java.io.IOException
  * Description: Description
  *
  */
-object AudioTools {
+object AudioDurationTools {
 
     fun getAudioDuration(path: String): Long {
         var duration = 0

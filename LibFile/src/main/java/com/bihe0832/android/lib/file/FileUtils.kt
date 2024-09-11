@@ -405,8 +405,8 @@ object FileUtils {
         return FileContent.isBinaryFile(filePath)
     }
 
-    fun writeDataToFile(filePath: String, offset: Long, bytes: ByteArray): Boolean {
-        return RandomAccessFileUtils.writeDataToFile(filePath, offset, bytes)
+    fun writeDataToFile(filePath: String, offset: Long, bytes: ByteArray, replace: Boolean): Boolean {
+        return RandomAccessFileUtils.writeDataToFile(filePath, offset, bytes, replace)
     }
 
     fun writeToFile(filePath: String, data: String, append: Boolean) {
