@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.debug.base
 
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.debug.DebugUtils
@@ -13,11 +14,11 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.http.common.HTTPServer
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.text.TextFactoryUtils
+import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
+import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
 
 open class BaseDebugListFragment : CommonListFragment() {
 
@@ -129,14 +130,16 @@ open class BaseDebugListFragment : CommonListFragment() {
     }
 
     protected open fun showResult(s: String?) {
-        s?.let {
-            ThreadManager.getInstance().runOnUIThread {
-                ZLog.d(HTTPServer.LOG_TAG, "showResult:$s")
-                view?.findViewById<TextView>(R.id.test_tips)?.apply {
+        ThreadManager.getInstance().runOnUIThread {
+            ZLog.d(HTTPServer.LOG_TAG, "showResult:$s")
+            view?.findViewById<TextView>(R.id.test_tips)?.apply {
+                if (TextUtils.isEmpty(s)) {
+                    visibility = View.GONE
+                } else {
                     this.text = TextFactoryUtils.getSpannedTextByHtml("<B>提示信息</b>:<BR> $s")
                     visibility = View.VISIBLE
+                    ZixieContext.showDebug(s!!)
                 }
-                ZixieContext.showDebug(it)
             }
         }
     }

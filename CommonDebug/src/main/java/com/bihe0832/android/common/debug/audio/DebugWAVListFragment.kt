@@ -35,14 +35,15 @@ open class DebugWAVListFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
 
         val data = ArrayList<CardBaseModule>().apply {
-            val tips = "1. <b><font color='#3AC8EF'>点击</font>图标</b>，播放音频，<b><font color='#3AC8EF'>点击</font>标题和内容</b>，${
-                        if (isPlay) {
-                            "播放音频并识别音频内容"
-                        } else {
-                            "识别音频内容"
-                        }
-                    }<BR>" +
-                    "2. <b><font color='#3AC8EF'>长按</font>图标</b>，可以删除音频，<b><font color='#3AC8EF'>长按</font>标题和内容</b>，可以发送音频"
+            val tips =
+                "1. <b><font color='#3AC8EF'>点击</font>图标</b>，播放音频，<b><font color='#3AC8EF'>点击</font>标题和内容</b>，${
+                    if (isPlay) {
+                        "播放音频并识别音频内容"
+                    } else {
+                        "识别音频内容"
+                    }
+                }<BR>" +
+                        "2. <b><font color='#3AC8EF'>长按</font>图标</b>，可以删除音频，<b><font color='#3AC8EF'>长按</font>标题和内容</b>，可以发送音频"
 
             add(DebugTipsData(tips))
             add(
@@ -66,15 +67,21 @@ open class DebugWAVListFragment : DebugEnvFragment() {
                 it
             }
         }.let { file ->
-            SearchFileUtils.search(file, arrayOf(".wav")).sortedByDescending { it.lastModified() }.forEach { item ->
-                AudioData(item.absolutePath).apply {
+            SearchFileUtils.search(file, arrayOf(".wav")).filter { filter(it.absolutePath) }
+                    .sortedByDescending { it.lastModified() }
+                    .forEach { item ->
+                        AudioData(item.absolutePath).apply {
 //                    palyAndRecognise(this, false)
-                }.let {
-                    data.add(it)
-                }
-            }
+                        }.let {
+                            data.add(it)
+                        }
+                    }
         }
         return data
+    }
+
+    open fun filter(filePath: String): Boolean {
+        return FileUtils.checkFileExist(filePath)
     }
 
     override fun getDataLiveData(): CommonListLiveData {
