@@ -107,8 +107,8 @@ public class PermissionsActivity extends AppCompatActivity {
 
     // 全部权限均已获取
     protected void allPermissionsGranted() {
-        PermissionManager.INSTANCE.getPermissionCheckResultListener().onSuccess(scene);
         finish();
+        PermissionManager.INSTANCE.getPermissionCheckResultListener().onSuccess(scene);
     }
 
     protected void setAutoDeny() {
