@@ -28,6 +28,8 @@ import com.bihe0832.android.lib.audio.wav.WavHeader
 import com.bihe0832.android.lib.audio.wav.WaveFileReader
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.pinyin.FilePinyinMapDict
+import com.bihe0832.android.lib.pinyin.PinYinTools
 import com.bihe0832.android.lib.speech.kws.KeywordSpotterManager
 import com.bihe0832.android.lib.speech.recognition.ASRManager
 import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
@@ -42,6 +44,7 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
     private val scene = "debugRecord"
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            add(DebugItemData("文字转拼音", View.OnClickListener { testPinyin() }))
             add(DebugItemData("指定文件 WAV头 信息查看", View.OnClickListener { readWavHead(preFile()) }))
             add(DebugItemData("空文件 WAV头 信息查看", View.OnClickListener { readWavHead(preEmpty()) }))
             add(getDebugFragmentItemData("本地 WAV 查看及识别", DebugWAVWithASRListFragment::class.java))
@@ -67,13 +70,38 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
         }
     }
 
+    private fun testPinyin() {
+        mutableListOf("阿珂没有闪现", "妲己没闪现", "大司命没有技能").forEach {
+            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, "").toLowerCase())
+            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, " ").toLowerCase())
+            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, ",").toLowerCase())
+            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, "-").toLowerCase())
+        }
+    }
+
     @SuppressLint("MissingPermission")
     fun init() {
+        val file = AAFFileWrapper.getTempFolder() + "dict.txt"
+
+
+        val dict = FileUtils.copyAssetsFileToPath(context,"cncity.txt",file)
+        PinYinTools.init(PinYinTools.newConfig().with(
+            FilePinyinMapDict(
+                context!!,
+                file
+            )
+        ))
         AAFAudioTools.addRecordScene(scene, "读取麦克风", "音频录制测试")
         AAFAudioTools.startRecordPermissionCheck(activity, scene, object : PermissionResultOfAAF(false) {
             override fun onSuccess() {
                 AAFAudioTools.init()
-                AudioRecordManagerWithEndPoint.init(context!!, AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, 2.4f, 1.4f, 30f)
+                AudioRecordManagerWithEndPoint.init(
+                    context!!,
+                    AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ,
+                    2.4f,
+                    1.4f,
+                    30f
+                )
                 mASRManager.initRecognizer(
                     context!!, "sherpa-onnx-paraformer-zh-2023-09-14", AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ
                 )

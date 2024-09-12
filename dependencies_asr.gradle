@@ -4,7 +4,7 @@ ext.asrmoduleInfo = [
                 "version"            : "6.15.4",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
-                        "LibSpeechRecognition", "LibASRMin", "LibSherpaEndpoint"
+                        "LibASRMin", "LibSpeechRecognition", "LibSherpaEndpoint", "LibPinYin"
                 ]
         ],
         "LibASRMin"           : [
@@ -32,7 +32,7 @@ ext.asrmoduleInfo = [
                 "version"            : "6.15.4",
                 "artifactId"         : "lib-audio-player",
                 "apidependenciesList": [
-                        "LibBlockTask","LibAudio"
+                        "LibBlockTask", "LibAudio"
                 ]
         ],
         "LibAudioRecord"      : [
@@ -68,6 +68,13 @@ ext.asrmoduleInfo = [
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
                         "LibSherpaOnnx"
+                ]
+        ],
+        "LibPinYin"           : [
+                "version"            : "6.15.4",
+                "artifactId"         : "lib-pinyin",
+                "apidependenciesList": [
+                        "org.ahocorasick:ahocorasick:0.3.0"
                 ]
         ]
 ]
