@@ -83,7 +83,7 @@ public class CommonDialog extends Dialog {
     private int imageResId = -1;
 
     public CommonDialog(Context context) {
-        super(context, R.style.CommonDialog);
+        super(context, R.style.AAFCommonDialog);
     }
 
     public CommonDialog(Context context, int themeResId) {

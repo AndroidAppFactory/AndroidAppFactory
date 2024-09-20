@@ -32,7 +32,7 @@ public class LoadingDialog extends Dialog {
     private int loadingType = LOADING_TYPE_DOTS;
 
     public LoadingDialog(Context context) {
-        super(context, R.style.LoadingProgressDialog);
+        super(context, R.style.AAFLoadingProgressDialog);
     }
 
     @Override

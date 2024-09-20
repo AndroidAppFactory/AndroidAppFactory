@@ -1,9 +1,9 @@
 <resources>
 
-    <style name="LoadingProgressDialog" parent="BaseDialog">
+    <style name="AAFLoadingProgressDialog" parent="AAFBaseDialog">
     </style>
 
-    <style name="LoadingProcessStyle" parent="@android:style/Widget.ProgressBar.Small.Inverse">
+    <style name="AAFLoadingProcessStyle" parent="@android:style/Widget.ProgressBar.Small.Inverse">
         <item name="android:indeterminateDrawable">@anim/com_bihe0832_loading_animation</item>
         <item name="android:minWidth">24dp</item>
         <item name="android:maxWidth">24dp</item>

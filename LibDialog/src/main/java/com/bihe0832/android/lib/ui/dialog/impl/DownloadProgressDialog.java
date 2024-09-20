@@ -34,7 +34,7 @@ public class DownloadProgressDialog extends Dialog {
     private TextView mPositiveButton;
 
     public DownloadProgressDialog(Context context) {
-        super(context, R.style.CommonProgressDialogStyle);
+        super(context, R.style.AAFCommonProgressDialogStyle);
     }
 
     private String mTitleString;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="BaseDialog" parent="@android:style/Theme.Dialog">
+    <style name="AAFBaseDialog" parent="@android:style/Theme.Dialog">
         <!--背景颜色及和透明程度-->
         <!-- 设置这个属性后，dialog周边的一圈黑边就可以消失了-->
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -28,12 +28,12 @@
         <item name="android:textColorHintInverse">@color/com_bihe0832_dialog_hint</item>
     </style>
 
-    <style name="CommonDialog" parent="BaseDialog">
+    <style name="AAFCommonDialog" parent="AAFBaseDialog">
         <item name="android:windowMinWidthMajor">65%</item>
         <item name="android:windowMinWidthMinor">80%</item>
     </style>
 
-    <style name="InputDialog" parent="CommonDialog">
+    <style name="AAFInputDialog" parent="AAFCommonDialog">
         <!--显示软件盘-->
         <item name="android:windowSoftInputMode">stateAlwaysVisible</item>
     </style>

@@ -13,7 +13,7 @@ import com.bihe0832.android.lib.ui.dialog.R
 
 
 open class BottomDialog : CommonDialog {
-    constructor(context: Context?) : super(context, R.style.BaseDialog)
+    constructor(context: Context?) : super(context, R.style.AAFBaseDialog)
 
     constructor(context: Context?, themeResId: Int) : super(context, themeResId)
 

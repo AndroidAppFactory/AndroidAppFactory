@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.annotation.NonNull
 import com.bihe0832.android.lib.audio.AudioUtils
 import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
+import com.bihe0832.android.lib.block.task.BlockTask
 import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -190,7 +191,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
 
     fun finishCurrent() {
         pause()
-        getCurrentTask().finishTask()
+        getCurrentTask()?.finishTask()
     }
 
     fun pause() {
