@@ -99,6 +99,8 @@ def checkModuleDependencies(String moduleA, String moduleB) {
 def getPublishCommand() {
     System.err.println("组件依赖关系处理中，预计耗时较久，请耐心等待...\n\n")
 
+    delete fileTree(dir: rootDir, include: '**/build')
+
     def moduleList = []
 
     zixieDepenciesList.each { projectName, subModuleList ->

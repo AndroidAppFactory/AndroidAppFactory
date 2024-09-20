@@ -38,7 +38,7 @@ object DialogUtils {
         listener: DialogStringCallback?,
     ) {
         ThreadManager.getInstance().runOnUIThread {
-            val dialog = CommonDialog(context, R.style.InputDialog)
+            val dialog = CommonDialog(context, R.style.AAFInputDialog)
             InputDialogUtils.showInputDialog(
                 context,
                 dialog,

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="CommonProgressDialogStyle" parent="CommonDialog"></style>
+    <style name="AAFCommonProgressDialogStyle" parent="AAFCommonDialog"></style>
 
-    <style name="CommonProgressBarStyle">
+    <style name="AAFCommonProgressBarStyle">
         <item name="android:maxHeight">10dp</item>
         <item name="android:minHeight">5dp</item>
         <item name="android:indeterminateOnly">false</item>
