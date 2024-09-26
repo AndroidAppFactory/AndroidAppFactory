@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author zixie code@bihe0832.com Created on 2020/9/23.
  */
 
-public class DownloadUtils {
+public class DownloadFileUtils {
 
     public static final String DOWNLOAD_ACTION_KEY_APK = "DownloadAPK";
     public static final String DOWNLOAD_ACTION_KEY_CONFIG = "DownloadConfig";

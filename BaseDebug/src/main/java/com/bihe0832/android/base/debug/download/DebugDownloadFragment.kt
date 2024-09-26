@@ -5,7 +5,6 @@ import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -14,7 +13,7 @@ import com.bihe0832.android.lib.download.wrapper.DownloadConfig
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.DownloadRangeUtils
 import com.bihe0832.android.lib.download.wrapper.DownloadTools
-import com.bihe0832.android.lib.download.wrapper.DownloadUtils
+import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
@@ -190,7 +189,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 }
             }
         }.let {
-            DownloadUtils.startDownload(context, it, it.isForceDownloadNew)
+            DownloadFileUtils.startDownload(context, it, it.isForceDownloadNew)
         }
     }
 
@@ -555,6 +554,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             object : DialogCompletedStringCallback {
                 override fun onResult(p0: String?) {
                     if (URLUtils.isHTTPUrl(p0)) {
+                        FileUtils.deleteFile(AAFFileWrapper.getTempFolder() + "a.a")
 //                        DownloadFile.download(
 //                            activity!!,
 //                            p0!!,
@@ -562,17 +562,18 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 //                            false,
 //                            null,
 //                        )
-                        DownloadFile.download(
+                        DownloadFile.forceDownload(
                             activity!!,
-                            URL_FILE,
-                            ZixieContext.getLogFolder(),
-                            false,
+                            URL_FILE ,
+                            AAFFileWrapper.getTempFolder() + "a.a",
+                            true,
                             MD5_FILE,
                             object : SimpleDownloadListener() {
 
                                 override fun onComplete(filePath: String, item: DownloadItem): String {
-                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
-                                    ZLog.d(LOG_TAG, "testDownload onComplete : ${filePath}")
+                                    ZLog.d(LOG_TAG, "testDownload onComplete 1 : ${filePath}")
+                                    val a = 0
+                                    var b = 5/a
                                     filePath.let {
                                         ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
                                         ZLog.d(
@@ -604,7 +605,57 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                                 }
 
                                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                                    ZLog.d(LOG_TAG, "testDownload onFail : ${errorCode} ${msg} $item")
+                                    ZLog.d(LOG_TAG, "testDownload onFail 1: ${errorCode} ${msg} $item")
+                                }
+
+                                override fun onProgress(item: DownloadItem) {
+                                    ZLog.d(LOG_TAG, "testDownload : ${item.process}")
+                                }
+
+                            })
+
+                        DownloadFile.forceDownload(
+                            activity!!,
+                            URL_FILE,
+                            AAFFileWrapper.getTempFolder() + "a.a",
+                            true,
+                            MD5_FILE,
+                            object : SimpleDownloadListener() {
+
+                                override fun onComplete(filePath: String, item: DownloadItem): String {
+                                    ZLog.d(LOG_TAG, "testDownload onComplete 2: ${filePath}")
+                                    filePath.let {
+                                        ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
+                                        ZLog.d(
+                                            LOG_TAG,
+                                            "getExtensionName: ${FileUtils.getExtensionName(it)}"
+                                        )
+                                        ZLog.d(
+                                            LOG_TAG,
+                                            "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}"
+                                        )
+                                        ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
+//                                        ZLog.d(
+//                                            LOG_TAG,
+//                                            "getFileMD5: ${MD5.getFileMD5(it, 0, File(it).length())}"
+//                                        )
+//                                        ZLog.d(LOG_TAG, "getFileSHA256: ${FileUtils.getFileSHA256(it)}")
+//                                        ZLog.d(
+//                                            LOG_TAG,
+//                                            "getFileSHA256: ${
+//                                                SHA256.getFileSHA256(
+//                                                    it,
+//                                                    0,
+//                                                    File(it).length()
+//                                                )
+//                                            }"
+//                                        )
+                                    }
+                                    return filePath
+                                }
+
+                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                                    ZLog.d(LOG_TAG, "testDownload onFail 2: ${errorCode} ${msg} $item")
                                 }
 
                                 override fun onProgress(item: DownloadItem) {

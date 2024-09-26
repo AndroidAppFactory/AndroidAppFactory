@@ -259,7 +259,8 @@ object DownloadFile {
                 }
 
                 override fun onNegativeClick() {
-                    DownloadUtils.deleteTask(DownloadUtils.getDownloadIDByURL(url), true)
+                    DownloadFileUtils.deleteTask(
+                        DownloadFileUtils.getDownloadIDByURL(url), true)
                     dismiss()
                     listener?.onNegativeClick()
                 }
@@ -555,7 +556,7 @@ object DownloadFile {
             sha256,
             forceDownloadNew,
             useMobile,
-            DownloadUtils.DOWNLOAD_ACTION_KEY_FILE,
+            DownloadFileUtils.DOWNLOAD_ACTION_KEY_FILE,
             forceDownload,
             needRecord,
             downloadListener

@@ -39,12 +39,12 @@ object DownloadConfig {
         if (TextUtils.isEmpty(url)) {
             downloadListener.onFailed(ResponseHandler.ERROR_CONFIG, "url is bad")
         }
-        DownloadUtils.startDownload(context, DownloadItem().apply {
+        DownloadFileUtils.startDownload(context, DownloadItem().apply {
             setNotificationVisibility(false)
             downloadPriority = DownloadItem.MAX_DOWNLOAD_PRIORITY
             downloadURL = url
             contentMD5 = md5
-            actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_CONFIG
+            actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_CONFIG
             isDownloadWhenUseMobile = true
             isForceDownloadNew = TextUtils.isEmpty(md5)
             isNeedRecord = false
