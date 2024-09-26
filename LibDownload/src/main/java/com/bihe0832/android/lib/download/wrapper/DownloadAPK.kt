@@ -164,7 +164,7 @@ object DownloadAPK {
             sha256 = "",
             forceDownloadNew = true,
             useMobile = true,
-            actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_APK,
+            actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
             forceDownload = false,
             needRecord = false,
             downloadListener = SimpleAPKDownloadListener(context, packageName)
@@ -184,7 +184,7 @@ object DownloadAPK {
             sha256 = "",
             forceDownloadNew = false,
             useMobile = true,
-            actionKey = DownloadUtils.DOWNLOAD_ACTION_KEY_APK,
+            actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
             forceDownload = false,
             needRecord = false,
             downloadListener = SimpleAPKDownloadListener(context, packageName)

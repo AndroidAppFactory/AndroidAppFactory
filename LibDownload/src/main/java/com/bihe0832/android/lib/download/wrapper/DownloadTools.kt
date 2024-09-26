@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
@@ -102,12 +103,47 @@ object DownloadTools {
                 DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = true)
             }
 
+            override fun onComplete(downloadPath: String, item: DownloadItem): String {
+                return notifySuccess(downloadPath, item)
+            }
+
+            @Synchronized
+            override fun onDelete(item: DownloadItem) {
+                nameListener.values.forEach { list ->
+                    list.forEach {
+                        it?.onDelete(item)
+                    }
+                }
+                nameListener.clear()
+
+                mGlobalDownloadListenerList.forEach {
+                    it.onDelete(item)
+                }
+            }
+
+            fun notifyComplete(path: String, listener: DownloadListener?, item: DownloadItem): String {
+                if (listener == null) {
+                    return path
+                }
+                try {
+                    if (FileUtils.checkFileExist(path)) {
+                        return listener.onComplete(path, item)
+                    } else {
+                        item.setDownloadStatus(DownloadStatus.STATUS_DOWNLOAD_FAILED)
+                        listener.onFail(DownloadErrorCode.ERR_NOTIFY_EXCEPTION, "new path file not exist", item)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                return path
+            }
+
             @Synchronized
             fun notifySuccess(downloadPath: String, item: DownloadItem): String {
                 var path = downloadPath
                 nameListener[UNIQUE_KEY]?.forEach {
                     it?.let {
-                        path = it.onComplete(path, item)
+                        path = notifyComplete(path, it, item)
                     }
                 }
                 nameListener.remove(UNIQUE_KEY)
@@ -118,9 +154,7 @@ object DownloadTools {
                     val listenerList = next.value
                     if (filePath == path) {
                         listenerList.forEach {
-                            it?.let {
-                                path = it.onComplete(path, item)
-                            }
+                            path = notifyComplete(path, it, item)
                         }
                     } else {
                         try {
@@ -128,9 +162,7 @@ object DownloadTools {
                                 if (result) {
                                     path = filePath
                                     listenerList.forEach {
-                                        it?.let {
-                                            path = it.onComplete(path, item)
-                                        }
+                                        path = notifyComplete(path, it, item)
                                     }
                                 } else {
                                     listenerList.forEach {
@@ -157,27 +189,9 @@ object DownloadTools {
                     nameListener.remove(filePath)
                 }
                 mGlobalDownloadListenerList.forEach {
-                    path = it.onComplete(path, item)
+                    path = notifyComplete(path, it, item)
                 }
                 return path
-            }
-
-            override fun onComplete(downloadPath: String, item: DownloadItem): String {
-                return notifySuccess(downloadPath, item)
-            }
-
-            @Synchronized
-            override fun onDelete(item: DownloadItem) {
-                nameListener.values.forEach { list ->
-                    list.forEach {
-                        it?.onDelete(item)
-                    }
-                }
-                nameListener.clear()
-
-                mGlobalDownloadListenerList.forEach {
-                    it.onDelete(item)
-                }
             }
         }
 
@@ -274,13 +288,17 @@ object DownloadTools {
             if (isFilePath && (!TextUtils.isEmpty(md5) || !TextUtils.isEmpty(sha256))
                     && FileUtils.checkFileExist(path, 0, md5, sha256, false)
             ) {
-                downloadListener?.onComplete(path, it)
+                try {
+                    downloadListener?.onComplete(path, it)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
                 return
             }
 
             addNewKeyListener(it.downloadID, path, isFilePath, downloadListener)
             it.downloadListener = mDownloadKeyListenerList[it.downloadID]?.getDownloadListener()
-            DownloadUtils.startDownload(context, it, forceDownload)
+            DownloadFileUtils.startDownload(context, it, forceDownload)
         }
     }
 }

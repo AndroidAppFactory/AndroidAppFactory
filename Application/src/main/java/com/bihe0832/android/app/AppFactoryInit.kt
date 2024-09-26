@@ -17,7 +17,7 @@ import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.device.shake.ShakeManager
-import com.bihe0832.android.lib.download.wrapper.DownloadUtils
+import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.theme.ThemeManager
@@ -69,7 +69,7 @@ object AppFactoryInit {
             RouterHelper.initRouter()
             AAFPermissionManager.initPermission()
             ThreadManager.getInstance().start {
-                DownloadUtils.init(ctx, ZixieContext.isDebug())
+                DownloadFileUtils.init(ctx, ZixieContext.isDebug())
             }
             AAFMessageManager.initModule(ctx)
             ZLog.d(
