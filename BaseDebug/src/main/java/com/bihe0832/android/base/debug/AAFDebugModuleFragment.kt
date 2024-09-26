@@ -61,7 +61,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(getDebugFragmentItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
             add(getDebugFragmentItemData("Dialog、底部弹出Activity 调试", DebugDialogFragment::class.java))
-            add(getDebugFragmentItemData("文件（Zip、assets 等）、配置操作调试", DebugFileFragment::class.java))
+            add(getDebugFragmentItemData("文件（Zip、assets 等）、配置、DB操作调试", DebugFileFragment::class.java))
             add(getDebugFragmentItemData("TAB 调试", DebugTabFragment::class.java))
             add(getDebugFragmentItemData("权限 Permission 调试", DebugPermissionFragment::class.java))
             add(getDebugFragmentItemData("公告消息 调试", DebugMessageFragment::class.java))

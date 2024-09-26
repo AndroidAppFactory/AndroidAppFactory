@@ -21,7 +21,6 @@ public class DownloadFileUtils {
     public static final String DOWNLOAD_ACTION_KEY_CONFIG = "DownloadConfig";
     public static final String DOWNLOAD_ACTION_KEY_FILE = "DownloadFile";
 
-
     /**
      * 初始化
      *
