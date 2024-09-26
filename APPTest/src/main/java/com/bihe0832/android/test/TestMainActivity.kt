@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.Gravity
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.ui.AAFCommonMainActivity
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
@@ -37,6 +39,7 @@ open class TestMainActivity : AAFCommonMainActivity() {
 //    override fun getLayoutID(): Int {
 //        return R.layout.activity_debug_main
 //    }
+
 
     override fun onResume() {
         super.onResume()

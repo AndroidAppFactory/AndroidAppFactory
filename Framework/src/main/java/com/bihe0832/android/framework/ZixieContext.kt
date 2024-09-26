@@ -25,6 +25,7 @@ import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
@@ -144,7 +145,7 @@ object ZixieContext {
     //仅debug弹
     fun showDebug(msg: String) {
         if (isDebug()) {
-            Log.e("DEBUG",msg)
+            Log.e("DEBUG", msg)
             showToast(msg)
         }
     }
@@ -206,7 +207,7 @@ object ZixieContext {
     }
 
     fun getLogFolder(): String {
-        return FileUtils.getFolderPathWithSeparator( getZixieFolder() + "temp${File.separator}log" + File.separator)
+        return FileUtils.getFolderPathWithSeparator(getZixieFolder() + "temp${File.separator}log" + File.separator)
     }
 
     fun initModule(action: () -> Unit, canInitWithBackgroundThread: Boolean) {
@@ -255,10 +256,25 @@ object ZixieContext {
         }, 200L)
     }
 
-
     fun exitAPP(callbackListener: OnDialogListener?) {
         getCurrentActivity()?.let {
-            DialogUtils.showConfirmDialog(it, ThemeResourcesManager.getString(R.string.common_reminder_title)!!, String.format(ThemeResourcesManager.getString(R.string.exist_msg)!!, ThemeResourcesManager.getString(R.string.app_name)), ThemeResourcesManager.getString(R.string.comfirm), ThemeResourcesManager.getString(R.string.cancel), true, object :
+            val dialog = CommonDialog(it)
+            exitAPP(dialog, callbackListener)
+        }
+    }
+
+    fun exitAPP(dialog: CommonDialog, callbackListener: OnDialogListener?) {
+        DialogUtils.showConfirmDialog(
+            dialog,
+            ThemeResourcesManager.getString(R.string.common_reminder_title)!!,
+            String.format(
+                ThemeResourcesManager.getString(R.string.exist_msg)!!,
+                ThemeResourcesManager.getString(R.string.app_name)
+            ),
+            ThemeResourcesManager.getString(R.string.comfirm),
+            ThemeResourcesManager.getString(R.string.cancel),
+            true,
+            object :
                 OnDialogListener {
                 override fun onPositiveClick() {
                     callbackListener?.onPositiveClick()
@@ -273,11 +289,15 @@ object ZixieContext {
                     callbackListener?.onCancel()
                 }
             })
-        }
     }
 
     open fun restartApp() {
-        restartApp(ConvertUtils.parseLong(ThemeResourcesManager.getString(R.string.common_waiting_duration_restart), 1500L))
+        restartApp(
+            ConvertUtils.parseLong(
+                ThemeResourcesManager.getString(R.string.common_waiting_duration_restart),
+                1500L
+            )
+        )
     }
 
     open fun restartApp(waitTime: Long) {

@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.bihe0832.android.framework.R
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.config.Config
@@ -249,6 +250,14 @@ open class BaseActivity : SupportActivity() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    open fun mainBackAction(autoShowExitDialog: Boolean) {
+        if (autoShowExitDialog) {
+            ZixieContext.exitAPP(null)
+        } else {
+            onBack()
         }
     }
 }

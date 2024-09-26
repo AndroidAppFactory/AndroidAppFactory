@@ -86,14 +86,6 @@ fun BaseActivity.onBackPressedSupportAction(autoShowExitDialog: Boolean) {
     }
 }
 
-private fun BaseActivity.mainBackAction(autoShowExitDialog: Boolean) {
-    if (autoShowExitDialog) {
-        ZixieContext.exitAPP(null)
-    } else {
-        onBack()
-    }
-}
-
 private fun isMain(activityName: String): Boolean {
     return Routers.getMainActivityList().find { it.name.equals(activityName, true) } != null
 }
