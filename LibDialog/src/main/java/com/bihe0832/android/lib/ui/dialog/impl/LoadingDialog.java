@@ -51,11 +51,23 @@ public class LoadingDialog extends Dialog {
     private void refreshView() {
         //如果用户自定了title和message
         if (loadingType == LOADING_TYPE_CIRCLE) {
-            findViewById(R.id.circle_loading_bar).setVisibility(View.VISIBLE);
-            findViewById(R.id.dots_loading_bar).setVisibility(View.GONE);
+            View cbar = findViewById(R.id.circle_loading_bar);
+            if (cbar != null) {
+                cbar.setVisibility(View.VISIBLE);
+            }
+            View dbar = findViewById(R.id.dots_loading_bar);
+            if (dbar != null) {
+                dbar.setVisibility(View.GONE);
+            }
         } else {
-            findViewById(R.id.circle_loading_bar).setVisibility(View.GONE);
-            findViewById(R.id.dots_loading_bar).setVisibility(View.VISIBLE);
+            View cbar = findViewById(R.id.circle_loading_bar);
+            if (cbar != null) {
+                cbar.setVisibility(View.GONE);
+            }
+            View dbar = findViewById(R.id.dots_loading_bar);
+            if (dbar != null) {
+                dbar.setVisibility(View.VISIBLE);
+            }
         }
 
         setCanceledOnTouchOutside(shouldCanceledOutside);
@@ -67,14 +79,16 @@ public class LoadingDialog extends Dialog {
             titleTv.setText(charSequence);
         }
 
-        if (isFullScreen) {
-            ViewGroup.LayoutParams lp = findViewById(R.id.loading_main_layout).getLayoutParams();
-            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-            findViewById(R.id.loading_main_layout).setLayoutParams(lp);
-        } else {
-            findViewById(R.id.loading_main_layout).setBackgroundResource(
-                    R.drawable.com_bihe0832_base_loading_progress_bg);
+        View layout = findViewById(R.id.loading_main_layout);
+        if (layout != null) {
+            if (isFullScreen) {
+                ViewGroup.LayoutParams lp = layout.getLayoutParams();
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                layout.setLayoutParams(lp);
+            } else {
+                layout.setBackgroundResource(R.drawable.com_bihe0832_base_loading_progress_bg);
+            }
         }
     }
 
@@ -110,7 +124,10 @@ public class LoadingDialog extends Dialog {
      */
     private void initView() {
         titleTv = (TextView) findViewById(R.id.loading_label);
-        ((ProgressIndicatorView) findViewById(R.id.dots_loading_bar)).setAnimationNum(3);
+        ProgressIndicatorView view = (ProgressIndicatorView) findViewById(R.id.dots_loading_bar);
+        if (view != null){
+            view.setAnimationNum(3);
+        }
     }
 
     public LoadingDialog setHtmlTitle(String content) {

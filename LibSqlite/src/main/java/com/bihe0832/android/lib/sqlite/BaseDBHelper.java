@@ -5,15 +5,46 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.bihe0832.android.lib.log.ZLog;
+import java.io.File;
 
 public abstract class BaseDBHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "SQLiteOpenHelper";
+    private boolean mainTmpDirSet = false;
+    private Context context = null;
 
     public BaseDBHelper(Context ctx, String name, int version) {
         super(ctx, name, null, version);
+        context = ctx;
+    }
+
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        if (!mainTmpDirSet) {
+            File path = new File(context.getCacheDir() + "/databases/aaf_" + getDatabaseName());
+            if (!path.exists()) {
+                mainTmpDirSet = path.mkdirs();
+            }else {
+                mainTmpDirSet = true;
+            }
+            super.getReadableDatabase().execSQL("PRAGMA temp_store_directory = '" + path +"'");
+        }
+        return super.getReadableDatabase();
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        if (!mainTmpDirSet) {
+            File path = new File(context.getCacheDir() + "/databases/aaf_" + getDatabaseName());
+            if (!path.exists()) {
+                mainTmpDirSet = path.mkdirs();
+            }else {
+                mainTmpDirSet = true;
+            }
+            super.getWritableDatabase().execSQL("PRAGMA temp_store_directory = '" + path + "'");
+        }
+        return super.getWritableDatabase();
     }
 
     public synchronized long insert(String table, String nullColumnHack, ContentValues values) {
@@ -47,7 +78,7 @@ public abstract class BaseDBHelper extends SQLiteOpenHelper {
     }
 
     public synchronized int update(String table, ContentValues values, String whereClause,
-                                   String[] whereArgs) {
+            String[] whereArgs) {
         SQLiteDatabase db = null;
         int rows = 0;
 
@@ -63,8 +94,8 @@ public abstract class BaseDBHelper extends SQLiteOpenHelper {
     }
 
     public synchronized Cursor queryInfo(String table, String[] columns, String selection,
-                                         String[] selectionArgs, String groupBy, String having,
-                                         String orderBy, String limit) {
+            String[] selectionArgs, String groupBy, String having,
+            String orderBy, String limit) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
 

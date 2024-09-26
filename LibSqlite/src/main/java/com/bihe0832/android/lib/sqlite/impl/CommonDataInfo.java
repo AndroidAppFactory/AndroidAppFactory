@@ -10,9 +10,9 @@ public class CommonDataInfo {
     public String key = "";
     //下载ts的基础URL
     public String value = "";
-    //文件总大小
+    //创建时间
     public long createTime = 0;
-    //总时间，单位毫秒
+    //更新时间
     public long updateTime = 0;
 
 
