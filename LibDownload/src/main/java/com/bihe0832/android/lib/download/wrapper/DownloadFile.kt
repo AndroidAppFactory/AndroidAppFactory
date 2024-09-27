@@ -259,9 +259,9 @@ object DownloadFile {
                 }
 
                 override fun onNegativeClick() {
+                    dismiss()
                     DownloadFileUtils.deleteTask(
                         DownloadFileUtils.getDownloadIDByURL(url), true)
-                    dismiss()
                     listener?.onNegativeClick()
                 }
 
