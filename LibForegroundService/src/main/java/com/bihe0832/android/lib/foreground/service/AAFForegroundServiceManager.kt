@@ -7,6 +7,9 @@ import android.content.Intent
 import android.os.Build
 import android.text.TextUtils
 import androidx.core.app.NotificationCompat
+import com.bihe0832.android.lib.foreground.service.BaseForegroundService.Companion.ACTION_STOP
+import com.bihe0832.android.lib.foreground.service.BaseForegroundService.Companion.ACTION_UPADTE
+import com.bihe0832.android.lib.foreground.service.BaseForegroundService.Companion.INTENT_KEY_PERMISSION
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -29,10 +32,7 @@ object AAFForegroundServiceManager {
         fun onStartCommand(context: Context, intent: Intent, flags: Int, startId: Int)
     }
 
-    const val TAG = "AAFForegroundService"
-    const val ACTION_UPADTE = "AAFForegroundServiceManager.update"
-    const val ACTION_STOP = "AAFForegroundServiceManager.stop"
-    const val INTENT_KEY_PERMISSION = "AAFForegroundServiceManager.notify.permission"
+    private const val TAG = BaseForegroundService.TAG
 
     private const val NOTICE_ID = 99998
     private const val NOTICE_CHANNEL_ID = "ForegroundService"

@@ -19,6 +19,7 @@ import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 import com.bihe0832.android.lib.utils.time.DateUtil;
 import com.bihe0832.android.lib.widget.worker.BaseWidgetWorker;
+import com.bihe0832.android.lib.worker.AAFWorkerManager;
 
 
 public class TestWorker2 extends BaseWidgetWorker {
@@ -29,6 +30,8 @@ public class TestWorker2 extends BaseWidgetWorker {
 
     @Override
     protected void updateWidget(Context context) {
+        AAFWorkerManager.INSTANCE.startForegroundService(context, DebugForegroundService.class.getName(), false);
+
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {

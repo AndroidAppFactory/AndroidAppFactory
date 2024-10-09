@@ -137,27 +137,33 @@ object AppFactoryInit {
             val runningApps = am.runningAppProcesses
             for (it in runningApps) {
                 if (it.pid == Process.myPid() && it.processName != null &&
-                    it.processName.contains(application.getPackageName())
+                        it.processName.contains(application.getPackageName())
                 ) {
                     ZLog.e(
                         ZixieCoreInit.TAG,
                         "Application initCore process: name:" + it.processName + " and id:" + it.pid,
                     )
                     val processName = it.processName
-                    initCore(application, processName)
-                    if (processName.equals(application.packageName, ignoreCase = true)) {
-                        initExtra(application)
-                    } else if (processName.equals(
-                            application.packageName + application.applicationContext.getString(R.string.com_bihe0832_lock_screen_process_name),
-                            ignoreCase = true,
-                        )
+                    if (!processName.equals(
+                                application.packageName + application.applicationContext.getString(R.string.process_name_domain),
+                                ignoreCase = true,
+                            )
                     ) {
-                        ZLog.e(
-                            ZixieCoreInit.TAG,
-                            "Application WidgetUpdateManager initModuleWithOtherProcess  process: name:" + it.processName + " and id:" + it.pid,
-                        )
+                        initCore(application, processName)
+                        if (processName.equals(application.packageName, ignoreCase = true)) {
+                            initExtra(application)
+                        } else if (processName.equals(
+                                    application.packageName + application.applicationContext.getString(R.string.com_bihe0832_lock_screen_process_name),
+                                    ignoreCase = true,
+                                )
+                        ) {
+                            ZLog.e(
+                                ZixieCoreInit.TAG,
+                                "Application WidgetUpdateManager initModuleWithOtherProcess  process: name:" + it.processName + " and id:" + it.pid,
+                            )
+                        }
+                        initWebview(application, it)
                     }
-                    initWebview(application, it)
                 }
             }
         }
