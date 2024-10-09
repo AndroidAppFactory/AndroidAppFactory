@@ -194,6 +194,17 @@
 
         </service>
 
+        <service
+                android:name="com.bihe0832.android.base.debug.widget.DebugForegroundService"
+                android:enabled="true"
+                android:exported="true"
+                android:process="@string/process_name_domain" />
+
+        <service
+                android:name="com.bihe0832.android.base.debug.widget.DebugService"
+                android:enabled="true"
+                android:exported="true" />
+
     </application>
 
 </manifest>
