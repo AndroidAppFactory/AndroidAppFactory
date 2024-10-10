@@ -12,7 +12,6 @@ buildscript {
         maven { url 'https://developer.huawei.com/repo/' }
 
         maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1854/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1855/content/" }
 
     }
 
@@ -38,7 +37,6 @@ allprojects {
         maven { url 'https://developer.huawei.com/repo/' }
 
         maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1854/content/" }
-        maven { url "https://s01.oss.sonatype.org/service/local/repositories/combihe0832android-1855/content/" }
     }
 
     afterEvaluate { Project subproject ->
