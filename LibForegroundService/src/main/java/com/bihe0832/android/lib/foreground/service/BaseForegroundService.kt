@@ -42,6 +42,7 @@ abstract class BaseForegroundService : Service() {
         return null
     }
 
+
     override fun onCreate() {
         super.onCreate()
         ZLog.d(TAG, "\nonCreate被调用:${this.hashCode()}")
@@ -64,6 +65,7 @@ abstract class BaseForegroundService : Service() {
             ZLog.d(TAG, " do stop")
             ThreadManager.getInstance().start({
                 ZLog.d(TAG, " start stop")
+                stopForeground(true)
                 stopSelf()
             }, 1)
         } else {

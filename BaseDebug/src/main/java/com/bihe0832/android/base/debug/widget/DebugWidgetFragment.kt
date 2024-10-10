@@ -19,7 +19,6 @@ import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail
-import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.router.RouterAction
@@ -30,7 +29,6 @@ import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.widget.WidgetUpdateManager
 import com.bihe0832.android.lib.widget.permission.ShortcutPermission
 import com.bihe0832.android.lib.widget.tools.WidgetTools
@@ -75,8 +73,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
                         WidgetUpdateManager.updateWidget(
                             context!!,
                             TestWorker1::class.java,
-                            canAutoUpdateByOthers = false,
-                            updateAll = false,
+                            canAutoUpdateByOthers = false
                         )
                     },
                 ),

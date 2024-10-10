@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import androidx.work.WorkerParameters;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.intent.PendingIntentUtils;
-import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.widget.BaseWidgetProvider;
 import com.bihe0832.android.lib.widget.WidgetUpdateManager;
 import com.bihe0832.android.lib.worker.AAFBaseWorker;
@@ -31,6 +29,7 @@ public abstract class BaseWidgetWorker extends AAFBaseWorker {
     }
 
     protected void updateWidget(Context context, ComponentName componentName, RemoteViews remoteViews) {
+        ZLog.e(WidgetUpdateManager.TAG, "updateWidget doUpdate:" + this);
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
@@ -49,6 +48,7 @@ public abstract class BaseWidgetWorker extends AAFBaseWorker {
 
     @Override
     protected void doAction(Context context) {
+        ZLog.e(WidgetUpdateManager.TAG, "updateWidget doAction:" + this);
         updateWidget(getApplicationContext());
     }
 

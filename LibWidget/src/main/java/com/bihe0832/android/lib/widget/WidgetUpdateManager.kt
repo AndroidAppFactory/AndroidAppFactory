@@ -28,12 +28,8 @@ object WidgetUpdateManager {
     private var mlastUpdateAllTime = 0L
 
     fun initModuleWithMainProcess(context: Context) {
+        ZLog.e(TAG, "initModuleWithMainProcess")
         updateAllWidgets(context)
-    }
-
-    fun enqueueAutoStart(context: Context) {
-        cancelAutoStart(context)
-        AAFWorkerManager.enqueueOneTimeUniqueWork(context, WIDGET_WORK_NAME, 5, UpdateAllWork::class.java)
     }
 
     fun cancelAutoStart(context: Context) {
@@ -78,10 +74,11 @@ object WidgetUpdateManager {
     class UpdateAllWork(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
         private fun updateByName(name: String) {
-            ZLog.d(TAG, "updateByName by $name")
+            ZLog.w(TAG, "updateByName by $name")
             try {
                 if (!name.contains("$")) {
                     (Class.forName(name) as? Class<out Worker>)?.let {
+                        ZLog.e(TAG, "updateByName :" + it.name)
                         AAFWorkerManager.enqueueOneTimeWork(applicationContext, it)
                     }
                 } else {
@@ -96,7 +93,7 @@ object WidgetUpdateManager {
         }
 
         override fun doWork(): Result {
-            ZLog.d(TAG, "do update all work")
+            ZLog.w(TAG, "do update all work")
             try {
                 Config.readConfig(WIDGET_AUTO_UPDATE_KEY, "").split(" ").distinct().forEach {
                     if (!TextUtils.isEmpty(it)) {
@@ -115,37 +112,26 @@ object WidgetUpdateManager {
         updateAllWidgets(context, null)
     }
 
-    fun updateWidget(
-        context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean, updateAll: Boolean,
-    ) {
-        ZLog.d(
-            TAG, "updateWidget:" + clazz.name + ",canAutoUpdateByOthers: $canAutoUpdateByOthers ; updateAll: $updateAll"
-        )
+    fun updateWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean) {
+        ZLog.e(TAG, "updateWidget start:" + clazz.name + ",canAutoUpdateByOthers: $canAutoUpdateByOthers ")
         if (canAutoUpdateByOthers) {
             addToAutoUpdateList(clazz.name)
         } else {
             removeFromAutoUpdateList(clazz.name)
         }
         // 执行一次任务
-        if (updateAll) {
-            updateAllWidgets(context, clazz)
-        } else {
-            AAFWorkerManager.enqueueOneTimeWork(context, clazz)
-        }
+//        AAFWorkerManager.enqueueOneTimeWork(context, clazz)
     }
 
-    fun enableWidget(context: Context, clazz: Class<out BaseWidgetWorker>, canAutoUpdateByOthers: Boolean) {
-        enqueueAutoStart(context)
+    fun enableWidget(context: Context, clazz: Class<out BaseWidgetWorker>) {
+        cancelAutoStart(context)
         AAFWorkerManager.enqueueRepeatWork(context, 15 * 60L, clazz)
-        updateWidget(context, clazz, canAutoUpdateByOthers, true)
     }
 
     fun disableWidget(context: Context, clazz: Class<out Worker>) {
         removeFromAutoUpdateList(clazz.name)
         if (!WidgetTools.hasAddWidget(context)) {
             cancelAutoStart(context)
-        } else {
-            updateAllWidgets(context)
         }
     }
 }

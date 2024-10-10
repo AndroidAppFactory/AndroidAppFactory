@@ -12,6 +12,6 @@ public class AAFDebugWidgetProviderDetail extends BaseWidgetProvider {
 
     @Override
     protected boolean canAutoUpdateByOthers() {
-        return true;
+        return false;
     }
 }
