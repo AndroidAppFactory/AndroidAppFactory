@@ -31,18 +31,25 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        ZLog.d(WidgetUpdateManager.TAG, "onReceive start:" + this);
-        ZLog.d(WidgetUpdateManager.TAG, "onReceive start:" + intent.getAction());
+        ZLog.w(WidgetUpdateManager.TAG, "onReceive start:" + this);
+        ZLog.d(WidgetUpdateManager.TAG, "onReceive:" + intent.getAction());
         if (TextUtils.equals(intent.getAction(), REFRESH_ACTION)) {
-            boolean updateAll = intent.getBooleanExtra(REFRESH_INTENT_KEY_UPDATE_ALL, true);
+            boolean updateAll = intent.getBooleanExtra(REFRESH_INTENT_KEY_UPDATE_ALL, false);
             //执行一次任务
-            WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(),
-                    updateAll);
+            if (updateAll) {
+                WidgetUpdateManager.INSTANCE.updateAllWidgets(context);
+                if (!canAutoUpdateByOthers()) {
+                    WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers());
+                }
+            } else {
+                WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers());
+            }
         } else if (TextUtils.equals(intent.getAction(), REFRESH_ACTION_APPWIDGET_UPDATE) || TextUtils.equals(
                 intent.getAction(), REFRESH_ACTION_SCREEN_ON)) {
-            WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(), false);
+
+            WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers());
         }
-        ZLog.d(WidgetUpdateManager.TAG, "onReceive end:" + getClass().getName());
+        ZLog.w(WidgetUpdateManager.TAG, "onReceive end:" + this);
     }
 
     /**
@@ -53,7 +60,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         ZLog.d(WidgetUpdateManager.TAG, "onUpdate:" + getClass().getName());
         ZLog.d(WidgetUpdateManager.TAG, "onUpdate worker:" + getWidgetWorkerClass().getName());
-        WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers(), true);
+        WidgetUpdateManager.INSTANCE.updateWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers());
     }
 
     /**
@@ -64,7 +71,6 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
         super.onDeleted(context, appWidgetIds);
         ZLog.d(WidgetUpdateManager.TAG, "onDeleted:" + getClass().getName());
         ZLog.d(WidgetUpdateManager.TAG, "onDeleted worker:" + getWidgetWorkerClass().getName());
-        WidgetUpdateManager.INSTANCE.updateAllWidgets(context);
     }
 
     /**
@@ -76,7 +82,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
         super.onEnabled(context);
         ZLog.d(WidgetUpdateManager.TAG, "onEnabled:" + getClass().getName());
         ZLog.d(WidgetUpdateManager.TAG, "onEnabled worker:" + getWidgetWorkerClass().getName());
-        WidgetUpdateManager.INSTANCE.enableWidget(context, getWidgetWorkerClass(), canAutoUpdateByOthers());
+        WidgetUpdateManager.INSTANCE.enableWidget(context, getWidgetWorkerClass());
     }
 
     /**
