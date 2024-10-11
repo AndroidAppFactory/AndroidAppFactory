@@ -191,7 +191,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
 
     fun finishCurrent() {
         pause()
-        getCurrentTask()?.finishTask()
+       (getCurrentTask() as? BlockAudioTask)?.forceStop()
     }
 
     fun pause() {

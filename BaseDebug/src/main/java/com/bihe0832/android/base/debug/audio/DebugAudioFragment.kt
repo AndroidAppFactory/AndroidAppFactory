@@ -17,6 +17,9 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.lib.audio.player.AudioPlayListener
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager
 
 
@@ -81,6 +84,55 @@ class DebugAudioFragment : DebugEnvFragment() {
                 blockAudioPlayerManager.play(context!!, R.raw.three)
             }))
 
+            add(DebugItemData("强制中断当前并播放下一个", View.OnClickListener {
+                blockAudioPlayerManager.play(context!!, R.raw.three, 0.1f, 1.0f, 1.0f, 1, object : AudioPlayListener {
+                    override fun onLoad() {
+                        ZLog.d(LOG_TAG, "onLoad")
+                    }
+
+                    override fun onLoadComplete(soundid: Int, status: Int) {
+                        ZLog.d(LOG_TAG, "onLoadComplete")
+                    }
+
+                    override fun onPlayStart() {
+                        ZLog.d(LOG_TAG, "onPlayStart")
+                    }
+
+                    override fun onPlayFinished(error: Int, msg: String) {
+                        ZLog.d(LOG_TAG, "onPlayFinished")
+                    }
+
+                })
+                ThreadManager.getInstance().start({
+                    blockAudioPlayerManager.finishCurrent()
+                    blockAudioPlayerManager.play(
+                        context!!,
+                        R.raw.three,
+                        0.1f,
+                        1.0f,
+                        1.0f,
+                        1,
+                        object : AudioPlayListener {
+                            override fun onLoad() {
+                                ZLog.d(LOG_TAG, "onLoad")
+                            }
+
+                            override fun onLoadComplete(soundid: Int, status: Int) {
+                                ZLog.d(LOG_TAG, "onLoadComplete")
+                            }
+
+                            override fun onPlayStart() {
+                                ZLog.d(LOG_TAG, "onPlayStart")
+                            }
+
+                            override fun onPlayFinished(error: Int, msg: String) {
+                                ZLog.d(LOG_TAG, "onPlayFinished")
+                            }
+
+                        })
+                }, 800L)
+
+            }))
 
         }
     }
