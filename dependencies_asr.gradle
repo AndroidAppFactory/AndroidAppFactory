@@ -1,14 +1,14 @@
 apply from: rootDir.toString() + '/config.gradle'
 ext.asrmoduleInfo = [
         "LibASR"              : [
-                "version"            : "6.16.5",
+                "version"            : "6.16.6",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
                         "LibASRMin", "LibSpeechRecognition", "LibSherpaEndpoint", "LibPinYin"
                 ]
         ],
         "LibASRMin"           : [
-                "version"            : "6.16.5",
+                "version"            : "6.16.6",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
                         "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
@@ -29,7 +29,7 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibAudioPlayer"      : [
-                "version"            : "6.15.4",
+                "version"            : "6.16.6",
                 "artifactId"         : "lib-audio-player",
                 "apidependenciesList": [
                         "LibBlockTask", "LibAudio"
