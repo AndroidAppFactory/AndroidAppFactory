@@ -19,7 +19,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,Framework,Application"
  **/
-ext.developModule = "Application"
+ext.developModule = "Application,LibSherpaOnnx,CommonDebug,LibSherpaKwsModel,LibSherpaEndpointModel,LibOnnx"
 
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
@@ -39,7 +39,7 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "6.16.6"
+ext.moduleVersionName = "6.16.7"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
@@ -58,7 +58,8 @@ ext.coremoduleInfo = [
                 "version"            : "",
                 "artifactId"         : "",
                 "apidependenciesList": [
-                        "Application", "CommonDebug", "CommonTBSFeedback"
+                        "Application", "CommonDebug", "CommonTBSFeedback", "LibSherpaEndpointModel",
+                        "LibSherpaKwsModel"
                 ]
         ],
         "Application": [

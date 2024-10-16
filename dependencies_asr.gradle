@@ -4,7 +4,7 @@ ext.asrmoduleInfo = [
                 "version"            : "6.16.6",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
-                        "LibASRMin", "LibSpeechRecognition", "LibSherpaEndpoint", "LibPinYin"
+                        "LibASRMin", "LibSpeechRecognition", "LibPinYin"
                 ]
         ],
         "LibASRMin"           : [
@@ -56,18 +56,25 @@ ext.asrmoduleInfo = [
                         "LibAudio", "LibOnnx"
                 ]
         ],
-        "LibSherpaEndpoint"   : [
+        "LibSherpaEndpointModel"   : [
                 "version"            : "6.16.5",
-                "artifactId"         : "lib-sherpa-endpoint",
+                "artifactId"         : "lib-sherpa-endpoint-model",
                 "apidependenciesList": [
-                        "LibAudioRecord", "LibSherpaOnnx"
+
+                ]
+        ],
+        "LibSherpaKwsModel"   : [
+                "version"            : "6.16.5",
+                "artifactId"         : "lib-sherpa-kws-model",
+                "apidependenciesList": [
+                        
                 ]
         ],
         "LibSpeechRecognition": [
                 "version"            : "6.16.1",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
-                        "LibSherpaOnnx"
+                        "LibAudioRecord","LibSherpaOnnx"
                 ]
         ],
         "LibPinYin"           : [

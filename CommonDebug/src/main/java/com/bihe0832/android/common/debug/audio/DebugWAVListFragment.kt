@@ -124,8 +124,12 @@ open class DebugWAVListFragment : DebugEnvFragment() {
                 (baseQuickAdapter.getItem(i) as AudioData?)?.let { audioData ->
                     when (view.id) {
                         R.id.audio_title, R.id.audio_desc -> {
-                            palyAndRecognise(audioData, isPlay)
-                            mAdapter.notifyItemChanged(i)
+                            ThreadManager.getInstance().start {
+                                palyAndRecognise(audioData, isPlay)
+                                post {
+                                    mAdapter.notifyItemChanged(i)
+                                }
+                            }
                         }
 
                         R.id.audio_icon -> {
@@ -178,6 +182,9 @@ open class DebugWAVListFragment : DebugEnvFragment() {
 
     open fun palyAndRecognise(data: AudioData, play: Boolean) {
         if (play) {
+            if (mAudioPLayerManager.isRunning){
+                mAudioPLayerManager.stopAll(true)
+            }
             mAudioPLayerManager.play(data.filePath)
         }
         Log.i(TAG, data.toString())

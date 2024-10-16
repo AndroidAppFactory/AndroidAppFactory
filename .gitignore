@@ -45,3 +45,4 @@ gradle.properties
 # mac
 ######################
 .DS_Store
+sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20

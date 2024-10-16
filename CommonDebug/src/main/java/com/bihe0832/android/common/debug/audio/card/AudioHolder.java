@@ -40,24 +40,27 @@ public class AudioHolder extends CardBaseHolder {
         String title = FileUtils.INSTANCE.getFileName(filePath) + "  |  " + DateUtil.getDateEN(file.lastModified());
         ((TextView) getView(R.id.audio_title)).setText(title);
         WaveFileReader waveFileReader = new WaveFileReader(filePath);
-        String fileLength = "文件大小：" + FileUtils.INSTANCE.getFileLength(file.length());
-        ((TextView) getView(R.id.audio_desc)).setText(
-                fileLength + "，" + waveFileReader.toShowString() + "，" + data.amplitude);
-        TextView result = (TextView) getView(R.id.audio_recognise);
-        if (TextUtils.isEmpty(data.recogniseResult)) {
-            result.setVisibility(View.GONE);
-        } else {
-            result.setText("识别内容：" + data.recogniseResult);
-            result.setVisibility(View.VISIBLE);
+        if (waveFileReader.isSuccess()){
+            String fileLength = "文件大小：" + FileUtils.INSTANCE.getFileLength(file.length());
+            ((TextView) getView(R.id.audio_desc)).setText(
+                    fileLength + "，" + waveFileReader.toShowString() + "，" + data.amplitude);
+            TextView result = (TextView) getView(R.id.audio_recognise);
+            if (TextUtils.isEmpty(data.recogniseResult)) {
+                result.setVisibility(View.GONE);
+            } else {
+                result.setText(data.recogniseResult);
+                result.setVisibility(View.VISIBLE);
+            }
+
+            addOnLongClickListener(R.id.audio_icon);
+            addOnLongClickListener(R.id.audio_title);
+            addOnLongClickListener(R.id.audio_desc);
+
+            addOnClickListener(R.id.audio_icon);
+            addOnClickListener(R.id.audio_title);
+            addOnClickListener(R.id.audio_desc);
+        }else {
+            ((TextView) getView(R.id.audio_desc)).setText("音频文件异常，解析失败，请检查音频格式");
         }
-
-        addOnLongClickListener(R.id.audio_icon);
-        addOnLongClickListener(R.id.audio_title);
-        addOnLongClickListener(R.id.audio_desc);
-
-        addOnClickListener(R.id.audio_icon);
-        addOnClickListener(R.id.audio_title);
-        addOnClickListener(R.id.audio_desc);
-
     }
 }

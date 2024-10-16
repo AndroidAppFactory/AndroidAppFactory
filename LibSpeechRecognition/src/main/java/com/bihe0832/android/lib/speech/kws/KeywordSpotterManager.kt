@@ -1,13 +1,11 @@
 package com.bihe0832.android.lib.speech.kws
 
 import android.content.Context
-import android.util.Log
-import com.k2fsa.sherpa.onnx.FeatureConfig
+import com.bihe0832.android.lib.audio.record.AudioRecordManager
+import com.bihe0832.android.lib.log.ZLog
 import com.k2fsa.sherpa.onnx.KeywordSpotter
 import com.k2fsa.sherpa.onnx.KeywordSpotterConfig
-import com.k2fsa.sherpa.onnx.OnlineModelConfig
 import com.k2fsa.sherpa.onnx.OnlineStream
-import com.k2fsa.sherpa.onnx.OnlineTransducerModelConfig
 
 /**
  * Summary
@@ -18,35 +16,27 @@ import com.k2fsa.sherpa.onnx.OnlineTransducerModelConfig
  */
 public class KeywordSpotterManager {
 
-    private val TAG = "ASRManager"
     private lateinit var kws: KeywordSpotter
     private lateinit var stream: OnlineStream
 
-    fun initRecognizer(context: Context, modelDir: String, keywordsFile: String, sampleRateInHz: Int) {
-        val config = KeywordSpotterConfig(
-            featConfig = FeatureConfig(sampleRate = sampleRateInHz, featureDim = 80),
-            modelConfig = OnlineModelConfig(
-                transducer = OnlineTransducerModelConfig(
-                    encoder = "$modelDir/encoder-epoch-12-avg-2-chunk-16-left-64.onnx",
-                    decoder = "$modelDir/decoder-epoch-12-avg-2-chunk-16-left-64.onnx",
-                    joiner = "$modelDir/joiner-epoch-12-avg-2-chunk-16-left-64.onnx",
-                ),
-                tokens = "$modelDir/tokens.txt",
-                modelType = "zipformer2",
-            ),
-            keywordsFile = "$modelDir/$keywordsFile",
-        )
+    fun initRecognizer(context: Context, config: KeywordSpotterConfig) {
         kws = KeywordSpotter(
             assetManager = context.assets,
             config = config,
         )
         stream = kws.createStream()
-
     }
 
-    fun start(key: String): Boolean {
-        Log.i(TAG, key)
-        stream.release()
+    fun initRecognizer(config: KeywordSpotterConfig) {
+        kws = KeywordSpotter(
+            null,
+            config = config,
+        )
+        stream = kws.createStream()
+    }
+
+    fun start(key: String) {
+        ZLog.d(AudioRecordManager.TAG, key)
         var keywords = key.replace("\n", "/")
         keywords = keywords.trim()
         // If keywords is an empty string, it just resets the decoding stream
@@ -54,16 +44,12 @@ public class KeywordSpotterManager {
         // If keywords is not empty, it will create a new decoding stream with
         // the given keywords appended to the default keywords.
         // Return false if errors occurred when adding keywords, true otherwise.
-        return if (keywords.isNotEmpty()) {
+        if (keywords.isNotEmpty()) {
+            stream.release()
             stream = kws.createStream(keywords)
             if (stream.ptr == 0L) {
-                Log.i(TAG, "Failed to create stream with keywords: $keywords")
-                false
-            } else {
-                true
+                ZLog.d(AudioRecordManager.TAG, "Failed to create stream with keywords: $keywords")
             }
-        } else {
-            true
         }
     }
 
@@ -77,7 +63,7 @@ public class KeywordSpotterManager {
     }
 
     fun doRecognizer(sampleRateInHz: Int, buffer: FloatArray?): String {
-        Log.i(TAG, "processing samples")
+        ZLog.d(AudioRecordManager.TAG, "processing samples")
         if (buffer != null && buffer.isNotEmpty()) {
             stream.acceptWaveform(buffer, sampleRateInHz)
             while (kws.isReady(stream)) {
