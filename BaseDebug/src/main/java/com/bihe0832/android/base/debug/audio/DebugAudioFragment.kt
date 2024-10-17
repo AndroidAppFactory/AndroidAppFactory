@@ -64,6 +64,19 @@ class DebugAudioFragment : DebugEnvFragment() {
                 blockAudioPlayerManager.play(context!!, R.raw.one)
                 blockAudioPlayerManager.play(context!!, R.raw.two, 0.1f, 1.0f, 1.0f, 1, null)
                 blockAudioPlayerManager.play(context!!, R.raw.three)
+                blockAudioPlayerManager.play(context!!, R.raw.icon)
+                blockAudioPlayerManager.play(context!!, R.raw.test)
+                blockAudioPlayerManager.play(context!!, R.raw.three)
+            }))
+
+            add(DebugItemData("本地音频极限测试", View.OnClickListener {
+                ThreadManager.getInstance().start {
+                    ZLog.d("本地音频极限测试开始")
+                    for (i in 0..257) {
+                        blockAudioPlayerManager.play(context!!, R.raw.one)
+                    }
+                    ZLog.d("本地音频极限测试结束")
+                }
             }))
 
             add(DebugItemData("播放扫码音频", View.OnClickListener {
