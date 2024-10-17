@@ -247,9 +247,16 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         }
     }
 
-    fun finishCurrent() {
+    fun finishCurrent(): Boolean {
         pause()
-        (getCurrentTask() as? BlockAudioTask)?.forceStop()
+        (getCurrentTask() as? BlockAudioTask).let {
+            if (null == it) {
+                return false
+            } else {
+                it.forceStop()
+                return true
+            }
+        }
     }
 
     fun pause() {
