@@ -27,7 +27,7 @@ public abstract class BaseAAFBlockTask implements BlockTask {
 
     @Override
     public final void startTask() {
-        ZLog.w(BlockTask.TAG, "Do     Task: " + this);
+        ZLog.w(BlockTask.TAG, "Do Task: " + this);
         mTaskIsRunning = true;
         doTask();
     }

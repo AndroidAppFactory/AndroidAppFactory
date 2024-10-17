@@ -8,7 +8,6 @@ import android.os.Build
 import androidx.annotation.NonNull
 import com.bihe0832.android.lib.audio.AudioUtils
 import com.bihe0832.android.lib.block.task.BaseAAFBlockTask
-import com.bihe0832.android.lib.block.task.BlockTask
 import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -31,44 +30,50 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
     private val TAG = "AudioManager"
     private val mAudioInfoMap = ConcurrentHashMap<Int, AudioItem>()
 
-    private val mSoundPool by lazy {
-        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    private var mSoundPool: SoundPool? = null
+
+    private fun createSoundPool() {
+        mSoundPool = if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //设置描述音频流信息的属性
             val abs = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
-            SoundPool.Builder().setMaxStreams(1).setAudioAttributes(abs).build()
+            SoundPool.Builder().setMaxStreams(5).setAudioAttributes(abs).build()
         } else {
-            SoundPool(1, AudioManager.STREAM_MUSIC, 0)
+            SoundPool(5, AudioManager.STREAM_MUSIC, 0)
         }
-    }
-
-    init {
-        mSoundPool.setOnLoadCompleteListener { _, sampleId, status ->
-
+        mSoundPool?.setOnLoadCompleteListener { _, sampleId, status ->
             try {
                 mAudioInfoMap.get(sampleId)?.let {
                     ZLog.d(TAG, "load Complete, add task ：sampleId $sampleId, status: $status")
                     it.playListener?.onLoadComplete(sampleId, status)
-                    add(BlockAudioTask(mSoundPool, it, {
-                        mAudioInfoMap.remove(sampleId)
-                        ZLog.d(TAG, "play Complete：${mAudioInfoMap.size}")
-                    }, "").apply {
-                        sequence = sampleId.toLong()
-                        priority = it.priority
-                    })
+                    if (mSoundPool != null) {
+                        add(BlockAudioTask(mSoundPool!!, it, {
+                            mAudioInfoMap.remove(sampleId)
+                            ZLog.d(TAG, "play Complete：${mAudioInfoMap.size}")
+                        }, "").apply {
+                            sequence = sampleId.toLong()
+                            priority = it.priority
+                        })
+                    } else {
+                        it.playListener?.onPlayFinished(-1, "")
+                    }
                 }
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
+    init {
+        createSoundPool()
+        setDelayTime(3000L)
+    }
+
     class BlockAudioTask(
         private val mPlay: SoundPool,
         private val mAudioItem: AudioItem,
         private val innerFinishedAction: () -> Unit,
-        name: String
+        name: String,
     ) : BaseAAFBlockTask(name) {
 
         private var errorCode = 0
@@ -78,7 +83,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
             try {
                 if (mAudioItem != null && mAudioItem.sourceDuration > 0) {
                     mAudioItem.playListener?.onPlayStart()
-                    ZLog.d("AudioManager", "play start：$mAudioItem")
+                    ZLog.d(TAG, "play start：$mAudioItem")
                     try {
                         mPlay.play(
                             mAudioItem.soundid,
@@ -87,7 +92,11 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
                             mAudioItem.priority,
                             0,
                             mAudioItem.rate
-                        )
+                        ).let {
+                            if (it == 0) {
+                                ZLog.e(TAG, "play error !!! $mAudioItem")
+                            }
+                        }
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -109,10 +118,15 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
 
         override fun finishTask() {
             super.finishTask()
-            ZLog.d("AudioManager", "play finish：$mAudioItem")
+            ZLog.d(TAG, "play finish：$mAudioItem")
             innerFinishedAction()
             try {
                 mAudioItem.playListener?.onPlayFinished(errorCode, msg)
+                mPlay.unload(mAudioItem.soundid).let {
+                    if (!it) {
+                        ZLog.e(TAG, "play finish and unload error: $it,$mAudioItem")
+                    }
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -146,7 +160,6 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         return play(context, resId, 1F, 1F, 1F, priority, null)
     }
 
-
     fun play(
         context: Context,
         resId: Int,
@@ -154,12 +167,15 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         leftVolume: Float,
         rightVolume: Float,
         priority: Int,
-        listener: AudioPlayListener?
+        listener: AudioPlayListener?,
     ): Int {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
-        val soundid = mSoundPool.load(context, resId, PRIORITY_DEFAULT)
+        if (mSoundPool == null) {
+            createSoundPool()
+        }
         val duration = AudioUtils.getDurationWithMediaPlayer(context, resId)
+        val soundid = mSoundPool!!.load(context, resId, PRIORITY_DEFAULT)
         mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
             listener?.let {
                 playListener = it
@@ -191,12 +207,15 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         leftVolume: Float,
         rightVolume: Float,
         priority: Int,
-        listener: AudioPlayListener?
+        listener: AudioPlayListener?,
     ): Int {
         ZLog.d(TAG, "load start")
         listener?.onLoad()
-        val soundid = mSoundPool.load(path, PRIORITY_DEFAULT)
+        if (mSoundPool == null) {
+            createSoundPool()
+        }
         val duration = AudioUtils.getDurationWithMediaPlayer(path)
+        val soundid = mSoundPool!!.load(path, PRIORITY_DEFAULT)
         mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
             listener?.let {
                 playListener = it
@@ -209,11 +228,22 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         return soundid
     }
 
+    override fun taskQueueIsEmptyAfterDelay() {
+        try {
+            super.taskQueueIsEmptyAfterDelay()
+            mSoundPool?.release()
+            mSoundPool = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun stopAll(stopCurrent: Boolean) {
         mAudioInfoMap.clear()
         super.clearAll()
         if (stopCurrent) {
             (currentTask as? BlockAudioTask)?.forceStop()
+            taskQueueIsEmptyAfterDelay()
         }
     }
 
@@ -223,10 +253,10 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
     }
 
     fun pause() {
-        mSoundPool.autoPause()
+        mSoundPool?.autoPause()
     }
 
     fun resume() {
-        mSoundPool.autoResume()
+        mSoundPool?.autoResume()
     }
 }
