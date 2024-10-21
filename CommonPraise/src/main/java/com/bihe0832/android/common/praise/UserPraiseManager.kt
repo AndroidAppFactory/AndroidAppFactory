@@ -1,16 +1,13 @@
 package com.bihe0832.android.common.praise
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.superapp.APPMarketHelper
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.ConvertUtils
-import com.bihe0832.android.lib.utils.intent.IntentUtils
 import java.util.concurrent.TimeUnit
 
 object UserPraiseManager {
@@ -80,16 +77,23 @@ object UserPraiseManager {
             return false
         }
 
-        if (System.currentTimeMillis() - Config.readConfig(KEY_PRAISE_LAST_SHOW_TIME, 0L) < TimeUnit.DAYS.toMillis(mShowInterval.toLong())) {
+        if (System.currentTimeMillis() - Config.readConfig(KEY_PRAISE_LAST_SHOW_TIME, 0L) < TimeUnit.DAYS.toMillis(
+                    mShowInterval.toLong()
+                )
+        ) {
             return false
         }
 
         return true
     }
 
+    fun setMarketPackageName(markName: String) {
+        mMarketPackageName = markName;
+    }
+
     fun showUserPraiseDialog(activity: Activity, feedbackRouter: String) {
         showUserPraiseDialog(activity, feedbackRouter) {
-            launchAppStore(activity)
+            APPMarketHelper.launchMarket(activity, mMarketPackageName, activity.packageName)
         }
     }
 
@@ -119,20 +123,6 @@ object UserPraiseManager {
 
             }
         }.show()
-    }
-
-    fun launchAppStore(context: Context): Boolean {
-        val intent = Intent()
-        intent.action = Intent.ACTION_VIEW
-        val uri = Uri.parse(String.format("market://details?id=%s", context.packageName))
-        return try {
-            intent.setPackage(mMarketPackageName)
-            intent.data = uri
-            IntentUtils.startIntent(context, intent)
-            true
-        } catch (e: Exception) {
-            false
-        }
     }
 
     private fun doPraiseAction() {

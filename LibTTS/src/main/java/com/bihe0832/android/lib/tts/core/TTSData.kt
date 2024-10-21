@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.tts
+package com.bihe0832.android.lib.tts.core
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -12,7 +12,7 @@ import android.speech.tts.TextToSpeech
  */
 class TTSData(val speakText: String = "") {
 
-    private val mUtteranceId: Int = LibTTS.mTTSIDGenerator.generate()
+    private val mUtteranceId: Int = TTSConfig.getTTSID()
 
     private val speakBundle: Bundle = Bundle()
 
