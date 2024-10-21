@@ -215,24 +215,30 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
             createSoundPool()
         }
         val duration = AudioUtils.getDurationWithMediaPlayer(path)
-        val soundid = mSoundPool!!.load(path, PRIORITY_DEFAULT)
-        mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
-            listener?.let {
-                playListener = it
+        return if (mSoundPool != null) {
+            val soundid = mSoundPool!!.load(path, PRIORITY_DEFAULT)
+            mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
+                listener?.let {
+                    playListener = it
+                }
+                this.priority = priority
+                this.leftVolume = leftVolume
+                this.rightVolume = rightVolume
+                this.rate = rate
             }
-            this.priority = priority
-            this.leftVolume = leftVolume
-            this.rightVolume = rightVolume
-            this.rate = rate
+            soundid
+        } else {
+            -1
         }
-        return soundid
     }
 
     override fun taskQueueIsEmptyAfterDelay() {
         try {
             super.taskQueueIsEmptyAfterDelay()
-            mSoundPool?.release()
-            mSoundPool = null
+            mSoundPool?.apply {
+                release()
+                mSoundPool = null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -243,7 +249,6 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         super.clearAll()
         if (stopCurrent) {
             (currentTask as? BlockAudioTask)?.forceStop()
-            taskQueueIsEmptyAfterDelay()
         }
     }
 
@@ -267,3 +272,5 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         mSoundPool?.autoResume()
     }
 }
+
+

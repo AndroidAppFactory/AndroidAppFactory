@@ -8,26 +8,31 @@
 
 package com.bihe0832.android.base.debug.temp
 
-import android.content.Intent
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
+import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.network.wifi.WifiManagerWrapper
+import com.bihe0832.android.lib.superapp.APPMarketHelper
+import com.bihe0832.android.lib.superapp.SuperAPPContants
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 class DebugTempFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("简单测试函数", View.OnClickListener { testFunc() }))
             add(DebugItemData("通用测试预处理", View.OnClickListener { preTest(it) }))
+            add(DebugItemData("简单测试函数", View.OnClickListener { testFunc(it) }))
+
         }
     }
 
     private fun preTest(itemView: View) {
+        
     }
 
-    private fun testFunc() {
+    private fun testFunc(itemView: View) {
 
     }
 }
