@@ -2,14 +2,14 @@ apply from: rootDir.toString() + '/config.gradle'
 
 ext.kitmoduleInfo = [
     "ServicesWrapper"  : [
-        "version"            : "6.10.0",
+        "version"            : "6.16.11",
         "artifactId"         : "services-wrapper",
         "apidependenciesList": [
             "ServicesGooglePay", "ServicesGoogleAD", "ServicesGoogle"
         ]
     ],
     "ServicesGooglePay": [
-        "version"            : "6.2.3",
+        "version"            : "6.16.11",
         "artifactId"         : "services-google-pay",
         "apidependenciesList": [
             "LibThread",
@@ -17,15 +17,15 @@ ext.kitmoduleInfo = [
         ]
     ],
     "ServicesGoogleAD" : [
-        "version"            : "6.10.0",
+        "version"            : "6.16.11",
         "artifactId"         : "services-google-ad",
         "apidependenciesList": [
             "LibLog",
-            "com.google.android.gms:play-services-ads:23.4.0"
+            "com.google.android.gms:play-services-ads:22.2.0"
         ]
     ],
     "ServicesGoogle"   : [
-        "version"            : "6.2.3",
+        "version"            : "6.16.11",
         "artifactId"         : "services-google",
         "apidependenciesList": [
             "com.google.android.gms:play-services-auth:21.2.0"
