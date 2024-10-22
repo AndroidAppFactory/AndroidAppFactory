@@ -13,7 +13,7 @@ ext.kitmoduleInfo = [
         "artifactId"         : "services-google-pay",
         "apidependenciesList": [
             "LibThread",
-            "com.android.billingclient:billing:6.0.0"
+            "com.android.billingclient:billing:7.0.0"
         ]
     ],
     "ServicesGoogleAD" : [
@@ -21,14 +21,14 @@ ext.kitmoduleInfo = [
         "artifactId"         : "services-google-ad",
         "apidependenciesList": [
             "LibLog",
-            "com.google.android.gms:play-services-ads:22.2.0"
+            "com.google.android.gms:play-services-ads:23.4.0"
         ]
     ],
     "ServicesGoogle"   : [
         "version"            : "6.2.3",
         "artifactId"         : "services-google",
         "apidependenciesList": [
-            "com.google.android.gms:play-services-auth:20.5.0"
+            "com.google.android.gms:play-services-auth:21.2.0"
         ]
     ]
 
