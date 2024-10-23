@@ -174,7 +174,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         if (mSoundPool == null) {
             createSoundPool()
         }
-        val duration = AudioUtils.getDurationWithMediaPlayer(context, resId)
+        val duration = AudioUtils.getAudioDuration(context, resId)
         val soundid = mSoundPool!!.load(context, resId, PRIORITY_DEFAULT)
         mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
             listener?.let {
@@ -214,7 +214,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
         if (mSoundPool == null) {
             createSoundPool()
         }
-        val duration = AudioUtils.getDurationWithMediaPlayer(path)
+        val duration = AudioUtils.getAudioDuration(path)
         return if (mSoundPool != null) {
             val soundid = mSoundPool!!.load(path, PRIORITY_DEFAULT)
             mAudioInfoMap[soundid] = AudioItem(soundid, duration).apply {
