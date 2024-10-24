@@ -81,7 +81,7 @@ class AudioPLayerManager : PriorityBlockTaskManager() {
 
         override fun doTask() {
             try {
-                if (mAudioItem != null && mAudioItem.sourceDuration > 0) {
+                if (mAudioItem.sourceDuration > 0) {
                     mAudioItem.playListener?.onPlayStart()
                     ZLog.d(TAG, "play start：$mAudioItem")
                     try {

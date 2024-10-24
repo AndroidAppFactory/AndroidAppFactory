@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.tts.core
+package com.bihe0832.android.lib.tts.core.impl
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,14 +6,13 @@ import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.text.TextUtils
-import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.lib.tts.core.TTSConfig
+import com.bihe0832.android.lib.tts.core.TTSData
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.File
+import java.lang.ref.WeakReference
 import java.lang.reflect.Field
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import java.util.Locale
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -23,63 +22,35 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Description: Description
  */
 @SuppressLint("StaticFieldLeak")
-class TTSHelper {
+open class TTSImpl {
 
-    private val TAG = "TTSHelper"
+    companion object{
+        const val TAG = "TTS"
+    }
 
-    val CONFIG_VALUE_ENGINE = "com.google.android.tts"
-    private val CONFIG_VALUE_PITCH = 0.4f
-    private val CONFIG_VALUE_SPEECH_RATE = 0.4f
 
     private var mSpeech: TextToSpeech? = null
-    private var mContext: Context? = null
-    private var mLocale: Locale = Locale.CHINA
+    private var mContext: WeakReference<Context>? = null
+    private var mLocale: Locale = Locale.SIMPLIFIED_CHINESE
     private var mNeedStopAfterSpeak = false
     private var isSpeakIng = false
-    private var mScene = ""
+    protected var enginePackageName: String? = null
 
     private val mMsgList by lazy {
         CopyOnWriteArrayList<TTSData>()
     }
 
-    private val mTTSSpeakListenerList = CopyOnWriteArrayList<TTSSpeakListener>()
-    private val mTTSInitListenerList = CopyOnWriteArrayList<TTSInitListener>()
-
-    fun addTTSSpeakListener(listener: TTSSpeakListener) {
-        mTTSSpeakListenerList.add(listener)
-    }
-
-    fun removeTTSSpeakListener(listener: TTSSpeakListener) {
-        if (mTTSSpeakListenerList.contains(listener)) {
-            mTTSSpeakListenerList.remove(listener)
-        }
-    }
-
-    fun addTTSInitListener(listener: TTSInitListener) {
-        if (mTTSInitListenerList.contains(listener)) {
-            return
-        }
-        mTTSInitListenerList.add(listener)
-    }
-
-    fun removeTTSInitListener(listener: TTSInitListener) {
-        if (mTTSInitListenerList.contains(listener)) {
-            mTTSInitListenerList.remove(listener)
-        }
-    }
+    private var mTTSSpeakListener: TTSSpeakListener? = null
+    private var mTTSInitListener: TTSInitListener? = null
 
     private val mTTSResultListener = object : TTSSpeakListener {
 
         override fun onUtteranceStart(utteranceId: String) {
-            mTTSSpeakListenerList.forEach {
-                it.onUtteranceStart(utteranceId)
-            }
+            mTTSSpeakListener?.onUtteranceStart(utteranceId)
         }
 
         override fun onUtteranceDone(utteranceId: String) {
-            mTTSSpeakListenerList.forEach {
-                it.onUtteranceDone(utteranceId)
-            }
+            mTTSSpeakListener?.onUtteranceDone(utteranceId)
 
             if (mNeedStopAfterSpeak) {
                 onDestroy()
@@ -88,33 +59,27 @@ class TTSHelper {
         }
 
         override fun onUtteranceError(utteranceId: String) {
-            mTTSSpeakListenerList.forEach {
-                it.onUtteranceError(utteranceId)
-            }
+            mTTSSpeakListener?.onUtteranceError(utteranceId)
         }
 
         override fun onUtteranceFailed(utteranceId: String, textSpeak: String) {
-            mTTSSpeakListenerList.forEach {
-                it.onUtteranceFailed(utteranceId, textSpeak)
-            }
+            mTTSSpeakListener?.onUtteranceFailed(utteranceId, textSpeak)
         }
     }
 
-    fun init(context: Context, scene: String, loc: Locale, listener: TTSInitListener? = null) {
-        init(context, scene, loc, null, listener)
-    }
-
-    fun init(context: Context, scene: String, loc: Locale, engine: String?, listener: TTSInitListener?) {
-        mContext = context
+    open fun initTTSImpl(
+        context: Context,
+        loc: Locale,
+        engine: String?,
+        initListener: TTSInitListener?,
+        speakListener: TTSSpeakListener?,
+    ) {
+        mContext = WeakReference(context)
         mLocale = loc
-        mScene = scene
-        listener?.let {
-            mTTSInitListenerList.add(listener)
-        }
-        engine?.let {
-            setEngine(it)
-        }
-        initTTSAndSpeak(scene, null)
+        mTTSInitListener = initListener
+        mTTSSpeakListener = speakListener
+        enginePackageName = engine
+        initTTSAndSpeak(null)
         mSpeech?.engines?.forEach {
             ZLog.e(TAG, "onInit: 引擎列表：" + it.label + " " + it.name)
             if (it.name == mSpeech!!.defaultEngine) {
@@ -123,22 +88,13 @@ class TTSHelper {
         }
     }
 
-    private fun initTTSAndSpeak(scene: String, ttsData: TTSData?) {
-        if (mContext != null && mLocale != null) {
-            val enginePackageName = Config.readConfig(TTSConfig.CONFIG_KEY_ENGINE + scene, CONFIG_VALUE_ENGINE).let {
-                if (it.isEmpty()) {
-                    null
-                } else {
-                    it
-                }
-            }
+    private fun initTTSAndSpeak(ttsData: TTSData?) {
+        if (mContext?.get() != null) {
             mSpeech = TextToSpeech(
-                mContext,
-                TextToSpeech.OnInitListener { status ->
+                mContext?.get(),
+                { status ->
                     if (status == TextToSpeech.SUCCESS) {
                         ZLog.d(TAG, "onInit: TTS引擎初始化成功")
-//                    lastInitTime = System.currentTimeMillis()
-                        initConfig(scene)
                         setLanguage(mLocale!!)
                         ttsData?.let {
                             if (speak(ttsData) == TextToSpeech.ERROR) {
@@ -147,9 +103,7 @@ class TTSHelper {
                         }
                     } else {
                         ZLog.e(TAG, "onInit: TTS引擎初始化失败")
-                        mTTSInitListenerList.forEach {
-                            it.onInitError()
-                        }
+                        mTTSInitListener?.onInitError()
                         if (null != ttsData) {
                             mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
                         }
@@ -184,25 +138,16 @@ class TTSHelper {
         } else {
             ZLog.e(TAG, "onInit: TTS引擎初始化失败，参数失败")
             isSpeakIng = false
-            mTTSInitListenerList.forEach {
-                it.onInitError()
-            }
+            mTTSInitListener?.onInitError()
             if (null != ttsData) {
                 mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
             }
         }
     }
 
-    private fun initConfig(scene: String) {
-        setPitch(Config.readConfig(TTSConfig.CONFIG_KEY_PITCH + scene, getDefaultPitch()))
-        setSpeechRate(Config.readConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + scene, getDefaultSpeechRate()))
-    }
-
     interface TTSInitListener {
 
         fun onInitError()
-
-        fun onTTSError()
 
         fun onLangUnAvailable()
 
@@ -230,13 +175,9 @@ class TTSHelper {
 
         if (supported != TextToSpeech.LANG_AVAILABLE && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
             ZLog.i(TAG, "onInit: 不支持当前语言")
-            mTTSInitListenerList.forEach {
-                it.onLangUnAvailable()
-            }
+            mTTSInitListener?.onLangUnAvailable()
         } else {
-            mTTSInitListenerList.forEach {
-                it.onLangAvailable()
-            }
+            mTTSInitListener?.onLangAvailable()
             ZLog.i(TAG, "onInit: 支持当前选择语言")
             startSpeak()
         }
@@ -273,8 +214,8 @@ class TTSHelper {
         onDestroy()
     }
 
-    fun speak(tempStr: TTSData, type: Int) {
-        ZLog.e(TAG, "speak:$tempStr $mSpeech ${isSpeak()} ${mSpeech?.isSpeaking}")
+    open fun speak(tempStr: TTSData, type: Int) {
+        ZLog.e(TAG, "speak: ${mSpeech.hashCode()} ${isSpeak()} ${mSpeech?.isSpeaking} $tempStr")
         if (TextUtils.isEmpty(tempStr.speakText)) {
             return
         }
@@ -309,7 +250,7 @@ class TTSHelper {
     private fun speakWithTry(ttsData: TTSData) {
         ZLog.e(TAG, "speakWithTry ttsData: $ttsData ")
         if (!isTTSServiceOK(mSpeech)) {
-            initTTSAndSpeak(mScene, ttsData)
+            initTTSAndSpeak(ttsData)
         } else {
             var result = TextToSpeech.ERROR
             try {
@@ -317,9 +258,9 @@ class TTSHelper {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            ZLog.e(TAG, "speakWithTry result: $result ")
+            ZLog.d(TAG, "speakWithTry result: $result ")
             if (result == TextToSpeech.ERROR) {
-                initTTSAndSpeak(mScene, ttsData)
+                initTTSAndSpeak(ttsData)
             }
         }
     }
@@ -366,94 +307,45 @@ class TTSHelper {
             )
         }
         isSpeakIng = (TextToSpeech.SUCCESS == result)
-        ZLog.e(TAG, "speak ttsData result $result ,ttsData: $ttsData ")
+        ZLog.e(TAG, "real speak ttsData result $result ,ttsData: $ttsData ")
         return result
     }
 
-    fun save(ttsData: TTSData, finalFileName: String): Int? {
+    fun save(ttsData: TTSData, finalFileName: String): Int {
         ZLog.e(TAG, "ttsData: $ttsData")
         val result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
-                ?: TextToSpeech.ERROR
+            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap()) ?: TextToSpeech.ERROR
         } else {
             mSpeech?.synthesizeToFile(
                 ttsData.speakText,
                 ttsData.getSpeakBundle(),
                 File(finalFileName),
                 ttsData.speakText,
-            )
-                ?: TextToSpeech.ERROR
+            ) ?: TextToSpeech.ERROR
         }
         ZLog.i(TAG, "saveAudioFile: $finalFileName 文件保存结果： $result")
         return result
     }
 
-    fun getSpeechRate(): Float {
-        val speechRate = Config.readConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, getDefaultSpeechRate())
-        DecimalFormat("0.00").apply {
-            roundingMode = RoundingMode.HALF_UP
-        }.let {
-            return ConvertUtils.parseFloat(it.format(speechRate), speechRate)
-        }
-    }
 
-    fun getDefaultSpeechRate(): Float {
-        return CONFIG_VALUE_SPEECH_RATE
-    }
-
-    fun setSpeechRate(speechRate: Float) {
+    open fun setSpeechRate(speechRate: Float) {
         var tempmSpeechRate = speechRate
         if (tempmSpeechRate < 0) {
             tempmSpeechRate = 0.1f
         }
         val result = mSpeech?.setSpeechRate(speechRate * 4)
-        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, tempmSpeechRate)
-
-        ZLog.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result $result1")
+        ZLog.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result")
     }
 
-    fun getPitch(): Float {
-        val pitch = Config.readConfig(TTSConfig.CONFIG_KEY_PITCH + mScene, getDefaultPitch())
 
-        DecimalFormat("0.00").apply {
-            roundingMode = RoundingMode.HALF_UP
-        }.let {
-            return ConvertUtils.parseFloat(it.format(pitch), pitch)
-        }
-    }
-
-    fun getDefaultPitch(): Float {
-        return CONFIG_VALUE_PITCH
-    }
-
-    fun setPitch(pitch: Float) {
+    open fun setPitch(pitch: Float) {
         var tempPitch = pitch
 
         if (tempPitch < 0) {
             tempPitch = 0.1f
         }
         val result = mSpeech?.setPitch(tempPitch * 2)
-        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_PITCH + mScene, tempPitch)
-        ZLog.i(TAG, "setPitch: $pitch $tempPitch $result $result1")
-    }
-
-    private fun setEngine(tempEngine: String) {
-        Config.writeConfig(TTSConfig.CONFIG_KEY_ENGINE + mScene, tempEngine)
-//        APKUtils.getInstalledPackage(mContext, tempEngine).let { packageInfo ->
-//            if (null == packageInfo || TextUtils.isEmpty(packageInfo?.packageName)) {
-//                APKUtils.getInstalledPackage(mContext, CONFIG_VALUE_ENGINE).let { androidTTS ->
-//                    if (null == androidTTS || TextUtils.isEmpty(androidTTS?.packageName)) {
-//                        Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, "")
-//                    } else {
-//                        val result = Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, androidTTS?.packageName)
-//                        ZLog.i(TAG, "setEngine: ${androidTTS?.packageName} ; result $result")
-//                    }
-//                }
-//            } else {
-//                val result = Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, packageInfo?.packageName)
-//                ZLog.i(TAG, "setEngine: ${packageInfo?.packageName} ; result $result")
-//            }
-//        }
+        ZLog.i(TAG, "setPitch: $pitch $tempPitch $result")
     }
 
     fun getEngines(): List<TextToSpeech.EngineInfo>? {
