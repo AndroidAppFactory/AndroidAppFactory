@@ -4,7 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import com.bihe0832.android.lib.tts.core.TTSData
-import com.bihe0832.android.lib.tts.core.TTSHelper
+import com.bihe0832.android.lib.tts.core.impl.CONFIG_VALUE_PITCH
+import com.bihe0832.android.lib.tts.core.impl.CONFIG_VALUE_SPEECH_RATE
+import com.bihe0832.android.lib.tts.core.impl.TTSImpl
+import com.bihe0832.android.lib.tts.core.impl.TTSImplNotifyWithKey
+import com.bihe0832.android.lib.tts.core.impl.TTSImplWithConfig
 import java.util.Locale
 
 /**
@@ -15,39 +19,38 @@ import java.util.Locale
 @SuppressLint("StaticFieldLeak")
 object LibTTS {
     private val ttsImpl by lazy {
-        TTSHelper()
+        TTSImplWithConfig("")
     }
 
-    fun addTTSSpeakListener(listener: TTSHelper.TTSSpeakListener) {
-        ttsImpl.addTTSSpeakListener(listener)
+    fun addTTSSpeakListener(listener: TTSImplNotifyWithKey.TTSListener) {
+        ttsImpl.addTTSListener(listener)
     }
 
-    fun removeTTSSpeakListener(listener: TTSHelper.TTSSpeakListener) {
-        ttsImpl.removeTTSSpeakListener(listener)
+    fun removeTTSSpeakListener(listener: TTSImplNotifyWithKey.TTSListener) {
+        ttsImpl.removeTTSListener(listener)
     }
 
-    fun addTTSInitListener(listener: TTSHelper.TTSInitListener) {
+    fun addTTSInitListener(listener: TTSImpl.TTSInitListener) {
         ttsImpl.addTTSInitListener(listener)
     }
 
-    fun removeTTSInitListener(listener: TTSHelper.TTSInitListener) {
+    fun removeTTSInitListener(listener: TTSImpl.TTSInitListener) {
         ttsImpl.removeTTSInitListener(listener)
     }
 
-    fun init(context: Context, scene: String, loc: Locale, listener: TTSHelper.TTSInitListener) {
-        ttsImpl.init(context, scene, loc, listener)
-    }
-
-    fun init(context: Context, scene: String, loc: Locale, engine: String?, listener: TTSHelper.TTSInitListener) {
-        ttsImpl.init(context, scene, loc, engine, listener)
+    fun init(context: Context,loc: Locale, engine:String , listener: TTSImpl.TTSInitListener?) {
+        listener?.let {
+            ttsImpl.addTTSInitListener(listener)
+        }
+        ttsImpl.initTTSImplWithConfig(context, loc, engine)
     }
 
     fun isSpeak(): Boolean {
-        return ttsImpl.isSpeak()
+        return ttsImpl.isSpeak() ?: false
     }
 
     fun hasMoreSpeak(): Boolean {
-        return ttsImpl.hasMoreSpeak()
+        return ttsImpl.hasMoreSpeak() ?: false
     }
 
     @Synchronized
@@ -68,7 +71,7 @@ object LibTTS {
     }
 
     fun isTTSServiceOK(tts: TextToSpeech?): Boolean {
-        return ttsImpl.isTTSServiceOK(tts)
+        return ttsImpl.isTTSServiceOK(tts) ?: false
     }
 
 
@@ -76,28 +79,28 @@ object LibTTS {
         return ttsImpl.save(ttsData, finalFileName)
     }
 
-    fun getSpeechRate(): Float {
-        return ttsImpl.getSpeechRate()
+    fun getConfigSpeechRate(): Float {
+        return ttsImpl.getConfigSpeechRate() ?: CONFIG_VALUE_SPEECH_RATE
     }
 
     fun getDefaultSpeechRate(): Float {
-        return ttsImpl.getDefaultSpeechRate()
+        return ttsImpl.getDefaultSpeechRate() ?: CONFIG_VALUE_SPEECH_RATE
     }
 
     fun setSpeechRate(speechRate: Float) {
         ttsImpl.setSpeechRate(speechRate)
     }
 
-    fun getPitch(): Float {
-        return ttsImpl.getPitch()
+    fun getConfigPitch(): Float {
+        return ttsImpl.getConfigPitch() ?: CONFIG_VALUE_PITCH
     }
 
     fun getDefaultPitch(): Float {
-        return ttsImpl.getDefaultPitch()
+        return ttsImpl.getDefaultPitch() ?: CONFIG_VALUE_PITCH
     }
 
     fun setPitch(pitch: Float) {
-        return ttsImpl.setPitch(pitch)
+        ttsImpl.setPitch(pitch)
     }
 
 
@@ -110,6 +113,6 @@ object LibTTS {
     }
 
     fun onDestroy() {
-        return ttsImpl.onDestroy()
+        ttsImpl.onDestroy()
     }
 }

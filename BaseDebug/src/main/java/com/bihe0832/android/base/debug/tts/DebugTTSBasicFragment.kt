@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.log.ZLog
@@ -17,14 +16,15 @@ import com.bihe0832.android.lib.timer.TaskManager
 import com.bihe0832.android.lib.tts.LibTTS
 import com.bihe0832.android.lib.tts.core.TTSConfig
 import com.bihe0832.android.lib.tts.core.TTSData
-import com.bihe0832.android.lib.tts.core.TTSHelper
+import com.bihe0832.android.lib.tts.core.impl.TTSImpl
+import com.bihe0832.android.lib.tts.core.impl.TTSImplNotifyWithKey
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
-import java.util.*
+import java.util.Locale
 
 class DebugTTSBasicFragment : BaseFragment() {
     val TAG = this.javaClass.simpleName
-    private val FORMAT = "语音播报测试：语速 %s,语速 %s,音量 %s，最大ID %s "
+    private val FORMAT = "语音播报测试：语速 %s,语调 %s,音量 %s，最大ID %s "
 
     private var times = 0
     private var volume = 0.5f
@@ -36,9 +36,10 @@ class DebugTTSBasicFragment : BaseFragment() {
     override fun initView(view: View) {
         LibTTS.init(
             view.context,
-            "com.iflytek.vflynote",
             Locale.CHINA,
-            object : TTSHelper.TTSInitListener {
+            "com.iflytek.vflynote",
+
+            object : TTSImpl.TTSInitListener {
                 override fun onInitError() {
                     showGuide()
                 }
@@ -50,33 +51,24 @@ class DebugTTSBasicFragment : BaseFragment() {
                 override fun onLangAvailable() {
                     hideGuide()
                 }
-
-                override fun onTTSError() {
-                    ZixieContext.showToast("TTS引擎异常，正在重新初始化")
-                }
             })
 
-        LibTTS.addTTSSpeakListener(object : TTSHelper.TTSSpeakListener {
+        LibTTS.addTTSSpeakListener(object : TTSImplNotifyWithKey.TTSListener {
 
             var lastStart = System.currentTimeMillis()
-            override fun onUtteranceStart(utteranceId: String) {
+            override fun onStart(utteranceId: String, data: String) {
                 lastStart = System.currentTimeMillis()
-                ZLog.d(TAG, "onStart $utteranceId : $lastStart")
+                ZLog.d(TAG, "onStart $data : $lastStart")
             }
 
-            override fun onUtteranceDone(utteranceId: String) {
+            override fun onError(utteranceId: String, data: String) {
                 var end = System.currentTimeMillis()
-                ZLog.d(TAG, "onDone $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
+                ZLog.d(TAG, "onError $data : ${lastStart} ${end}  ${end - lastStart}")
             }
 
-            override fun onUtteranceError(utteranceId: String) {
+            override fun onComplete(utteranceId: String, data: String) {
                 var end = System.currentTimeMillis()
-                ZLog.d(TAG, "onError $utteranceId : ${lastStart} ${end}  ${end - lastStart}")
-            }
-
-            override fun onUtteranceFailed(utteranceId: String, textSpeak: String) {
-                var end = System.currentTimeMillis()
-                ZLog.d(TAG, "onError $utteranceId : ${textSpeak}")
+                ZLog.d(TAG, "onComplete $data : ${lastStart} ${end}  ${end - lastStart}")
             }
 
         })
@@ -140,22 +132,22 @@ class DebugTTSBasicFragment : BaseFragment() {
         }
 
         view!!.findViewById<Button>(R.id.tts_voice_incre)?.setOnClickListener {
-            LibTTS.setSpeechRate(LibTTS.getSpeechRate() + 0.1f)
+            LibTTS.setSpeechRate(LibTTS.getConfigSpeechRate() + 0.1f)
             updateTTSTitle()
         }
 
         view!!.findViewById<Button>(R.id.tts_voice_decre)?.setOnClickListener {
-            LibTTS.setSpeechRate(LibTTS.getSpeechRate() - 0.1f)
+            LibTTS.setSpeechRate(LibTTS.getConfigSpeechRate() - 0.1f)
             updateTTSTitle()
         }
 
         view!!.findViewById<Button>(R.id.tts_pitch_incre)?.setOnClickListener {
-            LibTTS.setPitch(LibTTS.getPitch() + 0.1f)
+            LibTTS.setPitch(LibTTS.getConfigPitch() + 0.1f)
             updateTTSTitle()
         }
 
         view!!.findViewById<Button>(R.id.tts_pitch_decre)?.setOnClickListener {
-            LibTTS.setPitch(LibTTS.getPitch() - 0.1f)
+            LibTTS.setPitch(LibTTS.getConfigPitch() - 0.1f)
             updateTTSTitle()
         }
 
@@ -216,6 +208,6 @@ class DebugTTSBasicFragment : BaseFragment() {
 
     private fun updateTTSTitle() {
         view!!.findViewById<TextView>(R.id.tts_title)?.text =
-            String.format(FORMAT, LibTTS.getSpeechRate(), LibTTS.getPitch(), volume, times)
+            String.format(FORMAT, LibTTS.getConfigSpeechRate(), LibTTS.getConfigPitch(), volume, times)
     }
 }
