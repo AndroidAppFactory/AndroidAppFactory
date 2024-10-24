@@ -32,7 +32,7 @@ object SplitApksInstallHelper {
             if (hasUnregister) {
                 mBroadcastReceiver?.let {
                     try {
-                        context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
+                        context.registerReceiver(it, IntentFilter(it.getIntentFilterFlag(context)))
                         hasUnregister = false
                     } catch (e: java.lang.Exception) {
                         ZLog.e("registerReceiver failed:${e.message}")
@@ -44,7 +44,7 @@ object SplitApksInstallHelper {
         mContext = context.applicationContext
         hasInit = true
         mPackageInstaller = context.packageManager.packageInstaller
-        mBroadcastReceiver = SplitApksInstallBroadcastReceiver(context)
+        mBroadcastReceiver = SplitApksInstallBroadcastReceiver()
         mBroadcastReceiver?.addEventObserver(object : SplitApksInstallBroadcastReceiver.EventObserver {
             override fun onConfirmationPending() {
                 ZLog.e("onConfirmationPending")
@@ -70,7 +70,7 @@ object SplitApksInstallHelper {
         })
         mBroadcastReceiver?.let {
             try {
-                context.registerReceiver(it, IntentFilter(it.intentFilterFlag))
+                context.registerReceiver(it, IntentFilter(it.getIntentFilterFlag(context)))
                 hasUnregister = false
             } catch (e: java.lang.Exception) {
                 ZLog.e("registerReceiver failed:${e.message}")
@@ -230,7 +230,7 @@ object SplitApksInstallHelper {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            val callbackIntent = Intent(mBroadcastReceiver!!.intentFilterFlag)
+            val callbackIntent = Intent(mBroadcastReceiver!!.getIntentFilterFlag(mContext))
             val pendingIntent = PendingIntent.getBroadcast(mContext, 0, callbackIntent, 0)
             session?.commit(pendingIntent.intentSender)
             session?.close()
