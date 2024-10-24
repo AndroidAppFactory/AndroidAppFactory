@@ -18,7 +18,7 @@ object AudioDurationTools {
 
     fun getDurationByWavFile(filePath: String): Int {
         if (!FileUtils.checkFileExist(filePath)) {
-            return -1
+            return 0
         }
         val wavFileReader = WaveFileReader(filePath)
         return wavFileReader.duration
@@ -56,6 +56,9 @@ object AudioDurationTools {
     }
 
     fun getDurationWithMediaPlayer(filePath: String): Long {
+        if (!FileUtils.checkFileExist(filePath)) {
+            return 0L
+        }
         val player = MediaPlayer()
         player.setDataSource(filePath)
         return getDurationWithMediaPlayer(player)
