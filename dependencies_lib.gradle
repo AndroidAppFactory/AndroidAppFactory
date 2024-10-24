@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.16.13",
+                "version"            : "6.16.14",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
