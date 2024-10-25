@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.tts.core.impl
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.text.TextUtils
@@ -24,14 +25,15 @@ import java.util.concurrent.CopyOnWriteArrayList
 @SuppressLint("StaticFieldLeak")
 open class TTSImpl {
 
-    companion object{
+    companion object {
         const val TAG = "TTS"
     }
-
 
     private var mSpeech: TextToSpeech? = null
     private var mContext: WeakReference<Context>? = null
     private var mLocale: Locale = Locale.SIMPLIFIED_CHINESE
+    private var mVolume = 100
+
     private var mNeedStopAfterSpeak = false
     private var isSpeakIng = false
     protected var enginePackageName: String? = null
@@ -216,6 +218,14 @@ open class TTSImpl {
 
     open fun speak(tempStr: TTSData, type: Int) {
         ZLog.e(TAG, "speak: ${mSpeech.hashCode()} ${isSpeak()} ${mSpeech?.isSpeaking} $tempStr")
+        if (!tempStr.getSpeakBundle().containsKey(TextToSpeech.Engine.KEY_PARAM_VOLUME)) {
+            tempStr.addSpeakParams(
+                Bundle().apply {
+                    putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, getVoiceVolumeFloat())
+                },
+            )
+        }
+
         if (TextUtils.isEmpty(tempStr.speakText)) {
             return
         }
@@ -354,6 +364,27 @@ open class TTSImpl {
 
     fun getDefaultEngine(): String? {
         return mSpeech?.defaultEngine
+    }
+
+    open fun setVoiceVolume(paramVolume: Int): Int {
+        val volume = if (paramVolume in 0..100) {
+            paramVolume
+        } else if (paramVolume < 0) {
+            0
+        } else {
+            100
+        }
+        mVolume = volume
+        ZLog.i(TAG, "setVoiceVolume ${this.hashCode()}: $paramVolume $volume")
+        return volume
+    }
+
+    fun getVoiceVolumeFloat(): Float {
+        return mVolume / 100f
+    }
+
+    fun getVoiceVolumeInt(): Int {
+        return mVolume
     }
 
     fun onDestroy() {

@@ -13,6 +13,9 @@ public class TTSConfig {
 
     public static final String CONFIG_KEY_PITCH = "com.bihe0832.android.lib.tts.pitch";
     public static final String CONFIG_KEY_SPEECH_RATE = "com.bihe0832.android.lib.tts.speech.rate";
+
+    public static final String CONFIG_KEY_SPEECH_VOICE_VOLUME = "com.bihe0832.android.lib.tts.speech.volume";
+
     public static final String CONFIG_KEY_ENGINE = "com.bihe0832.android.lib.tts.engine";
 
     public static final int SPEEAK_TYPE_SEQUENCE = 1;

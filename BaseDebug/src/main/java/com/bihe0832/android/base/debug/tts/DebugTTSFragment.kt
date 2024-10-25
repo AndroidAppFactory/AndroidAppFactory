@@ -41,7 +41,7 @@ class DebugTTSFragment : DebugEnvFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
-        ttsImpl1.initTTSImplWithConfig(view.context, Locale.SIMPLIFIED_CHINESE,"com.iflytek.speechsuite")
+        ttsImpl1.initTTSImplWithConfig(view.context, Locale.SIMPLIFIED_CHINESE, "com.iflytek.speechsuite")
         ttsImpl1.addTTSListener(object : TTSImplNotifyWithKey.TTSListener {
             override fun onStart(utteranceId: String, data: String) {
                 ZLog.e("ttsImpl1 speak onStart:$utteranceId $data")
@@ -133,11 +133,21 @@ class DebugTTSFragment : DebugEnvFragment() {
                 tts2?.setLanguage(Locale.CHINA)
             }))
 
-            add(DebugItemData("TextToSpeech 设置播报参数", View.OnClickListener {
+            add(DebugItemData("TextToSpeech 递增设置播报参数", View.OnClickListener {
                 ttsImpl1.setPitch(ttsImpl1.getConfigPitch() + 0.1f)
                 ttsImpl1.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.1f)
-                ttsImpl2.setPitch(0.5f)
-                ttsImpl2.setSpeechRate(0.7f)
+                ttsImpl1.setVoiceVolume(ttsImpl1.getConfigVoiceVolume() + 10)
+                ttsImpl2.setPitch(ttsImpl1.getConfigPitch() + 0.1f)
+                ttsImpl2.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.1f)
+                ttsImpl2.setVoiceVolume(ttsImpl2.getVoiceVolumeInt() + 10)
+            }))
+            add(DebugItemData("TextToSpeech 递减设置播报参数", View.OnClickListener {
+                ttsImpl1.setPitch(ttsImpl1.getConfigPitch() - 0.1f)
+                ttsImpl1.setSpeechRate(ttsImpl1.getConfigSpeechRate() - 0.1f)
+                ttsImpl1.setVoiceVolume(ttsImpl1.getVoiceVolumeInt() - 10)
+                ttsImpl2.setPitch(ttsImpl1.getConfigPitch() - 0.1f)
+                ttsImpl2.setSpeechRate(ttsImpl1.getConfigSpeechRate() - 0.1f)
+                ttsImpl2.setVoiceVolume(ttsImpl2.getVoiceVolumeInt() - 10)
             }))
 
             add(DebugItemData("TextToSpeech 抢断播报", View.OnClickListener {

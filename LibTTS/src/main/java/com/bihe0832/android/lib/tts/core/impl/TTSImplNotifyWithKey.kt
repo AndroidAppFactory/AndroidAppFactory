@@ -1,6 +1,8 @@
 package com.bihe0832.android.lib.tts.core.impl
 
 import android.content.Context
+import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.tts.core.TTSConfig
 import com.bihe0832.android.lib.tts.core.TTSData
@@ -80,7 +82,9 @@ open class TTSImplNotifyWithKey : TTSImpl() {
         })
     }
 
-    fun speak(key: String, data: TTSData, type: Int) {
+
+
+    open fun speak(key: String, data: TTSData, type: Int) {
         ZLog.d(TAG, "speak $data")
         mTTSNotifyKeyMap[data.getUtteranceId()] = key
         super.speak(data, type)
@@ -90,11 +94,11 @@ open class TTSImplNotifyWithKey : TTSImpl() {
         speak("", tempStr, type)
     }
 
-    fun speak(key: String, data: TTSData) {
+    final fun speak(key: String, data: TTSData) {
         speak(key, data, TTSConfig.SPEEAK_TYPE_FLUSH)
     }
 
-    fun speak(data: TTSData) {
+    final fun speak(data: TTSData) {
         speak("", data)
     }
 

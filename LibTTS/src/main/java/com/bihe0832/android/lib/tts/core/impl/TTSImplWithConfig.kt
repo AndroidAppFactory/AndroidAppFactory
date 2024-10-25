@@ -2,9 +2,12 @@ package com.bihe0832.android.lib.tts.core.impl
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.tts.core.TTSConfig
+import com.bihe0832.android.lib.tts.core.TTSData
 import com.bihe0832.android.lib.utils.ConvertUtils
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -25,6 +28,7 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
 
     private val mTTSListenerList = CopyOnWriteArrayList<TTSListener>()
     private val mTTSInitListenerList = CopyOnWriteArrayList<TTSInitListener>()
+    private var mVolume = getVoiceVolumeFloat()
 
     fun addTTSListener(listener: TTSListener) {
         mTTSListenerList.add(listener)
@@ -65,7 +69,7 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
         loc: Locale,
         engine: String? = "",
     ) {
-        initConfig(mScene)
+        initConfig()
         engine?.let {
             setEngine(it)
         }
@@ -110,9 +114,39 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
     }
 
 
-    private fun initConfig(scene: String) {
-        setPitch(Config.readConfig(TTSConfig.CONFIG_KEY_PITCH + scene, getDefaultPitch()))
-        setSpeechRate(Config.readConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + scene, getDefaultSpeechRate()))
+    private fun initConfig() {
+        setPitch(getConfigPitch())
+        setSpeechRate(getConfigSpeechRate())
+        setVoiceVolume(getConfigVoiceVolume())
+    }
+
+    private fun setEngine(tempEngine: String) {
+        Config.writeConfig(TTSConfig.CONFIG_KEY_ENGINE + mScene, tempEngine)
+//        APKUtils.getInstalledPackage(mContext, tempEngine).let { packageInfo ->
+//            if (null == packageInfo || TextUtils.isEmpty(packageInfo?.packageName)) {
+//                APKUtils.getInstalledPackage(mContext, CONFIG_VALUE_ENGINE).let { androidTTS ->
+//                    if (null == androidTTS || TextUtils.isEmpty(androidTTS?.packageName)) {
+//                        Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, "")
+//                    } else {
+//                        val result = Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, androidTTS?.packageName)
+//                        ZLog.i(TAG, "setEngine: ${androidTTS?.packageName} ; result $result")
+//                    }
+//                }
+//            } else {
+//                val result = Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, packageInfo?.packageName)
+//                ZLog.i(TAG, "setEngine: ${packageInfo?.packageName} ; result $result")
+//            }
+//        }
+    }
+
+    override fun speak(key: String, data: TTSData, type: Int) {
+        super.speak(key, data.apply {
+            addSpeakParams(
+                Bundle().apply {
+                    putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, mVolume)
+                },
+            )
+        }, type)
     }
 
 
@@ -165,24 +199,16 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
         ZLog.i(TAG, "setPitch: $pitch $tempPitch $result $result1")
     }
 
-    private fun setEngine(tempEngine: String) {
-        Config.writeConfig(TTSConfig.CONFIG_KEY_ENGINE + mScene, tempEngine)
-//        APKUtils.getInstalledPackage(mContext, tempEngine).let { packageInfo ->
-//            if (null == packageInfo || TextUtils.isEmpty(packageInfo?.packageName)) {
-//                APKUtils.getInstalledPackage(mContext, CONFIG_VALUE_ENGINE).let { androidTTS ->
-//                    if (null == androidTTS || TextUtils.isEmpty(androidTTS?.packageName)) {
-//                        Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, "")
-//                    } else {
-//                        val result = Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, androidTTS?.packageName)
-//                        ZLog.i(TAG, "setEngine: ${androidTTS?.packageName} ; result $result")
-//                    }
-//                }
-//            } else {
-//                val result = Config.writeConfig(CONFIG_KEY_ENGINE+ mScene, packageInfo?.packageName)
-//                ZLog.i(TAG, "setEngine: ${packageInfo?.packageName} ; result $result")
-//            }
-//        }
+    override fun setVoiceVolume(paramVolume: Int): Int {
+        super.setVoiceVolume(paramVolume).let {
+            Config.writeConfig(TTSConfig.CONFIG_KEY_SPEECH_VOICE_VOLUME + mScene, it)
+            ZLog.i(TAG, "setVoiceVolume: $paramVolume $it")
+            return it
+        }
     }
 
+    fun getConfigVoiceVolume(): Int {
+        return Config.readConfig(TTSConfig.CONFIG_KEY_SPEECH_VOICE_VOLUME + mScene, 100)
+    }
 
 }

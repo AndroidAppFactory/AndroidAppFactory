@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import com.bihe0832.android.lib.tts.core.TTSData
-import com.bihe0832.android.lib.tts.core.impl.CONFIG_VALUE_PITCH
-import com.bihe0832.android.lib.tts.core.impl.CONFIG_VALUE_SPEECH_RATE
 import com.bihe0832.android.lib.tts.core.impl.TTSImpl
 import com.bihe0832.android.lib.tts.core.impl.TTSImplNotifyWithKey
 import com.bihe0832.android.lib.tts.core.impl.TTSImplWithConfig
@@ -38,7 +36,7 @@ object LibTTS {
         ttsImpl.removeTTSInitListener(listener)
     }
 
-    fun init(context: Context,loc: Locale, engine:String , listener: TTSImpl.TTSInitListener?) {
+    fun init(context: Context, loc: Locale, engine: String, listener: TTSImpl.TTSInitListener?) {
         listener?.let {
             ttsImpl.addTTSInitListener(listener)
         }
@@ -46,11 +44,11 @@ object LibTTS {
     }
 
     fun isSpeak(): Boolean {
-        return ttsImpl.isSpeak() ?: false
+        return ttsImpl.isSpeak()
     }
 
     fun hasMoreSpeak(): Boolean {
-        return ttsImpl.hasMoreSpeak() ?: false
+        return ttsImpl.hasMoreSpeak()
     }
 
     @Synchronized
@@ -71,7 +69,7 @@ object LibTTS {
     }
 
     fun isTTSServiceOK(tts: TextToSpeech?): Boolean {
-        return ttsImpl.isTTSServiceOK(tts) ?: false
+        return ttsImpl.isTTSServiceOK(tts)
     }
 
 
@@ -80,11 +78,11 @@ object LibTTS {
     }
 
     fun getConfigSpeechRate(): Float {
-        return ttsImpl.getConfigSpeechRate() ?: CONFIG_VALUE_SPEECH_RATE
+        return ttsImpl.getConfigSpeechRate()
     }
 
     fun getDefaultSpeechRate(): Float {
-        return ttsImpl.getDefaultSpeechRate() ?: CONFIG_VALUE_SPEECH_RATE
+        return ttsImpl.getDefaultSpeechRate()
     }
 
     fun setSpeechRate(speechRate: Float) {
@@ -92,11 +90,19 @@ object LibTTS {
     }
 
     fun getConfigPitch(): Float {
-        return ttsImpl.getConfigPitch() ?: CONFIG_VALUE_PITCH
+        return ttsImpl.getConfigPitch()
     }
 
     fun getDefaultPitch(): Float {
-        return ttsImpl.getDefaultPitch() ?: CONFIG_VALUE_PITCH
+        return ttsImpl.getDefaultPitch()
+    }
+
+    fun getConfigVoiceVolume(): Int {
+        return ttsImpl.getConfigVoiceVolume()
+    }
+
+    fun setVoiceVolume(paramVolume: Int) {
+        ttsImpl.setVoiceVolume(paramVolume)
     }
 
     fun setPitch(pitch: Float) {
