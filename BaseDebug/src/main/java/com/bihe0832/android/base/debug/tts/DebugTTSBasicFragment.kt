@@ -1,8 +1,6 @@
 package com.bihe0832.android.base.debug.tts
 
 import android.content.Intent
-import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -27,7 +25,6 @@ class DebugTTSBasicFragment : BaseFragment() {
     private val FORMAT = "语音播报测试：语速 %s,语调 %s,音量 %s，最大ID %s "
 
     private var times = 0
-    private var volume = 0.5f
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_test_tts
@@ -152,12 +149,12 @@ class DebugTTSBasicFragment : BaseFragment() {
         }
 
         view!!.findViewById<Button>(R.id.tts_volume_incre)?.setOnClickListener {
-            volume += 0.1f
+            LibTTS.setVoiceVolume(LibTTS.getConfigVoiceVolume() + 10)
             updateTTSTitle()
         }
 
         view!!.findViewById<Button>(R.id.tts_volume_decre)?.setOnClickListener {
-            volume -= 0.1f
+            LibTTS.setVoiceVolume(LibTTS.getConfigVoiceVolume() - 10)
             updateTTSTitle()
         }
 
@@ -199,15 +196,17 @@ class DebugTTSBasicFragment : BaseFragment() {
     private fun getTTSData(): TTSData {
         times++
         updateTTSTitle()
-        return TTSData(view!!.findViewById<TextView>(R.id.tts_test_text)?.text.toString()).apply {
-            addSpeakParams(Bundle().apply {
-                putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
-            })
-        }
+        return TTSData(view!!.findViewById<TextView>(R.id.tts_test_text)?.text.toString())
     }
 
     private fun updateTTSTitle() {
         view!!.findViewById<TextView>(R.id.tts_title)?.text =
-            String.format(FORMAT, LibTTS.getConfigSpeechRate(), LibTTS.getConfigPitch(), volume, times)
+            String.format(
+                FORMAT,
+                LibTTS.getConfigSpeechRate(),
+                LibTTS.getConfigPitch(),
+                LibTTS.getConfigVoiceVolume(),
+                times
+            )
     }
 }
