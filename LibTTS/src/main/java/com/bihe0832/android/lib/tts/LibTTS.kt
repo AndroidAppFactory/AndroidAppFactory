@@ -68,6 +68,10 @@ object LibTTS {
         ttsImpl.speak(tempStr, type)
     }
 
+    fun speak(key: String, tempStr: TTSData, type: Int) {
+        ttsImpl.speak(key, tempStr, type)
+    }
+
     fun isTTSServiceOK(tts: TextToSpeech?): Boolean {
         return ttsImpl.isTTSServiceOK(tts)
     }

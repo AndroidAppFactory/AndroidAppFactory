@@ -2,12 +2,9 @@ package com.bihe0832.android.lib.tts.core.impl
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.tts.core.TTSConfig
-import com.bihe0832.android.lib.tts.core.TTSData
 import com.bihe0832.android.lib.utils.ConvertUtils
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -138,17 +135,6 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
 //            }
 //        }
     }
-
-    override fun speak(key: String, data: TTSData, type: Int) {
-        super.speak(key, data.apply {
-            addSpeakParams(
-                Bundle().apply {
-                    putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, mVolume)
-                },
-            )
-        }, type)
-    }
-
 
     fun getConfigSpeechRate(): Float {
         val speechRate = Config.readConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, getDefaultSpeechRate())

@@ -82,8 +82,6 @@ open class TTSImplNotifyWithKey : TTSImpl() {
         })
     }
 
-
-
     open fun speak(key: String, data: TTSData, type: Int) {
         ZLog.d(TAG, "speak $data")
         mTTSNotifyKeyMap[data.getUtteranceId()] = key
