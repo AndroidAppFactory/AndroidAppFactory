@@ -138,7 +138,7 @@ open class TTSImpl {
                 })
             }
         } else {
-            ZLog.e(TAG, "onInit: TTS引擎初始化失败，参数失败")
+            ZLog.e(TAG, "onInit: TTS引擎初始化失败，参数失败，请先初始化后重试")
             isSpeakIng = false
             mTTSInitListener?.onInitError()
             if (null != ttsData) {

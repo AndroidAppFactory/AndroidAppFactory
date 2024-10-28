@@ -50,15 +50,18 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
         }
     }
 
-    override fun initTTSImpl(
+    final override fun initTTSImpl(
         context: Context,
         loc: Locale,
         engine: String?,
         initListener: TTSInitListener?,
         speakListener: TTSSpeakListener?,
     ) {
-        super.initTTSImpl(context, loc, engine, initListener, speakListener)
-        ZLog.e("TTSImplWithConfig init mTTSInitListenerList and mTTSSpeakListenerList can not used !!!")
+        ZLog.e(TAG, "TTSImplWithConfig init, TTSSpeakListener can not used, please use TTSListener !!!")
+        initListener?.let {
+            addTTSInitListener(initListener)
+        }
+        initTTSImplWithConfig(context, loc, engine)
     }
 
     fun initTTSImplWithConfig(
