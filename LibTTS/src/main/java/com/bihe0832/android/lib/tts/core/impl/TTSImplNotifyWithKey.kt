@@ -1,8 +1,6 @@
 package com.bihe0832.android.lib.tts.core.impl
 
 import android.content.Context
-import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.tts.core.TTSConfig
 import com.bihe0832.android.lib.tts.core.TTSData
@@ -36,7 +34,7 @@ open class TTSImplNotifyWithKey : TTSImpl() {
         initListener: TTSInitListener?,
         speakListener: TTSSpeakListener?,
     ) {
-        ZLog.e(TAG, "TTSImplNotifyWithKey init TTSListener can not used !!!")
+        ZLog.e(TAG, "TTSImplNotifyWithKey init,  TTSSpeakListener can not used, please use TTSListener !!!")
         super.initTTSImpl(context, loc, engine, initListener, speakListener)
     }
 
