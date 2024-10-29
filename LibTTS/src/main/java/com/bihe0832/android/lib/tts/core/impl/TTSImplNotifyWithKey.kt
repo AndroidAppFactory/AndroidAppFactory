@@ -27,17 +27,6 @@ open class TTSImplNotifyWithKey : TTSImpl() {
         fun onComplete(utteranceId: String, key: String)
     }
 
-    override fun initTTSImpl(
-        context: Context,
-        loc: Locale,
-        engine: String?,
-        initListener: TTSInitListener?,
-        speakListener: TTSSpeakListener?,
-    ) {
-        ZLog.e(TAG, "TTSImplNotifyWithKey init,  TTSSpeakListener can not used, please use TTSListener !!!")
-        super.initTTSImpl(context, loc, engine, initListener, speakListener)
-    }
-
     fun initTTSImplWithKey(
         context: Context,
         loc: Locale,
