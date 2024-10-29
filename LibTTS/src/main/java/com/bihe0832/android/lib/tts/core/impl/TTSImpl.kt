@@ -69,7 +69,7 @@ open class TTSImpl {
         }
     }
 
-    open fun initTTSImpl(
+    fun initTTSImpl(
         context: Context,
         loc: Locale,
         engine: String?,
