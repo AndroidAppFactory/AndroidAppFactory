@@ -9,6 +9,7 @@ import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -121,22 +122,6 @@ object DownloadTools {
                 }
             }
 
-            fun notifyComplete(path: String, listener: DownloadListener?, item: DownloadItem): String {
-                if (listener == null) {
-                    return path
-                }
-                try {
-                    if (FileUtils.checkFileExist(path)) {
-                        return listener.onComplete(path, item)
-                    } else {
-                        item.setDownloadStatus(DownloadStatus.STATUS_DOWNLOAD_FAILED)
-                        listener.onFail(DownloadErrorCode.ERR_NOTIFY_EXCEPTION, "new path file not exist", item)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                return path
-            }
 
             @Synchronized
             fun notifySuccess(downloadPath: String, item: DownloadItem): String {
@@ -241,6 +226,23 @@ object DownloadTools {
         }
     }
 
+    fun notifyComplete(path: String, listener: DownloadListener?, item: DownloadItem): String {
+        if (listener == null) {
+            return path
+        }
+        try {
+            if (FileUtils.checkFileExist(path)) {
+                return listener.onComplete(path, item)
+            } else {
+                item.setDownloadStatus(DownloadStatus.STATUS_DOWNLOAD_FAILED)
+                listener.onFail(DownloadErrorCode.ERR_NOTIFY_EXCEPTION, "new path file not exist", item)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return path
+    }
+
     @Synchronized
     fun startDownload(
         context: Context,
@@ -259,6 +261,7 @@ object DownloadTools {
         needRecord: Boolean,
         downloadListener: DownloadListener?,
     ) {
+
         DownloadItem().apply {
             if (FileMimeTypes.isApkFile(URLUtils.getFileName(url))) {
                 setNotificationVisibility(true)
@@ -283,22 +286,34 @@ object DownloadTools {
             this.actionKey = actionKey
             this.isDownloadWhenUseMobile = useMobile
             this.isNeedRecord = needRecord
-        }.let {
+        }.let { downloadItem ->
+            if (!URLUtils.isHTTPUrl(url)) {
+                downloadListener?.onFail(DownloadErrorCode.ERR_BAD_URL, "url is null", downloadItem)
+                mGlobalDownloadListenerList.forEach {
+                    it.onFail(DownloadErrorCode.ERR_BAD_URL, "url is null", downloadItem)
+                }
+                return
+            }
             // 文件已经存在，直接回调
-            if (isFilePath && (!TextUtils.isEmpty(md5) || !TextUtils.isEmpty(sha256))
-                    && FileUtils.checkFileExist(path, 0, md5, sha256, false)
+            if (isFilePath && (!TextUtils.isEmpty(md5) || !TextUtils.isEmpty(sha256)) && FileUtils.checkFileExist(
+                        path, 0, md5, sha256, false
+                    )
             ) {
                 try {
-                    downloadListener?.onComplete(path, it)
+                    var notifyPath = downloadListener?.onComplete(path, downloadItem) ?: path
+                    mGlobalDownloadListenerList.forEach {
+                        notifyPath = notifyComplete(path, it, downloadItem)
+                    }
+                    ZLog.d("final path:$notifyPath")
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
                 return
             }
 
-            addNewKeyListener(it.downloadID, path, isFilePath, downloadListener)
-            it.downloadListener = mDownloadKeyListenerList[it.downloadID]?.getDownloadListener()
-            DownloadFileUtils.startDownload(context, it, forceDownload)
+            addNewKeyListener(downloadItem.downloadID, path, isFilePath, downloadListener)
+            downloadItem.downloadListener = mDownloadKeyListenerList[downloadItem.downloadID]?.getDownloadListener()
+            DownloadFileUtils.startDownload(context, downloadItem, forceDownload)
         }
     }
 }
