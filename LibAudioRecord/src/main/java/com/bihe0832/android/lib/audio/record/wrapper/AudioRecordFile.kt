@@ -31,8 +31,8 @@ class AudioRecordFile(
 
     fun stopRecord(context: Context) {
         ZLog.d("${AudioRecordManager.TAG} AudioRecordFile stopRecord:$scene $file")
+        AudioRecordManager.pauseRecord(scene)
         if (config != null) {
-            AudioRecordManager.stopRecord(context, scene)
             if (outputStream != null) {
                 try {
                     outputStream!!.flush()
@@ -43,9 +43,10 @@ class AudioRecordFile(
                 }
             }
             ZLog.d("${AudioRecordManager.TAG} AudioRecordFile stopRecord:$scene $file ${file.length()}")
-            FileUtils.writeDataToFile(file.absolutePath, 0, WavHeader(config, file.length()).toBytes(),false)
+            FileUtils.writeDataToFile(file.absolutePath, 0, WavHeader(config, file.length()).toBytes(), false)
             ZLog.d("${AudioRecordManager.TAG} AudioRecordFile stopRecord:$scene $file ${file.length()}")
         }
+        AudioRecordManager.stopRecord(context, scene)
         hasStart = false
     }
 
