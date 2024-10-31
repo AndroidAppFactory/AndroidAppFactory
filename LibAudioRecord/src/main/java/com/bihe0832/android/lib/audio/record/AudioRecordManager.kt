@@ -94,12 +94,15 @@ object AudioRecordManager {
             return false
         }
         return if (sceneWithListener.containsKey(scene)) {
-            ZLog.d(TAG, "startRecord record failed, start before:$scene")
+            ZLog.e(TAG, "startRecord record failed, start before:$scene")
+            false
+        } else if (mAudioDataRecorder == null) {
+            ZLog.e(TAG, "startRecord record failed, has not init:$scene")
             false
         } else {
             ZLog.d(TAG, "startRecord record success:$scene")
             sceneWithListener[scene] = AudioRecordItem(scene, listener)
-            mAudioDataRecorder?.startRecord()
+            mAudioDataRecorder!!.startRecord()
             true
         }
     }

@@ -59,14 +59,20 @@ public abstract class BaseJsBridge {
     }
 
     public void responseFail(String callbackFun, int seqid, String method, int code) {
-        responseFail(callbackFun, seqid, method, code, null);
+        responseFail(callbackFun, seqid, method, code, "");
     }
 
-    public void responseFail(String callbackFun, int seqid, String method, int code, Map<String, String> extMap) {
-        responseFail(callbackFun, seqid, method, code, null, ResponseType.Method);
+    public void responseFail(String callbackFun, int seqid, String method, int code, String msg) {
+        responseFail(callbackFun, seqid, method, code, msg, null);
     }
 
-    public void responseFail(String callbackFun, int seqid, String method, int code, Map<String, String> extMap,
+    public void responseFail(String callbackFun, int seqid, String method, int code, String msg,
+            Map<String, String> extMap) {
+        responseFail(callbackFun, seqid, method, code, msg, null, ResponseType.Method);
+    }
+
+    public void responseFail(String callbackFun, int seqid, String method, int code, String msg,
+            Map<String, String> extMap,
             ResponseType type) {
         if (TextUtils.isEmpty(callbackFun)) {
             return;
@@ -75,6 +81,7 @@ public abstract class BaseJsBridge {
         try {
             json.put("result", JsResult.Result_Fail);
             json.put("code", code);
+            json.put("msg", msg);
             json.put("method", method);
             json.put("seqid", seqid);
             if (extMap != null) {
