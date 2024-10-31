@@ -19,17 +19,21 @@ public class ASROfflineManager {
     private lateinit var offlineRecognizer: OfflineRecognizer
 
     fun initRecognizer(context: Context, config: OfflineRecognizerConfig) {
+        ZLog.d(AudioRecordManager.TAG,  "initRecognizer start")
         offlineRecognizer = OfflineRecognizer(
             assetManager = context.assets,
             config = config,
         )
+        ZLog.d(AudioRecordManager.TAG,  "initRecognizer end")
     }
 
     fun initRecognizer(config: OfflineRecognizerConfig) {
+        ZLog.d(AudioRecordManager.TAG,  "initRecognizer start")
         offlineRecognizer = OfflineRecognizer(
             null,
             config = config,
         )
+        ZLog.d(AudioRecordManager.TAG,  "initRecognizer end")
     }
 
     fun startRecognizer(sampleRateInHz: Int, buffer: FloatArray?): String {

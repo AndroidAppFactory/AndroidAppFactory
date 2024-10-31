@@ -11,11 +11,9 @@ public class JsonTest {
     private int key;
 
     @SerializedName("value1")
-    @JsonAdapter(RawStringJsonAdapter.class)
     private String data1 = "";
 
     @SerializedName("value2")
-    @JsonAdapter(BooleanDefaultAdapter.class)
     private boolean data2 = false;
 
     @SerializedName("value3")
