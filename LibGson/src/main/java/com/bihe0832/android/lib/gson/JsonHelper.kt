@@ -30,18 +30,17 @@ object JsonHelper {
     }
 
     fun getGsonBuilder(): GsonBuilder {
-        return GsonBuilder()
-            .registerTypeAdapter(Double::class.java, DoubleDefaultAdapter())
-            .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
-            .registerTypeAdapter(Boolean::class.java, BooleanTypeAdapter())
-            .registerTypeAdapter(Boolean::class.javaPrimitiveType, BooleanTypeAdapter())
-            .registerTypeAdapter(Float::class.java, FloatDefaultAdapter())
-            .registerTypeAdapter(Float::class.javaPrimitiveType, FloatDefaultAdapter())
-            .registerTypeAdapter(Int::class.java, IntegerDefaultAdapter())
-            .registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDefaultAdapter())
-            .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
-            .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
-            .registerTypeAdapter(String::class.java, StringNullAdapter())
+        return GsonBuilder().registerTypeAdapter(Double::class.java, DoubleDefaultAdapter())
+                .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
+                .registerTypeAdapter(Boolean::class.java, BooleanTypeAdapter())
+                .registerTypeAdapter(Boolean::class.javaPrimitiveType, BooleanTypeAdapter())
+                .registerTypeAdapter(Float::class.java, FloatDefaultAdapter())
+                .registerTypeAdapter(Float::class.javaPrimitiveType, FloatDefaultAdapter())
+                .registerTypeAdapter(Int::class.java, IntegerDefaultAdapter())
+                .registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDefaultAdapter())
+                .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
+                .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
+                .registerTypeAdapter(String::class.java, StringNullAdapter())
     }
 
     /**
@@ -52,7 +51,7 @@ object JsonHelper {
      * @return json的String格式
      *
      * i.e: String json = JsonHelper.toJson(beanObject);
-     </T> */
+    </T> */
     fun <T> toJson(beanObject: T): String? {
         return toJson(getGson(), beanObject)
     }
@@ -65,6 +64,23 @@ object JsonHelper {
         }
 
         return null
+    }
+
+    fun toMap(beanObject: Any): Map<*, *>? {
+        val json = toJson(beanObject) ?: return null
+        return toMap(json)
+    }
+
+    fun toMap(data: String): Map<*, *>? {
+        return try {
+            getGson().fromJson(data, object : TypeToken<Map<*, *>>() {}.type)
+        } catch (e: Exception) {
+            ZLog.e("JsonHelper", "------------------------------------")
+            ZLog.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
+            ZLog.e("JsonHelper", "JsonParserWrapper json:$data")
+            ZLog.e("JsonHelper", "------------------------------------")
+            null
+        }
     }
 
     /**
@@ -156,7 +172,10 @@ object JsonHelper {
                     fromJson(jsonArray.get(i).toString(), clazz).let {
                         if (null == it) {
                             ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null")
-                            ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null:" + jsonArray.get(i).toString())
+                            ZLog.e(
+                                "JsonHelper",
+                                "JsonParserWrapper parse list result is null:" + jsonArray.get(i).toString()
+                            )
                             ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null:$clazz")
                         } else {
                             result.add(it)
@@ -165,7 +184,10 @@ object JsonHelper {
                 }
                 ZLog.e("JsonHelper", "------------------------------------")
                 if (result.size != jsonArray.length()) {
-                    ZLog.e("JsonHelper", "JsonParserWrapper parse list :result is ${result.size}, but jsonArray is ${jsonArray.length()}")
+                    ZLog.e(
+                        "JsonHelper",
+                        "JsonParserWrapper parse list :result is ${result.size}, but jsonArray is ${jsonArray.length()}"
+                    )
                 }
                 return result
             } catch (e: java.lang.Exception) {

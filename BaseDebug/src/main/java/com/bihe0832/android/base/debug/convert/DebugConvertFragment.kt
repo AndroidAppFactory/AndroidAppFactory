@@ -194,21 +194,21 @@ class DebugConvertFragment : DebugEnvFragment() {
         var list =
             "[" + "{\"key\": \"value1\",\"value1\": [1222,2222],\"value\":true}," + "{\"key\": 2,\"value1\": [1222,2222],\"value2\":1}," + "{\"key\": 3,\"value1\": [1222,2222],\"value2\":\"true\"}," + "{\"key\": 4,\"value1\": [1222,2222],\"value2\":\"1\"}," + "{\"key\": 5,\"value1\": [1222,2222],\"value2\":\"0\"}," + "{\"key\": 6,\"value1\": [1222,2222],\"value2\":false}," + "{\"key\": 7,\"value1\": [1222,2222],\"value2\":0}," + "{\"key\": 8,\"value1\": [1222,2222],\"value2\":\"false\"}" + "]"
 
-        list.let {
-            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(it, JsonTest::class.java))
-            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(JsonHelper.getGson(), it, JsonTest::class.java))
-            ZLog.d(
-                LOG_TAG,
-                "result:" + fromJsonList<JsonTest>(
-                    JsonHelper.getGsonBuilder().apply {
-                        registerTypeAdapter(Int::class.java, IntegerDebugAdapter())
-                        registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDebugAdapter())
-                    }.create(),
-                    it,
-                    JsonTest::class.java,
-                ),
-            )
-        }
+//        list.let {
+//            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(it, JsonTest::class.java))
+//            ZLog.d(LOG_TAG, "result:" + fromJsonList<JsonTest>(JsonHelper.getGson(), it, JsonTest::class.java))
+//            ZLog.d(
+//                LOG_TAG,
+//                "result:" + fromJsonList<JsonTest>(
+//                    JsonHelper.getGsonBuilder().apply {
+//                        registerTypeAdapter(Int::class.java, IntegerDebugAdapter())
+//                        registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDebugAdapter())
+//                    }.create(),
+//                    it,
+//                    JsonTest::class.java,
+//                ),
+//            )
+//        }
 
         val enerics =
             "{\"content\":{\"key\":\"value1\",\"value1\":[1222,2222],\"value2\":true},\"err_code\":0,\"message\":\"\"}"
@@ -218,8 +218,12 @@ class DebugConvertFragment : DebugEnvFragment() {
             key = 1212
             setData3("chat&user")
         }.let {
-            ZLog.d(LOG_TAG, "result:" + JsonHelper.toJson(it))
+            ZLog.d(LOG_TAG, "result data:" + JsonHelper.toJson(it))
+//            ZLog.d(LOG_TAG, "result JsonTest map:" + JsonTest.getData(it))
+            ZLog.d(LOG_TAG, "result JsonHelper map:" + JsonHelper.toMap(it))
         }
+        ZLog.d(LOG_TAG, "String result JsonHelper map:" + JsonHelper.toMap("{\"key\": \"value1\",\"value1\": \"value1\",\"value\":true}"))
+
     }
 
     fun testConvertBoolean() {
@@ -432,7 +436,7 @@ class DebugConvertFragment : DebugEnvFragment() {
         srcHeight: Float,
         destWidth: Float,
         destHeight: Float,
-        isFit: Boolean
+        isFit: Boolean,
     ) {
 //        val point = PointUtils.transform(x, y, srcWidth, srcHeight, destWidth, destHeight, isFit)
         ZLog.d(
