@@ -13,10 +13,13 @@ import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
+import com.bihe0832.android.common.video.FFmpegTools
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.lib.audio.player.AudioPlayListener
@@ -45,6 +48,37 @@ class DebugAudioFragment : DebugEnvFragment() {
                             blockAudioPlayerManager.play(filePath)
                             blockAudioPlayerManager.play(context!!, R.raw.one)
                             blockAudioPlayerManager.play(context!!, R.raw.four)
+                            return filePath
+                        }
+
+                        override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+
+                        }
+
+                        override fun onProgress(item: DownloadItem) {
+
+                        }
+
+                    })
+
+            }))
+
+            add(DebugItemData("远程音频裁剪", View.OnClickListener {
+                DownloadFile.download(
+                    context!!,
+                    "https://cdn.bihe0832.com/audio/03.wav",
+                    "",false,
+                    "FAEE24E98CD256E204FAF5168FA39D24",
+                    false,
+                    object : SimpleDownloadListener() {
+                        override fun onComplete(filePath: String, item: DownloadItem): String {
+                            ZLog.d(FileUtils.getFileMD5(filePath))
+                            FFmpegTools.splitAudioWithDuration(filePath, 0.7f, 2f, object : AAFDataCallback<String>() {
+                                override fun onSuccess(result: String?) {
+                                    blockAudioPlayerManager.play(filePath)
+                                    blockAudioPlayerManager.play(result ?: "")
+                                }
+                            })
                             return filePath
                         }
 
