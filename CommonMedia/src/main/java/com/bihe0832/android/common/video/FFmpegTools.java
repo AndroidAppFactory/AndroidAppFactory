@@ -49,8 +49,7 @@ public class FFmpegTools {
     }
 
     public static void convertAudioWithImageToVideo(int width, int height, String audioPath, long coverDuration,
-            List<String> images,
-            AAFDataCallback<String> callback) {
+            List<String> images, AAFDataCallback<String> callback) {
         ThreadManager.getInstance().start(() -> {
             try {
                 ArrayList<String> realImageList = new ArrayList<>();
@@ -72,7 +71,7 @@ public class FFmpegTools {
                 try {
                     File videoFile = new File(videoPath);
                     videoFile.createNewFile();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -107,8 +106,8 @@ public class FFmpegTools {
                 for (int i = 0; i < realImageList.size(); i++) {
                     filterArgsBuilder.append(String.format(
                             "[%d:v]scale=iw*min(%d/iw\\,%d/ih):ih*min(%d/iw\\,%d/ih),pad=%d:%d:(%d-iw)/2:(%d-ih)/2,trim=duration=%.2f[v%d];",
-                            i, width, height, width, height, width, height, width,
-                            height, (i == 0 ? coverImageDuration : remainingImageDuration) / 1000.0, i));
+                            i, width, height, width, height, width, height, width, height,
+                            (i == 0 ? coverImageDuration : remainingImageDuration) / 1000.0, i));
                 }
                 for (int i = 0; i < realImageList.size(); i++) {
                     filterArgsBuilder.append(String.format("[v%d]", i));
@@ -141,8 +140,6 @@ public class FFmpegTools {
         });
     }
 
-
-
     public static void convertAudioWithImageToVideo(int width, int height, String audioPath, String imagePath,
             AAFDataCallback<String> callback) {
         try {
@@ -166,6 +163,28 @@ public class FFmpegTools {
                 int result = FFmpegTools.executeFFmpegCommand(command);
                 if (result == Config.RETURN_CODE_SUCCESS) {
                     callback.onSuccess(videoPath);
+                } else {
+                    callback.onError(result, "executeFFmpegCommand failed");
+                }
+            } catch (Exception e) {
+                callback.onError(-1, "executeFFmpegCommand exception:" + e);
+            }
+        });
+    }
+
+    public static void splitAudioWithDuration(String audioPath, float startTime, float duration,
+            AAFDataCallback<String> callback) {
+        ThreadManager.getInstance().start(() -> {
+            try {
+
+                String outputFilePath = AAFFileWrapper.INSTANCE.getCacheVideoPath("."+
+                        FileUtils.INSTANCE.getExtensionName(audioPath));
+                // FFmpeg 命令
+                String[] command = {"-i", audioPath,
+                        "-ss", String.valueOf(startTime), "-t", String.valueOf(duration), "-c", "copy", outputFilePath};
+                int result = FFmpegTools.executeFFmpegCommand(command);
+                if (result == Config.RETURN_CODE_SUCCESS) {
+                    callback.onSuccess(outputFilePath);
                 } else {
                     callback.onError(result, "executeFFmpegCommand failed");
                 }
