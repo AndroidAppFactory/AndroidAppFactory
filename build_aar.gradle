@@ -16,7 +16,7 @@ def sonatypePassword
 def moduleName = project.name
 
 try {
-    sonatypeUserName = getProperty("NEXUS_USERNAME")
+    sonatypeUserName = getProperty("sonatypeUsername")
 } catch (Exception e) {
     e.printStackTrace()
     sonatypeUserName = ""
@@ -24,7 +24,7 @@ try {
 
 
 try {
-    sonatypePassword = getProperty("NEXUS_PASSWORD")
+    sonatypePassword = getProperty("sonatypePassword")
 } catch (Exception e) {
     e.printStackTrace()
     sonatypePassword = ""
