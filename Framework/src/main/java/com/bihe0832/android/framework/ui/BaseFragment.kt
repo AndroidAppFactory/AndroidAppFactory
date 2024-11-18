@@ -112,7 +112,7 @@ open class BaseFragment : SwipeBackFragment() {
      * @param hasCreateView 当前View 是否已经创建好
      */
     open fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
-        ZLog.d("${this.javaClass.name} ,isVisibleToUser:$isVisibleToUser ,hasCreateView:$hasCreateView")
+        ZLog.d("setUserVisibleHint","${this.javaClass.simpleName} ,isVisibleToUser:$isVisibleToUser ,hasCreateView:$hasCreateView")
     }
 
     fun setChildUserVisibleHint(isVisibleToUser: Boolean) {

@@ -76,42 +76,49 @@
     2023年5月30日16时29分，神舟十六号采用自主快速交会对接模式成功对接于天和核心舱节点舱径向对接口。18时22分，神舟十六号乘组打开神舟飞船轨道舱径舱门，仍留守天宫空间站的神舟十五号航天员乘组打开天和核心舱舱门，两个航天员乘组第二次实现“太空会师”。
 </div>
 <script type="text/javascript">
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        console.log("document.hidden:" + document.hidden)
+      } else {
+        console.log("document.hidden:" + document.hidden)
+      }
+    });
 
-    var a = 1
-    function addNativeView() {
-        call('addNativeView', {viewKey:"native_view_" + a}, (res) => {
-            console.log(res)
-        })
-        a++
-    }
+        var a = 1
+        function addNativeView() {
+            call('addNativeView', {viewKey:"native_view_" + a}, (res) => {
+                console.log(res)
+            })
+            a++
+        }
 
-    function showNativeView() {
-        call('showNativeView', {viewKey:"native_view_1"}, (res) => {
-            console.log(res)
-        })
-    }
+        function showNativeView() {
+            call('showNativeView', {viewKey:"native_view_1"}, (res) => {
+                console.log(res)
+            })
+        }
 
-    function hideNativeView() {
-        call('hideNativeView', {viewKey:"native_view_1"}, (res) => {
-            console.log(res)
-        })
-    }
+        function hideNativeView() {
+            call('hideNativeView', {viewKey:"native_view_1"}, (res) => {
+                console.log(res)
+            })
+        }
 
-    function removeNativeView() {
-        call('removeNativeView', {viewKey:"native_view_1"}, (res) => {
-            console.log(res)
-        })
-    }
+        function removeNativeView() {
+            call('removeNativeView', {viewKey:"native_view_1"}, (res) => {
+                console.log(res)
+            })
+        }
 
-    function getNativeViewPosition(key) {
-        var native_view = document.getElementById(key);
-        return native_view.offsetTop;
-    }
+        function getNativeViewPosition(key) {
+            var native_view = document.getElementById(key);
+            return native_view.offsetTop;
+        }
 
-    function setNativeViewHeight(key,height) {
-        var native_view = document.getElementById(key);
-        native_view.style.height=height+"px";
-    }
+        function setNativeViewHeight(key,height) {
+            var native_view = document.getElementById(key);
+            native_view.style.height=height+"px";
+        }
 
 </script>
 </body>

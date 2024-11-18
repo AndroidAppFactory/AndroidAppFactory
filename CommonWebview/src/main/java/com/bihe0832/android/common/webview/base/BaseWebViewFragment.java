@@ -73,8 +73,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     private int mOriginalSystemUiVisibility;
     private int mOriginalOrientation;
     private LiveData<Integer> mWebViewScrollTopLiveData = _webViewScrollTopLiveData;
-    private long lastResumeTime = 0L;
-    private long lastPauseTime = 0L;
+
 
     public static Bundle getWebviewDataBundle(String url, String data) {
         Bundle bundle = new Bundle();
@@ -310,50 +309,23 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         startActivityForResult(Intent.createChooser(intent, "Image Chooser"), ZixieActivityRequestCode.FILE_CHOOSER);
     }
 
-    @Override
-    public void onResume() {
-        ZLog.d(TAG, "onResume ");
-        super.onResume();
-        onJSBridgeResume();
-
-    }
-
-    @Override
-    public void onPause() {
-        ZLog.d(TAG, "onPause ");
-        super.onPause();
-        onJSBridgePause();
-    }
-
-    private void onJSBridgeResume() {
+    protected void onJSBridgeResume() {
         if (null != mJSBridgeProxy) {
             ZLog.d(TAG, "onJSBridgeResume");
-            if (System.currentTimeMillis() - lastResumeTime < 5 * 1000) {
-                ZLog.d(TAG, "onJSBridgeResume to quick");
-                return;
-            }
-            lastResumeTime = System.currentTimeMillis();
-            lastPauseTime = 0;
             mJSBridgeProxy.onResume();
         }
     }
 
-    private void onJSBridgePause() {
+    protected void onJSBridgePause() {
         if (null != mJSBridgeProxy) {
             ZLog.d(TAG, "onJSBridgePause");
-            if (System.currentTimeMillis() - lastPauseTime < 5 * 1000) {
-                ZLog.d(TAG, "onJSBridgePause to quick");
-                return;
-            }
-            lastPauseTime = System.currentTimeMillis();
-            lastResumeTime = 0;
             mJSBridgeProxy.onPause();
         }
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser, boolean hasCreateView) {
-        ZLog.d(TAG, "setUserVisibleHint " + isVisibleToUser);
+       super.setUserVisibleHint(isVisibleToUser,hasCreateView);
         if (isVisibleToUser) {
             onJSBridgeResume();
         } else {

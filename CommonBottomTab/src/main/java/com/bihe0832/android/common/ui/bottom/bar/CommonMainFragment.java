@@ -2,13 +2,10 @@ package com.bihe0832.android.common.ui.bottom.bar;
 
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.framework.ui.BaseFragment;
-import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
 import com.bihe0832.android.lib.ui.bottom.bar.BottomBar;
-
 import java.util.ArrayList;
 
 /**
@@ -101,7 +98,6 @@ public abstract class CommonMainFragment extends BaseFragment {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser, boolean hasCreateView) {
-        ZLog.d("setUserVisibleHint:$isVisibleToUser");
         super.setUserVisibleHint(isVisibleToUser, hasCreateView);
         if (mFragments.size() > mBottomBar.getCurrentItemPosition() && null != mFragments.get(mBottomBar.getCurrentItemPosition())) {
             mFragments.get(mBottomBar.getCurrentItemPosition()).setUserVisibleHint(isVisibleToUser);
