@@ -75,6 +75,14 @@
 </p>
 <script language="JavaScript" type="text/JavaScript">
 
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        console.log("document.hidden:" + document.hidden)
+      } else {
+        console.log("document.hidden:" + document.hidden)
+      }
+    });
+
          document.querySelector('#btn_copy').addEventListener('click',() => {
             const input = document.createElement('input');
             document.body.appendChild(input);

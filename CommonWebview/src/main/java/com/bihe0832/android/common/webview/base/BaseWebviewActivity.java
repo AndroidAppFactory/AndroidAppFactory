@@ -11,6 +11,7 @@ import com.bihe0832.android.common.webview.R;
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile;
 import com.bihe0832.android.common.webview.core.WebViewViewModel;
 import com.bihe0832.android.framework.router.RouterConstants;
+import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.framework.ui.main.CommonActivity;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
@@ -35,6 +36,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         mWebViewViewModel = new ViewModelProvider(this).get(WebViewViewModel.class);
         WebViewLoggerFile.INSTANCE.log("BaseWebviewActivity mWebViewViewModel: " + mWebViewViewModel.hashCode());
         handleIntent(getIntent());
+        loadWebViewFragment();
     }
 
     @Override
@@ -102,6 +104,12 @@ public abstract class BaseWebviewActivity extends CommonActivity {
         });
     }
 
+    protected void loadWebViewFragment(){
+        if (findFragment(getWebViewFragmentClass()) == null) {
+            loadRootFragment(getWebViewFragment());
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -116,8 +124,12 @@ public abstract class BaseWebviewActivity extends CommonActivity {
             return;
         } else {
             WebViewLoggerFile.INSTANCE.log(TAG + " onResume:" + mURL);
-            if (findFragment(getWebViewFragmentClass()) == null) {
-                loadRootFragment(getWebViewFragment());
+            try {
+                if (findFragment(getWebViewFragmentClass()) != null) {
+                    ((BaseFragment) findFragment(getWebViewFragmentClass())).setUserVisibleHint(true);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

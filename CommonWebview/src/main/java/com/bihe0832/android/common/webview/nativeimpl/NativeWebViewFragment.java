@@ -161,6 +161,22 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         }
     }
 
+    @Override
+    protected void onJSBridgeResume() {
+        super.onJSBridgeResume();
+        if (null != mWebView) {
+            mWebView.resumeTimers();
+        }
+    }
+
+    @Override
+    protected void onJSBridgePause() {
+        super.onJSBridgePause();
+        if (null != mWebView) {
+            mWebView.pauseTimers();
+        }
+    }
+
     protected WebResourceResponse interceptRequestResult(String url) {
         if (null != mWebView && !mWebView.hasDoActionBeforeLoadURL()) {
             //主要用于解决页面通过webview的reload刷新时没有走 actionBeforeLoadURL 导致一些前置逻辑被跳过

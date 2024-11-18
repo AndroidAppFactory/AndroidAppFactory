@@ -46,7 +46,7 @@ import com.bihe0832.android.base.debug.toast.DebugToastFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
-import com.bihe0832.android.base.debug.webview.DebugWebviewActivity
+import com.bihe0832.android.base.debug.webview.DebugWebViewFragment
 import com.bihe0832.android.base.debug.widget.DebugWidgetFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -113,14 +113,8 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("多进程调试", AAFDebugIPCFragment::class.java))
             add(getDebugFragmentItemData("日志调试", DebugLogFragment::class.java))
             add(getDebugFragmentItemData("通知栏调试", DebugNotifyFragment::class.java))
-            add(
-                DebugItemData(
-                    "WebView 调试",
-                    View.OnClickListener {
-                        startActivityWithException(DebugWebviewActivity::class.java)
-                    },
-                ),
-            )
+            add(getDebugFragmentItemData("WebView 调试", DebugWebViewFragment::class.java))
+
 
             add(DebugItemData("网络切换监控") { startActivityWithException(DebugNetworkActivity::class.java) })
             add(getDebugFragmentItemData("Wi-Fi 相关信息", DebugWiFiFragment::class.java))

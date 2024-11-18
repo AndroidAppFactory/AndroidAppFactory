@@ -10,7 +10,7 @@ import com.bihe0832.android.common.webview.CommonWebviewFragment;
  * Created on 2023/5/30.
  * Description: Description
  */
-public class DebugWebviewFragment extends CommonWebviewFragment {
+public class DebugWebViewWithNativeFragment extends CommonWebviewFragment {
     public static int HEIGHT = 50;
     private TextView textView = null;
     private DebugJsBridgeProxy mBaseJsBridgeProxy = null;
