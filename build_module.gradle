@@ -154,7 +154,7 @@ def addDependencies(String projectName) {
 }
 
 def addLocalDependencies(String projectName, String path) {
-    if (zixieIsDebug) println("======== addDependencies " + projectName + " ========")
+    if (zixieIsDebug) println("======== addLocalDependencies " + projectName + " ========")
     if (zixieIsDebug) println("addLocalDependencies fileTree ： " + path)
     HashMap<String, ArrayList> dependencies = new HashMap<>()
     fileTree(dir: path, include: '*.aar').each { File file ->
