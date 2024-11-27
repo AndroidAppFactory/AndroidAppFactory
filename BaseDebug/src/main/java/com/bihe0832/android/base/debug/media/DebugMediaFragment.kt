@@ -10,6 +10,7 @@ import com.bihe0832.android.base.debug.audio.DebugAudioFragment
 import com.bihe0832.android.base.debug.audio.asr.DebugRecordAndASRFragRecment
 import com.bihe0832.android.base.debug.media.photos.DebugPhotosFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.media.MediaTools
 import com.bihe0832.android.common.video.FFmpegTools
@@ -40,17 +41,17 @@ class DebugMediaFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
             add(getDebugFragmentItemData("WAV 录制及 ARS 调试", DebugRecordAndASRFragRecment::class.java))
             add(getDebugFragmentItemData("拍照及相册调试", DebugPhotosFragment::class.java))
-            add(DebugItemData("文字转图片1（有图标，有标题）", View.OnClickListener { textToImage() }))
-            add(DebugItemData("文字转图片2（无图标，无标题）", View.OnClickListener { textToImage2() }))
-            add(DebugItemData("音频转视频1", View.OnClickListener { audioToVideo(1) }))
-            add(DebugItemData("音频转视频2", View.OnClickListener { audioToVideo(2) }))
-            add(DebugItemData("音频图片转视频1", View.OnClickListener { audioImageToVideo(1) }))
-            add(DebugItemData("音频图片转视频2", View.OnClickListener { audioImageToVideo(2) }))
-            add(DebugItemData("图片无损存图库", View.OnClickListener { saveImage() }))
-            add(DebugItemData("视频图片存图库", View.OnClickListener { save() }))
-            add(DebugItemData("下载图片并添加到相册", View.OnClickListener { testDownImage() }))
-            add(DebugItemData("下载视频并添加到相册", View.OnClickListener { testDownVideo() }))
-            add(DebugItemData("从相册删除最后一次的照片", View.OnClickListener { testDelete() }))
+            add(getDebugItem("文字转图片1（有图标，有标题）", View.OnClickListener { textToImage() }))
+            add(getDebugItem("文字转图片2（无图标，无标题）", View.OnClickListener { textToImage2() }))
+            add(getDebugItem("音频转视频1", View.OnClickListener { audioToVideo(1) }))
+            add(getDebugItem("音频转视频2", View.OnClickListener { audioToVideo(2) }))
+            add(getDebugItem("音频图片转视频1", View.OnClickListener { audioImageToVideo(1) }))
+            add(getDebugItem("音频图片转视频2", View.OnClickListener { audioImageToVideo(2) }))
+            add(getDebugItem("图片无损存图库", View.OnClickListener { saveImage() }))
+            add(getDebugItem("视频图片存图库", View.OnClickListener { save() }))
+            add(getDebugItem("下载图片并添加到相册", View.OnClickListener { testDownImage() }))
+            add(getDebugItem("下载视频并添加到相册", View.OnClickListener { testDownVideo() }))
+            add(getDebugItem("从相册删除最后一次的照片", View.OnClickListener { testDelete() }))
         }
     }
 

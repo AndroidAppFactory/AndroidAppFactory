@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.View
 import androidx.work.WorkerParameters
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
@@ -32,12 +33,12 @@ class DebugThreadAndCoroutinesFragmeAndnt : DebugCommonFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("并发测试", View.OnClickListener { getSpecialData() }))
-            add(DebugItemData("多层调用验证", View.OnClickListener { testThread() }))
-            add(DebugItemData("前台服务任务1开启", View.OnClickListener { start1() }))
-            add(DebugItemData("前台服务任务2开启", View.OnClickListener { start2() }))
-            add(DebugItemData("前台服务任务1结束", View.OnClickListener { stop1() }))
-            add(DebugItemData("前台服务任务2结束", View.OnClickListener { stop2() }))
+            add(getDebugItem("并发测试", View.OnClickListener { getSpecialData() }))
+            add(getDebugItem("多层调用验证", View.OnClickListener { testThread() }))
+            add(getDebugItem("前台服务任务1开启", View.OnClickListener { start1() }))
+            add(getDebugItem("前台服务任务2开启", View.OnClickListener { start2() }))
+            add(getDebugItem("前台服务任务1结束", View.OnClickListener { stop1() }))
+            add(getDebugItem("前台服务任务2结束", View.OnClickListener { stop2() }))
 
         }
     }

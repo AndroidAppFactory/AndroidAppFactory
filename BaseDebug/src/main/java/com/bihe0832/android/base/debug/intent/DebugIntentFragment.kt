@@ -16,6 +16,7 @@ import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.lock.DebugLockService
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.praise.UserPraiseManager
 import com.bihe0832.android.framework.router.RouterAction
@@ -29,17 +30,17 @@ class DebugIntentFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("打开指定schema", View.OnClickListener { openSchema() }))
+            add(getDebugItem("打开指定schema", View.OnClickListener { openSchema() }))
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "默认关于页",
                     View.OnClickListener { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_BASE_ABOUT) },
                 ),
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "打开指定应用设置",
                     View.OnClickListener {
                         IntentUtils.startAppSettings(
@@ -53,7 +54,7 @@ class DebugIntentFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "打开应用安装界面",
                     View.OnClickListener {
                         IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
@@ -62,7 +63,7 @@ class DebugIntentFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "打开反馈页面",
                     View.OnClickListener {
                         RouterAction.openFinalURL(getFeedBackURL())
@@ -71,7 +72,7 @@ class DebugIntentFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "启动锁屏页面",
                     View.OnClickListener {
                         DebugLockService.startLockServiceWithPermission(context)
@@ -80,7 +81,7 @@ class DebugIntentFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "启动Service",
                     View.OnClickListener {
                         val intent = Intent()
@@ -96,7 +97,7 @@ class DebugIntentFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "弹出评分页面",
                     View.OnClickListener {
                         UserPraiseManager.showUserPraiseDialog(activity!!, getFeedBackURL())

@@ -12,6 +12,7 @@ package com.bihe0832.android.base.debug.audio
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.video.FFmpegTools
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
@@ -38,7 +39,7 @@ class DebugAudioFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("播放远程音频", View.OnClickListener {
+            add(getDebugItem("播放远程音频", View.OnClickListener {
                 DownloadFile.download(
                     context!!,
                     "https://cdn.bihe0832.com/audio/03.wav",
@@ -63,7 +64,7 @@ class DebugAudioFragment : DebugEnvFragment() {
 
             }))
 
-            add(DebugItemData("远程音频裁剪", View.OnClickListener {
+            add(getDebugItem("远程音频裁剪", View.OnClickListener {
                 DownloadFile.download(
                     context!!,
                     "https://cdn.bihe0832.com/audio/03.wav",
@@ -94,7 +95,7 @@ class DebugAudioFragment : DebugEnvFragment() {
 
             }))
 
-            add(DebugItemData("播放本地音频", View.OnClickListener {
+            add(getDebugItem("播放本地音频", View.OnClickListener {
                 blockAudioPlayerManager.play(context!!, R.raw.one)
                 blockAudioPlayerManager.play(context!!, R.raw.two, 0.1f, 1.0f, 1.0f, 1, null)
                 blockAudioPlayerManager.play(context!!, R.raw.three)
@@ -103,7 +104,7 @@ class DebugAudioFragment : DebugEnvFragment() {
                 blockAudioPlayerManager.play(context!!, R.raw.three)
             }))
 
-            add(DebugItemData("本地音频极限测试", View.OnClickListener {
+            add(getDebugItem("本地音频极限测试", View.OnClickListener {
                 ThreadManager.getInstance().start {
                     ZLog.d("本地音频极限测试开始")
                     for (i in 0..257) {
@@ -113,25 +114,25 @@ class DebugAudioFragment : DebugEnvFragment() {
                 }
             }))
 
-            add(DebugItemData("播放扫码音频", View.OnClickListener {
+            add(getDebugItem("播放扫码音频", View.OnClickListener {
                 blockAudioPlayerManager.play(context!!, R.raw.beep)
             }))
 
 
-            add(DebugItemData("立即结束并清空队列", View.OnClickListener {
+            add(getDebugItem("立即结束并清空队列", View.OnClickListener {
                 blockAudioPlayerManager.stopAll(true)
             }))
 
-            add(DebugItemData("清空队列", View.OnClickListener {
+            add(getDebugItem("清空队列", View.OnClickListener {
                 blockAudioPlayerManager.stopAll(false)
             }))
 
-            add(DebugItemData("清空队列并播放", View.OnClickListener {
+            add(getDebugItem("清空队列并播放", View.OnClickListener {
                 blockAudioPlayerManager.stopAll(false)
                 blockAudioPlayerManager.play(context!!, R.raw.three)
             }))
 
-            add(DebugItemData("强制中断当前并播放下一个", View.OnClickListener {
+            add(getDebugItem("强制中断当前并播放下一个", View.OnClickListener {
                 blockAudioPlayerManager.play(context!!, R.raw.three, 0.1f, 1.0f, 1.0f, 1, object : AudioPlayListener {
                     override fun onLoad() {
                         ZLog.d(LOG_TAG, "onLoad")

@@ -5,6 +5,7 @@ import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -67,14 +68,14 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("下载并计算文件的具体信息", View.OnClickListener { testDownload() }))
-            add(DebugItemData("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
-            add(DebugItemData("测试区间下载", View.OnClickListener { testDownloadRange() }))
-            add(DebugItemData("测试下载队列", View.OnClickListener { testDownloadList() }))
-            add(DebugItemData("多位置触发下载", View.OnClickListener { testDownloadMoreThanOnce() }))
+            add(getDebugItem("下载并计算文件的具体信息", View.OnClickListener { testDownload() }))
+            add(getDebugItem("测试带进度下载", View.OnClickListener { testDownloadProcess() }))
+            add(getDebugItem("测试区间下载", View.OnClickListener { testDownloadRange() }))
+            add(getDebugItem("测试下载队列", View.OnClickListener { testDownloadList() }))
+            add(getDebugItem("多位置触发下载", View.OnClickListener { testDownloadMoreThanOnce() }))
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "打开应用安装界面",
                     View.OnClickListener {
                         IntentUtils.startAppSettings(
@@ -85,7 +86,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "卸载应用",
                     View.OnClickListener {
                         InstallUtils.uninstallAPP(
@@ -96,30 +97,30 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "自定义Provider安装",
                     View.OnClickListener { startDownload(INSTALL_BY_CUSTOMER) },
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "默认Provider安装",
                     View.OnClickListener { startDownload(INSTALL_BY_DEFAULT) },
                 ),
             )
-            add(DebugItemData("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))
-            add(DebugItemData("通过ZIP安装超大OBB", View.OnClickListener { testInstallOOBByBigZip() }))
-            add(DebugItemData("通过文件夹安装OBB", View.OnClickListener { testInstallOOBByFolder() }))
-            add(DebugItemData("通过文件夹安装超大OBB", View.OnClickListener { testInstallBigOOBByFolder() }))
-            add(DebugItemData("通过ZIP安装Split", View.OnClickListener { testInstallSplitByGoodZip() }))
+            add(getDebugItem("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))
+            add(getDebugItem("通过ZIP安装超大OBB", View.OnClickListener { testInstallOOBByBigZip() }))
+            add(getDebugItem("通过文件夹安装OBB", View.OnClickListener { testInstallOOBByFolder() }))
+            add(getDebugItem("通过文件夹安装超大OBB", View.OnClickListener { testInstallBigOOBByFolder() }))
+            add(getDebugItem("通过ZIP安装Split", View.OnClickListener { testInstallSplitByGoodZip() }))
             add(
-                DebugItemData(
+                getDebugItem(
                     "通过非标准Split格式的ZIP安装Split",
                     View.OnClickListener { testInstallSplitByBadZip() },
                 ),
             )
-            add(DebugItemData("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
-            add(DebugItemData("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
+            add(getDebugItem("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
+            add(getDebugItem("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
         }
     }
 

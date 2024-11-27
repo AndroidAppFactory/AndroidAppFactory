@@ -3,7 +3,7 @@ package com.bihe0832.android.common.debug.log;
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
@@ -38,19 +38,18 @@ open class DebugLogActivity : CommonListActivity() {
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
             add(CardItemForCommonList(SectionDataContent::class.java))
             add(CardItemForCommonList(DebugItemData::class.java, true))
-            add(CardItemForCommonList(DebugTipsData::class.java, true))
         }
     }
 
     protected fun getCommonLogList(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
-            add(DebugItemData("日志路径：<BR><small>${LoggerFile.getZixieFileLogPathByModule("*")}</small>"))
-            add(DebugItemData("选择并发送日志") {
+            add(getDebugItem("日志路径：<BR><small>${LoggerFile.getZixieFileLogPathByModule("*")}</small>"))
+            add(getDebugItem("选择并发送日志") {
                 isView = false
                 FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
             })
-            add(DebugItemData("选择并查看日志") {
+            add(getDebugItem("选择并查看日志") {
                 isView = true
                 FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
             })

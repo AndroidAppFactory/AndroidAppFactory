@@ -15,7 +15,9 @@ import android.view.View
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.device.DebugCurrentStorageFragment
+import com.bihe0832.android.common.debug.device.DebugStorageFragment
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
@@ -70,13 +72,22 @@ class DebugFileFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("文件及文件夹操作", View.OnClickListener { testFolder() }))
+            add(getDebugItem("文件及文件夹操作", View.OnClickListener { testFolder() }))
 
-            add(DebugItemData("文本查看器", View.OnClickListener { testEdit() }))
-            add(DebugItemData("Assets 操作", View.OnClickListener { testAssets() }))
-            add(DebugItemData("文件长度测试", View.OnClickListener { testFileLength() }))
+            add(getDebugItem("文本查看器", View.OnClickListener { testEdit() }))
             add(
-                DebugItemData(
+                getDebugFragmentItemData(
+                    "<font color ='#3AC8EF'><b>查看当前应用的存储占用情况</b></font>", DebugCurrentStorageFragment::class.java, false
+                )
+            )
+            add(
+                getDebugFragmentItemData("查看制定目录的文件大小", DebugStorageFragment::class.java)
+            )
+
+            add(getDebugItem("Assets 操作", View.OnClickListener { testAssets() }))
+            add(getDebugItem("文件长度测试", View.OnClickListener { testFileLength() }))
+            add(
+                getDebugItem(
                     "文件MD5",
                     View.OnClickListener {
                         testMD5()
@@ -85,16 +96,18 @@ class DebugFileFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "文件选择",
                     View.OnClickListener {
-                        FileSelectTools.openFileSelect(this@DebugFileFragment, ZixieContext.getZixieFolder())
+                        FileSelectTools.openFileSelect(
+                            this@DebugFileFragment, ZixieContext.getZixieFolder()
+                        )
                     },
                 ),
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "系统文件选择",
                     View.OnClickListener {
                         FileSelectTools.openAndroidFileSelect(this@DebugFileFragment, FILE_TYPE_ALL)
@@ -102,16 +115,16 @@ class DebugFileFragment : DebugEnvFragment() {
                 ),
             )
 
-            add(DebugItemData("ZIP测试", View.OnClickListener { testZIP() }))
-            add(DebugItemData("配置 Config 管理测试", View.OnClickListener { testConfig() }))
-            add(DebugItemData("Sqlite测试", View.OnClickListener { testDB() }))
-            add(DebugItemData("数据压缩解压", View.OnClickListener { testZLib() }))
-            add(DebugItemData("数据分片与合并", View.OnClickListener { testSegment() }))
-            add(DebugItemData("文件内容读写", View.OnClickListener { testReadAndWrite() }))
-            add(DebugItemData("读取共享文件内容", View.OnClickListener { share() }))
-            add(DebugItemData("创建指定大小文件", View.OnClickListener { createFile() }))
-            add(DebugItemData("修改文件指定位置内容", View.OnClickListener { modifyFile(true) }))
-            add(DebugItemData("文件指定位置插入内容", View.OnClickListener { modifyFile(false) }))
+            add(getDebugItem("ZIP测试", View.OnClickListener { testZIP() }))
+            add(getDebugItem("配置 Config 管理测试", View.OnClickListener { testConfig() }))
+            add(getDebugItem("Sqlite测试", View.OnClickListener { testDB() }))
+            add(getDebugItem("数据压缩解压", View.OnClickListener { testZLib() }))
+            add(getDebugItem("数据分片与合并", View.OnClickListener { testSegment() }))
+            add(getDebugItem("文件内容读写", View.OnClickListener { testReadAndWrite() }))
+            add(getDebugItem("读取共享文件内容", View.OnClickListener { share() }))
+            add(getDebugItem("创建指定大小文件", View.OnClickListener { createFile() }))
+            add(getDebugItem("修改文件指定位置内容", View.OnClickListener { modifyFile(true) }))
+            add(getDebugItem("文件指定位置插入内容", View.OnClickListener { modifyFile(false) }))
         }
     }
 
@@ -129,7 +142,8 @@ class DebugFileFragment : DebugEnvFragment() {
                 resultData.getData()?.let {
                     ZLog.d(LOG_TAG, "File : $it")
                     val filePath: String = it.getPath() ?: ""
-                    var tempFile = AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(filePath)
+                    var tempFile =
+                        AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(filePath)
                     var result = FileUtils.copyFile(context!!, it, File(tempFile))
                     ZLog.d(LOG_TAG, "File Copy : $result $tempFile")
                     tempFile = "/" + FileUtils.getFileName(filePath)
@@ -137,12 +151,38 @@ class DebugFileFragment : DebugEnvFragment() {
                     ZLog.d(LOG_TAG, "File Copy : $result $tempFile")
                     ZixieFileProvider.uriToFile(context!!, it)?.let { file ->
                         ZLog.d(LOG_TAG, "File Copy : $file")
-                        ZLog.d(LOG_TAG, "File Content : ${FileUtils.getFileContent(file.absolutePath)}")
+                        ZLog.d(
+                            LOG_TAG, "File Content : ${FileUtils.getFileContent(file.absolutePath)}"
+                        )
                     }
                 }
             }
         }
     }
+
+
+    /**
+     * 获取文件夹大小
+     *
+     * @param file File实例
+     * @return long
+     */
+    private fun getFolderSize(file: File): Long {
+        var size: Long = 0
+        try {
+            val fileList = file.listFiles()
+            if (fileList != null) {
+                for (i in fileList.indices) {
+                    size = if (fileList[i].isDirectory) size + getFolderSize(fileList[i])
+                    else size + fileList[i].length()
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        return size
+    }
+
 
     private fun testReadAndWrite() {
         val filePath = AAFFileWrapper.getFileTempFolder() + "test.panel"
@@ -204,14 +244,16 @@ class DebugFileFragment : DebugEnvFragment() {
         }
 
         val logPath = AAFLoggerFile.getLogPathByModuleName(AAFLoggerFile.MODULE_UPDATE)
-        FileUtils.copyFile(File(logPath), File(AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(logPath)))
-                .let {
-                    ZLog.d(LOG_TAG, "===============$it==================")
-                }
-
-        FileUtils.copyDirectory(File(logPath).parentFile, File(AAFFileWrapper.getFileTempFolder())).let {
+        FileUtils.copyFile(
+            File(logPath), File(AAFFileWrapper.getFileTempFolder() + FileUtils.getFileName(logPath))
+        ).let {
             ZLog.d(LOG_TAG, "===============$it==================")
         }
+
+        FileUtils.copyDirectory(File(logPath).parentFile, File(AAFFileWrapper.getFileTempFolder()))
+            .let {
+                ZLog.d(LOG_TAG, "===============$it==================")
+            }
     }
 
     private fun testMD5() {
@@ -383,8 +425,13 @@ class DebugFileFragment : DebugEnvFragment() {
             ZLog.d(LOG_TAG, "DataSegment 源数据 分片数量:${it.size}")
             ZLog.d(LOG_TAG, "DataSegment 源数据 首片长度:${it.firstOrNull()?.content?.size}")
             ZLog.d(
-                LOG_TAG,
-                "DataSegment 源数据 首片数据:${String(Base64.encode(it.firstOrNull()?.content, Base64.NO_WRAP))}"
+                LOG_TAG, "DataSegment 源数据 首片数据:${
+                    String(
+                        Base64.encode(
+                            it.firstOrNull()?.content, Base64.NO_WRAP
+                        )
+                    )
+                }"
             )
         }
         val data = mutableListOf<DataSegment>().apply {
@@ -397,18 +444,19 @@ class DebugFileFragment : DebugEnvFragment() {
             ZLog.d(LOG_TAG, "DataSegment 乱序后 分片数量:${it.size}")
             ZLog.d(LOG_TAG, "DataSegment 乱序后 首片长度:${it.firstOrNull()?.content?.size}")
             ZLog.d(
-                LOG_TAG,
-                "DataSegment 乱序后 首片数据:${String(Base64.encode(it.firstOrNull()?.content, Base64.NO_WRAP))}"
+                LOG_TAG, "DataSegment 乱序后 首片数据:${
+                    String(
+                        Base64.encode(
+                            it.firstOrNull()?.content, Base64.NO_WRAP
+                        )
+                    )
+                }"
             )
 
         }
         ZLog.d(LOG_TAG, "=============================")
         return DataSegmentTools.mergeDataSegment(
-            dataKey,
-            data,
-            totalLength,
-            MD5.MESSAGE_DIGEST_TYPE_MD5,
-            signatureValue
+            dataKey, data, totalLength, MD5.MESSAGE_DIGEST_TYPE_MD5, signatureValue
         )
     }
 
@@ -423,18 +471,30 @@ class DebugFileFragment : DebugEnvFragment() {
             ZLog.d(LOG_TAG, "testSegment 再次合并后数据： " + String(it))
         }
         val compres = CompressionUtils.compress(text.toByteArray())
-        ZLog.d(LOG_TAG, "testSegment CompressionUtils compres 前后： " + compres.size + " : " + text.toByteArray().size)
+        ZLog.d(
+            LOG_TAG,
+            "testSegment CompressionUtils compres 前后： " + compres.size + " : " + text.toByteArray().size
+        )
         testSegment("key2", compres, 40)?.let {
             ZLog.d(
-                LOG_TAG,
-                "testSegment CompressionUtils 再次合并后解压数据： " + String(CompressionUtils.uncompress(it))
+                LOG_TAG, "testSegment CompressionUtils 再次合并后解压数据： " + String(
+                    CompressionUtils.uncompress(
+                        it
+                    )
+                )
             )
         }
 
         val gizpData = GzipUtils.compress(text)
-        ZLog.d(LOG_TAG, "testSegment GzipUtils compres 前后： " + gizpData.size + " : " + text.toByteArray().size)
+        ZLog.d(
+            LOG_TAG,
+            "testSegment GzipUtils compres 前后： " + gizpData.size + " : " + text.toByteArray().size
+        )
         testSegment("key3", gizpData, 40)?.let {
-            ZLog.d(LOG_TAG, "testSegment GzipUtils 再次合并后解压数据： " + GzipUtils.uncompressToString(it))
+            ZLog.d(
+                LOG_TAG,
+                "testSegment GzipUtils 再次合并后解压数据： " + GzipUtils.uncompressToString(it)
+            )
         }
     }
 
@@ -475,14 +535,30 @@ class DebugFileFragment : DebugEnvFragment() {
             add((1024 * 1204 * 3.514f).toInt())
             for (i in 0..5) {
                 add(MathUtils.getRandNumByLimit(0, FileUtils.SPACE_KB.toInt()))
-                add(MathUtils.getRandNumByLimit(FileUtils.SPACE_KB.toInt(), FileUtils.SPACE_MB.toInt()))
-                add(MathUtils.getRandNumByLimit(FileUtils.SPACE_MB.toInt(), FileUtils.SPACE_GB.toInt()))
+                add(
+                    MathUtils.getRandNumByLimit(
+                        FileUtils.SPACE_KB.toInt(), FileUtils.SPACE_MB.toInt()
+                    )
+                )
+                add(
+                    MathUtils.getRandNumByLimit(
+                        FileUtils.SPACE_MB.toInt(), FileUtils.SPACE_GB.toInt()
+                    )
+                )
             }
         }.forEach {
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 0)}")
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 1)}")
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 2)}")
-            ZLog.d("AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 3)}")
+            ZLog.d(
+                "AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 0)}"
+            )
+            ZLog.d(
+                "AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 1)}"
+            )
+            ZLog.d(
+                "AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 2)}"
+            )
+            ZLog.d(
+                "AAF", "File length:$it and format to : ${FileUtils.getFileLength(it.toLong(), 3)}"
+            )
 
         }
     }
@@ -503,18 +579,50 @@ class DebugFileFragment : DebugEnvFragment() {
         var datas = "zixie".encodeToByteArray()
 
         ZLog.d("AAF", "File create:${FileUtils.createFile(file.absolutePath, fileLength)}")
-        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 50L, datas, replace)}")
+        ZLog.d(
+            "AAF", "File writeDataToFile:${
+                FileUtils.writeDataToFile(
+                    file.absolutePath, 50L, datas, replace
+                )
+            }"
+        )
         readFile(file)
-        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 98L, datas, replace)}")
+        ZLog.d(
+            "AAF", "File writeDataToFile:${
+                FileUtils.writeDataToFile(
+                    file.absolutePath, 98L, datas, replace
+                )
+            }"
+        )
         readFile(file)
-        ZLog.d("AAF", "File writeDataToFile:${FileUtils.writeDataToFile(file.absolutePath, 200L, datas, replace)}")
+        ZLog.d(
+            "AAF", "File writeDataToFile:${
+                FileUtils.writeDataToFile(
+                    file.absolutePath, 200L, datas, replace
+                )
+            }"
+        )
         readFile(file)
     }
 
     fun readFile(file: File) {
-        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 50L, 5))}")
-        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 98L, 5))}")
-        ZLog.d("AAF", "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 200L, 5))}")
+        ZLog.d(
+            "AAF",
+            "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 50L, 5))}"
+        )
+        ZLog.d(
+            "AAF",
+            "File readDataFromFile:${String(FileUtils.readDataFromFile(file.absolutePath, 98L, 5))}"
+        )
+        ZLog.d(
+            "AAF", "File readDataFromFile:${
+                String(
+                    FileUtils.readDataFromFile(
+                        file.absolutePath, 200L, 5
+                    )
+                )
+            }"
+        )
         ZLog.d("AAF", "File readDataFromFile:${file.length()}")
 
     }

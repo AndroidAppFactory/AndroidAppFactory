@@ -14,6 +14,7 @@ import android.content.Intent
 import android.view.View
 import androidx.work.WorkerParameters
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.block.task.priority.PriorityBlockTaskManager
@@ -36,36 +37,36 @@ class DebugEnqueueFragment : DebugEnvFragment() {
     private val mTaskQueue = PriorityBlockTaskManager()
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("定时任务测试", View.OnClickListener { testTask() }))
-            add(DebugItemData("开启单次任务", View.OnClickListener { startOneTimeWork() }))
-            add(DebugItemData("开启单次延迟任务", View.OnClickListener { startOneTimeDelayWork() }))
-            add(DebugItemData("开启重复任务", View.OnClickListener { startRepeatUniqueWork() }))
-            add(DebugItemData("取消任务", View.OnClickListener { cancelUniqueWork() }))
-            add(DebugItemData("定时计数任务(自动结束)", View.OnClickListener { testTimerProcess(true) }))
-            add(DebugItemData("定时计数任务(延迟结束)", View.OnClickListener { testTimerProcess(false) }))
+            add(getDebugItem("定时任务测试", View.OnClickListener { testTask() }))
+            add(getDebugItem("开启单次任务", View.OnClickListener { startOneTimeWork() }))
+            add(getDebugItem("开启单次延迟任务", View.OnClickListener { startOneTimeDelayWork() }))
+            add(getDebugItem("开启重复任务", View.OnClickListener { startRepeatUniqueWork() }))
+            add(getDebugItem("取消任务", View.OnClickListener { cancelUniqueWork() }))
+            add(getDebugItem("定时计数任务(自动结束)", View.OnClickListener { testTimerProcess(true) }))
+            add(getDebugItem("定时计数任务(延迟结束)", View.OnClickListener { testTimerProcess(false) }))
 
-            add(DebugItemData("添加中优先级任务", View.OnClickListener {
+            add(getDebugItem("添加中优先级任务", View.OnClickListener {
                 num++
                 mTaskQueue.add(LogTask("DEFAULT：$num").apply {
                     setPriority(0)
                 })
 
             }))
-            add(DebugItemData("添加低优先级任务", View.OnClickListener {
+            add(getDebugItem("添加低优先级任务", View.OnClickListener {
                 num++
                 mTaskQueue.add(LogTask("LOW：$num").apply {
                     setPriority(-1)
                 })
 
             }))
-            add(DebugItemData("添加高优先级任务", View.OnClickListener {
+            add(getDebugItem("添加高优先级任务", View.OnClickListener {
                 num++
                 mTaskQueue.add(LogTask("HIGH：$num").apply {
                     setPriority(5)
                 })
 
             }))
-            add(DebugItemData("添加递增高优先级任务", View.OnClickListener {
+            add(getDebugItem("添加递增高优先级任务", View.OnClickListener {
                 num++
                 mTaskQueue.add(LogTask("HIGH：$num").apply {
                     setPriority(num)

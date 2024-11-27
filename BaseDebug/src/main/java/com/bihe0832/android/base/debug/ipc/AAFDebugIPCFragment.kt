@@ -11,6 +11,7 @@ package com.bihe0832.android.base.debug.ipc
 
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
@@ -22,12 +23,12 @@ class AAFDebugIPCFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
 
             add(
-                    DebugItemData(
+                    getDebugItem(
                             "多进程",
                             View.OnClickListener { startActivityWithException(TestIPCActivity::class.java) })
             )
             add(
-                    DebugItemData(
+                    getDebugItem(
                             "多进程1",
                             View.OnClickListener { startActivityWithException(TestIPC1Activity::class.java) })
             )

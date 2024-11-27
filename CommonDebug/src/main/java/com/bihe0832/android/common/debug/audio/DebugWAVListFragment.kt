@@ -14,7 +14,8 @@ import android.view.View
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.audio.card.AudioData
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.framework.file.AAFFileWrapper
@@ -45,9 +46,9 @@ open class DebugWAVListFragment : DebugEnvFragment() {
                 }<BR>" +
                         "2. <b><font color='#3AC8EF'>长按</font>图标</b>，可以删除音频，<b><font color='#3AC8EF'>长按</font>标题和内容</b>，可以发送音频"
 
-            add(DebugTipsData(tips))
+            add(getTipsItem(tips))
             add(
-                DebugItemData(
+                getDebugItem(
                     "<font color ='#3AC8EF'><b>点击切换识别时是否播放，当前：$isPlay</b></font>"
                 ) {
                     isPlay = !isPlay
@@ -55,7 +56,7 @@ open class DebugWAVListFragment : DebugEnvFragment() {
                 }
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "<font color ='#3AC8EF'><b>点击切换要查看的音频目录</b></font>"
                 ) { FileSelectTools.openFileSelect(this@DebugWAVListFragment, folder) }
             )

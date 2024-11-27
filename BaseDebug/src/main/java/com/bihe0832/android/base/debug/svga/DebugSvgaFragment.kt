@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.svga.*
 import com.bihe0832.android.framework.ZixieContext
@@ -66,11 +67,11 @@ class DebugSvgaFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("加载SDCard SVGA", View.OnClickListener { loadAssetsAnimation() }))
-            add(DebugItemData("加载Assets SVGA", View.OnClickListener { loadAssetsAnimation() }))
-            add(DebugItemData("加载网络 SVGA", View.OnClickListener { loadHttpAnimation() }))
-            add(DebugItemData("返回 SVGA 的指定内容的点击", View.OnClickListener { loadDynamicClickAnimation() }))
-            add(DebugItemData("替换 SVGA 的指定内容", View.OnClickListener { loadDynamicAnimation() }))
+            add(getDebugItem("加载SDCard SVGA", View.OnClickListener { loadAssetsAnimation() }))
+            add(getDebugItem("加载Assets SVGA", View.OnClickListener { loadAssetsAnimation() }))
+            add(getDebugItem("加载网络 SVGA", View.OnClickListener { loadHttpAnimation() }))
+            add(getDebugItem("返回 SVGA 的指定内容的点击", View.OnClickListener { loadDynamicClickAnimation() }))
+            add(getDebugItem("替换 SVGA 的指定内容", View.OnClickListener { loadDynamicAnimation() }))
         }
     }
 

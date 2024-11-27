@@ -2,7 +2,6 @@ package com.bihe0832.android.base.debug.media.photos
 
 import android.Manifest
 import android.app.Activity
-import android.app.Fragment
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -10,7 +9,8 @@ import com.bihe0832.android.common.crop.CropUtils
 import com.bihe0832.android.common.crop.constants.CropConstants
 import com.bihe0832.android.common.crop.view.OverlayView
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.common.photos.choosePhoto
 import com.bihe0832.android.common.photos.cropPhoto
@@ -40,9 +40,9 @@ class DebugPhotosFragment : DebugCommonFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugTipsData("当前图片地址： "))
+            add(getTipsItem("当前图片地址： "))
             add(
-                DebugItemData(
+                getDebugItem(
                     "调试中临时申请指定权限",
                     View.OnClickListener {
                         requestPermissionForDebug(
@@ -54,7 +54,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "AAF 裁剪",
                     View.OnClickListener {
                         needCrop = false
@@ -65,7 +65,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
 
                 )
             add(
-                DebugItemData(
+                getDebugItem(
                     "仅拍照",
                     View.OnClickListener {
                         needCrop = false
@@ -76,7 +76,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "拍照并系统裁剪",
                     View.OnClickListener {
                         needCrop = true
@@ -87,7 +87,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "拍照并AAF裁剪",
                     View.OnClickListener {
                         needCrop = false
@@ -98,7 +98,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "选择图片",
                     View.OnClickListener {
                         needCrop = false
@@ -108,7 +108,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "选择视频",
                     View.OnClickListener {
                         needCrop = false
@@ -118,7 +118,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "选择图片或者视频",
                     View.OnClickListener {
                         needCrop = false
@@ -128,7 +128,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "选择并系统裁剪",
                     View.OnClickListener {
                         needCrop = true
@@ -138,7 +138,7 @@ class DebugPhotosFragment : DebugCommonFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "选择并AAF裁剪",
                     View.OnClickListener {
                         needCrop = false

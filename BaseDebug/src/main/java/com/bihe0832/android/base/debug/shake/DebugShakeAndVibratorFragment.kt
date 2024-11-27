@@ -4,6 +4,7 @@ import android.app.Service
 import android.os.Vibrator
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -28,8 +29,8 @@ class DebugShakeAndVibratorFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("开启摇一摇", View.OnClickListener { ShakeManager.start() }))
-            add(DebugItemData("关闭摇一摇", View.OnClickListener { ShakeManager.stop() }))
+            add(getDebugItem("开启摇一摇", View.OnClickListener { ShakeManager.start() }))
+            add(getDebugItem("关闭摇一摇", View.OnClickListener { ShakeManager.stop() }))
         }
     }
 }

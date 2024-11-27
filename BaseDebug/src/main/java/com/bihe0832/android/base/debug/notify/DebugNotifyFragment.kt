@@ -5,6 +5,7 @@ import com.bihe0832.android.app.api.AAFNetWorkApi.LOG_TAG
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
@@ -17,11 +18,11 @@ class DebugNotifyFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("是否开启通知", View.OnClickListener { AAFPermissionManager.hasNotifyPermission() }))
-            add(DebugItemData("打开通知设置", View.OnClickListener { AAFPermissionManager.openNotifyPermission() }))
-            add(DebugItemData("普通通知", View.OnClickListener { testNotify() }))
-            add(DebugItemData("可刷新通知", View.OnClickListener { testRefreshNotify() }))
-            add(DebugItemData("下载通知", View.OnClickListener { testNotifyProcess() }))
+            add(getDebugItem("是否开启通知", View.OnClickListener { AAFPermissionManager.hasNotifyPermission() }))
+            add(getDebugItem("打开通知设置", View.OnClickListener { AAFPermissionManager.openNotifyPermission() }))
+            add(getDebugItem("普通通知", View.OnClickListener { testNotify() }))
+            add(getDebugItem("可刷新通知", View.OnClickListener { testRefreshNotify() }))
+            add(getDebugItem("下载通知", View.OnClickListener { testNotifyProcess() }))
 
         }
     }

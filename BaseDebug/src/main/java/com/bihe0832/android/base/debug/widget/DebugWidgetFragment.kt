@@ -17,6 +17,7 @@ import android.content.Intent
 import android.view.View
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail
 import com.bihe0832.android.framework.ZixieContext
@@ -40,9 +41,9 @@ class DebugWidgetFragment : DebugEnvFragment() {
     var permissionDialog: PermissionDialog? = null
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("简单测试函数", View.OnClickListener { testFunc() }))
+            add(getDebugItem("简单测试函数", View.OnClickListener { testFunc() }))
             add(
-                DebugItemData(
+                getDebugItem(
                     "Activity使用系统选择并添加Widget到桌面",
                     View.OnClickListener {
                         WidgetTools.pickWidget(activity!!, ZixieActivityRequestCode.SELECT_WIDGET)
@@ -51,7 +52,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "Fragment使用系统选择并添加Widget到桌面",
                     View.OnClickListener {
                         WidgetTools.pickWidget(this@DebugWidgetFragment, ZixieActivityRequestCode.SELECT_WIDGET)
@@ -59,7 +60,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "使用AAF选择并添加Widget到桌面",
                     View.OnClickListener {
                         WidgetTools.pickWidget(context!!)
@@ -67,7 +68,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "刷新指定Widget信息",
                     View.OnClickListener {
                         WidgetUpdateManager.updateWidget(
@@ -80,7 +81,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "刷新所有Widget信息",
                     View.OnClickListener {
                         WidgetUpdateManager.updateAllWidgets(context!!)
@@ -89,7 +90,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "获取当前应用的所有Widget信息",
                     View.OnClickListener {
                         val widgetProviders: List<AppWidgetProviderInfo> = mAppWidgetManager.getInstalledProviders()
@@ -107,7 +108,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "添加Widget到桌面",
                     View.OnClickListener {
                         WidgetTools.addWidgetToHome(activity!!, AAFDebugWidgetProviderDetail::class.java)
@@ -115,7 +116,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "添加Widget到桌面(检查权限)",
                     View.OnClickListener {
                         addWidgetWithPermission()
@@ -125,7 +126,7 @@ class DebugWidgetFragment : DebugEnvFragment() {
 
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "启动Service",
                     View.OnClickListener {
                         val intent = Intent()
