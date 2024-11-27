@@ -3,10 +3,8 @@ package com.bihe0832.android.common.debug.item
 import android.view.View
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
-import com.bihe0832.android.common.debug.log.SectionDataContent.ItemOnClickListener
 import com.bihe0832.android.framework.ZixieContext.applicationContext
 import com.bihe0832.android.framework.router.RouterAction
-import com.bihe0832.android.lib.debug.DebugTools
 
 
 /**
@@ -36,6 +34,8 @@ private fun getItem(content: String, isTips: Boolean): DebugItemData {
         null,
         DebugItemData.DEFAULT_TEXT_SIZE_DP,
         getTextColor(isTips),
+        isTips,
+        !isTips,
         DebugItemData.DEFAULT_PADDING_SIZE_DP,
         getBackGroundColor(isTips),
         true
@@ -61,6 +61,8 @@ private fun getItem(
         null,
         DebugItemData.DEFAULT_TEXT_SIZE_DP,
         getTextColor(isTips),
+        isTips,
+        !isTips,
         DebugItemData.DEFAULT_PADDING_SIZE_DP,
         getBackGroundColor(isTips),
         true
@@ -75,50 +77,30 @@ fun getDebugItem(content: String, listener: View.OnClickListener?): DebugItemDat
     return getItem(content, listener, false)
 }
 
-private fun getItem(
+
+private fun getInfoItem(
     content: String,
     listener: View.OnClickListener?,
-    longClickListener: View.OnLongClickListener,
+    longClickListener: View.OnLongClickListener?,
     isTips: Boolean
 ): DebugItemData {
     return DebugItemData(
         content,
         listener,
         longClickListener,
-        DebugItemData.DEFAULT_TEXT_SIZE_DP,
-        getTextColor(isTips),
-        DebugItemData.DEFAULT_PADDING_SIZE_DP,
-        getBackGroundColor(isTips),
-        true
-    )
-}
-
-
-fun BaseDebugListFragment.getRouterItem(content: String): DebugItemData {
-    return getItem(content, { RouterAction.openFinalURL(content) },{
-        showInfo("复制并分享路由地址", content)
-        true
-    }, false)
-}
-
-
-private fun getInfoItem(
-    content: String,
-    listener: View.OnClickListener?,
-    isTips: Boolean
-): DebugItemData {
-    return DebugItemData(
-        content,
-        listener,
-        null,
         10,
         getTextColor(isTips),
+        isTips,
+        !isTips,
         12,
         getBackGroundColor(isTips),
         true
     )
 }
 
-fun getDebugInfoItem(content: String, listener: View.OnClickListener?): DebugItemData {
-    return getInfoItem(content, listener, false)
+fun BaseDebugListFragment.getRouterItem(content: String): DebugItemData {
+    return getInfoItem(content, { RouterAction.openFinalURL(content) }, {
+        showInfo("复制并分享路由地址", content)
+        true
+    }, false)
 }

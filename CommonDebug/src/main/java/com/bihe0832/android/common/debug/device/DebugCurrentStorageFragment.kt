@@ -8,14 +8,14 @@
 
 package com.bihe0832.android.common.debug.device
 
-import com.bihe0832.android.common.debug.item.getDebugInfoItem
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
-import com.bihe0832.android.lib.utils.apk.AppStorageUtil
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.apk.AppStorageUtil
 
 open class DebugCurrentStorageFragment : DebugEnvFragment() {
     private var needSort = true
@@ -26,7 +26,7 @@ open class DebugCurrentStorageFragment : DebugEnvFragment() {
         val itemContent = entry.key.replace(
             context!!.packageName, "包名"
         ) + " ：<b>${FileUtils.getFileLength(entry.value)}</b>"
-        return getDebugInfoItem(
+        return getDebugItem(
             itemContent,
         ) { showInfo("应用调试信息", itemContent) }
     }
