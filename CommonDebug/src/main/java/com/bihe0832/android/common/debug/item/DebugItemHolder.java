@@ -1,6 +1,8 @@
 package com.bihe0832.android.common.debug.item;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.TextUtils.TruncateAt;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -35,6 +37,18 @@ public class DebugItemHolder extends CardBaseHolder {
         mHeader.setText(TextFactoryUtils.getSpannedTextByHtml(data.mContentText));
         mHeader.setTextSize(TypedValue.COMPLEX_UNIT_DIP, data.textSizeDP);
         mHeader.setTextColor(data.textColor);
+        if (data.isBold) {
+            mHeader.setTypeface(null, Typeface.BOLD);
+        } else {
+            mHeader.setTypeface(null, Typeface.NORMAL);
+        }
+        if (data.isSingleLine) {
+            mHeader.setSingleLine(true);
+            mHeader.setEllipsize(TruncateAt.END);
+        } else {
+            mHeader.setSingleLine(false);
+            mHeader.setEllipsize(null);
+        }
         mHeader.setPadding(DisplayUtil.dip2px(getContext(), 16), DisplayUtil.dip2px(getContext(), data.paddingDp),
                 DisplayUtil.dip2px(getContext(), 16), DisplayUtil.dip2px(getContext(), data.paddingDp));
         if (null != data.mListener) {

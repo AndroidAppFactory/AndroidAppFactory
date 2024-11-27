@@ -19,6 +19,8 @@ public class DebugItemData extends CardBaseModule {
     public View.OnLongClickListener mLongClickListener = null;
     public int backgroundColor = Color.WHITE;
     public int textColor = Color.BLACK;
+    public boolean isSingleLine = true;
+    public boolean isBold = false;
     public boolean showBottomLine = true;
     public int textSizeDP = DEFAULT_TEXT_SIZE_DP;
     public int paddingDp = DEFAULT_PADDING_SIZE_DP;
@@ -28,13 +30,16 @@ public class DebugItemData extends CardBaseModule {
     }
 
     public DebugItemData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener,
-            int textSizeDP, int textColor, int paddingDp, int background, boolean showBottomLine) {
+            int textSizeDP, int textColor, boolean isBold, boolean isSingleLine, int paddingDp, int background,
+            boolean showBottomLine) {
         this.mContentText = content;
         this.mListener = listener;
         this.mLongClickListener = longClickListener;
         this.textSizeDP = textSizeDP;
-        this.paddingDp = paddingDp;
         this.textColor = textColor;
+        this.isSingleLine = isSingleLine;
+        this.isBold = isBold;
+        this.paddingDp = paddingDp;
         this.backgroundColor = background;
         this.showBottomLine = showBottomLine;
     }
