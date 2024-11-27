@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
@@ -19,7 +20,7 @@ class DebugWebViewFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("打开指定Web页面", View.OnClickListener {
+            add(getDebugItem("打开指定Web页面", View.OnClickListener {
                 showInputDialog("打开指定Web页面", "请在输入框输入网页地址后点击“确定”", lastUrl,
                     DialogCompletedStringCallback { result: String ->
                         try {
@@ -33,14 +34,14 @@ class DebugWebViewFragment : BaseDebugListFragment() {
                         }
                     })
             }))
-            add(DebugItemData("原生内核打开JSbridge调试页面", View.OnClickListener { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
-            add(DebugItemData("原生内核打开TBS调试页面", View.OnClickListener { openWeb("http://debugtbs.qq.com/") }))
-            add(DebugItemData("原生内核打开本地调试页", View.OnClickListener { openWeb("file:///android_asset/index.html") }))
-            add(DebugItemData("X5内核打开JSbridge调试页面", View.OnClickListener { openTBSWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
-            add(DebugItemData("X5内核打开TBS调试页面", View.OnClickListener { openTBSWeb("http://debugtbs.qq.com/") }))
-            add(DebugItemData("X5内核打开本地调试页", View.OnClickListener { openTBSWeb("file:///android_asset/index.html") }))
-            add(DebugItemData("H5与原生混排Demo", View.OnClickListener { startDebugActivity(DebugH5NativeWebFragment::class.java) }))
-            add(DebugItemData("H5与原生混排实践", View.OnClickListener { startDebugActivity(DebugWebViewWithNativeFragment::class.java) }))
+            add(getDebugItem("原生内核打开JSbridge调试页面", View.OnClickListener { openWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
+            add(getDebugItem("原生内核打开TBS调试页面", View.OnClickListener { openWeb("http://debugtbs.qq.com/") }))
+            add(getDebugItem("原生内核打开本地调试页", View.OnClickListener { openWeb("file:///android_asset/index.html") }))
+            add(getDebugItem("X5内核打开JSbridge调试页面", View.OnClickListener { openTBSWeb("https://microdemo.bihe0832.com/jsbridge/index.html") }))
+            add(getDebugItem("X5内核打开TBS调试页面", View.OnClickListener { openTBSWeb("http://debugtbs.qq.com/") }))
+            add(getDebugItem("X5内核打开本地调试页", View.OnClickListener { openTBSWeb("file:///android_asset/index.html") }))
+            add(getDebugItem("H5与原生混排Demo", View.OnClickListener { startDebugActivity(DebugH5NativeWebFragment::class.java) }))
+            add(getDebugItem("H5与原生混排实践", View.OnClickListener { startDebugActivity(DebugWebViewWithNativeFragment::class.java) }))
 
         }
     }

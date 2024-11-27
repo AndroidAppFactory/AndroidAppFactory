@@ -6,6 +6,8 @@ import android.widget.TextView
 import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
@@ -69,14 +71,21 @@ open class BaseDebugListFragment : CommonListFragment() {
         }
     }
 
-    fun getDebugFragmentItemData(content: String, clazz: Class<*>): DebugItemData {
-        return DebugItemData(content) { startDebugActivity(clazz, content) }
-
+    fun getDebugFragmentItemData(
+        content: String,
+        clazz: Class<*>,
+        isTips: Boolean = false
+    ): DebugItemData {
+        return if (isTips) {
+            getTipsItem(content) { startDebugActivity(clazz, content) }
+        } else {
+            getDebugItem(content) { startDebugActivity(clazz, content) }
+        }
     }
 
     open fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("test"))
+            add(getDebugItem("test"))
         }
     }
 
@@ -100,11 +109,16 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugUtils.showInfoWithHTML(context, title, content)
     }
 
-    protected fun showInfo(title: String, content: String) {
+    public fun showInfo(title: String, content: String) {
         DebugUtils.showInfo(context, title, content)
     }
 
-    fun showInputDialog(titleName: String, msg: String, defaultValue: String, listener: DialogCompletedStringCallback) {
+    fun showInputDialog(
+        titleName: String,
+        msg: String,
+        defaultValue: String,
+        listener: DialogCompletedStringCallback
+    ) {
         DebugUtils.showInputDialog(context, titleName, msg, defaultValue, listener)
     }
 

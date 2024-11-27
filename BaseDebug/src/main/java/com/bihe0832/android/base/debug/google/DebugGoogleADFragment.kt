@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -53,19 +54,19 @@ class DebugGoogleADFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("预加载广告", View.OnClickListener {
+            add(getDebugItem("预加载广告", View.OnClickListener {
                 preloadAD()
             }))
 
-            add(DebugItemData("展示插屏广告", View.OnClickListener {
+            add(getDebugItem("展示插屏广告", View.OnClickListener {
                 showInterstitialAd()
 
             }))
-            add(DebugItemData("激励视频广告", View.OnClickListener {
+            add(getDebugItem("激励视频广告", View.OnClickListener {
                 showRewardedAd()
             }))
 
-            add(DebugItemData("插屏激励视频广告", View.OnClickListener {
+            add(getDebugItem("插屏激励视频广告", View.OnClickListener {
                 showRewardedInterstitialAd()
             }))
         }

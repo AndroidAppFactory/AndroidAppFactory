@@ -16,6 +16,7 @@ import com.bihe0832.android.common.accessibility.action.AAFAccessibilityDispatch
 import com.bihe0832.android.common.accessibility.action.AAFAccessibilityManager
 import com.bihe0832.android.common.accessibility.view.PositionIcon
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -28,14 +29,14 @@ class DebugFloatViewFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("展示悬浮窗", View.OnClickListener { showIcon() }))
-            add(DebugItemData("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
-            add(DebugItemData("展示定位Icon", View.OnClickListener { showPosition() }))
-            add(DebugItemData("开启无障碍", View.OnClickListener { AAFAccessibilityManager.openSettings(context!!) }))
-            add(DebugItemData("模拟点击指定位置", View.OnClickListener {
+            add(getDebugItem("展示悬浮窗", View.OnClickListener { showIcon() }))
+            add(getDebugItem("隐藏悬浮窗", View.OnClickListener { hideIcon() }))
+            add(getDebugItem("展示定位Icon", View.OnClickListener { showPosition() }))
+            add(getDebugItem("开启无障碍", View.OnClickListener { AAFAccessibilityManager.openSettings(context!!) }))
+            add(getDebugItem("模拟点击指定位置", View.OnClickListener {
                 AAFAccessibilityDispatcher.doClickAction(LOG_TAG, null)
             }))
-            add(DebugItemData("模拟点击测试反馈", View.OnClickListener {
+            add(getDebugItem("模拟点击测试反馈", View.OnClickListener {
                 ZixieContext.showWaiting() }))
 
         }

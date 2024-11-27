@@ -3,12 +3,12 @@ package com.bihe0832.android.common.debug.module
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
+import com.bihe0832.android.common.debug.device.DebugDeviceFragment
+import com.bihe0832.android.common.debug.device.getMobileInfo
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.DebugTipsData
+import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.log.DebugLogActivity
-import com.bihe0832.android.common.permission.AAFPermissionManager
-import com.bihe0832.android.common.permission.PermissionResultOfAAF
-import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -20,8 +20,6 @@ import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_APP_FIRST
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_VERSION_FIRST
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
-import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
@@ -31,19 +29,19 @@ open class DebugCommonFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugTipsData("APPFactory的通用组件和工具"))
-            add(DebugItemData("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
-            add(DebugItemData("查看使用情况", View.OnClickListener { showUsedInfo() }))
+            add(getTipsItem("APPFactory的通用组件和工具"))
+            add(getDebugItem("查看应用版本及环境", View.OnClickListener { showAPPInfo() }))
+            add(getDebugItem("查看使用情况", View.OnClickListener { showUsedInfo() }))
             add(
-                DebugItemData(
+                getDebugItem(
                     "查看设备概要信息",
                     View.OnClickListener { showInfoWithHTML("设备概要信息", getMobileInfo(context)) },
                 ),
             )
             add(getDebugFragmentItemData("查看设备详细信息", DebugDeviceFragment::class.java))
-            add(DebugItemData("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
+            add(getDebugItem("查看第三方应用信息", View.OnClickListener { showOtherAPPInfo() }))
             add(
-                DebugItemData(
+                getDebugItem(
                     "<font color ='#3AC8EF'><b>日志管理</b></font>",
                     View.OnClickListener {
                         showLog()
@@ -51,23 +49,23 @@ open class DebugCommonFragment : DebugEnvFragment() {
                 ),
             )
             add(
-                DebugItemData("打开开发者模式") {
+                getDebugItem("打开开发者模式") {
                     IntentUtils.startSettings(context, Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)
                 },
             )
             add(
-                DebugItemData("打开应用设置") {
+                getDebugItem("打开应用设置") {
                     IntentUtils.startAppDetailSettings(context)
                 },
             )
             add(
-                DebugItemData("清除缓存") {
+                getDebugItem("清除缓存") {
                     FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
                     ZixieContext.restartApp()
                 },
             )
             add(
-                DebugItemData("清除用户信息授权") {
+                getDebugItem("清除用户信息授权") {
                     AgreementPrivacy.resetPrivacy()
                     ZixieContext.restartApp()
                 },

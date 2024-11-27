@@ -8,6 +8,7 @@ import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.common.message.list.card.MessageItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -24,14 +25,14 @@ class DebugMessageFragment : BaseDebugListFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("初始化并拉取公告", View.OnClickListener { testTrace() }))
-            add(DebugItemData("打开消息详情页(Fragment)", View.OnClickListener {
+            add(getDebugItem("初始化并拉取公告", View.OnClickListener { testTrace() }))
+            add(getDebugItem("打开消息详情页(Fragment)", View.OnClickListener {
                 startDebugActivity(AAFMessageListFragment::class.java)
             }))
-            add(DebugItemData("打开消息详情页(Activity)", View.OnClickListener {
+            add(getDebugItem("打开消息详情页(Activity)", View.OnClickListener {
                 RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
             }))
-            add(DebugItemData("测试消息样式", View.OnClickListener {
+            add(getDebugItem("测试消息样式", View.OnClickListener {
                 testMsg()
             }))
 

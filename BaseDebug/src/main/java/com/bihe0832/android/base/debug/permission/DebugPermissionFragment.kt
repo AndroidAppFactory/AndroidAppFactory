@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
@@ -17,14 +18,14 @@ class DebugPermissionFragment : DebugCommonFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
-            add(DebugItemData("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
-            add(DebugItemData("通用权限弹框V2", View.OnClickListener { testCommonPermissionV2(activity) }))
-            add(DebugItemData("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
-            add(DebugItemData("申请通用权限（相机）", View.OnClickListener { checkCommonPermision() }))
-            add(DebugItemData("申请特殊权限（位置）", View.OnClickListener { checkSpecialPermision() }))
+            add(getDebugItem("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
+            add(getDebugItem("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
+            add(getDebugItem("通用权限弹框V2", View.OnClickListener { testCommonPermissionV2(activity) }))
+            add(getDebugItem("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
+            add(getDebugItem("申请通用权限（相机）", View.OnClickListener { checkCommonPermision() }))
+            add(getDebugItem("申请特殊权限（位置）", View.OnClickListener { checkSpecialPermision() }))
             add(
-                DebugItemData(
+                getDebugItem(
                     "调试中临时申请指定权限",
                     View.OnClickListener {
                         requestPermissionForDebug(
@@ -38,7 +39,7 @@ class DebugPermissionFragment : DebugCommonFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "查看当前自定义的权限信息",
                     View.OnClickListener { PermissionManager.logPermissionConfigInfo() },
                 ),

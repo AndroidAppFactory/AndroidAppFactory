@@ -33,22 +33,18 @@ import java.io.File;
 import java.util.Locale;
 
 /**
- * @author zixie code@bihe0832.com
- *         Created on 2020-02-30.
- *         ZixieFileProvider 提供的Provider时，可以选择自定路径或者使用库默认路径
+ * @author zixie code@bihe0832.com Created on 2020-02-30. ZixieFileProvider 提供的Provider时，可以选择自定路径或者使用库默认路径
  *         <p>
  *         如果是选择默认的路径时你需要获取库提供的provider 可以使用接口 {@link ZixieFileProvider#getZixieFileProvider(Context, File)}
  *         <p>
- *         如果是选择自定义的，
- *         需要保证文件保存地址为 {@link ZixieFileProvider#getZixieFilePath(Context)} 获取，或者
+ *         如果是选择自定义的， 需要保证文件保存地址为 {@link ZixieFileProvider#getZixieFilePath(Context)} 获取，或者
  *         使用context.getExternalFilesDir(context.getString(R.string.lib_bihe0832_file_folder))得到
  *         <p>
  *         并同步做如下操作，否则会造成获取provider失败等问题：
  *         <p>
  *         添加以下String值定义：
  *         <p>
- *         lib_bihe0832_file_folder：自定义文件目录
- *         在res/xml添加文件：file_paths.xml，内容为：
+ *         lib_bihe0832_file_folder：自定义文件目录 在res/xml添加文件：file_paths.xml，内容为：
  *         <p>
  *         <?xml version="1.0" encoding="utf-8"?>
  *         <paths>
@@ -116,8 +112,12 @@ public class ZixieFileProvider extends FileProvider {
         }
 
         String absoluteFilePath = "";
+        // context.getExternalFilesDir 返回应用的外部存储目录，适用于存储用户可见的文件
+        // 存储位置：通常位于 /storage/emulated/0/Android/data/<package_name>/files/。
         File tempFile = context.getExternalFilesDir(subPath);
         if (tempFile == null) {
+            // 描述：context.getFilesDir() 返回应用的内部存储目录,与appInfo.dataDir通常一致，适用于存储应用私有的文件。
+            // 存储位置：通常位于 /data/data/<package_name>/files/。
             absoluteFilePath = context.getFilesDir().getAbsolutePath() + File.separator + subPath;
         } else {
             absoluteFilePath = tempFile.getAbsolutePath();
@@ -264,9 +264,7 @@ public class ZixieFileProvider extends FileProvider {
     }
 
     /**
-     * 将uri转换为file
-     * uri类型为file的直接转换出路径
-     * uri类型为content的将对应的文件复制到沙盒内的cache目录下进行操作
+     * 将uri转换为file uri类型为file的直接转换出路径 uri类型为content的将对应的文件复制到沙盒内的cache目录下进行操作
      *
      * @param context 上下文
      * @param uri uri

@@ -13,6 +13,7 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.framework.file.AAFFileWrapper
@@ -53,29 +54,29 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
     private val scene = "debugRecord"
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("文字转拼音", View.OnClickListener { testPinyin() }))
-            add(DebugItemData("指定文件 WAV头 信息查看", View.OnClickListener { readWavHead(preFile()) }))
-            add(DebugItemData("空文件 WAV头 信息查看", View.OnClickListener { readWavHead(preEmpty()) }))
+            add(getDebugItem("文字转拼音", View.OnClickListener { testPinyin() }))
+            add(getDebugItem("指定文件 WAV头 信息查看", View.OnClickListener { readWavHead(preFile()) }))
+            add(getDebugItem("空文件 WAV头 信息查看", View.OnClickListener { readWavHead(preEmpty()) }))
             add(getDebugFragmentItemData("本地 WAV 查看及识别", DebugWAVWithASRListFragment::class.java))
 
-            add(DebugItemData("初始化", View.OnClickListener { init() }))
+            add(getDebugItem("初始化", View.OnClickListener { init() }))
             add(
-                DebugItemData("ARS 静音检测：结束实时识别及录制",
+                getDebugItem("ARS 静音检测：结束实时识别及录制",
                     View.OnClickListener { ASRWithEndpoint.stopRecord(context!!) })
             )
-            add(DebugItemData("ARS 实时打断", View.OnClickListener { forceEndCurrent() }))
-            add(DebugItemData("ARS 静音检测：开启录制在回调保存为文件", View.OnClickListener { startRecord() }))
-            add(DebugItemData("ARS 静音检测：开启录制在回调识别部分文区间", View.OnClickListener { testSplit() }))
-            add(DebugItemData("ARS 识别：开启录制识别静音检测回调数据", View.OnClickListener { startReal() }))
-            add(DebugItemData("ARS 识别：开启录制识别静音检测回调文件", View.OnClickListener { startRealFile() }))
+            add(getDebugItem("ARS 实时打断", View.OnClickListener { forceEndCurrent() }))
+            add(getDebugItem("ARS 静音检测：开启录制在回调保存为文件", View.OnClickListener { startRecord() }))
+            add(getDebugItem("ARS 静音检测：开启录制在回调识别部分文区间", View.OnClickListener { testSplit() }))
+            add(getDebugItem("ARS 识别：开启录制识别静音检测回调数据", View.OnClickListener { startReal() }))
+            add(getDebugItem("ARS 识别：开启录制识别静音检测回调文件", View.OnClickListener { startRealFile() }))
 
-            add(DebugItemData("ARS 识别：基于本地文件识别", View.OnClickListener { startFile(preFile()) }))
-            add(DebugItemData("WAV 录制测试：开始录制", View.OnClickListener { startWav() }))
-            add(DebugItemData("WAV 录制测试：结束录制", View.OnClickListener { stopWav() }))
-            add(DebugItemData("WAV 录制测试：录制文件开始（可同时多个）", View.OnClickListener { startWaveFile() }))
-            add(DebugItemData("WAV 录制测试：录制文件结束（关闭所有）", View.OnClickListener { stopWaveFile() }))
+            add(getDebugItem("ARS 识别：基于本地文件识别", View.OnClickListener { startFile(preFile()) }))
+            add(getDebugItem("WAV 录制测试：开始录制", View.OnClickListener { startWav() }))
+            add(getDebugItem("WAV 录制测试：结束录制", View.OnClickListener { stopWav() }))
+            add(getDebugItem("WAV 录制测试：录制文件开始（可同时多个）", View.OnClickListener { startWaveFile() }))
+            add(getDebugItem("WAV 录制测试：录制文件结束（关闭所有）", View.OnClickListener { stopWaveFile() }))
 
-            add(DebugItemData(
+            add(getDebugItem(
                 "清空本地音频临时缓存"
             ) { FileUtils.deleteDirectory(File(AAFFileWrapper.getMediaTempFolder())) })
 

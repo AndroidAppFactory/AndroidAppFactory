@@ -7,7 +7,7 @@ import android.content.Intent
 import android.widget.RemoteViews
 import androidx.work.WorkerParameters
 import com.bihe0832.android.common.debug.R
-import com.bihe0832.android.common.debug.module.DebugDeviceFragment
+import com.bihe0832.android.common.debug.device.DebugDeviceFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.getVersionCode
 import com.bihe0832.android.framework.ZixieContext.getVersionName

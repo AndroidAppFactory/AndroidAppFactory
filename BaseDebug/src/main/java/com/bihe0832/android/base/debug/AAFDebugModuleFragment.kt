@@ -49,6 +49,7 @@ import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebViewFragment
 import com.bihe0832.android.base.debug.widget.DebugWidgetFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
@@ -103,7 +104,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("SVGA 调试", DebugSvgaFragment::class.java))
             add(getDebugFragmentItemData("Cache、数据中心测试", DebugCacheFragment::class.java))
             add(
-                DebugItemData(
+                getDebugItem(
                     "沉浸式状态栏及标题栏调试",
                     View.OnClickListener {
                         startActivityWithException(DebugImmersionActivity::class.java)
@@ -116,10 +117,10 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("WebView 调试", DebugWebViewFragment::class.java))
 
 
-            add(DebugItemData("网络切换监控") { startActivityWithException(DebugNetworkActivity::class.java) })
+            add(getDebugItem("网络切换监控") { startActivityWithException(DebugNetworkActivity::class.java) })
             add(getDebugFragmentItemData("Wi-Fi 相关信息", DebugWiFiFragment::class.java))
             add(
-                DebugItemData(
+                getDebugItem(
                     "HTTP Request",
                     View.OnClickListener {
                         startActivityWithException(DebugHttpActivity::class.java)
@@ -133,7 +134,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("Intent及跳转调试", DebugListFragment::class.java))
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "列表 Activity 调试",
                     View.OnClickListener {
                         startActivityWithException(TestListActivity::class.java)

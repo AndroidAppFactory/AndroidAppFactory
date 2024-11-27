@@ -14,6 +14,7 @@ import com.bihe0832.android.base.debug.json.IntegerDebugAdapter
 import com.bihe0832.android.base.debug.json.JsonTest
 import com.bihe0832.android.base.debug.tree.TreeNode
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.gson.JsonHelper
@@ -35,19 +36,19 @@ class DebugConvertFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("JsonHelper", View.OnClickListener { testJson() }))
-            add(DebugItemData("Boolean 转化", View.OnClickListener { testConvertBoolean() }))
-            add(DebugItemData("Float 转化", View.OnClickListener { testConvertFloat() }))
-            add(DebugItemData("Int Long 与 Byte 数组转化", View.OnClickListener { testToByte() }))
+            add(getDebugItem("JsonHelper", View.OnClickListener { testJson() }))
+            add(getDebugItem("Boolean 转化", View.OnClickListener { testConvertBoolean() }))
+            add(getDebugItem("Float 转化", View.OnClickListener { testConvertFloat() }))
+            add(getDebugItem("Int Long 与 Byte 数组转化", View.OnClickListener { testToByte() }))
 
 
-            add(DebugItemData("树结构", View.OnClickListener { testTree() }))
+            add(getDebugItem("树结构", View.OnClickListener { testTree() }))
 
-            add(DebugItemData("数据百分比转化", View.OnClickListener { testPercent() }))
-            add(DebugItemData("时间数据格式化", View.OnClickListener { testFormat() }))
-            add(DebugItemData("版本号比较", View.OnClickListener { testVersion() }))
+            add(getDebugItem("数据百分比转化", View.OnClickListener { testPercent() }))
+            add(getDebugItem("时间数据格式化", View.OnClickListener { testFormat() }))
+            add(getDebugItem("版本号比较", View.OnClickListener { testVersion() }))
 
-            add(DebugItemData("坐标映射", View.OnClickListener { testPoint() }))
+            add(getDebugItem("坐标映射", View.OnClickListener { testPoint() }))
         }
     }
 

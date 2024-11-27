@@ -8,6 +8,7 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.share.DebugShareFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
@@ -48,12 +49,12 @@ class DebugDialogFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(DebugItemData("唯一弹框", View.OnClickListener { testUnique() }))
-            add(DebugItemData("根据优先级逐次弹框", View.OnClickListener { testBlock() }))
-            add(DebugItemData("根据弹框顺序弹不自动弹", View.OnClickListener { testSequence1() }))
-            add(DebugItemData("根据弹框顺序弹自动弹", View.OnClickListener { testSequence2() }))
+            add(getDebugItem("唯一弹框", View.OnClickListener { testUnique() }))
+            add(getDebugItem("根据优先级逐次弹框", View.OnClickListener { testBlock() }))
+            add(getDebugItem("根据弹框顺序弹不自动弹", View.OnClickListener { testSequence1() }))
+            add(getDebugItem("根据弹框顺序弹自动弹", View.OnClickListener { testSequence2() }))
             add(
-                DebugItemData(
+                getDebugItem(
                     "弹框顺序手动触发启动",
                     View.OnClickListener {
                         mDependenceBlockDialogManager.start()
@@ -61,9 +62,9 @@ class DebugDialogFragment : DebugEnvFragment() {
                     },
                 ),
             )
-            add(DebugItemData("弹框顺序手动触发暂停", View.OnClickListener { pause() }))
+            add(getDebugItem("弹框顺序手动触发暂停", View.OnClickListener { pause() }))
             add(
-                DebugItemData(
+                getDebugItem(
                     "弹框顺序强制重置清空",
                     View.OnClickListener {
                         reset()
@@ -71,19 +72,19 @@ class DebugDialogFragment : DebugEnvFragment() {
                 ),
             )
 
-            add(DebugItemData("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
+            add(getDebugItem("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
-            add(DebugItemData("底部Dialog", View.OnClickListener { showAlert(BottomDialog(activity!!)) }))
-            add(DebugItemData("通用弹框", View.OnClickListener { testAlert(activity!!) }))
-            add(DebugItemData("单选列表弹框", View.OnClickListener { testRadio(activity) }))
-            add(DebugItemData("自定义弹框", View.OnClickListener { testCustom(activity) }))
-            add(DebugItemData("URL图片竖弹框", View.OnClickListener { testVURLImage() }))
-            add(DebugItemData("URL图片横弹框", View.OnClickListener { testHURLImage() }))
-            add(DebugItemData("本地资源竖弹框", View.OnClickListener { testImage(activity) }))
-            add(DebugItemData("带输入弹框", View.OnClickListener { testInput(activity!!) }))
-            add(DebugItemData("进度条弹框", View.OnClickListener { testUpdate(activity) }))
-            add(DebugItemData("加载弹框", View.OnClickListener { testLoading(activity) }))
-            add(DebugItemData("唯一弹框", View.OnClickListener { testAlertTools() }))
+            add(getDebugItem("底部Dialog", View.OnClickListener { showAlert(BottomDialog(activity!!)) }))
+            add(getDebugItem("通用弹框", View.OnClickListener { testAlert(activity!!) }))
+            add(getDebugItem("单选列表弹框", View.OnClickListener { testRadio(activity) }))
+            add(getDebugItem("自定义弹框", View.OnClickListener { testCustom(activity) }))
+            add(getDebugItem("URL图片竖弹框", View.OnClickListener { testVURLImage() }))
+            add(getDebugItem("URL图片横弹框", View.OnClickListener { testHURLImage() }))
+            add(getDebugItem("本地资源竖弹框", View.OnClickListener { testImage(activity) }))
+            add(getDebugItem("带输入弹框", View.OnClickListener { testInput(activity!!) }))
+            add(getDebugItem("进度条弹框", View.OnClickListener { testUpdate(activity) }))
+            add(getDebugItem("加载弹框", View.OnClickListener { testLoading(activity) }))
+            add(getDebugItem("唯一弹框", View.OnClickListener { testAlertTools() }))
             add(changeEnv("模拟环境切换并自动重启", CHANGE_ENV_EXIST_TYPE_RESTART))
             add(changeEnv("模拟环境切换并自动退出", CHANGE_ENV_EXIST_TYPE_EXIST))
             add(changeEnv("模拟环境切换并立即生效", CHANGE_ENV_EXIST_TYPE_NOTHING))
@@ -374,7 +375,7 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
     fun changeEnv(title: String, type: Int): DebugItemData {
-        return DebugItemData(
+        return getDebugItem(
             title,
             View.OnClickListener {
                 mutableListOf<String>().apply {

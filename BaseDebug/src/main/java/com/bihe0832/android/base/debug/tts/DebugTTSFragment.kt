@@ -12,6 +12,7 @@ package com.bihe0832.android.base.debug.tts
 import android.speech.tts.TextToSpeech
 import android.view.View
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.log.ZLog
@@ -92,7 +93,7 @@ class DebugTTSFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("TTS 基础功能调试", DebugTTSBasicFragment::class.java))
-            add(DebugItemData("TTS1 和 TTS2 同时顺序播报", View.OnClickListener {
+            add(getDebugItem("TTS1 和 TTS2 同时顺序播报", View.OnClickListener {
                 ttsImpl1.speak(
                     idGenerator.generate().toString(), TTSData("TTS1 顺序播报"), TTSConfig.SPEEAK_TYPE_SEQUENCE
                 )
@@ -101,39 +102,39 @@ class DebugTTSFragment : DebugEnvFragment() {
                 )
             }))
 
-            add(DebugItemData("TTS1顺序播报", View.OnClickListener {
+            add(getDebugItem("TTS1顺序播报", View.OnClickListener {
                 ttsImpl1.speak(
                     idGenerator.generate().toString(), TTSData("TTS1 顺序播报"), TTSConfig.SPEEAK_TYPE_SEQUENCE
                 )
             }))
 
-            add(DebugItemData("TTS2 顺序播报", View.OnClickListener {
+            add(getDebugItem("TTS2 顺序播报", View.OnClickListener {
                 ttsImpl2.speak(
                     idGenerator.generate().toString(), TTSData("TTS2 顺序播报"), TTSConfig.SPEEAK_TYPE_SEQUENCE
                 )
             }))
-            add(DebugItemData("TTS1 和 TTS2 抢断播报", View.OnClickListener {
+            add(getDebugItem("TTS1 和 TTS2 抢断播报", View.OnClickListener {
                 ttsImpl1.speak(idGenerator.generate().toString(), TTSData("TTS1 抢断播报"), TTSConfig.SPEEAK_TYPE_FLUSH)
                 ttsImpl2.speak(idGenerator.generate().toString(), TTSData("TTS2 抢断播报"), TTSConfig.SPEEAK_TYPE_FLUSH)
             }))
 
-            add(DebugItemData("TTS1抢断播报", View.OnClickListener {
+            add(getDebugItem("TTS1抢断播报", View.OnClickListener {
                 ttsImpl1.speak(idGenerator.generate().toString(), TTSData("TTS1 抢断播报"), TTSConfig.SPEEAK_TYPE_FLUSH)
             }))
 
-            add(DebugItemData("TTS1清空播报", View.OnClickListener {
+            add(getDebugItem("TTS1清空播报", View.OnClickListener {
                 ttsImpl1.speak(idGenerator.generate().toString(), TTSData("TTS1 清空播报"), TTSConfig.SPEEAK_TYPE_CLEAR)
             }))
-            add(DebugItemData("TTS2 抢断播报", View.OnClickListener {
+            add(getDebugItem("TTS2 抢断播报", View.OnClickListener {
                 ttsImpl2.speak(idGenerator.generate().toString(), TTSData("TTS2 抢断播报"), TTSConfig.SPEEAK_TYPE_FLUSH)
             }))
 
-            add(DebugItemData("TextToSpeech 设置语言", View.OnClickListener {
+            add(getDebugItem("TextToSpeech 设置语言", View.OnClickListener {
                 tts1?.setLanguage(Locale.CHINA)
                 tts2?.setLanguage(Locale.CHINA)
             }))
 
-            add(DebugItemData("TextToSpeech 递增设置播报参数", View.OnClickListener {
+            add(getDebugItem("TextToSpeech 递增设置播报参数", View.OnClickListener {
                 ttsImpl1.setPitch(ttsImpl1.getConfigPitch() + 0.1f)
                 ttsImpl1.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.1f)
                 ttsImpl1.setVoiceVolume(ttsImpl1.getConfigVoiceVolume() + 10)
@@ -141,7 +142,7 @@ class DebugTTSFragment : DebugEnvFragment() {
                 ttsImpl2.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.1f)
                 ttsImpl2.setVoiceVolume(ttsImpl2.getVoiceVolumeInt() + 10)
             }))
-            add(DebugItemData("TextToSpeech 递减设置播报参数", View.OnClickListener {
+            add(getDebugItem("TextToSpeech 递减设置播报参数", View.OnClickListener {
                 ttsImpl1.setPitch(ttsImpl1.getConfigPitch() - 0.1f)
                 ttsImpl1.setSpeechRate(ttsImpl1.getConfigSpeechRate() - 0.1f)
                 ttsImpl1.setVoiceVolume(ttsImpl1.getVoiceVolumeInt() - 10)
@@ -150,7 +151,7 @@ class DebugTTSFragment : DebugEnvFragment() {
                 ttsImpl2.setVoiceVolume(ttsImpl2.getVoiceVolumeInt() - 10)
             }))
 
-            add(DebugItemData("TextToSpeech 抢断播报", View.OnClickListener {
+            add(getDebugItem("TextToSpeech 抢断播报", View.OnClickListener {
                 tts1?.speak("抢断播报1", TextToSpeech.QUEUE_FLUSH, null, null)
                 tts2?.speak("抢断播报112", TextToSpeech.QUEUE_FLUSH, null, null)
             }))

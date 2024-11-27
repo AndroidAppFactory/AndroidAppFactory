@@ -13,6 +13,7 @@ import android.content.Intent
 import android.view.View
 import com.android.billingclient.api.*
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -66,29 +67,29 @@ class DebugGoogleFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("Google AD", DebugGoogleADFragment::class.java))
-            add(DebugItemData("登录", View.OnClickListener { mAAFGoogleOAuth?.startLogin(100) }))
-            add(DebugItemData("查看个人信息", View.OnClickListener {
+            add(getDebugItem("登录", View.OnClickListener { mAAFGoogleOAuth?.startLogin(100) }))
+            add(getDebugItem("查看个人信息", View.OnClickListener {
                 mAAFGoogleOAuth?.getLastUserInfo()?.let {
                     showUser(it)
                 }
             }))
-            add(DebugItemData("刷新Token", View.OnClickListener {
+            add(getDebugItem("刷新Token", View.OnClickListener {
                 mAAFGoogleOAuth?.refreshToken {
                     showLastUser()
                 }
             }))
-            add(DebugItemData("解除授权", View.OnClickListener {
+            add(getDebugItem("解除授权", View.OnClickListener {
                 mAAFGoogleOAuth?.revokeAccess {
                     showLastUser()
                 }
             }))
-            add(DebugItemData("登出", View.OnClickListener {
+            add(getDebugItem("登出", View.OnClickListener {
                 mAAFGoogleOAuth?.logout {
                     showLastUser()
                 }
             }))
 
-            add(DebugItemData("拉起订阅列表并支付", View.OnClickListener {
+            add(getDebugItem("拉起订阅列表并支付", View.OnClickListener {
                 getSublist()
             }))
         }

@@ -2,6 +2,7 @@ package com.bihe0832.android.common.debug.module
 
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
@@ -117,7 +118,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
     }
 
     fun getInfoItem(itemContent: String): DebugItemData {
-        return DebugItemData(itemContent) { showInfo("应用调试信息", itemContent) }
+        return getDebugItem(itemContent) { showInfo("应用调试信息", itemContent) }
     }
 
     fun requestPermissionForDebug(

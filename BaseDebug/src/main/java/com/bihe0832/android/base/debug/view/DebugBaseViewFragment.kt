@@ -12,6 +12,7 @@ import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.touch.TouchRegionActivity
 import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.debug.DebugTools
@@ -29,7 +30,7 @@ class DebugBaseViewFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("特殊TextView 调试", DebugTextViewFragment::class.java))
             add(getDebugFragmentItemData("自定义View 调试", DebugCustomViewFragment::class.java))
             add(
-                DebugItemData(
+                getDebugItem(
                     "View 导出图片",
                     View.OnClickListener {
                         debugExport(it)
@@ -37,7 +38,7 @@ class DebugBaseViewFragment : DebugEnvFragment() {
                 ),
             )
             add(
-                DebugItemData(
+                getDebugItem(
                     "TextView对HTML的支持测试",
                     View.OnClickListener {
                         showInputDialog(
@@ -61,7 +62,7 @@ class DebugBaseViewFragment : DebugEnvFragment() {
             )
 
             add(
-                DebugItemData(
+                getDebugItem(
                     "点击区扩大Demo",
                     View.OnClickListener {
                         startActivityWithException(TouchRegionActivity::class.java)
