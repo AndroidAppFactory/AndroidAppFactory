@@ -17,10 +17,12 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.apk.AppStorageUtil
+import java.io.File
 
 open class DebugCurrentStorageFragment : DebugEnvFragment() {
     private var needSort = true
-    private var showFile = false
+    private var showFile = true
+    private var onlyFile = true
 
 
     fun getFolderInfo(entry: Map.Entry<String, Long>): CardBaseModule {
@@ -29,7 +31,9 @@ open class DebugCurrentStorageFragment : DebugEnvFragment() {
         ) + " ：<b>${FileUtils.getFileLength(entry.value)}</b>"
         return getLittleDebugItem(
             itemContent,
-            { showInfoWithHTML("应用调试信息", itemContent) }, false, TextUtils.TruncateAt.MIDDLE
+            { showInfoWithHTML("应用调试信息", itemContent) },
+            false,
+            TextUtils.TruncateAt.MIDDLE
         )
     }
 
@@ -93,10 +97,16 @@ open class DebugCurrentStorageFragment : DebugEnvFragment() {
             showFile = !showFile
             mListLiveData.refresh()
         })
+        data.add(getTipsItem("<b>点击切换是否仅展示文件大小，当前：$onlyFile</b>") {
+            onlyFile = !onlyFile
+            mListLiveData.refresh()
+        })
         AppStorageUtil.getCurrentAppFolderSizeList(
             context!!, FileUtils.SPACE_MB.toInt(), showFile, needSort
         ).forEach {
-            data.add(getFolderInfo(it))
+            if ((onlyFile && File(it.key).isFile) || !onlyFile) {
+                data.add(getFolderInfo(it))
+            }
         }
         return data
     }
