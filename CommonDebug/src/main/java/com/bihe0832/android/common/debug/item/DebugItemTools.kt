@@ -11,7 +11,7 @@ import com.bihe0832.android.framework.router.RouterAction
  * @author zixie code@bihe0832.com Created on 2019-11-21. Description: Description
  */
 
-private fun getTextColor(isTips: Boolean): Int {
+fun getTextColor(isTips: Boolean): Int {
     return if (isTips) {
         applicationContext!!.resources.getColor(R.color.colorOnPrimary)
     } else {
@@ -19,7 +19,7 @@ private fun getTextColor(isTips: Boolean): Int {
     }
 }
 
-private fun getBackGroundColor(isTips: Boolean): Int {
+fun getBackGroundColor(isTips: Boolean): Int {
     return if (isTips) {
         applicationContext!!.resources.getColor(R.color.colorAccent)
     } else {
@@ -27,19 +27,30 @@ private fun getBackGroundColor(isTips: Boolean): Int {
     }
 }
 
-private fun getItem(content: String, isTips: Boolean): DebugItemData {
+fun getItem(
+    content: String,
+    listener: View.OnClickListener?,
+    longClickListener: View.OnLongClickListener?,
+    isBold: Boolean,
+    isSingleLine: Boolean,
+    isTips: Boolean
+): DebugItemData {
     return DebugItemData(
         content,
-        null,
-        null,
+        listener,
+        longClickListener,
         DebugItemData.DEFAULT_TEXT_SIZE_DP,
         getTextColor(isTips),
-        isTips,
-        !isTips,
+        isBold,
+        isSingleLine,
         DebugItemData.DEFAULT_PADDING_SIZE_DP,
         getBackGroundColor(isTips),
         true
     )
+}
+
+private fun getItem(content: String, isTips: Boolean): DebugItemData {
+    return getItem(content, null, null, isTips, !isTips, isTips)
 }
 
 fun getTipsItem(content: String): DebugItemData {
@@ -51,22 +62,9 @@ fun getDebugItem(content: String): DebugItemData {
 }
 
 private fun getItem(
-    content: String,
-    listener: View.OnClickListener?,
-    isTips: Boolean
+    content: String, listener: View.OnClickListener?, isTips: Boolean
 ): DebugItemData {
-    return DebugItemData(
-        content,
-        listener,
-        null,
-        DebugItemData.DEFAULT_TEXT_SIZE_DP,
-        getTextColor(isTips),
-        isTips,
-        !isTips,
-        DebugItemData.DEFAULT_PADDING_SIZE_DP,
-        getBackGroundColor(isTips),
-        true
-    )
+    return getItem(content, listener, null, isTips, !isTips, isTips)
 }
 
 fun getTipsItem(content: String, listener: View.OnClickListener?): DebugItemData {
@@ -84,18 +82,7 @@ private fun getInfoItem(
     longClickListener: View.OnLongClickListener?,
     isTips: Boolean
 ): DebugItemData {
-    return DebugItemData(
-        content,
-        listener,
-        longClickListener,
-        10,
-        getTextColor(isTips),
-        isTips,
-        !isTips,
-        12,
-        getBackGroundColor(isTips),
-        true
-    )
+    return getItem(content, listener, longClickListener, isTips, !isTips, isTips)
 }
 
 fun BaseDebugListFragment.getRouterItem(content: String): DebugItemData {
