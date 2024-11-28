@@ -31,11 +31,23 @@ object DownloadConfig {
     }
 
     //直接下载，不显示进度，4G下载直接下载
-    fun download(context: Context, url: String, md5: String, downloadListener: ResponseHandler) {
-        startDownloadConfig(context, url, md5, downloadListener)
+    fun download(
+        context: Context,
+        url: String,
+        cacheFilePath: String,
+        md5: String,
+        downloadListener: ResponseHandler
+    ) {
+        startDownloadConfig(context, url, cacheFilePath, md5, downloadListener)
     }
 
-    private fun startDownloadConfig(context: Context, url: String, md5: String, downloadListener: ResponseHandler) {
+    private fun startDownloadConfig(
+        context: Context,
+        url: String,
+        cacheFilePath: String,
+        md5: String,
+        downloadListener: ResponseHandler
+    ) {
         if (TextUtils.isEmpty(url)) {
             downloadListener.onFailed(ResponseHandler.ERROR_CONFIG, "url is bad")
         }
@@ -47,6 +59,7 @@ object DownloadConfig {
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_CONFIG
             isDownloadWhenUseMobile = true
             isForceDownloadNew = TextUtils.isEmpty(md5)
+            fileFolder = cacheFilePath
             isNeedRecord = false
             this.downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
@@ -71,7 +84,10 @@ object DownloadConfig {
                             }
                         }
                     } catch (e: Exception) {
-                        downloadListener.onFailed(ResponseHandler.ERROR_EXCEPTION, e.message.toString())
+                        downloadListener.onFailed(
+                            ResponseHandler.ERROR_EXCEPTION,
+                            e.message.toString()
+                        )
                     }
                     return filePath
                 }

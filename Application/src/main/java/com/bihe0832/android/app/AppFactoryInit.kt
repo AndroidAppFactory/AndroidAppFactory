@@ -14,6 +14,7 @@ import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.webview.tbs.WebViewHelper
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.device.shake.ShakeManager
@@ -24,6 +25,7 @@ import com.bihe0832.android.lib.theme.ThemeManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
+import com.bihe0832.android.lib.utils.time.DateUtil
 import com.bihe0832.android.lib.widget.WidgetUpdateManager
 import com.bihe0832.android.services.google.ad.AAFGoogleAD
 import com.tencent.smtt.sdk.QbSdk
@@ -70,6 +72,9 @@ object AppFactoryInit {
             AAFPermissionManager.initPermission()
             ThreadManager.getInstance().start {
                 DownloadFileUtils.init(ctx, ZixieContext.isDebug())
+            }
+            ThreadManager.getInstance().start {
+                AAFFileWrapper.autoClear(DateUtil.MILLISECOND_OF_MONTH)
             }
             AAFMessageManager.initModule(ctx)
             ZLog.d(

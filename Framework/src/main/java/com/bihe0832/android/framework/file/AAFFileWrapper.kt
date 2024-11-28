@@ -15,10 +15,8 @@ import java.io.File
  */
 object AAFFileWrapper {
 
-    const val FILE_DELETE_DUREATION = 30 * 24 * 60 * 60 * 1000L
-
-    init {
-        FileUtils.deleteOldAsync(File(getTempFolder()), FILE_DELETE_DUREATION)
+    fun autoClear(duration: Long) {
+        FileUtils.deleteOldAsync(File(getTempFolder()), duration)
     }
 
     fun clear() {
@@ -68,6 +66,10 @@ object AAFFileWrapper {
         val file = getTempFolder() + name + File.separator
         FileUtils.checkAndCreateFolder(file)
         return file
+    }
+
+    fun getConfigFolder(): String {
+        return getFolder("conf")
     }
 
     fun getMediaFolder(): String {
