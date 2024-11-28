@@ -2,7 +2,6 @@ package com.bihe0832.android.common.debug.item;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.text.TextUtils.TruncateAt;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -44,7 +43,7 @@ public class DebugItemHolder extends CardBaseHolder {
         }
         if (data.isSingleLine) {
             mHeader.setSingleLine(true);
-            mHeader.setEllipsize(TruncateAt.END);
+            mHeader.setEllipsize(data.ellipsize);
         } else {
             mHeader.setSingleLine(false);
             mHeader.setEllipsize(null);

@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.debug.item
 
+import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
@@ -34,6 +35,7 @@ fun getDebugItem(
     textSizeDP: Int,
     isBold: Boolean,
     isSingleLine: Boolean,
+    ellipsize: TextUtils.TruncateAt?,
     paddingDp: Int,
     isTips: Boolean
 ): DebugItemData {
@@ -45,6 +47,7 @@ fun getDebugItem(
         getDebugItemTextColor(isTips),
         isBold,
         isSingleLine,
+        ellipsize,
         paddingDp,
         getDebugItemBackGroundColor(isTips),
         true
@@ -57,6 +60,7 @@ fun getDebugItem(
     longClickListener: View.OnLongClickListener?,
     isBold: Boolean,
     isSingleLine: Boolean,
+    ellipsize: TextUtils.TruncateAt?,
     isTips: Boolean
 ): DebugItemData {
     return getDebugItem(
@@ -66,6 +70,7 @@ fun getDebugItem(
         DebugItemData.DEFAULT_TEXT_SIZE_DP,
         isBold,
         isSingleLine,
+        ellipsize,
         DebugItemData.DEFAULT_PADDING_SIZE_DP,
         isTips
     )
@@ -77,15 +82,22 @@ fun getLittleDebugItem(
     longClickListener: View.OnLongClickListener?,
     isBold: Boolean,
     isSingleLine: Boolean,
+    ellipsize: TextUtils.TruncateAt?,
     isTips: Boolean
 ): DebugItemData {
     return getDebugItem(
-        content, listener, longClickListener, 10, isBold, isSingleLine, 12, isTips
+        content, listener, longClickListener, 10, isBold, isSingleLine, ellipsize, 12, isTips
     )
 }
 
 private fun getDebugItem(content: String, isTips: Boolean): DebugItemData {
-    return getDebugItem(content, null, null, isTips, !isTips, isTips)
+    return getDebugItem(
+        content, null, null, isTips, !isTips, if (isTips) {
+            null
+        } else {
+            TextUtils.TruncateAt.END
+        }, isTips
+    )
 }
 
 fun getTipsItem(content: String): DebugItemData {
@@ -99,7 +111,13 @@ fun getDebugItem(content: String): DebugItemData {
 private fun getDebugItem(
     content: String, listener: View.OnClickListener?, isTips: Boolean
 ): DebugItemData {
-    return getDebugItem(content, listener, null, isTips, !isTips, isTips)
+    return getDebugItem(
+        content, listener, null, isTips, !isTips, if (isTips) {
+            null
+        } else {
+            TextUtils.TruncateAt.END
+        }, isTips
+    )
 }
 
 fun getTipsItem(content: String, listener: View.OnClickListener?): DebugItemData {
@@ -111,9 +129,20 @@ fun getDebugItem(content: String, listener: View.OnClickListener?): DebugItemDat
 }
 
 
+fun getLittleDebugItem(
+    content: String,
+    listener: View.OnClickListener?,
+    isSingleLine: Boolean,
+    ellipsize: TextUtils.TruncateAt?,
+): DebugItemData {
+    return getDebugItem(
+        content, listener, null, 10, false, isSingleLine, ellipsize, 12, false
+    )
+}
+
 fun BaseDebugListFragment.getRouterItem(content: String): DebugItemData {
     return getLittleDebugItem(content, { RouterAction.openFinalURL(content) }, {
         showInfo("复制并分享路由地址", content)
         true
-    }, isBold = false, isSingleLine = true, isTips = false)
+    }, isBold = false, isSingleLine = true, TextUtils.TruncateAt.END, isTips = false)
 }

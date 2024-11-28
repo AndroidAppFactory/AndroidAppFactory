@@ -27,7 +27,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
 
     fun getEnvDebugItem(content: String, action: View.OnClickListener): DebugItemData {
         return getDebugItem(
-            content, action, null, isBold = false, isSingleLine = false, isTips = false
+            content, action, null, isBold = false, isSingleLine = false,null, isTips = false
         )
     }
 
