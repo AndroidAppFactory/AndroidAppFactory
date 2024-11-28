@@ -708,6 +708,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         DownloadConfig.download(
                             requireContext(),
                             it.get(currentNum),
+                            AAFFileWrapper.getConfigFolder(),
                             "",
                             object : DownloadConfig.ResponseHandler {
                                 override fun onSuccess(type: Int, response: String) {
