@@ -115,5 +115,5 @@ fun BaseDebugListFragment.getRouterItem(content: String): DebugItemData {
     return getLittleDebugItem(content, { RouterAction.openFinalURL(content) }, {
         showInfo("复制并分享路由地址", content)
         true
-    }, isBold = false, isSingleLine = false, isTips = false)
+    }, isBold = false, isSingleLine = true, isTips = false)
 }
