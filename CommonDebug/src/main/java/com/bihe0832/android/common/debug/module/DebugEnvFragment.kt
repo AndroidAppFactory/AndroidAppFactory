@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.debug.module
 
+import android.view.View
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
@@ -24,7 +25,18 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         fun onChanged(index: Int)
     }
 
-    fun getChangeEnvSelectDialog(title: String, data: List<String>, index: Int, ins: OnEnvChangedListener): RadioDialog {
+    fun getEnvDebugItem(content: String, action: View.OnClickListener): DebugItemData {
+        return getDebugItem(
+            content, action, null, isBold = false, isSingleLine = false, isTips = false
+        )
+    }
+
+    fun getChangeEnvSelectDialog(
+        title: String,
+        data: List<String>,
+        index: Int,
+        ins: OnEnvChangedListener
+    ): RadioDialog {
         RadioDialog(activity).apply {
             setTitle("${title}切换")
             setHtmlContent("点击下方列表选择将 <font color='#38ADFF'> $title </font> 切换为：")
@@ -60,7 +72,13 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         showChangeEnvResult(title, key, value, value, actionType)
     }
 
-    fun showChangeEnvResult(title: String, key: String, value: String, tipsText: String, actionType: Int) {
+    fun showChangeEnvResult(
+        title: String,
+        key: String,
+        value: String,
+        tipsText: String,
+        actionType: Int
+    ) {
         try {
             var setResultForServer = Config.writeConfig(key, value)
             if (setResultForServer) {
@@ -79,11 +97,12 @@ open class DebugEnvFragment : BaseDebugListFragment() {
 
     fun showChangeEnvDialog(title: String, tipsText: String, actionType: Int) {
         try {
-            var tips = "${title}已切换为：<BR> <font color=\"#c0392b\">$tipsText</font> <BR> 点击确认后" + when (actionType) {
-                CHANGE_ENV_EXIST_TYPE_EXIST -> "APP会自动退出，手动启动APP后生效"
-                CHANGE_ENV_EXIST_TYPE_RESTART -> "APP会自动重启，APP重启后生效。<font color=\"#EC4C40\">重启过程会偶现白屏，请耐心等待</font>"
-                else -> "生效"
-            }
+            var tips =
+                "${title}已切换为：<BR> <font color=\"#c0392b\">$tipsText</font> <BR> 点击确认后" + when (actionType) {
+                    CHANGE_ENV_EXIST_TYPE_EXIST -> "APP会自动退出，手动启动APP后生效"
+                    CHANGE_ENV_EXIST_TYPE_RESTART -> "APP会自动重启，APP重启后生效。<font color=\"#EC4C40\">重启过程会偶现白屏，请耐心等待</font>"
+                    else -> "生效"
+                }
 
             DialogUtils.showConfirmDialog(
                 activity!!,
@@ -152,13 +171,21 @@ open class DebugEnvFragment : BaseDebugListFragment() {
                     permissionResult?.onSuccess()
                 }
 
-                override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                override fun onUserCancel(
+                    scene: String,
+                    permissionGroupID: String,
+                    permission: String
+                ) {
                     super.onUserCancel(scene, permissionGroupID, permission)
                     ZLog.d("放弃授权")
                     permissionResult?.onUserCancel(scene, permissionGroupID, permission)
                 }
 
-                override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                override fun onUserDeny(
+                    scene: String,
+                    permissionGroupID: String,
+                    permission: String
+                ) {
                     super.onUserDeny(scene, permissionGroupID, permission)
                     ZLog.d("拒绝授权")
                     permissionResult?.onUserDeny(scene, permissionGroupID, permission)
