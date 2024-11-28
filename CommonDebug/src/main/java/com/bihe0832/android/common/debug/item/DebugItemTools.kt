@@ -11,7 +11,7 @@ import com.bihe0832.android.framework.router.RouterAction
  * @author zixie code@bihe0832.com Created on 2019-11-21. Description: Description
  */
 
-fun getTextColor(isTips: Boolean): Int {
+fun getDebugItemTextColor(isTips: Boolean): Int {
     return if (isTips) {
         applicationContext!!.resources.getColor(R.color.colorOnPrimary)
     } else {
@@ -19,7 +19,7 @@ fun getTextColor(isTips: Boolean): Int {
     }
 }
 
-fun getBackGroundColor(isTips: Boolean): Int {
+fun getDebugItemBackGroundColor(isTips: Boolean): Int {
     return if (isTips) {
         applicationContext!!.resources.getColor(R.color.colorAccent)
     } else {
@@ -27,7 +27,31 @@ fun getBackGroundColor(isTips: Boolean): Int {
     }
 }
 
-fun getItem(
+fun getDebugItem(
+    content: String,
+    listener: View.OnClickListener?,
+    longClickListener: View.OnLongClickListener?,
+    textSizeDP: Int,
+    isBold: Boolean,
+    isSingleLine: Boolean,
+    paddingDp: Int,
+    isTips: Boolean
+): DebugItemData {
+    return DebugItemData(
+        content,
+        listener,
+        longClickListener,
+        textSizeDP,
+        getDebugItemTextColor(isTips),
+        isBold,
+        isSingleLine,
+        paddingDp,
+        getDebugItemBackGroundColor(isTips),
+        true
+    )
+}
+
+fun getDebugItem(
     content: String,
     listener: View.OnClickListener?,
     longClickListener: View.OnLongClickListener?,
@@ -35,59 +59,61 @@ fun getItem(
     isSingleLine: Boolean,
     isTips: Boolean
 ): DebugItemData {
-    return DebugItemData(
+    return getDebugItem(
         content,
         listener,
         longClickListener,
         DebugItemData.DEFAULT_TEXT_SIZE_DP,
-        getTextColor(isTips),
         isBold,
         isSingleLine,
         DebugItemData.DEFAULT_PADDING_SIZE_DP,
-        getBackGroundColor(isTips),
-        true
+        isTips
     )
 }
 
-private fun getItem(content: String, isTips: Boolean): DebugItemData {
-    return getItem(content, null, null, isTips, !isTips, isTips)
-}
-
-fun getTipsItem(content: String): DebugItemData {
-    return getItem(content, true)
-}
-
-fun getDebugItem(content: String): DebugItemData {
-    return getItem(content, false)
-}
-
-private fun getItem(
-    content: String, listener: View.OnClickListener?, isTips: Boolean
-): DebugItemData {
-    return getItem(content, listener, null, isTips, !isTips, isTips)
-}
-
-fun getTipsItem(content: String, listener: View.OnClickListener?): DebugItemData {
-    return getItem(content, listener, true)
-}
-
-fun getDebugItem(content: String, listener: View.OnClickListener?): DebugItemData {
-    return getItem(content, listener, false)
-}
-
-
-private fun getInfoItem(
+fun getLittleDebugItem(
     content: String,
     listener: View.OnClickListener?,
     longClickListener: View.OnLongClickListener?,
+    isBold: Boolean,
+    isSingleLine: Boolean,
     isTips: Boolean
 ): DebugItemData {
-    return getItem(content, listener, longClickListener, isTips, !isTips, isTips)
+    return getDebugItem(
+        content, listener, longClickListener, 10, isBold, isSingleLine, 12, isTips
+    )
 }
 
+private fun getDebugItem(content: String, isTips: Boolean): DebugItemData {
+    return getDebugItem(content, null, null, isTips, !isTips, isTips)
+}
+
+fun getTipsItem(content: String): DebugItemData {
+    return getDebugItem(content, true)
+}
+
+fun getDebugItem(content: String): DebugItemData {
+    return getDebugItem(content, false)
+}
+
+private fun getDebugItem(
+    content: String, listener: View.OnClickListener?, isTips: Boolean
+): DebugItemData {
+    return getDebugItem(content, listener, null, isTips, !isTips, isTips)
+}
+
+fun getTipsItem(content: String, listener: View.OnClickListener?): DebugItemData {
+    return getDebugItem(content, listener, true)
+}
+
+fun getDebugItem(content: String, listener: View.OnClickListener?): DebugItemData {
+    return getDebugItem(content, listener, false)
+}
+
+
 fun BaseDebugListFragment.getRouterItem(content: String): DebugItemData {
-    return getInfoItem(content, { RouterAction.openFinalURL(content) }, {
+    return getLittleDebugItem(content, { RouterAction.openFinalURL(content) }, {
         showInfo("复制并分享路由地址", content)
         true
-    }, false)
+    }, isBold = false, isSingleLine = false, isTips = false)
 }
