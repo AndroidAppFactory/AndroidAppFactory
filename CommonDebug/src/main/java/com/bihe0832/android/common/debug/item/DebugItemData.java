@@ -1,6 +1,8 @@
 package com.bihe0832.android.common.debug.item;
 
 import android.graphics.Color;
+import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
@@ -20,6 +22,7 @@ public class DebugItemData extends CardBaseModule {
     public int backgroundColor = Color.WHITE;
     public int textColor = Color.BLACK;
     public boolean isSingleLine = true;
+    public TextUtils.TruncateAt ellipsize = TruncateAt.END;
     public boolean isBold = false;
     public boolean showBottomLine = true;
     public int textSizeDP = DEFAULT_TEXT_SIZE_DP;
@@ -30,7 +33,8 @@ public class DebugItemData extends CardBaseModule {
     }
 
     public DebugItemData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener,
-            int textSizeDP, int textColor, boolean isBold, boolean isSingleLine, int paddingDp, int background,
+            int textSizeDP, int textColor, boolean isBold, boolean isSingleLine, TextUtils.TruncateAt ellipsize,
+            int paddingDp, int background,
             boolean showBottomLine) {
         this.mContentText = content;
         this.mListener = listener;
@@ -38,6 +42,7 @@ public class DebugItemData extends CardBaseModule {
         this.textSizeDP = textSizeDP;
         this.textColor = textColor;
         this.isSingleLine = isSingleLine;
+        this.ellipsize = ellipsize;
         this.isBold = isBold;
         this.paddingDp = paddingDp;
         this.backgroundColor = background;

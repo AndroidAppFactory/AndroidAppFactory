@@ -109,6 +109,10 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugUtils.showInfoWithHTML(context, title, content)
     }
 
+    protected fun showInfoWithHTML(title: String, content: String) {
+        DebugUtils.showInfoWithHTML(context, title, mutableListOf(content))
+    }
+
     public fun showInfo(title: String, content: String) {
         DebugUtils.showInfo(context, title, content)
     }

@@ -8,7 +8,8 @@
 
 package com.bihe0832.android.common.debug.device
 
-import com.bihe0832.android.common.debug.item.getDebugItem
+import android.text.TextUtils
+import com.bihe0832.android.common.debug.item.getLittleDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -26,9 +27,10 @@ open class DebugCurrentStorageFragment : DebugEnvFragment() {
         val itemContent = entry.key.replace(
             context!!.packageName, "包名"
         ) + " ：<b>${FileUtils.getFileLength(entry.value)}</b>"
-        return getDebugItem(
+        return getLittleDebugItem(
             itemContent,
-        ) { showInfo("应用调试信息", itemContent) }
+            { showInfoWithHTML("应用调试信息", itemContent) }, false, TextUtils.TruncateAt.MIDDLE
+        )
     }
 
     override fun getDataLiveData(): CommonListLiveData {
