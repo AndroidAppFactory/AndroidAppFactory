@@ -10,6 +10,8 @@ import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.log.DebugLogActivity
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.framework.file.AAFFileWrapper.getCacheFolder
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
@@ -60,7 +62,8 @@ open class DebugCommonFragment : DebugEnvFragment() {
             )
             add(
                 getDebugItem("清除缓存") {
-                    FileUtils.deleteDirectory(File(ZixieContext.getZixieFolder()))
+                    AAFFileWrapper.clear()
+                    FileUtils.deleteDirectory(context!!.cacheDir)
                     ZixieContext.restartApp()
                 },
             )
