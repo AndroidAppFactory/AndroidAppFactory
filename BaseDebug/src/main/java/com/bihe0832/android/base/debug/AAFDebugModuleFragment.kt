@@ -48,7 +48,6 @@ import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebViewFragment
 import com.bihe0832.android.base.debug.widget.DebugWidgetFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule

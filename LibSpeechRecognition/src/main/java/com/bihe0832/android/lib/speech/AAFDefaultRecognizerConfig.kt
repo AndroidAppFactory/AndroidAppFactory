@@ -17,6 +17,8 @@ import com.k2fsa.sherpa.onnx.OnlineTransducerModelConfig
  */
 const val DEFAULT_KWS_MODEL_DIR = "sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01"
 const val DEFAULT_ENDPOINT_MODEL_DIR = "sherpa-onnx-streaming-zipformer-zh-14M-2023-02-23"
+const val DEFAULT_WHISPER_TINY_MODEL_DIR = ""
+const val DEFAULT_WHISPER_BASE_MODEL_DIR = ""
 
 fun getAAFFeatureConfig(sampleRateInHz: Int): FeatureConfig {
     return FeatureConfig(

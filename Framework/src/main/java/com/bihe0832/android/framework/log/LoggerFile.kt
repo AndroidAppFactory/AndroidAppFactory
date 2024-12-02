@@ -69,7 +69,13 @@ object LoggerFile {
                     var file = File(fileName)
                     if (FileUtils.checkFileExist(fileName)) {
                         if (file.length() > MAX_LOG_FILE_SIZE) {
-                            FileUtils.copyFile(file, File("${file.parentFile.absolutePath}${File.separator}${FileUtils.getFileNameWithoutEx(fileName)}_${DateUtil.getCurrentDateEN("HHmm")}.txt"), true)
+                            FileUtils.copyFile(
+                                file, File(
+                                    "${file.parentFile.absolutePath}${File.separator}${
+                                        FileUtils.getFileNameWithoutEx(fileName)
+                                    }_${DateUtil.getCurrentDateEN("HHmm")}.txt"
+                                ), true
+                            )
                         }
                     }
                     if (!FileUtils.checkFileExist(fileName)) {
@@ -77,7 +83,7 @@ object LoggerFile {
                     }
                     checkOldFile(file)
                     val bufferedWriter =
-                            BufferedWriter(OutputStreamWriter(FileOutputStream(file, true), "UTF-8"))
+                        BufferedWriter(OutputStreamWriter(FileOutputStream(file, true), "UTF-8"))
                     mLogFiles[fileName] = file
                     ZLog.e(TAG, "ZLog Add New File !!!! $fileName")
                     mBufferedWriters[fileName] = bufferedWriter
@@ -93,10 +99,10 @@ object LoggerFile {
         FileUtils.deleteOldAsync(file.parentFile, mDuration)
     }
 
-    private fun bufferSave(fileName: String, msg: String?) {
+    private fun bufferSave(fileName: String, tag: String, msg: String?) {
         mLoggerFileHandler.post {
             try {
-                mBufferedWriters[fileName]?.write("${DateUtil.getCurrentDateEN()} $msg")
+                mBufferedWriters[fileName]?.write("$tag $msg")
                 mBufferedWriters[fileName]?.newLine()
                 mBufferedWriters[fileName]?.flush()
             } catch (e: java.lang.Exception) {
@@ -112,14 +118,24 @@ object LoggerFile {
 
     fun log(filePath: String, msg: String) {
         ZLog.info(FileUtils.getFileNameWithoutEx(filePath), msg)
-        logFile(filePath, msg)
+        logFile(filePath, DateUtil.getCurrentDateEN(), msg)
+    }
+
+
+    fun log(filePath: String, tag: String, msg: String) {
+        ZLog.info(FileUtils.getFileNameWithoutEx(filePath), msg)
+        logFile(filePath, tag, msg)
     }
 
     fun logFile(filePath: String, msg: String) {
+        logFile(filePath, DateUtil.getCurrentDateEN(), msg)
+    }
+
+    fun logFile(filePath: String, tag: String, msg: String) {
         try {
             if (mCanSaveSpecialFile) {
                 reset(filePath)
-                bufferSave(filePath, msg)
+                bufferSave(filePath, tag, msg)
             }
         } catch (e: java.lang.Exception) {
             ZLog.e(TAG, "log ERROR !!!! $e")
