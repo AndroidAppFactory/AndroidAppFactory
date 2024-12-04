@@ -133,7 +133,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
                             } else {
                                 "倒序"
                             }.let {
-                                actionName = "切换为$it"
+                                actionName = "当前内容$it"
                             }
                             iconResId = if (isSort) {
                                 R.drawable.icon_ascending
@@ -143,7 +143,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
                             setItemClickListener {
                                 hide()
                                 isSort = !isSort
-                                mLiveData.refresh()
+                                mLiveData.postValue(mLiveData.value?.reversed())
                             }
                         })
                         add(PopMenuItem().apply {
