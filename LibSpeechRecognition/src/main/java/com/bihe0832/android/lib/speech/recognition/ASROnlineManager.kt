@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.speech.recognition
 import android.content.Context
 import com.bihe0832.android.lib.audio.record.AudioRecordManager
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.speech.endpoint.ASREndpointCheck.CheckResult
 import com.k2fsa.sherpa.onnx.OnlineRecognizer
 import com.k2fsa.sherpa.onnx.OnlineRecognizerConfig
 import com.k2fsa.sherpa.onnx.OnlineStream
@@ -36,10 +37,6 @@ public class ASROnlineManager {
         }
     }
 
-    fun destroy() {
-        onlineRecognizer?.release()
-        onlineRecognizer = null
-    }
 
     fun getOnlineRecognizer(): OnlineRecognizer? {
         return onlineRecognizer
@@ -50,7 +47,9 @@ public class ASROnlineManager {
         return onlineRecognizer?.createStream()
     }
 
-    fun acceptWaveform(stream: OnlineStream, sampleRateInHz: Int, buffer: FloatArray?): String {
+    fun acceptWaveform(
+        stream: OnlineStream, sampleRateInHz: Int, buffer: FloatArray?
+    ): CheckResult {
         ZLog.d(AudioRecordManager.TAG, "acceptWaveform")
         if (buffer != null && buffer.isNotEmpty()) {
             stream.acceptWaveform(buffer, sampleRateInHz)
@@ -59,14 +58,27 @@ public class ASROnlineManager {
                 ZLog.d(AudioRecordManager.TAG, onlineRecognizer!!.getResult(stream).text)
             }
             val result = onlineRecognizer!!.getResult(stream)
-            return result.text
+            return if (onlineRecognizer!!.isEndpoint(stream)) {
+                CheckResult(true, result)
+            } else {
+                CheckResult(false, result)
+            }
         }
-        return ""
+        return CheckResult(false, null)
     }
 
-    fun stop(stream: OnlineStream): String {
+    fun resetStream(stream: OnlineStream) {
+        onlineRecognizer?.reset(stream)
+    }
+
+    fun stop(stream: OnlineStream) {
         ZLog.d(AudioRecordManager.TAG, "reset")
+        resetStream(stream)
         stream.release()
-        return ""
+    }
+
+    fun destroy() {
+        onlineRecognizer?.release()
+        onlineRecognizer = null
     }
 }

@@ -191,7 +191,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
                             true
                         },
                         10,
-                        getDebugItemTextColor(false),
+                        Color.parseColor("#333333"),
                         false,
                         false,
                         null,
