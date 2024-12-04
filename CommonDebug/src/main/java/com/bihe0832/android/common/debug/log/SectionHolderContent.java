@@ -4,22 +4,19 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-
 import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.common.debug.log.core.DebugLogInfoActivity;
 import com.bihe0832.android.framework.file.AAFFileTools;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
 
 /**
- * @author zixie code@bihe0832.com
- * Created on 2019-11-21.
- * Description: Description
+ * @author zixie code@bihe0832.com Created on 2019-11-21. Description: Description
  */
 
 public class SectionHolderContent extends CardBaseHolder {
+
     public TextView log_title;
     public TextView log_open;
     public TextView log_send;
@@ -40,7 +37,6 @@ public class SectionHolderContent extends CardBaseHolder {
         final SectionDataContent data = (SectionDataContent) item;
         log_title.setText(TextFactoryUtils.getSpannedTextByHtml(data.mTitleName));
 
-
         log_open.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +44,8 @@ public class SectionHolderContent extends CardBaseHolder {
                     data.mActionListener.onClick(v, SectionDataContent.TYPE_OPEN);
                 } else {
                     try {
-                        DebugLogInfoActivity.Companion.showLog(getContext(),data.mLogFileName);
+                        DebugLogInfoActivity.Companion.showLog(getContext(), data.mLogFileName, data.mSort,
+                                data.mShowLine);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -9,12 +9,10 @@ import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.getDebugItemTextColor
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
@@ -27,27 +25,32 @@ import com.bihe0832.android.lib.utils.ConvertUtils
 
 
 open class DebugLogInfoActivity : CommonListActivity() {
-    private val SORT = "aaf.debug.log.core.sort"
-    private val NUM = "aaf.debug.log.core.num"
 
     companion object {
+        private val SORT = "aaf.debug.log.core.sort"
+        private val NUM = "aaf.debug.log.core.num"
+        private val SHOW_LINE = "aaf.debug.log.core.line"
 
-        fun showLog(context: Context, filePath: String, short: Boolean, showNum: Int) {
+        fun showLog(
+            context: Context, filePath: String, sort: Boolean, showLine: Boolean, showNum: Int
+        ) {
             val intent = Intent(context, DebugLogInfoActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, filePath)
-            intent.putExtra(CommonRootActivity.DEBUG_MODULE_CLASS_NAME, short)
-            intent.putExtra(CommonRootActivity.DEBUG_MODULE_TITLE_NAME, showNum)
+            intent.putExtra(SORT, sort)
+            intent.putExtra(NUM, showNum)
+            intent.putExtra(SHOW_LINE, showLine)
             context.startActivity(intent)
         }
 
-        fun showLog(context: Context, logFileName: String) {
-            showLog(context, logFileName, true, 2000)
+        fun showLog(context: Context, logFileName: String, sort: Boolean, showLine: Boolean) {
+            showLog(context, logFileName, sort, showLine, 2000)
         }
     }
 
     private var logPath = ""
     private var isSort = false
+    private var showLine = true
     private var showNum = 2000
     private var fileContentList = mutableListOf<String>()
     private var mLiveData = object : CommonListLiveData() {
@@ -79,6 +82,10 @@ open class DebugLogInfoActivity : CommonListActivity() {
         return mLiveData
     }
 
+    override fun getEmptyText(): String {
+        return "日志内容为空"
+    }
+
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(DebugItemData::class.java, true))
@@ -89,20 +96,25 @@ open class DebugLogInfoActivity : CommonListActivity() {
     override fun parseBundle(bundle: Bundle) {
         super.parseBundle(bundle)
         logPath = bundle.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")
-        if (logPath.isBlank()) {
+        if (logPath.isBlank() || !FileUtils.checkFileExist(logPath)) {
+            ZixieContext.showToast("日志路径异常或日志不存在")
             finish()
         }
         findViewById<TextView>(R.id.title_text).apply {
             text = "查看日志：${FileUtils.getFileName(logPath)}"
         }
         isSort = bundle.getBoolean(SORT, false)
+        showLine = bundle.getBoolean(SHOW_LINE, true)
         showNum = ConvertUtils.parseInt(bundle.getString(NUM, ""), 2000)
         ThreadManager.getInstance().start {
             FileUtils.getFileContent(logPath).split("\n").let {
                 fileContentList.clear()
                 fileContentList.addAll(it)
             }
-            mLiveData.refresh()
+            if (fileContentList.isNotEmpty()) {
+                mLiveData.refresh()
+            }
+
         }
     }
 
@@ -126,7 +138,6 @@ open class DebugLogInfoActivity : CommonListActivity() {
                                 FileUtils.sendFile(this@DebugLogInfoActivity, logPath)
                             }
                         })
-
                         add(PopMenuItem().apply {
                             if (isSort) {
                                 "正序"
@@ -144,6 +155,21 @@ open class DebugLogInfoActivity : CommonListActivity() {
                                 hide()
                                 isSort = !isSort
                                 mLiveData.postValue(mLiveData.value?.reversed())
+                            }
+                        })
+                        add(PopMenuItem().apply {
+                            if (showLine) {
+                                "隐藏"
+                            } else {
+                                "展示"
+                            }.let {
+                                actionName = "${it}分隔线"
+                            }
+                            iconResId = R.drawable.icon_edit
+                            setItemClickListener {
+                                hide()
+                                showLine = !showLine
+                                mLiveData.refresh()
                             }
                         })
                         add(PopMenuItem().apply {
@@ -202,7 +228,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
                         } else {
                             Color.parseColor("#EEEEEE")
                         },
-                        true
+                        showLine
                     )
                 )
             }

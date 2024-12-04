@@ -32,6 +32,12 @@ class AAFDebugLogActivity : DebugLogActivity() {
                 try {
                     AAFLoggerFile.getLogPathByModuleName(AAFLoggerFile.MODULE_UPDATE).let {
                         if (type == SectionDataContent.TYPE_OPEN) {
+//                            DebugLogInfoActivity.showLog(
+//                                this@AAFDebugLogActivity,
+//                                it,
+//                                sort = false,
+//                                showLine = true
+//                            )
                             AAFFileTools.openFileWithTips(this@AAFDebugLogActivity, it)
                         } else {
                             AAFFileTools.sendFile(it)
