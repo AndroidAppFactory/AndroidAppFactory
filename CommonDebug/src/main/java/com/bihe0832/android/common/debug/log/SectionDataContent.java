@@ -26,6 +26,8 @@ public class SectionDataContent extends CardBaseModule {
 
     public String mTitleName;
     public String mLogFileName;
+    public boolean mSort = false;
+    public boolean mShowLine = true;
     public ItemOnClickListener mActionListener = null;
 
     public SectionDataContent() {
@@ -34,6 +36,13 @@ public class SectionDataContent extends CardBaseModule {
     public SectionDataContent(String title, String logFilePath) {
         mTitleName = title;
         mLogFileName = logFilePath;
+    }
+
+    public SectionDataContent(String title, String logFilePath,boolean sort,boolean showLine) {
+        mTitleName = title;
+        mLogFileName = logFilePath;
+        mSort = sort;
+        mShowLine = showLine;
     }
 
     public SectionDataContent(String title, ItemOnClickListener clickListener) {

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.item.getLittleDebugItem
 import com.bihe0832.android.common.debug.log.core.DebugLogInfoActivity
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -43,15 +44,33 @@ open class DebugLogActivity : CommonListActivity() {
     protected fun getCommonLogList(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
-            add(getDebugItem("日志路径：<BR><small>${LoggerFile.getZixieFileLogPathByModule("*")}</small>"))
-            add(getDebugItem("选择并发送日志") {
-                isView = false
-                FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
-            })
-            add(getDebugItem("选择并查看日志") {
-                isView = true
-                FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
-            })
+            add(getPathItem(LoggerFile.getZixieFileLogPathByModule("*")))
+            add(getSentItem())
+            add(getSentItem())
+            add(getViewItem())
+        }
+    }
+
+    protected fun getPathItem(path: String): DebugItemData {
+        return getLittleDebugItem(
+            "日志路径：<BR><small>${path}</small>",
+            null,
+            false,
+            null
+        )
+    }
+
+    protected fun getSentItem(): DebugItemData {
+        return getDebugItem("选择并发送日志") {
+            isView = false
+            FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
+        }
+    }
+
+    protected fun getViewItem(): CardBaseModule {
+        return getDebugItem("选择并查看日志") {
+            isView = true
+            FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
         }
     }
 
@@ -82,8 +101,8 @@ open class DebugLogActivity : CommonListActivity() {
         return mutableListOf<CardBaseModule>().apply {
             addAll(getCommonLogList())
             add(SectionDataHeader("基础通用日志"))
-            add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath()))
-            add(SectionDataContent("Webview", WebViewLoggerFile.getWebviewLogPath()))
+            add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath(), true, false))
+            add(SectionDataContent("Webview", WebViewLoggerFile.getWebviewLogPath(), false, true))
         }
     }
 
@@ -100,7 +119,9 @@ open class DebugLogActivity : CommonListActivity() {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
                 if (isView) {
-                    DebugLogInfoActivity.showLog(this, filePath, false, 2000)
+                    DebugLogInfoActivity.showLog(
+                        this, filePath, sort = false, showLine = true, showNum = 2000
+                    )
                 } else {
                     FileUtils.sendFile(this@DebugLogActivity, filePath).let {
                         if (!it) {
