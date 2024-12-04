@@ -143,7 +143,7 @@ open class BaseActivity : SupportActivity() {
         initToolbar(resID, null, needBack)
     }
 
-    protected fun initToolbar(resID: Int, titleString: String?, needBack: Boolean) {
+    protected open fun initToolbar(resID: Int, titleString: String?, needBack: Boolean) {
         initToolbar(resID, titleString, true, needBack, 0)
     }
 

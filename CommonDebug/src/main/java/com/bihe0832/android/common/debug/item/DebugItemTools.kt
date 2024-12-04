@@ -36,8 +36,10 @@ fun getDebugItem(
     isBold: Boolean,
     isSingleLine: Boolean,
     ellipsize: TextUtils.TruncateAt?,
-    paddingDp: Int,
-    isTips: Boolean
+    paddingTopDp: Int,
+    paddingLeftDp: Int,
+    isTips: Boolean,
+    showBottomLine: Boolean
 ): DebugItemData {
     return DebugItemData(
         content,
@@ -48,9 +50,10 @@ fun getDebugItem(
         isBold,
         isSingleLine,
         ellipsize,
-        paddingDp,
+        paddingTopDp,
+        paddingLeftDp,
         getDebugItemBackGroundColor(isTips),
-        true
+        showBottomLine
     )
 }
 
@@ -72,7 +75,9 @@ fun getDebugItem(
         isSingleLine,
         ellipsize,
         DebugItemData.DEFAULT_PADDING_SIZE_DP,
-        isTips
+        DebugItemData.DEFAULT_PADDING_SIZE_DP,
+        isTips,
+        true
     )
 }
 
@@ -86,7 +91,17 @@ fun getLittleDebugItem(
     isTips: Boolean
 ): DebugItemData {
     return getDebugItem(
-        content, listener, longClickListener, 10, isBold, isSingleLine, ellipsize, 12, isTips
+        content,
+        listener,
+        longClickListener,
+        10,
+        isBold,
+        isSingleLine,
+        ellipsize,
+        12,
+        DebugItemData.DEFAULT_PADDING_SIZE_DP,
+        isTips,
+        true
     )
 }
 
@@ -136,7 +151,17 @@ fun getLittleDebugItem(
     ellipsize: TextUtils.TruncateAt?,
 ): DebugItemData {
     return getDebugItem(
-        content, listener, null, 10, false, isSingleLine, ellipsize, 12, false
+        content,
+        listener,
+        null,
+        10,
+        false,
+        isSingleLine,
+        ellipsize,
+        12,
+        DebugItemData.DEFAULT_PADDING_SIZE_DP,
+        isTips = false,
+        showBottomLine = true
     )
 }
 

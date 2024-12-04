@@ -6,6 +6,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.bihe0832.android.common.debug.R;
+import com.bihe0832.android.common.debug.log.core.DebugLogInfoActivity;
 import com.bihe0832.android.framework.file.AAFFileTools;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
@@ -47,7 +48,7 @@ public class SectionHolderContent extends CardBaseHolder {
                     data.mActionListener.onClick(v, SectionDataContent.TYPE_OPEN);
                 } else {
                     try {
-                        AAFFileTools.INSTANCE.openFileWithTips(ViewExtKt.getActivity(v), data.mLogFileName);
+                        DebugLogInfoActivity.Companion.showLog(getContext(),data.mLogFileName);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

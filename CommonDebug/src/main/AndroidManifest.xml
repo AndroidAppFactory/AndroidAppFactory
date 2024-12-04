@@ -1,66 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.bihe0832.android.common.debug">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bihe0832.android.common.debug">
 
     <application>
         <activity
-                android:name="com.bihe0832.android.common.debug.log.DebugLogActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:exported="true"
-                android:theme="@style/AAF.ActivityTheme">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:name="com.bihe0832.android.common.debug.log.DebugLogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
-        <receiver
-                android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail"
-                android:exported="true"
-                android:label="详细调试">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-                <action android:name="android.appwidget.action.REFRESH" />
-            </intent-filter>
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/com_bihe0832_debug_widget_detail" />
-        </receiver>
-
-        <receiver
-                android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderSimple"
-                android:exported="true"
-                android:label="简洁调试">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-                <action android:name="android.appwidget.action.REFRESH" />
-            </intent-filter>
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/com_bihe0832_debug_widget_simple" />
-        </receiver>
-
-        <receiver
-                android:name="com.bihe0832.android.common.debug.widget.device.AAFDebugWidgetProviderDevice"
-                android:exported="true"
-                android:label="设备调试">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-                <action android:name="android.appwidget.action.REFRESH" />
-            </intent-filter>
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/com_bihe0832_debug_widget_device" />
-        </receiver>
+        <activity
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name="com.bihe0832.android.common.debug.log.core.DebugLogInfoActivity"
+            android:screenOrientation="sensor"
+            android:theme="@style/AAF.ActivityTheme"
+            tools:ignore="DiscouragedApi" />
 
         <activity
-                android:name="com.bihe0832.android.common.debug.module.DebugRootActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="sensor"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name="com.bihe0832.android.common.debug.module.DebugRootActivity"
+            android:screenOrientation="sensor"
+            android:theme="@style/AAF.ActivityTheme"
+            tools:ignore="DiscouragedApi" />
+
+        <receiver
+            android:exported="true"
+            android:label="设备调试"
+            android:name="com.bihe0832.android.common.debug.widget.device.AAFDebugWidgetProviderDevice">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.appwidget.action.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_device" />
+        </receiver>
+
+        <receiver
+            android:exported="true"
+            android:label="详细调试"
+            android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.appwidget.action.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_detail" />
+        </receiver>
+
+        <receiver
+            android:exported="true"
+            android:label="简洁调试"
+            android:name="com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderSimple">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.appwidget.action.REFRESH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_simple" />
+        </receiver>
     </application>
 
 </manifest>

@@ -29,8 +29,14 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.pinyin.FilePinyinMapDict
 import com.bihe0832.android.lib.pinyin.PinYinTools
 import com.bihe0832.android.lib.speech.DEFAULT_ENDPOINT_MODEL_DIR
-import com.bihe0832.android.lib.speech.endpoint.ASRWithEndpoint
+import com.bihe0832.android.lib.speech.endpoint.AudioRecordWithEndpoint
 import com.bihe0832.android.lib.speech.getDefaultOnlineRecognizerConfig
+import com.bihe0832.android.lib.speech.recognition.ASROfflineManager
+import com.k2fsa.sherpa.onnx.OfflineModelConfig
+import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig
+import com.k2fsa.sherpa.onnx.OfflineWhisperModelConfig
+import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
+import com.k2fsa.sherpa.onnx.getFeatureConfig
 import java.io.File
 
 class DebugRecordAndASRFragRecment : DebugEnvFragment() {
@@ -59,11 +65,15 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
                     )
                 })
             )
-
+            add(
+                getDebugItem("ASR测试", View.OnClickListener {
+                    debugASR()
+                })
+            )
             add(getDebugItem("初始化", View.OnClickListener { init() }))
             add(
                 getDebugItem("ARS 静音检测：结束实时识别及录制",
-                    View.OnClickListener { ASRWithEndpoint.stopRecord(context!!) })
+                    View.OnClickListener { AudioRecordWithEndpoint.stopRecord(context!!) })
             )
             add(getDebugItem("ARS 实时打断", View.OnClickListener { forceEndCurrent() }))
             add(
@@ -118,7 +128,7 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
                     AAFAudioTools.init()
-                    ASRWithEndpoint.init(
+                    AudioRecordWithEndpoint.init(
                         context!!, getDefaultOnlineRecognizerConfig(
                             AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, DEFAULT_ENDPOINT_MODEL_DIR
                         )
@@ -202,7 +212,7 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
             scene,
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
-                    ASRWithEndpoint.startDataRecord() { audioRecordConfig, pcmData, result ->
+                    AudioRecordWithEndpoint.startDataRecord() { audioRecordConfig, pcmData, result ->
                         ZLog.d(TAG, "Started recording callback:${pcmData?.size}")
                         val fileFolder = AAFFileWrapper.getMediaTempFolder()
                         pcmData?.let {
@@ -225,13 +235,13 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
     }
 
     fun forceEndCurrent() {
-        ASRWithEndpoint.forceEndCurrent().let {
+        AudioRecordWithEndpoint.forceEndCurrent().let {
             ZLog.d(TAG, "forceEndCurrent:$it")
         }
     }
 
     fun testSplit() {
-        ASRWithEndpoint.startDataRecord { audioRecordConfig, pcmData, result ->
+        AudioRecordWithEndpoint.startDataRecord { audioRecordConfig, pcmData, result ->
             ZLog.d(TAG, "Started recording callback:${pcmData?.size}")
             val fileFolder = AAFFileWrapper.getMediaTempFolder()
             pcmData?.let {
@@ -279,6 +289,42 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
         first?.copyInto(result, 0)
         second?.copyInto(result, first?.size ?: 0)
         return result
+    }
+
+    fun debugASR() {
+        preFile()
+        createAndRecogniseAudio(AAFFileWrapper.getMediaTempFolder() + "1733231828880.wav")
+    }
+
+    fun createAndRecogniseAudio(filePath: String) {
+        val mASROfflineManager = ASROfflineManager()
+        val modelDir = "sherpa-onnx-whisper-base"
+        FileUtils.copyAssetsFolderToFolder(
+            context,
+            modelDir,
+            AAFFileWrapper.getTempFolder() + modelDir
+        )
+        val offlineRecognizer = OfflineRecognizerConfig(
+            featConfig = getFeatureConfig(AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, 80),
+            modelConfig = OfflineModelConfig(
+                whisper = OfflineWhisperModelConfig(
+                    encoder = AAFFileWrapper.getTempFolder() + "$modelDir/base-encoder.int8.onnx",
+                    decoder = AAFFileWrapper.getTempFolder() + "$modelDir/base-decoder.int8.onnx",
+                    language = "zh"
+                ),
+                tokens = AAFFileWrapper.getTempFolder() + "$modelDir/base-tokens.txt",
+                modelType = "whisper",
+            )
+        )
+        mASROfflineManager.initRecognizer(offlineRecognizer)
+        SherpaAudioConvertTools.readWavAudioToSherpaArray(filePath)?.let { audioData ->
+            val time = System.currentTimeMillis()
+            mASROfflineManager.startRecognizer(
+                AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, audioData
+            ).let { result ->
+                ZLog.e(TAG, "识别耗时： ${System.currentTimeMillis() - time} recognizer:$result")
+            }
+        }
     }
 
 
