@@ -18,19 +18,22 @@ import com.k2fsa.sherpa.onnx.OnlineStream
 public class ASROnlineManager {
 
     private var onlineRecognizer: OnlineRecognizer? = null
+    private var isReady = false
+
     fun initRecognizer(context: Context, config: OnlineRecognizerConfig) {
         try {
             onlineRecognizer = OnlineRecognizer(assetManager = context.assets, config = config)
+            isReady = true
         } catch (e: Exception) {
             e.printStackTrace()
             onlineRecognizer = null
         }
-
     }
 
     fun initRecognizer(config: OnlineRecognizerConfig) {
         try {
             onlineRecognizer = OnlineRecognizer(null, config = config)
+            isReady = true
         } catch (e: Exception) {
             e.printStackTrace()
             onlineRecognizer = null
@@ -51,7 +54,7 @@ public class ASROnlineManager {
         stream: OnlineStream, sampleRateInHz: Int, buffer: FloatArray?
     ): CheckResult {
         ZLog.d(AudioRecordManager.TAG, "acceptWaveform")
-        if (buffer != null && buffer.isNotEmpty()) {
+        if (isReady && buffer != null && buffer.isNotEmpty()) {
             stream.acceptWaveform(buffer, sampleRateInHz)
             while (onlineRecognizer!!.isReady(stream)) {
                 onlineRecognizer!!.decode(stream)
@@ -77,7 +80,12 @@ public class ASROnlineManager {
         stream.release()
     }
 
+    fun isReady(): Boolean {
+        return isReady
+    }
+
     fun destroy() {
+        isReady = false
         onlineRecognizer?.release()
         onlineRecognizer = null
     }

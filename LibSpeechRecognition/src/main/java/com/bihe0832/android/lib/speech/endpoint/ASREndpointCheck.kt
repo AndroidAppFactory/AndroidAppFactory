@@ -19,42 +19,59 @@ import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
 class ASREndpointCheck {
 
     private var needForceEnding: Boolean = false
-    private lateinit var onlineRecognizer: OnlineRecognizer
-    private lateinit var stream: OnlineStream
+    private var onlineRecognizer: OnlineRecognizer? = null
+    private var stream: OnlineStream? = null
+    private var isReady = false
 
     fun init(context: Context, config: OnlineRecognizerConfig) {
-        onlineRecognizer = OnlineRecognizer(assetManager = context.assets, config = config)
+        try {
+            onlineRecognizer = OnlineRecognizer(assetManager = context.assets, config = config)
+            isReady = true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            onlineRecognizer = null
+        }
     }
 
     fun init(config: OnlineRecognizerConfig) {
-        onlineRecognizer = OnlineRecognizer(null, config = config)
+        try {
+            onlineRecognizer = OnlineRecognizer(null, config = config)
+            isReady = true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            onlineRecognizer = null
+        }
     }
 
     class CheckResult(val isEnd: Boolean, val result: OnlineRecognizerResult?)
 
-    fun check(sampleRateInHz: Int, buffer: ShortArray?, size: Int): CheckResult {
+    fun check(
+        sampleRateInHz: Int, buffer: ShortArray?, size: Int, autoReset: Boolean
+    ): CheckResult {
         try {
-            if (buffer != null) {
+            if (onlineRecognizer != null && stream != null && isReady && buffer != null) {
                 val samples = SherpaAudioConvertTools.shortArrayToSherpaArray(buffer, size)
-                stream.acceptWaveform(samples, sampleRate = sampleRateInHz)
-                while (onlineRecognizer.isReady(stream)) {
-                    onlineRecognizer.decode(stream)
+                stream!!.acceptWaveform(samples, sampleRate = sampleRateInHz)
+                while (onlineRecognizer!!.isReady(stream!!)) {
+                    onlineRecognizer!!.decode(stream!!)
                 }
-                if (needForceEnding || onlineRecognizer.isEndpoint(stream)) {
+                if (needForceEnding || onlineRecognizer!!.isEndpoint(stream!!)) {
                     ZLog.d("${AudioRecordManager.TAG} AudioRecordWithEndpoint isEndpoint, needForceEnding:$needForceEnding")
                     ZLog.d(
-                        "${AudioRecordManager.TAG} AudioRecordWithEndpoint processSamples isEndpoint:" + onlineRecognizer.getResult(
-                            stream
+                        "${AudioRecordManager.TAG} AudioRecordWithEndpoint processSamples isEndpoint:" + onlineRecognizer!!.getResult(
+                            stream!!
                         ).text
                     )
                     if (needForceEnding) {
                         needForceEnding = false
                     }
-                    val result = onlineRecognizer.getResult(stream)
-                    onlineRecognizer.reset(stream)
+                    val result = onlineRecognizer!!.getResult(stream!!)
+                    if (autoReset) {
+                        onlineRecognizer!!.reset(stream!!)
+                    }
                     return CheckResult(true, result)
                 } else {
-                    return CheckResult(false, onlineRecognizer.getResult(stream))
+                    return CheckResult(false, onlineRecognizer!!.getResult(stream!!))
                 }
             }
         } catch (e: Exception) {
@@ -67,17 +84,30 @@ class ASREndpointCheck {
         needForceEnding = true
     }
 
-    fun startCheck() {
-        stream = onlineRecognizer.createStream()
+    fun startCheck(): Boolean {
+        try {
+            if (isReady && onlineRecognizer != null) {
+                stream = onlineRecognizer!!.createStream()
+            }
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            stream = null
+        }
+        return false
     }
 
     fun endCheck() {
-        onlineRecognizer.reset(stream)
-        stream.release()
+        stream?.let {
+            onlineRecognizer?.reset(it)
+            it.release()
+        }
     }
 
     fun releaseCheck() {
-        onlineRecognizer.release()
+        isReady = false
+        onlineRecognizer?.release()
+        onlineRecognizer = null
 
     }
 }
