@@ -48,8 +48,10 @@ public class DebugItemHolder extends CardBaseHolder {
             mHeader.setSingleLine(false);
             mHeader.setEllipsize(null);
         }
-        mHeader.setPadding(DisplayUtil.dip2px(getContext(), 16), DisplayUtil.dip2px(getContext(), data.paddingDp),
-                DisplayUtil.dip2px(getContext(), 16), DisplayUtil.dip2px(getContext(), data.paddingDp));
+        mHeader.setPadding(DisplayUtil.dip2px(getContext(), data.paddingLeftDp),
+                DisplayUtil.dip2px(getContext(), data.paddingTopDp),
+                DisplayUtil.dip2px(getContext(), data.paddingLeftDp),
+                DisplayUtil.dip2px(getContext(), data.paddingTopDp));
         if (null != data.mListener) {
             itemView.setOnClickListener(data.mListener);
         }

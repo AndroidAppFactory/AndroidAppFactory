@@ -26,7 +26,8 @@ public class DebugItemData extends CardBaseModule {
     public boolean isBold = false;
     public boolean showBottomLine = true;
     public int textSizeDP = DEFAULT_TEXT_SIZE_DP;
-    public int paddingDp = DEFAULT_PADDING_SIZE_DP;
+    public int paddingTopDp = DEFAULT_PADDING_SIZE_DP;
+    public int paddingLeftDp = DEFAULT_PADDING_SIZE_DP;
 
     public DebugItemData() {
         super();
@@ -34,7 +35,7 @@ public class DebugItemData extends CardBaseModule {
 
     public DebugItemData(String content, View.OnClickListener listener, View.OnLongClickListener longClickListener,
             int textSizeDP, int textColor, boolean isBold, boolean isSingleLine, TextUtils.TruncateAt ellipsize,
-            int paddingDp, int background,
+            int paddingTopDp, int paddingLeftDp, int background,
             boolean showBottomLine) {
         this.mContentText = content;
         this.mListener = listener;
@@ -44,7 +45,8 @@ public class DebugItemData extends CardBaseModule {
         this.isSingleLine = isSingleLine;
         this.ellipsize = ellipsize;
         this.isBold = isBold;
-        this.paddingDp = paddingDp;
+        this.paddingTopDp = paddingTopDp;
+        this.paddingLeftDp = paddingLeftDp;
         this.backgroundColor = background;
         this.showBottomLine = showBottomLine;
     }

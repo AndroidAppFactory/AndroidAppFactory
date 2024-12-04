@@ -4,13 +4,13 @@ import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.log.core.DebugLogInfoActivity
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.router.RouterInterrupt
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -23,8 +23,7 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 
 open class DebugLogActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
-    var num = 0
-    protected var isView = true
+    private var isView = true
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeGridLayoutManager(this, 3)
     }
@@ -101,7 +100,7 @@ open class DebugLogActivity : CommonListActivity() {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
                 if (isView) {
-                    AAFFileTools.openFileWithTips(this, filePath)
+                    DebugLogInfoActivity.showLog(this, filePath, false, 2000)
                 } else {
                     FileUtils.sendFile(this@DebugLogActivity, filePath).let {
                         if (!it) {
