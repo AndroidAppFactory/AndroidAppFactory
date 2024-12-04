@@ -18,21 +18,33 @@ public class KeywordSpotterManager {
 
     private lateinit var kws: KeywordSpotter
     private lateinit var stream: OnlineStream
+    private var isReady = false
 
     fun initRecognizer(context: Context, config: KeywordSpotterConfig) {
-        kws = KeywordSpotter(
-            assetManager = context.assets,
-            config = config,
-        )
-        stream = kws.createStream()
+        try {
+            kws = KeywordSpotter(
+                assetManager = context.assets,
+                config = config,
+            )
+            stream = kws.createStream()
+            isReady = true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
     fun initRecognizer(config: KeywordSpotterConfig) {
-        kws = KeywordSpotter(
-            null,
-            config = config,
-        )
-        stream = kws.createStream()
+        try {
+            kws = KeywordSpotter(
+                null,
+                config = config,
+            )
+            stream = kws.createStream()
+            isReady = true
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun start(key: String) {

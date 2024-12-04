@@ -74,9 +74,9 @@ object AudioRecordWithEndpoint {
     fun startDataRecord(
         callback: (audioRecordConfig: AudioRecordConfig, totalData: ShortArray?, result: OnlineRecognizerResult?) -> Unit,
     ) {
-        startDataRecord(null, scene,"") { audioRecordConfig, stepData, result ->
+        startDataRecord(null, scene, "") { audioRecordConfig, stepData, result ->
             samplesBuffer.add(stepData.toShorts())
-            if (result.isEnd){
+            if (result.isEnd) {
                 val totalData = samplesBuffer.flatMap { it.asList() }.toShortArray()
                 ZLog.d("${AudioRecordManager.TAG} ASRWithEndpoint  processSamples isEndpoint totalData:" + totalData.size)
                 samplesBuffer.clear()
@@ -105,7 +105,7 @@ object AudioRecordWithEndpoint {
                     callback.invoke(
                         audioRecordConfig,
                         audioChunk,
-                        mASREndpointCheck.check(audioRecordConfig.sampleRateInHz, temp, ret)
+                        mASREndpointCheck.check(audioRecordConfig.sampleRateInHz, temp, ret, true)
                     )
                 }
             } catch (e: Exception) {
@@ -169,7 +169,7 @@ object AudioRecordWithEndpoint {
             newFile(fileFolder)
             startDataRecord(activity, scene, notifyContent) { audioRecordConfig, pcmData, result ->
                 outputStream!!.write(pcmData.toBytes()) // 将数据写入文件
-                if (result.isEnd){
+                if (result.isEnd) {
                     val finalFile = file
                     ZLog.d("${AudioRecordManager.TAG} AudioRecordWithEndpoint  processSamples :$finalFile")
                     ZLog.d("${AudioRecordManager.TAG} AudioRecordWithEndpoint processSamples isEndpoint:" + result.result?.text)

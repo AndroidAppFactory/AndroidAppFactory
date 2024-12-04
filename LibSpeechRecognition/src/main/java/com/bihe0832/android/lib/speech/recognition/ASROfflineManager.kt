@@ -16,6 +16,7 @@ import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig
 public class ASROfflineManager {
 
     private var offlineRecognizer: OfflineRecognizer? = null
+    private var isReady = false
 
     fun initRecognizer(context: Context, config: OfflineRecognizerConfig) {
         ZLog.d(AudioRecordManager.TAG, "initRecognizer start")
@@ -24,6 +25,7 @@ public class ASROfflineManager {
                 assetManager = context.assets,
                 config = config,
             )
+            isReady = true
         } catch (e: Exception) {
             e.printStackTrace()
             offlineRecognizer = null
@@ -38,6 +40,7 @@ public class ASROfflineManager {
                 null,
                 config = config,
             )
+            isReady = true
         } catch (e: Exception) {
             e.printStackTrace()
             offlineRecognizer = null
@@ -49,7 +52,7 @@ public class ASROfflineManager {
     fun startRecognizer(sampleRateInHz: Int, buffer: FloatArray?): String {
         ZLog.d(AudioRecordManager.TAG, "processing samples")
         try {
-            if (offlineRecognizer != null && buffer != null && buffer.isNotEmpty()) {
+            if (offlineRecognizer != null && isReady && buffer != null && buffer.isNotEmpty()) {
                 val stream = offlineRecognizer!!.createStream()
                 stream.acceptWaveform(buffer, sampleRateInHz)
                 offlineRecognizer!!.decode(stream)
@@ -63,7 +66,13 @@ public class ASROfflineManager {
         return ""
     }
 
+    fun isReady(): Boolean {
+        return isReady
+    }
+
     fun destroy() {
+        isReady = false
         offlineRecognizer?.release()
+        offlineRecognizer = null
     }
 }
