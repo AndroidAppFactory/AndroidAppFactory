@@ -156,9 +156,12 @@ open class DebugLogInfoActivity : CommonListActivity() {
                                     "调整日志行数",
                                     "请在下方输入你想展示的日志行数，后点击确定，当前行数：$showNum",
                                     showNum.toString()
-                                ) { p0 -> showNum = ConvertUtils.parseInt(p0, showNum) }
-                                isSort = !isSort
-                                mLiveData.refresh()
+                                ) { p0 ->
+                                    if (!showNum.toString().equals(p0)) {
+                                        showNum = ConvertUtils.parseInt(p0, showNum)
+                                        mLiveData.refresh()
+                                    }
+                                }
                             }
                         })
                     }.let {
