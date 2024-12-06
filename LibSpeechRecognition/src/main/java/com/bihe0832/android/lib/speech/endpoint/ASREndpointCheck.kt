@@ -102,6 +102,7 @@ class ASREndpointCheck {
             onlineRecognizer?.reset(it)
             it.release()
         }
+        stream = null
     }
 
     fun releaseCheck() {
