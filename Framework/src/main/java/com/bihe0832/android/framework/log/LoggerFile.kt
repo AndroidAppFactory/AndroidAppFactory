@@ -201,6 +201,6 @@ object LoggerFile {
     }
 
     fun getAudioH5LogData(filePath: String, type: String): String {
-        return "这是一个测试<audio controls style=\"height: 1em;\">\n" + "  <source src=\"file://${filePath}\" type=\"${type}\">\n" + "  Your browser does not support the audio element.\n" + "</audio>"
+        return "<audio controls style=\"height: 1em;\">\n" + "  <source src=\"file://${filePath}\" type=\"${type}\">\n" + "  Your browser does not support the audio element.\n" + "</audio>"
     }
 }
