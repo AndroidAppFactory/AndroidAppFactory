@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
+import android.text.TextUtils
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -36,6 +37,8 @@ object LoggerFile {
 
     private val mLogFiles = ConcurrentHashMap<String, File?>()
     private val mBufferedWriters = ConcurrentHashMap<String, BufferedWriter?>()
+    private val fileNameMap = ConcurrentHashMap<String, String>()
+
     private const val DEFAULT_DURATION = DateUtil.MILLISECOND_OF_HOUR
     private const val DEFAULT_LOG_FILE_SIZE = FileUtils.SPACE_MB * 3
     private const val MAX_LOG_FILE_SIZE = FileUtils.SPACE_MB * 10
@@ -100,39 +103,12 @@ object LoggerFile {
                     mBufferedWriters[fileName] = bufferedWriter
                     if (!hasExist && type == TYPE_HTML) {
                         bufferSave(
-                            fileName, TYPE_TEXT, "", " <!DOCTYPE HTML>\n" +
-                                    "<head>\n" +
-                                    "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
-                                    "  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0\" />\n" +
-                                    "  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n" +
-                                    "  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n" +
-                                    "  <meta name=\"format-detection\" content=\"telephone=no\" />\n" +
-                                    "  <meta http-equiv=\"Pragma\" content=\"no-cache\">\n" +
-                                    "  <meta http-equiv=\"Cache-Control\" content=\"no-cache, must-revalidate\">\n" +
-                                    "  <meta http-equiv=\"Expires\" content=\"0\">\n" +
-                                    "  <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.bihe0832.com/css/global.css\" />\n" +
-                                    "  <style type=\"text/css\">\n" +
-                                    "   body {\n" +
-                                    "      line-height: 1;\n" +
-                                    "      font-family: Microsoft Yahei;\n" +
-                                    "      color: #333;\n" +
-                                    "      background: #fff;\n" +
-                                    "      font-size: 0.9em;\n" +
-                                    "      margin-top: 10px;\n" +
-                                    "      margin-left: 6px;\n" +
-                                    "      margin-right: 6px;\n" +
-                                    "    }\n" +
-                                    "    div{       \n" +
-                                    "      width: 100%;       \n" +
-                                    "      color: #333;\n" +
-                                    "      line-height: 2em;\n" +
-                                    "      border-bottom: 0.5px solid #333;\n" +
-                                    "    }  \n" +
-                                    "    </style>\n" +
-                                    "  <title>" + APKUtils.getAppName(mContext) +
-                                    "</title>\n" +
-                                    "</head>\n" +
-                                    "<body>"
+                            fileName,
+                            TYPE_TEXT,
+                            "",
+                            " <!DOCTYPE HTML>\n" + "<head>\n" + "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" + "  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0\" />\n" + "  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n" + "  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n" + "  <meta name=\"format-detection\" content=\"telephone=no\" />\n" + "  <meta http-equiv=\"Pragma\" content=\"no-cache\">\n" + "  <meta http-equiv=\"Cache-Control\" content=\"no-cache, must-revalidate\">\n" + "  <meta http-equiv=\"Expires\" content=\"0\">\n" + "  <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.bihe0832.com/css/global.css\" />\n" + "  <style type=\"text/css\">\n" + "   body {\n" + "      line-height: 1;\n" + "      font-family: Microsoft Yahei;\n" + "      color: #333;\n" + "      background: #fff;\n" + "      font-size: 0.9em;\n" + "      margin-top: 10px;\n" + "      margin-left: 6px;\n" + "      margin-right: 6px;\n" + "    }\n" + "    div{       \n" + "      width: 100%;       \n" + "      color: #333;\n" + "      line-height: 2em;\n" + "      border-bottom: 0.5px solid #333;\n" + "    }  \n" + "    </style>\n" + "  <title>" + APKUtils.getAppName(
+                                mContext
+                            ) + "</title>\n" + "</head>\n" + "<body>"
                         )
                     }
                 } catch (e: Exception) {
@@ -154,8 +130,7 @@ object LoggerFile {
                     mBufferedWriters[fileName]?.write(
                         "<div>$tag ${
                             msg?.replace(
-                                "\n",
-                                "<BR>"
+                                "\n", "<BR>"
                             )
                         }</div>"
                     )
@@ -172,26 +147,33 @@ object LoggerFile {
     }
 
     fun getZixieFileLogPathByModule(module: String): String {
-        return ZixieContext.getLogFolder() + "${module}_${DateUtil.getCurrentDateEN("yyyyMMdd")}.txt"
+        return getZixieFileLogPathByModule(module, ZixieContext.getLogFolder(), TYPE_TEXT)
     }
 
-    fun log(filePath: String, msg: String) {
-        ZLog.info(FileUtils.getFileNameWithoutEx(filePath), msg)
-        logFile(filePath, TYPE_TEXT, DateUtil.getCurrentDateEN(), msg)
+    fun getZixieFileLogPathByModule(module: String, type: Int): String {
+        return getZixieFileLogPathByModule(module, ZixieContext.getLogFolder(), type)
     }
 
-
-    fun log(filePath: String, tag: String, msg: String) {
-        ZLog.info(FileUtils.getFileNameWithoutEx(filePath), msg)
-        logFile(filePath, TYPE_TEXT, tag, msg)
-    }
-
-    fun logFile(filePath: String, msg: String) {
-        logFile(filePath, TYPE_TEXT, DateUtil.getCurrentDateEN(), msg)
+    fun getZixieFileLogPathByModule(module: String, folder: String, type: Int): String {
+        var path = ""
+        if (fileNameMap.contains(module + type)) {
+            path = fileNameMap[module + type] ?: ""
+        }
+        if (TextUtils.isEmpty(path)) {
+            val ext = if (type == TYPE_HTML) {
+                ".html"
+            } else {
+                ".txt"
+            }
+            path = folder + "${module}_${DateUtil.getCurrentDateEN("yyyyMMdd")}$ext"
+            fileNameMap[module + type] = path
+        }
+        return path
     }
 
     fun logFile(filePath: String, type: Int, tag: String, msg: String) {
         try {
+            ZLog.info(FileUtils.getFileNameWithoutEx(filePath), msg)
             if (mCanSaveSpecialFile) {
                 reset(filePath, type)
                 bufferSave(filePath, type, tag, msg)
@@ -202,10 +184,23 @@ object LoggerFile {
         }
     }
 
+    fun logH5(filePath: String, tag: String, msg: String) {
+        logFile(filePath, TYPE_HTML, tag, msg)
+    }
+
+    fun logH5(filePath: String, msg: String) {
+        logH5(filePath, DateUtil.getCurrentDateEN("MM-dd HH:mm:ss"), msg)
+    }
+
+    fun log(filePath: String, tag: String, msg: String) {
+        logFile(filePath, TYPE_TEXT, tag, msg)
+    }
+
+    fun log(filePath: String, msg: String) {
+        log(filePath, DateUtil.getCurrentDateEN("MM-dd HH:mm:ss"), msg)
+    }
+
     fun getAudioH5LogData(filePath: String, type: String): String {
-        return "这是一个测试<audio controls style=\"height: 1em;\">\n" +
-                "  <source src=\"file://${filePath}\" type=\"${type}\">\n" +
-                "  Your browser does not support the audio element.\n" +
-                "</audio>"
+        return "这是一个测试<audio controls style=\"height: 1em;\">\n" + "  <source src=\"file://${filePath}\" type=\"${type}\">\n" + "  Your browser does not support the audio element.\n" + "</audio>"
     }
 }

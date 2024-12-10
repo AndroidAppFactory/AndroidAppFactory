@@ -49,12 +49,12 @@ class DebugLogFragment : BaseDebugListFragment() {
             add(
                 getDebugItem(
                     "打开文件日志",
-                    View.OnClickListener { AAFLoggerFile.openLog(LOG_TAG) })
+                    View.OnClickListener { AAFLoggerFile.showLogByModule(LOG_TAG) })
             )
             add(
                 getDebugItem(
                     "发送文件日志",
-                    View.OnClickListener { AAFLoggerFile.sendLog(LOG_TAG) })
+                    View.OnClickListener { AAFLoggerFile.sendLogByModule(LOG_TAG) })
             )
             add(getDebugItem("跨线程文件日志", View.OnClickListener { testLog() }))
         }

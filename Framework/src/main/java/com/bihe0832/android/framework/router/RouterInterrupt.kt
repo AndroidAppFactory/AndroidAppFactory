@@ -66,7 +66,7 @@ object RouterInterrupt {
     }
     
     fun logRouterToFile(msg: String) {
-        LoggerFile.logFile(getRouterLogPath(), msg)
+        LoggerFile.log(getRouterLogPath(), msg)
 
     }
 

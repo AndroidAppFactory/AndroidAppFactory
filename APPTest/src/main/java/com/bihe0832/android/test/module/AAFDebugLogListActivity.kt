@@ -31,7 +31,7 @@ class AAFDebugLogListActivity : DebugLogListActivity() {
         return mutableListOf<CardBaseModule>().apply {
             addAll(getCommonLogList())
             add(SectionDataHeader("基础通用日志"))
-            add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath(), false))
+            add(SectionDataContent("路由跳转路由跳转路由跳转路由跳转路由跳转路由跳转", RouterInterrupt.getRouterLogPath(), false))
             add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath(), false))
             add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath(), false))
             add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath(), false))
