@@ -1,11 +1,11 @@
 package com.bihe0832.android.common.debug.log;
 
 import android.content.Intent
+import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getLittleDebugItem
-import com.bihe0832.android.common.debug.log.core.DebugLogInfoActivity
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
@@ -13,18 +13,39 @@ import com.bihe0832.android.common.webview.core.WebViewLoggerFile
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.log.LoggerFile
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterInterrupt
+import com.bihe0832.android.framework.router.showLog
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
+import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.recycleview.ext.SafeGridLayoutManager
+import com.bihe0832.android.lib.utils.ConvertUtils
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
 
+@Module(RouterConstants.MODULE_NAME_SHOW_LOG_LIST)
+open class DebugLogListActivity : CommonListActivity() {
 
-open class DebugLogActivity : CommonListActivity() {
     val mDataList = ArrayList<CardBaseModule>()
     private var isView = true
+    private var showTitle = false
+
+    override fun parseBundle(bundle: Bundle) {
+        super.parseBundle(bundle)
+        showTitle = ConvertUtils.parseBoolean(
+            bundle.getString(
+                RouterConstants.INTENT_EXTRA_KEY_SHOW_LOG_LIST_ACTION,
+                ""
+            ), showTitle
+        )
+    }
+
+    open fun showAction(): Boolean {
+        return false
+    }
+
     override fun getLayoutManagerForList(): RecyclerView.LayoutManager {
         return SafeGridLayoutManager(this, 3)
     }
@@ -52,24 +73,21 @@ open class DebugLogActivity : CommonListActivity() {
 
     protected fun getLogPathItem(path: String): DebugItemData {
         return getLittleDebugItem(
-            "日志路径：<BR><small>${path}</small>",
-            null,
-            false,
-            null
+            "日志路径：<BR><small>${path}</small>", null, false, null
         )
     }
 
     protected fun getSendLogItem(): DebugItemData {
         return getDebugItem("选择并发送日志") {
             isView = false
-            FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
+            FileSelectTools.openFileSelect(this@DebugLogListActivity, ZixieContext.getLogFolder())
         }
     }
 
     protected fun getOpenLogItem(): CardBaseModule {
         return getDebugItem("选择并查看日志") {
             isView = true
-            FileSelectTools.openFileSelect(this@DebugLogActivity, ZixieContext.getLogFolder())
+            FileSelectTools.openFileSelect(this@DebugLogListActivity, ZixieContext.getLogFolder())
         }
     }
 
@@ -98,10 +116,20 @@ open class DebugLogActivity : CommonListActivity() {
 
     open fun getTempData(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
-            addAll(getCommonLogList())
+            if (showTitle) {
+                addAll(getCommonLogList())
+            }
             add(SectionDataHeader("基础通用日志"))
-            add(SectionDataContent("路由跳转", RouterInterrupt.getRouterLogPath(), true, false))
-            add(SectionDataContent("Webview", WebViewLoggerFile.getWebviewLogPath(), false, true))
+            add(
+                SectionDataContent(
+                    "路由跳转", RouterInterrupt.getRouterLogPath(), showAction(), true, false
+                )
+            )
+            add(
+                SectionDataContent(
+                    "Webview", WebViewLoggerFile.getWebviewLogPath(), showAction(), false, true
+                )
+            )
         }
     }
 
@@ -118,11 +146,9 @@ open class DebugLogActivity : CommonListActivity() {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
                 if (isView) {
-                    DebugLogInfoActivity.showLog(
-                        this, filePath, sort = false, showLine = true, showNum = 2000
-                    )
+                    showLog(filePath, sort = false, showLine = true, showNum = 2000)
                 } else {
-                    FileUtils.sendFile(this@DebugLogActivity, filePath).let {
+                    FileUtils.sendFile(this@DebugLogListActivity, filePath).let {
                         if (!it) {
                             ZixieContext.showToast("分享文件:$filePath 失败")
                         }

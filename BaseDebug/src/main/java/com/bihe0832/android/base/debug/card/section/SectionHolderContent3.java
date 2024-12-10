@@ -12,7 +12,7 @@ import com.bihe0832.android.lib.adapter.CardBaseModule;
  * Description: Description
  */
 
-public class SectionHolderContent3 extends SectionHolderContent2 {
+public class SectionHolderContent3 extends SectionHolderContentTest {
 
     public SectionHolderContent3(View itemView, Context context) {
         super(itemView, context);

@@ -18,6 +18,7 @@ public class RouterConstants {
 
     public static final String MODULE_NAME_WEB_PAGE = "zweb";
     public static final String MODULE_NAME_WEB_PAGE_TBS = "ztbsweb";
+
     //webview参数，要打开的URL
     public static final String INTENT_EXTRA_KEY_WEB_URL = FileSelectTools.INTENT_EXTRA_KEY_WEB_URL;
     //是否隐藏webview的标题栏
@@ -56,5 +57,11 @@ public class RouterConstants {
     // 是否支持发送APK
     public static final String INTENT_EXTRA_KEY_SHARE_SEND_APK = "apk";
 
-
+    //日志查看
+    public static final String MODULE_NAME_SHOW_LOG_LIST = "loglist";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_LIST_ACTION = "showAction";
+    public static final String MODULE_NAME_SHOW_LOG = "log";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SORT = "log.sort";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_NUM = "log.num";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SHOW_LINE = "log.line";
 }

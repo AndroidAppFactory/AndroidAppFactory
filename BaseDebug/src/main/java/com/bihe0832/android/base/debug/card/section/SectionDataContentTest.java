@@ -9,18 +9,18 @@ import com.bihe0832.android.lib.adapter.CardBaseModule;
  * Created on 2019-11-21.
  * Description: Description
  */
-public class SectionDataContent2 extends CardBaseModule {
+public class SectionDataContentTest extends CardBaseModule {
 
     public int getResID() {
         return R.layout.card_demo_section_content_2;
     }
 
     public Class<? extends CardBaseHolder> getViewHolderClass() {
-        return SectionHolderContent2.class;
+        return SectionHolderContentTest.class;
     }
     public String mContentText;
 
-    public SectionDataContent2(String netType) {
+    public SectionDataContentTest(String netType) {
         mContentText = netType;
     }
 }

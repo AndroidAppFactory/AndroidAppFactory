@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.adapter.CardBaseHolder;
  * Created on 2019-11-21.
  * Description: Description
  */
-public class SectionDataContent3 extends SectionDataContent2 {
+public class SectionDataContent3 extends SectionDataContentTest {
 
     public SectionDataContent3(String netType) {
         super(netType);
