@@ -62,12 +62,28 @@ open class DebugLogListActivity : CommonListActivity() {
         }
     }
 
-    protected fun getCommonLogList(): List<CardBaseModule> {
+    protected open fun getCommonLogList(): List<CardBaseModule> {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
             add(getLogPathItem(LoggerFile.getZixieFileLogPathByModule("*")))
             add(getSendLogItem())
             add(getOpenLogItem())
+        }
+    }
+
+    protected open fun getItemList(): List<CardBaseModule> {
+        return mutableListOf<CardBaseModule>().apply {
+            add(SectionDataHeader("基础通用日志"))
+            add(
+                SectionDataContent(
+                    "路由跳转", RouterInterrupt.getRouterLogPath(), showAction(), true, false
+                )
+            )
+            add(
+                SectionDataContent(
+                    "Webview", WebViewLoggerFile.getWebviewLogPath(), showAction(), false, true
+                )
+            )
         }
     }
 
@@ -119,17 +135,7 @@ open class DebugLogListActivity : CommonListActivity() {
             if (showTitle) {
                 addAll(getCommonLogList())
             }
-            add(SectionDataHeader("基础通用日志"))
-            add(
-                SectionDataContent(
-                    "路由跳转", RouterInterrupt.getRouterLogPath(), showAction(), true, false
-                )
-            )
-            add(
-                SectionDataContent(
-                    "Webview", WebViewLoggerFile.getWebviewLogPath(), showAction(), false, true
-                )
-            )
+            addAll(getItemList())
         }
     }
 
