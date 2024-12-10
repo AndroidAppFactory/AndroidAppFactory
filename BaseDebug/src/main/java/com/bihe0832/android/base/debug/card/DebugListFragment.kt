@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.bihe0832.android.base.debug.card.section.SectionDataContent2
+import com.bihe0832.android.base.debug.card.section.SectionDataContentTest
 import com.bihe0832.android.base.debug.card.section.SectionDataContent3
 import com.bihe0832.android.base.debug.card.section.SettingsDataSwitchForDebug
 import com.bihe0832.android.base.debug.card.section.SettingsHolderSwitchForDebug
@@ -151,9 +151,13 @@ class DebugListFragment : CommonListFragment() {
 //                })
                 for (j in 0..3) {
                     if (i < 2) {
-                        add(SectionDataContent("内容1:${System.currentTimeMillis()}", ""))
+                        add(SectionDataContent("内容1:${System.currentTimeMillis()}", "",false))
                     } else {
-                        add(SectionDataContent2("内容2:${System.currentTimeMillis()}"))
+                        add(
+                            SectionDataContentTest(
+                                "内容2:${System.currentTimeMillis()}"
+                            )
+                        )
                         add(SectionDataContent3("内容3:${System.currentTimeMillis()}"))
                     }
                 }

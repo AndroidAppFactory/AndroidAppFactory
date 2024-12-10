@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
-import com.bihe0832.android.base.debug.card.section.SectionDataContent2
+import com.bihe0832.android.base.debug.card.section.SectionDataContentTest
 import com.bihe0832.android.common.debug.log.SectionDataHeader
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
@@ -120,7 +120,7 @@ class TestListActivity : CommonListActivity() {
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
-            add(CardItemForCommonList(SectionDataContent2::class.java, true))
+            add(CardItemForCommonList(SectionDataContentTest::class.java, true))
         }
     }
 

@@ -77,7 +77,7 @@
                 android:theme="@style/AAF.ActivityTheme" />
         
         <activity
-                android:name="com.bihe0832.android.common.debug.log.DebugLogActivity"
+                android:name="com.bihe0832.android.common.debug.log.DebugLogListActivity"
                 android:configChanges="orientation|screenSize|keyboardHidden"
                 android:screenOrientation="portrait"
                 android:theme="@style/AAF.ActivityTheme" />

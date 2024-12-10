@@ -15,10 +15,10 @@ import com.bihe0832.android.lib.adapter.CardBaseModule;
  * Description: Description
  */
 
-public class SectionHolderContent2 extends CardBaseHolder {
+public class SectionHolderContentTest extends CardBaseHolder {
     public TextView mHeader;
 
-    public SectionHolderContent2(View itemView, Context context) {
+    public SectionHolderContentTest(View itemView, Context context) {
         super(itemView, context);
     }
 
@@ -29,7 +29,7 @@ public class SectionHolderContent2 extends CardBaseHolder {
 
     @Override
     public void initData(CardBaseModule item) {
-        SectionDataContent2 data = (SectionDataContent2) item;
+        SectionDataContentTest data = (SectionDataContentTest) item;
         mHeader.setText(data.mContentText);
         mHeader.setBackgroundColor(Color.BLUE);
     }

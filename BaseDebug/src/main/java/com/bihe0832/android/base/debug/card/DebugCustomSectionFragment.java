@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bihe0832.android.base.debug.R;
-import com.bihe0832.android.base.debug.card.section.SectionDataContent2;
+import com.bihe0832.android.base.debug.card.section.SectionDataContentTest;
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2;
 import com.bihe0832.android.common.debug.log.SectionDataContent;
 import com.bihe0832.android.common.debug.log.SectionDataHeader;
@@ -60,9 +60,9 @@ public class DebugCustomSectionFragment extends BaseFragment {
             for (int j = 0; j < 15; j++) {
                 CardBaseModule section;
                 if (i < 2) {
-                    section = new SectionDataContent("内容1:" + j, "");
+                    section = new SectionDataContent("内容1:" + j, "",false);
                 } else {
-                    section = new SectionDataContent2("内容2:" + j);
+                    section = new SectionDataContentTest("内容2:" + j);
                 }
                 mDataList.add(section);
             }

@@ -40,7 +40,7 @@
             android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-            android:name="com.bihe0832.android.test.module.AAFDebugLogActivity"
+            android:name="com.bihe0832.android.test.module.AAFDebugLogListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
             android:screenOrientation="portrait"
             android:theme="@style/AAF.ActivityTheme" />

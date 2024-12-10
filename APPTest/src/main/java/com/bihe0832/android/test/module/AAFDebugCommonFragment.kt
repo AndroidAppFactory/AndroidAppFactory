@@ -13,7 +13,7 @@ import com.bihe0832.android.common.debug.module.DebugCommonFragment
 open class AAFDebugCommonFragment : DebugCommonFragment() {
 
     override fun showLog() {
-        startActivityWithException(AAFDebugLogActivity::class.java)
+        startActivityWithException(AAFDebugLogListActivity::class.java)
     }
 
 }

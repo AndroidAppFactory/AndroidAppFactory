@@ -7,7 +7,7 @@
         <activity
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
-            android:name="com.bihe0832.android.common.debug.log.DebugLogActivity"
+            android:name="com.bihe0832.android.common.debug.log.DebugLogListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AAF.ActivityTheme"
             tools:ignore="DiscouragedApi">

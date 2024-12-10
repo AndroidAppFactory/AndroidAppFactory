@@ -6,6 +6,7 @@ import android.net.Uri
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.framework.router.openZixieWeb
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.request.URLUtils

@@ -5,13 +5,11 @@ import android.provider.Settings
 import android.view.View
 import com.bihe0832.android.common.debug.device.DebugDeviceFragment
 import com.bihe0832.android.common.debug.device.getMobileInfo
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
-import com.bihe0832.android.common.debug.log.DebugLogActivity
+import com.bihe0832.android.common.debug.log.DebugLogListActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
-import com.bihe0832.android.framework.file.AAFFileWrapper.getCacheFolder
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
@@ -25,7 +23,6 @@ import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
-import java.io.File
 
 open class DebugCommonFragment : DebugEnvFragment() {
 
@@ -86,7 +83,7 @@ open class DebugCommonFragment : DebugEnvFragment() {
     }
 
     protected open fun showLog() {
-        startActivityWithException(DebugLogActivity::class.java)
+        startActivityWithException(DebugLogListActivity::class.java)
     }
 
     protected fun showAPPInfo() {
