@@ -116,6 +116,7 @@ object LoggerFile {
                                     "      line-height: 1;\n" +
                                     "      font-family: Microsoft Yahei;\n" +
                                     "      color: #333;\n" +
+                                    "      background: #fff;\n" +
                                     "      font-size: 0.9em;\n" +
                                     "      margin-top: 10px;\n" +
                                     "      margin-left: 6px;\n" +
