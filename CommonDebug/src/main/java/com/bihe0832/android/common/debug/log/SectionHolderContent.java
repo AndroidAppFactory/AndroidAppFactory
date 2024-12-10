@@ -11,7 +11,6 @@ import com.bihe0832.android.framework.router.RouterHelperWrapperKt;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
 /**
  * @author zixie code@bihe0832.com Created on 2019-11-21. Description: Description
@@ -40,22 +39,18 @@ public class SectionHolderContent extends CardBaseHolder {
     @Override
     public void initData(CardBaseModule item) {
         final SectionDataContent data = (SectionDataContent) item;
-        View.OnClickListener openListener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (data.mActionListener != null) {
-                    data.mActionListener.onClick(v, SectionDataContent.TYPE_OPEN);
-                } else {
-                    try {
-                        RouterHelperWrapperKt.showLog(data.mLogFileName, data.mSort, data.mShowLine);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        log_title.setText(TextFactoryUtils.getSpannedTextByHtml(data.mTitleName));
+        View.OnClickListener openListener = v -> {
+            if (data.mActionListener != null) {
+                data.mActionListener.onClick(v, SectionDataContent.TYPE_OPEN);
+            } else {
+                try {
+                    RouterHelperWrapperKt.showLog(data.mLogFileName, data.mSort, data.mShowLine);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
             }
         };
-        log_title.setText(TextFactoryUtils.getSpannedTextByHtml(data.mTitleName));
         if (data.mShowAction) {
             log_open.setOnClickListener(openListener);
             log_open.setVisibility(View.VISIBLE);
@@ -71,16 +66,15 @@ public class SectionHolderContent extends CardBaseHolder {
                             e.printStackTrace();
                         }
                     }
-
                 }
             });
             log_send.setVisibility(View.VISIBLE);
             log_layout.setBackground(null);
+            log_layout.setOnClickListener(null);
         } else {
             log_send.setVisibility(View.GONE);
             log_open.setVisibility(View.GONE);
-            log_title.setOnClickListener(openListener);
-            log_title.setMaxWidth(DisplayUtil.dip2px(getContext(), 32));
+            log_layout.setOnClickListener(openListener);
             log_layout.setBackground(getContext().getResources().getDrawable(R.drawable.common_button_bg_shape));
         }
     }
