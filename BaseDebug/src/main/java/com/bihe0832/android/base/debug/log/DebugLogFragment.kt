@@ -6,8 +6,8 @@ import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.log.DebugLogListActivity
-import com.bihe0832.android.common.debug.log.core.DebugLogInfoActivity
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.log.LoggerTrace
 import com.bihe0832.android.framework.router.showH5Log
@@ -28,7 +28,7 @@ class DebugLogFragment : BaseDebugListFragment() {
             add(getDebugItem("自定义日志管理", View.OnClickListener {
                 startActivityWithException(DebugLogListActivity::class.java)
             }))
-            add(getDebugItem("将日志按H5记录", View.OnClickListener { logToH5File(it) }))
+            add(getDebugItem("将日志按H5记录并查看", View.OnClickListener { logToH5File(it) }))
 
             add(getDebugItem("简单日志", View.OnClickListener {
                 ZLog.i(LOG_TAG, "testi")
@@ -44,6 +44,7 @@ class DebugLogFragment : BaseDebugListFragment() {
                     "开启Logcat",
                     View.OnClickListener { ZLog.addLogImpl(LogImplForLogcat) })
             )
+            add(getDebugItem("跨线程文件日志", View.OnClickListener { testLog() }))
             add(getDebugItem("耗时打点", View.OnClickListener { testTrace() }))
             add(getDebugItem("文件日志", View.OnClickListener { testLogFile() }))
             add(
@@ -56,7 +57,17 @@ class DebugLogFragment : BaseDebugListFragment() {
                     "发送文件日志",
                     View.OnClickListener { AAFLoggerFile.sendLogByModule(LOG_TAG) })
             )
-            add(getDebugItem("跨线程文件日志", View.OnClickListener { testLog() }))
+            add(
+                getDebugItem(
+                    "ACE打开文件日志",
+                    View.OnClickListener {
+                        AAFFileTools.openFileWithTips(
+                            activity!!,
+                            AAFLoggerFile.getLogPathByModuleName(LOG_TAG)
+                        )
+                    })
+            )
+
         }
     }
 
@@ -108,6 +119,7 @@ class DebugLogFragment : BaseDebugListFragment() {
 
         val path =
             ZixieContext.getLogFolder() + "TEST_${DateUtil.getCurrentDateEN("yyyyMMdd")}.html"
+//        FileUtils.deleteFile(path)
         LoggerFile.logFile(
             path,
             LoggerFile.TYPE_HTML,
@@ -116,19 +128,20 @@ class DebugLogFragment : BaseDebugListFragment() {
         )
         LoggerFile.logFile(path, LoggerFile.TYPE_HTML, DateUtil.getCurrentDateEN(), "这是一个测试2")
         LoggerFile.logFile(path, LoggerFile.TYPE_HTML, DateUtil.getCurrentDateEN(), "这是一个测试3")
-        val mp3Path = "TEST_${DateUtil.getCurrentDateEN("yyyyMMdd")}.mp3"
+        val mp3Path =
+            ZixieContext.getLogFolder() + "TEST_${DateUtil.getCurrentDateEN("yyyyMMdd")}.mp3"
 
         FileUtils.copyAssetsFileToPath(
             context!!,
             "audio.mp3",
-            ZixieContext.getLogFolder() + mp3Path
+            mp3Path
         )
 
         LoggerFile.logFile(
             path,
             LoggerFile.TYPE_HTML,
             DateUtil.getCurrentDateEN(),
-            LoggerFile.getAudioH5LogData(ZixieContext.getLogFolder() + mp3Path,"audio/*")
+            LoggerFile.getAudioH5LogData(mp3Path, "audio/mp3")
         )
         ZLog.d(path)
 

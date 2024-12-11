@@ -13,7 +13,6 @@ import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.debug.icon.DebugLogTips.hide
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.router.annotation.Module
@@ -124,24 +123,24 @@ open class DebugLogInfoActivity : CommonListActivity() {
         findViewById<View>(R.id.title_icon).apply {
             setOnClickListener {
                 PopMenu(this@DebugLogInfoActivity, this).apply {
-                    setMenuItemList(getPopMenuItem())
+                    setMenuItemList(getPopMenuItem(this))
                 }.show()
             }
         }
     }
 
-    fun getSendLogMenu(): PopMenuItem {
+    fun getSendLogMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
             actionName = "发送文件"
             iconResId = R.drawable.icon_send
             setItemClickListener {
-                hide()
+                menu.hide()
                 FileUtils.sendFile(this@DebugLogInfoActivity, logPath)
             }
         }
     }
 
-    fun getSortLongMenu(): PopMenuItem {
+    fun getSortLongMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
             if (isSort) {
                 "正序"
@@ -156,14 +155,14 @@ open class DebugLogInfoActivity : CommonListActivity() {
                 R.drawable.icon_descending
             }
             setItemClickListener {
-                hide()
+                menu.hide()
                 isSort = !isSort
                 mLiveData.postValue(mLiveData.value?.reversed())
             }
         }
     }
 
-    fun getShowLineMenu(): PopMenuItem {
+    fun getShowLineMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
             if (showLine) {
                 "隐藏"
@@ -174,19 +173,19 @@ open class DebugLogInfoActivity : CommonListActivity() {
             }
             iconResId = R.drawable.icon_edit
             setItemClickListener {
-                hide()
+                menu.hide()
                 showLine = !showLine
                 mLiveData.refresh()
             }
         }
     }
 
-    fun getChangeNumMenu(): PopMenuItem {
+    fun getChangeNumMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
             actionName = "调整展示行数"
             iconResId = R.drawable.icon_number
             setItemClickListener {
-                hide()
+                menu.hide()
                 DialogUtils.showInputDialog(
                     this@DebugLogInfoActivity,
                     "调整展示行数",
@@ -202,12 +201,12 @@ open class DebugLogInfoActivity : CommonListActivity() {
         }
     }
 
-    open fun getPopMenuItem(): ArrayList<PopMenuItem> {
+    open fun getPopMenuItem(menu: PopMenu): ArrayList<PopMenuItem> {
         return ArrayList<PopMenuItem>().apply {
-            add(getSendLogMenu())
-            add(getSortLongMenu())
-            add(getShowLineMenu())
-            add(getChangeNumMenu())
+            add(getSendLogMenu(menu))
+            add(getSortLongMenu(menu))
+            add(getShowLineMenu(menu))
+            add(getChangeNumMenu(menu))
         }
     }
 

@@ -106,9 +106,71 @@ object LoggerFile {
                             fileName,
                             TYPE_TEXT,
                             "",
-                            " <!DOCTYPE HTML>\n" + "<head>\n" + "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" + "  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0\" />\n" + "  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n" + "  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n" + "  <meta name=\"format-detection\" content=\"telephone=no\" />\n" + "  <meta http-equiv=\"Pragma\" content=\"no-cache\">\n" + "  <meta http-equiv=\"Cache-Control\" content=\"no-cache, must-revalidate\">\n" + "  <meta http-equiv=\"Expires\" content=\"0\">\n" + "  <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.bihe0832.com/css/global.css\" />\n" + "  <style type=\"text/css\">\n" + "   body {\n" + "      line-height: 1;\n" + "      font-family: Microsoft Yahei;\n" + "      color: #333;\n" + "      background: #fff;\n" + "      font-size: 0.9em;\n" + "      margin-top: 10px;\n" + "      margin-left: 6px;\n" + "      margin-right: 6px;\n" + "    }\n" + "    div{       \n" + "      width: 100%;       \n" + "      color: #333;\n" + "      line-height: 2em;\n" + "      border-bottom: 0.5px solid #333;\n" + "    }  \n" + "    </style>\n" + "  <title>" + APKUtils.getAppName(
-                                mContext
-                            ) + "</title>\n" + "</head>\n" + "<body>"
+                            " <!DOCTYPE HTML>\n" +
+                                    "<head>\n" +
+                                    "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
+                                    "  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0\" />\n" +
+                                    "  <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n" +
+                                    "  <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n" +
+                                    "  <meta name=\"format-detection\" content=\"telephone=no\" />\n" +
+                                    "  <meta http-equiv=\"Pragma\" content=\"no-cache\">\n" +
+                                    "  <meta http-equiv=\"Cache-Control\" content=\"no-cache, must-revalidate\">\n" +
+                                    "  <meta http-equiv=\"Expires\" content=\"0\">\n" +
+                                    "  <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.bihe0832.com/css/global.css\" />\n" +
+                                    "  <style type=\"text/css\">\n" +
+                                    "   body {\n" +
+                                    "      line-height: 1;\n" +
+                                    "      font-family: Microsoft Yahei;\n" +
+                                    "      color: #333;\n" +
+                                    "      font-size: 0.9em;\n" +
+                                    "      margin-top: 10px;\n" +
+                                    "    }\n" +
+                                    "    div{       \n" +
+                                    "      width: 100%;       \n" +
+                                    "      color: #333;\n" +
+                                    "      line-height: 2em;\n" +
+                                    "      border-bottom: 1px solid #333;\n" +
+                                    "    }  \n" +
+                                    "    .container {\n" +
+                                    "        display: flex;\n" +
+                                    "        flex-direction: column;\n" +
+                                    "        border-bottom: 0;\n" +
+                                    "    }\n" +
+                                    "    .button-container{\n" +
+                                    "      display: flex;\n" +
+                                    "        align-items: center;\n" +
+                                    "        justify-content: center;\n" +
+                                    "        display: flex;\n" +
+                                    "        flex-direction: row;\n" +
+                                    "        border-bottom: 0;\n" +
+                                    "    }\n" +
+                                    "    button {\n" +
+                                    "      width:40%; \n" +
+                                    "      height: 40px;\n" +
+                                    "      margin-left: 20px;\n" +
+                                    "      margin-right:  20px;\n" +
+                                    "      margin-top: 5px;\n" +
+                                    "      margin-bottom: 5px;" +
+                                    "    }\n" +
+                                    "    </style>\n" +
+                                    "    <script>\n" +
+                                    "      function reverseOrder() {\n" +
+                                    "          var container = document.getElementById('logInfoContainer');\n" +
+                                    "          container.style.flexDirection = 'column-reverse';\n" +
+                                    "      }\n" +
+                                    "      function normalOrder() {\n" +
+                                    "          var container = document.getElementById('logInfoContainer');\n" +
+                                    "          container.style.flexDirection = 'column';\n" +
+                                    "      }\n" +
+                                    "  </script>\n" +
+                                    "  <title>" + APKUtils.getAppName(mContext) + "</title>\n" +
+                                    "</head>\n" +
+                                    "<body>\n" +
+                                    "  <div class=\"button-container\" >\n" +
+                                    "    <button onclick=\"reverseOrder()\">倒序展示</button>\n" +
+                                    "    <button onclick=\"normalOrder()\">正序展示</button>\n" +
+                                    "  </div>\n" +
+                                    "<div class=\"container\" id=\"logInfoContainer\">"
                         )
                     }
                 } catch (e: Exception) {
@@ -173,7 +235,7 @@ object LoggerFile {
 
     fun logFile(filePath: String, type: Int, tag: String, msg: String) {
         try {
-            ZLog.info(FileUtils.getFileNameWithoutEx(filePath), msg)
+            ZLog.d(FileUtils.getFileNameWithoutEx(filePath), msg)
             if (mCanSaveSpecialFile) {
                 reset(filePath, type)
                 bufferSave(filePath, type, tag, msg)
