@@ -218,7 +218,7 @@ object LoggerFile {
 
     fun getZixieFileLogPathByModule(module: String, folder: String, type: Int): String {
         var path = ""
-        if (fileNameMap.contains(module + type)) {
+        if (fileNameMap.containsKey(module + type)) {
             path = fileNameMap[module + type] ?: ""
         }
         if (TextUtils.isEmpty(path)) {
@@ -227,7 +227,7 @@ object LoggerFile {
             } else {
                 ".txt"
             }
-            path = folder + "${module}_${DateUtil.getCurrentDateEN("yyyyMMdd")}$ext"
+            path = FileUtils.getFolderPathWithSeparator(folder) + "${module}_${DateUtil.getCurrentDateEN("yyyyMMdd")}$ext"
             fileNameMap[module + type] = path
         }
         return path
