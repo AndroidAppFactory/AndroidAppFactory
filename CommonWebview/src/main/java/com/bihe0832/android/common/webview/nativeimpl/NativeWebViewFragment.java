@@ -62,7 +62,7 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
     }
 
     @Override
-    protected void addWebviewToLayout(ViewGroup mViewParent) {
+    protected void addWebViewToLayout(ViewGroup mViewParent) {
         mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
     }
@@ -290,7 +290,7 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            actionOnPageFinished();
+            onWebClientPageFinished();
         }
 
         @Override
@@ -302,7 +302,6 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             onWebClientReceivedError(errorCode);
-            return;
         }
 
         @RequiresApi(api = VERSION_CODES.M)
@@ -362,20 +361,6 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
         public void onProgressChanged(WebView view, int newProgress) {
             ZLog.d(TAG, "onProgressChanged " + newProgress);
             mProgressBar.setProgress(newProgress);
-            if (newProgress == 100) {
-                mProgressBar.setVisibility(View.GONE);
-            } else {
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-            if (newProgress == 100) {
-                //隐藏进度条
-                mSwipeLayout.setRefreshing(false);
-            } else {
-                if (!mSwipeLayout.isRefreshing()) {
-                    mSwipeLayout.setRefreshing(true);
-                }
-            }
-
             super.onProgressChanged(view, newProgress);
         }
 
