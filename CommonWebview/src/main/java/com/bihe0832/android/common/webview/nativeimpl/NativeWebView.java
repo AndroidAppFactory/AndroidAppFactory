@@ -91,8 +91,9 @@ public class NativeWebView extends WebView {
     private void setHTMLSupport(WebSettings webSetting) {
         //设置WebView属性，能够执行Javascript脚本
         webSetting.setJavaScriptEnabled(true);
+        webSetting.setAllowUniversalAccessFromFileURLs(true);
         webSetting.setAllowFileAccess(true);
-        webSetting.setSupportMultipleWindows(false);
+        webSetting.setSupportMultipleWindows(true);
         webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
         webSetting.setUseWideViewPort(true);  //将图片调整到适合webview的大小
         webSetting.setLoadWithOverviewMode(true); // 缩放至屏幕的大小

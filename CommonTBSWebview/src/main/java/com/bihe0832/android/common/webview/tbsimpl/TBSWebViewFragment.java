@@ -68,7 +68,7 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
     }
 
     @Override
-    protected void addWebviewToLayout(ViewGroup mViewParent) {
+    protected void addWebViewToLayout(ViewGroup mViewParent) {
         mViewParent.addView(mWebView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
     }
@@ -172,17 +172,11 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
     @Override
     protected void onJSBridgeResume() {
         super.onJSBridgeResume();
-        if (null != mWebView) {
-            mWebView.resumeTimers();
-        }
     }
 
     @Override
     protected void onJSBridgePause() {
         super.onJSBridgePause();
-        if (null != mWebView) {
-            mWebView.pauseTimers();
-        }
     }
 
     protected WebResourceResponse interceptRequestResult(String url) {
@@ -300,7 +294,7 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            actionOnPageFinished();
+            onWebClientPageFinished();
         }
 
         @Override
@@ -381,20 +375,6 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         public void onProgressChanged(WebView view, int newProgress) {
             ZLog.d(TAG, "onProgressChanged " + newProgress);
             mProgressBar.setProgress(newProgress);
-            if (newProgress == 100) {
-                mProgressBar.setVisibility(View.GONE);
-            } else {
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-            if (newProgress == 100) {
-                //隐藏进度条
-                mSwipeLayout.setRefreshing(false);
-            } else {
-                if (!mSwipeLayout.isRefreshing()) {
-                    mSwipeLayout.setRefreshing(true);
-                }
-            }
-
             super.onProgressChanged(view, newProgress);
         }
 

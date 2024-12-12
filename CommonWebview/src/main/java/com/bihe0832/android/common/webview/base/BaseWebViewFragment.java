@@ -102,7 +102,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
 
     protected abstract void loadFinalURL(String url, String data);
 
-    protected abstract void addWebviewToLayout(ViewGroup mViewParent);
+    protected abstract void addWebViewToLayout(ViewGroup mViewParent);
 
     protected abstract void initRefreshAndScrollChangedCallback();
 
@@ -129,7 +129,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     }
 
     //在页面加载结束之后执行操作
-    protected void actionOnPageFinished() {
+    protected void onWebClientPageFinished() {
         if (isLoadSuccess) {
             mNormalPage.setVisibility(View.VISIBLE);
             mErrorPage.setVisibility(View.GONE);
@@ -137,9 +137,12 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
             mNormalPage.setVisibility(View.GONE);
             mErrorPage.setVisibility(View.VISIBLE);
         }
+        mProgressBar.setVisibility(View.GONE);
+        mSwipeLayout.setRefreshing(false);
     }
 
     protected void onWebClientPageStarted() {
+        mProgressBar.setVisibility(View.VISIBLE);
         mNormalPage.setVisibility(View.VISIBLE);
         mErrorPage.setVisibility(View.GONE);
     }
@@ -237,9 +240,11 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
 
     protected boolean processWebClientOverrideUrlLoading(String url, String mRefererString) {
         if (url.startsWith(BaseJsBridge.JS_BRIDGE_SCHEME)) {
-            ZLog.e(TAG, "mJSBridgeProxy is null");
             if (mJSBridgeProxy != null) {
                 mJSBridgeProxy.invoke(url);
+                ZLog.e(TAG, "new JSBridge invoke:" + url);
+            } else {
+                ZLog.e(TAG, "new mJSBridgeProxy is null");
             }
             return true;
         } else if (url.startsWith(RouterAction.INSTANCE.getSCHEME())) {
@@ -269,7 +274,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
 
     protected void initWebview(View view) {
         mNormalPage = (SwipeRefreshLayout) view.findViewById(R.id.app_webview_swipe_container);
-        addWebviewToLayout(mViewParent);
+        addWebViewToLayout(mViewParent);
         mErrorPage = (ConstraintLayout) view.findViewById(R.id.error_page);
         mProgressBar = (ProgressBar) view.findViewById(R.id.app_webview_progressbar);
         mProgressBar.setMax(100);
@@ -288,6 +293,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         } else {
             loadUrl(mIntentUrl, mPostData);
         }
+        ZLog.d(TAG, "mIntentUrl：" + mIntentUrl);
         ZLog.d(TAG, "time-cost cost time: " + (System.currentTimeMillis() - time));
     }
 
@@ -324,8 +330,8 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser, boolean hasCreateView) {
-       super.setUserVisibleHint(isVisibleToUser,hasCreateView);
+    public final void setUserVisibleHint(boolean isVisibleToUser, boolean hasCreateView) {
+        super.setUserVisibleHint(isVisibleToUser, hasCreateView);
         if (isVisibleToUser) {
             onJSBridgeResume();
         } else {
