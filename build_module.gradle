@@ -159,7 +159,8 @@ def addLocalDependencies(String projectName, String path) {
     HashMap<String, ArrayList> dependencies = new HashMap<>()
     fileTree(dir: path, include: '*.aar').each { File file ->
         if (zixieIsDebug) println("fileTree dependencies： " + file + "")
-        addDependenciesOnce(projectName, file.name, "", dependencies)
+//        addDependenciesOnce(projectName, file.name, "", dependencies)
+        addDependenciesOnce(projectName, path + '/' + file.name, "", dependencies)
     }
 
     fileTree(dir: path, include: '*.jar').each { File file ->
@@ -236,10 +237,11 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
     if (moduleName.endsWith(".jar")) {
         project(':' + projectName).dependencies.add(finalType, files(moduleName))
     } else if (moduleName.endsWith(".aar")) {
-        def name = moduleName.lastIndexOf('.').with {
-            it != -1 ? moduleName[0..<it] : moduleName
-        }
-        project(':' + projectName).dependencies.add(finalType, [name: name, ext: 'aar'])
+//        def name = moduleName.lastIndexOf('.').with {
+//            it != -1 ? moduleName[0..<it] : moduleName
+//        }
+//        project(':' + projectName).dependencies.add(finalType, [name: name, ext: 'aar'])
+        project(':' + projectName).dependencies.add(finalType, files(moduleName))
     } else if (moduleName.contains(":")) {
         project(':' + projectName).dependencies.add(finalType, moduleName)
     } else if (checkModuleIsDev(moduleName)) {
