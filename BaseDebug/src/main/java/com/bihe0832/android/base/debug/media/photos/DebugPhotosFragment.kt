@@ -8,7 +8,7 @@ import android.view.View
 import com.bihe0832.android.common.crop.CropUtils
 import com.bihe0832.android.common.crop.constants.CropConstants
 import com.bihe0832.android.common.crop.view.OverlayView
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.crop.wrapper.CropWrapper
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
@@ -19,6 +19,7 @@ import com.bihe0832.android.common.photos.getAutoChangedPhotoUri
 import com.bihe0832.android.common.photos.takePhoto
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FILE_TYPE_ALL
@@ -147,7 +148,31 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     },
                 ),
             )
+            add(
+                getDebugItem(
+                    "AAF裁剪并通过回调返回",
+                    View.OnClickListener {
+                        testCropCallBack()
+                    },
+                ),
+            )
         }
+    }
+
+    private fun testCropCallBack() {
+        val sourceFile = AAFFileWrapper.getTempFolder() + "cv_v.jpg"
+        FileUtils.copyAssetsFileToPath(context, "cv_v.jpg", sourceFile)
+        CropWrapper.startCrop(ZixieFileProvider.getZixieFileProvider(context!!, File(sourceFile)),
+            CropUtils.Options().apply {
+                setHideBottomControls(true)
+                withAspectRatio(3f, 2f)
+                setCircleDimmedLayer(true)
+            },
+            object : AAFDataCallback<Uri>() {
+                override fun onSuccess(result: Uri?) {
+                    showResult(result.toString())
+                }
+            })
     }
 
     private fun aafcrop() {
@@ -196,13 +221,18 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     } else if (needAAFCrop) {
                         CropUtils.startCrop(activity, data.getData(), CropUtils.Options().apply {
                             setAllowedGestures(
-                                CropConstants.GESTURE_TYPES_SCALE, CropConstants.GESTURE_TYPES_ROTATE,
+                                CropConstants.GESTURE_TYPES_SCALE,
+                                CropConstants.GESTURE_TYPES_ROTATE,
                                 CropConstants.GESTURE_TYPES_SCALE
                             )
                             setFreeStyleCropType(OverlayView.FREESTYLE_CROP_MODE_ENABLE_WITH_PASS_THROUGH)
                         })
                     } else {
-                        showResult("图片地址:" + Media.uriToFile(activity!!, data.getData()).absolutePath)
+                        showResult(
+                            "图片地址:" + Media.uriToFile(
+                                activity!!, data.getData()
+                            ).absolutePath
+                        )
                     }
                 } else {
                     ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：$requestCode；resultCode：$resultCode")
@@ -219,7 +249,9 @@ class DebugPhotosFragment : DebugCommonFragment() {
                     } else if (needAAFCrop) {
                         ZLog.d("PhotoChooser in PhotoChooser onResult requestCode：" + requestCode + "；resultCode：" + data.toString())
                         showResult("图片地址:${data?.data}")
-                        Media.addToPhotos(context!!, Media.uriToFile(context, data?.data).absolutePath)
+                        Media.addToPhotos(
+                            context!!, Media.uriToFile(context, data?.data).absolutePath
+                        )
                     }
                 }
 

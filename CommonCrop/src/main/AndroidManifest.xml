@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.bihe0832.android.common.crop">
+    package="com.bihe0832.android.common.crop">
 
     <application>
         <activity
-                android:name="com.bihe0832.android.common.crop.ui.CropActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name="com.bihe0832.android.common.crop.ui.CropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
+
+        <activity
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name="com.bihe0832.android.common.crop.wrapper.CropTransActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme.Fullscreen" />
 
     </application>
 </manifest>

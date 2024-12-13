@@ -79,7 +79,7 @@ public class CropUtils {
      * @param requestCode requestCode for result
      */
 
-    private static Intent getCropIntent(Context context, Uri source, Options options) {
+    public static Intent getCropIntent(Context context, Uri source, Options options, Class<?> cls) {
         Intent cropIntent = new Intent();
         Bundle cropOptionsBundle = new Bundle();
         cropOptionsBundle.putParcelable(EXTRA_INPUT_URI, source);
@@ -87,18 +87,18 @@ public class CropUtils {
             cropOptionsBundle.putAll(options.getOptionBundle());
         }
 
-        cropIntent.setClass(context, CropActivity.class);
+        cropIntent.setClass(context, cls);
         cropIntent.putExtras(cropOptionsBundle);
         return cropIntent;
     }
 
     public static void startCrop(Activity activity, int requestCode, Uri source, Options options) {
-        Intent cropIntent = getCropIntent(activity, source, options);
+        Intent cropIntent = getCropIntent(activity, source, options, CropActivity.class);
         activity.startActivityForResult(cropIntent, requestCode);
     }
 
     public static void startCrop(Fragment fragment, int requestCode, Uri source, Options options) {
-        Intent cropIntent = getCropIntent(fragment.getContext(), source, options);
+        Intent cropIntent = getCropIntent(fragment.getContext(), source, options, CropActivity.class);
         fragment.startActivityForResult(cropIntent, requestCode);
     }
 
@@ -117,7 +117,7 @@ public class CropUtils {
         startCrop(activity, source, options);
     }
 
-    public static void startCrop(Fragment fragment,  Uri source) {
+    public static void startCrop(Fragment fragment, Uri source) {
         Options options = new Options();
         options.setAllowedGestures(CropConstants.GESTURE_TYPES_ALL, CropConstants.GESTURE_TYPES_ROTATE,
                 CropConstants.GESTURE_TYPES_SCALE);
@@ -137,8 +137,8 @@ public class CropUtils {
     }
 
     /**
-     * Class that helps to setup advanced configs that are not commonly used.
-     * Use it with method {@link #withOptions(Options)}
+     * Class that helps to setup advanced configs that are not commonly used. Use it with method
+     * {@link #withOptions(Options)}
      */
     public static class Options {
 
@@ -297,8 +297,7 @@ public class CropUtils {
         }
 
         /**
-         * Set an aspect ratio for crop bounds.
-         * User won't see the menu with other ratios options.
+         * Set an aspect ratio for crop bounds. User won't see the menu with other ratios options.
          *
          * @param x aspect ratio X
          * @param y aspect ratio Y
@@ -309,8 +308,8 @@ public class CropUtils {
         }
 
         /**
-         * Set an aspect ratio for crop bounds that is evaluated from source image width and height.
-         * User won't see the menu with other ratios options.
+         * Set an aspect ratio for crop bounds that is evaluated from source image width and height. User won't see the
+         * menu with other ratios options.
          */
         public void useSourceImageAspectRatio() {
             withAspectRatio(0, 0);
