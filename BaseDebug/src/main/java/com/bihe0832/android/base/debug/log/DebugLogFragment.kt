@@ -119,7 +119,7 @@ class DebugLogFragment : BaseDebugListFragment() {
 
         val path =
             ZixieContext.getLogFolder() + "TEST_${DateUtil.getCurrentDateEN("yyyyMMdd")}.html"
-//        FileUtils.deleteFile(path)
+        FileUtils.deleteFile(path)
         LoggerFile.logFile(
             path,
             LoggerFile.TYPE_HTML,
