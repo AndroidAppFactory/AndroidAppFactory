@@ -222,7 +222,7 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
 
     String finalType = sourceType
     if (null == finalType || finalType.length() < 1) {
-        if (isDebugModule(moduleName)) {
+        if (isDebugModule(projectName)) {
             finalType = "debugApi"
         } else {
             if (!isApplicationModule(projectName)) {
