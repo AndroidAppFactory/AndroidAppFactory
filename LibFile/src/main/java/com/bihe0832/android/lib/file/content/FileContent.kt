@@ -202,4 +202,67 @@ object FileContent {
             e.printStackTrace()
         }
     }
+
+    fun parseFileToMap(filePath: String, split: Regex): MutableMap<String, String> {
+        val map = mutableMapOf<String, String>()
+        if (FileUtils.checkFileExist(filePath)) {
+            var bufferedReader: BufferedReader? = null
+            try {
+                bufferedReader = File(filePath).bufferedReader()
+                bufferedReader.useLines { lines ->
+                    lines.forEach { line ->
+                        val (key, value) = line.split(split)
+                        map[key] = value
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                if (bufferedReader != null) {
+                    try {
+                        bufferedReader.close()
+                    } catch (ee: Exception) {
+                        ee.printStackTrace()
+                    }
+                }
+            }
+        }
+        return map
+    }
+
+    fun parseAssetFileToMap(
+        context: Context, fileName: String, split: Regex
+    ): MutableMap<String, String> {
+        val map = mutableMapOf<String, String>()
+        var inputStream: InputStream? = null
+        var bufferedReader: BufferedReader? = null
+        try {
+            inputStream = context.assets.open(fileName)
+            bufferedReader = BufferedReader(InputStreamReader(inputStream))
+            bufferedReader.useLines { lines ->
+                lines.forEach { line ->
+                    val (key, value) = line.split(split)
+                    map[key] = value
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close()
+                } catch (ee: Exception) {
+                    ee.printStackTrace()
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close()
+                } catch (ee: Exception) {
+                    ee.printStackTrace()
+                }
+            }
+        }
+        return map
+    }
 }

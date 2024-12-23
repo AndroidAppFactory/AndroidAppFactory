@@ -1,87 +1,96 @@
 apply from: rootDir.toString() + '/config.gradle'
 ext.asrmoduleInfo = [
-        "LibASR"              : [
+        "LibASR"                : [
                 "version"            : "6.21.14",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
-                        "LibASRMin", "LibSpeechRecognition", "LibPinYin"
+                        "LibASRMin", "LibSpeechRecognition", "LibPinYin", "LibChinese"
                 ]
         ],
-        "LibASRMin"           : [
+        "LibASRMin"             : [
                 "version"            : "6.21.9",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
                         "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
                 ]
         ],
-        "LibTTS"              : [
+        "LibTTS"                : [
                 "version"            : "6.16.18",
                 "artifactId"         : "lib-tts",
                 "apidependenciesList": [
                         "LibConfig", "LibOS"
                 ]
         ],
-        "LibAudio"            : [
+        "LibAudio"              : [
                 "version"            : "6.21.0",
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibFile", "LibGson"
                 ]
         ],
-        "LibAudioPlayer"      : [
+        "LibAudioPlayer"        : [
                 "version"            : "6.21.0",
                 "artifactId"         : "lib-audio-player",
                 "apidependenciesList": [
                         "LibBlockTask", "LibAudio"
                 ]
         ],
-        "LibAudioRecord"      : [
+        "LibAudioRecord"        : [
                 "version"            : "6.21.9",
                 "artifactId"         : "lib-audio-record",
                 "apidependenciesList": [
                         "LibAudio", "LibAAF", "LibLog", "LibCommonUtils", "LibFile", "LibPermission", "LibForegroundService"
                 ]
         ],
-        "LibOnnx"             : [
+        "LibOnnx"               : [
                 "version"            : "6.16.7",
                 "artifactId"         : "lib-onnx",
                 "apidependenciesList": [
 
                 ]
         ],
-        "LibSherpaOnnx"       : [
+        "LibSherpaOnnx"         : [
                 "version"            : "6.21.9",
                 "artifactId"         : "lib-sherpa-onnx",
                 "apidependenciesList": [
                         "LibAudio", "LibOnnx"
                 ]
         ],
-        "LibSherpaEndpointModel"   : [
+        "LibSherpaEndpointModel": [
                 "version"            : "6.16.7",
                 "artifactId"         : "lib-sherpa-endpoint-model",
                 "apidependenciesList": [
 
                 ]
         ],
-        "LibSherpaKwsModel"   : [
+        "LibSherpaKwsModel"     : [
                 "version"            : "6.16.7",
                 "artifactId"         : "lib-sherpa-kws-model",
                 "apidependenciesList": [
-                        
+
                 ]
         ],
-        "LibSpeechRecognition": [
+        "LibSpeechRecognition"  : [
                 "version"            : "6.21.14",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
-                        "LibAudioRecord","LibSherpaOnnx"
+                        "LibAudioRecord", "LibSherpaOnnx"
                 ]
         ],
-        "LibPinYin"           : [
+        "LibPinYin"             : [
                 "version"            : "6.16.0",
                 "artifactId"         : "lib-pinyin",
                 "apidependenciesList": [
-                        "org.ahocorasick:ahocorasick:0.3.0"
+                        "org.ahocorasick:ahocorasick:0.3.0","LibFile","LibAAF","LibChinese"
+                ]
+        ],
+        "LibChinese"            : [
+                "version"            : "6.16.0",
+                "artifactId"         : "lib-chinese",
+                "apidependenciesList": [
+                        "LibFile"
                 ]
         ]
+
+
 ]

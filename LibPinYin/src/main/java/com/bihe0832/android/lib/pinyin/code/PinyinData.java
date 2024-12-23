@@ -4,8 +4,6 @@ public final class PinyinData {
 
     public static final char MIN_VALUE = 19968;
 
-    public static final char MAX_VALUE = 40869;
-
     public static final String PINYIN_12295 = "LING";
 
     public static final char CHAR_12295 = 12295;

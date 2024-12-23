@@ -123,7 +123,7 @@ object LoggerFile {
                                     "      font-family: Microsoft Yahei;\n" +
                                     "      background-color: #fff;\n" +
                                     "      color: #333;\n" +
-                                    "      font-size: 0.9em;\n" +
+                                    "      font-size: 12px;\n" +
                                     "      margin-top: 10px;\n" +
                                     "    }\n" +
                                     "    div{       \n" +

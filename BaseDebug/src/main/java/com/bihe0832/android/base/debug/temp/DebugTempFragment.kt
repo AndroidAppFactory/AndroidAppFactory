@@ -8,10 +8,12 @@
 
 package com.bihe0832.android.base.debug.temp
 
+import android.os.Handler
 import android.view.View
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.thread.ThreadManager
 
 class DebugTempFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -23,12 +25,20 @@ class DebugTempFragment : DebugEnvFragment() {
         }
     }
 
-    private fun preTest(itemView: View) {
+    private val mHandler =
+        Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_ANDROID_MAIN))
 
+    private fun preTest(itemView: View) {
+        mHandler.postDelayed({
+            Thread.sleep(10 * 1000)
+        }, 0)
     }
 
     private fun testFunc(itemView: View) {
-
+        mHandler.postDelayed({
+            Thread.sleep(5 * 1000)
+        }, 0)
+        Thread.sleep(5 * 1000)
     }
 }
 
