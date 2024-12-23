@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.pinyin;
 
+import com.bihe0832.android.lib.chinese.ChineseHelper;
 import com.bihe0832.android.lib.pinyin.bean.PinyinDict;
 import com.bihe0832.android.lib.pinyin.bean.PinyinRules;
 import com.bihe0832.android.lib.pinyin.code.PinyinCode1;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.ahocorasick.trie.Trie;
 
 public final class PinYinTools {
+
 
     static Trie mTrieDict = null;
     static SegmentationSelector mSelector = null;
@@ -46,12 +48,11 @@ public final class PinYinTools {
     }
 
     /**
-     * 向Pinyin中追加词典。
-     * 注意: 若有多个词典，推荐使用性能更优的 {@link PinYinTools#init(PinYinConfig)} 初始化Pinyin。
+     * 向Pinyin中追加词典。 注意: 若有多个词典，推荐使用性能更优的 {@link PinYinTools#init(PinYinConfig)} 初始化Pinyin。
      *
      * @param dict 输入的词典
      */
-    public static void add(PinyinDict dict) {
+    public static void addPinyinDict(PinyinDict dict) {
         if (dict == null || dict.words() == null || dict.words().isEmpty()) {
             // 无效字典
             return;
@@ -114,7 +115,7 @@ public final class PinYinTools {
      * @return return pinyin if c is chinese in uppercase, String.valueOf(c) otherwise.
      */
     public static String toPinyin(char c) {
-        if (isChinese(c)) {
+        if (ChineseHelper.isChinese(c)) {
             if (c == PinyinData.CHAR_12295) {
                 return PinyinData.PINYIN_12295;
             } else {
@@ -140,16 +141,6 @@ public final class PinYinTools {
         }
     }
 
-    /**
-     * 判断输入字符是否为汉字
-     *
-     * @param c 输入字符
-     * @return return whether c is chinese
-     */
-    public static boolean isChinese(char c) {
-        return (PinyinData.MIN_VALUE <= c && c <= PinyinData.MAX_VALUE && getPinyinCode(c) > 0)
-                || PinyinData.CHAR_12295 == c;
-    }
 
     private static int getPinyinCode(char c) {
         int offset = c - PinyinData.MIN_VALUE;

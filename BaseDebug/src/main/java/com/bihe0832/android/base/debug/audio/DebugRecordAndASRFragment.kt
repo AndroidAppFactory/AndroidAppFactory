@@ -26,8 +26,6 @@ import com.bihe0832.android.lib.audio.wav.WavHeader
 import com.bihe0832.android.lib.audio.wav.WaveFileReader
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.pinyin.FilePinyinMapDict
-import com.bihe0832.android.lib.pinyin.PinYinTools
 import com.bihe0832.android.lib.speech.DEFAULT_ENDPOINT_MODEL_DIR
 import com.bihe0832.android.lib.speech.endpoint.AudioRecordWithEndpoint
 import com.bihe0832.android.lib.speech.getDefaultOnlineRecognizerConfig
@@ -39,13 +37,12 @@ import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
 import com.k2fsa.sherpa.onnx.getFeatureConfig
 import java.io.File
 
-class DebugRecordAndASRFragRecment : DebugEnvFragment() {
+class DebugRecordAndASRFragment : DebugEnvFragment() {
     val TAG = this.javaClass.simpleName
     private val mAudioRecordFile = mutableListOf<AudioRecordFile>()
     private val scene = "debugRecord"
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(getDebugItem("文字转拼音", View.OnClickListener { testPinyin() }))
             add(
                 getDebugItem("指定文件 WAV头 信息查看",
                     View.OnClickListener { readWavHead(preFile()) })
@@ -102,26 +99,8 @@ class DebugRecordAndASRFragRecment : DebugEnvFragment() {
         }
     }
 
-    private fun testPinyin() {
-        mutableListOf("阿珂没有闪现", "妲己没闪现", "大司命没有技能").forEach {
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, "").toLowerCase())
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, " ").toLowerCase())
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, ",").toLowerCase())
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, "-").toLowerCase())
-        }
-    }
-
     @SuppressLint("MissingPermission")
     fun init() {
-        val file = AAFFileWrapper.getTempFolder() + "dict.txt"
-        FileUtils.copyAssetsFileToPath(context, "cncity.txt", file)
-        PinYinTools.init(
-            PinYinTools.newConfig().with(
-                FilePinyinMapDict(
-                    context!!, file
-                )
-            )
-        )
         AAFAudioTools.addRecordScene(scene, "读取麦克风", "音频录制测试")
         AAFAudioTools.startRecordPermissionCheck(activity,
             scene,
