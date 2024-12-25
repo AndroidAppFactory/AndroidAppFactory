@@ -1,7 +1,7 @@
 apply from: rootDir.toString() + '/config.gradle'
 ext.asrmoduleInfo = [
         "LibASR"                : [
-                "version"            : "6.22.0",
+                "version"            : "6.22.1",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
                         "LibASRMin", "LibSpeechRecognition", "LibPinYin", "LibChinese"
@@ -78,7 +78,7 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibPinYin"             : [
-                "version"            : "6.22.0",
+                "version"            : "6.22.1",
                 "artifactId"         : "lib-pinyin",
                 "apidependenciesList": [
                         "org.ahocorasick:ahocorasick:0.3.0","LibFile","LibAAF","LibChinese"
