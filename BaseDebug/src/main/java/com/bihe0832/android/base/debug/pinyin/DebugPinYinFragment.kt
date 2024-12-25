@@ -16,10 +16,8 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.chinese.ChineseHelper
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.pinyin.FilePinyinMapDict
-import com.bihe0832.android.lib.pinyin.PinYinTools
-import com.bihe0832.android.lib.pinyin.tone.PinYinWithTone
-import com.bihe0832.android.lib.pinyin.tone.PinyinFormat
+import com.bihe0832.android.lib.pinyin.PinYinWithTone
+import com.bihe0832.android.lib.pinyin.PinyinFormat
 
 class DebugPinYinFragment : DebugEnvFragment() {
     val TAG = this.javaClass.simpleName
@@ -28,17 +26,12 @@ class DebugPinYinFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugItem("文字转拼音", View.OnClickListener { testPinyin() }))
-            add(
-                getDebugItem("无音调版本添加本地字典",
-                    View.OnClickListener { addFilePinyinMapDict() })
-            )
             add(getDebugItem("中文简繁体转换", View.OnClickListener { testTraditional() }))
         }
     }
 
     override fun initView(view: View) {
         super.initView(view)
-        PinYinTools.init(PinYinTools.newConfig())
         ChineseHelper.init(context!!)
         PinYinWithTone.init(context!!)
     }
@@ -57,11 +50,6 @@ class DebugPinYinFragment : DebugEnvFragment() {
             "乌拉特前旗"
         ).forEach {
             ZLog.d("===============")
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, "").toLowerCase())
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, " ").toLowerCase())
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, ",").toLowerCase())
-            ZLog.d(it + " Convert to Pinyin：" + PinYinTools.toPinyin(it, "-").toLowerCase())
-            ZLog.d("---------------")
             ZLog.d(
                 "$it Convert to Pinyin：" + PinYinWithTone.toPinYin(
                     it, "-", PinyinFormat.WITH_TONE_MARK
@@ -74,12 +62,12 @@ class DebugPinYinFragment : DebugEnvFragment() {
             )
             ZLog.d(
                 "$it Convert to Pinyin：" + PinYinWithTone.toPinYin(
-                    it, "-", PinyinFormat.WITH_TONE_NUMBER
+                    it, " ", PinyinFormat.WITH_TONE_NUMBER
                 )
             )
             ZLog.d(
                 "$it Convert to Pinyin：" + PinYinWithTone.toPinYin(
-                    it, " ", PinyinFormat.WITH_TONE_NUMBER
+                    it, " ", PinyinFormat.WITHOUT_TONE
                 )
             )
             ZLog.d("===============")
@@ -97,12 +85,6 @@ class DebugPinYinFragment : DebugEnvFragment() {
                 )
             )
         }
-    }
-
-    fun addFilePinyinMapDict() {
-        val file = AAFFileWrapper.getTempFolder() + "cncity.txt"
-        FileUtils.copyAssetsFileToPath(context, "cncity.txt", file)
-        PinYinTools.addPinyinDict(FilePinyinMapDict(context!!, file))
     }
 }
 

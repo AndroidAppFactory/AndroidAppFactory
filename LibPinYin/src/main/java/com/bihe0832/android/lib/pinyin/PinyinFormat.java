@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.pinyin.tone;
+package com.bihe0832.android.lib.pinyin;
 
 /**
  * 拼音格式类
