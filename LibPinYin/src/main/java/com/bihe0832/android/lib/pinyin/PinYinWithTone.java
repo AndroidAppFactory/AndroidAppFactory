@@ -1,9 +1,10 @@
-package com.bihe0832.android.lib.pinyin.tone;
+package com.bihe0832.android.lib.pinyin;
 
 import android.content.Context;
 import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.chinese.ChineseHelper;
 import com.bihe0832.android.lib.file.content.FileContent;
+import com.bihe0832.android.lib.pinyin.tone.DoubleArrayTrie;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -94,7 +95,7 @@ public final class PinYinWithTone {
         LinkedHashSet<String> pinyinSet = new LinkedHashSet<String>();
         Collections.addAll(pinyinSet, pinyinArray);
 
-        return pinyinSet.toArray(new String[pinyinSet.size()]);
+        return pinyinSet.toArray(new String[0]);
     }
 
     /**
@@ -158,7 +159,7 @@ public final class PinYinWithTone {
         while (i < strLen) {
             String substr = str.substring(i);
             List<Integer> commonPrefixList = sDoubleArrayTrie.commonPrefixSearch(substr);
-            if (commonPrefixList.size() == 0) {
+            if (commonPrefixList.isEmpty()) {
                 char c = str.charAt(i);
                 // 判断是否为汉字或者〇
                 if (ChineseHelper.isChinese(c) || c == CHINESE_LING) {
@@ -270,9 +271,7 @@ public final class PinYinWithTone {
         sMutilPinYin.putAll(dict3);
         sPinYinDict.clear();
         sDoubleArrayTrie.clear();
-        for (String word : sMutilPinYin.keySet()) {
-            sPinYinDict.add(word);
-        }
+        sPinYinDict.addAll(sMutilPinYin.keySet());
         Collections.sort(sPinYinDict);
         sDoubleArrayTrie.build(sPinYinDict);
     }
@@ -282,4 +281,7 @@ public final class PinYinWithTone {
     }
 
 
+    public static void showDoubleToneList() {
+        sDoubleArrayTrie.dump();
+    }
 }
