@@ -1,19 +1,16 @@
 package com.bihe0832.android.lib.audio
 
 import android.content.Context
-import android.media.MediaMetadataRetriever
-import android.media.MediaPlayer
 import android.net.Uri
 import com.bihe0832.android.lib.audio.wav.PcmToWav
-import com.bihe0832.android.lib.audio.wav.WaveFileReader
 import com.bihe0832.android.lib.file.FileUtils
 import java.io.File
 import java.io.FileInputStream
-import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-val TAG = "Audio"
+const val TAG = "Audio"
+const val WAV_LENGTH = 44
 
 object AudioUtils {
 
@@ -46,29 +43,31 @@ object AudioUtils {
 
     fun readWavAudioData(filePath: String?): ByteArray? {
         var bytes: ByteArray? = null
-        val file = File(filePath)
-        val WAV_LENGTH = 44
-        if (file.exists() && file.length() > WAV_LENGTH) {
-
-            var inputStream: FileInputStream? = null
-            try {
-                inputStream = FileInputStream(file)
-                // 跳过WAV文件头
-                val headerSize = WAV_LENGTH
-                inputStream.skip(headerSize.toLong())
-                // 读取音频数据
-                bytes = ByteArray(file.length().toInt() - headerSize)
-                inputStream.read(bytes)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            } finally {
+        if (FileUtils.checkFileExist(filePath ?: "")) {
+            val file = File(filePath!!)
+            val length = file.length()
+            if (length > WAV_LENGTH) {
+                var inputStream: FileInputStream? = null
                 try {
-                    inputStream?.close()
+                    inputStream = FileInputStream(file)
+                    // 跳过WAV文件头
+                    val headerSize = WAV_LENGTH
+                    inputStream.skip(headerSize.toLong())
+                    // 读取音频数据
+                    bytes = ByteArray(length.toInt() - headerSize)
+                    inputStream.read(bytes)
                 } catch (e: Exception) {
                     e.printStackTrace()
+                } finally {
+                    try {
+                        inputStream?.close()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
+
         return bytes
     }
 
