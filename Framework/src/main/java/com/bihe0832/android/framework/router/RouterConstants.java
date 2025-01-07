@@ -61,7 +61,7 @@ public class RouterConstants {
     public static final String MODULE_NAME_SHOW_LOG_LIST = "loglist";
     public static final String INTENT_EXTRA_KEY_SHOW_LOG_LIST_ACTION = "showAction";
     public static final String MODULE_NAME_SHOW_LOG = "log";
-    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SORT = "log.sort";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SORT = "log.reversed";
     public static final String INTENT_EXTRA_KEY_SHOW_LOG_NUM = "log.num";
     public static final String INTENT_EXTRA_KEY_SHOW_LOG_SHOW_LINE = "log.line";
 }

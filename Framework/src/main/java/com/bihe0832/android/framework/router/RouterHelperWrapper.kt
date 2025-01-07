@@ -59,7 +59,7 @@ fun showLogHome(showAction: Boolean) {
     showLogHome(RouterConstants.MODULE_NAME_SHOW_LOG_LIST, showAction)
 }
 
-fun showLogHome(routerHost: String,showAction: Boolean) {
+fun showLogHome(routerHost: String, showAction: Boolean) {
     val map = HashMap<String, String>()
     map[RouterConstants.INTENT_EXTRA_KEY_SHOW_LOG_LIST_ACTION] = showAction.toString()
     RouterAction.openPageByRouter(routerHost, map)
@@ -72,22 +72,22 @@ fun showH5Log(filePath: String) {
 fun showLog(
     routerHost: String,
     filePath: String,
-    sort: Boolean,
+    isReversed: Boolean,
     showLine: Boolean,
     showNum: Int,
 ) {
     val map = HashMap<String, String>()
     map[RouterConstants.INTENT_EXTRA_KEY_WEB_URL] = filePath
-    map[RouterConstants.INTENT_EXTRA_KEY_SHOW_LOG_SORT] = sort.toString()
+    map[RouterConstants.INTENT_EXTRA_KEY_SHOW_LOG_SORT] = isReversed.toString()
     map[RouterConstants.INTENT_EXTRA_KEY_SHOW_LOG_NUM] = showNum.toString()
     map[RouterConstants.INTENT_EXTRA_KEY_SHOW_LOG_SHOW_LINE] = showLine.toString()
     RouterAction.openPageByRouter(routerHost, map)
 }
 
-fun showLog(filePath: String, sort: Boolean, showLine: Boolean, showNum: Int) {
-    showLog(RouterConstants.MODULE_NAME_SHOW_LOG, filePath, sort, showLine, showNum)
+fun showLog(filePath: String, isReversed: Boolean, showLine: Boolean, showNum: Int) {
+    showLog(RouterConstants.MODULE_NAME_SHOW_LOG, filePath, isReversed, showLine, showNum)
 }
 
-fun showLog(filePath: String, sort: Boolean, showLine: Boolean) {
-    showLog(filePath, sort, showLine, 2000)
+fun showLog(filePath: String, isReversed: Boolean, showLine: Boolean) {
+    showLog(filePath, isReversed, showLine, 2000)
 }

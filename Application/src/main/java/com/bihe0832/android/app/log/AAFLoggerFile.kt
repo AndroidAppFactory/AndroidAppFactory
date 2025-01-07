@@ -38,7 +38,7 @@ object AAFLoggerFile {
 
     fun showLogByModule(module: String) {
         showLog(
-            getLogPathByModuleName(module), sort = false, showLine = true
+            getLogPathByModuleName(module), isReversed = true, showLine = true
         )
     }
 
