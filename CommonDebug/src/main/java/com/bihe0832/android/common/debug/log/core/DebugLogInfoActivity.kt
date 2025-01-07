@@ -28,7 +28,7 @@ import com.bihe0832.android.lib.utils.ConvertUtils
 open class DebugLogInfoActivity : CommonListActivity() {
 
     private var logPath = ""
-    private var isSort = false
+    private var isReversed = false
     private var showLine = true
     private var showNum = 2000
     private var fileContentList = mutableListOf<String>()
@@ -82,7 +82,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
         findViewById<TextView>(R.id.title_text).apply {
             text = "查看文件：${FileUtils.getFileName(logPath)}"
         }
-        isSort = ConvertUtils.parseBoolean(
+        isReversed = ConvertUtils.parseBoolean(
             bundle.getString(
                 RouterConstants.INTENT_EXTRA_KEY_SHOW_LOG_SORT,
                 ""
@@ -140,23 +140,23 @@ open class DebugLogInfoActivity : CommonListActivity() {
         }
     }
 
-    fun getSortLongMenu(menu: PopMenu): PopMenuItem {
+    fun getReversedMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
-            if (isSort) {
+            if (isReversed) {
                 "正序"
             } else {
                 "倒序"
             }.let {
-                actionName = "当前内容$it"
+                actionName = "${it}展示"
             }
-            iconResId = if (isSort) {
+            iconResId = if (isReversed) {
                 R.drawable.icon_ascending
             } else {
                 R.drawable.icon_descending
             }
             setItemClickListener {
                 menu.hide()
-                isSort = !isSort
+                isReversed = !isReversed
                 mLiveData.postValue(mLiveData.value?.reversed())
             }
         }
@@ -204,7 +204,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
     open fun getPopMenuItem(menu: PopMenu): ArrayList<PopMenuItem> {
         return ArrayList<PopMenuItem>().apply {
             add(getSendLogMenu(menu))
-            add(getSortLongMenu(menu))
+            add(getReversedMenu(menu))
             add(getShowLineMenu(menu))
             add(getChangeNumMenu(menu))
         }
@@ -213,7 +213,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
     fun getLogInfo() {
         val dataList = mutableListOf<CardBaseModule>()
         if (fileContentList.isNotEmpty()) {
-            val logList = if (isSort) {
+            val logList = if (isReversed) {
                 fileContentList.reversed().take(showNum)
             } else {
                 fileContentList.take(showNum)

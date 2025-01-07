@@ -152,7 +152,7 @@ open class DebugLogListActivity : CommonListActivity() {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
                 if (isView) {
-                    showLog(filePath, sort = false, showLine = true, showNum = 2000)
+                    showLog(filePath, isReversed = false, showLine = true, showNum = 2000)
                 } else {
                     FileUtils.sendFile(this@DebugLogListActivity, filePath).let {
                         if (!it) {
