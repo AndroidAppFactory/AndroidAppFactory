@@ -41,7 +41,7 @@ class DebugMediaFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("音频播放", DebugAudioFragment::class.java))
             add(
                 getDebugFragmentItemData(
-                    "WAV 录制及 ARS 调试",
+                    "WAV 录制及 ASR 调试",
                     DebugRecordAndASRFragment::class.java
                 )
             )
