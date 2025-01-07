@@ -2,6 +2,7 @@ package com.k2fsa.sherpa.onnx
 
 import android.content.res.AssetManager
 
+
 data class OfflineRecognizerResult(
     val text: String,
     val tokens: Array<String>,
@@ -33,6 +34,12 @@ data class OfflineWhisperModelConfig(
     var tailPaddings: Int = 1000, // Padding added at the end of the samples
 )
 
+data class OfflineMoonshineModelConfig(
+    var preprocessor: String = "",
+    var encoder: String = "",
+    var uncachedDecoder: String = "",
+    var cachedDecoder: String = "",
+)
 data class OfflineSenseVoiceModelConfig(
     var model: String = "",
     var language: String = "",
@@ -43,6 +50,7 @@ data class OfflineModelConfig(
     var transducer: OfflineTransducerModelConfig = OfflineTransducerModelConfig(),
     var paraformer: OfflineParaformerModelConfig = OfflineParaformerModelConfig(),
     var whisper: OfflineWhisperModelConfig = OfflineWhisperModelConfig(),
+    var moonshine: OfflineMoonshineModelConfig = OfflineMoonshineModelConfig(),
     var nemo: OfflineNemoEncDecCtcModelConfig = OfflineNemoEncDecCtcModelConfig(),
     var senseVoice: OfflineSenseVoiceModelConfig = OfflineSenseVoiceModelConfig(),
     var teleSpeech: String = "",
@@ -50,14 +58,14 @@ data class OfflineModelConfig(
     var debug: Boolean = false,
     var provider: String = "cpu",
     var modelType: String = "",
-    var tokens: String,
+    var tokens: String = "",
     var modelingUnit: String = "",
     var bpeVocab: String = "",
 )
 
 data class OfflineRecognizerConfig(
     var featConfig: FeatureConfig = FeatureConfig(),
-    var modelConfig: OfflineModelConfig,
+    var modelConfig: OfflineModelConfig = OfflineModelConfig(),
     // var lmConfig: OfflineLMConfig(), // TODO(fangjun): enable it
     var decodingMethod: String = "greedy_search",
     var maxActivePaths: Int = 4,
@@ -126,7 +134,6 @@ class OfflineRecognizer(
             emotion = "",
             event = ""
         )
-
     }
 
     fun decode(stream: OfflineStream) = decode(ptr, stream.ptr)
