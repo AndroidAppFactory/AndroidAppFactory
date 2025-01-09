@@ -55,6 +55,9 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
                 getDebugFragmentItemData("WAV查看", DebugWAVListFragment::class.java)
             )
             add(
+                getDebugFragmentItemData("WAV查看Demo", DebugLocalWAVListFragment::class.java)
+            )
+            add(
                 getDebugItem("ASR及语音转文字", View.OnClickListener {
                     showInfo(
                         "ASR及语音转文字",
