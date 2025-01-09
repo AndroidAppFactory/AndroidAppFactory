@@ -64,12 +64,16 @@ public class FileActivity extends SupportActivity {
 
         String path = getIntent().getStringExtra(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL);
         if (!TextUtils.isEmpty(path)) {
-            mFSTask.execute(new File(path).getParentFile());
+            File file = new File(path);
+            if (file.isDirectory()) {
+                mFSTask.execute(file);
+            } else {
+                mFSTask.execute(file.getParentFile());
+            }
         } else {
             mFSTask.execute(Environment.getExternalStorageDirectory());
         }
     }
-
 
     private void initPermission() {
         needSDcard = getIntent().getBooleanExtra(FileSelectTools.INTENT_EXTRA_KEY_NEED_SDCARD_PERMISSION, false);
