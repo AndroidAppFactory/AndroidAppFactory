@@ -66,8 +66,8 @@ open class DebugLogListActivity : CommonListActivity() {
         return mutableListOf<CardBaseModule>().apply {
             add(SectionDataHeader("通用日志工具"))
             add(getLogPathItem(LoggerFile.getZixieFileLogPathByModule("*")))
-            add(getSendLogItem())
-            add(getOpenLogItem())
+            add(getSendLogItem(ZixieContext.getLogFolder()))
+            add(getOpenLogItem(ZixieContext.getLogFolder()))
         }
     }
 
@@ -93,17 +93,17 @@ open class DebugLogListActivity : CommonListActivity() {
         )
     }
 
-    protected fun getSendLogItem(): DebugItemData {
+    protected fun getSendLogItem(path: String): DebugItemData {
         return getDebugItem("选择并发送日志") {
             isView = false
-            FileSelectTools.openFileSelect(this@DebugLogListActivity, ZixieContext.getLogFolder())
+            FileSelectTools.openFileSelect(this@DebugLogListActivity, path)
         }
     }
 
-    protected fun getOpenLogItem(): CardBaseModule {
+    protected fun getOpenLogItem(path: String): CardBaseModule {
         return getDebugItem("选择并查看日志") {
             isView = true
-            FileSelectTools.openFileSelect(this@DebugLogListActivity, ZixieContext.getLogFolder())
+            FileSelectTools.openFileSelect(this@DebugLogListActivity, path)
         }
     }
 
