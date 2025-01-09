@@ -3,7 +3,7 @@ def project = ext
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"            : "6.22.4",
+                "version"            : "6.22.5",
                 "artifactId"         : "common-debug",
                 "apidependenciesList": [
                         "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper"
