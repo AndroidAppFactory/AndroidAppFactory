@@ -45,6 +45,7 @@ class ASREndpointCheck {
 
     class CheckResult(val isEnd: Boolean, val result: OnlineRecognizerResult?)
 
+    @Synchronized
     fun check(
         sampleRateInHz: Int, buffer: ShortArray?, size: Int, autoReset: Boolean
     ): CheckResult {

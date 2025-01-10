@@ -8,16 +8,16 @@
 
 package com.bihe0832.android.base.debug.audio
 
-import com.bihe0832.android.common.debug.audio.DebugWAVListFragment
+import com.bihe0832.android.common.debug.audio.DebugAudioDataFactory
+import com.bihe0832.android.common.debug.audio.DebugWAVListWithProcessFragment
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.log.LoggerFile
-import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils.getFileLength
 import java.io.File
 
-class DebugLocalWAVListFragment : DebugWAVListFragment() {
+class DebugLocalWAVListFragment : DebugWAVListWithProcessFragment() {
 
     override fun filterFile(filePath: String): Boolean {
         return File(filePath).length() > 44
@@ -27,27 +27,7 @@ class DebugLocalWAVListFragment : DebugWAVListFragment() {
         val tips =
             "1. <b><font color='#3AC8EF'>点击</font>图标</b>，播放音频<BR>" +
                     "2. <b><font color='#3AC8EF'>长按</font>图标</b>，可以删除音频，<b><font color='#3AC8EF'>长按</font>标题和内容</b>，可以发送音频"
-
         return getTipsItem(tips)
-    }
-
-    override fun getHeader(): ArrayList<CardBaseModule> {
-        val data = ArrayList<CardBaseModule>().apply {
-            add(getTips())
-            add(getChangeFolderItem())
-            add(
-                getProcessAudioList(
-                    getLogFile(),
-                    "<div style=\"width: 100%;\">本地音频批量处理结果：<BR>文件目录：${
-                        folder.replace(
-                            "/",
-                            " / "
-                        )
-                    } </div>\n"
-                )
-            )
-        }
-        return data
     }
 
     override fun getLogFile(): String {
@@ -56,12 +36,16 @@ class DebugLocalWAVListFragment : DebugWAVListFragment() {
         )
     }
 
-    override fun processAudioData(logFile: String, filePath: String) {
-        LoggerFile.logH5(
-            logFile, "", LoggerFile.getAudioH5LogData(filePath, "audio/wav")
-        )
-        val file = File(filePath)
-        LoggerFile.logH5(getLogFile(), "", "文件大小：" + getFileLength(file.length()))
+    override fun getAudioDataProcessInterface(): DebugAudioDataFactory {
+        return object : DebugAudioDataFactory(getAudioDataFactoryCallback()) {
+            override fun processAudioData(logFile: String, filePath: String) {
+                LoggerFile.logH5(
+                    logFile, "", LoggerFile.getAudioH5LogData(filePath, "audio/wav")
+                )
+                val file = File(filePath)
+                LoggerFile.logH5(getLogFile(), "", "文件大小：" + getFileLength(file.length()))
+                Thread.sleep(1000L)
+            }
+        }
     }
-
 }

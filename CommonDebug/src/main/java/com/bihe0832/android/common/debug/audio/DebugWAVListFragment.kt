@@ -23,9 +23,7 @@ import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.router.showH5Log
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.audio.wav.WaveFileReader
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.FileUtils.getFileLength
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
@@ -148,54 +146,6 @@ open class DebugWAVListFragment : DebugEnvFragment() {
         }
     }
 
-    open fun getLogFile(): String {
-        return LoggerFile.getZixieFileLogPathByModule(
-            "audio", ZixieContext.getLogFolder(), LoggerFile.TYPE_HTML
-        )
-    }
-
-    open fun getProcessAudioList(logFile: String, logHeader: String): DebugItemData {
-        return getDebugItem(
-            "<font color ='#3AC8EF'><b>批量处理音频并记录</b></font>"
-        ) {
-            LoggerFile.initFile(
-                logFile,
-                LoggerFile.getH5LogHeader("<title>音频查看</title>\n") + logHeader + LoggerFile.getH5Sort() + LoggerFile.getH5Content(),
-                true
-            )
-            processAudioList(logFile)
-        }
-    }
-
-    fun playAudioData(data: AudioData) {
-        if (mAudioPLayerManager.isRunning) {
-            mAudioPLayerManager.stopAll(true)
-        }
-        mAudioPLayerManager.play(data.filePath)
-    }
-
-    open fun getHeader(): ArrayList<CardBaseModule> {
-        val data = ArrayList<CardBaseModule>().apply {
-            getTips()?.let {
-                add(it)
-            }
-            add(getChangeFolderItem())
-            add(getChangeAutoPlayItem())
-            add(
-                getProcessAudioList(
-                    getLogFile(),
-                    "<div style=\"width: 100%;\">本地音频批量处理结果：<BR>文件目录：${
-                        folder.replace(
-                            "/",
-                            " / "
-                        )
-                    } </div>\n"
-                )
-            )
-        }
-        return data
-    }
-
     open fun getFileItem(file: File): AudioData {
         return AudioData(file.absolutePath)
     }
@@ -216,6 +166,17 @@ open class DebugWAVListFragment : DebugEnvFragment() {
                 .filter { filterFile(it.absolutePath) }.sortedByDescending { it.lastModified() }
 
         }
+    }
+
+    open fun getHeader(): ArrayList<CardBaseModule> {
+        val data = ArrayList<CardBaseModule>().apply {
+            getTips()?.let {
+                add(it)
+            }
+            add(getChangeFolderItem())
+            add(getChangeAutoPlayItem())
+        }
+        return data
     }
 
     override fun getDataList(): ArrayList<CardBaseModule> {
@@ -265,41 +226,10 @@ open class DebugWAVListFragment : DebugEnvFragment() {
         FileUtils.sendFile(activity!!, audioData.filePath)
     }
 
-    open fun processAudioList(logFile: String) {
-        val dialog = LoadingDialog(activity!!)
-        dialog.show("开始处理……")
-        ThreadManager.getInstance().start {
-            getFileList().let {
-                val num = it.size
-                it.forEachIndexed { index, file ->
-                    ThreadManager.getInstance().runOnUIThread {
-                        dialog.show("共 $num 个音频，正在处理第 ${index + 1} 个……")
-                    }
-                    processAudioData(logFile, file.absolutePath)
-                    Thread.sleep(1000L)
-                }
-
-                ThreadManager.getInstance().runOnUIThread {
-                    dialog.dismiss()
-                    showH5Log(getLogFile())
-                }
-            }
+    fun playAudioData(data: AudioData) {
+        if (mAudioPLayerManager.isRunning) {
+            mAudioPLayerManager.stopAll(true)
         }
-    }
-
-    open fun processAudioData(logFile: String, filePath: String) {
-        LoggerFile.logH5(
-            logFile, "", LoggerFile.getAudioH5LogData(filePath, "audio/wav")
-        )
-        val file = File(filePath)
-        val waveFileReader = WaveFileReader(filePath)
-        LoggerFile.logH5(
-            getLogFile(), "", "文件大小：" + if (waveFileReader.isSuccess) {
-                val fileLength = "文件大小：" + getFileLength(file.length())
-                fileLength + "，" + waveFileReader.toShowString()
-            } else {
-                "音频文件异常，解析失败，请检查音频格式"
-            }
-        )
+        mAudioPLayerManager.play(data.filePath)
     }
 }

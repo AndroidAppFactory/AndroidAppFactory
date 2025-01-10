@@ -49,6 +49,7 @@ public class ASROfflineManager {
         ZLog.d(AudioRecordManager.TAG, "initRecognizer end")
     }
 
+    @Synchronized
     fun startRecognizer(sampleRateInHz: Int, buffer: FloatArray?): String {
         ZLog.d(AudioRecordManager.TAG, "processing samples")
         try {
