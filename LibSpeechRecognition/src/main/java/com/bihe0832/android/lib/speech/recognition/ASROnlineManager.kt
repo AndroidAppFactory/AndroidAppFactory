@@ -50,6 +50,7 @@ public class ASROnlineManager {
         return onlineRecognizer?.createStream()
     }
 
+    @Synchronized
     fun acceptWaveform(
         stream: OnlineStream, sampleRateInHz: Int, buffer: FloatArray?
     ): CheckResult {
