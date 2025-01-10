@@ -8,7 +8,7 @@ import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 
 /**
  *
- * @author hardyshi code@bihe0832.com
+ * @author zixie code@bihe0832.com
  * Created on 2024/12/13.
  * Description: Description
  *

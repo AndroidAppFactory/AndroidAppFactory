@@ -58,6 +58,15 @@ object DebugUtils {
         DebugRootActivity.startDebugRootActivity(context, cls, titleName)
     }
 
+    fun startDebugActivity(
+        context: Context?,
+        cls: Class<*>,
+        titleName: String,
+        data: Map<String, String>?
+    ) {
+        DebugRootActivity.startDebugRootActivity(context, cls, titleName, data)
+    }
+
     fun startActivityWithException(context: Context?, cls: String) {
         startActivityWithException(context, Class.forName(cls))
     }

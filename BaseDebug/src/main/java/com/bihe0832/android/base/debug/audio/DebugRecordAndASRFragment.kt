@@ -10,8 +10,11 @@ package com.bihe0832.android.base.debug.audio
 
 import android.annotation.SuppressLint
 import android.view.View
+import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.debug.audio.DebugWAVListFragment
+import com.bihe0832.android.common.debug.audio.DebugWAVListWithProcessFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.framework.file.AAFFileWrapper
@@ -54,8 +57,19 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
             add(
                 getDebugFragmentItemData("WAV查看", DebugWAVListFragment::class.java)
             )
+            add(getDebugItem("WAV查看Demo1") {
+                startDebugActivity(
+                    DebugWAVListWithProcessFragment::class.java,
+                    "WAV查看Demo1",
+                    HashMap<String, String>().apply {
+                        put(
+                            RouterConstants.INTENT_EXTRA_KEY_WEB_URL,
+                            AAFFileWrapper.getTempFolder()
+                        )
+                    })
+            })
             add(
-                getDebugFragmentItemData("WAV查看Demo", DebugLocalWAVListFragment::class.java)
+                getDebugFragmentItemData("WAV查看Demo2", DebugLocalWAVListFragment::class.java)
             )
             add(
                 getDebugItem("ASR及语音转文字", View.OnClickListener {

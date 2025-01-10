@@ -9,6 +9,7 @@
 package com.bihe0832.android.common.debug.audio
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.bihe0832.android.common.debug.R
@@ -18,23 +19,28 @@ import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.list.CommonListLiveData
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
-import com.bihe0832.android.framework.log.LoggerFile
-import com.bihe0832.android.framework.router.showH5Log
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
-import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager
 import java.io.File
 
+/**
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2025/1/10.
+ * Description: 查看本地的音频文件，支持播放音频
+ *
+ */
+
 open class DebugWAVListFragment : DebugEnvFragment() {
     val TAG = this.javaClass.simpleName
-    private val mAudioPLayerManager by lazy { AudioPLayerManager() }
+    protected val mAudioPLayerManager by lazy { AudioPLayerManager() }
     protected var folder = AAFFileWrapper.getMediaTempFolder()
     private var isPlay = false
     private val mListLiveData = object : CommonListLiveData() {
@@ -76,6 +82,20 @@ open class DebugWAVListFragment : DebugEnvFragment() {
 
     override fun getDataLiveData(): CommonListLiveData {
         return mListLiveData
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mAudioPLayerManager.stopAll(true)
+    }
+
+    override fun parseBundle(bundle: Bundle, isOnCreate: Boolean) {
+        super.parseBundle(bundle, isOnCreate)
+        bundle.getString(RouterConstants.INTENT_EXTRA_KEY_WEB_URL, "").let {
+            if (it.isNotBlank()) {
+                folder = it
+            }
+        }
     }
 
     override fun initView(view: View) {
@@ -122,9 +142,9 @@ open class DebugWAVListFragment : DebugEnvFragment() {
         val tips =
             "1. <b><font color='#3AC8EF'>点击</font>图标</b>，播放音频，<b><font color='#3AC8EF'>点击</font>标题和内容</b>，${
                 if (isPlay) {
-                    "播放音频并识别音频内容"
+                    "播放音频并处理音频内容"
                 } else {
-                    "识别音频内容"
+                    "处理音频内容"
                 }
             }<BR>" + "2. <b><font color='#3AC8EF'>长按</font>图标</b>，可以删除音频，<b><font color='#3AC8EF'>长按</font>标题和内容</b>，可以发送音频"
 

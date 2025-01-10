@@ -135,6 +135,10 @@ open class BaseDebugListFragment : CommonListFragment() {
         DebugUtils.startDebugActivity(context, cls, titleName)
     }
 
+    protected fun startDebugActivity(cls: Class<*>, titleName: String, data: Map<String, String>?) {
+        DebugUtils.startDebugActivity(context, cls, titleName, data)
+    }
+
     protected open fun startActivityWithException(cls: String) {
         DebugUtils.startActivityWithException(context, cls)
     }

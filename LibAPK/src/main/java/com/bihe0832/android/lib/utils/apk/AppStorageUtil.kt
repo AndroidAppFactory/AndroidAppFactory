@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import java.io.File
 
 /**
- * @author hardyshi code@bihe0832.com Created on 2024/11/27.
+ * @author zixie code@bihe0832.com Created on 2024/11/27.
  * Description: 获取应用占用存储信息
  */
 
