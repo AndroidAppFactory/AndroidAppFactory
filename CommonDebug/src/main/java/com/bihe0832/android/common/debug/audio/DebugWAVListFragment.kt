@@ -160,7 +160,7 @@ open class DebugWAVListFragment : DebugEnvFragment() {
         ) {
             LoggerFile.initFile(
                 logFile,
-                LoggerFile.getH5LogHeader() + logHeader + LoggerFile.getH5Sort() + LoggerFile.getH5Content(),
+                LoggerFile.getH5LogHeader("<title>音频查看</title>\n") + logHeader + LoggerFile.getH5Sort() + LoggerFile.getH5Content(),
                 true
             )
             processAudioList(logFile)

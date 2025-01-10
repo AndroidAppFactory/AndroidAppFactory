@@ -131,6 +131,10 @@ object LoggerFile {
     }
 
     fun getH5LogHeader(): String {
+        return getH5LogHeader("<title>" + APKUtils.getAppName(mContext) + "</title>\n")
+    }
+
+    fun getH5LogHeader(userHead: String): String {
         return " <!DOCTYPE HTML>\n" +
                 "<head>\n" +
                 "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n" +
@@ -189,7 +193,7 @@ object LoggerFile {
                 "          container.style.flexDirection = 'column';\n" +
                 "      }\n" +
                 "  </script>\n" +
-                "  <title>" + APKUtils.getAppName(mContext) + "</title>\n" +
+                userHead +
                 "</head>\n" +
                 "<body>\n"
     }
