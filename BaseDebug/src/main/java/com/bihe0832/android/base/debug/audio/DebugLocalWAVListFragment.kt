@@ -17,6 +17,13 @@ import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.lib.file.FileUtils.getFileLength
 import java.io.File
 
+/**
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2025/1/10.
+ * Description: 本地音频批处理自定义
+ *
+ */
 class DebugLocalWAVListFragment : DebugWAVListWithProcessFragment() {
 
     override fun filterFile(filePath: String): Boolean {
@@ -38,12 +45,14 @@ class DebugLocalWAVListFragment : DebugWAVListWithProcessFragment() {
 
     override fun getAudioDataProcessInterface(): DebugAudioDataFactory {
         return object : DebugAudioDataFactory(getAudioDataFactoryCallback()) {
-            override fun processAudioData(logFile: String, filePath: String) {
-                LoggerFile.logH5(
-                    logFile, "", LoggerFile.getAudioH5LogData(filePath, "audio/wav")
-                )
-                val file = File(filePath)
-                LoggerFile.logH5(getLogFile(), "", "文件大小：" + getFileLength(file.length()))
+            override fun processAudioData(
+                logFile: String,
+                index: Int,
+                folder: String,
+                filePath: String
+            ) {
+                commonProcessAudioData(logFile, index, folder, filePath)
+                LoggerFile.logH5(getLogFile(), "", "文件大小：" + getFileLength(File(filePath).length()))
                 Thread.sleep(1000L)
             }
         }
