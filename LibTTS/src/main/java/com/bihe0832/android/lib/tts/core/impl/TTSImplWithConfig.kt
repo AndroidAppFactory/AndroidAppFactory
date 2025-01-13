@@ -25,7 +25,6 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
 
     private val mTTSListenerList = CopyOnWriteArrayList<TTSListener>()
     private val mTTSInitListenerList = CopyOnWriteArrayList<TTSInitListener>()
-    private var mVolume = getVoiceVolumeFloat()
 
     fun addTTSListener(listener: TTSListener) {
         mTTSListenerList.add(listener)
@@ -55,7 +54,6 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
         loc: Locale,
         engine: String? = "",
     ) {
-        initConfig()
         engine?.let {
             setEngine(it)
         }
@@ -99,13 +97,6 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
         })
     }
 
-
-    private fun initConfig() {
-        setPitch(getConfigPitch())
-        setSpeechRate(getConfigSpeechRate())
-        setVoiceVolume(getConfigVoiceVolume())
-    }
-
     private fun setEngine(tempEngine: String) {
         Config.writeConfig(TTSConfig.CONFIG_KEY_ENGINE + mScene, tempEngine)
 //        APKUtils.getInstalledPackage(mContext, tempEngine).let { packageInfo ->
@@ -141,8 +132,8 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
 
     override fun setSpeechRate(speechRate: Float) {
         super.setSpeechRate(speechRate)
-        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, speechRate)
-        ZLog.i(TAG, "setSpeechRate: $speechRate $speechRate $result1")
+        val result = Config.writeConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, speechRate)
+        ZLog.i(TAG, "setSpeechRate: $speechRate $speechRate $result")
     }
 
     fun getConfigPitch(): Float {
@@ -160,9 +151,9 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
     }
 
     override fun setPitch(pitch: Float) {
-        super.setPitch(pitch * 2)
-        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_PITCH + mScene, pitch)
-        ZLog.i(TAG, "setPitch: $pitch $result1")
+        super.setPitch(pitch)
+        val result = Config.writeConfig(TTSConfig.CONFIG_KEY_PITCH + mScene, pitch)
+        ZLog.i(TAG, "setPitch: $pitch $result")
     }
 
     override fun setVoiceVolume(paramVolume: Int): Int {
