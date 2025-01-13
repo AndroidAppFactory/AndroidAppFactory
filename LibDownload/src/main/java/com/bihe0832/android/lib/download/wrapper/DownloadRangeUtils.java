@@ -5,7 +5,6 @@ import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadListener;
 import com.bihe0832.android.lib.download.core.DownloadTaskList;
 import com.bihe0832.android.lib.download.range.DownloadRangeManager;
-import com.bihe0832.android.lib.file.FileUtils;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,15 +38,16 @@ public class DownloadRangeUtils {
 
     public static final void startDownload(Context context, String url, String filePath, long start, long length,
             DownloadListener listener) {
-        startDownload(context, url, filePath, start, length, start, listener);
+        startDownload(context, url, filePath, start, length, start, "", listener);
     }
 
     public static final void startDownload(Context context, String url, String filePath, long start, long length,
-            long localStart, DownloadListener listener) {
+            long localStart, String md5, DownloadListener listener) {
         DownloadItem info = new DownloadItem();
         info.setDownloadURL(url);
         info.setDownloadListener(listener);
         info.setFilePath(filePath);
+        info.setContentMD5(md5);
         info.setNeedRecord(false);
         startDownload(context, info, start, length, localStart);
     }
@@ -70,9 +70,7 @@ public class DownloadRangeUtils {
         if (forceDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
             info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
         }
-        if (!FileUtils.INSTANCE.checkFileExist(info.getFilePath())) {
-            info.setForceDownloadNew(true);
-        }
+        info.setForceDownloadNew(true);
         DownloadRangeManager.INSTANCE.addTask(info, start, length, localStart);
     }
 

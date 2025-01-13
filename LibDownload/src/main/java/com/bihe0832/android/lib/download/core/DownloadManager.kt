@@ -22,6 +22,9 @@ import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.request.HTTPRequestUtils
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.MessageDigestUtils
+import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -59,16 +62,17 @@ abstract class DownloadManager {
     private val MSG_TYPE_START_CHECK = 1
     private val MSG_DELAY_START_CHECK = 3 * 1000L
 
-    private val msgHandler = object : Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_NORMAL)) {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                MSG_TYPE_START_CHECK -> {
-                    removeMessages(MSG_TYPE_START_CHECK)
-                    checkDownloadWhenNetChanged()
+    private val msgHandler =
+        object : Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_NORMAL)) {
+            override fun handleMessage(msg: Message) {
+                when (msg.what) {
+                    MSG_TYPE_START_CHECK -> {
+                        removeMessages(MSG_TYPE_START_CHECK)
+                        checkDownloadWhenNetChanged()
+                    }
                 }
             }
         }
-    }
 
     fun getContext(): Context? {
         return mContext
@@ -89,6 +93,7 @@ abstract class DownloadManager {
     fun hasInit(): Boolean {
         return mHasInit
     }
+
     open fun init(context: Context, maxNum: Int, isDebug: Boolean = false) {
         initContext(context)
         mMaxNum = maxNum
@@ -132,7 +137,10 @@ abstract class DownloadManager {
                 if (!it.isDownloadWhenUseMobile) {
                     ZLog.e(TAG, "当前网络切换为移动网络，任务暂停:$it")
                     pauseTask(
-                        it.downloadID, startByUser = false, clearHistory = false, pauseByNetwork = true
+                        it.downloadID,
+                        startByUser = false,
+                        clearHistory = false,
+                        pauseByNetwork = true
                     )
                 }
             }
@@ -144,9 +152,33 @@ abstract class DownloadManager {
 
     fun checkBeforeDownloadFile(info: DownloadItem): String {
         ZLog.d(TAG, "本地文件是否完整检查开始: $info ")
-        if (FileUtils.checkFileExist(info.filePath, info.contentLength, info.contentMD5, info.contentSHA256, false)) {
-            return info.filePath
+        if (info.downloadType == DownloadItem.TYPE_FILE) {
+            if (FileUtils.checkFileExist(
+                    info.filePath,
+                    info.contentLength,
+                    info.contentMD5,
+                    info.contentSHA256,
+                    false
+                )
+            ) {
+                return info.filePath
+            }
+        } else if (info.downloadType == DownloadItem.TYPE_RANGE) {
+            if (!TextUtils.isEmpty(info.contentMD5)) {
+                val result =
+                    MD5.getFilePartMD5(info.filePath, info.localStart, info.contentLength)
+                if (result.equals(info.contentMD5, ignoreCase = true)) {
+                    return info.filePath
+                }
+            } else if (!TextUtils.isEmpty(info.contentSHA256)) {
+                val result =
+                    SHA256.getFilePartSHA256(info.filePath, info.localStart, info.contentLength)
+                if (result.equals(info.contentSHA256, ignoreCase = true)) {
+                    return info.filePath
+                }
+            }
         }
+
         ZLog.d(TAG, "本地文件是否完整检查结束：$info ")
         return ""
     }
@@ -156,7 +188,8 @@ abstract class DownloadManager {
     }
 
     fun updateInfo(info: DownloadItem, addFilePath: Boolean) {
-        var savedInfo = DownloadInfoDBManager.getDownloadInfo(info.downloadURL, info.downloadActionKey)
+        var savedInfo =
+            DownloadInfoDBManager.getDownloadInfo(info.downloadURL, info.downloadActionKey)
         if (savedInfo != null) {
             info.filePath = savedInfo.filePath
             info.finishedLengthBefore = DownloadInfoDBManager.getFinishedBefore(info.downloadID)
@@ -176,7 +209,11 @@ abstract class DownloadManager {
     }
 
     fun updateDownItemByServerInfo(
-        info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long, downloadAfterAdd: Boolean
+        info: DownloadItem,
+        rangeStart: Long,
+        rangeLength: Long,
+        localStart: Long,
+        downloadAfterAdd: Boolean
     ): Boolean {
         ZLog.w(TAG, "updateDownItemByServerInfo:$info")
         // 重新启动，获取文件总长度
@@ -193,7 +230,10 @@ abstract class DownloadManager {
                 }
                 val time = System.currentTimeMillis()
                 connection.connect()
-                ZLog.e(TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~")
+                ZLog.e(
+                    TAG,
+                    "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~"
+                )
                 if (mIsDebug) {
                     connection.logResponseHeaderFields("获取文件长度")
                 }
@@ -204,12 +244,19 @@ abstract class DownloadManager {
                 ZLog.e(TAG, "获取文件长度 responseCode:${connection.responseCode}")
                 if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL) {
                     return updateItemByServer(
-                        info, rangeStart, rangeLength, localStart, realURL, contentLength, downloadAfterAdd
+                        info,
+                        rangeStart,
+                        rangeLength,
+                        localStart,
+                        realURL,
+                        contentLength,
+                        downloadAfterAdd
                     )
                 } else {
                     if (times > MAX_RETRY_TIMES) {
                         ZLog.e(
-                            TAG, "download with error file length after max times:${connection.responseCode} " + info
+                            TAG,
+                            "download with error file length after max times:${connection.responseCode} " + info
                         )
                         //请求三次都失败在结束
                         getInnerDownloadListener().onFail(
@@ -219,13 +266,19 @@ abstract class DownloadManager {
                         )
                         return false
                     } else {
-                        ZLog.e(TAG, "download with error file length :${connection.responseCode} " + info)
+                        ZLog.e(
+                            TAG,
+                            "download with error file length :${connection.responseCode} " + info
+                        )
                         realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                ZLog.e(TAG, "获取文件长度 异常: download with exception: $times ${e.javaClass.name}")
+                ZLog.e(
+                    TAG,
+                    "获取文件长度 异常: download with exception: $times ${e.javaClass.name}"
+                )
                 if (times > MAX_RETRY_TIMES) {
                     //累积请求三次都失败在结束
                     getInnerDownloadListener().onFail(
@@ -233,7 +286,10 @@ abstract class DownloadManager {
                         "download with exception after three times:${e.javaClass.name}",
                         info
                     )
-                    ZLog.e(TAG, "获取文件长度 异常: download with exception after three times:${e.javaClass.name}")
+                    ZLog.e(
+                        TAG,
+                        "获取文件长度 异常: download with exception after three times:${e.javaClass.name}"
+                    )
                     return false
                 }
             }
@@ -249,18 +305,29 @@ abstract class DownloadManager {
     }
 
 
-    fun getDownladTempFilePath(downloadURL: String, backFileName: String, fileFolder: String): String {
+    fun getDownladTempFilePath(
+        downloadURL: String,
+        backFileName: String,
+        fileFolder: String
+    ): String {
         return getFilePath(downloadURL, backFileName, fileFolder, "Temp_")
     }
 
-    fun getFilePath(downloadURL: String, backFileName: String, fileFolder: String, prefix: String): String {
+    fun getFilePath(
+        downloadURL: String,
+        backFileName: String,
+        fileFolder: String,
+        prefix: String
+    ): String {
         var folder = if (TextUtils.isEmpty(fileFolder)) {
             ZixieFileProvider.getZixieCacheFolder(mContext!!)
         } else {
             fileFolder
         }
         FileUtils.checkAndCreateFolder(folder)
-        return FileUtils.getFolderPathWithSeparator(folder) + prefix + URLUtils.getFileName(downloadURL).let {
+        return FileUtils.getFolderPathWithSeparator(folder) + prefix + URLUtils.getFileName(
+            downloadURL
+        ).let {
             if (TextUtils.isEmpty(it)) {
                 if (TextUtils.isEmpty(backFileName)) {
                     System.currentTimeMillis()
@@ -275,7 +342,7 @@ abstract class DownloadManager {
 
     fun getFinishedTask(): List<DownloadItem> {
         return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_SUCCEED || it.status == DownloadStatus.STATUS_HAS_DOWNLOAD }
-                .toList()
+            .toList()
     }
 
     fun getDownloadingTask(): List<DownloadItem> {
@@ -287,7 +354,8 @@ abstract class DownloadManager {
     }
 
     fun getPauseByNetworkTask(): List<DownloadItem> {
-        return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED_BY_NETWORK }.toList()
+        return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED_BY_NETWORK }
+            .toList()
     }
 
     fun addToDownloadTaskList(info: DownloadItem) {
@@ -341,13 +409,23 @@ abstract class DownloadManager {
         }
     }
 
-    fun pauseTask(downloadId: Long, startByUser: Boolean, clearHistory: Boolean, pauseByNetwork: Boolean) {
+    fun pauseTask(
+        downloadId: Long,
+        startByUser: Boolean,
+        clearHistory: Boolean,
+        pauseByNetwork: Boolean
+    ) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             pauseTask(info, startByUser, clearHistory, pauseByNetwork)
         }
     }
 
-    fun pauseTask(info: DownloadItem, startByUser: Boolean, clearHistory: Boolean, pauseByNetwork: Boolean) {
+    fun pauseTask(
+        info: DownloadItem,
+        startByUser: Boolean,
+        clearHistory: Boolean,
+        pauseByNetwork: Boolean
+    ) {
         ZLog.d(TAG, "pause:$info")
         ZLog.d(TAG, "pause:$info")
         getDownloadEngine().closeDownload(info.downloadID, false, clearHistory)
@@ -389,7 +467,12 @@ abstract class DownloadManager {
         getDownloadingTask().forEach {
             if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
                 if (pauseMaxDownload) {
-                    pauseTask(it.downloadID, startByUser, clearHistory = false, pauseByNetwork = false)
+                    pauseTask(
+                        it.downloadID,
+                        startByUser,
+                        clearHistory = false,
+                        pauseByNetwork = false
+                    )
                 } else {
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
@@ -405,7 +488,12 @@ abstract class DownloadManager {
         getWaitingTask().forEach {
             if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
                 if (pauseMaxDownload) {
-                    pauseTask(it.downloadID, startByUser, clearHistory = false, pauseByNetwork = false)
+                    pauseTask(
+                        it.downloadID,
+                        startByUser,
+                        clearHistory = false,
+                        pauseByNetwork = false
+                    )
                 } else {
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                     ZLog.e(TAG, "skip pause maxPriority download:$it")

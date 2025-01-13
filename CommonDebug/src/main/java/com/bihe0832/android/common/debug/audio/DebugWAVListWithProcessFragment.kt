@@ -76,7 +76,7 @@ open class DebugWAVListWithProcessFragment : DebugWAVListFragment() {
                     }<BR>" + "<BR> </div>"
                 )
             )
-            add(getTipsItem("<b><font color='#3AC8EF'>下方为具体音频内容</font></b>"))
+            add(getTipsItem("下方为具体音频内容"))
         }
 
         return data

@@ -358,7 +358,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     }
 
     private fun startDownload(
-        url: String?, start: Long, length: Long,
+        url: String?, start: Long, length: Int,md5:String
     ) {
         val file = File(AAFFileWrapper.getFileCacheFolder() + FileUtils.getFileName(url))
         file.createNewFile()
@@ -367,8 +367,9 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             url,
             file.absolutePath,
             start,
-            length,
+            length.toLong(),
             0,
+            md5,
             object : SimpleDownloadListener() {
                 override fun onWait(item: DownloadItem) {
                     ZLog.d(
@@ -403,12 +404,13 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         "onComplete start $start : ${item.downloadID} - ${
                             MD5.getMd5(
                                 FileUtils.readDataFromFile(
-                                    filePath, start, 10000
+                                    filePath,  start,
+                                    length
                                 )
                             )
                         }",
                     )
-                    DownloadRangeUtils.deleteTask(item.downloadID, true)
+//                    DownloadRangeUtils.deleteTask(item.downloadID, true)
 
                     return filePath
                 }
@@ -416,11 +418,11 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     }
 
     fun testDownloadRange() {
-        for (i in 0 until 1) {
+//        for (i in 0 until 1) {
             val url = URL_YYB_WZ
-            val start = i * 50000000L
-            startDownload(url, start, 200000000L)
-        }
+            val start = 0 * 50000000L
+            startDownload(url, start, 2000000,"cfd58b9748b44df6c56dbf22f89a737d")
+//        }
     }
 
     fun testDownloadProcess() {
