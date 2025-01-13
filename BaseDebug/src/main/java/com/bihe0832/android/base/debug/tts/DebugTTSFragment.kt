@@ -135,20 +135,24 @@ class DebugTTSFragment : DebugEnvFragment() {
             }))
 
             add(getDebugItem("TextToSpeech 递增设置播报参数", View.OnClickListener {
-                ttsImpl1.setPitch(ttsImpl1.getConfigPitch() + 0.1f)
-                ttsImpl1.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.1f)
+                ttsImpl1.setPitch(ttsImpl1.getConfigPitch() + 0.2f)
+                ttsImpl1.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.2f)
                 ttsImpl1.setVoiceVolume(ttsImpl1.getConfigVoiceVolume() + 10)
-                ttsImpl2.setPitch(ttsImpl1.getConfigPitch() + 0.1f)
-                ttsImpl2.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.1f)
+                ttsImpl1.speak(idGenerator.generate().toString(), TTSData("递增设置播报参数"))
+                ttsImpl2.setPitch(ttsImpl1.getConfigPitch() + 0.2f)
+                ttsImpl2.setSpeechRate(ttsImpl1.getConfigSpeechRate() + 0.2f)
                 ttsImpl2.setVoiceVolume(ttsImpl2.getVoiceVolumeInt() + 10)
+                ttsImpl2.speak(idGenerator.generate().toString(), TTSData("递增设置播报参数"))
             }))
             add(getDebugItem("TextToSpeech 递减设置播报参数", View.OnClickListener {
                 ttsImpl1.setPitch(ttsImpl1.getConfigPitch() - 0.1f)
                 ttsImpl1.setSpeechRate(ttsImpl1.getConfigSpeechRate() - 0.1f)
                 ttsImpl1.setVoiceVolume(ttsImpl1.getVoiceVolumeInt() - 10)
+                ttsImpl1.speak(idGenerator.generate().toString(), TTSData("递减设置播报参数"))
                 ttsImpl2.setPitch(ttsImpl1.getConfigPitch() - 0.1f)
                 ttsImpl2.setSpeechRate(ttsImpl1.getConfigSpeechRate() - 0.1f)
                 ttsImpl2.setVoiceVolume(ttsImpl2.getVoiceVolumeInt() - 10)
+                ttsImpl2.speak(idGenerator.generate().toString(), TTSData("递减设置播报参数"))
             }))
 
             add(getDebugItem("TextToSpeech 抢断播报", View.OnClickListener {

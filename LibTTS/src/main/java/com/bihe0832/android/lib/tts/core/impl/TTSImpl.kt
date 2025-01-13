@@ -100,14 +100,20 @@ open class TTSImpl {
                         setLanguage(mLocale!!)
                         ttsData?.let {
                             if (speak(ttsData) == TextToSpeech.ERROR) {
-                                mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
+                                mTTSResultListener.onUtteranceFailed(
+                                    ttsData.getUtteranceId(),
+                                    ttsData.speakText
+                                )
                             }
                         }
                     } else {
                         ZLog.e(TAG, "onInit: TTS引擎初始化失败")
                         mTTSInitListener?.onInitError()
                         if (null != ttsData) {
-                            mTTSResultListener.onUtteranceFailed(ttsData.getUtteranceId(), ttsData.speakText)
+                            mTTSResultListener.onUtteranceFailed(
+                                ttsData.getUtteranceId(),
+                                ttsData.speakText
+                            )
                         }
                     }
                 },
@@ -284,9 +290,12 @@ open class TTSImpl {
         for (j in fields.indices) {
             fields[j].setAccessible(true)
             if (TextUtils.equals(
-                        "mServiceConnection",
-                        fields[j].getName(),
-                    ) && TextUtils.equals("android.speech.tts.TextToSpeech\$Connection", fields[j].getType().getName())
+                    "mServiceConnection",
+                    fields[j].getName(),
+                ) && TextUtils.equals(
+                    "android.speech.tts.TextToSpeech\$Connection",
+                    fields[j].getType().getName()
+                )
             ) {
                 try {
                     if (fields[j].get(tts) == null) {
@@ -324,7 +333,8 @@ open class TTSImpl {
     fun save(ttsData: TTSData, finalFileName: String): Int {
         ZLog.e(TAG, "ttsData: $ttsData")
         val result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap()) ?: TextToSpeech.ERROR
+            mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
+                ?: TextToSpeech.ERROR
         } else {
             mSpeech?.synthesizeToFile(
                 ttsData.speakText,
@@ -339,22 +349,24 @@ open class TTSImpl {
 
 
     open fun setSpeechRate(speechRate: Float) {
-        var tempmSpeechRate = speechRate
-        if (tempmSpeechRate < 0) {
-            tempmSpeechRate = 0.1f
+        val tempSpeechRate = if (speechRate < 0) {
+            0f
+        } else {
+            speechRate
         }
-        val result = mSpeech?.setSpeechRate(speechRate * 4)
-        ZLog.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result")
+        val result = mSpeech?.setSpeechRate(tempSpeechRate)
+        ZLog.i(TAG, "setSpeechRate:  $tempSpeechRate $result")
     }
 
 
     open fun setPitch(pitch: Float) {
-        var tempPitch = pitch
-
-        if (tempPitch < 0) {
-            tempPitch = 0.1f
+        val tempPitch = if (pitch < 0) {
+            0f
+        } else {
+            pitch
         }
-        val result = mSpeech?.setPitch(tempPitch * 2)
+
+        val result = mSpeech?.setPitch(tempPitch)
         ZLog.i(TAG, "setPitch: $pitch $tempPitch $result")
     }
 
