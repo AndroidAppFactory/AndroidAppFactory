@@ -126,7 +126,8 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
     }
 
     fun getConfigSpeechRate(): Float {
-        val speechRate = Config.readConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, getDefaultSpeechRate())
+        val speechRate =
+            Config.readConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, getDefaultSpeechRate())
         DecimalFormat("0.00").apply {
             roundingMode = RoundingMode.HALF_UP
         }.let {
@@ -139,14 +140,9 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
     }
 
     override fun setSpeechRate(speechRate: Float) {
-        var tempmSpeechRate = speechRate
-        if (tempmSpeechRate < 0) {
-            tempmSpeechRate = 0.1f
-        }
-        val result = super.setSpeechRate(speechRate * 4)
-        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, tempmSpeechRate)
-
-        ZLog.i(TAG, "setSpeechRate: $speechRate $tempmSpeechRate $result $result1")
+        super.setSpeechRate(speechRate)
+        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_SPEECH_RATE + mScene, speechRate)
+        ZLog.i(TAG, "setSpeechRate: $speechRate $speechRate $result1")
     }
 
     fun getConfigPitch(): Float {
@@ -164,14 +160,9 @@ class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
     }
 
     override fun setPitch(pitch: Float) {
-        var tempPitch = pitch
-
-        if (tempPitch < 0) {
-            tempPitch = 0.1f
-        }
-        val result = super.setPitch(tempPitch * 2)
-        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_PITCH + mScene, tempPitch)
-        ZLog.i(TAG, "setPitch: $pitch $tempPitch $result $result1")
+        super.setPitch(pitch * 2)
+        val result1 = Config.writeConfig(TTSConfig.CONFIG_KEY_PITCH + mScene, pitch)
+        ZLog.i(TAG, "setPitch: $pitch $result1")
     }
 
     override fun setVoiceVolume(paramVolume: Int): Int {
