@@ -17,6 +17,8 @@ import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
 import com.bihe0832.android.lib.download.core.DownloadingList
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
+import com.bihe0832.android.lib.download.file.DownloadFileManager
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -173,7 +175,6 @@ object DownloadRangeManager : DownloadManager() {
         try {
             addDownloadItemToListAndSaveLocal(info)
             Thread {
-                // 本地已下载
                 if (downloadAfterAdd) {
                     if (isMobileNet() && !info.isDownloadWhenUseMobile) {
                         pauseTask(info, startByUser = false, clearHistory = false, pauseByNetwork = true)
@@ -223,6 +224,14 @@ object DownloadRangeManager : DownloadManager() {
                 if (!file.exists() || (file.exists() && !File(info.filePath).isFile)) {
                     ZLog.e(TAG, "bad file path:$info")
                     innerDownloadListener.onFail(ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info)
+                    return@start
+                }
+                val path = checkBeforeDownloadFile(info)
+                if (!TextUtils.isEmpty(path)) {
+                    ZLog.e(TAG, "has download:$info")
+                    info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
+                    Thread.sleep(1000L)
+                    innerDownloadListener.onComplete(info.filePath, info)
                     return@start
                 }
                 if (info.isForceDownloadNew) {
