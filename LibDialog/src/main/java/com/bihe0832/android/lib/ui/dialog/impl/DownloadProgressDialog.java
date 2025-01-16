@@ -149,36 +149,29 @@ public class DownloadProgressDialog extends Dialog {
 
         if (null != mLeftTextView) {
             if (mCurrentSize > 0 && mContentSize > 0) {
-                SpannableString tmp = new SpannableString(
-                        MathUtils.getFormatPercentDesc(MathUtils.getFormatPercent(mCurrentSize, mContentSize,
-                                mPercentScale), mPercentScale));
-                tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, tmp.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mLeftTextView.setText(tmp);
+                String result = "<strong>"+MathUtils.getFormatPercentDesc(
+                        MathUtils.getFormatPercent(mCurrentSize, mContentSize, mPercentScale), mPercentScale) + "</strong>";
+                if (mContentSize != mCurrentSize && mCurrentSpeed > 0) {
+                    result =  result +"  |  "+ FileUtils.INSTANCE.getFileLength(mCurrentSpeed) + "/s";
+                }
+                mLeftTextView.setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getTextHtmlAfterTransform(result)));
             }
         }
 
         if (null != mRightTextView) {
             String result = "";
-
             if (mContentSize > 0) {
-                if (mContentSize != mCurrentSize && mCurrentSpeed > 0) {
-                    result = FileUtils.INSTANCE.getFileLength(mCurrentSpeed) + "  <strong>|</strong>  ";
-                }
                 if (mCurrentSize < 0) {
                     mCurrentSize = 0;
                 }
-                result = TextFactoryUtils.getTextHtmlAfterTransform(result) + FileUtils.INSTANCE.getFileLength(
-                        mCurrentSize) + " / " + FileUtils.INSTANCE.getFileLength(mContentSize);
+                result = FileUtils.INSTANCE.getFileLength(mCurrentSize) + " / " + FileUtils.INSTANCE.getFileLength(mContentSize);
             }
-            mRightTextView.setText(TextFactoryUtils.getSpannedTextByHtml(result));
+            mRightTextView.setText(result);
         }
         if (null != mProgress) {
-            mProgress.setProgress(0);
             if (mContentSize < 1) {
-                mProgress.setVisibility(View.INVISIBLE);
+                mProgress.setProgress(0);
             } else {
-                mProgress.setVisibility(View.VISIBLE);
                 mProgress.setProgress((int) (mCurrentSize * 100 / mContentSize));
             }
         }
