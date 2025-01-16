@@ -18,8 +18,8 @@ import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.ui.dialog.R;
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
 import com.bihe0832.android.lib.ui.view.ext.ViewExtKt;
+import com.bihe0832.android.lib.utils.MathUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
-import java.text.NumberFormat;
 
 
 public class DownloadProgressDialog extends Dialog {
@@ -27,8 +27,8 @@ public class DownloadProgressDialog extends Dialog {
     private TextView mTitleView;
     private TextView mContentView;
     private ProgressBar mProgress;
-    private TextView mProgressPercent;
-    private TextView mProgressNumber;
+    private TextView mLeftTextView;
+    private TextView mRightTextView;
     private TextView mNegativeButton;
     private View mButtonLine;
     private TextView mPositiveButton;
@@ -39,12 +39,13 @@ public class DownloadProgressDialog extends Dialog {
 
     private String mTitleString;
     private String mContentString;
-    private long mAPKSize;
+    private long mContentSize;
     private long mCurrentSize = 0;
+    private long mCurrentSpeed = 0;
+    private int mPercentScale = 2;
 
     private boolean shouldCanceledOutside = false;
     private boolean shouldCanceled = true;
-    private NumberFormat mProgressPercentFormat = NumberFormat.getPercentInstance();
 
     private int maxLine = -1;
     private static final int MAX_LINES_LANDSCAPE = 3;
@@ -146,35 +147,39 @@ public class DownloadProgressDialog extends Dialog {
             }
         }
 
-        if (null != mProgressNumber) {
-            if (mCurrentSize > 0 && mAPKSize > 0) {
-                mProgressNumber.setText(FileUtils.INSTANCE.getFileLength(mCurrentSize) + "/" + FileUtils.INSTANCE.getFileLength(mAPKSize));
-            } else {
-                mProgressNumber.setText("");
+        if (null != mLeftTextView) {
+            if (mCurrentSize > 0 && mContentSize > 0) {
+                SpannableString tmp = new SpannableString(
+                        MathUtils.getFormatPercentDesc(MathUtils.getFormatPercent(mCurrentSize, mContentSize,
+                                mPercentScale), mPercentScale));
+                tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, tmp.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mLeftTextView.setText(tmp);
             }
         }
 
-        if (null != mProgressPercent) {
-            mProgressPercent.setVisibility(View.VISIBLE);
-            if (mProgressPercentFormat != null) {
-                if (mAPKSize < 1) {
+        if (null != mRightTextView) {
+            String result = "";
 
-                } else {
-                    double percent = mCurrentSize * 1d / mAPKSize;
-                    SpannableString tmp = new SpannableString(mProgressPercentFormat.format(percent));
-                    tmp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, tmp.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    mProgressPercent.setText(tmp);
+            if (mContentSize > 0) {
+                if (mContentSize != mCurrentSize && mCurrentSpeed > 0) {
+                    result = FileUtils.INSTANCE.getFileLength(mCurrentSpeed) + "  <strong>|</strong>  ";
                 }
-            } else {
-                mProgressPercent.setText("");
+                if (mCurrentSize < 0) {
+                    mCurrentSize = 0;
+                }
+                result = TextFactoryUtils.getTextHtmlAfterTransform(result) + FileUtils.INSTANCE.getFileLength(
+                        mCurrentSize) + " / " + FileUtils.INSTANCE.getFileLength(mContentSize);
             }
+            mRightTextView.setText(TextFactoryUtils.getSpannedTextByHtml(result));
         }
         if (null != mProgress) {
             mProgress.setProgress(0);
-            if (mAPKSize < 1) {
-                mProgress.setProgress((int) (100));
+            if (mContentSize < 1) {
+                mProgress.setVisibility(View.INVISIBLE);
             } else {
-                mProgress.setProgress((int) (mCurrentSize * 100 / mAPKSize));
+                mProgress.setVisibility(View.VISIBLE);
+                mProgress.setProgress((int) (mCurrentSize * 100 / mContentSize));
             }
         }
 
@@ -220,8 +225,8 @@ public class DownloadProgressDialog extends Dialog {
         mContentView = (TextView) findViewById(R.id.update_message);
         mProgress = (ProgressBar) findViewById(R.id.update_progress_bar);
         mProgress.setMax(100);
-        mProgressNumber = (TextView) findViewById(R.id.update_progress_number);
-        mProgressPercent = (TextView) findViewById(R.id.update_progress_percent);
+        mRightTextView = (TextView) findViewById(R.id.update_progress_number);
+        mLeftTextView = (TextView) findViewById(R.id.update_progress_percent);
         mNegativeButton = (TextView) findViewById(R.id.update_progress_cancle);
         mPositiveButton = (TextView) findViewById(R.id.update_progress_positive);
         mButtonLine = findViewById(R.id.update_progress_column_line);
@@ -266,14 +271,22 @@ public class DownloadProgressDialog extends Dialog {
     }
 
     // setProgress传入的参数以B为单位
-    public void setCurrentSize(long value) {
-        mCurrentSize = value;
+    public void setCurrentSize(long currentSize, long currentSpeed) {
+        mCurrentSize = currentSize;
+        mCurrentSpeed = currentSpeed;
         refreshView();
     }
 
     // setMax传入的参数以B为单位
-    public void setAPKSize(long max) {
-        mAPKSize = max;
+    public void setContentSize(long max) {
+        mContentSize = max;
         refreshView();
     }
+
+    // setMax传入的参数以B为单位
+    public void setPercentScale(int max) {
+        mPercentScale = max;
+        refreshView();
+    }
+
 }

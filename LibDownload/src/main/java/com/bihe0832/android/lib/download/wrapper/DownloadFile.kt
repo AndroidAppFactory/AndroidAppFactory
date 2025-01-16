@@ -26,7 +26,12 @@ object DownloadFile {
     }
 
     //检测网络类型，并且4G弹框，不使用进度条
-    fun downloadWithCheck(activity: Activity, url: String, md5: String, downloadListener: DownloadListener?) {
+    fun downloadWithCheck(
+        activity: Activity,
+        url: String,
+        md5: String,
+        downloadListener: DownloadListener?
+    ) {
         downloadWithCheck(activity, url, "", false, md5, true, downloadListener)
     }
 
@@ -40,7 +45,17 @@ object DownloadFile {
         canCancel: Boolean,
         downloadListener: DownloadListener?
     ) {
-        downloadWithCheckAndProcess(activity, url, emptyMap(), path, isFile, md5, canCancel, null, downloadListener)
+        downloadWithCheckAndProcess(
+            activity,
+            url,
+            emptyMap(),
+            path,
+            isFile,
+            md5,
+            canCancel,
+            null,
+            downloadListener
+        )
     }
 
     fun downloadWithCheckAndProcess(
@@ -237,10 +252,11 @@ object DownloadFile {
         listener: OnDialogListener?,
         downloadListener: DownloadListener?
     ) {
-        var progressDialog = DownloadProgressDialog(activity).apply {
+        val progressDialog = DownloadProgressDialog(activity).apply {
+            setPercentScale(3)
             setTitle(title)
             setMessage(msg)
-            setCurrentSize(0)
+            setCurrentSize(0, 0)
             setShouldCanceled(canCancel)
             if (canCancel) {
                 setPositive("后台下载")
@@ -261,7 +277,8 @@ object DownloadFile {
                 override fun onNegativeClick() {
                     dismiss()
                     DownloadFileUtils.deleteTask(
-                        DownloadFileUtils.getDownloadIDByURL(url), true)
+                        DownloadFileUtils.getDownloadIDByURL(url), true
+                    )
                     listener?.onNegativeClick()
                 }
 
@@ -291,8 +308,8 @@ object DownloadFile {
             object : DownloadListener {
                 fun updateProcess(item: DownloadItem) {
                     activity.runOnUiThread {
-                        progressDialog.setAPKSize(item.contentLength)
-                        progressDialog.setCurrentSize(item.finished)
+                        progressDialog.setContentSize(item.contentLength)
+                        progressDialog.setCurrentSize(item.finished-1, item.lastSpeed)
                     }
                 }
 
@@ -308,10 +325,12 @@ object DownloadFile {
 
                 override fun onComplete(filePath: String, item: DownloadItem): String {
                     ZLog.i("startDownload download Path: $filePath")
+                    val result = downloadListener?.onComplete(filePath, item) ?: filePath
                     ThreadManager.getInstance().runOnUIThread {
+                        progressDialog.setCurrentSize(item.contentLength, item.lastSpeed)
                         progressDialog.dismiss()
                     }
-                    return downloadListener?.onComplete(filePath, item) ?: filePath
+                    return result
                 }
 
                 override fun onDelete(item: DownloadItem) {
@@ -337,16 +356,21 @@ object DownloadFile {
                 }
 
                 override fun onPause(item: DownloadItem) {
+                    downloadListener?.onPause(item)
                     ThreadManager.getInstance().runOnUIThread {
                         progressDialog.dismiss()
                     }
-                    downloadListener?.onPause(item)
                 }
             })
     }
 
     //不检测网络类型，4G自动下载，不使用进度条
-    fun forceDownload(context: Context, url: String, forceDownloadNew: Boolean, downloadListener: DownloadListener?) {
+    fun forceDownload(
+        context: Context,
+        url: String,
+        forceDownloadNew: Boolean,
+        downloadListener: DownloadListener?
+    ) {
         forceDownload(
             context,
             "",
@@ -363,7 +387,12 @@ object DownloadFile {
         )
     }
 
-    fun download(context: Context, url: String, forceDownloadNew: Boolean, downloadListener: DownloadListener?) {
+    fun download(
+        context: Context,
+        url: String,
+        forceDownloadNew: Boolean,
+        downloadListener: DownloadListener?
+    ) {
         download(
             context,
             "",
@@ -390,18 +419,33 @@ object DownloadFile {
     }
 
     fun forceDownload(
-        context: Context, url: String, path: String, isFile: Boolean, downloadListener: DownloadListener?
+        context: Context,
+        url: String,
+        path: String,
+        isFile: Boolean,
+        downloadListener: DownloadListener?
     ) {
         forceDownload(context, url, path, isFile, "", downloadListener)
     }
 
-    fun download(context: Context, url: String, path: String, isFile: Boolean, downloadListener: DownloadListener?) {
+    fun download(
+        context: Context,
+        url: String,
+        path: String,
+        isFile: Boolean,
+        downloadListener: DownloadListener?
+    ) {
         download(context, url, path, isFile, "", downloadListener)
     }
 
     //不检测网络类型，4G自动下载，不使用进度条
     fun forceDownload(
-        context: Context, url: String, path: String, isFile: Boolean, md5: String, downloadListener: DownloadListener?
+        context: Context,
+        url: String,
+        path: String,
+        isFile: Boolean,
+        md5: String,
+        downloadListener: DownloadListener?
     ) {
         forceDownload(
             context,
@@ -420,7 +464,12 @@ object DownloadFile {
     }
 
     fun download(
-        context: Context, url: String, path: String, isFile: Boolean, md5: String, downloadListener: DownloadListener?
+        context: Context,
+        url: String,
+        path: String,
+        isFile: Boolean,
+        md5: String,
+        downloadListener: DownloadListener?
     ) {
         download(
             context,

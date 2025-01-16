@@ -39,7 +39,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginRight="16dp"
         android:progress="0"
-        android:visibility="visible"
+        android:visibility="invisible"
         tools:visibility="visible"/>
 
     <RelativeLayout
@@ -55,7 +55,7 @@
             android:layout_marginLeft="16dp"
             android:textColor="@color/com_bihe0832_dialog_hint"
             android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
-            tools:text="70%" />
+            tools:text="705 KB/s " />
 
         <TextView
             android:id="@+id/update_progress_number"
@@ -65,7 +65,7 @@
             android:layout_marginRight="16dp"
             android:textColor="@color/com_bihe0832_dialog_hint"
             android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
-            tools:text="20M/50M" />
+            tools:text="79%  |   2M / 50M " />
 
     </RelativeLayout>
 

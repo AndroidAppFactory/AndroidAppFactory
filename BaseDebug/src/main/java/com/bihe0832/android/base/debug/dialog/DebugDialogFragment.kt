@@ -269,8 +269,8 @@ class DebugDialogFragment : DebugEnvFragment() {
         var progressDialog = DownloadProgressDialog(activity).apply {
             setTitle("更新测试")
             setMessage("正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~")
-            setCurrentSize(1)
-            setAPKSize(10000)
+            setCurrentSize(1,MathUtils.getRandNumByLimit(1,10000000).toLong())
+            setContentSize(10000)
             setNegative("取消下载")
             setPositive("后台下载")
             setOnClickListener(object :
@@ -298,8 +298,8 @@ class DebugDialogFragment : DebugEnvFragment() {
                 if (i < 100) {
                     activity!!.runOnUiThread(
                         Runnable {
-                            progressDialog.setAPKSize(10000L)
-                            progressDialog.setCurrentSize(100L * i)
+                            progressDialog.setContentSize(10000L)
+                            progressDialog.setCurrentSize(100L * i, MathUtils.getRandNumByLimit(1,100000).toLong())
                         },
                     )
                 } else {
