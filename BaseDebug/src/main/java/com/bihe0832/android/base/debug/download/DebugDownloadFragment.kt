@@ -497,6 +497,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             }",
                         )
                     }
+                    Thread.sleep(4000)
                     FileUtils.deleteFile(filePath)
                     return filePath
                 }
