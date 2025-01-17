@@ -53,6 +53,7 @@ open class DebugAudioDataFactory(private val processCallback: AudioDataFactoryCa
         processCallback.onStart()
         forceStop = false
         ThreadManager.getInstance().start {
+            val start = System.currentTimeMillis()
             fileList.let {
                 val num = it.size
                 var isSuccess = true
@@ -68,6 +69,9 @@ open class DebugAudioDataFactory(private val processCallback: AudioDataFactoryCa
                     }
                 }
                 forceStop = false
+                if (System.currentTimeMillis() - start < 2000) {
+                    Thread.sleep(System.currentTimeMillis() - start)
+                }
                 ThreadManager.getInstance().runOnUIThread {
                     if (isSuccess) {
                         processCallback.onComplete()

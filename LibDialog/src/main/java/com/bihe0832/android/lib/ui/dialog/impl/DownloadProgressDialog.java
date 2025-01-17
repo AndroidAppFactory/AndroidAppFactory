@@ -270,7 +270,7 @@ public class DownloadProgressDialog extends Dialog {
     // setProgress传入的参数以B为单位
     public void setCurrentSize(long currentSize, long currentSpeed) {
         if (mContentSize > 0 && currentSize > mContentSize) {
-            mCurrentSize = mContentSize
+            mCurrentSize = mContentSize;
         }else {
             mCurrentSize = currentSize;
         }
