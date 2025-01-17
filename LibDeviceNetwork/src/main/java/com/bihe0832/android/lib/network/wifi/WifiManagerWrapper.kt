@@ -62,7 +62,9 @@ object WifiManagerWrapper {
                     if (isDebug) ZLog.d(TAG, "---------------------- ")
                 } else if (action == WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION) {
                     if (isDebug) ZLog.d(TAG, "---------------------- ")
-                    if (isDebug) ZLog.d(TAG, " SUPPLICANT_CONNECTION_CHANGE_ACTION ${getInfoString()}")
+                    if (isDebug) ZLog.d(
+                        TAG, " SUPPLICANT_CONNECTION_CHANGE_ACTION ${getInfoString()}"
+                    )
                     checkBaseInfoNotify(context)
                     if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)) {
                         // TODO: 建立新连接
@@ -104,6 +106,9 @@ object WifiManagerWrapper {
 
     // 可以扫描周边Wi-Fi
     private var mCanScanWifi = false
+
+    // 可以获取已连接Wi-Fi列表
+    private var mCanWifiConfiguration = false
 
     // 扫描出的网络连接列表
     private var mWifiList: List<ScanResult>? = null
@@ -182,7 +187,9 @@ object WifiManagerWrapper {
     fun getSSID(): String {
         if (isDebug) ZLog.d(TAG, "-----------getSSID----------- ")
         mWifiInfo?.let {
-            if (TextFactoryUtils.trimMarks(it.ssid).equals(WifiUtil.DEFAULT_SSID, ignoreCase = true)) {
+            if (TextFactoryUtils.trimMarks(it.ssid)
+                    .equals(WifiUtil.DEFAULT_SSID, ignoreCase = true)
+            ) {
                 getConfiguredByNetworkID(getNetworkId())?.let { wifiConfiguration ->
                     return TextFactoryUtils.trimMarks(wifiConfiguration.SSID)
                 }
@@ -290,14 +297,19 @@ object WifiManagerWrapper {
     }
 
     fun getWifiStatus(): WifiStatus? {
-        val connectivityManager = mContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        val connectivityManager =
+            mContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         return if (mWifiManager?.isWifiEnabled == true) {
             val wifiNetworkInfo = connectivityManager?.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
             if (wifiNetworkInfo?.isConnected == true) {
                 if (BuildUtils.SDK_INT >= Build.VERSION_CODES.M) {
                     val activeNetwork = connectivityManager.activeNetwork
-                    val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-                    if (networkCapabilities != null && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+                    val networkCapabilities =
+                        connectivityManager.getNetworkCapabilities(activeNetwork)
+                    if (networkCapabilities != null && networkCapabilities.hasCapability(
+                            NetworkCapabilities.NET_CAPABILITY_VALIDATED
+                        )
+                    ) {
                         WifiStatus.CONNECTED
                     } else {
                         WifiStatus.CONNECTED_NO_INTERNET
@@ -330,7 +342,8 @@ object WifiManagerWrapper {
         getWifiConfiguration()?.let {
             buffer.append("\n\tWifiConfiguration-> ").append(getWifiConfigurationString(it))
         }
-        buffer.append("\n\twifi state-> $wifiState").append(";network state-> ${mWifiManager?.isWifiEnabled}")
+        buffer.append("\n\twifi state-> $wifiState")
+            .append(";network state-> ${mWifiManager?.isWifiEnabled}")
         buffer.append("\n\tmWifiList-> " + getScanResultList().size)
             .append(";mWifiConfigurationList-> " + getConfigurationList().size)
         return buffer.toString()
@@ -383,7 +396,8 @@ object WifiManagerWrapper {
             removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             setNetworkSpecifier(wpaSpecifier)
         }.build()
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager?.requestNetwork(networkRequest, networkCallback)
     }
 
@@ -468,15 +482,22 @@ object WifiManagerWrapper {
     }
 
     fun init(context: Context, debug: Boolean) {
-        init(context, debug, notifyRSSI = false, canScanWifi = false)
+        init(context, debug, notifyRSSI = false, canScanWifi = false, canWifiConfiguration = false)
     }
 
-    fun init(context: Context, debug: Boolean, notifyRSSI: Boolean, canScanWifi: Boolean) {
+    fun init(
+        context: Context,
+        debug: Boolean,
+        notifyRSSI: Boolean,
+        canScanWifi: Boolean,
+        canWifiConfiguration: Boolean
+    ) {
         // 取得WifiManager对象
         mContext = context
         isDebug = debug
         mNotifyRSSI = notifyRSSI
         mCanScanWifi = canScanWifi
+        mCanWifiConfiguration = canWifiConfiguration
         if (hasInit) {
             context.applicationContext.unregisterReceiver(mWifiReceiver)
             register(context)
@@ -541,10 +562,12 @@ object WifiManagerWrapper {
 
     private fun updateConfiguredListInfo() {
         // 得到配置好的网络连接
-        try {
-            mWifiConfigurationList = mWifiManager?.configuredNetworks
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (mCanWifiConfiguration) {
+            try {
+                mWifiConfigurationList = mWifiManager?.configuredNetworks
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

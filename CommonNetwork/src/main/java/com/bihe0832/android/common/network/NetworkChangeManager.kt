@@ -115,7 +115,13 @@ object NetworkChangeManager {
         curCellId: Boolean = false,
     ) {
         DeviceInfoManager.getInstance().init(context.applicationContext)
-        WifiManagerWrapper.init(context, isDebug(), notifyRSSI = false, canScanWifi = false)
+        WifiManagerWrapper.init(
+            context,
+            isDebug(),
+            notifyRSSI = false,
+            canScanWifi = false,
+            canWifiConfiguration = false
+        )
         canGetNetType = getNetType
         canGetBSSID = getBssID
         canGetSSID = getSSID
@@ -160,7 +166,8 @@ object NetworkChangeManager {
         }
         ctx.registerReceiver(mNetReceiver, intentFilter)
 
-        WifiManagerWrapper.setWifiChangedListener(object : WifiManagerWrapper.OnWifiChangerListener {
+        WifiManagerWrapper.setWifiChangedListener(object :
+            WifiManagerWrapper.OnWifiChangerListener {
             override fun onStateChanged(context: Context?, state: Int) {
                 innerNetworkChanged(context, null)
             }
@@ -172,7 +179,10 @@ object NetworkChangeManager {
             override fun onScanUpdate(context: Context?, wifiList: List<ScanResult?>?) {
             }
 
-            override fun onConnectUpdate(context: Context?, wifiConfigurationList: List<WifiConfiguration?>?) {
+            override fun onConnectUpdate(
+                context: Context?,
+                wifiConfigurationList: List<WifiConfiguration?>?
+            ) {
             }
         })
 
@@ -187,7 +197,8 @@ object NetworkChangeManager {
                 }
             }
             val networkRequest =
-                NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR).build()
+                NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    .build()
             (ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?)?.registerNetworkCallback(
                 networkRequest,
                 mNetworkCallback as ConnectivityManager.NetworkCallback,
@@ -205,7 +216,10 @@ object NetworkChangeManager {
             "network change >> oldNetType: $oldNetType, cachedNetType: $cachedNetType, oldDtType $oldDtType, cachedDtType $cachedDtTypeInfo",
         )
 
-        ZLog.w(TAG, "network change >> netType correctAfter: $cachedNetType ,intent.getAction():" + intent?.action)
+        ZLog.w(
+            TAG,
+            "network change >> netType correctAfter: $cachedNetType ,intent.getAction():" + intent?.action
+        )
         if (intent?.action?.equals(LocationManager.PROVIDERS_CHANGED_ACTION) == true || oldNetType != cachedNetType || oldDtType != cachedDtTypeInfo) {
             postNetworkChangeEvent(oldNetType, cachedNetType, intent)
             updateInfo(context)
