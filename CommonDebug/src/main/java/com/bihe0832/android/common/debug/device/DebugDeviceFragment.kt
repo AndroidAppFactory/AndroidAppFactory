@@ -54,7 +54,7 @@ class DebugDeviceFragment : DebugEnvFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
-        WifiManagerWrapper.init(view.context, debug = true, notifyRSSI = true, canScanWifi = true)
+        WifiManagerWrapper.init(view.context, debug = true, notifyRSSI = true, canScanWifi = true, canWifiConfiguration = false)
         showResult("点击信息内容可以复制和分享")
     }
 
