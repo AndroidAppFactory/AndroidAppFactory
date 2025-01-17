@@ -149,12 +149,14 @@ public class DownloadProgressDialog extends Dialog {
 
         if (null != mLeftTextView) {
             if (mCurrentSize > 0 && mContentSize > 0) {
-                String result = "<strong>"+MathUtils.getFormatPercentDesc(
-                        MathUtils.getFormatPercent(mCurrentSize, mContentSize, mPercentScale), mPercentScale) + "</strong>";
+                String result = "<strong>" + MathUtils.getFormatPercentDesc(
+                        MathUtils.getFormatPercent(mCurrentSize, mContentSize, mPercentScale), mPercentScale)
+                        + "</strong>";
                 if (mContentSize != mCurrentSize && mCurrentSpeed > 0) {
-                    result =  result +"  |  "+ FileUtils.INSTANCE.getFileLength(mCurrentSpeed) + "/s";
+                    result = result + "  |  " + FileUtils.INSTANCE.getFileLength(mCurrentSpeed, 0) + "/s";
                 }
-                mLeftTextView.setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getTextHtmlAfterTransform(result)));
+                mLeftTextView.setText(
+                        TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getTextHtmlAfterTransform(result)));
             }
         }
 
@@ -164,7 +166,8 @@ public class DownloadProgressDialog extends Dialog {
                 if (mCurrentSize < 0) {
                     mCurrentSize = 0;
                 }
-                result = FileUtils.INSTANCE.getFileLength(mCurrentSize) + " / " + FileUtils.INSTANCE.getFileLength(mContentSize);
+                result = FileUtils.INSTANCE.getFileLength(mCurrentSize, 1) + " / " + FileUtils.INSTANCE.getFileLength(
+                        mContentSize);
             }
             mRightTextView.setText(result);
         }
@@ -172,6 +175,7 @@ public class DownloadProgressDialog extends Dialog {
             if (mContentSize < 1) {
                 mProgress.setProgress(0);
             } else {
+
                 mProgress.setProgress((int) (mCurrentSize * 100 / mContentSize));
             }
         }
@@ -265,7 +269,11 @@ public class DownloadProgressDialog extends Dialog {
 
     // setProgress传入的参数以B为单位
     public void setCurrentSize(long currentSize, long currentSpeed) {
-        mCurrentSize = currentSize;
+        if (mContentSize > 0 && currentSize > mContentSize) {
+            mCurrentSize = mContentSize
+        }else {
+            mCurrentSize = currentSize;
+        }
         mCurrentSpeed = currentSpeed;
         refreshView();
     }
