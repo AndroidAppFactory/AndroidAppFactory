@@ -153,7 +153,7 @@ public class DownloadProgressDialog extends Dialog {
                         MathUtils.getFormatPercent(mCurrentSize, mContentSize, mPercentScale), mPercentScale)
                         + "</strong>";
                 if (mContentSize != mCurrentSize && mCurrentSpeed > 0) {
-                    result = result + "  |  " + FileUtils.INSTANCE.getFileLength(mCurrentSpeed, 0) + "/s";
+                    result = result + "  |  " + FileUtils.INSTANCE.getFileLength(mCurrentSpeed, 1) + "/s";
                 }
                 mLeftTextView.setText(
                         TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getTextHtmlAfterTransform(result)));
