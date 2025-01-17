@@ -13,6 +13,7 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.text.ClipboardUtil
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
@@ -74,7 +75,11 @@ class DebugDialogFragment : DebugEnvFragment() {
 
             add(getDebugItem("底部列表弹框", View.OnClickListener { showBottomDialog(activity!!) }))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))
-            add(getDebugItem("底部Dialog", View.OnClickListener { showAlert(BottomDialog(activity!!)) }))
+            add(
+                getDebugItem(
+                    "底部Dialog",
+                    View.OnClickListener { showAlert(BottomDialog(activity!!)) })
+            )
             add(getDebugItem("通用弹框", View.OnClickListener { testAlert(activity!!) }))
             add(getDebugItem("单选列表弹框", View.OnClickListener { testRadio(activity) }))
             add(getDebugItem("自定义弹框", View.OnClickListener { testCustom(activity) }))
@@ -269,8 +274,14 @@ class DebugDialogFragment : DebugEnvFragment() {
         var progressDialog = DownloadProgressDialog(activity).apply {
             setTitle("更新测试")
             setMessage("正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~")
-            setCurrentSize(1,MathUtils.getRandNumByLimit(1,10000000).toLong())
-            setContentSize(10000)
+            setCurrentSize(
+                1,
+                MathUtils.getRandNumByLimit(
+                    FileUtils.SPACE_KB.toInt(),
+                    FileUtils.SPACE_MB.toInt() * 10
+                ).toLong()
+            )
+            setContentSize(FileUtils.SPACE_MB.toLong() * 1011 - FileUtils.SPACE_KB.toInt() * 800)
             setNegative("取消下载")
             setPositive("后台下载")
             setOnClickListener(object :
@@ -295,11 +306,16 @@ class DebugDialogFragment : DebugEnvFragment() {
 
         TaskManager.getInstance().addTask(object : BaseTask() {
             override fun run() {
-                if (i < 100) {
+                if (i < 1000) {
                     activity!!.runOnUiThread(
                         Runnable {
-                            progressDialog.setContentSize(10000L)
-                            progressDialog.setCurrentSize(100L * i, MathUtils.getRandNumByLimit(1,100000).toLong())
+                            progressDialog.setCurrentSize(
+                                FileUtils.SPACE_KB.toLong() * 1256 * i * 7,
+                                MathUtils.getRandNumByLimit(
+                                    FileUtils.SPACE_KB.toInt(),
+                                    FileUtils.SPACE_MB.toInt() * 10
+                                ).toLong() * 7
+                            )
                         },
                     )
                 } else {
@@ -360,7 +376,7 @@ class DebugDialogFragment : DebugEnvFragment() {
                 showToast(it)
             },
 
-        )
+            )
     }
 
     fun testUnique() {
@@ -457,7 +473,8 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
     fun testSequence1() {
-        val taskIDList = mutableListOf<String>("Dialog0", "Dialog1", "Dialog4", "Dialog5", "Dialog6")
+        val taskIDList =
+            mutableListOf<String>("Dialog0", "Dialog1", "Dialog4", "Dialog5", "Dialog6")
         taskIDList.shuffled().forEach { taskID ->
             dependList.get(taskID)?.let {
                 mDependenceBlockDialogManager.showDialog(
@@ -508,6 +525,7 @@ class DebugDialogFragment : DebugEnvFragment() {
     }
 
     private fun pause() {
-        mDependenceBlockDialogManager.getDependentTaskManager().addTask(INNER_PAUSE_TASK_ID, 1000, {}, mutableListOf())
+        mDependenceBlockDialogManager.getDependentTaskManager()
+            .addTask(INNER_PAUSE_TASK_ID, 1000, {}, mutableListOf())
     }
 }
