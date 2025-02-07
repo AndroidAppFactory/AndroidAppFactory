@@ -127,7 +127,7 @@ class DebugLocalWAVListWithASRFragment : DebugWAVListWithProcessFragment() {
                                 }<BR>" +
                                 "<font color='#3AC8EF'>模型信息：</font><BR>" +
                                 "流式模型1（31M）：sherpa-onnx-streaming-zipformer-zh-14M-2023-02-23<BR>" +
-                                "流式模型2（121M）：streaming-zipformer-bilingual-zh-en-2023-02-20-mobile<BR>" +
+                                "流式模型2（122.3M）：streaming-zipformer-bilingual-zh-en-2023-02-20-mobile<BR>" +
                                 "非流式模型1（243.4M）：paraformer-zh-2023-09-14<BR>" +
                                 "非流式模型2（81.8M）：paraformer-zh-small-2024-03-09<BR>" +
                                 LoggerFile.getH5Content(),

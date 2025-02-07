@@ -1,6 +1,7 @@
 package com.bihe0832.android.base.debug.audio.asr
 
 import android.app.Activity
+import com.bihe0832.android.base.debug.audio.asr.ASRModelDownloadManager.checkAndDoAction
 import com.bihe0832.android.common.debug.audio.DebugAudioDataFactory
 import com.bihe0832.android.common.debug.audio.process.AudioDataFactoryCallback
 import com.bihe0832.android.lib.audio.AudioRecordConfig
@@ -10,7 +11,6 @@ import com.bihe0832.android.lib.speech.DEFAULT_ENDPOINT_MODEL_DIR
 import com.bihe0832.android.lib.speech.getDefaultOnlineRecognizerConfig
 import com.bihe0832.android.lib.speech.recognition.ASROfflineManager
 import com.bihe0832.android.lib.speech.recognition.ASROnlineManager
-import com.bihe0832.android.base.debug.audio.asr.ASRModelDownloadManager.checkAndDoAction
 import com.k2fsa.sherpa.onnx.OnlineStream
 
 /**
@@ -65,29 +65,27 @@ class AudioDataFactoryWithASR(processCallback: AudioDataFactoryCallback) :
             mSmallParaformerASROfflineManager.initRecognizer(
                 getASROfflineRecognizerConfig_paraformer_small()
             )
-//            checkAndDoAction(
-//                activity, modelDir_ASROnlieRecognizerConfig,
-//                url_ASROnlieRecognizerConfig,
-//                md5_ASROnlieRecognizerConfig,
-//            ) {
-//                mASROnlineManager2.initRecognizer(
-//                    activity, getASROnlieRecognizerConfig()
-//                )
-//                if (mASROnlineManager2.isReady()) {
-//                    mOnlineStream2 = mASROnlineManager2.start()
-//                }
-                checkAndDoAction(
-                    activity, modelDir_ASROfflineRecognizerConfig_paraformer,
-                    url_ASROfflineRecognizerConfig_paraformer,
-                    md5_ASROfflineRecognizerConfig_paraformer,
-                ) {
-                    mParaformerASROfflineManager.initRecognizer(
-                        getASROfflineRecognizerConfig_paraformer()
-                    )
+            checkAndDoAction(
+                activity, modelDir_ASROfflineRecognizerConfig_paraformer,
+                url_ASROfflineRecognizerConfig_paraformer,
+                md5_ASROfflineRecognizerConfig_paraformer,
+            ) {
+                mParaformerASROfflineManager.initRecognizer(
+                    getASROfflineRecognizerConfig_paraformer()
+                )
+
+//                checkAndDoAction(
+//                    activity, modelDir_ASROnlineRecognizerConfig,
+//                    url_ASROnlineRecognizerConfig,
+//                    md5_ASROnlineRecognizerConfig,
+//                ) {
+//                    mASROnlineManager2.initRecognizer(getASROnlineRecognizerConfig())
+//                    if (mASROnlineManager2.isReady()) {
+//                        mOnlineStream2 = mASROnlineManager2.start()
+//                    }
 //                }
             }
         }
-
 
         mASROnlineManager.initRecognizer(
             activity, getDefaultOnlineRecognizerConfig(

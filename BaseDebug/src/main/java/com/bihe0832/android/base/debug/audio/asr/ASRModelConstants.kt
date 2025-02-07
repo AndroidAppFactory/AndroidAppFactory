@@ -33,7 +33,7 @@ fun getASRModelRoot(): String {
 val modelDir_ASROfflineRecognizerConfig_paraformer = "sherpa-onnx-paraformer-zh-2024-03-09"
 val url_ASROfflineRecognizerConfig_paraformer =
     "https://github.com/AndroidAppFactory/AAFASR/raw/refs/heads/main/model/sherpa-onnx-paraformer-zh-2024-03-09.zip"
-val md5_ASROfflineRecognizerConfig_paraformer = "e91e6fd014eb61a5f48f9788c17c10a4"
+val md5_ASROfflineRecognizerConfig_paraformer = "be5ed74c6b809552098ca95fdca0ab91"
 fun getASROfflineRecognizerConfig_paraformer(): OfflineRecognizerConfig {
     ZLog.d(
         TAG,
@@ -58,7 +58,7 @@ val modelDir_ASROfflineRecognizerConfig_paraformer_small =
 val url_ASROfflineRecognizerConfig_paraformer_small =
     "https://github.com/AndroidAppFactory/AAFASR/raw/refs/heads/main/model/sherpa-onnx-paraformer-zh-small-2024-03-09.zip"
 val md5_ASROfflineRecognizerConfig_paraformer_small =
-    "aeb33738b897c5d1352ec14145b1c696"
+    "583c1c103b84fd6f67656445de41e45e"
 fun getASROfflineRecognizerConfig_paraformer_small(): OfflineRecognizerConfig {
     ZLog.d(
         TAG,
@@ -78,26 +78,26 @@ fun getASROfflineRecognizerConfig_paraformer_small(): OfflineRecognizerConfig {
     )
 }
 
-val modelDir_ASROnlieRecognizerConfig =
-    "sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20-mobile"
-val url_ASROnlieRecognizerConfig =
-    "https://github.com/AndroidAppFactory/AAFASR/raw/refs/heads/main/model/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20-mobile.zip"
-val md5_ASROnlieRecognizerConfig =
-    "c169f65f3c09629a357342b03bb70c20"
-fun getASROnlieRecognizerConfig(): OnlineRecognizerConfig {
+val modelDir_ASROnlineRecognizerConfig =
+    "sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20"
+val url_ASROnlineRecognizerConfig =
+    "https://github.com/AndroidAppFactory/AAFASR/raw/refs/heads/main/model/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20.zip"
+val md5_ASROnlineRecognizerConfig =
+    "1a93f5c3daa59fecd3de6fb758b4cc07"
+fun getASROnlineRecognizerConfig(): OnlineRecognizerConfig {
     ZLog.d(
         TAG,
-        "path:" + getASRModelRoot() + "$modelDir_ASROnlieRecognizerConfig/joiner-epoch-99-avg-1.int8.onnx",
+        "path:" + getASRModelRoot() + "$modelDir_ASROnlineRecognizerConfig/joiner-epoch-99-avg-1.int8.onnx",
     )
     return OnlineRecognizerConfig(
         featConfig = getAAFFeatureConfig(AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ),
         modelConfig = OnlineModelConfig(
             transducer = OnlineTransducerModelConfig(
-                encoder = "$modelDir_ASROnlieRecognizerConfig/encoder-epoch-99-avg-1.int8.onnx",
-                decoder = "$modelDir_ASROnlieRecognizerConfig/decoder-epoch-99-avg-1.onnx",
-                joiner = "$modelDir_ASROnlieRecognizerConfig/joiner-epoch-99-avg-1.int8.onnx",
+                encoder = "$modelDir_ASROnlineRecognizerConfig/encoder-epoch-99-avg-1.int8.onnx",
+                decoder = "$modelDir_ASROnlineRecognizerConfig/decoder-epoch-99-avg-1.int8.onnx",
+                joiner = "$modelDir_ASROnlineRecognizerConfig/joiner-epoch-99-avg-1.int8.onnx",
             ),
-            tokens = "$modelDir_ASROnlieRecognizerConfig/tokens.txt",
+            tokens = "$modelDir_ASROnlineRecognizerConfig/tokens.txt",
             modelType = "zipformer",
         ),
         endpointConfig = getAAFEndpointConfig(2.4f, 1.4f, 30f),
@@ -106,3 +106,29 @@ fun getASROnlieRecognizerConfig(): OnlineRecognizerConfig {
 }
 
 
+val modelDir_ASROnlineRecognizerConfig_small =
+    "sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20-mobile"
+val url_ASROnlineRecognizerConfig_small =
+    "https://github.com/AndroidAppFactory/AAFASR/raw/refs/heads/main/model/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20-mobile.zip"
+val md5_ASROnlineRecognizerConfig_small =
+    "848fa55c84d7a3f44aa7f616fc30229e"
+fun getASROnlineRecognizerConfig_small(): OnlineRecognizerConfig {
+    ZLog.d(
+        TAG,
+        "path:" + getASRModelRoot() + "$modelDir_ASROnlineRecognizerConfig_small/joiner-epoch-99-avg-1.int8.onnx",
+    )
+    return OnlineRecognizerConfig(
+        featConfig = getAAFFeatureConfig(AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ),
+        modelConfig = OnlineModelConfig(
+            transducer = OnlineTransducerModelConfig(
+                encoder = "$modelDir_ASROnlineRecognizerConfig_small/encoder-epoch-99-avg-1.int8.onnx",
+                decoder = "$modelDir_ASROnlineRecognizerConfig_small/decoder-epoch-99-avg-1.onnx",
+                joiner = "$modelDir_ASROnlineRecognizerConfig_small/joiner-epoch-99-avg-1.int8.onnx",
+            ),
+            tokens = "$modelDir_ASROnlineRecognizerConfig_small/tokens.txt",
+            modelType = "zipformer",
+        ),
+        endpointConfig = getAAFEndpointConfig(2.4f, 1.4f, 30f),
+        enableEndpoint = true,
+    )
+}
