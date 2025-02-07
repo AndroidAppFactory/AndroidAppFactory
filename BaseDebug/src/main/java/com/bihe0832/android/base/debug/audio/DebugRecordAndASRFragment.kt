@@ -9,15 +9,29 @@
 package com.bihe0832.android.base.debug.audio
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
-import com.bihe0832.android.app.router.RouterConstants
+import com.bihe0832.android.base.debug.audio.asr.ASRModelDownloadManager.checkAndDoAction
+import com.bihe0832.android.base.debug.audio.asr.SCENE
+import com.bihe0832.android.base.debug.audio.asr.getASRModelRoot
+import com.bihe0832.android.base.debug.audio.asr.getASROfflineRecognizerConfig_paraformer_small
+import com.bihe0832.android.base.debug.audio.asr.md5_ASROfflineRecognizerConfig_paraformer
+import com.bihe0832.android.base.debug.audio.asr.md5_ASROfflineRecognizerConfig_paraformer_small
+import com.bihe0832.android.base.debug.audio.asr.md5_ASROnlieRecognizerConfig
+import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROfflineRecognizerConfig_paraformer
+import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROfflineRecognizerConfig_paraformer_small
+import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROnlieRecognizerConfig
+import com.bihe0832.android.base.debug.audio.asr.url_ASROfflineRecognizerConfig_paraformer
+import com.bihe0832.android.base.debug.audio.asr.url_ASROfflineRecognizerConfig_paraformer_small
+import com.bihe0832.android.base.debug.audio.asr.url_ASROnlieRecognizerConfig
 import com.bihe0832.android.common.debug.audio.DebugWAVListFragment
-import com.bihe0832.android.common.debug.audio.DebugWAVListWithProcessFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.audio.AudioRecordConfig
 import com.bihe0832.android.lib.audio.AudioUtils
@@ -33,19 +47,26 @@ import com.bihe0832.android.lib.speech.DEFAULT_ENDPOINT_MODEL_DIR
 import com.bihe0832.android.lib.speech.endpoint.AudioRecordWithEndpoint
 import com.bihe0832.android.lib.speech.getDefaultOnlineRecognizerConfig
 import com.bihe0832.android.lib.speech.recognition.ASROfflineManager
-import com.k2fsa.sherpa.onnx.OfflineModelConfig
-import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig
-import com.k2fsa.sherpa.onnx.OfflineWhisperModelConfig
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.k2fsa.sherpa.onnx.SherpaAudioConvertTools
-import com.k2fsa.sherpa.onnx.getFeatureConfig
 import java.io.File
 
 class DebugRecordAndASRFragment : DebugEnvFragment() {
     val TAG = this.javaClass.simpleName
     private val mAudioRecordFile = mutableListOf<AudioRecordFile>()
-    private val scene = "debugRecord"
+    private val mASROfflineManager by lazy { ASROfflineManager() }
+
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
+            addAll(getWavList())
+            addAll(getASRPreList())
+            addAll(getASRList())
+        }
+    }
+
+    private fun getWavList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(getTipsItem("WAV 文件处理相关"))
             add(
                 getDebugItem("指定文件 WAV头 信息查看",
                     View.OnClickListener { readWavHead(preFile()) })
@@ -54,37 +75,83 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
                 getDebugItem("空文件 WAV头 信息查看",
                     View.OnClickListener { readWavHead(preEmpty()) })
             )
+            add(getDebugItem("WAV 录制测试：开始录制", View.OnClickListener { startWav() }))
+            add(getDebugItem("WAV 录制测试：结束录制", View.OnClickListener { stopWav() }))
             add(
-                getDebugFragmentItemData("WAV查看", DebugWAVListFragment::class.java)
+                getDebugItem("WAV 录制测试：录制文件开始（可同时多个）",
+                    View.OnClickListener { startWaveFile() })
             )
-            add(getDebugItem("WAV查看Demo1") {
-                startDebugActivity(
-                    DebugWAVListWithProcessFragment::class.java,
-                    "WAV查看Demo1",
-                    HashMap<String, String>().apply {
-                        put(
-                            RouterConstants.INTENT_EXTRA_KEY_WEB_URL,
-                            AAFFileWrapper.getTempFolder()
-                        )
+            add(
+                getDebugItem("WAV 录制测试：录制文件结束（关闭所有）",
+                    View.OnClickListener { stopWaveFile() })
+            )
+            add(
+                getDebugFragmentItemData("本地 WAV 查看", DebugWAVListFragment::class.java)
+            )
+            add(
+                getDebugFragmentItemData(
+                    "本地 WAV 查看及识别",
+                    DebugLocalWAVListWithASRFragment::class.java
+                )
+            )
+        }
+    }
+
+    private fun getASRPreList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(getTipsItem("语音识别模型相关"))
+            add(getDebugItem("清理模型缓存", View.OnClickListener {
+                ThreadManager.getInstance().start {
+                    FileUtils.deleteDirectory(File(getASRModelRoot()))
+                    ZixieContext.showToast("清理完成")
+                }
+            }))
+            add(getDebugItem(
+                "清空本地音频临时缓存"
+            ) { FileUtils.deleteDirectory(File(AAFFileWrapper.getMediaTempFolder())) })
+            add(
+                getDebugItem(
+                    "下载并准备非流式模型：sherpa-onnx-paraformer-zh-small",
+                    View.OnClickListener {
+                        checkAndDoAction(activity!!,
+                            modelDir_ASROfflineRecognizerConfig_paraformer_small,
+                            url_ASROfflineRecognizerConfig_paraformer_small,
+                            md5_ASROfflineRecognizerConfig_paraformer_small,
+                            {})
                     })
-            })
-            add(
-                getDebugFragmentItemData("WAV查看Demo2", DebugLocalWAVListFragment::class.java)
             )
+
             add(
-                getDebugItem("ASR及语音转文字", View.OnClickListener {
-                    showInfo(
-                        "ASR及语音转文字",
-                        "ASR及语音转文字，已独立为单独项目，请参考：https://github.com/AndroidAppFactory/AAFASR"
-                    )
-                })
+                getDebugItem(
+                    "下载并准备非流式模型：sherpa-onnx-paraformer-zh-2023-09-14",
+                    View.OnClickListener {
+                        checkAndDoAction(
+                            activity!!,
+                            modelDir_ASROfflineRecognizerConfig_paraformer,
+                            url_ASROfflineRecognizerConfig_paraformer,
+                            md5_ASROfflineRecognizerConfig_paraformer
+                        ) {}
+                    })
             )
+
             add(
-                getDebugItem("ASR测试", View.OnClickListener {
-                    debugASR()
-                })
+                getDebugItem("下载并准备流式模型：sherpa-onnx-streaming-zipformer-bilingual-zh-en",
+                    View.OnClickListener {
+                        checkAndDoAction(
+                            activity!!,
+                            modelDir_ASROnlieRecognizerConfig,
+                            url_ASROnlieRecognizerConfig,
+                            md5_ASROnlieRecognizerConfig
+                        ) {}
+                    })
             )
-            add(getDebugItem("初始化", View.OnClickListener { init() }))
+        }
+    }
+
+    private fun getASRList(): ArrayList<CardBaseModule> {
+        return ArrayList<CardBaseModule>().apply {
+            add(getTipsItem("ASR 语音识别相关"))
+            add(getDebugItem("录音及识别初始化", View.OnClickListener { initRecordAndASR() }))
             add(
                 getDebugItem("ARS 静音检测：结束实时识别及录制",
                     View.OnClickListener { AudioRecordWithEndpoint.stopRecord(context!!) })
@@ -98,29 +165,28 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
                 getDebugItem("ARS 静音检测：开启录制在回调识别部分文区间",
                     View.OnClickListener { testSplit() })
             )
-            add(getDebugItem("WAV 录制测试：开始录制", View.OnClickListener { startWav() }))
-            add(getDebugItem("WAV 录制测试：结束录制", View.OnClickListener { stopWav() }))
             add(
-                getDebugItem("WAV 录制测试：录制文件开始（可同时多个）",
-                    View.OnClickListener { startWaveFile() })
+                getDebugItem("ARS 识别：开启录制识别静音检测回调数据",
+                    View.OnClickListener { startReal() })
             )
             add(
-                getDebugItem("WAV 录制测试：录制文件结束（关闭所有）",
-                    View.OnClickListener { stopWaveFile() })
+                getDebugItem("ARS 识别：开启录制识别静音检测回调文件",
+                    View.OnClickListener { startRealFile() })
             )
 
-            add(getDebugItem(
-                "清空本地音频临时缓存"
-            ) { FileUtils.deleteDirectory(File(AAFFileWrapper.getMediaTempFolder())) })
+            add(
+                getDebugItem("ARS 识别：基于本地文件识别",
+                    View.OnClickListener { startFile(preFile()) })
+            )
 
         }
     }
 
     @SuppressLint("MissingPermission")
-    fun init() {
-        AAFAudioTools.addRecordScene(scene, "读取麦克风", "音频录制测试")
+    fun initRecordAndASR() {
+        AAFAudioTools.addRecordScene(SCENE, "读取麦克风", "音频录制测试")
         AAFAudioTools.startRecordPermissionCheck(activity,
-            scene,
+            SCENE,
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
                     AAFAudioTools.init()
@@ -129,17 +195,26 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
                             AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, DEFAULT_ENDPOINT_MODEL_DIR
                         )
                     )
+                    checkAndDoAction(
+                        activity!!, modelDir_ASROfflineRecognizerConfig_paraformer_small,
+                        url_ASROfflineRecognizerConfig_paraformer_small,
+                        md5_ASROfflineRecognizerConfig_paraformer_small,
+                    ) {
+                        mASROfflineManager.initRecognizer(
+                            getASROfflineRecognizerConfig_paraformer_small()
+                        )
+                    }
                 }
             })
     }
 
     fun startWav() {
         AAFAudioTools.startRecordPermissionCheck(activity,
-            scene,
+            SCENE,
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
                     AudioRecordManager.startRecord(
-                        activity, scene, "rere"
+                        activity, SCENE, "rere"
                     ) { config, audioChunk, dataLength ->
                         ZLog.d(
                             TAG, "Started recording callback:${dataLength}"
@@ -150,13 +225,13 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
     }
 
     fun stopWav() {
-        AudioRecordManager.stopRecord(context!!, scene)
+        AudioRecordManager.stopRecord(context!!, SCENE)
     }
 
     fun startWaveFile() {
         val file = AAFFileWrapper.getMediaTempFolder() + System.currentTimeMillis() + ".wav"
         AAFAudioTools.startRecordPermissionCheck(activity,
-            scene,
+            SCENE,
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
                     AudioRecordFile(System.currentTimeMillis().toString(), File(file)).let {
@@ -205,7 +280,7 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
 
     fun startRecord() {
         AAFAudioTools.startRecordPermissionCheck(activity,
-            scene,
+            SCENE,
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
                     AudioRecordWithEndpoint.startDataRecord() { audioRecordConfig, pcmData, result ->
@@ -279,50 +354,79 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
         }
     }
 
-
-    fun concatenate(first: FloatArray?, second: FloatArray?): FloatArray {
-        val result = FloatArray((first?.size ?: 0) + (second?.size ?: 0))
-        first?.copyInto(result, 0)
-        second?.copyInto(result, first?.size ?: 0)
-        return result
-    }
-
-    fun debugASR() {
-        preFile()
-        createAndRecogniseAudio(AAFFileWrapper.getMediaTempFolder() + "1733231828880.wav")
-    }
-
-    fun createAndRecogniseAudio(filePath: String) {
-        val mASROfflineManager = ASROfflineManager()
-        val modelDir = "sherpa-onnx-whisper-base"
-        FileUtils.copyAssetsFolderToFolder(
-            context,
-            modelDir,
-            AAFFileWrapper.getTempFolder() + modelDir
-        )
-        val offlineRecognizer = OfflineRecognizerConfig(
-            featConfig = getFeatureConfig(AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, 80),
-            modelConfig = OfflineModelConfig(
-                whisper = OfflineWhisperModelConfig(
-                    encoder = AAFFileWrapper.getTempFolder() + "$modelDir/base-encoder.int8.onnx",
-                    decoder = AAFFileWrapper.getTempFolder() + "$modelDir/base-decoder.int8.onnx",
-                    language = "zh"
-                ),
-                tokens = AAFFileWrapper.getTempFolder() + "$modelDir/base-tokens.txt",
-                modelType = "whisper",
-            )
-        )
-        mASROfflineManager.initRecognizer(offlineRecognizer)
-        SherpaAudioConvertTools.readWavAudioToSherpaArray(filePath)?.let { audioData ->
-            val time = System.currentTimeMillis()
-            mASROfflineManager.startRecognizer(
-                AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, audioData
-            ).let { result ->
-                ZLog.e(TAG, "识别耗时： ${System.currentTimeMillis() - time} recognizer:$result")
+    fun startReal() {
+        AudioRecordWithEndpoint.startDataRecord { audioRecordConfig, pcmData, result ->
+            pcmData?.let { data ->
+                Log.i(TAG, "====================")
+                val max = (Short.MAX_VALUE * 0.1f).toInt().toShort()
+                Log.i(
+                    TAG, "record data size:${pcmData.size} max:$max, audioMax: ${pcmData.max()}"
+                )
+                if (SherpaAudioConvertTools.isOverSilence(pcmData, max)) {
+                    val samples = SherpaAudioConvertTools.shortArrayToSherpaArray(data, data.size)
+                    recognise(audioRecordConfig.sampleRateInHz, samples)
+//                    AudioUtils.shortArrayToByteArray(data).let {
+//                        SherpaAudioConvertTools.byteArrayToSherpaArray(it).let { float ->
+//                            recognise(audioRecordConfig.sampleRateInHz, float)
+//                        }
+//
+//                        AudioUtils.byteArrayToShortArray(it, it.size).let { short ->
+//                            val erer = SherpaAudioConvertTools.shortArrayToSherpaArray(short, short.size)
+//                            recognise(audioRecordConfig.sampleRateInHz, erer)
+//                        }
+//                    }
+                } else {
+                    Log.i(TAG, "无效音频，无有效内容")
+                }
+                Log.i(TAG, "====================")
             }
         }
     }
 
+    fun startRealFile() {
+        val max = (Short.MAX_VALUE * 0.1f).toInt().toShort()
+        AudioRecordWithEndpoint.startFileRecord(activity,
+            "File",
+            AAFFileWrapper.getMediaTempFolder(),
+            max,
+            object : AAFDataCallback<String>() {
+                override fun onSuccess(result: String?) {
+                    ZLog.d(TAG, "record data:${result}")
+                    result?.let {
+                        readWavHead(it)
+                        recognise(
+                            WaveFileReader(result).sampleRate.toInt(),
+                            SherpaAudioConvertTools.readWavAudioToSherpaArray(result)
+                        )
+                    }
+                }
+            })
+    }
+
+    fun recognise(sampleRateInHz: Int, data: FloatArray?) {
+        data?.let { samples ->
+            Log.i(TAG, "record data:${samples.size}")
+//            mKeywordSpotterManager.doRecognizer(sampleRateInHz, samples).let {
+//                Log.i(TAG, "mKeywordSpotterManager Start to recognizer:$it")
+//            }
+            val time = System.currentTimeMillis()
+            mASROfflineManager.startRecognizer(sampleRateInHz, samples).let {
+                Log.i(
+                    TAG,
+                    "mRecognizerManager cost ${System.currentTimeMillis() - time} to recognizer:$it"
+                )
+
+                showResult(it)
+            }
+        }
+    }
+
+    fun startFile(file: String) {
+        readWavHead(file)
+        SherpaAudioConvertTools.readWavAudioToSherpaArray(file)?.let {
+            recognise(WaveFileReader(file).sampleRate.toInt(), it)
+        }
+    }
 
 }
 
