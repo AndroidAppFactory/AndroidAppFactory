@@ -58,6 +58,7 @@ ext.coremoduleInfo = [
                 "artifactId"         : "",
                 "apidependenciesList": [
                         "Application", "CommonDebug", "CommonTBSFeedback",
+                        "com.bihe0832.android:lib-sherpa-endpoint-model:6.16.7",
                         "LibSherpaEndpointModel"
                 ]
         ],

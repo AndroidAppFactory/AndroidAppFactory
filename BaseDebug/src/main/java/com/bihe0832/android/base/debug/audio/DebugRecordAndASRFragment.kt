@@ -17,13 +17,13 @@ import com.bihe0832.android.base.debug.audio.asr.getASRModelRoot
 import com.bihe0832.android.base.debug.audio.asr.getASROfflineRecognizerConfig_paraformer_small
 import com.bihe0832.android.base.debug.audio.asr.md5_ASROfflineRecognizerConfig_paraformer
 import com.bihe0832.android.base.debug.audio.asr.md5_ASROfflineRecognizerConfig_paraformer_small
-import com.bihe0832.android.base.debug.audio.asr.md5_ASROnlieRecognizerConfig
+import com.bihe0832.android.base.debug.audio.asr.md5_ASROnlineRecognizerConfig_small
 import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROfflineRecognizerConfig_paraformer
 import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROfflineRecognizerConfig_paraformer_small
-import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROnlieRecognizerConfig
+import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROnlineRecognizerConfig_small
 import com.bihe0832.android.base.debug.audio.asr.url_ASROfflineRecognizerConfig_paraformer
 import com.bihe0832.android.base.debug.audio.asr.url_ASROfflineRecognizerConfig_paraformer_small
-import com.bihe0832.android.base.debug.audio.asr.url_ASROnlieRecognizerConfig
+import com.bihe0832.android.base.debug.audio.asr.url_ASROnlineRecognizerConfig_small
 import com.bihe0832.android.common.debug.audio.DebugWAVListFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
@@ -135,13 +135,13 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
             )
 
             add(
-                getDebugItem("下载并准备流式模型：sherpa-onnx-streaming-zipformer-bilingual-zh-en",
+                getDebugItem("下载并准备流式模型：sherpa-onnx-streaming-zipformer-bilingual-zh-en-mobile",
                     View.OnClickListener {
                         checkAndDoAction(
                             activity!!,
-                            modelDir_ASROnlieRecognizerConfig,
-                            url_ASROnlieRecognizerConfig,
-                            md5_ASROnlieRecognizerConfig
+                            modelDir_ASROnlineRecognizerConfig_small,
+                            url_ASROnlineRecognizerConfig_small,
+                            md5_ASROnlineRecognizerConfig_small
                         ) {}
                     })
             )
