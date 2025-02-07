@@ -4,6 +4,7 @@ import android.app.Activity
 import com.bihe0832.android.base.debug.audio.asr.ASRModelDownloadManager.checkAndDoAction
 import com.bihe0832.android.common.debug.audio.DebugAudioDataFactory
 import com.bihe0832.android.common.debug.audio.process.AudioDataFactoryCallback
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.audio.AudioRecordConfig
 import com.bihe0832.android.lib.audio.record.AudioRecordManager
 import com.bihe0832.android.lib.log.ZLog
@@ -82,6 +83,7 @@ class AudioDataFactoryWithASR(processCallback: AudioDataFactoryCallback) :
 //                    mASROnlineManager2.initRecognizer(getASROnlineRecognizerConfig())
 //                    if (mASROnlineManager2.isReady()) {
 //                        mOnlineStream2 = mASROnlineManager2.start()
+//                ZixieContext.showToast("模型 $modelDir_ASROnlineRecognizerConfig 已准备就绪")
 //                    }
 //                }
             }
@@ -95,6 +97,7 @@ class AudioDataFactoryWithASR(processCallback: AudioDataFactoryCallback) :
 
         if (mASROnlineManager.isReady()) {
             mOnlineStream = mASROnlineManager.start()
+            ZixieContext.showToast("模型 $DEFAULT_ENDPOINT_MODEL_DIR 已准备就绪")
         }
     }
 
