@@ -17,12 +17,15 @@ import com.bihe0832.android.base.debug.audio.asr.getASRModelRoot
 import com.bihe0832.android.base.debug.audio.asr.getASROfflineRecognizerConfig_paraformer_small
 import com.bihe0832.android.base.debug.audio.asr.md5_ASROfflineRecognizerConfig_paraformer
 import com.bihe0832.android.base.debug.audio.asr.md5_ASROfflineRecognizerConfig_paraformer_small
+import com.bihe0832.android.base.debug.audio.asr.md5_ASROnlineRecognizerConfig
 import com.bihe0832.android.base.debug.audio.asr.md5_ASROnlineRecognizerConfig_small
 import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROfflineRecognizerConfig_paraformer
 import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROfflineRecognizerConfig_paraformer_small
+import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROnlineRecognizerConfig
 import com.bihe0832.android.base.debug.audio.asr.modelDir_ASROnlineRecognizerConfig_small
 import com.bihe0832.android.base.debug.audio.asr.url_ASROfflineRecognizerConfig_paraformer
 import com.bihe0832.android.base.debug.audio.asr.url_ASROfflineRecognizerConfig_paraformer_small
+import com.bihe0832.android.base.debug.audio.asr.url_ASROnlineRecognizerConfig
 import com.bihe0832.android.base.debug.audio.asr.url_ASROnlineRecognizerConfig_small
 import com.bihe0832.android.common.debug.audio.DebugWAVListFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
@@ -56,6 +59,19 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
     private val mAudioRecordFile = mutableListOf<AudioRecordFile>()
     private val mASROfflineManager by lazy { ASROfflineManager() }
 
+    override fun initView(view: View) {
+        super.initView(view)
+        AAFAudioTools.addRecordScene(SCENE, "读取麦克风", "音频录制测试")
+        AAFAudioTools.startRecordPermissionCheck(activity,
+            SCENE,
+            object : PermissionResultOfAAF(false) {
+                override fun onSuccess() {
+                    AAFAudioTools.init()
+                }
+            })
+
+    }
+
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             addAll(getWavList())
@@ -67,6 +83,12 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
     private fun getWavList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(getTipsItem("WAV 文件处理相关"))
+            add(
+                getDebugFragmentItemData(
+                    "<font color ='#3AC8EF'><b>本地 WAV 查看及识别</b></font>",
+                    DebugLocalWAVListWithASRFragment::class.java
+                )
+            )
             add(
                 getDebugItem("指定文件 WAV头 信息查看",
                     View.OnClickListener { readWavHead(preFile()) })
@@ -88,12 +110,7 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
             add(
                 getDebugFragmentItemData("本地 WAV 查看", DebugWAVListFragment::class.java)
             )
-            add(
-                getDebugFragmentItemData(
-                    "本地 WAV 查看及识别",
-                    DebugLocalWAVListWithASRFragment::class.java
-                )
-            )
+
         }
     }
 
@@ -184,12 +201,10 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
 
     @SuppressLint("MissingPermission")
     fun initRecordAndASR() {
-        AAFAudioTools.addRecordScene(SCENE, "读取麦克风", "音频录制测试")
         AAFAudioTools.startRecordPermissionCheck(activity,
             SCENE,
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
-                    AAFAudioTools.init()
                     AudioRecordWithEndpoint.init(
                         context!!, getDefaultOnlineRecognizerConfig(
                             AudioRecordConfig.DEFAULT_SAMPLE_RATE_IN_HZ, DEFAULT_ENDPOINT_MODEL_DIR
@@ -429,5 +444,6 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
     }
 
 }
+
 
 
