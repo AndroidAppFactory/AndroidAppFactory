@@ -150,7 +150,8 @@ public final class PinYinWithTone {
      * @return 字符串的拼音
      * @throws AAFException
      */
-    public static String toPinYin(String str, String separator, PinyinFormat pinyinFormat)
+    public static String toPinYin(String str, String separator, PinyinFormat pinyinFormat,
+            boolean throwExceptionWhenBad)
             throws AAFException {
         str = ChineseHelper.convertToSimplifiedChinese(str);
         StringBuilder sb = new StringBuilder();
@@ -168,13 +169,25 @@ public final class PinYinWithTone {
                         if (pinyinArray.length > 0) {
                             sb.append(pinyinArray[0]);
                         } else {
-                            throw new AAFException("Can't convert to pinyin: " + c);
+                            if (throwExceptionWhenBad) {
+                                throw new AAFException("Can't convert to pinyin: " + c);
+                            } else {
+                                sb.append(str.charAt(i));
+                            }
                         }
+                    } else {
+                        if (throwExceptionWhenBad) {
+                            throw new AAFException("Can't convert to pinyin: " + c);
+                        } else {
+                            sb.append(str.charAt(i));
+                        }
+                    }
+                } else {
+                    if (throwExceptionWhenBad) {
+                        throw new AAFException("Can't convert to pinyin: " + c);
                     } else {
                         sb.append(str.charAt(i));
                     }
-                } else {
-                    sb.append(c);
                 }
                 i++;
             } else {
@@ -204,8 +217,8 @@ public final class PinYinWithTone {
      * @return 转换后带声调的拼音
      * @throws AAFException
      */
-    public static String toPinYin(String str, String separator) throws AAFException {
-        return toPinYin(str, separator, PinyinFormat.WITH_TONE_MARK);
+    public static String toPinYin(String str, String separator, boolean throwExceptionWhenBad) throws AAFException {
+        return toPinYin(str, separator, PinyinFormat.WITH_TONE_MARK, throwExceptionWhenBad);
     }
 
     /**
@@ -226,7 +239,7 @@ public final class PinYinWithTone {
      * @return 对应拼音的首字母
      * @throws AAFException
      */
-    public static String getShortPinyin(String str) throws AAFException {
+    public static String getShortPinyin(String str, boolean throwExceptionWhenBad) throws AAFException {
         String separator = "#"; // 使用#作为拼音分隔符
         StringBuilder sb = new StringBuilder();
 
@@ -246,7 +259,8 @@ public final class PinYinWithTone {
                     sb.append(str.charAt(j));
                     j++;
                 }
-                String hanziPinyin = toPinYin(sb.toString(), separator, PinyinFormat.WITHOUT_TONE);
+                String hanziPinyin = toPinYin(sb.toString(), separator, PinyinFormat.WITHOUT_TONE,
+                        throwExceptionWhenBad);
                 String[] pinyinArray = hanziPinyin.split(separator);
                 for (String string : pinyinArray) {
                     charArray[i] = string.charAt(0);

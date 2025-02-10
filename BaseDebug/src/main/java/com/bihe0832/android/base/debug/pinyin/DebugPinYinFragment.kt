@@ -46,28 +46,28 @@ class DebugPinYinFragment : DebugEnvFragment() {
             "齦齬齪齲齷龍龜",
             "成都",
             "朝阳区",
-            "甄嬛传",
+            "甄嬛传坦",
             "乌拉特前旗"
         ).forEach {
             ZLog.d("===============")
             ZLog.d(
                 "$it Convert to Pinyin：" + PinYinWithTone.toPinYin(
-                    it, "-", PinyinFormat.WITH_TONE_MARK
+                    it, "-", PinyinFormat.WITH_TONE_MARK,false
                 )
             )
             ZLog.d(
                 "$it Convert to Pinyin：" + PinYinWithTone.toPinYin(
-                    it, " ", PinyinFormat.WITH_TONE_MARK
+                    it, " ", PinyinFormat.WITH_TONE_MARK,false
                 )
             )
             ZLog.d(
                 "$it Convert to Pinyin：" + PinYinWithTone.toPinYin(
-                    it, " ", PinyinFormat.WITH_TONE_NUMBER
+                    it, " ", PinyinFormat.WITH_TONE_NUMBER,false
                 )
             )
             ZLog.d(
                 "$it Convert to Pinyin：" + PinYinWithTone.toPinYin(
-                    it, " ", PinyinFormat.WITHOUT_TONE
+                    it, " ", PinyinFormat.WITHOUT_TONE,false
                 )
             )
             ZLog.d("===============")
