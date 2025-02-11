@@ -1,7 +1,6 @@
 package com.bihe0832.android.lib.utils.encrypt.messagedigest;
 
 import android.text.TextUtils;
-import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -10,46 +9,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * @author zixie code@bihe0832.com
- *         Created on 2022/8/15.
- *         Description: Description
+ * @author zixie code@bihe0832.com Created on 2022/8/15. Description: Description
  */
 public class MessageDigestUtils {
 
     private static final int BUFFER_SIZE = 2048;
 
-    private static final ThreadLocal<Map<String, MessageDigest>> sMessageDigestHolder = new ThreadLocal<Map<String, MessageDigest>>() {
-        @Override
-        protected Map<String, MessageDigest> initialValue() {
-            return new HashMap<>();
-        }
-    };
-
-    public static MessageDigest getMessageDigest(String digestType) {
-        Map<String, MessageDigest> digestMap = sMessageDigestHolder.get();
-        MessageDigest digest = digestMap.get(digestType);
-        if (digest == null) {
-            try {
-                digest = MessageDigest.getInstance(digestType);
-                digestMap.put(digestType, digest);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        digest.reset();
-        ZLog.e(String.valueOf(digest.hashCode()));
-        return digest;
-    }
-
     public static String getDigestData(byte[] bytes, String digestType) {
         try {
-            MessageDigest digest = getMessageDigest(digestType);
+            MessageDigest digest = MessageDigest.getInstance(digestType);
             if (digest == null) {
                 return "";
             }
@@ -138,7 +108,8 @@ public class MessageDigestUtils {
         return ret;
     }
 
-    public static String getInputStreamPartDigestData(InputStream bis, String digestType, long start, long end) {
+    public static synchronized String getInputStreamPartDigestData(InputStream bis, String digestType, long start,
+            long end) {
         try {
             MessageDigest digest = getMessageDigest(digestType);
             if (digest == null) {
@@ -171,7 +142,7 @@ public class MessageDigestUtils {
 
     public static String getInputStreamDigestData(InputStream is, String digestType) {
         try {
-            MessageDigest digest = getMessageDigest(digestType);
+            MessageDigest digest = MessageDigest.getInstance(digestType);
             if (digest == null) {
                 return "";
             }
@@ -182,7 +153,7 @@ public class MessageDigestUtils {
             }
             byte[] md5Bytes = digest.digest();
             return HexUtils.bytes2HexStr(md5Bytes);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
