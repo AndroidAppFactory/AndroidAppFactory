@@ -25,7 +25,12 @@ open class CommonWithResultActivity : CommonScanActivity() {
     open fun handleQrcodeResult(scanResult: String) {
         ZLog.d("Qrcode", scanResult)
         if (TextUtils.isEmpty(scanResult)) {
-            ZixieContext.showToast("扫码失败，" + ThemeResourcesManager.getString(R.string.app_name) + "无法识别该二维码")
+            ZixieContext.showToast(
+                String.format(
+                    ThemeResourcesManager.getString(R.string.common_scan_failed) ?: "",
+                    ThemeResourcesManager.getString(R.string.app_name)
+                )
+            )
         } else {
             try {
                 Intent.parseUri(scanResult, Intent.URI_INTENT_SCHEME).apply {
@@ -38,7 +43,13 @@ open class CommonWithResultActivity : CommonScanActivity() {
                         RouterAction.openFinalURL(scanResult)
                     } else {
                         if (!IntentUtils.startIntent(this, it)) {
-                            ZixieContext.showToast("扫码失败，" + ThemeResourcesManager.getString(R.string.app_name) + "无法解析该二维码")
+                            ZixieContext.showToast(
+                                String.format(
+                                    ThemeResourcesManager.getString(R.string.common_scan_failed)
+                                        ?: "",
+                                    ThemeResourcesManager.getString(R.string.app_name)
+                                )
+                            )
                         } else {
                             playBeepSoundAndVibrate()
                         }

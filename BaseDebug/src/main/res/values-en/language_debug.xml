@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="debug_msg">this is an English msg</string>
+    <string name="com_bihe0832_praise_positive">positive</string>
+    <string name="com_bihe0832_praise_negative">negative</string>
 </resources>

@@ -1,15 +1,16 @@
 package com.bihe0832.android.lib.language
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.LocaleList
 import android.text.TextUtils
 import androidx.core.os.ConfigurationCompat
-import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.Locale
+
 
 /**
  *
@@ -21,28 +22,36 @@ import java.util.Locale
 object MultiLanguageHelper {
 
     private const val KEY_LOCAL_LANGUAGE = "app_config_language"
+    private const val SP_NAME_LOCAL_LANGUAGE = "language_sp"
+    private var lastLocale: Locale? = null
 
     /**
      * 更新当前页面语言资源，返回更新后的Context
      */
     fun modifyContextLanguageConfig(context: Context): Context {
-        return modifyContextLanguageConfig(context, getLanguageConfig())
+        return modifyContextLanguageConfig(context, getLanguageConfig(context))
     }
 
     fun modifyContextLanguageConfig(context: Context, locale: Locale): Context {
+        return modifyContextLanguageConfig(context, context.resources, locale)
+    }
+
+    fun modifyContextLanguageConfig(
+        context: Context, resources: Resources, locale: Locale
+    ): Context {
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.N) {
-            setAppLanguageApi24(context, locale)
+            return setAppLanguageApi24(context, resources, locale)
         } else {
-            setAppLanguage(context, locale)
+            setAppLanguage(resources, locale)
         }
         return context
     }
 
+
     /**
      * 设置应用语言
      */
-    private fun setAppLanguage(context: Context, locale: Locale) {
-        val resources = context.resources
+    private fun setAppLanguage(resources: Resources, locale: Locale) {
         val displayMetrics = resources.displayMetrics
         val configuration = resources.configuration
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -56,11 +65,14 @@ object MultiLanguageHelper {
     /**
      * 兼容 7.0 及以上
      */
-    private fun setAppLanguageApi24(context: Context, locale: Locale): Context {
-        val resource = context.resources
-        val configuration = resource.configuration
-        configuration.setLocale(locale)
+    private fun setAppLanguageApi24(
+        context: Context,
+        resources: Resources,
+        locale: Locale
+    ): Context {
+        val configuration = resources.configuration
         configuration.setLocales(LocaleList(locale))
+        configuration.setLocale(locale)
         return context.createConfigurationContext(configuration)
     }
 
@@ -85,28 +97,41 @@ object MultiLanguageHelper {
         return locale
     }
 
-    fun getLanguageConfig(): Locale {
-        Locale.forLanguageTag(Config.readConfig(KEY_LOCAL_LANGUAGE, "")).let {
-            return if (TextUtils.isEmpty(it.language)) {
-                getSystemLocale()
-            } else {
-                it
+    fun getLanguageConfig(context: Context): Locale {
+        if (null == lastLocale) {
+            val sp = context.getSharedPreferences(SP_NAME_LOCAL_LANGUAGE, MODE_PRIVATE)
+            Locale.forLanguageTag(sp.getString(KEY_LOCAL_LANGUAGE, "") ?: "").let {
+                lastLocale = if (TextUtils.isEmpty(it.language)) {
+                    getSystemLocale()
+                } else {
+                    it
+                }
             }
         }
+        return lastLocale!!
+
     }
 
-    fun setLanguageConfig(locale: Locale): Boolean {
-        return Config.writeConfig(KEY_LOCAL_LANGUAGE, locale.toLanguageTag())
+    fun setLanguageConfig(context: Context, locale: Locale): Boolean {
+        lastLocale = locale
+        val editor = context.getSharedPreferences(SP_NAME_LOCAL_LANGUAGE, MODE_PRIVATE).edit()
+        editor.putString(KEY_LOCAL_LANGUAGE, locale.toLanguageTag())
+        return editor.commit()
     }
 
-    fun getRealString(contextAfterConfig: Context, id: Int): String {
-        val configuration = Configuration(contextAfterConfig.resources.configuration)
-        val localizedContext = contextAfterConfig.createConfigurationContext(configuration)
-        return localizedContext.resources.getString(id)
+    fun getResources(context: Context, locale: Locale): Resources {
+        val resources: Resources = context.getResources()
+        val configuration = Configuration()
+        configuration.setLocale(locale)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        return resources
     }
 
-    fun getRealStringWithConfig(context: Context, id: Int): String {
-        val contextAfterConfig = modifyContextLanguageConfig(context)
-        return getRealString(contextAfterConfig, id)
+    fun getRealResources(context: Context): Resources {
+        val resources: Resources = context.applicationContext.getResources()
+        val configuration = Configuration()
+        configuration.setLocale(getLanguageConfig(context))
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        return resources
     }
 }

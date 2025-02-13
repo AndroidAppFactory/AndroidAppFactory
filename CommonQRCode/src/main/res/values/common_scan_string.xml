@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_scan_failed">扫码失败， %s无法识别该二维码"</string>
+</resources>

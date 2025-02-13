@@ -60,7 +60,7 @@ object SettingsItem {
     }
 
     fun getAboutTitle(): String {
-        return "关于" + ThemeResourcesManager.getString(R.string.about_app)
+        return ThemeResourcesManager.getString(R.string.settings_about_title) + ThemeResourcesManager.getString(R.string.about_app)
     }
 
     fun getAboutAPP(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsDataGo {
