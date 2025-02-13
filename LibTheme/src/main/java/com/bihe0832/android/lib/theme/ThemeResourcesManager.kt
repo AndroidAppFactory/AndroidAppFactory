@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
+import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.IdGenerator
 
@@ -18,7 +19,12 @@ object ThemeResourcesManager {
     private var mVersion = IdGenerator(0)
 
     fun init(application: Application) {
-        mAppDefaultResources = application.resources
+        val context = MultiLanguageHelper.modifyContextLanguageConfig(
+            application, application.resources, MultiLanguageHelper.getLanguageConfig(
+                application
+            )
+        )
+        mAppDefaultResources = context.resources
     }
 
     // 使用新主题
@@ -61,14 +67,22 @@ object ThemeResourcesManager {
                 try {
                     return mThemeResources!!.getColor(resIdInTheme)
                 } catch (e: Resources.NotFoundException) {
-                    ZLog.e(ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+                    ZLog.e(
+                        ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${
+                            mAppDefaultResources.getResourceTypeName(resId)
+                        }.${mAppDefaultResources.getResourceEntryName(resId)}"
+                    )
                     e.printStackTrace()
                     return mAppDefaultResources.getColor(resId)
                 }
             }
         } catch (e: Resources.NotFoundException) {
             e.printStackTrace()
-            ZLog.e(ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+            ZLog.e(
+                ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${
+                    mAppDefaultResources.getResourceTypeName(resId)
+                }.${mAppDefaultResources.getResourceEntryName(resId)}"
+            )
         }
         return null
     }
@@ -86,14 +100,22 @@ object ThemeResourcesManager {
                     return mThemeResources!!.getColorStateList(resIdInTheme)
                 } catch (e: Resources.NotFoundException) {
                     e.printStackTrace()
-                    ZLog.e(ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+                    ZLog.e(
+                        ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${
+                            mAppDefaultResources.getResourceTypeName(resId)
+                        }.${mAppDefaultResources.getResourceEntryName(resId)}"
+                    )
 
                     return mAppDefaultResources.getColorStateList(resId)
                 }
             }
         } catch (e: Resources.NotFoundException) {
             e.printStackTrace()
-            ZLog.e(ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+            ZLog.e(
+                ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${
+                    mAppDefaultResources.getResourceTypeName(resId)
+                }.${mAppDefaultResources.getResourceEntryName(resId)}"
+            )
 
         }
         return null
@@ -112,14 +134,22 @@ object ThemeResourcesManager {
                     return mThemeResources!!.getDrawable(resIdInTheme)
                 } catch (e: Resources.NotFoundException) {
                     e.printStackTrace()
-                    ZLog.e(ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+                    ZLog.e(
+                        ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${
+                            mAppDefaultResources.getResourceTypeName(resId)
+                        }.${mAppDefaultResources.getResourceEntryName(resId)}"
+                    )
 
                     return mAppDefaultResources.getDrawable(resId)
                 }
             }
         } catch (e: Resources.NotFoundException) {
             e.printStackTrace()
-            ZLog.e(ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+            ZLog.e(
+                ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${
+                    mAppDefaultResources.getResourceTypeName(resId)
+                }.${mAppDefaultResources.getResourceEntryName(resId)}"
+            )
 
         }
         return null
@@ -152,13 +182,21 @@ object ThemeResourcesManager {
                     return mThemeResources!!.getString(resIdInTheme)
                 } catch (e: Resources.NotFoundException) {
                     e.printStackTrace()
-                    ZLog.e(ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+                    ZLog.e(
+                        ThemeManager.TAG, "Resources.NotFoundException:  Theme $mThemePkgName,  R.${
+                            mAppDefaultResources.getResourceTypeName(resId)
+                        }.${mAppDefaultResources.getResourceEntryName(resId)}"
+                    )
                     return mAppDefaultResources.getString(resId)
                 }
             }
         } catch (e: Resources.NotFoundException) {
             e.printStackTrace()
-            ZLog.e(ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${mAppDefaultResources.getResourceTypeName(resId)}.${mAppDefaultResources.getResourceEntryName(resId)}")
+            ZLog.e(
+                ThemeManager.TAG, "Resources.NotFoundException: Theme Default,  R.${
+                    mAppDefaultResources.getResourceTypeName(resId)
+                }.${mAppDefaultResources.getResourceEntryName(resId)}"
+            )
 
         }
         return null

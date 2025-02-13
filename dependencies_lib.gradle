@@ -509,7 +509,7 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-theme",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
-                        "LibConfig", "LibCustomView"
+                        "LibConfig", "LibCustomView","LibLanguage"
                 ]
         ],
         "LibColor"                  : [
@@ -553,7 +553,7 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-language",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
-                        "LibConfig","LibOS"
+                        "LibOS"
                 ]
         ]
 

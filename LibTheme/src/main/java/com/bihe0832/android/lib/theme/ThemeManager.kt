@@ -6,8 +6,9 @@ import android.content.res.AssetManager
 import android.content.res.Resources
 import android.text.TextUtils
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.theme.core.ActivityLifecycleForTheme
-import java.util.*
+import java.util.Observable
 
 
 object ThemeManager : Observable() {
@@ -43,20 +44,30 @@ object ThemeManager : Observable() {
     }
 
     fun applyTheme(path: String?) {
-        if (isEnabled()){
+        if (isEnabled()) {
             if (TextUtils.isEmpty(path)) {
                 ThemeResourcesManager.reset()
                 changeThemPath("")
             } else {
                 try {
                     val assetManager = AssetManager::class.java.newInstance()
-                    val method = assetManager.javaClass.getMethod("addAssetPath", String::class.java)
+                    val method =
+                        assetManager.javaClass.getMethod("addAssetPath", String::class.java)
                     method.isAccessible = true
                     method.invoke(assetManager, path)
-                    val resources = mApplication.resources
-                    val skinRes = Resources(assetManager, resources.displayMetrics, resources.configuration)
+                    val context = MultiLanguageHelper.modifyContextLanguageConfig(
+                        mApplication, mApplication.resources, MultiLanguageHelper.getLanguageConfig(
+                            mApplication
+                        )
+                    )
+                    val resources = context.resources
+                    val skinRes =
+                        Resources(assetManager, resources.displayMetrics, resources.configuration)
                     //获取外部Apk(皮肤包) 包名
-                    val packageName = mApplication.packageManager.getPackageArchiveInfo(path!!, PackageManager.GET_ACTIVITIES)?.packageName
+                    val packageName = mApplication.packageManager.getPackageArchiveInfo(
+                        path!!,
+                        PackageManager.GET_ACTIVITIES
+                    )?.packageName
                     if (!TextUtils.isEmpty(packageName)) {
                         ThemeResourcesManager.apply(skinRes, packageName)
                         changeThemPath(path)

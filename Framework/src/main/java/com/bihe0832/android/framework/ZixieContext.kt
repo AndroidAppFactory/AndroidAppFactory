@@ -20,6 +20,7 @@ import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.device.DeviceIDUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
+import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
@@ -58,13 +59,27 @@ object ZixieContext {
     }
 
     @Synchronized
-    fun init(app: Application, appIsDebug: Boolean, appIsOfficial: Boolean, appTag: String) {
+    fun init(
+        app: Application,
+        appIsDebug: Boolean,
+        appIsOfficial: Boolean,
+        appTag: String,
+        supportMultiLanguage: Boolean
+    ) {
         application = app
-        applicationContext = app.applicationContext
+        updateApplicationContext(app.applicationContext, supportMultiLanguage)
         mDebug = appIsDebug
         mOfficial = appIsOfficial
         mTag = appTag
         initModule({ ChannelTools.init(app, "DEBUG") }, false)
+    }
+
+    fun updateApplicationContext(context: Context, supportMultiLanguage: Boolean) {
+        applicationContext = if (supportMultiLanguage) {
+            MultiLanguageHelper.modifyContextLanguageConfig(context.applicationContext)
+        } else {
+            context.applicationContext
+        }
     }
 
     var applicationContext: Context? = null
@@ -96,9 +111,10 @@ object ZixieContext {
 
     fun showDebugEditionToast() {
         if (!isOfficial()) {
-            ThemeResourcesManager.getString(R.string.common_tips_debug)?.takeIf { it.isNotBlank() }?.let { text ->
-                showLongToast(text)
-            }
+            ThemeResourcesManager.getString(R.string.common_tips_debug)?.takeIf { it.isNotBlank() }
+                ?.let { text ->
+                    showLongToast(text)
+                }
         }
     }
 
@@ -151,9 +167,10 @@ object ZixieContext {
     }
 
     fun showWaiting() {
-        ThemeResourcesManager.getString(R.string.common_tips_waiting)?.takeIf { it.isNotBlank() }?.let { text ->
-            showLongToast(text)
-        }
+        ThemeResourcesManager.getString(R.string.common_tips_waiting)?.takeIf { it.isNotBlank() }
+            ?.let { text ->
+                showLongToast(text)
+            }
     }
 
     fun getVersionNameAndCode(): String {
@@ -264,8 +281,7 @@ object ZixieContext {
     }
 
     fun exitAPP(dialog: CommonDialog, callbackListener: OnDialogListener?) {
-        DialogUtils.showConfirmDialog(
-            dialog,
+        DialogUtils.showConfirmDialog(dialog,
             ThemeResourcesManager.getString(R.string.common_reminder_title)!!,
             String.format(
                 ThemeResourcesManager.getString(R.string.exist_msg)!!,
@@ -274,8 +290,7 @@ object ZixieContext {
             ThemeResourcesManager.getString(R.string.comfirm),
             ThemeResourcesManager.getString(R.string.cancel),
             true,
-            object :
-                OnDialogListener {
+            object : OnDialogListener {
                 override fun onPositiveClick() {
                     callbackListener?.onPositiveClick()
                     exitAPP()
@@ -294,17 +309,17 @@ object ZixieContext {
     open fun restartApp() {
         restartApp(
             ConvertUtils.parseLong(
-                ThemeResourcesManager.getString(R.string.common_waiting_duration_restart),
-                1500L
+                ThemeResourcesManager.getString(R.string.common_waiting_duration_restart), 1500L
             )
         )
     }
 
     open fun restartApp(waitTime: Long) {
         applicationContext?.let { context ->
-            ThemeResourcesManager.getString(R.string.common_tips_restart)?.takeIf { it.isNotBlank() }?.let { text ->
-                showLongToast(text)
-            }
+            ThemeResourcesManager.getString(R.string.common_tips_restart)
+                ?.takeIf { it.isNotBlank() }?.let { text ->
+                    showLongToast(text)
+                }
             ThreadManager.getInstance().start({
                 IntentUtils.restartAPP(context)
                 exitProcess(0)

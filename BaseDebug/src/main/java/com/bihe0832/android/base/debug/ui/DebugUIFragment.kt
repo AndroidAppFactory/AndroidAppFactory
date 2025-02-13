@@ -34,12 +34,10 @@ class DebugUIFragment : DebugEnvFragment() {
 
             add(getDebugItem("哀悼日全局置灰", View.OnClickListener {
                 Config.writeConfig(
-                    Constants.CONFIG_KEY_LAYER_START_VALUE,
-                    System.currentTimeMillis() / 1000 - 3600
+                    Constants.CONFIG_KEY_LAYER_START_VALUE, System.currentTimeMillis() / 1000 - 3600
                 )
                 Config.writeConfig(
-                    Constants.CONFIG_KEY_LAYER_END_VALUE,
-                    System.currentTimeMillis() / 1000 + 3600
+                    Constants.CONFIG_KEY_LAYER_END_VALUE, System.currentTimeMillis() / 1000 + 3600
                 )
                 ZixieContext.restartApp()
             }))
@@ -60,6 +58,7 @@ class DebugUIFragment : DebugEnvFragment() {
             add(getDebugItem("设置语言为中文") { changeToZH() })
             add(getDebugItem("设置语言为英文") { changeToEN() })
             add(getTipsItem(context!!.resources.getString(R.string.debug_msg)))
+            add(getTipsItem(ZixieContext.applicationContext!!.resources.getString(R.string.debug_msg)))
         }
     }
 
@@ -67,8 +66,7 @@ class DebugUIFragment : DebugEnvFragment() {
         ZLog.d("testAPPObserver", "getAPPStartTime ： ${ApplicationObserver.getAPPStartTime()}")
         ZLog.d("testAPPObserver", "getLastPauseTime ： ${ApplicationObserver.getLastPauseTime()}")
         ZLog.d(
-            "testAPPObserver",
-            "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}"
+            "testAPPObserver", "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}"
         )
         ZLog.d("testAPPObserver", "getCurrentActivity ： ${ActivityObserver.getCurrentActivity()}")
         ActivityObserver.getActivityList().forEach {
@@ -80,26 +78,33 @@ class DebugUIFragment : DebugEnvFragment() {
     }
 
     private fun changeToZH() {
-        MultiLanguageHelper.setLanguageConfig(Locale.CHINESE)
-        showLanguageInfo()
+        MultiLanguageHelper.setLanguageConfig(context!!, Locale.CHINESE)
+        ZixieContext.updateApplicationContext(context!!, true)
+        activity!!.recreate()
     }
 
     private fun changeToEN() {
-        MultiLanguageHelper.setLanguageConfig(Locale.US)
-        showLanguageInfo()
+        MultiLanguageHelper.setLanguageConfig(context!!, Locale.US)
+        ZixieContext.updateApplicationContext(context!!, true)
+        activity!!.recreate()
     }
 
     private fun showLanguageInfo() {
         showInfo("引用当前多语言设置", mutableListOf<String>().apply {
             add("系统当前语言: ${MultiLanguageHelper.getSystemLocale().displayName}")
             add("应用当前语音: ${MultiLanguageHelper.getContextLocale(context!!).displayName}")
-            add("应用设置语音: ${MultiLanguageHelper.getLanguageConfig().displayName}")
+            add("应用设置语音: ${MultiLanguageHelper.getLanguageConfig(context!!).displayName}")
+            add("页面Context: ${context!!.resources.getString(R.string.debug_msg)}")
             add(
-                "${context!!.resources.getString(R.string.debug_msg)}: ${
-                    MultiLanguageHelper.getRealStringWithConfig(
-                        context!!,
-                        R.string.debug_msg
-                    )
+                "页面Context实时: ${
+                    MultiLanguageHelper.getRealResources(context!!).getString(R.string.debug_msg)
+                }"
+            )
+            add("Application Context: ${ZixieContext.applicationContext!!.resources.getString(R.string.debug_msg)}")
+            add(
+                "Application Context 实时: ${
+                    MultiLanguageHelper.getRealResources(ZixieContext.applicationContext!!)
+                        .getString(R.string.debug_msg)
                 }"
             )
         })

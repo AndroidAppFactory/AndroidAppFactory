@@ -32,20 +32,43 @@ object ZixieCoreInit {
 
     //目前仅仅主进程和web进程需要初始化
     @Synchronized
-    fun initCore(application: Application, appIsDebug: Boolean, appIsOfficial: Boolean, skipPrivacy: Boolean, appTag: String) {
-        ZixieContext.init(application, appIsDebug, appIsOfficial, appTag)
+    fun initCore(
+        application: Application,
+        appIsDebug: Boolean,
+        appIsOfficial: Boolean,
+        skipPrivacy: Boolean,
+        appTag: String,
+        supportMultiLanguage: Boolean
+    ) {
+        ZixieContext.init(application, appIsDebug, appIsOfficial, appTag, supportMultiLanguage)
         if (!hasInit) {
             hasInit = true
             initLog(application, !ZixieContext.isOfficial())
             // 初始化配置管理
-            Config.init(ZixieContext.applicationContext, Constants.CONFIG_COMMON_FILE_NAME, !ZixieContext.isOfficial())
-            Config.loadLoaclFile(application, Constants.CONFIG_SPECIAL_FILE_NAME, !ZixieContext.isOfficial())
+            Config.init(
+                ZixieContext.applicationContext,
+                Constants.CONFIG_COMMON_FILE_NAME,
+                !ZixieContext.isOfficial()
+            )
+            Config.loadLoaclFile(
+                application,
+                Constants.CONFIG_SPECIAL_FILE_NAME,
+                !ZixieContext.isOfficial()
+            )
             ThemeResourcesManager.init(ZixieContext.application!!)
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
-            Log.e(TAG, "isDebug: ${ZixieContext.isDebug()} ;isOfficial: ${ZixieContext.isOfficial()}")
+            Log.e(
+                TAG,
+                "isDebug: ${ZixieContext.isDebug()} ;isOfficial: ${ZixieContext.isOfficial()}"
+            )
             Log.e(TAG, "tag: ${ZixieContext.getVersionTag()}")
             Log.e(TAG, "version: ${ZixieContext.getVersionNameAndCode()}")
-            Log.e(TAG, "APPInstalledTime: ${DateUtil.getDateEN(ZixieContext.getAPPInstalledTime())} ;VersionInstalledTime: ${DateUtil.getDateEN(ZixieContext.getAPPLastVersionInstalledTime())}")
+            Log.e(
+                TAG,
+                "APPInstalledTime: ${DateUtil.getDateEN(ZixieContext.getAPPInstalledTime())} ;VersionInstalledTime: ${
+                    DateUtil.getDateEN(ZixieContext.getAPPLastVersionInstalledTime())
+                }"
+            )
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
             if (skipPrivacy) {
                 AgreementPrivacy.doAgreedPrivacy()
