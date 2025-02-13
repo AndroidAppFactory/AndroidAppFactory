@@ -7,7 +7,7 @@ import com.bihe0832.android.lib.utils.time.DateUtil
 /**
  * 记录间隔 interal 天（0表示当天），最多 limitTime 次的任务记录
  */
-object ZixieConfig {
+object ZixieLimitConfig {
 
     private const val KEY_LAST_SHOW_TIME = "KEY_FIRST_USE_TIME" // 时间
     private const val KEY_USED_TIMES = "KEY_USED_TIMES" // 次数

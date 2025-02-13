@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="debug_msg">这是一个中文信息</string>
+</resources>

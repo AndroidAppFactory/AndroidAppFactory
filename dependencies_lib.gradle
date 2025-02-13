@@ -547,6 +547,14 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         "LibNotification", "LibThread", "LibLog"
                 ]
+        ],
+        "LibLanguage"                  : [
+                "version"            : "6.22.18",
+                "artifactId"         : "lib-language",
+                "apidependenciesList": [
+                        project.androidsupport.androidxcore,
+                        "LibConfig","LibOS"
+                ]
         ]
 
 
