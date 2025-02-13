@@ -111,7 +111,7 @@ public class MessageDigestUtils {
     public static synchronized String getInputStreamPartDigestData(InputStream bis, String digestType, long start,
             long end) {
         try {
-            MessageDigest digest = getMessageDigest(digestType);
+            MessageDigest digest =  MessageDigest.getInstance(digestType);
             if (digest == null) {
                 return "";
             }
@@ -134,7 +134,7 @@ public class MessageDigestUtils {
             }
             byte[] md5Bytes = digest.digest();
             return HexUtils.bytes2HexStr(md5Bytes);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "";
         }

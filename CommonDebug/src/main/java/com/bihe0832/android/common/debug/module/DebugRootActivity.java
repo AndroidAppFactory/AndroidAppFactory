@@ -20,4 +20,8 @@ public class DebugRootActivity extends CommonRootActivity {
         startRootActivity(context, DebugRootActivity.class, cls, titleName, data);
     }
 
+    @Override
+    public boolean supportMultiLanguage() {
+        return true;
+    }
 }

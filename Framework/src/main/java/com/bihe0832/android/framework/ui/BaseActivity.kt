@@ -1,5 +1,6 @@
 package com.bihe0832.android.framework.ui
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -17,6 +18,7 @@ import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
+import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.clearImage
@@ -39,6 +41,14 @@ open class BaseActivity : SupportActivity() {
                 Constants.CONFIG_KEY_LAYER_START_VALUE,
                 0L,
             )..Config.readConfig(Constants.CONFIG_KEY_LAYER_END_VALUE, 0L)
+        }
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        if (supportMultiLanguage() && newBase != null) {
+            super.attachBaseContext(MultiLanguageHelper.modifyContextLanguageConfig(newBase))
+        } else {
+            super.attachBaseContext(newBase)
         }
     }
 
@@ -183,10 +193,12 @@ open class BaseActivity : SupportActivity() {
                         mTitleView!!.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
                         if (needTitleCenter) {
                             mTitleView!!.setGravity(Gravity.CENTER)
-                            mTitleView!!.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT
+                            mTitleView!!.getLayoutParams().width =
+                                ViewGroup.LayoutParams.MATCH_PARENT
                         } else {
                             mTitleView!!.setGravity(Gravity.CENTER_VERTICAL or Gravity.LEFT)
-                            mTitleView!!.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT
+                            mTitleView!!.getLayoutParams().width =
+                                ViewGroup.LayoutParams.WRAP_CONTENT
                         }
                         continue
                     }
@@ -194,7 +206,9 @@ open class BaseActivity : SupportActivity() {
                     if (view is ImageButton) {
                         mNavigationImageButton = view
                         DisplayUtil.dip2px(this, 4f).let { padding ->
-                            mNavigationImageButton?.setPadding(padding * 2, padding, padding, padding)
+                            mNavigationImageButton?.setPadding(
+                                padding * 2, padding, padding, padding
+                            )
                         }
 
                         //  布局发生改变的时候拿到导航的宽度
@@ -231,6 +245,10 @@ open class BaseActivity : SupportActivity() {
      */
     open fun onBack() {
         finish()
+    }
+
+    open fun supportMultiLanguage(): Boolean {
+        return false
     }
 
     override fun finish() {

@@ -37,7 +37,7 @@ ext.commonmoduleInfo = [
                         project.androidsupport.annotation,
                         project.androidsupport.lifecycle_livedata,
                         project.androidsupport.multidex,
-                        "LibWrapper", "Router", "RouterAnnotation", "LibTheme",
+                        "LibWrapper", "Router", "RouterAnnotation", "LibTheme","LibLanguage"
                 ],
                 "specialdependenciesList": ["kapt": [project.glide.compiler, "RouterCompiler"]
                 ]

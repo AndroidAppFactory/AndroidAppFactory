@@ -10,17 +10,20 @@ package com.bihe0832.android.base.debug.ui
 
 
 import android.view.View
+import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.theme.ThemeActivity
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
+import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
+import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
+import java.util.Locale
 
 
 class DebugUIFragment : DebugEnvFragment() {
@@ -30,8 +33,14 @@ class DebugUIFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
 
             add(getDebugItem("哀悼日全局置灰", View.OnClickListener {
-                Config.writeConfig(Constants.CONFIG_KEY_LAYER_START_VALUE, System.currentTimeMillis() / 1000 - 3600)
-                Config.writeConfig(Constants.CONFIG_KEY_LAYER_END_VALUE, System.currentTimeMillis() / 1000 + 3600)
+                Config.writeConfig(
+                    Constants.CONFIG_KEY_LAYER_START_VALUE,
+                    System.currentTimeMillis() / 1000 - 3600
+                )
+                Config.writeConfig(
+                    Constants.CONFIG_KEY_LAYER_END_VALUE,
+                    System.currentTimeMillis() / 1000 + 3600
+                )
                 ZixieContext.restartApp()
             }))
 
@@ -47,18 +56,52 @@ class DebugUIFragment : DebugEnvFragment() {
 
 
             add(getDebugItem("应用前后台信息", View.OnClickListener { testAPPObserver() }))
-
+            add(getDebugItem("多语言测试") { showLanguageInfo() })
+            add(getDebugItem("设置语言为中文") { changeToZH() })
+            add(getDebugItem("设置语言为英文") { changeToEN() })
+            add(getTipsItem(context!!.resources.getString(R.string.debug_msg)))
         }
     }
 
     private fun testAPPObserver() {
         ZLog.d("testAPPObserver", "getAPPStartTime ： ${ApplicationObserver.getAPPStartTime()}")
         ZLog.d("testAPPObserver", "getLastPauseTime ： ${ApplicationObserver.getLastPauseTime()}")
-        ZLog.d("testAPPObserver", "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}")
+        ZLog.d(
+            "testAPPObserver",
+            "getLastResumedTime ： ${ApplicationObserver.getLastResumedTime()}"
+        )
         ZLog.d("testAPPObserver", "getCurrentActivity ： ${ActivityObserver.getCurrentActivity()}")
         ActivityObserver.getActivityList().forEach {
-            ZLog.d("testAPPObserver", "getCurrentActivity ： ${it.javaClass.name} - ${it.hashCode()} - ${it.taskId}")
+            ZLog.d(
+                "testAPPObserver",
+                "getCurrentActivity ： ${it.javaClass.name} - ${it.hashCode()} - ${it.taskId}"
+            )
         }
+    }
 
+    private fun changeToZH() {
+        MultiLanguageHelper.setLanguageConfig(Locale.CHINESE)
+        showLanguageInfo()
+    }
+
+    private fun changeToEN() {
+        MultiLanguageHelper.setLanguageConfig(Locale.US)
+        showLanguageInfo()
+    }
+
+    private fun showLanguageInfo() {
+        showInfo("引用当前多语言设置", mutableListOf<String>().apply {
+            add("系统当前语言: ${MultiLanguageHelper.getSystemLocale().displayName}")
+            add("应用当前语音: ${MultiLanguageHelper.getContextLocale(context!!).displayName}")
+            add("应用设置语音: ${MultiLanguageHelper.getLanguageConfig().displayName}")
+            add(
+                "${context!!.resources.getString(R.string.debug_msg)}: ${
+                    MultiLanguageHelper.getRealStringWithConfig(
+                        context!!,
+                        R.string.debug_msg
+                    )
+                }"
+            )
+        })
     }
 }
