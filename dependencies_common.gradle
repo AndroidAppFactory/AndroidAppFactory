@@ -17,7 +17,7 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
-                        "CommonPanel", "CommonMedia", "CommonNetwork", "CommonAudioRecord"
+                        "CommonPanel", "CommonMedia", "CommonAudioRecord"
                 ]
         ],
         "CommonWrapperMin"      : [
@@ -27,7 +27,7 @@ ext.commonmoduleInfo = [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
                         "CommonList", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare",
                         "CommonMessage", "CommonPermission", "CommonPhotos", "CommonCrop",
-                        "CommonQRCode", "CommonWebview"
+                        "CommonQRCode", "CommonWebview", "CommonNetwork"
                 ]
         ],
         "Framework"             : [
