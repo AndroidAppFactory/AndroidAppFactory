@@ -3,9 +3,9 @@ def project = ext
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"            : "6.23.2",
-                "artifactId"         : "common-debug",
-                "apidependenciesList": [
+                "version"                : "6.23.2",
+                "artifactId"             : "common-debug",
+                "apidependenciesList"    : [
                         "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper"
                 ],
                 "specialdependenciesList": [
@@ -17,7 +17,7 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
-                        "CommonPanel", "CommonMedia", "CommonAudioRecord"
+                        "CommonPanel", "CommonMedia", "CommonAudioRecord", "CommonLanguage"
                 ]
         ],
         "CommonWrapperMin"      : [
@@ -37,7 +37,7 @@ ext.commonmoduleInfo = [
                         project.androidsupport.annotation,
                         project.androidsupport.lifecycle_livedata,
                         project.androidsupport.multidex,
-                        "LibWrapper", "Router", "RouterAnnotation", "LibTheme","LibLanguage"
+                        "LibWrapper", "Router", "RouterAnnotation", "LibTheme", "LibLanguage"
                 ],
                 "specialdependenciesList": ["kapt": [project.glide.compiler, "RouterCompiler"]
                 ]
@@ -190,6 +190,13 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
                         "Framework", "CommonBottomTab", "LibImageMetadata", "LibCrop"
+                ]
+        ],
+        "CommonLanguage"        : [
+                "version"            : "6.23.1",
+                "artifactId"         : "common-crop",
+                "apidependenciesList": [
+                        "Framework","CommonList"
                 ]
         ]
 

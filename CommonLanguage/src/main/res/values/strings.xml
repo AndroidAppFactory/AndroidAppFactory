@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_language_title">语言切换</string>
+    <string name="toast_settings_language_tips">语言切换失败，请稍候再试</string>
+</resources>

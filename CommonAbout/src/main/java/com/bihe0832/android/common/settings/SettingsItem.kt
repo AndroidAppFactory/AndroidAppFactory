@@ -30,7 +30,11 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 object SettingsItem {
 
     fun getVersionList(): SettingsDataGo {
-        return SettingsDataGo("版本介绍").apply {
+        return getVersionList("版本介绍")
+    }
+
+    fun getVersionList(title: String): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.ic_menu
             mShowDriver = true
             mShowGo = true
@@ -46,7 +50,11 @@ object SettingsItem {
         }
     }
 
-    fun getUpdate(titile: String, cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsDataGo {
+    fun getUpdate(
+        titile: String,
+        cloud: UpdateDataFromCloud?,
+        listener: View.OnClickListener
+    ): SettingsDataGo {
         return SettingsDataGo(titile).apply {
             mItemIconRes = R.drawable.icon_update
             mHeaderTextBold = true
@@ -60,7 +68,9 @@ object SettingsItem {
     }
 
     fun getAboutTitle(): String {
-        return ThemeResourcesManager.getString(R.string.settings_about_title) + ThemeResourcesManager.getString(R.string.about_app)
+        return ThemeResourcesManager.getString(R.string.settings_about_title) + ThemeResourcesManager.getString(
+            R.string.about_app
+        )
     }
 
     fun getAboutAPP(cloud: UpdateDataFromCloud?, listener: View.OnClickListener): SettingsDataGo {
@@ -139,14 +149,18 @@ object SettingsItem {
     }
 
     fun getQQService(activity: Activity?): SettingsDataGo {
-        return SettingsDataGo("客服QQ").apply {
+        return getQQService(activity, "客服QQ")
+    }
+
+    fun getQQService(activity: Activity?, title: String): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             var feedbackQQnumber = ThemeResourcesManager.getString(R.string.feedback_qq)
             mItemIconRes = R.drawable.icon_qq
             mShowDriver = true
             mShowGo = true
             mTipsText = "<u>$feedbackQQnumber</u>"
             mHeaderTipsListener = View.OnClickListener {
-                var res = QQHelper.openQQChat(activity, feedbackQQnumber)
+                val res = QQHelper.openQQChat(activity, feedbackQQnumber)
                 if (!res) {
                     ZixieContext.showToastJustAPPFront(ThemeResourcesManager.getString(R.string.contact_QQ_join_failed)!!)
                 }
@@ -155,7 +169,11 @@ object SettingsItem {
     }
 
     fun getDebug(): SettingsDataGo {
-        return SettingsDataGo("调试").apply {
+        return getDebug("调试")
+    }
+
+    fun getDebug(title: String): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_android
             mShowDriver = true
             mShowGo = true
@@ -166,19 +184,25 @@ object SettingsItem {
     }
 
     fun getWechat(activity: Activity?): SettingsDataGo {
-        return SettingsDataGo("微信公众号").apply {
+        return getWechat(activity, "微信公众号", "前往关注")
+    }
+
+    fun getWechat(activity: Activity?, title: String, tipsText: String): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_wechat
             mShowDriver = true
             mShowGo = true
-            mTipsText = "<u>前往关注</u>"
+            mTipsText = "<u>$tipsText</u>"
             mHeaderTipsListener = View.OnClickListener {
                 activity?.let {
                     WechatOfficialAccount.showSubscribe(
                         activity,
                         WechatOfficialAccount.WechatOfficialAccountData().apply {
                             this.mAccountID = ThemeResourcesManager.getString(R.string.wechat_id)
-                            this.mAccountTitle = ThemeResourcesManager.getString(R.string.wechat_name)
-                            this.mSubContent = ThemeResourcesManager.getString(R.string.wechat_sub_content)
+                            this.mAccountTitle =
+                                ThemeResourcesManager.getString(R.string.wechat_name)
+                            this.mSubContent =
+                                ThemeResourcesManager.getString(R.string.wechat_sub_content)
                         },
                     )
                 }
@@ -187,7 +211,11 @@ object SettingsItem {
     }
 
     fun getZixie(): SettingsDataGo {
-        return SettingsDataGo("关于开发者").apply {
+        return getZixie("关于开发者")
+    }
+
+    fun getZixie(title: String): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_author
             mShowDriver = true
             mShowGo = true
@@ -198,7 +226,11 @@ object SettingsItem {
     }
 
     fun getShareAPP(canSendAPK: Boolean): SettingsDataGo {
-        return SettingsDataGo("分享给好友").apply {
+        return getShareAPP(canSendAPK, "分享给好友")
+    }
+
+    fun getShareAPP(canSendAPK: Boolean, title: String): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_share
             mShowDriver = true
             mShowGo = true
@@ -237,7 +269,11 @@ object SettingsItem {
     }
 
     fun getClearCache(activity: Activity): SettingsDataGo {
-        return SettingsDataGo("清理缓存").apply {
+        return getClearCache(activity, "清理缓存")
+    }
+
+    fun getClearCache(activity: Activity, title: String): SettingsDataGo {
+        return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_delete_fill
             mShowDriver = true
             mShowGo = true
