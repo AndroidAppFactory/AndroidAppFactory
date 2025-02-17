@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.language.MultiLanguageHelper
+import com.bihe0832.android.lib.language.MultiLanguageHelper.getLanguageConfig
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.clearImage
@@ -31,9 +33,10 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation.SupportActivity
 
 open class BaseActivity : SupportActivity() {
-
+    private var lastLocale = ""
+    
     var mToolbar: Toolbar? = null
-    var mTitleView: TextView? = null
+    private var mTitleView: TextView? = null
     private var mNavigationImageButton: ImageButton? = null
     private val mNeedEnableLayerToGray by lazy {
         (LifecycleHelper.getCurrentTime() / 1000).let {
@@ -77,6 +80,13 @@ open class BaseActivity : SupportActivity() {
         return ThemeResourcesManager.getColor(R.color.navigationBarColor)!!
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        if (!TextUtils.isEmpty(lastLocale) && getLanguageConfig(this).toLanguageTag() != lastLocale) {
+            recreate()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         if (getStatusBarColor() == Color.TRANSPARENT) {
@@ -97,6 +107,9 @@ open class BaseActivity : SupportActivity() {
 
     override fun onPause() {
         super.onPause()
+        if (supportMultiLanguage()) {
+            lastLocale = getLanguageConfig(this).toLanguageTag()
+        }
         for (fragment in supportFragmentManager.fragments) {
             if (fragment.isAdded) {
                 fragment.userVisibleHint = false
