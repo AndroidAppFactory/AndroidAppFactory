@@ -1,14 +1,10 @@
 package com.bihe0832.android.lib.http.common;
 
-import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CHARSET;
-import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_PROPERTY_CONTENT_TYPE;
-import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
+import android.net.Network;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.http.common.core.FileInfo;
@@ -36,38 +32,7 @@ public class HTTPServer {
 
     //是否为测试版本
     private static final boolean DEBUG = true;
-    private static final int MSG_REQUEST_ORIGIN = 0;
-    private static final int MSG_REQUEST_CONVERT = 1;
     private static volatile HTTPServer instance;
-    private Handler mCallHandler;
-
-    private HTTPServer() {
-        mCallHandler = new Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_HIGHER)) {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case MSG_REQUEST_ORIGIN:
-                        if (msg.obj != null && msg.obj instanceof RequestInfo) {
-                            executeRequestInExecutor(((RequestInfo) msg.obj).request, ((RequestInfo) msg.obj).handler,
-                                    false);
-                        } else {
-                            ZLog.d(LOG_TAG, msg.toString());
-                        }
-                        break;
-                    case MSG_REQUEST_CONVERT:
-                        if (msg.obj != null && msg.obj instanceof RequestInfo) {
-                            executeRequestInExecutor(((RequestInfo) msg.obj).request, ((RequestInfo) msg.obj).handler,
-                                    true);
-                        } else {
-                            ZLog.d(LOG_TAG, msg.toString());
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-    }
 
     public static HTTPServer getInstance() {
         if (instance == null) {
@@ -129,10 +94,10 @@ public class HTTPServer {
         return result;
     }
 
-    private String executeRequest(HttpBasicRequest request, HttpResponseHandler handler, boolean needConvert) {
-
+    private String executeRequest(HttpBasicRequest request, HttpResponseHandler handler, Network network,
+            boolean needConvert) {
         String url = request.getUrl();
-        BaseConnection connection = getConnection(url);
+        BaseConnection connection = getConnection(url, network);
         String result;
         if (needConvert) {
             result = convertOriginToUTF8Data(executeRequest(request, connection));
@@ -163,17 +128,18 @@ public class HTTPServer {
         }
     }
 
-    private void executeRequestInExecutor(final HttpBasicRequest request, HttpResponseHandler handler,
+    private void executeRequestInExecutor(final HttpBasicRequest request, HttpResponseHandler handler, Network network,
             final boolean needConvert) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
-                executeRequest(request, handler, needConvert);
+                executeRequest(request, handler, network, needConvert);
             }
         });
     }
 
-    private String doRequest(final String url, byte[] bytes, final String contentType, HttpResponseHandler handler,
+    private String doRequest(Network network, final String url, byte[] bytes, final String contentType,
+            HttpResponseHandler handler,
             boolean needConvert) {
         final String finalContentType;
         if (TextUtils.isEmpty(contentType)) {
@@ -196,56 +162,22 @@ public class HTTPServer {
             basicRequest.data = bytes;
         }
         if (handler != null) {
-            executeRequestInExecutor(basicRequest, handler, needConvert);
+            executeRequestInExecutor(basicRequest, handler, network, needConvert);
             return "";
         } else {
-            return executeRequest(basicRequest, null, needConvert);
+            return executeRequest(basicRequest, null, network, needConvert);
         }
     }
 
-    public String doFileUpload(Context context, final String requestUrl, final String strParams,
-            final List<FileInfo> fileParams) {
-        return new HttpFileUpload()
-                .postRequest(context, HTTPServer.getInstance().getConnection(requestUrl), strParams, fileParams);
-    }
-
-    public void doOriginRequestAsync(HttpBasicRequest request, HttpResponseHandler handler) {
-        Message msg = mCallHandler.obtainMessage();
-        msg.what = MSG_REQUEST_ORIGIN;
-        RequestInfo info = new RequestInfo();
-        info.request = request;
-        info.handler = handler;
-        msg.obj = info;
-        mCallHandler.sendMessage(msg);
-    }
-
-    public void doRequestAsync(HttpBasicRequest request, HttpResponseHandler handler) {
-        Message msg = mCallHandler.obtainMessage();
-        msg.what = MSG_REQUEST_CONVERT;
-        RequestInfo info = new RequestInfo();
-        info.request = request;
-        info.handler = handler;
-        msg.obj = info;
-        mCallHandler.sendMessage(msg);
-    }
-
-    public String doOriginRequestSync(HttpBasicRequest request) {
-        return executeRequest(request, null, false);
-    }
-
-    public String doRequestSync(HttpBasicRequest request) {
-        return executeRequest(request, null, true);
-    }
-
-    public BaseConnection getConnection(String url) {
+    public BaseConnection getConnection(String url, Network network) {
         ZLog.e(LOG_TAG, "getConnection:" + url);
         String finalUrl = HTTPRequestUtils.getRedirectUrl(url);
         ZLog.e(LOG_TAG, "getConnection getRedirectUrl:" + finalUrl);
         BaseConnection connection = null;
         if (finalUrl.startsWith("https:")) {
-            connection = new HTTPSConnection(finalUrl);
+            connection = new HTTPSConnection(finalUrl, network);
         } else {
-            connection = new HTTPConnection(finalUrl);
+            connection = new HTTPConnection(finalUrl, network);
         }
         return connection;
     }
@@ -266,21 +198,50 @@ public class HTTPServer {
         }
     }
 
+    public String doFileUpload(Context context, Network network, final String requestUrl, final String strParams,
+            final List<FileInfo> fileParams) {
+        return new HttpFileUpload()
+                .postRequest(context, HTTPServer.getInstance().getConnection(requestUrl, network), strParams,
+                        fileParams);
+    }
+
+    public void doOriginRequestAsync(HttpBasicRequest request, HttpResponseHandler handler, Network network) {
+        executeRequestInExecutor(request, handler, network, false);
+    }
+
+    public String doOriginRequestSync(HttpBasicRequest request, Network network) {
+        return executeRequest(request, null, network, false);
+    }
+
+    public void doRequestAsync(HttpBasicRequest request, HttpResponseHandler handler, Network network) {
+        executeRequestInExecutor(request, handler, network, true);
+    }
+
+    public String doRequestSync(HttpBasicRequest request, Network network) {
+        return executeRequest(request, null, network, true);
+    }
+
+    public String doFileUpload(Context context, final String requestUrl, final String strParams,
+            final List<FileInfo> fileParams) {
+        return doFileUpload(context, null, requestUrl, strParams, fileParams);
+    }
+
     public String doOriginRequestSync(final String url, byte[] bytes, final String contentType) {
-        return doRequest(url, bytes, contentType, null, false);
+        return doRequest(null, url, bytes, contentType, null, false);
     }
 
     public String doRequestSync(final String url, byte[] bytes, final String contentType) {
-        return convertOriginToUTF8Data(doRequest(url, bytes, contentType, null, true));
+        return convertOriginToUTF8Data(doRequest(null, url, bytes, contentType, null, true));
     }
 
     public void doOriginRequestAsync(final String url, byte[] bytes, final String contentType,
             HttpResponseHandler handler) {
-        doRequest(url, bytes, contentType, handler, false);
+        doRequest(null, url, bytes, contentType, handler, false);
     }
 
-    public void doRequestAsync(final String url, byte[] bytes, final String contentType, HttpResponseHandler handler) {
-        doRequest(url, bytes, contentType, handler, true);
+    public void doRequestAsync(final String url, byte[] bytes, final String contentType,
+            HttpResponseHandler handler) {
+        doRequest(null, url, bytes, contentType, handler, true);
     }
 
     public String doRequestSync(final String url) {
@@ -299,10 +260,6 @@ public class HTTPServer {
         doRequestAsync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD, handler);
     }
 
-    public String doRequestSync(final String url, final String params) {
-        return convertOriginToUTF8Data(doOriginRequestSync(url, params));
-    }
-
     public String doOriginRequestSync(final String url, final String params) {
         byte[] bytes = null;
 
@@ -314,9 +271,7 @@ public class HTTPServer {
         return doOriginRequestSync(url, bytes, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
     }
 
-    private class RequestInfo {
-
-        public HttpBasicRequest request;
-        public HttpResponseHandler handler;
+    public String doRequestSync(final String url, final String params) {
+        return convertOriginToUTF8Data(doOriginRequestSync(url, params));
     }
 }
