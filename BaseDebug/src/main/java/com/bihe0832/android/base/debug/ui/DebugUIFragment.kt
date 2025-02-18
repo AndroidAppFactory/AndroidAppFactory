@@ -10,6 +10,7 @@ package com.bihe0832.android.base.debug.ui
 
 
 import android.view.View
+import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.theme.ThemeActivity
 import com.bihe0832.android.common.debug.item.getDebugItem
@@ -17,6 +18,7 @@ import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
+import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.language.MultiLanguageHelper
@@ -57,6 +59,7 @@ class DebugUIFragment : DebugEnvFragment() {
             add(getDebugItem("多语言测试") { showLanguageInfo() })
             add(getDebugItem("设置语言为中文") { changeToZH() })
             add(getDebugItem("设置语言为英文") { changeToEN() })
+            add(getDebugItem("多语言切换") { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_LANGUAGE) })
             add(getTipsItem(context!!.resources.getString(R.string.debug_msg)))
             add(getTipsItem(ZixieContext.applicationContext!!.resources.getString(R.string.debug_msg)))
         }
