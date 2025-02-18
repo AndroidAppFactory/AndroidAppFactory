@@ -226,22 +226,40 @@ public class HTTPServer {
         return doFileUpload(context, null, requestUrl, strParams, fileParams);
     }
 
+    public String doOriginRequestSync(Network network, final String url, byte[] bytes, final String contentType) {
+        return doRequest(network, url, bytes, contentType, null, false);
+    }
+
     public String doOriginRequestSync(final String url, byte[] bytes, final String contentType) {
-        return doRequest(null, url, bytes, contentType, null, false);
+        return doOriginRequestSync(null, url, bytes, contentType);
+    }
+
+    public String doRequestSync(Network network, final String url, byte[] bytes, final String contentType) {
+        return convertOriginToUTF8Data(doRequest(network, url, bytes, contentType, null, true));
     }
 
     public String doRequestSync(final String url, byte[] bytes, final String contentType) {
-        return convertOriginToUTF8Data(doRequest(null, url, bytes, contentType, null, true));
+        return doRequestSync(null, url, bytes, contentType);
+    }
+
+    public void doOriginRequestAsync(Network network, final String url, byte[] bytes, final String contentType,
+            HttpResponseHandler handler) {
+        doRequest(network, url, bytes, contentType, handler, false);
     }
 
     public void doOriginRequestAsync(final String url, byte[] bytes, final String contentType,
             HttpResponseHandler handler) {
-        doRequest(null, url, bytes, contentType, handler, false);
+        doOriginRequestAsync(null, url, bytes, contentType, handler);
+    }
+
+    public void doRequestAsync(Network network, final String url, byte[] bytes, final String contentType,
+            HttpResponseHandler handler) {
+        doRequest(network, url, bytes, contentType, handler, true);
     }
 
     public void doRequestAsync(final String url, byte[] bytes, final String contentType,
             HttpResponseHandler handler) {
-        doRequest(null, url, bytes, contentType, handler, true);
+        doRequestAsync(null, url, bytes, contentType, handler);
     }
 
     public String doRequestSync(final String url) {
