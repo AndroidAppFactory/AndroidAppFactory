@@ -132,7 +132,7 @@
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:visibility="invisible"
-                        android:src="@drawable/ic_left_go" />
+                        android:src="@drawable/icon_left_go" />
 
                 <TextView
                         android:id="@+id/tv_white_board_page"
@@ -150,7 +150,7 @@
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:visibility="invisible"
-                        android:src="@drawable/ic_right_go" />
+                        android:src="@drawable/icon_right_go" />
             </LinearLayout>
 
 
@@ -168,7 +168,7 @@
             <ImageView
                     android:id="@+id/close"
                     style="@style/CommonMenuStyle"
-                    android:src="@drawable/ic_close" />
+                    android:src="@drawable/icon_close" />
 
         </LinearLayout>
 

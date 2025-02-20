@@ -26,7 +26,7 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="16dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_menu"
+                android:src="@drawable/icon_menu"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

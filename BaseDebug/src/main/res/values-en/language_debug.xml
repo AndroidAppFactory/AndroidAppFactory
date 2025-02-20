@@ -3,4 +3,6 @@
     <string name="debug_msg">this is an English msg</string>
     <string name="com_bihe0832_praise_positive">positive</string>
     <string name="com_bihe0832_praise_negative">negative</string>
+    <string name="name_permission_debug">M3U8 Download Need to &lt;font color =\'#38ADFF\'&gt;&lt;b&gt;Download data to SDCard&lt;/b&gt;&lt;/font&gt;</string>
+
 </resources>

@@ -66,7 +66,7 @@ public class CommonRootActivity extends CommonActivity {
         rootFragmentTitleName = getIntent().getStringExtra(DEBUG_MODULE_TITLE_NAME);
         ZLog.d(TAG, "rootFragmentClassName: " + rootFragmentClassName);
         ZLog.d(TAG, "rootFragmentTitleName: " + rootFragmentTitleName);
-        initToolbar(R.id.common_toolbar, getTitleName(), false, true, R.drawable.ic_left_arrow); loadFragment();
+        initToolbar(R.id.common_toolbar, getTitleName(), false, true, R.drawable.icon_left_arrow); loadFragment();
     }
 
     protected String getRootFragmentClassName() {

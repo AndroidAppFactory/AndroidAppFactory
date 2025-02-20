@@ -3,12 +3,14 @@ package com.bihe0832.android.base.debug.permission
 import android.Manifest
 import android.app.Activity
 import android.view.View
+import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
@@ -18,7 +20,7 @@ class DebugPermissionFragment : DebugCommonFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(getDebugItem("自定义内容权限弹框", View.OnClickListener { testCustomPermission(activity) }))
+            add(getDebugItem("自定义内容权限弹框(多语言)", View.OnClickListener { testCustomPermission(activity) }))
             add(getDebugItem("通用权限弹框", View.OnClickListener { testCommonPermission(activity) }))
             add(getDebugItem("通用权限弹框V2", View.OnClickListener { testCommonPermissionV2(activity) }))
             add(getDebugItem("权限拒绝通用弹框", View.OnClickListener { testCommonPermissionDialog() }))
@@ -67,7 +69,7 @@ class DebugPermissionFragment : DebugCommonFragment() {
             HashMap<String, String>().apply {
                 put(
                     Manifest.permission.CAMERA,
-                    "M3U8下载助手需要将<font color ='#38ADFF'><b>下载数据存储在SD卡</b></font>才能访问，当前手机尚未开启悬浮窗权限，请点击「点击开启」前往设置！",
+                    activity?.getString(R.string.name_permission_debug)?:"",
                 )
             },
         )
@@ -90,12 +92,6 @@ class DebugPermissionFragment : DebugCommonFragment() {
                         override fun onCancel() {
                             permissionDialog.dismiss()
                         }
-                    },
-                )
-
-                PermissionManager.addPermissionGroupContent(
-                    HashMap<String, String>().apply {
-                        put(Manifest.permission.CAMERA, "fsdf")
                     },
                 )
             }

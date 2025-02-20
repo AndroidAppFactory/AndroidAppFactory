@@ -48,7 +48,7 @@ class DebugTextViewFragment : BaseFragment() {
     override fun initView(view: View) {
         view.findViewById<MarqueeTextView>(R.id.text_marquee).apply {
 //            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
-            setDrawableLeft(R.drawable.ic_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
+            setDrawableLeft(R.drawable.icon_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             setText(":fds")
             startScroll()
             setOnScrollListener(object : OnScrollListener {

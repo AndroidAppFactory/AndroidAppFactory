@@ -204,11 +204,11 @@ public class FileActivity extends SupportActivity {
                 switch (msg.what) {
                     case HANDLER_MSG_SELECTED:
                         if (mSelectedPath != null) {
-                            btn_close.setBackgroundResource(R.drawable.ic_done_fill);
+                            btn_close.setBackgroundResource(R.drawable.icon_done_fill);
                             btn_back.setVisibility(View.GONE);
                             tv_path.setText("已选择：" + mSelectedPath);
                         } else {
-                            btn_close.setBackgroundResource(R.drawable.ic_close);
+                            btn_close.setBackgroundResource(R.drawable.icon_close);
                             btn_back.setVisibility(View.VISIBLE);
                             tv_path.setText(mFile.getAbsolutePath());
                         }
