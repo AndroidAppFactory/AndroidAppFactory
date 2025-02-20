@@ -145,7 +145,7 @@ open class DebugLogListActivity : CommonListActivity() {
 
     override fun initView() {
         super.initView()
-        updateIcon(R.drawable.ic_left_arrow, true)
+        updateIcon(R.drawable.icon_left_arrow, true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

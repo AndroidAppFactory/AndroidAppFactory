@@ -58,7 +58,7 @@
                     android:visibility="gone"
                     app:tint="@color/colorPrimary"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_close_fill"
+                    android:src="@drawable/icon_close_fill"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
@@ -154,7 +154,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:layout_marginLeft="@dimen/crop_page_padding"
-                android:src="@drawable/ic_left_arrow"
+                android:src="@drawable/icon_left_arrow"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
@@ -167,7 +167,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:layout_marginRight="@dimen/crop_page_padding"
-                android:src="@drawable/ic_done"
+                android:src="@drawable/icon_done"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

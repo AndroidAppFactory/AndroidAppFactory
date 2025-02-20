@@ -163,7 +163,7 @@ object DownloadNotifyManager {
                     )
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.drawable.ic_close_fill)
+                    remoteViews.setImageViewResource(it, R.drawable.icon_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -184,7 +184,7 @@ object DownloadNotifyManager {
                     )
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.drawable.ic_close_fill)
+                    remoteViews.setImageViewResource(it, R.drawable.icon_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -205,7 +205,7 @@ object DownloadNotifyManager {
                     )
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.drawable.ic_close_fill)
+                    remoteViews.setImageViewResource(it, R.drawable.icon_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,

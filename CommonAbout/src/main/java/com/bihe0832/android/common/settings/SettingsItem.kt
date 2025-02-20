@@ -35,7 +35,7 @@ object SettingsItem {
 
     fun getVersionList(title: String): SettingsDataGo {
         return SettingsDataGo(title).apply {
-            mItemIconRes = R.drawable.ic_menu
+            mItemIconRes = R.drawable.icon_menu
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {

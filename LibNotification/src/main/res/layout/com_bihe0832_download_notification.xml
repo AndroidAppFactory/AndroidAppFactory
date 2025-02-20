@@ -104,6 +104,6 @@
                 android:paddingBottom="10dp"
                 android:scaleType="centerInside"
                 android:tint="@color/colorAccent"
-                tools:src="@drawable/ic_close_fill" />
+                tools:src="@drawable/icon_close_fill" />
     </LinearLayout>
 </RelativeLayout>

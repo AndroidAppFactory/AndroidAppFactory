@@ -92,7 +92,7 @@
                     android:layout_height="16dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_right_go"
+                    android:src="@drawable/icon_right_go"
                     app:tint="@color/textColorPrimary"
                     android:visibility="gone"
                     tools:visibility="visible"
