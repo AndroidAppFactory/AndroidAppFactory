@@ -83,7 +83,7 @@ public class SettingsHolderGo extends CardBaseHolder {
             mHeaderIcon.setVisibility(View.VISIBLE);
         }
 
-        mHeader.setText(data.mItemText);
+        mHeader.setText(TextFactoryUtils.getSpannedTextByHtml(data.mItemText));
         if (data.mHeaderTextBold) {
             mHeader.setTypeface(null, Typeface.BOLD);
         } else {
