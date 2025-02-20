@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.language
 
 import com.bihe0832.android.common.language.card.SettingsDataLanguage
+import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.framework.ZixieContext
@@ -60,6 +61,12 @@ open class LanguageActivity : CommonListActivity() {
         }
     }
 
+    override fun getCardList(): List<CardItemForCommonList>? {
+        return mutableListOf<CardItemForCommonList>().apply {
+            add(CardItemForCommonList(SettingsDataLanguage::class.java, true))
+        }
+    }
+    
     open fun setLocale(settingData: SettingsDataLanguage?) {
         if (null != settingData?.locale) {
             MultiLanguageHelper.setLanguageConfig(this@LanguageActivity, settingData.locale!!)
