@@ -90,10 +90,10 @@ public abstract class BaseConnection {
         connection.setRequestProperty(HTTP_REQ_COOKIE, cookieString);
     }
 
-    public String doRequest(HttpBasicRequest request) {
+    public byte[] doRequest(HttpBasicRequest request) {
         if (null == getURLConnection()) {
             ZLog.e(LOG_TAG, "URLConnection is null");
-            return "";
+            return new byte[0];
         }
         setURLConnectionCommonPara(request.getConnectTimeOut(), request.getReadTimeOut(), request.useCaches());
         HashMap<String, String> requestProperty = new HashMap<>();
@@ -108,22 +108,23 @@ public abstract class BaseConnection {
         if (null != request.cookieInfo && request.cookieInfo.size() > 0) {
             setURLConnectionCookie(request.cookieInfo);
         }
-
+        byte[] result;
         if (null == request.data) {
-            return doGetRequest();
+            result = doGetRequest();
         } else {
-            return doPostRequest(request.data);
+            result = doPostRequest(request.data);
         }
+        return result;
     }
 
-    protected String doGetRequest() {
+    protected byte[] doGetRequest() {
         String result = "";
         InputStream is = null;
         BufferedReader br = null;
         try {
             HttpURLConnection connection = getURLConnection();
             if (null == connection) {
-                return "";
+                return new byte[0];
             }
             connection.setRequestMethod(HTTP_REQ_METHOD_GET);
             is = connection.getInputStream();
@@ -134,36 +135,40 @@ public abstract class BaseConnection {
                 os.write(buffer, 0, len);
             }
             is.close();
-            result = os.toString("ISO-8859-1");
+            return os.toByteArray();
         } catch (javax.net.ssl.SSLHandshakeException ee) {
             ZLog.e(LOG_TAG, "javax.net.ssl.SSLPeerUnverifiedException");
+            ee.printStackTrace();
+            return new byte[0];
         } catch (Exception e) {
             e.printStackTrace();
+            return new byte[0];
         } finally {
             try {
                 if (br != null) {
                     br.close();
                 }
             } catch (IOException e) {
+                e.printStackTrace();
             }
             try {
                 if (is != null) {
                     is.close();
                 }
             } catch (IOException e) {
+                e.printStackTrace();
             }
-            return result;
         }
     }
 
-    protected String doPostRequest(byte[] data) {
+    protected byte[] doPostRequest(byte[] data) {
         BufferedReader br = null;
         InputStream inptStream = null;
         OutputStream outputStream = null;
         HttpURLConnection connection = getURLConnection();
         try {
             if (null == connection) {
-                return "";
+                return new byte[0];
             }
             connection.setRequestMethod(HTTP_REQ_METHOD_POST);
             connection.setRequestProperty(HTTP_REQ_PROPERTY_CONTENT_LENGTH, String.valueOf(data.length));
@@ -182,10 +187,13 @@ public abstract class BaseConnection {
                     os.write(buffer, 0, len);
                 }
                 inptStream.close();
-                return os.toString(HTTP_REQ_VALUE_CHARSET_ISO_8599_1);
+                return os.toByteArray();
+            } else {
+                return new byte[0];
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return new byte[0];
         } finally {
             try {
                 if (connection != null) {
@@ -216,7 +224,6 @@ public abstract class BaseConnection {
                 e.printStackTrace();
             }
         }
-        return "";
     }
 
     public String getResponseMessage() {

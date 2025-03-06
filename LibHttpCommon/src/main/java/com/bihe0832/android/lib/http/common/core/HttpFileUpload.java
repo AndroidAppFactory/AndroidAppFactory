@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class HttpFileUpload {
 
-    public String postRequest(final Context context, final BaseConnection baseConnection, final String strParams,
+    public byte[] postRequest(final Context context, final BaseConnection baseConnection, final String strParams,
             final List<FileInfo> fileParams) {
         return postRequest(context, baseConnection, BaseConnection.CONNECT_TIMEOUT, BaseConnection.DEFAULT_READ_TIMEOUT,
                 false, strParams, fileParams);
@@ -32,7 +32,7 @@ public class HttpFileUpload {
     /**
      * post请求方法
      */
-    public String postRequest(final Context context, final BaseConnection baseConnection, int connectTimeOut,
+    public byte[] postRequest(final Context context, final BaseConnection baseConnection, int connectTimeOut,
             int readTimeOut, boolean useCaches, final String strParams, final List<FileInfo> fileParams) {
         baseConnection.setURLConnectionCommonPara(connectTimeOut, readTimeOut, useCaches);
         HashMap<String, String> requestProperty = new HashMap<>();
@@ -91,7 +91,7 @@ public class HttpFileUpload {
                     byteArrayOutputStream.write(resultBuffer, 0, resultLen);
                 }
                 resultInptStream.close();
-                return byteArrayOutputStream.toString(HTTP_REQ_VALUE_CHARSET_UTF8);
+                return byteArrayOutputStream.toByteArray();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,6 +125,6 @@ public class HttpFileUpload {
                 e.printStackTrace();
             }
         }
-        return "";
+        return new byte[0];
     }
 }

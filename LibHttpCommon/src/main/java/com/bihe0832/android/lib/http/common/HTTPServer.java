@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.http.common;
 
+import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
 
@@ -17,10 +18,10 @@ import com.bihe0832.android.lib.request.HTTPRequestUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 网络请求分发、执行类
@@ -54,22 +55,20 @@ public class HTTPServer {
             if (TextUtils.isEmpty(entry.getKey()) && TextUtils.isEmpty(entry.getValue())) {
                 break;
             } else {
-                stringBuffer.append(BaseConnection.HTTP_REQ_ENTITY_PREFIX)
-                        .append(HTTPServer.BOUNDARY)
+                stringBuffer.append(BaseConnection.HTTP_REQ_ENTITY_PREFIX).append(HTTPServer.BOUNDARY)
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                         .append(BaseConnection.HTTP_REQ_PROPERTY_CONTENT_DISPOSITION).append(":").append("form-data")
-                        .append(BaseConnection.HTTP_REQ_ENTITY_END)
-                        .append("name").append(HTTP_REQ_ENTITY_MERGE).append("\"").append(entry.getKey()).append("\"")
+                        .append(BaseConnection.HTTP_REQ_ENTITY_END).append("name").append(HTTP_REQ_ENTITY_MERGE)
+                        .append("\"").append(entry.getKey()).append("\"")
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)
                         .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END)// 参数头设置完以后需要两个换行，然后才是参数内容
-                        .append(entry.getValue())
-                        .append(BaseConnection.HTTP_REQ_ENTITY_LINE_END);
+                        .append(entry.getValue()).append(BaseConnection.HTTP_REQ_ENTITY_LINE_END);
             }
         }
         return stringBuffer.toString();
     }
 
-    private String executeRequest(HttpBasicRequest request, BaseConnection connection) {
+    private byte[] executeRequest(HttpBasicRequest request, BaseConnection connection) {
         String url = request.getUrl();
         if (DEBUG) {
             ZLog.w(LOG_TAG, "=======================================");
@@ -82,11 +81,15 @@ public class HTTPServer {
             ZLog.w(LOG_TAG, "=======================================");
         }
         request.setRequestTime(System.currentTimeMillis() / 1000);
-        String result = connection.doRequest(request);
+        byte[] result = connection.doRequest(request);
         if (DEBUG) {
             ZLog.w(LOG_TAG, "=======================================");
             ZLog.w(LOG_TAG, request.getClass().toString());
-            ZLog.w(LOG_TAG, result);
+            try {
+                ZLog.w(LOG_TAG, result.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             ZLog.w(LOG_TAG, String.valueOf(connection.getResponseCode()));
             ZLog.w(LOG_TAG, connection.getResponseMessage());
             ZLog.w(LOG_TAG, "=======================================");
@@ -94,53 +97,47 @@ public class HTTPServer {
         return result;
     }
 
-    private String executeRequest(HttpBasicRequest request, HttpResponseHandler handler, Network network,
-            boolean needConvert) {
+    private byte[] executeRequest(HttpBasicRequest request, HttpByteResponseHandler handler, Network network) {
         String url = request.getUrl();
         BaseConnection connection = getConnection(url, network);
-        String result;
-        if (needConvert) {
-            result = convertOriginToUTF8Data(executeRequest(request, connection));
-        } else {
-            result = executeRequest(request, connection);
-        }
+        byte[] result;
+        result = executeRequest(request, connection);
         if (null == handler) {
             return result;
         } else {
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 handler.onResponse(connection.getResponseCode(), result);
             } else {
-                if (TextUtils.isEmpty(result)) {
+                if (result != null && result.length > 0) {
                     if (DEBUG) {
                         ZLog.e(LOG_TAG, request.getClass().getName());
                     }
                     ZLog.e(LOG_TAG, "responseBody is null");
                     if (TextUtils.isEmpty(connection.getResponseMessage())) {
-                        handler.onResponse(connection.getResponseCode(), "");
+                        handler.onResponse(connection.getResponseCode(), new byte[0]);
                     } else {
-                        handler.onResponse(connection.getResponseCode(), connection.getResponseMessage());
+                        handler.onResponse(connection.getResponseCode(), connection.getResponseMessage().getBytes());
                     }
                 } else {
                     handler.onResponse(connection.getResponseCode(), result);
                 }
             }
-            return "";
+            return new byte[0];
         }
     }
 
-    private void executeRequestInExecutor(final HttpBasicRequest request, HttpResponseHandler handler, Network network,
-            final boolean needConvert) {
+    private void executeRequestInExecutor(final HttpBasicRequest request, HttpByteResponseHandler handler,
+            Network network) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
-                executeRequest(request, handler, network, needConvert);
+                executeRequest(request, handler, network);
             }
         });
     }
 
-    private String doRequest(Network network, final String url, byte[] bytes, final String contentType,
-            HttpResponseHandler handler,
-            boolean needConvert) {
+    private byte[] startRequest(Network network, final String url, byte[] bytes, final String contentType,
+            HttpByteResponseHandler handler) {
         final String finalContentType;
         if (TextUtils.isEmpty(contentType)) {
             finalContentType = HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
@@ -162,10 +159,10 @@ public class HTTPServer {
             basicRequest.data = bytes;
         }
         if (handler != null) {
-            executeRequestInExecutor(basicRequest, handler, network, needConvert);
-            return "";
+            executeRequestInExecutor(basicRequest, handler, network);
+            return new byte[0];
         } else {
-            return executeRequest(basicRequest, null, network, needConvert);
+            return executeRequest(basicRequest, null, network);
         }
     }
 
@@ -182,15 +179,9 @@ public class HTTPServer {
         return connection;
     }
 
-    public String convertOriginToUTF8Data(String source) {
-        return convertOriginData(source, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8);
-    }
-
-    public String convertOriginData(String source, String charsetName) {
-
+    public String convertToString(byte[] source, String charsetName) {
         try {
-            return new String(source.getBytes(Charset.forName(BaseConnection.HTTP_REQ_VALUE_CHARSET_ISO_8599_1)),
-                    charsetName);
+            return new String(source, charsetName);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             ZLog.e(LOG_TAG, "convertData data error" + e.toString());
@@ -198,98 +189,102 @@ public class HTTPServer {
         }
     }
 
-    public String doFileUpload(Context context, Network network, final String requestUrl, final String strParams,
+    public byte[] doFileUpload(Context context, Network network, final String requestUrl, final String strParams,
             final List<FileInfo> fileParams) {
-        return new HttpFileUpload()
-                .postRequest(context, HTTPServer.getInstance().getConnection(requestUrl, network), strParams,
-                        fileParams);
+        return new HttpFileUpload().postRequest(context, HTTPServer.getInstance().getConnection(requestUrl, network),
+                strParams, fileParams);
     }
 
-    public void doOriginRequestAsync(HttpBasicRequest request, HttpResponseHandler handler, Network network) {
-        executeRequestInExecutor(request, handler, network, false);
-    }
-
-    public String doOriginRequestSync(HttpBasicRequest request, Network network) {
-        return executeRequest(request, null, network, false);
-    }
-
-    public void doRequestAsync(HttpBasicRequest request, HttpResponseHandler handler, Network network) {
-        executeRequestInExecutor(request, handler, network, true);
-    }
-
-    public String doRequestSync(HttpBasicRequest request, Network network) {
-        return executeRequest(request, null, network, true);
-    }
-
-    public String doFileUpload(Context context, final String requestUrl, final String strParams,
+    public byte[] doFileUpload(Context context, final String requestUrl, final String strParams,
             final List<FileInfo> fileParams) {
         return doFileUpload(context, null, requestUrl, strParams, fileParams);
     }
 
-    public String doOriginRequestSync(Network network, final String url, byte[] bytes, final String contentType) {
-        return doRequest(network, url, bytes, contentType, null, false);
+    public String doFileUpload(Context context, final String requestUrl, final String strParams,
+            final List<FileInfo> fileParams, String charSet) {
+        return convertToString(doFileUpload(context, null, requestUrl, strParams, fileParams), charSet);
     }
 
-    public String doOriginRequestSync(final String url, byte[] bytes, final String contentType) {
-        return doOriginRequestSync(null, url, bytes, contentType);
+    public void doByteRequest(HttpBasicRequest request, HttpByteResponseHandler handler, Network network) {
+        executeRequestInExecutor(request, handler, network);
     }
 
-    public String doRequestSync(Network network, final String url, byte[] bytes, final String contentType) {
-        return convertOriginToUTF8Data(doRequest(network, url, bytes, contentType, null, true));
+    public byte[] doByteRequest(HttpBasicRequest request, Network network) {
+        return executeRequest(request, null, network);
     }
 
-    public String doRequestSync(final String url, byte[] bytes, final String contentType) {
-        return doRequestSync(null, url, bytes, contentType);
+    public void doRequest(HttpBasicRequest request, HttpResponseHandler handler, Network network,
+            String charSetName) {
+        doByteRequest(request, new HttpByteResponseHandler() {
+            @Override
+            public void onResponse(int statusCode, byte[] response) {
+                handler.onResponse(statusCode, convertToString(response, charSetName));
+            }
+        }, network);
     }
 
-    public void doOriginRequestAsync(Network network, final String url, byte[] bytes, final String contentType,
-            HttpResponseHandler handler) {
-        doRequest(network, url, bytes, contentType, handler, false);
+    public String doRequest(HttpBasicRequest request, Network network, String charSetName) {
+        return convertToString(doByteRequest(request, network), charSetName);
     }
 
-    public void doOriginRequestAsync(final String url, byte[] bytes, final String contentType,
-            HttpResponseHandler handler) {
-        doOriginRequestAsync(null, url, bytes, contentType, handler);
+    public void doRequest(HttpBasicRequest request, HttpResponseHandler handler, Network network) {
+        doRequest(request, handler, network, HTTP_REQ_VALUE_CHARSET_UTF8);
     }
 
-    public void doRequestAsync(Network network, final String url, byte[] bytes, final String contentType,
-            HttpResponseHandler handler) {
-        doRequest(network, url, bytes, contentType, handler, true);
+    public String doRequest(HttpBasicRequest request, Network network) {
+        return  doRequest(request, network, HTTP_REQ_VALUE_CHARSET_UTF8);
     }
 
-    public void doRequestAsync(final String url, byte[] bytes, final String contentType,
-            HttpResponseHandler handler) {
-        doRequestAsync(null, url, bytes, contentType, handler);
+    public void doByteRequest(Network network, final String url, byte[] bytes, final String contentType,
+            HttpByteResponseHandler handler) {
+        startRequest(network, url, bytes, contentType, handler);
     }
 
-    public String doRequestSync(final String url) {
-        return convertOriginToUTF8Data(doOriginRequestSync(url));
+    public byte[] doByteRequest(Network network, final String url, byte[] bytes, final String contentType) {
+        return startRequest(network, url, bytes, contentType, null);
     }
 
-    public String doOriginRequestSync(final String url) {
-        return doOriginRequestSync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
+    public void doByteRequest(final String url, byte[] bytes, final String contentType,
+            HttpByteResponseHandler handler) {
+        doByteRequest(null, url, bytes, contentType, handler);
     }
 
-    public void doOriginRequestAsync(final String url, HttpResponseHandler handler) {
-        doOriginRequestAsync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD, handler);
+    public byte[] doByteRequest(final String url, byte[] bytes, final String contentType) {
+        return startRequest(null, url, bytes, contentType, null);
     }
 
-    public void doRequestAsync(final String url, HttpResponseHandler handler) {
-        doRequestAsync(url, (byte[]) null, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD, handler);
+    public void doRequest(final String url, byte[] bytes, final String contentType,
+            HttpResponseHandler handler, String charSetName) {
+        doByteRequest(null, url, bytes, contentType, new HttpByteResponseHandler() {
+            @Override
+            public void onResponse(int statusCode, byte[] response) {
+                handler.onResponse(statusCode, convertToString(bytes, charSetName));
+            }
+        });
     }
 
-    public String doOriginRequestSync(final String url, final String params) {
-        byte[] bytes = null;
-
-        try {
-            bytes = params.getBytes("UTF-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return doOriginRequestSync(url, bytes, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
+    public String doRequest(final String url, byte[] bytes, final String contentType, String charSetName) {
+        return convertToString(doByteRequest(null, url, bytes, contentType), charSetName);
     }
 
-    public String doRequestSync(final String url, final String params) {
-        return convertOriginToUTF8Data(doOriginRequestSync(url, params));
+    public void doRequest(final String url, byte[] bytes, final String contentType, HttpResponseHandler handler) {
+        doRequest(url, bytes, contentType, handler, HTTP_REQ_VALUE_CHARSET_UTF8);
+    }
+
+    public String doRequest(final String url, byte[] bytes, final String contentType) {
+        return doRequest(url, bytes, contentType, HTTP_REQ_VALUE_CHARSET_UTF8);
+    }
+
+    public void doRequest(final String url, HttpResponseHandler handler) {
+        doRequest(url, null, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD, handler);
+    }
+
+    public String doRequest(final String url) {
+        return doRequest(url, null, HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
+    }
+
+    @NotNull
+    public String doRequest(@NotNull String url, @NotNull String params) {
+        return doRequest(url, params.getBytes(), HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD);
     }
 }

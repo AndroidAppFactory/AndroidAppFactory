@@ -43,7 +43,8 @@ public open class MessageManager {
     open fun initModule(context: Context) {
         ZLog.d(MessageListLiveData.TAG, "MessageManager initModule ")
         MessageListLiveData.initData(context)
-        ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
+        ApplicationObserver.addStatusChangeListener(object :
+            ApplicationObserver.APPStatusChangeListener {
             override fun onBackground() {
             }
 
@@ -69,12 +70,12 @@ public open class MessageManager {
 
     private fun fetchMessageByURL(url: String) {
         if (URLUtils.isHTTPUrl(url)) {
-            HTTPServer.getInstance().doRequestAsync(url) { statusCode, msg ->
+            HTTPServer.getInstance().doRequest(url) { statusCode, msg ->
                 if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(msg)) {
                     ThreadManager.getInstance().start {
                         ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile url:$url")
                         ZLog.d(MessageListLiveData.TAG, "fetchMessageByFile result:$msg")
-                        var httpResultList: ArrayList<MessageInfoItem> = ArrayList()
+                        val httpResultList: ArrayList<MessageInfoItem> = ArrayList()
                         try {
                             JsonHelper.fromJsonList(msg, MessageInfoItem::class.java)
                                 ?.filter { it.isNotExpired }?.let { msgJsonResponse ->
@@ -94,7 +95,12 @@ public open class MessageManager {
         }
     }
 
-    fun showMessage(activity: Activity, item: MessageInfoItem, showFace: Boolean, listener: OnDialogListener?) {
+    fun showMessage(
+        activity: Activity,
+        item: MessageInfoItem,
+        showFace: Boolean,
+        listener: OnDialogListener?
+    ) {
         when (item.type) {
             MessageInfoItem.TYPE_TEXT, MessageInfoItem.TYPE_IMG, MessageInfoItem.TYPE_APK -> {
                 CommonDialog(activity).apply {
@@ -112,12 +118,16 @@ public open class MessageManager {
                         },
                     )
                     setNegative("关闭")
-                    setOnClickBottomListener(object :
-                        OnDialogListener {
+                    setOnClickBottomListener(object : OnDialogListener {
                         override fun onPositiveClick() {
                             if (!TextUtils.isEmpty(item.action)) {
                                 if (item.type == MessageInfoItem.TYPE_APK) {
-                                    DownloadAPK.startDownloadWithCheck(activity, item.action, "", "")
+                                    DownloadAPK.startDownloadWithCheck(
+                                        activity,
+                                        item.action,
+                                        "",
+                                        ""
+                                    )
                                 } else {
                                     RouterAction.openFinalURL(item.action)
                                 }
@@ -146,14 +156,20 @@ public open class MessageManager {
 
             MessageInfoItem.TYPE_WEB_PAGE -> {
                 openZixieWeb(item.content)
+                listener?.onPositiveClick()
             }
         }
-        var showFace = if (showFace && item.showFace > 0) {
+        val face = if (showFace && item.showFace > 0) {
             item.showFace - 1
         } else {
             item.showFace
         }
-        MessageListLiveData.updateMessageLocalStatus(item.messageID, hasRead = true, showFace = showFace, isDel = false)
+        MessageListLiveData.updateMessageLocalStatus(
+            item.messageID,
+            hasRead = true,
+            showFace = face,
+            isDel = false
+        )
     }
 
     fun deleteMessage(messageInfoItem: MessageInfoItem?) {
