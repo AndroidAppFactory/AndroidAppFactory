@@ -16,9 +16,9 @@ public class HTTPConnection extends BaseConnection {
         super();
         try {
             if (network == null) {
-                mConn = (HttpsURLConnection) new URL(url).openConnection();
+                mConn = (HttpURLConnection) new URL(url).openConnection();
             } else {
-                mConn = (HttpsURLConnection) network.openConnection(new URL(url));
+                mConn = (HttpURLConnection) network.openConnection(new URL(url));
             }
         } catch (Exception e) {
             e.printStackTrace();
