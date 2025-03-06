@@ -46,7 +46,7 @@ object UpdateManager {
         successAction: (info: UpdateDataFromCloud) -> Unit,
         failedAction: () -> Unit,
     ) {
-        HTTPServer.getInstance().doRequestAsync(
+        HTTPServer.getInstance().doRequest(
             AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.update_url), ""),
         ) { statusCode, updateString ->
             AAFLoggerFile.logUpdate("statusCode:$statusCode")

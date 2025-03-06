@@ -13,7 +13,7 @@ import java.nio.charset.Charset
 object ZixieRequestHttp {
 
     fun get(url: String): String {
-        return HTTPServer.getInstance().doRequestSync(url)
+        return HTTPServer.getInstance().doRequest(url)
     }
 
     fun getOriginByteArray(url: String): ByteArray {
@@ -21,15 +21,15 @@ object ZixieRequestHttp {
     }
 
     fun getOrigin(url: String): String {
-        return HTTPServer.getInstance().doOriginRequestSync(url)
+        return HTTPServer.getInstance().doRequest(url)
     }
 
     fun post(url: String, params: String): String {
-        return HTTPServer.getInstance().doRequestSync(url, params)
+        return HTTPServer.getInstance().doRequest(url, params)
     }
 
     fun postOrigin(url: String, params: String): String {
-        return HTTPServer.getInstance().doOriginRequestSync(url, params)
+        return HTTPServer.getInstance().doRequest(url, params)
     }
 
     fun get(url: String, responseHandler: HttpResponseHandler) {
@@ -55,18 +55,18 @@ object ZixieRequestHttp {
         isOrigin: Boolean,
     ) {
         if (isOrigin) {
-            HTTPServer.getInstance().doOriginRequestAsync(
+            HTTPServer.getInstance().doRequest(
                 url,
                 postData,
                 BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD,
-                responseHandler,
+                responseHandler, BaseConnection.HTTP_REQ_VALUE_CHARSET_ISO_8599_1
             )
         } else {
-            HTTPServer.getInstance().doRequestAsync(
+            HTTPServer.getInstance().doRequest(
                 url,
                 postData,
                 BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD,
-                responseHandler,
+                responseHandler, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8
             )
         }
     }

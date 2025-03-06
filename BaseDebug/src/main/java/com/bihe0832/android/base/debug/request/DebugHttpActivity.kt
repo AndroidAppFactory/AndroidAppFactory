@@ -81,6 +81,7 @@ class DebugHttpActivity : BaseDebugActivity() {
                 "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX0&type=file&debug=1",
                 b,
                 files,
+                BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8
             ).let {
                 ZLog.d(HTTPServer.LOG_TAG, "result $it")
                 showResult(it)
@@ -89,7 +90,7 @@ class DebugHttpActivity : BaseDebugActivity() {
 
         findViewById<View>(R.id.testGzip).setOnClickListener {
             HTTPServer.getInstance()
-                .doOriginRequestSync("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+                .doRequest("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
                 .let {
                     showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
                 }
@@ -124,7 +125,7 @@ class DebugHttpActivity : BaseDebugActivity() {
 //            HTTPServer.getInstance().doRequest(request)
 
             HTTPServer.getInstance()
-                .doRequestSync(Constants.HTTP_DOMAIN + Constants.PATH_GET + "?para=" + result)
+                .doRequest(Constants.HTTP_DOMAIN + Constants.PATH_GET + "?para=" + result)
                 .let {
                     showResult("同步请求结果：$it")
                 }
@@ -136,7 +137,7 @@ class DebugHttpActivity : BaseDebugActivity() {
     private fun sendGetAdvancedRequest() {
         var result = findViewById<EditText>(R.id.paraEditText).text?.toString()
         if (result?.length ?: 0 > 0) {
-            HTTPServer.getInstance().doRequestAsync(
+            HTTPServer.getInstance().doRequest(
                 object : HttpBasicRequest() {
 
                     override fun getUrl(): String {
@@ -153,7 +154,7 @@ class DebugHttpActivity : BaseDebugActivity() {
                     override fun onError(statusCode: Int, msg: String) {
                         showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$msg")
                     }
-                }, null
+                }, null, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8
             )
         } else {
             showResult("请在输入框输入请求内容！")
@@ -165,7 +166,8 @@ class DebugHttpActivity : BaseDebugActivity() {
         if (result?.length ?: 0 > 0) {
             val handle = TestBasicResponseHandler()
             val request = BasicPostRequest(result)
-            HTTPServer.getInstance().doRequestAsync(request, handle, null)
+            HTTPServer.getInstance()
+                .doRequest(request, handle, null, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8)
         } else {
             showResult("请在输入框输入请求内容！")
         }
@@ -173,8 +175,8 @@ class DebugHttpActivity : BaseDebugActivity() {
 
     private fun sendPostAdvancedRequest() {
         val result = findViewById<EditText>(R.id.paraEditText).text?.toString()
-        if (TextUtils.isEmpty(result)) {
-            HTTPServer.getInstance().doRequestAsync(
+        if (!TextUtils.isEmpty(result)) {
+            HTTPServer.getInstance().doRequest(
                 object : HttpBasicRequest() {
                     init {
                         try {
@@ -209,7 +211,7 @@ class DebugHttpActivity : BaseDebugActivity() {
                     override fun onError(statusCode: Int, msg: String) {
                         showResult("HTTP状态码：\n\t$statusCode \n 网络请求内容：\n\t$msg")
                     }
-                }, null
+                }, null, BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8
             )
         } else {
             showResult("请在输入框输入请求内容！")
