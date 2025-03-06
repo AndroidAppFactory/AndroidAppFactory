@@ -22,8 +22,7 @@ import org.json.JSONObject;
 
 /**
  * 调用的方法为js形如：window.location.href="jsb://getAppInfo/1/ZixieCallback?packagename=com.tencent.mm";
- * 分别是：jsb://方法名/序列号/回调方法?参数key=value
- * 回调方法如不需要可以不用。但是需要调用的方法名和系列号必须要
+ * 分别是：jsb://方法名/序列号/回调方法?参数key=value 回调方法如不需要可以不用。但是需要调用的方法名和系列号必须要
  */
 public abstract class BaseJsBridgeProxy {
 
@@ -86,13 +85,15 @@ public abstract class BaseJsBridgeProxy {
             ZLog.e(TAG, "JSBridge method 404");
             ZLog.d(TAG, e.toString());
             if (!TextUtils.isEmpty(callbackName)) {
-                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.NOT_SUPPORT);
+                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.NOT_SUPPORT,
+                        "JSBridge method 404, please update apk version");
             }
         } catch (Exception ex) {
             ZLog.e(TAG, "JSBridge method has error");
             ZLog.d(TAG, ex.toString());
             if (!TextUtils.isEmpty(callbackName)) {
-                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception);
+                getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception,
+                        "JSBridge method has error, connect api developer");
             }
         }
 
@@ -159,7 +160,8 @@ public abstract class BaseJsBridgeProxy {
                 ZLog.e(TAG, "JSBridge method has error");
                 ZLog.d(TAG, ex.toString());
                 if (!TextUtils.isEmpty(callbackName)) {
-                    getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception);
+                    getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception,
+                            "JSBridge method has error, connect api developer");
                 }
             }
         } else {
