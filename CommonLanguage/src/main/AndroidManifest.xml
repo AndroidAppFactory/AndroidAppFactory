@@ -3,7 +3,7 @@
         package="com.bihe0832.android.common.language">
     <application>
         <activity
-            android:configChanges="orientation|screenSize|keyboardHidden|locale"
+            android:configChanges="orientation|screenSize|keyboardHidden|locale|layoutDirection"
             android:exported="true"
             android:name="com.bihe0832.android.common.language.LanguageActivity"
             android:screenOrientation="portrait"

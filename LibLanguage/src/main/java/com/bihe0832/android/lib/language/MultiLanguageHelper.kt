@@ -5,9 +5,9 @@ import android.content.Context.MODE_PRIVATE
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
-import android.os.LocaleList
 import android.text.TextUtils
 import androidx.core.os.ConfigurationCompat
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.Locale
 
@@ -21,59 +21,37 @@ import java.util.Locale
  */
 object MultiLanguageHelper {
 
+    const val TAG = "MultiLanguageHelper"
     private const val KEY_LOCAL_LANGUAGE = "app_config_language"
     private const val SP_NAME_LOCAL_LANGUAGE = "language_sp"
     private var lastLocale: Locale? = null
 
     /**
-     * 更新当前页面语言资源，返回更新后的Context
+     * 更新当前页面语言资源，同时返回更新后的Context
      */
     fun modifyContextLanguageConfig(context: Context): Context {
         return modifyContextLanguageConfig(context, getLanguageConfig(context))
     }
 
     fun modifyContextLanguageConfig(context: Context, locale: Locale): Context {
-        return modifyContextLanguageConfig(context, context.resources, locale)
-    }
-
-    fun modifyContextLanguageConfig(
-        context: Context, resources: Resources, locale: Locale
-    ): Context {
-        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.N) {
-            return setAppLanguageApi24(context, resources, locale)
+        modifyContextLanguageConfig(context.resources, locale)
+        val newContext = if (BuildUtils.SDK_INT >= Build.VERSION_CODES.N) {
+            context.createConfigurationContext(context.resources.configuration)
         } else {
-            setAppLanguage(resources, locale)
+            context
         }
-        return context
+        return newContext
     }
 
-
-    /**
-     * 设置应用语言
-     */
-    private fun setAppLanguage(resources: Resources, locale: Locale) {
-        val displayMetrics = resources.displayMetrics
+    fun modifyContextLanguageConfig(resources: Resources, locale: Locale) {
         val configuration = resources.configuration
+        Locale.setDefault(locale)
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             configuration.setLocale(locale)
         } else {
             configuration.locale = locale
         }
-        resources.updateConfiguration(configuration, displayMetrics)
-    }
-
-    /**
-     * 兼容 7.0 及以上
-     */
-    private fun setAppLanguageApi24(
-        context: Context,
-        resources: Resources,
-        locale: Locale
-    ): Context {
-        val configuration = resources.configuration
-        configuration.setLocales(LocaleList(locale))
-        configuration.setLocale(locale)
-        return context.createConfigurationContext(configuration)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
     }
 
     /**
@@ -92,7 +70,7 @@ object MultiLanguageHelper {
         val locale: Locale = if (BuildUtils.SDK_INT >= Build.VERSION_CODES.N) {
             context.resources.configuration.locales.get(0)
         } else {
-            @Suppress("DEPRECATION") context.resources.configuration.locale
+            context.resources.configuration.locale
         }
         return locale
     }

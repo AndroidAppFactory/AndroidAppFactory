@@ -24,7 +24,7 @@
             tools:ignore="DiscouragedApi" />
 
         <activity
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden|locale|layoutDirection"
             android:name="com.bihe0832.android.common.debug.module.DebugRootActivity"
             android:screenOrientation="sensor"
             android:theme="@style/AAF.ActivityTheme"

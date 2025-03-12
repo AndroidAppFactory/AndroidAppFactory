@@ -62,11 +62,13 @@ public class CommonRootActivity extends CommonActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); rootFragmentClassName = getIntent().getStringExtra(DEBUG_MODULE_CLASS_NAME);
+        super.onCreate(savedInstanceState);
+        rootFragmentClassName = getIntent().getStringExtra(DEBUG_MODULE_CLASS_NAME);
         rootFragmentTitleName = getIntent().getStringExtra(DEBUG_MODULE_TITLE_NAME);
         ZLog.d(TAG, "rootFragmentClassName: " + rootFragmentClassName);
         ZLog.d(TAG, "rootFragmentTitleName: " + rootFragmentTitleName);
-        initToolbar(R.id.common_toolbar, getTitleName(), false, true, R.drawable.icon_left_arrow); loadFragment();
+        initToolbar(R.id.common_toolbar, getTitleName(), false, true, R.drawable.icon_left_arrow);
+        loadFragment();
     }
 
     protected String getRootFragmentClassName() {
@@ -83,13 +85,16 @@ public class CommonRootActivity extends CommonActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            } return this.getClass().getSimpleName();
-        } return rootFragmentTitleName;
+            }
+            return this.getClass().getSimpleName();
+        }
+        return rootFragmentTitleName;
     }
 
     @Override
     protected void onResume() {
-        super.onResume(); try {
+        super.onResume();
+        try {
             Class rootFragmentClass = Class.forName(getRootFragmentClassName());
             if (findFragment(rootFragmentClass) != null) {
                 ((BaseFragment) findFragment(rootFragmentClass)).setUserVisibleHint(true);
@@ -100,23 +105,29 @@ public class CommonRootActivity extends CommonActivity {
     }
 
     protected void loadFragment() {
-        String rootFragmentClassName = getRootFragmentClassName(); try {
+        String rootFragmentClassName = getRootFragmentClassName();
+        try {
             if (TextUtils.isEmpty(rootFragmentClassName)) {
-                ZixieContext.INSTANCE.showDebug("类名错误，请检查后重试"); finish();
+                ZixieContext.INSTANCE.showDebug("类名错误，请检查后重试");
+                finish();
             }
 
             Class rootFragmentClass = Class.forName(rootFragmentClassName);
             if (rootFragmentClass.getClass().isAssignableFrom(BaseFragment.class.getClass())) {
                 if (findFragment(rootFragmentClass) == null) {
-                    ISupportFragment fragment = (ISupportFragment) ReflecterHelper.newInstance(rootFragmentClassName, null);
+                    ISupportFragment fragment = (ISupportFragment) ReflecterHelper.newInstance(rootFragmentClassName,
+                            null);
                     loadRootFragment(fragment);
                     fragment.onNewBundle(getIntent().getExtras());
                 }
             } else {
-                ZixieContext.INSTANCE.showDebug(rootFragmentClassName + "不是继承 BaseFragment"); finish();
+                ZixieContext.INSTANCE.showDebug(rootFragmentClassName + "不是继承 BaseFragment");
+                finish();
             }
         } catch (ClassNotFoundException e) {
-            ZixieContext.INSTANCE.showDebug("没有找到" + rootFragmentClassName); finish(); e.printStackTrace();
+            ZixieContext.INSTANCE.showDebug("没有找到" + rootFragmentClassName);
+            finish();
+            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }

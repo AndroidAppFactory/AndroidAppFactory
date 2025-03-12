@@ -51,7 +51,10 @@ abstract class BaseListActivity : BaseActivity() {
     private val mHeadView by lazy {
         LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
     }
 
@@ -91,10 +94,7 @@ abstract class BaseListActivity : BaseActivity() {
         intent?.extras?.let {
             parseBundle(it)
         }
-        if (null == findViewById(R.id.common_activity_list_toolbar)) {
-            throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
-        }
-        initToolbar(R.id.common_activity_list_toolbar, getTitleText(), true)
+        iniToolBar()
         mRecyclerView = findViewById(R.id.activity_list_info_list)
         if (null == mRecyclerView) {
             throw AAFException("please check recyclerview id name is : activity_list_info_list")
@@ -102,6 +102,12 @@ abstract class BaseListActivity : BaseActivity() {
         initView()
     }
 
+    open fun iniToolBar() {
+        if (null == findViewById(R.id.common_activity_list_toolbar)) {
+            throw AAFException("please check mToolbar id name is : common_activity_list_toolbar")
+        }
+        initToolbar(R.id.common_activity_list_toolbar, getTitleText(), true)
+    }
 
     protected open fun initView() {
 

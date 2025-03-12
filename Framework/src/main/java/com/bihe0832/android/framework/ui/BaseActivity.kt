@@ -20,7 +20,6 @@ import com.bihe0832.android.lib.color.utils.ColorUtils
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.immersion.enableActivityImmersive
 import com.bihe0832.android.lib.language.MultiLanguageHelper
-import com.bihe0832.android.lib.language.MultiLanguageHelper.getLanguageConfig
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.clearImage
@@ -31,10 +30,11 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation.SupportActivity
+import java.util.Locale
 
 open class BaseActivity : SupportActivity() {
     private var lastLocale = ""
-    
+
     var mToolbar: Toolbar? = null
     private var mTitleView: TextView? = null
     private var mNavigationImageButton: ImageButton? = null
@@ -49,7 +49,8 @@ open class BaseActivity : SupportActivity() {
 
     override fun attachBaseContext(newBase: Context?) {
         if (supportMultiLanguage() && newBase != null) {
-            super.attachBaseContext(MultiLanguageHelper.modifyContextLanguageConfig(newBase))
+            val newContext = MultiLanguageHelper.modifyContextLanguageConfig(newBase)
+            super.attachBaseContext(newContext)
         } else {
             super.attachBaseContext(newBase)
         }
@@ -82,9 +83,28 @@ open class BaseActivity : SupportActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        if (!TextUtils.isEmpty(lastLocale) && getLanguageConfig(this).toLanguageTag() != lastLocale) {
-            recreate()
+        checkLanguageChanged()
+    }
+
+    fun checkLanguageChanged() {
+        if (!TextUtils.isEmpty(lastLocale)) {
+            val newLocale = MultiLanguageHelper.getLanguageConfig(this)
+            if (newLocale.toLanguageTag() != lastLocale) {
+                onLocaleChanged(Locale.forLanguageTag(lastLocale), newLocale)
+            }
         }
+    }
+
+    fun getLastLocale(): Locale {
+        return Locale.forLanguageTag(lastLocale)
+    }
+
+    open fun supportMultiLanguage(): Boolean {
+        return false
+    }
+
+    open fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+
     }
 
     override fun onResume() {
@@ -108,7 +128,7 @@ open class BaseActivity : SupportActivity() {
     override fun onPause() {
         super.onPause()
         if (supportMultiLanguage()) {
-            lastLocale = getLanguageConfig(this).toLanguageTag()
+            lastLocale = MultiLanguageHelper.getLanguageConfig(this).toLanguageTag()
         }
         for (fragment in supportFragmentManager.fragments) {
             if (fragment.isAdded) {
@@ -260,9 +280,6 @@ open class BaseActivity : SupportActivity() {
         finish()
     }
 
-    open fun supportMultiLanguage(): Boolean {
-        return false
-    }
 
     override fun finish() {
         intent = null
