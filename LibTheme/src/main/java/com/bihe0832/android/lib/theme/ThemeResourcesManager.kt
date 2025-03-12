@@ -20,9 +20,8 @@ object ThemeResourcesManager {
 
     fun init(application: Application) {
         val context = MultiLanguageHelper.modifyContextLanguageConfig(
-            application, application.resources, MultiLanguageHelper.getLanguageConfig(
-                application
-            )
+            application,
+            MultiLanguageHelper.getLanguageConfig(application)
         )
         mAppDefaultResources = context.resources
     }

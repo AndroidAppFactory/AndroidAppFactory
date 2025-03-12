@@ -1,7 +1,9 @@
 package com.bihe0832.android.common.debug.module;
 
 import android.content.Context;
+import androidx.annotation.NonNull;
 import com.bihe0832.android.framework.ui.main.CommonRootActivity;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -23,5 +25,10 @@ public class DebugRootActivity extends CommonRootActivity {
     @Override
     public boolean supportMultiLanguage() {
         return true;
+    }
+
+    @Override
+    public void onLocaleChanged(@NonNull Locale lastLocale, @NonNull Locale toLanguageTag) {
+        super.onLocaleChanged(lastLocale, toLanguageTag);
     }
 }

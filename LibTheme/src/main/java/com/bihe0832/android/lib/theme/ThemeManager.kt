@@ -56,9 +56,7 @@ object ThemeManager : Observable() {
                     method.isAccessible = true
                     method.invoke(assetManager, path)
                     val context = MultiLanguageHelper.modifyContextLanguageConfig(
-                        mApplication, mApplication.resources, MultiLanguageHelper.getLanguageConfig(
-                            mApplication
-                        )
+                        mApplication, MultiLanguageHelper.getLanguageConfig(mApplication)
                     )
                     val resources = context.resources
                     val skinRes =

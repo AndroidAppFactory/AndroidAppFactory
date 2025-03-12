@@ -27,7 +27,6 @@ import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
 import java.util.Locale
 
-
 class DebugUIFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
 
@@ -61,6 +60,7 @@ class DebugUIFragment : DebugEnvFragment() {
             add(getDebugItem("设置语言为英文") { changeToEN() })
             add(getDebugItem("多语言切换") { RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_LANGUAGE) })
             add(getTipsItem(context!!.resources.getString(R.string.debug_msg)))
+            add(getTipsItem(resources.getString(R.string.debug_msg)))
             add(getTipsItem(ZixieContext.applicationContext!!.resources.getString(R.string.debug_msg)))
         }
     }
@@ -111,5 +111,12 @@ class DebugUIFragment : DebugEnvFragment() {
                 }"
             )
         })
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser, hasCreateView)
+        if(hasCreateView && isVisibleToUser){
+            mDataLiveData.initData()
+        }
     }
 }
