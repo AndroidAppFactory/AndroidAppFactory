@@ -58,6 +58,11 @@ open class BaseActivity : SupportActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (supportMultiLanguage()) {
+            MultiLanguageHelper.modifyContextLanguageConfig(
+                resources, MultiLanguageHelper.getLanguageConfig(this)
+            )
+        }
         if (resetDensity()) {
             DisplayUtil.resetDensity(
                 this,
@@ -83,13 +88,14 @@ open class BaseActivity : SupportActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        checkLanguageChanged()
+        checkLocaleChanged()
     }
 
-    fun checkLanguageChanged() {
+    fun checkLocaleChanged() {
         if (!TextUtils.isEmpty(lastLocale)) {
             val newLocale = MultiLanguageHelper.getLanguageConfig(this)
             if (newLocale.toLanguageTag() != lastLocale) {
+                MultiLanguageHelper.modifyContextLanguageConfig(resources, newLocale)
                 onLocaleChanged(Locale.forLanguageTag(lastLocale), newLocale)
             }
         }
