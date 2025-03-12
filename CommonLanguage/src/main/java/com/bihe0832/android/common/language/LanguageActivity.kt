@@ -26,11 +26,7 @@ open class LanguageActivity : CommonListActivity() {
     }
 
     override fun getTitleText(): String {
-        ZLog.d(
-            TAG,
-            "getTitleText ${baseContext.hashCode()} locale:${baseContext.resources.configuration.locale.toLanguageTag()}"
-        )
-        return baseContext.resources.getString(R.string.settings_language_title)
+        return resources.getString(R.string.settings_language_title)
     }
 
     override fun initView() {
@@ -76,16 +72,21 @@ open class LanguageActivity : CommonListActivity() {
 
     open fun setLocale(settingData: SettingsDataLanguage?) {
         if (null != settingData?.locale) {
-            MultiLanguageHelper.setLanguageConfig(this, settingData.locale!!)
-            ZixieContext.updateApplicationContext(this, true)
-            MultiLanguageHelper.modifyContextLanguageConfig(resources,  settingData.locale!!)
+            updateApplicationLocale(settingData.locale!!)
             onLocaleChanged(getLastLocale(), settingData.locale!!)
         } else {
             ZixieContext.showToast(this@LanguageActivity.resources.getString(R.string.toast_settings_language_tips))
         }
     }
 
+    fun updateApplicationLocale(locale: Locale) {
+        MultiLanguageHelper.setLanguageConfig(this, locale)
+        ZixieContext.updateApplicationContext(this, true)
+        MultiLanguageHelper.modifyContextLanguageConfig(resources, locale)
+    }
+
     override fun onLocaleChanged(lastLocale: Locale, newLocale: Locale) {
+        super.onLocaleChanged(lastLocale, newLocale)
         iniToolBar()
         mDataLiveData.refresh()
     }
