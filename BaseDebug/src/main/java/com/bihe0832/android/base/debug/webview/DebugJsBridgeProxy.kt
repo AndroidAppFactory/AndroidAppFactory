@@ -21,6 +21,10 @@ class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsB
 
     private val mViewMap = HashMap<String?, View?>()
 
+    override fun onRefresh() {
+        super.onRefresh()
+        removeAll()
+    }
     private fun addNativeView(key: String, mNativeView: View) {
         mViewMap[key] = mNativeView
     }
@@ -122,7 +126,7 @@ class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsB
             if (!TextUtils.isEmpty(finalViewID)) {
                 if (mViewMap[finalViewID] == null) {
                     ThreadManager.getInstance().runOnUIThread {
-                        val view = DebugH5NativeWebFragment.getTextView(webView.context)
+                        val view = DebugH5NativeWebFragment.getRecycleView(webView.context)
                         webView.addView(view)
                         addNativeView(finalViewID, view)
                         view.visibility = View.GONE

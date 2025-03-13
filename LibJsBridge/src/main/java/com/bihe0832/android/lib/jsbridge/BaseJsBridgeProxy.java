@@ -241,6 +241,12 @@ public abstract class BaseJsBridgeProxy {
                 BaseJsBridge.ResponseType.Event);
     }
 
+    public void onRefresh() {
+        ZLog.e(TAG, "JSBridge onRefresh");
+        getJsBridge().response(ACTIVITY_STATE_CHANGE_CALLBACK, 0, ACTIVITY_STATE_CHANGE_CALLBACK, "onRefresh", null,
+                BaseJsBridge.ResponseType.Event);
+    }
+
     public void getAppInfo(final Uri uri, final int seqid, final String method, final String callbackFun) {
         final String packageName = uri.getQueryParameter("packagename");
 

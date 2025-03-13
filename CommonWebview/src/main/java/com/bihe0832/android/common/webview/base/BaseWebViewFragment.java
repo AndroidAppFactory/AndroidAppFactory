@@ -48,7 +48,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     public static final String INTENT_KEY_REFRESH = "refresh";
     public static final String INTENT_KEY_DATA = "WebviewFragment.data";
     public static final String INTENT_KEY_THIRD_PART = "http://localhost";
-    protected static final String TAG = "WebPageFragment -> :";
+    public static final String TAG = "WebPageFragment -> :";
     protected static final String HEADER_NAME_REFERER = "Referer";
     protected ConstraintLayout mErrorPage;
     protected SwipeRefreshLayout mNormalPage;
@@ -66,12 +66,9 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     private HashMap<String, String> globalLocalRes = new HashMap<String, String>() {{
         put("https://cdn.bihe0832.com/js/jsbridge.js", "web/js/jsbridge.min.new.js");
     }};
-    private View mCustomView;
     private TextView mRetry;
     private TextView mRedirect;
     private ViewGroup mViewParent;
-    private int mOriginalSystemUiVisibility;
-    private int mOriginalOrientation;
     private LiveData<Integer> mWebViewScrollTopLiveData = _webViewScrollTopLiveData;
 
 
