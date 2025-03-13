@@ -3,7 +3,7 @@ def project = ext
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"                : "6.24.9",
+                "version"                : "6.24.10",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper"
@@ -13,7 +13,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.24.9",
+                "version"            : "6.24.10",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -21,7 +21,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperMin"      : [
-                "version"            : "6.24.9",
+                "version"            : "6.24.10",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
@@ -143,7 +143,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWebview"         : [
-                "version"                : "6.24.9",
+                "version"                : "6.24.10",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         project.androidsupport.swiperefreshlayout,
@@ -154,7 +154,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonFeedback"        : [
-                "version"                : "6.24.9",
+                "version"                : "6.24.10",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : ["CommonWebview"
                 ],
