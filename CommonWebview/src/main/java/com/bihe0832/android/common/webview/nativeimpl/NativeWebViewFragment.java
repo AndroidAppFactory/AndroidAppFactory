@@ -8,7 +8,9 @@ import android.net.http.SslError;
 import android.os.Build.VERSION_CODES;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.JsPromptResult;
@@ -80,6 +82,7 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
             public void onRefresh() {
                 mSwipeLayout.setRefreshing(false);
                 if (mJSBridgeProxy != null && mJSBridgeProxy.canPullToRefresh()) {
+                    mJSBridgeProxy.onRefresh();
                     if (mRefreshCallback != null) {
                         mRefreshCallback.onRefresh(mWebView);
                     } else {
@@ -314,13 +317,10 @@ public abstract class NativeWebViewFragment extends BaseWebViewFragment {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            DialogUtils.INSTANCE.showConfirmDialog(
-                    getContext(),
-                    getResources().getString(R.string.dialog_title),
+            DialogUtils.INSTANCE.showConfirmDialog(getContext(), getResources().getString(R.string.dialog_title),
                     getResources().getString(R.string.com_bihe0832_web_ssl_error_message),
                     getResources().getString(R.string.dialog_button_ok),
-                    getResources().getString(R.string.dialog_button_cancel),
-                    new OnDialogListener() {
+                    getResources().getString(R.string.dialog_button_cancel), new OnDialogListener() {
                         @Override
                         public void onPositiveClick() {
                             handler.proceed();

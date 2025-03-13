@@ -3,11 +3,15 @@ package com.bihe0832.android.common.debug.item;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import com.bihe0832.android.common.debug.R;
 import com.bihe0832.android.lib.adapter.CardBaseHolder;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
+import com.bihe0832.android.lib.jsbridge.BaseJsBridge;
+import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.utils.os.DisplayUtil;
 
@@ -55,15 +59,39 @@ public class DebugItemHolder extends CardBaseHolder {
         if (null != data.mListener) {
             itemView.setOnClickListener(data.mListener);
         }
-        if (null != data.mLongClickListener) {
-            itemView.setOnLongClickListener(data.mLongClickListener);
-        }
+        itemView.setLongClickable(false);
+
+        setTouchListenerForAllViews((ViewGroup)itemView);
+//        if (null != data.mLongClickListener) {
+//            itemView.setOnLongClickListener(data.mLongClickListener);
+//        }
         ((View) mHeader.getParent()).setBackgroundColor(data.backgroundColor);
 
         if (data.showBottomLine && null != mBottomLine) {
             mBottomLine.setVisibility(View.VISIBLE);
         } else {
             mBottomLine.setVisibility(View.GONE);
+        }
+    }
+
+    public void setTouchListenerForAllViews(ViewGroup viewGroup) {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View child = viewGroup.getChildAt(i);
+
+            // 为每个子 View 设置 Touch 回调
+            child.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // 处理 Touch 事件
+                    ZLog.d(BaseJsBridge.TAG,"onTouch:" + v.toString());
+                    return false; // 返回 false，表示不拦截事件
+                }
+            });
+
+            // 如果子 View 是 ViewGroup，递归遍历
+            if (child instanceof ViewGroup) {
+                setTouchListenerForAllViews((ViewGroup) child);
+            }
         }
     }
 }
