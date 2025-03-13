@@ -3,14 +3,14 @@ def project = ext
 
 ext.tbsmoduleInfo = [
     "CommonTBSWrapper"   : [
-        "version"            : "6.24.9",
+        "version"            : "6.24.10",
         "artifactId"         : "common-wrapper-tbs",
         "apidependenciesList": [
             "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
         ]
     ],
     "CommonTBSFeedback": [
-        "version"                : "6.24.9",
+        "version"                : "6.24.10",
         "artifactId"             : "common-feedback-tbs",
         "apidependenciesList": ["CommonTBSWebview", "CommonFeedback"
         ],
@@ -19,7 +19,7 @@ ext.tbsmoduleInfo = [
         ]
     ],
     "CommonTBSWebview" : [
-        "version"                : "6.24.9",
+        "version"                : "6.24.10",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
             project.androidsupport.swiperefreshlayout,
@@ -30,7 +30,7 @@ ext.tbsmoduleInfo = [
         ]
     ],
     "CommonTBS"        : [
-        "version"            : "6.24.4",
+        "version"            : "6.24.10",
         "artifactId"         : "common-tbs",
         "apidependenciesList": [
             project.tencent.tbssdk,
