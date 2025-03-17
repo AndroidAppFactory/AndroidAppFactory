@@ -49,7 +49,7 @@
             android:id="@+id/web_load_failed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="网页加载失败"
+            android:text="@string/web_load_failed_title"
             android:textColor="@color/textColorSecondary"
             android:textSize="16dp"
             android:textStyle="bold"
@@ -67,7 +67,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/web_load_failed"
-            tools:text="TextView" />
+            tools:text="" />
 
         <View
             android:id="@+id/web_split_line"
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:lineSpacingExtra="12dp"
-            android:text="• 没有网络信号或数据连接\n• 此网页可能暂时出现故障\n• 输入网址不正确"
+            android:text="@string/web_load_failed_error"
             android:textColor="@color/textColorSecondary"
             android:textSize="12dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,7 @@
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:gravity="center"
-            android:text="点击重试"
+            android:text="@string/web_load_failed_retry"
             android:textColor="@color/textColorPrimary"
             app:bgtv_cornerRadius="6dp"
             app:bgtv_strokeColor="@color/colorButtonNormal"
@@ -112,7 +112,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="45dp"
             android:gravity="center"
-            android:text="用系统浏览器打开"
+            android:text="@string/web_load_failed_browser"
             android:textColor="@color/textColorPrimary"
             app:bgtv_cornerRadius="6dp"
             app:bgtv_strokeColor="@color/colorButtonNormal"

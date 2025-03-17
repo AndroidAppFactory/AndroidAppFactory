@@ -2,4 +2,9 @@
 <resources>
     <string name="com_bihe0832_web_process_name">:web</string>
     <string name="com_bihe0832_web_ssl_error_message">当前页面SSL认证失败，继续访问可能存在风险，是否继续访问？</string>
+    <string name="web_load_failed_title">网页加载失败</string>
+    <string name="web_load_failed_error">• 没有网络信号或数据连接\n• 此网页可能暂时出现故障\n• 输入网址不正确</string>
+    <string name="web_load_failed_browser">用系统浏览器打开</string>
+    <string name="web_load_failed_retry">点击重试</string>
+
 </resources>
