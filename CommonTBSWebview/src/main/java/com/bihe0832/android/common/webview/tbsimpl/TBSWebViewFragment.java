@@ -86,6 +86,7 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
             public void onRefresh() {
                 mSwipeLayout.setRefreshing(false);
                 if (mJSBridgeProxy != null && mJSBridgeProxy.canPullToRefresh()) {
+                    mJSBridgeProxy.onRefresh();
                     if (mRefreshCallback != null) {
                         mRefreshCallback.onRefresh(mWebView);
                     } else {
