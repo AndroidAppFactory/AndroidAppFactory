@@ -6,95 +6,284 @@ import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsoluteLayout
+import com.bihe0832.android.common.webview.base.BaseWebViewFragment.TAG
 import com.bihe0832.android.common.webview.nativeimpl.NativeJsBridgeProxy
 import com.bihe0832.android.common.webview.nativeimpl.NativeWebView
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
 import com.bihe0832.android.lib.jsbridge.JsResult
+import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import com.tencent.smtt.sdk.ValueCallback
 
 /**
  * Created by zixie on 2016/10/20.
  */
-class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsBridgeProxy(activity, webView) {
+class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) :
+    NativeJsBridgeProxy(activity, webView) {
 
-    private val mViewMap = HashMap<String?, View?>()
+    private val nativeViewMap = HashMap<String?, View?>()
 
     override fun onRefresh() {
         super.onRefresh()
-        removeAll()
-    }
-    private fun addNativeView(key: String, mNativeView: View) {
-        mViewMap[key] = mNativeView
+        removeAllNativeViewItem()
     }
 
-    private fun getViewID(uri: Uri?): String {
-        return uri?.getQueryParameter("viewKey") ?: ""
+    fun addToNativeViewRecord(key: String?, mNativeView: View?) {
+        nativeViewMap[key] = mNativeView
     }
 
-    private fun hideView(finalViewID: String?, mNativeView: View?) {
-        mNativeView?.visibility = View.INVISIBLE
-        resetADHeight(finalViewID, -1)
+    private fun resetADHeight(
+        key: String?,
+        showView: Boolean,
+        callback: AAFDataCallback<Boolean>?
+    ) {
+        ZLog.d(TAG, "resetADHeight  key=$key; showView=$showView")
+        val mNativeView = nativeViewMap[key]
+        if (mNativeView != null) {
+            if (showView) {
+                ThreadManager.getInstance().runOnUIThread {
+                    webView.evaluateJavascript(
+                        "javaScript:getNativeViewPosition('$key')",
+                        ValueCallback<String> { h5Position ->
+                            ZLog.d(TAG, "resetADHeight key=$key; h5Position=$h5Position")
+                            val topPosition = ConvertUtils.parseFloat(h5Position, -1f)
+                            ZLog.d(TAG, "resetADHeight  key=$key; top=$topPosition")
+                            if (topPosition > 0) {
+                                val params = mNativeView.layoutParams as AbsoluteLayout.LayoutParams
+                                params.y =
+                                    DisplayUtil.dip2px(ZixieContext.applicationContext, topPosition)
+                                mNativeView.layoutParams = params
+                                webView.loadUrl(
+                                    "javaScript:setNativeViewHeight('$key'," + DisplayUtil.px2dip(
+                                        ZixieContext.applicationContext,
+                                        mNativeView.height.toFloat()
+                                    ) + ")"
+                                )
+                                mNativeView.visibility = View.VISIBLE
+                                callback?.onSuccess(true)
+                            } else {
+                                webView.loadUrl("javaScript:setNativeViewHeight('$key',0)")
+                                callback?.onError(
+                                    -2, "resetADHeight : key=" + key
+                                            + " getNativeViewPosition should more than 0,current  is "
+                                            + topPosition
+                                )
+                            }
+                        })
+                }
+            } else {
+                ThreadManager.getInstance().runOnUIThread {
+                    webView.loadUrl("javaScript:setNativeViewHeight('$key',0)")
+                    mNativeView.visibility = View.GONE
+                    callback?.onSuccess(true)
+                }
+            }
+        } else {
+            ZLog.d(TAG, "resetADHeight : key=" + key + "mNativeView is bad")
+            ThreadManager.getInstance().runOnUIThread {
+                webView.loadUrl("javaScript:setNativeViewHeight('$key',0)")
+                callback?.onError(-1, "resetADHeight : key=$key mNativeView is bad")
+            }
+        }
     }
 
-    private fun removeView(finalViewID: String?) {
+    fun addNativeView(uri: Uri, seqid: Int, method: String?, callbackFun: String?) {
+        var viewID1: String? = ""
         try {
-            val mNativeView = mViewMap[finalViewID]
-            removeView(finalViewID, mNativeView)
+            viewID1 = uri.getQueryParameter("viewKey")
         } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        val finalViewID = viewID1
+        if (TextUtils.isEmpty(finalViewID)) {
+            mJsBridge.responseFail(
+                callbackFun,
+                seqid,
+                method,
+                JsResult.Code_IllegalArgument,
+                "viewKey is bad"
+            )
+            return
+        } else {
+            ThreadManager.getInstance().runOnUIThread {
+                webView.loadUrl("javaScript:document.getElementById('$finalViewID').height")
+                val jsCode =
+                    ("(function() {" + "var div = document.getElementById('" + finalViewID + "');"
+                            + "return div ? 'Div IS OK' : 'Div not found';" + "})()")
+                webView.evaluateJavascript(jsCode,
+                    ValueCallback<String> { result ->
+                        ZLog.d(TAG, "addNativeView Div $finalViewID 检查结果: $result")
+                    })
+            }
+        }
+
+
+        try {
+            if (nativeViewMap[finalViewID] == null) {
+                ThreadManager.getInstance().runOnUIThread {
+                    val view = DebugH5NativeWebFragment.getTextView(mActivity)
+                    webView.addView(view)
+                    addToNativeViewRecord(finalViewID, view)
+                    val widthMeasureSpec =
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                    val heightMeasureSpec =
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                    view.measure(widthMeasureSpec, heightMeasureSpec)
+                    view.layout(
+                        0,
+                        0,
+                        view.getMeasuredWidth(),
+                        view.getMeasuredHeight()
+                    )
+                    view.visibility = View.GONE
+                    resetADHeight(finalViewID, true, object : AAFDataCallback<Boolean>() {
+                        override fun onSuccess(aBoolean: Boolean?) {
+                            mJsBridge.response(callbackFun, seqid, method, "")
+                        }
+
+                        override fun onError(errorCode: Int, msg: String) {
+                            mJsBridge.responseFail(
+                                callbackFun,
+                                seqid,
+                                method,
+                                JsResult.Code_Busy,
+                                msg
+                            )
+                        }
+                    })
+                }
+            } else {
+                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
+            }
+        } catch (e: Exception) {
+            mJsBridge.responseFail(
+                callbackFun, seqid, method, JsResult.Code_Java_Exception,
+                e.stackTrace.toString()
+            )
             e.printStackTrace()
         }
     }
 
-    private fun removeView(finalViewID: String?, mNativeView: View?) {
+    private fun changeNativeViewVisibility(
+        uri: Uri,
+        seqid: Int,
+        method: String,
+        callbackFun: String,
+        isVisiable: Boolean
+    ) {
         try {
-            hideView(finalViewID, mNativeView)
-            mNativeView?.parent?.let {
-                (it as ViewGroup).removeView(mNativeView)
+            var viewID: String? = ""
+            try {
+                viewID = uri.getQueryParameter("viewKey")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            resetADHeight(viewID, isVisiable, object : AAFDataCallback<Boolean>() {
+                override fun onSuccess(aBoolean: Boolean?) {
+                    mJsBridge.response(callbackFun, seqid, method, "showNativeView success")
+                    resetAll()
+                }
+
+                override fun onError(errorCode: Int, msg: String) {
+                    mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Busy, msg)
+                }
+            })
+        } catch (var11: Exception) {
+            mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
+        }
+    }
+
+    fun showNativeView(uri: Uri, seqid: Int, method: String, callbackFun: String) {
+        changeNativeViewVisibility(uri, seqid, method, callbackFun, true)
+    }
+
+    fun hideNativeView(uri: Uri, seqid: Int, method: String, callbackFun: String) {
+        changeNativeViewVisibility(uri, seqid, method, callbackFun, false)
+    }
+
+    private fun removeView(
+        finalViewID: String?,
+        mNativeView: View?,
+        callback: AAFDataCallback<Boolean>?
+    ) {
+        try {
+            if (mNativeView != null) {
+                resetADHeight(finalViewID, false, callback)
+                if (null != mNativeView.parent) {
+                    (mNativeView.parent as ViewGroup).removeView(mNativeView)
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun resetADHeight(key: String?, height: Int) {
-        if (!TextUtils.isEmpty(key)) {
-            webView?.evaluateJavascript("javaScript:getNativeViewPosition('$key')") { value ->
+    fun removeNativeView(uri: Uri, seqid: Int, method: String?, callbackFun: String?) {
+        try {
+            var viewID: String? = ""
+            try {
+                viewID = uri.getQueryParameter("viewKey")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            val mNativeView = nativeViewMap[viewID]
+            if (null != mNativeView) {
+                val finalViewID = viewID
                 ThreadManager.getInstance().runOnUIThread {
-                    val mNativeView = mViewMap[key]
-                    if (mNativeView != null) {
-                        val top = ConvertUtils.parseFloat(value, -1f)
-                        if (top > 0) {
-                            val params = mNativeView.layoutParams as AbsoluteLayout.LayoutParams
-                            params.y = DisplayUtil.dip2pxWithDefaultDensity(ZixieContext.applicationContext, top)
-                            mNativeView.layoutParams = params
-                            webView.loadUrl("javaScript:setNativeViewHeight('" + key + "'," + DisplayUtil.px2dipWithDefaultDensity(ZixieContext.applicationContext, height.toFloat()) + ")")
-                            if (height > 0) {
-                                mNativeView.visibility = View.VISIBLE
-                            } else {
-                                mNativeView.visibility = View.GONE
-                            }
-                        }
-                    }
+                    removeView(finalViewID, mNativeView, null)
+                    resetAll()
+                    mJsBridge.response(callbackFun, seqid, method, null)
+                }
+            } else {
+                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
+            }
+        } catch (var11: Exception) {
+            mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
+        }
+    }
+
+    private fun removeAllNativeViewItem() {
+        ThreadManager.getInstance().runOnUIThread {
+            val it = nativeViewMap.entries.iterator()
+            while (it.hasNext()) {
+                val entry = it.next()
+                try {
+                    removeView(entry.key, entry.value, null)
+                    it.remove()
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
-
     }
 
-    private fun resetAll() {
+    fun removeAllNativeView(uri: Uri?, seqid: Int, method: String?, callbackFun: String?) {
+        try {
+            removeAllNativeViewItem()
+            resetAll()
+            mJsBridge.response(callbackFun, seqid, method, null)
+        } catch (var11: Exception) {
+            mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
+        }
+    }
+
+
+    fun resetAll() {
         ThreadManager.getInstance().start({
             ThreadManager.getInstance().runOnUIThread {
-                val viewInfo: MutableIterator<Map.Entry<String?, View?>> = mViewMap.entries.iterator()
-                while (viewInfo.hasNext()) {
-                    val (key, view) = viewInfo.next()
+                val it = nativeViewMap.entries.iterator()
+                while (it.hasNext()) {
+                    val entry = it.next()
                     try {
-                        view?.let {
-                            if (it.visibility == View.VISIBLE) {
-                                resetADHeight(key, it.height)
-                            } else if (it.parent == null) {
-                                viewInfo.remove()
+                        entry.value?.let { view ->
+                            if (view.visibility == View.VISIBLE) {
+                                resetADHeight(entry.key, true, null)
+                            } else if (view.parent == null) {
+                                resetADHeight(entry.key, false, null)
+                                it.remove()
                             }
                         }
                     } catch (e: Exception) {
@@ -104,100 +293,4 @@ class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) : NativeJsB
             }
         }, 500L)
     }
-
-    fun removeAll() {
-        ThreadManager.getInstance().runOnUIThread {
-            val viewInfo: MutableIterator<Map.Entry<String?, View?>> = mViewMap.entries.iterator()
-            while (viewInfo.hasNext()) {
-                val (key, value) = viewInfo.next()
-                try {
-                    removeView(key, value)
-                    viewInfo.remove()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
-
-    fun addNativeView(uri: Uri, seqid: Int, method: String?, callbackFun: String?) {
-        try {
-            var finalViewID = getViewID(uri)
-            if (!TextUtils.isEmpty(finalViewID)) {
-                if (mViewMap[finalViewID] == null) {
-                    ThreadManager.getInstance().runOnUIThread {
-                        val view = DebugH5NativeWebFragment.getTextView(webView.context)
-                        webView.addView(view)
-                        addNativeView(finalViewID, view)
-                        view.visibility = View.GONE
-                        resetADHeight(finalViewID, DebugH5NativeWebFragment.getHeight())
-                        mJsBridge.response(callbackFun, seqid, method, "")
-                    }
-                } else {
-                    mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
-                }
-            } else {
-                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
-            }
-        } catch (e: Exception) {
-            mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
-            e.printStackTrace()
-        }
-    }
-
-    fun showNativeView(uri: Uri, seqid: Int, method: String?, callbackFun: String?) {
-        try {
-            var finalViewID = getViewID(uri)
-            val mNativeView = mViewMap[finalViewID]
-            if (null != mNativeView) {
-                ThreadManager.getInstance().runOnUIThread {
-                    resetADHeight(finalViewID, mNativeView.height)
-                    resetAll()
-                    mJsBridge.response(callbackFun, seqid, method, "showNativeView success")
-                }
-            } else {
-                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
-            }
-        } catch (var11: Exception) {
-            mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
-        }
-    }
-
-    fun hideNativeView(uri: Uri, seqid: Int, method: String?, callbackFun: String?) {
-        try {
-            var finalViewID = getViewID(uri)
-            val mNativeView = mViewMap[finalViewID]
-            if (null != mNativeView) {
-                ThreadManager.getInstance().runOnUIThread {
-                    hideView(finalViewID, mNativeView)
-                    resetAll()
-                    mJsBridge.response(callbackFun, seqid, method, null)
-                }
-            } else {
-                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
-            }
-        } catch (var11: Exception) {
-            mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
-        }
-    }
-
-    fun removeNativeView(uri: Uri, seqid: Int, method: String?, callbackFun: String?) {
-        try {
-            var finalViewID = getViewID(uri)
-            val mNativeView = mViewMap[finalViewID]
-            if (null != mNativeView) {
-                ThreadManager.getInstance().runOnUIThread {
-                    removeView(finalViewID, mNativeView)
-                    resetAll()
-                    mJsBridge.response(callbackFun, seqid, method, null)
-                }
-            } else {
-                mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_IllegalArgument)
-            }
-        } catch (var11: Exception) {
-            mJsBridge.responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception)
-        }
-    }
-
-
 }
