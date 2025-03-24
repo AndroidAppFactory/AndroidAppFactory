@@ -24,7 +24,6 @@ public class DebugWebViewWithNativeFragment extends CommonWebviewFragment {
     @Override
     protected void actionBeforeLoadURL(String url) {
         super.actionBeforeLoadURL(url);
-        mBaseJsBridgeProxy.removeAll();
     }
 
     protected DebugJsBridgeProxy getJsBridgeProxy() {
