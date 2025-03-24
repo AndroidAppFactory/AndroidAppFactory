@@ -6,5 +6,9 @@
     <string name="com_bihe0832_praise_positive">positive</string>
     <string name="com_bihe0832_praise_negative">negative</string>
     <string name="name_permission_debug">M3U8 Download Need to &lt;font color =\'#38ADFF\'&gt;&lt;b&gt;Download data to SDCard&lt;/b&gt;&lt;/font&gt;</string>
-
+    <string name="tab_1">tab1</string>
+    <string name="tab_2">tab2</string>
+    <string name="tab_3">tab3</string>
+    <string name="tab_4">tab4</string>
+    <string name="tab_5">tab5</string>
 </resources>

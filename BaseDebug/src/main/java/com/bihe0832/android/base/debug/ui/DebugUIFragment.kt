@@ -113,9 +113,9 @@ class DebugUIFragment : DebugEnvFragment() {
         })
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean, hasCreateView: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser, hasCreateView)
-        if(hasCreateView && isVisibleToUser){
+    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+        super.onLocaleChanged(lastLocale, toLanguageTag)
+        if(isRootViewCreated()){
             mDataLiveData.initData()
         }
     }

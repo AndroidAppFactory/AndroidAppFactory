@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
+import java.util.Locale
 
 /**
  * @author zixie code@bihe0832.com
@@ -177,6 +178,13 @@ open class BaseFragment : SwipeBackFragment() {
 
     open fun resetDensity(): Boolean {
         return true
+    }
+
+    /**
+     * 需要外部主动调用触发，不会自动触发
+     */
+    open fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+
     }
 
     fun dispatchActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

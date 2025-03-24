@@ -19,11 +19,11 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil;
  * Description: Description
  */
 class DebugSvgaBottomBarTab extends SvgaBottomBarTab {
-    public DebugSvgaBottomBarTab(Context context, int normalImageRes, int selectedImageRes, String actionSvga, String title) {
+    public DebugSvgaBottomBarTab(Context context, int normalImageRes, int selectedImageRes, String actionSvga, int title) {
         super(context, normalImageRes, selectedImageRes, actionSvga, title);
     }
 
-    public DebugSvgaBottomBarTab(Context context, AttributeSet attrs, int defStyleAttr, int normalImageRes, int selectedImageRes, String actionSvga, String title) {
+    public DebugSvgaBottomBarTab(Context context, AttributeSet attrs, int defStyleAttr, int normalImageRes, int selectedImageRes, String actionSvga, int title) {
         super(context, attrs, defStyleAttr, normalImageRes, selectedImageRes, actionSvga, title);
     }
 

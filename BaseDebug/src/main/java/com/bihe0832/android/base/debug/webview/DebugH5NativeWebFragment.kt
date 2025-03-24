@@ -8,7 +8,6 @@ import android.widget.TextView
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.webview.nativeimpl.NativeWebView
 import com.bihe0832.android.framework.ui.BaseFragment
-import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 
 class DebugH5NativeWebFragment : BaseFragment() {

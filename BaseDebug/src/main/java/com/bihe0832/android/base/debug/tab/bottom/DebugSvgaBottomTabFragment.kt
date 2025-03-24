@@ -34,7 +34,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
                         R.drawable.icon_camera,
                     R.drawable.icon_author,
                     "ic_voice.svga",
-                    "弹框"
+                    R.string.tab_1
                 )
             )
             add(
@@ -43,7 +43,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
                         R.drawable.icon_author,
                         R.drawable.icon_camera,
                     "ic_voice.svga",
-                    "下载"
+                    R.string.tab_2
                 )
             )
             add(
@@ -52,7 +52,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
                         R.drawable.icon_feedback,
                         R.drawable.icon_cloud,
                     "ic_voice.svga",
-                    "权限"
+                    R.string.tab_3
                 )
             )
             add(
@@ -61,7 +61,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
                         R.drawable.icon_cloud,
                         R.drawable.icon_feedback,
                     "ic_voice.svga",
-                    "文件"
+                    R.string.tab_4
                 )
             )
             add(
@@ -70,7 +70,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
                         R.drawable.icon_cloud,
                         R.drawable.icon_feedback,
                     "ic_voice.svga",
-                    "文件"
+                    R.string.tab_5
                 )
             )
         }.let {
@@ -106,6 +106,5 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
     override fun onBottomBarTabReselected(position: Int) {
         getBottomBar().getItem(position).hideUnreadMsg()
     }
-
 
 }
