@@ -197,6 +197,9 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-language",
                 "apidependenciesList": [
                         "Framework","CommonList"
+                ],
+                "specialdependenciesList": [
+                        "kapt": ["RouterCompiler"]
                 ]
         ]
 

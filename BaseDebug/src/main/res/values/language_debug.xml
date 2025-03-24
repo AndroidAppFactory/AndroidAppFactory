@@ -4,4 +4,9 @@
     <string name="com_bihe0832_praise_positive">赐我力量</string>
     <string name="com_bihe0832_praise_negative">吐槽一下</string>
     <string name="name_permission_debug">M3U8下载助手需要将&lt;font color =\'#38ADFF\'&gt;&lt;b&gt;下载数据存储在SD卡&lt;/b&gt;&lt;/font&gt;才能访问，当前手机尚未开启存储权限，请点击「点击开启」前往设置！</string>
+    <string name="tab_1">栏目1</string>
+    <string name="tab_2">栏目2</string>
+    <string name="tab_3">栏目3</string>
+    <string name="tab_4">栏目4</string>
+    <string name="tab_5">栏目5</string>
 </resources>

@@ -5,41 +5,88 @@ import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
-import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
+import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.common.ui.bottom.bar.CommonMainFragment
 import com.bihe0832.android.common.ui.bottom.bar.SvgaBottomBarTab
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.framework.ui.main.CommonEmptyFragment
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab
+import java.util.Locale
 
 class SvgaBottomTabFragment : CommonMainFragment() {
+
+    private val mTab by lazy {
+        ArrayList<BaseBottomBarTab>().apply {
+            add(
+                SvgaBottomBarTab(
+                    context,
+                    R.drawable.icon_camera,
+                    R.drawable.icon_author,
+                    "ic_voice.svga",
+                    R.string.tab_1
+                )
+            )
+            add(
+                SvgaBottomBarTab(
+                    context,
+                    R.drawable.icon_author,
+                    R.drawable.icon_camera,
+                    "ic_voice.svga",
+                    R.string.tab_2
+                )
+            )
+            add(
+                SvgaBottomBarTab(
+                    context,
+                    R.drawable.icon_feedback,
+                    R.drawable.icon_cloud,
+                    "ic_voice.svga",
+                    R.string.tab_3
+                )
+            )
+            add(
+                SvgaBottomBarTab(
+                    context,
+                    R.drawable.icon_cloud,
+                    R.drawable.icon_feedback,
+                    "ic_voice.svga",
+                    R.string.tab_4
+                )
+            )
+            add(
+                SvgaBottomBarTab(
+                    context,
+                    R.drawable.icon_cloud,
+                    R.drawable.icon_feedback,
+                    "ic_voice.svga",
+                    R.string.tab_5
+                )
+            )
+        }
+    }
+
+    private val mFragments by lazy {
+        ArrayList<BaseFragment>().apply {
+            add(DebugDialogFragment())
+            add(DebugDownloadFragment())
+            add(CommonEmptyFragment.newInstance("Test", Color.GREEN))
+            add(DebugPermissionFragment())
+            add(DebugUIFragment())
+        }
+    }
 
     override fun getDefaultTabID(): Int {
         return 1
     }
 
     override fun getFragments(): ArrayList<BaseFragment> {
-        return ArrayList<BaseFragment>().apply {
-            add(DebugDialogFragment())
-            add(DebugDownloadFragment())
-            add(CommonEmptyFragment.newInstance("Test", Color.GREEN))
-            add(DebugPermissionFragment())
-            add(DebugFileFragment())
-        }
+        return mFragments;
     }
 
     override fun getBottomBarTabs(): ArrayList<BaseBottomBarTab> {
-        ArrayList<BaseBottomBarTab>().apply {
-            add(SvgaBottomBarTab(context, R.drawable.icon_camera,  R.drawable.icon_author, "ic_voice.svga", "弹框"))
-            add(SvgaBottomBarTab(context,  R.drawable.icon_author, R.drawable.icon_camera, "ic_voice.svga", "下载"))
-            add(SvgaBottomBarTab(context,  R.drawable.icon_feedback, R.drawable.icon_cloud, "ic_voice.svga", "权限"))
-            add(SvgaBottomBarTab(context, R.drawable.icon_cloud,  R.drawable.icon_feedback, "ic_voice.svga", "文件"))
-            add(SvgaBottomBarTab(context, R.drawable.icon_cloud,  R.drawable.icon_feedback, "ic_voice.svga", "文件"))
-        }.let {
-            return it
-        }
+        return mTab
     }
 
     override fun initView(view: View) {
@@ -57,4 +104,14 @@ class SvgaBottomTabFragment : CommonMainFragment() {
 
     }
 
+    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+        if (isRootViewCreated()){
+            mTab.forEach {
+                (it as? SvgaBottomBarTab)?.updateTabText()
+            }
+            mFragments.forEach {
+                it.onLocaleChanged(lastLocale, toLanguageTag)
+            }
+        }
+    }
 }

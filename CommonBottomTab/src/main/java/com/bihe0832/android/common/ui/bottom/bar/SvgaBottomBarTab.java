@@ -4,13 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.bihe0832.android.common.bottom.bar.R;
 import com.bihe0832.android.common.svga.SVGAHelperKt;
+import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 import com.bihe0832.android.lib.ui.bottom.bar.BaseBottomBarTab;
 import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground;
@@ -21,6 +20,7 @@ import com.opensource.svgaplayer.SVGAImageView;
  * height:56
  */
 public class SvgaBottomBarTab extends BaseBottomBarTab {
+
     protected SVGAImageView mIconView;
     protected TextView mTitleView;
     protected TextViewWithBackground mTipsView;
@@ -28,16 +28,20 @@ public class SvgaBottomBarTab extends BaseBottomBarTab {
     protected String mActionSvga = "";
     protected int mNormalImageRes = -1;
     protected int mSelectedImageRes = -1;
+    protected int mTitleRes = -1;
 
-    public SvgaBottomBarTab(Context context, @DrawableRes int normalImageRes, @DrawableRes int selectedImageRes, String actionSvga, String title) {
+    public SvgaBottomBarTab(Context context, @DrawableRes int normalImageRes, @DrawableRes int selectedImageRes,
+            String actionSvga, int title) {
         this(context, null, 0, normalImageRes, selectedImageRes, actionSvga, title);
     }
 
-    public SvgaBottomBarTab(Context context, AttributeSet attrs, int defStyleAttr, int normalImageRes, int selectedImageRes, String actionSvga, String title) {
-        super(context, attrs, defStyleAttr, normalImageRes, title);
+    public SvgaBottomBarTab(Context context, AttributeSet attrs, int defStyleAttr, int normalImageRes,
+            int selectedImageRes, String actionSvga, int title) {
+        super(context, attrs, defStyleAttr, normalImageRes, context.getString(title));
         mActionSvga = actionSvga;
         mNormalImageRes = normalImageRes;
         mSelectedImageRes = selectedImageRes;
+        mTitleRes = title;
     }
 
     @Override
@@ -110,5 +114,9 @@ public class SvgaBottomBarTab extends BaseBottomBarTab {
             mIconView.setImageResource(mNormalImageRes);
             mTitleView.setTextColor(ThemeResourcesManager.INSTANCE.getColor(R.color.com_bihe0832_tab_unselect));
         }
+    }
+
+    public void updateTabText() {
+        getTitleView().setText(ZixieContext.INSTANCE.getApplicationContext().getString(mTitleRes));
     }
 }
