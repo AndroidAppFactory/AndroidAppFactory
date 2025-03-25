@@ -17,8 +17,22 @@ import java.util.Locale
 
 class SvgaBottomTabFragment : CommonMainFragment() {
 
-    private val mTab by lazy {
-        ArrayList<BaseBottomBarTab>().apply {
+    override fun getDefaultTabID(): Int {
+        return 1
+    }
+
+    override fun initFragments(): ArrayList<BaseFragment> {
+        return ArrayList<BaseFragment>().apply {
+            add(DebugDialogFragment())
+            add(DebugDownloadFragment())
+            add(CommonEmptyFragment.newInstance("Test", Color.GREEN))
+            add(DebugPermissionFragment())
+            add(DebugUIFragment())
+        };
+    }
+
+    override fun initBottomBarTabs(): ArrayList<BaseBottomBarTab> {
+        return ArrayList<BaseBottomBarTab>().apply {
             add(
                 SvgaBottomBarTab(
                     context,
@@ -67,28 +81,6 @@ class SvgaBottomTabFragment : CommonMainFragment() {
         }
     }
 
-    private val mFragments by lazy {
-        ArrayList<BaseFragment>().apply {
-            add(DebugDialogFragment())
-            add(DebugDownloadFragment())
-            add(CommonEmptyFragment.newInstance("Test", Color.GREEN))
-            add(DebugPermissionFragment())
-            add(DebugUIFragment())
-        }
-    }
-
-    override fun getDefaultTabID(): Int {
-        return 1
-    }
-
-    override fun getFragments(): ArrayList<BaseFragment> {
-        return mFragments;
-    }
-
-    override fun getBottomBarTabs(): ArrayList<BaseBottomBarTab> {
-        return mTab
-    }
-
     override fun initView(view: View) {
         super.initView(view)
         ThreadManager.getInstance().start({
@@ -99,19 +91,16 @@ class SvgaBottomTabFragment : CommonMainFragment() {
                 getBottomBar().getItem(3).showUnreadMsg(200)
                 getBottomBar().getItem(4).showUnreadMsg(-1)
             }
-            changeTab(2)
         }, 3)
 
     }
 
     override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
-        if (isRootViewCreated()){
-            mTab.forEach {
+        if (isRootViewCreated()) {
+            bottomBarTabs.forEach {
                 (it as? SvgaBottomBarTab)?.updateTabText()
             }
-            mFragments.forEach {
-                it.onLocaleChanged(lastLocale, toLanguageTag)
-            }
         }
+        super.onLocaleChanged(lastLocale, toLanguageTag)
     }
 }
