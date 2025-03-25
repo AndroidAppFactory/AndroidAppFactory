@@ -15,7 +15,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
         return 1
     }
 
-    override fun getFragments(): ArrayList<BaseFragment> {
+    override fun initFragments(): ArrayList<BaseFragment> {
         return ArrayList<BaseFragment>().apply {
             add(CommonEmptyFragment.newInstance("Test1", Color.GREEN))
             add(CommonEmptyFragment.newInstance("Test2", Color.BLUE))
@@ -26,7 +26,7 @@ class DebugSvgaBottomTabFragment : CommonMainFragment() {
         }
     }
 
-    override fun getBottomBarTabs(): ArrayList<BaseBottomBarTab> {
+    override fun initBottomBarTabs(): ArrayList<BaseBottomBarTab> {
         ArrayList<BaseBottomBarTab>().apply {
             add(
                 DebugSvgaBottomBarTab(

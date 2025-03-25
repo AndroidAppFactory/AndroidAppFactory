@@ -115,8 +115,8 @@ class DebugUIFragment : DebugEnvFragment() {
 
     override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
         super.onLocaleChanged(lastLocale, toLanguageTag)
-        if(isRootViewCreated()){
-            mDataLiveData.initData()
-        }
+//        if(isRootViewCreated()){
+//            mDataLiveData.initData()
+//        }
     }
 }

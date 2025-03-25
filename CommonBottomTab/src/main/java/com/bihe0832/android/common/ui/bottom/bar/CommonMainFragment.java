@@ -21,9 +21,17 @@ public abstract class CommonMainFragment extends BaseFragment {
 
     protected abstract int getDefaultTabID();
 
-    protected abstract ArrayList<BaseFragment> getFragments();
+    protected abstract ArrayList<BaseFragment> initFragments();
 
-    protected abstract ArrayList<BaseBottomBarTab> getBottomBarTabs();
+    protected abstract ArrayList<BaseBottomBarTab> initBottomBarTabs();
+
+    public ArrayList<BaseBottomBarTab> getBottomBarTabs() {
+        return mBottomBarTabs;
+    }
+
+    public ArrayList<BaseFragment> getFragments() {
+        return mFragments;
+    }
 
     @Override
     protected int getLayoutID() {
@@ -33,27 +41,21 @@ public abstract class CommonMainFragment extends BaseFragment {
     @Override
     protected void initView(View view) {
         super.initView(view);
-
-        mFragments = getFragments();
-        BaseFragment[] list = mFragments.toArray(new BaseFragment[0]);
-        loadMultipleRootFragment(R.id.fragment_content, getDefaultTabID(), list);
-
-        mBottomBarTabs = getBottomBarTabs();
+        mBottomBarTabs = initBottomBarTabs();
         mBottomBar = view.findViewById(R.id.main_fragment_bottomBar);
-        mBottomBar.setDefaultPosition(getDefaultTabID());
         mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, int prePosition) {
-                showHideFragment(mFragments.get(position), mFragments.get(prePosition));
+                showHideFragment(getFragments().get(position), getFragments().get(prePosition));
 
-                if (position < mFragments.size()) {
-                    mFragments.get(position).setUserVisibleHint(true);
+                if (position < getFragments().size()) {
+                    getFragments().get(position).setUserVisibleHint(true);
                 }
 
-                if (position != prePosition && prePosition < mFragments.size()) {
-                    mFragments.get(prePosition).setUserVisibleHint(false);
+                if (position != prePosition && prePosition < getFragments().size()) {
+                    getFragments().get(prePosition).setUserVisibleHint(false);
                 }
-                
+
                 onBottomBarTabSelected(position, prePosition);
             }
 
@@ -67,9 +69,10 @@ public abstract class CommonMainFragment extends BaseFragment {
                 onBottomBarTabReselected(position);
             }
         });
-        for (int i = 0; i < mBottomBarTabs.size(); i++) {
-            mBottomBar.addItem(mBottomBarTabs.get(i));
+        for (int i = 0; i < getBottomBarTabs().size(); i++) {
+            mBottomBar.addItem(getBottomBarTabs().get(i));
         }
+        loadFragments();
     }
 
     public void onBottomBarTabSelected(int position, int prePosition) {
@@ -86,6 +89,17 @@ public abstract class CommonMainFragment extends BaseFragment {
 
     }
 
+    public void loadFragments() {
+        mFragments = initFragments();
+        BaseFragment[] list = getFragments().toArray(new BaseFragment[0]);
+        loadMultipleRootFragment(R.id.fragment_content, mBottomBar.getCurrentItemPosition(), list);
+    }
+
+    @Override
+    public void onLocaleChanged(@NonNull Locale lastLocale, @NonNull Locale toLanguageTag) {
+        loadFragments();
+    }
+
     protected void changeTab(final int position) {
         if (position < ((ViewGroup) mBottomBar.getChildAt(0)).getChildCount()) {
             mBottomBar.setCurrentItem(position);
@@ -99,9 +113,9 @@ public abstract class CommonMainFragment extends BaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser, boolean hasCreateView) {
         super.setUserVisibleHint(isVisibleToUser, hasCreateView);
-        if (mFragments.size() > mBottomBar.getCurrentItemPosition() && null != mFragments.get(
+        if (getFragments().size() > mBottomBar.getCurrentItemPosition() && null != getFragments().get(
                 mBottomBar.getCurrentItemPosition())) {
-            mFragments.get(mBottomBar.getCurrentItemPosition()).setUserVisibleHint(isVisibleToUser);
+            getFragments().get(mBottomBar.getCurrentItemPosition()).setUserVisibleHint(isVisibleToUser);
         }
     }
 }

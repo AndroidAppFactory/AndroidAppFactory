@@ -17,7 +17,7 @@ class DebugSimpleBottomTabFragment : CommonMainFragment() {
         return 1
     }
 
-    override fun getFragments(): ArrayList<BaseFragment> {
+    override fun initFragments(): ArrayList<BaseFragment> {
         return ArrayList<BaseFragment>().apply {
             add(DebugDialogFragment())
             add(DebugDownloadFragment())
@@ -26,7 +26,7 @@ class DebugSimpleBottomTabFragment : CommonMainFragment() {
         }
     }
 
-    override fun getBottomBarTabs(): ArrayList<BaseBottomBarTab> {
+    override fun initBottomBarTabs(): ArrayList<BaseBottomBarTab> {
         ArrayList<BaseBottomBarTab>().apply {
             add(SimpleBottomBarTab(context, R.drawable.icon_camera, "弹框"))
             add(SimpleBottomBarTab(context, R.drawable.icon_author, "下载"))
