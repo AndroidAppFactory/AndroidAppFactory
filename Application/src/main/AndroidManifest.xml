@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        package="com.bihe0832.android.app">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bihe0832.android.app">
+
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -15,30 +16,30 @@
 
 
     <application
-            android:name="com.bihe0832.android.app.Application"
-            tools:replace="android:name">
+        android:name="com.bihe0832.android.app.Application"
+        tools:replace="android:name">
 
         <activity
-                android:name="com.bihe0832.android.app.about.AboutActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.app.about.AboutActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.app.message.AAFMessageActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.app.message.AAFMessageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.common.tbswebview.WebPageActivity"
-                android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
-                android:exported="true"
-                android:hardwareAccelerated="true"
-                android:process="@string/com_bihe0832_web_process_name"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme"
-                android:windowSoftInputMode="adjustPan|stateHidden">
+            android:name="com.bihe0832.android.common.tbswebview.WebPageActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:process="@string/com_bihe0832_web_process_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -47,22 +48,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                        android:host="*.ptlogin2.qq.com"
-                        android:scheme="https" />
+                    android:host="*.ptlogin2.qq.com"
+                    android:scheme="https" />
 
             </intent-filter>
 
         </activity>
 
         <activity
-                android:name="com.bihe0832.android.common.webview.WebPageActivity"
-                android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
-                android:exported="true"
-                android:hardwareAccelerated="true"
-                android:process="@string/com_bihe0832_web_process_name"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme"
-                android:windowSoftInputMode="adjustPan|stateHidden">
+            android:name="com.bihe0832.android.common.webview.WebPageActivity"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:process="@string/com_bihe0832_web_process_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -70,11 +71,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                        android:host="*.ptlogin2.qq.com"
-                        android:scheme="https" />
+                    android:host="*.ptlogin2.qq.com"
+                    android:scheme="https" />
 
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.bihe0832.android.app.language.LanguageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|locale|layoutDirection"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
     </application>
 </manifest>

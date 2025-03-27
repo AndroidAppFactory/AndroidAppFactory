@@ -65,6 +65,4 @@ public class RouterConstants {
     public static final String INTENT_EXTRA_KEY_SHOW_LOG_NUM = "log.num";
     public static final String INTENT_EXTRA_KEY_SHOW_LOG_SHOW_LINE = "log.line";
 
-    // 多语言设置
-    public static final String MODULE_NAME_LANGUAGE = "language";
 }

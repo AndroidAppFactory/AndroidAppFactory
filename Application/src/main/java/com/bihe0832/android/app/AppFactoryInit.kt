@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Process
 import android.util.Log
 import android.webkit.WebView
+import com.bihe0832.android.app.language.AAFLanguageManager
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
@@ -77,6 +78,7 @@ object AppFactoryInit {
                 AAFFileWrapper.autoClear(DateUtil.MILLISECOND_OF_MONTH)
             }
             AAFMessageManager.initModule(ctx)
+            AAFLanguageManager.init(ctx)
             ZLog.d(
                 ZixieCoreInit.TAG,
                 "Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL,
@@ -84,10 +86,16 @@ object AppFactoryInit {
         }
     }
 
-    private fun initWebview(application: android.app.Application, processInfo: ActivityManager.RunningAppProcessInfo) {
+    private fun initWebview(
+        application: android.app.Application,
+        processInfo: ActivityManager.RunningAppProcessInfo
+    ) {
         if (processInfo.processName.equals(application.packageName, ignoreCase = true)) {
             ThreadManager.getInstance().start({
-                ZLog.e(ZixieCoreInit.TAG, "Application process initWebview：" + processInfo.processName)
+                ZLog.e(
+                    ZixieCoreInit.TAG,
+                    "Application process initWebview：" + processInfo.processName
+                )
                 ZLog.d(ZixieCoreInit.TAG, "" + QbSdk.getTbsVersion(application.applicationContext))
 
                 WebViewHelper.init(
@@ -98,15 +106,24 @@ object AppFactoryInit {
                             TbsPrivacyAccess.ConfigurablePrivacy.MODEL.name,
                             ManufacturerUtil.MODEL,
                         )
-                        putString(TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name, ZixieContext.deviceId)
-                        putString(TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name, ZixieContext.deviceId)
+                        putString(
+                            TbsPrivacyAccess.ConfigurablePrivacy.ANDROID_ID.name,
+                            ZixieContext.deviceId
+                        )
+                        putString(
+                            TbsPrivacyAccess.ConfigurablePrivacy.SERIAL.name,
+                            ZixieContext.deviceId
+                        )
                     },
                     false,
                 )
             }, 5)
         } else {
             if (BuildUtils.SDK_INT >= Build.VERSION_CODES.P) {
-                ZLog.d(ZixieCoreInit.TAG, "Application setDataDirectorySuffix " + processInfo.processName)
+                ZLog.d(
+                    ZixieCoreInit.TAG,
+                    "Application setDataDirectorySuffix " + processInfo.processName
+                )
                 WebView.setDataDirectorySuffix(processInfo.processName)
             }
         }
@@ -142,7 +159,7 @@ object AppFactoryInit {
             val runningApps = am.runningAppProcesses
             for (it in runningApps) {
                 if (it.pid == Process.myPid() && it.processName != null &&
-                        it.processName.contains(application.getPackageName())
+                    it.processName.contains(application.getPackageName())
                 ) {
                     ZLog.e(
                         ZixieCoreInit.TAG,
@@ -150,17 +167,17 @@ object AppFactoryInit {
                     )
                     val processName = it.processName
                     if (!processName.equals(
-                                application.packageName + application.applicationContext.getString(R.string.process_name_domain),
-                                ignoreCase = true,
-                            )
+                            application.packageName + application.applicationContext.getString(R.string.process_name_domain),
+                            ignoreCase = true,
+                        )
                     ) {
                         initCore(application, processName)
                         if (processName.equals(application.packageName, ignoreCase = true)) {
                             initExtra(application)
                         } else if (processName.equals(
-                                    application.packageName + application.applicationContext.getString(R.string.com_bihe0832_lock_screen_process_name),
-                                    ignoreCase = true,
-                                )
+                                application.packageName + application.applicationContext.getString(R.string.com_bihe0832_lock_screen_process_name),
+                                ignoreCase = true,
+                            )
                         ) {
                             ZLog.e(
                                 ZixieCoreInit.TAG,

@@ -10,6 +10,7 @@ package com.bihe0832.android.base.debug.ui
 
 
 import android.view.View
+import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.theme.ThemeActivity
@@ -18,7 +19,6 @@ import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
-import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.language.MultiLanguageHelper
@@ -115,8 +115,8 @@ class DebugUIFragment : DebugEnvFragment() {
 
     override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
         super.onLocaleChanged(lastLocale, toLanguageTag)
-//        if(isRootViewCreated()){
-//            mDataLiveData.initData()
-//        }
+        if(isRootViewCreated()){
+            mDataLiveData.initData()
+        }
     }
 }

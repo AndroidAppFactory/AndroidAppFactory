@@ -2,6 +2,7 @@ package com.bihe0832.android.framework
 
 
 import android.app.Application
+import android.content.Context
 import android.os.Environment
 import android.util.Log
 import com.bihe0832.android.framework.constant.Constants
@@ -9,12 +10,14 @@ import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.file.FileUtils
+import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
 import java.io.File
+import java.util.Locale
 
 
 /**
@@ -114,5 +117,10 @@ object ZixieCoreInit {
 
     fun initAfterAgreePrivacy(application: Application) {
 
+    }
+
+    fun updateApplicationLocale(context: Context,locale: Locale) {
+        MultiLanguageHelper.setLanguageConfig(context, locale)
+        ZixieContext.updateApplicationContext(context, true)
     }
 }
