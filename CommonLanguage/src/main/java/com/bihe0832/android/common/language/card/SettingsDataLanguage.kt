@@ -12,7 +12,8 @@ import java.util.Locale
  */
 class SettingsDataLanguage : CardBaseModule() {
     var title: String = ""
-    var locale:Locale? = null
+    var locale: Locale? = null
+    var useLanguage = false
 
     override fun getResID(): Int {
         return R.layout.card_settings_language

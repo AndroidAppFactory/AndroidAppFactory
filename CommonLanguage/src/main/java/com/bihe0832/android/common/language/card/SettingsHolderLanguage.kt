@@ -25,7 +25,13 @@ class SettingsHolderLanguage(view: View, context: Context) : CardBaseHolder(view
     override fun initData(item: CardBaseModule?) {
         (item as? SettingsDataLanguage)?.let { settingData ->
             settingTitle?.setText(settingData.title)
-            if (MultiLanguageHelper.getLanguageConfig(context).equals(settingData.locale)) {
+            val configLocale = MultiLanguageHelper.getLanguageConfig(context)
+            val isCurrent = if (settingData.useLanguage) {
+                configLocale.language.equals(settingData.locale?.language)
+            } else {
+                configLocale.equals(settingData.locale)
+            }
+            if (isCurrent) {
                 mStatus?.visibility = View.VISIBLE
             } else {
                 mStatus?.visibility = View.GONE

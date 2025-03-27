@@ -15,5 +15,6 @@ public class RouterConstants extends com.bihe0832.android.framework.router.Route
 
     public static final String MODULE_NAME_MESSAGE = "message";
 
-
+    // 多语言设置
+    public static final String MODULE_NAME_LANGUAGE = "language";
 }

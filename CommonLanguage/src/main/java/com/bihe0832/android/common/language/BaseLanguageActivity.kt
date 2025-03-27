@@ -5,19 +5,18 @@ import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.language.MultiLanguageHelper
-import com.bihe0832.android.lib.language.MultiLanguageHelper.TAG
-import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.router.annotation.Module
 import java.util.Locale
 
 /**
  * @author zixie code@bihe0832.com Created on 2025/2/17. Description: Description
  */
-@Module(RouterConstants.MODULE_NAME_LANGUAGE)
-open class LanguageActivity : CommonListActivity() {
+
+abstract class BaseLanguageActivity : CommonListActivity() {
+
+    abstract fun getLanguageList(): MutableList<SettingsDataLanguage>
 
     val mDataList = ArrayList<CardBaseModule>()
 
@@ -50,7 +49,7 @@ open class LanguageActivity : CommonListActivity() {
 
             override fun initData() {
                 mDataList.clear()
-                mDataList.addAll(getTempData())
+                mDataList.addAll(getLanguageList())
                 postValue(mDataList)
             }
 
@@ -75,13 +74,12 @@ open class LanguageActivity : CommonListActivity() {
             updateApplicationLocale(settingData.locale!!)
             onLocaleChanged(getLastLocale(), settingData.locale!!)
         } else {
-            ZixieContext.showToast(this@LanguageActivity.resources.getString(R.string.toast_settings_language_tips))
+            ZixieContext.showToast(this@BaseLanguageActivity.resources.getString(R.string.toast_settings_language_tips))
         }
     }
 
     fun updateApplicationLocale(locale: Locale) {
-        MultiLanguageHelper.setLanguageConfig(this, locale)
-        ZixieContext.updateApplicationContext(this, true)
+        ZixieCoreInit.updateApplicationLocale(this, locale)
         MultiLanguageHelper.modifyContextLanguageConfig(resources, locale)
     }
 
@@ -89,19 +87,5 @@ open class LanguageActivity : CommonListActivity() {
         super.onLocaleChanged(lastLocale, newLocale)
         iniToolBar()
         mDataLiveData.refresh()
-    }
-
-    fun getLanguageItem(titleName: String, localeInfo: Locale): SettingsDataLanguage {
-        return SettingsDataLanguage().apply {
-            this.title = titleName
-            this.locale = localeInfo
-        }
-    }
-
-    open fun getTempData(): List<CardBaseModule> {
-        return mutableListOf<CardBaseModule>().apply {
-            add(getLanguageItem("中文", Locale.CHINESE))
-            add(getLanguageItem("English", Locale.US))
-        }
     }
 }
