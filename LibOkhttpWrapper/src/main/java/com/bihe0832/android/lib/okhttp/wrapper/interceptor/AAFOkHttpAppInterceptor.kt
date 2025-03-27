@@ -20,14 +20,6 @@ class AAFOkHttpAppInterceptor : Interceptor {
             .tag(AAFRequestContext::class.java, AAFRequestContext(requestId))
             .header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID, requestId).build()
         val response = chain.proceed(newRequest)
-        // 验证数据传递
-        ZLog.d(
-            OkHttpWrapper.TAG,
-            "AAFOkHttpAppInterceptor Request ID (Request): " + chain.request().tag(
-                AAFRequestContext::class.java
-            )?.requestId
-        )
-
         ZLog.d(
             OkHttpWrapper.TAG,
             "AAFOkHttpAppInterceptor Request ID (Rresponse): " + response.request().tag(
