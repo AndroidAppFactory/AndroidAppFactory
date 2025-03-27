@@ -6,7 +6,7 @@
  *
  */
 
-package com.bihe0832.android.lib.okhttp.wrapper.interceptor
+package com.bihe0832.android.lib.okhttp.wrapper.interceptor.event
 
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestTraceTimeRecord
 import okhttp3.*

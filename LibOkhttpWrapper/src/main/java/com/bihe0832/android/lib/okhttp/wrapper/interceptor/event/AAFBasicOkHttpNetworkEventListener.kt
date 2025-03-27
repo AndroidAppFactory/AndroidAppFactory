@@ -6,11 +6,12 @@
  *
  */
 
-package com.bihe0832.android.lib.okhttp.wrapper.interceptor
+package com.bihe0832.android.lib.okhttp.wrapper.interceptor.event
 
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFRequestContext
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestContentDataRecord
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
@@ -63,7 +64,7 @@ open class AAFBasicOkHttpNetworkEventListener(
     override fun requestHeadersEnd(call: Call, request: Request) {
         super.requestHeadersEnd(call, request)
         saveEvent(RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_END)
-        request.header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID)?.let { contentRequesetID ->
+        request.tag(AAFRequestContext::class.java)?.requestId?.let { contentRequesetID ->
             if (!TextUtils.isEmpty(contentRequesetID)) {
                 ZLog.d(OkHttpWrapper.TAG, "Request ID bind contentRequestId:$contentRequesetID, traceID:${mNetworkTraceRequestID}")
                 mNetworkContentRequestID = contentRequesetID

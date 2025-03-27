@@ -9,9 +9,10 @@
 package com.bihe0832.android.lib.okhttp.wrapper
 
 import android.os.SystemClock
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFBasicOkHttpNetworkEventListener
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFBasicOkHttpNetworkEventListener
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOKHttpInterceptor
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpNetworkEventListener
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFOkHttpNetworkEventListener
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpAppInterceptor
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
 import com.bihe0832.android.lib.utils.IdGenerator
@@ -62,20 +63,33 @@ object OkHttpWrapper {
             readTimeout(TIME_OUT_READ, TimeUnit.MILLISECONDS)
             writeTimeout(TIME_OUT_WRITE, TimeUnit.MILLISECONDS)
             retryOnConnectionFailure(true)
+            addInterceptor(AAFOkHttpAppInterceptor())
         }
     }
 
     fun getOkHttpClientBuilderWithInterceptor(enableTraceAndIntercept: Boolean): OkHttpClient.Builder {
         return getOkHttpClientBuilder().apply {
             addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
-            eventListenerFactory(generateOkHttpNetworkEventListener(enableTraceAndIntercept, enableTraceAndIntercept, null))
+            eventListenerFactory(
+                generateOkHttpNetworkEventListener(
+                    enableTraceAndIntercept,
+                    enableTraceAndIntercept,
+                    null
+                )
+            )
         }
     }
 
     fun getBasicOkHttpClientBuilderWithInterceptor(enableTraceAndIntercept: Boolean): OkHttpClient.Builder {
         return getOkHttpClientBuilder().apply {
             addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
-            eventListenerFactory(generateBasicOkHttpNetworkEventListener(enableTraceAndIntercept, enableTraceAndIntercept, null))
+            eventListenerFactory(
+                generateBasicOkHttpNetworkEventListener(
+                    enableTraceAndIntercept,
+                    enableTraceAndIntercept,
+                    null
+                )
+            )
         }
     }
 
@@ -87,12 +101,32 @@ object OkHttpWrapper {
         return generateOkHttpNetworkEventListener(enableTrace, enableTrace, null)
     }
 
-    fun generateOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?): EventListener.Factory {
-        return EventListener.Factory { AAFOkHttpNetworkEventListener(enableTrace, enableLog, listener) }
+    fun generateOkHttpNetworkEventListener(
+        enableTrace: Boolean,
+        enableLog: Boolean,
+        listener: EventListener?
+    ): EventListener.Factory {
+        return EventListener.Factory {
+            AAFOkHttpNetworkEventListener(
+                enableTrace,
+                enableLog,
+                listener
+            )
+        }
     }
 
-    fun generateBasicOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?): EventListener.Factory {
-        return EventListener.Factory { AAFBasicOkHttpNetworkEventListener(enableTrace, enableLog, listener) }
+    fun generateBasicOkHttpNetworkEventListener(
+        enableTrace: Boolean,
+        enableLog: Boolean,
+        listener: EventListener?
+    ): EventListener.Factory {
+        return EventListener.Factory {
+            AAFBasicOkHttpNetworkEventListener(
+                enableTrace,
+                enableLog,
+                listener
+            )
+        }
     }
 
     fun generateRequestID(): String {
