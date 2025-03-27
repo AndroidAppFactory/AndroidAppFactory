@@ -22,7 +22,7 @@ object AAFRequestDataRepository {
         mRequestTraceTimeRecord.remove(traceID)
         ZLog.d(
             OkHttpWrapper.TAG,
-            "Content: " + mRequestContentDataRecord.size + ",Time: " + mRequestTraceTimeRecord.size
+            "removeData:" + traceID + "，Content: " + mRequestContentDataRecord.size + ",Time: " + mRequestTraceTimeRecord.size
         )
     }
 
@@ -38,30 +38,28 @@ object AAFRequestDataRepository {
         }
         ZLog.d(
             OkHttpWrapper.TAG,
-            "Content: " + mRequestContentDataRecord.size + ",Time: " + mRequestTraceTimeRecord.size
+            "GetNetworkContentData:" + requestId + "，Content: " + mRequestContentDataRecord.size + ",Time: " + mRequestTraceTimeRecord.size
         )
         return networkFeedBean
     }
 
     fun getNetworkContentDataRecordByTraceID(requestId: String): RequestContentDataRecord {
         return getNetworkContentDataRecordByContentID(
-            getNetworkTraceTimeRecordByRequestID(requestId).contentRequestId
-                ?: ""
+            getNetworkTraceTimeRecordByRequestID(requestId).contentRequestId ?: ""
         )
     }
 
     fun getNetworkTraceTimeRecordByRequestID(requestId: String): RequestTraceTimeRecord {
         var networkFeedBean = mRequestTraceTimeRecord.get(requestId)
         if (networkFeedBean == null) {
-            networkFeedBean = RequestTraceTimeRecord()
-                .apply {
-                    this.setTraceRequestId(requestId)
-                }
+            networkFeedBean = RequestTraceTimeRecord().apply {
+                this.setTraceRequestId(requestId)
+            }
             mRequestTraceTimeRecord[requestId] = networkFeedBean
         }
         ZLog.d(
             OkHttpWrapper.TAG,
-            "Content: " + mRequestContentDataRecord.size + ",Time: " + mRequestTraceTimeRecord.size
+            "GetNetworkTimeRecord:" + requestId + "，Content: " + mRequestContentDataRecord.size + ",Time: " + mRequestTraceTimeRecord.size
         )
         return networkFeedBean
     }
