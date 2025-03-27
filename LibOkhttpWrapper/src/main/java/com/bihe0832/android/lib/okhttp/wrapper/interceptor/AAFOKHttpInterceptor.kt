@@ -7,12 +7,15 @@
  */
 package com.bihe0832.android.lib.okhttp.wrapper.interceptor
 
-import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
 import com.bihe0832.android.lib.okhttp.wrapper.getRequestParams
 import com.bihe0832.android.lib.okhttp.wrapper.getResponseData
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestContentDataRecord
-import okhttp3.*
+import okhttp3.Interceptor
+import okhttp3.MultipartBody
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.Response
 
 /**
  * @author zixie code@bihe0832.com
@@ -20,12 +23,11 @@ import okhttp3.*
  * Description: Description
  */
 open class AAFOKHttpInterceptor(
-        // 是否开启请求拦截并记录日志信息
-        private var enableIntercept: Boolean = false,
-        // 是否开启异常日志
-        private var enableLog: Boolean = true) : Interceptor {
-
-    private val HTTP_REQ_PROPERTY_CONTENT_ENCODING = "Content-Encoding"
+    // 是否开启请求拦截并记录日志信息
+    private var enableIntercept: Boolean = false,
+    // 是否开启异常日志
+    private var enableLog: Boolean = true
+) : Interceptor {
 
     protected fun interceptResponse(requestId: String?, response: Response): Response {
         return response
@@ -36,9 +38,9 @@ open class AAFOKHttpInterceptor(
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val requestId = OkHttpWrapper.generateRequestID()
         var requestContentDataRecord: RequestContentDataRecord? = null
-        val request = interceptRequest(requestId, chain.request().newBuilder().header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID, requestId).build())
+        val requestId = chain.request().tag(AAFRequestContext::class.java)?.requestId?:""
+        val request = interceptRequest(requestId, chain.request())
         if (enableIntercept) {
             requestContentDataRecord = getNetworkContentDataRecordByContentID(requestId)
             val connection = chain.connection()
@@ -50,14 +52,16 @@ open class AAFOKHttpInterceptor(
             val requestBody = request.body()
             if (requestBody != null) {
                 val contentLength = requestBody.contentLength()
-                requestContentDataRecord.requestBodyLength = if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
+                requestContentDataRecord.requestBodyLength =
+                    if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
                 if (requestBody.contentType() != null) {
                     requestContentDataRecord.requestContentType = requestBody.contentType()
                 }
                 if (requestBody.contentType() != MultipartBody.FORM && contentLength < 500 * 1024) {
                     requestContentDataRecord.requestBody = request.getRequestParams(enableLog)
                 } else {
-                    requestContentDataRecord.requestBody = "！！！AAF Record UnSupport Request , type: " + requestBody.contentType()
+                    requestContentDataRecord.requestBody =
+                        "！！！AAF Record UnSupport Request , type: " + requestBody.contentType()
                 }
             }
         }
@@ -79,14 +83,16 @@ open class AAFOKHttpInterceptor(
             val responseBody = response.body()
             if (responseBody != null) {
                 val contentLength = responseBody.contentLength()
-                requestContentDataRecord?.responseBodyLength = if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
+                requestContentDataRecord?.responseBodyLength =
+                    if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
                 if (responseBody.contentType() != null) {
                     requestContentDataRecord?.responseContentType = responseBody.contentType()
                 }
                 if (contentLength < 500 * 1024) {
                     requestContentDataRecord?.responseBody = response.getResponseData(enableLog)
                 } else {
-                    requestContentDataRecord?.requestBody = "！！！AAF Record UnSupport Response , type: $contentLength"
+                    requestContentDataRecord?.requestBody =
+                        "！！！AAF Record UnSupport Response , type: $contentLength"
                 }
             }
         }
