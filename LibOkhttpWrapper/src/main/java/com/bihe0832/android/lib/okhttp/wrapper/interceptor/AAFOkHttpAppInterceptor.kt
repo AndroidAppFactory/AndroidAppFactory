@@ -22,7 +22,7 @@ class AAFOkHttpAppInterceptor : Interceptor {
         val response = chain.proceed(newRequest)
         ZLog.d(
             OkHttpWrapper.TAG,
-            "AAFOkHttpAppInterceptor Request ID (Rresponse): " + response.request().tag(
+            "AAFOkHttpAppInterceptor Request ID (Rresponse): " + response.request.tag(
                 AAFRequestContext::class.java
             )?.requestId
         )

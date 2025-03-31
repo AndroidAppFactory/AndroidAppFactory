@@ -26,12 +26,13 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 
 open class AAFBasicOkHttpNetworkEventListener(
-        // 是否统计请求耗时
-        protected val enableTrace: Boolean = false,
-        // 是否打印基本的请求数据
-        protected val enableLog: Boolean = false,
-        // 网络事件回调
-        protected val listener: EventListener?) : EventListener() {
+    // 是否统计请求耗时
+    protected val enableTrace: Boolean = false,
+    // 是否打印基本的请求数据
+    protected val enableLog: Boolean = false,
+    // 网络事件回调
+    protected val listener: EventListener?
+) : EventListener() {
 
     private var mRequestTraceTimeRecord: RequestTraceTimeRecord? = null
     private var mNetworkTraceRequestID: String = ""
@@ -55,7 +56,10 @@ open class AAFBasicOkHttpNetworkEventListener(
         super.callStart(call)
         mNetworkTraceRequestID = OkHttpWrapper.generateRequestID()
         if (canTrace(call)) {
-            mRequestTraceTimeRecord = OkHttpWrapper.getRecord(mNetworkTraceRequestID, call.request().url().toString(), call.request().method()).getRecordTraceTimeData()
+            mRequestTraceTimeRecord = OkHttpWrapper.getRecord(
+                mNetworkTraceRequestID, call.request().url.toString(),
+                call.request().method
+            ).getRecordTraceTimeData()
         }
         saveEvent(RequestTraceTimeRecord.EVENT_CALL_START)
         listener?.callStart(call)
@@ -66,12 +70,17 @@ open class AAFBasicOkHttpNetworkEventListener(
         saveEvent(RequestTraceTimeRecord.EVENT_REQUEST_HEADERS_END)
         request.tag(AAFRequestContext::class.java)?.requestId?.let { contentRequesetID ->
             if (!TextUtils.isEmpty(contentRequesetID)) {
-                ZLog.d(OkHttpWrapper.TAG, "Request ID bind contentRequestId:$contentRequesetID, traceID:${mNetworkTraceRequestID}")
+                ZLog.d(
+                    OkHttpWrapper.TAG,
+                    "Request ID bind contentRequestId:$contentRequesetID, traceID:${mNetworkTraceRequestID}"
+                )
                 mNetworkContentRequestID = contentRequesetID
                 if (canTrace(call)) {
                     mRequestTraceTimeRecord?.contentRequestId = mNetworkContentRequestID
                 }
-                AAFRequestDataRepository.getNetworkContentDataRecordByContentID(mNetworkContentRequestID).mTraceRequestId = mNetworkTraceRequestID
+                AAFRequestDataRepository.getNetworkContentDataRecordByContentID(
+                    mNetworkContentRequestID
+                ).mTraceRequestId = mNetworkTraceRequestID
             }
         }
         listener?.requestHeadersEnd(call, request)
@@ -90,7 +99,6 @@ open class AAFBasicOkHttpNetworkEventListener(
         ThreadManager.getInstance().start({
             doLogAction()
         }, 500L)
-
     }
 
     override fun callEnd(call: Call) {
@@ -100,7 +108,13 @@ open class AAFBasicOkHttpNetworkEventListener(
         doLogAction()
     }
 
-    override fun connectFailed(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy?, protocol: Protocol?, ioe: IOException?) {
+    override fun connectFailed(
+        call: Call,
+        inetSocketAddress: InetSocketAddress,
+        proxy: Proxy,
+        protocol: Protocol?,
+        ioe: IOException
+    ) {
         super.connectFailed(call, inetSocketAddress, proxy, protocol, ioe)
         listener?.connectFailed(call, inetSocketAddress, proxy, protocol, ioe)
         doLogAction()
@@ -113,9 +127,14 @@ open class AAFBasicOkHttpNetworkEventListener(
                 if (enableTrace) {
                     logRequest(OkHttpWrapper.getRecord(mNetworkTraceRequestID))
                 } else {
-                    logRequest(AAFRequestDataRepository.getNetworkContentDataRecordByContentID(mNetworkContentRequestID))
+                    logRequest(
+                        AAFRequestDataRepository.getNetworkContentDataRecordByContentID(
+                            mNetworkContentRequestID
+                        )
+                    )
                 }
             }
+            AAFRequestDataRepository.removeData(mNetworkTraceRequestID)
             lastTraceNetworkRequestID = mNetworkTraceRequestID
         }
     }

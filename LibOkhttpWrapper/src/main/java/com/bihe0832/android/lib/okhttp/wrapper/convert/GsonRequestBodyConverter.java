@@ -19,11 +19,11 @@ import retrofit2.Converter;
  *         Created on 2024/5/30.
  *         Description:
  */
-final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
+public final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 
     private final TypeAdapter<T> adapter;
 
-    private static final MediaType MEDIA_TYPE = MediaType.get("application/json; charset=UTF-8");
+    public static final MediaType MEDIA_TYPE = MediaType.get("application/json; charset=UTF-8");
     private static final Charset UTF_8 = Charset.forName("UTF-8");
 
     GsonRequestBodyConverter(TypeAdapter<T> adapter) {

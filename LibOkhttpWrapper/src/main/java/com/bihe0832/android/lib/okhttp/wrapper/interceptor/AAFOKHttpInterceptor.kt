@@ -39,17 +39,17 @@ open class AAFOKHttpInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var requestContentDataRecord: RequestContentDataRecord? = null
-        val requestId = chain.request().tag(AAFRequestContext::class.java)?.requestId?:""
+        val requestId = chain.request().tag(AAFRequestContext::class.java)?.requestId ?: ""
         val request = interceptRequest(requestId, chain.request())
         if (enableIntercept) {
             requestContentDataRecord = getNetworkContentDataRecordByContentID(requestId)
             val connection = chain.connection()
             val protocol = connection?.protocol() ?: Protocol.HTTP_1_1
-            requestContentDataRecord.url = request.url().toString()
-            requestContentDataRecord.method = request.method()
+            requestContentDataRecord.url = request.url.toString()
+            requestContentDataRecord.method = request.method
             requestContentDataRecord.protocol = protocol
-            requestContentDataRecord.requestHeadersMap = request.headers()
-            val requestBody = request.body()
+            requestContentDataRecord.requestHeadersMap = request.headers
+            val requestBody = request.body
             if (requestBody != null) {
                 val contentLength = requestBody.contentLength()
                 requestContentDataRecord.requestBodyLength =
@@ -77,10 +77,10 @@ open class AAFOKHttpInterceptor(
         }
 
         if (enableIntercept) {
-            requestContentDataRecord?.responseHeadersMap = response.headers()
-            requestContentDataRecord?.status = response.code()
-            requestContentDataRecord?.errorMsg = response.message() ?: ""
-            val responseBody = response.body()
+            requestContentDataRecord?.responseHeadersMap = response.headers
+            requestContentDataRecord?.status = response.code
+            requestContentDataRecord?.errorMsg = response.message
+            val responseBody = response.body
             if (responseBody != null) {
                 val contentLength = responseBody.contentLength()
                 requestContentDataRecord?.responseBodyLength =

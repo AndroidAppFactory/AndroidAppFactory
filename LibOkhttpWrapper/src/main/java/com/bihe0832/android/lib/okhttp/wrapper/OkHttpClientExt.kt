@@ -9,7 +9,7 @@
 package com.bihe0832.android.lib.okhttp.wrapper
 
 import com.bihe0832.android.lib.log.ZLog
-import okhttp3.MediaType
+import com.bihe0832.android.lib.okhttp.wrapper.convert.GsonRequestBodyConverter
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
@@ -66,7 +66,7 @@ fun Response.getResponseData(enableLog: Boolean): String {
 }
 
 fun Request.getRequestParams(enableLog: Boolean): String {
-    this.body()?.let {
+    this.body?.let {
         val buffer = okio.Buffer()
         try {
             it.writeTo(buffer)
@@ -92,5 +92,5 @@ fun Request.getRequestParams(enableLog: Boolean): String {
 
 
 fun getRequestBodyByJsonString(jsonString: String): RequestBody {
-    return RequestBody.create(MediaType.parse("application/json"), jsonString)
+    return RequestBody.create(GsonRequestBodyConverter.MEDIA_TYPE, jsonString)
 }
