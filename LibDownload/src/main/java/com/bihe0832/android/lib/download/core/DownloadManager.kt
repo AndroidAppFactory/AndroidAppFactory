@@ -23,7 +23,6 @@ import com.bihe0832.android.lib.request.HTTPRequestUtils
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
-import com.bihe0832.android.lib.utils.encrypt.messagedigest.MessageDigestUtils
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import java.net.HttpURLConnection
 import java.net.URL
@@ -188,7 +187,7 @@ abstract class DownloadManager {
     }
 
     fun updateInfo(info: DownloadItem, addFilePath: Boolean) {
-        var savedInfo =
+        val savedInfo =
             DownloadInfoDBManager.getDownloadInfo(info.downloadURL, info.downloadActionKey)
         if (savedInfo != null) {
             info.filePath = savedInfo.filePath

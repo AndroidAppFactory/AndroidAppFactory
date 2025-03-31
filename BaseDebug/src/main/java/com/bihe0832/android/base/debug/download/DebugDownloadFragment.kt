@@ -43,6 +43,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     val URL_FILE = "https://dldir1.qq.com/INO/voice/taimei_trylisten.m4a"
     val URL_CONFIG = "https://cdn.bihe0832.com/app/update/get_apk.json"
     val MD5_FILE = "4ef99863858b0ee17177f773580e4f2a"
+    val MD5_CONFIG = "E1E127FE9F951F0A71FD4AA695449305"
 
     companion object {
         val LOG_TAG = "DebugDownloadFragment"
@@ -426,8 +427,8 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     }
 
     fun testDownloadProcess() {
-        val url = URL_FILE
-        val md5 = MD5_FILE
+        val url = URL_CONFIG
+        val md5 = MD5_CONFIG
 //        val url = ""
 //        val md5 = ""
         val header = HashMap<String, String>().apply {
@@ -498,7 +499,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         )
                     }
                     Thread.sleep(4000)
-                    FileUtils.deleteFile(filePath)
+//                    FileUtils.deleteFile(filePath)
                     return filePath
                 }
 
@@ -697,12 +698,12 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 //        }
         mutableListOf<String>(
 //                URL_YYB_DDZ, URL_YYB_QQ, URL_YYB_TTS, URL_YYB_GG, URL_FILE, URL_CONFIG
-            URL_YYB_WZ,
+//            URL_YYB_WZ,
 //            URL_YYB_DDZ,
 //            URL_YYB_TTS,
 //            URL_YYB_CHANNEL,
 //            URL_FILE,
-//            URL_CONFIG,
+            URL_CONFIG,
         ).let {
             for (currentNum in 0 until it.size) {
                 ThreadManager.getInstance().start({

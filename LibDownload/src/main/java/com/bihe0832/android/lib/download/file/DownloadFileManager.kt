@@ -19,6 +19,7 @@ import com.bihe0832.android.lib.download.core.DownloadTaskList
 import com.bihe0832.android.lib.download.core.DownloadingList
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.file.notify.DownloadFileNotify
+import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -100,8 +101,13 @@ object DownloadFileManager : DownloadManager() {
 
         override fun onComplete(filePath: String, item: DownloadItem): String {
             item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
+            val file = File(filePath)
             if (item.contentLength < 1) {
-                item.contentLength = File(filePath).length()
+                item.contentLength = file.length()
+            }
+            val time = file.lastModified()
+            FileUtils.updateModifiedTime(filePath).let {
+                ZLog.e(TAG, "更新文件的最新更新时间: 更新前 $time, 更新后：${file.lastModified()}")
             }
             item.finished = item.contentLength
             if (FileMimeTypes.isApkFile(filePath)) {
@@ -123,7 +129,7 @@ object DownloadFileManager : DownloadManager() {
 
             ThreadManager.getInstance().start {
                 ZLog.d(TAG, "onComplete start: $filePath ")
-                var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
+                val newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
                 ZLog.d(TAG, "onComplete end: $newPath ")
                 item.filePath = newPath
                 if (item.isNeedRecord || !newPath.equals(filePath)) {
@@ -227,7 +233,7 @@ object DownloadFileManager : DownloadManager() {
             addDownloadItemToListAndSaveLocal(info)
             Thread {
                 // 本地已下载
-                var filePath = checkBeforeDownloadFile(info)
+                val filePath = checkBeforeDownloadFile(info)
                 if (!TextUtils.isEmpty(filePath)) {
                     ZLog.e(TAG, "has download:$info")
                     info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)

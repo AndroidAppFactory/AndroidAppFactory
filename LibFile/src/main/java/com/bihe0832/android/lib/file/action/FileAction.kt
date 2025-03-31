@@ -37,7 +37,12 @@ object FileAction {
         return fileAction(context, Intent.ACTION_VIEW, "", filePath)
     }
 
-    fun openFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+    fun openFile(
+        context: Context,
+        actionTitle: String,
+        filePath: String,
+        fileType: String
+    ): Boolean {
         return fileAction(context, Intent.ACTION_VIEW, actionTitle, filePath, fileType)
     }
 
@@ -45,15 +50,37 @@ object FileAction {
         return fileAction(context, Intent.ACTION_SEND, "", filePath)
     }
 
-    fun sendFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+    fun sendFile(
+        context: Context,
+        actionTitle: String,
+        filePath: String,
+        fileType: String
+    ): Boolean {
         return fileAction(context, Intent.ACTION_SEND, actionTitle, filePath, fileType)
     }
 
-    fun fileAction(context: Context, action: String, actionTitle: String, filePath: String): Boolean {
-        return fileAction(context, action, actionTitle, filePath, FileMimeTypes.getMimeType(filePath))
+    fun fileAction(
+        context: Context,
+        action: String,
+        actionTitle: String,
+        filePath: String
+    ): Boolean {
+        return fileAction(
+            context,
+            action,
+            actionTitle,
+            filePath,
+            FileMimeTypes.getMimeType(filePath)
+        )
     }
 
-    fun fileAction(context: Context, action: String, actionTitle: String, filePath: String, fileType: String): Boolean {
+    fun fileAction(
+        context: Context,
+        action: String,
+        actionTitle: String,
+        filePath: String,
+        fileType: String
+    ): Boolean {
         try { // 设置intent的data和Type属性
             ZLog.d("fileAction sourceFile:$filePath")
             var sourceFile = File(filePath)
@@ -67,7 +94,9 @@ object FileAction {
                 }
                 if (fileProvider == null) {
                     ZLog.e("fileAction targetFile dont has zixie FileProvider")
-                    targetFile = File(ZixieFileProvider.getZixieFilePath(context) + FileName.getFileName(filePath))
+                    targetFile = File(
+                        ZixieFileProvider.getZixieFilePath(context) + FileName.getFileName(filePath)
+                    )
                     copyFile(sourceFile, targetFile)
                 }
             }
@@ -167,6 +196,15 @@ object FileAction {
         } catch (e: Exception) {
             e.printStackTrace()
             return false
+        }
+    }
+
+    fun updateModifiedTime(filePath: String, newTimeMillis: Long): Boolean {
+        val file = File(filePath)
+        return if (file.exists()) {
+            file.setLastModified(newTimeMillis)
+        } else {
+            false
         }
     }
 
@@ -361,7 +399,11 @@ object FileAction {
         return result
     }
 
-    fun copyAssetsFolderToFolder(context: Context?, fromAssetPath: String, targetFolder: String): Boolean {
+    fun copyAssetsFolderToFolder(
+        context: Context?,
+        fromAssetPath: String,
+        targetFolder: String
+    ): Boolean {
         if (context == null) {
             ZLog.e("copyAssetsFolder context is null")
             return false
