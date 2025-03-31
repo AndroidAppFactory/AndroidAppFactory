@@ -9,12 +9,20 @@
 package com.bihe0832.android.lib.okhttp.wrapper.interceptor.event
 
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestTraceTimeRecord
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.EventListener
+import okhttp3.Handshake
+import okhttp3.Protocol
+import okhttp3.Response
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
 
-open class AAFOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolean, listener: EventListener?) : AAFBasicOkHttpNetworkEventListener(enableTrace, enableLog, listener) {
+open class AAFOkHttpNetworkEventListener(
+    enableTrace: Boolean,
+    enableLog: Boolean,
+    listener: EventListener?
+) : AAFBasicOkHttpNetworkEventListener(enableTrace, enableLog, listener) {
 
 
     override fun dnsStart(call: Call, domainName: String) {
@@ -23,7 +31,11 @@ open class AAFOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolea
         listener?.dnsStart(call, domainName)
     }
 
-    override fun dnsEnd(call: Call, domainName: String, inetAddressList: MutableList<InetAddress>?) {
+    override fun dnsEnd(
+        call: Call,
+        domainName: String,
+        inetAddressList: List<@JvmSuppressWildcards InetAddress>
+    ) {
         super.dnsEnd(call, domainName, inetAddressList)
         saveEvent(RequestTraceTimeRecord.EVENT_DNS_END)
         listener?.dnsEnd(call, domainName, inetAddressList)
@@ -47,7 +59,12 @@ open class AAFOkHttpNetworkEventListener(enableTrace: Boolean, enableLog: Boolea
         listener?.secureConnectEnd(call, handshake)
     }
 
-    override fun connectEnd(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy?, protocol: Protocol?) {
+    override fun connectEnd(
+        call: Call,
+        inetSocketAddress: InetSocketAddress,
+        proxy: Proxy,
+        protocol: Protocol?
+    ) {
         super.connectEnd(call, inetSocketAddress, proxy, protocol)
         saveEvent(RequestTraceTimeRecord.EVENT_CONNECT_END)
         listener?.connectEnd(call, inetSocketAddress, proxy, protocol)

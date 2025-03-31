@@ -23,8 +23,8 @@ ext {
 
 
     okhttp = [
-            okhttp             : "com.squareup.okhttp3:okhttp:3.14.9",
-            logging_interceptor: "com.squareup.okhttp3:logging-interceptor:3.14.9",
+            okhttp             : "com.squareup.okhttp3:okhttp:4.11.0",
+            logging_interceptor: "com.squareup.okhttp3:logging-interceptor:4.11.0",
             retrofit           : "com.squareup.retrofit2:retrofit:2.9.0"
     ]
 

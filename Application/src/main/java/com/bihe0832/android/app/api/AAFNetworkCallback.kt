@@ -56,7 +56,7 @@ abstract class AAFNetworkCallback<T : BaseResponse> : Callback<T> {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            onInnerError(call, FLAG_FAILED_HTTP_EXCEPTION, "${call.request().url()} response Exception:$response + ")
+            onInnerError(call, FLAG_FAILED_HTTP_EXCEPTION, "${call.request().url} response Exception:$response + ")
         }
     }
 
@@ -65,7 +65,7 @@ abstract class AAFNetworkCallback<T : BaseResponse> : Callback<T> {
         onInnerError(
             call,
             FLAG_FAILED_HTTP,
-            " call: ${call.hashCode()}, ${call.request().url()} onFailure :${t.message} + "
+            " call: ${call.hashCode()}, ${call.request().url} onFailure :${t.message} + "
         )
     }
 }
