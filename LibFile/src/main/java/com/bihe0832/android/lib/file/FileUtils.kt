@@ -187,7 +187,7 @@ object FileUtils {
                     if (paraFileLength == file.length()) {
                         if (hasMD5) {
                             MessageDigestUtils.getFileDigestData(paraFilePath, digestType)
-                                    .equals(digestValue, ignoreCase = true)
+                                .equals(digestValue, ignoreCase = true)
                         } else {
                             ignoreDigestCheck
                         }
@@ -197,7 +197,7 @@ object FileUtils {
                 } else {
                     if (hasMD5) {
                         MessageDigestUtils.getFileDigestData(paraFilePath, digestType)
-                                .equals(digestValue, ignoreCase = true)
+                            .equals(digestValue, ignoreCase = true)
                     } else {
                         ignoreDigestCheck
                     }
@@ -245,7 +245,12 @@ object FileUtils {
     /**
      * 仅能打开 [ZixieFileProvider.getZixieFilePath] 对应目录下的文件
      */
-    fun openFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+    fun openFile(
+        context: Context,
+        actionTitle: String,
+        filePath: String,
+        fileType: String
+    ): Boolean {
         return FileAction.openFile(context, actionTitle, filePath, fileType)
     }
 
@@ -257,7 +262,12 @@ object FileUtils {
         return FileAction.sendFile(context, filePath)
     }
 
-    fun sendFile(context: Context, actionTitle: String, filePath: String, fileType: String): Boolean {
+    fun sendFile(
+        context: Context,
+        actionTitle: String,
+        filePath: String,
+        fileType: String
+    ): Boolean {
         return FileAction.sendFile(context, actionTitle, filePath, fileType)
     }
 
@@ -279,6 +289,10 @@ object FileUtils {
 
     fun deleteFile(filePath: String): Boolean {
         return FileAction.deleteFile(filePath)
+    }
+
+    fun updateModifiedTime(filePath: String): Boolean {
+        return FileAction.updateModifiedTime(filePath, System.currentTimeMillis())
     }
 
     fun copyFile(input: InputStream?, dest: File?): Boolean {
@@ -325,7 +339,12 @@ object FileUtils {
         return MessageDigestUtils.getFileDigestData(filePath, digestType)
     }
 
-    fun getFilePartDigestData(fileName: String, digestType: String, start: Long, end: Long): String {
+    fun getFilePartDigestData(
+        fileName: String,
+        digestType: String,
+        start: Long,
+        end: Long
+    ): String {
         return MessageDigestUtils.getFilePartDigestData(fileName, digestType, start, end)
     }
 
@@ -405,7 +424,12 @@ object FileUtils {
         return FileContent.isBinaryFile(filePath)
     }
 
-    fun writeDataToFile(filePath: String, offset: Long, bytes: ByteArray, replace: Boolean): Boolean {
+    fun writeDataToFile(
+        filePath: String,
+        offset: Long,
+        bytes: ByteArray,
+        replace: Boolean
+    ): Boolean {
         return RandomAccessFileUtils.writeDataToFile(filePath, offset, bytes, replace)
     }
 

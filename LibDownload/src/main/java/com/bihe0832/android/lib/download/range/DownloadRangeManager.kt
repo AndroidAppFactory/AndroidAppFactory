@@ -17,7 +17,6 @@ import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
 import com.bihe0832.android.lib.download.core.DownloadingList
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
-import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
@@ -128,14 +127,18 @@ object DownloadRangeManager : DownloadManager() {
                 if (rangeLength > 0 && serverContentLength < rangeStart + rangeLength) {
                     //请求长度小于服务器获取的长度
                     innerDownloadListener.onFail(
-                        DownloadErrorCode.ERR_RANGE_BAD_SERVER_LENGTH, "download length is less than need", info
+                        DownloadErrorCode.ERR_RANGE_BAD_SERVER_LENGTH,
+                        "download length is less than need",
+                        info
                     )
                     return false
                 }
             } else {
                 // 区间下载，但是源数据不支持分片，返回失败
                 innerDownloadListener.onFail(
-                    DownloadErrorCode.ERR_RANGE_NOT_SUPPORT, "download maybe not support range download", info
+                    DownloadErrorCode.ERR_RANGE_NOT_SUPPORT,
+                    "download maybe not support range download",
+                    info
                 )
                 return false
             }
@@ -143,7 +146,11 @@ object DownloadRangeManager : DownloadManager() {
             val file = File(info.filePath)
             if (!file.exists() || (file.exists() && !File(info.filePath).isFile)) {
                 ZLog.e(TAG, "bad file path:$info")
-                innerDownloadListener.onFail(ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info)
+                innerDownloadListener.onFail(
+                    ERR_RANGE_BAD_PATH,
+                    "bad para, file not exist or not file",
+                    info
+                )
                 return false
             }
             info.realURL = realURL
@@ -156,7 +163,11 @@ object DownloadRangeManager : DownloadManager() {
         } catch (e: Exception) {
             e.printStackTrace()
             ZLog.e(TAG, "download:$e")
-            innerDownloadListener.onFail(ERR_CONTENT_LENGTH_EXCEPTION, "update server content exception", info)
+            innerDownloadListener.onFail(
+                ERR_CONTENT_LENGTH_EXCEPTION,
+                "update server content exception",
+                info
+            )
             return false
         }
 
@@ -177,7 +188,12 @@ object DownloadRangeManager : DownloadManager() {
             Thread {
                 if (downloadAfterAdd) {
                     if (isMobileNet() && !info.isDownloadWhenUseMobile) {
-                        pauseTask(info, startByUser = false, clearHistory = false, pauseByNetwork = true)
+                        pauseTask(
+                            info,
+                            startByUser = false,
+                            clearHistory = false,
+                            pauseByNetwork = true
+                        )
                         ZLog.e(TAG, "当前网络为移动网络，任务暂停:$info")
                     } else {
                         var currentTime = System.currentTimeMillis()
@@ -196,7 +212,12 @@ object DownloadRangeManager : DownloadManager() {
                         )
                     }
                 } else {
-                    pauseTask(info, startByUser = true, clearHistory = false, pauseByNetwork = false)
+                    pauseTask(
+                        info,
+                        startByUser = true,
+                        clearHistory = false,
+                        pauseByNetwork = false
+                    )
                 }
             }.start()
         } catch (e: Exception) {
@@ -215,7 +236,14 @@ object DownloadRangeManager : DownloadManager() {
                 currentDownload?.downloadListener = info.downloadListener
             } else {
                 innerDownloadListener.onWait(info)
-                if (!updateDownItemByServerInfo(info, rangeStart, rangeLength, localStart, info.isDownloadWhenAdd)) {
+                if (!updateDownItemByServerInfo(
+                        info,
+                        rangeStart,
+                        rangeLength,
+                        localStart,
+                        info.isDownloadWhenAdd
+                    )
+                ) {
                     ZLog.d(TAG, "has notify in updateDownItemByServerInfo")
                     return@start
                 }
@@ -223,7 +251,11 @@ object DownloadRangeManager : DownloadManager() {
                 val file = File(info.filePath)
                 if (!file.exists() || (file.exists() && !File(info.filePath).isFile)) {
                     ZLog.e(TAG, "bad file path:$info")
-                    innerDownloadListener.onFail(ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info)
+                    innerDownloadListener.onFail(
+                        ERR_RANGE_BAD_PATH,
+                        "bad para, file not exist or not file",
+                        info
+                    )
                     return@start
                 }
                 val path = checkBeforeDownloadFile(info)
@@ -245,7 +277,10 @@ object DownloadRangeManager : DownloadManager() {
                     ZLog.d(TAG, "mDownloadList contains:$info")
                     DownloadTaskList.updateDownloadTaskListItem(info)
                     resumeTask(
-                        info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile
+                        info.downloadID,
+                        info.downloadListener,
+                        info.isDownloadWhenAdd,
+                        info.isDownloadWhenUseMobile
                     )
                 } else {
                     startTask(info, info.isDownloadWhenAdd)

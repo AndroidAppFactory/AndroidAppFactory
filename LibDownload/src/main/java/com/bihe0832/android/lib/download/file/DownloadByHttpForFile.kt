@@ -27,7 +27,10 @@ import java.io.File
 
 
 class DownloadByHttpForFile(
-    applicationContext: Context, innerDownloadListener: DownloadListener, maxNum: Int, isDebug: Boolean = false
+    applicationContext: Context,
+    innerDownloadListener: DownloadListener,
+    maxNum: Int,
+    isDebug: Boolean = false
 ) : DownloadByHttpForRange(applicationContext, innerDownloadListener, maxNum, isDebug) {
 
     fun startDownload(context: Context, info: DownloadItem) {
@@ -60,12 +63,16 @@ class DownloadByHttpForFile(
                         notifyDownloadSucc(downloadInfo)
                     } else {
                         val sha256 = SHA256.getFileSHA256(downloadFile)
-                        ZLog.e(TAG, " oldfile SHA256:$sha256")
-                        ZLog.e(TAG, " downloadInfo md5:" + downloadInfo.contentSHA256)
+                        ZLog.e(TAG, "file SHA256:$sha256")
+                        ZLog.e(TAG, "DownloadItem param SHA256:" + downloadInfo.contentSHA256)
                         if (sha256.equals(downloadInfo.contentSHA256, ignoreCase = true)) {
                             notifyDownloadSucc(downloadInfo)
                         } else {
-                            notifyDownloadFailed(downloadInfo, ERR_MD5_BAD, "Sorry! the file SHA256 is bad")
+                            notifyDownloadFailed(
+                                downloadInfo,
+                                ERR_MD5_BAD,
+                                "Sorry! the file SHA256 is bad"
+                            )
                             if (downloadInfo.isForceDeleteBad) {
                                 deleteFile(downloadInfo)
                             }
@@ -73,12 +80,16 @@ class DownloadByHttpForFile(
                     }
                 } else {
                     val md5 = MD5.getFileMD5(downloadFile)
-                    ZLog.e(TAG, " oldfile md5:$md5")
-                    ZLog.e(TAG, " downloadInfo md5:" + downloadInfo.contentMD5)
+                    ZLog.e(TAG, "file md5:$md5")
+                    ZLog.e(TAG, "DownloadItem param md5:" + downloadInfo.contentMD5)
                     if (md5.equals(downloadInfo.contentMD5, ignoreCase = true)) {
                         notifyDownloadSucc(downloadInfo)
                     } else {
-                        notifyDownloadFailed(downloadInfo, ERR_MD5_BAD, "Sorry! the file md5 is bad")
+                        notifyDownloadFailed(
+                            downloadInfo,
+                            ERR_MD5_BAD,
+                            "Sorry! the file md5 is bad"
+                        )
                         if (downloadInfo.isForceDeleteBad) {
                             deleteFile(downloadInfo)
                         }
@@ -86,7 +97,11 @@ class DownloadByHttpForFile(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                notifyDownloadFailed(downloadInfo, ERR_FILE_RENAME_FAILED, "Sorry! the file can't be renamed")
+                notifyDownloadFailed(
+                    downloadInfo,
+                    ERR_FILE_RENAME_FAILED,
+                    "Sorry! the file can't be renamed"
+                )
             }
         }
     }
