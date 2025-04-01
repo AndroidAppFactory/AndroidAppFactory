@@ -5,12 +5,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bihe0832.android.lib.media.image.GlideExtKt;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.R;
 import com.bihe0832.android.lib.text.TextFactoryUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,30 +32,41 @@ public class PermissionsActivityV2 extends PermissionsActivity {
 
     protected void showTips() {
         findViewById(R.id.permission_layout).setVisibility(View.VISIBLE);
-        GlideExtKt.loadImage((ImageView) findViewById(R.id.permission_icon), PermissionManager.INSTANCE.getPermissionIcon(scene, ""));
+        GlideExtKt.loadImage((ImageView) findViewById(R.id.permission_icon),
+                PermissionManager.INSTANCE.getPermissionIcon(scene, ""));
         List<String> tempPermissionList = new ArrayList<>();
         for (String permission : needCheckPermissionGroup) {
             tempPermissionList.add(permission);
         }
 
-        String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, true, getNeedSpecial());
-        String permissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, false, getNeedSpecial());
-        String permissionContent = PermissionManager.INSTANCE.getPermissionContent(this, scene, tempPermissionList, false, getNeedSpecial());
+        String permissionDesc = PermissionManager.INSTANCE.getPermissionDesc(scene, tempPermissionList, true,
+                getNeedSpecial());
+        String permissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, false,
+                getNeedSpecial());
+        String permissionContent = PermissionManager.INSTANCE.getPermissionContent(this, scene, tempPermissionList,
+                false, getNeedSpecial());
 
         if (!TextUtils.isEmpty(permissionDesc)) {
-            ((TextView) findViewById(R.id.permission_title)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionDesc + "权限使用说明"));
+            ((TextView) findViewById(R.id.permission_title)).setText(TextFactoryUtils.getSpannedTextByHtml(
+                    permissionDesc + " " + getString(R.string.com_bihe0832_permission_tips)));
             if (!TextUtils.isEmpty(permissionScene)) {
-                ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionScene));
+                ((TextView) findViewById(R.id.permission_desc)).setText(
+                        TextFactoryUtils.getSpannedTextByHtml(permissionScene));
             } else if (!TextUtils.isEmpty(permissionContent)) {
-                ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(permissionContent));
+                ((TextView) findViewById(R.id.permission_desc)).setText(
+                        TextFactoryUtils.getSpannedTextByHtml(permissionContent));
             } else {
                 if (getUseDefault()) {
-                    String defaultPermissionScene = PermissionManager.INSTANCE.getPermissionScene(scene, tempPermissionList, true, getNeedSpecial());
-                    String defaultPermissionContent = PermissionManager.INSTANCE.getPermissionContent(this, scene, tempPermissionList, true, getNeedSpecial());
+                    String defaultPermissionScene = PermissionManager.INSTANCE.getPermissionScene(scene,
+                            tempPermissionList, true, getNeedSpecial());
+                    String defaultPermissionContent = PermissionManager.INSTANCE.getPermissionContent(this, scene,
+                            tempPermissionList, true, getNeedSpecial());
                     if (!TextUtils.isEmpty(defaultPermissionScene)) {
-                        ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(defaultPermissionScene));
+                        ((TextView) findViewById(R.id.permission_desc)).setText(
+                                TextFactoryUtils.getSpannedTextByHtml(defaultPermissionScene));
                     } else if (!TextUtils.isEmpty(defaultPermissionContent)) {
-                        ((TextView) findViewById(R.id.permission_desc)).setText(TextFactoryUtils.getSpannedTextByHtml(defaultPermissionContent));
+                        ((TextView) findViewById(R.id.permission_desc)).setText(
+                                TextFactoryUtils.getSpannedTextByHtml(defaultPermissionContent));
                     } else {
                         hideTips();
                     }

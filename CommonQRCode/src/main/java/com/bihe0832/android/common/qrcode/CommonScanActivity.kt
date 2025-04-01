@@ -11,11 +11,14 @@ import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.utils.os.BuildUtils
+import java.util.Locale
 
 @Module(RouterConstants.MODULE_NAME_QRCODE_SCAN)
 open class CommonScanActivity : BaseScanActivity() {
 
-    init {
+    private var userDeny = false
+
+    fun initPermission() {
         PermissionManager.addPermissionGroup(
             RouterConstants.MODULE_NAME_QRCODE_SCAN,
             Manifest.permission.CAMERA,
@@ -33,7 +36,15 @@ open class CommonScanActivity : BaseScanActivity() {
         )
     }
 
-    private var userDeny = false
+    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+        initPermission()
+    }
+
+    override fun initUI() {
+        super.initUI()
+        initPermission()
+    }
+
 
     fun startScanAction() {
         super.startCamera()
@@ -53,7 +64,11 @@ open class CommonScanActivity : BaseScanActivity() {
                         startScanAction()
                     }
 
-                    override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                    override fun onUserCancel(
+                        scene: String,
+                        permissionGroupID: String,
+                        permission: String
+                    ) {
                         super.onUserDeny(scene, permissionGroupID, permission)
                         userDeny = true
                     }
@@ -63,7 +78,11 @@ open class CommonScanActivity : BaseScanActivity() {
                         userDeny = true
                     }
 
-                    override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                    override fun onUserDeny(
+                        scene: String,
+                        permissionGroupID: String,
+                        permission: String
+                    ) {
                         super.onUserDeny(scene, permissionGroupID, permission)
                         userDeny = true
                     }
@@ -87,7 +106,11 @@ open class CommonScanActivity : BaseScanActivity() {
                             getPhotoContent()
                         }
 
-                        override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                        override fun onUserCancel(
+                            scene: String,
+                            permissionGroupID: String,
+                            permission: String
+                        ) {
                             super.onUserDeny(scene, permissionGroupID, permission)
                             userDeny = true
                         }
@@ -97,7 +120,11 @@ open class CommonScanActivity : BaseScanActivity() {
                             userDeny = true
                         }
 
-                        override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                        override fun onUserDeny(
+                            scene: String,
+                            permissionGroupID: String,
+                            permission: String
+                        ) {
                             super.onUserDeny(scene, permissionGroupID, permission)
                             userDeny = true
                         }
