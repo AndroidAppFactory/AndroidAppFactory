@@ -4,7 +4,6 @@ import android.provider.Settings
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp

@@ -1,14 +1,16 @@
 package com.bihe0832.android.app.ui.navigation
 
 import android.view.View
+import com.bihe0832.android.app.R
 import com.bihe0832.android.app.about.getFeedbackItem
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
-import com.bihe0832.android.common.about.R
+import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.main.CommonNavigationContentFragment
 import com.bihe0832.android.common.permission.settings.PermissionFragment
 import com.bihe0832.android.common.permission.settings.PermissionItem
 import com.bihe0832.android.common.settings.SettingsItem
+import com.bihe0832.android.common.settings.card.SettingsDataGo
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -36,6 +38,20 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
         }
     }
 
+    fun getChangeLanguage(): SettingsDataGo {
+        return SettingsDataGo(resources.getString(R.string.settings_language_title)).apply {
+            mItemIconRes = R.drawable.icon_language
+            mHeaderTextBold = true
+            mShowDriver = true
+            mShowGo = true
+            mHeaderListener = object : View.OnClickListener {
+                override fun onClick(p0: View?) {
+                    RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_LANGUAGE)
+                }
+            }
+        }
+    }
+
     override fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(
@@ -57,9 +73,10 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
                 )
             }
 
-            add(PermissionItem.getPermission(PermissionFragment::class.java))
+            add(PermissionItem.getPermission(context!!, PermissionFragment::class.java))
             add(getFeedbackItem(activity))
-            add(SettingsItem.getShareAPP(true))
+            add(SettingsItem.getShareAPP(true,resources.getString(R.string.com_bihe0832_share_title)))
+            add(getChangeLanguage())
             addAll(super.getDataList(false))
             add(SettingsItem.getClearCache(activity!!))
             add(SettingsItem.getZixie())

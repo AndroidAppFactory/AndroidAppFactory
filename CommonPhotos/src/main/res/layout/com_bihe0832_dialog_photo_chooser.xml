@@ -13,7 +13,7 @@
         android:paddingLeft="24dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="拍照"
+        android:text="@string/common_photo_take_photo"
         android:textColor="@color/com_bihe0832_dialog_title"
         android:textSize="14sp" />
 
@@ -30,7 +30,7 @@
         android:paddingLeft="24dp"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="从相册选择"
+        android:text="@string/common_photo_choose_photo"
         android:textColor="@color/com_bihe0832_dialog_title"
         android:textSize="14sp" />
 

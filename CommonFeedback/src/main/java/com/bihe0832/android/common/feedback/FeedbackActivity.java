@@ -2,9 +2,8 @@ package com.bihe0832.android.common.feedback;
 
 import android.content.Intent;
 import android.text.TextUtils;
-
-import com.bihe0832.android.common.webview.base.BaseWebviewActivity;
 import com.bihe0832.android.common.webview.base.BaseWebViewFragment;
+import com.bihe0832.android.common.webview.base.BaseWebviewActivity;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.router.RouterConstants;
 import com.bihe0832.android.lib.router.annotation.Module;
@@ -26,16 +25,15 @@ public class FeedbackActivity extends BaseWebviewActivity {
 
     @Override
     protected void initToolbar() {
-        initToolbar("建议反馈", true);
+        initToolbar(getResources().getString(R.string.feedback_title), true);
     }
 
     @Override
     protected void handleIntent(Intent intent) {
         super.handleIntent(intent);
         if (TextUtils.isEmpty(getURL())) {
-            ZixieContext.INSTANCE.showToast("请输入正确的反馈地址");
+            ZixieContext.INSTANCE.showToast(getResources().getString(R.string.feedback_bad_tips));
             finish();
-            return;
         }
     }
 }

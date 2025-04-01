@@ -20,7 +20,7 @@ import retrofit2.Retrofit
 object AAFNetWorkApi {
 
     private val mHttpClient: OkHttpClient by lazy {
-        OkHttpWrapper.getBasicOkHttpClientBuilderWithInterceptor(!ZixieContext.isOfficial()).build()
+        OkHttpWrapper.getBasicOkHttpClientBuilderWithInterceptor(ZixieContext.applicationContext!!,!ZixieContext.isOfficial()).build()
     }
 
     const val LOG_TAG = "RetrofitLog"

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="ace_editor_title">文本编辑</string>
+
     <string name="ace_editor_load_file_tips">文件加载中，请稍候</string>
     <string name="ace_editor_load_file_empty">你尚未选择要查看的文件，请选择文件</string>
     <string name="ace_editor_load_file_not_found">你选择的文件不存在，请重新选择</string>
     <string name="ace_editor_load_file_folder">文本查看器当前仅支持打开文本文件，请重新选择文件</string>
+    <string name="ace_editor_load_file_not_found_positive">选择文件</string>
+    <string name="ace_editor_load_file_not_found_negative">退出查看</string>
 
     <string name="ace_editor_menu_open_new">打开其他文件</string>
     <string name="ace_editor_menu_share">发送当前文件</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/iv_refresh"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,7 +33,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:text="调试详情"
+        tools:text="调试详情"
         android:textColor="@color/com_bihe0832_dialog_title"
         android:textSize="14dp"
         android:textStyle="bold" />

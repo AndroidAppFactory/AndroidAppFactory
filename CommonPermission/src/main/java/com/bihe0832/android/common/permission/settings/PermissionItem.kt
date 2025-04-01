@@ -1,10 +1,11 @@
 package com.bihe0832.android.common.permission.settings
 
 import android.app.Activity
+import android.content.Context
 import android.view.View
 import android.widget.CompoundButton
-import com.bihe0832.android.common.about.R
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
+import com.bihe0832.android.common.permission.R
 import com.bihe0832.android.common.settings.card.SettingsDataGo
 import com.bihe0832.android.common.settings.card.SettingsDataSwitch
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
@@ -25,8 +26,8 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
  */
 object PermissionItem {
 
-    fun getPermission(cls: Class<out PermissionFragment>): SettingsDataGo {
-        val title = "隐私及权限设置"
+    fun getPermission(context: Context, cls: Class<out PermissionFragment>): SettingsDataGo {
+        val title = context.getString(R.string.common_permission_item_title_privacy)
         return SettingsDataGo(title).apply {
             mItemIconRes = R.drawable.icon_privacy_tip
             mShowDriver = true
@@ -37,13 +38,14 @@ object PermissionItem {
         }
     }
 
-    fun getRecommandSetting(): SettingsDataSwitch {
+    fun getRecommandSetting(context: Context): SettingsDataSwitch {
         return SettingsDataSwitch().apply {
-            title = "个性化内容推荐"
-            description = "开启后，将根据您的喜好为您推荐个性化内容"
+            title = context.getString(R.string.common_permission_item_title_recommend)
+            description = context.getString(R.string.common_permission_item_desc_recommend)
             isChecked = false
-            onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-            }
+            onCheckedChangeListener =
+                CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                }
         }
     }
 
@@ -51,17 +53,32 @@ object PermissionItem {
         return getPermissionSetting(activity, "", permissionGroup)
     }
 
-    fun getPermissionSetting(activity: Activity, scene: String, permissionGroup: String): SettingsDataSwitch {
+    fun getPermissionSetting(
+        activity: Activity,
+        scene: String,
+        permissionGroup: String
+    ): SettingsDataSwitch {
         PermissionManager.logPermissionConfigInfo()
         val permissionDesc: String = PermissionManager.getPermissionDesc(
             scene,
             permissionGroup,
             useDefault = false,
             needSpecial = false,
-        ) + "权限"
+        ) + activity.getString(R.string.common_permission_desc_ext)
         val permissionScene: String =
-            PermissionManager.getPermissionScene(scene, permissionGroup, useDefault = false, needSpecial = false)
-        return getPermissionSetting(activity, scene, permissionDesc, permissionScene, permissionGroup)
+            PermissionManager.getPermissionScene(
+                scene,
+                permissionGroup,
+                useDefault = false,
+                needSpecial = false
+            )
+        return getPermissionSetting(
+            activity,
+            scene,
+            permissionDesc,
+            permissionScene,
+            permissionGroup
+        )
     }
 
     fun getPermissionSetting(
@@ -74,18 +91,26 @@ object PermissionItem {
         return SettingsDataSwitch().apply {
             title = permissionDesc
             description = permissionScene
-            val hasPermission: Boolean = PermissionManager.isAllPermissionOK(activity, permissionGroup)
+            val hasPermission: Boolean =
+                PermissionManager.isAllPermissionOK(activity, permissionGroup)
             tips = if (hasPermission) {
-                TextFactoryUtils.getSpecialText("已开启", ThemeResourcesManager.getColor(R.color.textColorSecondary)!!)
+                TextFactoryUtils.getSpecialText(
+                    activity.getString(R.string.common_permission_status_enabled),
+                    ThemeResourcesManager.getColor(R.color.textColorSecondary)!!
+                )
             } else {
-                TextFactoryUtils.getSpecialText("去设置", ThemeResourcesManager.getColor(R.color.textColorPrimary)!!)
+                TextFactoryUtils.getSpecialText(
+                    activity.getString(R.string.common_permission_action_setting),
+                    ThemeResourcesManager.getColor(R.color.textColorPrimary)!!
+                )
             }
             onClickListener = View.OnClickListener {
                 if (hasPermission) {
                     showPermissionCloseDialog(
                         activity,
-                        "关闭$permissionDesc",
-                        "关闭${permissionDesc}后将不能$description",
+                        activity.getString(R.string.common_permission_action_close) + " " + permissionDesc,
+                        activity.getString(R.string.common_permission_action_close) + " " + permissionDesc + " " +
+                                activity.getString(R.string.common_permission_desc_close) + " $description",
                         permissionGroup,
                     )
                 } else {
@@ -113,8 +138,8 @@ object PermissionItem {
         CommonDialog(activity).apply {
             title = titleString
             setHtmlContent(permissionCloseDesc)
-            positive = "去设置"
-            negative = "取消"
+            positive = activity.getString(R.string.common_permission_action_setting)
+            negative = activity.getString(R.string.common_permission_action_cancel)
             shouldCanceled = false
             onClickBottomListener = object : OnDialogListener {
                 override fun onPositiveClick() {
@@ -130,8 +155,6 @@ object PermissionItem {
                     dismiss()
                 }
             }
-        }.let {
-            it.show()
-        }
+        }.show()
     }
 }

@@ -70,7 +70,7 @@ object AppFactoryInit {
             Log.e(ZixieCoreInit.TAG, "———————————————————————— 设备信息 ————————————————————————")
 
             RouterHelper.initRouter()
-            AAFPermissionManager.initPermission()
+            AAFPermissionManager.initPermission(ctx)
             ThreadManager.getInstance().start {
                 DownloadFileUtils.init(ctx, ZixieContext.isDebug())
             }

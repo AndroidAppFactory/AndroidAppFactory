@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.bihe0832.android.lib.lock.screen.R
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -15,18 +16,35 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
 
 object LockScreenPermission {
 
-    val mLockScreenPermission = mutableListOf(Manifest.permission.WAKE_LOCK, Manifest.permission.DISABLE_KEYGUARD, Manifest.permission.SYSTEM_ALERT_WINDOW)
+    val mLockScreenPermission = mutableListOf(
+        Manifest.permission.WAKE_LOCK,
+        Manifest.permission.DISABLE_KEYGUARD,
+        Manifest.permission.SYSTEM_ALERT_WINDOW
+    )
 
     const val SCENE = "lock"
 
-    init {
-        PermissionManager.addPermissionGroup(SCENE, Manifest.permission.WAKE_LOCK, mLockScreenPermission)
-        PermissionManager.addPermissionGroupDesc(SCENE, Manifest.permission.WAKE_LOCK, "显示在其他应用上层")
-        PermissionManager.addPermissionGroupScene(SCENE, Manifest.permission.WAKE_LOCK, "自定义锁屏界面")
+    fun init(context: Context) {
+        PermissionManager.addPermissionGroup(
+            SCENE,
+            Manifest.permission.WAKE_LOCK,
+            mLockScreenPermission
+        )
+        PermissionManager.addPermissionGroupDesc(
+            SCENE,
+            Manifest.permission.WAKE_LOCK,
+            context.getString(R.string.com_bihe0832_lock_screen_permission_desc_lock)
+        )
+        PermissionManager.addPermissionGroupScene(
+            SCENE,
+            Manifest.permission.WAKE_LOCK,
+            context.getString(R.string.com_bihe0832_lock_screen_permission_scene_lock)
+        )
     }
 
     fun startLockService(context: Context, cls: Class<out LockScreenService?>) {
         ZLog.e(LockScreenService.TAG, "startLockService ${cls.name}")
+        init(context)
         try {
             val intent = Intent()
             intent.setComponent(ComponentName(context.packageName, cls.name))
@@ -35,7 +53,7 @@ object LockScreenPermission {
             } else {
                 context!!.startService(intent)
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -46,8 +64,8 @@ object LockScreenPermission {
             startLockService(context, cls)
         } else {
             PermissionDialog(context).apply {
-                negative = "直接开启"
-                positive = "授权并开启"
+                negative = context.getString(R.string.com_bihe0832_lock_screen_permission_force)
+                positive = context.getString(R.string.com_bihe0832_lock_screen_permission_enabled)
                 needSpecial = true
             }.let {
                 it.show(

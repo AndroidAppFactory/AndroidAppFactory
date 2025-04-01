@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="white_board_export_tip">Export successful. Image saved to:</string>
+    <string name="white_board_export_fail">Export failed. Please try again later</string>
+    <string name="white_board_save_sucess">Saved successfully</string>
+</resources>

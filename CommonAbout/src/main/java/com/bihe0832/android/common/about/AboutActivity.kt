@@ -12,8 +12,7 @@ import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
-import com.bihe0832.android.lib.utils.intent.IntentUtils.openWebPage
-import java.util.*
+import java.util.Calendar
 
 open class AboutActivity : BaseActivity() {
 
@@ -37,7 +36,8 @@ open class AboutActivity : BaseActivity() {
     }
 
     protected open fun initView() {
-        getVersionTextView()?.text = "当前版本：" + ZixieContext.getVersionName()
+        getVersionTextView()?.text =
+            resources.getString(R.string.settings_update_current) + ZixieContext.getVersionName()
         getVersionIcon()?.setOnClickListener(object : ShowDebugClick() {
             override fun onClickAction() {
                 showVersionDetail()
@@ -53,7 +53,10 @@ open class AboutActivity : BaseActivity() {
             } else {
                 getPrivacyTextView()?.apply {
                     visibility = View.VISIBLE
-                    text = TextFactoryUtils.getCharSequenceWithClickAction(resources.getString(R.string.privacy_agreement_entrance), AgreementPrivacy.getAgreementAndPrivacyClickActionMap(this@AboutActivity))
+                    text = TextFactoryUtils.getCharSequenceWithClickAction(
+                        resources.getString(R.string.privacy_agreement_entrance),
+                        AgreementPrivacy.getAgreementAndPrivacyClickActionMap(this@AboutActivity)
+                    )
                     movementMethod = LinkMovementMethod.getInstance()
                 }
             }
@@ -63,12 +66,15 @@ open class AboutActivity : BaseActivity() {
     }
 
     protected open fun getCommonRightText(): String {
-        return "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " " + ThemeResourcesManager.getString(R.string.author) + " .All Rights Reserved"
+        return "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " " + ThemeResourcesManager.getString(
+            R.string.author
+        ) + " .All Rights Reserved"
 
     }
 
     protected fun showVersionDetail() {
-        getVersionTextView()?.text = "当前版本：" + ZixieContext.getVersionNameAndCode()
+        getVersionTextView()?.text =
+            resources.getString(R.string.settings_update_current) + ZixieContext.getVersionNameAndCode()
     }
 
     protected fun getVersionIcon(): ImageView? {

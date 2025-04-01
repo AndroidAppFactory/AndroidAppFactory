@@ -19,6 +19,7 @@ package com.bihe0832.android.common.qrcode.core;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.camera.view.PreviewView;
+import com.bihe0832.android.common.qrcode.R;
 import com.bihe0832.android.common.qrcode.view.ViewfinderView;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.framework.ui.BaseActivity;
@@ -156,7 +157,7 @@ public abstract class BaseCaptureActivity extends BaseActivity {
             try {
                 boolean isTorch = mCameraScan.isTorchEnabled();
                 if (!isTorch) {
-                    ZixieContext.INSTANCE.showToast("暂时无法开启闪光灯");
+                    ZixieContext.INSTANCE.showToast(getString(R.string.common_scan_failed));
                     return;
                 }
                 mCameraScan.enableTorch(!isTorch);

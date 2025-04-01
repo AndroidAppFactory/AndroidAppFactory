@@ -24,12 +24,12 @@ open class CommonScanActivity : BaseScanActivity() {
         PermissionManager.addPermissionGroupDesc(
             RouterConstants.MODULE_NAME_QRCODE_SCAN,
             Manifest.permission.CAMERA,
-            "相机",
+            getString(R.string.common_permission_title_camera),
         )
         PermissionManager.addPermissionGroupScene(
             RouterConstants.MODULE_NAME_QRCODE_SCAN,
             Manifest.permission.CAMERA,
-            "扫描、识别二维码",
+            getString(R.string.common_permission_title_qrcode)
         )
     }
 

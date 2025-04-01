@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_title">Notification</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_settings">Settings</string>
+    <string name="dialog_button_retry">Retry</string>
+    <string name="dialog_button_close">Close</string>
+    <string name="dialog_tips_button">Got it</string>
+    <string name="dialog_button_ok">Confirm</string>
+    <string name="dialog_input_hint">Click confirm after input</string>
+
+    <string name="dialog_color_button_ok">Apply current value</string>
+    <string name="dialog_color_button_reset">Reset to default</string>
+    <string name="dialog_color_title">Current color:</string>
+    <string name="dialog_color_alpha_title">Opacity:</string>
+    <string name="dialog_color_depth_title">Brightness:</string>
+    <string name="dialog_color_tips">Scroll vertically for more color options</string>
+</resources>

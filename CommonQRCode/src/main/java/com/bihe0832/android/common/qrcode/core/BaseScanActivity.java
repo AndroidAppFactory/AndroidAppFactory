@@ -202,13 +202,13 @@ public class BaseScanActivity extends BaseCaptureActivity {
         }
         mLoading.setCanCanceled(false);
         ThreadManager.getInstance().runOnUIThread(() -> {
-            mLoading.show("识别中，请稍候...");
+            mLoading.show(getString(R.string.common_scan_scanning));
             Result result = QRCodeDecodingHandler.decodeCode(this, uri, BITMAP_WIDTH, BITMAP_WIDTH);
             mLoading.dismiss();
             if (result != null) {
                 handleDecode(result);
             } else {
-                ZixieContext.INSTANCE.showToast("识别失败");
+                ZixieContext.INSTANCE.showToast(getString(R.string.common_scan_bad));
             }
         });
     }

@@ -7,15 +7,20 @@
   -->
 
 <resources>
-    <string name="commont_dialog_title">温馨提示</string>
+    <string name="com_bihe0832_web_process_name" translatable="false">:web</string>
+    <string name="process_name_domain" translatable="false">:domain</string>
 
-    <string name="theme_change_title">切换主题</string>
-    <string name="theme_change_tips">你可上下滑动主题列表查看更多主题</string>
-    <string name="theme_type_dark">暗夜模式</string>
-    <string name="theme_change_confirm_message">改变主题不会自动保存当前文档, 确认放弃文档改变而改变主题?</string>
+    <string name="app_name">子勰Lib</string>
+    <string name="app_desc">潜心学技术，努力做精品</string>
 
+    <string name="custom_density" translatable="false">360</string>
+    <string name="router_schema" translatable="false">zixie</string>
+    <string name="version_url" translatable="false"></string>
+    <string name="update_url" translatable="false"></string>
+    <string name="message_url" translatable="false"></string>
 
-    <string name="process_name_domain">:domain</string>
-
+    <string name="feedback_qq" translatable="false">2217661422</string>
+    <string name="feedback_mail" translatable="false">app@bihe0832.com</string>
+    <string name="feedback_url" translatable="false">https://support.qq.com/product/290858</string>
 
 </resources>

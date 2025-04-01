@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.test.widget.DebugWidget
+import java.util.Locale
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
@@ -51,5 +52,14 @@ open class TestMainActivity : AAFCommonMainActivity() {
 
     override fun getRootFragmentClassName(): String {
         return TestMainFragment::class.java.name
+    }
+
+    override fun supportMultiLanguage(): Boolean {
+        return true
+    }
+
+    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+        super.onLocaleChanged(lastLocale, toLanguageTag)
+        recreate()
     }
 }

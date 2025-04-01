@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="分享到"
+            android:text="@string/com_bihe0832_share_target"
             android:textColor="@color/com_bihe0832_share_text_color"
             android:textSize="@dimen/com_bihe0832_share_title_text_size" />
 
@@ -60,7 +60,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="微信" />
+                    android:text="@string/com_bihe0832_share_item_wechat" />
             </LinearLayout>
 
             <LinearLayout
@@ -73,7 +73,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="朋友圈" />
+                    android:text="@string/com_bihe0832_share_item_time_line" />
             </LinearLayout>
 
 
@@ -100,7 +100,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="QQ空间" />
+                    android:text="QZone" />
             </LinearLayout>
 
             <LinearLayout
@@ -113,7 +113,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="复制链接" />
+                    android:text="@string/com_bihe0832_share_item_link_copy" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,7 +126,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="保存图片" />
+                    android:text="@string/com_bihe0832_share_item_pic_save" />
             </LinearLayout>
 
 

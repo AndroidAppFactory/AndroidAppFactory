@@ -36,7 +36,7 @@ object UpdateManager {
             UpdateHelper.showUpdate(activity, checkUpdateByUser, showIfNeedUpdate, it)
         }, {
             if (checkUpdateByUser) {
-                ZixieContext.showLongToast("当前已是最新版本")
+                ZixieContext.showLongToast(activity.getString(R.string.dialog_apk_update_version_new))
             }
         })
     }

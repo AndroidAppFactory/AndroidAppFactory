@@ -21,23 +21,45 @@ import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
 object AAFPermissionManager {
 
     val selectPhotoPermission =
-        mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+        mutableListOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
     val takePhotoPermission = mutableListOf(Manifest.permission.CAMERA)
     val locationPermission =
-        mutableListOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+        mutableListOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
 
-    fun initPermission() {
-        PermissionManager.addPermissionGroup("", Manifest.permission.ACCESS_COARSE_LOCATION, locationPermission)
+    fun initPermission(context: Context) {
+        PermissionManager.addPermissionGroup(
+            "",
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            locationPermission
+        )
         PermissionManager.addPermissionGroup("", Manifest.permission.CAMERA, takePhotoPermission)
 
-        PermissionManager.addPermissionGroupDesc("", Manifest.permission.CAMERA, "相机")
-        PermissionManager.addPermissionGroupScene("", Manifest.permission.CAMERA, "扫描、识别二维码")
+        PermissionManager.addPermissionGroupDesc(
+            "",
+            Manifest.permission.CAMERA,
+            context.getString(R.string.common_permission_title_camera)
+        )
+        PermissionManager.addPermissionGroupScene(
+            "",
+            Manifest.permission.CAMERA,
+            context.getString(R.string.common_permission_title_qrcode)
+        )
 
-        PermissionManager.addPermissionGroupDesc("", Manifest.permission.ACCESS_COARSE_LOCATION, "开启位置服务")
+        PermissionManager.addPermissionGroupDesc(
+            "",
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            context.getString(R.string.common_permission_title_location)
+        )
         PermissionManager.addPermissionGroupScene(
             "",
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            "获取Wi-Fi名称、获取位置等",
+            context.getString(R.string.common_permission_scene_location),
         )
     }
 
@@ -118,11 +140,19 @@ object AAFPermissionManager {
                     }
                 }
 
-                override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                override fun onUserCancel(
+                    scene: String,
+                    permissionGroupID: String,
+                    permission: String
+                ) {
                     result?.onUserCancel(scene, permissionGroupID, permission)
                 }
 
-                override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                override fun onUserDeny(
+                    scene: String,
+                    permissionGroupID: String,
+                    permission: String
+                ) {
                     result?.onUserDeny(scene, permissionGroupID, permission)
                 }
             },

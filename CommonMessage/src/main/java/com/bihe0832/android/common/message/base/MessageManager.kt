@@ -108,16 +108,16 @@ public open class MessageManager {
                     setSingle(TextUtils.isEmpty(item.action))
                     setPositive(
                         if (TextUtils.isEmpty(item.action)) {
-                            "确定"
+                            activity.getString(R.string.com_bihe0832_message_confirm)
                         } else {
                             if (item.type == MessageInfoItem.TYPE_APK) {
-                                "立刻下载"
+                                activity.getString(R.string.com_bihe0832_message_download)
                             } else {
-                                "前往"
+                                activity.getString(R.string.com_bihe0832_message_go)
                             }
                         },
                     )
-                    setNegative("关闭")
+                    setNegative(activity.getString(R.string.com_bihe0832_message_close))
                     setOnClickBottomListener(object : OnDialogListener {
                         override fun onPositiveClick() {
                             if (!TextUtils.isEmpty(item.action)) {

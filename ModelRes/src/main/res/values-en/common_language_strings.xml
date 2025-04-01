@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_language_title">Change Language</string>
+    <string name="toast_settings_language_tips">Language change failed. Please try again later</string>
+</resources>
