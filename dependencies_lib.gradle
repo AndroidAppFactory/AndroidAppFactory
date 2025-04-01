@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.24.18",
+                "version"            : "6.24.19",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibDebug",
@@ -239,7 +239,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"          : [
-                "version"            : "6.24.18",
+                "version"            : "6.24.19",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon", "LibGson",
