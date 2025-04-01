@@ -6,6 +6,7 @@
     <string name="com_bihe0832_permission_negtive">Deny</string>
     <string name="com_bihe0832_permission_positive">Grant Permission</string>
     <string name="com_bihe0832_permission_default_content">The %s feature of %s requires %s permission. Missing permissions may affect feature availability.</string>
+    <string name="com_bihe0832_permission_tips">Permission Tips</string>
 
 
     <!-- Permission Titles -->

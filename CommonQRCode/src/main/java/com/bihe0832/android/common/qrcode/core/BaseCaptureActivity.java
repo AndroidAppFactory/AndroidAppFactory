@@ -59,6 +59,11 @@ public abstract class BaseCaptureActivity extends BaseActivity {
         return mCameraScan;
     }
 
+    @Override
+    public boolean supportMultiLanguage() {
+        return true;
+    }
+
     protected Analyzer createAnalyzer() {
         //初始化解码配置
         DecodeConfig decodeConfig = createDecodeConfig();
