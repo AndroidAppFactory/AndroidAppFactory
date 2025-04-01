@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="router_schema" translatable="false">zixie</string>
+    <string name="feedback_qq" translatable="false">2217661422</string>
+    <string name="feedback_mail" translatable="false">app@bihe0832.com</string>
+    <string name="feedback_url" translatable="false">https://support.qq.com/product/290858</string>
+    <string name="version_url" translatable="false"></string>
+    <string name="update_url" translatable="false"></string>
+    <string name="message_url" translatable="false"></string>
+    <string name="custom_density" translatable="false">360</string>
+</resources>

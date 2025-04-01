@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common_photo_take_photo">Take Photo</string>
+    <string name="common_photo_choose_photo">Choose from Gallery</string>
+    <string name="common_photo_choose_photo_bad">No image viewer found</string>
+</resources>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="about">关于我们</string>
@@ -8,6 +9,9 @@
     <string name="settings_message_title">消息中心</string>
     <string name="settings_update_title">版本更新</string>
     <string name="settings_update_tips">发现新版本</string>
+    <string name="settings_update_current"> 当前版本：</string>
+
+
 
     <string name="wechat_id">zixie_shi</string>
     <string name="wechat_name">子勰随笔</string>
@@ -16,5 +20,6 @@
     <string name="contact_QQ_join_failed">未安装手Q或手Q版本过低，请手动添加</string>
 
     <string name="clear_tips">缓存清理将为你清除 &lt;font color=\'#38ADFF\'&gt;各种缓存资源&lt;/font&gt;，清理期间请耐心等待，清理结束后会自动退出应用，是否开始清理？</string>
+    <string name="clear_loading">正在清理，请稍候~</string>
 
 </resources>

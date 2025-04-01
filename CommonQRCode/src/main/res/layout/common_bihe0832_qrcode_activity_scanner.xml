@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             app:cornerColor="@color/corner_color"
             app:frameColor="@color/viewfinder_frame"
-            app:labelText="二维码/条形码扫描"
+            app:labelText="@string/common_scan_tips"
             app:labelTextColor="@color/colorOnPrimary"
             app:laserColor="@color/laser_color"
             app:maskColor="@color/viewfinder_mask"

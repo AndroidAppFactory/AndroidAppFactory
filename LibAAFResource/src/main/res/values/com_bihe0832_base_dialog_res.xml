@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <color name="com_bihe0832_dialog_bg">#FFFFFF</color>
@@ -12,21 +13,5 @@
     <dimen name="com_bihe0832_dialog_content_text_size">12dp</dimen>
     <dimen name="com_bihe0832_dialog_tips_text_size">10dp</dimen>
     <dimen name="com_bihe0832_dialog_button_text_size">14dp</dimen>
-
-    <string name="dialog_title">温馨提示</string>
-    <string name="dialog_button_cancel">取消</string>
-    <string name="dialog_button_settings">设置</string>
-    <string name="dialog_button_retry">重试</string>
-    <string name="dialog_button_close">关闭</string>
-    <string name="dialog_tips_button">我知道了</string>
-    <string name="dialog_button_ok">确认</string>
-    <string name="dialog_input_hint">输入完成后点击确认提交</string>
-
-    <string name="dialog_color_button_ok">使用当前值</string>
-    <string name="dialog_color_button_reset">重置到初始值</string>
-    <string name="dialog_color_title">当前颜色：</string>
-    <string name="dialog_color_alpha_title">透明度：</string>
-    <string name="dialog_color_depth_title">亮度：</string>
-    <string name="dialog_color_tips">上下滑动浏览更多颜色设置选项</string>
 
 </resources>

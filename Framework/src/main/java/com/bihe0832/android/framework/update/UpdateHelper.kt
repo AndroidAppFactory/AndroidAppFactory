@@ -9,7 +9,6 @@ import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadAPK
 import com.bihe0832.android.lib.download.wrapper.SimpleInstallListener
-import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_NOT_FIRST
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
@@ -33,11 +32,14 @@ object UpdateHelper {
         desc: String,
         url: String,
         md5: String,
-        canCancel: Boolean,
+        canCancel: Boolean
     ) {
-        var title = String.format(ThemeResourcesManager.getString(R.string.dialog_apk_updating)!!, "$version")
+        val title = String.format(
+            ThemeResourcesManager.getString(R.string.dialog_apk_updating)!!,
+            version
+        )
 
-        var dialogListenerWhenDownload = object :
+        val dialogListenerWhenDownload = object :
             OnDialogListener {
             override fun onPositiveClick() {
                 if (!canCancel) {
@@ -54,15 +56,16 @@ object UpdateHelper {
             }
         }
 
-        var downloadListener =
-            object : SimpleInstallListener(activity, activity.packageName, dialogListenerWhenDownload) {
+        val downloadListener =
+            object :
+                SimpleInstallListener(activity, activity.packageName, dialogListenerWhenDownload) {
 
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     if (errorCode in listOf(
-                                DownloadErrorCode.ERR_BAD_URL,
-                                DownloadErrorCode.ERR_HTTP_LENGTH_FAILED,
-                                DownloadErrorCode.ERR_MD5_BAD
-                            )
+                            DownloadErrorCode.ERR_BAD_URL,
+                            DownloadErrorCode.ERR_HTTP_LENGTH_FAILED,
+                            DownloadErrorCode.ERR_MD5_BAD
+                        )
                     ) {
                         DialogUtils.showConfirmDialog(
                             activity,
@@ -129,15 +132,24 @@ object UpdateHelper {
             CommonDialog(activity).apply {
                 title = titleString
                 setHtmlContent(desc)
-                positive = "现在更新"
-                negative = "稍后更新"
+                positive = activity.getString(R.string.dialog_apk_update_positive)
+                negative = activity.getString(R.string.dialog_apk_update_negative)
                 setOnClickBottomListener(object :
                     OnDialogListener {
                     override fun onPositiveClick() {
                         when (type) {
                             UpdateDataFromCloud.UPDATE_TYPE_MUST -> {
                                 ThreadManager.getInstance()
-                                        .run { startUpdate(activity, versionName, desc, url, md5, false) }
+                                    .run {
+                                        startUpdate(
+                                            activity,
+                                            versionName,
+                                            desc,
+                                            url,
+                                            md5,
+                                            false
+                                        )
+                                    }
                             }
 
                             UpdateDataFromCloud.UPDATE_TYPE_MUST_JUMP -> {
@@ -149,11 +161,17 @@ object UpdateHelper {
                             }
 
                             UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW, UpdateDataFromCloud.UPDATE_TYPE_RED, UpdateDataFromCloud.UPDATE_TYPE_NEED -> {
-                                ThreadManager.getInstance()
-                                        .run { startUpdate(activity, versionName, desc, url, md5, true) }
-                                if (InstallUtils.hasInstallAPPPermission(context, false, false)) {
-                                    dismiss()
+                                ThreadManager.getInstance().run {
+                                    startUpdate(
+                                        activity,
+                                        versionName,
+                                        desc,
+                                        url,
+                                        md5,
+                                        true
+                                    )
                                 }
+                                dismiss()
                             }
 
                             UpdateDataFromCloud.UPDATE_TYPE_HAS_NEW_JUMP, UpdateDataFromCloud.UPDATE_TYPE_RED_JUMP, UpdateDataFromCloud.UPDATE_TYPE_NEED_JUMP -> {
@@ -203,7 +221,7 @@ object UpdateHelper {
     ) {
         hasShow = false
         var title = if (TextUtils.isEmpty(titleString)) {
-            ThemeResourcesManager.getString(R.string.dialog_apk_update_title) + versionName
+            ThemeResourcesManager.getString(R.string.dialog_apk_update_title) + ": " + versionName
         } else {
             titleString
         }
@@ -295,7 +313,10 @@ object UpdateHelper {
 
             UpdateDataFromCloud.UPDATE_TYPE_NEW -> {
                 if (checkUpdateByUser) {
-                    ToastUtil.showLong(activity, "当前已是最新版本")
+                    ToastUtil.showLong(
+                        activity,
+                        activity.getString(R.string.dialog_apk_update_version_new)
+                    )
                 }
             }
         }

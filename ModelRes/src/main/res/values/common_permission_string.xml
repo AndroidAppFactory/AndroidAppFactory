@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="com_bihe0832_permission_title">权限申请</string>
+    <string name="com_bihe0832_permission_default_scene">完整</string>
+    <string name="com_bihe0832_permission_default_desc">部分设备</string>
+    <string name="com_bihe0832_permission_negtive">暂不授权</string>
+    <string name="com_bihe0832_permission_positive">开启授权</string>
+    <string name="com_bihe0832_permission_default_content">%s的%s功能需要手机授予%s权限，缺少权限有可能会影响功能的正常使用。</string>
+
+
+    <string name="common_permission_title_camera">相机</string>
+    <string name="common_permission_title_qrcode">扫描、识别二维码</string>
+    <string name="common_permission_title_location">开启位置服务</string>
+    <string name="common_permission_scene_location">获取Wi-Fi名称、获取位置等</string>
+
+    <string name="common_permission_item_title_privacy">隐私及权限设置</string>
+    <string name="common_permission_item_title_recommend">隐私及权限设置</string>
+    <string name="common_permission_item_desc_recommend">开启后，将根据您的喜好为您推荐个性化内容</string>
+    <string name="common_permission_desc_ext">权限</string>
+    <string name="common_permission_status_enabled">已开启</string>
+    <string name="common_permission_action_setting">去设置</string>
+    <string name="common_permission_action_close">关闭</string>
+    <string name="common_permission_action_delay">暂不开启</string>
+
+    <string name="common_permission_action_cancel">@string/dialog_button_cancel</string>
+    <string name="common_permission_desc_close">后将不能</string>
+
+
+
+</resources>

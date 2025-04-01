@@ -86,7 +86,8 @@ public class HTTPServer {
             ZLog.w(LOG_TAG, "=======================================");
             ZLog.w(LOG_TAG, request.getClass().toString());
             try {
-                ZLog.w(LOG_TAG, result.toString());
+                ZLog.w(LOG_TAG, "result byte array size:" + result.length);
+                ZLog.w(LOG_TAG, "request data:" + new String(result));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -232,7 +233,7 @@ public class HTTPServer {
     }
 
     public String doRequest(HttpBasicRequest request, Network network) {
-        return  doRequest(request, network, HTTP_REQ_VALUE_CHARSET_UTF8);
+        return doRequest(request, network, HTTP_REQ_VALUE_CHARSET_UTF8);
     }
 
     public void doByteRequest(Network network, final String url, byte[] bytes, final String contentType,
@@ -258,7 +259,7 @@ public class HTTPServer {
         doByteRequest(null, url, bytes, contentType, new HttpByteResponseHandler() {
             @Override
             public void onResponse(int statusCode, byte[] response) {
-                handler.onResponse(statusCode, convertToString(bytes, charSetName));
+                handler.onResponse(statusCode, convertToString(response, charSetName));
             }
         });
     }

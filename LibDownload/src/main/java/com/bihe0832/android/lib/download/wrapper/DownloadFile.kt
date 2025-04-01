@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.R
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -143,10 +144,10 @@ object DownloadFile {
         if (NetworkUtil.isNetworkConnected(activity)) {
             if (NetworkUtil.isMobileNet(activity)) {
                 DialogUtils.showConfirmDialog(activity,
-                    "移动网络下载提示",
-                    "当前处于移动网络, 下载将消耗流量，是否继续下载?",
-                    "继续下载",
-                    "稍候下载",
+                    activity.getString(R.string.download_dialog_mobile_title),
+                    activity.getString(R.string.download_dialog_mobile_desc),
+                    activity.getString(R.string.download_dialog_mobile_positive),
+                    activity.getString(R.string.download_dialog_mobile_negative),
                     canCancel,
                     object : SimpleDialogListener() {
                         override fun onPositiveClick() {
@@ -229,7 +230,7 @@ object DownloadFile {
                 }
             }
         } else {
-            ToastUtil.showShort(activity, "网络已经断开，请先检查网络")
+            ToastUtil.showShort(activity, activity.getString(R.string.download_network_bad))
         }
     }
 
@@ -259,16 +260,19 @@ object DownloadFile {
             setCurrentSize(0, 0)
             setShouldCanceled(canCancel)
             if (canCancel) {
-                setPositive("后台下载")
-                setNegative("取消下载")
+                setPositive(activity.getString(R.string.download_background_downloading))
+                setNegative(activity.getString(R.string.download_cancel))
             } else {
-                setPositive("取消下载")
+                setPositive(activity.getString(R.string.download_cancel))
             }
 
             setOnClickListener(object : OnDialogListener {
                 override fun onPositiveClick() {
                     if (canCancel) {
-                        ToastUtil.showShort(activity, "已切换到后台下载，你可以在通知栏查看下载进度")
+                        ToastUtil.showShort(
+                            activity,
+                            activity.getString(R.string.download_background)
+                        )
                     }
                     dismiss()
                     listener?.onPositiveClick()
@@ -284,7 +288,10 @@ object DownloadFile {
 
                 override fun onCancel() {
                     if (canCancel) {
-                        ToastUtil.showShort(activity, "已切换到后台下载，你可以在通知栏查看下载进度")
+                        ToastUtil.showShort(
+                            activity,
+                            activity.getString(R.string.download_background)
+                        )
                     }
                     dismiss()
                     listener?.onCancel()
@@ -309,12 +316,15 @@ object DownloadFile {
                 fun updateProcess(item: DownloadItem) {
                     activity.runOnUiThread {
                         progressDialog.setContentSize(item.contentLength)
-                        progressDialog.setCurrentSize(item.finished-1, item.lastSpeed)
+                        progressDialog.setCurrentSize(item.finished - 1, item.lastSpeed)
                     }
                 }
 
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                    ToastUtil.showShort(activity, "应用下载失败（$errorCode）")
+                    ToastUtil.showShort(
+                        activity,
+                        activity.getString(R.string.download_failed) + "（$errorCode）"
+                    )
                     ThreadManager.getInstance().start({
                         downloadListener?.onFail(errorCode, msg, item)
                         ThreadManager.getInstance().runOnUIThread {

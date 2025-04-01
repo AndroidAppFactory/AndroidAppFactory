@@ -2,14 +2,46 @@ package com.bihe0832.android.lib.download.wrapper
 
 import android.app.Activity
 import android.content.Context
+import android.provider.Settings
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.R
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 
 object DownloadAPK {
+
+    fun showInstallPermissionDialog(activity: Activity, title: String, listener: OnDialogListener?) {
+        DialogUtils.showConfirmDialog(
+            activity,
+            title,
+            activity.getString(R.string.download_background_permission),
+            activity.getString(R.string.com_bihe0832_permission_positive),
+            activity.getString(R.string.com_bihe0832_permission_negtive),
+            false,
+            object : OnDialogListener {
+                override fun onPositiveClick() {
+                    IntentUtils.startAppSettings(
+                        activity,
+                        Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+                    )
+                    listener?.onPositiveClick()
+                }
+
+                override fun onNegativeClick() {
+                    listener?.onNegativeClick()
+                }
+
+                override fun onCancel() {
+                    listener?.onCancel()
+                }
+            },
+        )
+    }
 
     //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
     fun startDownloadWithCheckAndProcess(activity: Activity, url: String) {
@@ -56,7 +88,24 @@ object DownloadAPK {
             true,
             forceDownload = false,
             needRecord = false,
-            listener,
+            object : OnDialogListener {
+                override fun onPositiveClick() {
+                    if (!InstallUtils.hasInstallAPPPermission(activity, false, false)) {
+                        showInstallPermissionDialog(activity, title, listener)
+                    } else {
+                        listener?.onPositiveClick()
+                    }
+                }
+
+                override fun onNegativeClick() {
+                    listener?.onNegativeClick()
+                }
+
+                override fun onCancel() {
+                    listener?.onCancel()
+                }
+
+            },
             SimpleInstallListener(activity, packageName, listener)
         )
     }
@@ -97,10 +146,37 @@ object DownloadAPK {
     ) {
         DownloadFile.downloadWithProcess(
             activity,
-            title, msg,
-            url, header,"", false, md5, "",
-            canCancel, forceDownloadNew = false, downloadMobile, forceDownload = true, needRecord = false,
-            listener,
+            title,
+            msg,
+            url,
+            header,
+            "",
+            false,
+            md5,
+            "",
+            canCancel,
+            forceDownloadNew = false,
+            downloadMobile,
+            forceDownload = true,
+            needRecord = false,
+            object : OnDialogListener {
+                override fun onPositiveClick() {
+                    if (!InstallUtils.hasInstallAPPPermission(activity, false, false)) {
+                        showInstallPermissionDialog(activity, title, listener)
+                    } else {
+                        listener?.onPositiveClick()
+                    }
+                }
+
+                override fun onNegativeClick() {
+                    listener?.onNegativeClick()
+                }
+
+                override fun onCancel() {
+                    listener?.onCancel()
+                }
+
+            },
             downloadListener
         )
     }
@@ -110,10 +186,24 @@ object DownloadAPK {
         DownloadFile.downloadWithCheckAndProcess(
             activity,
             "", "",
-            url, emptyMap(),"", false, md5, "",
+            url, emptyMap(), "", false, md5, "",
             canCancel = true, useProcess = false,
             forceDownload = true, needRecord = false,
-            listener = null,
+            listener = object : OnDialogListener {
+                override fun onPositiveClick() {
+                    if (!InstallUtils.hasInstallAPPPermission(activity, false, false)) {
+                        showInstallPermissionDialog(activity, activity.getString(R.string.dialog_title), null)
+                    }
+                }
+
+                override fun onNegativeClick() {
+
+                }
+
+                override fun onCancel() {
+
+                }
+            },
             downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                 }

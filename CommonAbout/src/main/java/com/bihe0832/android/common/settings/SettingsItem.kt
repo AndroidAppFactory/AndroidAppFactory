@@ -250,7 +250,9 @@ object SettingsItem {
                     val loadingDialog = LoadingDialog(activity)
                     loadingDialog.setCanCanceled(false)
                     loadingDialog.setIsFullScreen(true)
-                    loadingDialog.setHtmlTitle("正在清理，请稍候~")
+                    loadingDialog.setHtmlTitle(
+                        ThemeResourcesManager.getString(R.string.clear_loading) ?: ""
+                    )
                     loadingDialog.show()
                     ThreadManager.getInstance().start {
                         AAFFileWrapper.clear()

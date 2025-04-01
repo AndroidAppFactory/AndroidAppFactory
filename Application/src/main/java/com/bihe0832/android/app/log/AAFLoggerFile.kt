@@ -61,10 +61,11 @@ object AAFLoggerFile {
     }
 
     fun logServer(msg: String) {
-        LoggerFile.log(MODULE_SERVER, msg)
+        LoggerFile.log(getLogPathByModuleName(MODULE_SERVER), msg)
     }
 
     fun logUpdate(msg: String) {
-        LoggerFile.log(MODULE_UPDATE, msg)
+        LoggerFile.log(getLogPathByModuleName(MODULE_UPDATE), msg)
+
     }
 }

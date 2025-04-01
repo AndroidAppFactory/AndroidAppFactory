@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feedback_title">@string/feedback</string>
+    <string name="feedback_bad_tips">请输入正确的反馈地址</string>
+</resources>

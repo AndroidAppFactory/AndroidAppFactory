@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--    整个AAF 的关键主题颜色定义-->
 
     <string name="app_name"></string>
+    <string name="app_desc"></string>
     <string name="custom_density">360</string>
 
     <!--    主题相关配色-->

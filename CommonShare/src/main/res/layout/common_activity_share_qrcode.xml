@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="通过以下方式分享"
+            android:text="@string/com_bihe0832_share_target"
             android:textColor="@color/com_bihe0832_share_text_color"
             android:textSize="@dimen/com_bihe0832_share_title_text_size" />
 
@@ -106,7 +106,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="分享APK" />
+                    android:text="@string/com_bihe0832_share_item_qrcode_apk" />
             </LinearLayout>
 
 
@@ -120,7 +120,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="分享二维码" />
+                    android:text="@string/com_bihe0832_share_item_qrcode_send" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,7 +133,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="保存二维码" />
+                    android:text="@string/com_bihe0832_share_item_qrcode_save" />
             </LinearLayout>
 
             <LinearLayout
@@ -146,7 +146,7 @@
 
                 <TextView
                     style="@style/shareItemText"
-                    android:text="分享链接" />
+                    android:text="@string/com_bihe0832_share_item_link_send" />
             </LinearLayout>
 
         </LinearLayout>

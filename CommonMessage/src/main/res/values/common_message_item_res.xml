@@ -5,6 +5,5 @@
     <color name="com_bihe0832_message_item_title_color">@color/textColorPrimary</color>
     <color name="com_bihe0832_message_item_time_color">@color/textColorSecondary</color>
     <color name="com_bihe0832_message_item_time_divider">@color/divider</color>
-    <string name="com_bihe0832_message_empty_text">消息空空如也~</string>
     <string name="com_bihe0832_message_common_msg_url">https://cdn.bihe0832.com/app/msg/aaf_msg.json</string>
 </resources>

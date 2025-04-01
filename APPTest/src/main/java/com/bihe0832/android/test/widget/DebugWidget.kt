@@ -2,7 +2,6 @@ package com.bihe0832.android.test.widget
 
 import android.content.Context
 import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
-import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail
 import com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderSimple
 import com.bihe0832.android.common.debug.widget.device.AAFDebugWidgetProviderDevice
@@ -10,6 +9,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.widget.tools.WidgetTools
+import com.bihe0832.android.test.R
 
 
 /**

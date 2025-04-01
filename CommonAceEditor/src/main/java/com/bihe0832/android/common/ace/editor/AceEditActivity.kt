@@ -38,7 +38,7 @@ class AceEditActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_layout)
-        initToolbar(R.id.common_toolbar, "文本查看器", true)
+        initToolbar(R.id.common_toolbar, resources.getString(R.string.ace_editor_title), true)
         parseBundle(intent.extras)
         initView()
     }
@@ -49,15 +49,20 @@ class AceEditActivity : BaseActivity() {
                 PopMenu(this@AceEditActivity, this).apply {
                     ArrayList<PopMenuItem>().apply {
                         add(PopMenuItem().apply {
-                            actionName = ThemeResourcesManager.getString(R.string.ace_editor_menu_open_new)
+                            actionName =
+                                ThemeResourcesManager.getString(R.string.ace_editor_menu_open_new)
                             iconResId = R.drawable.icon_folder_open
                             setItemClickListener {
                                 hide()
-                                FileSelectTools.openFileSelect(this@AceEditActivity, ZixieContext.getLogFolder())
+                                FileSelectTools.openFileSelect(
+                                    this@AceEditActivity,
+                                    ZixieContext.getLogFolder()
+                                )
                             }
                         })
                         add(PopMenuItem().apply {
-                            actionName = ThemeResourcesManager.getString(R.string.ace_editor_menu_share)
+                            actionName =
+                                ThemeResourcesManager.getString(R.string.ace_editor_menu_share)
                             iconResId = R.drawable.icon_send
                             setItemClickListener {
                                 hide()
@@ -71,7 +76,10 @@ class AceEditActivity : BaseActivity() {
                             } else {
                                 R.string.ace_editor_menu_open
                             }.let {
-                                actionName = ThemeResourcesManager.getString(it) + ThemeResourcesManager.getString(R.string.ace_editor_menu_auto_wrap)
+                                actionName =
+                                    ThemeResourcesManager.getString(it) + ThemeResourcesManager.getString(
+                                        R.string.ace_editor_menu_auto_wrap
+                                    )
                             }
 
                             iconResId = R.drawable.icon_wrap_text
@@ -150,26 +158,29 @@ class AceEditActivity : BaseActivity() {
 
     private fun showBadFile(msg: String) {
         DialogUtils.showConfirmDialog(
-                this,
-                ThemeResourcesManager.getString(R.string.dialog_title)!!,
-                msg,
-                "选择文件",
-                "退出查看",
-                false,
-                object : OnDialogListener {
-                    override fun onPositiveClick() {
-                        FileSelectTools.openFileSelect(this@AceEditActivity, ZixieContext.getLogFolder())
-                    }
+            this,
+            ThemeResourcesManager.getString(R.string.dialog_title)!!,
+            msg,
+            resources.getString(R.string.ace_editor_load_file_not_found_positive),
+            resources.getString(R.string.ace_editor_load_file_not_found_negative),
+            false,
+            object : OnDialogListener {
+                override fun onPositiveClick() {
+                    FileSelectTools.openFileSelect(
+                        this@AceEditActivity,
+                        ZixieContext.getLogFolder()
+                    )
+                }
 
-                    override fun onNegativeClick() {
-                        finish()
-                    }
+                override fun onNegativeClick() {
+                    finish()
+                }
 
-                    override fun onCancel() {
-                        finish()
-                    }
+                override fun onCancel() {
+                    finish()
+                }
 
-                })
+            })
     }
 
 }

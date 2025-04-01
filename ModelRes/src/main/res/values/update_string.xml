@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="version_update">版本更新</string>
+    <string name="dialog_apk_update_title">发现新版本</string>
+    <string name="dialog_apk_version">版本号</string>
+    <string name="dialog_apk_updating">版本 %1$s 更新中…</string>
+    <string name="dialog_apk_update_info_pre">版本内容：&lt;BR&gt;</string>
+    <string name="dialog_apk_update_failed_desc">版本更新遇到异常，当前更新包可能存在问题，是否将问题反馈给开发者？</string>
+    <string name="dialog_apk_update_failed_negative">不反馈</string>
+    <string name="dialog_apk_update_failed_positive">反馈给开发者</string>
+    <string name="dialog_apk_update_version_new">当前已是最新版本</string>
+    <string name="common_dialog_title">@string/dialog_title</string>
+    <string name="dialog_apk_update_positive">现在更新</string>
+    <string name="dialog_apk_update_negative">稍后更新</string>
+
+
+</resources>

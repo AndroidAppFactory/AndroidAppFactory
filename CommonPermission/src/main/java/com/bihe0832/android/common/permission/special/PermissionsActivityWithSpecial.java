@@ -3,6 +3,7 @@ package com.bihe0832.android.common.permission.special;
 import android.Manifest;
 import android.provider.Settings;
 import com.bihe0832.android.common.permission.AAFPermissionManager;
+import com.bihe0832.android.common.permission.R;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.ui.PermissionDialog;
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2;
@@ -47,10 +48,10 @@ public class PermissionsActivityWithSpecial extends PermissionsActivityV2 {
         PermissionDialog dialog = new PermissionDialog(this);
         String content = PermissionManager.INSTANCE.getPermissionContent(this, scene, Arrays.asList(permission),
                 getUseDefault(), getNeedSpecial());
-        dialog.setTitle("开启位置服务");
+        dialog.setTitle(getString(R.string.common_permission_title_location));
         dialog.setHtmlContent(content);
-        dialog.setPositive("开启位置服务");
-        dialog.setNegative("暂不开启");
+        dialog.setPositive(getString(R.string.common_permission_title_location));
+        dialog.setNegative(getString(R.string.common_permission_action_delay));
         dialog.setShouldCanceled(true);
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override

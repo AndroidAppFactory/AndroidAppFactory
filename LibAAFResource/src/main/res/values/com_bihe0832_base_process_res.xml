@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="com_bihe0832_process_color">@color/com_bihe0832_select_state_checked</color>
     <color name="com_bihe0832_process_back_color">@color/com_bihe0832_select_default</color>

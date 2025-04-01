@@ -114,7 +114,7 @@ object LoggerFile {
                     mBufferedWriters[fileName] = bufferedWriter
                     bufferSave(fileName, TYPE_TEXT, "", initMsg)
                 } catch (e: Exception) {
-                    ZLog.e(TAG, "ZLog FLIE ERROR !!!! $e")
+                    ZLog.e(TAG, "ZLog FLIE ERROR !!!! [filePath:$fileName] $e")
                     e.printStackTrace()
                 }
             }

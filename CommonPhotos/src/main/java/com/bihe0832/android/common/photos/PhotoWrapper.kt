@@ -77,7 +77,12 @@ fun Context.getPhotosUri(fileName: String): Uri? {
 /**
  * TargetFile 建议使用 [getPhotosFolder] 获取
  */
-fun Context.getCropIntentPhoto(sourceFile: Uri?, targetFile: Uri?, aspectX: Int = 1, aspectY: Int = 1): Intent {
+fun Context.getCropIntentPhoto(
+    sourceFile: Uri?,
+    targetFile: Uri?,
+    aspectX: Int = 1,
+    aspectY: Int = 1
+): Intent {
     ZLog.d("Activity cropPhoto sourceFile ：$sourceFile")
     ZLog.d("Activity cropPhoto targetFile ：$targetFile")
 
@@ -168,7 +173,7 @@ fun Activity.choosePhoto(fileType: String) {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
     } catch (e: Exception) {
         e.printStackTrace()
-        ZixieContext.showDebug("未找到图片查看器")
+        ZixieContext.showDebug(getString(R.string.common_photo_choose_photo_bad))
     }
 }
 
@@ -179,7 +184,7 @@ fun Fragment.choosePhoto(fileType: String) {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
     } catch (e: Exception) {
         e.printStackTrace()
-        ZixieContext.showDebug("未找到图片查看器")
+        ZixieContext.showDebug(getString(R.string.common_photo_choose_photo_bad))
     }
 }
 
@@ -246,11 +251,19 @@ fun Context.showPhotoChooser(takePhotoAction: (() -> Unit), choosePhotoAction: (
                     takePhotoAction()
                 }
 
-                override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                override fun onUserCancel(
+                    scene: String,
+                    permissionGroupID: String,
+                    permission: String
+                ) {
                     dialog.dismiss()
                 }
 
-                override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                override fun onUserDeny(
+                    scene: String,
+                    permissionGroupID: String,
+                    permission: String
+                ) {
                     dialog.dismiss()
                 }
             },
@@ -275,11 +288,19 @@ fun Context.showPhotoChooser(takePhotoAction: (() -> Unit), choosePhotoAction: (
                         choosePhotoAction()
                     }
 
-                    override fun onUserCancel(scene: String, permissionGroupID: String, permission: String) {
+                    override fun onUserCancel(
+                        scene: String,
+                        permissionGroupID: String,
+                        permission: String
+                    ) {
                         dialog.dismiss()
                     }
 
-                    override fun onUserDeny(scene: String, permissionGroupID: String, permission: String) {
+                    override fun onUserDeny(
+                        scene: String,
+                        permissionGroupID: String,
+                        permission: String
+                    ) {
                         dialog.dismiss()
                     }
                 },

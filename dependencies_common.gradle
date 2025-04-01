@@ -30,6 +30,13 @@ ext.commonmoduleInfo = [
                         "CommonQRCode", "CommonWebview", "CommonNetwork", "CommonLanguage"
                 ]
         ],
+        "ModelRes"              : [
+                "version"            : "",
+                "artifactId"         : "",
+                "apidependenciesList": [
+                        "LibAAFResource"
+                ]
+        ],
         "Framework"             : [
                 "version"                : "6.24.19",
                 "artifactId"             : "framework",
@@ -37,7 +44,7 @@ ext.commonmoduleInfo = [
                         project.androidsupport.annotation,
                         project.androidsupport.lifecycle_livedata,
                         project.androidsupport.multidex,
-                        "LibWrapper", "Router", "RouterAnnotation", "LibTheme", "LibLanguage"
+                        "LibWrapper", "Router", "RouterAnnotation", "LibTheme", "LibLanguage", "ModelRes"
                 ],
                 "specialdependenciesList": ["kapt": [project.glide.compiler, "RouterCompiler"]
                 ]
@@ -193,10 +200,10 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonLanguage"        : [
-                "version"            : "6.24.19",
-                "artifactId"         : "common-language",
-                "apidependenciesList": [
-                        "Framework","CommonList"
+                "version"                : "6.24.19",
+                "artifactId"             : "common-language",
+                "apidependenciesList"    : [
+                        "Framework", "CommonList"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
