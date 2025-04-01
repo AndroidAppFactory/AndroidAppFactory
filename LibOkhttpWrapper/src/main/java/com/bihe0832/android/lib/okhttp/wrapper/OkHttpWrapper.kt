@@ -8,17 +8,23 @@
 
 package com.bihe0832.android.lib.okhttp.wrapper
 
+import android.content.Context
 import android.os.SystemClock
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFBasicOkHttpNetworkEventListener
+import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOKHttpInterceptor
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFOkHttpNetworkEventListener
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpAppInterceptor
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFBasicOkHttpNetworkEventListener
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFOkHttpNetworkEventListener
 import com.bihe0832.android.lib.utils.IdGenerator
+import okhttp3.Cache
+import okhttp3.ConnectionPool
+import okhttp3.Dispatcher
 import okhttp3.EventListener
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
@@ -36,7 +42,6 @@ object OkHttpWrapper {
     private val mRequestIdGenerator by lazy {
         IdGenerator(0)
     }
-
 
     private val mRequestRecords: CopyOnWriteArrayList<RequestRecord> by lazy {
         CopyOnWriteArrayList<RequestRecord>()
@@ -57,37 +62,56 @@ object OkHttpWrapper {
         }
     }
 
-    fun getOkHttpClientBuilder(): OkHttpClient.Builder {
+    fun getOkHttpClientBuilder(context: Context): OkHttpClient.Builder {
+        val connectionPool = ConnectionPool(
+            5,  // 最大空闲连接数
+            3,  // 连接存活时间（分钟）
+            TimeUnit.MINUTES
+        )
+
+        val cache = Cache(
+            File(ZixieFileProvider.getZixieTempFolder(context) + "http-cache"),
+            100 * 1024 * 1024L
+        )
+        val dispatcher = Dispatcher().apply {
+            maxRequests = 30 // 全局限请求数
+            maxRequestsPerHost = 10 // 单主机限请求数
+        }
         return OkHttpClient.Builder().apply {
+            connectionPool(connectionPool)
+            cache(cache)
+            dispatcher(dispatcher)
+            retryOnConnectionFailure(true)
+            addInterceptor(AAFOkHttpAppInterceptor())
             connectTimeout(TIME_OUT_CONNECTION, TimeUnit.MILLISECONDS)
             readTimeout(TIME_OUT_READ, TimeUnit.MILLISECONDS)
             writeTimeout(TIME_OUT_WRITE, TimeUnit.MILLISECONDS)
-            retryOnConnectionFailure(true)
-            addInterceptor(AAFOkHttpAppInterceptor())
         }
     }
 
-    fun getOkHttpClientBuilderWithInterceptor(enableTraceAndIntercept: Boolean): OkHttpClient.Builder {
-        return getOkHttpClientBuilder().apply {
+    fun getOkHttpClientBuilderWithInterceptor(
+        context: Context,
+        enableTraceAndIntercept: Boolean
+    ): OkHttpClient.Builder {
+        return getOkHttpClientBuilder(context).apply {
             addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
             eventListenerFactory(
                 generateOkHttpNetworkEventListener(
-                    enableTraceAndIntercept,
-                    enableTraceAndIntercept,
-                    null
+                    enableTraceAndIntercept, enableTraceAndIntercept, null
                 )
             )
         }
     }
 
-    fun getBasicOkHttpClientBuilderWithInterceptor(enableTraceAndIntercept: Boolean): OkHttpClient.Builder {
-        return getOkHttpClientBuilder().apply {
+    fun getBasicOkHttpClientBuilderWithInterceptor(
+        context: Context,
+        enableTraceAndIntercept: Boolean
+    ): OkHttpClient.Builder {
+        return getOkHttpClientBuilder(context).apply {
             addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
             eventListenerFactory(
                 generateBasicOkHttpNetworkEventListener(
-                    enableTraceAndIntercept,
-                    enableTraceAndIntercept,
-                    null
+                    enableTraceAndIntercept, enableTraceAndIntercept, null
                 )
             )
         }
@@ -102,29 +126,21 @@ object OkHttpWrapper {
     }
 
     fun generateOkHttpNetworkEventListener(
-        enableTrace: Boolean,
-        enableLog: Boolean,
-        listener: EventListener?
+        enableTrace: Boolean, enableLog: Boolean, listener: EventListener?
     ): EventListener.Factory {
         return EventListener.Factory {
             AAFOkHttpNetworkEventListener(
-                enableTrace,
-                enableLog,
-                listener
+                enableTrace, enableLog, listener
             )
         }
     }
 
     fun generateBasicOkHttpNetworkEventListener(
-        enableTrace: Boolean,
-        enableLog: Boolean,
-        listener: EventListener?
+        enableTrace: Boolean, enableLog: Boolean, listener: EventListener?
     ): EventListener.Factory {
         return EventListener.Factory {
             AAFBasicOkHttpNetworkEventListener(
-                enableTrace,
-                enableLog,
-                listener
+                enableTrace, enableLog, listener
             )
         }
     }
