@@ -17,7 +17,6 @@ import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
 import com.bihe0832.android.lib.download.core.DownloadingList
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -76,16 +75,12 @@ object DownloadRangeManager : DownloadManager() {
                 )
             } else {
                 item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-                if (item.isNeedRecord) {
-                    DownloadInfoDBManager.saveDownloadInfo(item)
-                } else {
-                    closeDownloadAndRemoveRecord(item)
-                }
                 addDownloadItemToListAndSaveLocal(item)
-                addWaitToDownload()
+                closeDownloadAndRemoveRecord(item)
+
                 ThreadManager.getInstance().start {
                     ZLog.d(TAG, "onComplete start: $filePath ")
-                    var newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
+                    val newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
                     ZLog.d(TAG, "onComplete end: $newPath ")
                     item.filePath = newPath
                     if (item.isNeedRecord) {

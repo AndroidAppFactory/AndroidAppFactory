@@ -30,4 +30,6 @@
     <!-- References & Special Cases -->
     <string name="common_permission_action_cancel">@string/dialog_button_cancel</string>
     <string name="common_permission_desc_close">will disable</string>
+    <string name="common_permission_title_storage">Read and save to storage</string>
+    <string name="common_permission_scene_storage">Save videos</string>
 </resources>
