@@ -3,7 +3,6 @@
 
     <!-- Update Related -->
     <string name="version_update">App Update</string>
-    <string name="dialog_apk_update_title">New version</string>
     <string name="dialog_apk_version">Version</string>
     <string name="dialog_apk_updating">Updating to version %1$s…</string>
     <string name="dialog_apk_update_info_pre">Release notes:&lt;BR&gt;</string>

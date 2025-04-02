@@ -10,15 +10,12 @@ package com.bihe0832.android.base.debug.convert
 
 import android.view.View
 import com.bihe0832.android.app.api.AAFResponse
-import com.bihe0832.android.base.debug.json.IntegerDebugAdapter
 import com.bihe0832.android.base.debug.json.JsonTest
 import com.bihe0832.android.base.debug.tree.TreeNode
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.gson.JsonHelper
-import com.bihe0832.android.lib.gson.JsonHelper.fromJsonList
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.MathUtils

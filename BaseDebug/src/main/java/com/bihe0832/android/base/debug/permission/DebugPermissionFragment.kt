@@ -4,13 +4,11 @@ import android.Manifest
 import android.app.Activity
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
-import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog

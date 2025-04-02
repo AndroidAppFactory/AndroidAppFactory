@@ -50,7 +50,7 @@ class AceEditActivity : BaseActivity() {
                     ArrayList<PopMenuItem>().apply {
                         add(PopMenuItem().apply {
                             actionName =
-                                ThemeResourcesManager.getString(R.string.ace_editor_menu_open_new)
+                                ThemeResourcesManager.getString(R.string.common_file_menu_open_new)
                             iconResId = R.drawable.icon_folder_open
                             setItemClickListener {
                                 hide()
@@ -62,7 +62,7 @@ class AceEditActivity : BaseActivity() {
                         })
                         add(PopMenuItem().apply {
                             actionName =
-                                ThemeResourcesManager.getString(R.string.ace_editor_menu_share)
+                                ThemeResourcesManager.getString(R.string.common_file_menu_share)
                             iconResId = R.drawable.icon_send
                             setItemClickListener {
                                 hide()
@@ -72,13 +72,13 @@ class AceEditActivity : BaseActivity() {
 
                         add(PopMenuItem().apply {
                             if (mAceEditFragment.isAutoWrap()) {
-                                R.string.ace_editor_menu_close
+                                R.string.common_file_menu_close
                             } else {
-                                R.string.ace_editor_menu_open
+                                R.string.common_file_menu_open
                             }.let {
                                 actionName =
                                     ThemeResourcesManager.getString(it) + ThemeResourcesManager.getString(
-                                        R.string.ace_editor_menu_auto_wrap
+                                        R.string.common_file_menu_auto_wrap
                                     )
                             }
 

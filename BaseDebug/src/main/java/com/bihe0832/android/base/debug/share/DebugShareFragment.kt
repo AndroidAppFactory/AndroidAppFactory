@@ -2,7 +2,6 @@ package com.bihe0832.android.base.debug.share
 
 import android.view.View
 import com.bihe0832.android.base.debug.empty.DebugBottomActivity
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.share.ShareAPPActivity

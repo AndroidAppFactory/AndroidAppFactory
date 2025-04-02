@@ -3,7 +3,7 @@ package com.bihe0832.android.common.debug.log;
 import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getLittleDebugItem
 import com.bihe0832.android.common.list.CardItemForCommonList
@@ -15,7 +15,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.framework.router.RouterInterrupt
-import com.bihe0832.android.framework.router.showLog
+import com.bihe0832.android.framework.router.showFileContent
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.select.FileSelectTools
@@ -58,7 +58,7 @@ open class DebugLogListActivity : CommonListActivity() {
         return mutableListOf<CardItemForCommonList>().apply {
             add(CardItemForCommonList(SectionDataHeader::class.java, true))
             add(CardItemForCommonList(SectionDataContent::class.java))
-            add(CardItemForCommonList(DebugItemData::class.java, true))
+            add(CardItemForCommonList(ContentItemData::class.java, true))
         }
     }
 
@@ -87,13 +87,13 @@ open class DebugLogListActivity : CommonListActivity() {
         }
     }
 
-    protected fun getLogPathItem(path: String): DebugItemData {
+    protected fun getLogPathItem(path: String): ContentItemData {
         return getLittleDebugItem(
             "日志路径：<BR><small>${path}</small>", null, false, null
         )
     }
 
-    protected fun getSendLogItem(path: String): DebugItemData {
+    protected fun getSendLogItem(path: String): ContentItemData {
         return getDebugItem("选择并发送日志") {
             isView = false
             FileSelectTools.openFileSelect(this@DebugLogListActivity, path)
@@ -152,7 +152,7 @@ open class DebugLogListActivity : CommonListActivity() {
         if (requestCode == FileSelectTools.FILE_CHOOSER && resultCode == SwipeBackFragment.RESULT_OK) {
             data?.extras?.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")?.let { filePath ->
                 if (isView) {
-                    showLog(filePath, isReversed = false, showLine = true, showNum = 2000)
+                    showFileContent(filePath, isReversed = false, showLine = true, showNum = 2000)
                 } else {
                     FileUtils.sendFile(this@DebugLogListActivity, filePath).let {
                         if (!it) {

@@ -7,10 +7,8 @@ import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.message.data.MessageInfoItem
-import com.bihe0832.android.common.message.list.card.MessageItemData
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.gson.JsonHelper
 import com.bihe0832.android.lib.log.ZLog

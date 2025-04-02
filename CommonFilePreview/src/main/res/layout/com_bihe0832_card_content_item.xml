@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:lineHeight="24dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
         android:paddingLeft="16dp"
+        android:paddingTop="16dp"
         android:paddingRight="16dp"
+        android:paddingBottom="16dp"
         android:textColor="@color/colorOnBackground"
         android:textSize="12dp"
         tools:text="fsdfdsf" />
@@ -25,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/divider"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:background="#333333"
+        android:visibility="visible" />
 </RelativeLayout>

@@ -3,16 +3,12 @@ package com.bihe0832.android.base.debug.task
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import androidx.work.WorkerParameters
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.worker.AAFBaseWorker
-import com.bihe0832.android.lib.worker.AAFWorkerManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

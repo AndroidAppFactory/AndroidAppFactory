@@ -30,7 +30,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 object SettingsItem {
 
     fun getVersionList(): SettingsDataGo {
-        return getVersionList("版本介绍")
+        return getVersionList(ZixieContext.applicationContext!!.getString(R.string.settings_version_title))
     }
 
     fun getVersionList(title: String): SettingsDataGo {
@@ -154,7 +154,7 @@ object SettingsItem {
 
     fun getQQService(activity: Activity?, title: String): SettingsDataGo {
         return SettingsDataGo(title).apply {
-            var feedbackQQnumber = ThemeResourcesManager.getString(R.string.feedback_qq)
+            val feedbackQQnumber = ThemeResourcesManager.getString(R.string.feedback_qq)
             mItemIconRes = R.drawable.icon_qq
             mShowDriver = true
             mShowGo = true
@@ -184,7 +184,11 @@ object SettingsItem {
     }
 
     fun getWechat(activity: Activity?): SettingsDataGo {
-        return getWechat(activity, "微信公众号", "前往关注")
+        return getWechat(
+            activity,
+            activity?.getString(R.string.wechat_official_account) ?: "",
+            activity?.getString(R.string.wechat_sub_content_tips) ?: ""
+        )
     }
 
     fun getWechat(activity: Activity?, title: String, tipsText: String): SettingsDataGo {
@@ -226,7 +230,10 @@ object SettingsItem {
     }
 
     fun getShareAPP(canSendAPK: Boolean): SettingsDataGo {
-        return getShareAPP(canSendAPK, "分享给好友")
+        return getShareAPP(
+            canSendAPK,
+            ZixieContext.applicationContext!!.getString(R.string.com_bihe0832_share_title)
+        )
     }
 
     fun getShareAPP(canSendAPK: Boolean, title: String): SettingsDataGo {
@@ -243,7 +250,7 @@ object SettingsItem {
     open fun clearCache(activity: Activity) {
         DialogUtils.showConfirmDialog(
             activity,
-            ThemeResourcesManager.getString(R.string.clear_tips) ?: "",
+            ThemeResourcesManager.getString(R.string.settings_clear_tips) ?: "",
             true,
             object : OnDialogListener {
                 override fun onPositiveClick() {
@@ -251,7 +258,7 @@ object SettingsItem {
                     loadingDialog.setCanCanceled(false)
                     loadingDialog.setIsFullScreen(true)
                     loadingDialog.setHtmlTitle(
-                        ThemeResourcesManager.getString(R.string.clear_loading) ?: ""
+                        ThemeResourcesManager.getString(R.string.settings_clear_loading) ?: ""
                     )
                     loadingDialog.show()
                     ThreadManager.getInstance().start {
@@ -271,7 +278,7 @@ object SettingsItem {
     }
 
     fun getClearCache(activity: Activity): SettingsDataGo {
-        return getClearCache(activity, "清理缓存")
+        return getClearCache(activity, activity.getString(R.string.settings_clear_title))
     }
 
     fun getClearCache(activity: Activity, title: String): SettingsDataGo {

@@ -7,7 +7,7 @@ import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.share.DebugShareFragment
 import com.bihe0832.android.base.debug.temp.DebugTempFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
@@ -390,7 +390,7 @@ class DebugDialogFragment : DebugEnvFragment() {
         }
     }
 
-    fun changeEnv(title: String, type: Int): DebugItemData {
+    fun changeEnv(title: String, type: Int): ContentItemData {
         return getDebugItem(
             title,
             View.OnClickListener {

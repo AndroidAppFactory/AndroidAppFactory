@@ -57,13 +57,14 @@ public class RouterConstants {
     // 是否支持发送APK
     public static final String INTENT_EXTRA_KEY_SHARE_SEND_APK = "apk";
 
-    //日志查看
+    //日志列表查看
     public static final String MODULE_NAME_SHOW_LOG_LIST = "loglist";
     public static final String INTENT_EXTRA_KEY_SHOW_LOG_LIST_ACTION = "showAction";
-    public static final String MODULE_NAME_SHOW_LOG = "log";
-    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SORT = "log.reversed";
-    public static final String INTENT_EXTRA_KEY_SHOW_LOG_NUM = "log.num";
-    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SHOW_LINE = "log.line";
+    //文本查看
+    public static final String MODULE_NAME_SHOW_FILE_CONTENT = "file";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SORT = "file.reversed";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_NUM = "file.num";
+    public static final String INTENT_EXTRA_KEY_SHOW_LOG_SHOW_LINE = "file.line";
 
 
 }

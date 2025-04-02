@@ -5,7 +5,6 @@ import com.bihe0832.android.base.debug.tab.bottom.DebugSimpleBottomTabFragment
 import com.bihe0832.android.base.debug.tab.bottom.DebugSvgaBottomTabFragment
 import com.bihe0832.android.base.debug.tab.bottom.SvgaBottomTabFragment
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.lib.adapter.CardBaseModule
 

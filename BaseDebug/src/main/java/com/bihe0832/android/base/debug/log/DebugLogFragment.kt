@@ -10,7 +10,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.log.LoggerTrace
-import com.bihe0832.android.framework.router.showH5Log
+import com.bihe0832.android.framework.router.showH5File
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.LogImplForLogcat
@@ -145,7 +145,7 @@ class DebugLogFragment : BaseDebugListFragment() {
         )
         ZLog.d(path)
 
-        showH5Log(path)
+        showH5File(path)
 
     }
 }

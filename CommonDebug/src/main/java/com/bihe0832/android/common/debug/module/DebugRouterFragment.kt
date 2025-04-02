@@ -2,11 +2,8 @@ package com.bihe0832.android.common.debug.module
 
 import android.view.View
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
-import com.bihe0832.android.common.debug.item.DebugItemHolder
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getTipsItem
-import com.bihe0832.android.common.list.CardItemForCommonList
-import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.adapter.CardBaseModule
 
 open class DebugRouterFragment : BaseDebugListFragment() {
@@ -28,7 +25,7 @@ open class DebugRouterFragment : BaseDebugListFragment() {
         }
     }
 
-    open fun getRouterList(): ArrayList<DebugItemData> {
-        return ArrayList<DebugItemData>()
+    open fun getRouterList(): ArrayList<ContentItemData> {
+        return ArrayList<ContentItemData>()
     }
 }

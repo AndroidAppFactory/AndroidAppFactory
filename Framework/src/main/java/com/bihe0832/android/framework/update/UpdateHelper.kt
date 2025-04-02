@@ -221,7 +221,7 @@ object UpdateHelper {
     ) {
         hasShow = false
         var title = if (TextUtils.isEmpty(titleString)) {
-            ThemeResourcesManager.getString(R.string.dialog_apk_update_title) + ": " + versionName
+            ThemeResourcesManager.getString(R.string.settings_update_tips) + ": " + versionName
         } else {
             titleString
         }

@@ -6,8 +6,8 @@ import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.log.LoggerFile.TYPE_HTML
 import com.bihe0832.android.framework.log.LoggerFile.TYPE_TEXT
-import com.bihe0832.android.framework.router.showH5Log
-import com.bihe0832.android.framework.router.showLog
+import com.bihe0832.android.framework.router.showH5File
+import com.bihe0832.android.framework.router.showFileContent
 
 
 /**
@@ -37,7 +37,7 @@ object AAFLoggerFile {
     }
 
     fun showLogByModule(module: String) {
-        showLog(
+        showFileContent(
             getLogPathByModuleName(module), isReversed = true, showLine = true
         )
     }
@@ -47,7 +47,7 @@ object AAFLoggerFile {
     }
 
     fun showLocalH5LogByModule(module: String) {
-        showH5Log(
+        showH5File(
             getLogPathByModuleName(module, TYPE_HTML)
         )
     }

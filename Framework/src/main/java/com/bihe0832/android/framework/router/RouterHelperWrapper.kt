@@ -65,11 +65,11 @@ fun showLogHome(routerHost: String, showAction: Boolean) {
     RouterAction.openPageByRouter(routerHost, map)
 }
 
-fun showH5Log(filePath: String) {
+fun showH5File(filePath: String) {
     openZixieWeb("file://" + filePath)
 }
 
-fun showLog(
+fun showFileContent(
     routerHost: String,
     filePath: String,
     isReversed: Boolean,
@@ -84,10 +84,10 @@ fun showLog(
     RouterAction.openPageByRouter(routerHost, map)
 }
 
-fun showLog(filePath: String, isReversed: Boolean, showLine: Boolean, showNum: Int) {
-    showLog(RouterConstants.MODULE_NAME_SHOW_LOG, filePath, isReversed, showLine, showNum)
+fun showFileContent(filePath: String, isReversed: Boolean, showLine: Boolean, showNum: Int) {
+    showFileContent(RouterConstants.MODULE_NAME_SHOW_FILE_CONTENT, filePath, isReversed, showLine, showNum)
 }
 
-fun showLog(filePath: String, isReversed: Boolean, showLine: Boolean) {
-    showLog(filePath, isReversed, showLine, 2000)
+fun showFileContent(filePath: String, isReversed: Boolean, showLine: Boolean) {
+    showFileContent(filePath, isReversed, showLine, 2000)
 }

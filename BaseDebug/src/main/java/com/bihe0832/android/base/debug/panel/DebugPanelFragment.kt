@@ -2,7 +2,6 @@ package com.bihe0832.android.base.debug.panel
 
 import android.content.res.Configuration
 import android.view.View
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugCommonFragment
 import com.bihe0832.android.common.panel.PanelUtils

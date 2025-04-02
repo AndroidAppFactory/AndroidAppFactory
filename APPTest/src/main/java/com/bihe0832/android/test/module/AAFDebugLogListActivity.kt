@@ -41,7 +41,7 @@ class AAFDebugLogListActivity : DebugLogListActivity() {
                 try {
                     AAFLoggerFile.getLogPathByModuleName(AAFLoggerFile.MODULE_UPDATE).let {
                         if (type == SectionDataContent.TYPE_OPEN) {
-//                            DebugLogInfoActivity.showLog(
+//                            FileContentInfoActivity.showLog(
 //                                this@AAFDebugLogListActivity,
 //                                it,
 //                                sort = false,

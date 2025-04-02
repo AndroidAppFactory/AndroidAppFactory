@@ -10,12 +10,12 @@ package com.bihe0832.android.common.debug.audio
 
 import android.view.View
 import com.bihe0832.android.common.debug.audio.process.AudioDataFactoryCallback
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.log.LoggerFile
-import com.bihe0832.android.framework.router.showH5Log
+import com.bihe0832.android.framework.router.showH5File
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
 
@@ -47,7 +47,7 @@ open class DebugWAVListWithProcessFragment : DebugWAVListFragment() {
         )
     }
 
-    open fun getProcessAudioList(logFile: String, logHeader: String): DebugItemData {
+    open fun getProcessAudioList(logFile: String, logHeader: String): ContentItemData {
         return getDebugItem(
             "<font color ='#3AC8EF'><b>批量处理当前目录音频并记录</b></font>"
         ) {
@@ -67,7 +67,7 @@ open class DebugWAVListWithProcessFragment : DebugWAVListFragment() {
             }
             add(getChangeFolderItem())
             add(getDebugItem("<font color ='#3AC8EF'><b>查看最后一次处理日志</b></font>") {
-                showH5Log(getLogFile())
+                showH5File(getLogFile())
             })
             add(
                 getProcessAudioList(
@@ -98,7 +98,7 @@ open class DebugWAVListWithProcessFragment : DebugWAVListFragment() {
 
             override fun onComplete() {
                 dialog?.dismiss()
-                showH5Log(getLogFile())
+                showH5File(getLogFile())
             }
         }
     }

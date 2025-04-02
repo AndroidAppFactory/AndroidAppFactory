@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.common.debug.R
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.list.CardItemForCommonList
@@ -67,7 +67,7 @@ open class BaseDebugListFragment : CommonListFragment() {
 
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
-            add(CardItemForCommonList(DebugItemData::class.java, true))
+            add(CardItemForCommonList(ContentItemData::class.java, true))
         }
     }
 
@@ -75,7 +75,7 @@ open class BaseDebugListFragment : CommonListFragment() {
         content: String,
         clazz: Class<*>,
         isTips: Boolean = false
-    ): DebugItemData {
+    ): ContentItemData {
         return if (isTips) {
             getTipsItem(content) { startDebugActivity(clazz, content) }
         } else {

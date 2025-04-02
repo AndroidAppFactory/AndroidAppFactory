@@ -16,7 +16,6 @@ import android.content.ComponentName
 import android.content.Intent
 import android.view.View
 import com.bihe0832.android.app.router.RouterConstants
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.debug.widget.app.AAFDebugWidgetProviderDetail
