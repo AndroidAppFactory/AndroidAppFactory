@@ -27,7 +27,7 @@ ext.commonmoduleInfo = [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
                         "CommonList", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare",
                         "CommonMessage", "CommonPermission", "CommonPhotos", "CommonCrop",
-                        "CommonQRCode", "CommonWebview", "CommonNetwork", "CommonLanguage"
+                        "CommonQRCode", "CommonWebview", "CommonNetwork", "CommonLanguage", "CommonFilePreview"
                 ]
         ],
         "ModelRes"              : [
@@ -208,7 +208,17 @@ ext.commonmoduleInfo = [
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
                 ]
-        ]
+        ],
+        "CommonFilePreview"     : [
+                "version"                : "6.25.1",
+                "artifactId"             : "common-file-preview",
+                "apidependenciesList"    : [
+                        "CommonList"
+                ],
+                "specialdependenciesList": [
+                        "kapt": ["RouterCompiler"]
+                ]
+        ],
 
 
 ]

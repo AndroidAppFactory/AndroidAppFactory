@@ -1,9 +1,11 @@
 package com.bihe0832.android.common.debug.item
 
+import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.framework.ZixieContext.applicationContext
 import com.bihe0832.android.framework.router.RouterAction
 
@@ -40,8 +42,8 @@ fun getDebugItem(
     paddingLeftDp: Int,
     isTips: Boolean,
     showBottomLine: Boolean
-): DebugItemData {
-    return DebugItemData(
+): ContentItemData {
+    return ContentItemData(
         content,
         listener,
         longClickListener,
@@ -53,7 +55,11 @@ fun getDebugItem(
         paddingTopDp,
         paddingLeftDp,
         getDebugItemBackGroundColor(isTips),
-        showBottomLine
+        if (showBottomLine) {
+            Color.parseColor("#333333")
+        } else {
+            Color.TRANSPARENT
+        }
     )
 }
 
@@ -65,17 +71,17 @@ fun getDebugItem(
     isSingleLine: Boolean,
     ellipsize: TextUtils.TruncateAt?,
     isTips: Boolean
-): DebugItemData {
+): ContentItemData {
     return getDebugItem(
         content,
         listener,
         longClickListener,
-        DebugItemData.DEFAULT_TEXT_SIZE_DP,
+        ContentItemData.DEFAULT_TEXT_SIZE_DP,
         isBold,
         isSingleLine,
         ellipsize,
-        DebugItemData.DEFAULT_PADDING_SIZE_DP,
-        DebugItemData.DEFAULT_PADDING_SIZE_DP,
+        ContentItemData.DEFAULT_PADDING_SIZE_DP,
+        ContentItemData.DEFAULT_PADDING_SIZE_DP,
         isTips,
         true
     )
@@ -89,7 +95,7 @@ fun getLittleDebugItem(
     isSingleLine: Boolean,
     ellipsize: TextUtils.TruncateAt?,
     isTips: Boolean
-): DebugItemData {
+): ContentItemData {
     return getDebugItem(
         content,
         listener,
@@ -99,13 +105,13 @@ fun getLittleDebugItem(
         isSingleLine,
         ellipsize,
         12,
-        DebugItemData.DEFAULT_PADDING_SIZE_DP,
+        ContentItemData.DEFAULT_PADDING_SIZE_DP,
         isTips,
         true
     )
 }
 
-private fun getDebugItem(content: String, isTips: Boolean): DebugItemData {
+private fun getDebugItem(content: String, isTips: Boolean): ContentItemData {
     return getDebugItem(
         content, null, null, isTips, !isTips, if (isTips) {
             null
@@ -115,17 +121,17 @@ private fun getDebugItem(content: String, isTips: Boolean): DebugItemData {
     )
 }
 
-fun getTipsItem(content: String): DebugItemData {
+fun getTipsItem(content: String): ContentItemData {
     return getDebugItem(content, true)
 }
 
-fun getDebugItem(content: String): DebugItemData {
+fun getDebugItem(content: String): ContentItemData {
     return getDebugItem(content, false)
 }
 
 private fun getDebugItem(
     content: String, listener: View.OnClickListener?, isTips: Boolean
-): DebugItemData {
+): ContentItemData {
     return getDebugItem(
         content, listener, null, isTips, !isTips, if (isTips) {
             null
@@ -135,11 +141,11 @@ private fun getDebugItem(
     )
 }
 
-fun getTipsItem(content: String, listener: View.OnClickListener?): DebugItemData {
+fun getTipsItem(content: String, listener: View.OnClickListener?): ContentItemData {
     return getDebugItem(content, listener, true)
 }
 
-fun getDebugItem(content: String, listener: View.OnClickListener?): DebugItemData {
+fun getDebugItem(content: String, listener: View.OnClickListener?): ContentItemData {
     return getDebugItem(content, listener, false)
 }
 
@@ -149,7 +155,7 @@ fun getLittleDebugItem(
     listener: View.OnClickListener?,
     isSingleLine: Boolean,
     ellipsize: TextUtils.TruncateAt?,
-): DebugItemData {
+): ContentItemData {
     return getDebugItem(
         content,
         listener,
@@ -159,13 +165,13 @@ fun getLittleDebugItem(
         isSingleLine,
         ellipsize,
         12,
-        DebugItemData.DEFAULT_PADDING_SIZE_DP,
+        ContentItemData.DEFAULT_PADDING_SIZE_DP,
         isTips = false,
         showBottomLine = true
     )
 }
 
-fun BaseDebugListFragment.getRouterItem(content: String): DebugItemData {
+fun BaseDebugListFragment.getRouterItem(content: String): ContentItemData {
     return getLittleDebugItem(content, { RouterAction.openFinalURL(content) }, {
         showInfo("复制并分享路由地址", content)
         true

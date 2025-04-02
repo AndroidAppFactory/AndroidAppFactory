@@ -2,7 +2,7 @@ package com.bihe0832.android.common.debug.module
 
 import android.view.View
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
@@ -25,7 +25,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         fun onChanged(index: Int)
     }
 
-    fun getEnvDebugItem(content: String, action: View.OnClickListener): DebugItemData {
+    fun getEnvDebugItem(content: String, action: View.OnClickListener): ContentItemData {
         return getDebugItem(
             content, action, null, isBold = false, isSingleLine = false,null, isTips = false
         )
@@ -136,7 +136,7 @@ open class DebugEnvFragment : BaseDebugListFragment() {
         }
     }
 
-    fun getInfoItem(itemContent: String): DebugItemData {
+    fun getInfoItem(itemContent: String): ContentItemData {
         return getDebugItem(itemContent) { showInfo("应用调试信息", itemContent) }
     }
 

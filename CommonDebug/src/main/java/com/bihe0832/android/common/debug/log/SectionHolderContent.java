@@ -45,7 +45,7 @@ public class SectionHolderContent extends CardBaseHolder {
                 data.mActionListener.onClick(v, SectionDataContent.TYPE_OPEN);
             } else {
                 try {
-                    RouterHelperWrapperKt.showLog(data.mLogFileName, data.mSort, data.mShowLine);
+                    RouterHelperWrapperKt.showFileContent(data.mLogFileName, data.mSort, data.mShowLine);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

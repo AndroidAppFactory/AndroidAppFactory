@@ -1,13 +1,13 @@
 package com.bihe0832.android.test.module
 
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getRouterItem
 import com.bihe0832.android.lib.request.URLUtils
 
 class AAFDebugRouterFragment : com.bihe0832.android.common.debug.module.DebugRouterFragment() {
 
-    override fun getRouterList(): ArrayList<DebugItemData> {
-        return ArrayList<DebugItemData>().apply {
+    override fun getRouterList(): ArrayList<ContentItemData> {
+        return ArrayList<ContentItemData>().apply {
             add(getRouterItem("zixie://test"))
             add(getRouterItem("zixie://about"))
             add(getRouterItem("zixie://zshare?url=https%3A%2F%2Fblog.bihe0832.com"))

@@ -1,12 +1,10 @@
-package com.bihe0832.android.common.debug.log.core;
+package com.bihe0832.android.common.file.preview;
 
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import com.bihe0832.android.common.debug.R
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
@@ -24,8 +22,8 @@ import com.bihe0832.android.lib.ui.menu.PopMenuItem
 import com.bihe0832.android.lib.utils.ConvertUtils
 
 
-@Module(RouterConstants.MODULE_NAME_SHOW_LOG)
-open class DebugLogInfoActivity : CommonListActivity() {
+@Module(RouterConstants.MODULE_NAME_SHOW_FILE_CONTENT)
+open class FileContentInfoActivity : CommonListActivity() {
 
     private var logPath = ""
     private var isReversed = false
@@ -54,7 +52,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
     }
 
     override fun getTitleText(): String {
-        return "日志功能汇总"
+        return getString(R.string.common_file_preview_title)
     }
 
     override fun getDataLiveData(): CommonListLiveData {
@@ -62,12 +60,12 @@ open class DebugLogInfoActivity : CommonListActivity() {
     }
 
     override fun getEmptyText(): String {
-        return "日志内容为空"
+        return getString(R.string.common_file_preview_empty)
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
         return mutableListOf<CardItemForCommonList>().apply {
-            add(CardItemForCommonList(DebugItemData::class.java, true))
+            add(CardItemForCommonList(ContentItemData::class.java, true))
         }
     }
 
@@ -76,11 +74,11 @@ open class DebugLogInfoActivity : CommonListActivity() {
         super.parseBundle(bundle)
         logPath = bundle.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")
         if (logPath.isBlank() || !FileUtils.checkFileExist(logPath)) {
-            ZixieContext.showToast("路径异常或文件不存在")
+            ZixieContext.showToast(getString(R.string.ace_editor_load_file_not_found))
             finish()
         }
         findViewById<TextView>(R.id.title_text).apply {
-            text = "查看文件：${FileUtils.getFileName(logPath)}"
+            text = FileUtils.getFileName(logPath)
         }
         isReversed = ConvertUtils.parseBoolean(
             bundle.getString(
@@ -122,7 +120,7 @@ open class DebugLogInfoActivity : CommonListActivity() {
         }
         findViewById<View>(R.id.title_icon).apply {
             setOnClickListener {
-                PopMenu(this@DebugLogInfoActivity, this).apply {
+                PopMenu(this@FileContentInfoActivity, this).apply {
                     setMenuItemList(getPopMenuItem(this))
                 }.show()
             }
@@ -131,23 +129,21 @@ open class DebugLogInfoActivity : CommonListActivity() {
 
     fun getSendLogMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
-            actionName = "发送文件"
+            actionName = getString(R.string.common_file_menu_share)
             iconResId = R.drawable.icon_send
             setItemClickListener {
                 menu.hide()
-                FileUtils.sendFile(this@DebugLogInfoActivity, logPath)
+                FileUtils.sendFile(this@FileContentInfoActivity, logPath)
             }
         }
     }
 
     fun getReversedMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
-            if (isReversed) {
-                "正序"
+            actionName = if (isReversed) {
+                getString(R.string.common_file_menu_show_sort)
             } else {
-                "倒序"
-            }.let {
-                actionName = "${it}展示"
+                getString(R.string.common_file_menu_show_reversed)
             }
             iconResId = if (isReversed) {
                 R.drawable.icon_ascending
@@ -164,12 +160,10 @@ open class DebugLogInfoActivity : CommonListActivity() {
 
     fun getShowLineMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
-            if (showLine) {
-                "隐藏"
+            actionName = if (showLine) {
+                getString(R.string.common_file_menu_driver_hide)
             } else {
-                "展示"
-            }.let {
-                actionName = "${it}分隔线"
+                getString(R.string.common_file_menu_driver_show)
             }
             iconResId = R.drawable.icon_edit
             setItemClickListener {
@@ -182,14 +176,14 @@ open class DebugLogInfoActivity : CommonListActivity() {
 
     fun getChangeNumMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
-            actionName = "调整展示行数"
+            actionName = getString(R.string.common_file_line_title)
             iconResId = R.drawable.icon_number
             setItemClickListener {
                 menu.hide()
                 DialogUtils.showInputDialog(
-                    this@DebugLogInfoActivity,
-                    "调整展示行数",
-                    "请在下方输入你想展示的文件内容行数，后点击确定，当前行数：$showNum",
+                    this@FileContentInfoActivity,
+                    getString(R.string.common_file_line_title),
+                    String.format(getString(R.string.common_file_line_desc), showNum.toString()),
                     showNum.toString()
                 ) { p0 ->
                     if (!showNum.toString().equals(p0)) {
@@ -227,17 +221,21 @@ open class DebugLogInfoActivity : CommonListActivity() {
         }
     }
 
-    open fun getLineItem(index: Int, logInfo: String): DebugItemData {
-        return DebugItemData(
+    open fun getLineItem(index: Int, logInfo: String): ContentItemData {
+        return ContentItemData(
             logInfo, null, {
-                ClipboardUtil.copyToClipboard(this@DebugLogInfoActivity, logInfo)
-                ZixieContext.showToast("文件内容已经复制到剪切板")
+                ClipboardUtil.copyToClipboard(this@FileContentInfoActivity, logInfo)
+                ZixieContext.showToast(getString(R.string.common_file_copy))
                 true
             }, 10, Color.parseColor("#333333"), false, false, null, 6, 6, if (index % 2 == 0) {
                 Color.parseColor("#FFFFFF")
             } else {
                 Color.parseColor("#EEEEEE")
-            }, showLine
+            }, if (showLine) {
+                Color.parseColor("#333333")
+            } else {
+                Color.TRANSPARENT
+            }
         )
     }
 }

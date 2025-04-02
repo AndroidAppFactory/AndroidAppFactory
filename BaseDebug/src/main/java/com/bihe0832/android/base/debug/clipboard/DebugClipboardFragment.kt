@@ -3,7 +3,6 @@ package com.bihe0832.android.base.debug.clipboard
 import android.view.View
 import com.bihe0832.android.app.tools.AAFTools
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule

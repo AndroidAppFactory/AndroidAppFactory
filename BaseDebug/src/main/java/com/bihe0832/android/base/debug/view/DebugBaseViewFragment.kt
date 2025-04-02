@@ -11,7 +11,6 @@ import androidx.core.view.setPadding
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.touch.TouchRegionActivity
 import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule

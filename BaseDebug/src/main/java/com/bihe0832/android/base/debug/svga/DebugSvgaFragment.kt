@@ -3,7 +3,6 @@ package com.bihe0832.android.base.debug.svga
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.svga.*
@@ -12,7 +11,6 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.opensource.svgaplayer.*
 import java.net.MalformedURLException
-import java.net.URL
 
 class DebugSvgaFragment : DebugEnvFragment() {
 

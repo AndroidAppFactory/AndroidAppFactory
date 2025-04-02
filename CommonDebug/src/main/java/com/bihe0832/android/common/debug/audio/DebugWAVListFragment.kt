@@ -14,7 +14,7 @@ import android.util.Log
 import android.view.View
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.audio.card.AudioData
-import com.bihe0832.android.common.debug.item.DebugItemData
+import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -138,7 +138,7 @@ open class DebugWAVListFragment : DebugEnvFragment() {
         }
     }
 
-    open fun getTips(): DebugItemData? {
+    open fun getTips(): ContentItemData? {
         val tips =
             "1. <b><font color='#3AC8EF'>点击</font>图标</b>，播放音频，<b><font color='#3AC8EF'>点击</font>标题和内容</b>，${
                 if (isPlay) {
@@ -151,13 +151,13 @@ open class DebugWAVListFragment : DebugEnvFragment() {
         return getTipsItem(tips)
     }
 
-    fun getChangeFolderItem(): DebugItemData {
+    fun getChangeFolderItem(): ContentItemData {
         return getDebugItem(
             "<font color ='#3AC8EF'><b>点击切换查看的音频目录</b></font>"
         ) { FileSelectTools.openFileSelect(this@DebugWAVListFragment, folder) }
     }
 
-    fun getChangeAutoPlayItem(): DebugItemData {
+    fun getChangeAutoPlayItem(): ContentItemData {
         return getDebugItem(
             "<font color ='#3AC8EF'><b>点击切换识别时是否播放，当前：$isPlay</b></font>"
         ) {

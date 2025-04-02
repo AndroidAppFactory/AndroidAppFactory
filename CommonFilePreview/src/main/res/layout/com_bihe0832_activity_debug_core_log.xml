@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -46,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="日志查看：game_helper_core_202212"
+            tools:text="日志查看：game_helper_core_202212"
             android:textColor="@color/colorOnPrimary"
             android:textSize="10dp"
             app:layout_constraintEnd_toStartOf="@id/title_icon"

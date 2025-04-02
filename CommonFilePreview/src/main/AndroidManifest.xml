@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bihe0832.android.common.file.preview">
+
+    <application>
+        <activity
+            android:name="com.bihe0832.android.common.file.preview.FileContentInfoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="sensor"
+            android:theme="@style/AAF.ActivityTheme"
+            tools:ignore="DiscouragedApi" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="ace_editor_title">文本编辑</string>
+
+    <string name="ace_editor_load_file_tips">文件加载中，请稍候</string>
+    <string name="ace_editor_load_file_empty">你尚未选择要查看的文件，请选择文件</string>
+    <string name="ace_editor_load_file_not_found">你选择的文件不存在，请重新选择</string>
+    <string name="ace_editor_load_file_folder">文本查看器当前仅支持打开文本文件，请重新选择文件</string>
+    <string name="ace_editor_load_file_not_found_positive">选择文件</string>
+    <string name="ace_editor_load_file_not_found_negative">退出查看</string>
+
+    <string name="common_file_menu_open_new">打开其他文件</string>
+    <string name="common_file_menu_share">发送当前文件</string>
+    <string name="common_file_menu_open">开启%1$s</string>
+    <string name="common_file_menu_close">关闭%1$s</string>
+    <string name="common_file_menu_auto_wrap">自动换行</string>
+    <string name="common_file_menu_edit">文本编辑</string>
+    <string name="common_file_menu_show_sort">正序展示</string>
+    <string name="common_file_menu_show_reversed">倒序展示</string>
+    <string name="common_file_menu_driver_show">展示分割线</string>
+    <string name="common_file_menu_driver_hide">隐藏分割线</string>
+    <string name="common_file_preview_title">文件查看</string>
+    <string name="common_file_preview_empty">文本内容是空的~</string>
+    <string name="common_file_line_title">调整展示行数</string>
+    <string name="common_file_line_desc">请在下方输入你想展示的文件内容行数，后点击确定，当前行数：%s</string>
+    <string name="common_file_copy">文件内容已经复制到剪切板</string>
+
+
+</resources>
