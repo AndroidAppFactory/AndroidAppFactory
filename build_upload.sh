@@ -8,9 +8,9 @@ function checkResult() {
   if [ $result -eq 0 ]; then
     echo "checkResult: execCommand succ,libName:$1 "
   else
-    echo "\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo "checkResult: execCommand failed,libName:$1 "
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     exit $result
   fi
 }
