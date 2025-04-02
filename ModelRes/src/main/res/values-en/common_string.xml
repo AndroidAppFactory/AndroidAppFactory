@@ -8,7 +8,6 @@
     <string name="common_tips_debug">Beta version - Confidential</string>
     <string name="common_tips_waiting">Coming soon</string>
     <string name="common_tips_restart">Occasional white screen during restart. Please wait</string>
-    <string name="common_waiting_duration_restart">1500</string>
 
     <!-- UI Elements -->
     <string name="common_reminder_title">Notification</string>

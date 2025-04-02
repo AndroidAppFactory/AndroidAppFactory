@@ -6,7 +6,6 @@
     <string name="common_tips_debug">测试版本，请勿外泄~</string>
     <string name="common_tips_waiting">功能开发中，敬请期待~</string>
     <string name="common_tips_restart">应用重启时会偶现白屏，请耐心等待</string>
-    <string name="common_waiting_duration_restart">1500</string>
 
     <string name="common_reminder_title">温馨提示</string>
     <string name="comfirm">确定</string>
