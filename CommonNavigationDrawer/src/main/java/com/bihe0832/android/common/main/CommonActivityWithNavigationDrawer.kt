@@ -11,6 +11,7 @@ import com.bihe0832.android.framework.ui.main.CommonRootActivity
 import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
 import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnreadMsg
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import java.util.Locale
 
 open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
 
@@ -22,31 +23,38 @@ open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
         return R.layout.com_bihe0832_activity_navigation_drawer
     }
 
-    private val mNavigationDrawerFragment by lazy {
-        getNavigationDrawerFragment()
-    }
+    private var mNavigationDrawerFragment: NavigationDrawerFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mNavigationDrawerFragment?.apply {
-            setUp(findViewById(R.id.navigation_drawer_fl), findViewById(R.id.drawer_layout))
-        }
-
+        loadFragment()
         findViewById<ImageView>(R.id.title_icon).apply {
             setOnClickListener {
                 openDrawer()
             }
         }
+    }
+
+    override fun loadFragment() {
+        mNavigationDrawerFragment = getNavigationDrawerFragment()
+        mNavigationDrawerFragment?.apply {
+            setUp(findViewById(R.id.navigation_drawer_fl), findViewById(R.id.drawer_layout))
+        }
         mNavigationDrawerFragment?.let {
             loadRootFragment(R.id.navigation_drawer_fl, it)
         }
+        super.loadFragment()
+    }
+
+    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+        loadFragment()
     }
 
     fun showQrcodeScan(needSound: Boolean, needVibrate: Boolean, onlyQRCode: Boolean) {
         findViewById<ImageView>(R.id.title_scan).apply {
             visibility = View.VISIBLE
             setOnClickListener {
-                QrcodeUtils.openQrScanAndParse(needSound, needVibrate, onlyQRCode,true)
+                QrcodeUtils.openQrScanAndParse(needSound, needVibrate, onlyQRCode, true)
             }
         }
     }
@@ -89,5 +97,9 @@ open class CommonActivityWithNavigationDrawer : CommonRootActivity() {
         } else {
             setUnReadNum(-1)
         }
+    }
+
+    override fun supportMultiLanguage(): Boolean {
+        return true
     }
 }

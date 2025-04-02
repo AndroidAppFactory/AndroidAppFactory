@@ -9,11 +9,13 @@ import com.bihe0832.android.app.update.UpdateManager
 import com.bihe0832.android.common.main.CommonActivityWithNavigationDrawer
 import com.bihe0832.android.common.navigation.drawer.NavigationDrawerFragment
 import com.bihe0832.android.framework.ZixieContext
+import java.util.Locale
 
 
 open class AAFCommonMainActivity : CommonActivityWithNavigationDrawer() {
 
-    private val mAAFNavigationDrawerFragment = createAAFNavigationDrawerFragment()
+    private var mAAFNavigationDrawerFragment = createAAFNavigationDrawerFragment()
+
     open fun createAAFNavigationDrawerFragment(): AAFNavigationDrawerFragment {
         return AAFNavigationDrawerFragment()
     }
@@ -30,4 +32,11 @@ open class AAFCommonMainActivity : CommonActivityWithNavigationDrawer() {
         updateTitle(titleName)
         showQrcodeScan(needSound = true, needVibrate = true, onlyQRCode = false)
     }
+
+    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+        mAAFNavigationDrawerFragment = createAAFNavigationDrawerFragment()
+        super.onLocaleChanged(lastLocale, toLanguageTag)
+    }
+
+
 }
