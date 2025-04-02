@@ -81,8 +81,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 0
             }
         }
-        var availableSpace = FileUtils.getDirectoryAvailableSpace(file.parentFile.absolutePath)
-        var needSpace = mDownloadPartInfo.partLength - finishedBeforeLength
+        val availableSpace = FileUtils.getDirectoryAvailableSpace(file.parentFile.absolutePath)
+        val needSpace = mDownloadPartInfo.partLength - finishedBeforeLength
         if (needSpace > 0 && needSpace > availableSpace) {
             mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
             ZLog.e(

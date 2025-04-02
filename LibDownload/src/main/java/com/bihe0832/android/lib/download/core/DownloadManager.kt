@@ -298,9 +298,7 @@ abstract class DownloadManager {
 
     internal fun addDownloadItemToListAndSaveLocal(info: DownloadItem) {
         ThreadManager.getInstance().start {
-            if (info.isNeedRecord) {
-                DownloadInfoDBManager.saveDownloadInfo(info)
-            }
+            DownloadInfoDBManager.saveDownloadInfo(info)
             addToDownloadTaskList(info)
         }
     }
