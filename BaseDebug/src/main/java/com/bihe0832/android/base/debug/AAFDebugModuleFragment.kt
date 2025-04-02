@@ -81,7 +81,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
 
             add(
                 getDebugFragmentItemData(
-                    "UI（Intent跳转、反馈、评分、锁屏、设置等）测试",
+                    "UI（Intent跳转、反馈、评分、锁屏、隐私弹框、设置等）测试",
                     DebugIntentFragment::class.java,
                 ),
             )

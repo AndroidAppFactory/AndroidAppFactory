@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_title_privacy_and_agreement">用户协议与隐私政策</string>
+    <string name="agreement_title">用户协议</string>
+    <string name="agreement_positive">同意并继续</string>
+    <string name="agreement_negative">暂不同意</string>
+    <string name="privacy_title">隐私政策</string>
+    <string name="privacy_agreement_content">
+<![CDATA[
+请仔细阅读并理解<font color="#539EFF">《隐私政策》</font>主要内容：<br/>
+• 为提供服务，我们将收集<font color="#539EFF">设备信息、使用日志、网络数据</font><br/>
+• 需连接互联网（可能产生流量费用）<br/>
+• 您可在<font color="#539EFF">「设置」</font>中管理授权<br/><br/>
+查看完整<font color="#38c6ee">《隐私政策》</font>，点击<font color="#539EFF">「同意并继续」</font>即表示接受
+]]>
+</string>
+
+    <string name="privacy_agreement_entrance">&lt;font color=\'#539EFF\'&gt;《隐私政策》&lt;/font&gt;</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_title_privacy_and_agreement">Privacy Policy</string>
+    <string name="agreement_title">User Agreement</string>
+    <string name="agreement_positive">Agree</string>
+    <string name="agreement_negative">Not Now</string>
+    <string name="privacy_title">Privacy Policy</string>
+
+    <string name="privacy_agreement_content">
+<![CDATA[
+Please carefully read and understand the <font color="#539EFF">Privacy Policy</font>, including but not limited to:<br/>
+• We collect device information, usage logs, and network data to provide services<br/>
+• Internet connection required (data charges may apply)<br/>
+• You can manage permissions in Settings<br/><br/>
+Read the <font color="#38c6ee">Privacy Policy</font> for details. Click "Agree" to accept our services
+]]>
+</string>
+
+    <string name="privacy_agreement_entrance">&lt;font color=\'#539EFF\'&gt; Privacy Policy &lt;/font&gt;</string>
+
+</resources>

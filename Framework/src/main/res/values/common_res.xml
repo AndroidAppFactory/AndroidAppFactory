@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="custom_density" translatable="false">360</string>
     <string name="router_schema" translatable="false">zixie</string>
     <string name="feedback_qq" translatable="false">2217661422</string>
     <string name="feedback_mail" translatable="false">app@bihe0832.com</string>
@@ -8,5 +8,6 @@
     <string name="version_url" translatable="false"></string>
     <string name="update_url" translatable="false"></string>
     <string name="message_url" translatable="false"></string>
-    <string name="custom_density" translatable="false">360</string>
+    <string name="agreement_url" translatable="false"></string>
+    <string name="privacy_url" translatable="false"></string>
 </resources>
