@@ -298,7 +298,9 @@ abstract class DownloadManager {
 
     internal fun addDownloadItemToListAndSaveLocal(info: DownloadItem) {
         ThreadManager.getInstance().start {
-            DownloadInfoDBManager.saveDownloadInfo(info)
+            if (info.isNeedRecord) {
+                DownloadInfoDBManager.saveDownloadInfo(info)
+            }
             addToDownloadTaskList(info)
         }
     }
@@ -362,7 +364,7 @@ abstract class DownloadManager {
     }
 
     fun closeDownloadAndRemoveRecord(item: DownloadItem) {
-        getDownloadEngine()?.closeDownload(item.downloadID, finishDownload = true, true)
+        getDownloadEngine().closeDownload(item.downloadID, finishDownload = true, true)
     }
 
     fun checkAndAddTaskFromList(taskList: List<DownloadItem>) {

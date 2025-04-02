@@ -9,11 +9,6 @@
 
     <string name="com_bihe0832_permission_tips">权限使用说明</string>
 
-    <string name="common_permission_title_camera">相机</string>
-    <string name="common_permission_title_qrcode">扫描、识别二维码</string>
-    <string name="common_permission_title_location">开启位置服务</string>
-    <string name="common_permission_scene_location">获取Wi-Fi名称、获取位置等</string>
-
     <string name="common_permission_item_title_privacy">隐私及权限设置</string>
     <string name="common_permission_item_title_recommend">隐私及权限设置</string>
     <string name="common_permission_item_desc_recommend">开启后，将根据您的喜好为您推荐个性化内容</string>
@@ -26,6 +21,12 @@
     <string name="common_permission_action_cancel">@string/dialog_button_cancel</string>
     <string name="common_permission_desc_close">后将不能</string>
 
+    <string name="common_permission_title_camera">相机</string>
+    <string name="common_permission_title_qrcode">扫描、识别二维码</string>
+    <string name="common_permission_title_location">开启位置服务</string>
+    <string name="common_permission_scene_location">获取Wi-Fi名称、获取位置等</string>
 
+    <string name="common_permission_title_storage">读取和保存到存储卡</string>
+    <string name="common_permission_scene_storage">保存视频</string>
 
 </resources>

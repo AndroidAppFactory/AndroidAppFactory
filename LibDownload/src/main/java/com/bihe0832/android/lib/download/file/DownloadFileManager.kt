@@ -118,13 +118,8 @@ object DownloadFileManager : DownloadManager() {
                     item.packageName = it
                 }
             }
-            if (item.isNeedRecord) {
-                DownloadInfoDBManager.saveDownloadInfo(item)
-            } else {
-                closeDownloadAndRemoveRecord(item)
-            }
-
             addDownloadItemToListAndSaveLocal(item)
+            closeDownloadAndRemoveRecord(item)
             addWaitToDownload()
 
             ThreadManager.getInstance().start {
