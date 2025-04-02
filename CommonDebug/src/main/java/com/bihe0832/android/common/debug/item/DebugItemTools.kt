@@ -6,6 +6,7 @@ import android.view.View
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.file.preview.ContentItemData
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.applicationContext
 import com.bihe0832.android.framework.router.RouterAction
 
@@ -56,7 +57,7 @@ fun getDebugItem(
         paddingLeftDp,
         getDebugItemBackGroundColor(isTips),
         if (showBottomLine) {
-            Color.parseColor("#333333")
+            ZixieContext.applicationContext!!.getColor(R.color.divider)
         } else {
             Color.TRANSPARENT
         }
