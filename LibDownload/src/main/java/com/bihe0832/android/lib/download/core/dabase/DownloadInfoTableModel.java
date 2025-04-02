@@ -222,7 +222,7 @@ public class DownloadInfoTableModel extends BaseTableModel {
     }
 
     static boolean saveData(BaseDBHelper helper, DownloadItem item) {
-        if (TextUtils.isEmpty(item.getDownloadURL())) {
+        if (TextUtils.isEmpty(item.getDownloadURL()) || !item.isNeedRecord()) {
             return false;
         }
 
