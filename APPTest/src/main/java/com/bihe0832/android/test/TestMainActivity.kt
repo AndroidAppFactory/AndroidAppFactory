@@ -60,6 +60,5 @@ open class TestMainActivity : AAFCommonMainActivity() {
 
     override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
         super.onLocaleChanged(lastLocale, toLanguageTag)
-        recreate()
     }
 }
