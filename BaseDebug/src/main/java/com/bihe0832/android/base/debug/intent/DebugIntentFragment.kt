@@ -19,6 +19,7 @@ import com.bihe0832.android.common.debug.item.DebugItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.praise.UserPraiseManager
+import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.request.URLUtils
@@ -31,6 +32,17 @@ class DebugIntentFragment : DebugEnvFragment() {
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugItem("打开指定schema", View.OnClickListener { openSchema() }))
+
+            add(
+                getDebugItem(
+                    "弹出隐私弹框页面",
+                    View.OnClickListener {
+                        AgreementPrivacy.showPrivacy(activity!!) {
+
+                        }
+                    },
+                ),
+            )
 
             add(
                 getDebugItem(
@@ -57,7 +69,10 @@ class DebugIntentFragment : DebugEnvFragment() {
                 getDebugItem(
                     "打开应用安装界面",
                     View.OnClickListener {
-                        IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                        IntentUtils.startAppSettings(
+                            context,
+                            Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+                        )
                     },
                 ),
             )
