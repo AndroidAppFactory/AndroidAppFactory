@@ -37,7 +37,7 @@ const val TIME_OUT_WRITE = 5000L
 object OkHttpWrapper {
     const val TAG = "AAFRequest"
     const val HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID = "AAF-Content-Request-Id"
-    private var maxRequestListSize = 50
+    private var maxRequestListSize = 20
 
     private val mRequestIdGenerator by lazy {
         IdGenerator(0)
@@ -55,14 +55,19 @@ object OkHttpWrapper {
         mRequestRecords.add(record)
     }
 
-    // 建议不超过 0，如果请求比较复杂且内容较多，会导致内存占用偏高
+    // 建议不超过 20，如果请求比较复杂且内容较多，会导致内存占用偏高
     fun setMaxRequestNumInRequestCacheList(cacheMaxRequest: Int) {
         if (cacheMaxRequest > 0) {
             maxRequestListSize = cacheMaxRequest
         }
     }
 
-    fun getOkHttpClientBuilder(context: Context): OkHttpClient.Builder {
+    fun getOkHttpClientBuilder(
+        context: Context,
+        connectTimeout: Long,
+        readTimeout: Long,
+        writeTimeout: Long
+    ): OkHttpClient.Builder {
         val connectionPool = ConnectionPool(
             5,  // 最大空闲连接数
             3,  // 连接存活时间（分钟）
@@ -83,50 +88,28 @@ object OkHttpWrapper {
             dispatcher(dispatcher)
             retryOnConnectionFailure(true)
             addInterceptor(AAFOkHttpAppInterceptor())
-            connectTimeout(TIME_OUT_CONNECTION, TimeUnit.MILLISECONDS)
-            readTimeout(TIME_OUT_READ, TimeUnit.MILLISECONDS)
-            writeTimeout(TIME_OUT_WRITE, TimeUnit.MILLISECONDS)
+            connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
+            readTimeout(readTimeout, TimeUnit.MILLISECONDS)
+            writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
         }
     }
 
-    fun getOkHttpClientBuilderWithInterceptor(
-        context: Context,
-        enableTraceAndIntercept: Boolean
-    ): OkHttpClient.Builder {
-        return getOkHttpClientBuilder(context).apply {
-            addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
-            eventListenerFactory(
-                generateOkHttpNetworkEventListener(
-                    enableTraceAndIntercept, enableTraceAndIntercept, null
-                )
-            )
-        }
-    }
-
-    fun getBasicOkHttpClientBuilderWithInterceptor(
-        context: Context,
-        enableTraceAndIntercept: Boolean
-    ): OkHttpClient.Builder {
-        return getOkHttpClientBuilder(context).apply {
-            addNetworkInterceptor(AAFOKHttpInterceptor(enableTraceAndIntercept))
-            eventListenerFactory(
-                generateBasicOkHttpNetworkEventListener(
-                    enableTraceAndIntercept, enableTraceAndIntercept, null
-                )
-            )
-        }
+    fun getOkHttpClientBuilder(context: Context): OkHttpClient.Builder {
+        return getOkHttpClientBuilder(context, TIME_OUT_CONNECTION, TIME_OUT_READ, TIME_OUT_WRITE)
     }
 
     fun generateNetworkInterceptor(enableIntercept: Boolean): Interceptor {
         return AAFOKHttpInterceptor(enableIntercept)
     }
 
-    fun generateOkHttpNetworkEventListener(enableTrace: Boolean): EventListener.Factory {
-        return generateOkHttpNetworkEventListener(enableTrace, enableTrace, null)
+    fun generateNetworkEventListener(enableTrace: Boolean): EventListener.Factory {
+        return generateNetworkEventListener(enableTrace, enableTrace, null)
     }
 
-    fun generateOkHttpNetworkEventListener(
-        enableTrace: Boolean, enableLog: Boolean, listener: EventListener?
+    fun generateNetworkEventListener(
+        enableTrace: Boolean,
+        enableLog: Boolean,
+        listener: EventListener?
     ): EventListener.Factory {
         return EventListener.Factory {
             AAFOkHttpNetworkEventListener(
@@ -135,12 +118,59 @@ object OkHttpWrapper {
         }
     }
 
-    fun generateBasicOkHttpNetworkEventListener(
-        enableTrace: Boolean, enableLog: Boolean, listener: EventListener?
+    fun getOkHttpClientBuilderWithInterceptor(
+        context: Context,
+        enableTraceAndIntercept: Boolean
+    ): OkHttpClient.Builder {
+        return getOkHttpClientBuilder(context).apply {
+            addNetworkInterceptor(generateNetworkInterceptor(enableTraceAndIntercept))
+            eventListenerFactory(
+                generateNetworkEventListener(
+                    enableTraceAndIntercept, enableTraceAndIntercept, null
+                )
+            )
+        }
+    }
+
+    fun generateBasicNetworkEventListener(
+        enableTrace: Boolean,
+        enableLog: Boolean,
+        listener: EventListener?
     ): EventListener.Factory {
         return EventListener.Factory {
             AAFBasicOkHttpNetworkEventListener(
                 enableTrace, enableLog, listener
+            )
+        }
+    }
+
+    fun getOkHttpClientBuilderWithBasicInterceptor(
+        context: Context,
+        enableTraceAndIntercept: Boolean
+    ): OkHttpClient.Builder {
+        return getOkHttpClientBuilder(context).apply {
+            addNetworkInterceptor(generateNetworkInterceptor(enableTraceAndIntercept))
+            eventListenerFactory(
+                generateBasicNetworkEventListener(
+                    enableTraceAndIntercept, enableTraceAndIntercept, null
+                )
+            )
+        }
+    }
+
+    fun getOkHttpClientBuilderWithBasicInterceptor(
+        context: Context,
+        connectTimeout: Long,
+        readTimeout: Long,
+        writeTimeout: Long,
+        enableTraceAndIntercept: Boolean
+    ): OkHttpClient.Builder {
+        return getOkHttpClientBuilder(context, connectTimeout, readTimeout, writeTimeout).apply {
+            addNetworkInterceptor(generateNetworkInterceptor(enableTraceAndIntercept))
+            eventListenerFactory(
+                generateBasicNetworkEventListener(
+                    enableTraceAndIntercept, enableTraceAndIntercept, null
+                )
             )
         }
     }

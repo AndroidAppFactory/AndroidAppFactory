@@ -5,7 +5,7 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
 import com.bihe0832.android.lib.okhttp.wrapper.convert.GsonConverterFactory
-import com.bihe0832.android.lib.okhttp.wrapper.getRequestBodyByJsonString
+import com.bihe0832.android.lib.okhttp.wrapper.ext.getRequestBodyByJsonString
 import com.bihe0832.android.lib.request.URLUtils
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -20,7 +20,7 @@ import retrofit2.Retrofit
 object AAFNetWorkApi {
 
     private val mHttpClient: OkHttpClient by lazy {
-        OkHttpWrapper.getBasicOkHttpClientBuilderWithInterceptor(ZixieContext.applicationContext!!,!ZixieContext.isOfficial()).build()
+        OkHttpWrapper.getOkHttpClientBuilderWithBasicInterceptor(ZixieContext.applicationContext!!,!ZixieContext.isOfficial()).build()
     }
 
     const val LOG_TAG = "RetrofitLog"

@@ -25,6 +25,9 @@ import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
 
+/**
+ * 仅记录请求的关键阶段，日常开发推荐
+ */
 open class AAFBasicOkHttpNetworkEventListener(
     // 是否统计请求耗时
     protected val enableTrace: Boolean = false,

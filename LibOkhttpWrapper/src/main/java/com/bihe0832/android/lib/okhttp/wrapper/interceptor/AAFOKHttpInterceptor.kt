@@ -7,8 +7,8 @@
  */
 package com.bihe0832.android.lib.okhttp.wrapper.interceptor
 
-import com.bihe0832.android.lib.okhttp.wrapper.getRequestParams
-import com.bihe0832.android.lib.okhttp.wrapper.getResponseData
+import com.bihe0832.android.lib.okhttp.wrapper.ext.getRequestParams
+import com.bihe0832.android.lib.okhttp.wrapper.ext.getResponseData
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository.getNetworkContentDataRecordByContentID
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestContentDataRecord
 import okhttp3.Interceptor
