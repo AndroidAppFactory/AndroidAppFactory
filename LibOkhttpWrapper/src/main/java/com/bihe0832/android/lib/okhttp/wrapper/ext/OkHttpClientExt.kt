@@ -6,9 +6,10 @@
  *
  */
 
-package com.bihe0832.android.lib.okhttp.wrapper
+package com.bihe0832.android.lib.okhttp.wrapper.ext
 
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
 import com.bihe0832.android.lib.okhttp.wrapper.convert.GsonRequestBodyConverter
 import okhttp3.Request
 import okhttp3.RequestBody

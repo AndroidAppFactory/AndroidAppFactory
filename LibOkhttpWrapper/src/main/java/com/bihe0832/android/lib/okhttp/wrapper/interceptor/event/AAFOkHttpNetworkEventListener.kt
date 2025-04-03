@@ -18,6 +18,10 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Proxy
 
+
+/**
+ * 记录请求的详细阶段的耗时，问题定位推荐
+ */
 open class AAFOkHttpNetworkEventListener(
     enableTrace: Boolean,
     enableLog: Boolean,
