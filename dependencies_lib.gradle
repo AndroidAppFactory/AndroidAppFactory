@@ -48,6 +48,13 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-aaf-tools",
                 "apidependenciesList": []
         ],
+        "LibAAFResource"            : [
+                "version"            : "6.25.0",
+                "artifactId"         : "lib-aaf-res",
+                "apidependenciesList": [
+
+                ]
+        ],
         "LibAndroid"                : [
                 "version"            : "6.10.0",
                 "artifactId"         : "lib-android",
@@ -285,13 +292,6 @@ ext.libmoduleInfo = [
                         project.metadata.drewnoakes, "LibCommonUtils", "LibLog", "LibFile", "LibMedia",
                 ]
         ],
-        "LibAAFResource"            : [
-                "version"            : "6.25.0",
-                "artifactId"         : "lib-aaf-res",
-                "apidependenciesList": [
-
-                ]
-        ],
         "LibCommonUIUtils"          : [
                 "version"            : "6.12.0",
                 "artifactId"         : "lib-ui-common",
@@ -501,7 +501,7 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
                         project.androidsupport.constraintlayout,
-                        "LibViewExt"
+                        "LibViewExt","LibAAFResource"
                 ]
         ],
         "LibTheme"                  : [
