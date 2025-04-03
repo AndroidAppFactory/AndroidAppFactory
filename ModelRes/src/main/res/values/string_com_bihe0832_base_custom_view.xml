@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="custom_view_placeholder_title">内容为空，请稍后再试</string>
+    <string name="custom_view_placeholder_action">点击刷新</string>
+</resources>
