@@ -2,4 +2,8 @@
 <resources>
     <string name="custom_view_placeholder_title">内容为空，请稍后再试</string>
     <string name="custom_view_placeholder_action">点击刷新</string>
+
+    <string name="panel_draw_text_add_title">添加文本</string>
+    <string name="panel_draw_text_add_positive">输入新内容</string>
+    <string name="panel_draw_text_add_negative">保留原内容</string>
 </resources>

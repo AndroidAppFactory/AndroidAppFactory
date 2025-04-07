@@ -11,9 +11,9 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadConfig
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
+import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.download.wrapper.DownloadRangeUtils
 import com.bihe0832.android.lib.download.wrapper.DownloadTools
-import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
@@ -109,18 +109,42 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 ),
             )
             add(getDebugItem("通过ZIP安装OBB", View.OnClickListener { testInstallOOBByZip() }))
-            add(getDebugItem("通过ZIP安装超大OBB", View.OnClickListener { testInstallOOBByBigZip() }))
-            add(getDebugItem("通过文件夹安装OBB", View.OnClickListener { testInstallOOBByFolder() }))
-            add(getDebugItem("通过文件夹安装超大OBB", View.OnClickListener { testInstallBigOOBByFolder() }))
-            add(getDebugItem("通过ZIP安装Split", View.OnClickListener { testInstallSplitByGoodZip() }))
+            add(
+                getDebugItem(
+                    "通过ZIP安装超大OBB",
+                    View.OnClickListener { testInstallOOBByBigZip() })
+            )
+            add(
+                getDebugItem(
+                    "通过文件夹安装OBB",
+                    View.OnClickListener { testInstallOOBByFolder() })
+            )
+            add(
+                getDebugItem(
+                    "通过文件夹安装超大OBB",
+                    View.OnClickListener { testInstallBigOOBByFolder() })
+            )
+            add(
+                getDebugItem(
+                    "通过ZIP安装Split",
+                    View.OnClickListener { testInstallSplitByGoodZip() })
+            )
             add(
                 getDebugItem(
                     "通过非标准Split格式的ZIP安装Split",
                     View.OnClickListener { testInstallSplitByBadZip() },
                 ),
             )
-            add(getDebugItem("通过文件夹安装Split", View.OnClickListener { testInstallSplitByFolder() }))
-            add(getDebugItem("测试文件下载及GZIP 解压", View.OnClickListener { testDownloadGzip() }))
+            add(
+                getDebugItem(
+                    "通过文件夹安装Split",
+                    View.OnClickListener { testInstallSplitByFolder() })
+            )
+            add(
+                getDebugItem(
+                    "测试文件下载及GZIP 解压",
+                    View.OnClickListener { testDownloadGzip() })
+            )
         }
     }
 
@@ -138,13 +162,14 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 "https://cdn.bihe0832.com/images/head.jpg"
             }
             downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
+            contentMD5 = "E4DFE6298B5C727CD7E6134173BEE6D4"
 
 //            downloadURL = if (type == INSTALL_BY_CUSTOMER) {
 //                "https://imtt.dd.qq.com/sjy.10001/16891/apk/E2F59135FAE358442D2137E446AB59DE.apk"
 //            } else {
 //                "https://imtt.dd.qq.com/sjy.10001/16891/apk/2A5BC6AA4E69DCE13C6D5D3FB820706E.apk"
 //            }
-            isForceDownloadNew = true
+            isForceDownloadNew = false
             downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     showResult("应用下载失败（$errorCode）")
@@ -155,14 +180,11 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                     if (type == INSTALL_BY_CUSTOMER) {
                         var photoURI =
                             ZixieFileProvider.getZixieFileProvider(context!!, File(filePath))
-                        InstallUtils.installAPP(context, photoURI, File(filePath))
-                    }
-
-                    if (type == INSTALL_BY_DEFAULT) {
+//                        InstallUtils.installAPP(context, photoURI, File(filePath))
                         InstallUtils.installAPP(
                             context,
                             filePath,
-                            "",
+                            "com.bihe0832.puzzle",
                             object : InstallListener {
                                 override fun onUnCompress() {
                                     ZLog.d(LOG_TAG, "onUnCompress")
@@ -179,8 +201,19 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                                 override fun onInstallFailed(errorCode: Int) {
                                     ZLog.d(LOG_TAG, "onInstallFailed $errorCode")
                                 }
-                            },
-                        )
+
+                                override fun onInstallSuccess() {
+                                    ZLog.d(LOG_TAG, "onInstallSuccess")
+                                }
+
+                                override fun onInstallTimeOut() {
+                                    ZLog.d(LOG_TAG, "onInstallTimeOut")
+                                }
+                            })
+                    }
+
+                    if (type == INSTALL_BY_DEFAULT) {
+                        InstallUtils.installAPP(context, filePath)
                     }
                     return filePath
                 }
@@ -241,13 +274,23 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 override fun onInstallFailed(errorCode: Int) {
                     ZLog.d(LOG_TAG, "onInstallFailed $errorCode")
                 }
+
+                override fun onInstallSuccess() {
+                    ZLog.d(LOG_TAG, "onInstallSuccess")
+                }
+
+                override fun onInstallTimeOut() {
+                    ZLog.d(LOG_TAG, "onInstallTimeOut")
+                }
             },
         )
     }
 
     private fun testInstallSplitByGoodZip() {
+        val file = AAFFileWrapper.getFileTempFolder() + "com.supercell.brawlstars.zip"
+        FileUtils.copyAssetsFileToPath(context!!, "com.supercell.brawlstars.zip", file)
         testInstallSplit(
-            "/sdcard/Download/com.supercell.brawlstars.zip",
+            file,
             "com.supercell.brawlstars",
         )
     }
@@ -287,6 +330,14 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
                 override fun onInstallFailed(errorCode: Int) {
                     ZLog.d(LOG_TAG, "onInstallFailed $errorCode")
+                }
+
+                override fun onInstallSuccess() {
+                    ZLog.d(LOG_TAG, "onInstallSuccess")
+                }
+
+                override fun onInstallTimeOut() {
+                    ZLog.d(LOG_TAG, "onInstallTimeOut")
                 }
             },
         )
@@ -342,15 +393,16 @@ class DebugDownloadFragment : BaseDebugListFragment() {
             },
         )
 
-        ZixieRequestHttp.getOrigin("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")?.let {
-            val filePath = AAFFileWrapper.getFileTempFolder() + "a.gzip"
+        ZixieRequestHttp.getOrigin("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+            ?.let {
+                val filePath = AAFFileWrapper.getFileTempFolder() + "a.gzip"
 
-            FileUtils.writeToFile(filePath, it, false)
-            FileUtils.writeHexToFile(filePath, "00FFDD", true)
-            ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
+                FileUtils.writeToFile(filePath, it, false)
+                FileUtils.writeHexToFile(filePath, "00FFDD", true)
+                ZLog.d(LOG_TAG, "MD5 $filePath:" + MD5.getFileMD5(filePath))
 //            ZLog.d(LOG_TAG, "hhh 1" + GzipUtils.decompress(it))
-            ZLog.d(LOG_TAG, "hhh 2" + FileUtils.getFileContent(filePath, true))
-        }
+                ZLog.d(LOG_TAG, "hhh 2" + FileUtils.getFileContent(filePath, true))
+            }
 
         ZixieRequestHttp.get("https://cdn.bihe0832.com/app/update/get_apk.json").let {
             ZLog.d(LOG_TAG, "result 1 :$it")
@@ -358,7 +410,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
     }
 
     private fun startDownload(
-        url: String?, start: Long, length: Int,md5:String
+        url: String?, start: Long, length: Int, md5: String
     ) {
         val file = File(AAFFileWrapper.getFileCacheFolder() + FileUtils.getFileName(url))
         file.createNewFile()
@@ -404,7 +456,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                         "onComplete start $start : ${item.downloadID} - ${
                             MD5.getMd5(
                                 FileUtils.readDataFromFile(
-                                    filePath,  start,
+                                    filePath, start,
                                     length
                                 )
                             )
@@ -419,9 +471,9 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 
     fun testDownloadRange() {
 //        for (i in 0 until 1) {
-            val url = URL_YYB_WZ
-            val start = 0 * 50000000L
-            startDownload(url, start, 2000000,"cfd58b9748b44df6c56dbf22f89a737d")
+        val url = URL_YYB_WZ
+        val start = 0 * 50000000L
+        startDownload(url, start, 2000000, "cfd58b9748b44df6c56dbf22f89a737d")
 //        }
     }
 
@@ -568,16 +620,19 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 //                        )
                         DownloadFile.forceDownload(
                             activity!!,
-                            URL_FILE ,
+                            URL_FILE,
                             AAFFileWrapper.getTempFolder() + "a.a",
                             true,
                             MD5_FILE,
                             object : SimpleDownloadListener() {
 
-                                override fun onComplete(filePath: String, item: DownloadItem): String {
+                                override fun onComplete(
+                                    filePath: String,
+                                    item: DownloadItem
+                                ): String {
                                     ZLog.d(LOG_TAG, "testDownload onComplete 1 : ${filePath}")
                                     val a = 0
-                                    var b = 5/a
+                                    var b = 5 / a
                                     filePath.let {
                                         ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
                                         ZLog.d(
@@ -586,7 +641,11 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                                         )
                                         ZLog.d(
                                             LOG_TAG,
-                                            "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}"
+                                            "getFileNameWithoutEx: ${
+                                                FileUtils.getFileNameWithoutEx(
+                                                    it
+                                                )
+                                            }"
                                         )
                                         ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
 //                                        ZLog.d(
@@ -608,8 +667,15 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                                     return filePath
                                 }
 
-                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                                    ZLog.d(LOG_TAG, "testDownload onFail 1: ${errorCode} ${msg} $item")
+                                override fun onFail(
+                                    errorCode: Int,
+                                    msg: String,
+                                    item: DownloadItem
+                                ) {
+                                    ZLog.d(
+                                        LOG_TAG,
+                                        "testDownload onFail 1: ${errorCode} ${msg} $item"
+                                    )
                                 }
 
                                 override fun onProgress(item: DownloadItem) {
@@ -626,7 +692,10 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             MD5_FILE,
                             object : SimpleDownloadListener() {
 
-                                override fun onComplete(filePath: String, item: DownloadItem): String {
+                                override fun onComplete(
+                                    filePath: String,
+                                    item: DownloadItem
+                                ): String {
                                     ZLog.d(LOG_TAG, "testDownload onComplete 2: ${filePath}")
                                     filePath.let {
                                         ZLog.d(LOG_TAG, "getFileName: ${FileUtils.getFileName(it)}")
@@ -636,7 +705,11 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                                         )
                                         ZLog.d(
                                             LOG_TAG,
-                                            "getFileNameWithoutEx: ${FileUtils.getFileNameWithoutEx(it)}"
+                                            "getFileNameWithoutEx: ${
+                                                FileUtils.getFileNameWithoutEx(
+                                                    it
+                                                )
+                                            }"
                                         )
                                         ZLog.d(LOG_TAG, "getFileMD5: ${FileUtils.getFileMD5(it)}")
 //                                        ZLog.d(
@@ -658,8 +731,15 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                                     return filePath
                                 }
 
-                                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                                    ZLog.d(LOG_TAG, "testDownload onFail 2: ${errorCode} ${msg} $item")
+                                override fun onFail(
+                                    errorCode: Int,
+                                    msg: String,
+                                    item: DownloadItem
+                                ) {
+                                    ZLog.d(
+                                        LOG_TAG,
+                                        "testDownload onFail 2: ${errorCode} ${msg} $item"
+                                    )
                                 }
 
                                 override fun onProgress(item: DownloadItem) {
@@ -730,7 +810,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             },
                         )
                     } else if (it.get(currentNum).equals(URL_FILE) || it.get(currentNum)
-                                    .equals(URL_YYB_CHANNEL)
+                            .equals(URL_YYB_CHANNEL)
                     ) {
                         DownloadFile.download(requireContext(), it.get(currentNum), listener)
                     } else {

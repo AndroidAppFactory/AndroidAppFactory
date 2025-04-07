@@ -2,4 +2,8 @@
 <resources>
     <string name="custom_view_placeholder_title">No content available, Please try again later</string>
     <string name="custom_view_placeholder_action">Tap to refresh</string>
+
+    <string name="panel_draw_text_add_title">Add Text</string>
+    <string name="panel_draw_text_add_positive">Enter new text</string>
+    <string name="panel_draw_text_add_negative">Keep original</string>
 </resources>

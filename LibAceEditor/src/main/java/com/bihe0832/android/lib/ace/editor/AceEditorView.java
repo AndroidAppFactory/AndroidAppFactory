@@ -146,7 +146,7 @@ public class AceEditorView extends FrameLayout {
                 }
                 if (msg.equals("edt:big")) {
                     if (mMessageListener != null) {
-                        mMessageListener.onWarnMessage(R.string.ace_editor_file_to_big);
+                        mMessageListener.onWarnMessage(R.string.ace_editor_file_too_big);
                     }
                     return true;
                 }

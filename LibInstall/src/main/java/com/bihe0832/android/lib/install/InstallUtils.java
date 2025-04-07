@@ -8,7 +8,9 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
+import com.bihe0832.android.lib.install.apk.APKInstall;
 import com.bihe0832.android.lib.install.obb.OBBFormats;
+import com.bihe0832.android.lib.install.obb.ObbFileInstall;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
@@ -17,6 +19,7 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.zip.ZipUtils;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,9 +27,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by zixie on 2017/11/1.
  * <p>
- * 使用InstallUtils的前提是要按照  {@link ZixieFileProvider }的说明 定义好
- * lib_bihe0832_file_folder 和 zixie_file_paths.xml
- * 或者直接将文件放在  {@link ZixieFileProvider#getZixieFilePath(Context)} 的子目录
+ * 使用InstallUtils的前提是要按照  {@link ZixieFileProvider }的说明 定义好 lib_bihe0832_file_folder 和 zixie_file_paths.xml 或者直接将文件放在
+ * {@link ZixieFileProvider#getZixieFilePath(Context)} 的子目录
  * <p>
  * 如果不使用库自定义的fileProvider，请使用 {@link InstallUtils#installAPP(Context, Uri, File)} 安装 }，此时无需关注上述两个定义
  */
@@ -62,7 +64,7 @@ public class InstallUtils {
             }
             if (!haveInstallPermission) {
                 if (showToast) {
-                    ToastUtil.showShort(context, "安装应用需要打开未知来源权限，请在设置中开启权限");
+                    ToastUtil.showShort(context, context.getString(R.string.install_permission));
                 }
                 if (autoSettings) {
                     IntentUtils.startAppSettings(context, Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
@@ -77,7 +79,7 @@ public class InstallUtils {
     }
 
     public static void installAPP(Context context, Uri fileProvider, File file) {
-        APKInstall.realInstallAPK(context, fileProvider, file, null);
+        APKInstall.installAPK(context, fileProvider, file, null);
     }
 
     public static void installAPP(final Context context, final String filePath) {
@@ -95,6 +97,22 @@ public class InstallUtils {
                 @Override
                 public void run() {
                     installAllAPK(context, filePath, packageName, new InstallListener() {
+                        @Override
+                        public void onInstallTimeOut() {
+                            ZLog.d(TAG + " installAllApk onInstallTimeOut");
+                            if (listener != null) {
+                                listener.onInstallTimeOut();
+                            }
+                        }
+
+                        @Override
+                        public void onInstallSuccess() {
+                            ZLog.d(TAG + " installAllApk onInstallSuccess");
+                            if (listener != null) {
+                                listener.onInstallSuccess();
+                            }
+                        }
+
                         @Override
                         public void onUnCompress() {
                             ZLog.d(TAG + " installAllApk onUnCompress");
@@ -142,12 +160,12 @@ public class InstallUtils {
                 return;
             }
             if (FileMimeTypes.INSTANCE.isApkFile(filePath)) {
-                APKInstall.installAPK(context, downloadedFile.getAbsolutePath(), listener);
+                APKInstall.installAPK(context, downloadedFile.getAbsolutePath(), packageName, listener);
             } else if (ZipUtils.isZipFile(downloadedFile.getAbsolutePath(), true)) {
                 installSpecialAPKByZip(context, filePath, packageName, listener);
             } else {
                 if (!downloadedFile.isDirectory()) {
-                    APKInstall.installAPK(context, downloadedFile.getAbsolutePath(), listener);
+                    APKInstall.installAPK(context, downloadedFile.getAbsolutePath(), packageName, listener);
                 } else {
                     installSpecialAPKByFolder(context, downloadedFile.getAbsolutePath(), packageName, listener);
                 }
@@ -156,6 +174,18 @@ public class InstallUtils {
             e.printStackTrace();
             ZLog.d(TAG + "installAllApk failed:" + e.getMessage());
             listener.onInstallFailed(InstallErrorCode.UNKNOWN_EXCEPTION);
+        }
+    }
+
+    static void addApkToFilesList(File folder, ArrayList<String> files) {
+        if (folder != null && folder.isDirectory() && folder.listFiles() != null) {
+            for (File tempFile : folder.listFiles()) {
+                addApkToFilesList(tempFile, files);
+            }
+        } else {
+            if (FileMimeTypes.INSTANCE.isApkFile(folder.getName())) {
+                files.add(folder.getAbsolutePath());
+            }
         }
     }
 
@@ -178,7 +208,9 @@ public class InstallUtils {
             listener.onUnCompress();
             ZipUtils.unCompress(zipFilePath, fileDir);
             ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
-            SplitApksInstallHelper.INSTANCE.installApk(context, new File(fileDir), finalPackageName, listener);
+            ArrayList<String> files = new ArrayList<>();
+            addApkToFilesList(new File(fileDir), files);
+            SplitApksInstallHelper.INSTANCE.installApk(context, files, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.APK) {
             String fileDir = ZixieFileProvider.getZixieCacheFolder(context) + packageName;
             ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
@@ -206,13 +238,15 @@ public class InstallUtils {
         if (apkInstallType == ApkInstallType.OBB) {
             ObbFileInstall.installObbAPKByFile(context, folderPath, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
-            SplitApksInstallHelper.INSTANCE.installApk(context, new File(folderPath), finalPackageName, listener);
+            ArrayList<String> files = new ArrayList<>();
+            addApkToFilesList(new File(folderPath), files);
+            SplitApksInstallHelper.INSTANCE.installApk(context, files, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.APK) {
             boolean hasInstall = false;
             for (File file2 : new File(folderPath).listFiles()) {
                 if (FileMimeTypes.INSTANCE.isApkFile(file2.getAbsolutePath())) {
                     hasInstall = true;
-                    APKInstall.installAPK(context, file2.getAbsolutePath(), listener);
+                    APKInstall.installAPK(context, file2.getAbsolutePath(), "", listener);
                     break;
                 }
             }
@@ -301,9 +335,6 @@ public class InstallUtils {
     }
 
     public enum ApkInstallType {
-        NULL,
-        APK,
-        OBB,
-        SPLIT_APKS
+        NULL, APK, OBB, SPLIT_APKS
     }
 }

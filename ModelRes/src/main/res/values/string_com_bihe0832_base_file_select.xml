@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="com_bihe0832_file_select_permission_scene">访问存储卡</string>
+    <string name="com_bihe0832_file_select_permission_content">如果你需要选择非应用目录的文件，需要授权当前应用访问存储卡的权限</string>
+    <string name="com_bihe0832_file_select_permission_deny">未获得访问存储卡权限，请重试</string>
+
+    <string name="com_bihe0832_file_selected">已选择</string>
+    <string name="com_bihe0832_file_root">已经是最上层目录了</string>
+    <string name="com_bihe0832_file_empty">当前为空目录</string>
+
+
+
+</resources>

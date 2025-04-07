@@ -58,7 +58,7 @@ object UpdateHelper {
 
         val downloadListener =
             object :
-                SimpleInstallListener(activity, activity.packageName, dialogListenerWhenDownload) {
+                SimpleInstallListener(activity, "", dialogListenerWhenDownload) {
 
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     if (errorCode in listOf(

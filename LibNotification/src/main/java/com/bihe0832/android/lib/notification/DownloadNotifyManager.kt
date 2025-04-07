@@ -105,7 +105,10 @@ object DownloadNotifyManager {
         }
         ThreadManager.getInstance().runOnUIThread {
             context.applicationContext.let { context ->
-                val remoteViews = RemoteViews(context.getPackageName(), R.layout.com_bihe0832_download_notification)
+                val remoteViews = RemoteViews(
+                    context.getPackageName(),
+                    R.layout.com_bihe0832_download_notification
+                )
                 updateContent(
                     remoteViews,
                     context,
@@ -147,7 +150,10 @@ object DownloadNotifyManager {
 
         when (downloadType) {
             DOWNLOAD_TYPE_DOWNLOADING -> {
-                remoteViews.setTextViewText(R.id.download_notification_title, "正在下载$appName")
+                remoteViews.setTextViewText(
+                    R.id.download_notification_title,
+                    context.getString(R.string.download_notify_downloading) + appName
+                )
                 if (speed > 0) {
                     remoteViews.setTextViewText(
                         R.id.download_notification_desc,
@@ -173,7 +179,10 @@ object DownloadNotifyManager {
             }
 
             DOWNLOAD_TYPE_PAUSED -> {
-                remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载已暂停")
+                remoteViews.setTextViewText(
+                    R.id.download_notification_title,
+                    appName + context.getString(R.string.download_notify_download_paused)
+                )
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 R.id.download_notification_btn_restart.let {
                     remoteViews.setImageViewResource(it, R.drawable.icon_start_fill)
@@ -194,7 +203,10 @@ object DownloadNotifyManager {
             }
 
             DOWNLOAD_TYPE_FAILED -> {
-                remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载失败")
+                remoteViews.setTextViewText(
+                    R.id.download_notification_title,
+                    appName + context.getString(R.string.download_notify_download_failed)
+                )
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 R.id.download_notification_btn_restart.let {
                     remoteViews.setImageViewResource(it, R.drawable.icon_start_fill)
@@ -215,7 +227,10 @@ object DownloadNotifyManager {
             }
 
             DOWNLOAD_TYPE_FINISHED -> {
-                remoteViews.setTextViewText(R.id.download_notification_title, appName + "下载完成")
+                remoteViews.setTextViewText(
+                    R.id.download_notification_title,
+                    appName + context.getString(R.string.download_notify_download_finished)
+                )
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 remoteViews.setViewVisibility(R.id.download_notification_btn_restart, View.GONE)
                 remoteViews.setOnClickPendingIntent(
@@ -237,7 +252,10 @@ object DownloadNotifyManager {
                     )
                     if (null == bitmap) {
                         try {
-                            bitmap = BitmapFactory.decodeResource(context.applicationContext.resources, R.mipmap.icon)
+                            bitmap = BitmapFactory.decodeResource(
+                                context.applicationContext.resources,
+                                R.mipmap.icon
+                            )
                         } catch (e: java.lang.Exception) {
                             e.printStackTrace()
                         }
@@ -273,12 +291,20 @@ object DownloadNotifyManager {
         return context.packageName + "." + NOTIFICATION_BROADCAST_ACTION
     }
 
-    fun getPendingIntent(context: Context, url: String, notifyID: Int, action: String): PendingIntent {
-        return PendingIntentUtils.getBroadcastPendingIntent(context, mIntentID.generate(), Intent().apply {
-            setAction(getDownloadBroadcastFilter(context))
-            putExtra(NOTIFICATION_ID_KEY, notifyID)
-            putExtra(ACTION_KEY, action)
-            putExtra(NOTIFICATION_URL_KEY, url)
-        })
+    fun getPendingIntent(
+        context: Context,
+        url: String,
+        notifyID: Int,
+        action: String
+    ): PendingIntent {
+        return PendingIntentUtils.getBroadcastPendingIntent(
+            context,
+            mIntentID.generate(),
+            Intent().apply {
+                setAction(getDownloadBroadcastFilter(context))
+                putExtra(NOTIFICATION_ID_KEY, notifyID)
+                putExtra(ACTION_KEY, action)
+                putExtra(NOTIFICATION_URL_KEY, url)
+            })
     }
 }

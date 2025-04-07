@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="com_bihe0832_lock_screen_process_name">:lockscreen</string>
     <string name="com_bihe0832_lock_screen_permission_desc_lock">Display over other apps</string>
-    <string name="com_bihe0832_lock_screen_permission_scene_lock">Custom lock screen interface</string>
-    <string name="com_bihe0832_lock_screen_permission_force">Enable directly</string>
+    <string name="com_bihe0832_lock_screen_permission_scene_lock">Custom lock screen</string>
     <string name="com_bihe0832_lock_screen_permission_enabled">Authorize and enable</string>
+    <string name="com_bihe0832_lock_screen_permission_force">Bypass settings</string>
 </resources>

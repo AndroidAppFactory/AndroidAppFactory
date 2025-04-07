@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ace_editor_load_failed">File load failed</string>
+    <string name="ace_editor_save_failed">File save failed</string>
+    <string name="ace_editor_file_too_big">File too large, syntax highlighting disabled</string>
+</resources>
