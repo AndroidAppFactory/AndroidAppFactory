@@ -73,7 +73,7 @@ public class LoadingDialog extends Dialog {
         setCanceledOnTouchOutside(shouldCanceledOutside);
         if (titleTv != null) {
             if (TextUtils.isEmpty(title)) {
-                title = "加载中……";
+                title = getContext().getString(R.string.com_bihe0832_loading);
             }
             CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(title);//支持html
             titleTv.setText(charSequence);

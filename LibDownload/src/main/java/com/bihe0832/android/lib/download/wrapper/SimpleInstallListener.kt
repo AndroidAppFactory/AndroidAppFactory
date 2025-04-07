@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.download.wrapper
 
 import android.app.Activity
 import com.bihe0832.android.lib.download.DownloadItem
+import com.bihe0832.android.lib.download.R
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.install.InstallUtils.ApkInstallType
@@ -21,17 +22,17 @@ open class SimpleInstallListener(
         setIsFullScreen(true)
         setCanCanceled(true)
         setOnCancelListener {
-            ToastUtil.showShort(context, "应用安装已切到后台，请耐心等待")
+            ToastUtil.showShort(context, activity.getString(R.string.install_background))
         }
     }
     private val installListener = object : InstallListener {
 
         override fun onUnCompress() {
-            loadingDialog.show("特殊应用安装较慢，请耐心等待 <BR><BR> 当前安装包解压中，请稍候...")
+            loadingDialog.show(activity.getString(R.string.install_uncompress))
         }
 
         override fun onInstallPrepare() {
-            loadingDialog.show("特殊应用安装较慢，请耐心等待 <BR><BR> 当前安装包完整性检查，请稍候...")
+            loadingDialog.show(activity.getString(R.string.install_uncompress))
         }
 
         override fun onInstallStart() {
@@ -40,6 +41,14 @@ open class SimpleInstallListener(
 
         override fun onInstallFailed(errorCode: Int) {
             loadingDialog.dismiss()
+        }
+
+        override fun onInstallSuccess() {
+            loadingDialog.show(activity.getString(R.string.install_success))
+        }
+
+        override fun onInstallTimeOut() {
+            loadingDialog.show(activity.getString(R.string.install_timeout))
         }
     }
 

@@ -48,9 +48,11 @@ object WidgetTools {
     fun pickWidget(context: Context) {
         pickWidget(
             context,
-            "小组件快捷添加",
-            "<font color ='" + context.resources.getColor(R.color.colorAccent) + "'><b>长按组件信息</b></font>可快速添加小组件到手机",
-            "关闭",
+            context.getString(R.string.widget_add_dialog_title),
+            "<font color ='" + context.resources.getColor(R.color.colorAccent) + "'>" + context.resources.getString(
+                R.string.widget_add_dialog_desc
+            ),
+            context.getString(R.string.dialog_button_close),
             ""
         )
     }
@@ -82,7 +84,13 @@ object WidgetTools {
         return false
     }
 
-    fun pickWidget(context: Context, title: String, content: String, positiveDesc: String, negativeString: String) {
+    fun pickWidget(
+        context: Context,
+        title: String,
+        content: String,
+        positiveDesc: String,
+        negativeString: String
+    ) {
         WidgetSelectDialog(context).apply {
             setTitle(title)
             setHtmlContent(content)

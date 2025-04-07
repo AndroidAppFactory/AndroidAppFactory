@@ -202,10 +202,10 @@ public class DrawTextView extends RelativeLayout implements View.OnClickListener
             case TEXT_EDIT:
                 final String last = panel_draw_text_content.getText().toString();
                 DialogUtils.INSTANCE.showInputDialog(getContext(),
-                        "添加文本",
+                        getContext().getString(R.string.panel_draw_text_add_title),
                         "",
-                        TextUtils.isEmpty(last) ? "确认" : "输入新内容",
-                        TextUtils.isEmpty(last) ? "" : "保留原内容",
+                        TextUtils.isEmpty(last) ? getContext().getString(R.string.dialog_button_ok) : getContext().getString(R.string.panel_draw_text_add_positive),
+                        TextUtils.isEmpty(last) ? "" : getContext().getString(R.string.panel_draw_text_add_negative),
                         true,
                         EditorInfo.TYPE_CLASS_TEXT,
                         last,

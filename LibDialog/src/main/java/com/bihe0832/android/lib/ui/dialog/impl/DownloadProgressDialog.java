@@ -185,7 +185,7 @@ public class DownloadProgressDialog extends Dialog {
             if (!TextUtils.isEmpty(mPositiveButtonString)) {
                 mPositiveButton.setText(mPositiveButtonString);
             } else {
-                mPositiveButton.setText("确定");
+                mPositiveButton.setText(getContext().getString(R.string.dialog_button_ok));
             }
         }
 

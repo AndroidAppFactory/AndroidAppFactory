@@ -1,4 +1,4 @@
-package com.bihe0832.android.lib.install;
+package com.bihe0832.android.lib.install.obb;
 
 import static com.bihe0832.android.lib.install.InstallErrorCode.FILE_NOT_FOUND;
 import static com.bihe0832.android.lib.install.InstallErrorCode.PERMISSION_DENY;
@@ -10,22 +10,21 @@ import android.text.TextUtils;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
-import com.bihe0832.android.lib.install.obb.OBBFormats;
+import com.bihe0832.android.lib.install.InstallListener;
+import com.bihe0832.android.lib.install.apk.APKInstall;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.zip.ZipUtils;
 import java.io.File;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author zixie code@bihe0832.com
- *         Created on 2020/9/25.
- *         Description: Description
+ * @author zixie code@bihe0832.com Created on 2020/9/25. Description: Description
  */
-class ObbFileInstall {
+public class ObbFileInstall {
 
     private static final String TAG = "ObbFileInstall";
 
-    static void installObbAPKByFile(@NotNull Context context, String fileDir, String packageName,
+    public static void installObbAPKByFile(@NotNull Context context, String fileDir, String packageName,
             final InstallListener listener) {
         try {
 
@@ -43,7 +42,7 @@ class ObbFileInstall {
             String result = prepareInstallOBB(new File(fileDir), obbFolder, listener);
             if (!TextUtils.isEmpty(result)) {
                 if (result.startsWith(ZixieFileProvider.getZixieCacheFolder(context))) {
-                    APKInstall.installAPK(context, result, listener);
+                    APKInstall.installAPK(context, result, packageName, listener);
                 } else {
                     String realInstallPath =
                             ZixieFileProvider.getZixieCacheFolder(context) + FileUtils.INSTANCE.getFileName(result);
@@ -51,7 +50,7 @@ class ObbFileInstall {
                     FileUtils.INSTANCE.copyFile(new File(result), new File(realInstallPath));
                     ZLog.d(TAG + "installObbAPKByFile finished copy apk File");
                     listener.onInstallStart();
-                    APKInstall.installAPK(context, realInstallPath, listener);
+                    APKInstall.installAPK(context, realInstallPath, packageName, listener);
                 }
             }
         } catch (Exception e) {
@@ -95,7 +94,7 @@ class ObbFileInstall {
 
     }
 
-    static void installObbAPKByZip(@NotNull Context context, String zipFile, String packageName,
+    public static void installObbAPKByZip(@NotNull Context context, String zipFile, String packageName,
             final InstallListener listener) {
         try {
             if (!FileUtils.INSTANCE.checkStoragePermissions(context)) {
@@ -138,7 +137,7 @@ class ObbFileInstall {
                 }
             }
             listener.onInstallStart();
-            APKInstall.installAPK(context, dstApkFilePath, listener);
+            APKInstall.installAPK(context, dstApkFilePath, packageName, listener);
         } catch (Exception e) {
             ZLog.d(TAG + "prepare4InstallObb failed, for " + e);
             listener.onInstallFailed(UNKNOWN_EXCEPTION);

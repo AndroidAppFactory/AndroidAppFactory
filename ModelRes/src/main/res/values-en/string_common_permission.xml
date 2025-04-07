@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="com_bihe0832_permission_title">Permission Request</string>
-    <string name="com_bihe0832_permission_default_scene">Full</string>
-    <string name="com_bihe0832_permission_default_desc">Some devices</string>
-    <string name="com_bihe0832_permission_negtive">Deny</string>
-    <string name="com_bihe0832_permission_positive">Grant Permission</string>
-    <string name="com_bihe0832_permission_default_content">The %s feature of %s requires %s permission. Missing permissions may affect feature availability.</string>
-    <string name="com_bihe0832_permission_tips">Permission Tips</string>
-
 
     <!-- Permission Titles -->
     <string name="common_permission_title_camera">Camera</string>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="com_bihe0832_lock_screen_process_name">:lockscreen</string>
     <string name="com_bihe0832_lock_screen_permission_desc_lock">显示在其他应用上层</string>
     <string name="com_bihe0832_lock_screen_permission_scene_lock">自定义锁屏界面</string>
     <string name="com_bihe0832_lock_screen_permission_force">直接开启</string>

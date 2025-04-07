@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadStatus
+import com.bihe0832.android.lib.download.R
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
 import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
@@ -91,7 +92,9 @@ object DownloadFileManager : DownloadManager() {
             item.status = DownloadStatus.STATUS_DOWNLOAD_FAILED
             addWaitToDownload()
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
-                ToastUtil.showLong(mContext, "本机已有更高版本的${item.downloadTitle}，下载已取消")
+                getContext()?.getString(R.string.download_failed_local_is_new)?.let {
+                    ToastUtil.showLong(mContext, String.format(it, item.downloadTitle))
+                }
             }
             item.downloadListener?.onFail(errorCode, msg, item)
             if (item.notificationVisibility()) {

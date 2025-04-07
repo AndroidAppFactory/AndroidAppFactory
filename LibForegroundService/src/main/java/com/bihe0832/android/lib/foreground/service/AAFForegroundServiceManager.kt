@@ -75,9 +75,9 @@ object AAFForegroundServiceManager {
     }
 
     private fun getNotifyContent(context: Context): String {
-        var string = APKUtils.getAppName(context) + "的"
+        var string = APKUtils.getAppName(context) + context.getString(R.string.foreground_service_join)
         string += actionList.map { it.value.getNotifyContent() }.joinToString("、")
-        return string + "服务正在运行中..."
+        return string + context.getString(R.string.foreground_service_running)
     }
 
     internal fun getNoticeID(): Int {

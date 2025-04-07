@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="download_dialog_mobile_title">移动网络下载提示</string>
+    <string name="download_dialog_mobile_desc">当前处于移动网络, 下载将消耗流量，是否继续下载?</string>
+    <string name="download_dialog_mobile_positive">继续下载</string>
+    <string name="download_dialog_mobile_negative">稍候下载</string>
+    <string name="download_network_bad">网络已经断开，请先检查网络</string>
+
+    <string name="download_background">已切换到后台下载，你可以在通知栏查看下载进度</string>
+    <string name="download_cancel">取消下载</string>
+    <string name="download_background_downloading">后台下载</string>
+    <string name="download_failed">应用下载失败</string>
+    <string name="download_background_permission">尚未授予安装权限，若后台下载，完成后将无法自动安装，建议先开启安装权限</string>
+
+
+    <string name="download_notify_downloading">正在下载</string>
+    <string name="download_notify_download_failed">下载失败</string>
+    <string name="download_notify_download_finished">下载完成</string>
+    <string name="download_notify_download_paused">下载已暂停</string>
+
+
+    <string name="install_permission">安装应用需要打开未知来源权限，请在设置中开启权限</string>
+    <string name="install_background">应用安装已切到后台，请耐心等待</string>
+    <string name="install_uncompress">特殊应用安装可能需要更长时间，请稍候... &lt;BR&gt;&lt;BR&gt;正在解压安装包...</string>
+    <string name="install_prepare">特殊应用安装可能需要更长时间，请稍候... &lt;BR&gt;&lt;BR&gt;正在验证安装包完整性...</string>
+    <string name="install_success">应用已成功安装</string>
+    <string name="install_timeout">应用安装已超时，请检查后重试...</string>
+    <string name="download_failed_local_is_new">本机已有更高版本的%s，下载已取消</string>
+
+    <string name="apk_sig_not_found">读取失败，请重试或者检查应用是否有签名！</string>
+    <string name="apk_sig_bad_package">应用未安装，请检查输入的包名是否正确！</string>
+    <string name="apk_sig_package_empty">请先输入需要查询签名应用的包名！！</string>
+    <string name="apk_not_install">应用未安装，请安装后重试</string>
+    <string name="apk_launcher_failed">拉起 %s失败，请手动尝试</string>
+
+
+
+</resources>

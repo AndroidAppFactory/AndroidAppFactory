@@ -91,7 +91,6 @@ public class APKUtils {
     }
 
     /**
-     *
      * @param oldVersion
      * @param newVersion
      * @return 版本一致 0， oldVersion 更高 1， newVersion 更高 2，无法比较 -1
@@ -225,7 +224,7 @@ public class APKUtils {
         try {
             if (getInstalledPackage(ctx, pkgName) == null) {
                 if (showTips) {
-                    ToastUtil.showShort(ctx, "应用未安装，请安装后重试");
+                    ToastUtil.showShort(ctx, ctx.getString(R.string.apk_not_install));
                 }
                 return false;
             }
@@ -237,7 +236,7 @@ public class APKUtils {
         } catch (Exception e) {
             e.printStackTrace();
             if (showTips) {
-                ToastUtil.showShort(ctx, "拉起" + appName + "失败，请手动尝试");
+                ToastUtil.showShort(ctx, String.format(ctx.getString(R.string.apk_launcher_failed), appName));
             }
             return false;
         }
@@ -322,7 +321,8 @@ public class APKUtils {
         return getSigMessageDigestByPkgName(context, MD5.MESSAGE_DIGEST_TYPE_MD5, pkgName, showTips);
     }
 
-    public static String getSigMessageDigestByPkgName(Context context, String messageDigestType, String pkgName, boolean showTips) {
+    public static String getSigMessageDigestByPkgName(Context context, String messageDigestType, String pkgName,
+            boolean showTips) {
         if (null != pkgName && pkgName.length() > 0) {
             try {
                 Signature sig = context.getPackageManager()
@@ -332,18 +332,18 @@ public class APKUtils {
                     return result;
                 } else {
                     if (showTips) {
-                        ToastUtil.showShort(context, "读取失败，请重试或者检查应用是否有签名！");
+                        ToastUtil.showShort(context, context.getString(R.string.apk_sig_not_found));
                     }
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
                 if (showTips) {
-                    ToastUtil.showShort(context, "应用未安装，请检查输入的包名是否正确！");
+                    ToastUtil.showShort(context, context.getString(R.string.apk_sig_bad_package));
                 }
             }
         } else {
             if (showTips) {
-                ToastUtil.showShort(context, "请先输入需要查询签名应用的包名！");
+                ToastUtil.showShort(context, context.getString(R.string.apk_sig_package_empty));
             }
         }
         return "";

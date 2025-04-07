@@ -501,7 +501,7 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
                         project.androidsupport.constraintlayout,
-                        "LibViewExt","LibAAFResource"
+                        "LibViewExt", "LibAAFResource"
                 ]
         ],
         "LibTheme"                  : [
@@ -509,7 +509,7 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-theme",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
-                        "LibConfig", "LibCustomView","LibLanguage"
+                        "LibConfig", "LibCustomView", "LibLanguage"
                 ]
         ],
         "LibColor"                  : [
@@ -525,7 +525,7 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
-                        "LibColor", "LibGson"
+                        "LibColor", "LibGson", "LibAAFResource"
                 ]
         ],
         "LibCameraScan"             : [
@@ -545,10 +545,10 @@ ext.libmoduleInfo = [
                 "version"            : "6.25.5",
                 "artifactId"         : "lib-foreground-service",
                 "apidependenciesList": [
-                        "LibNotification", "LibThread", "LibLog"
+                        "LibNotification", "LibThread", "LibLog", "LibAAFResource"
                 ]
         ],
-        "LibLanguage"                  : [
+        "LibLanguage"               : [
                 "version"            : "6.24.15",
                 "artifactId"         : "lib-language",
                 "apidependenciesList": [

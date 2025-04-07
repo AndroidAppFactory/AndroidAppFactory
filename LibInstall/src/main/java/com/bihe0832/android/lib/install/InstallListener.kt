@@ -12,4 +12,6 @@ interface InstallListener {
     fun onInstallPrepare()
     fun onInstallStart()
     fun onInstallFailed(errorCode: Int)
+    fun onInstallSuccess()
+    fun onInstallTimeOut()
 }
