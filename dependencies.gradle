@@ -19,7 +19,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,ModelRes,Framework,Application"
  **/
-ext.developModule = "Application"
+ext.developModule = "Application,LibInstall"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -38,7 +38,7 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "6.25.8"
+ext.moduleVersionName = "6.25.9"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
