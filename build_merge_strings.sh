@@ -14,64 +14,65 @@ checkResult() {
   fi
 }
 
-# 处理文件内容：压缩多个空行为一个，并确保最后不是空行
-processContent() {
-  sed -e '/^[[:space:]]*$/d' "$1" | awk 'NR > 1 && /^[[:space:]]*$/ && p ~ /^[[:space:]]*$/ {next} {p=$0; print}'
-}
-
 # 合并字符串资源函数
 mergeStrings() {
   local source_dir=$1
   local output_dir=$2
+  local verbose=${3:-true}  # 默认不显示日志
   local output_file="$output_dir/aaf_merged_strings.xml"
-  local temp_file=$(mktemp)
+
+  # 获取文件总数（去掉所有空白字符）
+  local total_files=$(find "$source_dir" -type f -name "string*.xml" | wc -l | tr -d '[:space:]')
+  local current_file=0
+
+  # 检查源目录是否存在
+  if [ ! -d "$source_dir" ]; then
+    echo "错误: 源目录不存在: $source_dir" >&2
+    exit 1
+  fi
 
   # 创建输出目录
   mkdir -p "$output_dir"
-  checkResult "创建目录 $output_dir"
+  checkResult
 
   # 创建 XML 文件头
   echo '<?xml version="1.0" encoding="utf-8"?>' > "$output_file"
   echo '<resources>' >> "$output_file"
 
-  # 临时标记是否是第一个文件
-  local first_file=true
-
-  # 遍历并合并文件
+  # 合并文件
   find "$source_dir" -type f -name "string*.xml" | sort | while read -r file; do
-    echo "正在处理: $file"
+    current_file=$((current_file + 1))
+    [ "$verbose" = "true" ] && echo "正在处理 [$current_file/$total_files] $(basename "$file")"
 
-    # 如果不是第一个文件，添加两个空行分隔
-    if ! $first_file; then
-      echo "" >> "$temp_file"
-      echo "" >> "$temp_file"
-    else
-      first_file=false
-    fi
-
-    # 处理文件内容并追加到临时文件
-    processContent "$file" | \
-    grep -v '<?xml version="1.0" encoding="utf-8"?>' | \
-    grep -v '<resources>' | \
-    grep -v '</resources>' >> "$temp_file"
+    # 过滤XML声明和resources标签
+    grep -v -e '<?xml version="1.0" encoding="utf-8"?>' \
+            -e '<resources>' \
+            -e '</resources>' "$file" >> "$output_file"
   done
-
-  # 处理临时文件内容（压缩多个空行）并追加到输出文件
-  processContent "$temp_file" >> "$output_file"
-  rm -f "$temp_file"
 
   # 添加 XML 文件尾
   echo '</resources>' >> "$output_file"
-  echo "合并完成！结果保存在: $output_file"
+
+  # 验证输出
+  if [ -s "$output_file" ]; then
+    echo "合并完成: $total_files 个文件 → $output_file"
+  else
+    echo "错误: 输出文件为空!" >&2
+    exit 1
+  fi
 }
 
+# 主程序
+echo -e "\n\n========== 字符串资源合并开始 ==========\n\n"
 localPath=$(pwd)
-echo "localPath: $localPath"
+echo "工作目录: $localPath"
 
-# 合并中文资源
-mergeStrings "$localPath/ModelRes/src/main/res/values" "$localPath/bin/values"
+echo "1. 合并中文资源..."
+mergeStrings "$localPath/ModelRes/src/main/res/values" "$localPath/bin/values" false
 
-# 合并英文资源
-mergeStrings "$localPath/ModelRes/src/main/res/values-en" "$localPath/bin/values-en"
+echo "2. 合并英文资源..."
+mergeStrings "$localPath/ModelRes/src/main/res/values-en" "$localPath/bin/values-en" false
 
-echo "所有字符串资源合并完成"
+echo -e "\n\n========== 字符串资源合并完成 ==========\n\n"
+echo "生成文件:"
+find "$localPath/bin" -name "aaf_merged_strings.xml" -exec ls -lh {} \;

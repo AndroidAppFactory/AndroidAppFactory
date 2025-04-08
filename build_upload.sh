@@ -6,11 +6,11 @@ function checkResult() {
   result=$?
   echo "result : $result"
   if [ $result -eq 0 ]; then
-    echo "checkResult: execCommand succ,libName:$1 "
+    echo -e "checkResult: execCommand succ,libName:$1 \n\n"
   else
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "checkResult: execCommand failed,libName:$1 "
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo -e "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo -e " \n checkResult: execCommand failed,libName:$1  \n"
+    echo -e "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     exit $result
   fi
 }
@@ -137,4 +137,4 @@ do
 done
 cd $localPath
 /bin/bash ./build_merge_strings.sh
-echo "checkResult: execCommand succ, libName:$$libName "
+echo -e "checkResult: execCommand succ, libName:$libName \n\n"
