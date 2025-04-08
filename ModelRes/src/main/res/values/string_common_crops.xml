@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="label_original">原始比例</string>
 
     <string name="menu_crop">裁剪</string>
     <string name="menu_rotate">旋转</string>
     <string name="menu_scale">缩放</string>
-
 </resources>

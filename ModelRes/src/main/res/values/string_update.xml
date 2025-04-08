@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="version_update">版本更新</string>
     <string name="dialog_apk_version">版本号</string>
     <string name="dialog_apk_updating">版本 %1$s 更新中…</string>
@@ -12,5 +11,4 @@
     <string name="common_dialog_title">@string/dialog_title</string>
     <string name="dialog_apk_update_positive">现在更新</string>
     <string name="dialog_apk_update_negative">稍后更新</string>
-
 </resources>

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- About Section -->
     <string name="about">About Us</string>
-    <string name="author">ZIXIE</string> <!-- 保留品牌名不翻译 -->
-    <string name="about_app">APP</string> <!-- 保持引用不变 -->
+    <string name="author">ZIXIE</string>
+    <string name="about_app">APP</string>
 
     <string name="settings_about_title">About </string>
-    <string name="settings_about_app">APP</string> <!-- 保持引用不变 -->
-
+    <string name="settings_about_app">APP</string>
 
     <string name="settings_message_title">Notification Center</string>
     <string name="settings_version_title">Version</string>
@@ -15,16 +13,14 @@
     <string name="settings_update_tips">New version available</string>
     <string name="settings_update_current">Current version:</string>
 
-    <!-- WeChat Section -->
-    <string name="wechat_id">zixie_shi</string> <!-- 保留ID不翻译 -->
-    <string name="wechat_name">Zixie Notes</string> <!-- 品牌公众号名意译 -->
+    <string name="wechat_id">zixie_shi</string>
+    <string name="wechat_name">Zixie Notes</string>
     <string name="wechat_sub_content">Follow developer\'s official account</string>
     <string name="wechat_official_account">Wechat Official Account</string>
     <string name="wechat_sub_content_tips">Go to Follow</string>
-    <!-- Contact Section -->
+
     <string name="contact_QQ_join_failed">QQ not installed or version too low. Please add manually</string>
 
-    <!-- Cache Section -->
     <string name="settings_clear_title">Clear Cache</string>
     <string name="settings_clear_tips">Cache cleanup will remove &lt;font color=\'#38ADFF\'&gt;various cached resources&lt;/font&gt;. Please wait patiently. The app will close automatically after completion. Start cleanup now?</string>
     <string name="settings_clear_loading">Cleaning in progress, please wait~</string>

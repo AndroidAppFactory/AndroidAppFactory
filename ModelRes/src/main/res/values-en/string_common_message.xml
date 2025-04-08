@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="com_bihe0832_message_empty_text">No messages yet~</string>
     <string name="com_bihe0832_message_confirm">OK</string>
     <string name="com_bihe0832_message_go">Go</string>
     <string name="com_bihe0832_message_download">Download Now</string>
     <string name="com_bihe0832_message_close">@string/dialog_button_close</string>
-
 </resources>

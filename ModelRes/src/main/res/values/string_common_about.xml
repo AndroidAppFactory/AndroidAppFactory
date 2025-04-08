@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="about">关于我们</string>
     <string name="author">ZIXIE</string>
     <string name="about_app">@string/app_name</string>
@@ -25,5 +24,4 @@
     <string name="settings_clear_title">缓存清理</string>
     <string name="settings_clear_tips">缓存清理将为你清除 &lt;font color=\'#38ADFF\'&gt;各种缓存资源&lt;/font&gt;，清理期间请耐心等待，清理结束后会自动退出应用，是否开始清理？</string>
     <string name="settings_clear_loading">正在清理，请稍候~</string>
-
 </resources>

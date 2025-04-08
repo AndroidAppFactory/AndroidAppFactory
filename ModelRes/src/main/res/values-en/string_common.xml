@@ -1,32 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Feedback -->
-    <string name="feedback">Feedback</string>
-    <string name="feedback_mail_title">Submit feedback about %1$s</string>
-
-    <!-- System Messages -->
     <string name="common_tips_debug">Beta version - Confidential</string>
     <string name="common_tips_waiting">Coming soon</string>
     <string name="common_tips_restart">Occasional white screen during restart. Please wait</string>
 
-    <!-- UI Elements -->
     <string name="common_reminder_title">Notification</string>
     <string name="comfirm">OK</string>
     <string name="go_on">Continue</string>
     <string name="cancel">Cancel</string>
 
-    <!-- Dialogs -->
     <string name="exist_msg">Exit %1$s?</string>
     <string name="login">Login</string>
 
-
-    <!-- Dialog Reference -->
-    <string name="common_dialog_title">@string/dialog_title</string>
-
-    <!-- Theme Settings -->
     <string name="theme_change_title">Theme</string>
     <string name="theme_change_tips">Scroll vertically to view more themes</string>
     <string name="theme_type_dark">Dark Mode</string>
     <string name="theme_change_confirm_message">Changing themes won\'t save current document automatically. Continue without saving?</string>
-
 </resources>

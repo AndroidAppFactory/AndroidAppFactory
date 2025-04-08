@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Editor Title -->
     <string name="ace_editor_title">Text Editor</string>
 
-    <!-- File Loading Status -->
     <string name="ace_editor_load_file_tips">Loading file, please wait</string>
     <string name="ace_editor_load_file_empty">No file selected. Please choose a file</string>
     <string name="ace_editor_load_file_not_found">File not found. Please select again</string>
     <string name="ace_editor_load_file_folder">Only text files are supported. Please select again</string>
-
-    <!-- Action Buttons -->
     <string name="ace_editor_load_file_not_found_positive">Select File</string>
     <string name="ace_editor_load_file_not_found_negative">Exit Viewer</string>
 
-    <!-- Menu Options -->
     <string name="common_file_menu_open_new">Open Another File</string>
     <string name="common_file_menu_share">Share Current File</string>
     <string name="common_file_menu_open">Open %1$s</string>
     <string name="common_file_menu_close">Close %1$s</string>
     <string name="common_file_menu_auto_wrap">Word Wrap</string>
     <string name="common_file_menu_edit">Edit Text</string>
-
     <string name="common_file_menu_show_sort">Ascending </string>
     <string name="common_file_menu_show_reversed">Descending </string>
     <string name="common_file_menu_driver_show">Show Dividers</string>

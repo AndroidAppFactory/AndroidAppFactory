@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Image Editing Options -->
     <string name="label_original">Original Ratio</string>
 
-    <!-- Edit Menu Items -->
     <string name="menu_crop">Crop</string>
     <string name="menu_rotate">Rotate</string>
     <string name="menu_scale">Zoom</string>

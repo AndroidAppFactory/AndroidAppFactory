@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Update Related -->
     <string name="version_update">App Update</string>
     <string name="dialog_apk_version">Version</string>
     <string name="dialog_apk_updating">Updating to version %1$s…</string>
@@ -10,7 +8,7 @@
     <string name="dialog_apk_update_failed_negative">Don\'t report</string>
     <string name="dialog_apk_update_failed_positive">Report</string>
     <string name="dialog_apk_update_version_new">Latest version installed</string>
+    <string name="common_dialog_title">@string/dialog_title</string>
     <string name="dialog_apk_update_positive">Update Now</string>
     <string name="dialog_apk_update_negative">Later</string>
-
 </resources>

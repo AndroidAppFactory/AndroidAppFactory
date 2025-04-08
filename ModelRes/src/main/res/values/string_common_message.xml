@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="com_bihe0832_message_empty_text">消息空空如也~</string>
     <string name="com_bihe0832_message_confirm">确定</string>
     <string name="com_bihe0832_message_go">前往</string>
     <string name="com_bihe0832_message_download">立刻下载</string>
     <string name="com_bihe0832_message_close">@string/dialog_button_close</string>
-
 </resources>

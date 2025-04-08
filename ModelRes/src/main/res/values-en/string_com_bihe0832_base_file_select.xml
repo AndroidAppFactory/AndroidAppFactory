@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- File Permission Related -->
     <string name="com_bihe0832_file_select_permission_scene">Storage Access</string>
     <string name="com_bihe0832_file_select_permission_content">To select files outside app directories, storage permission is required</string>
     <string name="com_bihe0832_file_select_permission_deny">Storage permission denied. Please try again</string>
 
-    <!-- File Selection Status -->
     <string name="com_bihe0832_file_selected">Selected</string>
     <string name="com_bihe0832_file_root">Already at root directory</string>
     <string name="com_bihe0832_file_empty">Empty directory</string>
-
-
 </resources>

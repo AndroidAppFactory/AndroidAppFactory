@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Permission Titles -->
-    <string name="common_permission_title_camera">Camera</string>
-    <string name="common_permission_title_qrcode">QR Code Scanning</string>
-    <string name="common_permission_title_location">Location Services</string>
-    <string name="common_permission_scene_location">Wi-Fi name detection, location access, etc.</string>
-
-    <!-- Permission Categories -->
     <string name="common_permission_item_title_privacy">Privacy &amp; Permissions</string>
     <string name="common_permission_item_title_recommend">Privacy &amp; Permissions</string>
     <string name="common_permission_item_desc_recommend">Receive personalized content recommendations</string>
-    <string name="common_permission_desc_ext"></string>
 
-    <!-- Status & Actions -->
+    <string name="common_permission_desc_ext"></string>
     <string name="common_permission_status_enabled">Enabled</string>
     <string name="common_permission_action_setting">Go Settings</string>
     <string name="common_permission_action_close">Disable</string>
     <string name="common_permission_action_delay">Not Now</string>
 
-    <!-- References & Special Cases -->
     <string name="common_permission_action_cancel">@string/dialog_button_cancel</string>
     <string name="common_permission_desc_close">will disable</string>
+
+    <string name="common_permission_title_camera">Camera</string>
+    <string name="common_permission_title_qrcode">QR Code Scanning</string>
+    <string name="common_permission_title_location">Location Services</string>
+    <string name="common_permission_scene_location">Wi-Fi name detection, location access, etc.</string>
+
     <string name="common_permission_title_storage">Read and save to storage</string>
     <string name="common_permission_scene_storage">Save videos</string>
 </resources>

@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Mobile Network Download Warning -->
     <string name="download_dialog_mobile_title">Mobile Data Warning</string>
     <string name="download_dialog_mobile_desc">You\'re on mobile data. Download will consume data. Continue?</string>
     <string name="download_dialog_mobile_positive">Now</string>
     <string name="download_dialog_mobile_negative">Later</string>
     <string name="download_network_bad">Network disconnected. Please check your connection</string>
 
-    <!-- Download Status -->
     <string name="download_background">Downloading in background. Check progress in notifications</string>
     <string name="download_cancel">Cancel </string>
     <string name="download_background_downloading">Go Background</string>
     <string name="download_failed">Download Failed</string>
     <string name="download_background_permission">Install permission required. Background downloads won\'t auto-install without this permission. Enable now in Settings.</string>
 
-    <!-- 下载状态通知 -->
     <string name="download_notify_downloading">Downloading…</string>
     <string name="download_notify_download_failed">Download failed</string>
     <string name="download_notify_download_finished">Download complete</string>
     <string name="download_notify_download_paused">Download paused</string>
 
-    <!-- 安装相关提示 -->
     <string name="install_permission">Enable \"Install unknown apps\" permission in Settings</string>
     <string name="install_background">Installation running in background</string>
     <string name="install_uncompress">Special app installation may take longer…&lt;BR&gt;&lt;BR&gt;Extracting package…</string>
@@ -29,11 +25,9 @@
     <string name="install_timeout">Installation timed out</string>
     <string name="download_failed_local_is_new">Newer version (%s) already exists</string>
 
-    <!-- APK 相关错误 -->
     <string name="apk_sig_not_found">Signature read failed</string>
     <string name="apk_sig_bad_package">Invalid package name</string>
     <string name="apk_sig_package_empty">Enter package name first</string>
     <string name="apk_not_install">App not installed</string>
     <string name="apk_launcher_failed">Failed to launch %s</string>
-
 </resources>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Interactive Feedback -->
     <string name="com_bihe0832_praise_positive">Praise Me</string>
     <string name="com_bihe0832_praise_negative">Send Feedback</string>
 </resources>

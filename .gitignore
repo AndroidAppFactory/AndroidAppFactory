@@ -47,3 +47,4 @@ gradle.properties
 .DS_Store
 sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20
 sherpa-onnx-whisper-base
+bin

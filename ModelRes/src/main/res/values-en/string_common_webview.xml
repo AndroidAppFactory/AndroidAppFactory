@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- SSL Warning -->
     <string name="com_bihe0832_web_ssl_error_message">SSL certificate verification failed. Continuing may pose risks. Proceed anyway?</string>
-
-    <!-- Page Load Error -->
     <string name="web_load_failed_title">Page Load Failed</string>
     <string name="web_load_failed_error">• No network connection\n• Temporary server issue\n• Incorrect URL entered</string>
-
-    <!-- Action Options -->
     <string name="web_load_failed_browser">Open in Browser</string>
     <string name="web_load_failed_retry">Tap to Retry</string>
 </resources>
