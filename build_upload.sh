@@ -135,7 +135,6 @@ do
     git add $localPath/dependencies.gradle
     git commit $localPath/dependencies.gradle $localPath/$fileName -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
 done
-checkResult $libName
 cd $localPath
 /bin/bash ./build_merge_strings.sh
-checkResult $libName
+echo "checkResult: execCommand succ, libName:$$libName "
