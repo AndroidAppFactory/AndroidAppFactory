@@ -24,10 +24,12 @@ ext {
     zixieIncludeList = new ArrayList()
     zixieDepenciesList = new HashMap<String, ArrayList>()
     zixieUpdateRealDependencies = this.&updateRealDependencies
-    zixiePublishCommand = this.&getPublishCommand
     zixieAutoDependencies = this.&addDependencies
     zixieLocalDependencies = this.&addLocalDependencies
     zixieCheckModuleIsDev = this.&checkModuleIsDev
+    zixiePublishCommand = this.&getPublishCommand
+    zixieMergeStringCommand = this.&getMergeStringCommand
+    zixieHelpCommand = this.&getHelpCommand
 }
 
 zixieModuleInfo.each { projectName, subModuleList -> zixieUpdateRealDependencies(projectName, projectName)
@@ -92,57 +94,6 @@ def checkModuleDependencies(String moduleA, String moduleB) {
         return -1
     }
     return 0
-}
-
-// 更新组件命令生成
-def getPublishCommand() {
-    System.err.println("组件依赖关系处理中，预计耗时较久，请耐心等待...\n\n")
-    def moduleList = []
-
-    zixieDepenciesList.each { projectName, subModuleList ->
-        if (zixieIsDebug) println("showCommand projectName :" + projectName + " " + checkModuleIsDev(projectName))
-        if (!isApplicationModule(projectName) && checkModuleIsDev(projectName)) {
-            moduleList.add(projectName)
-        }
-    }
-    if (moduleList.size() > 0) {
-        if (zixieIsDebug) System.err.println("showCommand before :" + moduleList)
-        for (int i = 0; i < moduleList.size(); i++) {
-            for (int j = 0; j < moduleList.size() - 1; j++) {
-                if (zixieIsDebug) println("----- showCommand " + i + " " + j)
-                if (zixieIsDebug) println("showCommand " + moduleList.get(i) + " " + moduleList.get(j) + " " + (checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0))
-                if ((checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0)) {
-                    def temp = moduleList.get(i)
-                    if (zixieIsDebug) println("showCommand before:" + moduleList)
-                    moduleList.set(i, moduleList.get(j))
-                    moduleList.set(j, temp)
-                    if (zixieIsDebug) println("showCommand before:" + moduleList)
-                } else {
-                    if (zixieIsDebug) println("showCommand noting")
-                }
-                if (zixieIsDebug) println("----- showCommand " + i + " " + j)
-            }
-        }
-
-        if (zixieIsDebug) System.err.println("showCommand end :" + moduleList)
-
-        def resultList = "\n"
-        moduleList.each { item -> resultList = resultList + item + "\n"
-        }
-        System.err.println("\n\n========================================\n\n")
-        System.err.println("组件开发完毕修改版本号后，直接在根目录运行下面的命令即可发布所有依赖到最新版本\n")
-        System.err.println("运行后升级版本的组件有：\n\n\t" + moduleList)
-        System.err.println("\n发布使用的命令： \n\n")
-        System.err.println("find . -name \"build\" -type d -exec rm -rf {} +\n\n")
-        System.err.println("git checkout -b build_temp && " + "echo \"" + resultList + "\"  | xargs -I {} /bin/bash ./build_upload.sh {} " + zixieVersionName + "\n\n")
-        System.err.println("git checkout master && git merge build_temp --squash \n\n")
-        System.err.println("git commit -am'auto update to version ${zixieVersionName} by build.sh'\n\n")
-        System.err.println("git tag -a Tag_AAF_${zixieVersionName} -m 'auto update to version ${zixieVersionName} by build.sh' && git tag --sort=-v:refname -l &&  git push origin Tag_AAF_${zixieVersionName} && git push")
-        System.err.println("\n\n========================================\n\n")
-    } else {
-        System.err.println("组件依赖关系处理已完成，没有组件需要更新...")
-    }
-
 }
 
 //添加依赖
@@ -257,6 +208,76 @@ def addDependenciesOnce(String projectName, String moduleName, String sourceType
             }
         }
     }
+}
+
+// 更新组件命令生成
+def getPublishCommand() {
+    System.err.println("组件依赖关系处理中，预计耗时较久，请耐心等待...\n\n")
+    def moduleList = []
+
+    zixieDepenciesList.each { projectName, subModuleList ->
+        if (zixieIsDebug) println("showCommand projectName :" + projectName + " " + checkModuleIsDev(projectName))
+        if (!isApplicationModule(projectName) && checkModuleIsDev(projectName)) {
+            moduleList.add(projectName)
+        }
+    }
+    if (moduleList.size() > 0) {
+        if (zixieIsDebug) System.err.println("showCommand before :" + moduleList)
+        for (int i = 0; i < moduleList.size(); i++) {
+            for (int j = 0; j < moduleList.size() - 1; j++) {
+                if (zixieIsDebug) println("----- showCommand " + i + " " + j)
+                if (zixieIsDebug) println("showCommand " + moduleList.get(i) + " " + moduleList.get(j) + " " + (checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0))
+                if ((checkModuleDependencies(moduleList.get(i), moduleList.get(j)) < 0)) {
+                    def temp = moduleList.get(i)
+                    if (zixieIsDebug) println("showCommand before:" + moduleList)
+                    moduleList.set(i, moduleList.get(j))
+                    moduleList.set(j, temp)
+                    if (zixieIsDebug) println("showCommand before:" + moduleList)
+                } else {
+                    if (zixieIsDebug) println("showCommand noting")
+                }
+                if (zixieIsDebug) println("----- showCommand " + i + " " + j)
+            }
+        }
+
+        if (zixieIsDebug) System.err.println("showCommand end :" + moduleList)
+
+        def resultList = "\n"
+        moduleList.each { item ->
+            resultList = resultList + item + "\n"
+        }
+        getHelpCommand()
+        getMergeStringCommand()
+        System.err.println("\n\n========================================\n\n")
+        System.err.println("组件开发完毕修改版本号后，直接在根目录运行下面的命令即可发布所有依赖到最新版本\n")
+        System.err.println("运行后升级版本的组件有：\n\n\t" + moduleList)
+        System.err.println("\n发布使用的命令： \n\n")
+        System.err.println("find . -name \"build\" -type d -exec rm -rf {} +\n\n")
+        System.err.println("git checkout -b build_temp && " + "echo \"" + resultList + "\"  | xargs -I {} /bin/bash ./build_upload.sh {} " + zixieVersionName + "\n\n")
+        System.err.println("git checkout master && git merge build_temp --squash \n\n")
+        System.err.println("git commit -am'auto update to version ${zixieVersionName} by build.sh'\n\n")
+        System.err.println("git tag -a Tag_AAF_${zixieVersionName} -m 'auto update to version ${zixieVersionName} by build.sh' && git tag --sort=-v:refname -l &&  git push origin Tag_AAF_${zixieVersionName} && git push")
+        System.err.println("\n\n========================================\n\n")
+    } else {
+        System.err.println("组件依赖关系处理已完成，没有组件需要更新...")
+    }
+}
+
+// 更新组件命令生成
+def getMergeStringCommand() {
+    System.err.println("\n\n========================================\n\n")
+    System.err.println("目前AAF已经完成多语言的适配，当需要支持多语言时，请直接运行下面的命令即可生成最新的AAF多语言资源\n")
+    System.err.println("/bin/bash ./build_merge_strings.sh")
+    System.err.println("\n\n========================================\n\n")
+}
+
+// 更新组件命令生成
+def getHelpCommand() {
+    System.err.println("\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    System.err.println("|\n|  AAF 相关信息可以参考文档：")
+    System.err.println("|\n|    AAF官网：https://android.bihe0832.com/doc/")
+    System.err.println("|\n|    AAF事例：https://android.bihe0832.com/samples/")
+    System.err.println("|\n >>>>>>>>>>>>>>>>>>>>>>>>>>> AndroidAPPFactory <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 }
 
 def isApplicationModule(String projectName) {

@@ -2,18 +2,15 @@
 <resources>
     <string name="com_bihe0832_share_title">Share APP</string>
 
-    <!-- Share Content -->
     <string name="com_bihe0832_share_desc">Check out this cool thing I found! Scan the QR code to see</string>
     <string name="com_bihe0832_share_dialog_title">Share %1$s with friends</string>
     <string name="com_bihe0832_share_link">Check out this cool thing I found: %1$s</string>
 
-    <!-- App Sharing -->
     <string name="com_bihe0832_share_app">I found this great app called %1$s! Download here: %2$s</string>
     <string name="com_bihe0832_share_app_target">https://cdn.bihe0832.com/app/download.html</string>
     <string name="com_bihe0832_share_app_big">APK file too large. Recommend sharing via QR code</string>
     <string name="com_bihe0832_share_app_faild">Failed to get APK. Recommend sharing via QR code</string>
 
-    <!-- Share Methods -->
     <string name="com_bihe0832_share_target">Share via</string>
     <string name="com_bihe0832_share_item_qrcode_apk">Share APK</string>
     <string name="com_bihe0832_share_item_qrcode_send">Share QR Code</string>

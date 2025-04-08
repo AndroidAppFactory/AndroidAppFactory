@@ -8,6 +8,4 @@
     <string name="com_bihe0832_permission_tips">权限使用说明</string>
 
     <string name="com_bihe0832_permission_default_content">%s的%s功能需要手机授予%s权限，缺少权限有可能会影响功能的正常使用。</string>
-
-
 </resources>

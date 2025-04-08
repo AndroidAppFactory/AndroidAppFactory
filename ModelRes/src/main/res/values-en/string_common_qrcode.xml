@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Scan Status Messages -->
     <string name="common_scan_failed">Scan failed. %s cannot recognize this QR code</string>
     <string name="common_scan_tips">QR/Barcode Scanner</string>
     <string name="common_scan_scanning">Recognizing, please wait…</string>

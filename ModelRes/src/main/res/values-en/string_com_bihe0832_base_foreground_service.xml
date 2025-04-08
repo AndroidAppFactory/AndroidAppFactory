@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 英文版本 -->
     <string name="foreground_service_join">\'s</string>
     <string name="foreground_service_running">Service is running…</string>
 </resources>

@@ -3,5 +3,4 @@
     <string name="common_photo_take_photo">拍照</string>
     <string name="common_photo_choose_photo">从相册选择</string>
     <string name="common_photo_choose_photo_bad">未找到图片查看器</string>
-
 </resources>

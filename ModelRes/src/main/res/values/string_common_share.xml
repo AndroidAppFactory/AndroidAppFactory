@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="com_bihe0832_share_title">分享给好友</string>
 
     <string name="com_bihe0832_share_desc">我刚发现了一个好玩的，快扫码看看吧</string>
     <string name="com_bihe0832_share_dialog_title">分享%1$s给好友</string>
     <string name="com_bihe0832_share_link">我刚发现了一个好玩的，快点击链接看看吧：%1$s</string>
-
 
     <string name="com_bihe0832_share_app">我刚刚发现了一个很好玩的应用，推荐给你试试吧。名字叫 %1$s ，可以在这里下载： %2$s </string>
     <string name="com_bihe0832_share_app_target">https://cdn.bihe0832.com/app/download.html</string>
@@ -22,6 +20,5 @@
     <string name="com_bihe0832_share_item_pic_save">保存图片</string>
     <string name="com_bihe0832_share_item_wechat">微信</string>
     <string name="com_bihe0832_share_item_time_line">朋友圈</string>
-
 </resources>
 

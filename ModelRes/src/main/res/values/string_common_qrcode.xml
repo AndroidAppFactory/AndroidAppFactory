@@ -5,6 +5,4 @@
     <string name="common_scan_scanning">识别中，请稍候…</string>
     <string name="common_scan_bad">识别失败</string>
     <string name="common_scan_flash_failed">暂时无法开启闪光灯</string>
-
-
 </resources>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_mail_title">Submit feedback about %1$s</string>
     <string name="feedback_title">@string/feedback</string>
     <string name="feedback_bad_tips">Please enter a valid feedback address</string>
 </resources>

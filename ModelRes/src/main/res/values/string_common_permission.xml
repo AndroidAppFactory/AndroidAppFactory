@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="common_permission_item_title_privacy">隐私及权限设置</string>
     <string name="common_permission_item_title_recommend">隐私及权限设置</string>
     <string name="common_permission_item_desc_recommend">开启后，将根据您的喜好为您推荐个性化内容</string>
+
     <string name="common_permission_desc_ext">权限</string>
     <string name="common_permission_status_enabled">已开启</string>
     <string name="common_permission_action_setting">去设置</string>
