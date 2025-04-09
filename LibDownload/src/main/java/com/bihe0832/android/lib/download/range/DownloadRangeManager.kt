@@ -260,7 +260,6 @@ object DownloadRangeManager : DownloadManager() {
                 if (!TextUtils.isEmpty(path)) {
                     ZLog.e(TAG, "has download:$info")
                     info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
-                    Thread.sleep(1000L)
                     innerDownloadListener.onComplete(info.filePath, info)
                     return@start
                 }
