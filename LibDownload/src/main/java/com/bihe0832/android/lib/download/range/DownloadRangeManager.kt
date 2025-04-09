@@ -264,8 +264,8 @@ object DownloadRangeManager : DownloadManager() {
                     innerDownloadListener.onComplete(info.filePath, info)
                     return@start
                 }
-                if (info.isForceDownloadNew) {
-                    // 此前下载的文件不完整
+                if (info.shouldForceReDownload()) {
+                    // 此前下载的文件不完整，删除文件，清空任务，重头开始
                     if (TextUtils.isEmpty(checkBeforeDownloadFile(info))) {
                         deleteTask(info.downloadID, startByUser = false, deleteFile = true)
                     }

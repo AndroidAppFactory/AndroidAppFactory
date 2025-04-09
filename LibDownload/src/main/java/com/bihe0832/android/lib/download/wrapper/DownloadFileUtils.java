@@ -3,8 +3,8 @@ package com.bihe0832.android.lib.download.wrapper;
 import android.content.Context;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.download.DownloadItem;
-import com.bihe0832.android.lib.download.file.DownloadFileManager;
 import com.bihe0832.android.lib.download.core.DownloadTaskList;
+import com.bihe0832.android.lib.download.file.DownloadFileManager;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,11 +28,11 @@ public class DownloadFileUtils {
      * @param maxDownloadNum 同时容许下载的最大数量，如果主要用于大文件下载：建议3个，最大不建议超过5个
      * @param isDebug 是否开启调试模式
      */
-    public static final void init(Context context, int maxDownloadNum, Boolean isDebug) {
+    public static void init(Context context, int maxDownloadNum, Boolean isDebug) {
         DownloadFileManager.INSTANCE.init(context, maxDownloadNum, isDebug);
     }
 
-    public static final void init(Context context, boolean isDebug) {
+    public static void init(Context context, boolean isDebug) {
         DownloadFileManager.INSTANCE.init(context, isDebug);
     }
 
@@ -45,19 +45,23 @@ public class DownloadFileUtils {
      *
      * @param info 添加任务的信息，除 downloadURL ，其余都非必填，下载本地仅支持传入文件夹，不支持传入下载文件路径，如果是要下载到指定文件，请参考 DownloadTools 二次分封装
      */
-    public static final void startDownload(Context context, @NotNull DownloadItem info, boolean forceDownload) {
-        if (!DownloadFileManager.INSTANCE.hasInit()){
+    public static void startDownload(Context context, @NotNull DownloadItem info, boolean shouldForceReDownload) {
+        if (!DownloadFileManager.INSTANCE.hasInit()) {
             DownloadFileManager.INSTANCE.init(context);
         }
-        if (forceDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
+        if (shouldForceReDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
             info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
         }
         DownloadFileManager.INSTANCE.addTask(info);
     }
 
-    public static final void startDownload(Context context, @NotNull DownloadItem info) {
-        info.setForceDownloadNew(TextUtils.isEmpty(info.getContentMD5()) || TextUtils.isEmpty(info.getContentSHA256()));
-        startDownload(context, info, info.isForceDownloadNew());
+    public static void startDownload(Context context, @NotNull DownloadItem info) {
+        if (!info.shouldForceReDownload()) {
+            info.setShouldForceReDownload(
+                    TextUtils.isEmpty(info.getContentMD5()) && TextUtils.isEmpty(info.getContentSHA256()));
+        }
+        // 默认所有需要强制重新下载的，都提高下载优先级，else 优先级不变
+        startDownload(context, info, info.shouldForceReDownload());
     }
 
     /**
@@ -65,7 +69,7 @@ public class DownloadFileUtils {
      *
      * @param downloadURL 下载地址
      */
-    public static final DownloadItem getTaskByDownloadURL(@NotNull final String downloadURL) {
+    public static DownloadItem getTaskByDownloadURL(@NotNull final String downloadURL) {
         return DownloadTaskList.INSTANCE.getTaskByDownloadURL(downloadURL, "");
     }
 
@@ -78,7 +82,7 @@ public class DownloadFileUtils {
      *
      * @param downloadID 添加任务的信息
      */
-    public static final void pauseDownload(@NotNull final long downloadID) {
+    public static void pauseDownload(@NotNull final long downloadID) {
         DownloadFileManager.INSTANCE.pauseTask(downloadID, true, false, false);
     }
 
@@ -88,7 +92,7 @@ public class DownloadFileUtils {
      * @param downloadID 恢复任务的信息
      * @param pauseOnMobile 4G是否暂停下载
      */
-    public static final void resumeDownload(long downloadID, boolean pauseOnMobile) {
+    public static void resumeDownload(long downloadID, boolean pauseOnMobile) {
         DownloadFileManager.INSTANCE.resumeTask(downloadID, null, true, pauseOnMobile);
     }
 
@@ -98,28 +102,28 @@ public class DownloadFileUtils {
      * @param downloadID 删除任务的信息
      * @param deleteFile 删除任务时是否删除相关文件
      */
-    public static final void deleteTask(long downloadID, boolean deleteFile) {
+    public static void deleteTask(long downloadID, boolean deleteFile) {
         DownloadFileManager.INSTANCE.deleteTask(downloadID, true, deleteFile);
     }
 
     /**
      * 暂停所有下载任务
      */
-    public static final void pauseAll(boolean pauseMaxPriorityDownload) {
+    public static void pauseAll(boolean pauseMaxPriorityDownload) {
         DownloadFileManager.INSTANCE.pauseAllTask(true, pauseMaxPriorityDownload);
     }
 
     /**
      * 暂停所有下载中的任务
      */
-    public static final void pauseDownloading(boolean pauseMaxPriorityDownload) {
+    public static void pauseDownloading(boolean pauseMaxPriorityDownload) {
         DownloadFileManager.INSTANCE.pauseDownloadingTask(true, pauseMaxPriorityDownload);
     }
 
     /**
      * 暂停所有在等待的下载任务
      */
-    public static final void pauseWaiting(boolean pauseMaxPriorityDownload) {
+    public static void pauseWaiting(boolean pauseMaxPriorityDownload) {
         DownloadFileManager.INSTANCE.pauseWaitingTask(true, pauseMaxPriorityDownload);
     }
 
@@ -129,7 +133,7 @@ public class DownloadFileUtils {
      * @param pauseOnMobile 4G是否暂停下载
      */
 
-    public static final void resumeAll(boolean pauseOnMobile) {
+    public static void resumeAll(boolean pauseOnMobile) {
         DownloadFileManager.INSTANCE.resumeAllTask(pauseOnMobile);
     }
 
@@ -138,7 +142,7 @@ public class DownloadFileUtils {
      *
      * @param pauseOnMobile 4G是否暂停下载
      */
-    public static final void resumeFailed(boolean pauseOnMobile) {
+    public static void resumeFailed(boolean pauseOnMobile) {
         DownloadFileManager.INSTANCE.resumeFailedTask(pauseOnMobile);
     }
 
@@ -147,7 +151,7 @@ public class DownloadFileUtils {
      *
      * @param pauseOnMobile 4G是否暂停下载
      */
-    public static final void resumePause(boolean pauseOnMobile) {
+    public static void resumePause(boolean pauseOnMobile) {
         DownloadFileManager.INSTANCE.resumePauseTask(pauseOnMobile);
     }
 
@@ -157,7 +161,7 @@ public class DownloadFileUtils {
      * @return 所有下载任务列表
      */
     @NotNull
-    public static final List<DownloadItem> getAll() {
+    public static List<DownloadItem> getAll() {
         return DownloadFileManager.INSTANCE.getAllTask();
     }
 
@@ -167,7 +171,7 @@ public class DownloadFileUtils {
      * @return
      */
     @NotNull
-    public static final List<DownloadItem> getFinished() {
+    public static List<DownloadItem> getFinished() {
         return DownloadFileManager.INSTANCE.getFinishedTask();
     }
 
@@ -177,7 +181,7 @@ public class DownloadFileUtils {
      * @return
      */
     @NotNull
-    public static final List<DownloadItem> getDownloading() {
+    public static List<DownloadItem> getDownloading() {
         return DownloadFileManager.INSTANCE.getDownloadingTask();
     }
 
@@ -187,7 +191,7 @@ public class DownloadFileUtils {
      * @return
      */
     @NotNull
-    public static final List<DownloadItem> getWaiting() {
+    public static List<DownloadItem> getWaiting() {
         return DownloadFileManager.INSTANCE.getWaitingTask();
     }
 }
