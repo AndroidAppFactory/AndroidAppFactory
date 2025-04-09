@@ -63,8 +63,8 @@ class DownloadByHttpForFile(
                         notifyDownloadSucc(downloadInfo)
                     } else {
                         val sha256 = SHA256.getFileSHA256(downloadFile)
-                        ZLog.e(TAG, "file SHA256:$sha256")
-                        ZLog.e(TAG, "DownloadItem param SHA256:" + downloadInfo.contentSHA256)
+                        ZLog.e(TAG, " file SHA256:$sha256")
+                        ZLog.e(TAG, " para SHA256:" + downloadInfo.contentSHA256)
                         if (sha256.equals(downloadInfo.contentSHA256, ignoreCase = true)) {
                             notifyDownloadSucc(downloadInfo)
                         } else {
@@ -80,8 +80,8 @@ class DownloadByHttpForFile(
                     }
                 } else {
                     val md5 = MD5.getFileMD5(downloadFile)
-                    ZLog.e(TAG, "file md5:$md5")
-                    ZLog.e(TAG, "DownloadItem param md5:" + downloadInfo.contentMD5)
+                    ZLog.e(TAG, " file md5:$md5")
+                    ZLog.e(TAG, " para md5:" + downloadInfo.contentMD5)
                     if (md5.equals(downloadInfo.contentMD5, ignoreCase = true)) {
                         notifyDownloadSucc(downloadInfo)
                     } else {

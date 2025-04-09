@@ -6,9 +6,7 @@ import android.util.Log;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.MathUtils;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import kotlin.jvm.Synchronized;
 
 
@@ -48,8 +46,8 @@ public class DownloadItem implements Serializable {
     private String contentMD5 = "";
     // 文件SHA256，非必填
     private String contentSHA256 = "";
-    // 如果本地有同名文件是否重新下载，非必填
-    private boolean forceDownloadNew = false;
+    // 如果本地有同名文件是否重新下载，非必填（如果是此前下载且有MD5等校验，不受此控制，主要用于强制重新下载，或者不支持分片的场景
+    private boolean shouldForceReDownload = false;
     // 如果本地有同名文件但是下载完判断MD5不一致，是否自动删除，非必填
     private boolean forceDeleteBad = true;
     //下载结束是否自动拉起安装，非必填
@@ -293,13 +291,12 @@ public class DownloadItem implements Serializable {
         this.fileFolder = fileFolder;
     }
 
-    public boolean isForceDownloadNew() {
-        //强制重新下载，或者不支持分片，就算是不强制重新下载也要强制重新下载
-        return forceDownloadNew;
+    public boolean shouldForceReDownload() {
+        return shouldForceReDownload;
     }
 
-    public void setForceDownloadNew(boolean forceDownloadNew) {
-        this.forceDownloadNew = forceDownloadNew;
+    public void setShouldForceReDownload(boolean shouldForceReDownload) {
+        this.shouldForceReDownload = shouldForceReDownload;
     }
 
     public void setDownloadStatus(int downloadStatus) {
@@ -443,7 +440,7 @@ public class DownloadItem implements Serializable {
             this.contentLength = item.contentLength;
             this.contentMD5 = item.contentMD5;
             this.contentSHA256 = item.contentSHA256;
-            this.forceDownloadNew = item.forceDownloadNew;
+            this.shouldForceReDownload = item.shouldForceReDownload;
             this.forceDeleteBad = item.forceDeleteBad;
             this.autoInstall = item.autoInstall;
             this.notificationVisibility = item.notificationVisibility;
@@ -477,7 +474,7 @@ public class DownloadItem implements Serializable {
                 + ", title='" + downloadTitle + ", actionKey='" + actionKey + ", extraInfo='" + extraInfo
                 + ", rangeStart=" + rangeStart + ", localStart=" + localStart + ", contentLength=" + contentLength
                 + ", fileFolder='" + fileFolder + ", filePath='" + filePath + ", fileMD5='" + contentMD5
-                + ", fileSHA256='" + contentSHA256 + ", forceDownloadNew=" + forceDownloadNew + ", downloadDesc='"
+                + ", fileSHA256='" + contentSHA256 + ", forceDownloadNew=" + shouldForceReDownload + ", downloadDesc='"
                 + downloadDesc + ", packageName='" + packageName + ", versionCode=" + versionCode + ", finishedLength="
                 + finishedLength + ", finishedLengthBefore=" + finishedLengthBefore + ", lastSpeed=" + lastSpeed
                 + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", downloadIcon='" + downloadIcon

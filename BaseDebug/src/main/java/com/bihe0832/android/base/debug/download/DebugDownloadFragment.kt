@@ -169,7 +169,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 //            } else {
 //                "https://imtt.dd.qq.com/sjy.10001/16891/apk/2A5BC6AA4E69DCE13C6D5D3FB820706E.apk"
 //            }
-            isForceDownloadNew = false
+            setShouldForceReDownload(false)
             downloadListener = object : SimpleDownloadListener() {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     showResult("应用下载失败（$errorCode）")
@@ -223,7 +223,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                 }
             }
         }.let {
-            DownloadFileUtils.startDownload(context, it, it.isForceDownloadNew)
+            DownloadFileUtils.startDownload(context, it, it.shouldForceReDownload())
         }
     }
 
@@ -792,7 +792,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
                             requireContext(),
                             it.get(currentNum),
                             AAFFileWrapper.getConfigFolder(),
-                            "",
+                            "E1E127FE9F951F0A71FD4AA695449305",
                             object : DownloadConfig.ResponseHandler {
                                 override fun onSuccess(type: Int, response: String) {
                                     ZLog.d(

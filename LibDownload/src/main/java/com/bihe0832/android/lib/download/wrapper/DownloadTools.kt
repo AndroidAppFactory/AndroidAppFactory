@@ -282,7 +282,7 @@ object DownloadTools {
             }
             this.contentMD5 = md5
             this.contentSHA256 = sha256
-            this.isForceDownloadNew = forceDownloadNew
+            this.setShouldForceReDownload(forceDownloadNew)
             this.actionKey = actionKey
             this.isDownloadWhenUseMobile = useMobile
             this.isNeedRecord = needRecord
