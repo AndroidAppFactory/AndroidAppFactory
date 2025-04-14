@@ -29,7 +29,7 @@ public class SendTextUtils {
             final String tips,
             final String positiveText, final boolean showDialog) {
         sendInfoWithCharSequence(context, title,
-                TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getTextHtmlAfterTransform(content)), null, tips,
+                TextFactoryUtils.getSpannedTextByHtml(content), null, tips,
                 positiveText, showDialog);
     }
 
