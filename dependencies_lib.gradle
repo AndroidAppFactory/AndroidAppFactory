@@ -6,7 +6,6 @@ ext.libmoduleInfo = [
                 "version"            : "6.25.11",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
-                        "LibDebug",
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
                         "LibSqlite", "LibDeviceNetwork", "LibDownload", "LibInstall", "LibAPK", "LibText",
                         "LibSuperAPP", "LibOS", "LibZip", "LibLifecycle", "LibIPC", "LibBlockTask", "LibOkhttpWrapper",
@@ -376,7 +375,7 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         project.androidsupport.constraintlayout,
                         "LibThread", "LibOS", "LibAAFResource", "LibText", "LibViewExt", "LibBlockTask", "LibTheme",
-                        "LibMedia"
+                        "LibMedia", "LibAPK", "LibToast"
                 ]
         ],
         "LibNotification"           : [

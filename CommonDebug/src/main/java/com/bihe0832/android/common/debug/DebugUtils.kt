@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.bihe0832.android.common.debug.module.DebugRootActivity
-import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
+import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 
 /**
@@ -16,32 +16,43 @@ import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
  */
 object DebugUtils {
 
-    fun sendInfo(context: Context?, title: String, content: String) {
-        DebugTools.sendInfo(context, title, content, false)
+    fun sendInfo(
+        context: Context, title: String?, content: String?, showDialog: Boolean
+    ) {
+        SendTextUtils.sendInfo(
+            context,
+            title,
+            content,
+            null,
+            null,
+            context.getString(R.string.com_bihe0832_share_to_develop_tips),
+            content,
+            context.getString(R.string.com_bihe0832_share_to_develop),
+            showDialog
+        )
     }
 
-    fun showInfo(context: Context?, title: String, content: List<String>) {
-        StringBuilder().apply {
-            content.forEach {
-                append("$it\n")
-            }
-        }.let {
-            DebugTools.showInfo(context, title, it.toString(), "发送到第三方")
-        }
+    fun sendInfo(context: Context, title: String, content: String) {
+        sendInfo(context, title, content, true)
     }
 
-    fun showInfoWithHTML(context: Context?, title: String, content: List<String>) {
-        StringBuilder().apply {
-            content.forEach {
-                append("$it<BR>")
-            }
-        }.let {
-            DebugTools.showInfoWithHTML(context, title, it.toString(), "发送到第三方")
-        }
+    fun showInfo(context: Context, title: String, content: List<String>) {
+        sendInfo(context, title, content.joinToString("\n"), true)
     }
 
-    fun showInfo(context: Context?, title: String, content: String) {
-        DebugTools.showInfo(context, title, content, "发送到第三方")
+    fun showInfoWithHTML(context: Context, title: String, content: List<String>) {
+        SendTextUtils.sendInfoWithHTML(
+            context,
+            title,
+            content.joinToString("<BR>"),
+            context.getString(R.string.com_bihe0832_share_to_develop_tips),
+            context.getString(R.string.com_bihe0832_share_to_develop),
+            true
+        )
+    }
+
+    fun showInfo(context: Context, title: String, content: String) {
+        sendInfo(context, title, content, true)
     }
 
     fun showInputDialog(
@@ -59,10 +70,7 @@ object DebugUtils {
     }
 
     fun startDebugActivity(
-        context: Context?,
-        cls: Class<*>,
-        titleName: String,
-        data: Map<String, String>?
+        context: Context?, cls: Class<*>, titleName: String, data: Map<String, String>?
     ) {
         DebugRootActivity.startDebugRootActivity(context, cls, titleName, data)
     }

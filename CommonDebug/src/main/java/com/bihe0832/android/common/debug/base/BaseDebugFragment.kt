@@ -8,19 +8,19 @@ open class BaseDebugFragment : BaseFragment() {
     val TAG = this.javaClass.simpleName
 
     protected fun sendInfo(title: String, content: String) {
-        DebugUtils.sendInfo(context, title, content)
+        DebugUtils.sendInfo(context!!, title, content)
     }
 
     protected fun showInfo(title: String, content: List<String>) {
-        DebugUtils.showInfo(context, title, content)
+        DebugUtils.showInfo(context!!, title, content)
     }
 
     protected fun showInfoWithHTML(title: String, content: List<String>) {
-        DebugUtils.showInfoWithHTML(context, title, content)
+        DebugUtils.showInfoWithHTML(context!!, title, content)
     }
 
     protected fun showInfo(title: String, content: String) {
-        DebugUtils.showInfo(context, title, content)
+        DebugUtils.showInfo(context!!, title, content)
     }
 
     fun showInputDialog(

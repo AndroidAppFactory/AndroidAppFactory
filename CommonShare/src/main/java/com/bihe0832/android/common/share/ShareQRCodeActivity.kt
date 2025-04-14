@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.lib.debug.DebugTools
+import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.media.Media
@@ -110,7 +110,7 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
                 } else {
                     visibility = View.VISIBLE
                     setOnClickListener {
-                        DebugTools.sendInfo(context, getShareDialogTitle(), linkText)
+                        SendTextUtils.sendInfo(context, getShareDialogTitle(), linkText)
                     }
                 }
             }
@@ -129,7 +129,7 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
 
     // 图片副文字
     open fun getShareDesc(): String {
-        return ThemeResourcesManager.getString(R.string.com_bihe0832_share_desc)!!
+        return ThemeResourcesManager.getString(R.string.com_bihe0832_share_desc_qrcode)!!
     }
 
     // 文本分享的内容

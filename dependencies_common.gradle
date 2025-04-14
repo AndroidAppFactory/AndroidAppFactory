@@ -6,7 +6,7 @@ ext.commonmoduleInfo = [
                 "version"                : "6.25.11",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
-                        "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper"
+                        "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper", "LibDebug"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
@@ -118,7 +118,7 @@ ext.commonmoduleInfo = [
         "CommonAbout"           : [
                 "version"            : "6.25.11",
                 "artifactId"         : "common-about",
-                "apidependenciesList": ["Framework", "CommonList", "LibDebug"]
+                "apidependenciesList": ["Framework", "CommonList"]
         ],
         "CommonList"            : [
                 "version"            : "6.25.11",
