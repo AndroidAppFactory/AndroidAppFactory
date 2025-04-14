@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="left"
-                android:text="@string/com_bihe0832_share_desc"
+                android:text="@string/com_bihe0832_share_desc_qrcode"
                 android:textColor="@color/com_bihe0832_share_text_color"
                 android:textSize="10dp" />
         </LinearLayout>

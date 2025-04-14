@@ -2,12 +2,11 @@
 <resources>
     <string name="com_bihe0832_share_title">分享给好友</string>
 
-    <string name="com_bihe0832_share_desc">我刚发现了一个好玩的，快扫码看看吧</string>
+    <string name="com_bihe0832_share_desc_qrcode">我刚发现了一个好玩的应用，快扫码看看吧</string>
     <string name="com_bihe0832_share_dialog_title">分享%1$s给好友</string>
-    <string name="com_bihe0832_share_link">我刚发现了一个好玩的，快点击链接看看吧：%1$s</string>
+    <string name="com_bihe0832_share_link">我刚发现了一个好玩的应用，快点击链接看看吧：%1$s</string>
 
     <string name="com_bihe0832_share_app">我刚刚发现了一个很好玩的应用，推荐给你试试吧。名字叫 %1$s ，可以在这里下载： %2$s </string>
-    <string name="com_bihe0832_share_app_target">https://cdn.bihe0832.com/app/download.html</string>
     <string name="com_bihe0832_share_app_big">APK 文件过大，建议使用二维码分享给好友下载</string>
     <string name="com_bihe0832_share_app_faild">APK 获取失败，建议使用二维码分享给好友下载</string>
 
@@ -18,7 +17,14 @@
     <string name="com_bihe0832_share_item_link_send">分享链接</string>
     <string name="com_bihe0832_share_item_link_copy">复制链接</string>
     <string name="com_bihe0832_share_item_pic_save">保存图片</string>
-    <string name="com_bihe0832_share_item_wechat">微信</string>
-    <string name="com_bihe0832_share_item_time_line">朋友圈</string>
+
+    <string name="com_bihe0832_share_tips_copy_clipboard">已保存到剪贴板</string>
+    <string name="com_bihe0832_share_item_copy_clipboard">复制到剪贴板</string>
+
+    <string name="com_bihe0832_share_to_develop">分享给我们</string>
+    <string name="com_bihe0832_share_to_others">发送到第三方</string>
+    <string name="com_bihe0832_share_to_develop_content">调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们</string>
+    <string name="com_bihe0832_share_to_develop_tips">我们承诺你提供的信息仅用于问题定位</string>
+
 </resources>
 

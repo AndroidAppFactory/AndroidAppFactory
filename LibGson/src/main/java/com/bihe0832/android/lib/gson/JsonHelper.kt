@@ -17,30 +17,30 @@ import java.lang.reflect.Type
  */
 object JsonHelper {
 
-    /**
-     * 增加后台返回""和"null"的处理
-     * 1.int=>0
-     * 2.double=>0.00
-     * 3.long=>0L
-     *
-     * @return
-     */
     fun getGson(): Gson {
-        return getGsonBuilder().disableHtmlEscaping().create()
+        return getGson(false)
+    }
+
+    fun getGson(needPrettyPrinting: Boolean): Gson {
+        return getGsonBuilder().apply {
+            if (needPrettyPrinting) {
+                setPrettyPrinting()
+            }
+        }.disableHtmlEscaping().create()
     }
 
     fun getGsonBuilder(): GsonBuilder {
         return GsonBuilder().registerTypeAdapter(Double::class.java, DoubleDefaultAdapter())
-                .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
-                .registerTypeAdapter(Boolean::class.java, BooleanTypeAdapter())
-                .registerTypeAdapter(Boolean::class.javaPrimitiveType, BooleanTypeAdapter())
-                .registerTypeAdapter(Float::class.java, FloatDefaultAdapter())
-                .registerTypeAdapter(Float::class.javaPrimitiveType, FloatDefaultAdapter())
-                .registerTypeAdapter(Int::class.java, IntegerDefaultAdapter())
-                .registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDefaultAdapter())
-                .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
-                .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
-                .registerTypeAdapter(String::class.java, StringNullAdapter())
+            .registerTypeAdapter(Double::class.javaPrimitiveType, DoubleDefaultAdapter())
+            .registerTypeAdapter(Boolean::class.java, BooleanTypeAdapter())
+            .registerTypeAdapter(Boolean::class.javaPrimitiveType, BooleanTypeAdapter())
+            .registerTypeAdapter(Float::class.java, FloatDefaultAdapter())
+            .registerTypeAdapter(Float::class.javaPrimitiveType, FloatDefaultAdapter())
+            .registerTypeAdapter(Int::class.java, IntegerDefaultAdapter())
+            .registerTypeAdapter(Int::class.javaPrimitiveType, IntegerDefaultAdapter())
+            .registerTypeAdapter(Long::class.java, LongDefaultAdapter())
+            .registerTypeAdapter(Long::class.javaPrimitiveType, LongDefaultAdapter())
+            .registerTypeAdapter(String::class.java, StringNullAdapter())
     }
 
     /**
@@ -53,7 +53,11 @@ object JsonHelper {
      * i.e: String json = JsonHelper.toJson(beanObject);
     </T> */
     fun <T> toJson(beanObject: T): String? {
-        return toJson(getGson(), beanObject)
+        return toJson(beanObject, false)
+    }
+
+    fun <T> toJson(beanObject: T, needPrettyPrinting: Boolean): String? {
+        return toJson(getGson(needPrettyPrinting), beanObject)
     }
 
     fun <T> toJson(gson: Gson, beanObject: T): String? {
@@ -73,7 +77,7 @@ object JsonHelper {
 
     fun toMap(data: String): Map<*, *>? {
         return try {
-            getGson().fromJson(data, object : TypeToken<Map<*, *>>() {}.type)
+            getGson(false).fromJson(data, object : TypeToken<Map<*, *>>() {}.type)
         } catch (e: Exception) {
             ZLog.e("JsonHelper", "------------------------------------")
             ZLog.e("JsonHelper", "JsonParserWrapper fromJson error:$e")
@@ -94,7 +98,7 @@ object JsonHelper {
      * i.e: BeanClass beanClass = JsonHelper.fromJson(json, BeanClass.class);
      */
     fun <T> fromJson(json: String, beanClass: Class<T>): T? {
-        return fromJson(getGson(), json, beanClass)
+        return fromJson(getGson(false), json, beanClass)
     }
 
     /**
@@ -111,7 +115,7 @@ object JsonHelper {
     open fun <R, T> fromJson(json: String?, responseClass: Class<R>, contentClass: Class<T>): R? {
         try {
             TypeToken.getParameterized(responseClass, contentClass).type.let {
-                return getGson().fromJson(json, it)
+                return getGson(false).fromJson(json, it)
             }
         } catch (e: Exception) {
             ZLog.e("JsonHelper", "------------------------------------")
@@ -149,7 +153,7 @@ object JsonHelper {
      * i.e: List<BeanClass>  beanClass = JsonHelper.fromJsonList(json, BeanClass.class);
      */
     fun <T> fromJsonList(json: String, clazz: Class<T>): List<T>? {
-        return fromJsonList(getGson(), json, clazz)
+        return fromJsonList(getGson(false), json, clazz)
     }
 
     fun <T> fromJsonList(gson: Gson, json: String, clazz: Class<T>): List<T>? {
@@ -174,9 +178,13 @@ object JsonHelper {
                             ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null")
                             ZLog.e(
                                 "JsonHelper",
-                                "JsonParserWrapper parse list result is null:" + jsonArray.get(i).toString()
+                                "JsonParserWrapper parse list result is null:" + jsonArray.get(i)
+                                    .toString()
                             )
-                            ZLog.e("JsonHelper", "JsonParserWrapper parse list result is null:$clazz")
+                            ZLog.e(
+                                "JsonHelper",
+                                "JsonParserWrapper parse list result is null:$clazz"
+                            )
                         } else {
                             result.add(it)
                         }
@@ -192,7 +200,10 @@ object JsonHelper {
                 return result
             } catch (e: java.lang.Exception) {
                 ZLog.e("JsonHelper", "------------------------------------")
-                ZLog.e("JsonHelper", "JsonParserWrapper start parse list fromJsonArray Exception:\n")
+                ZLog.e(
+                    "JsonHelper",
+                    "JsonParserWrapper start parse list fromJsonArray Exception:\n"
+                )
                 ZLog.e("JsonHelper", "\t $e \n")
                 ZLog.e("JsonHelper", "------------------------------------")
             }

@@ -61,7 +61,7 @@
                 android:textColor="@color/com_bihe0832_dialog_content"
                 android:textSize="@dimen/com_bihe0832_dialog_tips_text_size"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                tools:visibility="gone" />
 
             <ImageView
                 android:id="@+id/content_img"
@@ -73,7 +73,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nomore_cb"
                 tools:src="@mipmap/debug"
-                tools:visibility="visible" />
+                tools:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/content_layout"

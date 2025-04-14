@@ -2,12 +2,11 @@
 <resources>
     <string name="com_bihe0832_share_title">Share APP</string>
 
-    <string name="com_bihe0832_share_desc">Check out this cool thing I found! Scan the QR code to see</string>
+    <string name="com_bihe0832_share_desc_qrcode">Check out this cool APP I found! Scan the QR code to see</string>
     <string name="com_bihe0832_share_dialog_title">Share %1$s with friends</string>
-    <string name="com_bihe0832_share_link">Check out this cool thing I found: %1$s</string>
+    <string name="com_bihe0832_share_link">Check out this cool APP I found: %1$s</string>
 
     <string name="com_bihe0832_share_app">I found this great app called %1$s! Download here: %2$s</string>
-    <string name="com_bihe0832_share_app_target">https://cdn.bihe0832.com/app/download.html</string>
     <string name="com_bihe0832_share_app_big">APK file too large. Recommend sharing via QR code</string>
     <string name="com_bihe0832_share_app_faild">Failed to get APK. Recommend sharing via QR code</string>
 
@@ -18,6 +17,16 @@
     <string name="com_bihe0832_share_item_link_send">Share Link</string>
     <string name="com_bihe0832_share_item_link_copy">Copy Link</string>
     <string name="com_bihe0832_share_item_pic_save">Save Image</string>
+
+    <string name="com_bihe0832_share_tips_copy_clipboard">Copied to clipboard</string>
+    <string name="com_bihe0832_share_item_copy_clipboard">Copy</string>
+
+    <string name="com_bihe0832_share_to_develop_title">Share To Developers</string>
+    <string name="com_bihe0832_share_to_develop">Send to Developers</string>
+    <string name="com_bihe0832_share_to_others">Share to Others</string>
+    <string name="com_bihe0832_share_to_develop_content">Debug info is ready. You can:1. Directly \"Send to developers\"2. \"Copy\" info and forward to us</string>
+    <string name="com_bihe0832_share_to_develop_tips">(All data will be used for troubleshooting only)</string>
+
     <string name="com_bihe0832_share_item_wechat">WeChat</string>
     <string name="com_bihe0832_share_item_time_line">Moments</string>
 </resources>

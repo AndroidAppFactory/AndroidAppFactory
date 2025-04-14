@@ -14,10 +14,10 @@ import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.debug.DebugTools
 import com.bihe0832.android.lib.media.Media
 import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
+import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
 import com.bihe0832.android.lib.ui.view.ext.ViewCaptureLayout
 import com.bihe0832.android.lib.utils.time.DateUtil
 
@@ -47,11 +47,11 @@ class DebugBaseViewFragment : DebugEnvFragment() {
                             object :
                                 DialogCompletedStringCallback {
                                 override fun onResult(result: String?) {
-                                    DebugTools.showInfoWithHTML(
+                                    SendTextUtils.sendInfoWithHTML(
                                         context,
                                         "TextView对HTML的支持测试",
-                                        result,
-                                        "分享给我们",
+                                        result, "",
+                                        "分享给我们", true
                                     )
                                 }
                             },
