@@ -41,7 +41,6 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
     fun getChangeLanguage(): SettingsDataGo {
         return SettingsDataGo(resources.getString(R.string.settings_language_title)).apply {
             mItemIconRes = R.drawable.icon_language
-            mHeaderTextBold = true
             mShowDriver = true
             mShowGo = true
             mHeaderListener = object : View.OnClickListener {

@@ -127,7 +127,7 @@ class DebugListFragment : CommonListFragment() {
                 }
             })
             add(SettingsDataSwitchForDebug().apply {
-                mItemIconRes = R.drawable.icon_help
+                mItemIconRes = R.drawable.icon_share
                 mItemIconResColorFilter = Color.RED
                 title = "fdsfsf"
                 description = "fsdfsdfsdfsfsdfsdfs"
