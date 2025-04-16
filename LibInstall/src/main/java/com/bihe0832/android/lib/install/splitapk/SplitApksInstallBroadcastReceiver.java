@@ -18,10 +18,15 @@ public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
         return context.getPackageName() + ".action.ROOTLESS_SAIP_BROADCAST_RECEIVER.ACTION_DELIVER_PI_EVENT";
     }
 
+    // 方法1: 检查调用者是否持有自定义权限
+    private boolean checkCallerPermission(Context context) {
+        return context.checkCallingOrSelfPermission(
+                context.getPackageName() + ".install.permission.SEND_SPLIT_APKS_INSTALL")
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        // check if the originating Activity is from trusted package
-
         int status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -999);
         String pacakgeName = "";
         String sessionID = "";
@@ -31,14 +36,21 @@ public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(TextUtils.isEmpty(sessionID)){
+        if (TextUtils.isEmpty(sessionID)) {
+            mObservers.onInstallationFailed(sessionID, pacakgeName);
             return;
         }
+        // 验证调用者权限
+        if (!checkCallerPermission(context)) {
+            ZLog.e(TAG, "Permission verification failed");
+            mObservers.onInstallationFailed(sessionID, pacakgeName);
+            return;
+        }
+
         switch (status) {
             case PackageInstaller.STATUS_PENDING_USER_ACTION:
                 ZLog.d(TAG, "Requesting user confirmation for installation");
                 Intent confirmationIntent = intent.getParcelableExtra(Intent.EXTRA_INTENT);
-                confirmationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 // 检查Intent的目标组件是否在你的应用的控制范围内
                 ComponentName componentName = confirmationIntent.getComponent();
@@ -46,9 +58,21 @@ public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
                     String packageName = componentName.getPackageName();
                     if (!context.getPackageName().equals(packageName)) {
                         ZLog.e(TAG, "Invalid target package: " + packageName);
+                        mObservers.onInstallationFailed(sessionID, pacakgeName);
                         return;
                     }
                 }
+
+                // 或者验证调用者包名是否在白名单中
+                if (!context.getPackageName().equals(confirmationIntent.getPackage())
+                        && !"com.android.packageinstaller".equals(confirmationIntent.getPackage())) {
+                    ZLog.e(TAG, "Invalid target package: " + confirmationIntent.getPackage());
+                    mObservers.onInstallationFailed(sessionID, pacakgeName);
+                    return;
+                }
+
+                // 清除任何可能被滥用的flags和extras
+                confirmationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 // 使用PackageManager检查Intent是否会被你的应用处理
                 PackageManager packageManager = context.getPackageManager();
@@ -63,7 +87,6 @@ public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
                     ZLog.e(TAG, "startActivity failed:" + e.getMessage());
                 }
                 mObservers.onConfirmationPending(sessionID, pacakgeName);
-
                 break;
             case PackageInstaller.STATUS_SUCCESS:
                 ZLog.d(TAG, "Installation succeed");
