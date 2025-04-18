@@ -1,17 +1,22 @@
 package com.bihe0832.android.lib.install.splitapk;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
+import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.log.ZLog;
+import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "SplitApksInstallBroadcastReceiver:::";
+    private static final String PACKAGE_NAME_INSTALL = "com.android.packageinstaller";
+    private static final String CLASS_NAME_INSTALL = "com.android.packageinstaller.InstallStart";
     private EventObserver mObservers = null;
 
     public String getIntentFilterFlag(Context context) {
@@ -25,6 +30,7 @@ public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void onReceive(Context context, Intent intent) {
         int status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -999);
@@ -65,7 +71,7 @@ public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
 
                 // 或者验证调用者包名是否在白名单中
                 if (!context.getPackageName().equals(confirmationIntent.getPackage())
-                        && !"com.android.packageinstaller".equals(confirmationIntent.getPackage())) {
+                        && !PACKAGE_NAME_INSTALL.equals(confirmationIntent.getPackage())) {
                     ZLog.e(TAG, "Invalid target package: " + confirmationIntent.getPackage());
                     mObservers.onInstallationFailed(sessionID, pacakgeName);
                     return;
@@ -73,20 +79,24 @@ public class SplitApksInstallBroadcastReceiver extends BroadcastReceiver {
 
                 // 清除任何可能被滥用的flags和extras
                 confirmationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+                if (BuildUtils.INSTANCE.getSDK_INT() >= VERSION_CODES.O) {
+                    confirmationIntent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    confirmationIntent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
                 // 使用PackageManager检查Intent是否会被你的应用处理
                 PackageManager packageManager = context.getPackageManager();
-                if (confirmationIntent.resolveActivity(packageManager) == null) {
+                if (confirmationIntent.resolveActivity(packageManager).getClassName().equals(CLASS_NAME_INSTALL)) {
+                    try {
+                        context.startActivity(confirmationIntent);
+                    } catch (Exception e) {
+                        ZLog.e(TAG, "startActivity failed:" + e.getMessage());
+                    }
+                    mObservers.onConfirmationPending(sessionID, pacakgeName);
+                } else {
                     ZLog.e(TAG, "No activity found to handle the intent");
+                    mObservers.onInstallationFailed(sessionID, pacakgeName);
                     return;
                 }
-
-                try {
-                    context.startActivity(confirmationIntent);
-                } catch (Exception e) {
-                    ZLog.e(TAG, "startActivity failed:" + e.getMessage());
-                }
-                mObservers.onConfirmationPending(sessionID, pacakgeName);
                 break;
             case PackageInstaller.STATUS_SUCCESS:
                 ZLog.d(TAG, "Installation succeed");

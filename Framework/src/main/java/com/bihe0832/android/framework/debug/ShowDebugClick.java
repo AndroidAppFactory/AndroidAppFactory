@@ -59,12 +59,7 @@ public class ShowDebugClick implements View.OnClickListener {
 
     protected void sendInfo(Context ctx) {
         String result = getDebugInfo(ctx) + "其他信息: \n" + getExtraInfo() + "\n";
-        SendTextUtils.sendInfo(
-                ctx, ctx.getString(R.string.com_bihe0832_share_to_develop_title),
-                ctx.getString(R.string.com_bihe0832_share_to_develop_content),
-                result,
-                ctx.getString(R.string.com_bihe0832_share_to_develop_tips),
-                ctx.getString(R.string.com_bihe0832_share_to_develop), true);
+        sendInfo(ctx, result);
     }
 
     public String getDebugInfo(Context ctx) {
@@ -114,5 +109,12 @@ public class ShowDebugClick implements View.OnClickListener {
             builder.append("\n");
         }
         return builder.toString();
+    }
+
+    public static void sendInfo(Context ctx, String result) {
+        SendTextUtils.sendInfo(ctx, ctx.getString(R.string.com_bihe0832_share_to_develop_title),
+                ctx.getString(R.string.com_bihe0832_share_to_develop_content), result,
+                ctx.getString(R.string.com_bihe0832_share_to_develop_tips),
+                ctx.getString(R.string.com_bihe0832_share_to_develop), true);
     }
 }
