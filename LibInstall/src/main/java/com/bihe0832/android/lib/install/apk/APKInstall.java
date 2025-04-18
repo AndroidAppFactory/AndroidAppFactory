@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.install.InstallListener;
+import com.bihe0832.android.lib.install.InstallUtils;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import java.io.File;
@@ -31,16 +32,50 @@ public class APKInstall {
             try {
                 ArrayList<String> fileList = new ArrayList<>();
                 fileList.add(filePath);
-                SplitApksInstallHelper.INSTANCE.installApk(context, fileList, finalPackageName, listener);
-            } catch (ActivityNotFoundException e) {
+                SplitApksInstallHelper.INSTANCE.installApk(context, fileList, finalPackageName, new InstallListener() {
+                    @Override
+                    public void onUnCompress() {
+                        listener.onUnCompress();
+                    }
+
+                    @Override
+                    public void onInstallPrepare() {
+                        listener.onInstallPrepare();
+                    }
+
+                    @Override
+                    public void onInstallStart() {
+                        listener.onInstallStart();
+                    }
+
+                    @Override
+                    public void onInstallFailed(int errorCode) {
+                        installAPK(context, filePath, listener);
+                    }
+
+                    @Override
+                    public void onInstallSuccess() {
+                        listener.onInstallSuccess();
+                    }
+
+                    @Override
+                    public void onInstallTimeOut() {
+                        listener.onInstallTimeOut();
+                    }
+                });
+            } catch (Exception e) {
                 e.printStackTrace();
-                listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
+                installAPK(context, filePath, listener);
             }
         } else {
-            File file = new File(filePath);
-            Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, file);
-            installAPK(context, fileProvider, file, listener);
+            installAPK(context, filePath, listener);
         }
+    }
+
+    public static void installAPK(Context context, String filePath, final InstallListener listener) {
+        File file = new File(filePath);
+        Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, file);
+        installAPK(context, fileProvider, file, listener);
     }
 
     public static void installAPK(Context context, Uri fileProvider, File file, final InstallListener listener) {
@@ -57,9 +92,9 @@ public class APKInstall {
                 }
                 if (BuildUtils.INSTANCE.getSDK_INT() > Build.VERSION_CODES.O && !context.getPackageManager()
                         .canRequestPackageInstalls()) {
-                    Log.e("InstallUtils", "app don't hava install permission");
-                    Log.e("InstallUtils", "app don't hava install permission");
-                    Log.e("InstallUtils", "app don't hava install permission");
+                    Log.e(InstallUtils.TAG, "app don't hava install permission");
+                    Log.e(InstallUtils.TAG, "app don't hava install permission");
+                    Log.e(InstallUtils.TAG, "app don't hava install permission");
                 }
                 context.startActivity(intent);
                 if (null != listener) {

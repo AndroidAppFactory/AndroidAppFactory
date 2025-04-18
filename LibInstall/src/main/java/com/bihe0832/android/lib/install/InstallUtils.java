@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class InstallUtils {
 
-    private static final String TAG = "InstallUtils";
+    public static final String TAG = "InstallUtils";
 
     public static ApkInstallType getFileType(String filepath) {
         if (TextUtils.isEmpty(filepath)) {

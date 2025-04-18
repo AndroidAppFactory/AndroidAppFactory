@@ -11,7 +11,7 @@
         <!-- 在 BroadcastReceiver 中声明需要的权限 -->
         <receiver
             android:name="com.bihe0832.android.lib.install.splitapk.SplitApksInstallBroadcastReceiver"
-            android:exported="true"
+            android:exported="false"
             android:permission="${applicationId}.install.permission.SEND_SPLIT_APKS_INSTALL" >
         </receiver>
     </application>

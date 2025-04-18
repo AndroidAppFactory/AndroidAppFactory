@@ -32,7 +32,7 @@ open class SimpleInstallListener(
         }
 
         override fun onInstallPrepare() {
-            loadingDialog.show(activity.getString(R.string.install_uncompress))
+            loadingDialog.show(activity.getString(R.string.install_prepare))
         }
 
         override fun onInstallStart() {
@@ -60,8 +60,6 @@ open class SimpleInstallListener(
         ZLog.i("startDownloadApk download installApkPath: $filePath")
         ThreadManager.getInstance().runOnUIThread {
             if (InstallUtils.getFileType(filePath) == ApkInstallType.APK) {
-                InstallUtils.installAPP(activity, filePath, packageName)
-            } else {
                 InstallUtils.installAPP(activity, filePath, packageName, installListener)
             }
         }

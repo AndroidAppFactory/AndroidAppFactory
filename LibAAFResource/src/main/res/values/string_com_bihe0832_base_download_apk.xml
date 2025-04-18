@@ -20,7 +20,7 @@
     <string name="install_permission">安装应用需要打开未知来源权限，请在设置中开启权限</string>
     <string name="install_background">应用安装已切到后台，请耐心等待</string>
     <string name="install_uncompress">特殊应用安装可能需要更长时间，请稍候... &lt;BR&gt;&lt;BR&gt;正在解压安装包...</string>
-    <string name="install_prepare">特殊应用安装可能需要更长时间，请稍候... &lt;BR&gt;&lt;BR&gt;正在验证安装包完整性...</string>
+    <string name="install_prepare">正在验证安装包完整性...</string>
     <string name="install_success">应用已成功安装</string>
     <string name="install_timeout">应用安装已超时，请检查后重试...</string>
     <string name="download_failed_local_is_new">本机已有更高版本的%s，下载已取消</string>
