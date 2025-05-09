@@ -145,7 +145,6 @@ object AppFactoryInit {
             // 监听信号变化，统一到MobileUtil
             MobileUtil.registerMobileSignalListener(application.applicationContext)
             CardInfoHelper.getInstance().enableDebug(!ZixieContext.isOfficial())
-            ShakeManager.init(application.applicationContext)
             ThemeManager.init(application, !ZixieContext.isOfficial())
             WidgetUpdateManager.initModuleWithMainProcess(application.applicationContext)
             AAFGoogleAD.initModule(application.applicationContext)

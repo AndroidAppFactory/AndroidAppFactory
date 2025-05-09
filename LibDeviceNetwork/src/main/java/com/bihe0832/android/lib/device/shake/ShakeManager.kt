@@ -10,18 +10,13 @@ import kotlin.math.sqrt
 object ShakeManager {
 
     // 速度阈值，当摇晃速度达到这值后产生作用
-    private const val SPEED_SHRESHOLD = 3000
+    private const val SPEED_SHRESHOLD = 5000L
 
     // 摇晃中两次检测位置的时间间隔
-    private const val UPTATE_INTERVAL_TIME = 60
-
-    private var mContext: Context? = null
+    private const val UPTATE_INTERVAL_TIME = 100
 
     // 传感器管理器
     private var mSensorManager: SensorManager? = null
-
-    // 传感器
-    private var sensor: Sensor? = null
 
     // 重力感应监听器
     private var mOnShakeListener: OnShakeListener? = null
@@ -33,25 +28,33 @@ object ShakeManager {
 
     // 上次检测时间
     private var lastUpdateTime: Long = 0
+    private var speedPerInterval: Long = SPEED_SHRESHOLD
 
-    fun init(context: Context?) {
-        mContext = context
+    fun setSpeed(speed: Int) {
+        setSpeed(UPTATE_INTERVAL_TIME, speed * 100L)
     }
 
-    fun start() {
+    fun setSpeed(duration: Int, speed: Long) {
+        this.speedPerInterval = speed * UPTATE_INTERVAL_TIME / duration
+    }
+
+    fun start(context: Context) {
         // 获得传感器管理器
-        mSensorManager = mContext?.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+        mSensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
         // 获得重力传感器
-        sensor = mSensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        // 注册
-        sensor?.let {
-            mSensorManager?.registerListener(mSensorEventListener, sensor, SensorManager.SENSOR_DELAY_GAME)
+        mSensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.let{
+            mSensorManager?.registerListener(
+                mSensorEventListener,
+                it,
+                SensorManager.SENSOR_DELAY_GAME
+            )
         }
     }
 
     // 停止检测
     fun stop() {
         mSensorManager?.unregisterListener(mSensorEventListener)
+        mSensorManager = null
     }
 
     // 设置重力感应监听器
@@ -93,10 +96,9 @@ object ShakeManager {
             lastX = x
             lastY = y
             lastZ = z
-            val speed = sqrt((deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ).toDouble()) / timeInterval * 10000
-            // 达到速度阀值，发出提示
-//		Logger.d("Spped:"+speed);
-            if (speed >= SPEED_SHRESHOLD) {
+            val speed =
+                sqrt((deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ).toDouble()) / timeInterval * 10000
+            if (speed >= speedPerInterval) {
                 mOnShakeListener?.onShake()
             }
         }
