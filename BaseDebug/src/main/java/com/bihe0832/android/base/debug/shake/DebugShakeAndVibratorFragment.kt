@@ -28,7 +28,10 @@ class DebugShakeAndVibratorFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(getDebugItem("开启摇一摇", View.OnClickListener { ShakeManager.start() }))
+            add(getDebugItem("摇一摇很灵敏", View.OnClickListener { ShakeManager.setSpeed(10)}))
+            add(getDebugItem("摇一摇很迟钝", View.OnClickListener { ShakeManager.setSpeed(100)}))
+            add(getDebugItem("摇一摇比较容易", View.OnClickListener { ShakeManager.setSpeed(30)}))
+            add(getDebugItem("开启摇一摇", View.OnClickListener { ShakeManager.start(context!!) }))
             add(getDebugItem("关闭摇一摇", View.OnClickListener { ShakeManager.stop() }))
         }
     }
