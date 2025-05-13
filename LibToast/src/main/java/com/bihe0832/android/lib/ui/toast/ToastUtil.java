@@ -23,11 +23,15 @@ public class ToastUtil {
     }
 
     public static void showTop(final Context ctx, final String toastInfo, final int duration) {
-        show(ctx, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size), duration, Gravity.TOP, 0, (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
+        show(ctx, R.mipmap.icon, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
+                duration, Gravity.TOP, 0,
+                (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
     }
 
     public static void show(final Context ctx, final String toastInfo, final int duration) {
-        show(ctx, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size), duration, Gravity.BOTTOM, 0, (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
+        show(ctx, R.mipmap.icon, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
+                duration, Gravity.BOTTOM, 0,
+                (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
     }
 
     public static void showLongTips(final Context ctx, int res, final String toastInfo) {
@@ -39,22 +43,26 @@ public class ToastUtil {
     }
 
     public static void showTips(final Context ctx, int res, final String toastInfo, final int duration) {
-        showTips(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size), duration, Gravity.CENTER, 0, 0);
+        showTips(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
+                duration, Gravity.CENTER, 0, 0);
     }
 
-    public static void show(final Context ctx, final String toastInfo, final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
+    public static void show(final Context ctx, final int imageRes, final String toastInfo, final float textSize,
+            final int duration, final int gravityType, final int xOffset, final int yOffset) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
                 View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_base_toast, null);
                 final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
+                ImageView toastImage = (ImageView) layout.findViewById(R.id.bihe0832_common_toast_image);
+                toastImage.setImageResource(imageRes);
                 show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
-
             }
         });
     }
 
-    public static void showTips(final Context ctx, final int imageRes, final String toastInfo, final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
+    public static void showTips(final Context ctx, final int imageRes, final String toastInfo, final float textSize,
+            final int duration, final int gravityType, final int xOffset, final int yOffset) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
@@ -67,7 +75,8 @@ public class ToastUtil {
         });
     }
 
-    private static void show(final Context ctx, final View layout, final String toastInfo, final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
+    private static void show(final Context ctx, final View layout, final String toastInfo, final float textSize,
+            final int duration, final int gravityType, final int xOffset, final int yOffset) {
         TextView toastText = (TextView) layout.findViewById(R.id.bihe0832_common_toast_text);
         CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(toastInfo);//支持html
         toastText.setText(charSequence);
@@ -76,7 +85,8 @@ public class ToastUtil {
 
     }
 
-    public static void show(final Context ctx, final View layout, final int duration, final int gravityType, final int xOffset, final int yOffset) {
+    public static void show(final Context ctx, final View layout, final int duration, final int gravityType,
+            final int xOffset, final int yOffset) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {
