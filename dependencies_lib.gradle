@@ -353,7 +353,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibToast"                  : [
-                "version"            : "6.25.15",
+                "version"            : "6.25.16",
                 "artifactId"         : "lib-toast",
                 "apidependenciesList": [
                         "LibThread", "LibText", "LibAAFResource"
