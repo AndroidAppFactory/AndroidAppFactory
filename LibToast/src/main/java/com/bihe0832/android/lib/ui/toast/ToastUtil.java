@@ -75,7 +75,7 @@ public class ToastUtil {
         });
     }
 
-    private static void show(final Context ctx, final View layout, final String toastInfo, final float textSize,
+    public static void show(final Context ctx, final View layout, final String toastInfo, final float textSize,
             final int duration, final int gravityType, final int xOffset, final int yOffset) {
         TextView toastText = (TextView) layout.findViewById(R.id.bihe0832_common_toast_text);
         CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(toastInfo);//支持html
