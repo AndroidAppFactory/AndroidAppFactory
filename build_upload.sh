@@ -136,5 +136,6 @@ do
     git commit $localPath/dependencies.gradle $localPath/$fileName -m"auto add ${libName} to version ${version} by build.sh, author:zixie "
 done
 cd $localPath
-/bin/bash ./build_merge_strings.sh
 echo -e "checkResult: execCommand succ, libName:$libName \n\n"
+
+/bin/bash ./build_merge_strings.sh
