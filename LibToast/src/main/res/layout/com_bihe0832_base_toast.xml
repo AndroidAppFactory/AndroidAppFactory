@@ -11,26 +11,27 @@
     android:padding="@dimen/bihe0832_common_toast_padding">
 
     <ImageView
+        android:id="@+id/bihe0832_common_toast_image"
         android:layout_width="@dimen/bihe0832_common_toast_img_size"
         android:layout_height="@dimen/bihe0832_common_toast_img_size"
         android:src="@mipmap/icon" />
 
     <TextView
-            android:id="@+id/bihe0832_common_toast_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/bihe0832_common_toast_text_margin"
-            android:layout_marginRight="@dimen/bihe0832_common_toast_text_margin"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:longClickable="false"
-            android:maxLines="3"
-            android:minLines="1"
-            android:lineSpacingExtra="0.5mm"
-            android:scrollbars="vertical"
-            android:textSize="14dp"
-            android:textColor="@color/bihe0832_common_toast_text_color"
-            tools:text="这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试" />
+        android:id="@+id/bihe0832_common_toast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/bihe0832_common_toast_text_margin"
+        android:layout_marginRight="@dimen/bihe0832_common_toast_text_margin"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:lineSpacingExtra="0.5mm"
+        android:longClickable="false"
+        android:maxLines="3"
+        android:minLines="1"
+        android:scrollbars="vertical"
+        android:textColor="@color/bihe0832_common_toast_text_color"
+        android:textSize="14dp"
+        tools:text="这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试" />
 
 </LinearLayout>
