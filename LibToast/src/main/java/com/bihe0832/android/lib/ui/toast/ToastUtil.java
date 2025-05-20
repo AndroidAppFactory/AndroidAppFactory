@@ -29,22 +29,13 @@ public class ToastUtil {
     }
 
     public static void show(final Context ctx, final String toastInfo, final int duration) {
-        show(ctx, R.mipmap.icon, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
+        show(ctx, R.mipmap.icon, toastInfo, duration);
+    }
+
+    public static void show(final Context ctx, final int res, final String toastInfo, final int duration) {
+        show(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
                 duration, Gravity.BOTTOM, 0,
                 (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
-    }
-
-    public static void showLongTips(final Context ctx, int res, final String toastInfo) {
-        showTips(ctx, res, toastInfo, Toast.LENGTH_LONG);
-    }
-
-    public static void showShortTips(final Context ctx, int res, final String toastInfo) {
-        showTips(ctx, res, toastInfo, Toast.LENGTH_SHORT);
-    }
-
-    public static void showTips(final Context ctx, int res, final String toastInfo, final int duration) {
-        showTips(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
-                duration, Gravity.CENTER, 0, 0);
     }
 
     public static void show(final Context ctx, final int imageRes, final String toastInfo, final float textSize,
@@ -59,6 +50,19 @@ public class ToastUtil {
                 show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
             }
         });
+    }
+
+    public static void showLongTips(final Context ctx, int res, final String toastInfo) {
+        showTips(ctx, res, toastInfo, Toast.LENGTH_LONG);
+    }
+
+    public static void showShortTips(final Context ctx, int res, final String toastInfo) {
+        showTips(ctx, res, toastInfo, Toast.LENGTH_SHORT);
+    }
+
+    public static void showTips(final Context ctx, int res, final String toastInfo, final int duration) {
+        showTips(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
+                duration, Gravity.CENTER, 0, 0);
     }
 
     public static void showTips(final Context ctx, final int imageRes, final String toastInfo, final float textSize,
@@ -82,7 +86,6 @@ public class ToastUtil {
         toastText.setText(charSequence);
         toastText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         show(ctx, layout, duration, gravityType, xOffset, yOffset);
-
     }
 
     public static void show(final Context ctx, final View layout, final int duration, final int gravityType,
