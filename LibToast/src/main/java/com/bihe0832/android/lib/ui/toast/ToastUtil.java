@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.ui.toast;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,22 +24,21 @@ public class ToastUtil {
     }
 
     public static void showTop(final Context ctx, final String toastInfo, final int duration) {
-        show(ctx, R.mipmap.icon, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
-                duration, Gravity.TOP, 0,
+        show(ctx, ctx.getResources().getDrawable(R.mipmap.icon), toastInfo,
+                ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size), duration, Gravity.TOP, 0,
                 (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
     }
 
     public static void show(final Context ctx, final String toastInfo, final int duration) {
-        show(ctx, R.mipmap.icon, toastInfo, duration);
+        show(ctx, ctx.getResources().getDrawable(R.mipmap.icon), toastInfo, duration);
     }
 
-    public static void show(final Context ctx, final int res, final String toastInfo, final int duration) {
-        show(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
-                duration, Gravity.BOTTOM, 0,
-                (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
+    public static void show(final Context ctx, final Drawable res, final String toastInfo, final int duration) {
+        show(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size), duration,
+                Gravity.BOTTOM, 0, (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
     }
 
-    public static void show(final Context ctx, final int imageRes, final String toastInfo, final float textSize,
+    public static void show(final Context ctx, final Drawable imageRes, final String toastInfo, final float textSize,
             final int duration, final int gravityType, final int xOffset, final int yOffset) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
@@ -46,34 +46,34 @@ public class ToastUtil {
                 View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_base_toast, null);
                 final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
                 ImageView toastImage = (ImageView) layout.findViewById(R.id.bihe0832_common_toast_image);
-                toastImage.setImageResource(imageRes);
+                toastImage.setImageDrawable(imageRes);
                 show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
             }
         });
     }
 
-    public static void showLongTips(final Context ctx, int res, final String toastInfo) {
+    public static void showLongTips(final Context ctx, Drawable res, final String toastInfo) {
         showTips(ctx, res, toastInfo, Toast.LENGTH_LONG);
     }
 
-    public static void showShortTips(final Context ctx, int res, final String toastInfo) {
+    public static void showShortTips(final Context ctx, Drawable res, final String toastInfo) {
         showTips(ctx, res, toastInfo, Toast.LENGTH_SHORT);
     }
 
-    public static void showTips(final Context ctx, int res, final String toastInfo, final int duration) {
+    public static void showTips(final Context ctx, Drawable res, final String toastInfo, final int duration) {
         showTips(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
                 duration, Gravity.CENTER, 0, 0);
     }
 
-    public static void showTips(final Context ctx, final int imageRes, final String toastInfo, final float textSize,
-            final int duration, final int gravityType, final int xOffset, final int yOffset) {
+    public static void showTips(final Context ctx, final Drawable imageRes, final String toastInfo,
+            final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
                 View contentView = LayoutInflater.from(ctx).inflate(R.layout.com_bihe0832_base_toast_tips, null);
                 final View layout = contentView.findViewById(R.id.bihe0832_common_custom_toast_layout_id);
                 ImageView toastImage = (ImageView) layout.findViewById(R.id.bihe0832_common_toast_image);
-                toastImage.setImageResource(imageRes);
+                toastImage.setImageDrawable(imageRes);
                 show(ctx, layout, toastInfo, textSize, duration, gravityType, xOffset, yOffset);
             }
         });
