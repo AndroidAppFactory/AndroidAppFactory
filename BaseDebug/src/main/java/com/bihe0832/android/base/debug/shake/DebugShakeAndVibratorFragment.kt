@@ -20,7 +20,9 @@ class DebugShakeAndVibratorFragment : DebugEnvFragment() {
                 if (System.currentTimeMillis() - lastTime > 1000L) {
                     lastTime = System.currentTimeMillis()
                     ZixieContext.showDebug("Shake 1")
-                    (context?.getSystemService(Service.VIBRATOR_SERVICE) as? Vibrator)?.vibrate(longArrayOf(50, 200, 100, 300), -1)
+                    (context?.getSystemService(Service.VIBRATOR_SERVICE) as? Vibrator)?.vibrate(
+                        longArrayOf(50, 200, 100, 300), -1
+                    )
                 }
             }
         })
@@ -28,9 +30,10 @@ class DebugShakeAndVibratorFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
-            add(getDebugItem("摇一摇很灵敏", View.OnClickListener { ShakeManager.setSpeed(10)}))
-            add(getDebugItem("摇一摇很迟钝", View.OnClickListener { ShakeManager.setSpeed(100)}))
-            add(getDebugItem("摇一摇比较容易", View.OnClickListener { ShakeManager.setSpeed(30)}))
+            add(getDebugFragmentItemData("实时摇一摇灵敏度", DebugShakeFragment::class.java))
+            add(getDebugItem("摇一摇很灵敏", View.OnClickListener { ShakeManager.setSpeed(10) }))
+            add(getDebugItem("摇一摇很迟钝", View.OnClickListener { ShakeManager.setSpeed(100) }))
+            add(getDebugItem("摇一摇比较容易", View.OnClickListener { ShakeManager.setSpeed(30) }))
             add(getDebugItem("开启摇一摇", View.OnClickListener { ShakeManager.start(context!!) }))
             add(getDebugItem("关闭摇一摇", View.OnClickListener { ShakeManager.stop() }))
         }
