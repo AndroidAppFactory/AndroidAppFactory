@@ -8,6 +8,7 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.device.shake.ShakeManager
+import com.bihe0832.android.lib.device.shake.ShakeManagerImpl
 
 class DebugShakeAndVibratorFragment : DebugEnvFragment() {
 
@@ -15,7 +16,7 @@ class DebugShakeAndVibratorFragment : DebugEnvFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
-        ShakeManager.setOnShakeListener(object : ShakeManager.OnShakeListener {
+        ShakeManager.setOnShakeListener(object : ShakeManagerImpl.OnShakeListener {
             override fun onShake() {
                 if (System.currentTimeMillis() - lastTime > 1000L) {
                     lastTime = System.currentTimeMillis()
