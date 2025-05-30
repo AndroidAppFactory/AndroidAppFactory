@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.location.LocationManager
+import android.provider.Settings
 import androidx.core.location.LocationManagerCompat
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.notification.NotifyManager
@@ -38,19 +39,6 @@ object AAFPermissionManager {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             locationPermission
         )
-        PermissionManager.addPermissionGroup("", Manifest.permission.CAMERA, takePhotoPermission)
-
-        PermissionManager.addPermissionGroupDesc(
-            "",
-            Manifest.permission.CAMERA,
-            context.getString(R.string.common_permission_title_camera)
-        )
-        PermissionManager.addPermissionGroupScene(
-            "",
-            Manifest.permission.CAMERA,
-            context.getString(R.string.common_permission_title_qrcode)
-        )
-
         PermissionManager.addPermissionGroupDesc(
             "",
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -60,6 +48,18 @@ object AAFPermissionManager {
             "",
             Manifest.permission.ACCESS_COARSE_LOCATION,
             context.getString(R.string.common_permission_scene_location),
+        )
+
+        PermissionManager.addPermissionGroup("", Manifest.permission.CAMERA, takePhotoPermission)
+        PermissionManager.addPermissionGroupDesc(
+            "",
+            Manifest.permission.CAMERA,
+            context.getString(R.string.common_permission_title_camera)
+        )
+        PermissionManager.addPermissionGroupScene(
+            "",
+            Manifest.permission.CAMERA,
+            context.getString(R.string.common_permission_title_qrcode)
         )
     }
 

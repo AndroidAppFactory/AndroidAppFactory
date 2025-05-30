@@ -1,7 +1,10 @@
 package com.bihe0832.android.common.permission.special;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
+
 import android.Manifest;
 import android.provider.Settings;
+import androidx.core.content.ContextCompat;
 import com.bihe0832.android.common.permission.AAFPermissionManager;
 import com.bihe0832.android.common.permission.R;
 import com.bihe0832.android.lib.permission.PermissionManager;
@@ -23,16 +26,17 @@ public class PermissionsActivityWithSpecial extends PermissionsActivityV2 {
 
     @Override
     protected void doRequestPermissionsAction(String... permissions) {
-        boolean hasSpecial = false;
         for (String permission : permissions) {
-            if (!AAFPermissionManager.INSTANCE.permissionExtraCheckIsOK(this, permission)) {
-                doSpecialCheck(permission);
-                hasSpecial = true;
+            // 此处特意使用 ContextCompat 而非 PermissionsChecker
+            // 因为ContextCompat 仅检查是否有权限，PermissionsChecker 还会检查系统是否限制
+            if (ContextCompat.checkSelfPermission(this, permission) == PERMISSION_DENIED) {
+                super.doRequestPermissionsAction(permissions);
                 break;
             }
-        }
-        if (!hasSpecial) {
-            super.doRequestPermissionsAction(permissions);
+            if (!AAFPermissionManager.INSTANCE.permissionExtraCheckIsOK(this, permission)) {
+                doSpecialCheck(permission);
+                break;
+            }
         }
     }
 
