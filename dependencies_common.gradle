@@ -3,7 +3,7 @@ def project = ext
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"                : "6.25.19",
+                "version"                : "6.25.20",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper", "LibDebug"
@@ -13,7 +13,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.25.19",
+                "version"            : "6.25.20",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -21,7 +21,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperMin"      : [
-                "version"            : "6.25.19",
+                "version"            : "6.25.20",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
@@ -57,7 +57,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonQRCode"          : [
-                "version"                : "6.25.19",
+                "version"                : "6.25.20",
                 "artifactId"             : "common-qrcode",
                 "apidependenciesList"    : [
                         "CommonPhotos", "LibCameraScan"
@@ -84,7 +84,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonNavigationDrawer": [
-                "version"            : "6.25.19",
+                "version"            : "6.25.20",
                 "artifactId"         : "common-navigation-drawer",
                 "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
         ],
@@ -136,7 +136,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonPhotos"          : [
-                "version"            : "6.25.19",
+                "version"            : "6.25.20",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "Framework", "CommonPermission"
@@ -175,7 +175,7 @@ ext.commonmoduleInfo = [
                 "apidependenciesList": ["Framework"]
         ],
         "CommonPermission"      : [
-                "version"            : "6.25.19",
+                "version"            : "6.25.20",
                 "artifactId"         : "common-permission",
                 "apidependenciesList": ["CommonAbout"]
         ],
