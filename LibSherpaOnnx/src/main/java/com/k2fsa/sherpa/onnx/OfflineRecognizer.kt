@@ -2,7 +2,6 @@ package com.k2fsa.sherpa.onnx
 
 import android.content.res.AssetManager
 
-
 data class OfflineRecognizerResult(
     val text: String,
     val tokens: Array<String>,
@@ -26,6 +25,10 @@ data class OfflineNemoEncDecCtcModelConfig(
     var model: String = "",
 )
 
+data class OfflineDolphinModelConfig(
+    var model: String = "",
+)
+
 data class OfflineWhisperModelConfig(
     var encoder: String = "",
     var decoder: String = "",
@@ -34,12 +37,18 @@ data class OfflineWhisperModelConfig(
     var tailPaddings: Int = 1000, // Padding added at the end of the samples
 )
 
+data class OfflineFireRedAsrModelConfig(
+    var encoder: String = "",
+    var decoder: String = "",
+)
+
 data class OfflineMoonshineModelConfig(
     var preprocessor: String = "",
     var encoder: String = "",
     var uncachedDecoder: String = "",
     var cachedDecoder: String = "",
 )
+
 data class OfflineSenseVoiceModelConfig(
     var model: String = "",
     var language: String = "",
@@ -50,9 +59,11 @@ data class OfflineModelConfig(
     var transducer: OfflineTransducerModelConfig = OfflineTransducerModelConfig(),
     var paraformer: OfflineParaformerModelConfig = OfflineParaformerModelConfig(),
     var whisper: OfflineWhisperModelConfig = OfflineWhisperModelConfig(),
+    var fireRedAsr: OfflineFireRedAsrModelConfig = OfflineFireRedAsrModelConfig(),
     var moonshine: OfflineMoonshineModelConfig = OfflineMoonshineModelConfig(),
     var nemo: OfflineNemoEncDecCtcModelConfig = OfflineNemoEncDecCtcModelConfig(),
     var senseVoice: OfflineSenseVoiceModelConfig = OfflineSenseVoiceModelConfig(),
+    var dolphin: OfflineDolphinModelConfig = OfflineDolphinModelConfig(),
     var teleSpeech: String = "",
     var numThreads: Int = 1,
     var debug: Boolean = false,
@@ -67,6 +78,7 @@ data class OfflineRecognizerConfig(
     var featConfig: FeatureConfig = FeatureConfig(),
     var modelConfig: OfflineModelConfig = OfflineModelConfig(),
     // var lmConfig: OfflineLMConfig(), // TODO(fangjun): enable it
+    var hr: HomophoneReplacerConfig = HomophoneReplacerConfig(),
     var decodingMethod: String = "greedy_search",
     var maxActivePaths: Int = 4,
     var hotwordsFile: String = "",
@@ -105,7 +117,6 @@ class OfflineRecognizer(
     }
 
     fun getResult(stream: OfflineStream): OfflineRecognizerResult {
-
         try {
             val objArray = getResult(stream.ptr)
             val text = objArray[0] as String

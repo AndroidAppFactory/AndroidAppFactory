@@ -82,7 +82,11 @@ public class KeywordSpotterManager {
                 kws.decode(stream)
             }
             val result = kws.getResult(stream)
-            return result.keyword
+            val text = result.keyword
+            if (text.isNotBlank()) {
+                kws.reset(stream)
+            }
+            return text
         }
         return ""
     }

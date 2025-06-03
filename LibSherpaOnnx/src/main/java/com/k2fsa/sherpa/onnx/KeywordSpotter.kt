@@ -48,6 +48,7 @@ class KeywordSpotter(
     }
 
     fun decode(stream: OnlineStream) = decode(ptr, stream.ptr)
+    fun reset(stream: OnlineStream) = reset(ptr, stream.ptr)
     fun isReady(stream: OnlineStream) = isReady(ptr, stream.ptr)
     fun getResult(stream: OnlineStream): KeywordSpotterResult {
         val objArray = getResult(ptr, stream.ptr)
@@ -73,6 +74,7 @@ class KeywordSpotter(
     private external fun createStream(ptr: Long, keywords: String): Long
     private external fun isReady(ptr: Long, streamPtr: Long): Boolean
     private external fun decode(ptr: Long, streamPtr: Long)
+    private external fun reset(ptr: Long, streamPtr: Long)
     private external fun getResult(ptr: Long, streamPtr: Long): Array<Any>
 
     companion object {
