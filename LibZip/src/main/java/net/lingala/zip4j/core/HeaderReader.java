@@ -5,7 +5,7 @@
 * you may not use this file except in compliance with the License. 
 * You may obtain a copy of the License at 
 * 
-* http://www.apache.org/licenses/LICENSE-2.0 
+* https://www.apache.org/licenses/LICENSE-2.0
 * 
 * Unless required by applicable law or agreed to in writing, 
 * software distributed under the License is distributed on an "AS IS" BASIS, 
@@ -306,9 +306,9 @@ public class HeaderReader {
 				if (fileNameLength > 0) {
 					byte[] fileNameBuf = new byte[fileNameLength];
 					readIntoBuff(zip4jRaf, fileNameBuf);
-					// Modified after user reported an issue http://www.lingala.net/zip4j/forum/index.php?topic=2.0
+					// Modified after user reported an issue https://www.lingala.net/zip4j/forum/index.php?topic=2.0
 //					String fileName = new String(fileNameBuf, "Cp850"); 
-					// Modified as per http://www.lingala.net/zip4j/forum/index.php?topic=41.0
+					// Modified as per https://www.lingala.net/zip4j/forum/index.php?topic=41.0
 //					String fileName = Zip4jUtil.getCp850EncodedString(fileNameBuf);
 					
 					String fileName = null;
@@ -925,7 +925,7 @@ public class HeaderReader {
 			if (fileNameLength > 0) {
 				byte[] fileNameBuf = new byte[fileNameLength];
 				readIntoBuff(zip4jRaf, fileNameBuf);
-				// Modified after user reported an issue http://www.lingala.net/zip4j/forum/index.php?topic=2.0
+				// Modified after user reported an issue https://www.lingala.net/zip4j/forum/index.php?topic=2.0
 //				String fileName = new String(fileNameBuf, "Cp850");
 //				String fileName = Zip4jUtil.getCp850EncodedString(fileNameBuf);
 				String fileName = Zip4jUtil.decodeFileName(fileNameBuf, localFileHeader.isFileNameUTF8Encoded());

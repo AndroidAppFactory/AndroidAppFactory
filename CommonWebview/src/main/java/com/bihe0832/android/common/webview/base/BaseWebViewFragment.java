@@ -47,7 +47,8 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
     public static final String INTENT_KEY_URL = RouterConstants.INTENT_EXTRA_KEY_WEB_URL;
     public static final String INTENT_KEY_REFRESH = "refresh";
     public static final String INTENT_KEY_DATA = "WebviewFragment.data";
-    public static final String INTENT_KEY_THIRD_PART = "http://localhost";
+    public static final String INTENT_KEY_THIRD_PART_HTTP = "http://localhost";
+    public static final String INTENT_KEY_THIRD_PART_HTTPS = "https://localhost";
     public static final String TAG = "WebPageFragment -> :";
     protected static final String HEADER_NAME_REFERER = "Referer";
     protected ConstraintLayout mErrorPage;
@@ -220,7 +221,7 @@ public abstract class BaseWebViewFragment extends BaseFragment implements
         if (TextUtils.isEmpty(url)) {
             return false;
         }
-        if (url.startsWith(INTENT_KEY_THIRD_PART)) {
+        if (url.startsWith(INTENT_KEY_THIRD_PART_HTTP) || url.startsWith(INTENT_KEY_THIRD_PART_HTTPS)) {
             String value = URLUtils.getValueByName(url, "value");
             try {
                 return processWebClientOverrideUrlLoading(

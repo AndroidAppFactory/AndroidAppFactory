@@ -21,8 +21,8 @@ public class URLUtils {
     public static final String HTTP_REQ_ENTITY_SPECIAL = "#";
 
     /**
-     * @param source 传入带参数的url,如:http://www.qq.com/ui/oa/test.html?name=hao&id=123
-     * @return 去掉参数的url, 如:http://www.qq.com/ui/oa/test.html
+     * @param source 传入带参数的url,如:https://www.qq.com/ui/oa/test.html?name=hao&id=123
+     * @return 去掉参数的url, 如:https://www.qq.com/ui/oa/test.html
      */
     public static String getNoQueryUrl(String source) {
         String dest = source;
