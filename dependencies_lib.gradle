@@ -284,11 +284,25 @@ ext.libmoduleInfo = [
 
                 ]
         ],
+        "LibAdobeXMPCore"           : [
+                "version"            : "6.24.18",
+                "artifactId"         : "lib-adobe-xmp-core",
+                "apidependenciesList": [
+
+                ]
+        ],
+        "LibMetadataExtractor"      : [
+                "version"            : "6.24.18",
+                "artifactId"         : "lib-metadata-extractor",
+                "apidependenciesList": [
+                        "LibAdobeXMPCore"
+                ]
+        ],
         "LibImageMetadata"          : [
                 "version"            : "6.24.18",
                 "artifactId"         : "lib-image-meta",
                 "apidependenciesList": [
-                        project.metadata.drewnoakes, "LibCommonUtils", "LibLog", "LibFile", "LibMedia",
+                        "LibCommonUtils", "LibLog", "LibFile", "LibMedia", "LibMetadataExtractor"
                 ]
         ],
         "LibCommonUIUtils"          : [

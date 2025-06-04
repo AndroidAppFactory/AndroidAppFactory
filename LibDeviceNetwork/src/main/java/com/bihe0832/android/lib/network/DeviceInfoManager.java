@@ -74,8 +74,8 @@ public class DeviceInfoManager {
         boolean isMobileOpened = true;//默认为true，即使反射失败，也要返回true，防止误判
         try {
             // 此处需要区分5.0以下和5.0以下，因为5.0以下需要通过mService.getMobileDataEnabled
-            // Android 4.4.4：http://androidxref.com/4.4.4_r1/xref/frameworks/base/core/java/android/net/ConnectivityManager.java
-            // Android 5.0.0：http://androidxref.com/5.0.0_r2/xref/frameworks/base/core/java/android/net/ConnectivityManager.java
+            // Android 4.4.4：https://androidxref.com/4.4.4_r1/xref/frameworks/base/core/java/android/net/ConnectivityManager.java
+            // Android 5.0.0：https://androidxref.com/5.0.0_r2/xref/frameworks/base/core/java/android/net/ConnectivityManager.java
             conMgrClass = Class.forName(connectivityManager.getClass().getName());
 
             if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.LOLLIPOP) {
@@ -120,7 +120,7 @@ public class DeviceInfoManager {
         /*
          * getSimOperatorName()就可以直接获取到运营商的名字
          * 也可以使用IMSI获取，getSimOperator()，然后根据返回值判断，例如"46000"为移动
-         * IMSI相关链接：http://baike.baidu.com/item/imsi
+         * IMSI相关链接：https://baike.baidu.com/item/imsi
          */
         if (telephonyManager == null) {
             return "";

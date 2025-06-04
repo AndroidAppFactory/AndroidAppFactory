@@ -6,7 +6,7 @@ package com.bihe0832.android.base.debug.request;
  * Description: Description
  */
 public class Constants {
-    public static String HTTP_DOMAIN = "http://microdemo.bihe0832.com";
+    public static String HTTP_DOMAIN = "https://microdemo.bihe0832.com";
     public static final String PATH_GET = "/AndroidHTTP/get.php";
     public static final String PATH_POST = "/AndroidHTTP/post.php";
     public static final String PARA_PARA = "para";
