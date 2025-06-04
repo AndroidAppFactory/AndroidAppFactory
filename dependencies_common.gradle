@@ -3,7 +3,7 @@ def project = ext
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"                : "6.25.20",
+                "version"                : "6.26.0",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper", "LibDebug"
@@ -13,21 +13,21 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.25.20",
+                "version"            : "6.26.0",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
-                        "CommonPanel", "CommonMedia", "CommonAudioRecord"
+                        "CommonPanel", "CommonMedia", "CommonAudioRecord", "CommonCrop", "CommonPhotos"
                 ]
         ],
         "CommonWrapperMin"      : [
-                "version"            : "6.25.20",
+                "version"            : "6.26.0",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
                         "CommonList", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare",
-                        "CommonMessage", "CommonPermission", "CommonPhotos", "CommonCrop",
-                        "CommonQRCode", "CommonWebview", "CommonNetwork", "CommonLanguage", "CommonFilePreview"
+                        "CommonMessage", "CommonPermission", "CommonQRCode",
+                        "CommonWebview", "CommonNetwork", "CommonLanguage", "CommonFilePreview"
                 ]
         ],
         "ModelRes"              : [
@@ -150,7 +150,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWebview"         : [
-                "version"                : "6.25.19",
+                "version"                : "6.26.0",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         project.androidsupport.swiperefreshlayout,
@@ -161,7 +161,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonFeedback"        : [
-                "version"                : "6.25.19",
+                "version"                : "6.26.0",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : ["CommonWebview"
                 ],
@@ -193,7 +193,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonCrop"            : [
-                "version"            : "6.25.19",
+                "version"            : "6.26.0",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
                         "Framework", "CommonBottomTab", "LibImageMetadata", "LibCrop"
