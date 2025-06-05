@@ -22,6 +22,8 @@ class ASREndpointCheck {
     private var onlineRecognizer: OnlineRecognizer? = null
     private var stream: OnlineStream? = null
     private var isReady = false
+    private var isChecking = false
+
 
     fun init(context: Context, config: OnlineRecognizerConfig) {
         try {
@@ -50,7 +52,7 @@ class ASREndpointCheck {
         sampleRateInHz: Int, buffer: ShortArray?, size: Int, autoReset: Boolean
     ): CheckResult {
         try {
-            if (onlineRecognizer != null && stream != null && isReady && buffer != null) {
+            if (onlineRecognizer != null && stream != null && isReady && isChecking && buffer != null) {
                 val samples = SherpaAudioConvertTools.shortArrayToSherpaArray(buffer, size)
                 stream!!.acceptWaveform(samples, sampleRate = sampleRateInHz)
                 while (onlineRecognizer!!.isReady(stream!!)) {
@@ -85,10 +87,12 @@ class ASREndpointCheck {
         needForceEnding = true
     }
 
+    @Synchronized
     fun startCheck(): Boolean {
         try {
             if (isReady && onlineRecognizer != null) {
                 stream = onlineRecognizer!!.createStream()
+                isChecking = true
             }
             return true
         } catch (e: Exception) {
@@ -98,7 +102,9 @@ class ASREndpointCheck {
         return false
     }
 
+    @Synchronized
     fun endCheck() {
+        isChecking = false
         stream?.let {
             onlineRecognizer?.reset(it)
             it.release()
@@ -106,6 +112,7 @@ class ASREndpointCheck {
         stream = null
     }
 
+    @Synchronized
     fun releaseCheck() {
         isReady = false
         onlineRecognizer?.release()
