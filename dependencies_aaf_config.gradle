@@ -18,7 +18,7 @@ ext {
 
     tencent = [
             tbssdk: "com.tencent.tbs:tbssdk:44286",
-            mmkv  : "com.tencent:mmkv:1.3.5"
+            mmkv  : "com.tencent:mmkv:1.3.14"
     ]
 
 
