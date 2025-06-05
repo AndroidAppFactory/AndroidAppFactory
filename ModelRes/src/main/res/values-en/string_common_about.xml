@@ -10,12 +10,12 @@
     <string name="settings_message_title">Notification Center</string>
     <string name="settings_version_title">Version</string>
     <string name="settings_update_title">App Update</string>
-    <string name="settings_update_tips">New version available</string>
+    <string name="settings_update_tips">New Version Available</string>
     <string name="settings_update_current">Current version:</string>
 
     <string name="wechat_id">zixie_shi</string>
     <string name="wechat_name">Zixie Notes</string>
-    <string name="wechat_sub_content">Follow developer\'s official account</string>
+    <string name="wechat_sub_content">Follow Developer\'s Official Account</string>
     <string name="wechat_official_account">Wechat Official Account</string>
     <string name="wechat_sub_content_tips">Go to Follow</string>
 
@@ -23,5 +23,5 @@
 
     <string name="settings_clear_title">Clear Cache</string>
     <string name="settings_clear_tips">Cache cleanup will remove &lt;font color=\'#38ADFF\'&gt;various cached resources&lt;/font&gt;. Please wait patiently. The app will close automatically after completion. Start cleanup now?</string>
-    <string name="settings_clear_loading">Cleaning in progress, please wait~</string>
+    <string name="settings_clear_loading">Cleaning in progress, Please wait~</string>
 </resources>
