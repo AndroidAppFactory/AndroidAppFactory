@@ -20,26 +20,26 @@ public abstract class BaseDBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public SQLiteDatabase getReadableDatabase() {
+    public synchronized SQLiteDatabase getReadableDatabase() {
         if (!mainTmpDirSet) {
             File path = new File(context.getCacheDir() + "/databases/aaf_" + getDatabaseName());
             if (!path.exists()) {
                 mainTmpDirSet = path.mkdirs();
-            }else {
+            } else {
                 mainTmpDirSet = true;
             }
-            super.getReadableDatabase().execSQL("PRAGMA temp_store_directory = '" + path +"'");
+            super.getReadableDatabase().execSQL("PRAGMA temp_store_directory = '" + path + "'");
         }
         return super.getReadableDatabase();
     }
 
     @Override
-    public SQLiteDatabase getWritableDatabase() {
+    public synchronized SQLiteDatabase getWritableDatabase() {
         if (!mainTmpDirSet) {
             File path = new File(context.getCacheDir() + "/databases/aaf_" + getDatabaseName());
             if (!path.exists()) {
                 mainTmpDirSet = path.mkdirs();
-            }else {
+            } else {
                 mainTmpDirSet = true;
             }
             super.getWritableDatabase().execSQL("PRAGMA temp_store_directory = '" + path + "'");
