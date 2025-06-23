@@ -3,9 +3,8 @@ apply from: rootDir.toString() + '/dependencies.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-
-def RELEASE_REPOSITORY_URL = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-def SNAPSHOT_REPOSITORY_URL = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+def RELEASE_REPOSITORY_URL = (new File(layout.projectDirectory.asFile.parent, "aafRepo")).absolutePath
+def SNAPSHOT_REPOSITORY_URL = (new File(layout.projectDirectory.asFile.parent, "aafRepo")).absolutePath
 
 def isRelease = true
 
@@ -101,10 +100,6 @@ afterEvaluate {
                 name = moduleName
                 allowInsecureProtocol true
                 url sonatypeRepositoryUrl
-                credentials {
-                    username = sonatypeUserName
-                    password = sonatypePassword
-                }
             }
         }
     }

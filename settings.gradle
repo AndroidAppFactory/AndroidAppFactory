@@ -5,11 +5,12 @@ System.err.println("DevProjectList: " + zixieDevelopModule)
 
 if (zixieIsPublish) {
     if (zixieMainProject.contains(",") || zixieDevelopModule.contains(",") || !zixieMainProject.equals(zixieDevelopModule)) {
-        throw new Exception("\n\n================== AAF 构建异常 ======================\n" +
-                "当前为组件发布模式，此时会启动编译加速，此时：dependencies.gradle 中 ：\n" +
-                "1. ext.mainProject 与 ext.developModule 必须一致  \n" +
-                "2. ext.includeALLDependOnDevelopModule 必须为 false \n\n" +
-                "关闭发布模式，请将 dependencies.gradle 中 ext.isPublish 设为  false：\n" +
+        throw new Exception("\n\n================== AAF 构建异常 ======================\n\n" +
+                "当前为组件发布模式，此时会启动编译加速。\n" +
+                "如需关闭发布模式，请将 dependencies.gradle 中 ext.isPublish 设为  false：\n" +
+                "发布模式时：dependencies.gradle 中 ：\n" +
+                "\t1. ext.mainProject 与 ext.developModule 必须一致  \n" +
+                "\t2. ext.includeALLDependOnDevelopModule 必须为 false \n\n" +
                 "================== AAF 构建异常 ======================\n\n"
         )
     }
@@ -45,7 +46,7 @@ def addInclude(projectName) {
         if (zixieIsDebug) System.out.println("Add Include: " + projectName + " is bad !")
     } else if (zixieIncludeList.contains(projectName)) {
         if (zixieIsDebug) System.out.println("Add Include: " + projectName + " has bad !")
-    } else{
+    } else {
         String finalProjectName = ':' + projectName
         System.out.println("include " + finalProjectName)
         zixieIncludeList.add(projectName)
@@ -55,7 +56,7 @@ def addInclude(projectName) {
 
 def autoAddInclude(dependenciesModule) {
     if (zixieIsDebug) println("autoAddInclude Depenciese of dependenciesModule " + dependenciesModule + " " + zixieCheckModuleIsDev(dependenciesModule))
-    if(zixieCheckModuleIsDev(dependenciesModule)){
+    if (zixieCheckModuleIsDev(dependenciesModule)) {
         addInclude(dependenciesModule)
     }
 }
