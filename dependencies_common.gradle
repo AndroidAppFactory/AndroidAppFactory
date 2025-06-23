@@ -3,7 +3,7 @@ def project = ext
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"                : "6.26.3",
+                "version"                : "6.27.0",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper", "LibDebug"
@@ -13,7 +13,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "6.26.3",
+                "version"            : "6.27.0",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -21,7 +21,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperMin"      : [
-                "version"            : "6.26.3",
+                "version"            : "6.27.0",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
