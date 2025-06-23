@@ -7,8 +7,6 @@ buildscript {
         maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://repo1.maven.org/maven2" }
-        maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
-        maven { url "https://s01.oss.sonatype.org/content/groups/public" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.4.1'
@@ -27,9 +25,6 @@ allprojects {
         maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
         maven { url "https://mirrors.tencent.com/repository/maven/thirdparty-snapshots/" }
         maven { url "https://repo1.maven.org/maven2" }
-        maven { url "https://repository.liferay.com/nexus/content/repositories/public/" }
-        maven { url "https://s01.oss.sonatype.org/content/groups/public" }
-
         maven { url = uri("./../aafRepo/") }
     }
 
