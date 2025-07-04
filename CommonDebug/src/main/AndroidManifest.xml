@@ -23,6 +23,8 @@
             android:theme="@style/AAF.ActivityTheme"
             tools:ignore="DiscouragedApi" />
 
+
+
         <receiver
             android:exported="true"
             android:label="设备调试"

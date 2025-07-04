@@ -3,6 +3,7 @@ package com.bihe0832.android.common.debug.item
 import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
+import com.bihe0832.android.common.compose.debug.DebugComposeActivity
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.file.preview.ContentItemData
@@ -150,6 +151,15 @@ fun getDebugItem(content: String, listener: View.OnClickListener?): ContentItemD
     return getDebugItem(content, listener, false)
 }
 
+fun getComposeDebugItem(content: String, composeName: String): ContentItemData {
+    return getDebugItem(content) {
+        DebugComposeActivity.startComposeActivity(
+            ZixieContext.applicationContext!!,
+            content,
+            composeName
+        )
+    }
+}
 
 fun getLittleDebugItem(
     content: String,
