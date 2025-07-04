@@ -3,6 +3,7 @@ package com.bihe0832.android.common.compose.state
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -17,11 +18,13 @@ object MultiLanguageState {
     private var _currentLanguage: Locale by mutableStateOf(Locale.getDefault())
 
     fun init(context: Context, locales: List<LanguageItem>, default: Locale) {
-        supportLanguage = locales
-        _currentLanguage = MultiLanguageHelper.getLanguageConfig(context)
-        if (supportLanguage.find { _currentLanguage.language.equals(it.locale?.language) } == null) {
+        supportLanguage = locales.filter { it.locale != null }
+        val lastLocale = MultiLanguageHelper.getLanguageConfig(context)
+        if (supportLanguage.find { lastLocale == it.locale } == null) {
             _currentLanguage = default
             ZixieCoreInit.updateApplicationLocale(context, default)
+        } else {
+            _currentLanguage = lastLocale
         }
     }
 
@@ -35,8 +38,11 @@ object MultiLanguageState {
 
     fun changeLanguage(context: Context, code: Locale?) {
         code?.let {
-            _currentLanguage = code
-            MultiLanguageHelper.setLanguageConfig(context, code)
+            if (supportLanguage.find { code == it.locale } != null) {
+                MultiLanguageHelper.setLanguageConfig(context, code)
+                MultiLanguageHelper.modifyContextLanguageConfig(context, code)
+                _currentLanguage = code
+            }
         }
     }
 }
@@ -44,9 +50,3 @@ object MultiLanguageState {
 data class LanguageItem(
     var title: String = "", var locale: Locale? = null
 )
-
-@Composable
-fun MultiLanguageContent(content: @Composable (currentLanguage: Locale) -> Unit) {
-    val currentLanguage by rememberUpdatedState(MultiLanguageState.getCurrentLanguageState())
-    content(currentLanguage)
-}

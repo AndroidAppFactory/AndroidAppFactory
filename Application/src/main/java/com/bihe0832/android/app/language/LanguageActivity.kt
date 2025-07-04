@@ -7,6 +7,7 @@ import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.language.BaseLanguageActivity
 import com.bihe0832.android.common.language.item.LanguageItemCompose
 import com.bihe0832.android.lib.router.annotation.Module
+import java.util.Locale
 
 /**
  * @author zixie code@bihe0832.com Created on 2025/3/27. Description: Description
@@ -15,13 +16,13 @@ import com.bihe0832.android.lib.router.annotation.Module
 class LanguageActivity : BaseLanguageActivity() {
 
     @Composable
-    override fun getLanguageItemCompose(languageItem: LanguageItem) {
+    override fun getLanguageItemCompose(languageItem: LanguageItem, currentLanguage: Locale) {
         return LanguageItemCompose(
             title = languageItem.title,
             event = {
-                MultiLanguageState.changeLanguage(this, languageItem.locale)
+                MultiLanguageState.changeLanguage(this, languageItem.locale!!)
             },
-            isSelected = MultiLanguageState.getCurrentLanguageState().equals(languageItem.locale)
+            isSelected = currentLanguage == languageItem.locale
         )
     }
 }

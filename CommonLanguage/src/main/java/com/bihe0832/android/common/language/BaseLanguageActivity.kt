@@ -3,7 +3,6 @@ package com.bihe0832.android.common.language
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.stringResource
@@ -21,24 +20,20 @@ import java.util.Locale
 abstract class BaseLanguageActivity : CommonComposeListActivity() {
 
     @Composable
-    abstract fun getLanguageItemCompose(languageItem: LanguageItem)
+    abstract fun getLanguageItemCompose(languageItem: LanguageItem, currentLanguage: Locale)
 
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content() {
+            override fun Content(currentLanguage: Locale) {
                 handleCommonListViewEffect()
                 val languageList: List<LanguageItem> by rememberUpdatedState(
                     MultiLanguageState.getSupportLanguageList()
                 )
-                val currentLanguage: Locale by rememberUpdatedState(
-                    MultiLanguageState.getCurrentLanguageState()
-                )
-                LaunchedEffect(currentLanguage) { }
                 CommonRefreshList(mCommonListViewModel) {
                     LazyColumn {
                         items(languageList) {
-                            getLanguageItemCompose(it)
+                            getLanguageItemCompose(it, currentLanguage)
                         }
                     }
                 }

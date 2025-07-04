@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.compose.state
 
 import androidx.compose.runtime.Composable
+import java.util.Locale
 
 /**
  *
@@ -13,6 +14,6 @@ import androidx.compose.runtime.Composable
 // 基类定义状态接口
 interface RenderState {
     @Composable
-    fun Content()
+    fun Content(currentLanguage: Locale)
 
 }

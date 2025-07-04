@@ -1,5 +1,6 @@
 package com.bihe0832.android.app.compose
 
+import android.app.Application
 import android.content.Context
 import com.bihe0832.android.common.compose.state.DensityState
 import com.bihe0832.android.common.compose.state.LanguageItem
