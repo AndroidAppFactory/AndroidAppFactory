@@ -88,7 +88,7 @@
 var a = 1
 function addNativeView() {
     call('addNativeView', {viewKey:"native_view_" + a,scene:"applist",ad_type:"zj",color:"#FF0000",margin:a * 25}, (res) => {
-        console.log("lwtor, showNativeView")
+        console.log("showNativeView")
         console.log(res)
     })
 
@@ -96,21 +96,21 @@ function addNativeView() {
 
 function showNativeView() {
     call('showNativeView', {viewKey:"native_view_1"}, (res) => {
-        console.log("lwtor, showNativeView")
+        console.log("showNativeView")
         console.log(res)
     })
 }
 
 function hideNativeView() {
     call('hideNativeView', {viewKey:"native_view_1"}, (res) => {
-        console.log("lwtor, hideNativeView")
+        console.log("hideNativeView")
         console.log(res)
     })
 }
 
 function removeNativeView() {
     call('removeNativeView', {viewKey:"native_view_1"}, (res) => {
-        console.log("lwtor, removeNativeView")
+        console.log("removeNativeView")
         console.log(res)
     })
 }

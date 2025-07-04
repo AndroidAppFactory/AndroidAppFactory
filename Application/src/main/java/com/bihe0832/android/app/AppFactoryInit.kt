@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.os.Process
 import android.util.Log
 import android.webkit.WebView
-import com.bihe0832.android.app.language.AAFLanguageManager
+import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.common.network.NetworkChangeManager
@@ -18,7 +18,6 @@ import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
-import com.bihe0832.android.lib.device.shake.ShakeManager
 import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
@@ -78,7 +77,7 @@ object AppFactoryInit {
                 AAFFileWrapper.autoClear(DateUtil.MILLISECOND_OF_MONTH)
             }
             AAFMessageManager.initModule(ctx)
-            AAFLanguageManager.init(ctx)
+            AAFComposeStateManager.init(ctx)
             ZLog.d(
                 ZixieCoreInit.TAG,
                 "Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL,

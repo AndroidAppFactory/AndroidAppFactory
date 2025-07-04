@@ -81,7 +81,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden|locale|layoutDirection"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 
     </application>
 </manifest>

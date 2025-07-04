@@ -24,16 +24,6 @@ object MultiLanguageHelper {
     private const val KEY_LOCAL_LANGUAGE = "app_config_language"
     private const val SP_NAME_LOCAL_LANGUAGE = "language_sp"
     private var lastLocale: Locale? = null
-    private val mSupportLanguageList = mutableListOf<Locale>()
-
-    fun init(supportLanguageList: List<Locale>) {
-        mSupportLanguageList.clear()
-        mSupportLanguageList.addAll(supportLanguageList)
-    }
-
-    fun getSupportLanguageList(): List<Locale> {
-        return mSupportLanguageList
-    }
 
     /**
      * 更新当前页面语言资源，同时返回更新后的Context

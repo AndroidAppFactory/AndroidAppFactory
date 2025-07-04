@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        package="com.bihe0832.android.base.debug">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bihe0832.android.base.debug">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,170 +15,170 @@
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
     <application
-            android:name="com.bihe0832.android.base.debug.TestApplication"
-            android:allowBackup="true"
-            android:icon="@mipmap/icon"
-            android:label="@string/app_name"
-            android:requestLegacyExternalStorage="true"
-            tools:replace="android:name"
-            android:supportsRtl="true">
+        android:name="com.bihe0832.android.base.debug.TestApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        tools:replace="android:name">
 
 
         <provider
-                android:name="com.bihe0832.android.base.debug.ipc.provider.MainBinderProvider"
-                android:authorities="${applicationId}.process_dispatcher_main" />
+            android:name="com.bihe0832.android.base.debug.ipc.provider.MainBinderProvider"
+            android:authorities="${applicationId}.process_dispatcher_main" />
 
         <provider
-                android:name="com.bihe0832.android.base.debug.ipc.provider.DebugBinderProvider"
-                android:authorities="${applicationId}.process_dispatcher_other"
-                android:process=":test" />
+            android:name="com.bihe0832.android.base.debug.ipc.provider.DebugBinderProvider"
+            android:authorities="${applicationId}.process_dispatcher_other"
+            android:process=":test" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.ipc.TestIPCActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.ipc.TestIPCActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.ipc.TestIPC1Activity"
-                android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
-                android:process=":test"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.ipc.TestIPC1Activity"
+            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
+            android:process=":test"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.touch.TouchRegionActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.touch.TouchRegionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.request.DebugHttpActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.request.DebugHttpActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.network.DebugNetworkActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.network.DebugNetworkActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.card.TestListActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.card.TestListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.immersion.DebugImmersionActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
-        
-        <activity
-                android:name="com.bihe0832.android.common.debug.log.DebugLogListActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.immersion.DebugImmersionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.permission.DebugPermissionsActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:theme="@style/AAF.ActivityTheme.Dialog" />
+            android:name="com.bihe0832.android.common.debug.log.DebugLogListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.tab.DebugCommonTabActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.permission.DebugPermissionsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Dialog" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.tab.DebugSegmentTabActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.tab.DebugCommonTabActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.tab.DebugSlidingTabActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:screenOrientation="portrait"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.tab.DebugSegmentTabActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.empty.DebugBottomActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:theme="@style/AAF.ActivityTheme.Alpha" />
+            android:name="com.bihe0832.android.base.debug.tab.DebugSlidingTabActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.toast.DebugToastActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:theme="@style/AAF.ActivityTheme.Alpha" />
+            android:name="com.bihe0832.android.base.debug.empty.DebugBottomActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
 
         <activity
-                android:name="com.bihe0832.android.base.debug.theme.ThemeActivity"
-                android:configChanges="orientation|screenSize|keyboardHidden"
-                android:theme="@style/AAF.ActivityTheme" />
+            android:name="com.bihe0832.android.base.debug.toast.DebugToastActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
+
+        <activity
+            android:name="com.bihe0832.android.base.debug.theme.ThemeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme" />
 
         <service
-                android:name="com.bihe0832.android.common.accessibility.service.AAFAccessibilityService"
-                android:exported="true"
-                android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:name="com.bihe0832.android.common.accessibility.service.AAFAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
             <meta-data
-                    android:name="android.accessibilityservice"
-                    android:resource="@xml/com_bihe0832_debug_accessibility_service_config" />
+                android:name="android.accessibilityservice"
+                android:resource="@xml/com_bihe0832_debug_accessibility_service_config" />
         </service>
 
         <receiver
-                android:name=".widget.TestWidgetProvider1"
-                android:exported="true"
-                android:label="WidgetDemo1"
-                android:process="@string/com_bihe0832_lock_screen_process_name">
+            android:name=".widget.TestWidgetProvider1"
+            android:exported="true"
+            android:label="WidgetDemo1"
+            android:process="@string/com_bihe0832_lock_screen_process_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.REFRESH" />
             </intent-filter>
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/com_bihe0832_debug_widget_demo_1" />
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_demo_1" />
         </receiver>
 
         <receiver
-                android:name=".widget.TestWidgetProvider2"
-                android:exported="true"
-                android:label="WidgetDemo2"
-                android:process="@string/com_bihe0832_lock_screen_process_name">
+            android:name=".widget.TestWidgetProvider2"
+            android:exported="true"
+            android:label="WidgetDemo2"
+            android:process="@string/com_bihe0832_lock_screen_process_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.REFRESH" />
             </intent-filter>
             <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/com_bihe0832_debug_widget_detail" />
+                android:name="android.appwidget.provider"
+                android:resource="@xml/com_bihe0832_debug_widget_detail" />
         </receiver>
 
         <activity
-                android:name="com.bihe0832.android.base.debug.lock.DebugLockActivity"
-                android:excludeFromRecents="true"
-                android:exported="true"
-                android:hardwareAccelerated="true"
-                android:launchMode="singleInstance"
-                android:noHistory="true"
-                android:process="@string/com_bihe0832_lock_screen_process_name"
-                android:resizeableActivity="false"
-                android:screenOrientation="portrait"
-                android:showOnLockScreen="true"
-                android:taskAffinity="com.bihe0832.android.base.debug.lock"
-                android:theme="@style/AAF.ActivityTheme.Transparent" />
+            android:name="com.bihe0832.android.base.debug.lock.DebugLockActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:process="@string/com_bihe0832_lock_screen_process_name"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            android:taskAffinity="com.bihe0832.android.base.debug.lock"
+            android:theme="@style/AAF.ActivityTheme.Transparent" />
 
         <service
-                android:name="com.bihe0832.android.base.debug.lock.DebugLockService"
-                android:exported="true"
-                android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
-                android:process="@string/com_bihe0832_lock_screen_process_name">
+            android:name="com.bihe0832.android.base.debug.lock.DebugLockService"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:process="@string/com_bihe0832_lock_screen_process_name">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.SCREEN_OFF" />
@@ -189,15 +189,15 @@
         </service>
 
         <service
-                android:name="com.bihe0832.android.base.debug.widget.DebugForegroundService"
-                android:enabled="true"
-                android:exported="true"
-                android:process="@string/process_name_domain" />
+            android:name="com.bihe0832.android.base.debug.widget.DebugForegroundService"
+            android:enabled="true"
+            android:exported="true"
+            android:process="@string/process_name_domain" />
 
         <service
-                android:name="com.bihe0832.android.base.debug.widget.DebugService"
-                android:enabled="true"
-                android:exported="true" />
+            android:name="com.bihe0832.android.base.debug.widget.DebugService"
+            android:enabled="true"
+            android:exported="true" />
 
     </application>
 

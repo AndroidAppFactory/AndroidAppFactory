@@ -45,6 +45,14 @@ android {
         abortOnError false
     }
 
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion project.compose_version
+    }
+
     signingConfigs {
         debug {
             keyAlias project.signingConfigs.keyAlias
@@ -79,6 +87,12 @@ android {
             minifyEnabled project.minifyEnabled as boolean
             proguardFiles "./../proguard-rules-common.pro"
             shrinkResources false
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force("androidx.lifecycle:lifecycle-livedata-core:2.6.0")
         }
     }
 }

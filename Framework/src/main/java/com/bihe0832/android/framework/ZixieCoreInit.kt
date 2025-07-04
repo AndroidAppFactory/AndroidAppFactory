@@ -119,7 +119,7 @@ object ZixieCoreInit {
 
     }
 
-    fun updateApplicationLocale(context: Context,locale: Locale) {
+    fun updateApplicationLocale(context: Context, locale: Locale) {
         MultiLanguageHelper.setLanguageConfig(context, locale)
         ZixieContext.updateApplicationContext(context, true)
     }

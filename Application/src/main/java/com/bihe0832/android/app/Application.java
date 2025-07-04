@@ -1,6 +1,6 @@
 package com.bihe0832.android.app;
 
-import com.bihe0832.android.framework.ui.BaseApplication;
+import com.bihe0832.android.framework.BaseApplication;
 import com.bihe0832.android.lib.log.ZLog;
 
 public class Application extends BaseApplication {

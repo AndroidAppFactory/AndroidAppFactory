@@ -117,8 +117,7 @@ abstract class BaseListActivity : BaseActivity() {
             adapter = mAdapter
             isFocusableInTouchMode = false
         }
-
-        mDataLiveData.observe(::getLifecycle) {
+        mDataLiveData.observe(this) {
             it?.let {
                 updateData(it)
             }

@@ -115,7 +115,7 @@ abstract class BaseListFragment : BaseFragment() {
             isFocusableInTouchMode = false
         }
 
-        mDataLiveData.observe(::getLifecycle) {
+        mDataLiveData.observe(this) {
             it?.let {
                 updateData(it)
             }
