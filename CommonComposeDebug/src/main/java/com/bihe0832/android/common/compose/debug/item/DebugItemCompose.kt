@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.debug.compose
+package com.bihe0832.android.common.compose.debug.item
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bihe0832.android.common.compose.debug.DebugComposeActivity
 import com.bihe0832.android.framework.ZixieContext
 
 /**
@@ -84,22 +85,29 @@ fun DebugItem(text: String, bgColor: Color, textColor: Color, click: () -> Unit)
 
 @Composable
 fun DebugItem(text: String, color: Color, click: () -> Unit) {
-    return DebugItem(text, MaterialTheme.colorScheme.surface, color, click, null, null)
+    DebugItem(text, MaterialTheme.colorScheme.surface, color, click, null, null)
 }
 
 @Composable
 fun DebugItem(text: String, click: () -> Unit) {
-    return DebugItem(text, MaterialTheme.colorScheme.onSurface, click)
+    DebugItem(text, MaterialTheme.colorScheme.onSurface, click)
+}
+
+@Composable
+fun DebugComposeItem(text: String, key: String) {
+    DebugItem(text) {
+        DebugComposeActivity.startComposeActivity(ZixieContext.applicationContext!!, text, key)
+    }
 }
 
 @Composable
 fun DebugTips(text: String, bgColor: Color, textColor: Color) {
-    return DebugItem(text, bgColor, textColor) { }
+    DebugItem(text, bgColor, textColor) { }
 }
 
 @Composable
 fun DebugTips(text: String) {
-    return DebugTips(
+    DebugTips(
         text, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.onSecondary
     )
 }

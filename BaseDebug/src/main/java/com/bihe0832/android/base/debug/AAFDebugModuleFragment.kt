@@ -14,7 +14,6 @@ import com.bihe0832.android.base.debug.card.DebugListFragment
 import com.bihe0832.android.base.debug.card.TestListActivity
 import com.bihe0832.android.base.debug.clipboard.DebugClipboardFragment
 import com.bihe0832.android.base.debug.color.DebugColorFragment
-import com.bihe0832.android.base.debug.compose.DebugComposeActivity
 import com.bihe0832.android.base.debug.convert.DebugConvertFragment
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
@@ -49,6 +48,7 @@ import com.bihe0832.android.base.debug.ui.DebugUIFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebViewFragment
 import com.bihe0832.android.base.debug.widget.DebugWidgetFragment
+import com.bihe0832.android.common.debug.item.getComposeDebugItem
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
@@ -59,7 +59,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("临时测试(Temp)", DebugTempFragment::class.java))
             add(getDebugFragmentItemData("临时测试(Basic)", DebugBasicFragment::class.java))
-            add(getDebugItem("Compose 调试") { startActivityWithException(DebugComposeActivity::class.java) })
+            add(getComposeDebugItem("Compose 调试","CommonConfigView"))
             add(getDebugFragmentItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
             add(getDebugFragmentItemData("Dialog、底部弹出Activity 调试", DebugDialogFragment::class.java))
             add(getDebugFragmentItemData("文件（Zip、assets 等）、配置、DB操作调试", DebugFileFragment::class.java))

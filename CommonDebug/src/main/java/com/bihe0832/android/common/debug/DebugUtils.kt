@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
+import com.bihe0832.android.common.compose.debug.DebugComposeActivity
 import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
@@ -65,6 +66,7 @@ object DebugUtils {
         DialogUtils.showInputDialog(context!!, titleName, msg, defaultValue, listener)
     }
 
+
     fun startDebugActivity(context: Context?, cls: Class<*>, titleName: String) {
         DebugRootActivity.startDebugRootActivity(context, cls, titleName)
     }
@@ -84,14 +86,7 @@ object DebugUtils {
     }
 
     fun startActivityWithException(context: Context?, cls: Class<*>, data: Map<String, String>?) {
-        val intent = Intent(context, cls)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        data?.let {
-            for ((key, value) in it) {
-                intent.putExtra(key, value)
-            }
-        }
-        context?.startActivity(intent)
+        DebugComposeActivity.startActivityWithException(context, cls, data)
     }
 
     fun startActivityForResultWithException(context: Activity, cls: Class<*>, requestCode: Int) {

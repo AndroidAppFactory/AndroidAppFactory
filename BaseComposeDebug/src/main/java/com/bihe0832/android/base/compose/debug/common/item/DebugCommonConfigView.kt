@@ -1,45 +1,44 @@
-package com.bihe0832.android.base.debug.compose
+package com.bihe0832.android.base.compose.debug.common.item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import com.bihe0832.android.base.debug.R
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.bihe0832.android.base.compose.debug.R
+import com.bihe0832.android.base.compose.debug.common.LocaleParameterProvider
+import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
+import com.bihe0832.android.common.compose.debug.item.DebugItem
+import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.state.MultiLanguageState
-import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.state.ThemeState
-import com.bihe0832.android.common.debug.DebugUtils
-import com.bihe0832.android.common.debug.compose.DebugItem
-import com.bihe0832.android.common.debug.compose.DebugTips
-import com.bihe0832.android.common.list.compose.CommonComposeListActivity
 import java.util.Locale
 
 /**
- * @author zixie code@bihe0832.com Created on 2025/2/17. Description: Description
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2025/7/5.
+ * Description: Description
+ *
  */
-class DebugComposeActivity : CommonComposeListActivity() {
-
-    override fun getContentRender(): RenderState {
-        return object : RenderState {
-            @Composable
-            override fun Content(currentLanguage: Locale) {
-                DebugComposeView()
-            }
-        }
-    }
-}
 
 @Preview
 @Composable
-fun DebugComposeView() {
+fun DebugCommonConfigViewPreview(
+    @PreviewParameter(LocaleParameterProvider::class) currentLanguage: Locale
+) {
+    DebugCommonConfigView(currentLanguage = currentLanguage)
+}
+
+@Composable
+fun DebugCommonConfigView(currentLanguage: Locale) {
     val context = LocalContext.current
 
     Column {
-        DebugItem("切换语言到调试") {
-            DebugUtils.startActivityWithException(context, DebugComposeLanguageActivity::class.java)
-        }
         DebugTips(stringResource(R.string.app_name))
+        DebugComposeItem("切换语言到调试", "CommonLanguageView")
         DebugItem("切换语言到中文") {
             MultiLanguageState.changeLanguage(context, Locale.CHINESE)
         }

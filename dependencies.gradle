@@ -20,7 +20,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,ModelRes,Framework,Application"
  **/
-ext.developModule = "Application"
+ext.developModule = "CommonComposeDebug,Application"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -39,12 +39,12 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "3.0.1"
+ext.moduleVersionName = "3.0.2"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
 
-        "APPTest"    : [
+        "APPTest"         : [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
@@ -54,16 +54,23 @@ ext.coremoduleInfo = [
                         "kapt": ["RouterCompiler"]
                 ]
         ],
-        "BaseDebug"  : [
+        "BaseDebug"       : [
                 "version"            : "",
                 "artifactId"         : "",
                 "apidependenciesList": [
-                        "Application", "CommonDebug", "CommonTBSFeedback",
+                        "Application","BaseComposeDebug", "CommonDebug", "CommonTBSFeedback",
                         "com.bihe0832.android:lib-sherpa-endpoint-model:6.16.7",
                         "LibSherpaEndpointModel"
                 ]
         ],
-        "Application": [
+        "BaseComposeDebug": [
+                "version"            : "",
+                "artifactId"         : "",
+                "apidependenciesList": [
+                        "Application", "CommonComposeDebug"
+                ]
+        ],
+        "Application"     : [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
