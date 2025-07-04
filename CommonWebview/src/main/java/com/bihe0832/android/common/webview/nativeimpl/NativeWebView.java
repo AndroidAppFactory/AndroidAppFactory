@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 
@@ -61,13 +60,16 @@ public class NativeWebView extends WebView {
     }
 
     public interface OnScrollChangedCallback {
+
         void onScroll(int l, int t);
     }
 
     @Override
     protected void onScrollChanged(final int l, final int t, final int oldl, final int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        if (mOnScrollChangedCallback != null) mOnScrollChangedCallback.onScroll(l, t);
+        if (mOnScrollChangedCallback != null) {
+            mOnScrollChangedCallback.onScroll(l, t);
+        }
     }
 
     public void setOnScrollChangedCallback(final OnScrollChangedCallback onScrollChangedCallback) {
@@ -109,7 +111,6 @@ public class NativeWebView extends WebView {
         //设置内置的缩放控件。
         webSetting.setBuiltInZoomControls(true);
 
-
         //若上面是false，则该WebView不可缩放，这个不管设置什么都不能缩放。
         webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN); //支持内容重新布局
         webSetting.supportMultipleWindows();  //多窗口
@@ -121,7 +122,8 @@ public class NativeWebView extends WebView {
 
     private void resetCacheType(WebSettings webSetting) {
         //设置缓存位置
-        String cacheDirPath = this.getContext().getApplicationContext().getFilesDir().getAbsolutePath() + APP_CACAHE_DIRNAME;
+        String cacheDirPath =
+                this.getContext().getApplicationContext().getFilesDir().getAbsolutePath() + APP_CACAHE_DIRNAME;
         //设置缓存类型
         webSetting.setCacheMode(WebSettings.LOAD_DEFAULT);
         // 开启 DOM storage API 功能
@@ -131,9 +133,8 @@ public class NativeWebView extends WebView {
         //设置数据库缓存路径
         webSetting.setDatabasePath(cacheDirPath);
         //设置  Application Caches 缓存目录
-        webSetting.setAppCachePath(cacheDirPath);
+        webSetting.setDatabasePath(cacheDirPath);
         //开启 Application Caches 功能
-        webSetting.setAppCacheEnabled(true);
-        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
+        webSetting.setDatabaseEnabled(true);
     }
 }

@@ -1,0 +1,74 @@
+apply from: rootDir.toString() + '/config.gradle'
+def project = ext
+
+ext.deprecatedModuleInfo = [
+        "CommonDeprecated"          : [
+                "version"            : "6.26.2",
+                "artifactId"         : "common-deprecated",
+                "apidependenciesList": [
+                        "Framework", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
+                        "LibRefresh", "LibRecycleviewExt", "LibBottomTab"
+                ]
+        ],
+        "LibFragmentation_core"     : [
+                "version"            : "6.25.15",
+                "artifactId"         : "lib-fragmentation-core",
+                "apidependenciesList": [
+                        project.androidsupport.appcompat,
+                        "LibAAFResource", "LibOS"
+                ]
+        ],
+        "LibFragmentation"          : [
+                "version"            : "6.25.15",
+                "artifactId"         : "lib-fragmentation",
+                "apidependenciesList": [
+                        "LibFragmentation_core"
+                ]
+        ],
+        "LibFragmentation_swipeback": [
+                "version"            : "6.25.15",
+                "artifactId"         : "lib-fragmentation-swipeback",
+                "apidependenciesList": [
+                        "LibFragmentation"
+                ]
+        ],
+        "LibFlycoTabLayout"         : [
+                "version"            : "6.26.2",
+                "artifactId"         : "lib-flycotablayout",
+                "apidependenciesList": [
+                        project.androidsupport.androidxcore,
+                        "LibAAFResource", "LibOS", "LibRequest", "LibMedia", "LibTextView"
+                ]
+        ],
+        "LibAdapter"                : [
+                "version"            : "6.25.15",
+                "artifactId"         : "lib-adapter",
+                "apidependenciesList": [
+                        project.androidsupport.recyclerview,
+                        "LibAAFResource", "LibText"
+                ]
+        ],
+        "LibRefresh"                : [
+                "version"            : "6.25.15",
+                "artifactId"         : "lib-refresh",
+                "apidependenciesList": [
+                        "LibAdapter"
+                ]
+        ],
+        "LibRecycleviewExt"         : [
+                "version"            : "6.26.2",
+                "artifactId"         : "lib-recycleview-ext",
+                "apidependenciesList": [
+                        "LibRefresh", "LibTheme"
+                ]
+        ],
+        "LibBottomTab"              : [
+                "version"            : "6.26.2",
+                "artifactId"         : "lib-bottom-tab",
+                "apidependenciesList": [
+                        "LibAndroid", "LibOS", "LibTextView",
+                        project.androidsupport.androidxcore,
+                        project.androidsupport.annotation
+                ]
+        ]
+]

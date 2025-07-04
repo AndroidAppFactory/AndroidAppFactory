@@ -6,6 +6,7 @@ apply from: rootDir.toString() + '/dependencies_lock_widget.gradle'
 apply from: rootDir.toString() + '/dependencies_tbs.gradle'
 apply from: rootDir.toString() + '/dependencies_services.gradle'
 apply from: rootDir.toString() + '/dependencies_asr.gradle'
+apply from: rootDir.toString() + '/dependencies_deprecated.gradle'
 
 /************************************ 组件化开发常用配置 ************************************/
 /**
@@ -19,7 +20,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,ModelRes,Framework,Application"
  **/
-ext.developModule = "Application"
+ext.developModule = "Application,Framework"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -38,7 +39,7 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "6.27.0"
+ext.moduleVersionName = "3.0.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
@@ -66,7 +67,7 @@ ext.coremoduleInfo = [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
-                        "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper",
+                        "CommonWrapper", "CommonTBSWrapper", "CommonWrapperCompose", "LibScreenWrapper", "ServicesWrapper",
                         "LibASR"
                 ],
                 "specialdependenciesList": [
@@ -76,7 +77,7 @@ ext.coremoduleInfo = [
         ]
 ]
 
-ext.moduleInfo = ext.coremoduleInfo + ext.libmoduleInfo + ext.tbsmoduleInfo + ext.commonmoduleInfo + ext.widgetmoduleInfo + ext.kitmoduleInfo + ext.asrmoduleInfo
+ext.moduleInfo = ext.coremoduleInfo + ext.libmoduleInfo + ext.tbsmoduleInfo + ext.commonmoduleInfo + ext.widgetmoduleInfo + ext.kitmoduleInfo + ext.asrmoduleInfo + ext.deprecatedModuleInfo
 
 
 

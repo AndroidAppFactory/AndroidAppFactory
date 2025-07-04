@@ -6,7 +6,9 @@ ext.commonmoduleInfo = [
                 "version"                : "6.27.0",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
-                        "Framework", "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper", "LibDebug"
+                        "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "LibScreenWrapper", "LibDebug",
+
+
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
@@ -16,7 +18,7 @@ ext.commonmoduleInfo = [
                 "version"            : "6.27.0",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
-                        "CommonWrapperMin", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
+                        "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
                         "CommonPanel", "CommonMedia", "CommonAudioRecord", "CommonCrop", "CommonPhotos"
                 ]
         ],
@@ -28,6 +30,13 @@ ext.commonmoduleInfo = [
                         "CommonList", "CommonBottomTab", "CommonNavigationDrawer", "CommonShare",
                         "CommonMessage", "CommonPermission", "CommonQRCode",
                         "CommonWebview", "CommonNetwork", "CommonLanguage", "CommonFilePreview"
+                ]
+        ],
+        "CommonWrapperCompose"  : [
+                "version"            : "6.27.0",
+                "artifactId"         : "common-wrapper-compose",
+                "apidependenciesList": [
+                        "CommonCompose", "CommonListCompose"
                 ]
         ],
         "ModelRes"              : [
@@ -42,18 +51,31 @@ ext.commonmoduleInfo = [
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         project.androidsupport.annotation,
-                        project.androidsupport.lifecycle_livedata,
                         project.androidsupport.multidex,
                         "LibWrapper", "Router", "RouterAnnotation", "LibTheme", "LibLanguage", "ModelRes"
                 ],
-                "specialdependenciesList": ["kapt": [project.glide.compiler, "RouterCompiler"]
+                "specialdependenciesList": [
+                        "kapt": [project.glide.compiler, "RouterCompiler"]
+                ]
+        ],
+        "CommonCompose"         : [
+                "version"            : "6.26.2",
+                "artifactId"         : "common-compose",
+                "apidependenciesList": [
+                        "Framework",
+                        project.androidsupport.activity_compose,
+                        project.androidsupport.material3_android,
+                        project.androidsupport.compose_ui,
+                        project.androidsupport.compose_ui_tooling,
+                        project.androidsupport.compose_ui_preview,
+                        project.androidsupport.systemuicontroller
                 ]
         ],
         "CommonAccessibility"   : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-accessibility",
                 "apidependenciesList": [
-                        "Framework"
+                        "CommonDeprecated"
                 ]
         ],
         "CommonQRCode"          : [
@@ -77,7 +99,7 @@ ext.commonmoduleInfo = [
                 "version"                : "6.26.3",
                 "artifactId"             : "common-share",
                 "apidependenciesList"    : [
-                        "Framework"
+                        "CommonDeprecated"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
@@ -99,7 +121,7 @@ ext.commonmoduleInfo = [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-svga",
                 "apidependenciesList": [
-                        "Framework",
+                        "CommonDeprecated",
                         "LibSvga",
                         project.svga_dependency
 
@@ -109,7 +131,7 @@ ext.commonmoduleInfo = [
                 "version"                : "6.26.3",
                 "artifactId"             : "common-ace-editor",
                 "apidependenciesList"    : [
-                        "Framework", "LibAceEditor"
+                        "CommonDeprecated", "LibAceEditor"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
@@ -118,35 +140,44 @@ ext.commonmoduleInfo = [
         "CommonAbout"           : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-about",
-                "apidependenciesList": ["Framework", "CommonList"]
+                "apidependenciesList": [
+                        "CommonDeprecated", "CommonList"
+                ]
+        ],
+        "CommonListCompose"     : [
+                "version"            : "6.26.3",
+                "artifactId"         : "common-list-compose",
+                "apidependenciesList": [
+                        "CommonCompose", project.androidsupport.lifecycle_compose,
+                ]
         ],
         "CommonList"            : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         project.androidsupport.swiperefreshlayout,
-                        "Framework"
+                        "CommonDeprecated"
                 ]
         ],
         "CommonSplash"          : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
-                        "Framework"
+                        "CommonDeprecated"
                 ]
         ],
         "CommonPhotos"          : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
-                        "Framework", "CommonPermission"
+                        "CommonDeprecated", "CommonPermission"
                 ]
         ],
         "CommonNetwork"         : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
-                        "Framework"
+                        "CommonDeprecated"
                 ]
         ],
         "CommonWebview"         : [
@@ -154,7 +185,7 @@ ext.commonmoduleInfo = [
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         project.androidsupport.swiperefreshlayout,
-                        "Framework", "LibJsBridge"
+                        "CommonDeprecated", "LibJsBridge"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
@@ -172,38 +203,43 @@ ext.commonmoduleInfo = [
         "CommonPraise"          : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-praise",
-                "apidependenciesList": ["Framework"]
+                "apidependenciesList": [
+                        "CommonDeprecated"
+                ]
         ],
         "CommonPermission"      : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-permission",
-                "apidependenciesList": ["CommonAbout"]
+                "apidependenciesList": [
+                        "CommonAbout"
+                ]
         ],
         "CommonPanel"           : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-panel",
-                "apidependenciesList": ["Framework", "LibPanel"
+                "apidependenciesList": [
+                        "CommonDeprecated", "LibPanel"
                 ]
         ],
         "CommonMedia"           : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
-                        "Framework", "LibFFmpegMobile"
+                        "CommonDeprecated", "LibFFmpegMobile"
                 ]
         ],
         "CommonCrop"            : [
                 "version"            : "6.26.3",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
-                        "Framework", "CommonBottomTab", "LibImageMetadata", "LibCrop"
+                        "CommonDeprecated", "CommonBottomTab", "LibImageMetadata", "LibCrop"
                 ]
         ],
         "CommonLanguage"        : [
                 "version"                : "6.26.3",
                 "artifactId"             : "common-language",
                 "apidependenciesList"    : [
-                        "Framework", "CommonList"
+                        "CommonListCompose"
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]

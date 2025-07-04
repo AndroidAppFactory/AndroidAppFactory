@@ -2,9 +2,9 @@ apply from: rootDir.toString() + '/dependencies_aaf_config.gradle'
 
 ext {
     //Android编译SDK版本
-    compileSdkVersion = 32
+    compileSdkVersion = 34
     //Android编译工具版本
-    buildToolsVersion = "32.0.0"
+    buildToolsVersion = "34.0.0"
     //Lib 最低适配Android 版本
     libMinSdkVersion = 23
     //APK 最低适配Android 版本
@@ -44,7 +44,4 @@ ext {
 //            storeFile       : "./../debug.keystore",
 //            storePassword   : 'android',
     ]
-
-    //使用kotlin版本
-    kotlin_version = '1.7.22'
 }

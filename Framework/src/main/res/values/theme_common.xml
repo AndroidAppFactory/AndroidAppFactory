@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AAF.Animation.Activity" parent="@android:style/Animation.Activity">
         <!--        新页面进入 -->
@@ -50,6 +50,7 @@
         <item name="android:background">@color/colorPrimary</item>
         <item name="navigationIcon">@drawable/icon_left_arrow</item>
     </style>
+
 
     <style name="AAF.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentNavigation">true</item>
