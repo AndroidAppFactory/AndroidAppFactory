@@ -11,6 +11,7 @@ import com.bihe0832.android.common.compose.common.activity.CommonComposeActivity
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.list.compose.mvi.CommonListEffect
 import com.bihe0832.android.common.list.compose.mvi.CommonListViewModel
+import java.util.Locale
 
 /**
  *
@@ -27,11 +28,11 @@ open class CommonComposeListActivity : CommonComposeActivity() {
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content() {
+            override fun Content(currentLanguage: Locale) {
                 handleCommonListViewEffect()
                 CommonRefreshList(mCommonListViewModel) {
                     LazyColumn {
-                        items(100) { index ->
+                        items(100, key = { currentLanguage }) { index ->
                             Text("Item $index")
                         }
                     }
@@ -43,7 +44,7 @@ open class CommonComposeListActivity : CommonComposeActivity() {
     @Preview
     @Composable
     override fun ActivityRootContentRenderPreview() {
-        getActivityRootContentRender().Content()
+        getActivityRootContentRender().Content(Locale.CHINESE)
     }
 
     protected fun handleCommonListViewEffect() {

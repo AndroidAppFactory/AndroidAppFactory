@@ -17,6 +17,7 @@ import com.bihe0832.android.common.compose.ui.EmptyText
 import com.bihe0832.android.common.compose.ui.activity.CommonActivityToolbarView
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
+import java.util.Locale
 
 open class CommonComposeActivity : BaseComposeActivity() {
 
@@ -27,7 +28,7 @@ open class CommonComposeActivity : BaseComposeActivity() {
     open fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content() {
+            override fun Content(currentLanguage: Locale) {
                 EmptyText(desc = "空白页面", colorP = MaterialTheme.colorScheme.surface)
             }
         }
@@ -41,10 +42,10 @@ open class CommonComposeActivity : BaseComposeActivity() {
     override fun getActivityContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content() {
+            override fun Content(currentLanguage: Locale) {
                 handleEffect(LocalContext.current)
                 CommonActivityToolbarView(getTitleName(), content = {
-                    getContentRender().Content()
+                    getContentRender().Content(currentLanguage)
                 })
             }
         }
@@ -90,7 +91,7 @@ open class CommonComposeActivity : BaseComposeActivity() {
     @Preview
     @Composable
     open fun ActivityRootContentRenderPreview() {
-        getActivityRootContentRender().Content()
+        getActivityRootContentRender().Content(Locale.CHINESE)
     }
 
 }

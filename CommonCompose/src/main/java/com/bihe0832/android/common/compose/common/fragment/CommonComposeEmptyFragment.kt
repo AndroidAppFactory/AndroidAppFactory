@@ -9,6 +9,7 @@ import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.ui.EmptyText
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
+import java.util.Locale
 
 /**
  * @author zixie code@bihe0832.com Created on 4/9/22.
@@ -23,14 +24,14 @@ open class CommonComposeEmptyFragment : BaseComposeFragment() {
     @Preview
     @Composable
     open fun FragmentContentRenderPreview() {
-        getContentRender().Content()
+        getContentRender().Content(Locale.CHINESE)
     }
 
     @Composable
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content() {
+            override fun Content(currentLanguage: Locale) {
                 EmptyText(mContentString, mContentBackgroundColor, null)
             }
         }

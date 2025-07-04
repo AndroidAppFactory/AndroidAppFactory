@@ -1,8 +1,10 @@
 package com.bihe0832.android.common.compose.ui.activity
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ColorScheme
@@ -17,9 +19,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +31,7 @@ import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.base.BaseComposeActivity
 import com.bihe0832.android.common.compose.state.RenderState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import java.util.Locale
 
 /**
  *
@@ -38,15 +41,19 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
  *
  */
 @Composable
-fun ActivityThemeView(themeType: State<ColorScheme>, contentRender: RenderState) {
-    MaterialTheme(themeType.value) {
+fun ActivityThemeView(
+    themeType: ColorScheme,
+    currentLanguage: Locale,
+    contentRender: RenderState
+) {
+    MaterialTheme(themeType) {
         val systemUiController = rememberSystemUiController()
         SideEffect {
-            systemUiController.setStatusBarColor(themeType.value.primary)
-            systemUiController.setNavigationBarColor(themeType.value.surface)
+            systemUiController.setStatusBarColor(themeType.primary)
+            systemUiController.setNavigationBarColor(themeType.surface)
         }
         Surface {
-            contentRender.Content()
+            contentRender.Content(currentLanguage)
         }
     }
 }
@@ -163,14 +170,15 @@ fun Preview() {
                 )
             }
         })
-//    ActivityBottomBarView(bottomBar = {
-//        Text(
-//            text = "fsdf", modifier = Modifier
-//                .background(Color.Red)
-//                .fillMaxWidth()
-//        )
-//    }, content = {
 
-//    })
+    ActivityBottomBarView(bottomBar = {
+        Text(
+            text = "fsdf", modifier = Modifier
+                .background(Color.Red)
+                .fillMaxWidth()
+        )
+    }, content = {
+
+    })
 
 }

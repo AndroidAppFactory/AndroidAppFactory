@@ -6,10 +6,14 @@ import android.text.TextUtils
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.bihe0832.android.common.compose.state.DensityState
 import com.bihe0832.android.common.compose.state.LayerToGrayState
 import com.bihe0832.android.common.compose.state.MultiLanguageState
@@ -26,7 +30,7 @@ abstract class BaseComposeActivity : ComponentActivity() {
     private var lastLocale = ""
 
     abstract fun getActivityContentRender(): RenderState
-    
+
     open fun title(): String {
         return ""
     }
@@ -58,8 +62,10 @@ abstract class BaseComposeActivity : ComponentActivity() {
             LayerToGrayState.update()
         }
         setContent {
+            val currentLanguage by rememberUpdatedState(
+                MultiLanguageState.getCurrentLanguageState()
+            )
             if (supportMultiLanguage()) {
-                val currentLanguage by rememberUpdatedState(MultiLanguageState.getCurrentLanguageState())
                 LaunchedEffect(currentLanguage) {
                     if (supportMultiLanguage()) {
                         MultiLanguageHelper.modifyContextLanguageConfig(
@@ -78,12 +84,12 @@ abstract class BaseComposeActivity : ComponentActivity() {
                 }
             }
 
-            if (resetDensity()) {
-                val currentLanguage by rememberUpdatedState(DensityState.getCurrentDensity())
-                LaunchedEffect(currentLanguage) {
-
-                }
-            }
+//            if (resetDensity()) {
+//                val currentLanguage by rememberUpdatedState(DensityState.getCurrentDensity())
+//                LaunchedEffect(currentLanguage) {
+//
+//                }
+//            }
             val layerToGrayState by rememberUpdatedState(LayerToGrayState.isGrayEnabled())
             LaunchedEffect(layerToGrayState) {
                 if (layerToGrayState) {
@@ -92,24 +98,33 @@ abstract class BaseComposeActivity : ComponentActivity() {
                     clearLayerToGray()
                 }
             }
-            getActivityRootContentRender().Content()
-        }
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        if (isMain(this.javaClass.name) || LayerToGrayState.isGrayEnabled()) {
-            LayerToGrayState.update()
+            val lifecycleOwner = LocalLifecycleOwner.current
+            // 观察配置变化以处理置灰
+            DisposableEffect(Unit) {
+                val observer = LifecycleEventObserver { _, event ->
+                    if (event == Lifecycle.Event.ON_START) {
+                        // 重新加载字符串资源
+                        if (isMain(this.javaClass.name) || LayerToGrayState.isGrayEnabled()) {
+                            LayerToGrayState.update()
+                        }
+                    }
+                }
+                lifecycleOwner.lifecycle.addObserver(observer)
+                onDispose {
+                    lifecycleOwner.lifecycle.removeObserver(observer)
+                }
+            }
+            getActivityRootContentRender().Content(currentLanguage)
         }
     }
 
     open fun getActivityRootContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content() {
-                val themeType = rememberUpdatedState(ThemeState.getCurrentThemeState())
+            override fun Content(currentLanguage: Locale) {
+                val themeType by rememberUpdatedState(ThemeState.getCurrentThemeState())
                 ActivityThemeView(
-                    themeType, getActivityContentRender()
+                    themeType, currentLanguage, getActivityContentRender()
                 )
             }
         }

@@ -31,7 +31,7 @@ object LayerToGrayState {
         _isGrayEnabled = isEnabled()
     }
 
-    fun changeLanguage(boolean: Boolean) {
+    fun setGrayEnabled(boolean: Boolean) {
         _isGrayEnabled = boolean
     }
 

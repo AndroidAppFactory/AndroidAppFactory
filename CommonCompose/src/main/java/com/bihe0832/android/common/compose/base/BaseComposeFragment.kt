@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.framework.R
 import com.bihe0832.android.framework.constant.Constants
@@ -37,7 +40,10 @@ abstract class BaseComposeFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                getContentRender().Content()
+                val currentLanguage by rememberUpdatedState(
+                    MultiLanguageState.getCurrentLanguageState()
+                )
+                getContentRender().Content(currentLanguage)
             }
         }
     }
