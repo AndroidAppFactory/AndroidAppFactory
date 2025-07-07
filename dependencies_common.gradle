@@ -3,7 +3,7 @@ def project = ext
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"                : "3.0.2",
+                "version"                : "3.0.3",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "CommonWrapperMin", "CommonComposeDebug", "CommonAceEditor", "LibScreenWrapper", "LibDebug",
@@ -15,7 +15,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonComposeDebug"           : [
-                "version"                : "3.0.2",
+                "version"                : "3.0.3",
                 "artifactId"             : "common-compose-debug",
                 "apidependenciesList"    : [
                         "CommonWrapperCompose"
@@ -27,7 +27,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "3.0.1",
+                "version"            : "3.0.3",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -35,7 +35,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperMin"      : [
-                "version"            : "3.0.1",
+                "version"            : "3.0.3",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
@@ -45,7 +45,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperCompose"  : [
-                "version"            : "3.0.1",
+                "version"            : "3.0.3",
                 "artifactId"         : "common-wrapper-compose",
                 "apidependenciesList": [
                         "CommonCompose", "CommonListCompose"
@@ -71,7 +71,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonCompose"         : [
-                "version"            : "3.0.1",
+                "version"            : "3.0.3",
                 "artifactId"         : "common-compose",
                 "apidependenciesList": [
                         "Framework",
@@ -157,7 +157,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonListCompose"     : [
-                "version"            : "3.0.1",
+                "version"            : "3.0.3",
                 "artifactId"         : "common-list-compose",
                 "apidependenciesList": [
                         "CommonCompose", project.androidsupport.lifecycle_compose,
@@ -248,7 +248,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonLanguage"        : [
-                "version"                : "3.0.1",
+                "version"                : "3.0.3",
                 "artifactId"             : "common-language",
                 "apidependenciesList"    : [
                         "CommonListCompose"
