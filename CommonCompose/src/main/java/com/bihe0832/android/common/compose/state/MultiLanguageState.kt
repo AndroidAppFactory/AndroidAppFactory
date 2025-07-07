@@ -7,6 +7,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.lib.language.MultiLanguageHelper
 import java.util.Locale
@@ -40,6 +41,7 @@ object MultiLanguageState {
         code?.let {
             if (supportLanguage.find { code == it.locale } != null) {
                 MultiLanguageHelper.setLanguageConfig(context, code)
+                ZixieContext.updateApplicationContext(context, true)
                 MultiLanguageHelper.modifyContextLanguageConfig(context, code)
                 _currentLanguage = code
             }
