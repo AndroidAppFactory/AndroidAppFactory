@@ -7,6 +7,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.base.compose.debug.common.LocaleParameterProvider
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
@@ -40,10 +41,10 @@ fun DebugCommonConfigView(currentLanguage: Locale) {
         DebugTips(stringResource(R.string.app_name))
         DebugComposeItem("切换语言到调试", "CommonLanguageView")
         DebugItem("切换语言到中文") {
-            MultiLanguageState.changeLanguage(context, Locale.CHINESE)
+            AAFComposeStateManager.changeLanguage(context, Locale.CHINESE)
         }
         DebugItem("切换语言到英文") {
-            MultiLanguageState.changeLanguage(context, Locale.US)
+            AAFComposeStateManager.changeLanguage(context, Locale.US)
         }
 
         DebugItem("切换主题到亮色") {

@@ -240,11 +240,12 @@ class AceWebView extends WebView implements NestedScrollingChild {
         webSetting.setDatabaseEnabled(true);
         //设置数据库缓存路径
         webSetting.setDatabasePath(cacheDirPath);
+        //设置数据库缓存路径
+        webSetting.setDatabasePath(cacheDirPath);
         //设置  Application Caches 缓存目录
-        webSetting.setAppCachePath(cacheDirPath);
+        webSetting.setDatabasePath(cacheDirPath);
         //开启 Application Caches 功能
-        webSetting.setAppCacheEnabled(true);
-        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
+        webSetting.setDatabaseEnabled(true);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -649,12 +650,6 @@ class AceWebView extends WebView implements NestedScrollingChild {
                                             long estimatedDatabaseSize, long totalQuota, WebStorage.QuotaUpdater quotaUpdater) {
             mWrappedWebChromeClient.onExceededDatabaseQuota(url, databaseIdentifier, quota,
                     estimatedDatabaseSize, totalQuota, quotaUpdater);
-        }
-
-        @Override
-        public void onReachedMaxAppCacheSize(long requiredStorage, long quota,
-                                             WebStorage.QuotaUpdater quotaUpdater) {
-            mWrappedWebChromeClient.onReachedMaxAppCacheSize(requiredStorage, quota, quotaUpdater);
         }
 
         @Override

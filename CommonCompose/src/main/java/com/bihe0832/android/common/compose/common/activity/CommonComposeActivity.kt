@@ -44,14 +44,25 @@ open class CommonComposeActivity : BaseComposeActivity() {
             @Composable
             override fun Content(currentLanguage: Locale) {
                 handleEffect(LocalContext.current)
+                getToolBarRender(getContentRender()).Content(currentLanguage)
+            }
+        }
+    }
+
+    open fun getToolBarRender(contentRender: RenderState): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content(currentLanguage: Locale) {
+                handleEffect(LocalContext.current)
                 CommonActivityToolbarView(getTitleName(), content = {
-                    getContentRender().Content(currentLanguage)
+                    contentRender.Content(currentLanguage)
                 })
             }
         }
     }
 
-    internal fun handleEffect(context: Context) {
+
+    protected fun handleEffect(context: Context) {
         lifecycleScope.launchWhenStarted {
             mCommonActionViewModel.effect.collect {
                 when (it) {

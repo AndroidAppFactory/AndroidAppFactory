@@ -14,7 +14,7 @@ ext.commonmoduleInfo = [
                         "kapt": ["RouterCompiler"]
                 ]
         ],
-        "CommonComposeDebug"           : [
+        "CommonDebugCompose"           : [
                 "version"                : "3.0.3",
                 "artifactId"             : "common-compose-debug",
                 "apidependenciesList"    : [

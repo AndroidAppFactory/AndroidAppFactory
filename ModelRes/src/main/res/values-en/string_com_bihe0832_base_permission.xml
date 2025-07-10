@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="com_bihe0832_permission_title">权限申请</string>
-    <string name="com_bihe0832_permission_default_scene">完整</string>
-    <string name="com_bihe0832_permission_default_desc">部分设备</string>
-    <string name="com_bihe0832_permission_negtive">暂不授权</string>
-    <string name="com_bihe0832_permission_positive">开启授权</string>
-    <string name="com_bihe0832_permission_tips">权限使用说明</string>
-
-    <string name="com_bihe0832_permission_default_content">%s的%s功能需要手机授予%s权限，缺少权限有可能会影响功能的正常使用。</string>
+    <string name="com_bihe0832_permission_title">Permission Request</string>
+    <string name="com_bihe0832_permission_default_scene">Full Features</string>
+    <string name="com_bihe0832_permission_default_desc">Required on some devices</string>
+    <string name="com_bihe0832_permission_negtive">Deny</string>
+    <string name="com_bihe0832_permission_positive">Allow</string>
+    <string name="com_bihe0832_permission_tips">Permission Usage Guide</string>
+    <string name="com_bihe0832_permission_default_content">%1$s requires %3$s permission for %2$s features. Some functions may be limited without it.</string>
 </resources>

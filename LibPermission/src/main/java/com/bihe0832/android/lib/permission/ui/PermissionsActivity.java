@@ -2,9 +2,11 @@ package com.bihe0832.android.lib.permission.ui;
 
 import static com.bihe0832.android.lib.permission.PermissionManager.PERMISSION_REQUEST_CODE;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import com.bihe0832.android.lib.language.MultiLanguageHelper;
 import com.bihe0832.android.lib.permission.PermissionManager;
 import com.bihe0832.android.lib.permission.PermissionsChecker;
 import com.bihe0832.android.lib.permission.R;
@@ -28,12 +30,26 @@ public class PermissionsActivity extends AppCompatActivity {
     private PermissionDialog dialog = null;
     private long lastCheckTime = 0L;
 
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        if (newBase != null) {
+            Context newContext = MultiLanguageHelper.INSTANCE.modifyContextLanguageConfig(newBase);
+            super.attachBaseContext(newContext);
+        } else {
+            super.attachBaseContext(newBase);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() == null || !getIntent().hasExtra(EXTRA_PERMISSIONS)) {
             throw new RuntimeException("PermissionsActivity need check permission");
         }
+        MultiLanguageHelper.INSTANCE.modifyContextLanguageConfig(
+                getResources(), MultiLanguageHelper.INSTANCE.getLanguageConfig(this)
+        );
         setContentView(R.layout.com_bihe0832_lib_permissions_activity);
         try {
             if (getIntent().hasExtra(EXTRA_PERMISSIONS)) {
