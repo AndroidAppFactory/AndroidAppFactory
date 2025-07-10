@@ -7,6 +7,9 @@ import com.bihe0832.android.common.compose.state.LanguageItem
 import com.bihe0832.android.common.compose.state.LayerToGrayState
 import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.compose.state.ThemeState
+import com.bihe0832.android.common.permission.AAFPermissionManager
+import com.bihe0832.android.lib.language.MultiLanguageHelper
+import com.bihe0832.android.lib.language.MultiLanguageHelper.getLanguageConfig
 import java.util.Locale
 
 /**
@@ -34,5 +37,10 @@ object AAFComposeStateManager {
         LayerToGrayState.update()
         DensityState.getCurrentDensity()
         ThemeState.init(darkColorPalette)
+    }
+
+    fun changeLanguage(context: Context, code: Locale?) {
+        MultiLanguageState.changeLanguage(context, code)
+        AAFPermissionManager.initPermission(context)
     }
 }

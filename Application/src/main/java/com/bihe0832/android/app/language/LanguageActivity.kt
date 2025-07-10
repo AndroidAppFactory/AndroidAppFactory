@@ -1,11 +1,14 @@
 package com.bihe0832.android.app.language
 
 import androidx.compose.runtime.Composable
+import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.common.compose.state.LanguageItem
 import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.language.BaseLanguageActivity
 import com.bihe0832.android.common.language.item.LanguageItemCompose
+import com.bihe0832.android.common.permission.AAFPermissionManager
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.router.annotation.Module
 import java.util.Locale
 
@@ -20,7 +23,7 @@ class LanguageActivity : BaseLanguageActivity() {
         return LanguageItemCompose(
             title = languageItem.title,
             event = {
-                MultiLanguageState.changeLanguage(this, languageItem.locale!!)
+                AAFComposeStateManager.changeLanguage(this, languageItem.locale!!)
             },
             isSelected = currentLanguage == languageItem.locale
         )

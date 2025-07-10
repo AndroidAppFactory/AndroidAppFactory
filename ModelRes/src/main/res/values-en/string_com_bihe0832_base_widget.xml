@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="widget_add_dialog_title">快捷添加小组件</string>
-    <string name="widget_add_dialog_desc">&lt;b&gt;长按小组件信息&lt;/b&gt;可快速添加到桌面</string>
+    <!-- 英文版本 (values-en/strings.xml) -->
+    <string name="widget_add_dialog_title">Quick Widget Add</string>
+    <string name="widget_add_dialog_desc">&lt;b&gt;Long press widget info&lt;/b&gt; to add to home screen</string>
 </resources>

@@ -1,12 +1,11 @@
 package com.bihe0832.android.common.compose.ui.activity
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,12 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.base.BaseComposeActivity
 import com.bihe0832.android.common.compose.state.RenderState
@@ -88,41 +87,85 @@ fun ActivityToolBarView(
     navigationIcon: ImageVector,
     navigationOnClick: () -> Unit,
     title: String,
-    textAlign: TextAlign,
+    textSize: TextUnit,
+    isCenter: Boolean,
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
-    ActivityRootView(topBar = {
-        TopAppBar(title = {
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontWeight = FontWeight.Medium,
-                textAlign = textAlign
-            )
-        }, navigationIcon = {
-            IconButton(onClick = {
-                navigationOnClick()
-            }) {
-                Icon(
-                    imageVector = navigationIcon, contentDescription = null
+    if (isCenter) {
+        ActivityRootView(topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = textSize
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navigationOnClick()
+                    }) {
+                        Icon(
+                            imageVector = navigationIcon, contentDescription = null
+                        )
+                    }
+                },
+                actions = {
+                    actions()
+                },
+                colors = TopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
                 )
-            }
-        }, actions = {
-            actions()
-        }, colors = TopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            scrolledContainerColor = MaterialTheme.colorScheme.surface,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-        )
-        )
-    }, bottomBar = {
+            )
+        }, bottomBar = {
 
-    }, content = {
-        content()
-    })
+        }, content = {
+            content()
+        })
+    } else {
+        ActivityRootView(topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = textSize
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navigationOnClick()
+                    }) {
+                        Icon(
+                            imageVector = navigationIcon, contentDescription = null
+                        )
+                    }
+                },
+                actions = {
+                    actions()
+                },
+                colors = TopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }, bottomBar = {
+
+        }, content = {
+            content()
+        })
+    }
+
 
 }
 
@@ -139,12 +182,14 @@ fun ActivityBottomBarView(bottomBar: @Composable () -> Unit, content: @Composabl
 fun BaseComposeActivity.CommonActivityToolbarView(
     title: String, content: @Composable () -> Unit
 ) {
-    ActivityToolBarView(navigationIcon = ImageVector.vectorResource(R.drawable.icon_left_go),
+    ActivityToolBarView(
+        navigationIcon = ImageVector.vectorResource(R.drawable.icon_left_go),
         navigationOnClick = {
             onBackPressed()
         },
         title = title,
-        textAlign = TextAlign.Start,
+        textSize = 18.sp,
+        isCenter = true,
         actions = {},
         content = { content() })
 }
@@ -157,8 +202,9 @@ fun Preview() {
         navigationOnClick = {
 
         },
-        title = "fsdcxcxf",
-        textAlign = TextAlign.Center,
+        title = "sdfsfdfsd",
+        18.sp,
+        true,
         actions = {},
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -171,14 +217,14 @@ fun Preview() {
             }
         })
 
-    ActivityBottomBarView(bottomBar = {
-        Text(
-            text = "fsdf", modifier = Modifier
-                .background(Color.Red)
-                .fillMaxWidth()
-        )
-    }, content = {
-
-    })
+//    ActivityBottomBarView(bottomBar = {
+//        Text(
+//            text = "fsdf", modifier = Modifier
+//                .background(Color.Red)
+//                .fillMaxWidth()
+//        )
+//    }, content = {
+//
+//    })
 
 }
