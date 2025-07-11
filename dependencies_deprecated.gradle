@@ -3,7 +3,7 @@ def project = ext
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
-                "version"            : "6.26.2",
+                "version"            : "3.0.4",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
                         "Framework", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
