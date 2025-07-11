@@ -34,7 +34,7 @@ version=$2
 echo "libName:"$libName
 echo "version:"$version
 
-configFile=("dependencies_lib.gradle" "dependencies_lock_widget.gradle" "dependencies_services.gradle" "dependencies_tbs.gradle" "dependencies_common.gradle" "dependencies_asr.gradle")
+configFile=("dependencies_lib.gradle" "dependencies_lock_widget.gradle" "dependencies_deprecated.gradle" "dependencies_services.gradle" "dependencies_tbs.gradle" "dependencies_common.gradle" "dependencies_asr.gradle")
 
 hasNotAdd=$(git status | grep "what will be committed" | wc -l)
 hasNotCommit=$(git status | grep "Changes to be committed" | wc -l)
