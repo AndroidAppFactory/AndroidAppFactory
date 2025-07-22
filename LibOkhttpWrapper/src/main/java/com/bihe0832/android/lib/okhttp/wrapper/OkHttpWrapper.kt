@@ -37,6 +37,8 @@ const val TIME_OUT_WRITE = 5000L
 object OkHttpWrapper {
     const val TAG = "AAFRequest"
     const val HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_ID = "AAF-Content-Request-Id"
+    const val HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DELAY = "AAF-Content-Request-Delay"
+    const val HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DATA = "AAF-Content-Request-Data"
     private var maxRequestListSize = 20
 
     private val mRequestIdGenerator by lazy {
@@ -66,7 +68,8 @@ object OkHttpWrapper {
         context: Context,
         connectTimeout: Long,
         readTimeout: Long,
-        writeTimeout: Long
+        writeTimeout: Long,
+        canInterceptRequest: Boolean
     ): OkHttpClient.Builder {
         val connectionPool = ConnectionPool(
             5,  // 最大空闲连接数
@@ -87,15 +90,24 @@ object OkHttpWrapper {
             cache(cache)
             dispatcher(dispatcher)
             retryOnConnectionFailure(true)
-            addInterceptor(AAFOkHttpAppInterceptor())
+            addInterceptor(AAFOkHttpAppInterceptor(canInterceptRequest))
             connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
             readTimeout(readTimeout, TimeUnit.MILLISECONDS)
             writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
         }
     }
 
-    fun getOkHttpClientBuilder(context: Context): OkHttpClient.Builder {
-        return getOkHttpClientBuilder(context, TIME_OUT_CONNECTION, TIME_OUT_READ, TIME_OUT_WRITE)
+    fun getOkHttpClientBuilder(
+        context: Context,
+        canInterceptRequest: Boolean
+    ): OkHttpClient.Builder {
+        return getOkHttpClientBuilder(
+            context,
+            TIME_OUT_CONNECTION,
+            TIME_OUT_READ,
+            TIME_OUT_WRITE,
+            canInterceptRequest
+        )
     }
 
     fun generateNetworkInterceptor(enableIntercept: Boolean): Interceptor {
@@ -122,7 +134,7 @@ object OkHttpWrapper {
         context: Context,
         enableTraceAndIntercept: Boolean
     ): OkHttpClient.Builder {
-        return getOkHttpClientBuilder(context).apply {
+        return getOkHttpClientBuilder(context, enableTraceAndIntercept).apply {
             addNetworkInterceptor(generateNetworkInterceptor(enableTraceAndIntercept))
             eventListenerFactory(
                 generateNetworkEventListener(
@@ -148,7 +160,7 @@ object OkHttpWrapper {
         context: Context,
         enableTraceAndIntercept: Boolean
     ): OkHttpClient.Builder {
-        return getOkHttpClientBuilder(context).apply {
+        return getOkHttpClientBuilder(context, enableTraceAndIntercept).apply {
             addNetworkInterceptor(generateNetworkInterceptor(enableTraceAndIntercept))
             eventListenerFactory(
                 generateBasicNetworkEventListener(
@@ -165,7 +177,13 @@ object OkHttpWrapper {
         writeTimeout: Long,
         enableTraceAndIntercept: Boolean
     ): OkHttpClient.Builder {
-        return getOkHttpClientBuilder(context, connectTimeout, readTimeout, writeTimeout).apply {
+        return getOkHttpClientBuilder(
+            context,
+            connectTimeout,
+            readTimeout,
+            writeTimeout,
+            enableTraceAndIntercept
+        ).apply {
             addNetworkInterceptor(generateNetworkInterceptor(enableTraceAndIntercept))
             eventListenerFactory(
                 generateBasicNetworkEventListener(
