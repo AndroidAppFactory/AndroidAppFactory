@@ -3,7 +3,7 @@ def project = ext
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
-                "version"            : "3.0.4",
+                "version"            : "3.1.0",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
                         "Framework", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
@@ -11,7 +11,7 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibFragmentation_core"     : [
-                "version"            : "6.25.15",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-fragmentation-core",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -19,21 +19,21 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibFragmentation"          : [
-                "version"            : "6.25.15",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-fragmentation",
                 "apidependenciesList": [
                         "LibFragmentation_core"
                 ]
         ],
         "LibFragmentation_swipeback": [
-                "version"            : "6.25.15",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-fragmentation-swipeback",
                 "apidependenciesList": [
                         "LibFragmentation"
                 ]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "6.26.2",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -41,7 +41,7 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibAdapter"                : [
-                "version"            : "6.25.15",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-adapter",
                 "apidependenciesList": [
                         project.androidsupport.recyclerview,
@@ -49,21 +49,21 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibRefresh"                : [
-                "version"            : "6.25.15",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-refresh",
                 "apidependenciesList": [
                         "LibAdapter"
                 ]
         ],
         "LibRecycleviewExt"         : [
-                "version"            : "6.26.2",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-recycleview-ext",
                 "apidependenciesList": [
                         "LibRefresh", "LibTheme"
                 ]
         ],
         "LibBottomTab"              : [
-                "version"            : "6.26.2",
+                "version"            : "3.1.0",
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",
