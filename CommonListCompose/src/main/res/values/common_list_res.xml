@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="bad_layoutmanager_empty_tips">通用List在GridLayoutManager时不支持空数据</string>
-</resources>

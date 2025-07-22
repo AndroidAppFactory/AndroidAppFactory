@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.common.compose.base.BaseComposeFragment
 import com.bihe0832.android.common.compose.state.RenderState
-import com.bihe0832.android.common.compose.ui.EmptyText
+import com.bihe0832.android.common.compose.ui.EmptyView
 import java.util.Locale
 
 /**
@@ -20,7 +20,7 @@ open class CommonComposeFragment : BaseComposeFragment() {
         return object : RenderState {
             @Composable
             override fun Content(currentLanguage: Locale) {
-                EmptyText(desc = "空白页面", colorP = Color.White)
+                EmptyView(message = "空白页面", colorP = Color.White)
             }
         }
     }

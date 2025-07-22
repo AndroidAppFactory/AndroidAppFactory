@@ -35,7 +35,7 @@ public class AccCircleProgress extends View {
 
     //圆环的宽度
     private float mCircleWidth = 30;
-    private int mCircleBackgroundColor = getResources().getColor(R.color.divider);
+    private int mCircleBackgroundColor = getResources().getColor(R.color.md_theme_outline);
 
     //圆弧的宽度
     private float mArcWidth = 10;

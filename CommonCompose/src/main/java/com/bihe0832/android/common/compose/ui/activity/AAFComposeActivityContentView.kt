@@ -1,5 +1,7 @@
 package com.bihe0832.android.common.compose.ui.activity
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +18,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +35,14 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.base.BaseComposeActivity
+import com.bihe0832.android.common.compose.common.CommonActionEvent
+import com.bihe0832.android.common.compose.common.CommonActionState
+import com.bihe0832.android.common.compose.common.CommonActionViewModel
 import com.bihe0832.android.common.compose.state.RenderState
+import com.bihe0832.android.common.compose.ui.EmptyView
+import com.bihe0832.android.common.compose.ui.ErrorView
+import com.bihe0832.android.common.compose.ui.LoadingView
+import com.bihe0832.android.common.compose.ui.RefreshView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Locale
 
@@ -41,11 +55,9 @@ import java.util.Locale
  */
 @Composable
 fun ActivityThemeView(
-    themeType: ColorScheme,
-    currentLanguage: Locale,
-    contentRender: RenderState
+    themeType: ColorScheme, currentLanguage: Locale, contentRender: RenderState
 ) {
-    MaterialTheme(themeType) {
+    MaterialTheme(colorScheme = themeType,) {
         val systemUiController = rememberSystemUiController()
         SideEffect {
             systemUiController.setStatusBarColor(themeType.primary)
@@ -94,34 +106,30 @@ fun ActivityToolBarView(
 ) {
     if (isCenter) {
         ActivityRootView(topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = title,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = textSize
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navigationOnClick()
-                    }) {
-                        Icon(
-                            imageVector = navigationIcon, contentDescription = null
-                        )
-                    }
-                },
-                actions = {
-                    actions()
-                },
-                colors = TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+            CenterAlignedTopAppBar(title = {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = textSize
                 )
+            }, navigationIcon = {
+                IconButton(onClick = {
+                    navigationOnClick()
+                }) {
+                    Icon(
+                        imageVector = navigationIcon, contentDescription = null
+                    )
+                }
+            }, actions = {
+                actions()
+            }, colors = TopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+            )
             )
         }, bottomBar = {
 
@@ -130,34 +138,30 @@ fun ActivityToolBarView(
         })
     } else {
         ActivityRootView(topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = title,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = textSize
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navigationOnClick()
-                    }) {
-                        Icon(
-                            imageVector = navigationIcon, contentDescription = null
-                        )
-                    }
-                },
-                actions = {
-                    actions()
-                },
-                colors = TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+            TopAppBar(title = {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = textSize
                 )
+            }, navigationIcon = {
+                IconButton(onClick = {
+                    navigationOnClick()
+                }) {
+                    Icon(
+                        imageVector = navigationIcon, contentDescription = null
+                    )
+                }
+            }, actions = {
+                actions()
+            }, colors = TopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+            )
             )
         }, bottomBar = {
 
@@ -182,8 +186,7 @@ fun ActivityBottomBarView(bottomBar: @Composable () -> Unit, content: @Composabl
 fun BaseComposeActivity.CommonActivityToolbarView(
     title: String, content: @Composable () -> Unit
 ) {
-    ActivityToolBarView(
-        navigationIcon = ImageVector.vectorResource(R.drawable.icon_left_go),
+    ActivityToolBarView(navigationIcon = ImageVector.vectorResource(R.drawable.icon_left_go),
         navigationOnClick = {
             onBackPressed()
         },
@@ -195,6 +198,55 @@ fun BaseComposeActivity.CommonActivityToolbarView(
 }
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CommonContent(
+    viewModel: CommonActionViewModel,
+    state: State<CommonActionState>,
+    dataSize: Int,
+    content: @Composable () -> Unit
+) {
+    val pullRefreshState = rememberPullToRefreshState()
+    val isLoading = rememberUpdatedState(state.value.isLoading)
+    Box(
+        modifier = Modifier
+            .pullToRefresh(isRefreshing = isLoading.value,
+                state = pullRefreshState,
+                enabled = state.value.canRefresh,
+                onRefresh = {
+                    viewModel.sendEvent(CommonActionEvent.Refresh)
+                })
+            .fillMaxSize()
+            .background(Color.Green)
+    ) {
+        if (state.value.isLoading && dataSize < 1) {
+            LoadingView(message = state.value.loadingMsg)
+            return
+        }
+
+        if (!state.value.isLoading && state.value.errorMsg.isNotEmpty()) {
+            ErrorView(message = state.value.errorMsg, onRetry = {
+                viewModel.sendEvent(CommonActionEvent.Refresh)
+            })
+            return
+        }
+
+        if (!state.value.isLoading && dataSize < 1) {
+            viewModel.sendEvent(CommonActionEvent.InitData)
+            EmptyView()
+            return
+        }
+
+        content()
+
+        if (state.value.isLoading && dataSize > 1) {
+            RefreshView()
+        }
+    }
+}
+
+
 @Preview
 @Composable
 fun Preview() {
@@ -202,7 +254,7 @@ fun Preview() {
         navigationOnClick = {
 
         },
-        title = "sdfsfdfsd",
+        title = "这是一个标题",
         18.sp,
         true,
         actions = {},

@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="@+id/dialog_bg"
         app:layout_constraintStart_toStartOf="@+id/dialog_bg"
         app:layout_constraintTop_toBottomOf="@+id/head"
-        app:tint="@color/accent" />
+        app:tint="@color/md_theme_tertiary" />
 
 
     <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
@@ -54,7 +54,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="36dp"
         android:text=""
-        app:bgtv_backgroundColor="@color/accent"
+        app:bgtv_backgroundColor="@color/md_theme_tertiary"
         app:bgtv_cornerRadius="4dp"
         app:layout_constraintEnd_toEndOf="@+id/dialog_bg"
         app:layout_constraintStart_toStartOf="@+id/dialog_bg"
@@ -83,7 +83,7 @@
         android:gravity="center"
         android:text=""
         app:bgtv_cornerRadius="4dp"
-        app:bgtv_strokeColor="@color/accent"
+        app:bgtv_strokeColor="@color/md_theme_tertiary"
         app:bgtv_strokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/dialog_bg"
         app:layout_constraintEnd_toEndOf="@+id/positive_bg"

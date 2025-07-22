@@ -2,21 +2,38 @@
 <resources>
 
     <!--    AAF 核心颜色定义，所有应用自定义颜色，都修改下放颜色即可：
-                生成颜色表并补充完善地址：https://www.materialpalette.com/indigo/indigo
+                生成颜色表并补充完善地址：https://www.figma.com/design/hn4BeZI3OvQP8vJxZNCR3F/Untitled?node-id=0-1&p=f&t=MikQ6F15aQKEeMOd-0
     -->
-    <!--主色调，标题栏等-->
-    <color name="primary">#3F51B5</color>
-    <!--状态栏颜色-->
-    <color name="primary_dark">@color/primary</color>
-    <color name="primary_light">#C5CAE9</color>
-    <!--控制各个控件被选中时的颜色-->
-    <color name="accent">#536DFE</color>
-    <!--文本颜色-->
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#8D8D8D</color>
-    <!--图标颜色-->
-    <color name="icons">#FFFFFF</color>
-    <!--分割线颜色-->
-    <color name="divider">@color/gray_light</color>
+    <!--    主色调   -->
+    <color name="md_theme_primary">#303F9F</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#C5CAE9</color>
+    <color name="md_theme_onPrimaryContainer">#394379</color>
+    <!--    次色调   -->
+    <color name="md_theme_secondary">#5A5D72</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#DFE1F9</color>
+    <color name="md_theme_onSecondaryContainer">#434659</color>
+    <!--    按钮等色调   -->
+    <color name="md_theme_tertiary">#FF6D00</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#FFE0B2</color>
+    <color name="md_theme_onTertiaryContainer">#5D4037</color>
+    <!--    报错等色调   -->
+    <color name="md_theme_error">#BA1A1A</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_errorContainer">#FFDAD6</color>
+    <color name="md_theme_onErrorContainer">#93000A</color>
+    <!--    背景色色调   -->
+    <color name="md_theme_background">#FBF8FF</color>
+    <color name="md_theme_onBackground">#1B1B21</color>
+    <color name="md_theme_surface">#FBF8FF</color>
+    <color name="md_theme_onSurface">#1B1B21</color>
+    <color name="md_theme_surfaceVariant">#E3E1EC</color>
+    <color name="md_theme_onSurfaceVariant">#46464F</color>
+    <!--    分割线色调  -->
+    <color name="md_theme_outline">#F2F2F2</color>
+    <color name="md_theme_outlineVariant">#C7C5D0</color>
+    <color name="md_theme_scrim">#000000</color>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.compose.ui
+package com.bihe0832.android.common.compose.ui.utils
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable

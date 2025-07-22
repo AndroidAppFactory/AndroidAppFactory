@@ -21,7 +21,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:text="目录"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/md_theme_onSurface"
             android:textSize="12dp" />
 
     <CheckBox

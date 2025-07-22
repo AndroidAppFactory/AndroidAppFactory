@@ -9,7 +9,7 @@
     </item>
     <item>
         <shape>
-            <solid android:color="@color/divider" />
+            <solid android:color="@color/md_theme_outline" />
             <size android:height="24dp" />
             <corners android:radius="12dp" />
         </shape>

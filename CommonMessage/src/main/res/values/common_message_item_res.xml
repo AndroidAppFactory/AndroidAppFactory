@@ -4,6 +4,6 @@
     <color name="com_bihe0832_message_item_bg_color">@color/white</color>
     <color name="com_bihe0832_message_item_title_color">@color/textColorPrimary</color>
     <color name="com_bihe0832_message_item_time_color">@color/textColorSecondary</color>
-    <color name="com_bihe0832_message_item_time_divider">@color/divider</color>
-    <string name="com_bihe0832_message_common_msg_url">https://cdn.bihe0832.com/app/msg/aaf_msg.json</string>
+    <color name="com_bihe0832_message_item_time_divider">@color/md_theme_outline</color>
+    <string name="com_bihe0832_message_common_msg_url" translatable="false">https://cdn.bihe0832.com/app/msg/aaf_msg.json</string>
 </resources>

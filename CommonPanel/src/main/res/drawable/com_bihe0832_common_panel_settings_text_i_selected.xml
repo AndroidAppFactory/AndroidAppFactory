@@ -11,7 +11,7 @@
                 android:viewportHeight="1024">
             <path
                     android:pathData="M830.6,264.9L824.9,292c53.3,-2 74.4,14 63.2,48.1L808.6,716.4C804.7,754.5 776.8,771.6 724.6,767.5L719,794.6h228.9l5.7,-27.1c-55.8,4 -76.6,-13 -62.4,-51.2l79.3,-376.3C971.6,306 999.4,290 1053.8,292L1059.5,264.9H830.6z"
-                    android:fillColor="@color/icons" />
+                    android:fillColor="@color/md_theme_onPrimary" />
         </vector>
     </item>
 </layer-list>

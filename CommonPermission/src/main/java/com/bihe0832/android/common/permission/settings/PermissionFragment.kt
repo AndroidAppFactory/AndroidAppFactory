@@ -11,7 +11,7 @@ open class PermissionFragment : SettingsFragment() {
     override fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(PermissionItem.getRecommandSetting(context!!))
-            add(PlaceholderData(context!!, 4f, R.color.divider))
+            add(PlaceholderData(context!!, 4f, R.color.md_theme_outline))
             add(PermissionItem.getPermissionSetting(activity!!, Manifest.permission.CAMERA))
         }.apply {
             processLastItemDriver(processLast)

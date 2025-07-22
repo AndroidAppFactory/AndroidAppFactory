@@ -107,7 +107,7 @@
             tl:tl_tab_padding="8dp"
             tl:tl_tab_space_equal="false"
             tl:tl_textBold="SELECT"
-            tl:tl_textSelectColor="@color/primary"
+            tl:tl_textSelectColor="@color/md_theme_primary"
             tl:tl_textUnselectColor="#9A000000"
             tl:tl_textsize="12dp"
             tl:tl_underline_height="0dp" />

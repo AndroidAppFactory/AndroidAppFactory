@@ -5,8 +5,8 @@
     android:viewportHeight="1024">
   <path
       android:pathData="M512,128C300.8,128 128,300.8 128,512s172.8,384 384,384 384,-172.8 384,-384S723.2,128 512,128zM512,832c-179.2,0 -320,-140.8 -320,-320s140.8,-320 320,-320 320,140.8 320,320S691.2,832 512,832z"
-      android:fillColor="@color/icons"/>
+      android:fillColor="@color/md_theme_onPrimary"/>
   <path
       android:pathData="M678.4,358.4 L448,595.2 345.6,486.4c-12.8,-12.8 -32,-12.8 -44.8,0s-12.8,32 0,44.8l128,128c6.4,6.4 12.8,6.4 25.6,6.4s19.2,0 25.6,-6.4l256,-256c12.8,-12.8 12.8,-32 0,-44.8S691.2,352 678.4,358.4z"
-      android:fillColor="@color/icons"/>
+      android:fillColor="@color/md_theme_onPrimary"/>
 </vector>

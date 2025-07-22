@@ -77,7 +77,7 @@ class DebugListFragment : CommonListFragment() {
             addItemDecoration(
                 GridDividerItemDecoration.Builder(context).apply {
                     setShowLastLine(false)
-                    setColor(R.color.divider)
+                    setColor(R.color.md_theme_outline)
                     setHorizontalSpan(DisplayUtil.dip2px(context!!, 1f).toFloat())
                 }.build()
             )

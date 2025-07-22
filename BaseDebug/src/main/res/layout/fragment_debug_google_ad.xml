@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/divider"
+            android:background="@color/md_theme_outline"
             android:textIsSelectable="true" />
 
         <androidx.recyclerview.widget.RecyclerView

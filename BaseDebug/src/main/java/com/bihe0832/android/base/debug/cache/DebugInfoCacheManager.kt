@@ -57,9 +57,9 @@ object DebugInfoCacheManager {
                 key: String,
                 duration: Long
         ): DebugCoroutinesData<DebugCacheData> =
-                suspendCoroutine { cont ->
-                    getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
-                }
+            suspendCoroutine { cont ->
+                getData(key, duration, ContinuationCallbackForFetchDataListener(cont))
+            }
 
 
         inner class ContinuationCallbackForFetchDataListener(private var continuation: Continuation<DebugCoroutinesData<DebugCacheData>>) :

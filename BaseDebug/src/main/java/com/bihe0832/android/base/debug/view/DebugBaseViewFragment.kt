@@ -101,7 +101,7 @@ class DebugBaseViewFragment : DebugEnvFragment() {
         TextView(context).apply {
             setText("ViewCaptureLayout getViewBitmap:" + DateUtil.getCurrentDateEN())
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20f)
-            setTextColor(context.getColor(R.color.accent))
+            setTextColor(context.getColor(R.color.md_theme_tertiary))
             setPadding(40)
         }.let {
             ViewCaptureLayout(context).apply {

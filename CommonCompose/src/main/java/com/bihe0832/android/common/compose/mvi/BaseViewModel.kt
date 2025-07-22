@@ -1,7 +1,6 @@
 package com.bihe0832.android.common.compose.mvi
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,10 +12,8 @@ import kotlinx.coroutines.launch
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
-abstract class BaseViewModel<Event : ViewEvent, State : ViewState, Effect : ViewSideEffect>(
-    application: Application
-) :
-    AndroidViewModel(application) {
+abstract class BaseViewModel<Event : ViewEvent, State : ViewState, Effect : ViewSideEffect> :
+    ViewModel() {
 
     private val initialState: State by lazy { setInitialState() }
     abstract fun setInitialState(): State
@@ -83,4 +80,5 @@ abstract class BaseViewModel<Event : ViewEvent, State : ViewState, Effect : View
         val effectValue = builder()
         viewModelScope.launch { _effect.send(effectValue) }
     }
+
 }

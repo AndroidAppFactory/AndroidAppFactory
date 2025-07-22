@@ -3,7 +3,7 @@
     <color name="com_bihe0832_share_bg_color">#A6000000</color>
     <color name="com_bihe0832_share_panel_color">#BF2D2D2B</color>
     <color name="com_bihe0832_share_text_color">#ADADAD</color>
-    <color name="com_bihe0832_share_icon_color">@color/icons</color>
+    <color name="com_bihe0832_share_icon_color">@color/md_theme_onPrimary</color>
     <dimen name="com_bihe0832_share_title_text_size">10dp</dimen>
     <dimen name="com_bihe0832_share_item_text_size">@dimen/com_bihe0832_share_title_text_size
     </dimen>

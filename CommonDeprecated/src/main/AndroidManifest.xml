@@ -6,8 +6,6 @@
     <application
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
-
         <activity
             android:name="com.bihe0832.android.framework.ui.main.CommonRootActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
