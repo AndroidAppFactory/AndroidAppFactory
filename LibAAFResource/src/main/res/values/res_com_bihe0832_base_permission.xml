@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="com_bihe0832_permission_color">@color/accent</color>
+    <color name="com_bihe0832_permission_color">@color/md_theme_tertiary</color>
     <color name="permission_window_bg">@color/transparent_background</color>
     <color name="permission_tips_bg">@color/white</color>
     <color name="permission_tips_text_color">@color/com_bihe0832_dialog_content</color>

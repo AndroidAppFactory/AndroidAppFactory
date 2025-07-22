@@ -45,7 +45,7 @@
                     android:id="@+id/iv_color"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@color/accent" />
+                    android:background="@color/md_theme_tertiary" />
 
         </LinearLayout>
 

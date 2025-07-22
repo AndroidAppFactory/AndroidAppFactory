@@ -48,7 +48,7 @@
                     android:layout_width="2dp"
                     android:layout_margin="12dp"
                     android:layout_height="match_parent"
-                    android:background="@color/icons" />
+                    android:background="@color/md_theme_onPrimary" />
 
             <ImageView
                     android:id="@+id/color_settings"
@@ -87,7 +87,7 @@
                     android:layout_width="2dp"
                     android:layout_margin="12dp"
                     android:layout_height="match_parent"
-                    android:background="@color/divider" />
+                    android:background="@color/md_theme_outline" />
 
             <ImageView
                     android:id="@+id/draw_undo"
@@ -110,7 +110,7 @@
                     android:layout_width="2dp"
                     android:layout_margin="12dp"
                     android:layout_height="match_parent"
-                    android:background="@color/divider" />
+                    android:background="@color/md_theme_outline" />
 
             <ImageView
                     android:id="@+id/add_page"
@@ -141,7 +141,7 @@
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/com_bihe0832_dialog_content_text_size"
                         android:text="1/1"
-                        android:textColor="@color/divider" />
+                        android:textColor="@color/md_theme_outline" />
 
                 <ImageView
                         android:id="@+id/page_next"
@@ -184,7 +184,7 @@
             <ImageView
                     android:id="@+id/menu_switch"
                     style="@style/CommonMenuStyle"
-                    android:tint="@color/icons" />
+                    android:tint="@color/md_theme_onPrimary" />
 
         </com.bihe0832.android.common.panel.ui.menu.DragLinearLayout>
 

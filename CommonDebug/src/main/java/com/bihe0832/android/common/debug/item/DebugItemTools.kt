@@ -58,7 +58,7 @@ fun getDebugItem(
         paddingLeftDp,
         getDebugItemBackGroundColor(isTips),
         if (showBottomLine) {
-            ZixieContext.applicationContext!!.getColor(R.color.divider)
+            ZixieContext.applicationContext!!.getColor(R.color.md_theme_outline)
         } else {
             Color.TRANSPARENT
         }

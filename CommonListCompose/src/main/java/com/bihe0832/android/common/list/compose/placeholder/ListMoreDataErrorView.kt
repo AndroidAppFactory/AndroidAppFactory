@@ -1,0 +1,87 @@
+package com.bihe0832.android.common.list.compose.placeholder
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.bihe0832.android.common.compose.R
+import com.bihe0832.android.common.compose.ui.utils.dpToSp
+
+/**
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2025/7/18.
+ * Description: Description
+ *
+ */
+@Preview
+@Composable
+fun ListMoreDataErrorView(
+    message: String = stringResource(R.string.com_bihe0832_load_failed),
+    colorP: Color = colorResource(R.color.windowBackground),
+    textSize: Dp = 12.dp,
+    textColor: Color = colorResource(R.color.textColorSecondary),
+    retryText: String = stringResource(R.string.dialog_button_retry),
+    onRetry: (() -> Unit)? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorP)
+            .clickable { onRetry?.invoke() },
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.icon_info),
+            contentDescription = "错误",
+            tint = textColor,
+            modifier = Modifier.size(textSize * 1.5f)
+        )
+        Text(
+            text = message,
+            color = textColor,
+            fontWeight = FontWeight.Black,
+            fontSize = dpToSp(textSize),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(8.dp)
+        )
+        Box(
+            modifier = Modifier
+                .clip(shape = RoundedCornerShape(4.dp))
+                .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.9f))
+        ) {
+            Text(
+                text = retryText,
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Black,
+                fontSize = dpToSp(textSize),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 8.dp, end = 8.dp)
+            )
+        }
+
+    }
+}

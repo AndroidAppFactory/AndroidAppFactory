@@ -14,7 +14,7 @@ ext.commonmoduleInfo = [
                         "kapt": ["RouterCompiler"]
                 ]
         ],
-        "CommonDebugCompose"           : [
+        "CommonDebugCompose"    : [
                 "version"                : "3.0.4",
                 "artifactId"             : "common-compose-debug",
                 "apidependenciesList"    : [
@@ -80,7 +80,9 @@ ext.commonmoduleInfo = [
                         project.androidsupport.compose_ui,
                         project.androidsupport.compose_ui_tooling,
                         project.androidsupport.compose_ui_preview,
-                        project.androidsupport.systemuicontroller
+                        project.androidsupport.systemuicontroller,
+                        project.androidsupport.compose_paging,
+                        project.androidsupport.lifecycle_viewmodel
                 ]
         ],
         "CommonAccessibility"   : [
@@ -104,7 +106,7 @@ ext.commonmoduleInfo = [
                 "version"            : "3.0.4",
                 "artifactId"         : "common-message",
                 "apidependenciesList": [
-                        "CommonAbout"
+                        "CommonList", "CommonListCompose"
                 ]
         ],
         "CommonShare"           : [

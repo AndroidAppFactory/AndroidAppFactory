@@ -81,7 +81,7 @@ class DebugLockActivity : BaseActivity() {
         }
         lock_charge_process = findViewById<AccCircleProgress>(R.id.lock_charge_process).apply {
             setArcBackgroundColor(intArrayOf(Color.GREEN, Color.GREEN))
-            setCircleBackgroundColor(resources.getColor(R.color.divider))
+            setCircleBackgroundColor(resources.getColor(R.color.md_theme_outline))
             setIconRes(R.drawable.icon_android)
             setCircleWidth(DisplayUtil.dip2px(context, 2f).toFloat())
             setArcWidth(DisplayUtil.dip2px(context, 2f).toFloat())

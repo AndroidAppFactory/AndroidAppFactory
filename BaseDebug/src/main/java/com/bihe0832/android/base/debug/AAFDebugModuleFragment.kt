@@ -59,7 +59,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugFragmentItemData("临时测试(Temp)", DebugTempFragment::class.java))
             add(getDebugFragmentItemData("临时测试(Basic)", DebugBasicFragment::class.java))
-            add(getComposeDebugItem("Compose 调试","CommonConfigView"))
+            add(getComposeDebugItem("Compose 调试","CommonComposeView"))
             add(getDebugFragmentItemData("下载及安装 Download 调试", DebugDownloadFragment::class.java))
             add(getDebugFragmentItemData("Dialog、底部弹出Activity 调试", DebugDialogFragment::class.java))
             add(getDebugFragmentItemData("文件（Zip、assets 等）、配置、DB操作调试", DebugFileFragment::class.java))

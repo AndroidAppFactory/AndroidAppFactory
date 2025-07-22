@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
         android:shape="oval">
     <!--    填充-->
-    <solid android:color="@color/accent" />
+    <solid android:color="@color/md_theme_tertiary" />
 
     <size
             android:width="20dp"
@@ -11,6 +11,6 @@
     <gradient
             android:endColor="@color/com_bihe0832_dialog_bg"
             android:gradientRadius="20dp"
-            android:startColor="@color/accent"
+            android:startColor="@color/md_theme_tertiary"
             android:type="radial" />
 </shape>

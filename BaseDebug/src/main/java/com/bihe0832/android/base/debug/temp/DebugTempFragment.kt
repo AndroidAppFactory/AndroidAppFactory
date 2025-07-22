@@ -9,11 +9,12 @@
 package com.bihe0832.android.base.debug.temp
 
 import android.view.View
+import com.bihe0832.android.base.compose.debug.list.model.DebugPageListActivity
 import com.bihe0832.android.common.compose.common.activity.CommonComposeActivity
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
-import com.bihe0832.android.common.list.compose.CommonComposeListActivity
 import com.bihe0832.android.lib.adapter.CardBaseModule
+
 
 class DebugTempFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -27,7 +28,7 @@ class DebugTempFragment : DebugEnvFragment() {
 
 
     private fun preTest(itemView: View) {
-        startActivityWithException(CommonComposeListActivity::class.java)
+
     }
 
     private fun testFunc(itemView: View) {

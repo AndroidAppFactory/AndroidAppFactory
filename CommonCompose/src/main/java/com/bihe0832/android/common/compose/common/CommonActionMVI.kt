@@ -1,34 +1,27 @@
 package com.bihe0832.android.common.compose.common
 
-import android.app.Application
+import android.content.Context
 import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.mvi.ViewEvent
-import com.bihe0832.android.common.compose.mvi.ViewSideEffect
 import com.bihe0832.android.common.compose.mvi.ViewState
 
-sealed class CommonActionEvent : ViewEvent {
-    class LoadingStart(val text: String) : CommonActionEvent()
-    object SimpleLoadingStart : CommonActionEvent()
-    object LoadingFinished : CommonActionEvent()
+open class CommonActionEvent : ViewEvent {
+    object InitData : CommonActionEvent()
+    object Refresh : CommonActionEvent()
 }
 
 data class CommonActionState(
-    val loadingMsg: String, val loadingSuccess: String, val loadingFailedMsg: String
+    val canRefresh: Boolean = true,
+    var isLoading: Boolean = false,
+    val loadingMsg: String = "",
+    val errorMsg: String = "",
 ) : ViewState
 
-
-fun getCommonActionState(application: Application): CommonActionState {
+fun getCommonActionState(context: Context): CommonActionState {
     return CommonActionState(
-        loadingMsg = application.getString(R.string.com_bihe0832_loading),
-        loadingSuccess = application.getString(R.string.com_bihe0832_loading_completed),
-        loadingFailedMsg = application.getString(R.string.com_bihe0832_load_failed),
+        canRefresh = true,
+        isLoading = false,
+        loadingMsg = context.getString(R.string.com_bihe0832_loading),
+        errorMsg = ""
     )
-}
-
-sealed class CommonActionEffect : ViewSideEffect {
-    data class Loading(val text: String) : CommonActionEffect()
-    object LoadingFinished : CommonActionEffect()
-    data class LoadingSuccess(val text: String) : CommonActionEffect()
-    data class LoadingFailed(val text: String, val errorCode: Int, val errorMsg: String) :
-        CommonActionEffect()
 }

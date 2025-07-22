@@ -28,7 +28,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:text="选择文本"
-            android:textColor="@color/icons"
+            android:textColor="@color/md_theme_onPrimary"
             android:textSize="12dp" />
 
         <ImageView
@@ -45,13 +45,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/divider" />
+        android:background="@color/md_theme_outline" />
 
     <ListView
         android:id="@+id/activity_file_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:descendantFocusability="blocksDescendants"
-        android:divider="@color/divider"
+        android:divider="@color/md_theme_outline"
         android:dividerHeight="1dp" />
 </LinearLayout>

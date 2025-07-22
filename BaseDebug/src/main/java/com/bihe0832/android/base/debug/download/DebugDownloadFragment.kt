@@ -483,7 +483,7 @@ class DebugDownloadFragment : BaseDebugListFragment() {
 //        val url = ""
 //        val md5 = ""
         val header = HashMap<String, String>().apply {
-            put("zixie", "AAA")
+            put("zixie", "NetworkApi")
         }
         DownloadFile.downloadWithProcess(
             activity!!,

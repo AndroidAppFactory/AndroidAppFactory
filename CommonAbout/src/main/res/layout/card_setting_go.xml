@@ -101,7 +101,7 @@
         android:id="@+id/settings_driver"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider"
+        android:background="@color/md_theme_outline"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

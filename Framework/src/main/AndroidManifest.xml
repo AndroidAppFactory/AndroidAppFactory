@@ -30,11 +30,5 @@
             </intent-filter>
         </activity>
 
-
-        <activity
-            android:name="com.bihe0832.android.framework.ui.main.CommonRootActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
     </application>
 </manifest>

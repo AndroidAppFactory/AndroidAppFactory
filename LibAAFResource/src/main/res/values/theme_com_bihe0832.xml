@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--    整个AAF 的关键主题颜色定义-->
 
     <string name="app_name"></string>
     <string name="app_desc"></string>
     <string name="custom_density">360</string>
 
-    <!--    主题相关配色-->
-    <!--    生成颜色表：https://www.materialpalette.com/indigo/indigo -->
-    <!--    颜色定义参考：https://github.com/bihe0832/Android-System-Related-Charts/blob/master/application-framework/README.md#AppCompat%E7%9A%84%E4%B8%BB%E9%A2%98%E7%A4%BA%E6%84%8F%E5%9B%BE-->
-    <!--    官方颜色定义参考：https://developer.android.com/codelabs/basic-android-kotlin-training-change-app-theme#202020-->
     <!--主色调 -->
-    <color name="colorPrimary">@color/primary</color>
+    <color name="colorPrimary">@color/md_theme_primary</color>
     <!--状态栏颜色-->
-    <color name="colorPrimaryDark">@color/primary_dark</color>
-    <color name="colorPrimaryLight">@color/primary_light</color>
-    <color name="colorOnPrimary">@color/color_on_primary</color>
-    <color name="navigationBarColor">@color/navigation_bar_color</color>
+    <color name="colorPrimaryDark">@color/md_theme_primary</color>
+    <color name="colorPrimaryLight">@color/md_theme_primaryContainer</color>
+    <color name="colorOnPrimary">@color/md_theme_onPrimary</color>
+    <color name="navigationBarColor">@color/md_theme_surface</color>
     <!--控制各个控件被选中时的颜色-->
-    <color name="colorAccent">@color/accent</color>
+    <color name="colorAccent">@color/md_theme_tertiary</color>
     <!--各个控制控件的默认颜色 与colorAccent相反-->
-    <color name="colorControlNormal">@color/com_bihe0832_select_default</color>
+    <color name="colorControlNormal">@color/md_theme_onTertiary</color>
     <!--控制normal状态下button的颜色-->
-    <color name="colorButtonNormal">@color/colorControlNormal</color>
+    <color name="colorButtonNormal">@color/md_theme_tertiary</color>
     <!--控制所有可点击的View的涟漪效果颜色-->
-    <color name="colorControlActivated">@color/com_bihe0832_select_state_checked</color>
-    <color name="colorControlHighlight">@color/com_bihe0832_select_state_focused</color>
+    <color name="colorControlActivated">@color/md_theme_onTertiaryContainer</color>
+    <color name="colorControlHighlight">@color/md_theme_tertiaryContainer</color>
     <!--页面背景色-->
-    <color name="colorBackground">@color/window_background</color>
-    <color name="windowBackground">@color/window_background</color>
-    <color name="colorOnBackground">@color/color_on_window</color>
+    <color name="colorBackground">@color/md_theme_surface</color>
+    <color name="windowBackground">@color/md_theme_surface</color>
+    <color name="colorOnBackground">@color/md_theme_onSurface</color>
     <!--文本颜色-->
-    <color name="textColorPrimary">@color/primary_text</color>
-    <color name="textColorSecondary">@color/secondary_text</color>
+    <color name="textColorPrimary">@color/md_theme_onSurface</color>
+    <color name="textColorSecondary">@color/md_theme_onSurfaceVariant</color>
 
     <!--页面背景色-->
-    <color name="color_on_primary">@color/icons</color>
-    <color name="window_background">@color/white</color>
-    <color name="color_on_window">@color/textColorPrimary</color>
-    <!--虚拟按键栏背景色-->
-    <color name="navigation_bar_color">@color/black</color>
+    <color name="color_on_primary">@color/md_theme_onPrimary</color>
+    <color name="window_background">@color/md_theme_surface</color>
+    <color name="color_on_window">@color/md_theme_onPrimaryContainer</color>
+
 
 </resources>

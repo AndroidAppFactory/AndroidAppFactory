@@ -28,7 +28,7 @@
         android:layout_marginRight="48dp"
         android:gravity="center"
         android:text="@string/custom_view_placeholder_title"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/md_theme_onBackground"
         android:textSize="12dp" />
 
     <com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
@@ -45,7 +45,7 @@
         android:textSize="12dp"
         android:textStyle="bold"
         android:visibility="invisible"
-        app:bgtv_backgroundColor="@color/primary"
+        app:bgtv_backgroundColor="@color/md_theme_onBackground"
         app:bgtv_cornerRadius="8dp"
         tools:visibility="visible" />
 

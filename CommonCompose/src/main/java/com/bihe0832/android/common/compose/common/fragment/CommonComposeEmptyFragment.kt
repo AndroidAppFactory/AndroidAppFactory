@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.base.BaseComposeFragment
 import com.bihe0832.android.common.compose.state.RenderState
-import com.bihe0832.android.common.compose.ui.EmptyText
-import com.bihe0832.android.framework.R
+import com.bihe0832.android.common.compose.ui.EmptyView
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import java.util.Locale
 
@@ -32,7 +32,7 @@ open class CommonComposeEmptyFragment : BaseComposeFragment() {
         return object : RenderState {
             @Composable
             override fun Content(currentLanguage: Locale) {
-                EmptyText(mContentString, mContentBackgroundColor, null)
+                EmptyView(mContentString, mContentBackgroundColor)
             }
         }
     }

@@ -90,7 +90,7 @@ class DebugEnqueueFragment : DebugEnvFragment() {
     }
 
     private fun testTask() {
-        val TASK_NAME = "AAA"
+        val TASK_NAME = "NetworkApi"
         for (i in 0..20) {
             ThreadManager.getInstance().start({
                 TaskManager.getInstance().removeTask(TASK_NAME)
