@@ -34,11 +34,13 @@ data class DataItem(
 
     @field:SerializedName("language") val language: String? = null,
 
-    @field:SerializedName("id") val id: Int? = null,
+    @field:SerializedName("id") var id: Int? = null,
 
     @field:SerializedName("mobileUrl") val mobileUrl: String? = null,
 
     @field:SerializedName("title") var title: String? = null,
 
-    @field:SerializedName("url") val url: String? = null
+    @field:SerializedName("url") val url: String? = null,
+
+    @field:SerializedName("isRead") var isRead: Boolean = false
 )

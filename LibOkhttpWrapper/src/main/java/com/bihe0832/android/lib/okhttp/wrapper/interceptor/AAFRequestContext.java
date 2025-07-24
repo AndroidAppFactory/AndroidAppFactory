@@ -7,7 +7,7 @@ public class AAFRequestContext {
 
     private String mRequestId = "";
 
-    AAFRequestContext(String id) {
+    public AAFRequestContext(String id) {
         mRequestId = id;
     }
 

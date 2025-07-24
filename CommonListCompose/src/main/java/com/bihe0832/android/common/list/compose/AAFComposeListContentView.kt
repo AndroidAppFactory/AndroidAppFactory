@@ -39,6 +39,9 @@ fun <T : Any> CommonRefreshList(
     enableLoadMore: Boolean,
     lazyPagingItems: LazyPagingItems<T>,
     itemContent: LazyListScope.() -> Unit,
+    onRefresh: () -> Unit = {
+        lazyPagingItems.refresh()
+    },
 ) {
     val isRefreshing by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
@@ -53,7 +56,7 @@ fun <T : Any> CommonRefreshList(
             .pullToRefresh(isRefreshing = isRefreshing,
                 state = pullRefreshState,
                 enabled = enableRefresh,
-                onRefresh = { lazyPagingItems.refresh() })
+                onRefresh = { onRefresh.invoke() })
             .fillMaxSize()
     ) {
         // 1. 首次加载（无数据时全屏加载）
