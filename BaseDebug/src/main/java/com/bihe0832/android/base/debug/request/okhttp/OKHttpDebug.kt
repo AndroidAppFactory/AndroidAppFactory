@@ -13,6 +13,7 @@ import com.bihe0832.android.app.api.BaseResponse
 import com.bihe0832.android.base.debug.request.Constants
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
+import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -37,7 +38,7 @@ interface ApiService {
     fun getData1(
         @Body body: RequestBody,
         @Header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DELAY) delay: Int = 3000,
-        @Header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DATA) result: String = "{\"code\":100,\"message\":\"sdfsfsf\"}"
+        @Header(OkHttpWrapper.HTTP_REQ_PROPERTY_AAF_CONTENT_REQUEST_DATA) result: String = URLUtils.encode("{\"code\":100,\"message\":\"sdfsfsf\"}")
     ): Call<BaseResponse>
 
     @POST("/article/query/0/json")

@@ -11,6 +11,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.bihe0832.android.common.compose.ui.utils.VerticalSpacer
 import com.bihe0832.android.common.list.compose.CommonComposeListActivity
+import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 
 /**
  * @author zixie code@bihe0832.com Created on 2025/2/17. Description: Description
@@ -27,12 +29,29 @@ class DebugPageListActivity : CommonComposeListActivity<DataItem>() {
     @Composable
     override fun GetComposeItem(index: Int, item: DataItem) {
         Column {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "$index name: ${item.title}",
-                fontSize = 16.sp,
-                textAlign = TextAlign.Start
-            )
+            DateItemUI(item, onClick = {
+                model.markAsRead(item.id ?: 0)
+            }, onDelete = {
+                DialogUtils.showConfirmDialog(this@DebugPageListActivity,
+                    "是否删除消息",
+                    "",
+                    true,
+                    object : OnDialogListener {
+                        override fun onPositiveClick() {
+                            model.delete(item.id ?: 0)
+                        }
+
+                        override fun onNegativeClick() {
+
+                        }
+
+                        override fun onCancel() {
+
+                        }
+
+                    })
+
+            })
             VerticalSpacer(18)
         }
     }

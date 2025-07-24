@@ -9,6 +9,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
+import java.net.URLDecoder
 
 /**
  * @author zixie code@bihe0832.com Created on 2025/3/27. Description: Description
@@ -46,7 +47,7 @@ class AAFOkHttpAppInterceptor(
                     .protocol(Protocol.HTTP_1_1)
                     .code(200)
                     .message("AAF OkHttpAppInterceptor MockData After Intercept Request")
-                    .body(mockData.toResponseBody("application/json".toMediaType()))
+                    .body(URLDecoder.decode(mockData).toResponseBody("application/json".toMediaType()))
                     .build()
             }
         }

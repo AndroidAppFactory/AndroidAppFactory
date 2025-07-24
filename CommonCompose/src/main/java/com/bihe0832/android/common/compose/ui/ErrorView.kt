@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,7 +53,7 @@ fun ErrorView(
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.icon_info),
-            contentDescription = "错误",
+            contentDescription = "错误提示",
             tint = Color.LightGray,
             modifier = Modifier.size(textSize * 2)
         )
@@ -69,12 +66,5 @@ fun ErrorView(
             fontSize = dpToSp(textSize),
             textAlign = TextAlign.Center
         )
-        Button(
-            onClick = { onRetry?.invoke() },
-            modifier = Modifier.padding(10.dp),
-            colors = buttonColors()
-        ) {
-            Text(text = stringResource(R.string.dialog_button_retry))
-        }
     }
 }
