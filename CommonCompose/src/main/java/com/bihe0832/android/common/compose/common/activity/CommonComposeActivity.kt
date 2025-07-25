@@ -15,14 +15,13 @@ import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.ui.EmptyView
 import com.bihe0832.android.common.compose.ui.activity.CommonActivityToolbarView
 import com.bihe0832.android.common.compose.ui.activity.CommonContent
-import java.util.Locale
 
 open class CommonComposeActivity : BaseComposeActivity() {
 
     open fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 val viewModel: CommonActionViewModel = viewModel()
                 val state = viewModel.uiState.collectAsStateWithLifecycle()
                 CommonContent(
@@ -42,9 +41,9 @@ open class CommonComposeActivity : BaseComposeActivity() {
     override fun getActivityContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 handleEffect(LocalContext.current)
-                getToolBarRender(getContentRender()).Content(currentLanguage)
+                getToolBarRender(getContentRender()).Content()
             }
         }
     }
@@ -52,10 +51,10 @@ open class CommonComposeActivity : BaseComposeActivity() {
     open fun getToolBarRender(contentRender: RenderState): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 handleEffect(LocalContext.current)
                 CommonActivityToolbarView(getTitleName(), content = {
-                    contentRender.Content(currentLanguage)
+                    contentRender.Content()
                 })
             }
         }
@@ -69,7 +68,7 @@ open class CommonComposeActivity : BaseComposeActivity() {
     @Preview
     @Composable
     open fun ActivityRootContentRenderPreview() {
-        getActivityRootContentRender().Content(Locale.CHINESE)
+        getActivityRootContentRender().Content()
     }
 
 }

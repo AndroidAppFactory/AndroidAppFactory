@@ -1,12 +1,13 @@
 package com.bihe0832.android.common.compose.state
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.lib.language.MultiLanguageHelper
@@ -52,3 +53,9 @@ object MultiLanguageState {
 data class LanguageItem(
     var title: String = "", var locale: Locale? = null
 )
+
+@Composable
+fun aafStringResource(@StringRes id: Int): String {
+    val currentLanguage by rememberUpdatedState(MultiLanguageState.getCurrentLanguageState())
+    return stringResource(id, currentLanguage)
+}

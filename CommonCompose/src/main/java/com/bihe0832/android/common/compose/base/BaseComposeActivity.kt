@@ -114,17 +114,17 @@ abstract class BaseComposeActivity : ComponentActivity() {
                     lifecycleOwner.lifecycle.removeObserver(observer)
                 }
             }
-            getActivityRootContentRender().Content(currentLanguage)
+            getActivityRootContentRender().Content()
         }
     }
 
     open fun getActivityRootContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 val themeType by rememberUpdatedState(ThemeState.getCurrentThemeState())
                 ActivityThemeView(
-                    themeType, currentLanguage, getActivityContentRender()
+                    themeType, getActivityContentRender()
                 )
             }
         }

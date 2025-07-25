@@ -91,7 +91,7 @@ open class BaseActivity : SupportActivity() {
         checkLocaleChanged()
     }
 
-    fun checkLocaleChanged() {
+    open fun checkLocaleChanged() {
         if (!TextUtils.isEmpty(lastLocale)) {
             val newLocale = MultiLanguageHelper.getLanguageConfig(this)
             if (newLocale.toLanguageTag() != lastLocale) {

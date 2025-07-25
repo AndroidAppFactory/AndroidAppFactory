@@ -3,15 +3,16 @@ package com.bihe0832.android.base.compose.debug.common
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.res.stringResource
 import com.bihe0832.android.app.compose.AAFComposeStateManager
-import com.bihe0832.android.base.compose.debug.DebugComposeViewPreviewParameterProvider
+import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
+import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.state.AAFDarkColorScheme
 import com.bihe0832.android.common.compose.state.AAFLightColorScheme
 import com.bihe0832.android.common.compose.state.ThemeState
+import com.bihe0832.android.common.compose.state.aafStringResource
 import java.util.Locale
 
 /**
@@ -21,19 +22,14 @@ import java.util.Locale
  * Description: Description
  *
  */
-
-@Preview
 @Composable
-fun DebugComposeConfigViewPreview(@PreviewParameter(DebugComposeViewPreviewParameterProvider::class) currentLanguage: Locale) {
-    DebugComposeConfigView(currentLanguage = currentLanguage)
-}
-
-@Composable
-fun DebugComposeConfigView(currentLanguage: Locale) {
+fun DebugComposeConfigView() {
     val context = LocalContext.current
 
     Column {
-        DebugComposeItem("切换语言到调试", "CommonLanguageView")
+        DebugTips(stringResource(R.string.app_name))
+        DebugTips(aafStringResource(R.string.app_name))
+        DebugComposeItem("语言调试", "CommonLanguageView")
         DebugItem("切换语言到中文") {
             AAFComposeStateManager.changeLanguage(context, Locale.CHINESE)
         }

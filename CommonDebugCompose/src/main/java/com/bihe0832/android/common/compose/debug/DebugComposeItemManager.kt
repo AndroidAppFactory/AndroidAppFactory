@@ -1,7 +1,6 @@
 package com.bihe0832.android.common.compose.debug
 
 import androidx.compose.runtime.Composable
-import java.util.Locale
 
 /**
  *
@@ -12,7 +11,7 @@ import java.util.Locale
  */
 interface DebugComposeManager {
     @Composable
-    fun getDebugComposeItem(key: DebugViewKey, currentLanguage: Locale)
+    fun getDebugComposeItem(key: DebugViewKey)
 }
 
 open class DebugViewKey(val viewKey: String)
@@ -25,7 +24,7 @@ object DebugComposeItemManager {
     }
 
     @Composable
-    fun getDebugComposeItem(key: DebugViewKey, currentLanguage: Locale) {
-        mDebugComposeManager?.getDebugComposeItem(key, currentLanguage)
+    fun getDebugComposeItem(key: DebugViewKey) {
+        mDebugComposeManager?.getDebugComposeItem(key)
     }
 }

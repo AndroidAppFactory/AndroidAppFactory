@@ -24,14 +24,14 @@ open class CommonComposeEmptyFragment : BaseComposeFragment() {
     @Preview
     @Composable
     open fun FragmentContentRenderPreview() {
-        getContentRender().Content(Locale.CHINESE)
+        getContentRender().Content()
     }
 
     @Composable
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 EmptyView(mContentString, mContentBackgroundColor)
             }
         }

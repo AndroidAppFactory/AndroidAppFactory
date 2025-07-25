@@ -6,31 +6,30 @@ import com.bihe0832.android.common.compose.debug.DebugComposeItemManager
 import com.bihe0832.android.common.compose.debug.DebugComposeManager
 import com.bihe0832.android.common.compose.debug.DebugViewKey
 import com.bihe0832.android.common.compose.ui.EmptyView
-import java.util.Locale
 
 /**
  *
  * @author zixie code@bihe0832.com
- * Created on 2025/7/5.
+ * Created on 2025/7/25.
  * Description: Description
  *
  */
 
-object AAFDebugCompose {
+object DebugComposeCore {
     const val DebugCommonCompose = "Common"
     fun init() {
         DebugComposeItemManager.setDebugComposeManagerImpl(object : DebugComposeManager {
             @Composable
-            override fun getDebugComposeItem(key: DebugViewKey, currentLanguage: Locale) {
-                GetDebugItem(key, currentLanguage)
+            override fun getDebugComposeItem(key: DebugViewKey) {
+                GetDebugItem(key)
             }
         })
     }
 
     @Composable
-    fun GetDebugItem(item: DebugViewKey, currentLanguage: Locale) {
+    fun GetDebugItem(item: DebugViewKey) {
         val result = if (item.viewKey.startsWith(DebugCommonCompose)) {
-            GetCommonDebug(item.viewKey, currentLanguage)
+            GetCommonDebug(item.viewKey)
         } else {
             false
         }
@@ -44,5 +43,3 @@ object AAFDebugCompose {
         }
     }
 }
-
-
