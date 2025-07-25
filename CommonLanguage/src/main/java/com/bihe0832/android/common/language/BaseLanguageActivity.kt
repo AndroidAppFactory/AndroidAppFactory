@@ -24,10 +24,11 @@ abstract class BaseLanguageActivity : CommonComposeActivity() {
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 val languageList: List<LanguageItem> by rememberUpdatedState(
                     MultiLanguageState.getSupportLanguageList()
                 )
+                val currentLanguage by rememberUpdatedState(MultiLanguageState.getCurrentLanguageState())
                 LazyColumn {
                     items(languageList) {
                         getLanguageItemCompose(it, currentLanguage)

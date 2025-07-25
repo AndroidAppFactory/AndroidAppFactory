@@ -2,12 +2,10 @@ package com.bihe0832.android.base.compose.debug
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.common.compose.common.fragment.CommonComposeFragment
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.state.RenderState
-import java.util.Locale
 
 /**
  *
@@ -16,10 +14,23 @@ import java.util.Locale
  * Description: Description
  *
  */
+
+open class DebugComposeRootFragment : CommonComposeFragment() {
+
+    @Composable
+    override fun getContentRender(): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content() {
+                DebugRootView()
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
-fun DebugComposeView() {
-    val context = LocalContext.current
+fun DebugRootView() {
     Column {
         DebugComposeItem("Compose 公共调试（语言、主题）", "CommonConfigView")
         DebugComposeItem("Compose List 调试", "CommonListView")
@@ -27,16 +38,3 @@ fun DebugComposeView() {
 }
 
 
-open class DebugComposeFragment : CommonComposeFragment() {
-
-    @Composable
-    override fun getContentRender(): RenderState {
-        return object : RenderState {
-            @Composable
-            override fun Content(currentLanguage: Locale) {
-                DebugComposeView()
-            }
-        }
-    }
-
-}

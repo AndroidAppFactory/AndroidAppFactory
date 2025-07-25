@@ -19,7 +19,7 @@ open class CommonComposeFragment : BaseComposeFragment() {
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 EmptyView(message = "空白页面", colorP = Color.White)
             }
         }
@@ -28,6 +28,6 @@ open class CommonComposeFragment : BaseComposeFragment() {
     @Preview
     @Composable
     open fun FragmentContentRenderPreview() {
-        getContentRender().Content(Locale.CHINESE)
+        getContentRender().Content()
     }
 }

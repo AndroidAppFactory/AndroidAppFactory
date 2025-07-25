@@ -14,6 +14,6 @@ import java.util.Locale
 // 基类定义状态接口
 interface RenderState {
     @Composable
-    fun Content(currentLanguage: Locale)
+    fun Content()
 
 }

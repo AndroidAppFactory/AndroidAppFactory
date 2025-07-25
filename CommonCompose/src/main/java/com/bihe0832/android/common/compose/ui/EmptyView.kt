@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bihe0832.android.common.compose.R
+import com.bihe0832.android.common.compose.state.aafStringResource
 
 /**
  *
@@ -33,9 +34,9 @@ import com.bihe0832.android.common.compose.R
 @Preview
 @Composable
 fun EmptyView(
-    message: String = "数据空空如也",
+    message: String = aafStringResource(R.string.com_bihe0832_loading_empty),
     colorP: Color = Color(0xFF0B0E15),
-    iconSize: Int = 177,
+    iconSize: Int = 100,
     textSize: Int = 16,
     textColor: Color = Color(0xFFFFFFFF),
     onClick: (() -> Unit)? = null

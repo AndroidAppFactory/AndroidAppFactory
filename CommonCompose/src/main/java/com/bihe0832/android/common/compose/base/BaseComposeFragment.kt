@@ -40,10 +40,7 @@ abstract class BaseComposeFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                val currentLanguage by rememberUpdatedState(
-                    MultiLanguageState.getCurrentLanguageState()
-                )
-                getContentRender().Content(currentLanguage)
+                getContentRender().Content()
             }
         }
     }

@@ -55,7 +55,7 @@ import java.util.Locale
  */
 @Composable
 fun ActivityThemeView(
-    themeType: ColorScheme, currentLanguage: Locale, contentRender: RenderState
+    themeType: ColorScheme, contentRender: RenderState
 ) {
     MaterialTheme(colorScheme = themeType,) {
         val systemUiController = rememberSystemUiController()
@@ -64,7 +64,7 @@ fun ActivityThemeView(
             systemUiController.setNavigationBarColor(themeType.surface)
         }
         Surface {
-            contentRender.Content(currentLanguage)
+            contentRender.Content()
         }
     }
 }

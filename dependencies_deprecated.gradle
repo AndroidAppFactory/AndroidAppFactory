@@ -6,7 +6,7 @@ ext.deprecatedModuleInfo = [
                 "version"            : "3.1.1",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
-                        "Framework", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
+                        "CommonCompose", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
                         "LibRefresh", "LibRecycleviewExt", "LibBottomTab"
                 ]
         ],

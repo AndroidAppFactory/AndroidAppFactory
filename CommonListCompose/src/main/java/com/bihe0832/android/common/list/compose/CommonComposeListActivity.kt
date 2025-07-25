@@ -22,7 +22,7 @@ abstract class CommonComposeListActivity<T : Any> : CommonComposeActivity() {
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 val lazyUserItems = getLazyPagingItems()
                 CommonRefreshList(enableRefresh = true,
                     enableLoadMore = true,
@@ -53,6 +53,6 @@ abstract class CommonComposeListActivity<T : Any> : CommonComposeActivity() {
     @Preview
     @Composable
     override fun ActivityRootContentRenderPreview() {
-        getActivityRootContentRender().Content(Locale.CHINESE)
+        getActivityRootContentRender().Content()
     }
 }

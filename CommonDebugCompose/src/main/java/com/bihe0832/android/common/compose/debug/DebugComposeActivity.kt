@@ -33,10 +33,9 @@ class DebugComposeActivity : CommonComposeActivity() {
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
-            override fun Content(currentLanguage: Locale) {
+            override fun Content() {
                 DebugComposeItemManager.getDebugComposeItem(
                     DebugViewKey(rootFragmentClassName),
-                    currentLanguage
                 )
             }
         }

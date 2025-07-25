@@ -1,7 +1,6 @@
 package com.bihe0832.android.app.compose
 
 import android.content.Context
-import com.bihe0832.android.common.compose.state.AAFDarkColorScheme
 import com.bihe0832.android.common.compose.state.AAFLightColorScheme
 import com.bihe0832.android.common.compose.state.DensityState
 import com.bihe0832.android.common.compose.state.LanguageItem
@@ -9,6 +8,12 @@ import com.bihe0832.android.common.compose.state.LayerToGrayState
 import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.compose.state.ThemeState
 import com.bihe0832.android.common.permission.AAFPermissionManager
+import com.bihe0832.android.lib.language.MultiLanguageHelper
+import com.bihe0832.android.lib.lifecycle.ActivityObserver
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import org.intellij.lang.annotations.Language
 import java.util.Locale
 
 /**
@@ -28,6 +33,7 @@ object AAFComposeStateManager {
         }
     }
 
+
     fun init(context: Context) {
         val supportList = supportLanguage.filter { it.locale != null }.toList()
         MultiLanguageState.init(context, supportList, DEFAULT_LANGUAGE)
@@ -38,7 +44,20 @@ object AAFComposeStateManager {
 
 
     fun changeLanguage(context: Context, code: Locale?) {
-        MultiLanguageState.changeLanguage(context, code)
-        AAFPermissionManager.initPermission(context)
+        code?.let {
+            if (supportLanguage.find { code == it.locale } != null) {
+                // 临时方案，等全切换为Compose即可废弃
+                ActivityObserver.getActivityList().forEach { activity ->
+                    MultiLanguageHelper.modifyContextLanguageConfig(
+                        activity, code
+                    )
+                    MultiLanguageHelper.modifyContextLanguageConfig(
+                        activity.resources, code
+                    )
+                }
+                MultiLanguageState.changeLanguage(context, code)
+                AAFPermissionManager.initPermission(context)
+            }
+        }
     }
 }

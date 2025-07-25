@@ -1,7 +1,7 @@
 package com.bihe0832.android.test;
 
 import androidx.fragment.app.Fragment;
-import com.bihe0832.android.base.compose.debug.DebugComposeFragment;
+import com.bihe0832.android.base.compose.debug.DebugComposeRootFragment;
 import com.bihe0832.android.base.debug.AAFDebugModuleFragment;
 import com.bihe0832.android.base.debug.webview.DebugWebViewFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
@@ -36,7 +36,7 @@ public class TestMainFragment extends DebugMainFragment {
         } else if (title.equals(TAB_FOR_DEV_COMMON)) {
             return new AAFDebugCommonFragment();
         } else if (title.equals(TAB_FOR_COMPOSE)) {
-            return new DebugComposeFragment();
+            return new DebugComposeRootFragment();
         } else {
             return new DebugCommonFragment();
         }
