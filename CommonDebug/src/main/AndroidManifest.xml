@@ -5,18 +5,6 @@
 
     <application>
         <activity
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="true"
-            android:name="com.bihe0832.android.common.debug.log.DebugLogListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme"
-            tools:ignore="DiscouragedApi">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:configChanges="orientation|screenSize|keyboardHidden|locale|layoutDirection"
             android:name="com.bihe0832.android.common.debug.module.DebugRootActivity"
             android:screenOrientation="sensor"

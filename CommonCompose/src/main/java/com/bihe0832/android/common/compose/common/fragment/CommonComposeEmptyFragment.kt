@@ -27,7 +27,7 @@ open class CommonComposeEmptyFragment : BaseComposeFragment() {
         getContentRender().Content()
     }
 
-    @Composable
+
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable

@@ -3,7 +3,7 @@ package com.bihe0832.android.common.debug.item
 import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
-import com.bihe0832.android.common.compose.debug.DebugComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugComposeRootActivity
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.file.preview.ContentItemData
@@ -18,17 +18,17 @@ import com.bihe0832.android.framework.router.RouterAction
 
 fun getDebugItemTextColor(isTips: Boolean): Int {
     return if (isTips) {
-        applicationContext!!.resources.getColor(R.color.colorOnPrimary)
+        applicationContext!!.resources.getColor(R.color.md_theme_onSecondary)
     } else {
-        applicationContext!!.resources.getColor(R.color.colorOnBackground)
+        applicationContext!!.resources.getColor(R.color.md_theme_onBackground)
     }
 }
 
 fun getDebugItemBackGroundColor(isTips: Boolean): Int {
     return if (isTips) {
-        applicationContext!!.resources.getColor(R.color.colorAccent)
+        applicationContext!!.resources.getColor(R.color.md_theme_secondary)
     } else {
-        applicationContext!!.resources.getColor(R.color.windowBackground)
+        applicationContext!!.resources.getColor(R.color.md_theme_background)
     }
 }
 
@@ -151,9 +151,12 @@ fun getDebugItem(content: String, listener: View.OnClickListener?): ContentItemD
     return getDebugItem(content, listener, false)
 }
 
-fun getComposeDebugItem(content: String, composeName: String): ContentItemData {
+fun getComposeDebugItem(
+    content: String,
+    composeName: String
+): ContentItemData {
     return getDebugItem(content) {
-        DebugComposeActivity.startComposeActivity(
+        DebugComposeRootActivity.startComposeActivity(
             ZixieContext.applicationContext!!,
             content,
             composeName

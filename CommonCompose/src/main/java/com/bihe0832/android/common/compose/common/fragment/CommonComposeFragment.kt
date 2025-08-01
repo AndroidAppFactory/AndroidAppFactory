@@ -15,7 +15,7 @@ import java.util.Locale
  */
 open class CommonComposeFragment : BaseComposeFragment() {
 
-    @Composable
+
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable

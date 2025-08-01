@@ -16,6 +16,7 @@ import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.compose.debug.R
+import com.bihe0832.android.common.compose.debug.DebugContent
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.state.MultiLanguageState
@@ -33,7 +34,7 @@ fun DebugComposeLanguageViewPreview() {
 @Composable
 fun DebugComposeLanguageView() {
     val context = LocalContext.current
-    Column {
+    DebugContent {
         DebugTips(stringResource(R.string.app_name))
         DebugTips("当前语言：" + MultiLanguageState.getCurrentLanguageState().language + "，当前Context语言：" + LocalContext.current.resources.configuration.locale.language)
         DebugTips("Locale.getDefault：" + Locale.getDefault().language + ",Locale.Current：" + androidx.compose.ui.text.intl.Locale.current)

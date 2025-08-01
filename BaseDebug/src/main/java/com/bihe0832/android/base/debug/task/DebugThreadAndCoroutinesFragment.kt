@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import com.bihe0832.android.common.debug.item.getDebugItem
-import com.bihe0832.android.common.debug.module.DebugCommonFragment
+import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
  * Created on 2023/3/2.
  * Description: Description
  */
-class DebugThreadAndCoroutinesFragmeAndnt : DebugCommonFragment() {
+class DebugThreadAndCoroutinesFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {

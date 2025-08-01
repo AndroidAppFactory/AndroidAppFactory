@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.content.Context
 import android.os.Process
 import com.bihe0832.android.app.Application
-import com.bihe0832.android.base.compose.debug.DebugComposeCore
 import com.bihe0832.android.base.debug.ipc.iservice.IZixieIPCTestServiceForMain
 import com.bihe0832.android.base.debug.ipc.iservice.IZixieIPCTestServiceForTest
 import com.bihe0832.android.base.debug.ipc.iservice.impl.ZixieIPCTestServiceForMain
@@ -19,7 +18,6 @@ class TestApplication : Application() {
     private val TAG = "TestApplication"
     override fun onCreate() {
         super.onCreate()
-        DebugComposeCore.init()
         val am = applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val runningApps = am.runningAppProcesses
         for (it in runningApps) {

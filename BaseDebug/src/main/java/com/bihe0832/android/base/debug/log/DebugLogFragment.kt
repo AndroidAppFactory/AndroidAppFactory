@@ -3,9 +3,9 @@ package com.bihe0832.android.base.debug.log
 
 import android.view.View
 import com.bihe0832.android.app.log.AAFLoggerFile
+import com.bihe0832.android.common.compose.debug.log.DebugLogComposeActivity
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
-import com.bihe0832.android.common.debug.log.DebugLogListActivity
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileTools
 import com.bihe0832.android.framework.log.LoggerFile
@@ -26,7 +26,7 @@ class DebugLogFragment : BaseDebugListFragment() {
         return ArrayList<CardBaseModule>().apply {
 
             add(getDebugItem("自定义日志管理", View.OnClickListener {
-                startActivityWithException(DebugLogListActivity::class.java)
+                startActivityWithException(DebugLogComposeActivity::class.java)
             }))
             add(getDebugItem("将日志按H5记录并查看", View.OnClickListener { logToH5File(it) }))
 
