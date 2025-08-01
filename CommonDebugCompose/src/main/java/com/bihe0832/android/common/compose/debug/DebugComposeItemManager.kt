@@ -1,6 +1,9 @@
 package com.bihe0832.android.common.compose.debug
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import com.bihe0832.android.common.compose.ui.EmptyView
+import com.bihe0832.android.lib.log.ZLog
 
 /**
  *
@@ -9,22 +12,34 @@ import androidx.compose.runtime.Composable
  * Description: Description
  *
  */
-interface DebugComposeManager {
-    @Composable
-    fun getDebugComposeItem(key: DebugViewKey)
-}
 
-open class DebugViewKey(val viewKey: String)
 
+typealias ComposeViewProvider = @Composable () -> Unit
 
 object DebugComposeItemManager {
-    private var mDebugComposeManager: DebugComposeManager? = null
-    fun setDebugComposeManagerImpl(impl: DebugComposeManager) {
-        mDebugComposeManager = impl
+
+    private val registry = mutableMapOf<String, ComposeViewProvider>()
+
+    fun register(key: String, composable: @Composable () -> Unit) {
+        if (registry.containsKey(key)) {
+            ZLog.e(
+                "\n\nDebugComposeItemManager : the same key :$key  has add before!!!\n\n"
+            )
+        }
+        registry[key] = composable
     }
 
     @Composable
-    fun getDebugComposeItem(key: DebugViewKey) {
-        mDebugComposeManager?.getDebugComposeItem(key)
+    fun GetDebugComposeItem(key: String) {
+        val composable = registry[key]
+        if (composable != null) {
+            composable.invoke()
+        } else {
+            EmptyView(
+                "没有匹配到对应的Compose组件\n\n $key", MaterialTheme.colorScheme.error
+            ) {}
+        }
     }
+
+
 }

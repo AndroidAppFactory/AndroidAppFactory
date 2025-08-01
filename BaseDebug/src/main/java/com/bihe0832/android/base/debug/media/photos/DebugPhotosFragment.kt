@@ -11,7 +11,7 @@ import com.bihe0832.android.common.crop.view.OverlayView
 import com.bihe0832.android.common.crop.wrapper.CropWrapper
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
-import com.bihe0832.android.common.debug.module.DebugCommonFragment
+import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.photos.choosePhoto
 import com.bihe0832.android.common.photos.cropPhoto
 import com.bihe0832.android.common.photos.getAutoChangedCropUri
@@ -30,7 +30,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.Media
 import java.io.File
 
-class DebugPhotosFragment : DebugCommonFragment() {
+class DebugPhotosFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
 
     var needCrop = false

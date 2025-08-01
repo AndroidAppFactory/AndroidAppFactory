@@ -5,7 +5,7 @@ import android.app.Activity
 import android.view.View
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.common.debug.item.getDebugItem
-import com.bihe0832.android.common.debug.module.DebugCommonFragment
+import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
 import com.bihe0832.android.common.permission.special.PermissionsActivityWithSpecial
@@ -14,7 +14,7 @@ import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 
-class DebugPermissionFragment : DebugCommonFragment() {
+class DebugPermissionFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {

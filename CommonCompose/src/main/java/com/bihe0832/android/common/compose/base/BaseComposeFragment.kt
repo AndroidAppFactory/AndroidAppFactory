@@ -20,9 +20,7 @@ import java.util.Locale
 
 abstract class BaseComposeFragment : Fragment() {
 
-    @Composable
     abstract fun getContentRender(): RenderState
-
 
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

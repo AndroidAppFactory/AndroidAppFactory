@@ -4,7 +4,28 @@
 
     <application>
         <activity
-            android:name="com.bihe0832.android.common.compose.debug.DebugComposeActivity"
+            android:name="com.bihe0832.android.common.compose.debug.DebugComposeRootActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name="com.bihe0832.android.common.compose.debug.log.DebugLogComposeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+
+        <activity
+            android:name="com.bihe0832.android.common.compose.debug.module.device.DebugDeviceActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name="com.bihe0832.android.common.compose.debug.module.device.storage.DebugCurrentStorageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name="com.bihe0832.android.common.compose.debug.module.device.storage.DebugStorageActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 

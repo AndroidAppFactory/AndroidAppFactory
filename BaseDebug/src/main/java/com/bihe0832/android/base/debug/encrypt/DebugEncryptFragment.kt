@@ -3,11 +3,11 @@ package com.bihe0832.android.base.debug.encrypt
 import android.view.View
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
-import com.bihe0832.android.common.debug.module.DebugCommonFragment
+import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.utils.encrypt.rsa.RSAUtils
 
-open class DebugEncryptFragment : DebugCommonFragment() {
+open class DebugEncryptFragment : DebugEnvFragment() {
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {

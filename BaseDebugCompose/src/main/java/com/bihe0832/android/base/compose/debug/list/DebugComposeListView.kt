@@ -1,13 +1,13 @@
 package com.bihe0832.android.base.compose.debug.list
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.compose.debug.list.model.DebugPageListActivity
-import com.bihe0832.android.common.compose.debug.DebugComposeActivity.Companion.startActivityWithException
+import com.bihe0832.android.common.compose.debug.DebugComposeRootActivity.Companion.startActivityWithException
+import com.bihe0832.android.common.compose.debug.DebugContent
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 
 
@@ -15,7 +15,7 @@ import com.bihe0832.android.common.compose.debug.item.DebugItem
 @Composable
 fun DebugComposeListView() {
     val context = LocalContext.current
-    Column {
+    DebugContent {
         DebugItem("简单的单次列表") {
             RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_LANGUAGE)
         }

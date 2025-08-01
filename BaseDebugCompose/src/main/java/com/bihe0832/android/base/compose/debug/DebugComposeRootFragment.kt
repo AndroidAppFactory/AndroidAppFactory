@@ -1,10 +1,13 @@
 package com.bihe0832.android.base.compose.debug
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.bihe0832.android.common.compose.common.fragment.CommonComposeFragment
+import com.bihe0832.android.base.compose.debug.common.DebugComposeConfigView
+import com.bihe0832.android.base.compose.debug.list.DebugComposeListView
+import com.bihe0832.android.common.compose.base.BaseComposeFragment
+import com.bihe0832.android.common.compose.debug.DebugContent
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
+import com.bihe0832.android.common.compose.debug.module.device.storage.DebugCurrentStorageActivity
 import com.bihe0832.android.common.compose.state.RenderState
 
 /**
@@ -15,9 +18,8 @@ import com.bihe0832.android.common.compose.state.RenderState
  *
  */
 
-open class DebugComposeRootFragment : CommonComposeFragment() {
+open class DebugComposeRootFragment : BaseComposeFragment() {
 
-    @Composable
     override fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
@@ -31,9 +33,15 @@ open class DebugComposeRootFragment : CommonComposeFragment() {
 @Preview
 @Composable
 fun DebugRootView() {
-    Column {
-        DebugComposeItem("Compose 公共调试（语言、主题）", "CommonConfigView")
-        DebugComposeItem("Compose List 调试", "CommonListView")
+    DebugContent {
+        DebugComposeItem(
+            "Compose 公共调试（语言、主题）", "DebugComposeConfigView"
+        ) { DebugComposeConfigView() }
+        DebugComposeItem("Compose List 调试", "DebugComposeListView") { DebugComposeListView() }
+        DebugComposeItem(
+            "Compose List 调试",
+            "DebugComposeListView"
+        ) { DebugCurrentStorageActivity() }
     }
 }
 

@@ -1,11 +1,9 @@
-package com.bihe0832.android.common.debug
+package com.bihe0832.android.common.compose.debug
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import com.bihe0832.android.common.compose.debug.DebugComposeActivity
-import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
@@ -66,17 +64,6 @@ object DebugUtils {
         DialogUtils.showInputDialog(context!!, titleName, msg, defaultValue, listener)
     }
 
-
-    fun startDebugActivity(context: Context?, cls: Class<*>, titleName: String) {
-        DebugRootActivity.startDebugRootActivity(context, cls, titleName)
-    }
-
-    fun startDebugActivity(
-        context: Context?, cls: Class<*>, titleName: String, data: Map<String, String>?
-    ) {
-        DebugRootActivity.startDebugRootActivity(context, cls, titleName, data)
-    }
-
     fun startActivityWithException(context: Context?, cls: String) {
         startActivityWithException(context, Class.forName(cls))
     }
@@ -86,7 +73,7 @@ object DebugUtils {
     }
 
     fun startActivityWithException(context: Context?, cls: Class<*>, data: Map<String, String>?) {
-        DebugComposeActivity.startActivityWithException(context, cls, data)
+        DebugComposeRootActivity.startActivityWithException(context, cls, data)
     }
 
     fun startActivityForResultWithException(context: Activity, cls: Class<*>, requestCode: Int) {

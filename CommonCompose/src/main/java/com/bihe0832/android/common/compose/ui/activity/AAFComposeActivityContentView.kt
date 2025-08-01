@@ -198,7 +198,6 @@ fun BaseComposeActivity.CommonActivityToolbarView(
 }
 
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommonContent(
@@ -218,7 +217,6 @@ fun CommonContent(
                     viewModel.sendEvent(CommonActionEvent.Refresh)
                 })
             .fillMaxSize()
-            .background(Color.Green)
     ) {
         if (state.value.isLoading && dataSize < 1) {
             LoadingView(message = state.value.loadingMsg)

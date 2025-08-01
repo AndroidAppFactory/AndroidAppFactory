@@ -6,6 +6,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.base.compose.debug.R
+import com.bihe0832.android.base.compose.debug.language.DebugComposeLanguageView
+import com.bihe0832.android.common.compose.debug.DebugContent
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.item.DebugTips
@@ -26,10 +28,12 @@ import java.util.Locale
 fun DebugComposeConfigView() {
     val context = LocalContext.current
 
-    Column {
+    DebugContent {
         DebugTips(stringResource(R.string.app_name))
         DebugTips(aafStringResource(R.string.app_name))
-        DebugComposeItem("语言调试", "CommonLanguageView")
+        DebugComposeItem("语言调试", "DebugComposeLanguageView") {
+            DebugComposeLanguageView()
+        }
         DebugItem("切换语言到中文") {
             AAFComposeStateManager.changeLanguage(context, Locale.CHINESE)
         }

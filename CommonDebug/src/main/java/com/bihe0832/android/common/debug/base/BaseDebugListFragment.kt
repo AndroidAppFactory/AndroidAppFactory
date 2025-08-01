@@ -3,11 +3,12 @@ package com.bihe0832.android.common.debug.base
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
-import com.bihe0832.android.common.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.DebugUtils
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
+import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
@@ -132,11 +133,11 @@ open class BaseDebugListFragment : CommonListFragment() {
     }
 
     protected fun startDebugActivity(cls: Class<*>, titleName: String) {
-        DebugUtils.startDebugActivity(context, cls, titleName)
+        DebugRootActivity.startDebugRootActivity(context, cls, titleName)
     }
 
     protected fun startDebugActivity(cls: Class<*>, titleName: String, data: Map<String, String>?) {
-        DebugUtils.startDebugActivity(context, cls, titleName, data)
+        DebugRootActivity.startDebugRootActivity(context, cls, titleName, data)
     }
 
     protected open fun startActivityWithException(cls: String) {

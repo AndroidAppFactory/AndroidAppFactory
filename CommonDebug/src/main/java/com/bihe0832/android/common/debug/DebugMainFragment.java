@@ -6,9 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import com.bihe0832.android.common.debug.module.DebugCommonFragment;
+import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeFragment;
 import com.bihe0832.android.framework.ui.BaseFragment;
-import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -38,7 +37,7 @@ public class DebugMainFragment extends BaseFragment {
     }
 
     protected Fragment getFragmentByIndex(String title) {
-        return new DebugCommonFragment();
+        return new DebugCommonComposeFragment();
     }
 
     protected int getDefaultTabIndex() {

@@ -10,7 +10,6 @@ import com.bihe0832.android.base.debug.card.section.SectionDataContent3
 import com.bihe0832.android.base.debug.card.section.SettingsDataSwitchForDebug
 import com.bihe0832.android.base.debug.card.section.SettingsHolderSwitchForDebug
 import com.bihe0832.android.common.debug.R
-import com.bihe0832.android.common.debug.log.SectionDataContent
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListFragment
@@ -151,7 +150,6 @@ class DebugListFragment : CommonListFragment() {
 //                })
                 for (j in 0..3) {
                     if (i < 2) {
-                        add(SectionDataContent("内容1:${System.currentTimeMillis()}", "",false))
                     } else {
                         add(
                             SectionDataContentTest(

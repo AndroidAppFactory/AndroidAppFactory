@@ -8,6 +8,7 @@
             android:name="com.bihe0832.android.base.compose.debug.list.model.DebugPageListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
         <activity
             android:name="com.bihe0832.android.base.compose.debug.list.DebugOnceListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

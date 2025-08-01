@@ -12,7 +12,7 @@ open class CommonActionEvent : ViewEvent {
 
 data class CommonActionState(
     val canRefresh: Boolean = true,
-    var isLoading: Boolean = false,
+    val isLoading: Boolean = false,
     val loadingMsg: String = "",
     val errorMsg: String = "",
 ) : ViewState

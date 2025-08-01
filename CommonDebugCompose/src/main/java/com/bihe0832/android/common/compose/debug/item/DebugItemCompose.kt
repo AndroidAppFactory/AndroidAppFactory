@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.compose.debug.item
 
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -12,11 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.common.compose.debug.DebugComposeActivity
+import com.bihe0832.android.common.compose.debug.DebugComposeRootActivity
+import com.bihe0832.android.common.compose.debug.DebugComposeItemManager
+import com.bihe0832.android.common.compose.debug.DebugUtils
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.router.RouterAction
 
 /**
  *
@@ -33,19 +40,23 @@ fun DebugItemPreView() {
         DebugItem(text = "DebugItem 完整样式",
             bgColor = Color.Green,
             textColor = Color.Red,
+            isLittle = false,
             click = { ZixieContext.showToast("DebugItem 单击") },
             doubleClick = { ZixieContext.showToast("DebugItem 双击") },
-            longClick = { ZixieContext.showToast("DebugItem 长按") }
-        )
+            longClick = { ZixieContext.showToast("DebugItem 长按") })
+        DebugItem(text = "<strong>DebugItem 完整样式</strong>",
+            bgColor = Color.Green,
+            textColor = Color.Red,
+            isLittle = true,
+            click = { ZixieContext.showToast("DebugItem 单击") },
+            doubleClick = { ZixieContext.showToast("DebugItem 双击") },
+            longClick = { ZixieContext.showToast("DebugItem 长按") })
         DebugItem(text = "DebugItem 完整样式",
             Color.Red,
-            click = { ZixieContext.showToast("DebugItem 单击") }
-        )
-        DebugItem(text = "DebugItem 完整样式",
-            click = { ZixieContext.showToast("DebugItem 单击") }
-        )
+            click = { ZixieContext.showToast("DebugItem 单击") })
+        DebugItem(text = "DebugItem 完整样式", click = { ZixieContext.showToast("DebugItem 单击") })
         DebugTips(text = "DebugTips 完整样式", Color.Black, Color.White)
-        DebugTips(text = "DebugTips 完整样式")
+        RouterItem(content = "zixie://main")
     }
 }
 
@@ -55,48 +66,67 @@ fun DebugItem(
     text: String,
     bgColor: Color,
     textColor: Color,
-    click: (() -> Unit)?,
-    doubleClick: (() -> Unit)?,
-    longClick: (() -> Unit)?
+    isLittle: Boolean,
+    click: ((context: Context) -> Unit)?,
+    doubleClick: ((context: Context) -> Unit)?,
+    longClick: ((context: Context) -> Unit)?
 ) {
+    val context = LocalContext.current
     return Column {
         Text(
-            text = text,
-            modifier = Modifier
-                .combinedClickable(
-                    onClick = {
-                        click?.invoke()
-                    }, onDoubleClick = doubleClick, onLongClick = longClick
-                )
-                .background(bgColor)
-                .padding(12.dp)
-                .fillMaxWidth(),
             color = textColor,
-            fontSize = 12.sp
+            fontSize = if (isLittle) {
+                10.sp
+            } else {
+                12.sp
+            },
+            text = AnnotatedString.fromHtml(text),
+            modifier = Modifier
+                .combinedClickable(onClick = {
+                    click?.invoke(context)
+                }, onDoubleClick = {
+                    doubleClick?.invoke(context)
+                }, onLongClick = {
+                    longClick?.invoke(context)
+                })
+                .background(bgColor)
+                .padding(
+                    start = 16.dp, end = 16.dp, top = if (isLittle) {
+                        10.dp
+                    } else {
+                        16.dp
+                    }, bottom = if (isLittle) {
+                        10.dp
+                    } else {
+                        16.dp
+                    }
+                )
+                .fillMaxWidth()
         )
         HorizontalDivider()
     }
 }
 
 @Composable
-fun DebugItem(text: String, bgColor: Color, textColor: Color, click: () -> Unit) {
-    return DebugItem(text, bgColor, textColor, click, null, null)
+fun DebugItem(text: String, bgColor: Color, textColor: Color, click: (context: Context) -> Unit) {
+    return DebugItem(text, bgColor, textColor, isLittle = false, click, null, null)
 }
 
 @Composable
-fun DebugItem(text: String, color: Color, click: () -> Unit) {
-    DebugItem(text, MaterialTheme.colorScheme.surface, color, click, null, null)
+fun DebugItem(text: String, color: Color, click: (context: Context) -> Unit) {
+    DebugItem(text, MaterialTheme.colorScheme.surface, color, isLittle = false, click, null, null)
 }
 
 @Composable
-fun DebugItem(text: String, click: () -> Unit) {
+fun DebugItem(text: String, click: (context: Context) -> Unit) {
     DebugItem(text, MaterialTheme.colorScheme.onSurface, click)
 }
 
 @Composable
-fun DebugComposeItem(text: String, key: String) {
+fun DebugComposeItem(text: String, key: String, composable: @Composable () -> Unit) {
+    DebugComposeItemManager.register(key) { composable.invoke() }
     DebugItem(text) {
-        DebugComposeActivity.startComposeActivity(ZixieContext.applicationContext!!, text, key)
+        DebugComposeRootActivity.startComposeActivity(ZixieContext.applicationContext!!, text, key)
     }
 }
 
@@ -110,4 +140,64 @@ fun DebugTips(text: String) {
     DebugTips(
         text, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.onSecondary
     )
+}
+
+@Composable
+fun DebugTips(text: String, click: (context: Context) -> Unit) {
+    DebugItem(
+        text, MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.onSecondary, click
+    )
+}
+
+@Composable
+fun Debuginfo(text: String) {
+    DebugItem(text) { context ->
+        DebugUtils.showInfo(context, "应用调试信息", text)
+    }
+}
+
+
+@Composable
+fun LittleDebugTips(
+    content: String,
+    click: ((context: Context) -> Unit)?  = null,
+    longClick: ((context: Context) -> Unit)? = null
+) {
+    DebugItem(
+        text = content,
+        bgColor = MaterialTheme.colorScheme.secondary,
+        textColor = MaterialTheme.colorScheme.onSecondary,
+        isLittle = true,
+        click = click,
+        doubleClick = null,
+        longClick = longClick
+    )
+}
+
+@Composable
+fun LittleDebugItem(
+    content: String,
+    click: ((context: Context) -> Unit)?  = null,
+    longClick: ((context: Context) -> Unit)? = null
+) {
+    DebugItem(
+        text = content,
+        bgColor = MaterialTheme.colorScheme.surface,
+        textColor = MaterialTheme.colorScheme.onSurface,
+        isLittle = true,
+        click = click,
+        doubleClick = null,
+        longClick = longClick
+    )
+}
+
+@Composable
+fun RouterItem(content: String) {
+    LittleDebugItem(content = content,
+        click = { context ->
+            RouterAction.openFinalURL(content)
+        },
+        longClick = { context ->
+            DebugUtils.showInfo(context, "复制并分享路由地址", content)
+        })
 }

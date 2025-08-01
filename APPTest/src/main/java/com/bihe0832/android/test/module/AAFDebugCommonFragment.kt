@@ -8,12 +8,14 @@
 
 package com.bihe0832.android.test.module
 
-import com.bihe0832.android.common.debug.module.DebugCommonFragment
+import android.content.Context
+import com.bihe0832.android.common.compose.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeFragment
 
-open class AAFDebugCommonFragment : DebugCommonFragment() {
+open class AAFDebugCommonFragment : DebugCommonComposeFragment() {
 
-    override fun showLog() {
-        startActivityWithException(AAFDebugLogListActivity::class.java)
+    override fun showLog(context: Context) {
+        DebugUtils.startActivityWithException(context, AAFDebugLogListActivity::class.java)
     }
 
 }

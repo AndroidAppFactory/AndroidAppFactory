@@ -2,19 +2,14 @@ package com.bihe0832.android.base.debug.card;
 
 
 import android.view.View;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bihe0832.android.base.debug.R;
 import com.bihe0832.android.base.debug.card.section.SectionDataContentTest;
 import com.bihe0832.android.base.debug.card.section.SectionDataHeader2;
-import com.bihe0832.android.common.debug.log.SectionDataContent;
-import com.bihe0832.android.common.debug.log.SectionDataHeader;
 import com.bihe0832.android.framework.ui.BaseFragment;
 import com.bihe0832.android.lib.adapter.CardBaseModule;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-
 import java.util.ArrayList;
 
 
@@ -51,19 +46,11 @@ public class DebugCustomSectionFragment extends BaseFragment {
 
         for (int i = 0; i < 6; i++) {
             CardBaseModule sectionHeader = null;
-            if (i < 2) {
-                sectionHeader = new SectionDataHeader("标题1:" + i);
-            } else {
-                sectionHeader = new SectionDataHeader2("标题2:" + i);
-            }
+            sectionHeader = new SectionDataHeader2("标题2:" + i);
             mDataList.add(sectionHeader);
             for (int j = 0; j < 15; j++) {
                 CardBaseModule section;
-                if (i < 2) {
-                    section = new SectionDataContent("内容1:" + j, "",false);
-                } else {
-                    section = new SectionDataContentTest("内容2:" + j);
-                }
+                section = new SectionDataContentTest("内容2:" + j);
                 mDataList.add(section);
             }
         }

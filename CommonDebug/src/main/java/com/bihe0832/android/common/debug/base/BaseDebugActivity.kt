@@ -3,7 +3,8 @@ package com.bihe0832.android.common.debug.base
 import android.os.Build
 import android.os.Bundle
 import android.os.StrictMode
-import com.bihe0832.android.common.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.DebugUtils
+import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -51,7 +52,7 @@ open class BaseDebugActivity : BaseActivity() {
 
 
     protected fun startDebugActivity(cls: Class<*>, titleName: String) {
-        DebugUtils.startDebugActivity(this, cls, titleName)
+        DebugRootActivity.startDebugRootActivity(this, cls, titleName)
     }
 
     protected open fun startActivityWithException(cls: String) {

@@ -3,10 +3,10 @@ package com.bihe0832.android.test;
 import androidx.fragment.app.Fragment;
 import com.bihe0832.android.base.compose.debug.DebugComposeRootFragment;
 import com.bihe0832.android.base.debug.AAFDebugModuleFragment;
-import com.bihe0832.android.base.debug.webview.DebugWebViewFragment;
+import com.bihe0832.android.base.debug.google.DebugGoogleFragment;
 import com.bihe0832.android.common.debug.DebugMainFragment;
-import com.bihe0832.android.common.debug.module.DebugCommonFragment;
 import com.bihe0832.android.test.module.AAFDebugCommonFragment;
+import com.bihe0832.android.test.module.AAFDebugRouterFragment;
 
 
 /**
@@ -29,16 +29,17 @@ public class TestMainFragment extends DebugMainFragment {
     private final boolean isDev = false;
 
     protected Fragment getFragmentByIndex(String title) {
-        if (title.equals(TAB_FOR_DEV)) {
-            return new DebugWebViewFragment();
-        } else if (title.equals(TAB_FOR_DEV_MODULE)) {
-            return new AAFDebugModuleFragment();
-        } else if (title.equals(TAB_FOR_DEV_COMMON)) {
-            return new AAFDebugCommonFragment();
-        } else if (title.equals(TAB_FOR_COMPOSE)) {
-            return new DebugComposeRootFragment();
-        } else {
-            return new DebugCommonFragment();
+        switch (title) {
+            case TAB_FOR_DEV:
+                return new DebugGoogleFragment();
+            case TAB_FOR_DEV_MODULE:
+                return new AAFDebugModuleFragment();
+            case TAB_FOR_DEV_COMMON:
+                return new AAFDebugCommonFragment();
+            case TAB_FOR_COMPOSE:
+                return new DebugComposeRootFragment();
+            default:
+                return new AAFDebugCommonFragment();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.debug.base
 
-import com.bihe0832.android.common.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.DebugUtils
+import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 
@@ -39,7 +40,7 @@ open class BaseDebugFragment : BaseFragment() {
 
 
     protected fun startDebugActivity(cls: Class<*>, titleName: String) {
-        DebugUtils.startDebugActivity(context, cls, titleName)
+        DebugRootActivity.startDebugRootActivity(context, cls, titleName)
     }
 
     protected open fun startActivityWithException(cls: String) {
