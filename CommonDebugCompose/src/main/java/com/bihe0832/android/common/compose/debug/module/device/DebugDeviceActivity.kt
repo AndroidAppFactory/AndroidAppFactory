@@ -11,9 +11,9 @@ import android.os.Process
 import android.text.format.Formatter
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.bihe0832.android.common.compose.debug.DebugComposeActivity
-import com.bihe0832.android.common.compose.debug.DebugContent
-import com.bihe0832.android.common.compose.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
+import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.debug.item.Debuginfo
@@ -38,7 +38,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
 
-open class DebugDeviceActivity : DebugComposeActivity() {
+open class DebugDeviceActivity : DebugBaseComposeActivity() {
 
     val statusChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
@@ -326,7 +326,7 @@ fun GetDeviceInfoView() {
 }
 
 fun getDebugStorageActivityAction(context: Context, filePath: String?) {
-    DebugUtils.startActivityWithException(
+    DebugUtilsV2.startActivityWithException(
         context,
         DebugStorageActivity::class.java,
         HashMap<String, String>().apply {

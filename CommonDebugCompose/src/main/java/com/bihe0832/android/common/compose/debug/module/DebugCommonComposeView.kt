@@ -1,26 +1,20 @@
 package com.bihe0832.android.common.compose.debug.module
 
 import android.content.Context
-import android.content.Intent
 import android.provider.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import com.bihe0832.android.common.compose.debug.DebugComposeActivity
 import com.bihe0832.android.common.compose.debug.DebugComposeItemManager
-import com.bihe0832.android.common.compose.debug.DebugComposeRootActivity
-import com.bihe0832.android.common.compose.debug.DebugContent
-import com.bihe0832.android.common.compose.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
+import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.debug.log.DebugLogComposeActivity
 import com.bihe0832.android.common.compose.debug.module.device.GetDeviceInfoView
 import com.bihe0832.android.common.compose.debug.module.device.getMobileInfo
-import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.file.FileUtils
-import com.bihe0832.android.lib.file.select.FileSelectTools
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.lifecycle.INSTALL_TYPE_APP_FIRST
@@ -32,23 +26,17 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.time.DateUtil
 
 @Composable
-fun GetDebugCommonModuleView() {
-    val context = LocalContext.current
-    GetDebugCommonModuleView { showLog(context) }
-}
-
-@Composable
-fun GetDebugCommonModuleView(showLog: () -> Unit) {
+fun AAFDebugCommonModuleView(showLog: () -> Unit) {
     DebugContent {
         DebugTips("APPFactory的通用组件和工具")
         DebugItem("查看应用版本及环境") { context -> showAPPInfo(context) }
         DebugItem("查看使用情况") { context -> showUsedInfo(context) }
         DebugItem("查看设备概要信息") { context ->
-            DebugUtils.showInfoWithHTML(context, "设备概要信息", getMobileInfo(context))
+            DebugUtilsV2.showInfoWithHTML(context, "设备概要信息", getMobileInfo(context))
         }
         DebugItem("查看设备详细信息") { context ->
             DebugComposeItemManager.register("GetDeviceInfoView") { GetDeviceInfoView() }
-            DebugComposeRootActivity.startComposeActivity(
+            DebugUtilsV2.startComposeActivity(
                 ZixieContext.applicationContext!!,
                 "设备详细信息",
                 "GetDeviceInfoView"
@@ -75,7 +63,7 @@ fun GetDebugCommonModuleView(showLog: () -> Unit) {
 }
 
 fun showAPPInfo(context: Context) {
-    DebugUtils.showInfoWithHTML(context, "应用信息", getAPPInfo(context))
+    DebugUtilsV2.showInfoWithHTML(context, "应用信息", getAPPInfo(context))
 }
 
 fun getAPPInfo(context: Context): List<String> {
@@ -107,7 +95,7 @@ fun getAPPInfo(context: Context): List<String> {
 }
 
 fun showUsedInfo(context: Context) {
-    DebugUtils.showInfo(context, "应用使用情况", getUsedInfo(context))
+    DebugUtilsV2.showInfo(context, "应用使用情况", getUsedInfo(context))
 }
 
 fun getUsedInfo(context: Context): List<String> {
@@ -150,7 +138,7 @@ fun showOtherAPPInfo(context: Context) {
     addPackageInfo(context, "com.tencent.qqlite", builder)
     addPackageInfo(context, "com.tencent.mobileqqi", builder)
     addPackageInfo(context, "com.tencent.tim", builder)
-    DebugUtils.showInfo(context, "第三方应用信息", builder.toString())
+    DebugUtilsV2.showInfo(context, "第三方应用信息", builder.toString())
 }
 
 fun addPackageInfo(context: Context, packageName: String, builder: StringBuilder) {
@@ -166,5 +154,5 @@ fun addPackageInfo(context: Context, packageName: String, builder: StringBuilder
 }
 
 fun showLog(context: Context) {
-    DebugUtils.startActivityWithException(context, DebugLogComposeActivity::class.java)
+    DebugUtilsV2.startActivityWithException(context, DebugLogComposeActivity::class.java)
 }

@@ -19,9 +19,9 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.common.compose.debug.DebugComposeRootActivity
+import androidx.fragment.app.Fragment
 import com.bihe0832.android.common.compose.debug.DebugComposeItemManager
-import com.bihe0832.android.common.compose.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.router.RouterAction
 
@@ -91,14 +91,10 @@ fun DebugItem(
                 })
                 .background(bgColor)
                 .padding(
-                    start = 16.dp, end = 16.dp, top = if (isLittle) {
+                    horizontal = 16.dp, vertical = if (isLittle) {
                         10.dp
                     } else {
-                        16.dp
-                    }, bottom = if (isLittle) {
-                        10.dp
-                    } else {
-                        16.dp
+                        14.dp
                     }
                 )
                 .fillMaxWidth()
@@ -124,9 +120,16 @@ fun DebugItem(text: String, click: (context: Context) -> Unit) {
 
 @Composable
 fun DebugComposeItem(text: String, key: String, composable: @Composable () -> Unit) {
-    DebugComposeItemManager.register(key) { composable.invoke() }
     DebugItem(text) {
-        DebugComposeRootActivity.startComposeActivity(ZixieContext.applicationContext!!, text, key)
+        DebugComposeItemManager.register(key, composable)
+        DebugUtilsV2.startComposeActivity(ZixieContext.applicationContext!!, text, key)
+    }
+}
+
+@Composable
+fun DebugComposeFragmentItem(text: String, fragmentName: Class<out Fragment>) {
+    DebugItem(text) {
+        DebugUtilsV2.startFragmentActivity(ZixieContext.applicationContext!!, text, fragmentName.name)
     }
 }
 
@@ -152,7 +155,7 @@ fun DebugTips(text: String, click: (context: Context) -> Unit) {
 @Composable
 fun Debuginfo(text: String) {
     DebugItem(text) { context ->
-        DebugUtils.showInfo(context, "应用调试信息", text)
+        DebugUtilsV2.showInfo(context, "应用调试信息", text)
     }
 }
 
@@ -160,7 +163,7 @@ fun Debuginfo(text: String) {
 @Composable
 fun LittleDebugTips(
     content: String,
-    click: ((context: Context) -> Unit)?  = null,
+    click: ((context: Context) -> Unit)? = null,
     longClick: ((context: Context) -> Unit)? = null
 ) {
     DebugItem(
@@ -177,7 +180,7 @@ fun LittleDebugTips(
 @Composable
 fun LittleDebugItem(
     content: String,
-    click: ((context: Context) -> Unit)?  = null,
+    click: ((context: Context) -> Unit)? = null,
     longClick: ((context: Context) -> Unit)? = null
 ) {
     DebugItem(
@@ -193,11 +196,9 @@ fun LittleDebugItem(
 
 @Composable
 fun RouterItem(content: String) {
-    LittleDebugItem(content = content,
-        click = { context ->
-            RouterAction.openFinalURL(content)
-        },
-        longClick = { context ->
-            DebugUtils.showInfo(context, "复制并分享路由地址", content)
-        })
+    LittleDebugItem(content = content, click = { context ->
+        RouterAction.openFinalURL(content)
+    }, longClick = { context ->
+        DebugUtilsV2.showInfo(context, "复制并分享路由地址", content)
+    })
 }

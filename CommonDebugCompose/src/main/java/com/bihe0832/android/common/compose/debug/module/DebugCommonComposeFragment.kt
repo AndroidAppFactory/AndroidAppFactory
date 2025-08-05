@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity.RESULT_OK
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.bihe0832.android.common.compose.common.fragment.CommonComposeFragment
-import com.bihe0832.android.common.compose.debug.DebugUtils
+import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.log.DebugLogComposeActivity
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.framework.ZixieContext
@@ -24,13 +24,13 @@ open class DebugCommonComposeFragment : CommonComposeFragment() {
             @Composable
             override fun Content() {
                 val context = LocalContext.current
-                GetDebugCommonModuleView { showLog(context) }
+                AAFDebugCommonModuleView { showLog(context) }
             }
         }
     }
 
     open fun showLog(context: Context) {
-        DebugUtils.startActivityWithException(context, DebugLogComposeActivity::class.java)
+        DebugUtilsV2.startActivityWithException(context, DebugLogComposeActivity::class.java)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

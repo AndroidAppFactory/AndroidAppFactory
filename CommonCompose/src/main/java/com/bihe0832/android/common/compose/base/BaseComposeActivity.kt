@@ -3,7 +3,7 @@ package com.bihe0832.android.common.compose.base
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -25,7 +26,7 @@ import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.util.Locale
 
 
-abstract class BaseComposeActivity : ComponentActivity() {
+abstract class BaseComposeActivity : FragmentActivity() {
 
     private var lastLocale = ""
 
@@ -47,6 +48,20 @@ abstract class BaseComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // 在这里处理返回键拦截
+                if (shouldInterceptBackPress()) {
+                    // 拦截返回键
+                    onBackPressedSupportAction(exitAuto())
+                } else {
+                    // 不拦截，执行默认行为
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    isEnabled = true
+                }
+            }
+        })
         if (supportMultiLanguage()) {
             MultiLanguageHelper.modifyContextLanguageConfig(
                 resources, MultiLanguageHelper.getLanguageConfig(this)
@@ -151,17 +166,14 @@ abstract class BaseComposeActivity : ComponentActivity() {
 
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        onBackPressedSupportAction(exitAuto())
+    private fun shouldInterceptBackPress(): Boolean {
+        return true
     }
 
-    /**
-     * onBackPressed final以后，外部完成返回键的一些额外处理工作
-     */
-    open fun onBack() {
+    fun onBack() {
         finish()
     }
+
 
     override fun finish() {
         intent = null

@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.base.compose.debug.common.DebugComposeConfigView
 import com.bihe0832.android.base.compose.debug.list.DebugComposeListView
-import com.bihe0832.android.common.compose.base.BaseComposeFragment
-import com.bihe0832.android.common.compose.debug.DebugContent
+import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
+import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.module.device.storage.DebugCurrentStorageActivity
-import com.bihe0832.android.common.compose.state.RenderState
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
 
 /**
  *
@@ -18,30 +18,25 @@ import com.bihe0832.android.common.compose.state.RenderState
  *
  */
 
-open class DebugComposeRootFragment : BaseComposeFragment() {
-
-    override fun getContentRender(): RenderState {
-        return object : RenderState {
-            @Composable
-            override fun Content() {
-                DebugRootView()
-            }
-        }
-    }
-}
-
 @Preview
 @Composable
-fun DebugRootView() {
+fun DebugComposeModuleView() {
+
+
     DebugContent {
         DebugComposeItem(
             "Compose 公共调试（语言、主题）", "DebugComposeConfigView"
         ) { DebugComposeConfigView() }
+
         DebugComposeItem("Compose List 调试", "DebugComposeListView") { DebugComposeListView() }
-        DebugComposeItem(
+        DebugItem(
             "Compose List 调试",
-            "DebugComposeListView"
-        ) { DebugCurrentStorageActivity() }
+        ) { context ->
+            DebugUtilsV2.startActivityWithException(
+                context,
+                DebugCurrentStorageActivity::class.java
+            )
+        }
     }
 }
 

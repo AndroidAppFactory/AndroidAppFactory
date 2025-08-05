@@ -11,8 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bihe0832.android.common.compose.debug.DebugComposeActivity
-import com.bihe0832.android.common.compose.debug.DebugContent
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.debug.item.LittleDebugItem
 import com.bihe0832.android.common.compose.debug.item.LittleDebugTips
 import com.bihe0832.android.common.compose.state.RenderState
@@ -22,7 +22,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.utils.apk.AppStorageUtil
 import java.io.File
 
-open class DebugCurrentStorageActivity : DebugComposeActivity() {
+open class DebugCurrentStorageActivity : DebugBaseComposeActivity() {
 
     override fun getContentRender(): RenderState {
         return object : RenderState {

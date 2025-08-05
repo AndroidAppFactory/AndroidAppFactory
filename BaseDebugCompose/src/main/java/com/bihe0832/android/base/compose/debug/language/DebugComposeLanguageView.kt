@@ -3,7 +3,6 @@ package com.bihe0832.android.base.compose.debug.language
 import android.Manifest
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +15,7 @@ import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.base.compose.debug.R
-import com.bihe0832.android.common.compose.debug.DebugContent
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.item.DebugTips
 import com.bihe0832.android.common.compose.state.MultiLanguageState

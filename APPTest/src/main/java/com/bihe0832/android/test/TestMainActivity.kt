@@ -2,27 +2,36 @@ package com.bihe0832.android.test
 
 import android.os.Bundle
 import android.view.Gravity
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import com.bihe0832.android.app.router.RouterConstants
-import com.bihe0832.android.app.ui.AAFCommonMainActivity
-import com.bihe0832.android.framework.ZixieContext
-import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.base.compose.debug.DebugComposeModuleView
+import com.bihe0832.android.base.debug.AAFDebugModule
+import com.bihe0832.android.common.compose.debug.DebugUtilsV2
+import com.bihe0832.android.common.compose.debug.common.DebugComposeMainActivity
+import com.bihe0832.android.common.compose.debug.module.AAFDebugCommonModuleView
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
 import com.bihe0832.android.lib.lifecycle.ApplicationObserver
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
+import com.bihe0832.android.test.module.AAFDebugLogListActivity
+import com.bihe0832.android.test.module.AAFRouterView
 import com.bihe0832.android.test.widget.DebugWidget
-import java.util.Locale
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_DEBUG)
-open class TestMainActivity : AAFCommonMainActivity() {
+open class TestMainActivity : DebugComposeMainActivity() {
+
+    val TAB_FOR_DEV_COMMON: String = "通用调试"
+    val TAB_FOR_DEV_MODULE: String = "模块调试"
+    val TAB_FOR_COMPOSE: String = "Compose"
+    val TAB_FOR_DEV: String = "开发测试"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         DebugLogTips.initModule(this, true, Gravity.LEFT or Gravity.TOP)
         CommonDBManager.init(this)
         ApplicationObserver.addDestoryListener(object : ApplicationObserver.APPDestroyListener {
@@ -32,33 +41,56 @@ open class TestMainActivity : AAFCommonMainActivity() {
                 R.mipmap.default_head_icon
             }
         })
-//        ThemeManager.getThemeInfo()?.let {
-//            setTheme(if (it.isDark) R.style.DarkTheme else R.style.DefaultTheme)
-//        }
     }
-
-//    override fun getLayoutID(): Int {
-//        return R.layout.activity_debug_main
-//    }
-
 
     override fun onResume() {
         super.onResume()
         DebugWidget.showAddDebugWidgetTips(this)
     }
-    override fun onDestroy() {
-        super.onDestroy()
+
+    override fun getTabs(): List<String> {
+        return mutableListOf(
+            TAB_FOR_DEV_COMMON,
+            TAB_FOR_DEV_MODULE,
+            TAB_FOR_COMPOSE,
+            TAB_FOR_DEV
+        )
     }
 
-    override fun getRootFragmentClassName(): String {
-        return TestMainFragment::class.java.name
+    override fun getDefault(): String {
+        return TAB_FOR_DEV_COMMON
     }
 
-    override fun supportMultiLanguage(): Boolean {
-        return true
+    @Composable
+    override fun GetPageView(page: Int, tab: String) {
+        when (tab) {
+            TAB_FOR_DEV_COMMON -> {
+                val context = LocalContext.current
+                AAFDebugCommonModuleView {
+                    DebugUtilsV2.startActivityWithException(
+                        context,
+                        AAFDebugLogListActivity::class.java
+                    )
+                }
+            }
+
+            TAB_FOR_DEV_MODULE -> {
+                AAFDebugModule()
+            }
+
+            TAB_FOR_COMPOSE -> {
+                DebugComposeModuleView()
+            }
+
+            TAB_FOR_DEV -> {
+                AAFRouterView()
+            }
+
+            else -> {
+                DebugComposeModuleView()
+            }
+        }
     }
 
-    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
-        super.onLocaleChanged(lastLocale, toLanguageTag)
-    }
+
 }

@@ -8,30 +8,30 @@
 
 package com.bihe0832.android.base.debug.temp
 
-import android.view.View
-import com.bihe0832.android.common.compose.debug.log.DebugLogComposeActivity
-import com.bihe0832.android.common.debug.item.getDebugItem
-import com.bihe0832.android.common.debug.module.DebugEnvFragment
-import com.bihe0832.android.lib.adapter.CardBaseModule
+import androidx.compose.runtime.Composable
+import com.bihe0832.android.common.compose.debug.item.DebugItem
+import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeFragment
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
+import com.bihe0832.android.common.compose.state.RenderState
 
 
-class DebugTempFragment : DebugEnvFragment() {
-    val LOG_TAG = this.javaClass.simpleName
-    override fun getDataList(): ArrayList<CardBaseModule> {
-        return ArrayList<CardBaseModule>().apply {
-            add(getDebugItem("通用测试预处理", View.OnClickListener { preTest(it) }))
-            add(getDebugItem("简单测试函数", View.OnClickListener { testFunc(it) }))
+class DebugTempFragment : DebugCommonComposeFragment() {
 
+    override fun getContentRender(): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content() {
+                DebugContent {
+                    DebugItem("通用测试预处理") {
+
+                    }
+                    DebugItem("简单测试函数") {
+
+                    }
+                }
+            }
         }
     }
 
-
-    private fun preTest(itemView: View) {
-
-    }
-
-    private fun testFunc(itemView: View) {
-        startActivityWithException(DebugLogComposeActivity::class.java)
-    }
 }
 

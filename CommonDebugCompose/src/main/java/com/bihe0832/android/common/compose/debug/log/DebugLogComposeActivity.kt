@@ -42,7 +42,7 @@ open class DebugLogComposeActivity : CommonComposeActivity() {
         return object : RenderState {
             @Composable
             override fun Content() {
-                LogComposeView()
+                LogComposeView(getLogList())
             }
         }
     }
@@ -66,10 +66,10 @@ open class DebugLogComposeActivity : CommonComposeActivity() {
 
     @Preview
     @Composable
-    fun LogComposeView() {
-        Column{
+    fun LogComposeView(dataList: List<LogInfo> = emptyList()) {
+        Column {
             LogCommonList()
-            LogItemList()
+            LogItemList(dataList)
         }
     }
 
@@ -89,9 +89,8 @@ open class DebugLogComposeActivity : CommonComposeActivity() {
 
 
     @Composable
-    open fun LogItemList() {
+    open fun LogItemList(dataList: List<LogInfo>) {
         DebugTips("基础通用日志")
-        val dataList = getLogList()
         LazyVerticalGrid(
             columns = GridCells.Fixed(4),
             contentPadding = PaddingValues(6.dp),

@@ -1,17 +1,34 @@
 package com.bihe0832.android.base.debug.request
 
 import android.net.Uri
-import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import android.widget.EditText
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.request.advanced.TestResponse
 import com.bihe0832.android.base.debug.request.basic.BasicPostRequest
 import com.bihe0832.android.base.debug.request.okhttp.debugOKHttp
-import com.bihe0832.android.common.debug.base.BaseDebugActivity
+import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.gson.JsonHelper
@@ -29,77 +46,166 @@ import java.io.File
 import java.net.URLDecoder
 
 
-class DebugHttpActivity : BaseDebugActivity() {
+class DebugHttpActivity : DebugBaseComposeActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_http_test)
+    private val _resultText = mutableStateOf("Result:")
+    val resultText: State<String> = _resultText
 
-        findViewById<Toolbar>(R.id.common_toolbar).setNavigationOnClickListener { onBackPressed() }
-
-        findViewById<View>(R.id.postOkHttp).setOnClickListener {
-            debugOKHttp()
-        }
-
-        findViewById<View>(R.id.getBasic).setOnClickListener { sendGetBasicRequest() }
-
-        findViewById<View>(R.id.postBasic).setOnClickListener {
-            sendPostBasicRequest()
-        }
-
-        findViewById<View>(R.id.getAdvanced).setOnClickListener { sendGetAdvancedRequest() }
-
-        findViewById<View>(R.id.postAdvanced).setOnClickListener { sendPostAdvancedRequest() }
-
-        findViewById<View>(R.id.postFile).setOnClickListener {
-
-            val file = File(AAFFileWrapper.getTempFolder() + "a.text")
-            file.createNewFile()
-            FileUtils.writeToFile(file.absolutePath, "fsdfsdfsd", false)
-
-            var b = HashMap<String, String>().apply {
-                put("fsdf1", "fsdf1")
-                put("fsdf2", "fsdf2")
-            }.let {
-//                HTTPServer.getFormDataString(it)
-                JSONObject(it as Map<*, *>?).toString()
-            }
-
-            var files = mutableListOf<FileInfo>()
-            files.add(
-                FileInfo(
-                    Uri.fromFile(file),
-                    "media",
-                    BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM,
-                    file.name,
-                    file.length()
-                ),
-            )
-
-            HTTPServer.getInstance().doFileUpload(
-                this,
-                "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX0&type=file&debug=1",
-                b,
-                files,
-                BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8
-            ).let {
-                ZLog.d(HTTPServer.LOG_TAG, "result $it")
-                showResult(it)
-            }
-        }
-
-        findViewById<View>(R.id.testGzip).setOnClickListener {
-            HTTPServer.getInstance()
-                .doRequest("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
-                .let {
-                    showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
-                }
-        }
-        findViewById<View>(R.id.clearResult).setOnClickListener { showResult("") }
+    fun showResult(text: String) {
+        _resultText.value = text
     }
 
-    private fun showResult(tips: String) {
-        runOnUiThread { findViewById<TextView>(R.id.result).text = tips }
+    fun clearResult() {
+        _resultText.value = "Result:"
+    }
+
+    override fun getContentRender(): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content() {
+                GetHttpView()
+            }
+        }
+    }
+
+    @Composable
+    fun GetHttpView() {
+        var inputText by remember { mutableStateOf("test") }
+        val resultText by resultText
+
+        val buttonList = listOf(
+            "使用OkHttp库发送POST请求" to {
+                debugOKHttp()
+            },
+            "使用Basic库发送GET请求" to {
+                sendGetBasicRequest()
+            },
+            "使用Basic库发送POST请求" to {
+                sendPostBasicRequest()
+            },
+            "使用Advanced库发送GET请求" to {
+                sendGetAdvancedRequest()
+            },
+            "使用Advanced发送POST请求" to {
+                sendPostAdvancedRequest()
+            },
+            "上传文件" to {
+                uploadFile()
+            },
+            "Gzip测试" to {
+                testGzip()
+            }
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    horizontal = 16.dp,
+                    vertical = 16.dp
+                )
+        ) {
+            // 标题文本
+            Text(
+                text = "网络请求测试：",
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .padding(bottom = 30.dp)
+            )
+
+            // 输入框
+            OutlinedTextField(
+                value = inputText,
+                onValueChange = { inputText = it },
+                label = { Text("请输入测试文字") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+            )
+
+            // 动态生成按钮
+            buttonList.forEach { (text, onClick) ->
+                Button(
+                    onClick = onClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .padding(horizontal = 10.dp)
+                        .padding(top = 8.dp)
+                ) {
+                    Text(text)
+                }
+            }
+
+            // 清空结果按钮
+            Button(
+                onClick = { clearResult() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .padding(horizontal = 10.dp)
+                    .padding(top = 8.dp)
+            ) {
+                Text("清空网络请求结果")
+            }
+
+            // 结果显示区域
+            Text(
+                text = resultText,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+                    .padding(top = 30.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                lineHeight = 1.25.em
+            )
+        }
+
+    }
+
+    fun testGzip() {
+        HTTPServer.getInstance()
+            .doRequest("http://dldir1.qq.com/INO/poster/FeHelper-20220321114751.json.gzip")
+            .let {
+                showResult("同步请求结果：${GzipUtils.uncompressToString(it)}")
+            }
+    }
+
+    fun uploadFile() {
+        val file = File(AAFFileWrapper.getTempFolder() + "a.text")
+        file.createNewFile()
+        FileUtils.writeToFile(file.absolutePath, "fsdfsdfsd", false)
+
+        var b = HashMap<String, String>().apply {
+            put("fsdf1", "fsdf1")
+            put("fsdf2", "fsdf2")
+        }.let {
+//                HTTPServer.getFormDataString(it)
+            JSONObject(it as Map<*, *>?).toString()
+        }
+
+        var files = mutableListOf<FileInfo>()
+        files.add(
+            FileInfo(
+                Uri.fromFile(file),
+                "media",
+                BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_OCTET_STREAM,
+                file.name,
+                file.length()
+            ),
+        )
+
+        HTTPServer.getInstance().doFileUpload(
+            this,
+            "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=XXXX0&type=file&debug=1",
+            b,
+            files,
+            BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8
+        ).let {
+            ZLog.d(HTTPServer.LOG_TAG, "result $it")
+            showResult(it)
+        }
     }
 
     fun testURL() {

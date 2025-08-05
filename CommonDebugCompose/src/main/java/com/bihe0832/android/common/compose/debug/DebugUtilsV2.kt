@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
+import com.bihe0832.android.common.compose.debug.common.DebugComposeFragmentActivity
+import com.bihe0832.android.common.compose.debug.common.DebugComposeRootActivity
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
@@ -13,7 +15,10 @@ import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
  * Created on 2022/10/28.
  * Description: Description
  */
-object DebugUtils {
+object DebugUtilsV2 {
+
+    val DEBUG_MODULE_CLASS_NAME: String = "com.bihe0832.android.common.module.class.name"
+    val DEBUG_MODULE_TITLE_NAME: String = "com.bihe0832.android.common.module.title.name"
 
     fun sendInfo(
         context: Context, title: String?, content: String?, showDialog: Boolean
@@ -64,16 +69,27 @@ object DebugUtils {
         DialogUtils.showInputDialog(context!!, titleName, msg, defaultValue, listener)
     }
 
-    fun startActivityWithException(context: Context?, cls: String) {
+
+    fun startComposeActivity(context: Context, titleName: String, fragmentName: String) {
+        val paramData = HashMap<String, String>()
+        paramData[DEBUG_MODULE_CLASS_NAME] = fragmentName
+        paramData[DEBUG_MODULE_TITLE_NAME] = titleName
+        startActivityWithException(context, DebugComposeRootActivity::class.java, paramData)
+    }
+
+    fun startFragmentActivity(context: Context, titleName: String, fragmentName: String) {
+        val paramData = HashMap<String, String>()
+        paramData[DEBUG_MODULE_CLASS_NAME] = fragmentName
+        paramData[DEBUG_MODULE_TITLE_NAME] = titleName
+        startActivityWithException(context, DebugComposeFragmentActivity::class.java, paramData)
+    }
+
+    fun startActivityWithException(context: Context, cls: String) {
         startActivityWithException(context, Class.forName(cls))
     }
 
-    fun startActivityWithException(context: Context?, cls: Class<*>) {
+    fun startActivityWithException(context: Context, cls: Class<*>) {
         startActivityWithException(context, cls, null)
-    }
-
-    fun startActivityWithException(context: Context?, cls: Class<*>, data: Map<String, String>?) {
-        DebugComposeRootActivity.startActivityWithException(context, cls, data)
     }
 
     fun startActivityForResultWithException(context: Activity, cls: Class<*>, requestCode: Int) {
@@ -92,6 +108,16 @@ object DebugUtils {
             }
         }
         return intent
+    }
+
+    fun startActivityWithException(
+        context: Context,
+        activityClass: Class<*>,
+        data: Map<String, String>?
+    ) {
+        val intent = getIntent(context, activityClass, data)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 
     fun startActivityForResultWithException(

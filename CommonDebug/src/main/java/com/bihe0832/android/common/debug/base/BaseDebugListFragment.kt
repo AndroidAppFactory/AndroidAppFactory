@@ -3,7 +3,6 @@ package com.bihe0832.android.common.debug.base
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
-import com.bihe0832.android.common.compose.debug.DebugUtils
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
@@ -141,15 +140,15 @@ open class BaseDebugListFragment : CommonListFragment() {
     }
 
     protected open fun startActivityWithException(cls: String) {
-        DebugUtils.startActivityWithException(context, cls)
+        DebugUtils.startActivityWithException(context!!, cls)
     }
 
     protected open fun startActivityWithException(cls: Class<*>) {
-        DebugUtils.startActivityWithException(context, cls)
+        DebugUtils.startActivityWithException(context!!, cls)
     }
 
     protected open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
-        DebugUtils.startActivityWithException(context, cls, data)
+        DebugUtils.startActivityWithException(context!!, cls, data)
     }
 
     protected open fun showResult(s: String?) {

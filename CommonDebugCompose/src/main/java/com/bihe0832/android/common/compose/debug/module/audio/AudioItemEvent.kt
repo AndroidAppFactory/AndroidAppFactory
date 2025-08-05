@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.compose.debug.audio.compose
+package com.bihe0832.android.common.compose.debug.module.audio
 
 import com.bihe0832.android.common.compose.mvi.ViewEvent
 

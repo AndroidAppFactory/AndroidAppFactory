@@ -37,8 +37,7 @@
         <activity
             android:name="com.bihe0832.android.test.TestMainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="sensor"
-            android:theme="@style/AAF.ActivityTheme" />
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 
         <activity
             android:name="com.bihe0832.android.test.module.AAFDebugLogListActivity"

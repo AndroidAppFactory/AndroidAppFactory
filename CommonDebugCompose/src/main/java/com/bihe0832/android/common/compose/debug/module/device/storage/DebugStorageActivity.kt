@@ -20,7 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bihe0832.android.common.compose.debug.DebugContent
+import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.debug.item.LittleDebugItem
 import com.bihe0832.android.common.compose.debug.item.LittleDebugTips
 import com.bihe0832.android.common.compose.state.RenderState

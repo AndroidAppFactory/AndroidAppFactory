@@ -18,6 +18,14 @@ android {
         abortOnError false
     }
 
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion project.compose_version
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
