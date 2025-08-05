@@ -5,14 +5,6 @@ import androidx.compose.runtime.Composable
 import com.bihe0832.android.common.compose.ui.EmptyView
 import com.bihe0832.android.lib.log.ZLog
 
-/**
- *
- * @author zixie code@bihe0832.com
- * Created on 2025/7/5.
- * Description: Description
- *
- */
-
 
 typealias ComposeViewProvider = @Composable () -> Unit
 
@@ -40,6 +32,4 @@ object DebugComposeItemManager {
             ) {}
         }
     }
-
-
 }

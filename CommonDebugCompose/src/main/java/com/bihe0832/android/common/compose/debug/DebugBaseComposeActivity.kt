@@ -24,7 +24,7 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
  *
  */
 
-open class DebugComposeActivity : CommonComposeActivity() {
+open class DebugBaseComposeActivity : CommonComposeActivity() {
 
     override fun getContentRender(): RenderState {
         return object : RenderState {
@@ -205,23 +205,23 @@ open class DebugComposeActivity : CommonComposeActivity() {
     }
 
      fun sendInfo(title: String, content: String) {
-        DebugUtils.sendInfo(this, title, content)
+        DebugUtilsV2.sendInfo(this, title, content)
     }
 
      fun showInfo(title: String, content: List<String>) {
-        DebugUtils.showInfo(this, title, content)
+        DebugUtilsV2.showInfo(this, title, content)
     }
 
      fun showInfoWithHTML(title: String, content: List<String>) {
-        DebugUtils.showInfoWithHTML(this, title, content)
+        DebugUtilsV2.showInfoWithHTML(this, title, content)
     }
 
      fun showInfoWithHTML(title: String, content: String) {
-        DebugUtils.showInfoWithHTML(this, title, mutableListOf(content))
+        DebugUtilsV2.showInfoWithHTML(this, title, mutableListOf(content))
     }
 
     public fun showInfo(title: String, content: String) {
-        DebugUtils.showInfo(this, title, content)
+        DebugUtilsV2.showInfo(this, title, content)
     }
 
     fun showInputDialog(
@@ -230,19 +230,19 @@ open class DebugComposeActivity : CommonComposeActivity() {
         defaultValue: String,
         listener: DialogCompletedStringCallback
     ) {
-        DebugUtils.showInputDialog(this, titleName, msg, defaultValue, listener)
+        DebugUtilsV2.showInputDialog(this, titleName, msg, defaultValue, listener)
     }
 
     open fun startActivityWithException(cls: String) {
-        DebugUtils.startActivityWithException(this, cls)
+        DebugUtilsV2.startActivityWithException(this, cls)
     }
 
     open fun startActivityWithException(cls: Class<*>) {
-        DebugUtils.startActivityWithException(this, cls)
+        DebugUtilsV2.startActivityWithException(this, cls)
     }
 
     open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
-        DebugUtils.startActivityWithException(this, cls, data)
+        DebugUtilsV2.startActivityWithException(this, cls, data)
     }
 
 }

@@ -6,7 +6,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.common.compose.base.BaseComposeFragment
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.ui.EmptyView
-import java.util.Locale
 
 /**
  * @author zixie code@bihe0832.com Created on 4/9/22.
@@ -20,7 +19,7 @@ open class CommonComposeFragment : BaseComposeFragment() {
         return object : RenderState {
             @Composable
             override fun Content() {
-                EmptyView(message = "空白页面", colorP = Color.White)
+                EmptyView(message = "空白页面", colorP = Color.White, textColor = Color.Black)
             }
         }
     }

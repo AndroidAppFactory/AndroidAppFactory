@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.compose.debug
+package com.bihe0832.android.common.compose.debug.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
