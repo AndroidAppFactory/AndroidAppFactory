@@ -1,4 +1,5 @@
 package com.bihe0832.android.common.compose.base
+
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context.ACTIVITY_SERVICE
@@ -95,8 +96,7 @@ fun BaseComposeActivity.onBackPressedSupportAction(autoShowExitDialog: Boolean) 
 }
 
 internal fun isMain(activityName: String): Boolean {
-    return  true
-//    return Routers.getMainActivityList().find { it.name.equals(activityName, true) } != null
+    return Routers.getMainActivityList().find { it.name.equals(activityName, true) } != null
 }
 
 private fun BaseComposeActivity.goMain() {
@@ -115,7 +115,10 @@ private fun BaseComposeActivity.goMain() {
     }
 }
 
-private fun startActivity(activity: BaseComposeActivity, threadClazz: Class<out Activity?>): Boolean {
+private fun startActivity(
+    activity: BaseComposeActivity,
+    threadClazz: Class<out Activity?>
+): Boolean {
     try {
         val intent = Intent(activity, threadClazz)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
