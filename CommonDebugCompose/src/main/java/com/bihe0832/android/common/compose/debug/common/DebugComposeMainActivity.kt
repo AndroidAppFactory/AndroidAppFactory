@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +52,11 @@ abstract class DebugComposeMainActivity : DebugBaseComposeActivity() {
     abstract fun getTabs(): List<String>
 
     abstract fun getDefault(): String
+
+    @Composable
+    override fun getNavigationIcon(): ImageVector? {
+        return null
+    }
 
     @Composable
     abstract fun GetPageView(page: Int, tab: String)

@@ -3,8 +3,10 @@ package com.bihe0832.android.common.compose.common.activity
 import android.content.Context
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,6 +40,16 @@ open class CommonComposeActivity : BaseComposeActivity() {
         return stringResource(R.string.app_name)
     }
 
+    @Composable
+    open fun getNavigationIcon(): ImageVector? {
+        return ImageVector.vectorResource(R.drawable.icon_left_go)
+    }
+
+    @Composable
+    open fun isCenter(): Boolean {
+        return true
+    }
+
     override fun getActivityContentRender(): RenderState {
         return object : RenderState {
             @Composable
@@ -53,9 +65,13 @@ open class CommonComposeActivity : BaseComposeActivity() {
             @Composable
             override fun Content() {
                 handleEffect(LocalContext.current)
-                CommonActivityToolbarView(getTitleName(), content = {
-                    contentRender.Content()
-                })
+                CommonActivityToolbarView(
+                    getNavigationIcon(),
+                    getTitleName(),
+                    isCenter(),
+                    content = {
+                        contentRender.Content()
+                    })
             }
         }
     }

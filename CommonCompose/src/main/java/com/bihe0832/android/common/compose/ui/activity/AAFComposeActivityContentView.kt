@@ -1,7 +1,5 @@
 package com.bihe0832.android.common.compose.ui.activity
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +24,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,7 +41,6 @@ import com.bihe0832.android.common.compose.ui.ErrorView
 import com.bihe0832.android.common.compose.ui.LoadingView
 import com.bihe0832.android.common.compose.ui.RefreshView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import java.util.Locale
 
 /**
  *
@@ -57,7 +53,7 @@ import java.util.Locale
 fun ActivityThemeView(
     themeType: ColorScheme, contentRender: RenderState
 ) {
-    MaterialTheme(colorScheme = themeType,) {
+    MaterialTheme(colorScheme = themeType) {
         val systemUiController = rememberSystemUiController()
         SideEffect {
             systemUiController.setStatusBarColor(themeType.primary)
@@ -96,7 +92,7 @@ fun ActivityRootView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityToolBarView(
-    navigationIcon: ImageVector,
+    navigationIcon: ImageVector?,
     navigationOnClick: () -> Unit,
     title: String,
     textSize: TextUnit,
@@ -114,13 +110,16 @@ fun ActivityToolBarView(
                     fontSize = textSize
                 )
             }, navigationIcon = {
-                IconButton(onClick = {
-                    navigationOnClick()
-                }) {
-                    Icon(
-                        imageVector = navigationIcon, contentDescription = null
-                    )
+                if (navigationIcon != null) {
+                    IconButton(onClick = {
+                        navigationOnClick()
+                    }) {
+                        Icon(
+                            imageVector = navigationIcon, contentDescription = null
+                        )
+                    }
                 }
+
             }, actions = {
                 actions()
             }, colors = TopAppBarColors(
@@ -146,12 +145,14 @@ fun ActivityToolBarView(
                     fontSize = textSize
                 )
             }, navigationIcon = {
-                IconButton(onClick = {
-                    navigationOnClick()
-                }) {
-                    Icon(
-                        imageVector = navigationIcon, contentDescription = null
-                    )
+                if (navigationIcon != null) {
+                    IconButton(onClick = {
+                        navigationOnClick()
+                    }) {
+                        Icon(
+                            imageVector = navigationIcon, contentDescription = null
+                        )
+                    }
                 }
             }, actions = {
                 actions()
@@ -184,15 +185,18 @@ fun ActivityBottomBarView(bottomBar: @Composable () -> Unit, content: @Composabl
 
 @Composable
 fun BaseComposeActivity.CommonActivityToolbarView(
-    title: String, content: @Composable () -> Unit
+    icon: ImageVector?,
+    title: String,
+    isCenter: Boolean,
+    content: @Composable () -> Unit
 ) {
-    ActivityToolBarView(navigationIcon = ImageVector.vectorResource(R.drawable.icon_left_go),
+    ActivityToolBarView(navigationIcon = icon,
         navigationOnClick = {
             onBackPressed()
         },
         title = title,
         textSize = 18.sp,
-        isCenter = true,
+        isCenter = isCenter,
         actions = {},
         content = { content() })
 }
