@@ -13,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.deprecated.R
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
@@ -60,7 +61,7 @@ open class BaseActivity : SupportActivity() {
         super.onCreate(savedInstanceState)
         if (supportMultiLanguage()) {
             MultiLanguageHelper.modifyContextLanguageConfig(
-                resources, MultiLanguageHelper.getLanguageConfig(this)
+                resources, MultiLanguageState.getCurrentLanguageState()
             )
         }
         if (resetDensity()) {
@@ -93,7 +94,7 @@ open class BaseActivity : SupportActivity() {
 
     open fun checkLocaleChanged() {
         if (!TextUtils.isEmpty(lastLocale)) {
-            val newLocale = MultiLanguageHelper.getLanguageConfig(this)
+            val newLocale = MultiLanguageState.getCurrentLanguageState()
             if (newLocale.toLanguageTag() != lastLocale) {
                 MultiLanguageHelper.modifyContextLanguageConfig(resources, newLocale)
                 onLocaleChanged(Locale.forLanguageTag(lastLocale), newLocale)
@@ -134,7 +135,7 @@ open class BaseActivity : SupportActivity() {
     override fun onPause() {
         super.onPause()
         if (supportMultiLanguage()) {
-            lastLocale = MultiLanguageHelper.getLanguageConfig(this).toLanguageTag()
+            lastLocale = MultiLanguageState.getCurrentLanguageState().toLanguageTag()
         }
         for (fragment in supportFragmentManager.fragments) {
             if (fragment.isAdded) {
