@@ -22,7 +22,7 @@ object MultiLanguageState {
     fun init(context: Context, locales: List<LanguageItem>, default: Locale) {
         supportLanguage = locales.filter { it.locale != null }
         val lastLocale = MultiLanguageHelper.getLanguageConfig(context)
-        if (supportLanguage.find { lastLocale == it.locale } == null) {
+        if (supportLanguage.find { lastLocale.language == it.locale?.language && lastLocale.country == it.locale?.country } == null) {
             _currentLanguage = default
             ZixieCoreInit.updateApplicationLocale(context, default)
         } else {
@@ -40,7 +40,7 @@ object MultiLanguageState {
 
     fun changeLanguage(context: Context, code: Locale?) {
         code?.let {
-            if (supportLanguage.find { code == it.locale } != null) {
+            if (_currentLanguage != code && supportLanguage.find { code == it.locale } != null) {
                 MultiLanguageHelper.setLanguageConfig(context, code)
                 ZixieContext.updateApplicationContext(context, true)
                 MultiLanguageHelper.modifyContextLanguageConfig(context, code)

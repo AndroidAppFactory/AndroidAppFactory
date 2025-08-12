@@ -10,10 +10,6 @@ import com.bihe0832.android.common.compose.state.ThemeState
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import org.intellij.lang.annotations.Language
 import java.util.Locale
 
 /**
@@ -28,7 +24,7 @@ object AAFComposeStateManager {
     private val DEFAULT_LANGUAGE = Locale.US
     private val supportLanguage by lazy {
         mutableListOf<LanguageItem>().apply {
-            add(LanguageItem("中文", Locale.CHINESE))
+            add(LanguageItem("中文", Locale.SIMPLIFIED_CHINESE))
             add(LanguageItem("English", Locale.US))
         }
     }

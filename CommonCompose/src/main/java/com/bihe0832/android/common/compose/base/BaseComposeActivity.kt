@@ -64,7 +64,7 @@ abstract class BaseComposeActivity : FragmentActivity() {
         })
         if (supportMultiLanguage()) {
             MultiLanguageHelper.modifyContextLanguageConfig(
-                resources, MultiLanguageHelper.getLanguageConfig(this)
+                resources, MultiLanguageState.getCurrentLanguageState()
             )
         }
         if (resetDensity()) {
