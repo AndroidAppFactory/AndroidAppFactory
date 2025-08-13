@@ -1,10 +1,10 @@
-package com.bihe0832.android.common.debug.base
+package com.bihe0832.android.common.debug
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import com.bihe0832.android.common.debug.R
+import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
@@ -15,9 +15,6 @@ import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
  * Description: Description
  */
 object DebugUtils {
-
-    val DEBUG_MODULE_CLASS_NAME: String = "com.bihe0832.android.common.module.class.name"
-    val DEBUG_MODULE_TITLE_NAME: String = "com.bihe0832.android.common.module.title.name"
 
     fun sendInfo(
         context: Context, title: String?, content: String?, showDialog: Boolean
@@ -68,13 +65,33 @@ object DebugUtils {
         DialogUtils.showInputDialog(context!!, titleName, msg, defaultValue, listener)
     }
 
+    fun startDebugActivity(context: Context?, cls: Class<*>, titleName: String) {
+        DebugRootActivity.startDebugRootActivity(context, cls, titleName)
+    }
 
-    fun startActivityWithException(context: Context, cls: String) {
+    fun startDebugActivity(
+        context: Context?, cls: Class<*>, titleName: String, data: Map<String, String>?
+    ) {
+        DebugRootActivity.startDebugRootActivity(context, cls, titleName, data)
+    }
+
+    fun startActivityWithException(context: Context?, cls: String) {
         startActivityWithException(context, Class.forName(cls))
     }
 
-    fun startActivityWithException(context: Context, cls: Class<*>) {
+    fun startActivityWithException(context: Context?, cls: Class<*>) {
         startActivityWithException(context, cls, null)
+    }
+
+    fun startActivityWithException(context: Context?, cls: Class<*>, data: Map<String, String>?) {
+        val intent = Intent(context, cls)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        data?.let {
+            for ((key, value) in it) {
+                intent.putExtra(key, value)
+            }
+        }
+        context?.startActivity(intent)
     }
 
     fun startActivityForResultWithException(context: Activity, cls: Class<*>, requestCode: Int) {
@@ -93,16 +110,6 @@ object DebugUtils {
             }
         }
         return intent
-    }
-
-    fun startActivityWithException(
-        context: Context,
-        activityClass: Class<*>,
-        data: Map<String, String>?
-    ) {
-        val intent = getIntent(context, activityClass, data)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
     }
 
     fun startActivityForResultWithException(

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /**
+  ~  * Created by zixie <code@bihe0832.com> on 2022/5/30 下午5:05
+  ~  * Copyright (c) 2022 . All rights reserved.
+  ~  * Last modified 2022/5/30 下午5:05
+  ~  */
+  -->
+
+<resources>
+
+    <color name="primary">@color/md_theme_primary</color>
+    <!--状态栏颜色-->
+    <color name="primary_dark">@color/md_theme_primary</color>
+    <color name="primary_light">@color/md_theme_primary</color>
+    <!--控制各个控件被选中时的颜色-->
+    <color name="accent">@color/md_theme_tertiary</color>
+    <!--文本颜色-->
+    <color name="primary_text">@color/md_theme_onPrimary</color>
+    <color name="secondary_text">@color/md_theme_secondary</color>
+    <!--图标颜色-->
+    <color name="icons">@color/md_theme_onTertiary</color>
+    <!--分割线颜色-->
+    <color name="divider">@color/md_theme_outline</color>
+</resources>
