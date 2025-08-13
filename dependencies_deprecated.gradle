@@ -3,7 +3,7 @@ def project = ext
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
-                "version"            : "7.0.4",
+                "version"            : "7.0.5",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
                         "CommonCompose", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
@@ -33,7 +33,7 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "7.0.0",
+                "version"            : "7.0.5",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
