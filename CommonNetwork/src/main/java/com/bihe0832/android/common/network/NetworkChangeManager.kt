@@ -187,6 +187,11 @@ object NetworkChangeManager {
         })
 
         if (BuildUtils.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mNetworkCallback != null) {
+                (ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?)?.unregisterNetworkCallback(
+                    mNetworkCallback!!
+                )
+            }
             mNetworkCallback = object : ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: Network) {
                     innerNetworkChanged(ctx, null)
