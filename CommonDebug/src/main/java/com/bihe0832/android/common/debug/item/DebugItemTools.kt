@@ -17,17 +17,17 @@ import com.bihe0832.android.framework.router.RouterAction
 
 fun getDebugItemTextColor(isTips: Boolean): Int {
     return if (isTips) {
-        applicationContext!!.resources.getColor(R.color.md_theme_onSecondary)
+        applicationContext!!.resources.getColor(R.color.colorOnPrimary)
     } else {
-        applicationContext!!.resources.getColor(R.color.md_theme_onBackground)
+        applicationContext!!.resources.getColor(R.color.colorOnBackground)
     }
 }
 
 fun getDebugItemBackGroundColor(isTips: Boolean): Int {
     return if (isTips) {
-        applicationContext!!.resources.getColor(R.color.md_theme_secondary)
+        applicationContext!!.resources.getColor(R.color.colorAccent)
     } else {
-        applicationContext!!.resources.getColor(R.color.md_theme_background)
+        applicationContext!!.resources.getColor(R.color.windowBackground)
     }
 }
 
@@ -57,7 +57,7 @@ fun getDebugItem(
         paddingLeftDp,
         getDebugItemBackGroundColor(isTips),
         if (showBottomLine) {
-            ZixieContext.applicationContext!!.getColor(R.color.md_theme_outline)
+            ZixieContext.applicationContext!!.getColor(R.color.divider)
         } else {
             Color.TRANSPARENT
         }
@@ -149,6 +149,7 @@ fun getTipsItem(content: String, listener: View.OnClickListener?): ContentItemDa
 fun getDebugItem(content: String, listener: View.OnClickListener?): ContentItemData {
     return getDebugItem(content, listener, false)
 }
+
 
 fun getLittleDebugItem(
     content: String,

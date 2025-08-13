@@ -3,11 +3,11 @@ package com.bihe0832.android.common.debug.base
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
+import com.bihe0832.android.common.debug.DebugUtils
 import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.item.getTipsItem
-import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.easyrefresh.CommonListFragment
@@ -132,23 +132,23 @@ open class BaseDebugListFragment : CommonListFragment() {
     }
 
     protected fun startDebugActivity(cls: Class<*>, titleName: String) {
-        DebugRootActivity.startDebugRootActivity(context, cls, titleName)
+        DebugUtils.startDebugActivity(context, cls, titleName)
     }
 
     protected fun startDebugActivity(cls: Class<*>, titleName: String, data: Map<String, String>?) {
-        DebugRootActivity.startDebugRootActivity(context, cls, titleName, data)
+        DebugUtils.startDebugActivity(context, cls, titleName, data)
     }
 
     protected open fun startActivityWithException(cls: String) {
-        DebugUtils.startActivityWithException(context!!, cls)
+        DebugUtils.startActivityWithException(context, cls)
     }
 
     protected open fun startActivityWithException(cls: Class<*>) {
-        DebugUtils.startActivityWithException(context!!, cls)
+        DebugUtils.startActivityWithException(context, cls)
     }
 
     protected open fun startActivityWithException(cls: Class<*>, data: Map<String, String>?) {
-        DebugUtils.startActivityWithException(context!!, cls, data)
+        DebugUtils.startActivityWithException(context, cls, data)
     }
 
     protected open fun showResult(s: String?) {
