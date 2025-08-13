@@ -80,7 +80,7 @@ public class BitmapTransUtils {
         return inSampleSize;
     }
 
-    public static Bitmap transformBitmap(@NonNull Bitmap bitmap, @NonNull Matrix transformMatrix) {
+    public static Bitmap transformBitmap(Bitmap bitmap, Matrix transformMatrix) {
         try {
             Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), transformMatrix,
                     true);
@@ -178,7 +178,7 @@ public class BitmapTransUtils {
                 exif = new ExifInterface(inputStream);
                 return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
@@ -188,7 +188,7 @@ public class BitmapTransUtils {
         try {
             ExifInterface exifInterface = new ExifInterface(path);
             return exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
@@ -206,7 +206,7 @@ public class BitmapTransUtils {
         try{
              inputStream = resolver.openInputStream(imageUri);
             return getExifOrientationTag(inputStream);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             ZLog.e("failed to open file to read rotation meta data: " + imageUri);
             return 0;
