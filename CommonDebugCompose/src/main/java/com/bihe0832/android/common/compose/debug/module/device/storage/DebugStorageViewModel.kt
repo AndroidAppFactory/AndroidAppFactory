@@ -25,7 +25,7 @@ data class DebugStorageUiState(
     val dataList: Map<String, Long> = emptyMap()
 )
 
-class StorageViewModel : CommonActionViewModel() {
+class DebugStorageViewModel : CommonActionViewModel() {
 
     private val _storageState: MutableStateFlow<DebugStorageUiState> =
         MutableStateFlow(DebugStorageUiState())

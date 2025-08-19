@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.empty
+package com.bihe0832.android.base.debug.dialog
 
 import android.content.Intent
 import android.os.Bundle

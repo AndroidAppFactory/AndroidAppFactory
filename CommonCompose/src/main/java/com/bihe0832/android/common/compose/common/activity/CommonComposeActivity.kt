@@ -77,7 +77,7 @@ open class CommonComposeActivity : BaseComposeActivity() {
     }
 
 
-    protected fun handleEffect(context: Context) {
+    protected open fun handleEffect(context: Context) {
 
     }
 

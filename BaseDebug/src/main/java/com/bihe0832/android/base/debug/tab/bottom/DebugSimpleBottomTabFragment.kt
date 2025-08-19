@@ -2,7 +2,6 @@ package com.bihe0832.android.base.debug.tab.bottom
 
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
 import com.bihe0832.android.base.debug.file.DebugFileFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
@@ -19,7 +18,7 @@ class DebugSimpleBottomTabFragment : CommonMainFragment() {
 
     override fun initFragments(): ArrayList<BaseFragment> {
         return ArrayList<BaseFragment>().apply {
-            add(DebugDialogFragment())
+            add(DebugDownloadFragment())
             add(DebugDownloadFragment())
             add(DebugPermissionFragment())
             add(DebugFileFragment())

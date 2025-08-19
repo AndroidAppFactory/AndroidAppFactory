@@ -24,7 +24,7 @@ open class DebugCommonComposeFragment : CommonComposeFragment() {
             @Composable
             override fun Content() {
                 val context = LocalContext.current
-                AAFDebugCommonModuleView { showLog(context) }
+                DebugCommonComposeView { showLog(context) }
             }
         }
     }

@@ -4,9 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.base.compose.debug.common.DebugComposeConfigView
 import com.bihe0832.android.base.compose.debug.list.DebugComposeListView
+import com.bihe0832.android.base.compose.debug.module.dialog.DebugComposeDialogView
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
+import com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListActivity
+import com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListWithProcessActivity
 import com.bihe0832.android.common.compose.debug.module.device.storage.DebugCurrentStorageActivity
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 
@@ -20,8 +23,7 @@ import com.bihe0832.android.common.compose.debug.ui.DebugContent
 
 @Preview
 @Composable
-fun DebugComposeModuleView() {
-
+fun AAFDebugModuleView() {
 
     DebugContent {
         DebugComposeItem(
@@ -35,6 +37,23 @@ fun DebugComposeModuleView() {
             DebugUtilsV2.startActivityWithException(
                 context,
                 DebugCurrentStorageActivity::class.java
+            )
+        }
+        DebugComposeItem("Dialog 调试", "DebugComposeDialogView") { DebugComposeDialogView() }
+        DebugItem(
+            "本地 WAV 查看",
+        ) { context ->
+            DebugUtilsV2.startActivityWithException(
+                context,
+                DebugAudioListActivity::class.java
+            )
+        }
+        DebugItem(
+            "本地 WAV 查看2",
+        ) { context ->
+            DebugUtilsV2.startActivityWithException(
+                context,
+                DebugAudioListWithProcessActivity::class.java
             )
         }
     }

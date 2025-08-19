@@ -3,7 +3,6 @@ package com.bihe0832.android.base.debug.tab.bottom
 import android.graphics.Color
 import android.view.View
 import com.bihe0832.android.base.debug.R
-import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.base.debug.ui.DebugUIFragment
@@ -23,7 +22,7 @@ class SvgaBottomTabFragment : CommonMainFragment() {
 
     override fun initFragments(): ArrayList<BaseFragment> {
         return ArrayList<BaseFragment>().apply {
-            add(DebugDialogFragment())
+            add(DebugDownloadFragment())
             add(DebugDownloadFragment())
             add(CommonEmptyFragment.newInstance("Test", Color.GREEN))
             add(DebugPermissionFragment())
