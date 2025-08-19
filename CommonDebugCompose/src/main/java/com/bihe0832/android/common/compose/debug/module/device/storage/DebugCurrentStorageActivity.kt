@@ -29,7 +29,7 @@ open class DebugCurrentStorageActivity : DebugBaseComposeActivity() {
             @Composable
             override fun Content() {
                 val context = LocalContext.current
-                val viewModel: StorageViewModel = viewModel()
+                val viewModel: DebugStorageViewModel = viewModel()
                 val storageUiState by viewModel.storageUiState.collectAsState()
                 val state = viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -53,7 +53,7 @@ open class DebugCurrentStorageActivity : DebugBaseComposeActivity() {
 
     @Composable
     fun StorageDataList(
-        viewModel: StorageViewModel, uiState: DebugStorageUiState
+        viewModel: DebugStorageViewModel, uiState: DebugStorageUiState
     ) {
         StorageControlPanel(viewModel, uiState)
         StorageDataItems(uiState)
@@ -102,7 +102,7 @@ open class DebugCurrentStorageActivity : DebugBaseComposeActivity() {
 
     @Composable
     private fun StorageControlPanel(
-        viewModel: StorageViewModel, uiState: DebugStorageUiState
+        viewModel: DebugStorageViewModel, uiState: DebugStorageUiState
     ) {
         Column {
             LittleDebugTips("<b>点击切换文件夹是否按大小排列，当前：${uiState.needSort}</b>", {

@@ -61,7 +61,7 @@
             android:layout_marginTop="4dp"
             android:textColor="@color/textColorPrimary"
             android:textSize="12dp"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:text="1.32 M" />
 
 

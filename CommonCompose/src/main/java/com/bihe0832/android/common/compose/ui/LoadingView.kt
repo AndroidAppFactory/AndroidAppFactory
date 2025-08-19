@@ -1,6 +1,7 @@
 package com.bihe0832.android.common.compose.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,13 +34,17 @@ import com.bihe0832.android.common.compose.ui.utils.dpToSp
 @Composable
 fun LoadingView(
     message: String = stringResource(R.string.com_bihe0832_loading),
-    colorP: Color = Color.Black.copy(alpha = 0.5F),
+    colorP: Color = Color.Black.copy(alpha = 0.75F),
     textSize: Dp = 14.dp,
-    textColor: Color = Color(0xFFEEEEEE)
+    textColor: Color = Color(0xFFEEEEEE),
+    action: (() -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .clickable {
+                action?.invoke()
+            }
             .background(colorP), contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

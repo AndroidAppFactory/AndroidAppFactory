@@ -1,4 +1,4 @@
-package com.bihe0832.android.common.compose.debug.module.audio
+package com.bihe0832.android.common.compose.debug.module.audio.item
 
 import com.bihe0832.android.common.compose.mvi.ViewEvent
 
@@ -11,4 +11,7 @@ import com.bihe0832.android.common.compose.mvi.ViewEvent
  */
 sealed class AudioItemEvent : ViewEvent {
     object IconClick : AudioItemEvent()
+    object IconLongClick : AudioItemEvent()
+    object ContentClick : AudioItemEvent()
+    object ContentLongClick : AudioItemEvent()
 }

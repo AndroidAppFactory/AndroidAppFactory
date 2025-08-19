@@ -33,7 +33,7 @@ import com.bihe0832.android.lib.file.select.FileSelectTools
 class DebugStorageActivity : DebugCurrentStorageActivity() {
 
     private var folder = AAFFileWrapper.getFolder()
-    private val viewModel: StorageViewModel = StorageViewModel()
+    private val viewModel: DebugStorageViewModel = DebugStorageViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -30,11 +30,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
 import com.bihe0832.android.common.compose.state.RenderState
 import kotlinx.coroutines.launch
@@ -55,7 +57,7 @@ abstract class DebugComposeMainActivity : DebugBaseComposeActivity() {
 
     @Composable
     override fun getNavigationIcon(): ImageVector? {
-        return null
+        return ImageVector.vectorResource(R.drawable.icon_menu)
     }
 
     @Composable
@@ -80,8 +82,7 @@ abstract class DebugComposeMainActivity : DebugBaseComposeActivity() {
         val pagerState = rememberPagerState(pageCount = { tabs.size })
         val shape = RoundedCornerShape(0.dp)
         val coroutineScope = rememberCoroutineScope()
-
-
+        
         Column(
             modifier = Modifier
                 .fillMaxSize()

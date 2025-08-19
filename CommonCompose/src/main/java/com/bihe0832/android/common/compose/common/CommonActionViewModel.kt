@@ -29,20 +29,52 @@ open class CommonActionViewModel :
         setState { copy(canRefresh = true, isLoading = false, errorMsg = msg) }
     }
 
+    fun hideLoading() {
+        setState {
+            copy(
+                canRefresh = true,
+                isLoading = false,
+                isRefreshLoading = false,
+                errorMsg = ""
+            )
+        }
+    }
+
     override suspend fun handleEventsWithinScope(event: CommonActionEvent): Int {
         ZLog.d("hardy", "handleEventsWithinScope:$event")
         when (event) {
             CommonActionEvent.Refresh -> {
-                setState { copy(canRefresh = false, isLoading = true, errorMsg = "") }
+                setState {
+                    copy(
+                        canRefresh = false,
+                        isLoading = true,
+                        isRefreshLoading = true,
+                        errorMsg = ""
+                    )
+                }
                 refresh()
+                return 0
             }
 
             CommonActionEvent.InitData -> {
-                setState { copy(canRefresh = false, isLoading = true, errorMsg = "") }
+                setState {
+                    copy(
+                        canRefresh = false,
+                        isLoading = true,
+                        isRefreshLoading = false,
+                        errorMsg = ""
+                    )
+                }
                 fetchData()
+                return 0
+            }
+
+            CommonActionEvent.ClickLoading -> {
+                setEffect { CommonViewSideEffect.ClickLoading }
+                return 0
             }
         }
-        return 0
+        return -1
     }
 
     override suspend fun reportEventWithinScope(

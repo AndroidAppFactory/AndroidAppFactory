@@ -39,6 +39,16 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 
+        <activity
+            android:name="com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name="com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListWithProcessActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
     </application>
 
 </manifest>

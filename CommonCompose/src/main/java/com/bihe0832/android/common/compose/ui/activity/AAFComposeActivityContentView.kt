@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,6 +24,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +45,7 @@ import com.bihe0832.android.common.compose.ui.ErrorView
 import com.bihe0832.android.common.compose.ui.LoadingView
 import com.bihe0832.android.common.compose.ui.RefreshView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 /**
  *
@@ -89,7 +94,118 @@ fun ActivityRootView(
     }
 }
 
+@Composable
+fun ActivityRootViewWithDrawer(
+    drawerState: DrawerState,
+    drawerContent: @Composable () -> Unit,
+    topBar: @Composable () -> Unit,
+    bottomBar: @Composable () -> Unit,
+    content: @Composable () -> Unit
+) {
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                drawerContent()
+            }
+        },
+    ) {
+        Scaffold(topBar = {
+            topBar()
+        }, bottomBar = {
+            bottomBar()
+        }, modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+        ) { innerPadding ->
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                content()
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun AAFCenterTopAppBar(
+    navigationIcon: ImageVector?,
+    navigationOnClick: () -> Unit,
+    title: String,
+    textSize: TextUnit,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    CenterAlignedTopAppBar(title = {
+        Text(
+            text = title,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontWeight = FontWeight.Medium,
+            fontSize = textSize
+        )
+    }, navigationIcon = {
+        if (navigationIcon != null) {
+            IconButton(onClick = {
+                navigationOnClick()
+            }) {
+                Icon(
+                    imageVector = navigationIcon, contentDescription = null
+                )
+            }
+        }
+
+    }, actions = {
+        actions()
+    }, colors = TopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        scrolledContainerColor = MaterialTheme.colorScheme.surface,
+        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+    )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun AAFTopAppBar(
+    navigationIcon: ImageVector?,
+    navigationOnClick: () -> Unit,
+    title: String,
+    textSize: TextUnit,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    TopAppBar(title = {
+        Text(
+            text = title,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontWeight = FontWeight.Medium,
+            fontSize = textSize
+        )
+    }, navigationIcon = {
+        if (navigationIcon != null) {
+            IconButton(onClick = {
+                navigationOnClick()
+            }) {
+                Icon(
+                    imageVector = navigationIcon, contentDescription = null
+                )
+            }
+        }
+    }, actions = {
+        actions()
+    }, colors = TopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        scrolledContainerColor = MaterialTheme.colorScheme.surface,
+        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+    )
+    )
+}
+
 @Composable
 fun ActivityToolBarView(
     navigationIcon: ImageVector?,
@@ -102,34 +218,7 @@ fun ActivityToolBarView(
 ) {
     if (isCenter) {
         ActivityRootView(topBar = {
-            CenterAlignedTopAppBar(title = {
-                Text(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = textSize
-                )
-            }, navigationIcon = {
-                if (navigationIcon != null) {
-                    IconButton(onClick = {
-                        navigationOnClick()
-                    }) {
-                        Icon(
-                            imageVector = navigationIcon, contentDescription = null
-                        )
-                    }
-                }
-
-            }, actions = {
-                actions()
-            }, colors = TopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-            )
-            )
+            AAFCenterTopAppBar(navigationIcon, navigationOnClick, title, textSize, actions)
         }, bottomBar = {
 
         }, content = {
@@ -137,41 +226,53 @@ fun ActivityToolBarView(
         })
     } else {
         ActivityRootView(topBar = {
-            TopAppBar(title = {
-                Text(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = textSize
-                )
-            }, navigationIcon = {
-                if (navigationIcon != null) {
-                    IconButton(onClick = {
-                        navigationOnClick()
-                    }) {
-                        Icon(
-                            imageVector = navigationIcon, contentDescription = null
-                        )
-                    }
-                }
-            }, actions = {
-                actions()
-            }, colors = TopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-            )
-            )
+            AAFTopAppBar(navigationIcon, navigationOnClick, title, textSize, actions)
         }, bottomBar = {
 
         }, content = {
             content()
         })
     }
+}
 
 
+@Composable
+fun ActivityToolBarViewWithDrawer(
+    navigationIcon: ImageVector?,
+    navigationOnClick: () -> Unit,
+    title: String,
+    textSize: TextUnit,
+    isCenter: Boolean,
+    drawerState: DrawerState,
+    drawerContent: @Composable () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
+    content: @Composable () -> Unit
+) {
+    if (isCenter) {
+        ActivityRootViewWithDrawer(drawerState = drawerState,
+            drawerContent = drawerContent,
+            topBar = {
+                AAFCenterTopAppBar(navigationIcon, navigationOnClick, title, textSize, actions)
+            },
+            bottomBar = {
+
+            },
+            content = {
+                content()
+            })
+    } else {
+        ActivityRootViewWithDrawer(drawerState = drawerState,
+            drawerContent = drawerContent,
+            topBar = {
+                AAFTopAppBar(navigationIcon, navigationOnClick, title, textSize, actions)
+            },
+            bottomBar = {
+
+            },
+            content = {
+                content()
+            })
+    }
 }
 
 @Composable
@@ -183,12 +284,10 @@ fun ActivityBottomBarView(bottomBar: @Composable () -> Unit, content: @Composabl
     })
 }
 
+
 @Composable
 fun BaseComposeActivity.CommonActivityToolbarView(
-    icon: ImageVector?,
-    title: String,
-    isCenter: Boolean,
-    content: @Composable () -> Unit
+    icon: ImageVector?, title: String, isCenter: Boolean, content: @Composable () -> Unit
 ) {
     ActivityToolBarView(navigationIcon = icon,
         navigationOnClick = {
@@ -197,6 +296,36 @@ fun BaseComposeActivity.CommonActivityToolbarView(
         title = title,
         textSize = 18.sp,
         isCenter = isCenter,
+        actions = {},
+        content = { content() })
+}
+
+@Composable
+fun BaseComposeActivity.CommonActivityToolbarViewWithDrawer(
+    icon: ImageVector?,
+    drawerState: DrawerState,
+    drawerContent: @Composable () -> Unit,
+    title: String,
+    isCenter: Boolean,
+    content: @Composable () -> Unit
+) {
+
+    val scope = rememberCoroutineScope()
+    ActivityToolBarViewWithDrawer(navigationIcon = icon,
+        navigationOnClick = {
+            scope.launch {
+                if (drawerState.isClosed) {
+                    drawerState.open()
+                } else {
+                    drawerState.close()
+                }
+            }
+        },
+        title = title,
+        textSize = 18.sp,
+        isCenter = isCenter,
+        drawerState = drawerState,
+        drawerContent = { drawerContent() },
         actions = {},
         content = { content() })
 }
@@ -222,10 +351,6 @@ fun CommonContent(
                 })
             .fillMaxSize()
     ) {
-        if (state.value.isLoading && dataSize < 1) {
-            LoadingView(message = state.value.loadingMsg)
-            return
-        }
 
         if (!state.value.isLoading && state.value.errorMsg.isNotEmpty()) {
             ErrorView(message = state.value.errorMsg, onRetry = {
@@ -235,14 +360,19 @@ fun CommonContent(
         }
 
         if (!state.value.isLoading && dataSize < 1) {
-            viewModel.sendEvent(CommonActionEvent.InitData)
             EmptyView()
             return
         }
 
         content()
 
-        if (state.value.isLoading && dataSize > 1) {
+        if (state.value.isLoading && !state.value.isRefreshLoading) {
+            LoadingView(message = state.value.loadingMsg, action = {
+                viewModel.sendEvent(CommonActionEvent.ClickLoading)
+            })
+        }
+
+        if (state.value.isLoading && state.value.isRefreshLoading) {
             RefreshView()
         }
     }

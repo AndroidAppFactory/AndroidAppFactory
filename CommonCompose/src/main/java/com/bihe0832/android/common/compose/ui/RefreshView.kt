@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 
 @Preview
 @Composable
-fun RefreshView(iconSize: Dp = 24.dp) {
+fun RefreshView(iconSize: Dp = 20.dp) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
