@@ -22,5 +22,6 @@ ext.widgetmoduleInfo = [
                 "apidependenciesList": [
                         "LibLog", "LibConfig", "LibPermission", "LibNotification"
                 ]
-        ],
+        ]
+
 ]

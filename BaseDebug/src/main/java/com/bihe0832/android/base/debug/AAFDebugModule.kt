@@ -87,7 +87,7 @@ fun AAFDebugModule() {
 
         DebugFragmentItem("UI（颜色取色器）测试", DebugColorFragment::class.java)
         DebugFragmentItem("UI（绘图板）测试", DebugPanelFragment::class.java)
-        DebugFragmentItem("UI（换肤、哀悼日、多语言、前后台等）测试", DebugUIFragment::class.java)
+        DebugFragmentItem("UI（换肤、APPIcon切换、哀悼日、多语言、前后台等）测试", DebugUIFragment::class.java)
 
 
         DebugFragmentItem("Toast 调试", DebugToastFragment::class.java)
