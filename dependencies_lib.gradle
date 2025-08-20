@@ -508,7 +508,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAppIcon"   : [
-                "version"            : "6.27.1",
+                "version"            : "7.1.0",
                 "artifactId"         : "lib-app-icon",
                 "apidependenciesList": [
                         "LibLifecycle"
