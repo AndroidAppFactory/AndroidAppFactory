@@ -34,7 +34,7 @@
             android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/icon"
-            android:label="App节日版1"
+            android:label="@string/app_name"
             android:targetActivity="com.bihe0832.android.test.TestSplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

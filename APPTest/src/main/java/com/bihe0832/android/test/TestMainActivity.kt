@@ -19,6 +19,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bihe0832.android.app.router.RouterConstants
@@ -26,6 +27,7 @@ import com.bihe0832.android.base.compose.debug.AAFDebugModuleView
 import com.bihe0832.android.base.debug.AAFDebugModule
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.common.DebugComposeMainActivity
+import com.bihe0832.android.common.compose.debug.common.DebugComposeMainWithDrawerActivity
 import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeView
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
@@ -52,15 +54,13 @@ open class TestMainActivity : DebugComposeMainActivity() {
         super.onCreate(savedInstanceState)
         DebugLogTips.initModule(this, true, Gravity.LEFT or Gravity.TOP)
         CommonDBManager.init(this)
-        ApplicationObserver.addDestoryListener(object : ApplicationObserver.APPDestroyListener {
-
-            override fun onAllActivityDestroyed() {
-                ZLog.d("onAllActivityDestroyed")
-                R.mipmap.default_head_icon
-            }
-        })
     }
 
+    @Composable
+    override fun getNavigationIcon(): ImageVector? {
+        return null
+    }
+    
     fun getDrawerContentContentRender(): RenderState {
         return object : RenderState {
             @Composable
