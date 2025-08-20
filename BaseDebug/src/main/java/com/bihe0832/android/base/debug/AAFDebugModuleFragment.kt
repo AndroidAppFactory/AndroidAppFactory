@@ -94,7 +94,7 @@ class AAFDebugModuleFragment : DebugEnvFragment() {
             add(getDebugFragmentItemData("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java))
             add(getDebugFragmentItemData("UI（颜色取色器）测试", DebugColorFragment::class.java))
             add(getDebugFragmentItemData("UI（绘图板）测试", DebugPanelFragment::class.java))
-            add(getDebugFragmentItemData("UI（换肤、哀悼日、多语言、前后台等）测试", DebugUIFragment::class.java))
+            add(getDebugFragmentItemData("UI（换肤、哀悼日、切换ICON、多语言、前后台等）测试", DebugUIFragment::class.java))
 
             add(getDebugFragmentItemData("Toast 调试", DebugToastFragment::class.java))
             add(getDebugFragmentItemData("分享调试", DebugShareFragment::class.java))

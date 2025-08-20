@@ -13,25 +13,49 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name="com.bihe0832.android.base.debug.TestApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        tools:replace="android:label"
-        android:theme="@style/AAF.AppTheme">
+        android:theme="@style/AAF.AppTheme"
+        tools:replace="android:label">
+
         <activity
             android:name="com.bihe0832.android.test.TestSplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
             android:exported="true"
-            android:theme="@style/AAF.ActivityTheme.Fullscreen">
+            android:screenOrientation="portrait"
+            android:theme="@style/AAF.ActivityTheme.Fullscreen" />
+
+        <activity-alias
+            android:name="com.bihe0832.android.test.DefaultAlias"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@mipmap/icon"
+            android:label="App节日版1"
+            android:targetActivity="com.bihe0832.android.test.TestSplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
+
+        <!-- 节日图标别名（初始禁用） -->
+        <activity-alias
+            android:name="com.bihe0832.android.test.FestivalAlias"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/icon_new"
+            android:label="App节日版2"
+            android:targetActivity="com.bihe0832.android.test.TestSplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <activity
             android:name="com.bihe0832.android.test.TestMainActivity"

@@ -23,4 +23,12 @@ ext.widgetmoduleInfo = [
                         "LibLog", "LibConfig", "LibPermission", "LibNotification"
                 ]
         ],
+        "LibAppIcon"   : [
+                "version"            : "6.27.1",
+                "artifactId"         : "lib-app-icon",
+                "apidependenciesList": [
+                        "LibLifecycle"
+                ]
+        ]
+
 ]

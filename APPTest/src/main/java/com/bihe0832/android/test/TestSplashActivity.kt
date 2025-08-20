@@ -4,8 +4,11 @@ import android.os.Bundle
 import com.bihe0832.android.app.AppFactoryInit
 import com.bihe0832.android.common.splash.SplashActivity
 import com.bihe0832.android.framework.router.RouterConstants
+import com.bihe0832.android.lib.app.icon.APPIconManager
+import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 @APPMain
 @Module(RouterConstants.MODULE_NAME_SPLASH)

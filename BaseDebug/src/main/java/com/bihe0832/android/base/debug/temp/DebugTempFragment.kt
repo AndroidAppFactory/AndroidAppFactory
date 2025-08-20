@@ -12,11 +12,7 @@ import android.view.View
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.lib.adapter.CardBaseModule
-import com.bihe0832.android.lib.http.common.HTTPServer
-import com.bihe0832.android.lib.http.common.core.BaseConnection
-import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.thread.ThreadManager
-import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
+import com.bihe0832.android.lib.app.icon.APPIconManager
 
 class DebugTempFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
@@ -27,6 +23,7 @@ class DebugTempFragment : DebugEnvFragment() {
 
         }
     }
+
 
 
     private fun preTest(itemView: View) {
