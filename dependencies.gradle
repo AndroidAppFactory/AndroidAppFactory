@@ -20,7 +20,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,ModelRes,Framework,Application"
  **/
-ext.developModule = "Application,CommonCompose,CommonDebug"
+ext.developModule = "Application,CommonCompose,CommonDebug,LibAppIcon"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -39,7 +39,7 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "7.0.5"
+ext.moduleVersionName = "7.1.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
@@ -60,7 +60,7 @@ ext.coremoduleInfo = [
                 "apidependenciesList": [
                         "Application", "BaseDebugCompose", "CommonDebug", "CommonTBSFeedback",
                         "com.bihe0832.android:lib-sherpa-endpoint-model:6.16.7",
-                        "LibSherpaEndpointModel"
+                        "LibSherpaEndpointModel","LibAppIcon"
                 ]
         ],
         "BaseDebugCompose": [

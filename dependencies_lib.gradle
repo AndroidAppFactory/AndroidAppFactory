@@ -506,6 +506,13 @@ ext.libmoduleInfo = [
                         project.androidsupport.androidxcore,
                         "LibOS"
                 ]
+        ],
+        "LibAppIcon"   : [
+                "version"            : "6.27.1",
+                "artifactId"         : "lib-app-icon",
+                "apidependenciesList": [
+                        "LibLifecycle"
+                ]
         ]
 
 

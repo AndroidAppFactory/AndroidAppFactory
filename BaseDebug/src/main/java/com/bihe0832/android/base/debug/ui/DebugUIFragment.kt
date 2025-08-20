@@ -20,6 +20,7 @@ import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.adapter.CardBaseModule
+import com.bihe0832.android.lib.app.icon.APPIconManager
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -29,6 +30,11 @@ import java.util.Locale
 
 class DebugUIFragment : DebugEnvFragment() {
     val LOG_TAG = this.javaClass.simpleName
+
+    val list = listOf(
+        "com.bihe0832.android.test.DefaultAlias",
+        "com.bihe0832.android.test.FestivalAlias"
+    )
 
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
@@ -47,6 +53,22 @@ class DebugUIFragment : DebugEnvFragment() {
                 Config.writeConfig(Constants.CONFIG_KEY_LAYER_START_VALUE, 0)
                 Config.writeConfig(Constants.CONFIG_KEY_LAYER_END_VALUE, 0)
                 ZixieContext.restartApp()
+            }))
+
+            add(getDebugItem("切换桌面图标1", View.OnClickListener {
+                APPIconManager.changeAppIcon(
+                    it.context,
+                    "com.bihe0832.android.test.DefaultAlias",
+                    list
+                )
+            }))
+
+            add(getDebugItem("切换桌面图标2", View.OnClickListener {
+                APPIconManager.changeAppIcon(
+                    it.context,
+                    "com.bihe0832.android.test.FestivalAlias",
+                    list
+                )
             }))
 
             add(getDebugItem("一键换肤", View.OnClickListener {
