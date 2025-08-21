@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.json;
+package com.bihe0832.android.base.compose.debug.json;
 
 import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.google.gson.JsonDeserializationContext;
@@ -7,7 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
 import java.lang.reflect.Type;
 
 /**
