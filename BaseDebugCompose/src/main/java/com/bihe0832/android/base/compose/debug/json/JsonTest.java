@@ -1,8 +1,5 @@
-package com.bihe0832.android.base.debug.json;
+package com.bihe0832.android.base.compose.debug.json;
 
-import com.bihe0832.android.lib.gson.adapter.BooleanDefaultAdapter;
-import com.bihe0832.android.lib.gson.adapter.RawStringJsonAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
 public class JsonTest {

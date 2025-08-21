@@ -9,12 +9,9 @@
 package com.bihe0832.android.base.debug
 
 import androidx.compose.runtime.Composable
-import com.bihe0832.android.base.debug.cache.DebugCacheFragment
 import com.bihe0832.android.base.debug.card.DebugListFragment
 import com.bihe0832.android.base.debug.card.TestListActivity
-import com.bihe0832.android.base.debug.clipboard.DebugClipboardFragment
 import com.bihe0832.android.base.debug.color.DebugColorFragment
-import com.bihe0832.android.base.debug.convert.DebugConvertFragment
 import com.bihe0832.android.base.debug.dialog.DebugDialogFragment
 import com.bihe0832.android.base.debug.download.DebugDownloadFragment
 import com.bihe0832.android.base.debug.encrypt.DebugEncryptFragment
@@ -75,7 +72,6 @@ fun AAFDebugModule() {
         DebugFragmentItem("协程、多线程、前台服务", DebugThreadAndCoroutinesFragment::class.java)
         DebugFragmentItem("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java)
 
-        DebugFragmentItem("数据转化", DebugConvertFragment::class.java)
         DebugFragmentItem("AES、RSA、MD5、SHA256等", DebugEncryptFragment::class.java)
         DebugFragmentItem("二维码调试", DebugQRCodeFragment::class.java)
         DebugFragmentItem(
@@ -95,7 +91,6 @@ fun AAFDebugModule() {
 
         DebugFragmentItem("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java)
         DebugFragmentItem("SVGA 调试", DebugSvgaFragment::class.java)
-        DebugFragmentItem("Cache、数据中心测试", DebugCacheFragment::class.java)
         DebugItem("沉浸式状态栏及标题栏调试") { context ->
             DebugUtilsV2.startActivityWithException(context, DebugImmersionActivity::class.java)
         }
@@ -113,7 +108,6 @@ fun AAFDebugModule() {
             DebugUtilsV2.startActivityWithException(context, DebugHttpActivity::class.java)
         }
 
-        DebugFragmentItem("剪切板调试", DebugClipboardFragment::class.java)
         DebugFragmentItem("列表 Fragment 调试", DebugListFragment::class.java)
         DebugFragmentItem("Intent及跳转调试", DebugListFragment::class.java)
 

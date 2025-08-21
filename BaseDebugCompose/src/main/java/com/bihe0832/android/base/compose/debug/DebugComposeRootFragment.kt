@@ -2,7 +2,10 @@ package com.bihe0832.android.base.compose.debug
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.bihe0832.android.base.compose.debug.cache.DebugComposeCacheView
+import com.bihe0832.android.base.compose.debug.clipboard.DebugComposeClipboardView
 import com.bihe0832.android.base.compose.debug.common.DebugComposeConfigView
+import com.bihe0832.android.base.compose.debug.convert.DebugComposeConvertView
 import com.bihe0832.android.base.compose.debug.list.DebugComposeListView
 import com.bihe0832.android.base.compose.debug.module.dialog.DebugComposeDialogView
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
@@ -40,6 +43,11 @@ fun AAFDebugModuleView() {
             )
         }
         DebugComposeItem("Dialog 调试", "DebugComposeDialogView") { DebugComposeDialogView() }
+        DebugComposeItem("Cache、数据中心测试", "DebugComposeCacheView") { DebugComposeCacheView() }
+        DebugComposeItem("剪切板调试", "DebugComposeClipboardView") { DebugComposeClipboardView() }
+        DebugComposeItem("剪切板调试", "DebugComposeClipboardView") { DebugComposeClipboardView() }
+        DebugComposeItem("数据转化", "DebugComposeConvertView") { DebugComposeConvertView() }
+
         DebugItem(
             "本地 WAV 查看",
         ) { context ->

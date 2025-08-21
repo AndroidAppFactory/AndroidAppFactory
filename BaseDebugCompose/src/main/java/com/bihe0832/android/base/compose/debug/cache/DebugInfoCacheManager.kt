@@ -1,4 +1,4 @@
-package com.bihe0832.android.base.debug.cache
+package com.bihe0832.android.base.compose.debug.cache;
 
 import com.bihe0832.android.common.coroutines.Coroutines_ERROR_DATA_NULL
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
@@ -109,6 +109,7 @@ object DebugInfoCacheManager {
         } else if (key < 0) {
             add = true
         }
+        ZLog.d(LOG_TAG, "key:$key,add:$add")
         CoroutineScope(defaultDispatcher).launch {
 
             addData("TestCache", DebugCacheData().apply {
@@ -167,7 +168,7 @@ object DebugInfoCacheManager {
                 ZLog.d(LOG_TAG, it.toString())
             }
 
-            mTestInfoCacheManagerImpl.getCachedData(key.toString())?.let {
+            mTestInfoCacheManagerImpl.getCachedData(key.toString()).let {
                 ZLog.d(LOG_TAG, it.toString())
             }
         }
