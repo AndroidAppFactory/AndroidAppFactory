@@ -2,8 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bihe0832.android.base.compose.debug">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BIND_APPWIDGET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <application>
+    <!--    Widget-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true">
         <activity
             android:name="com.bihe0832.android.base.compose.debug.list.model.DebugPageListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -11,6 +26,44 @@
 
         <activity
             android:name="com.bihe0832.android.base.compose.debug.list.DebugOnceListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name="com.bihe0832.android.base.compose.debug.lock.DebugLockActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:process="@string/com_bihe0832_lock_screen_process_name"
+            android:resizeableActivity="false"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            android:taskAffinity="com.bihe0832.android.base.debug.lock"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <service
+            android:name="com.bihe0832.android.base.compose.debug.lock.DebugLockService"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:process="@string/com_bihe0832_lock_screen_process_name">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+
+        </service>
+
+        <activity
+            android:name="com.bihe0832.android.base.compose.debug.share.DebugBottomActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AAF.ActivityTheme.Alpha" />
+
+        <activity
+            android:name="com.bihe0832.android.base.compose.debug.toast.DebugToastActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 

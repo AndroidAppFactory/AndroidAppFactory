@@ -3,16 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bihe0832.android.base.debug">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BIND_APPWIDGET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <!--    Widget-->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
     <application
         android:name="com.bihe0832.android.base.debug.TestApplication"
@@ -65,12 +56,6 @@
             android:theme="@style/AAF.ActivityTheme" />
 
         <activity
-            android:name="com.bihe0832.android.base.debug.card.TestListActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
-
-        <activity
             android:name="com.bihe0832.android.base.debug.immersion.DebugImmersionActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
@@ -86,39 +71,6 @@
             android:name="com.bihe0832.android.base.debug.permission.DebugPermissionsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AAF.ActivityTheme.Dialog" />
-
-        <activity
-            android:name="com.bihe0832.android.base.debug.tab.DebugCommonTabActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
-
-        <activity
-            android:name="com.bihe0832.android.base.debug.tab.DebugSegmentTabActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
-
-        <activity
-            android:name="com.bihe0832.android.base.debug.tab.DebugSlidingTabActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
-
-        <activity
-            android:name="com.bihe0832.android.base.debug.dialog.DebugBottomActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/AAF.ActivityTheme.Alpha" />
-
-        <activity
-            android:name="com.bihe0832.android.base.debug.toast.DebugToastActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/AAF.ActivityTheme.Alpha" />
-
-        <activity
-            android:name="com.bihe0832.android.base.debug.theme.ThemeActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/AAF.ActivityTheme" />
 
         <service
             android:name="com.bihe0832.android.common.accessibility.service.AAFAccessibilityService"
@@ -160,33 +112,6 @@
                 android:resource="@xml/com_bihe0832_debug_widget_detail" />
         </receiver>
 
-        <activity
-            android:name="com.bihe0832.android.base.debug.lock.DebugLockActivity"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleInstance"
-            android:noHistory="true"
-            android:process="@string/com_bihe0832_lock_screen_process_name"
-            android:resizeableActivity="false"
-            android:screenOrientation="portrait"
-            android:showOnLockScreen="true"
-            android:taskAffinity="com.bihe0832.android.base.debug.lock"
-            android:theme="@style/AAF.ActivityTheme.Transparent" />
-
-        <service
-            android:name="com.bihe0832.android.base.debug.lock.DebugLockService"
-            android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
-            android:process="@string/com_bihe0832_lock_screen_process_name">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.SCREEN_OFF" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-
-        </service>
 
         <service
             android:name="com.bihe0832.android.base.debug.widget.DebugForegroundService"
