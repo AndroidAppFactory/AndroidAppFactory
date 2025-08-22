@@ -1,5 +1,6 @@
 package com.bihe0832.android.common.compose.debug.item
 
+import android.app.Activity
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -129,7 +130,18 @@ fun DebugComposeItem(text: String, key: String, composable: @Composable () -> Un
 @Composable
 fun DebugComposeFragmentItem(text: String, fragmentName: Class<out Fragment>) {
     DebugItem(text) {
-        DebugUtilsV2.startFragmentActivity(ZixieContext.applicationContext!!, text, fragmentName.name)
+        DebugUtilsV2.startFragmentActivity(
+            ZixieContext.applicationContext!!,
+            text,
+            fragmentName.name
+        )
+    }
+}
+
+@Composable
+fun DebugComposeActivityItem(text: String, activity: Class<out Activity>) {
+    DebugItem(text) {
+        DebugUtilsV2.startActivityWithException(it, activity)
     }
 }
 

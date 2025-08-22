@@ -23,7 +23,6 @@ class DebugSvgaFragment : DebugEnvFragment() {
 
     override fun initView(view: View) {
         super.initView(view)
-        SVGAHelper
         mSVGAImageView = SVGAImageView(view.context).apply {
             setBackgroundColor(Color.BLACK)
             setOnClickListener {
