@@ -13,7 +13,10 @@ import com.bihe0832.android.base.compose.debug.intent.DebugIntentComposeView
 import com.bihe0832.android.base.compose.debug.list.DebugListComposeView
 import com.bihe0832.android.base.compose.debug.log.DebugLogComposeView
 import com.bihe0832.android.base.compose.debug.media.DebugMediaComposeView
+import com.bihe0832.android.base.compose.debug.message.DebugMessageComposeView
 import com.bihe0832.android.base.compose.debug.share.DebugShareComposeView
+import com.bihe0832.android.base.compose.debug.task.DebugEnqueueView
+import com.bihe0832.android.base.compose.debug.task.DebugThreadAndCoroutinesView
 import com.bihe0832.android.base.compose.debug.toast.DebugToastComposeView
 import com.bihe0832.android.base.compose.debug.ui.DebugApplicaionUIView
 import com.bihe0832.android.common.compose.debug.item.DebugComposeFragmentItem
@@ -44,19 +47,19 @@ fun AAFDebugModuleView() {
         DebugComposeItem("数据处理（格式转化、Json、拼音简繁体等）", "DebugConvertComposeView") {
             DebugConvertComposeView()
         }
-        DebugComposeItem(
-            "UI（换肤、APPIcon切换、哀悼日、多语言、前后台等）测试", "DebugApplicaionUIView"
-        ) {
+        DebugComposeItem("UI（换肤、APPIcon切换、哀悼日、多语言、前后台等）测试", "DebugApplicaionUIView") {
             DebugApplicaionUIView()
         }
-        DebugComposeItem(
-            "UI（Intent跳转、反馈、评分、锁屏、隐私弹框、设置等）测试", "DebugIntentComposeView"
-        ) {
+        DebugComposeItem("UI（Intent跳转、反馈、评分、锁屏、隐私弹框、设置等）测试", "DebugIntentComposeView") {
             DebugIntentComposeView()
         }
         DebugComposeFragmentItem("UI（颜色取色器）测试", DebugColorFragment::class.java)
-        DebugComposeItem("Compose List 调试", "DebugListComposeView") { DebugListComposeView() }
+        DebugComposeItem("公告消息 调试", "DebugMessageComposeView") { DebugMessageComposeView() }
 
+        DebugComposeItem("定时任务、阻塞任务、延迟任务", "DebugEnqueueView") { DebugEnqueueView() }
+        DebugComposeItem("协程、多线程、前台服务", "DebugThreadAndCoroutinesView") { DebugThreadAndCoroutinesView() }
+
+        DebugComposeItem("Compose List 调试", "DebugListComposeView") { DebugListComposeView() }
         DebugComposeItem("Toast 调试", "DebugToastComposeView") { DebugToastComposeView() }
         DebugComposeItem("分享、底部Activity 调试", "DebugShareComposeView") {
             DebugShareComposeView()

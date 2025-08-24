@@ -42,7 +42,6 @@ fun AAFDebugModule() {
     DebugContent {
 
         DebugFragmentItem("权限 Permission 调试", DebugPermissionFragment::class.java)
-        DebugFragmentItem("公告消息 调试", DebugMessageFragment::class.java)
         DebugFragmentItem("Google相关 调试", DebugGoogleFragment::class.java)
         DebugFragmentItem("TTS 调试", DebugTTSFragment::class.java)
         DebugFragmentItem("定时任务、阻塞任务、延迟任务", DebugEnqueueFragment::class.java)
