@@ -24,18 +24,7 @@
             android:authorities="${applicationId}.process_dispatcher_other"
             android:process=":test" />
 
-        <activity
-            android:name="com.bihe0832.android.base.debug.ipc.TestIPCActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
 
-        <activity
-            android:name="com.bihe0832.android.base.debug.ipc.TestIPC1Activity"
-            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
-            android:process=":test"
-            android:screenOrientation="portrait"
-            android:theme="@style/AAF.ActivityTheme" />
 
         <activity
             android:name="com.bihe0832.android.base.debug.touch.TouchRegionActivity"

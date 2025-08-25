@@ -10,27 +10,17 @@ package com.bihe0832.android.base.debug
 
 import androidx.compose.runtime.Composable
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
-import com.bihe0832.android.base.debug.google.DebugGoogleFragment
-import com.bihe0832.android.base.debug.immersion.DebugImmersionActivity
-import com.bihe0832.android.base.debug.ipc.AAFDebugIPCFragment
-import com.bihe0832.android.base.debug.message.DebugMessageFragment
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.network.DebugWiFiFragment
-import com.bihe0832.android.base.debug.notify.DebugNotifyFragment
 import com.bihe0832.android.base.debug.panel.DebugPanelFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.base.debug.qrcode.DebugQRCodeFragment
-import com.bihe0832.android.base.debug.request.DebugHttpActivity
-import com.bihe0832.android.base.debug.shake.DebugShakeAndVibratorFragment
 import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
-import com.bihe0832.android.base.debug.task.DebugEnqueueFragment
-import com.bihe0832.android.base.debug.task.DebugThreadAndCoroutinesFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebViewFragment
 import com.bihe0832.android.base.debug.widget.DebugWidgetFragment
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
-import com.bihe0832.android.common.compose.debug.item.DebugComposeActivityItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.debug.module.DebugRootActivity
@@ -42,11 +32,7 @@ fun AAFDebugModule() {
     DebugContent {
 
         DebugFragmentItem("权限 Permission 调试", DebugPermissionFragment::class.java)
-        DebugFragmentItem("Google相关 调试", DebugGoogleFragment::class.java)
         DebugFragmentItem("TTS 调试", DebugTTSFragment::class.java)
-        DebugFragmentItem("定时任务、阻塞任务、延迟任务", DebugEnqueueFragment::class.java)
-        DebugFragmentItem("协程、多线程、前台服务", DebugThreadAndCoroutinesFragment::class.java)
-        DebugFragmentItem("摇一摇、震动等测试", DebugShakeAndVibratorFragment::class.java)
 
         DebugFragmentItem("二维码调试", DebugQRCodeFragment::class.java)
 
@@ -58,10 +44,7 @@ fun AAFDebugModule() {
 
         DebugFragmentItem("悬浮窗测试(Basic)", DebugFloatViewFragment::class.java)
         DebugFragmentItem("SVGA 调试", DebugSvgaFragment::class.java)
-        DebugComposeActivityItem("沉浸式状态栏及标题栏调试", DebugImmersionActivity::class.java)
 
-        DebugFragmentItem("多进程调试", AAFDebugIPCFragment::class.java)
-        DebugFragmentItem("通知栏调试", DebugNotifyFragment::class.java)
         DebugFragmentItem("WebView 调试", DebugWebViewFragment::class.java)
 
 
@@ -69,9 +52,7 @@ fun AAFDebugModule() {
             DebugUtilsV2.startActivityWithException(context, DebugNetworkActivity::class.java)
         }
         DebugFragmentItem("Wi-Fi 相关信息", DebugWiFiFragment::class.java)
-        DebugItem("HTTP Request") { context ->
-            DebugUtilsV2.startActivityWithException(context, DebugHttpActivity::class.java)
-        }
+
     }
 }
 

@@ -68,6 +68,19 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 
+        <activity
+            android:name="com.bihe0832.android.base.compose.debug.ipc.TestIPCActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
+            android:screenOrientation="portrait"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name="com.bihe0832.android.base.compose.debug.ipc.TestIPC1Activity"
+            android:configChanges="orientation|screenSize|keyboardHidden|layoutDirection"
+            android:process=":test"
+            android:screenOrientation="portrait"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
+
     </application>
 
 </manifest>
