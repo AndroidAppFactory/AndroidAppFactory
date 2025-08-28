@@ -1,6 +1,8 @@
 package com.bihe0832.android.common.qrcode.core;
 
+import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Vibrator;
@@ -25,7 +27,7 @@ import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager;
 import com.google.zxing.Result;
 
-public class BaseScanActivity extends BaseCaptureActivity {
+public class BaseScanFragment extends BaseCaptureFragment {
 
     public static final int BITMAP_WIDTH = 600;
     private static final long VIBRATE_DURATION = 300L;
@@ -45,26 +47,26 @@ public class BaseScanActivity extends BaseCaptureActivity {
     }
 
     @Override
-    public ViewfinderView getViewfinderView() {
-        return findViewById(R.id.common_qrcode_finder_View);
+    public ViewfinderView getViewfinderView(View rootView) {
+        return rootView.findViewById(R.id.common_qrcode_finder_View);
     }
 
     @Override
-    public PreviewView getPreviewView() {
-        return findViewById(R.id.common_qrcode_preview);
+    public PreviewView getPreviewView(View rootView) {
+        return rootView.findViewById(R.id.common_qrcode_preview);
     }
 
     @Override
-    public CheckedEnableImageView getFlashlightView() {
-        return findViewById(R.id.common_qrcode_flash);
+    public CheckedEnableImageView getFlashlightView(View rootView) {
+        return rootView.findViewById(R.id.common_qrcode_flash);
     }
 
-    public CheckedEnableImageView getAlbumView() {
-        return findViewById(R.id.common_qrcode_album);
+    public CheckedEnableImageView getAlbumView(View rootView) {
+        return rootView.findViewById(R.id.common_qrcode_album);
     }
 
-    public View getBackView() {
-        return findViewById(R.id.common_qrcode_scanner_back);
+    public View getBackView(View rootView) {
+        return rootView.findViewById(R.id.common_qrcode_scanner_back);
     }
 
     @Override
@@ -97,10 +99,9 @@ public class BaseScanActivity extends BaseCaptureActivity {
 
 
     @Override
-    public void initUI() {
-        initData(getIntent());
-        super.initUI();
-        View backView = getBackView();
+    public void initView(View rootView) {
+        super.initView(rootView);
+        View backView = getBackView(rootView);
         if (backView != null) {
             backView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,19 +114,22 @@ public class BaseScanActivity extends BaseCaptureActivity {
         if (opensound) {
             blockAudioPlayerManager = new AudioPLayerManager();
         }
-        CheckedEnableImageView btnAlbum = getAlbumView();
+        CheckedEnableImageView btnAlbum = getAlbumView(rootView);
         if (btnAlbum != null) {
             initAlbumAction(btnAlbum);
         }
     }
 
+
     @Override
-    public void initCameraScan() {
-        super.initCameraScan();
+    public void initCameraScan(Context context) {
+        super.initCameraScan(context);
         getCameraScan().setNeedAutoZoom(autoZoom);
     }
 
-    private void initData(Intent intent) {
+
+    @Override
+    public void initData(Intent intent) {
         if (intent.hasExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND)) {
             opensound = ConvertUtils.parseBoolean(
                     intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_QRCODE_SCAN_SOUND), opensound);
@@ -152,7 +156,6 @@ public class BaseScanActivity extends BaseCaptureActivity {
         });
     }
 
-    @Override
     public void onBack() {
         handleDecode(null);
     }
@@ -162,9 +165,9 @@ public class BaseScanActivity extends BaseCaptureActivity {
             playBeepSoundAndVibrate();
             Intent data = new Intent();
             data.putExtra(ZixieActivityRequestCode.INTENT_EXTRA_KEY_QR_SCAN, result.getText());
-            setResult(RESULT_OK, data);
+            getActivity().setResult(Activity.RESULT_OK, data);
         } else {
-            setResult(RESULT_CANCELED);
+            getActivity().setResult(Activity.RESULT_CANCELED);
         }
         ThreadManager.getInstance().start(new Runnable() {
             @Override
@@ -172,7 +175,7 @@ public class BaseScanActivity extends BaseCaptureActivity {
                 ThreadManager.getInstance().runOnUIThread(new Runnable() {
                     @Override
                     public void run() {
-                        finish();
+                        getActivity().finish();
                     }
                 });
             }
@@ -180,8 +183,8 @@ public class BaseScanActivity extends BaseCaptureActivity {
     }
 
     @Override
-    protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+    public void onActivityResult(final int requestCode, int resultCode, Intent data) {
+        if (resultCode == getActivity().RESULT_OK) {
             if (requestCode == ZixieActivityRequestCode.CHOOSE_PHOTO) {
                 handleAlbumPic(data);
             }
@@ -198,12 +201,12 @@ public class BaseScanActivity extends BaseCaptureActivity {
         //获取选中图片的路径
         final Uri uri = data.getData();
         if (mLoading == null) {
-            mLoading = new LoadingDialog(this);
+            mLoading = new LoadingDialog(getActivity());
         }
         mLoading.setCanCanceled(false);
         ThreadManager.getInstance().runOnUIThread(() -> {
             mLoading.show(getString(R.string.common_scan_scanning));
-            Result result = QRCodeDecodingHandler.decodeCode(this, uri, BITMAP_WIDTH, BITMAP_WIDTH);
+            Result result = QRCodeDecodingHandler.decodeCode(getActivity(), uri, BITMAP_WIDTH, BITMAP_WIDTH);
             mLoading.dismiss();
             if (result != null) {
                 handleDecode(result);
@@ -214,7 +217,7 @@ public class BaseScanActivity extends BaseCaptureActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if (mLoading != null) {
             mLoading.dismiss();
             mLoading = null;
@@ -224,12 +227,11 @@ public class BaseScanActivity extends BaseCaptureActivity {
 
     protected void playBeepSoundAndVibrate() {
         if (opensound && blockAudioPlayerManager != null) {
-            blockAudioPlayerManager.play(this, BEEP_VOLUME, R.raw.beep);
+            blockAudioPlayerManager.play(getContext(), BEEP_VOLUME, R.raw.beep);
         }
 
         if (openvibrate) {
-
-            Vibrator vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
+            Vibrator vibrator = (Vibrator) getContext().getSystemService(Service.VIBRATOR_SERVICE);
             if (vibrator != null) {
                 vibrator.vibrate(VIBRATE_DURATION);
             }

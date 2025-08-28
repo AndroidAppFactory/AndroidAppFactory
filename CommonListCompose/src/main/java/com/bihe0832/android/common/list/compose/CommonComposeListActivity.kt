@@ -49,10 +49,4 @@ abstract class CommonComposeListActivity<T : Any> : CommonComposeActivity() {
     @Composable
     abstract fun GetComposeItem(index: Int, item: T)
 
-
-    @Preview
-    @Composable
-    override fun ActivityRootContentRenderPreview() {
-        getActivityRootContentRender().Content()
-    }
 }

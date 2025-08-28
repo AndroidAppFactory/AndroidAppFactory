@@ -1,28 +1,35 @@
 package com.bihe0832.android.common.qrcode
 
 import android.Manifest
-import android.os.Build
-import android.view.View
-import com.bihe0832.android.common.photos.getPhotoContent
-import com.bihe0832.android.common.qrcode.core.BaseScanActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
+import com.bihe0832.android.common.compose.base.BaseComposeActivity
+import com.bihe0832.android.common.compose.common.activity.FragmentContainer
+import com.bihe0832.android.common.compose.state.RenderState
+import com.bihe0832.android.common.compose.state.ThemeState
+import com.bihe0832.android.common.permission.AAFPermissionManager
+import com.bihe0832.android.common.qrcode.core.BaseScanFragment
 import com.bihe0832.android.framework.router.RouterConstants
-import com.bihe0832.android.lib.media.image.CheckedEnableImageView
 import com.bihe0832.android.lib.permission.PermissionManager
-import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.router.annotation.Module
-import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Locale
 
 @Module(RouterConstants.MODULE_NAME_QRCODE_SCAN)
-open class CommonScanActivity : BaseScanActivity() {
-
-    private var userDeny = false
+open class CommonScanActivity : BaseComposeActivity() {
 
     fun initPermission() {
         PermissionManager.addPermissionGroup(
             RouterConstants.MODULE_NAME_QRCODE_SCAN,
             Manifest.permission.CAMERA,
-            com.bihe0832.android.common.permission.AAFPermissionManager.takePhotoPermission,
+            AAFPermissionManager.takePhotoPermission,
         )
         PermissionManager.addPermissionGroupDesc(
             RouterConstants.MODULE_NAME_QRCODE_SCAN,
@@ -36,102 +43,38 @@ open class CommonScanActivity : BaseScanActivity() {
         )
     }
 
-    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
-        initPermission()
-    }
+    override fun getActivityRootContentRender(): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content() {
+                val themeType by rememberUpdatedState(ThemeState.getCurrentThemeState())
+                val maskColor = colorResource(R.color.viewfinder_mask)
 
-    override fun initUI() {
-        super.initUI()
-        initPermission()
-    }
-
-
-    fun startScanAction() {
-        super.startCamera()
-    }
-
-    override fun startCamera() {
-        if (PermissionManager.isAllPermissionOK(this, Manifest.permission.CAMERA)) {
-            startScanAction()
-        } else if (!userDeny) {
-            PermissionManager.checkPermission(
-                this,
-                RouterConstants.MODULE_NAME_QRCODE_SCAN,
-                true,
-                PermissionsActivityV2::class.java,
-                object : com.bihe0832.android.common.permission.PermissionResultOfAAF(false) {
-                    override fun onSuccess() {
-                        startScanAction()
+                MaterialTheme(colorScheme = themeType) {
+                    val systemUiController = rememberSystemUiController()
+                    SideEffect {
+                        systemUiController.setStatusBarColor(maskColor)
+                        systemUiController.setNavigationBarColor(maskColor)
                     }
-
-                    override fun onUserCancel(
-                        scene: String,
-                        permissionGroupID: String,
-                        permission: String
-                    ) {
-                        super.onUserDeny(scene, permissionGroupID, permission)
-                        userDeny = true
+                    Surface {
+                        FragmentContainer(
+                            modifier = Modifier.fillMaxSize(), getScanFragment()
+                        )
                     }
-
-                    override fun onFailed(msg: String) {
-                        super.onFailed(msg)
-                        userDeny = true
-                    }
-
-                    override fun onUserDeny(
-                        scene: String,
-                        permissionGroupID: String,
-                        permission: String
-                    ) {
-                        super.onUserDeny(scene, permissionGroupID, permission)
-                        userDeny = true
-                    }
-                },
-                com.bihe0832.android.common.permission.AAFPermissionManager.takePhotoPermission,
-            )
-        }
-    }
-
-    override fun initAlbumAction(btnAlbum: CheckedEnableImageView) {
-        btnAlbum.setOnClickListener { view: View? ->
-            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.Q) {
-                getPhotoContent()
-            } else {
-                PermissionManager.checkPermission(
-                    this,
-                    RouterConstants.MODULE_NAME_QRCODE_SCAN,
-                    false,
-                    object : com.bihe0832.android.common.permission.PermissionResultOfAAF(false) {
-                        override fun onSuccess() {
-                            getPhotoContent()
-                        }
-
-                        override fun onUserCancel(
-                            scene: String,
-                            permissionGroupID: String,
-                            permission: String
-                        ) {
-                            super.onUserDeny(scene, permissionGroupID, permission)
-                            userDeny = true
-                        }
-
-                        override fun onFailed(msg: String) {
-                            super.onFailed(msg)
-                            userDeny = true
-                        }
-
-                        override fun onUserDeny(
-                            scene: String,
-                            permissionGroupID: String,
-                            permission: String
-                        ) {
-                            super.onUserDeny(scene, permissionGroupID, permission)
-                            userDeny = true
-                        }
-                    },
-                    com.bihe0832.android.common.permission.AAFPermissionManager.selectPhotoPermission,
-                )
+                }
             }
         }
+    }
+
+    override fun onLocaleChanged(lastLocale: Locale, toLanguageTag: Locale) {
+        recreate()
+    }
+
+    open fun getScanFragment(): BaseScanFragment {
+        return fragment
+    }
+
+    private val fragment by lazy {
+        CommonScanFragment()
     }
 }

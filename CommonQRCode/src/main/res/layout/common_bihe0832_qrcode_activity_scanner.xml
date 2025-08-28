@@ -1,63 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.camera.view.PreviewView
-            android:id="@+id/common_qrcode_preview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:id="@+id/common_qrcode_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:id="@+id/common_qrcode_scanner_status"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_padding_top"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:id="@+id/common_qrcode_scanner_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="@dimen/toolbar_padding_top"
-            android:scaleType="centerInside"
-            android:src="@drawable/icon_left_arrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/common_qrcode_scanner_back"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="@dimen/toolbar_padding_top"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_left_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/common_qrcode_scanner_status" />
 
     <com.bihe0832.android.common.qrcode.view.ViewfinderView
-            android:id="@+id/common_qrcode_finder_View"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cornerColor="@color/corner_color"
-            app:frameColor="@color/viewfinder_frame"
-            app:labelText="@string/common_scan_tips"
-            app:labelTextColor="@color/colorOnPrimary"
-            app:laserColor="@color/laser_color"
-            app:maskColor="@color/viewfinder_mask"
-            app:labelTextSize="14dp"
-            app:labelTextLocation="bottom"
-            app:laserStyle="grid" />
+        android:id="@+id/common_qrcode_finder_View"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cornerColor="@color/corner_color"
+        app:frameColor="@color/viewfinder_frame"
+        app:labelText="@string/common_scan_tips"
+        app:labelTextColor="@color/colorOnPrimary"
+        app:labelTextLocation="bottom"
+        app:labelTextSize="14dp"
+        app:laserColor="@color/laser_color"
+        app:laserStyle="grid"
+        app:maskColor="@color/viewfinder_mask" />
 
     <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-            android:id="@+id/common_qrcode_flash"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="48dp"
-            android:padding="18dp"
-            android:scaleType="centerInside"
-            android:tint="@color/md_theme_onPrimary"
-            android:src="@drawable/com_bihe0832_common_qrcode_flash_select"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/common_qrcode_album"
-            app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/common_qrcode_flash"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="48dp"
+        android:padding="18dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/com_bihe0832_common_qrcode_flash_select"
+        android:tint="@color/md_theme_onPrimary"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/common_qrcode_album"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.bihe0832.android.lib.media.image.CheckedEnableImageView
-            android:id="@+id/common_qrcode_album"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="18dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/icon_photos"
-            android:tint="@color/md_theme_onPrimary"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/common_qrcode_flash"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/common_qrcode_flash" />
+        android:id="@+id/common_qrcode_album"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="18dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_photos"
+        android:tint="@color/md_theme_onPrimary"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/common_qrcode_flash"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/common_qrcode_flash" />
 </androidx.constraintlayout.widget.ConstraintLayout>
