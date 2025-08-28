@@ -2,7 +2,6 @@ package com.bihe0832.android.app.ui.navigation
 
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.common.main.CommonActivityWithNavigationDrawer
-import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.ui.custom.view.background.TextViewWithBackground
 import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnreadMsg

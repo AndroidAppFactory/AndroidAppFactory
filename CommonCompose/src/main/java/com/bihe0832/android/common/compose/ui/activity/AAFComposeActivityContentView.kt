@@ -131,7 +131,7 @@ fun ActivityRootViewWithDrawer(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AAFCenterTopAppBar(
+fun AAFCenterTopAppBar(
     navigationIcon: ImageVector?,
     navigationOnClick: () -> Unit,
     title: String,
@@ -170,39 +170,43 @@ internal fun AAFCenterTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AAFTopAppBar(
+fun AAFTopAppBar(
     navigationIcon: ImageVector?,
     navigationOnClick: () -> Unit,
     title: String,
     textSize: TextUnit,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    TopAppBar(title = {
-        Text(
-            text = title,
-            color = MaterialTheme.colorScheme.onPrimary,
-            fontWeight = FontWeight.Medium,
-            fontSize = textSize
-        )
-    }, navigationIcon = {
-        if (navigationIcon != null) {
-            IconButton(onClick = {
-                navigationOnClick()
-            }) {
-                Icon(
-                    imageVector = navigationIcon, contentDescription = null
-                )
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Medium,
+                fontSize = textSize
+            )
+        },
+        navigationIcon = {
+            if (navigationIcon != null) {
+                IconButton(onClick = {
+                    navigationOnClick()
+                }) {
+                    Icon(
+                        imageVector = navigationIcon, contentDescription = null
+                    )
+                }
             }
-        }
-    }, actions = {
-        actions()
-    }, colors = TopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        scrolledContainerColor = MaterialTheme.colorScheme.surface,
-        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-        titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-    )
+        },
+        actions = {
+            actions()
+        },
+        colors = TopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+        )
     )
 }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -20,17 +21,17 @@ import com.bihe0832.android.common.compose.state.LayerToGrayState
 import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.state.ThemeState
+import com.bihe0832.android.common.compose.ui.EmptyView
 import com.bihe0832.android.common.compose.ui.activity.ActivityThemeView
 import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.util.Locale
 
 
-abstract class BaseComposeActivity : FragmentActivity() {
+open class BaseComposeActivity : FragmentActivity() {
 
     private var lastLocale = ""
 
-    abstract fun getActivityContentRender(): RenderState
 
     open fun title(): String {
         return ""
@@ -145,6 +146,14 @@ abstract class BaseComposeActivity : FragmentActivity() {
         }
     }
 
+    open fun getActivityContentRender(): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content() {
+                EmptyView(message = "空白页面", colorP = MaterialTheme.colorScheme.surface)
+            }
+        }
+    }
 
     open fun resetDensity(): Boolean {
         return true

@@ -14,12 +14,20 @@ android {
         versionCode project.zixieVersionCode
         versionName project.zixieVersionName
     }
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion project.compose_version
+    }
 
     buildTypes {
         release {
             minifyEnabled false
         }
     }
+
     lintOptions {
         abortOnError false
     }

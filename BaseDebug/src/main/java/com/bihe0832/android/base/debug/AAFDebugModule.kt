@@ -14,7 +14,6 @@ import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.network.DebugWiFiFragment
 import com.bihe0832.android.base.debug.panel.DebugPanelFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
-import com.bihe0832.android.base.debug.qrcode.DebugQRCodeFragment
 import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
 import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
@@ -34,7 +33,6 @@ fun AAFDebugModule() {
         DebugFragmentItem("权限 Permission 调试", DebugPermissionFragment::class.java)
         DebugFragmentItem("TTS 调试", DebugTTSFragment::class.java)
 
-        DebugFragmentItem("二维码调试", DebugQRCodeFragment::class.java)
 
         DebugFragmentItem("UI（Widget）测试", DebugWidgetFragment::class.java)
         DebugFragmentItem("UI（点击区、TextView、自定义View）测试", DebugBaseViewFragment::class.java)

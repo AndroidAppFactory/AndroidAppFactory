@@ -20,6 +20,32 @@ import com.bihe0832.android.common.compose.ui.activity.CommonContent
 
 open class CommonComposeActivity : BaseComposeActivity() {
 
+    override fun getActivityContentRender(): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content() {
+                handleEffect(LocalContext.current)
+                getToolBarRender(getContentRender()).Content()
+            }
+        }
+    }
+
+    open fun getToolBarRender(contentRender: RenderState): RenderState {
+        return object : RenderState {
+            @Composable
+            override fun Content() {
+                handleEffect(LocalContext.current)
+                CommonActivityToolbarView(
+                    getNavigationIcon(),
+                    getTitleName(),
+                    isCenter(),
+                    content = {
+                        contentRender.Content()
+                    })
+            }
+        }
+    }
+
     open fun getContentRender(): RenderState {
         return object : RenderState {
             @Composable
@@ -50,42 +76,9 @@ open class CommonComposeActivity : BaseComposeActivity() {
         return true
     }
 
-    override fun getActivityContentRender(): RenderState {
-        return object : RenderState {
-            @Composable
-            override fun Content() {
-                handleEffect(LocalContext.current)
-                getToolBarRender(getContentRender()).Content()
-            }
-        }
-    }
-
-    open fun getToolBarRender(contentRender: RenderState): RenderState {
-        return object : RenderState {
-            @Composable
-            override fun Content() {
-                handleEffect(LocalContext.current)
-                CommonActivityToolbarView(
-                    getNavigationIcon(),
-                    getTitleName(),
-                    isCenter(),
-                    content = {
-                        contentRender.Content()
-                    })
-            }
-        }
-    }
-
 
     protected open fun handleEffect(context: Context) {
 
     }
-
-    @Preview
-    @Composable
-    open fun ActivityRootContentRenderPreview() {
-        getActivityRootContentRender().Content()
-    }
-
 }
 

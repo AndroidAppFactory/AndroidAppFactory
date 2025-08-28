@@ -16,13 +16,19 @@
 
 package com.bihe0832.android.common.qrcode.core;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.view.PreviewView;
+import androidx.fragment.app.Fragment;
 import com.bihe0832.android.common.qrcode.R;
 import com.bihe0832.android.common.qrcode.view.ViewfinderView;
 import com.bihe0832.android.framework.ZixieContext;
-import com.bihe0832.android.framework.ui.BaseActivity;
 import com.bihe0832.android.lib.camera.scan.CameraScan;
 import com.bihe0832.android.lib.camera.scan.CameraScan.OnScanResultCallback;
 import com.bihe0832.android.lib.camera.scan.DefaultCameraScan;
@@ -33,7 +39,7 @@ import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.media.image.CheckedEnableImageView;
 import com.bihe0832.android.lib.qrcode.DecodeFormatManager;
 
-public abstract class BaseCaptureActivity extends BaseActivity {
+public abstract class BaseCaptureFragment extends Fragment {
 
     protected PreviewView previewView;
     protected ViewfinderView viewfinderView;
@@ -43,25 +49,51 @@ public abstract class BaseCaptureActivity extends BaseActivity {
 
     public abstract int getLayoutId();
 
-    public abstract ViewfinderView getViewfinderView();
+    public abstract ViewfinderView getViewfinderView(View rootView);
 
-    public abstract PreviewView getPreviewView();
+    public abstract PreviewView getPreviewView(View rootView);
 
-    public abstract CheckedEnableImageView getFlashlightView();
+    public abstract CheckedEnableImageView getFlashlightView(View rootView);
 
     public abstract OnScanResultCallback getOnScanResultCallback();
 
-    protected CameraScan createCameraScan() {
-        return new DefaultCameraScan(this.getApplicationContext(), this, previewView);
+    protected CameraScan createCameraScan(Context mContext) {
+        return new DefaultCameraScan(mContext.getApplicationContext(), getViewLifecycleOwner(), previewView);
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(getLayoutId(), null);
+        initView(view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // 获取宿主 Activity 的 Intent
+        Intent intent = requireActivity().getIntent();
+        if (intent != null) {
+            initData(intent);
+        }
+        initCameraScan(view.getContext());
+        startCamera();
+    }
+
+
+    protected void initView(View view) {
+        initUI(view);
+    }
+
+    protected void initData(Intent intent) {
+
     }
 
     public CameraScan getCameraScan() {
         return mCameraScan;
-    }
-
-    @Override
-    public boolean supportMultiLanguage() {
-        return true;
     }
 
     protected Analyzer createAnalyzer() {
@@ -86,34 +118,23 @@ public abstract class BaseCaptureActivity extends BaseActivity {
         return decodeConfig;
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getLayoutId() > 0) {
-            setContentView(getLayoutId());
-            initUI();
-        }
-    }
-
     /**
      * 初始化
      */
-    public void initUI() {
-        previewView = getPreviewView();
-        viewfinderView = getViewfinderView();
-        flashlightView = getFlashlightView();
+    private void initUI(View rootView) {
+        previewView = getPreviewView(rootView);
+        viewfinderView = getViewfinderView(rootView);
+        flashlightView = getFlashlightView(rootView);
         if (flashlightView != null) {
             flashlightView.setOnClickListener(v -> onClickFlashlight());
         }
-        initCameraScan();
-        startCamera();
     }
 
     /**
      * 初始化CameraScan
      */
-    public void initCameraScan() {
-        mCameraScan = createCameraScan();
+    public void initCameraScan(Context context) {
+        mCameraScan = createCameraScan(context);
         //设置分析器,如果内置实现的一些分析器不满足您的需求，你也可以自定义去实现
         mCameraScan.setAnalyzer(createAnalyzer());
         mCameraScan.setOnScanResultCallback(getOnScanResultCallback());
@@ -162,7 +183,8 @@ public abstract class BaseCaptureActivity extends BaseActivity {
             try {
                 boolean isTorch = mCameraScan.isTorchEnabled();
                 if (!isTorch) {
-                    ZixieContext.INSTANCE.showToast(getString(R.string.common_scan_failed));
+                    ZixieContext.INSTANCE.showToast(
+                            ZixieContext.INSTANCE.getApplicationContext().getString(R.string.common_scan_flash_failed));
                     return;
                 }
                 mCameraScan.enableTorch(!isTorch);
@@ -174,24 +196,4 @@ public abstract class BaseCaptureActivity extends BaseActivity {
             }
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startCamera();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopCamera();
-    }
-
-    @Override
-    protected void onDestroy() {
-        releaseCamera();
-        super.onDestroy();
-    }
-
 }
