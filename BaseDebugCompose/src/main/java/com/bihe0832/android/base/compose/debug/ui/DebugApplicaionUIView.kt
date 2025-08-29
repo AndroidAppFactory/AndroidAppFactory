@@ -6,6 +6,7 @@ import androidx.compose.ui.res.stringResource
 import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.app.shortcut.AAFShortcutManager
 import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.base.compose.debug.language.DebugLanguageComposeView
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
@@ -19,7 +20,6 @@ import com.bihe0832.android.common.compose.state.ThemeState
 import com.bihe0832.android.common.compose.state.aafStringResource
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
-import com.bihe0832.android.lib.app.icon.APPIconManager
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.ActivityObserver
@@ -53,15 +53,12 @@ fun DebugApplicaionUIView() {
         }
 
         DebugItem("切换桌面图标1") {
-            APPIconManager.changeAppIcon(
-                it, "com.bihe0832.android.test.DefaultAlias", list
-            )
+            AAFShortcutManager.changeIcon(it, AAFShortcutManager.defaultShortcut)
+
         }
 
         DebugItem("切换桌面图标2") {
-            APPIconManager.changeAppIcon(
-                it, "com.bihe0832.android.test.FestivalAlias", list
-            )
+            AAFShortcutManager.changeIcon(it, "com.bihe0832.android.test.FestivalAlias")
         }
 
         DebugItem("一键换肤，暗夜模式") {

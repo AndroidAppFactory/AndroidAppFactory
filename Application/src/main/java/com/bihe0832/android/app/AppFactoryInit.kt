@@ -10,6 +10,7 @@ import android.webkit.WebView
 import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.app.shortcut.AAFShortcutManager
 import com.bihe0832.android.common.network.NetworkChangeManager
 import com.bihe0832.android.common.permission.AAFPermissionManager
 import com.bihe0832.android.common.webview.tbs.WebViewHelper
@@ -78,6 +79,7 @@ object AppFactoryInit {
             }
             AAFMessageManager.initModule(ctx)
             AAFComposeStateManager.init(ctx)
+            AAFShortcutManager.init(ctx)
             ZLog.d(
                 ZixieCoreInit.TAG,
                 "Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL,
