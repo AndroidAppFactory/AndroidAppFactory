@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 object APPIconManager {
 
-    private const val TAG = "APPIconManager"
+    const val TAG = "APPIconManager"
 
     fun changeAppIcon(context: Context, enableAlias: String, allAlias: List<String>, delay: Long) {
         if (TextUtils.isEmpty(enableAlias)) {
@@ -129,6 +129,7 @@ object APPIconManager {
         enableAlias: List<String>,
         disableAlias: List<String>
     ) {
+        ZLog.d(TAG, "changeAppIconAction start")
         val pm = context.packageManager
         val packageName = context.packageName
 
@@ -140,11 +141,17 @@ object APPIconManager {
                 }
 
                 else -> {
-                    pm.setComponentEnabledSetting(
-                        ComponentName(packageName, it.key),
-                        COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
+                    try {
+                        pm.setComponentEnabledSetting(
+                            ComponentName(packageName, it.key),
+                            COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        ZLog.e(TAG, "enable Alias $it catch exception $e")
+                    }
+
                 }
             }
         }
@@ -152,11 +159,16 @@ object APPIconManager {
         disableData.forEach {
             when (it.value) {
                 COMPONENT_ENABLED_STATE_ENABLED, COMPONENT_ENABLED_STATE_DEFAULT -> {
-                    pm.setComponentEnabledSetting(
-                        ComponentName(packageName, it.key),
-                        COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP
-                    )
+                    try {
+                        pm.setComponentEnabledSetting(
+                            ComponentName(packageName, it.key),
+                            COMPONENT_ENABLED_STATE_DISABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        ZLog.e(TAG, "disable Alias $it catch exception $e")
+                    }
                 }
 
                 else -> {
@@ -164,6 +176,7 @@ object APPIconManager {
                 }
             }
         }
+        ZLog.d(TAG, "changeAppIconAction end")
     }
 
     fun getAliasState(context: Context, aliases: List<String>): ConcurrentHashMap<String, Int> {
