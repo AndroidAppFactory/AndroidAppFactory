@@ -24,7 +24,7 @@ ext.widgetmoduleInfo = [
                 ]
         ],
         "LibAppIcon"   : [
-                "version"            : "6.28.1",
+                "version"            : "6.28.2",
                 "artifactId"         : "lib-app-icon",
                 "apidependenciesList": [
                         "LibLifecycle"
