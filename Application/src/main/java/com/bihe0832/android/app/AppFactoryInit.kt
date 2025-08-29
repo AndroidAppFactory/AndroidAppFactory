@@ -18,7 +18,7 @@ import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
-import com.bihe0832.android.lib.device.shake.ShakeManager
+import com.bihe0832.android.lib.app.icon.APPIconManager
 import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
@@ -79,6 +79,14 @@ object AppFactoryInit {
             }
             AAFMessageManager.initModule(ctx)
             AAFLanguageManager.init(ctx)
+            APPIconManager.changeAppIcon(
+                ctx,
+                "com.bihe0832.android.test.DefaultAlias",
+                listOf(
+                    "com.bihe0832.android.test.DefaultAlias",
+                    "com.bihe0832.android.test.FestivalAlias"
+                ),2000L
+            )
             ZLog.d(
                 ZixieCoreInit.TAG,
                 "Application process $processName initCore ManufacturerUtil:" + ManufacturerUtil.MODEL,

@@ -59,7 +59,7 @@ class DebugUIFragment : DebugEnvFragment() {
                 APPIconManager.changeAppIcon(
                     it.context,
                     "com.bihe0832.android.test.DefaultAlias",
-                    list
+                    list,2000
                 )
             }))
 
@@ -67,7 +67,7 @@ class DebugUIFragment : DebugEnvFragment() {
                 APPIconManager.changeAppIcon(
                     it.context,
                     "com.bihe0832.android.test.FestivalAlias",
-                    list
+                    list,2000
                 )
             }))
 
