@@ -75,13 +75,13 @@ class DebugBaseViewFragment : DebugEnvFragment() {
         Media.addToPhotos(context, BitmapUtil.getViewBitmap(it))
 
         TextView(context).apply {
-            setText("BitmapUtil.getViewBitmap:" + DateUtil.getCurrentDateEN())
+            text = "BitmapUtil.getViewBitmap:" + DateUtil.getCurrentDateEN()
         }.let {
             Media.addToPhotos(context, BitmapUtil.getViewBitmap(it))
         }
 
         TextView(context).apply {
-            setText("Bitmap createBitmap:" + DateUtil.getCurrentDateEN())
+            text = "Bitmap createBitmap:" + DateUtil.getCurrentDateEN()
             gravity = Gravity.CENTER
             textAlignment = View.TEXT_ALIGNMENT_CENTER
             width = 200
@@ -99,14 +99,14 @@ class DebugBaseViewFragment : DebugEnvFragment() {
         }
 
         TextView(context).apply {
-            setText("ViewCaptureLayout getViewBitmap:" + DateUtil.getCurrentDateEN())
+            text = "ViewCaptureLayout getViewBitmap:" + DateUtil.getCurrentDateEN()
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20f)
             setTextColor(context.getColor(R.color.md_theme_tertiary))
             setPadding(40)
         }.let {
             ViewCaptureLayout(context).apply {
                 addView(it, 0)
-                setBackground(context.getDrawable(R.drawable.com_bihe0832_base_dialog_bg))
+                background = context.getDrawable(R.drawable.com_bihe0832_base_dialog_bg)
             }.getViewBitmap { data ->
                 Media.addToPhotos(context, BitmapUtil.saveBitmap(context, data))
             }

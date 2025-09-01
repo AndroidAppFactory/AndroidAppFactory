@@ -135,8 +135,8 @@ class DebugJsBridgeProxy(activity: Activity, webView: NativeWebView) :
                     view.layout(
                         0,
                         0,
-                        view.getMeasuredWidth(),
-                        view.getMeasuredHeight()
+                        view.measuredWidth,
+                        view.measuredHeight
                     )
                     view.visibility = View.GONE
                     resetADHeight(finalViewID, true, object : AAFDataCallback<Boolean>() {

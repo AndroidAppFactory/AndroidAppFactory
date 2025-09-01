@@ -298,7 +298,7 @@ class DebugRecordAndASRFragment : DebugEnvFragment() {
             SCENE,
             object : PermissionResultOfAAF(false) {
                 override fun onSuccess() {
-                    AudioRecordWithEndpoint.startDataRecord() { audioRecordConfig, pcmData, result ->
+                    AudioRecordWithEndpoint.startDataRecord { audioRecordConfig, pcmData, result ->
                         ZLog.d(TAG, "Started recording callback:${pcmData?.size}")
                         val fileFolder = AAFFileWrapper.getMediaTempFolder()
                         pcmData?.let {

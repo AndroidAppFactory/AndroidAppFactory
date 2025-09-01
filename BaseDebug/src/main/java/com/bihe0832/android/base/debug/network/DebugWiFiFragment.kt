@@ -86,7 +86,6 @@ class DebugWiFiFragment : BaseFragment() {
                     ThreadManager.getInstance().runOnUIThread {
                         rootview.findViewById<TextView>(R.id.qrcode_result).text =
                             "源数据为：\n${rootview.findViewById<EditText>(R.id.qrcode_input).text} \n二维码解析后的数据为：\n" + data?.text
-                                ?: ""
                     }
                 }
             }
@@ -100,7 +99,7 @@ class DebugWiFiFragment : BaseFragment() {
                     data?.getStringExtra(ZixieActivityRequestCode.INTENT_EXTRA_KEY_QR_SCAN)?.let { qrString ->
                         view?.findViewById<EditText>(R.id.qrcode_input)?.setText(qrString)
                         val qrScanResultArray =
-                            qrString.split(";".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+                            qrString.split(";".toRegex()).dropLastWhile { it.isEmpty() }?.toTypedArray()
                         val wifiName = ConvertUtils.getSafeValueFromArray(qrScanResultArray, 1, "")
                         val wifiPassword = ConvertUtils.getSafeValueFromArray(qrScanResultArray, 2, "")
                         ZLog.d("扫描结果:wifiName$wifiName,wifiPassword:$wifiPassword")

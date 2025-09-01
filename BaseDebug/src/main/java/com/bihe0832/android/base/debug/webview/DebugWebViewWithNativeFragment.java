@@ -12,7 +12,7 @@ import com.bihe0832.android.common.webview.CommonWebviewFragment;
  */
 public class DebugWebViewWithNativeFragment extends CommonWebviewFragment {
     public static int HEIGHT = 50;
-    private TextView textView = null;
+    private final TextView textView = null;
     private DebugJsBridgeProxy mBaseJsBridgeProxy = null;
 
     @Override

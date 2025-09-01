@@ -24,7 +24,7 @@ fun getNeedLoginInterceptHostList(): List<String> {
 //不需要检查，直接跳过的路由
 fun getSkipListHostList(): List<String> {
     return listOf<String>(
-            RouterConstants.MODULE_NAME_SPLASH
+        RouterConstants.MODULE_NAME_SPLASH
     )
 }
 
