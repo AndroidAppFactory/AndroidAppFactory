@@ -296,7 +296,7 @@ object WifiManagerWrapper {
         NOT_CONNECTED, CONNECTED_NO_INTERNET, CONNECTED
     }
 
-    fun getWifiStatus(): WifiStatus? {
+    fun getWifiStatus(): WifiStatus {
         val connectivityManager =
             mContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         return if (mWifiManager?.isWifiEnabled == true) {
@@ -526,7 +526,7 @@ object WifiManagerWrapper {
         // 监听Wifi当前网络状态
         foundFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
         // 监听Wifi硬件状态(关闭、开启、...)
-        foundFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        foundFilter.addAction(WIFI_STATE_CHANGED_ACTION)
         // 监听与接入点之间的连接状态(新连接建立或者现有连接丢失)
         foundFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)
         if (mNotifyRSSI) {

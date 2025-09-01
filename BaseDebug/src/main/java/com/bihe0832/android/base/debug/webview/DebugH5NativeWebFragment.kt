@@ -20,7 +20,7 @@ class DebugH5NativeWebFragment : BaseFragment() {
 
     override fun initView(view: View) {
         mWebView = view.findViewById<NativeWebView>(R.id.webview)
-        val settings = mWebView!!.getSettings()
+        val settings = mWebView!!.settings
         settings.javaScriptEnabled = true
         setLocalWeb()
     }
@@ -33,7 +33,7 @@ class DebugH5NativeWebFragment : BaseFragment() {
         fun getTextView(context: Context): TextView {
             val textView = TextView(context)
             textView.setBackgroundColor(context.resources.getColor(R.color.bihe0832_common_toast_background_color))
-            textView.text = "Zixie AAF Webview Debug TextView2 " as CharSequence
+            textView.text = "Zixie AAF Webview Debug TextView2 "
             textView.gravity = Gravity.CENTER
             textView.layoutParams = ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,

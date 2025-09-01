@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager;
 
 @Module(RouterConstants.MODULE_NAME_MESSAGE)
 public final class AAFMessageActivity extends CommonActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

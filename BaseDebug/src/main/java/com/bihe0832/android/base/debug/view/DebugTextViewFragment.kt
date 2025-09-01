@@ -49,11 +49,11 @@ class DebugTextViewFragment : BaseFragment() {
         view.findViewById<MarqueeTextView>(R.id.text_marquee).apply {
 //            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
             setDrawableLeft(R.drawable.icon_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
-            setText(":fds")
+            text = ":fds"
             startScroll()
             setOnScrollListener(object : OnScrollListener {
                 override fun OnComplete() {
-                    setText(text.toString() + "fdsffsd ")
+                    text = text.toString() + "fdsffsd "
                 }
 
                 override fun onPause() {
@@ -85,7 +85,7 @@ class DebugTextViewFragment : BaseFragment() {
                     },
                 ),
             )
-            setMovementMethod(LinkMovementMethod.getInstance())
+            movementMethod = LinkMovementMethod.getInstance()
             //            setText(TextFactoryUtils.getSpannedTextByHtml(TextFactoryUtils.getSpecialText("这是一个测试",Color.WHITE)))
 //            setDrawable(
 //                    R.drawable.icon,
@@ -165,7 +165,7 @@ class DebugTextViewFragment : BaseFragment() {
             )
             append("aaaaaaa")
         }.let {
-            view!!.findViewById<TextView>(R.id.info_content_0).setText(it)
+            view!!.findViewById<TextView>(R.id.info_content_0).text = it
         }
 
         SpannableStringBuilder("测试").apply {
@@ -181,7 +181,7 @@ class DebugTextViewFragment : BaseFragment() {
             )
             append("这是一个测试")
         }.let {
-            view!!.findViewById<TextView>(R.id.info_content_00).setText(it)
+            view!!.findViewById<TextView>(R.id.info_content_00).text = it
         }
     }
 
@@ -234,7 +234,7 @@ class DebugTextViewFragment : BaseFragment() {
 
 //        }
 
-        view!!.findViewById<TextView>(R.id.info_content_0).setText(spanString)
+        view!!.findViewById<TextView>(R.id.info_content_0).text = spanString
 
 //        SpannableStringBuilder(" ").apply {
 //

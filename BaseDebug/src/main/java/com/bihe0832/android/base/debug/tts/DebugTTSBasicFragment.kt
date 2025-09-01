@@ -72,10 +72,6 @@ class DebugTTSBasicFragment : BaseFragment() {
         initViewItem()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
     fun showGuide() {
         if (null != APKUtils.getInstalledPackage(context, "com.google.android.tts")) {
             view!!.findViewById<TextView>(R.id.tts_tips).visibility = View.VISIBLE

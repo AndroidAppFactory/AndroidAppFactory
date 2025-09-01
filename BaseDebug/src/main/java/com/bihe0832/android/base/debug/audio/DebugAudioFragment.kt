@@ -32,10 +32,6 @@ class DebugAudioFragment : DebugEnvFragment() {
     private val blockAudioPlayerManager = AudioPLayerManager()
 
 
-    override fun initView(view: View) {
-        super.initView(view)
-    }
-
     override fun getDataList(): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(getDebugItem("播放远程音频", View.OnClickListener {

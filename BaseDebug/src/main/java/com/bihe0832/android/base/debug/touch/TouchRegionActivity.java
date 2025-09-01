@@ -39,7 +39,7 @@ public class TouchRegionActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initViews() {
-        rootView = (ConstraintLayout) findViewById(R.id.root);
+        rootView = findViewById(R.id.root);
         ((Toolbar) findViewById(R.id.common_toolbar)).setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,11 +49,11 @@ public class TouchRegionActivity extends BaseActivity implements View.OnClickLis
         });
 
         //rootView.setOnClickListener(this);
-        tv = (TextView) findViewById(R.id.tv);
+        tv = findViewById(R.id.tv);
         tv.setOnClickListener(this);
         ViewExtForTouchRegionKt.expandTouchRegionWithdp(tv, 200, 200, 200, 200);
 
-        tv2 = (TextView) findViewById(R.id.tv2);
+        tv2 = findViewById(R.id.tv2);
         tv2.setOnClickListener(this);
         ViewExtForTouchRegionKt.expandTouchRegionWithdp(tv2, 200, 200, 200, 200);
     }

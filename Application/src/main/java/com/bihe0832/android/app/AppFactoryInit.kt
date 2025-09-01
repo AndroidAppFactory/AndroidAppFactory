@@ -159,7 +159,7 @@ object AppFactoryInit {
             val runningApps = am.runningAppProcesses
             for (it in runningApps) {
                 if (it.pid == Process.myPid() && it.processName != null &&
-                    it.processName.contains(application.getPackageName())
+                    it.processName.contains(application.packageName)
                 ) {
                     ZLog.e(
                         ZixieCoreInit.TAG,
