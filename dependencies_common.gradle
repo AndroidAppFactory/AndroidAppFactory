@@ -27,7 +27,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "7.1.1",
+                "version"            : "7.1.3",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -243,7 +243,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonCrop"            : [
-                "version"            : "7.1.1",
+                "version"            : "7.1.3",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
                         "CommonDeprecated", "CommonBottomTab", "LibImageMetadata", "LibCrop"
