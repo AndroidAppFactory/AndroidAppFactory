@@ -48,7 +48,9 @@ fun AAFDebugModuleView() {
         DebugComposeItem(
             "Dialog (不同类型、顺序、底部，分享等)调试", "DebugDialogComposeView"
         ) { DebugDialogComposeView() }
-
+        DebugComposeItem("拍照、相册、图片、视频、音频操作调试", "DebugMediaComposeView") {
+            DebugMediaComposeView()
+        }
         DebugComposeItem("AES、RSA、MD5、SHA256等", "DebugEncryptView") { DebugEncryptView() }
 
         DebugComposeItem(
@@ -81,9 +83,7 @@ fun AAFDebugModuleView() {
         DebugComposeItem("分享、底部Activity 调试", "DebugShareComposeView") {
             DebugShareComposeView()
         }
-        DebugComposeItem("拍照、相册、图片、视频、音频操作调试", "DebugMediaComposeView") {
-            DebugMediaComposeView()
-        }
+
         DebugComposeFragmentItem("二维码调试", DebugQRCodeFragment::class.java)
 
         DebugComposeItem("日志调试", "DebugLogComposeView") { DebugLogComposeView() }

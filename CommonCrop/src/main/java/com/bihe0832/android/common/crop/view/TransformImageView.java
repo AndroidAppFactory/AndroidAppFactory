@@ -21,9 +21,9 @@ import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.image.meta.ImageMetadataUtils;
+import com.bihe0832.android.lib.media.image.RectUtils;
 import com.bihe0832.android.lib.media.image.bitmap.BitmapTransUtils;
 import com.bihe0832.android.lib.media.image.bitmap.BitmapUtil;
-import com.bihe0832.android.lib.media.image.RectUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.view.ext.DrawableByBitmap;
 
@@ -105,8 +105,8 @@ public class TransformImageView extends AppCompatImageView {
     }
 
     /**
-     * Setter for {@link #mMaxBitmapSize} value.
-     * Be sure to call it before {@link #setImageURI(Uri)} or other image setters.
+     * Setter for {@link #mMaxBitmapSize} value. Be sure to call it before {@link #setImageURI(Uri)} or other image
+     * setters.
      *
      * @param maxBitmapSize - max size for both width and height of bitmap that will be used in the view.
      */
@@ -182,8 +182,7 @@ public class TransformImageView extends AppCompatImageView {
     }
 
     /**
-     * @return - current image scale value.
-     *         [1.0f - for original image, 2.0f - for 200% scaled image, etc.]
+     * @return - current image scale value. [1.0f - for original image, 2.0f - for 200% scaled image, etc.]
      */
     public float getCurrentScale() {
         return getMatrixScale(mCurrentImageMatrix);
@@ -259,6 +258,25 @@ public class TransformImageView extends AppCompatImageView {
         }
     }
 
+    public void postScaleAndTrans(float deltaScaleX, float px, float py, float deltaX, float deltaY) {
+        // 1. 创建平移矩阵
+        Matrix translateMatrix = new Matrix();
+        translateMatrix.postTranslate(deltaX, deltaY);
+
+        // 2. 创建缩放矩阵
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.postScale(deltaScaleX, deltaScaleX, px, py);
+
+        // 3. 合并矩阵：先平移后缩放 = 缩放矩阵 × 平移矩阵（矩阵乘法顺序与执行顺序相反）
+
+        mCurrentImageMatrix.postConcat(translateMatrix);  // 再应用平移
+        mCurrentImageMatrix.postConcat(scaleMatrix);  // 先应用缩放
+        setImageMatrix(mCurrentImageMatrix);
+        if (mTransformImageListener != null) {
+            mTransformImageListener.onScale(getMatrixScale(mCurrentImageMatrix));
+        }
+    }
+
     /**
      * This method rotates current image.
      *
@@ -297,8 +315,7 @@ public class TransformImageView extends AppCompatImageView {
     }
 
     /**
-     * When image is laid out {@link #mInitialImageCenter} and {@link #mInitialImageCenter}
-     * must be set.
+     * When image is laid out {@link #mInitialImageCenter} and {@link #mInitialImageCenter} must be set.
      */
     protected void onImageLaidOut() {
         final Drawable drawable = getDrawable();
@@ -336,8 +353,7 @@ public class TransformImageView extends AppCompatImageView {
     }
 
     /**
-     * This method logs given matrix X, Y, scale, and angle values.
-     * Can be used for debug.
+     * This method logs given matrix X, Y, scale, and angle values. Can be used for debug.
      */
     @SuppressWarnings("unused")
     protected void printMatrix(@NonNull String logPrefix, @NonNull Matrix matrix) {
@@ -350,9 +366,8 @@ public class TransformImageView extends AppCompatImageView {
     }
 
     /**
-     * This method updates current image corners and center points that are stored in
-     * {@link #mCurrentImageCorners} and {@link #mCurrentImageCenter} arrays.
-     * Those are used for several calculations.
+     * This method updates current image corners and center points that are stored in {@link #mCurrentImageCorners} and
+     * {@link #mCurrentImageCenter} arrays. Those are used for several calculations.
      */
     private void updateCurrentImagePoints() {
         mCurrentImageMatrix.mapPoints(mCurrentImageCorners, mInitialImageCorners);

@@ -40,7 +40,7 @@ private var lastPath: String = ""
 fun DebugMediaComposeView() {
     DebugContent {
         DebugComposeItem("音频播放", "DebugComposeAudioView") { DebugAudioComposeView() }
-        DebugComposeFragmentItem("拍照及相册调试", DebugPhotosFragment::class.java)
+        DebugComposeFragmentItem("拍照、相册、裁剪调试", DebugPhotosFragment::class.java)
         DebugItem("文字转图片1（有图标，有标题）") { textToImage(it) }
         DebugItem("文字转图片2（无图标，无标题）") { textToImage2(it) }
         DebugItem("音频转视频1") { audioToVideo(it, 1) }

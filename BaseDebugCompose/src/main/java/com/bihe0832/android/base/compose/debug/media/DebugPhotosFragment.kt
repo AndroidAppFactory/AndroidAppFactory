@@ -1,11 +1,14 @@
 package com.bihe0832.android.base.compose.debug.media
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.item.DebugTips
+import com.bihe0832.android.common.compose.debug.item.requestPermissionForDebug
 import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeFragment
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.compose.state.RenderState
@@ -51,15 +54,15 @@ class DebugPhotosFragment : DebugCommonComposeFragment() {
 
     @Composable
     fun debugPhotoView() {
+        val activity = LocalContext.current as? Activity
         DebugContent {
             DebugTips("当前图片地址： ")
-            DebugItem("调试中临时申请指定权限") {
-//                requestPermissionForDebug(
-//                    listOf(
-//                        Manifest.permission.CAMERA,
-//                    ),
-//                )
+            activity?.let {
+                DebugItem("调试中临时申请指定权限") {
+                    requestPermissionForDebug(activity, listOf(Manifest.permission.CAMERA))
+                }
             }
+
             DebugItem("AAF 裁剪") {
                 needCrop = false
                 needAAFCrop = true
@@ -157,7 +160,7 @@ class DebugPhotosFragment : DebugCommonComposeFragment() {
                     if (needCrop) {
                         cropPhotos(takePhosUri)
                     } else if (needAAFCrop) {
-                        CropUtils.startCrop(activity!!, takePhosUri)
+                        CropUtils.startCrop(this, takePhosUri)
                     } else {
                         ZLog.d("图片地址:" + Media.uriToFile(context!!, takePhosUri))
 //                        showResult("图片地址:" + ZixieFileProvider.uriToFile(activity!!, takePhosUri).absolutePath)
@@ -174,7 +177,7 @@ class DebugPhotosFragment : DebugCommonComposeFragment() {
                             ),
                         )
                     } else if (needAAFCrop) {
-                        CropUtils.startCrop(activity, data.getData(), CropUtils.Options().apply {
+                        CropUtils.startCrop(this, data.getData(), CropUtils.Options().apply {
                             setAllowedGestures(
                                 CropConstants.GESTURE_TYPES_SCALE,
                                 CropConstants.GESTURE_TYPES_ROTATE,
