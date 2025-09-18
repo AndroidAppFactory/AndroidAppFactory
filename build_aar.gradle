@@ -10,24 +10,8 @@ def isRelease = true
 
 def sonatypeRepositoryUrl
 def sonatypeRepositoryVersion
-def sonatypeUserName
-def sonatypePassword
 def moduleName = project.name
 
-try {
-    sonatypeUserName = getProperty("sonatypeUsername")
-} catch (Exception e) {
-    e.printStackTrace()
-    sonatypeUserName = ""
-}
-
-
-try {
-    sonatypePassword = getProperty("sonatypePassword")
-} catch (Exception e) {
-    e.printStackTrace()
-    sonatypePassword = ""
-}
 
 if (isRelease) {
     println 'RELEASE BUILD'
