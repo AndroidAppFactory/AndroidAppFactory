@@ -84,10 +84,10 @@ object APPIconManager {
                     context.applicationContext, enableAlias, disableAlias
                 )
                 getAliasState(context.applicationContext, enableAlias).forEach {
-                    ZLog.d(TAG, "enableAlias:" + it.key + " state:" + it.value)
+                    ZLog.d(TAG, "enableAlias:" + it)
                 }
                 getAliasState(context.applicationContext, disableAlias).forEach {
-                    ZLog.d(TAG, "disableAlias:" + it.key + " state:" + it.value)
+                    ZLog.d(TAG, "disableAlias:" + it)
                 }
                 ZLog.d(TAG, "remove Listener after change")
                 return true
@@ -125,7 +125,7 @@ object APPIconManager {
                 }
 
                 else -> {
-                    ZLog.d(TAG, "disableAlias needChange: $it is " + it.value)
+                    ZLog.d(TAG, "disableAlias needChange: $it")
                 }
             }
 
@@ -179,7 +179,7 @@ object APPIconManager {
                 }
 
                 else -> {
-                    ZLog.d(TAG, "disableAlias: $it is " + it.value)
+                    ZLog.d(TAG, "disableAlias: $it")
                 }
             }
         }
