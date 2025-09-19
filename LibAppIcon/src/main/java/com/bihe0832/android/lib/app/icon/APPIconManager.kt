@@ -29,10 +29,7 @@ object APPIconManager {
             ZLog.d(TAG, "changeAppIcon: skip, enableAlias is empty")
         } else {
             changeAppIconState(
-                context,
-                listOf(enableAlias),
-                allAlias.filter { !enableAlias.contains(it) },
-                delay
+                context, listOf(enableAlias), allAlias.filter { !enableAlias.contains(it) }, delay
             )
         }
     }
@@ -43,7 +40,6 @@ object APPIconManager {
         disableAlias: List<String>,
         times: Long
     ) {
-
         ZLog.d(TAG, "enableAlias:" + enableAlias.joinToString(","))
         ZLog.d(TAG, "disableAlias:" + disableAlias.joinToString(","))
         val needChange = needChange(context, enableAlias, disableAlias)
@@ -55,30 +51,11 @@ object APPIconManager {
                 override fun onBackground() {
                     ZLog.d(TAG, "onBackground")
                     ThreadManager.getInstance().start({
-                        ZLog.d(TAG, "enableAlias:" + enableAlias.joinToString(","))
-                        ZLog.d(TAG, "disableAlias:" + disableAlias.joinToString(","))
-                        val needChangeWhenBack = needChange(context, enableAlias, disableAlias)
-                        ZLog.d(TAG, "needChangeWhenBack:$needChangeWhenBack")
-                        if (needChangeWhenBack) {
-                            changeAppIconAction(
-                                context.applicationContext,
-                                enableAlias,
-                                disableAlias
-                            )
-                            getAliasState(context.applicationContext, enableAlias).forEach {
-                                ZLog.d(TAG, "enableAlias:" + it.key + " state:" + it.value)
-                            }
-                            getAliasState(context.applicationContext, disableAlias).forEach {
-                                ZLog.d(TAG, "disableAlias:" + it.key + " state:" + it.value)
-                            }
-                            ZLog.d(TAG, "remove Listener after change")
-                            ApplicationObserver.removeStatusChangeListener(this)
-                        } else {
-                            ZLog.d(TAG, "remove Listener no change")
+                        val result = doChangeAppIconState(context, enableAlias, disableAlias)
+                        if (result) {
                             ApplicationObserver.removeStatusChangeListener(this)
                         }
                     }, times)
-
                 }
 
                 override fun onForeground() {
@@ -90,10 +67,42 @@ object APPIconManager {
         }
     }
 
-    private fun needChange(
+
+    fun doChangeAppIconState(
         context: Context,
         enableAlias: List<String>,
         disableAlias: List<String>
+    ): Boolean {
+        ZLog.d(TAG, "enableAlias:" + enableAlias.joinToString(","))
+        ZLog.d(TAG, "disableAlias:" + disableAlias.joinToString(","))
+        val needChangeWhenBack = needChange(context, enableAlias, disableAlias)
+        ZLog.d(TAG, "needChangeWhenBack:$needChangeWhenBack")
+        val currentIsBackground = ApplicationObserver.isAPPBackground()
+        if (currentIsBackground) {
+            if (needChangeWhenBack) {
+                changeAppIconAction(
+                    context.applicationContext, enableAlias, disableAlias
+                )
+                getAliasState(context.applicationContext, enableAlias).forEach {
+                    ZLog.d(TAG, "enableAlias:" + it)
+                }
+                getAliasState(context.applicationContext, disableAlias).forEach {
+                    ZLog.d(TAG, "disableAlias:" + it)
+                }
+                ZLog.d(TAG, "remove Listener after change")
+                return true
+            } else {
+                ZLog.d(TAG, "remove Listener no change")
+                return true
+            }
+        } else {
+            ZLog.d(TAG, "app go front when change icon")
+            return false
+        }
+    }
+
+    private fun needChange(
+        context: Context, enableAlias: List<String>, disableAlias: List<String>
     ): Boolean {
         val enableData = getAliasState(context.applicationContext, enableAlias)
         enableData.forEach {
@@ -116,7 +125,7 @@ object APPIconManager {
                 }
 
                 else -> {
-                    ZLog.d(TAG, "disableAlias needChange: $it is " + it.value)
+                    ZLog.d(TAG, "disableAlias needChange: $it")
                 }
             }
 
@@ -125,9 +134,7 @@ object APPIconManager {
     }
 
     private fun changeAppIconAction(
-        context: Context,
-        enableAlias: List<String>,
-        disableAlias: List<String>
+        context: Context, enableAlias: List<String>, disableAlias: List<String>
     ) {
         ZLog.d(TAG, "changeAppIconAction start")
         val pm = context.packageManager
@@ -172,7 +179,7 @@ object APPIconManager {
                 }
 
                 else -> {
-                    ZLog.d(TAG, "disableAlias: $it is " + it.value)
+                    ZLog.d(TAG, "disableAlias: $it")
                 }
             }
         }
