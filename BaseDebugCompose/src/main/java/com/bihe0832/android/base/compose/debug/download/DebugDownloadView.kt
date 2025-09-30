@@ -7,9 +7,11 @@ import androidx.compose.runtime.Composable
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.lib.download.wrapper.DownloadRangeUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallUtils
+import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 @Composable
@@ -22,7 +24,9 @@ fun DebugDownloadView() {
             }
 
         }
-        DebugItem("测试区间下载") { testDownloadRange(it) }
+        DebugItem("测试批量区间下载") { testDownloadRange(it, 20) }
+        DebugItem("测试区间下载") { testDownloadRange(it, 1) }
+        DebugItem("暂停所有区间下载") { DownloadRangeUtils.pauseAll(true, true) }
         DebugItem("测试下载队列") { testDownloadList(it) }
         DebugItem("多位置触发下载") { testDownloadMoreThanOnce(it) }
 
@@ -46,12 +50,14 @@ fun DebugDownloadView() {
 }
 
 
-internal fun testDownloadRange(context: Context) {
-//        for (i in 0 until 1) {
-    val url = URL_YYB_WZ
-    val start = 0 * 50000000L
-    startDownload(context, url, start, 2000000, "cfd58b9748b44df6c56dbf22f89a737d")
-//        }
+internal fun testDownloadRange(context: Context, num: Int) {
+    for (i in 0 until num) {
+        val url = URL_YYB_WZ
+        val start = 0 * 50000000L
+        startDownload(
+            context, url, start, MathUtils.getRandNumByLimit(2000, 100000), ""
+        )
+    }
 }
 
 

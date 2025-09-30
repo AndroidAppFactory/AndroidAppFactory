@@ -31,7 +31,7 @@ public class DownloadItem implements Serializable {
     private String downloadURL = "";
 
     // 下载头，特定的预下载头信息
-    private Map<String,String> requestHeader = null;
+    private Map<String, String> requestHeader = null;
     // 最终实际下载的URL，不填
     private int downloadType = TYPE_FILE;
     // 最终实际下载的URL，不填
@@ -56,6 +56,8 @@ public class DownloadItem implements Serializable {
     private boolean notificationVisibility = false;
     // 当前的下载状态，实时同步，不填
     private int status = DownloadStatus.STATUS_DOWNLOAD_PAUSED;
+    //最后暂停时间，不填
+    private int pauseType = 0;
     // 4G下是否下载，非必填
     private boolean downloadWhenUseMobile = false;
     // 任务添加后是否自动下载，非必填
@@ -92,6 +94,7 @@ public class DownloadItem implements Serializable {
     private transient long startTime = 0;
     //最后暂停时间，不填
     private transient long pauseTime = 0;
+
     //下载优先级
     private int downloadPriority = DEFAULT_DOWNLOAD_PRIORITY;
     //是否保存本次的下载记录
@@ -346,9 +349,14 @@ public class DownloadItem implements Serializable {
         return pauseTime;
     }
 
-    public void setPause(int status) {
-        this.status = status;
+    public void setPause(int pauseType) {
+        this.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED;
+        this.pauseType = pauseType;
         this.pauseTime = System.currentTimeMillis();
+    }
+
+    public int getPauseType() {
+        return pauseType;
     }
 
     public long getStartTime() {
