@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "7.0.5",
+                "version"            : "7.1.5",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -201,7 +201,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"         : [
-                "version"            : "7.0.5",
+                "version"            : "7.1.5",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
