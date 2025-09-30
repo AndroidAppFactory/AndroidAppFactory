@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_URL_IS_TOO_OLD_TH
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.R
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
@@ -85,12 +86,16 @@ object DownloadFileManager : DownloadManager() {
             if (item.notificationVisibility()) {
                 DownloadFileNotify.notifyPause(item)
             }
-            addWaitToDownload()
+            if (!hasPauseAll()) {
+                addWaitToDownload()
+            }
         }
 
         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_FAILED
-            addWaitToDownload()
+            if (!hasPauseAll()) {
+                addWaitToDownload()
+            }
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
                 getContext()?.getString(R.string.download_failed_local_is_new)?.let {
                     ToastUtil.showLong(mContext, String.format(it, item.downloadTitle))
@@ -121,9 +126,11 @@ object DownloadFileManager : DownloadManager() {
                     item.packageName = it
                 }
             }
-            addDownloadItemToListAndSaveLocal(item)
+            addDownloadItemToListAndSaveRecord(item)
             closeDownloadAndRemoveRecord(item)
-            addWaitToDownload()
+            if (!hasPauseAll()) {
+                addWaitToDownload()
+            }
 
             ThreadManager.getInstance().start {
                 ZLog.d(TAG, "onComplete start: $filePath ")
@@ -188,14 +195,19 @@ object DownloadFileManager : DownloadManager() {
             return false
         }
         ZLog.d(TAG, "checkIsNeedDownload versionCode:${info.versionCode}")
-        val alreadyDownloadItem = DownloadInfoDBManager.getDownloadInfoFromPackageName(info.packageName)
+        val alreadyDownloadItem =
+            DownloadInfoDBManager.getDownloadInfoFromPackageName(info.packageName)
         return if (alreadyDownloadItem == null) {
             ZLog.d(TAG, "checkIsNeedDownload alreadyDownloadItem null")
             false
         } else {
             if (alreadyDownloadItem.versionCode > 0) {
                 if (info.versionCode != alreadyDownloadItem.versionCode) {
-                    deleteTask(alreadyDownloadItem.downloadID, startByUser = false, deleteFile = true)
+                    deleteTask(
+                        alreadyDownloadItem.downloadID,
+                        startByUser = false,
+                        deleteFile = true
+                    )
                 }
                 false
             } else {
@@ -225,10 +237,14 @@ object DownloadFileManager : DownloadManager() {
             // 正在下载更高版本
             if (checkIsDownloadingAndVersionIsNew(info)) {
                 ZLog.e(TAG, "noneed download:$info")
-                innerDownloadListener.onFail(ERR_URL_IS_TOO_OLD_THAN_DOWNLOADING, "install is new", info)
+                innerDownloadListener.onFail(
+                    ERR_URL_IS_TOO_OLD_THAN_DOWNLOADING,
+                    "install is new",
+                    info
+                )
                 return
             }
-            addDownloadItemToListAndSaveLocal(info)
+            addDownloadItemToListAndSaveRecord(info)
             Thread {
                 // 本地已下载
                 val filePath = checkBeforeDownloadFile(info)
@@ -241,7 +257,11 @@ object DownloadFileManager : DownloadManager() {
                     if (downloadAfterAdd) {
                         if (isMobileNet() && !info.isDownloadWhenUseMobile) {
                             ZLog.e(TAG, "当前网络为移动网络，任务暂停:$info")
-                            pauseTask(info, startByUser = false, clearHistory = false, pauseByNetwork = true)
+                            pauseTask(
+                                info,
+                                DownloadPauseType.PAUSED_BY_NETWORK,
+                                clearHistory = false
+                            )
                         } else {
                             val currentTime = System.currentTimeMillis()
                             if (currentTime - info.pauseTime < 3000L) {
@@ -253,11 +273,15 @@ object DownloadFileManager : DownloadManager() {
                                     }
                                 }
                             }
-                            mDownloadEngine.startDownload(mContext!!, info)
+                            if (!hasPauseAll()) {
+                                mDownloadEngine.startDownload(mContext!!, info)
+                            } else {
+                                ZLog.e(TAG, "download paused by pause all")
+                            }
                         }
                     } else {
                         ZLog.e(TAG, "download paused by downloadAfterAdd")
-                        pauseTask(info, startByUser = false, clearHistory = false, pauseByNetwork = false)
+                        pauseTask(info, DownloadPauseType.PAUSED_BY_ADD, clearHistory = false)
                     }
                 }
             }.start()
@@ -284,7 +308,9 @@ object DownloadFileManager : DownloadManager() {
             if (file.exists() && !File(info.filePath).isFile) {
                 ZLog.e(TAG, "bad file path:$info")
                 innerDownloadListener.onFail(
-                    DownloadErrorCode.ERR_RANGE_BAD_PATH, "bad para, file not exist or not file", info
+                    DownloadErrorCode.ERR_RANGE_BAD_PATH,
+                    "bad para, file not exist or not file",
+                    info
                 )
                 return false
             }
@@ -299,7 +325,9 @@ object DownloadFileManager : DownloadManager() {
             e.printStackTrace()
             ZLog.e(TAG, "download:$e")
             innerDownloadListener.onFail(
-                DownloadErrorCode.ERR_CONTENT_LENGTH_EXCEPTION, "update server content exception", info
+                DownloadErrorCode.ERR_CONTENT_LENGTH_EXCEPTION,
+                "update server content exception",
+                info
             )
             return false
         }
@@ -312,10 +340,24 @@ object DownloadFileManager : DownloadManager() {
             info.downloadType = DownloadItem.TYPE_FILE
             if (DownloadingList.isDownloading(info)) {
                 val currentDownload = DownloadTaskList.getTaskByDownloadID(info.downloadID)
-                if (!TextUtils.isEmpty(currentDownload?.contentMD5) && !info.contentMD5.equals(currentDownload?.contentMD5)) {
-                    info.downloadListener?.onFail(ERR_MD5_BAD, "new md5 is diff with current download", info)
-                } else if (!TextUtils.isEmpty(currentDownload?.contentSHA256) && !info.contentSHA256.equals(currentDownload?.contentSHA256)) {
-                    info.downloadListener?.onFail(ERR_MD5_BAD, "new sha256 is diff with current download", info)
+                if (!TextUtils.isEmpty(currentDownload?.contentMD5) && !info.contentMD5.equals(
+                        currentDownload?.contentMD5
+                    )
+                ) {
+                    info.downloadListener?.onFail(
+                        ERR_MD5_BAD,
+                        "new md5 is diff with current download",
+                        info
+                    )
+                } else if (!TextUtils.isEmpty(currentDownload?.contentSHA256) && !info.contentSHA256.equals(
+                        currentDownload?.contentSHA256
+                    )
+                ) {
+                    info.downloadListener?.onFail(
+                        ERR_MD5_BAD,
+                        "new sha256 is diff with current download",
+                        info
+                    )
                 } else {
                     currentDownload?.downloadListener = info.downloadListener
                 }
@@ -343,9 +385,14 @@ object DownloadFileManager : DownloadManager() {
                 if (DownloadTaskList.hadAddTask(info)) {
                     ZLog.d(TAG, "mDownloadList contains:$info")
                     DownloadTaskList.updateDownloadTaskListItem(info)
-                    resumeTask(info.downloadID, info.downloadListener, info.isDownloadWhenAdd, info.isDownloadWhenUseMobile)
+                    resumeTask(
+                        info.downloadID,
+                        info.downloadListener,
+                        info.isDownloadWhenAdd,
+                        info.isDownloadWhenUseMobile
+                    )
                 } else {
-                    startTask(info, info.isDownloadWhenAdd)
+                    addNewTask(info, info.isDownloadWhenAdd)
                 }
             }
         }

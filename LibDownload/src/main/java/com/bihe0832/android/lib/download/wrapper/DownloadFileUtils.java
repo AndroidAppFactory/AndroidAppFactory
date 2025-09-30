@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download.wrapper;
 import android.content.Context;
 import android.text.TextUtils;
 import com.bihe0832.android.lib.download.DownloadItem;
+import com.bihe0832.android.lib.download.DownloadPauseType;
 import com.bihe0832.android.lib.download.core.DownloadTaskList;
 import com.bihe0832.android.lib.download.file.DownloadFileManager;
 import java.util.List;
@@ -82,8 +83,12 @@ public class DownloadFileUtils {
      *
      * @param downloadID 添加任务的信息
      */
-    public static void pauseDownload(@NotNull final long downloadID) {
-        DownloadFileManager.INSTANCE.pauseTask(downloadID, true, false, false);
+    public static void pauseDownload(@NotNull final long downloadID, boolean canAutoResume) {
+        if (canAutoResume) {
+            DownloadFileManager.INSTANCE.pauseTask(downloadID, DownloadPauseType.PAUSED_BY_ALL, false);
+        } else {
+            DownloadFileManager.INSTANCE.pauseTask(downloadID, DownloadPauseType.PAUSED_BY_USER, false);
+        }
     }
 
     /**
@@ -109,22 +114,36 @@ public class DownloadFileUtils {
     /**
      * 暂停所有下载任务
      */
-    public static void pauseAll(boolean pauseMaxPriorityDownload) {
-        DownloadFileManager.INSTANCE.pauseAllTask(true, pauseMaxPriorityDownload);
+    public static void pauseAll(boolean pauseMaxPriorityDownload, boolean canAutoResume) {
+        if (canAutoResume) {
+            DownloadFileManager.INSTANCE.pauseAllTask(DownloadPauseType.PAUSED_BY_ALL, pauseMaxPriorityDownload);
+        } else {
+            DownloadFileManager.INSTANCE.pauseAllTask(DownloadPauseType.PAUSED_BY_USER, pauseMaxPriorityDownload);
+        }
     }
 
     /**
      * 暂停所有下载中的任务
      */
-    public static void pauseDownloading(boolean pauseMaxPriorityDownload) {
-        DownloadFileManager.INSTANCE.pauseDownloadingTask(true, pauseMaxPriorityDownload);
+    public static void pauseDownloading(boolean pauseMaxPriorityDownload, boolean canAutoResume) {
+        if (canAutoResume) {
+            DownloadFileManager.INSTANCE.pauseDownloadingTask(DownloadPauseType.PAUSED_BY_ALL,
+                    pauseMaxPriorityDownload);
+        } else {
+            DownloadFileManager.INSTANCE.pauseDownloadingTask(DownloadPauseType.PAUSED_BY_USER,
+                    pauseMaxPriorityDownload);
+        }
     }
 
     /**
      * 暂停所有在等待的下载任务
      */
-    public static void pauseWaiting(boolean pauseMaxPriorityDownload) {
-        DownloadFileManager.INSTANCE.pauseWaitingTask(true, pauseMaxPriorityDownload);
+    public static void pauseWaiting(boolean pauseMaxPriorityDownload, boolean canAutoResume) {
+        if (canAutoResume) {
+            DownloadFileManager.INSTANCE.pauseWaitingTask(DownloadPauseType.PAUSED_BY_ALL, pauseMaxPriorityDownload);
+        } else {
+            DownloadFileManager.INSTANCE.pauseWaitingTask(DownloadPauseType.PAUSED_BY_USER, pauseMaxPriorityDownload);
+        }
     }
 
     /**

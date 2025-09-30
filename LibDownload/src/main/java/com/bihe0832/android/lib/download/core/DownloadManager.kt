@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.file.FileUtils
@@ -29,8 +30,11 @@ import java.net.URL
 
 @SuppressLint("StaticFieldLeak")
 abstract class DownloadManager {
+
     private val MAX_RETRY_TIMES = 2
 
+    // 是否一键暂停所有任务，暂停以后，不再新增下载，当前下载全部暂停
+    private var hasPauseAll = false
     abstract fun getAllTask(): List<DownloadItem>
 
     abstract fun getDownloadEngine(): DownloadByHttpBase
@@ -93,6 +97,11 @@ abstract class DownloadManager {
         return mHasInit
     }
 
+    fun addNewTask(info: DownloadItem, downloadAfterAdd: Boolean) {
+        hasPauseAll = false
+        startTask(info, downloadAfterAdd)
+    }
+
     open fun init(context: Context, maxNum: Int, isDebug: Boolean = false) {
         initContext(context)
         mMaxNum = maxNum
@@ -125,9 +134,13 @@ abstract class DownloadManager {
         }
     }
 
+    fun hasPauseAll(): Boolean {
+        return hasPauseAll
+    }
+
     open fun onDestroy() {
         mContext?.unregisterReceiver(mNetReceiver)
-        pauseAllTask(startByUser = false, pauseMaxDownload = true)
+        pauseAllTask(DownloadPauseType.PAUSED_BY_ALL, true)
     }
 
     fun checkDownloadWhenNetChanged() {
@@ -137,9 +150,8 @@ abstract class DownloadManager {
                     ZLog.e(TAG, "当前网络切换为移动网络，任务暂停:$it")
                     pauseTask(
                         it.downloadID,
-                        startByUser = false,
-                        clearHistory = false,
-                        pauseByNetwork = true
+                        DownloadPauseType.PAUSED_BY_NETWORK,
+                        clearHistory = false
                     )
                 }
             }
@@ -153,19 +165,14 @@ abstract class DownloadManager {
         ZLog.d(TAG, "本地文件是否完整检查开始: $info ")
         if (info.downloadType == DownloadItem.TYPE_FILE) {
             if (FileUtils.checkFileExist(
-                    info.filePath,
-                    info.contentLength,
-                    info.contentMD5,
-                    info.contentSHA256,
-                    false
+                    info.filePath, info.contentLength, info.contentMD5, info.contentSHA256, false
                 )
             ) {
                 return info.filePath
             }
         } else if (info.downloadType == DownloadItem.TYPE_RANGE) {
             if (!TextUtils.isEmpty(info.contentMD5)) {
-                val result =
-                    MD5.getFilePartMD5(info.filePath, info.localStart, info.contentLength)
+                val result = MD5.getFilePartMD5(info.filePath, info.localStart, info.contentLength)
                 if (result.equals(info.contentMD5, ignoreCase = true)) {
                     return info.filePath
                 }
@@ -230,8 +237,7 @@ abstract class DownloadManager {
                 val time = System.currentTimeMillis()
                 connection.connect()
                 ZLog.e(
-                    TAG,
-                    "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~"
+                    TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~"
                 )
                 if (mIsDebug) {
                     connection.logResponseHeaderFields("获取文件长度")
@@ -275,8 +281,7 @@ abstract class DownloadManager {
             } catch (e: Exception) {
                 e.printStackTrace()
                 ZLog.e(
-                    TAG,
-                    "获取文件长度 异常: download with exception: $times ${e.javaClass.name}"
+                    TAG, "获取文件长度 异常: download with exception: $times ${e.javaClass.name}"
                 )
                 if (times > MAX_RETRY_TIMES) {
                     //累积请求三次都失败在结束
@@ -296,27 +301,24 @@ abstract class DownloadManager {
     }
 
 
-    internal fun addDownloadItemToListAndSaveLocal(info: DownloadItem) {
+    internal fun addDownloadItemToListAndSaveRecord(info: DownloadItem) {
         ThreadManager.getInstance().start {
-            DownloadInfoDBManager.saveDownloadInfo(info)
+            if (info.isNeedRecord) {
+                DownloadInfoDBManager.saveDownloadInfo(info)
+            }
             addToDownloadTaskList(info)
         }
     }
 
 
     fun getDownladTempFilePath(
-        downloadURL: String,
-        backFileName: String,
-        fileFolder: String
+        downloadURL: String, backFileName: String, fileFolder: String
     ): String {
         return getFilePath(downloadURL, backFileName, fileFolder, "Temp_")
     }
 
     fun getFilePath(
-        downloadURL: String,
-        backFileName: String,
-        fileFolder: String,
-        prefix: String
+        downloadURL: String, backFileName: String, fileFolder: String, prefix: String
     ): String {
         var folder = if (TextUtils.isEmpty(fileFolder)) {
             ZixieFileProvider.getZixieCacheFolder(mContext!!)
@@ -353,7 +355,7 @@ abstract class DownloadManager {
     }
 
     fun getPauseByNetworkTask(): List<DownloadItem> {
-        return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED_BY_NETWORK }
+        return getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED && it.pauseType == DownloadPauseType.PAUSED_BY_NETWORK }
             .toList()
     }
 
@@ -362,7 +364,7 @@ abstract class DownloadManager {
     }
 
     fun closeDownloadAndRemoveRecord(item: DownloadItem) {
-        getDownloadEngine().closeDownload(item.downloadID, finishDownload = true, true)
+        getDownloadEngine().closeDownload(item.downloadID, true, !item.isNeedRecord)
     }
 
     fun checkAndAddTaskFromList(taskList: List<DownloadItem>) {
@@ -370,7 +372,9 @@ abstract class DownloadManager {
             if (list.isNotEmpty()) {
                 list.maxByOrNull { it.downloadPriority }?.let {
                     ThreadManager.getInstance().start {
-                        startTask(it, it.isDownloadWhenAdd)
+                        if (!hasPauseAll()) {
+                            startTask(it, it.isDownloadWhenAdd)
+                        }
                     }
                 }
             }
@@ -392,6 +396,7 @@ abstract class DownloadManager {
         startByUser: Boolean,
         downloadWhenUseMobile: Boolean,
     ) {
+        hasPauseAll = false
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             ZLog.d(TAG, "resumeTask:$info")
             if (startByUser) {
@@ -408,38 +413,34 @@ abstract class DownloadManager {
         }
     }
 
-    fun pauseTask(
-        downloadId: Long,
-        startByUser: Boolean,
-        clearHistory: Boolean,
-        pauseByNetwork: Boolean
-    ) {
+    fun pauseTask(downloadId: Long, type: Int, clearHistory: Boolean) {
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
-            pauseTask(info, startByUser, clearHistory, pauseByNetwork)
+            pauseTask(info, type, clearHistory)
         }
     }
 
-    fun pauseTask(
-        info: DownloadItem,
-        startByUser: Boolean,
-        clearHistory: Boolean,
-        pauseByNetwork: Boolean
-    ) {
-        ZLog.d(TAG, "pause:$info")
+    fun pauseTask(info: DownloadItem, type: Int, clearHistory: Boolean) {
+        ZLog.d(TAG, "pause:$type $clearHistory ${info.downloadURL}")
         ZLog.d(TAG, "pause:$info")
         getDownloadEngine().closeDownload(info.downloadID, false, clearHistory)
-        if (pauseByNetwork) {
-            info.setPause(DownloadStatus.STATUS_DOWNLOAD_PAUSED_BY_NETWORK)
-        } else {
-            info.setPause(DownloadStatus.STATUS_DOWNLOAD_PAUSED)
-        }
-        if (startByUser) {
-            getInnerDownloadListener().onPause(info)
+        info.setPause(type)
+        when (type) {
+            DownloadPauseType.PAUSED_BY_NETWORK -> {
+
+            }
+
+            else -> {
+                getInnerDownloadListener().onPause(info)
+            }
         }
     }
 
     open fun deleteTask(downloadId: Long, startByUser: Boolean, deleteFile: Boolean) {
-        getDownloadEngine().closeDownload(downloadId, finishDownload = true, clearHistory = true)
+        getDownloadEngine().closeDownload(
+            downloadId,
+            finishDownload = true,
+            clearDownloadHistory = true
+        )
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             if (info.status == DownloadStatus.STATUS_DOWNLOADING) {
                 addWaitToDownload()
@@ -452,65 +453,57 @@ abstract class DownloadManager {
             }
             getInnerDownloadListener().onDelete(info)
         }
-
     }
 
-    fun pauseAllTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
-        ZLog.d(TAG, "pauseAllTask")
-        pauseWaitingTask(startByUser, pauseMaxDownload)
-        pauseDownloadingTask(startByUser, pauseMaxDownload)
+    fun pauseAllTask(type: Int, pauseMaxDownload: Boolean) {
+        hasPauseAll = true
+        ZLog.d(TAG, "pauseAllTask:$type")
+        pauseWaitingTask(type, pauseMaxDownload)
+        pauseDownloadingTask(type, pauseMaxDownload)
     }
 
-    fun pauseDownloadingTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
+    fun pauseDownloadingTask(type: Int, pauseMaxDownload: Boolean) {
         ZLog.d(TAG, "pauseDownloadingTask")
         getDownloadingTask().forEach {
             if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
                 if (pauseMaxDownload) {
-                    pauseTask(
-                        it.downloadID,
-                        startByUser,
-                        clearHistory = false,
-                        pauseByNetwork = false
-                    )
+                    pauseTask(it.downloadID, type, clearHistory = false)
                 } else {
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                 }
             } else {
-                pauseTask(it.downloadID, startByUser, clearHistory = false, pauseByNetwork = false)
+                pauseTask(it.downloadID, type, clearHistory = false)
             }
         }
     }
 
-    fun pauseWaitingTask(startByUser: Boolean, pauseMaxDownload: Boolean) {
+    fun pauseWaitingTask(type: Int, pauseMaxDownload: Boolean) {
         ZLog.d(TAG, "pauseWaitingTask")
         getWaitingTask().forEach {
             if (it.downloadPriority == DownloadItem.MAX_DOWNLOAD_PRIORITY) {
                 if (pauseMaxDownload) {
-                    pauseTask(
-                        it.downloadID,
-                        startByUser,
-                        clearHistory = false,
-                        pauseByNetwork = false
-                    )
+                    pauseTask(it.downloadID, type, clearHistory = false)
                 } else {
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                     ZLog.e(TAG, "skip pause maxPriority download:$it")
                 }
             } else {
-                pauseTask(it.downloadID, startByUser, clearHistory = false, pauseByNetwork = false)
+                pauseTask(it.downloadID, type, clearHistory = false)
             }
         }
     }
 
     fun resumeAllTask(pauseOnMobile: Boolean) {
         ZLog.d(TAG, "resumeAllTask")
+        hasPauseAll = false
         resumePauseTask(pauseOnMobile)
         resumeFailedTask(pauseOnMobile)
     }
 
     fun resumeFailedTask(pauseOnMobile: Boolean) {
         ZLog.d(TAG, "resumeFailedTask")
+        hasPauseAll = false
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_FAILED }.forEach {
             resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
         }
@@ -518,6 +511,7 @@ abstract class DownloadManager {
 
     fun resumePauseTask(pauseOnMobile: Boolean) {
         ZLog.d(TAG, "resumePauseTask")
+        hasPauseAll = false
         getAllTask().filter { it.status == DownloadStatus.STATUS_DOWNLOAD_PAUSED }.forEach {
             resumeTask(it.downloadID, it.downloadListener, true, pauseOnMobile)
         }

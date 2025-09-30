@@ -29,7 +29,7 @@ interface DownloadListener {
 
     /**
      * 任务已暂停通知，只在主线程调用，用于更新UI，对于等待中和下载中的任务，调用pause() 接口时，都会在主线程回调此暂停通知
-     * 注:只在主线程回调，根据需要更新任务的UI状态显示，如:任务状态显示为”已暂停“ * @param task
+     * 注:只在主线程回调，根据需要更新任务的UI状态显示，如:任务状态显示为“已暂停”
      */
     fun onPause(item: DownloadItem)
 

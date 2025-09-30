@@ -13,7 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 public object DownloadTaskList {
 
-
     private val mDownloadList = ConcurrentHashMap<Long, DownloadItem>()
     private var mDownLoadIdList = CopyOnWriteArrayList<Long>()
 

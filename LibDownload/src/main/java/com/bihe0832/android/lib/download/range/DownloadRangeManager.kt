@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_URL_IS_TOO_OLD_TH
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.R
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
@@ -54,12 +55,16 @@ object DownloadRangeManager : DownloadManager() {
         override fun onPause(item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_PAUSED
             item.downloadListener?.onPause(item)
-            addWaitToDownload()
+            if (!hasPauseAll()) {
+                addWaitToDownload()
+            }
         }
 
         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
             item.status = DownloadStatus.STATUS_DOWNLOAD_FAILED
-            addWaitToDownload()
+            if (!hasPauseAll()) {
+                addWaitToDownload()
+            }
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
                 getContext()?.getString(R.string.download_failed_local_is_new)?.let {
                     ToastUtil.showLong(mContext, String.format(it, item.downloadTitle))
@@ -78,9 +83,11 @@ object DownloadRangeManager : DownloadManager() {
                 )
             } else {
                 item.status = DownloadStatus.STATUS_DOWNLOAD_SUCCEED
-                addDownloadItemToListAndSaveLocal(item)
+                addDownloadItemToListAndSaveRecord(item)
                 closeDownloadAndRemoveRecord(item)
-
+                if (!hasPauseAll()) {
+                    addWaitToDownload()
+                }
                 ThreadManager.getInstance().start {
                     ZLog.d(TAG, "onComplete start: $filePath ")
                     val newPath = item.downloadListener?.onComplete(filePath, item) ?: item.filePath
@@ -108,7 +115,6 @@ object DownloadRangeManager : DownloadManager() {
     override fun getInnerDownloadListener(): DownloadListener {
         return innerDownloadListener
     }
-
 
     override fun updateItemByServer(
         info: DownloadItem,
@@ -174,27 +180,26 @@ object DownloadRangeManager : DownloadManager() {
 
     @Synchronized
     override fun startTask(info: DownloadItem, downloadAfterAdd: Boolean) {
-        // 不合法的URl
-        if (!URLUtils.isHTTPUrl(info.downloadURL)) {
-            ZLog.e(TAG, "bad para:$info")
-            innerDownloadListener.onFail(ERR_BAD_URL, "bad para", info)
-            return
-        }
         ZLog.d(TAG, "startTask:$info")
         try {
-            addDownloadItemToListAndSaveLocal(info)
+            // 不合法的URl
+            if (!URLUtils.isHTTPUrl(info.downloadURL)) {
+                ZLog.e(TAG, "bad para:$info")
+                innerDownloadListener.onFail(ERR_BAD_URL, "bad para", info)
+                return
+            }
+            addDownloadItemToListAndSaveRecord(info)
             Thread {
                 if (downloadAfterAdd) {
                     if (isMobileNet() && !info.isDownloadWhenUseMobile) {
                         pauseTask(
                             info,
-                            startByUser = false,
-                            clearHistory = false,
-                            pauseByNetwork = true
+                            DownloadPauseType.PAUSED_BY_NETWORK,
+                            clearHistory = false
                         )
                         ZLog.e(TAG, "当前网络为移动网络，任务暂停:$info")
                     } else {
-                        var currentTime = System.currentTimeMillis()
+                        val currentTime = System.currentTimeMillis()
                         if (currentTime - info.pauseTime < 3000L) {
                             ZLog.e(TAG, "resume to quick:$info")
                             innerDownloadListener.onWait(info)
@@ -205,17 +210,17 @@ object DownloadRangeManager : DownloadManager() {
                                 }
                             }
                         }
-                        mDownloadEngine.startDownload(
-                            mContext!!, info, info.rangeStart, info.contentLength, info.localStart
-                        )
+                        if (!hasPauseAll()){
+                            mDownloadEngine.startDownload(
+                                mContext!!, info, info.rangeStart, info.contentLength, info.localStart
+                            )
+                        }else{
+                            ZLog.e(TAG, "download paused by pause all")
+                        }
                     }
                 } else {
-                    pauseTask(
-                        info,
-                        startByUser = true,
-                        clearHistory = false,
-                        pauseByNetwork = false
-                    )
+                    ZLog.e(TAG, "download paused by downloadAfterAdd")
+                    pauseTask(info, DownloadPauseType.PAUSED_BY_ADD, clearHistory = false)
                 }
             }.start()
         } catch (e: Exception) {
@@ -280,7 +285,7 @@ object DownloadRangeManager : DownloadManager() {
                         info.isDownloadWhenUseMobile
                     )
                 } else {
-                    startTask(info, info.isDownloadWhenAdd)
+                    addNewTask(info, info.isDownloadWhenAdd)
                 }
             }
         }
