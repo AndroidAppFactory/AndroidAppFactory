@@ -6,8 +6,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
-import com.bihe0832.android.lib.download.file.DownloadFileManager
+import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.core.DownloadTaskList
+import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.DownloadNotifyManager
@@ -28,7 +29,8 @@ object DownloadFileNotify {
             override fun onReceive(context: Context?, intent: Intent?) {
                 ZLog.d(TAG, "user input:$intent")
                 intent?.let {
-                    val notificationId = it.getIntExtra(DownloadNotifyManager.NOTIFICATION_ID_KEY, -1)
+                    val notificationId =
+                        it.getIntExtra(DownloadNotifyManager.NOTIFICATION_ID_KEY, -1)
                     val action = it.getStringExtra(DownloadNotifyManager.ACTION_KEY)
                     val downloadURL = it.getStringExtra(DownloadNotifyManager.NOTIFICATION_URL_KEY)
                         ?: ""
@@ -49,16 +51,19 @@ object DownloadFileNotify {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
                                 DownloadFileManager.pauseTask(
                                     item.downloadID,
-                                    startByUser = true,
-                                    clearHistory = false,
-                                    pauseByNetwork = false
+                                    DownloadPauseType.PAUSED_BY_USER,
+                                    clearHistory = false
                                 )
                             }
                         }
 
                         DownloadNotifyManager.ACTION_DELETE -> {
                             DownloadTaskList.getTaskByDownloadURL(downloadURL, "")?.let { item ->
-                                DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = false)
+                                DownloadFileManager.deleteTask(
+                                    item.downloadID,
+                                    startByUser = false,
+                                    deleteFile = false
+                                )
                                 notifyDelete(item)
                             }
 
@@ -154,7 +159,7 @@ object DownloadFileNotify {
 
     fun notifyDelete(item: DownloadItem) {
         if (item.notificationVisibility()) {
-            var notifyID = DownloadNotifyManager.getNotifyIDByURL(item.downloadURL)
+            val notifyID = DownloadNotifyManager.getNotifyIDByURL(item.downloadURL)
             ZLog.d(TAG, "notify delete: id: $notifyID ${item.downloadTitle}")
             mApplicationContext?.let {
                 DownloadNotifyManager.cancleNotify(it, notifyID)
