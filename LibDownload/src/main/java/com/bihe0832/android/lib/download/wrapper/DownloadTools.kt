@@ -189,7 +189,7 @@ object DownloadTools {
             if (TextUtils.isEmpty(file)) {
                 file = UNIQUE_KEY
             }
-            var list = nameListener[file] ?: CopyOnWriteArrayList<DownloadListener?>()
+            val list = nameListener[file] ?: CopyOnWriteArrayList<DownloadListener?>()
             nameListener[file] = list
             return list
         }
@@ -216,7 +216,7 @@ object DownloadTools {
         if (!mDownloadKeyListenerList.containsKey(downloadID) || null == mDownloadKeyListenerList[downloadID]) {
             mDownloadKeyListenerList[downloadID] = KeyListener()
         }
-        var keyListener = mDownloadKeyListenerList[downloadID] ?: KeyListener()
+        val keyListener = mDownloadKeyListenerList[downloadID] ?: KeyListener()
         mDownloadKeyListenerList[downloadID] = keyListener
 
         if (isFile) {

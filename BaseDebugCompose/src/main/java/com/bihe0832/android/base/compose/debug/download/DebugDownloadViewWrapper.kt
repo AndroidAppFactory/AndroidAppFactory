@@ -118,7 +118,8 @@ fun startDownload(context: Context, type: Int) {
 }
 
 internal fun startDownload(context: Context, url: String?, start: Long, length: Int, md5: String) {
-    val file = File(AAFFileWrapper.getFileCacheFolder() + FileUtils.getFileName(url))
+    val file =
+        File(AAFFileWrapper.getFileCacheFolder() + FileUtils.getFileName(url) + "?start=$start&length=$length")
     file.createNewFile()
     DownloadRangeUtils.startDownload(context,
         url,

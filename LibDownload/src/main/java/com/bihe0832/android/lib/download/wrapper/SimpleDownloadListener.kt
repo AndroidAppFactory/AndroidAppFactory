@@ -9,18 +9,18 @@ import com.bihe0832.android.lib.log.ZLog
  */
 abstract class SimpleDownloadListener : DownloadListener {
     override fun onWait(item: DownloadItem) {
-        ZLog.d("onWait$item")
+        ZLog.d(DownloadItem.TAG, "onWait $item")
     }
 
     override fun onStart(item: DownloadItem) {
-        ZLog.d("onStart$item")
+        ZLog.d(DownloadItem.TAG, "onStart $item")
     }
 
     override fun onPause(item: DownloadItem) {
-        ZLog.d("onPause$item")
+        ZLog.d(DownloadItem.TAG, "onPause $item")
     }
 
     override fun onDelete(item: DownloadItem) {
-        ZLog.d("onDelete$item")
+        ZLog.d(DownloadItem.TAG, "onDelete $item")
     }
 }
