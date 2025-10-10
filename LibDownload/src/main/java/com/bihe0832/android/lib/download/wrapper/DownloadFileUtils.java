@@ -122,6 +122,10 @@ public class DownloadFileUtils {
         }
     }
 
+    public static boolean hasPauseAll() {
+        return DownloadFileManager.INSTANCE.hasPauseAll();
+    }
+
     /**
      * 暂停所有下载中的任务
      */
