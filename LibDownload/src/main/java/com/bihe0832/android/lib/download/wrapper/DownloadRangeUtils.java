@@ -135,6 +135,10 @@ public class DownloadRangeUtils {
         }
     }
 
+    public static boolean hasPauseAll() {
+        return DownloadRangeManager.INSTANCE.hasPauseAll();
+    }
+
     /**
      * 暂停所有下载中的任务
      */

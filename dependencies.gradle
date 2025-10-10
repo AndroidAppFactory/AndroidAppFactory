@@ -19,7 +19,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,ModelRes,Framework,Application"
  **/
-ext.developModule = "LibDownload"
+ext.developModule = "Application,LibJsBridge,LibDownload"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -38,12 +38,12 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "7.1.4"
+ext.moduleVersionName = "6.28.3"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
 
-        "APPTest"         : [
+        "APPTest"    : [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
@@ -53,28 +53,21 @@ ext.coremoduleInfo = [
                         "kapt": ["RouterCompiler"]
                 ]
         ],
-        "BaseDebug"       : [
+        "BaseDebug"  : [
                 "version"            : "",
                 "artifactId"         : "",
                 "apidependenciesList": [
-                        "Application", "BaseDebugCompose", "CommonDebug", "CommonTBSFeedback",
+                        "Application", "CommonDebug", "CommonTBSFeedback",
                         "com.bihe0832.android:lib-sherpa-endpoint-model:6.16.7",
                         "LibSherpaEndpointModel"
                 ]
         ],
-        "BaseDebugCompose": [
-                "version"            : "",
-                "artifactId"         : "",
-                "apidependenciesList": [
-                        "Application", "CommonDebugCompose","LibAppIcon"
-                ]
-        ],
-        "Application"     : [
+        "Application": [
                 "version"                : "",
                 "artifactId"             : "",
                 "apidependenciesList"    : [
-                        "CommonWrapper", "CommonTBSWrapper", "CommonWrapperCompose", "LibScreenWrapper", "ServicesWrapper",
-                        "LibASR","ModelRes","LibAppIcon"
+                        "CommonWrapper", "CommonTBSWrapper", "LibScreenWrapper", "ServicesWrapper",
+                        "LibASR", "LibAppIcon"
                 ],
                 "specialdependenciesList": [
                         "kapt"               : ["RouterCompiler"],
@@ -83,7 +76,7 @@ ext.coremoduleInfo = [
         ]
 ]
 
-ext.moduleInfo = ext.coremoduleInfo + ext.libmoduleInfo + ext.tbsmoduleInfo + ext.commonmoduleInfo + ext.widgetmoduleInfo + ext.kitmoduleInfo + ext.asrmoduleInfo + ext.deprecatedModuleInfo
+ext.moduleInfo = ext.coremoduleInfo + ext.libmoduleInfo + ext.tbsmoduleInfo + ext.commonmoduleInfo + ext.widgetmoduleInfo + ext.kitmoduleInfo + ext.asrmoduleInfo
 
 
 
