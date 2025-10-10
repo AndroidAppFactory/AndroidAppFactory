@@ -78,22 +78,27 @@ public abstract class BaseJsBridgeProxy {
 
             } else {
                 if (!TextUtils.isEmpty(callbackName)) {
-                    getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_None);
+                    getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_None,
+                            "callbackName is bad");
                 }
             }
         } catch (NoSuchMethodException e) {
-            ZLog.e(TAG, "JSBridge method 404");
-            ZLog.d(TAG, e.toString());
+            ZLog.e(TAG, "JSBridge method 404：" + e);
+            if (e.getCause() != null) {
+                ZLog.d(TAG, e.getCause().toString());
+            }
             if (!TextUtils.isEmpty(callbackName)) {
                 getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.NOT_SUPPORT,
-                        "JSBridge method 404, please update apk version");
+                        "JSBridge method 404, please update apk version:" + e);
             }
         } catch (Exception ex) {
-            ZLog.e(TAG, "JSBridge method has error");
-            ZLog.d(TAG, ex.toString());
+            ZLog.e(TAG, "JSBridge method has error:" + ex);
+            if (ex.getCause() != null) {
+                ZLog.d(TAG, ex.getCause().toString());
+            }
             if (!TextUtils.isEmpty(callbackName)) {
                 getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception,
-                        "JSBridge method has error, connect api developer");
+                        "JSBridge method has error, connect JSBridge Native api developer:" + ex);
             }
         }
 
@@ -157,11 +162,13 @@ public abstract class BaseJsBridgeProxy {
                     callAMethod(uriForCall, method, seqidOfCall, callback);
                 }
             } catch (Exception ex) {
-                ZLog.e(TAG, "JSBridge method has error");
-                ZLog.d(TAG, ex.toString());
+                ZLog.e(TAG, "JSBridge method has error:" + ex);
+                if (ex.getCause() != null) {
+                    ZLog.d(TAG, ex.getCause().toString());
+                }
                 if (!TextUtils.isEmpty(callbackName)) {
                     getJsBridge().responseFail(callbackName, seqid, hostAsMethodName, JsResult.Code_Java_Exception,
-                            "JSBridge method has error, connect api developer");
+                            "JSBridge method has error, connect JSBridge Native api developer:" + ex);
                 }
             }
         } else {
@@ -269,7 +276,12 @@ public abstract class BaseJsBridgeProxy {
             }
             result.put(pkgName, json);
         } catch (Exception e) {
-            getJsBridge().responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception);
+            ZLog.e(TAG, "JSBridge method has error:" + e);
+            if (e.getCause() != null) {
+                ZLog.d(TAG, e.getCause().toString());
+            }
+            getJsBridge().responseFail(callbackFun, seqid, method, JsResult.Code_Java_Exception,
+                    "JSBridge method has error:" + e);
         }
         getJsBridge().response(callbackFun, seqid, method, result.toString());
     }
