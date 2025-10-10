@@ -377,7 +377,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibJsBridge"         : [
-                "version"            : "7.0.0",
+                "version"            : "7.1.6",
                 "artifactId"         : "lib-jsbridge",
                 "apidependenciesList": [
                         "LibLog", "LibThread", "LibToast", "LibAPK"
