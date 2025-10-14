@@ -41,7 +41,8 @@ object DownloadTools {
     private var mDownloadKeyListenerList = ConcurrentHashMap<Long, KeyListener>()
 
     private class KeyListener {
-        private var nameListener = ConcurrentHashMap<String, CopyOnWriteArrayList<DownloadListener?>>()
+        private var nameListener =
+            ConcurrentHashMap<String, CopyOnWriteArrayList<DownloadListener?>>()
         private val mListener = object : DownloadListener {
             override fun onWait(item: DownloadItem) {
                 nameListener.values.forEach { list ->
@@ -101,7 +102,11 @@ object DownloadTools {
                 mGlobalDownloadListenerList.forEach {
                     it.onFail(errorCode, msg, item)
                 }
-                DownloadFileManager.deleteTask(item.downloadID, startByUser = false, deleteFile = true)
+                DownloadFileManager.deleteTask(
+                    item.downloadID,
+                    startByUser = false,
+                    deleteFile = true
+                )
             }
 
             override fun onComplete(downloadPath: String, item: DownloadItem): String {
@@ -235,7 +240,11 @@ object DownloadTools {
                 return listener.onComplete(path, item)
             } else {
                 item.setDownloadStatus(DownloadStatus.STATUS_DOWNLOAD_FAILED)
-                listener.onFail(DownloadErrorCode.ERR_NOTIFY_EXCEPTION, "new path file not exist", item)
+                listener.onFail(
+                    DownloadErrorCode.ERR_NOTIFY_EXCEPTION,
+                    "new path file not exist",
+                    item
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -294,26 +303,32 @@ object DownloadTools {
                 }
                 return
             }
-            // 文件已经存在，直接回调
-            if (isFilePath && (!TextUtils.isEmpty(md5) || !TextUtils.isEmpty(sha256)) && FileUtils.checkFileExist(
-                        path, 0, md5, sha256, false
+            Thread {
+                // 文件已经存在，直接回调
+                if (isFilePath && (!TextUtils.isEmpty(md5) || !TextUtils.isEmpty(sha256)) && FileUtils.checkFileExist(
+                        path,
+                        0,
+                        md5,
+                        sha256,
+                        false
                     )
-            ) {
-                try {
-                    var notifyPath = downloadListener?.onComplete(path, downloadItem) ?: path
-                    mGlobalDownloadListenerList.forEach {
-                        notifyPath = notifyComplete(path, it, downloadItem)
+                ) {
+                    try {
+                        var notifyPath = downloadListener?.onComplete(path, downloadItem) ?: path
+                        mGlobalDownloadListenerList.forEach {
+                            notifyPath = notifyComplete(path, it, downloadItem)
+                        }
+                        ZLog.d("final path:$notifyPath")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                    ZLog.d("final path:$notifyPath")
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } else {
+                    addNewKeyListener(downloadItem.downloadID, path, isFilePath, downloadListener)
+                    downloadItem.downloadListener =
+                        mDownloadKeyListenerList[downloadItem.downloadID]?.getDownloadListener()
+                    DownloadFileUtils.startDownload(context, downloadItem, forceDownload)
                 }
-                return
-            }
-
-            addNewKeyListener(downloadItem.downloadID, path, isFilePath, downloadListener)
-            downloadItem.downloadListener = mDownloadKeyListenerList[downloadItem.downloadID]?.getDownloadListener()
-            DownloadFileUtils.startDownload(context, downloadItem, forceDownload)
+            }.start()
         }
     }
 }
