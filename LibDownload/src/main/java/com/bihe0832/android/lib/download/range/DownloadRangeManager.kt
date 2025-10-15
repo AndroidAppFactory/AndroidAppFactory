@@ -29,7 +29,7 @@ import java.io.File
 object DownloadRangeManager : DownloadManager() {
 
     private val mDownloadEngine by lazy {
-        DownloadByHttpForRange(mContext!!, innerDownloadListener, mMaxNum, mIsDebug)
+        DownloadByHttpForRange(innerDownloadListener, mMaxNum, mIsDebug)
     }
 
     private val innerDownloadListener = object : DownloadListener {
@@ -210,11 +210,14 @@ object DownloadRangeManager : DownloadManager() {
                                 }
                             }
                         }
-                        if (!hasPauseAll()){
+                        if (!hasPauseAll()) {
                             mDownloadEngine.startDownload(
-                                mContext!!, info, info.rangeStart, info.contentLength, info.localStart
+                                info,
+                                info.rangeStart,
+                                info.contentLength,
+                                info.localStart
                             )
-                        }else{
+                        } else {
                             ZLog.e(TAG, "download paused by pause all")
                         }
                     }
