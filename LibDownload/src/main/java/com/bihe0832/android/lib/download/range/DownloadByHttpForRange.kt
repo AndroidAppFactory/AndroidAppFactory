@@ -1,6 +1,5 @@
 package com.bihe0832.android.lib.download.range
 
-import android.content.Context
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
@@ -18,8 +17,7 @@ import com.bihe0832.android.lib.log.ZLog
  *
  */
 open class DownloadByHttpForRange(
-    internal var applicationContext: Context,
-    internal val innerDownloadListener: DownloadListener,
+    private val innerDownloadListener: DownloadListener,
     maxNum: Int,
     isDebug: Boolean = false
 ) : DownloadByHttpBase(maxNum, isDebug) {
@@ -47,12 +45,9 @@ open class DownloadByHttpForRange(
         innerDownloadListener.onStart(info)
     }
 
-    fun startDownload(context: Context, info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
+    fun startDownload(info: DownloadItem, rangeStart: Long, rangeLength: Long, localStart: Long) {
 
         ZLog.e(TAG, "开始下载:${info}")
-        if (applicationContext == null) {
-            applicationContext = context.applicationContext
-        }
         try {
             startDownload(info, DownloadItem.TYPE_RANGE, rangeStart, rangeLength, localStart)
         } catch (e: Throwable) {

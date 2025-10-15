@@ -35,7 +35,7 @@ import java.io.File
 object DownloadFileManager : DownloadManager() {
 
     private val mDownloadEngine by lazy {
-        DownloadByHttpForFile(mContext!!, innerDownloadListener, mMaxNum, mIsDebug)
+        DownloadByHttpForFile(innerDownloadListener, mMaxNum, mIsDebug)
     }
 
     override fun init(context: Context, maxNum: Int, isDebug: Boolean) {
@@ -274,7 +274,7 @@ object DownloadFileManager : DownloadManager() {
                                 }
                             }
                             if (!hasPauseAll()) {
-                                mDownloadEngine.startDownload(mContext!!, info)
+                                mDownloadEngine.startDownload(info)
                             } else {
                                 ZLog.e(TAG, "download paused by pause all")
                             }

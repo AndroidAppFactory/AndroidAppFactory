@@ -1,6 +1,5 @@
 package com.bihe0832.android.lib.download.file
 
-import android.content.Context
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_FILE_RENAME_FAILED
@@ -27,17 +26,13 @@ import java.io.File
 
 
 class DownloadByHttpForFile(
-    applicationContext: Context,
     innerDownloadListener: DownloadListener,
     maxNum: Int,
     isDebug: Boolean = false
-) : DownloadByHttpForRange(applicationContext, innerDownloadListener, maxNum, isDebug) {
+) : DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug) {
 
-    fun startDownload(context: Context, info: DownloadItem) {
+    fun startDownload(info: DownloadItem) {
         ZLog.e(TAG, "开始下载:${info}")
-        if (applicationContext == null) {
-            applicationContext = context.applicationContext
-        }
         try {
             startDownload(info, DownloadItem.TYPE_FILE, 0, info.contentLength, 0)
         } catch (e: Throwable) {
@@ -52,7 +47,7 @@ class DownloadByHttpForFile(
 
     override fun notifyDownloadAfterFinish(downloadInfo: DownloadItem) {
         closeDownload(downloadInfo.downloadID, finishDownload = true, clearDownloadHistory = false)
-        var downloadFile = downloadInfo.filePath
+        val downloadFile = downloadInfo.filePath
         ThreadManager.getInstance().start {
             try {
                 val oldfile = File(downloadFile)

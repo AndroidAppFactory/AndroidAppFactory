@@ -54,13 +54,13 @@ abstract class DownloadManager {
 
 
     internal var mContext: Context? = null
-    internal val DEFAULT_MAX_NUM = 1
-    internal val MAX_MAX_NUM = 5
+    private val DEFAULT_MAX_NUM = 1
+    private val MAX_MAX_NUM = 5
 
     internal var mMaxNum = DEFAULT_MAX_NUM
     internal var mHasInit = false
     internal var mIsDebug = false
-    internal var mNetReceiver: BroadcastReceiver? = null
+    private var mNetReceiver: BroadcastReceiver? = null
 
     private val MSG_TYPE_START_CHECK = 1
     private val MSG_DELAY_START_CHECK = 3 * 1000L
