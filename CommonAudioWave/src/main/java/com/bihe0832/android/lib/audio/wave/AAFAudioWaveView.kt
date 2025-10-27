@@ -44,7 +44,7 @@ private const val DefaultGraphicsLayerAlpha: Float = 0.99F
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AudioWaveform(
+fun AAFAudioWaveView(
     modifier: Modifier = Modifier,
     style: DrawStyle = Fill,
     waveformBrush: Brush = SolidColor(Color.DarkGray),

@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.base.compose.debug.color.getDebugColorPalettes
-import com.bihe0832.android.lib.audio.wave.AudioWaveform
+import com.bihe0832.android.lib.audio.wave.AAFAudioWaveView
 import com.bihe0832.android.lib.audio.wave.model.AmplitudeType
 import com.bihe0832.android.lib.audio.wave.model.WaveformAlignment
 
@@ -80,7 +80,7 @@ fun AudioWaveDebugView(
                     textAlign = TextAlign.Center
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                AudioWaveform(modifier = Modifier
+                AAFAudioWaveView(modifier = Modifier
                     .width(200.dp)
                     .height(20.dp),
                     style = waveformStyle.style,
@@ -102,7 +102,7 @@ fun AudioWaveDebugView(
                         scrollEnabled = true
                     })
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
-                AudioWaveform(modifier = Modifier
+                AAFAudioWaveView(modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp),
                     style = waveformStyle.style,
