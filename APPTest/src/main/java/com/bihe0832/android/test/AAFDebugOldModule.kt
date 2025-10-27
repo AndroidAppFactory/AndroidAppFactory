@@ -6,9 +6,10 @@
  *
  */
 
-package com.bihe0832.android.base.debug
+package com.bihe0832.android.test
 
 import androidx.compose.runtime.Composable
+import com.bihe0832.android.base.debug.audio.DebugRecordAndASRFragment
 import com.bihe0832.android.base.debug.floatview.DebugFloatViewFragment
 import com.bihe0832.android.base.debug.network.DebugNetworkActivity
 import com.bihe0832.android.base.debug.network.DebugWiFiFragment
@@ -27,11 +28,12 @@ import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 
 @Composable
-fun AAFDebugModule() {
+fun AAFDebugOldModule() {
     DebugContent {
 
         DebugFragmentItem("权限 Permission 调试", DebugPermissionFragment::class.java)
         DebugFragmentItem("TTS 调试", DebugTTSFragment::class.java)
+        DebugFragmentItem("语音和音频调试", DebugRecordAndASRFragment::class.java)
 
 
         DebugFragmentItem("UI（Widget）测试", DebugWidgetFragment::class.java)

@@ -24,20 +24,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.base.compose.debug.AAFDebugModuleView
-import com.bihe0832.android.base.debug.AAFDebugModule
+import com.bihe0832.android.base.compose.debug.DebugTempView
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.common.DebugComposeMainActivity
-import com.bihe0832.android.common.compose.debug.common.DebugComposeMainWithDrawerActivity
 import com.bihe0832.android.common.compose.debug.module.DebugCommonComposeView
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.lib.debug.icon.DebugLogTips
-import com.bihe0832.android.lib.lifecycle.ApplicationObserver
-import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.router.annotation.APPMain
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.sqlite.impl.CommonDBManager
 import com.bihe0832.android.test.module.AAFDebugLogListActivity
-import com.bihe0832.android.test.module.AAFRouterView
 import com.bihe0832.android.test.widget.DebugWidget
 
 @APPMain
@@ -160,7 +156,7 @@ open class TestMainActivity : DebugComposeMainActivity() {
             }
 
             TAB_FOR_DEV_MODULE -> {
-                AAFDebugModule()
+                DebugTempView()
             }
 
             TAB_FOR_COMPOSE -> {
@@ -168,7 +164,7 @@ open class TestMainActivity : DebugComposeMainActivity() {
             }
 
             TAB_FOR_DEV -> {
-                AAFRouterView()
+                AAFDebugOldModule()
             }
 
             else -> {

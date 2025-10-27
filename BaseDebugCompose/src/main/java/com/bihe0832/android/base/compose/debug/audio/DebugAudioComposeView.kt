@@ -19,11 +19,11 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.lib.audio.player.AudioPlayListener
 import com.bihe0832.lib.audio.player.block.AudioPLayerManager
 
-
 private const val LOG_TAG = "DebugComposeAudioView"
 
 @Composable
 fun DebugAudioComposeView() {
+
     DebugContent {
         val blockAudioPlayerManager = AudioPLayerManager()
         DebugComposeActivityItem("本地 WAV 查看", DebugAudioListActivity::class.java)

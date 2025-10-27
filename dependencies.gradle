@@ -20,7 +20,7 @@ ext.mainProject = "APPTest"
  *
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,ModelRes,Framework,Application"
  **/
-ext.developModule = "Application"
+ext.developModule = "Application, CommonAudioWave"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -39,7 +39,7 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "7.1.8"
+ext.moduleVersionName = "7.2.0"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
@@ -67,7 +67,7 @@ ext.coremoduleInfo = [
                 "version"            : "",
                 "artifactId"         : "",
                 "apidependenciesList": [
-                        "Application", "CommonDebugCompose","LibAppIcon"
+                        "Application", "CommonDebugCompose", "LibAppIcon"
                 ]
         ],
         "Application"     : [
@@ -75,7 +75,7 @@ ext.coremoduleInfo = [
                 "artifactId"             : "",
                 "apidependenciesList"    : [
                         "CommonWrapper", "CommonTBSWrapper", "CommonWrapperCompose", "LibScreenWrapper", "ServicesWrapper",
-                        "LibASR","ModelRes","LibAppIcon"
+                        "LibASR", "ModelRes", "LibAppIcon"
                 ],
                 "specialdependenciesList": [
                         "kapt"               : ["RouterCompiler"],
