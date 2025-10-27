@@ -239,7 +239,7 @@ ext.commonmoduleInfo = [
                 "version"            : "7.1.8",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
-                        "CommonDeprecated", "LibFFmpegMobile"
+                        "CommonDeprecated", "LibFFmpegMobile", "CommonAudioWave"
                 ]
         ],
         "CommonCrop"            : [
@@ -267,6 +267,13 @@ ext.commonmoduleInfo = [
                 ],
                 "specialdependenciesList": [
                         "kapt": ["RouterCompiler"]
+                ]
+        ],
+        "CommonAudioWave" : [
+                "version"            : "7.1.4",
+                "artifactId"         : "common-audio-wave",
+                "apidependenciesList": [
+                        "CommonCompose"
                 ]
         ],
 

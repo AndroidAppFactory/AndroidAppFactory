@@ -1,12 +1,12 @@
 package com.bihe0832.android.base.debug.audio.asr
 
 import com.bihe0832.android.framework.file.AAFFileWrapper
-import com.bihe0832.android.lib.audio.AudioRecordConfig
 import com.bihe0832.android.lib.device.cpu.CPUHelper
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.speech.getAAFEndpointConfig
 import com.bihe0832.android.lib.speech.getAAFFeatureConfig
 import com.bihe0832.android.base.debug.audio.asr.ASRModelDownloadManager.TAG
+import com.bihe0832.android.lib.audio.AudioRecordConfig
 import com.k2fsa.sherpa.onnx.OfflineModelConfig
 import com.k2fsa.sherpa.onnx.OfflineParaformerModelConfig
 import com.k2fsa.sherpa.onnx.OfflineRecognizerConfig

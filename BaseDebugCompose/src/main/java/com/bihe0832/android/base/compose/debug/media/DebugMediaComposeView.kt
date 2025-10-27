@@ -8,6 +8,7 @@ import android.text.TextUtils
 import androidx.compose.runtime.Composable
 import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.base.compose.debug.audio.DebugAudioComposeView
+import com.bihe0832.android.base.compose.debug.audio.DebugAudioWaveView
 import com.bihe0832.android.common.compose.debug.item.DebugComposeFragmentItem
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
@@ -40,6 +41,7 @@ private var lastPath: String = ""
 fun DebugMediaComposeView() {
     DebugContent {
         DebugComposeItem("音频播放", "DebugComposeAudioView") { DebugAudioComposeView() }
+        DebugComposeItem("音频波形", "DebugAudioWaveView") { DebugAudioWaveView() }
         DebugComposeFragmentItem("拍照、相册、裁剪调试", DebugPhotosFragment::class.java)
         DebugItem("文字转图片1（有图标，有标题）") { textToImage(it) }
         DebugItem("文字转图片2（无图标，无标题）") { textToImage2(it) }
