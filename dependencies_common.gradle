@@ -27,7 +27,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "7.1.8",
+                "version"            : "7.2.0",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -236,7 +236,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonMedia"           : [
-                "version"            : "7.1.8",
+                "version"            : "7.2.0",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
                         "CommonDeprecated", "LibFFmpegMobile", "CommonAudioWave"
@@ -270,7 +270,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonAudioWave" : [
-                "version"            : "7.1.4",
+                "version"            : "7.2.0",
                 "artifactId"         : "common-audio-wave",
                 "apidependenciesList": [
                         "CommonCompose"
