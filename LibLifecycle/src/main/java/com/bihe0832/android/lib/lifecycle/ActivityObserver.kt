@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import com.bihe0832.android.lib.log.ZLog
 import java.lang.ref.SoftReference
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * @author zixie code@bihe0832.com
@@ -14,7 +15,7 @@ import java.lang.ref.SoftReference
 object ActivityObserver : Application.ActivityLifecycleCallbacks {
 
     const val TAG = "ActivityObserver"
-    private val mActivityList = mutableListOf<Activity>()
+    private val mActivityList = CopyOnWriteArrayList<Activity>()
     private var mSoftReferenceOfCurrentActivity: SoftReference<Activity>? = null
     private var mSoftReferenceOfResumedActivity: SoftReference<Activity>? = null
     private var mAAFActivityLifecycleChangedListener: AAFActivityLifecycleChangedListener? = null

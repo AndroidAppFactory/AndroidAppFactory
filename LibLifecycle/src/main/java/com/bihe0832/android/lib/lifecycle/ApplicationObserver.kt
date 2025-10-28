@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.lifecycle
 
 import androidx.lifecycle.*
 import com.bihe0832.android.lib.log.ZLog
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * @author zixie code@bihe0832.com
@@ -15,8 +16,8 @@ object ApplicationObserver : DefaultLifecycleObserver {
     private var mLastPauseTime = 0L
     private var mLastResumeTime = 0L
     private var mIsAPPBackground = true
-    private val mAPPStatusChangeListenerList = mutableListOf<APPStatusChangeListener>()
-    private val mAPPDestroyChangeListenerList = mutableListOf<APPDestroyListener>()
+    private val mAPPStatusChangeListenerList = CopyOnWriteArrayList<APPStatusChangeListener>()
+    private val mAPPDestroyChangeListenerList = CopyOnWriteArrayList<APPDestroyListener>()
 
 
     interface APPStatusChangeListener {
@@ -44,14 +45,13 @@ object ApplicationObserver : DefaultLifecycleObserver {
         }
     }
 
-    fun addDestoryListener(listener: APPDestroyListener) {
+    fun addDestroyListener(listener: APPDestroyListener) {
         if (!mAPPDestroyChangeListenerList.contains(listener)) {
             mAPPDestroyChangeListenerList.add(listener)
         }
-
     }
 
-    fun removeDestoryListener(listener: APPDestroyListener) {
+    fun removeDestroyListener(listener: APPDestroyListener) {
         if (mAPPDestroyChangeListenerList.contains(listener)) {
             mAPPDestroyChangeListenerList.remove(listener)
         }

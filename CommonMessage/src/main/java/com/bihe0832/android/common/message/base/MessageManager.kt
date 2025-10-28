@@ -63,7 +63,7 @@ public open class MessageManager {
     }
 
     fun fetchMessageByURLList(url: String) {
-        url?.split(";")?.forEach {
+        url.split(";").forEach {
             fetchMessageByURL(it)
         }
     }

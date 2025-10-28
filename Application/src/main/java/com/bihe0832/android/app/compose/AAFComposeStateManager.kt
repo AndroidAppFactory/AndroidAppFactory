@@ -43,7 +43,7 @@ object AAFComposeStateManager {
         code?.let {
             if (supportLanguage.find { code == it.locale } != null) {
                 // 临时方案，等全切换为Compose即可废弃
-                ActivityObserver.getActivityList().forEach { activity ->
+                ActivityObserver.getActivityList().toList().forEach { activity ->
                     MultiLanguageHelper.modifyContextLanguageConfig(
                         activity, code
                     )

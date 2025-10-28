@@ -266,8 +266,8 @@ internal fun testCustom(activity: Activity?) {
 }
 
 internal fun testUpdate(activity: Activity?) {
-    var taskName = "TEST"
-    var progressDialog = DownloadProgressDialog(activity).apply {
+    val taskName = "TEST"
+    val progressDialog = DownloadProgressDialog(activity).apply {
         setTitle("更新测试")
         setMessage("正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~正在更新~")
         setCurrentSize(
