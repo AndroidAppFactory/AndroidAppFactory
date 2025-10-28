@@ -142,6 +142,7 @@ object AppFactoryInit {
                 getSSID = true,
                 getBssID = true,
                 curCellId = true,
+                needChange = false
             )
             // 监听信号变化，统一到MobileUtil
             MobileUtil.registerMobileSignalListener(application.applicationContext)
