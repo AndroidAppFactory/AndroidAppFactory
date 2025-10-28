@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"                : [
-                "version"            : "6.28.5",
+                "version"            : "6.28.6",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -445,7 +445,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibLifecycle"              : [
-                "version"            : "6.28.5",
+                "version"            : "6.28.6",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         project.androidsupport.lifecycle,
