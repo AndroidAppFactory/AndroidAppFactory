@@ -4,7 +4,7 @@
     <string name="app_name"></string>
     <string name="app_desc"></string>
     <string name="custom_density">360</string>
-
+    <!--已逐渐弃用，后续都是用 mdTheme的颜色值-->
     <!--主色调 -->
     <color name="colorPrimary">@color/md_theme_primary</color>
     <!--状态栏颜色-->

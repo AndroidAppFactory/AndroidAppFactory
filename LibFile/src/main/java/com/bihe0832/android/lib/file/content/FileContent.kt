@@ -209,10 +209,21 @@ object FileContent {
             var bufferedReader: BufferedReader? = null
             try {
                 bufferedReader = File(filePath).bufferedReader()
-                bufferedReader.useLines { lines ->
-                    lines.forEach { line ->
+                while (true) {
+                    val line = try {
+                        bufferedReader.readLine()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        null
+                    }
+                    if (line == null) {
+                        break
+                    }
+                    try {
                         val (key, value) = line.split(split)
                         map[key] = value
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
             } catch (e: Exception) {
@@ -239,10 +250,21 @@ object FileContent {
         try {
             inputStream = context.assets.open(fileName)
             bufferedReader = BufferedReader(InputStreamReader(inputStream))
-            bufferedReader.useLines { lines ->
-                lines.forEach { line ->
+            while (true) {
+                val line = try {
+                    bufferedReader.readLine()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+                if (line == null) {
+                    break
+                }
+                try {
                     val (key, value) = line.split(split)
                     map[key] = value
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         } catch (e: Exception) {

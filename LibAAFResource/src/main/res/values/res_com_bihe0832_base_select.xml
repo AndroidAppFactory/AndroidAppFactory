@@ -5,11 +5,11 @@
     <!-- 有背景时的背景色 -->
     <color name="com_bihe0832_select_bg">@color/md_theme_surface</color>
     <!-- 控件的默认颜色 -->
-    <color name="com_bihe0832_select_default">@color/md_theme_tertiary</color>
+    <color name="com_bihe0832_select_default">@color/md_theme_onTertiaryContainer</color>
     <!--  控件被选中时的颜色 -->
     <color name="com_bihe0832_select_state_checked">@color/md_theme_tertiary</color>
-    <color name="com_bihe0832_select_state_pressed">@color/md_theme_tertiaryContainer</color>
-    <color name="com_bihe0832_select_state_focused">@color/md_theme_onTertiaryContainer</color>
+    <color name="com_bihe0832_select_state_pressed">@color/md_theme_tertiary</color>
+    <color name="com_bihe0832_select_state_focused">@color/md_theme_tertiaryContainer</color>
 
     <dimen name="com_bihe0832_select_item_width">12dp</dimen>
     <dimen name="com_bihe0832_select_border_width">1dp</dimen>

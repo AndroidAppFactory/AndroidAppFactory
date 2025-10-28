@@ -141,7 +141,7 @@ object FileAction {
 
     fun getFolderPathWithSeparator(path: String): String {
         try {
-            var result = checkAndCreateFolder(path)
+            val result = checkAndCreateFolder(path)
             if (!result) {
                 ZLog.e("file $path is bad !!!")
             }
@@ -162,11 +162,11 @@ object FileAction {
     }
 
     fun deleteOld(dir: File, duration: Long) {
-        dir.listFiles().forEach { tempFile ->
-            var lastModify = tempFile.lastModified()
+        dir.listFiles()?.forEach { tempFile ->
+            val lastModify = tempFile.lastModified()
             ZLog.w("File", "File $tempFile Date is ${DateUtil.getDateEN(lastModify)}")
             if (tempFile.exists() && System.currentTimeMillis() - lastModify > duration) {
-                var result = if (tempFile.isDirectory) {
+                val result = if (tempFile.isDirectory) {
                     deleteDirectory(tempFile)
                 } else {
                     deleteFile(tempFile.absolutePath)
@@ -409,7 +409,7 @@ object FileAction {
             return false
         }
         try {
-            var source = if (TextUtils.isEmpty(fromAssetPath)) {
+            val source = if (TextUtils.isEmpty(fromAssetPath)) {
                 fromAssetPath
             } else {
                 if (fromAssetPath.endsWith(File.separator)) {
@@ -419,10 +419,10 @@ object FileAction {
                 }
             }
 
-            var target = FileAction.getFolderPathWithSeparator(targetFolder)
+            val target = FileAction.getFolderPathWithSeparator(targetFolder)
 
             context.assets.list(source)?.forEach { file: String ->
-                var dataArray = context.assets.list(source + file) ?: emptyArray()
+                val dataArray = context.assets.list(source + file) ?: emptyArray()
                 val res = if (dataArray.isNotEmpty()) {
                     copyAssetsFolderToFolder(context, "$source$file", "$target$file")
                 } else {
