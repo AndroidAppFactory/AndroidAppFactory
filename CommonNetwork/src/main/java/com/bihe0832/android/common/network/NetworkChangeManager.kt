@@ -113,6 +113,7 @@ object NetworkChangeManager {
         getSSID: Boolean = false,
         getBssID: Boolean = false,
         curCellId: Boolean = false,
+        needChange: Boolean = false,
     ) {
         DeviceInfoManager.getInstance().init(context.applicationContext)
         WifiManagerWrapper.init(
@@ -128,7 +129,9 @@ object NetworkChangeManager {
         canGetCELLID = curCellId
         refreshInfo(context)
         updateInfo(context)
-        listenNetChange(context)
+        if (needChange){
+            listenNetChange(context)
+        }
     }
 
     fun refreshInfo(context: Context?) {
@@ -213,8 +216,8 @@ object NetworkChangeManager {
 
     private fun innerNetworkChanged(context: Context?, intent: Intent?) {
         ZLog.d(TAG, "change")
-        var oldNetType = cachedNetType
-        var oldDtType = cachedDtTypeInfo
+        val oldNetType = cachedNetType
+        val oldDtType = cachedDtTypeInfo
         refreshInfo(context)
         ZLog.d(
             TAG,
