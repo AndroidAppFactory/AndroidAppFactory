@@ -26,8 +26,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.bihe0832.android.common.compose.ui.utils.VerticalSpacer
-import com.bihe0832.android.common.compose.ui.utils.loadPicture
 import com.bihe0832.android.common.message.R
 import com.bihe0832.android.lib.request.URLUtils
 
@@ -70,20 +70,19 @@ fun DateItemUI(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
+                AsyncImage(
+                    model = if (URLUtils.isHTTPUrl(url)) {
+                        url
+                    } else {
+                        R.drawable.icon_message
+                    },
+                    placeholder = painterResource(R.drawable.icon_message),
                     contentDescription = "",
                     modifier = Modifier.size(24.dp),
                     colorFilter = if (URLUtils.isHTTPUrl(url)) {
                         null
                     } else {
                         ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer)
-                    },
-                    painter = if (URLUtils.isHTTPUrl(url)) {
-                        loadPicture(
-                            url = url, placeholder = painterResource(R.drawable.icon_message)
-                        )
-                    } else {
-                        painterResource(R.drawable.icon_message)
                     }
                 )
                 Spacer(modifier = Modifier.width(8.dp))

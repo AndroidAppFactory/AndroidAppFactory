@@ -5,8 +5,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.base.compose.debug.DebugTempView
 import com.bihe0832.android.base.compose.debug.list.model.DebugPageListActivity
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
+import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 
@@ -33,5 +35,8 @@ fun DebugListComposeView() {
                 null
             )
         }
+
+        DebugComposeItem("Flex 布局联动", "DebugFlexWithScrollAndExamplePre") { DebugFlexWithScrollAndExamplePre() }
+
     }
 }

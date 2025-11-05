@@ -82,7 +82,8 @@ ext.commonmoduleInfo = [
                         project.androidsupport.compose_ui_preview,
                         project.androidsupport.systemuicontroller,
                         project.androidsupport.compose_paging,
-                        project.androidsupport.lifecycle_viewmodel
+                        project.androidsupport.lifecycle_viewmodel,
+                        project.androidsupport.compose_coil
                 ]
         ],
         "CommonAccessibility"   : [
