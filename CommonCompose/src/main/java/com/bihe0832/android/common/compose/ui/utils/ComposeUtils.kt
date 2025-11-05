@@ -27,6 +27,12 @@ fun dpToSp(dp: Dp): TextUnit {
 }
 
 @Composable
+fun Dp.toSp(): TextUnit {
+    val density = LocalDensity.current
+    return with(density) { (value / fontScale).sp }
+}
+
+@Composable
 fun VerticalSpacer(size: Int) {
     Spacer(modifier = Modifier.height(size.dp))
 }

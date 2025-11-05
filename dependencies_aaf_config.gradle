@@ -63,6 +63,7 @@ ext {
             systemuicontroller : "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version",
             compose_runtime    : "androidx.compose.runtime:runtime:1.4.0",
             compose_paging     : "androidx.paging:paging-compose-android:3.3.6",
+            compose_coil       : "io.coil-kt:coil-compose:2.4.0",
     ]
 
     router = [
