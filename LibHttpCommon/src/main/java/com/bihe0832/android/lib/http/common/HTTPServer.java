@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.http.common;
 
+import static com.bihe0832.android.lib.http.common.core.BaseConnection.CONNECT_TIMEOUT;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CHARSET_UTF8;
 import static com.bihe0832.android.lib.http.common.core.BaseConnection.HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
 import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_REQ_ENTITY_MERGE;
@@ -7,6 +8,7 @@ import static com.bihe0832.android.lib.http.common.core.HttpBasicRequest.HTTP_RE
 import android.content.Context;
 import android.net.Network;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.http.common.core.BaseConnection;
 import com.bihe0832.android.lib.http.common.core.FileInfo;
 import com.bihe0832.android.lib.http.common.core.HTTPConnection;
@@ -16,12 +18,14 @@ import com.bihe0832.android.lib.http.common.core.HttpFileUpload;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.request.HTTPRequestUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 网络请求分发、执行类
@@ -100,7 +104,7 @@ public class HTTPServer {
 
     private byte[] executeRequest(HttpBasicRequest request, HttpByteResponseHandler handler, Network network) {
         String url = request.getUrl();
-        BaseConnection connection = getConnection(url, network);
+        BaseConnection connection = getConnection(url, network, request.getConnectTimeOut());
         byte[] result;
         result = executeRequest(request, connection);
         if (null == handler) {
@@ -128,7 +132,7 @@ public class HTTPServer {
     }
 
     private void executeRequestInExecutor(final HttpBasicRequest request, HttpByteResponseHandler handler,
-            Network network) {
+                                          Network network) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
@@ -138,7 +142,7 @@ public class HTTPServer {
     }
 
     private byte[] startRequest(Network network, final String url, byte[] bytes, final String contentType,
-            HttpByteResponseHandler handler) {
+                                HttpByteResponseHandler handler) {
         final String finalContentType;
         if (TextUtils.isEmpty(contentType)) {
             finalContentType = HTTP_REQ_VALUE_CONTENT_TYPE_URL_ENCODD;
@@ -167,9 +171,9 @@ public class HTTPServer {
         }
     }
 
-    public BaseConnection getConnection(String url, Network network) {
+    public BaseConnection getConnection(String url, Network network, int timeOut) {
         ZLog.e(LOG_TAG, "getConnection:" + url);
-        String finalUrl = HTTPRequestUtils.getRedirectUrl(url);
+        String finalUrl = HTTPRequestUtils.getRedirectUrl(url, timeOut);
         ZLog.e(LOG_TAG, "getConnection getRedirectUrl:" + finalUrl);
         BaseConnection connection = null;
         if (finalUrl.startsWith("https:")) {
@@ -190,20 +194,20 @@ public class HTTPServer {
         }
     }
 
-    public byte[] doFileUpload(Context context, Network network, final String requestUrl, final String strParams,
-            final List<FileInfo> fileParams) {
-        return new HttpFileUpload().postRequest(context, HTTPServer.getInstance().getConnection(requestUrl, network),
+    public byte[] doFileUpload(Context context, Network network, final String requestUrl, final String strParams, int timeOut,
+                               final List<FileInfo> fileParams) {
+        return new HttpFileUpload().postRequest(context, HTTPServer.getInstance().getConnection(requestUrl, network, timeOut),
                 strParams, fileParams);
     }
 
     public byte[] doFileUpload(Context context, final String requestUrl, final String strParams,
-            final List<FileInfo> fileParams) {
-        return doFileUpload(context, null, requestUrl, strParams, fileParams);
+                               final List<FileInfo> fileParams) {
+        return doFileUpload(context, null, requestUrl, strParams, CONNECT_TIMEOUT, fileParams);
     }
 
     public String doFileUpload(Context context, final String requestUrl, final String strParams,
-            final List<FileInfo> fileParams, String charSet) {
-        return convertToString(doFileUpload(context, null, requestUrl, strParams, fileParams), charSet);
+                               final List<FileInfo> fileParams, String charSet) {
+        return convertToString(doFileUpload(context, null, requestUrl, strParams, CONNECT_TIMEOUT, fileParams), charSet);
     }
 
     public void doByteRequest(HttpBasicRequest request, HttpByteResponseHandler handler, Network network) {
@@ -215,7 +219,7 @@ public class HTTPServer {
     }
 
     public void doRequest(HttpBasicRequest request, HttpResponseHandler handler, Network network,
-            String charSetName) {
+                          String charSetName) {
         doByteRequest(request, new HttpByteResponseHandler() {
             @Override
             public void onResponse(int statusCode, byte[] response) {
@@ -237,7 +241,7 @@ public class HTTPServer {
     }
 
     public void doByteRequest(Network network, final String url, byte[] bytes, final String contentType,
-            HttpByteResponseHandler handler) {
+                              HttpByteResponseHandler handler) {
         startRequest(network, url, bytes, contentType, handler);
     }
 
@@ -246,7 +250,7 @@ public class HTTPServer {
     }
 
     public void doByteRequest(final String url, byte[] bytes, final String contentType,
-            HttpByteResponseHandler handler) {
+                              HttpByteResponseHandler handler) {
         doByteRequest(null, url, bytes, contentType, handler);
     }
 
@@ -255,7 +259,7 @@ public class HTTPServer {
     }
 
     public void doRequest(final String url, byte[] bytes, final String contentType,
-            HttpResponseHandler handler, String charSetName) {
+                          HttpResponseHandler handler, String charSetName) {
         doByteRequest(null, url, bytes, contentType, new HttpByteResponseHandler() {
             @Override
             public void onResponse(int statusCode, byte[] response) {
