@@ -23,7 +23,7 @@ public class HTTPRequestUtils {
 
     private static final Pattern TITLE_TAG = Pattern
             .compile("\\<title>(.*)\\</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-    
+
     public static final String USER_AGENT_COMMON_ZIXIE = "Mozilla/5.0 (Linux; Android 10; UNKnown) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 Mobile Safari/537.36/ ";
 
     /**
@@ -112,17 +112,21 @@ public class HTTPRequestUtils {
         return -1;
     }
 
-    //   可能第一步得获取重定向的url
     public static String getRedirectUrl(String url) {
+        return getRedirectUrl(url, CONNECT_TIMEOUT);
+    }
+
+    //   可能第一步得获取重定向的url
+    public static String getRedirectUrl(String url, int timeOut) {
         try {
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setInstanceFollowRedirects(false);
-            conn.setConnectTimeout(CONNECT_TIMEOUT);
+            conn.setConnectTimeout(timeOut);
             String redirectUrl = conn.getHeaderField("Location");
             if (TextUtils.isEmpty(redirectUrl)) {
                 return url;
             }
-            return getRedirectUrl(redirectUrl);
+            return getRedirectUrl(redirectUrl, timeOut);
         } catch (Exception e) {
             e.printStackTrace();
         }
