@@ -1,14 +1,14 @@
 apply from: rootDir.toString() + '/config.gradle'
 ext.asrmoduleInfo = [
         "LibASR"                : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
                         "LibASRMin", "LibSpeechRecognition", "LibPinYin", "LibChinese"
                 ]
         ],
         "LibASRMin"             : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
                         "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
@@ -22,21 +22,21 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibAudio"              : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibFile", "LibGson"
                 ]
         ],
         "LibAudioPlayer"        : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-audio-player",
                 "apidependenciesList": [
                         "LibBlockTask", "LibAudio"
                 ]
         ],
         "LibAudioRecord"        : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-audio-record",
                 "apidependenciesList": [
                         "LibAudio", "LibAAF", "LibLog", "LibCommonUtils", "LibFile", "LibPermission", "LibForegroundService"
@@ -50,7 +50,7 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibSherpaOnnx"         : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-sherpa-onnx",
                 "apidependenciesList": [
                         "LibAudio", "LibOnnx"
@@ -71,21 +71,21 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibSpeechRecognition"  : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
                         "LibAudioRecord", "LibSherpaOnnx"
                 ]
         ],
         "LibPinYin"             : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-pinyin",
                 "apidependenciesList": [
                         "org.ahocorasick:ahocorasick:0.3.0","LibFile","LibAAF","LibChinese"
                 ]
         ],
         "LibChinese"            : [
-                "version"            : "7.2.2",
+                "version"            : "7.2.5",
                 "artifactId"         : "lib-chinese",
                 "apidependenciesList": [
                         "LibFile"
