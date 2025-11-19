@@ -17,7 +17,11 @@ import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 object DebugUtils {
 
     fun sendInfo(
-        context: Context, title: String?, content: String?, showDialog: Boolean
+        context: Context,
+        title: String?,
+        content: String?,
+        showDialog: Boolean,
+        dialogCanAutoCancel: Boolean,
     ) {
         SendTextUtils.sendInfo(
             context,
@@ -28,16 +32,21 @@ object DebugUtils {
             context.getString(R.string.com_bihe0832_share_to_develop_tips),
             content,
             context.getString(R.string.com_bihe0832_share_to_develop),
-            showDialog
+            showDialog,
+            dialogCanAutoCancel
         )
     }
 
     fun sendInfo(context: Context, title: String, content: String) {
-        sendInfo(context, title, content, true)
+        sendInfo(context, title, content, showDialog = true, dialogCanAutoCancel = true)
     }
 
     fun showInfo(context: Context, title: String, content: List<String>) {
-        sendInfo(context, title, content.joinToString("\n"), true)
+        sendInfo(
+            context, title, content.joinToString("\n"),
+            showDialog = true,
+            dialogCanAutoCancel = true
+        )
     }
 
     fun showInfoWithHTML(context: Context, title: String, content: List<String>) {
@@ -47,12 +56,12 @@ object DebugUtils {
             content.joinToString("<BR>"),
             context.getString(R.string.com_bihe0832_share_to_develop_tips),
             context.getString(R.string.com_bihe0832_share_to_develop),
-            true
+            true, true
         )
     }
 
     fun showInfo(context: Context, title: String, content: String) {
-        sendInfo(context, title, content, true)
+        sendInfo(context, title, content, showDialog = true, dialogCanAutoCancel = true)
     }
 
     fun showInputDialog(

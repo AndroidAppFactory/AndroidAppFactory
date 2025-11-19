@@ -44,18 +44,14 @@ class DebugBaseViewFragment : DebugEnvFragment() {
                             "TextView对HTML的支持测试",
                             "请在输入框输入需要验证的文本内容，无需特殊编码",
                             "<font color='#428bca'>测试文字加粗</font> <BR> 正常的文字效果<BR> <b>测试文字加粗</b> <em>文字斜体</em> <p><font color='#428bca'>修改文字颜色</font></p>",
-                            object :
-                                DialogCompletedStringCallback {
-                                override fun onResult(result: String?) {
-                                    SendTextUtils.sendInfoWithHTML(
-                                        context,
-                                        "TextView对HTML的支持测试",
-                                        result, "",
-                                        "分享给我们", true
-                                    )
-                                }
-                            },
-                        )
+                        ) { result ->
+                            SendTextUtils.sendInfoWithHTML(
+                                context,
+                                "TextView对HTML的支持测试",
+                                result, "",
+                                "分享给我们", true, true
+                            )
+                        }
                     },
                 ),
             )
