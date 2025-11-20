@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -201,7 +201,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"         : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -223,14 +223,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibSuperAPP"         : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
                 ]
         ],
         "LibDebug"            : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": [
                         "LibDialog", "LibToast", "LibFloatview"
@@ -339,7 +339,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDialog"           : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         project.androidsupport.constraintlayout,
@@ -393,7 +393,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPermission"       : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -402,7 +402,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibImmersive"        : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibColor",
@@ -410,7 +410,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFileSelect"       : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -418,7 +418,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFloatview"        : [
-                "version"                : "7.2.5",
+                "version"                : "7.2.6",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         project.androidsupport.constraintlayout,
@@ -440,7 +440,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAceEditor"        : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
@@ -464,7 +464,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibColor"            : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-color",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
@@ -472,7 +472,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"            : [
-                "version"            : "7.2.5",
+                "version"            : "7.2.6",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
