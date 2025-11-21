@@ -193,7 +193,7 @@ public class DateUtil {
         }
     }
 
-    public static boolean isToady(long timestamp) {
+    public static boolean isToday(long timestamp) {
         Calendar pre = Calendar.getInstance();
         pre.setTimeInMillis(timestamp);
         Calendar cur = Calendar.getInstance();
