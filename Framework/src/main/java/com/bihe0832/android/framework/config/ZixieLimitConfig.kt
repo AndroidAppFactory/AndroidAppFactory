@@ -35,25 +35,26 @@ object ZixieLimitConfig {
      *
      * @param lastShowTime 最后显示时间
      * @param curTime 当前时间
-     * @param interval 间隔天数（0表示当天）
-     * @param isNaturalDay 是否按自然日计算，true表示按自然日跨天计算，false表示按时间间隔（满24小时）计算
+     * @param interval 间隔天数（小于1表示当天，1表示跨1天，以此类推）
+     * @param isNaturalDay 是否按自然日计算
+     *   - true: 按自然日跨天计算（例如：1月1日23:59到1月2日00:01算跨1天）
+     *   - false: 按时间间隔计算（例如：必须满24小时才算跨1天）
      * @return true表示需要重置，false表示不需要
      */
     private fun shouldResetTimes(lastShowTime: Long, curTime: Long, interval: Int, isNaturalDay: Boolean): Boolean {
-        return if (interval > 0) {
-            // 根据 isNaturalDay 选择计算起点
-            val startTime = if (isNaturalDay) {
-                // 自然日模式：从 lastShowTime 所在那天的 00:00:00 开始计算
-                DateUtil.getDayStartTimestamp(lastShowTime)
-            } else {
-                // 时间间隔模式：从 lastShowTime 开始计算
-                lastShowTime
-            }
-            // 直接比较时间差
-            curTime - startTime >= interval * DateUtil.MILLISECOND_OF_DAY
-        } else {
-            // interval=0 表示当天，不区分模式
+        return if (interval < 1) {
+            // interval<1 表示当天，不区分模式（包括0和负数等异常值）
             !DateUtil.isToday(lastShowTime)
+        } else {
+            // interval>=1 表示跨N天
+            if (isNaturalDay) {
+                // 自然日模式：从 lastShowTime 所在那天的 00:00:00 开始计算
+                val startTime = DateUtil.getDayStartTimestamp(lastShowTime)
+                curTime - startTime >= interval * DateUtil.MILLISECOND_OF_DAY
+            } else {
+                // 时间间隔模式：从 lastShowTime 开始计算，必须满足完整的时间间隔
+                curTime - lastShowTime >= interval * DateUtil.MILLISECOND_OF_DAY
+            }
         }
     }
 
