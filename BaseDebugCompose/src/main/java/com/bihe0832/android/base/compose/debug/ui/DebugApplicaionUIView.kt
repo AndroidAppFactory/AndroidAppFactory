@@ -97,33 +97,42 @@ fun DebugApplicaionUIView() {
 }
 
 val scene1 = "Test113"
-val scene2 = "Test121"
+val scene2 = "Test221"
+val scene3 = "Test313"
+val scene4 = "Test421"
 private fun testHasTimes() {
     ZLog.d(
         "testHasTimes",
         "scene1  ,getCanUseTimes： ${
-            ZixieLimitConfig.getCanUseTimes(
-                scene1,
-                1,
-                3
-            )
+            ZixieLimitConfig.getCanUseTimes(scene1, 1, 3)
         },hasTimes： ${ZixieLimitConfig.hasTimes(scene1, 1, 3)}"
     )
     ZLog.d(
         "testHasTimes",
-        "scene1  ,getCanUseTimes： ${
-            ZixieLimitConfig.getCanUseTimes(
-                scene2,
-                2, 1
-            )
-        },hasTimes： ${ZixieLimitConfig.hasTimes(scene1, 1, 3)}"
+        "scene3  ,getCanUseTimes： ${
+            ZixieLimitConfig.getCanUseTimes(scene3, 1, 3,true)
+        },hasTimes： ${ZixieLimitConfig.hasTimes(scene3, 1, 3,true)}"
+    )
+    ZLog.d(
+        "testHasTimes",
+        "scene2  ,getCanUseTimes： ${
+            ZixieLimitConfig.getCanUseTimes(scene2, 2, 1)
+        },hasTimes： ${ZixieLimitConfig.hasTimes( scene2, 2, 1)}"
+    )
+    ZLog.d(
+        "testHasTimes",
+        "scene4  ,getCanUseTimes： ${
+            ZixieLimitConfig.getCanUseTimes(scene4, 2, 1,true)
+        },hasTimes： ${ZixieLimitConfig.hasTimes( scene4, 2, 1,true)}"
     )
 
 }
 
 private fun testCostTimes() {
     ZixieLimitConfig.costTimes(scene1, 1)
-    ZixieLimitConfig.costTimes(scene1, 2)
+    ZixieLimitConfig.costTimes(scene3, 2,true)
+    ZixieLimitConfig.costTimes(scene2, 2)
+    ZixieLimitConfig.costTimes(scene4, 2,true)
 }
 
 private fun testAPPObserver() {
