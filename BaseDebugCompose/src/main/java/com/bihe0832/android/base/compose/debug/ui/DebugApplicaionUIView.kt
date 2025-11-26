@@ -19,6 +19,7 @@ import com.bihe0832.android.common.compose.state.AAFLightColorScheme
 import com.bihe0832.android.common.compose.state.ThemeState
 import com.bihe0832.android.common.compose.state.aafStringResource
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.framework.config.ZixieLimitConfig
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.config.Config
 import com.bihe0832.android.lib.language.MultiLanguageHelper
@@ -84,7 +85,45 @@ fun DebugApplicaionUIView() {
             AAFComposeStateManager.changeLanguage(it, Locale.US)
         }
 
+        DebugItem("查看使用次数") {
+            testHasTimes()
+        }
+
+        DebugItem("消耗次数") {
+            testCostTimes()
+            testHasTimes()
+        }
     }
+}
+
+val scene1 = "Test113"
+val scene2 = "Test121"
+private fun testHasTimes() {
+    ZLog.d(
+        "testHasTimes",
+        "scene1  ,getCanUseTimes： ${
+            ZixieLimitConfig.getCanUseTimes(
+                scene1,
+                1,
+                3
+            )
+        },hasTimes： ${ZixieLimitConfig.hasTimes(scene1, 1, 3)}"
+    )
+    ZLog.d(
+        "testHasTimes",
+        "scene1  ,getCanUseTimes： ${
+            ZixieLimitConfig.getCanUseTimes(
+                scene2,
+                2, 1
+            )
+        },hasTimes： ${ZixieLimitConfig.hasTimes(scene1, 1, 3)}"
+    )
+
+}
+
+private fun testCostTimes() {
+    ZixieLimitConfig.costTimes(scene1, 1)
+    ZixieLimitConfig.costTimes(scene1, 2)
 }
 
 private fun testAPPObserver() {

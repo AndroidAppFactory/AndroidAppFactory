@@ -36,12 +36,23 @@ object ZixieLimitConfig {
      * @param lastShowTime 最后显示时间
      * @param curTime 当前时间
      * @param interval 间隔天数（0表示当天）
+     * @param isNaturalDay 是否按自然日计算，true表示按自然日跨天计算，false表示按时间间隔（满24小时）计算
      * @return true表示需要重置，false表示不需要
      */
-    private fun shouldResetTimes(lastShowTime: Long, curTime: Long, interval: Int): Boolean {
+    private fun shouldResetTimes(lastShowTime: Long, curTime: Long, interval: Int, isNaturalDay: Boolean): Boolean {
         return if (interval > 0) {
-            curTime - lastShowTime > interval * DateUtil.MILLISECOND_OF_DAY
+            // 根据 isNaturalDay 选择计算起点
+            val startTime = if (isNaturalDay) {
+                // 自然日模式：从 lastShowTime 所在那天的 00:00:00 开始计算
+                DateUtil.getDayStartTimestamp(lastShowTime)
+            } else {
+                // 时间间隔模式：从 lastShowTime 开始计算
+                lastShowTime
+            }
+            // 直接比较时间差
+            curTime - startTime >= interval * DateUtil.MILLISECOND_OF_DAY
         } else {
+            // interval=0 表示当天，不区分模式
             !DateUtil.isToday(lastShowTime)
         }
     }
@@ -52,13 +63,15 @@ object ZixieLimitConfig {
      * @param sceneId 场景ID
      * @param interval 间隔天数（0表示当天）
      * @param limitTime 限制次数
+     * @param isNaturalDay 是否按自然日计算，默认false
      * @return 当前剩余次数
      */
-    fun getCanUseTimes(sceneId: String, interval: Int, limitTime: Int): Int {
+    @JvmOverloads
+    fun getCanUseTimes(sceneId: String, interval: Int, limitTime: Int, isNaturalDay: Boolean = false): Int {
         val lastShowTime = Config.readConfig(KEY_LAST_SHOW_TIME + sceneId, 0L)
         val usedTimes = Config.readConfig(KEY_USED_TIMES + sceneId, 0)
         val curTime = System.currentTimeMillis()
-        return if (shouldResetTimes(lastShowTime, curTime, interval)) {
+        return if (shouldResetTimes(lastShowTime, curTime, interval, isNaturalDay)) {
             limitTime
         } else {
             limitTime - usedTimes
@@ -71,10 +84,12 @@ object ZixieLimitConfig {
      * @param sceneId 场景ID
      * @param interval 间隔天数（0表示当天）
      * @param limitTime 限制次数
+     * @param isNaturalDay 是否按自然日计算，默认false
      * @return true表示还有次数，false表示已用完
      */
-    fun hasTimes(sceneId: String, interval: Int, limitTime: Int): Boolean {
-        val usedTimes = getCanUseTimes(sceneId, interval, limitTime)
+    @JvmOverloads
+    fun hasTimes(sceneId: String, interval: Int, limitTime: Int, isNaturalDay: Boolean = false): Boolean {
+        val usedTimes = getCanUseTimes(sceneId, interval, limitTime, isNaturalDay)
         return usedTimes > 0
     }
 
@@ -83,12 +98,14 @@ object ZixieLimitConfig {
      *
      * @param sceneId 场景ID
      * @param interval 间隔天数（0表示当天）
+     * @param isNaturalDay 是否按自然日计算，默认false
      */
-    fun costTimes(sceneId: String, interval: Int) {
+    @JvmOverloads
+    fun costTimes(sceneId: String, interval: Int, isNaturalDay: Boolean = false) {
         val lastShowTime = Config.readConfig(KEY_LAST_SHOW_TIME + sceneId, 0L)
         val usedTimes = Config.readConfig(KEY_USED_TIMES + sceneId, 0)
         val curTime = System.currentTimeMillis()
-        if (shouldResetTimes(lastShowTime, curTime, interval)) {
+        if (shouldResetTimes(lastShowTime, curTime, interval, isNaturalDay)) {
             Config.writeConfig(KEY_LAST_SHOW_TIME + sceneId, System.currentTimeMillis())
             Config.writeConfig(KEY_USED_TIMES + sceneId, 1)
         } else {
