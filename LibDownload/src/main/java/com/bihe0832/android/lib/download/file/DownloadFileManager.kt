@@ -1,3 +1,16 @@
+/**
+ * 文件下载管理器
+ *
+ * 继承自 DownloadManager，专门用于文件下载场景：
+ * - 支持 APK 自动安装
+ * - 支持通知栏进度展示
+ * - 支持版本检查（避免下载旧版本）
+ * - 支持 MD5/SHA256 校验
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-01-10.
+ * Description: 文件下载管理器，处理完整文件的下载逻辑
+ */
 package com.bihe0832.android.lib.download.file
 
 import android.annotation.SuppressLint
@@ -34,14 +47,20 @@ import java.io.File
 @SuppressLint("StaticFieldLeak")
 object DownloadFileManager : DownloadManager() {
 
+    /** 快速恢复下载的最小间隔（毫秒），防止频繁重试导致服务器压力 */
+    private const val MIN_RESUME_INTERVAL = 3000L
+
+    /** 下载前的延迟时间（毫秒），用于状态同步 */
+    private const val DOWNLOAD_START_DELAY = 1000L
+
     private val mDownloadEngine by lazy {
-        DownloadByHttpForFile(innerDownloadListener, mMaxNum, mIsDebug)
+        DownloadByHttpForFile(innerDownloadListener, maxNum, isDebug)
     }
 
     override fun init(context: Context, maxNum: Int, isDebug: Boolean) {
         super.init(context, maxNum, isDebug)
-        if (!mHasInit) {
-            mHasInit = true
+        if (!hasInit) {
+            hasInit = true
             DownloadFileNotify.init(context)
         }
     }
@@ -98,7 +117,7 @@ object DownloadFileManager : DownloadManager() {
             }
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
                 getContext()?.getString(R.string.download_failed_local_is_new)?.let {
-                    ToastUtil.showLong(mContext, String.format(it, item.downloadTitle))
+                    ToastUtil.showLong(context, String.format(it, item.downloadTitle))
                 }
             }
             item.downloadListener?.onFail(errorCode, msg, item)
@@ -119,7 +138,7 @@ object DownloadFileManager : DownloadManager() {
             }
             item.finished = item.contentLength
             if (FileMimeTypes.isApkFile(filePath)) {
-                mContext?.packageManager?.getPackageArchiveInfo(
+                context?.packageManager?.getPackageArchiveInfo(
                     filePath,
                     PackageManager.GET_ACTIVITIES,
                 )?.packageName?.let {
@@ -144,7 +163,7 @@ object DownloadFileManager : DownloadManager() {
                     DownloadFileNotify.notifyFinished(item)
                 }
                 if (item.isAutoInstall) {
-                    InstallUtils.installAPP(mContext, newPath)
+                    InstallUtils.installAPP(context, newPath)
                 }
             }
 
@@ -171,7 +190,7 @@ object DownloadFileManager : DownloadManager() {
         }
         ZLog.d(TAG, "checkIsNeedDownload versionCode:${info.versionCode}")
         return try {
-            val packageInfo = APKUtils.getInstalledPackage(mContext, info.packageName)
+            val packageInfo = APKUtils.getInstalledPackage(context, info.packageName)
             if (packageInfo != null) {
                 ZLog.d(TAG, "checkIsNeedDownload installVersionCode:${packageInfo.versionCode}")
                 packageInfo.versionCode > info.versionCode
@@ -251,7 +270,7 @@ object DownloadFileManager : DownloadManager() {
                 if (!TextUtils.isEmpty(filePath)) {
                     ZLog.e(TAG, "has download:$info")
                     info.setDownloadStatus(DownloadStatus.STATUS_HAS_DOWNLOAD)
-                    Thread.sleep(1000L)
+                    Thread.sleep(DOWNLOAD_START_DELAY)
                     innerDownloadListener.onComplete(info.filePath, info)
                 } else {
                     if (downloadAfterAdd) {
@@ -264,10 +283,10 @@ object DownloadFileManager : DownloadManager() {
                             )
                         } else {
                             val currentTime = System.currentTimeMillis()
-                            if (currentTime - info.pauseTime < 3000L) {
+                            if (currentTime - info.pauseTime < MIN_RESUME_INTERVAL) {
                                 ZLog.e(TAG, "resume to quick:$info")
                                 innerDownloadListener.onWait(info)
-                                (info.pauseTime + 3000L - currentTime).let {
+                                (info.pauseTime + MIN_RESUME_INTERVAL - currentTime).let {
                                     if (it > 0) {
                                         Thread.sleep(it)
                                     }

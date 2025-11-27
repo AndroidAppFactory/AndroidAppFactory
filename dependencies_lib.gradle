@@ -205,7 +205,8 @@ ext.libmoduleInfo = [
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
-                        "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced"
+                        "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced",
+                        project.okhttp.okhttp,
                 ]
         ],
         "LibInstall"          : [

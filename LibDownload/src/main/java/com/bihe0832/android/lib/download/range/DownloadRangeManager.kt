@@ -29,7 +29,7 @@ import java.io.File
 object DownloadRangeManager : DownloadManager() {
 
     private val mDownloadEngine by lazy {
-        DownloadByHttpForRange(innerDownloadListener, mMaxNum, mIsDebug)
+        DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug)
     }
 
     private val innerDownloadListener = object : DownloadListener {
@@ -67,7 +67,7 @@ object DownloadRangeManager : DownloadManager() {
             }
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
                 getContext()?.getString(R.string.download_failed_local_is_new)?.let {
-                    ToastUtil.showLong(mContext, String.format(it, item.downloadTitle))
+                    ToastUtil.showLong(context, String.format(it, item.downloadTitle))
                 }
             }
             item.downloadListener?.onFail(errorCode, msg, item)

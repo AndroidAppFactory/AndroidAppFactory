@@ -8,7 +8,31 @@ import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 
-
+/**
+ * 配置文件下载工具类
+ *
+ * 专门用于下载配置文件（如 JSON、XML、TXT 等文本配置），提供以下功能：
+ * - 自动下载远程配置文件
+ * - 支持本地缓存（优先使用本地缓存）
+ * - MD5 校验确保配置完整性
+ * - 自动解析文件内容并回调
+ * - 高优先级下载（配置文件通常需要优先获取）
+ * - 4G 网络自动下载（配置文件通常较小）
+ *
+ * 使用场景：
+ * 1. 应用启动时拉取远程配置
+ * 2. 动态更新业务配置
+ * 3. 热更新配置文件
+ * 4. A/B 测试配置下载
+ *
+ * 回调类型说明：
+ * - TYPE_NEW: 从云端重新拉取的配置
+ * - TYPE_NEW_LOCAL: 使用本地缓存的配置
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-01-10.
+ * Description: 配置文件下载工具类，简化配置文件的下载和缓存管理
+ */
 object DownloadConfig {
 
     interface ResponseHandler {

@@ -28,10 +28,39 @@ import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * 下载管理器基类
+ *
+ * 提供下载任务的统一管理功能，包括：
+ * - 任务队列管理（等待、下载中、已完成）
+ * - 网络状态监听与自动切换
+ * - 下载状态控制（开始、暂停、恢复、删除）
+ * - 数据库持久化管理
+ * - 断点续传支持
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-01-10.
+ * Description: 下载管理器核心抽象类，定义下载流程和公共逻辑
+ */
 @SuppressLint("StaticFieldLeak")
 abstract class DownloadManager {
 
-    private val MAX_RETRY_TIMES = 2
+    companion object {
+        /** 最大重试次数 */
+        private const val MAX_RETRY_TIMES = 2
+
+        /** 默认最大并发下载数 */
+        private const val DEFAULT_MAX_NUM = 1
+
+        /** 最大并发下载数上限（建议不超过5，避免资源竞争） */
+        private const val MAX_MAX_NUM = 5
+
+        /** 网络切换后延迟检查时间（毫秒），避免频繁触发 */
+        private const val MSG_DELAY_START_CHECK = 3 * 1000L
+
+        /** Handler 消息类型：开始检查下载任务 */
+        private const val MSG_TYPE_START_CHECK = 1
+    }
 
     // 是否一键暂停所有任务，暂停以后，不再新增下载，当前下载全部暂停
     private var hasPauseAll = false
@@ -53,17 +82,11 @@ abstract class DownloadManager {
     ): Boolean
 
 
-    internal var mContext: Context? = null
-    private val DEFAULT_MAX_NUM = 1
-    private val MAX_MAX_NUM = 5
-
-    internal var mMaxNum = DEFAULT_MAX_NUM
-    internal var mHasInit = false
-    internal var mIsDebug = false
-    private var mNetReceiver: BroadcastReceiver? = null
-
-    private val MSG_TYPE_START_CHECK = 1
-    private val MSG_DELAY_START_CHECK = 3 * 1000L
+    internal var context: Context? = null
+    internal var maxNum = DEFAULT_MAX_NUM
+    internal var hasInit = false
+    internal var isDebug = false
+    private var netReceiver: BroadcastReceiver? = null
 
     private val msgHandler =
         object : Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_NORMAL)) {
@@ -78,11 +101,11 @@ abstract class DownloadManager {
         }
 
     fun getContext(): Context? {
-        return mContext
+        return context
     }
 
     fun isDebug(): Boolean {
-        return mIsDebug
+        return isDebug
     }
 
     fun init(context: Context) {
@@ -94,7 +117,7 @@ abstract class DownloadManager {
     }
 
     fun hasInit(): Boolean {
-        return mHasInit
+        return hasInit
     }
 
     fun addNewTask(info: DownloadItem, downloadAfterAdd: Boolean) {
@@ -103,21 +126,22 @@ abstract class DownloadManager {
     }
 
     open fun init(context: Context, maxNum: Int, isDebug: Boolean = false) {
-        initContext(context)
-        mMaxNum = maxNum
-        if (mMaxNum > MAX_MAX_NUM) {
+        // 使用 ApplicationContext 避免内存泄漏
+        initContext(context.applicationContext)
+        this.maxNum = maxNum
+        if (this.maxNum > MAX_MAX_NUM) {
             ZLog.e(
                 TAG,
-                "  \n !!!========================================  \n \n \n !!! zixie download: The max download mum is recommended less than 5 \n \n \n !!!========================================",
+                "  \n !!!========================================  \n \n \n !!! zixie download: The max download mum is recommended less than 5 \n \n \n !!!========================================"
             )
         }
-        mIsDebug = isDebug
-        if (!mHasInit) {
-            mHasInit = true
+        this.isDebug = isDebug
+        if (!hasInit) {
+            hasInit = true
             DownloadInfoDBManager.init(context, isDebug)
         }
 
-        mNetReceiver = object : BroadcastReceiver() {
+        netReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 ZLog.d(TAG, "当前发生网络切换")
                 msgHandler.sendEmptyMessageDelayed(MSG_TYPE_START_CHECK, MSG_DELAY_START_CHECK)
@@ -125,12 +149,17 @@ abstract class DownloadManager {
         }
         val intentFilter = IntentFilter()
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-        context.registerReceiver(mNetReceiver, intentFilter)
+        context.registerReceiver(netReceiver, intentFilter)
     }
 
     private fun initContext(context: Context?) {
         context?.let {
-            mContext = it
+            // 确保使用 Application Context
+            this.context = if (it.applicationContext != null) {
+                it.applicationContext
+            } else {
+                it
+            }
         }
     }
 
@@ -139,8 +168,24 @@ abstract class DownloadManager {
     }
 
     open fun onDestroy() {
-        mContext?.unregisterReceiver(mNetReceiver)
+        // 安全注销广播接收器
+        try {
+            netReceiver?.let {
+                context?.unregisterReceiver(it)
+                netReceiver = null
+            }
+        } catch (e: IllegalArgumentException) {
+            // 广播接收器可能已经被注销
+            ZLog.w(TAG, "广播接收器注销失败，可能已被注销: ${e.message}")
+        } catch (e: Exception) {
+            ZLog.e(TAG, "注销广播接收器异常: ${e.message}")
+        }
+
+        // 暂停所有任务
         pauseAllTask(DownloadPauseType.PAUSED_BY_ALL, true)
+
+        // 清空 Context 引用
+        context = null
     }
 
     fun checkDownloadWhenNetChanged() {
@@ -190,7 +235,7 @@ abstract class DownloadManager {
     }
 
     fun isMobileNet(): Boolean {
-        return NetworkUtil.isMobileNet(mContext)
+        return NetworkUtil.isMobileNet(context)
     }
 
     fun updateInfo(info: DownloadItem, addFilePath: Boolean) {
@@ -239,7 +284,7 @@ abstract class DownloadManager {
                 ZLog.e(
                     TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~"
                 )
-                if (mIsDebug) {
+                if (isDebug) {
                     connection.logResponseHeaderFields("获取文件长度")
                 }
                 val contentLength = HTTPRequestUtils.getContentLength(connection)
@@ -320,8 +365,14 @@ abstract class DownloadManager {
     fun getFilePath(
         downloadURL: String, backFileName: String, fileFolder: String, prefix: String
     ): String {
-        var folder = if (TextUtils.isEmpty(fileFolder)) {
-            ZixieFileProvider.getZixieCacheFolder(mContext!!)
+        // 安全获取 Context，添加空值检查
+        val ctx = context ?: run {
+            ZLog.e(TAG, "Context 为空，无法获取文件路径")
+            return ""
+        }
+
+        val folder = if (TextUtils.isEmpty(fileFolder)) {
+            ZixieFileProvider.getZixieCacheFolder(ctx)
         } else {
             fileFolder
         }

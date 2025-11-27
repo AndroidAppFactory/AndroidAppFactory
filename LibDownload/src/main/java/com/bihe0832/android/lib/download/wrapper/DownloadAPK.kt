@@ -12,7 +12,26 @@ import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
-
+/**
+ * APK 下载工具类
+ *
+ * 专门用于 APK 文件的下载和安装场景，提供以下功能：
+ * - APK 下载前的网络检查（4G 提示）
+ * - 下载进度展示（可选）
+ * - 下载完成后自动安装
+ * - 安装权限检查和引导
+ * - MD5 校验支持
+ * - 支持强制下载和顺序下载
+ *
+ * 使用场景：
+ * 1. 应用内更新：下载新版本 APK 并自动安装
+ * 2. 插件下载：下载并安装插件 APK
+ * 3. 批量应用安装：下载多个 APK 并依次安装
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-01-10.
+ * Description: APK 下载和安装的便捷工具类，封装了下载、校验、安装的完整流程
+ */
 object DownloadAPK {
 
     fun showInstallPermissionDialog(activity: Activity, title: String, listener: OnDialogListener?) {

@@ -15,10 +15,41 @@ import com.bihe0832.android.lib.ui.dialog.tools.SimpleDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 
 /**
- * forceDownload 与 downlod 区别：当下载队列已满，是否继续直接下载，还是等待队列任务完成再下载
+ * 通用文件下载工具类
  *
+ * 提供灵活的文件下载功能，支持多种下载场景和配置：
+ *
+ * 核心功能：
+ * - 网络类型检测（WiFi/4G 自动识别）
+ * - 4G 网络下载提示（可配置）
+ * - 下载进度展示（可选进度对话框）
+ * - MD5/SHA256 文件校验
+ * - 断点续传支持
+ * - 自定义下载路径
+ * - 下载队列管理
+ *
+ * 下载模式：
+ * 1. **download**: 普通下载，队列满时等待
+ * 2. **forceDownload**: 强制下载，队列满时也立即开始
+ *
+ * 网络策略：
+ * - downloadWithCheck: 4G 网络弹框提示用户
+ * - download/forceDownload: 根据参数控制 4G 下载行为
+ *
+ * 进度展示：
+ * - downloadWithProcess: 显示进度对话框
+ * - download/forceDownload: 后台静默下载
+ *
+ * 使用场景：
+ * 1. 大文件下载（视频、压缩包等）
+ * 2. 资源包下载（游戏资源、素材包等）
+ * 3. 文档下载（PDF、Office 文档等）
+ * 4. 媒体文件下载（图片、音频等）
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-01-10.
+ * Description: 通用文件下载工具类，提供丰富的下载配置和灵活的使用方式
  */
-
 object DownloadFile {
 
     //检测网络类型，并且4G弹框，不使用进度条

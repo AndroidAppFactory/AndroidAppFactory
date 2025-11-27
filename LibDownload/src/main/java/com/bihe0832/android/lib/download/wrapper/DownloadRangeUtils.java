@@ -11,11 +11,39 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * AAF Range 下载,range 用法相对比较复杂，因此不建议自行封装 DownloadItem ，直接使用DownloadRangeUtils对外暴漏的方法
+ * AAF Range 下载管理工具类
  *
- * @author zixie code@bihe0832.com Created on 2020/9/23.
+ * 提供 HTTP Range 请求的下载功能，支持下载文件的指定部分。
+ * Range 用法相对比较复杂，因此不建议自行封装 DownloadItem，直接使用本类提供的方法。
+ *
+ * 核心功能：
+ * - 支持 HTTP Range 请求（下载文件的指定范围）
+ * - 支持断点续传（指定本地起始位置）
+ * - 任务管理（暂停、恢复、删除）
+ * - 批量任务管理
+ * - 任务列表查询
+ *
+ * Range 下载参数说明：
+ * - start: 服务器端起始位置（Range 请求的 start）
+ * - length: 需要下载的长度
+ * - localStart: 本地文件写入的起始位置
+ *
+ * 使用场景：
+ * 1. 大文件分片下载（多线程下载不同片段）
+ * 2. 视频分段加载（边播边下）
+ * 3. 断点续传（从上次中断位置继续）
+ * 4. P2P 下载（下载文件的不同部分）
+ *
+ * 注意事项：
+ * 1. 服务器必须支持 Range 请求
+ * 2. start + length 不能超过文件总大小
+ * 3. localStart 通常等于 start，特殊场景可以不同
+ * 4. 建议配合 MD5 校验确保分片完整性
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020/9/23.
+ * Description: Range 下载管理工具类，支持文件分片下载和断点续传
  */
-
 public class DownloadRangeUtils {
 
     /**

@@ -7,7 +7,6 @@ import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.MathUtils;
 import java.io.Serializable;
 import java.util.Map;
-import kotlin.jvm.Synchronized;
 
 
 /**
@@ -88,12 +87,12 @@ public class DownloadItem implements Serializable {
     // 之前已经下载完的文件长度，不填
     private long finishedLengthBefore = 0;
 
-    // 实时下载速度，不填
-    private transient long lastSpeed = 0;
-    //开始下载的时间，不填
-    private transient long startTime = 0;
-    //最后暂停时间，不填
-    private transient long pauseTime = 0;
+    // 实时下载速度，不填 (volatile 保证多线程可见性)
+    private volatile transient long lastSpeed = 0;
+    // 开始下载的时间，不填 (volatile 保证多线程可见性)
+    private volatile transient long startTime = 0;
+    // 最后暂停时间，不填 (volatile 保证多线程可见性)
+    private volatile transient long pauseTime = 0;
 
     //下载优先级
     private int downloadPriority = DEFAULT_DOWNLOAD_PRIORITY;
@@ -326,13 +325,22 @@ public class DownloadItem implements Serializable {
         return finishedLength;
     }
 
-    @Synchronized
-    public void setFinished(long finished) {
+    /**
+     * 设置已下载长度（线程安全）
+     * @param finished 已下载的字节数
+     */
+    public synchronized void setFinished(long finished) {
         this.finishedLength = finished;
     }
 
-    public long addFinished(long data) {
-        return finishedLength = finishedLength + data;
+    /**
+     * 增加已下载长度（线程安全）
+     * @param data 新增的字节数
+     * @return 更新后的已下载总长度
+     */
+    public synchronized long addFinished(long data) {
+        this.finishedLength = this.finishedLength + data;
+        return this.finishedLength;
     }
 
     public long getLastSpeed() {

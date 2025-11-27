@@ -16,21 +16,45 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
- * 主要用于二层封装，所有的下载会优先走到预处理的listener，处理结束以后再对外回调最终结果，仅能回调通过：
+ * 下载工具类 - 对外封装层
  *
- * DownLoadAPK，DownloadConfig，DownloadFile 触发的下载
+ * 主要功能：
+ * - 提供简化的下载接口
+ * - 管理全局和局部下载监听器
+ * - 处理下载回调的分发和转换
+ * - 支持文件自动重命名和复制
+ *
+ * 注意：所有下载会优先走到预处理的listener，处理结束后再对外回调最终结果
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-01-10.
+ * Description: 下载工具类，提供便捷的下载接口和回调管理
  */
-
 object DownloadTools {
 
+    private const val TAG = "DownloadTools"
     private val UNIQUE_KEY = "DownloadTools"
 
     // 外部注册的全局回调，仅回调，不包含任何逻辑，如果一个URL在多个地方下载，下载状态也只会每个Listener触发一次
     private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
+    
+    /**
+     * 添加全局下载监听器
+     * @param downloadListener 下载监听器（自动去重）
+     */
     fun addGlobalDownloadListener(downloadListener: DownloadListener?) {
-        mGlobalDownloadListenerList.add(downloadListener)
+        downloadListener?.let {
+            // 避免重复添加
+            if (!mGlobalDownloadListenerList.contains(it)) {
+                mGlobalDownloadListenerList.add(it)
+            }
+        }
     }
 
+    /**
+     * 移除全局下载监听器
+     * @param downloadListener 要移除的下载监听器
+     */
     fun removeGlobalDownloadListener(downloadListener: DownloadListener?) {
         if (mGlobalDownloadListenerList.contains(downloadListener)) {
             mGlobalDownloadListenerList.remove(downloadListener)
@@ -43,65 +67,39 @@ object DownloadTools {
     private class KeyListener {
         private var nameListener =
             ConcurrentHashMap<String, CopyOnWriteArrayList<DownloadListener?>>()
+
+        /**
+         * 统一的监听器通知方法
+         * @param action 要执行的回调动作
+         */
+        private inline fun notifyListeners(action: (DownloadListener) -> Unit) {
+            nameListener.values.forEach { list ->
+                list.forEach { listener ->
+                    listener?.let(action)
+                }
+            }
+            mGlobalDownloadListenerList.forEach(action)
+        }
         private val mListener = object : DownloadListener {
             override fun onWait(item: DownloadItem) {
-                nameListener.values.forEach { list ->
-                    list.forEach {
-                        it?.onWait(item)
-                    }
-                }
-
-                mGlobalDownloadListenerList.forEach {
-                    it.onWait(item)
-                }
+                notifyListeners { it.onWait(item) }
             }
 
             override fun onStart(item: DownloadItem) {
-                nameListener.values.forEach { list ->
-                    list.forEach {
-                        it?.onStart(item)
-                    }
-                }
-
-                mGlobalDownloadListenerList.forEach {
-                    it.onStart(item)
-                }
+                notifyListeners { it.onStart(item) }
             }
 
             override fun onProgress(item: DownloadItem) {
-                nameListener.values.forEach { list ->
-                    list.forEach {
-                        it?.onProgress(item)
-                    }
-                }
-
-                mGlobalDownloadListenerList.forEach {
-                    it.onProgress(item)
-                }
+                notifyListeners { it.onProgress(item) }
             }
 
             override fun onPause(item: DownloadItem) {
-                nameListener.values.forEach { list ->
-                    list.forEach {
-                        it?.onPause(item)
-                    }
-                }
-
-                mGlobalDownloadListenerList.forEach {
-                    it.onPause(item)
-                }
+                notifyListeners { it.onPause(item) }
             }
 
             @Synchronized
             override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                nameListener.values.forEach { list ->
-                    list.forEach {
-                        it?.onFail(errorCode, msg, item)
-                    }
-                }
-                mGlobalDownloadListenerList.forEach {
-                    it.onFail(errorCode, msg, item)
-                }
+                notifyListeners { it.onFail(errorCode, msg, item) }
                 DownloadFileManager.deleteTask(
                     item.downloadID,
                     startByUser = false,
@@ -115,16 +113,8 @@ object DownloadTools {
 
             @Synchronized
             override fun onDelete(item: DownloadItem) {
-                nameListener.values.forEach { list ->
-                    list.forEach {
-                        it?.onDelete(item)
-                    }
-                }
+                notifyListeners { it.onDelete(item) }
                 nameListener.clear()
-
-                mGlobalDownloadListenerList.forEach {
-                    it.onDelete(item)
-                }
             }
 
 
@@ -155,21 +145,22 @@ object DownloadTools {
                                         path = notifyComplete(path, it, item)
                                     }
                                 } else {
+                                    ZLog.e(TAG, "文件复制失败: $path -> $filePath")
                                     listenerList.forEach {
                                         it?.onFail(
                                             DownloadErrorCode.ERR_FILE_RENAME_FAILED,
-                                            "download success and rename failed",
+                                            "download success but copy file failed: $path -> $filePath",
                                             item,
                                         )
                                     }
                                 }
                             }
                         } catch (e: Exception) {
-                            e.printStackTrace()
+                            ZLog.e(TAG, "文件复制时发生异常: ${e.message}", e)
                             listenerList.forEach {
                                 it?.onFail(
                                     DownloadErrorCode.ERR_FILE_RENAME_FAILED,
-                                    "download success and rename throw Exception:$e",
+                                    "download success but copy file throw Exception: ${e.message}",
                                     item,
                                 )
                             }
@@ -203,10 +194,14 @@ object DownloadTools {
             addNameListener("", downloadListener)
         }
 
+        @Synchronized
         fun addNameListener(finalPath: String, downloadListener: DownloadListener?) {
             getKeyDownloadListenerList(finalPath).apply {
                 downloadListener?.let {
-                    add(downloadListener)
+                    // 避免重复添加
+                    if (!contains(it)) {
+                        add(it)
+                    }
                 }
             }
         }

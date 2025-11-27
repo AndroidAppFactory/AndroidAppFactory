@@ -17,20 +17,28 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import java.io.File
 
-
 /**
+ * 下载引擎基类
+ *
+ * 提供 HTTP 下载的核心功能：
+ * - 分片下载管理
+ * - 下载进度监控
+ * - 断点续传支持
+ * - 并发下载控制
  *
  * @author zixie code@bihe0832.com
  * Created on 2020-01-10.
  * Description: 下载引擎的具体实现
- *
  */
-
-
 abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug: Boolean = false) {
 
-    private val MAX_DOWNLOAD_THREAD = 5
-    private val MAX_DOWNLOAD_TOTAL_THREAD = 30
+    companion object {
+        /** 单个下载任务的最大分片数 */
+        private const val MAX_DOWNLOAD_THREAD = 5
+
+        /** 所有下载任务的最大总线程数 */
+        private const val MAX_DOWNLOAD_TOTAL_THREAD = 30
+    }
 
     private var hasStart = false
 
@@ -290,14 +298,20 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         Thread {
             while (DownloadingList.getDownloadingNum() > 0) {
                 ZLog.d("checkDownloadProcess work")
-                DownloadingList.getDownloadingItemList().forEach { downloadItem ->
+                // 创建快照，避免并发修改异常
+                val downloadingSnapshot = DownloadingList.getDownloadingItemList().toList()
+
+                downloadingSnapshot.forEach { downloadItem ->
                     var notFinished = false
                     var hasFail = false
                     var errorInfo = ""
                     if (downloadItem.status == DownloadStatus.STATUS_DOWNLOADING) {
                         var newFinished = 0L
                         var finishedBefore = 0L
-                        DownloadingPartList.getPartListById(downloadItem.downloadID).forEach { downloadPartItem ->
+                        // 同样创建分片列表的快照
+                        val partListSnapshot = DownloadingPartList.getPartListById(downloadItem.downloadID).toList()
+
+                        partListSnapshot.forEach { downloadPartItem ->
                             ZLog.d(
                                 TAG,
                                 "第${downloadPartItem.getDownloadPartInfo().partID} " + "分片信息:${downloadPartItem.getDownloadPartInfo()}"

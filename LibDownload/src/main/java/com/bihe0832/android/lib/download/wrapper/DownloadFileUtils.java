@@ -11,11 +11,33 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * AAF 文件下载
+ * AAF 文件下载管理工具类
  *
- * @author zixie code@bihe0832.com Created on 2020/9/23.
+ * 提供文件下载的统一管理接口，是 DownloadFileManager 的对外封装层。
+ *
+ * 核心功能：
+ * - 下载任务的增删改查
+ * - 下载任务的暂停、恢复、删除
+ * - 批量任务管理（暂停所有、恢复所有等）
+ * - 任务列表查询（全部、下载中、等待中、已完成）
+ * - 下载优先级控制
+ * - 4G 网络下载控制
+ *
+ * 任务分类：
+ * - DOWNLOAD_ACTION_KEY_APK: APK 文件下载
+ * - DOWNLOAD_ACTION_KEY_CONFIG: 配置文件下载
+ * - DOWNLOAD_ACTION_KEY_FILE: 普通文件下载
+ *
+ * 使用建议：
+ * 1. 应用启动时调用 init() 初始化
+ * 2. 应用退出时调用 onDestroy() 释放资源
+ * 3. 根据文件类型选择合适的 ACTION_KEY
+ * 4. 大文件下载建议设置 maxDownloadNum 为 3-5
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020/9/23.
+ * Description: 文件下载管理工具类，提供完整的下载任务管理功能
  */
-
 public class DownloadFileUtils {
 
     public static final String DOWNLOAD_ACTION_KEY_APK = "DownloadAPK";

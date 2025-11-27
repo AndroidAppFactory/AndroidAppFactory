@@ -45,9 +45,13 @@ const val DOWNLOAD_RETRY_TIMES = 3
 
 class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread() {
 
-    // 10秒（弱网）或 10M(高速网络)保存策略
-    private val DOWNLOAD_SVAE_TIMER = 10 * 1000
-    private val DOWNLOAD_SVAE_SIZE = DOWNLOAD_BUFFER_SIZE * 125 * 5
+    companion object {
+        /** 保存进度的时间间隔（毫秒），适用于弱网环境 */
+        private const val DOWNLOAD_SAVE_TIMER = 10 * 1000
+
+        /** 保存进度的大小间隔（字节），适用于高速网络，约 10MB */
+        private const val DOWNLOAD_SAVE_SIZE = DOWNLOAD_BUFFER_SIZE * 125 * 5
+    }
 
     private var retryTimes = 0
 
@@ -100,18 +104,13 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             RandomAccessFile(file, "rw")
         } catch (e: Exception) {
             e.printStackTrace()
-            null
-        }
-        if (null == randomAccessFile) {
+            ZLog.e(TAG, "RandomAccessFile 创建失败: ${e.message}")
             mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
-            ZLog.e(
-                TAG,
-                "分片下载开始 第${mDownloadPartInfo.downloadPartID}分片失败 下载异常！！！！RandomAccessFile 生成失败",
-            )
             return
         }
 
-        do {
+        try {
+            do {
             ZLog.e(
                 TAG,
                 "分片下载开始 回退进度前简要信息 第${mDownloadPartInfo.downloadPartID}分片下载前: 分片长度：${mDownloadPartInfo.partLength}, 分片Range开头：${mDownloadPartInfo.partRangeStart}, 分片本地开头：${mDownloadPartInfo.partLocalStart}, 已完成：${mDownloadPartInfo.partFinished} ",
@@ -165,10 +164,15 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 }
             }
         } while (true)
-        try {
-            randomAccessFile.close()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+        } finally {
+            // 确保资源被释放
+            try {
+                randomAccessFile.close()
+                ZLog.d(TAG, "RandomAccessFile 已关闭")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ZLog.e(TAG, "关闭 RandomAccessFile 失败: ${e.message}")
+            }
         }
     }
 
@@ -275,8 +279,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     )
                     // 继续下载，长度不增加
                 } else {
-                    // 10秒（弱网）或 2M(高速网络)保存策略
-                    if (System.currentTimeMillis() - lastUpdateTime > DOWNLOAD_SVAE_TIMER || hasDownloadLength - lastUpdateLength > DOWNLOAD_SVAE_SIZE) {
+                    // 10秒（弱网）或 10M(高速网络)保存策略
+                    if (System.currentTimeMillis() - lastUpdateTime > DOWNLOAD_SAVE_TIMER || hasDownloadLength - lastUpdateLength > DOWNLOAD_SAVE_SIZE) {
                         ZLog.w(
                             TAG,
                             "分片下载数据 - ${mDownloadPartInfo.downloadPartID} 分片存储： 距离上次存储时间：${System.currentTimeMillis() - lastUpdateTime}, 新增：${hasDownloadLength - lastUpdateLength} 已下载长度：$hasDownloadLength 上次存储下载长度：$lastUpdateLength",
