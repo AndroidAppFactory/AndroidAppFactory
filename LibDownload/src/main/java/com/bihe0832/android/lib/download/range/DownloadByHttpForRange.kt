@@ -1,5 +1,6 @@
 package com.bihe0832.android.lib.download.range
 
+import com.bihe0832.android.lib.download.DownloadClientConfig
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadItem.TAG
@@ -19,8 +20,9 @@ import com.bihe0832.android.lib.log.ZLog
 open class DownloadByHttpForRange(
     private val innerDownloadListener: DownloadListener,
     maxNum: Int,
-    isDebug: Boolean = false
-) : DownloadByHttpBase(maxNum, isDebug) {
+    isDebug: Boolean = false,
+    downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
+) : DownloadByHttpBase(maxNum, isDebug, downloadClientConfig) {
 
     override fun onFail(item: DownloadItem, errorCode: Int, msg: String) {
         if (item.status != DownloadStatus.STATUS_DOWNLOAD_PAUSED) {

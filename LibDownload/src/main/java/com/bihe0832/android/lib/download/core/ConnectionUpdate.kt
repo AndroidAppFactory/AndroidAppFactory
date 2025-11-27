@@ -4,6 +4,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
+import okhttp3.Response
 import java.net.HttpURLConnection
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.HttpsURLConnection
@@ -55,6 +56,7 @@ fun HttpURLConnection.logRequestHeaderFields(msg: String) {
 fun HttpURLConnection.logResponseHeaderFields(msg: String) {
     ZLog.w(DownloadItem.TAG, "$msg  Response - responseCode:$responseCode ")
     ZLog.w(DownloadItem.TAG, "$msg  Response - contentType:$contentType ")
+    // 从 header 中读取 Content-Length，使用统一的工具方法
     ZLog.w(DownloadItem.TAG, "$msg  Response - contentLength:${HTTPRequestUtils.getContentLength(this)} ")
 
     for ((key, value1) in headerFields.entries) {
@@ -64,4 +66,30 @@ fun HttpURLConnection.logResponseHeaderFields(msg: String) {
         }
         ZLog.w(DownloadItem.TAG, "$msg  Response - :${key} - $values ")
     }
+}
+
+/**
+ * 打印 OkHttp Response 的响应头信息（用于调试）
+ *
+ * @param msg 日志前缀消息
+ */
+fun Response.logResponseHeaderFields(msg: String) {
+    ZLog.w(DownloadItem.TAG, "$msg  Response - responseCode:$code ")
+    ZLog.w(DownloadItem.TAG, "$msg  Response - protocol:$protocol ")
+    ZLog.w(DownloadItem.TAG, "$msg  Response - contentType:${body?.contentType()} ")
+    // 从 header 中读取 Content-Length，使用统一的扩展方法
+    ZLog.w(DownloadItem.TAG, "$msg  Response - contentLength:${getContentLength()} ")
+
+    for ((key, value) in headers) {
+        ZLog.w(DownloadItem.TAG, "$msg  Response - :$key - $value ")
+    }
+}
+
+/**
+ * 从 HTTP Response Header 中获取 Content-Length
+ *
+ * @return Content-Length 值，如果不存在或解析失败则返回 0
+ */
+fun Response.getContentLength(): Long {
+    return header("Content-Length")?.toLongOrNull() ?: 0L
 }

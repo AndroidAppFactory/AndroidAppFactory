@@ -156,7 +156,8 @@ object DownloadTools {
                                 }
                             }
                         } catch (e: Exception) {
-                            ZLog.e(TAG, "文件复制时发生异常: ${e.message}", e)
+                            ZLog.e(TAG, "文件复制时发生异常: ${e.message}")
+                            e.printStackTrace()
                             listenerList.forEach {
                                 it?.onFail(
                                     DownloadErrorCode.ERR_FILE_RENAME_FAILED,

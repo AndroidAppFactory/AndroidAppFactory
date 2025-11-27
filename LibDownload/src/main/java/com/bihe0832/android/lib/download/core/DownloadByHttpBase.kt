@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.download.core
 
 import android.annotation.SuppressLint
+import com.bihe0832.android.lib.download.DownloadClientConfig
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_DOWNLOAD_PART_START_EXCEPTION
 import com.bihe0832.android.lib.download.DownloadItem
@@ -9,9 +10,9 @@ import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.core.dabase.DownloadPartInfoTableModel
-import com.bihe0832.android.lib.download.core.part.DOWNLOAD_MIN_SIZE
 import com.bihe0832.android.lib.download.core.part.DOWNLOAD_PART_SIZE
 import com.bihe0832.android.lib.download.core.part.DownloadThread
+import com.bihe0832.android.lib.okhttp.wrapper.OkHttpClientManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -30,7 +31,11 @@ import java.io.File
  * Created on 2020-01-10.
  * Description: 下载引擎的具体实现
  */
-abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug: Boolean = false) {
+abstract class DownloadByHttpBase(
+    private var maxNum: Int,
+    protected val isDebug: Boolean = false,
+    protected val downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
+) {
 
     companion object {
         /** 单个下载任务的最大分片数 */
@@ -170,6 +175,18 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
         ZLog.e(TAG, "\n")
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ startNew ~~~~~~~~~~~~~~~~~~")
         ZLog.e(TAG, "开启新下载: startNew: start：$rangeStart, rangeLength: $rangeLength,localStart:$localStart $info ")
+        
+        // 检测是否支持 HTTP/2，根据协议动态调整分片策略
+        val isHttp2 = downloadClientConfig.enableHttp2 &&
+                      OkHttpClientManager.checkHttp2Support(info.realURL)
+        
+        val maxThreadNum = downloadClientConfig.getMaxChunks(isHttp2)
+        val minChunkSize = downloadClientConfig.getMinChunkSize(isHttp2)
+        
+        if (downloadClientConfig.logProtocolInfo) {
+            ZLog.e(TAG, "开启新下载: 协议类型: ${if (isHttp2) "HTTP/2" else "HTTP/1.1"}, 最大分片数: $maxThreadNum, 最小分片大小: ${FileUtils.getFileLength(minChunkSize)}")
+        }
+        
         var threadNum = 1
         if (rangeLength > DOWNLOAD_PART_SIZE) {
             // 先分大片
@@ -179,12 +196,12 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
                     "开启新下载: 内容长度: ${rangeLength}，默认分片大小：${DOWNLOAD_PART_SIZE}，按默认分片可分片：${it}"
                 )
                 when {
-                    it > MAX_DOWNLOAD_THREAD * 2 -> {
-                        MAX_DOWNLOAD_THREAD
+                    it > maxThreadNum * 2 -> {
+                        maxThreadNum
                     }
 
-                    it in 2..MAX_DOWNLOAD_THREAD * 2 -> {
-                        MAX_DOWNLOAD_THREAD * 2 / maxNum
+                    it in 2..maxThreadNum * 2 -> {
+                        maxThreadNum * 2 / maxNum
                     }
 
                     it < 1 -> {
@@ -199,22 +216,22 @@ abstract class DownloadByHttpBase(private var maxNum: Int, protected val isDebug
             ZLog.e(TAG, "开启新下载: 内容长度: ${rangeLength}，二次分片数量：${threadNum}，并行下载量数量：${maxNum}")
             if (threadNum < 1) {
                 threadNum = 1
-            } else if (threadNum > MAX_DOWNLOAD_THREAD) {
-                threadNum = MAX_DOWNLOAD_THREAD
+            } else if (threadNum > maxThreadNum) {
+                threadNum = maxThreadNum
             }
             ZLog.e(TAG, "开启新下载: 内容长度: ${rangeLength}，三次分片数量：${threadNum}，并行下载量数量：${maxNum}")
         } else {
             threadNum = 1
         }
-        //太小的文件分小片
-        if (rangeLength / threadNum < DOWNLOAD_MIN_SIZE) {
-            threadNum = (rangeLength / DOWNLOAD_MIN_SIZE).toInt()
+        // 根据协议类型动态调整最小分片大小
+        if (rangeLength / threadNum < minChunkSize) {
+            threadNum = (rangeLength / minChunkSize).toInt()
         }
         if (threadNum < 1) {
             threadNum = 1
         }
-        if (threadNum > MAX_DOWNLOAD_THREAD) {
-            threadNum = MAX_DOWNLOAD_THREAD
+        if (threadNum > maxThreadNum) {
+            threadNum = maxThreadNum
         }
         val partSize = rangeLength / threadNum
         if ((rangeLength - partSize * (threadNum - 1)) < partSize / 5) {

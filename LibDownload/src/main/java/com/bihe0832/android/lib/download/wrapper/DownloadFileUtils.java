@@ -2,19 +2,23 @@ package com.bihe0832.android.lib.download.wrapper;
 
 import android.content.Context;
 import android.text.TextUtils;
+
+import com.bihe0832.android.lib.download.DownloadClientConfig;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadPauseType;
 import com.bihe0832.android.lib.download.core.DownloadTaskList;
 import com.bihe0832.android.lib.download.file.DownloadFileManager;
-import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 /**
  * AAF 文件下载管理工具类
- *
+ * <p>
  * 提供文件下载的统一管理接口，是 DownloadFileManager 的对外封装层。
- *
+ * <p>
  * 核心功能：
  * - 下载任务的增删改查
  * - 下载任务的暂停、恢复、删除
@@ -22,12 +26,12 @@ import org.jetbrains.annotations.NotNull;
  * - 任务列表查询（全部、下载中、等待中、已完成）
  * - 下载优先级控制
  * - 4G 网络下载控制
- *
+ * <p>
  * 任务分类：
  * - DOWNLOAD_ACTION_KEY_APK: APK 文件下载
  * - DOWNLOAD_ACTION_KEY_CONFIG: 配置文件下载
  * - DOWNLOAD_ACTION_KEY_FILE: 普通文件下载
- *
+ * <p>
  * 使用建议：
  * 1. 应用启动时调用 init() 初始化
  * 2. 应用退出时调用 onDestroy() 释放资源
@@ -47,12 +51,12 @@ public class DownloadFileUtils {
     /**
      * 初始化
      *
-     * @param context Application Context
+     * @param context        Application Context
      * @param maxDownloadNum 同时容许下载的最大数量，如果主要用于大文件下载：建议3个，最大不建议超过5个
-     * @param isDebug 是否开启调试模式
+     * @param isDebug        是否开启调试模式
      */
-    public static void init(Context context, int maxDownloadNum, Boolean isDebug) {
-        DownloadFileManager.INSTANCE.init(context, maxDownloadNum, isDebug);
+    public static void init(Context context, int maxDownloadNum, DownloadClientConfig downloadConfig, Boolean isDebug) {
+        DownloadFileManager.INSTANCE.init(context, maxDownloadNum, downloadConfig, isDebug);
     }
 
     public static void init(Context context, boolean isDebug) {
@@ -116,7 +120,7 @@ public class DownloadFileUtils {
     /**
      * 恢复一个下载任务
      *
-     * @param downloadID 恢复任务的信息
+     * @param downloadID    恢复任务的信息
      * @param pauseOnMobile 4G是否暂停下载
      */
     public static void resumeDownload(long downloadID, boolean pauseOnMobile) {

@@ -29,7 +29,7 @@ import java.io.File
 object DownloadRangeManager : DownloadManager() {
 
     private val mDownloadEngine by lazy {
-        DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug)
+        DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug, downloadClientConfig)
     }
 
     private val innerDownloadListener = object : DownloadListener {
@@ -184,8 +184,13 @@ object DownloadRangeManager : DownloadManager() {
         try {
             // 不合法的URl
             if (!URLUtils.isHTTPUrl(info.downloadURL)) {
-                ZLog.e(TAG, "bad para:$info")
-                innerDownloadListener.onFail(ERR_BAD_URL, "bad para", info)
+                ZLog.e(TAG, "bad para downloadURL:$info")
+                innerDownloadListener.onFail(ERR_BAD_URL, "bad para downloadURL", info)
+                return
+            }
+            if (info.contentLength < 1) {
+                ZLog.e(TAG, "bad para contentLength:$info")
+                innerDownloadListener.onFail(ERR_BAD_URL, "bad para contentLength", info)
                 return
             }
             addDownloadItemToListAndSaveRecord(info)

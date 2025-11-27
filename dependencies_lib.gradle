@@ -206,6 +206,7 @@ ext.libmoduleInfo = [
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
                         "LibAPK", "LibNotification", "LibInstall", "LibHttpAdvanced",
+                        "LibOkhttpWrapper",
                         project.okhttp.okhttp,
                 ]
         ],

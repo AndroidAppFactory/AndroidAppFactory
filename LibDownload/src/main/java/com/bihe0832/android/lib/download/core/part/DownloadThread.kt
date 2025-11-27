@@ -5,16 +5,15 @@ import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
-import com.bihe0832.android.lib.download.core.logRequestHeaderFields
+import com.bihe0832.android.lib.download.core.getContentLength
 import com.bihe0832.android.lib.download.core.logResponseHeaderFields
-import com.bihe0832.android.lib.download.core.upateRequestInfo
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
-import com.bihe0832.android.lib.request.HTTPRequestUtils
+import com.bihe0832.android.lib.okhttp.wrapper.OkHttpClientManager
+import okhttp3.Request
 import java.io.File
 import java.io.RandomAccessFile
 import java.net.HttpURLConnection
-import java.net.URL
 import kotlin.math.abs
 
 /**
@@ -186,29 +185,37 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             TAG,
             "分片下载 第${mDownloadPartInfo.downloadPartID}分片: Range开头: ${mDownloadPartInfo.partRangeStart}, 本次Range开头 : $rangeStart end: ${rangeEnd}"
         )
-        val url = URL(mDownloadPartInfo.realDownloadURL)
-        val connection = (url.openConnection() as HttpURLConnection).apply {
-            upateRequestInfo(mDownloadPartInfo.requestHeader)
-
-            if (rangeEnd > 0 && rangeEnd > rangeStart) {
-                setRequestProperty("Range", "bytes=$rangeStart-${rangeEnd}")
-            }
-            logRequestHeaderFields("分片下载数据 第${mDownloadPartInfo.downloadPartID}分片")
+        
+        // 使用 OkHttp 替代 HttpURLConnection，支持 HTTP/2 多路复用
+        val requestBuilder = Request.Builder()
+            .url(mDownloadPartInfo.realDownloadURL)
+        
+        // 添加自定义请求头
+        mDownloadPartInfo.requestHeader?.forEach { (key, value) ->
+            requestBuilder.addHeader(key, value)
         }
+        
+        // 设置 Range 请求头
+        if (rangeEnd > 0 && rangeEnd > rangeStart) {
+            requestBuilder.addHeader("Range", "bytes=$rangeStart-${rangeEnd}")
+        }
+        
+        val request = requestBuilder.build()
+        
         var time = System.currentTimeMillis()
-        connection.connect()
+        val response = OkHttpClientManager.executeRequest(request)
         ZLog.w(
             TAG,
-            "分片下载 第${mDownloadPartInfo.downloadPartID}分片: 请求用时: ${System.currentTimeMillis() - time} ~~~~~~~~~~~~~",
+            "分片下载 第${mDownloadPartInfo.downloadPartID}分片: 请求用时: ${System.currentTimeMillis() - time}, 协议: ${response.protocol} ~~~~~~~~~~~~~",
         )
 
-        connection.logResponseHeaderFields("分片下载数据 第${mDownloadPartInfo.downloadPartID}分片")
-
-        var serverContentLength = HTTPRequestUtils.getContentLength(connection)
+        // 从 header 中读取 Content-Length，使用统一的扩展方法
+        var serverContentLength = response.getContentLength()
         var localContentLength = mDownloadPartInfo.partLength - mDownloadPartInfo.partFinished
         ZLog.e(TAG, "~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.downloadPartID} 分片 ~~~~~~~~~~~~~")
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: getContentType:${connection.contentType}")
-        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: responseCode:${connection.responseCode}")
+        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: getContentType:${response.body?.contentType()}")
+        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: responseCode:${response.code}")
+        ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: protocol:${response.protocol}")
         ZLog.e(
             TAG,
             "分片下载 第${mDownloadPartInfo.downloadPartID}分片: contentLength: origin start ${mDownloadPartInfo.partRangeStart}, final start $rangeStart, end ${rangeEnd}, bytes=$rangeStart-$rangeEnd",
@@ -221,8 +228,11 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             TAG,
             "分片下载 第${mDownloadPartInfo.downloadPartID}分片: finished ${mDownloadPartInfo.partFinished}, finished before: ${mDownloadPartInfo.partFinishedBefore} \n",
         )
+        
+        // 打印完整的响应头信息
+        response.logResponseHeaderFields("分片下载数据 第${mDownloadPartInfo.downloadPartID}分片")
 
-        if (connection.responseCode == HttpURLConnection.HTTP_OK || connection.responseCode == HttpURLConnection.HTTP_PARTIAL || connection.responseCode == 416) {
+        if (response.code == HttpURLConnection.HTTP_OK || response.code == HttpURLConnection.HTTP_PARTIAL || response.code == 416) {
             // 分片下载
             if (abs(serverContentLength - localContentLength) > 1 && localContentLength > 0) {
                 ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片长度 错误 ！！！")
@@ -245,13 +255,21 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                 }
             }
 
-            val inputStream = connection.inputStream
+            val inputStream = response.body?.byteStream() ?: run {
+                ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: Response body 为空")
+                mDownloadPartInfo.partStatus = DownloadStatus.STATUS_DOWNLOAD_FAILED
+                response.close()
+                return false
+            }
+            
             val data = ByteArray(DOWNLOAD_BUFFER_SIZE)
             var len = -1
             var hasDownloadLength = 0L
             var lastUpdateTime = 0L
             var lastUpdateLength = 0L
-            while (inputStream.read(data).also { len = it } !== -1) {
+            
+            try {
+                while (inputStream.read(data).also { len = it } !== -1) {
                 if (mDownloadPartInfo.partStatus > DownloadStatus.STATUS_DOWNLOADING) {
                     // 下载完成或者失败
                     DownloadInfoDBManager.updateDownloadFinished(
@@ -299,6 +317,15 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
                     retryTimes = 0
                 }
             }
+            } finally {
+                // 确保资源被释放
+                try {
+                    inputStream.close()
+                } catch (e: Exception) {
+                    ZLog.e(TAG, "关闭 InputStream 失败: ${e.message}")
+                }
+            }
+            
             ZLog.e(TAG, "\n")
             ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ 分片下载结束 ~~~~~~~~~~~~~~~~~~")
             ZLog.e(
@@ -351,17 +378,9 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
             )
             ZLog.e(TAG, "分片下载数据 第${mDownloadPartInfo.downloadPartID}分片下载结束: $mDownloadPartInfo")
             ZLog.e(TAG, "\n")
-            try {
-                inputStream.close()
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-
-            try {
-                connection.disconnect()
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
+            
+            // 关闭 Response
+            response.close()
         } else {
             return true
         }

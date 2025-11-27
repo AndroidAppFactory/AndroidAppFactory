@@ -17,6 +17,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.text.TextUtils
+import com.bihe0832.android.lib.download.DownloadClientConfig
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_BAD_URL
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_MD5_BAD
@@ -54,11 +55,11 @@ object DownloadFileManager : DownloadManager() {
     private const val DOWNLOAD_START_DELAY = 1000L
 
     private val mDownloadEngine by lazy {
-        DownloadByHttpForFile(innerDownloadListener, maxNum, isDebug)
+        DownloadByHttpForFile(innerDownloadListener, maxNum, isDebug, downloadClientConfig)
     }
 
-    override fun init(context: Context, maxNum: Int, isDebug: Boolean) {
-        super.init(context, maxNum, isDebug)
+    override fun init(context: Context, maxNum: Int, downloadClientConfig: DownloadClientConfig, isDebug: Boolean) {
+        super.init(context, maxNum, downloadClientConfig, isDebug)
         if (!hasInit) {
             hasInit = true
             DownloadFileNotify.init(context)
@@ -241,8 +242,8 @@ object DownloadFileManager : DownloadManager() {
         try {
             // 不合法的URl
             if (!URLUtils.isHTTPUrl(info.downloadURL)) {
-                ZLog.e(TAG, "bad para:$info")
-                innerDownloadListener.onFail(ERR_BAD_URL, "bad para", info)
+                ZLog.e(TAG, "bad para downloadURL:$info")
+                innerDownloadListener.onFail(ERR_BAD_URL, "bad para downloadURL", info)
                 return
             }
 

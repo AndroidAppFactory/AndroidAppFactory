@@ -10,7 +10,6 @@ package com.bihe0832.android.lib.okhttp.wrapper
 
 import android.content.Context
 import android.os.SystemClock
-import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOKHttpInterceptor
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpAppInterceptor
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
@@ -18,13 +17,9 @@ import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFBasicOkHttpNetworkEventListener
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFOkHttpNetworkEventListener
 import com.bihe0832.android.lib.utils.IdGenerator
-import okhttp3.Cache
-import okhttp3.ConnectionPool
-import okhttp3.Dispatcher
 import okhttp3.EventListener
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import java.io.File
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
@@ -71,29 +66,15 @@ object OkHttpWrapper {
         writeTimeout: Long,
         canInterceptRequest: Boolean
     ): OkHttpClient.Builder {
-        val connectionPool = ConnectionPool(
-            5,  // 最大空闲连接数
-            3,  // 连接存活时间（分钟）
-            TimeUnit.MINUTES
-        )
-
-        val cache = Cache(
-            File(ZixieFileProvider.getZixieTempFolder(context) + "http-cache"),
-            100 * 1024 * 1024L
-        )
-        val dispatcher = Dispatcher().apply {
-            maxRequests = 30 // 全局限请求数
-            maxRequestsPerHost = 10 // 单主机限请求数
-        }
-        return OkHttpClient.Builder().apply {
-            connectionPool(connectionPool)
-            cache(cache)
-            dispatcher(dispatcher)
-            retryOnConnectionFailure(true)
+        // 使用 OkHttpClientManager 创建基础客户端
+        return OkHttpClientManager.createOkHttpClientWithCache(
+            context = context,
+            connectTimeout = connectTimeout,
+            readTimeout = readTimeout,
+            writeTimeout = writeTimeout
+        ).newBuilder().apply {
+            // 添加应用拦截器
             addInterceptor(AAFOkHttpAppInterceptor(canInterceptRequest))
-            connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
-            readTimeout(readTimeout, TimeUnit.MILLISECONDS)
-            writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
         }
     }
 

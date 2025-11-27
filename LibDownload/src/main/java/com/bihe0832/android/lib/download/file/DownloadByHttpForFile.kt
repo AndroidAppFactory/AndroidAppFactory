@@ -1,6 +1,7 @@
 package com.bihe0832.android.lib.download.file
 
 import android.text.TextUtils
+import com.bihe0832.android.lib.download.DownloadClientConfig
 import com.bihe0832.android.lib.download.DownloadErrorCode
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_FILE_RENAME_FAILED
 import com.bihe0832.android.lib.download.DownloadErrorCode.ERR_MD5_BAD
@@ -28,8 +29,9 @@ import java.io.File
 class DownloadByHttpForFile(
     innerDownloadListener: DownloadListener,
     maxNum: Int,
-    isDebug: Boolean = false
-) : DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug) {
+    isDebug: Boolean = false,
+    downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
+) : DownloadByHttpForRange(innerDownloadListener, maxNum, isDebug, downloadClientConfig) {
 
     fun startDownload(info: DownloadItem) {
         ZLog.e(TAG, "开始下载:${info}")

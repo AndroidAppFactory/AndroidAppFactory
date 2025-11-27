@@ -1,39 +1,43 @@
 package com.bihe0832.android.lib.download.wrapper;
 
 import android.content.Context;
+
+import com.bihe0832.android.lib.download.DownloadClientConfig;
 import com.bihe0832.android.lib.download.DownloadItem;
 import com.bihe0832.android.lib.download.DownloadListener;
 import com.bihe0832.android.lib.download.DownloadPauseType;
 import com.bihe0832.android.lib.download.core.DownloadTaskList;
 import com.bihe0832.android.lib.download.range.DownloadRangeManager;
-import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 /**
  * AAF Range 下载管理工具类
- *
+ * <p>
  * 提供 HTTP Range 请求的下载功能，支持下载文件的指定部分。
  * Range 用法相对比较复杂，因此不建议自行封装 DownloadItem，直接使用本类提供的方法。
- *
+ * <p>
  * 核心功能：
  * - 支持 HTTP Range 请求（下载文件的指定范围）
  * - 支持断点续传（指定本地起始位置）
  * - 任务管理（暂停、恢复、删除）
  * - 批量任务管理
  * - 任务列表查询
- *
+ * <p>
  * Range 下载参数说明：
  * - start: 服务器端起始位置（Range 请求的 start）
  * - length: 需要下载的长度
  * - localStart: 本地文件写入的起始位置
- *
+ * <p>
  * 使用场景：
  * 1. 大文件分片下载（多线程下载不同片段）
  * 2. 视频分段加载（边播边下）
  * 3. 断点续传（从上次中断位置继续）
  * 4. P2P 下载（下载文件的不同部分）
- *
+ * <p>
  * 注意事项：
  * 1. 服务器必须支持 Range 请求
  * 2. start + length 不能超过文件总大小
@@ -49,12 +53,12 @@ public class DownloadRangeUtils {
     /**
      * 初始化
      *
-     * @param context Application Context
+     * @param context        Application Context
      * @param maxDownloadNum 同时容许下载的最大数量，如果主要用于大文件下载：建议3个，最大不建议超过5个
-     * @param isDebug 是否开启调试模式
+     * @param isDebug        是否开启调试模式
      */
-    public static void init(Context context, int maxDownloadNum, Boolean isDebug) {
-        DownloadRangeManager.INSTANCE.init(context, maxDownloadNum, isDebug);
+    public static void init(Context context, int maxDownloadNum, DownloadClientConfig downloadConfig, Boolean isDebug) {
+        DownloadRangeManager.INSTANCE.init(context, maxDownloadNum, downloadConfig, isDebug);
     }
 
     public static void init(Context context, boolean isDebug) {
@@ -66,12 +70,12 @@ public class DownloadRangeUtils {
     }
 
     public static void startDownload(Context context, String url, String filePath, long start, long length,
-            DownloadListener listener) {
+                                     DownloadListener listener) {
         startDownload(context, url, filePath, start, length, start, "", listener);
     }
 
     public static void startDownload(Context context, String url, String filePath, long start, long length,
-            long localStart, String md5, DownloadListener listener) {
+                                     long localStart, String md5, DownloadListener listener) {
         DownloadItem info = new DownloadItem();
         info.setDownloadURL(url);
         info.setDownloadListener(listener);
@@ -82,7 +86,7 @@ public class DownloadRangeUtils {
     }
 
     public static void startDownload(Context context, @NotNull DownloadItem info, long start, long length,
-            long localStart) {
+                                     long localStart) {
         startDownload(context, info, start, length, localStart, info.shouldForceReDownload());
     }
 
@@ -92,7 +96,7 @@ public class DownloadRangeUtils {
      * @param info 添加任务的信息，除 downloadURL ，其余都非必填，下载本地仅支持传入文件夹，不支持传入下载文件路径，如果是要下载到指定文件，请参考 DownloadTools 二次分封装
      */
     public static void startDownload(Context context, @NotNull DownloadItem info, long start, long length,
-            long localStart, boolean forceDownload) {
+                                     long localStart, boolean forceDownload) {
         if (!DownloadRangeManager.INSTANCE.hasInit()) {
             DownloadRangeManager.INSTANCE.init(context);
         }
@@ -109,7 +113,7 @@ public class DownloadRangeUtils {
      * @param downloadURL 下载地址
      */
     public static DownloadItem getTaskByDownloadURL(@NotNull final String downloadURL, long start, long length,
-            long localStart) {
+                                                    long localStart) {
         return DownloadTaskList.INSTANCE.getTaskByDownloadID(
                 getDownloadIDByURL(downloadURL, start, length, localStart));
     }
@@ -135,7 +139,7 @@ public class DownloadRangeUtils {
     /**
      * 恢复一个下载任务
      *
-     * @param downloadID 恢复任务的信息
+     * @param downloadID    恢复任务的信息
      * @param pauseOnMobile 4G是否暂停下载
      */
     public static void resumeDownload(long downloadID, boolean pauseOnMobile) {

@@ -51,13 +51,13 @@ fun DebugDownloadView() {
 
 
 internal fun testDownloadRange(context: Context, num: Int) {
-    for (i in 0 until num) {
+//    for (i in 0 until num) {
         val url = URL_YYB_WZ
         val start = 0 * 50000000L
         startDownload(
-            context, url, start, MathUtils.getRandNumByLimit(2000, 100000), ""
+            context, url, start, start.toInt(), ""
         )
-    }
+//    }
 }
 
 
