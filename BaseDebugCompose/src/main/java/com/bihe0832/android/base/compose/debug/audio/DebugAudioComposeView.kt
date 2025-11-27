@@ -2,6 +2,7 @@ package com.bihe0832.android.base.compose.debug.audio
 
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.common.compose.debug.item.DebugComposeActivityItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
@@ -9,7 +10,9 @@ import com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListActi
 import com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListWithProcessActivity
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.video.FFmpegTools
+import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.lib.aaf.tools.AAFDataCallback
+import com.bihe0832.android.lib.audio.AudioUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.wrapper.DownloadFile
 import com.bihe0832.android.lib.download.wrapper.SimpleDownloadListener
@@ -23,6 +26,7 @@ private const val LOG_TAG = "DebugComposeAudioView"
 
 @Composable
 fun DebugAudioComposeView() {
+    val context = LocalContext.current
 
     DebugContent {
         val blockAudioPlayerManager = AudioPLayerManager()
@@ -92,6 +96,30 @@ fun DebugAudioComposeView() {
             blockAudioPlayerManager.play(it, R.raw.icon)
             blockAudioPlayerManager.play(it, R.raw.test)
             blockAudioPlayerManager.play(it, R.raw.three)
+        }
+        DebugItem("PCM转WAV") {
+            DownloadFile.download(
+                context,
+                "https://cdn.bihe0832.com/audio/02.pcm",
+                AAFFileWrapper.getTempFolder(),
+                false,
+                "5135554C0D30763067D2ADA22D45BB3B",
+                object : SimpleDownloadListener() {
+                    override fun onProgress(item: DownloadItem) {
+
+                    }
+
+                    override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+
+                    }
+
+                    override fun onComplete(filePath: String, item: DownloadItem): String {
+                        val wavFile = filePath.replace(".pcm", "1.wav")
+                        AudioUtils.convertPCMToWAV(48000, 1, 16, filePath, wavFile)
+                        blockAudioPlayerManager.play(wavFile)
+                        return filePath
+                    }
+                })
         }
 
         DebugItem("本地音频极限测试") {

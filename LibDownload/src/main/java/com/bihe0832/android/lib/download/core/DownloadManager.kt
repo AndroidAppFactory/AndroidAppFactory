@@ -185,7 +185,7 @@ abstract class DownloadManager {
             }
         }
 
-        ZLog.d(TAG, "本地文件是否完整检查结束：$info ")
+        ZLog.d(TAG, "本地文件是否完整检查结束，本地不存在：$info ")
         return ""
     }
 
