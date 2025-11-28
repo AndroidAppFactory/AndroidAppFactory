@@ -3,6 +3,22 @@
 [ ![Github](https://img.shields.io/github/stars/bihe0832/AndroidAppFactory?style=social) ](https://github.com/bihe0832/AndroidAppFactory)
 [ ![Github](https://img.shields.io/bitbucket/issues/bihe0832/AndroidAppFactory) ](https://github.com/bihe0832/AndroidAppFactory)
 
+## 使用 CodeBuddy 开发
+
+**CodeBuddy** 是 AAF 框架的 AI 开发助手，可以帮助您快速开发和维护 AAF 框架及相关项目。
+
+- **初始化项目**：克隆 [CodeBuddyForAAF](https://github.com/AndroidAppFactory/CodeBuddyForAAF) 后运行 `./init.sh` 初始化开发环境
+- **智能开发**：使用自然语言描述需求，CodeBuddy 自动生成代码
+- **框架维护**：支持文档生成与同步、发布检查、依赖管理等开发任务
+- **快速上手**：输入"帮助"查看所有可用命令
+- **示例命令**：
+  - "更新文档" - 同步代码变更到文档
+  - "发布检查" - 执行完整的发布前检查
+  - "添加依赖" - 查看依赖管理规范
+  - "编译检查" - 验证代码编译状态
+
+详细使用指南：[CodeBuddyForAAF](https://github.com/AndroidAppFactory/CodeBuddyForAAF)
+
 ## 相关链接
 
 - **框架文档：**
@@ -11,11 +27,17 @@
     
     - 内容：主要**介绍相关组件的功能以及整体框架使用相关的内容**
 
-- 技术方案介绍：
+- **技术方案介绍：**
 
     - 链接：[https://blog.bihe0832.com/android-dev-summary.html](https://blog.bihe0832.com/android-dev-summary.html)
     
     - 内容：完整AAF的整个技术方案，以及其中一些核心的技术点
+
+- **代码统计：**
+
+   - 框架代码：[https://android.bihe0832.com/source/lib/index.html](https://android.bihe0832.com/source/lib/index.html)
+   
+   - AAF Sample 代码：[https://android.bihe0832.com/source/sample/index.html](https://android.bihe0832.com/source/sample/index.html)
 	
 
 ## 框架能力
