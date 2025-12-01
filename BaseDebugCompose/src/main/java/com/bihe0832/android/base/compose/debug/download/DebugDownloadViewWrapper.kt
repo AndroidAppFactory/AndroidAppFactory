@@ -175,7 +175,7 @@ internal fun startDownload(context: Context, url: String?, start: Long, length: 
 }
 
 fun testDownloadProcess(activity: Activity) {
-    val url = URL_CONFIG
+    val url = URL_YYB_WZ
     val md5 = MD5_CONFIG
 //        val url = ""
 //        val md5 = ""
