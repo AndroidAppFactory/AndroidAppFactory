@@ -214,7 +214,7 @@ ext.libmoduleInfo = [
                 "version"            : "8.0.0",
                 "artifactId"         : "lib-install",
                 "apidependenciesList": [
-                        "LibFile", "LibZip", "LibAPK"
+                        "LibFile", "LibZip", "LibAPK","LibTimer"
                 ]
         ],
         "LibText"             : [

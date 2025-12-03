@@ -265,7 +265,12 @@ object SplitApksInstallHelper {
                 e.printStackTrace()
             }
             val callbackIntent = Intent(mBroadcastReceiver!!.getIntentFilterFlag(mContext))
-            val pendingIntent = PendingIntent.getBroadcast(mContext, 0, callbackIntent, 0)
+            val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.FLAG_MUTABLE
+            } else {
+                0
+            }
+            val pendingIntent = PendingIntent.getBroadcast(mContext, 0, callbackIntent, pendingIntentFlags)
             session?.commit(pendingIntent.intentSender)
             session?.close()
             ZLog.d("$TAG install request sent")

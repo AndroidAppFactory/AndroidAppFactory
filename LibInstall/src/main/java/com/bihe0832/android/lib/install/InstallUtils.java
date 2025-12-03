@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.mimetype.FileMimeTypes;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
@@ -14,14 +15,18 @@ import com.bihe0832.android.lib.install.obb.ObbFileInstall;
 import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
+import com.bihe0832.android.lib.timer.BaseTask;
+import com.bihe0832.android.lib.timer.TaskManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 import com.bihe0832.android.lib.zip.ZipUtils;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -35,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class InstallUtils {
 
-    public static final String TAG = "InstallUtils";
+    public static final String TAG = "InstallUtils ";
 
     public static ApkInstallType getFileType(String filepath) {
         if (TextUtils.isEmpty(filepath)) {
@@ -83,23 +88,31 @@ public class InstallUtils {
     }
 
     public static void installAPP(final Context context, final String filePath) {
-        installAPP(context, filePath, "");
+        installAPP(context, filePath, "", null);
     }
 
-    public static void installAPP(final Context context, final String filePath, final String packageName) {
-        installAPP(context, filePath, packageName, null);
+    public static void installAPP(final Context context, final String filePath,
+                                  final InstallListener listener) {
+        installAPP(context, filePath, "", listener);
     }
 
     public static void installAPP(final Context context, final String filePath, final String packageName,
-            final InstallListener listener) {
+                                  final InstallListener listener) {
+        installAPP(context, filePath, packageName, 30, listener);
+    }
+
+    public static void installAPP(final Context context, final String filePath, final String packageName, int delayTime,
+                                  final InstallListener listener) {
+
         if (hasInstallAPPPermission(context, true, true)) {
             ThreadManager.getInstance().start(new Runnable() {
                 @Override
                 public void run() {
-                    installAllAPK(context, filePath, packageName, new InstallListener() {
+                    ZLog.d(TAG, " installAllApk start");
+                    installAllAPK(context, filePath, "", new InstallListener() {
                         @Override
                         public void onInstallTimeOut() {
-                            ZLog.d(TAG + " installAllApk onInstallTimeOut");
+                            ZLog.d(TAG, " installAllApk onInstallTimeOut");
                             if (listener != null) {
                                 listener.onInstallTimeOut();
                             }
@@ -107,7 +120,7 @@ public class InstallUtils {
 
                         @Override
                         public void onInstallSuccess() {
-                            ZLog.d(TAG + " installAllApk onInstallSuccess");
+                            ZLog.d(TAG, " installAllApk onInstallSuccess");
                             if (listener != null) {
                                 listener.onInstallSuccess();
                             }
@@ -115,7 +128,7 @@ public class InstallUtils {
 
                         @Override
                         public void onUnCompress() {
-                            ZLog.d(TAG + " installAllApk onUnCompress");
+                            ZLog.d(TAG, " installAllApk onUnCompress");
                             if (listener != null) {
                                 listener.onUnCompress();
                             }
@@ -123,7 +136,7 @@ public class InstallUtils {
 
                         @Override
                         public void onInstallPrepare() {
-                            ZLog.d(TAG + " installAllApk onInstallPrepare");
+                            ZLog.d(TAG, " installAllApk onInstallPrepare");
                             if (listener != null) {
                                 listener.onInstallPrepare();
                             }
@@ -131,7 +144,7 @@ public class InstallUtils {
 
                         @Override
                         public void onInstallStart() {
-                            ZLog.d(TAG + " installAllApk onInstallStart");
+                            ZLog.d(TAG, " installAllApk onInstallStart");
                             if (listener != null) {
                                 listener.onInstallStart();
                             }
@@ -139,7 +152,7 @@ public class InstallUtils {
 
                         @Override
                         public void onInstallFailed(int errorcode) {
-                            ZLog.d(TAG + " installAllApk onInstallFailed : " + errorcode);
+                            ZLog.d(TAG, " installAllApk onInstallFailed : " + errorcode);
                             if (listener != null) {
                                 listener.onInstallFailed(errorcode);
                             }
@@ -147,14 +160,52 @@ public class InstallUtils {
                     });
                 }
             });
+        } else if (delayTime > 0) {
+            final String taskName = "installAPP";
+            TaskManager.getInstance().addTask(new BaseTask() {
+                private int times = 0;
+
+                @Override
+                public int getMyInterval() {
+                    return 2;
+                }
+
+                @Override
+                public int getNextEarlyRunTime() {
+                    return 0;
+                }
+
+                @Override
+                public void doTask() {
+                    times++;
+                    if (hasInstallAPPPermission(context, false, false)) {
+                        ZLog.d(TAG, " installAllApk hasInstallAPPPermission true");
+                        InstallUtils.installAPP(context, filePath, packageName, listener);
+                        TaskManager.getInstance().removeTask(taskName);
+                    } else {
+                        ZLog.d(TAG, " installAllApk hasInstallAPPPermission : false");
+                    }
+                    if (times > delayTime) {
+                        ZLog.d(TAG, " installAllApk hasInstallAPPPermission timeout " + times + "," + delayTime);
+                        TaskManager.getInstance().removeTask(taskName);
+                    }
+                }
+
+                @Override
+                public String getTaskName() {
+                    return taskName;
+                }
+            });
+        } else {
+            ZLog.d(TAG, " installAllApk hasInstallAPPPermission false and not autoCheck");
         }
     }
 
     static void installAllAPK(final Context context, final String filePath, final String packageName,
-            final InstallListener listener) {
+                              final InstallListener listener) {
         try {
             final File downloadedFile = new File(filePath);
-            ZLog.d(TAG + "installAllApk downloadedFile:" + downloadedFile.getAbsolutePath());
+            ZLog.d(TAG, "installAllApk downloadedFile:" + downloadedFile.getAbsolutePath());
             if (downloadedFile == null || !downloadedFile.exists()) {
                 listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND);
                 return;
@@ -172,7 +223,7 @@ public class InstallUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            ZLog.d(TAG + "installAllApk failed:" + e.getMessage());
+            ZLog.d(TAG, "installAllApk failed:" + e.getMessage());
             listener.onInstallFailed(InstallErrorCode.UNKNOWN_EXCEPTION);
         }
     }
@@ -190,8 +241,8 @@ public class InstallUtils {
     }
 
     static void installSpecialAPKByZip(@NotNull Context context, String zipFilePath, String packageName,
-            final InstallListener listener) {
-        ZLog.d(TAG + "installSpecialAPKByZip:" + zipFilePath);
+                                       final InstallListener listener) {
+        ZLog.d(TAG, "installSpecialAPKByZip:" + zipFilePath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
             finalPackageName = FileUtils.INSTANCE.getFileNameWithoutEx(zipFilePath);
@@ -204,19 +255,19 @@ public class InstallUtils {
             ObbFileInstall.installObbAPKByZip(context, zipFilePath, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
             String fileDir = ZixieFileProvider.getZixieCacheFolder(context) + packageName;
-            ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
+            ZLog.d(TAG, "installSpecialAPKByZip start unCompress:");
             listener.onUnCompress();
             ZipUtils.unCompress(zipFilePath, fileDir);
-            ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
+            ZLog.d(TAG, "installSpecialAPKByZip finished unCompress ");
             ArrayList<String> files = new ArrayList<>();
             addApkToFilesList(new File(fileDir), files);
             SplitApksInstallHelper.INSTANCE.installApk(context, files, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.APK) {
             String fileDir = ZixieFileProvider.getZixieCacheFolder(context) + packageName;
-            ZLog.d(TAG + "installSpecialAPKByZip start unCompress:");
+            ZLog.d(TAG, "installSpecialAPKByZip start unCompress:");
             listener.onUnCompress();
             ZipUtils.unCompress(zipFilePath, fileDir);
-            ZLog.d(TAG + "installSpecialAPKByZip finished unCompress ");
+            ZLog.d(TAG, "installSpecialAPKByZip finished unCompress ");
             installSpecialAPKByFolder(context, fileDir, finalPackageName, listener);
         } else {
             listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE);
@@ -224,8 +275,8 @@ public class InstallUtils {
     }
 
     static void installSpecialAPKByFolder(@NotNull Context context, String folderPath, String packageName,
-            final InstallListener listener) {
-        ZLog.d(TAG + "installSpecialAPKByFolder:" + folderPath);
+                                          final InstallListener listener) {
+        ZLog.d(TAG, "installSpecialAPKByFolder:" + folderPath);
         String finalPackageName = "";
         if (TextUtils.isEmpty(packageName)) {
             finalPackageName = FileUtils.INSTANCE.getFileName(folderPath);
@@ -234,7 +285,7 @@ public class InstallUtils {
         }
 
         ApkInstallType apkInstallType = getApkInstallTypeByFolder(new File(folderPath));
-        ZLog.d(TAG + "installSpecialAPKByFolder start install:" + folderPath);
+        ZLog.d(TAG, "installSpecialAPKByFolder start install:" + folderPath);
         if (apkInstallType == ApkInstallType.OBB) {
             ObbFileInstall.installObbAPKByFile(context, folderPath, finalPackageName, listener);
         } else if (apkInstallType == ApkInstallType.SPLIT_APKS) {
