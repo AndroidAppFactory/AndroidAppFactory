@@ -137,7 +137,7 @@ class DebugLockActivity : BaseActivity() {
                 return false
             }
 
-            override fun run() {
+            override fun doTask() {
                 updateView()
             }
 

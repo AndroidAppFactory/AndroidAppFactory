@@ -298,7 +298,7 @@ internal fun testUpdate(activity: Activity?) {
     var i = 0
 
     TaskManager.getInstance().addTask(object : BaseTask() {
-        override fun run() {
+        override fun doTask() {
             if (i < 1000) {
                 activity!!.runOnUiThread(
                     Runnable {

@@ -171,7 +171,7 @@ class DebugTTSBasicFragment : BaseFragment() {
         }
 
         TaskManager.getInstance().addTask(object : BaseTask() {
-            override fun run() {
+            override fun doTask() {
                 LibTTS.stopSpeak()
             }
 

@@ -126,7 +126,6 @@ public open class MessageManager {
                                         activity,
                                         item.action,
                                         "",
-                                        ""
                                     )
                                 } else {
                                     RouterAction.openFinalURL(item.action)

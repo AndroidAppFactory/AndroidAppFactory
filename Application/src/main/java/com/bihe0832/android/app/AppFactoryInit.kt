@@ -17,6 +17,7 @@ import com.bihe0832.android.common.webview.tbs.WebViewHelper
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieCoreInit
 import com.bihe0832.android.framework.file.AAFFileWrapper
+import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
@@ -67,6 +68,7 @@ object AppFactoryInit {
                     ""
                 },
             )
+            Log.e(ZixieCoreInit.TAG, "文件日志开关: ${ZixieCoreInit.enableLogByFile()}")
             Log.e(ZixieCoreInit.TAG, "———————————————————————— 设备信息 ————————————————————————")
 
             RouterHelper.initRouter()

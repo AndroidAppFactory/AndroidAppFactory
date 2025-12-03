@@ -28,7 +28,8 @@ object UpdateHelper {
 
     private fun startUpdate(
         activity: Activity,
-        version: String,
+        versionName: String,
+        versionCode: Long,
         desc: String,
         url: String,
         md5: String,
@@ -36,7 +37,7 @@ object UpdateHelper {
     ) {
         val title = String.format(
             ThemeResourcesManager.getString(R.string.dialog_apk_updating)!!,
-            version
+            versionName
         )
 
         val dialogListenerWhenDownload = object :
@@ -58,7 +59,7 @@ object UpdateHelper {
 
         val downloadListener =
             object :
-                SimpleInstallListener(activity, activity.packageName, dialogListenerWhenDownload) {
+                SimpleInstallListener(activity, dialogListenerWhenDownload) {
 
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     if (errorCode in listOf(
@@ -108,6 +109,8 @@ object UpdateHelper {
             url,
             emptyMap(),
             md5,
+            activity.packageName,
+            versionCode,
             canCancel,
             true,
             dialogListenerWhenDownload,
@@ -118,6 +121,7 @@ object UpdateHelper {
     private fun showUpdateDialogWithTitle(
         activity: Activity,
         versionName: String,
+        versionCode: Long,
         titleString: String,
         desc: String,
         url: String,
@@ -144,6 +148,7 @@ object UpdateHelper {
                                         startUpdate(
                                             activity,
                                             versionName,
+                                            versionCode,
                                             desc,
                                             url,
                                             md5,
@@ -165,6 +170,7 @@ object UpdateHelper {
                                     startUpdate(
                                         activity,
                                         versionName,
+                                        versionCode,
                                         desc,
                                         url,
                                         md5,
@@ -213,6 +219,7 @@ object UpdateHelper {
     fun showUpdateDialog(
         activity: Activity,
         versionName: String,
+        versionCode: Long,
         titleString: String,
         desc: String,
         url: String,
@@ -228,6 +235,7 @@ object UpdateHelper {
         showUpdateDialogWithTitle(
             activity,
             versionName,
+            versionCode,
             title,
             ThemeResourcesManager.getString(R.string.dialog_apk_update_info_pre) + desc,
             url,
@@ -248,6 +256,7 @@ object UpdateHelper {
                 showUpdateDialog(
                     activity,
                     info.newVersionName,
+                    info.newVersionCode.toLong(),
                     info.newVersionTitle,
                     info.newVersionInfo,
                     info.newVersionURL,
@@ -261,6 +270,7 @@ object UpdateHelper {
                     showUpdateDialog(
                         activity,
                         info.newVersionName,
+                        info.newVersionCode.toLong(),
                         info.newVersionTitle,
                         info.newVersionInfo,
                         info.newVersionURL,
@@ -281,6 +291,7 @@ object UpdateHelper {
                             showUpdateDialog(
                                 activity,
                                 info.newVersionName,
+                                info.newVersionCode.toLong(),
                                 info.newVersionTitle,
                                 info.newVersionInfo,
                                 info.newVersionURL,
@@ -302,6 +313,7 @@ object UpdateHelper {
                     showUpdateDialog(
                         activity,
                         info.newVersionName,
+                        info.newVersionCode.toLong(),
                         info.newVersionTitle,
                         info.newVersionInfo,
                         info.newVersionURL,
@@ -325,12 +337,13 @@ object UpdateHelper {
     fun showUpdate(
         activity: Activity,
         versionName: String,
+        versionCode: Long,
         title: String,
         desc: String,
         url: String,
         md5: String,
         type: Int,
     ) {
-        showUpdateDialog(activity, versionName, title, desc, url, md5, type)
+        showUpdateDialog(activity, versionName, versionCode, title, desc, url, md5, type)
     }
 }

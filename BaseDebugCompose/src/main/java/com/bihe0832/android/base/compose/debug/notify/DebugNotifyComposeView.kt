@@ -33,7 +33,7 @@ internal fun testRefreshNotify(context: Context) {
     val time = System.currentTimeMillis()
     content = "这是一个测试 <font color ='#38ADFF'><b>测试消息</b></font>"
     TaskManager.getInstance().addTask(object : BaseTask() {
-        override fun run() {
+        override fun doTask() {
             process++
             content += content
             RefreshNotifyManager.sendDownloadNotify(
@@ -81,7 +81,7 @@ internal fun testNotifyProcess(context: Context) {
     )
 
     TaskManager.getInstance().addTask(object : BaseTask() {
-        override fun run() {
+        override fun doTask() {
             DownloadNotifyManager.sendDownloadNotify(
                 context,
                 "https://blog.bihe0832.com/public/img/head.jpg",

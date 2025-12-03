@@ -74,7 +74,6 @@ fun startDownload(context: Context, type: Int) {
 //                        InstallUtils.installAPP(context, photoURI, File(filePath))
                     InstallUtils.installAPP(context,
                         filePath,
-                        "com.bihe0832.puzzle",
                         object : InstallListener {
                             override fun onUnCompress() {
                                 ZLog.d(LOG_TAG, "onUnCompress")
@@ -194,6 +193,8 @@ fun testDownloadProcess(activity: Activity) {
         false,
         md5,
         "",
+        "",
+        0,
         canCancel = true,
         forceDownloadNew = false,
         useMobile = true,

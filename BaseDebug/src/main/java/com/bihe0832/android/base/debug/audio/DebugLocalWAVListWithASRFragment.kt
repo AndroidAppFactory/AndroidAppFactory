@@ -53,7 +53,7 @@ class DebugLocalWAVListWithASRFragment : DebugWAVListWithProcessFragment() {
                 return 0
             }
 
-            override fun run() {
+            override fun doTask() {
                 if (mAudioDataFactoryWithASR.isReady()) {
                     TaskManager.getInstance().removeTask(name)
                 }

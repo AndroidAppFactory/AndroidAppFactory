@@ -105,7 +105,7 @@ internal fun testTask() {
                     return false
                 }
 
-                override fun run() {
+                override fun doTask() {
                     ZLog.d("TaskManager", "TASK_NAME $i ${this.hashCode()}")
                 }
 

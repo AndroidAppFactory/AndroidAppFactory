@@ -424,7 +424,7 @@ class DebugDeviceFragment : DebugEnvFragment() {
                 return 0
             }
 
-            override fun run() {
+            override fun doTask() {
                 try {
                     DebugLogTips.show(getSimplaInfo())
                 } catch (e: java.lang.Exception) {

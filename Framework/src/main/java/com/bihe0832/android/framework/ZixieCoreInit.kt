@@ -3,7 +3,6 @@ package com.bihe0832.android.framework
 
 import android.app.Application
 import android.content.Context
-import android.os.Environment
 import android.util.Log
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
@@ -16,7 +15,6 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import com.bihe0832.android.lib.utils.time.DateUtil
-import java.io.File
 import java.util.Locale
 
 
@@ -83,17 +81,18 @@ object ZixieCoreInit {
     }
 
     private fun initLog(application: Application, openLog: Boolean) {
-        val filePath = if (FileUtils.checkStoragePermissions(ZixieContext.applicationContext)) {
-            "${Environment.getExternalStorageDirectory().absolutePath}${File.separator}zixie${File.separator}"
-        } else {
-            ZixieContext.getZixieFolder()
-        }
-        val logFileEnabled = FileUtils.checkFileExist(filePath + "logFileEnabled")
+
+        val logFileEnabled = enableLogByFile()
         val logEnable = openLog || logFileEnabled
-        Log.e(TAG, "log enable: $filePath $openLog  $logFileEnabled $logEnable ")
+        Log.e(TAG, "log enable: $openLog  $logFileEnabled $logEnable ")
         ZLog.setDebug(logEnable)
         ZLog.setLogLineLength(1500)
         LoggerFile.init(application, logEnable)
+    }
+
+    fun enableLogByFile(): Boolean {
+        Log.e(TAG, "log enable: isFileEnabled, $${ZixieContext.getZixieFolder()} ")
+        return FileUtils.checkFileExist("${ZixieContext.getZixieFolder()}logFileEnabled")
     }
 
     private fun initScreenWidthAndHeight() {
