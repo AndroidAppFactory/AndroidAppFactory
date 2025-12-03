@@ -259,6 +259,8 @@ object DownloadTools {
         isFilePath: Boolean,
         md5: String,
         sha256: String,
+        packageName: String,
+        versionCode: Long,
         forceDownloadNew: Boolean,
         useMobile: Boolean,
         actionKey: String,
@@ -285,6 +287,8 @@ object DownloadTools {
                     path
                 }
             }
+            this.packageName = packageName
+            this.versionCode = versionCode
             this.contentMD5 = md5
             this.contentSHA256 = sha256
             this.setShouldForceReDownload(forceDownloadNew)

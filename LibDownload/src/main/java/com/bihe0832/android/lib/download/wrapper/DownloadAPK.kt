@@ -34,7 +34,11 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
  */
 object DownloadAPK {
 
-    fun showInstallPermissionDialog(activity: Activity, title: String, listener: OnDialogListener?) {
+    fun showInstallPermissionDialog(
+        activity: Activity,
+        title: String,
+        listener: OnDialogListener?
+    ) {
         DialogUtils.showConfirmDialog(
             activity,
             title,
@@ -64,7 +68,7 @@ object DownloadAPK {
 
     //直接下载，不显示进度，4G下载弹框，下载完成自动安装且弹框
     fun startDownloadWithCheckAndProcess(activity: Activity, url: String) {
-        startDownloadWithCheck(activity, url, "", "")
+        startDownloadWithCheck(activity, url, "")
     }
 
 
@@ -125,7 +129,7 @@ object DownloadAPK {
                 }
 
             },
-            SimpleInstallListener(activity, packageName, listener)
+            SimpleInstallListener(activity, listener)
         )
     }
 
@@ -137,6 +141,7 @@ object DownloadAPK {
         url: String,
         md5: String,
         packageName: String,
+        versionCode: Long,
         canCancel: Boolean,
         downloadMobile: Boolean,
         listener: OnDialogListener?,
@@ -144,10 +149,10 @@ object DownloadAPK {
         startDownloadWithProcess(
             activity,
             title, msg,
-            url, emptyMap(), md5,
+            url, emptyMap(), md5, packageName, versionCode,
             canCancel, downloadMobile,
             listener,
-            SimpleInstallListener(activity, packageName, listener)
+            SimpleInstallListener(activity, listener)
         )
     }
 
@@ -158,6 +163,8 @@ object DownloadAPK {
         url: String,
         header: Map<String, String>,
         md5: String,
+        packageName: String,
+        versionCode: Long,
         canCancel: Boolean,
         downloadMobile: Boolean,
         listener: OnDialogListener?,
@@ -173,6 +180,8 @@ object DownloadAPK {
             false,
             md5,
             "",
+            packageName,
+            versionCode,
             canCancel,
             forceDownloadNew = false,
             downloadMobile,
@@ -201,7 +210,7 @@ object DownloadAPK {
     }
 
     //直接下载，显示进度，4G下载弹框，强制下载，下载完成自动安装且弹框
-    fun startDownloadWithCheck(activity: Activity, url: String, md5: String, packageName: String) {
+    fun startDownloadWithCheck(activity: Activity, url: String, md5: String) {
         DownloadFile.downloadWithCheckAndProcess(
             activity,
             "", "",
@@ -211,7 +220,11 @@ object DownloadAPK {
             listener = object : OnDialogListener {
                 override fun onPositiveClick() {
                     if (!InstallUtils.hasInstallAPPPermission(activity, false, false)) {
-                        showInstallPermissionDialog(activity, activity.getString(R.string.dialog_title), null)
+                        showInstallPermissionDialog(
+                            activity,
+                            activity.getString(R.string.dialog_title),
+                            null
+                        )
                     }
                 }
 
@@ -229,7 +242,7 @@ object DownloadAPK {
 
                 override fun onComplete(filePath: String, item: DownloadItem): String {
                     ThreadManager.getInstance().runOnUIThread {
-                        InstallUtils.installAPP(activity, filePath, packageName)
+                        InstallUtils.installAPP(activity, filePath)
                     }
                     return filePath
                 }
@@ -242,14 +255,13 @@ object DownloadAPK {
 
     private class SimpleAPKDownloadListener(
         private val context: Context,
-        private val packageName: String,
     ) : SimpleDownloadListener() {
         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
         }
 
         override fun onComplete(filePath: String, item: DownloadItem): String {
             ThreadManager.getInstance().runOnUIThread {
-                InstallUtils.installAPP(context, filePath, packageName)
+                InstallUtils.installAPP(context, filePath)
             }
             return filePath
         }
@@ -260,43 +272,59 @@ object DownloadAPK {
     }
 
     //直接下载，不显示进度，4G下载不弹框直接下载，下载完成自动安装
-    fun forceDownload(context: Context, url: String, md5: String, packageName: String) {
+    fun forceDownload(
+        context: Context,
+        url: String,
+        md5: String,
+        packageName: String,
+        versionCode: Long
+    ) {
         DownloadTools.startDownload(
-            context,
-            "",
-            "",
-            url,
-            emptyMap(),
-            "",
-            false,
-            md5,
+            context = context,
+            title = "",
+            msg = "",
+            url = url,
+            header = emptyMap(),
+            path = "",
+            isFilePath = false,
+            md5 = md5,
             sha256 = "",
+            packageName = packageName,
+            versionCode = versionCode,
             forceDownloadNew = true,
             useMobile = true,
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
             forceDownload = false,
             needRecord = false,
-            downloadListener = SimpleAPKDownloadListener(context, packageName)
+            downloadListener = SimpleAPKDownloadListener(context)
         )
     }
 
-    fun download(context: Context, url: String, md5: String, packageName: String) {
+    fun download(
+        context: Context,
+        url: String,
+        md5: String,
+        packageName: String,
+        versionCode: Long
+    ) {
         DownloadTools.startDownload(
-            context,
-            "",
-            "",
-            url,
-            emptyMap(),
-            "",
-            false,
-            md5,
+            context = context,
+            title = "",
+            msg = "",
+            url = url,
+            header = emptyMap(),
+            path = "",
+            isFilePath = false,
+            md5 = md5,
             sha256 = "",
+            packageName = packageName,
+            versionCode = versionCode,
             forceDownloadNew = false,
             useMobile = true,
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
             forceDownload = false,
             needRecord = false,
-            downloadListener = SimpleAPKDownloadListener(context, packageName)
+            downloadListener = SimpleAPKDownloadListener(context)
         )
 
     }
