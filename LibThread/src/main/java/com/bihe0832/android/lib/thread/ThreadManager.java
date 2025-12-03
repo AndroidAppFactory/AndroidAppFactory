@@ -5,12 +5,22 @@ import android.os.HandlerThread;
 import android.os.Looper;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 线程管理器 - 提供统一的线程调度和管理能力
+ * 
+ * 功能说明：
+ * 1. 提供不同优先级的 HandlerThread（主线程、普通、高优先级、低优先级）
+ * 2. 提供有界线程池用于执行临时任务，避免线程爆炸
+ * 3. 线程池配置：核心线程5个，最大20个，队列容量100，空闲超时60秒
+ * 
  * Created by zixie on 16/6/2.
+ * Modified by AI Assistant on 2025/12/03 - 优化线程池为有界线程池
  */
 public class ThreadManager {
 
@@ -78,7 +88,16 @@ public class ThreadManager {
     public void start(Runnable runnable) {
         if (null == executor) {
             try {
-                executor = Executors.newCachedThreadPool(new CommonThreadFactory());
+                // 使用有界线程池：核心线程5个，最大20个，队列100个任务，空闲超时60秒
+                // 这样可以避免线程爆炸，同时保证足够的并发能力
+                executor = new ThreadPoolExecutor(
+                    5,                              // 核心线程数
+                    30,                             // 最大线程数
+                    60L,                            // 空闲线程存活时间
+                    TimeUnit.SECONDS,               // 时间单位
+                    new LinkedBlockingQueue<Runnable>(100),  // 任务队列，容量100
+                    new CommonThreadFactory()       // 线程工厂
+                );
             } catch (Throwable t) {
                 t.printStackTrace();
             }
