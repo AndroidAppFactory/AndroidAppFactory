@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "8.0.1",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -82,12 +82,12 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibThread"           : [
-                "version"            : "5.1.7",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-thread",
                 "apidependenciesList": []
         ],
         "LibEncrypt"          : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-encrypt",
                 "apidependenciesList": [
                         "LibLog", "LibCommonUtils", "LibOS", "LibThread"
@@ -116,14 +116,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpCommon"       : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-http-common",
                 "apidependenciesList": [
                         "LibThread", "LibLog", "LibOS", "LibFile", "LibCommonUtils", "LibRequest",
                 ]
         ],
         "LibHttpAdvanced"     : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-http-advanced",
                 "apidependenciesList": [
                         "LibHttpCommon", "LibGson", "LibAAF"
@@ -137,7 +137,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDeviceNetwork"    : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-device-network",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -148,7 +148,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibTimer"            : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-timer",
                 "apidependenciesList": [
                         "LibThread", "LibLog", "LibCommonUtils"
@@ -162,7 +162,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibWorker"           : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-worker-task",
                 "apidependenciesList": [
                         "LibLog", "LibConfig", "LibOS", "LibForegroundService", project.androidsupport.worker
@@ -178,14 +178,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAPK"              : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-utils-apk",
                 "apidependenciesList": [
                         "LibToast", "LibLog", "LibAAF", "LibEncrypt", "LibDeviceNetwork"
                 ]
         ],
         "LibFile"             : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-file",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -194,14 +194,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibZip"              : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-zip",
                 "apidependenciesList": [
                         "LibLog", "LibThread", "LibFile"
                 ]
         ],
         "LibDownload"         : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -211,7 +211,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibInstall"          : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-install",
                 "apidependenciesList": [
                         "LibFile", "LibZip", "LibAPK","LibTimer"
@@ -225,14 +225,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibSuperAPP"         : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-super-app",
                 "apidependenciesList": [
                         "LibDialog", "LibAPK"
                 ]
         ],
         "LibDebug"            : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-debug",
                 "apidependenciesList": [
                         "LibDialog", "LibToast", "LibFloatview"
@@ -246,7 +246,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"    : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon", "LibGson",
@@ -300,7 +300,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibImageMetadata"    : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-image-meta",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibLog", "LibFile", "LibMedia", "LibMetadataExtractor"
@@ -314,7 +314,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibQRCode"           : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-qrcode",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -324,14 +324,14 @@ ext.libmoduleInfo = [
         ],
 
         "LibToast"            : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-toast",
                 "apidependenciesList": [
                         "LibThread", "LibText", "LibAAFResource"
                 ]
         ],
         "LibMedia"            : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-media",
                 "apidependenciesList": [
                         project.glide.glide,
@@ -341,7 +341,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDialog"           : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-dialog",
                 "apidependenciesList": [
                         project.androidsupport.constraintlayout,
@@ -350,7 +350,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibNotification"     : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-notification",
                 "apidependenciesList": [
                         "LibMedia", "LibAPK", "LibCommonUtils"
@@ -364,7 +364,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibViewExt"          : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-view-ext",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -379,14 +379,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibJsBridge"         : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-jsbridge",
                 "apidependenciesList": [
                         "LibLog", "LibThread", "LibToast", "LibAPK"
                 ]
         ],
         "LibLifecycle"        : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         project.androidsupport.lifecycle,
@@ -395,7 +395,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPermission"       : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-permission",
                 "apidependenciesList": [
                         "LibConfig", "LibDialog", "LibAPK", "LibDeviceNetwork",
@@ -404,7 +404,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibImmersive"        : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-immersive",
                 "apidependenciesList": [
                         "LibDeviceNetwork", "LibMedia", "LibAAFResource", "LibColor",
@@ -412,7 +412,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFileSelect"       : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-file-select",
                 "apidependenciesList": [
                         "LibFragmentation", "LibImmersive", "LibPermission", "LibTouchRegion"
@@ -420,7 +420,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibFloatview"        : [
-                "version"                : "8.0.0",
+                "version"                : "8.0.2",
                 "artifactId"             : "lib-float-view",
                 "apidependenciesList"    : [
                         project.androidsupport.constraintlayout,
@@ -433,7 +433,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibTextView"         : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-textview",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -442,14 +442,14 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAceEditor"        : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-ace-editor",
                 "apidependenciesList": [
                         "LibFileSelect", "LibOS", "LibDialog", "LibText"
                 ]
         ],
         "LibCustomView"       : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-custom-view",
                 "apidependenciesList": [
                         project.androidsupport.appcompat,
@@ -458,7 +458,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibTheme"            : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-theme",
                 "apidependenciesList": [
                         project.androidsupport.androidxcore,
@@ -466,7 +466,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibColor"            : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-color",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
@@ -474,7 +474,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"            : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
@@ -482,7 +482,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibCameraScan"       : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-camera-scan",
                 "apidependenciesList": [
                         project.androidsupport.annotation,
@@ -495,7 +495,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibForegroundService": [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-foreground-service",
                 "apidependenciesList": [
                         "LibNotification", "LibThread", "LibLog", "LibAAFResource"
@@ -510,7 +510,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAppIcon"   : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.2",
                 "artifactId"         : "lib-app-icon",
                 "apidependenciesList": [
                         "LibLifecycle"

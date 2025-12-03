@@ -43,7 +43,7 @@ internal val URL_CONFIG = "https://cdn.bihe0832.com/app/update/get_apk.json"
 internal val MD5_FILE = "4ef99863858b0ee17177f773580e4f2a"
 internal val MD5_CONFIG = "E1E127FE9F951F0A71FD4AA695449305"
 
-fun startDownload(context: Context, type: Int) {
+fun startDownload(context: Context, type: Int, url: String, md5: String) {
     DownloadItem().apply {
         setNotificationVisibility(true)
         downloadTitle = ThemeResourcesManager.getString(R.string.app_name)
@@ -53,8 +53,8 @@ fun startDownload(context: Context, type: Int) {
         } else {
             "https://cdn.bihe0832.com/images/head.jpg"
         }
-        downloadURL = "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk"
-        contentMD5 = "E4DFE6298B5C727CD7E6134173BEE6D4"
+        downloadURL = url
+        contentMD5 = md5
 
 //            downloadURL = if (type == INSTALL_BY_CUSTOMER) {
 //                "https://imtt.dd.qq.com/sjy.10001/16891/apk/E2F59135FAE358442D2137E446AB59DE.apk"

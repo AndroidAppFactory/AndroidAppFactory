@@ -2,14 +2,14 @@ apply from: rootDir.toString() + '/config.gradle'
 
 ext.kitmoduleInfo = [
     "ServicesWrapper"  : [
-        "version"            : "6.16.11",
+        "version"            : "8.0.2",
         "artifactId"         : "services-wrapper",
         "apidependenciesList": [
             "ServicesGooglePay", "ServicesGoogleAD", "ServicesGoogle"
         ]
     ],
     "ServicesGooglePay": [
-        "version"            : "6.16.11",
+        "version"            : "8.0.2",
         "artifactId"         : "services-google-pay",
         "apidependenciesList": [
             "LibThread",

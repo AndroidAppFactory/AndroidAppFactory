@@ -11,7 +11,6 @@ import com.bihe0832.android.lib.download.wrapper.DownloadRangeUtils
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.install.InstallUtils
-import com.bihe0832.android.lib.utils.MathUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 @Composable
@@ -36,8 +35,22 @@ fun DebugDownloadView() {
         DebugItem("卸载应用") {
             InstallUtils.uninstallAPP(it, "com.google.android.tts")
         }
-        DebugItem("自定义Provider安装") { startDownload(it, INSTALL_BY_CUSTOMER) }
-        DebugItem("默认Provider安装") { startDownload(it, INSTALL_BY_DEFAULT) }
+        DebugItem("自定义Provider安装") {
+            startDownload(
+                it,
+                INSTALL_BY_CUSTOMER,
+                "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk",
+                "E4DFE6298B5C727CD7E6134173BEE6D4"
+            )
+        }
+        DebugItem("默认Provider安装") {
+            startDownload(
+                it,
+                INSTALL_BY_DEFAULT,
+                "https://android.bihe0832.com/app/release/ZPUZZLE_official.apk",
+                "E4DFE6298B5C727CD7E6134173BEE6D4"
+            )
+        }
         DebugItem("通过ZIP安装OBB") { testInstallOOBByZip(it) }
         DebugItem("通过ZIP安装超大OBB") { testInstallOOBByBigZip(it) }
         DebugItem("通过文件夹安装OBB") { testInstallOOBByFolder(it) }
@@ -52,11 +65,11 @@ fun DebugDownloadView() {
 
 internal fun testDownloadRange(context: Context, num: Int) {
 //    for (i in 0 until num) {
-        val url = URL_YYB_WZ
-        val start = 0 * 50000000L
-        startDownload(
-            context, url, start, start.toInt(), ""
-        )
+    val url = URL_YYB_WZ
+    val start = 0 * 50000000L
+    startDownload(
+        context, url, start, start.toInt(), ""
+    )
 //    }
 }
 
