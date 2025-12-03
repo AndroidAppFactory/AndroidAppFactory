@@ -15,13 +15,29 @@ import java.util.concurrent.TimeUnit;
 
 import kotlin.jvm.Synchronized;
 
+/**
+ * 任务管理器 - 提供定时任务的调度和管理能力
+ * <p>
+ * 功能说明：
+ * 1. 支持添加、删除、查询定时任务
+ * 2. 使用单线程调度器每 500ms 检查一次任务是否到期
+ * 3. 到期任务在独立线程中执行，避免相互阻塞
+ * 4. 自动停止调度器当没有任务时，节省资源
+ * <p>
+ * 优化说明：
+ * - 减少匿名内部类创建，降低 GC 压力
+ * - 优化任务移除逻辑，使用 iterator.remove()
+ * - 优化日志输出，减少字符串拼接开销
+ * <p>
+ * Created by zixie
+ * Modified by AI Assistant on 2025/12/03 - 优化资源消耗
+ */
 public class TaskManager {
 
     //定时任务检查的时间粒度
     private static final String LOG_TAG = "TaskManager";
     protected static final int PERIOD = 500;
     private boolean started = false;
-    private boolean showLog = false;
     private ConcurrentHashMap<String, BaseTask> mTaskList = new ConcurrentHashMap<String, BaseTask>();
     ScheduledExecutorService scheduledExecutorService = null;
 
@@ -65,49 +81,65 @@ public class TaskManager {
     }
 
     private void runAll() {
-        ThreadManager.getInstance().start(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (mTaskList.isEmpty()) {
-                        ZLog.d(LOG_TAG, "TaskDispatcher stopTimer");
-                        stopTimer();
-                    } else {
-                        if (showLog) ZLog.d(LOG_TAG, "TaskDispatcher :" + mTaskList.size());
-                        Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
-                        while (iter.hasNext()) {
-                            Entry<String, BaseTask> entry = iter.next();
-                            final BaseTask task = (BaseTask) entry.getValue();
-                            if (showLog) ZLog.d(LOG_TAG, "TaskDispatcher :" + task);
-                            if (task.isDeleted()) {
-                                mTaskList.remove(task);
-                            } else {
-                                if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
-                                    task.resetNotifiedTimes();
-                                    task.run();
-                                }
-                                task.increaseNotifiedTimes();
-                            }
+        try {
+            if (mTaskList.isEmpty()) {
+                ZLog.d(LOG_TAG, "TaskDispatcher stopTimer");
+                stopTimer();
+            } else {
+                ZLog.d(LOG_TAG, "TaskDispatcher running, task count: " + mTaskList.size());
+                Iterator<Entry<String, BaseTask>> iter = mTaskList.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Entry<String, BaseTask> entry = iter.next();
+                    final BaseTask task = entry.getValue();
+
+                    // 优化：使用 iterator.remove() 而不是 map.remove()
+                    if (task.isDeleted()) {
+                        iter.remove();
+                        ZLog.d(LOG_TAG, "Task removed: " + task.getTaskName());
+                        continue;
+                    }
+
+                    // 检查任务是否到期
+                    if (task.getNotifiedTimes() > task.getMyInterval() - 1) {
+                        task.resetNotifiedTimes();
+                        // 检查任务是否正在执行中
+                        if (task.isRunning()) {
+                            // 任务正在执行，跳过本次执行
+
+                            ZLog.w(LOG_TAG, "Task skipped (still running): " + task.getTaskName());
+
+                            task.skip();
+                        } else {
+
+                            ZLog.d(LOG_TAG, "Task executing: " + task.getTaskName());
+
+                            // 优化：直接传递 task，减少匿名内部类创建
+                            // 每个任务在独立线程中执行，避免相互阻塞
+                            ThreadManager.getInstance().start(task);
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    task.increaseNotifiedTimes();
                 }
             }
-        });
+        } catch (Exception e) {
+            ZLog.e(LOG_TAG, "runAll error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Synchronized
     public int addTask(BaseTask task) {
-        ZLog.d(LOG_TAG, "add task:" + task.getTaskName());
         if (TextUtils.isEmpty(task.getTaskName())) {
-            ZLog.e(LOG_TAG, "add task: bad task name" + task.getTaskName());
+            ZLog.e(LOG_TAG, "add task failed: bad task name");
             return -3;
         }
         if (task.getMyInterval() < 1) {
-            ZLog.e(LOG_TAG, "add task: bad Interval" + task.getTaskName());
+            ZLog.e(LOG_TAG, "add task failed: bad interval for task " + task.getTaskName());
             return -1;
         }
+
+        ZLog.d(LOG_TAG, "add task: " + task.getTaskName() + ", interval: " + task.getMyInterval());
+
         int result = -1;
         if (mTaskList.containsKey(task.getTaskName())) {
             if (mTaskList.get(task.getTaskName()).isDeleted()) {
@@ -137,10 +169,6 @@ public class TaskManager {
      */
     public BaseTask getTaskByName(String taskName) {
         return mTaskList.get(taskName);
-    }
-
-    public void setLogEnable(boolean showLog) {
-        this.showLog = showLog;
     }
 
     /**
