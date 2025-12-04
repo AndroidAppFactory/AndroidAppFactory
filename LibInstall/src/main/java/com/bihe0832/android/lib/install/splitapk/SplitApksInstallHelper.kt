@@ -2,6 +2,7 @@ package com.bihe0832.android.lib.install.splitapk
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -9,286 +10,489 @@ import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.SessionParams
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.RemoteException
-import com.bihe0832.android.lib.file.mimetype.FileMimeTypes
 import com.bihe0832.android.lib.install.InstallErrorCode
 import com.bihe0832.android.lib.install.InstallListener
+import com.bihe0832.android.lib.install.InstallUtils.TAG
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Split APKs 安装助手
+ *
+ * 使用 PackageInstaller API 安装 APK，支持：
+ * - 单个 APK 安装
+ * - Split APKs（拆分 APK）安装
+ *
+ * 适配说明：
+ * - Android 12+ (API 31+): PendingIntent 需要 FLAG_MUTABLE
+ * - Android 13+ (API 33+): 广播接收器需要 RECEIVER_NOT_EXPORTED
+ * - Android 14+ (API 34+): mutable PendingIntent 需要显式 Intent
+ * - Android 15+ (API 35+): 被安装的 APK targetSdkVersion >= 24
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-01-09
+ * Refactored on 2025-01-07
+ */
 @SuppressLint("StaticFieldLeak")
 object SplitApksInstallHelper {
-    private const val TAG = "SplitApksInstallHelper:::"
-    private var mBroadcastReceiver: SplitApksInstallBroadcastReceiver? = null
-    private var mPackageInstaller: PackageInstaller? = null
-    private var mInstallListenerMap = ConcurrentHashMap<String, InstallListener>()
-    private var mContext: Context? = null
-    private var hasInit = false
-    private var hasUnregister = false
 
+    // 安装状态广播 Action 后缀
+    private const val ACTION_INSTALL_STATUS_SUFFIX = ".action.SPLIT_APKS_INSTALL_STATUS"
+
+    // 安装监听器映射表，key 为 sessionId
+    private val installListenerMap = ConcurrentHashMap<Int, InstallListenerWrapper>()
+
+    // 广播接收器
+    private var installReceiver: BroadcastReceiver? = null
+
+    // 应用上下文
+    private var appContext: Context? = null
+
+    // 是否已初始化
+    private var isInitialized = false
+
+    // 广播接收器是否已注销
+    private var isReceiverUnregistered = true
+
+    /**
+     * 获取安装状态广播 Action
+     */
+    private fun getInstallStatusAction(context: Context): String {
+        return context.packageName + ACTION_INSTALL_STATUS_SUFFIX
+    }
+
+    /**
+     * 初始化
+     */
     @Synchronized
     private fun init(context: Context) {
-        if (hasInit) {
-            if (hasUnregister) {
-                mBroadcastReceiver?.let {
-                    try {
-                        context.registerReceiver(it, IntentFilter(it.getIntentFilterFlag(context)))
-                        hasUnregister = false
-                    } catch (e: java.lang.Exception) {
-                        ZLog.e("registerReceiver failed:${e.message}")
-                    }
-                }
-            }
+        if (isInitialized && !isReceiverUnregistered) {
             return
         }
-        mContext = context.applicationContext
-        hasInit = true
-        mPackageInstaller = context.packageManager.packageInstaller
-        mBroadcastReceiver = SplitApksInstallBroadcastReceiver().apply {
-            setEventObserver(object :
-                SplitApksInstallBroadcastReceiver.EventObserver {
-                override fun onConfirmationPending(sessionId: String?, packageName: String?) {
-                    ZLog.e("onConfirmationPending")
-                    mInstallListenerMap.get(sessionId)?.onInstallStart()
-                }
 
-                override fun onInstallationSucceeded(sessionId: String?, packageName: String?) {
-                    try {
-                        mInstallListenerMap.get(sessionId)?.onInstallSuccess()
-                        mInstallListenerMap.remove(sessionId)
-                        checkReceiver(context)
-                    } catch (e: java.lang.Exception) {
-                        ZLog.e("onInstallationSucceeded unregisterReceiver failed:${e.message}")
-                    }
-                }
+        appContext = context.applicationContext
+        isInitialized = true
 
-                override fun onInstallationFailed(sessionId: String?, packageName: String?) {
-                    try {
-                        mInstallListenerMap.get(sessionId)
-                            ?.onInstallFailed(InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION)
-                        mInstallListenerMap.remove(sessionId)
-                        checkReceiver(context)
-                    } catch (e: java.lang.Exception) {
-                        ZLog.e("onInstallationFailed unregisterReceiver failed:${e.message}")
-                    }
-                }
-            })
+        // 创建广播接收器
+        if (installReceiver == null) {
+            installReceiver = createInstallReceiver()
         }
-        mBroadcastReceiver?.let {
-            try {
-                context.registerReceiver(it, IntentFilter(it.getIntentFilterFlag(context)))
-                hasUnregister = false
-            } catch (e: java.lang.Exception) {
-                ZLog.e("registerReceiver failed:${e.message}")
+
+        // 注册广播接收器
+        registerReceiver(context)
+    }
+
+    /**
+     * 创建安装结果广播接收器
+     */
+    private fun createInstallReceiver(): BroadcastReceiver {
+        return object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (context == null || intent == null) return
+
+                val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)
+                val sessionId = intent.getIntExtra(PackageInstaller.EXTRA_SESSION_ID, -1)
+                val message = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE) ?: ""
+                val packageName = intent.getStringExtra(PackageInstaller.EXTRA_PACKAGE_NAME) ?: ""
+
+                ZLog.d(TAG, "onReceive: status=$status, sessionId=$sessionId, package=$packageName, message=$message")
+
+                when (status) {
+                    PackageInstaller.STATUS_PENDING_USER_ACTION -> {
+                        // 需要用户确认，启动确认界面
+                        handlePendingUserAction(context, intent, sessionId)
+                    }
+
+                    PackageInstaller.STATUS_SUCCESS -> {
+                        ZLog.d(TAG, "Installation succeeded for session $sessionId")
+                        notifySuccess(sessionId)
+                    }
+
+                    PackageInstaller.STATUS_FAILURE,
+                    PackageInstaller.STATUS_FAILURE_ABORTED,
+                    PackageInstaller.STATUS_FAILURE_BLOCKED,
+                    PackageInstaller.STATUS_FAILURE_CONFLICT,
+                    PackageInstaller.STATUS_FAILURE_INCOMPATIBLE,
+                    PackageInstaller.STATUS_FAILURE_INVALID,
+                    PackageInstaller.STATUS_FAILURE_STORAGE -> {
+                        ZLog.e(TAG, "Installation failed for session $sessionId: ${getErrorMessage(status, message)}")
+                        notifyFailed(sessionId, status, message)
+                    }
+
+                    else -> {
+                        ZLog.e(TAG, "Unknown status $status for session $sessionId")
+                        notifyFailed(sessionId, status, message)
+                    }
+                }
             }
         }
     }
 
-    fun checkReceiver(context: Context) {
-        if (mInstallListenerMap.isEmpty()) {
-            context.unregisterReceiver(mBroadcastReceiver)
-            hasUnregister = true
+    /**
+     * 处理需要用户确认的情况
+     */
+    private fun handlePendingUserAction(context: Context, intent: Intent, sessionId: Int) {
+        ZLog.d(TAG, "Requesting user confirmation for session $sessionId")
+
+        val confirmIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(Intent.EXTRA_INTENT, Intent::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(Intent.EXTRA_INTENT)
+        }
+
+        if (confirmIntent != null) {
+            try {
+                confirmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(confirmIntent)
+                installListenerMap[sessionId]?.listener?.onInstallStart()
+            } catch (e: Exception) {
+                ZLog.e(TAG, "Failed to start confirmation activity: ${e.message}")
+                notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, e.message ?: "")
+            }
+        } else {
+            ZLog.e(TAG, "Confirmation intent is null")
+            notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, "Confirmation intent is null")
         }
     }
 
+    /**
+     * 注册广播接收器
+     */
+    private fun registerReceiver(context: Context) {
+        if (!isReceiverUnregistered) return
+
+        installReceiver?.let { receiver ->
+            try {
+                val filter = IntentFilter(getInstallStatusAction(context))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    context.applicationContext.registerReceiver(
+                        receiver,
+                        filter,
+                        Context.RECEIVER_NOT_EXPORTED
+                    )
+                } else {
+                    context.applicationContext.registerReceiver(receiver, filter)
+                }
+                isReceiverUnregistered = false
+                ZLog.d(TAG, "Receiver registered")
+            } catch (e: Exception) {
+                ZLog.e(TAG, "Failed to register receiver: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * 注销广播接收器
+     */
+    private fun unregisterReceiver(context: Context) {
+        if (isReceiverUnregistered) return
+
+        installReceiver?.let { receiver ->
+            try {
+                context.applicationContext.unregisterReceiver(receiver)
+                isReceiverUnregistered = true
+                ZLog.d(TAG, "Receiver unregistered")
+            } catch (e: Exception) {
+                ZLog.e(TAG, "Failed to unregister receiver: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * 检查是否需要注销广播接收器
+     */
+    private fun checkAndUnregisterReceiver(context: Context) {
+        if (installListenerMap.isEmpty()) {
+            unregisterReceiver(context)
+        }
+    }
+
+    /**
+     * 通知安装成功
+     */
+    private fun notifySuccess(sessionId: Int) {
+        ThreadManager.getInstance().runOnUIThread {
+            installListenerMap[sessionId]?.listener?.onInstallSuccess()
+            installListenerMap.remove(sessionId)
+            appContext?.let { checkAndUnregisterReceiver(it) }
+        }
+    }
+
+    /**
+     * 通知安装失败
+     */
+    private fun notifyFailed(sessionId: Int, errorCode: Int, message: String) {
+        ZLog.e(TAG, "Install failed: errorCode=$errorCode, message=$message")
+        ThreadManager.getInstance().runOnUIThread {
+            val wrapper = installListenerMap[sessionId]
+            wrapper?.listener?.onInstallFailed(
+                when (errorCode) {
+                    PackageInstaller.STATUS_FAILURE_ABORTED -> InstallErrorCode.PERMISSION_DENY
+                    PackageInstaller.STATUS_FAILURE_BLOCKED -> InstallErrorCode.PERMISSION_DENY
+                    PackageInstaller.STATUS_FAILURE_INVALID -> InstallErrorCode.BAD_APK_TYPE
+                    else -> InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION
+                }
+            )
+            installListenerMap.remove(sessionId)
+            appContext?.let { checkAndUnregisterReceiver(it) }
+        }
+    }
+
+    /**
+     * 获取错误信息
+     */
+    private fun getErrorMessage(status: Int, message: String): String {
+        return when (status) {
+            PackageInstaller.STATUS_FAILURE -> "Installation failed: $message"
+            PackageInstaller.STATUS_FAILURE_ABORTED -> "Installation aborted"
+            PackageInstaller.STATUS_FAILURE_BLOCKED -> "Installation blocked"
+            PackageInstaller.STATUS_FAILURE_CONFLICT -> "Installation conflict"
+            PackageInstaller.STATUS_FAILURE_INCOMPATIBLE -> "APK incompatible"
+            PackageInstaller.STATUS_FAILURE_INVALID -> "Invalid APK"
+            PackageInstaller.STATUS_FAILURE_STORAGE -> "Insufficient storage"
+            else -> "Unknown error: $status"
+        }
+    }
+
+    /**
+     * 安装 APK 文件列表
+     *
+     * @param context 上下文
+     * @param files APK 文件路径列表
+     * @param timeoutSeconds 超时时间（秒）
+     * @param listener 安装监听器
+     */
     fun installApk(
         context: Context,
-        files : ArrayList<String>?,
-        packageName: String,
+        files: ArrayList<String>?,
+        timeoutSeconds: Int,
         listener: InstallListener
     ) {
-        init(context)
+        ZLog.d(TAG, "installApk: files=${files?.size}, timeout=$timeoutSeconds")
+
         if (files.isNullOrEmpty()) {
+            ZLog.e(TAG, "Files list is null or empty")
             listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND)
-            checkReceiver(context)
-        } else {
-            listener.onInstallPrepare()
-            if (files.size > 0) {
-                installApk(context, files, packageName, listener)
-            } else {
-                listener.onInstallFailed(InstallErrorCode.BAD_APK_TYPE)
-                checkReceiver(context)
+            return
+        }
+
+        // 验证文件是否存在
+        val validFiles = files.filter { path ->
+            val file = File(path)
+            val exists = file.exists() && file.isFile
+            if (!exists) {
+                ZLog.e(TAG, "File not found or not a file: $path")
             }
+            exists
+        }
+
+        if (validFiles.isEmpty()) {
+            ZLog.e(TAG, "No valid files found")
+            listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND)
+            return
+        }
+
+        // 初始化
+        init(context)
+
+        // 通知准备安装
+        listener.onInstallPrepare()
+
+        // 在后台线程执行安装
+        ThreadManager.getInstance().start {
+            doInstall(context, ArrayList(validFiles), timeoutSeconds, listener)
         }
     }
 
-
-
-    private fun installApk(
+    /**
+     * 执行安装（在后台线程）
+     */
+    private fun doInstall(
         context: Context,
         files: ArrayList<String>,
-        packageName: String,
+        timeoutSeconds: Int,
         listener: InstallListener
-    ): Int {
-        val nameSizeMap = HashMap<String, Long>()
-        val filenameToPathMap = HashMap<String, String>()
-        var totalSize: Long = 0
-        var sessionId = 0
+    ) {
+        var sessionId = -1
+        var session: PackageInstaller.Session? = null
+
         try {
-            for (file in files) {
-                val listOfFile = File(file)
-                if (listOfFile.isFile) {
-                    ZLog.d("$TAG installApk: " + listOfFile.name)
-                    nameSizeMap[listOfFile.name] = listOfFile.length()
-                    filenameToPathMap[listOfFile.name] = file
-                    totalSize += listOfFile.length()
+            val packageInstaller = context.packageManager.packageInstaller
+
+            // 计算总大小
+            var totalSize = 0L
+            val fileInfoMap = HashMap<String, Long>()
+            for (filePath in files) {
+                val file = File(filePath)
+                fileInfoMap[file.name] = file.length()
+                totalSize += file.length()
+                ZLog.d(TAG, "File: ${file.name}, size: ${file.length()}")
+            }
+
+            // 创建安装会话参数
+            val sessionParams = createSessionParams(totalSize)
+
+            // 创建会话
+            sessionId = packageInstaller.createSession(sessionParams)
+            ZLog.d(TAG, "Created session: $sessionId")
+
+            // 保存监听器
+            installListenerMap[sessionId] = InstallListenerWrapper(listener, timeoutSeconds)
+
+            // 打开会话
+            session = packageInstaller.openSession(sessionId)
+
+            // 写入所有 APK 文件
+            for (filePath in files) {
+                val file = File(filePath)
+                val writeResult = writeApkToSession(session, file)
+                if (writeResult != PackageInstaller.STATUS_SUCCESS) {
+                    throw IOException("Failed to write APK: ${file.name}")
                 }
             }
+
+            // 提交会话
+            commitSession(context, session, sessionId)
+
+            ZLog.d(TAG, "Session committed: $sessionId")
+
+            // 设置超时
+            setupTimeout(context, sessionId, timeoutSeconds)
+
         } catch (e: Exception) {
+            ZLog.e(TAG, "Install error: ${e.message}")
             e.printStackTrace()
-            listener.onInstallFailed(InstallErrorCode.UNKNOWN_EXCEPTION)
-            checkReceiver(context)
-            return -1
-        }
-        val installParams = makeSessionParams(totalSize, packageName)
-        try {
-            sessionId = runInstallCreate(installParams)
-            for ((key, value) in nameSizeMap) {
-                runInstallWrite(value, sessionId, key, filenameToPathMap[key])
+
+            // 清理
+            session?.close()
+            if (sessionId >= 0) {
+                installListenerMap.remove(sessionId)
+                try {
+                    context.packageManager.packageInstaller.abandonSession(sessionId)
+                } catch (ex: Exception) {
+                    ZLog.e(TAG, "Failed to abandon session: ${ex.message}")
+                }
             }
-            doCommitSession(sessionId)
-            listener.onInstallStart()
-            mInstallListenerMap.put(sessionId.toString(), listener)
-            ThreadManager.getInstance().start({
-                installTimeOut(context, sessionId.toString())
-            }, 60)
-            ZLog.d("$TAG Success")
-        } catch (e: RemoteException) {
-            e.printStackTrace()
+
+            // 通知失败
+            ThreadManager.getInstance().runOnUIThread {
+                listener.onInstallFailed(InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION)
+            }
+
+            checkAndUnregisterReceiver(context)
         }
-        if (sessionId < 0) {
-            listener.onInstallFailed(InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION)
-            checkReceiver(context)
-        }
-        return sessionId
     }
 
-    private fun installTimeOut(context: Context, sessionId: String) {
-        mInstallListenerMap.get(sessionId)?.onInstallTimeOut()
-        mInstallListenerMap.remove(sessionId)
-        checkReceiver(context)
-    }
-
-    private fun runInstallCreate(sessionParams: SessionParams): Int {
-        if (sessionParams == null) {
-            ZLog.d(TAG, "doCreateSession: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!param is null")
-            return 0
-        }
-        val sessionId = doCreateSession(sessionParams)
-        ZLog.d("$TAG Success: created install session [$sessionId]")
-        return sessionId
-    }
-
-    private fun doCreateSession(params: SessionParams): Int {
-        var sessionId = 0
-        try {
-            sessionId = mPackageInstaller!!.createSession(params)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return sessionId
-    }
-
-    private fun runInstallWrite(size: Long, sessionId: Int, splitName: String, path: String?): Int {
-        var sizeBytes: Long = -1
-        sizeBytes = size
-        return doWriteSession(sessionId, path, sizeBytes, splitName)
-    }
-
-
-    private fun doWriteSession(
-        sessionId: Int,
-        inPath: String?,
-        sizeBytes: Long,
-        splitName: String
-    ): Int {
-        var inPath = inPath
-        var sizeBytes = sizeBytes
-        if ("-" == inPath) {
-            inPath = null
-        } else if (inPath != null) {
-            val file = File(inPath)
-            if (file.isFile) {
-                sizeBytes = file.length()
+    /**
+     * 创建会话参数
+     */
+    private fun createSessionParams(totalSize: Long): SessionParams {
+        return SessionParams(SessionParams.MODE_FULL_INSTALL).apply {
+            setSize(totalSize)
+            if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
+                setInstallReason(PackageManager.INSTALL_REASON_USER)
             }
         }
+    }
 
-        var session: PackageInstaller.Session? = null
-        var inputStream: InputStream? = null
-        var out: OutputStream? = null
+    /**
+     * 将 APK 写入会话
+     */
+    private fun writeApkToSession(session: PackageInstaller.Session, file: File): Int {
+        var inputStream: FileInputStream? = null
+        var outputStream: java.io.OutputStream? = null
+
         return try {
-            session = mPackageInstaller?.openSession(sessionId)
-            if (inPath != null) {
-                inputStream = FileInputStream(inPath)
-            }
-            out = session?.openWrite(splitName, 0, sizeBytes)
-            var total = 0
+            inputStream = FileInputStream(file)
+            outputStream = session.openWrite(file.name, 0, file.length())
+
             val buffer = ByteArray(65536)
-            var c: Int
-            while (inputStream!!.read(buffer).also { c = it } != -1) {
-                total += c
-                out?.write(buffer, 0, c)
-            }
-            out?.let {
-                session?.fsync(it)
+            var bytesRead: Int
+            var totalWritten = 0L
+
+            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                outputStream.write(buffer, 0, bytesRead)
+                totalWritten += bytesRead
             }
 
-            ZLog.d("$TAG Success: streamed $total bytes")
+            session.fsync(outputStream)
+
+            ZLog.d(TAG, "Written ${file.name}: $totalWritten bytes")
             PackageInstaller.STATUS_SUCCESS
+
         } catch (e: IOException) {
-            ZLog.d("$TAG Error: failed to write; " + e.message)
+            ZLog.e(TAG, "Failed to write ${file.name}: ${e.message}")
             PackageInstaller.STATUS_FAILURE
         } finally {
             try {
-                out?.close()
-                inputStream?.close()
-                session?.close()
+                outputStream?.close()
             } catch (e: IOException) {
-                e.printStackTrace()
+                ZLog.e(TAG, "Failed to close output stream: ${e.message}")
             }
-        }
-    }
-
-    private fun doCommitSession(sessionId: Int): Int {
-        var session: PackageInstaller.Session? = null
-        return try {
             try {
-                session = mPackageInstaller?.openSession(sessionId)
+                inputStream?.close()
             } catch (e: IOException) {
-                e.printStackTrace()
+                ZLog.e(TAG, "Failed to close input stream: ${e.message}")
             }
-            val callbackIntent = Intent(mBroadcastReceiver!!.getIntentFilterFlag(mContext))
-            val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                PendingIntent.FLAG_MUTABLE
-            } else {
-                0
-            }
-            val pendingIntent = PendingIntent.getBroadcast(mContext, 0, callbackIntent, pendingIntentFlags)
-            session?.commit(pendingIntent.intentSender)
-            session?.close()
-            ZLog.d("$TAG install request sent")
-            ZLog.d("$TAG doCommitSession: " + mPackageInstaller?.mySessions)
-            ZLog.d("$TAG doCommitSession: after session commit ")
-            1
-        } finally {
-            session?.close()
         }
     }
 
-    private fun makeSessionParams(totalSize: Long, packageName: String): SessionParams {
-        val sessionParams = SessionParams(SessionParams.MODE_FULL_INSTALL)
-        if (BuildUtils.SDK_INT >= Build.VERSION_CODES.O) {
-            sessionParams.setInstallReason(PackageManager.INSTALL_REASON_USER)
+    /**
+     * 提交会话
+     */
+    private fun commitSession(context: Context, session: PackageInstaller.Session, sessionId: Int) {
+        // 创建 PendingIntent
+        // Android 14+ 要求 mutable PendingIntent 使用显式 Intent
+        val intent = Intent(getInstallStatusAction(context)).apply {
+            setPackage(context.packageName)
         }
-        sessionParams.setAppPackageName(packageName)
-        sessionParams.setSize(totalSize)
-        return sessionParams
+
+        // Android 12+ 需要 FLAG_MUTABLE
+        val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            sessionId,
+            intent,
+            pendingIntentFlags
+        )
+
+        // 提交
+        session.commit(pendingIntent.intentSender)
+        session.close()
     }
+
+    /**
+     * 设置安装超时
+     */
+    private fun setupTimeout(context: Context, sessionId: Int, timeoutSeconds: Int) {
+        ThreadManager.getInstance().start({
+            if (installListenerMap.containsKey(sessionId)) {
+                ZLog.d(TAG, "Installation timeout for session $sessionId")
+                ThreadManager.getInstance().runOnUIThread {
+                    installListenerMap[sessionId]?.listener?.onInstallTimeOut()
+                    installListenerMap.remove(sessionId)
+                    checkAndUnregisterReceiver(context)
+                }
+            }
+        }, timeoutSeconds)
+    }
+
+    /**
+     * 安装监听器包装类
+     */
+    private data class InstallListenerWrapper(
+        val listener: InstallListener,
+        val timeoutSeconds: Int
+    )
 }

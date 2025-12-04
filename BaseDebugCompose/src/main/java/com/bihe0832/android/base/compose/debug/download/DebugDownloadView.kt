@@ -75,7 +75,9 @@ internal fun testDownloadRange(context: Context, num: Int) {
 
 
 internal fun testInstallOOBByZip(context: Context) {
-    testInstallOOB(context, "/sdcard/Download/jp.co.sumzap.pj0007.zip", "jp.co.sumzap.pj0007")
+    val filePath = AAFFileWrapper.getFileTempFolder() + "jp.co.sumzap.pj0007.zip"
+    FileUtils.copyAssetsFileToPath(context, "jp.co.sumzap.pj0007.zip", filePath)
+    testInstallOOB(context, filePath, "jp.co.sumzap.pj0007")
 }
 
 internal fun testInstallOOBByBigZip(context: Context) {

@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.text.TextUtils;
+
 import com.bihe0832.android.lib.aaf.tools.AAFException;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
@@ -17,6 +18,7 @@ import com.bihe0832.android.lib.utils.encrypt.HexUtils;
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5;
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.MessageDigestUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -35,6 +37,20 @@ import java.util.List;
  */
 
 public class APKUtils {
+
+    private static final String TAG = "APKUtils";
+
+    /**
+     * 检查并记录包名查询失败的原因
+     * Android 11+ 需要 QUERY_ALL_PACKAGES 权限或 queries 声明
+     */
+    private static void logPackageQueryError(Context context, String packageName) {
+        if (context == null) return;
+        
+        if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.R) {
+            ZLog.d(TAG, "Cannot query package [" + packageName + "], may need QUERY_ALL_PACKAGES permission or <queries> declaration on Android 11+");
+        }
+    }
 
     /**
      * 获取APP版本号
@@ -61,7 +77,7 @@ public class APKUtils {
                 return pi == null ? 0 : pi.versionCode;
             }
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            logPackageQueryError(context, packageName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,7 +99,7 @@ public class APKUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? "" : pi.versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            logPackageQueryError(context, packageName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -146,20 +162,92 @@ public class APKUtils {
             PackageInfo pi = pm.getPackageInfo(packageName, 0);
             return pi == null ? "" : pi.applicationInfo.loadLabel(pm).toString();
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            logPackageQueryError(context, packageName);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
     }
 
+    /**
+     * 获取已安装应用列表
+     * 注意：Android 11+ 需要 QUERY_ALL_PACKAGES 权限才能获取完整列表，否则只返回部分可见应用
+     */
     public static List<PackageInfo> getInstalledPackageList(Context ctx) {
         try {
             PackageManager pm = ctx.getPackageManager();
-            return pm.getInstalledPackages(0);
+            List<PackageInfo> list = pm.getInstalledPackages(0);
+            if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.R && list != null && list.size() < 10) {
+                ZLog.w("APKUtils", "getInstalledPackageList: only got " + list.size() + " apps, may need QUERY_ALL_PACKAGES permission on Android 11+");
+            }
+            return list;
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * 检查是否能查询指定包名的应用信息
+     * 兼容 QUERY_ALL_PACKAGES 权限和 queries 声明两种方式
+     * Android 11+ 需要声明权限或 queries 才能查询其他应用
+     *
+     * @param context     上下文
+     * @param packageName 要查询的包名
+     * @return 是否能查询该包名
+     */
+    public static boolean canQueryPackage(Context context, String packageName) {
+        if (context == null || TextUtils.isEmpty(packageName)) {
+            return false;
+        }
+
+        // Android 11 以下不需要特殊权限
+        if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.R) {
+            return true;
+        }
+
+        // Android 11+：尝试查询目标包名
+        // 如果有 QUERY_ALL_PACKAGES 权限或在 <queries> 中声明了该包名，查询会成功
+        try {
+            context.getPackageManager().getPackageInfo(packageName, 0);
+            // 能查到说明有权限（已安装的情况）
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            // 查不到可能是：1. 没权限 2. 确实没安装
+            // 再尝试查询自己的包名，如果自己都查不到说明 PM 有问题
+            try {
+                context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+                // 能查到自己，说明 PM 正常，目标包可能是没安装或没权限
+                // 这种情况下返回 true，让调用方继续轮询等待安装
+                return true;
+            } catch (Exception ex) {
+                // 连自己都查不到，说明有严重问题
+                ZLog.e("APKUtils", "canQueryPackage: cannot query self package, PM may have issues");
+                return false;
+            }
+        } catch (Exception e) {
+            ZLog.w("APKUtils", "canQueryPackage: query failed for " + packageName + ", error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * 获取 APK 文件的包名
+     *
+     * @param context  上下文
+     * @param filePath APK 文件路径
+     * @return 包名，解析失败返回 null
+     */
+    public static String getApkPackageName(Context context, String filePath) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo packageInfo = pm.getPackageArchiveInfo(filePath, 0);
+            if (packageInfo != null) {
+                return packageInfo.packageName;
+            }
+        } catch (Exception e) {
+            ZLog.e("Failed to get APK package name: " + e.getMessage());
+        }
+        return "";
     }
 
     public static PackageInfo getInstalledPackage(Context ctx, String pkgName) {
@@ -167,6 +255,7 @@ public class APKUtils {
             PackageManager pm = ctx.getPackageManager();
             return pm.getPackageInfo(pkgName.trim(), 0);
         } catch (PackageManager.NameNotFoundException e) {
+            logPackageQueryError(ctx, pkgName);
             return null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -322,7 +411,7 @@ public class APKUtils {
     }
 
     public static String getSigMessageDigestByPkgName(Context context, String messageDigestType, String pkgName,
-            boolean showTips) {
+                                                      boolean showTips) {
         if (null != pkgName && pkgName.length() > 0) {
             try {
                 Signature sig = context.getPackageManager()
@@ -336,7 +425,7 @@ public class APKUtils {
                     }
                 }
             } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+                logPackageQueryError(context, pkgName);
                 if (showTips) {
                     ToastUtil.showShort(context, context.getString(R.string.apk_sig_bad_package));
                 }

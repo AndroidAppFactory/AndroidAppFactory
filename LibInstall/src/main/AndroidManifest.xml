@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.bihe0832.android.lib.install"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="com.bihe0832.android.lib.install">
 
-    <permission
-        android:name="${applicationId}.install.permission.SEND_SPLIT_APKS_INSTALL"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.install.permission.SEND_SPLIT_APKS_INSTALL" />
 
-    <application>
-        <!-- 在 BroadcastReceiver 中声明需要的权限 -->
-        <receiver
-            android:name="com.bihe0832.android.lib.install.splitapk.SplitApksInstallBroadcastReceiver"
-            android:exported="false"
-            android:permission="${applicationId}.install.permission.SEND_SPLIT_APKS_INSTALL" >
-        </receiver>
-    </application>
 </manifest>

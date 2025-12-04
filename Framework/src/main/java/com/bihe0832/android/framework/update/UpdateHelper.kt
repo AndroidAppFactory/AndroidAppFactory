@@ -57,51 +57,50 @@ object UpdateHelper {
             }
         }
 
-        val downloadListener =
-            object :
-                SimpleInstallListener(activity, dialogListenerWhenDownload) {
+        val downloadListener = object :
+            SimpleInstallListener(activity, activity.packageName, dialogListenerWhenDownload) {
 
-                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                    if (errorCode in listOf(
-                            DownloadErrorCode.ERR_BAD_URL,
-                            DownloadErrorCode.ERR_HTTP_LENGTH_FAILED,
-                            DownloadErrorCode.ERR_MD5_BAD
-                        )
-                    ) {
-                        DialogUtils.showConfirmDialog(
-                            activity,
-                            title,
-                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_desc)!!,
-                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_positive),
-                            ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_negative),
-                            object :
-                                OnDialogListener {
-                                override fun onPositiveClick() {
-                                    if (canCancel) {
-                                        openFeedback()
-                                    } else {
-                                        IntentUtils.openWebPage(
-                                            activity,
-                                            ThemeResourcesManager.getString(R.string.feedback_url),
-                                        )
-                                    }
-                                    onNegativeClick()
+            override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
+                if (errorCode in listOf(
+                        DownloadErrorCode.ERR_BAD_URL,
+                        DownloadErrorCode.ERR_HTTP_LENGTH_FAILED,
+                        DownloadErrorCode.ERR_MD5_BAD
+                    )
+                ) {
+                    DialogUtils.showConfirmDialog(
+                        activity,
+                        title,
+                        ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_desc)!!,
+                        ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_positive),
+                        ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_negative),
+                        object :
+                            OnDialogListener {
+                            override fun onPositiveClick() {
+                                if (canCancel) {
+                                    openFeedback()
+                                } else {
+                                    IntentUtils.openWebPage(
+                                        activity,
+                                        ThemeResourcesManager.getString(R.string.feedback_url),
+                                    )
                                 }
+                                onNegativeClick()
+                            }
 
-                                override fun onNegativeClick() {
-                                    dialogListenerWhenDownload.onNegativeClick()
-                                }
+                            override fun onNegativeClick() {
+                                dialogListenerWhenDownload.onNegativeClick()
+                            }
 
-                                override fun onCancel() {
-                                    onNegativeClick()
-                                }
-                            },
-                        )
-                    } else {
-                        dialogListenerWhenDownload.onNegativeClick()
-                    }
+                            override fun onCancel() {
+                                onNegativeClick()
+                            }
+                        },
+                    )
+                } else {
+                    dialogListenerWhenDownload.onNegativeClick()
                 }
             }
+        }
         DownloadAPK.startDownloadWithProcess(
             activity,
             title,

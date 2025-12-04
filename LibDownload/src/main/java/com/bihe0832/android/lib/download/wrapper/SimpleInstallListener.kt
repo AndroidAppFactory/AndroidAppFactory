@@ -48,6 +48,7 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
  */
 open class SimpleInstallListener(
     private val activity: Activity,
+    private val packageName: String,
     private val listener: OnDialogListener?,
 ) : SimpleDownloadListener() {
 
@@ -93,7 +94,7 @@ open class SimpleInstallListener(
         ZLog.i("startDownloadApk download installApkPath: $filePath")
         ThreadManager.getInstance().runOnUIThread {
             if (InstallUtils.getFileType(filePath) == ApkInstallType.APK) {
-                InstallUtils.installAPP(activity, filePath, "", installListener)
+                InstallUtils.installAPP(activity, filePath, packageName, installListener)
             }
         }
         return filePath

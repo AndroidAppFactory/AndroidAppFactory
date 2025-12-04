@@ -44,6 +44,9 @@ internal val MD5_FILE = "4ef99863858b0ee17177f773580e4f2a"
 internal val MD5_CONFIG = "E1E127FE9F951F0A71FD4AA695449305"
 
 fun startDownload(context: Context, type: Int, url: String, md5: String) {
+
+    val file = AAFFileWrapper.getFileTempFolder() + "ZPUZZLE_official.apk"
+    FileUtils.copyAssetsFileToPath(context, "ZPUZZLE_official.apk", file)
     DownloadItem().apply {
         setNotificationVisibility(true)
         downloadTitle = ThemeResourcesManager.getString(R.string.app_name)
@@ -53,6 +56,7 @@ fun startDownload(context: Context, type: Int, url: String, md5: String) {
         } else {
             "https://cdn.bihe0832.com/images/head.jpg"
         }
+        filePath = file
         downloadURL = url
         contentMD5 = md5
 
@@ -74,6 +78,7 @@ fun startDownload(context: Context, type: Int, url: String, md5: String) {
 //                        InstallUtils.installAPP(context, photoURI, File(filePath))
                     InstallUtils.installAPP(context,
                         filePath,
+                        "com.bihe0832.puzzle",
                         object : InstallListener {
                             override fun onUnCompress() {
                                 ZLog.d(LOG_TAG, "onUnCompress")

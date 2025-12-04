@@ -6,6 +6,7 @@ import android.provider.Settings
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.R
+import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
@@ -113,11 +114,7 @@ object DownloadAPK {
             needRecord = false,
             object : OnDialogListener {
                 override fun onPositiveClick() {
-                    if (!InstallUtils.hasInstallAPPPermission(activity, false, false)) {
-                        showInstallPermissionDialog(activity, title, listener)
-                    } else {
-                        listener?.onPositiveClick()
-                    }
+                    listener?.onPositiveClick()
                 }
 
                 override fun onNegativeClick() {
@@ -129,7 +126,7 @@ object DownloadAPK {
                 }
 
             },
-            SimpleInstallListener(activity, listener)
+            SimpleInstallListener(activity, packageName, listener)
         )
     }
 
@@ -152,7 +149,7 @@ object DownloadAPK {
             url, emptyMap(), md5, packageName, versionCode,
             canCancel, downloadMobile,
             listener,
-            SimpleInstallListener(activity, listener)
+            SimpleInstallListener(activity, packageName, listener)
         )
     }
 
@@ -236,32 +233,21 @@ object DownloadAPK {
 
                 }
             },
-            downloadListener = object : SimpleDownloadListener() {
-                override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
-                }
-
-                override fun onComplete(filePath: String, item: DownloadItem): String {
-                    ThreadManager.getInstance().runOnUIThread {
-                        InstallUtils.installAPP(activity, filePath)
-                    }
-                    return filePath
-                }
-
-                override fun onProgress(item: DownloadItem) {
-                }
-
-            })
+            downloadListener = SimpleAPKDownloadListener(activity)
+        )
     }
 
     private class SimpleAPKDownloadListener(
         private val context: Context,
+        private val packageName: String = "",
+        private val listener: InstallListener? = null
     ) : SimpleDownloadListener() {
         override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
         }
 
         override fun onComplete(filePath: String, item: DownloadItem): String {
             ThreadManager.getInstance().runOnUIThread {
-                InstallUtils.installAPP(context, filePath)
+                InstallUtils.installAPP(context, filePath, packageName, listener)
             }
             return filePath
         }
@@ -277,7 +263,9 @@ object DownloadAPK {
         url: String,
         md5: String,
         packageName: String,
-        versionCode: Long
+        versionCode: Long,
+        delay: Int,
+        installListener: InstallListener
     ) {
         DownloadTools.startDownload(
             context = context,
@@ -296,7 +284,11 @@ object DownloadAPK {
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
             forceDownload = false,
             needRecord = false,
-            downloadListener = SimpleAPKDownloadListener(context)
+            downloadListener = SimpleAPKDownloadListener(
+                context,
+                packageName,
+                installListener
+            )
         )
     }
 
@@ -305,7 +297,9 @@ object DownloadAPK {
         url: String,
         md5: String,
         packageName: String,
-        versionCode: Long
+        versionCode: Long,
+        delay: Int,
+        installListener: InstallListener
     ) {
         DownloadTools.startDownload(
             context = context,
@@ -324,7 +318,11 @@ object DownloadAPK {
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
             forceDownload = false,
             needRecord = false,
-            downloadListener = SimpleAPKDownloadListener(context)
+            downloadListener = SimpleAPKDownloadListener(
+                context,
+                packageName,
+                installListener
+            )
         )
 
     }

@@ -15,7 +15,6 @@ package com.bihe0832.android.lib.download.file
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadClientConfig
 import com.bihe0832.android.lib.download.DownloadErrorCode
@@ -58,7 +57,12 @@ object DownloadFileManager : DownloadManager() {
         DownloadByHttpForFile(innerDownloadListener, maxNum, isDebug, downloadClientConfig)
     }
 
-    override fun init(context: Context, maxNum: Int, downloadClientConfig: DownloadClientConfig, isDebug: Boolean) {
+    override fun init(
+        context: Context,
+        maxNum: Int,
+        downloadClientConfig: DownloadClientConfig,
+        isDebug: Boolean
+    ) {
         super.init(context, maxNum, downloadClientConfig, isDebug)
         if (!hasInit) {
             hasInit = true
@@ -139,11 +143,8 @@ object DownloadFileManager : DownloadManager() {
             }
             item.finished = item.contentLength
             if (FileMimeTypes.isApkFile(filePath)) {
-                context?.packageManager?.getPackageArchiveInfo(
-                    filePath,
-                    PackageManager.GET_ACTIVITIES,
-                )?.packageName?.let {
-                    item.packageName = it
+                context?.let {
+                    item.packageName = APKUtils.getApkPackageName(it, filePath)
                 }
             }
             addDownloadItemToListAndSaveRecord(item)
