@@ -123,8 +123,8 @@ public class InstallUtils {
      * @param fileProvider FileProvider URI
      * @param file         APK 文件
      */
-    public static void installAPP(Context context, Uri fileProvider, File file) {
-        APKInstall.installAPKByProvider(context, fileProvider, file, "", 0, null);
+    public static void installAPK(Context context, Uri fileProvider, File file) {
+        APKInstall.installAPK(context, fileProvider, file, "", true, 0, null);
     }
 
     /**
@@ -134,18 +134,21 @@ public class InstallUtils {
      * @param filePath 文件路径
      */
     public static void installAPP(Context context, String filePath) {
-        installAPP(context, filePath, "", 0, null);
+        installAPP(context, filePath, "", null);
     }
 
     public static void installAPP(Context context, String filePath, String packageName, InstallListener listener) {
         if (FileUtils.INSTANCE.checkFileExist(filePath)) {
-            File file = new File(filePath);
-            int compareTime = (int) (file.length() / (FileUtils.SPACE_MB * 5));
-            installAPP(context, filePath, packageName, MathUtils.getMax(60, compareTime), null);
+            int timeout = 0;
+            if (listener != null) {
+                File file = new File(filePath);
+                int compareTime = (int) (file.length() / (FileUtils.SPACE_MB * 5));
+                timeout = MathUtils.getMax(APKInstall.DEFAULT_INSTALL_TIMEOUT, compareTime);
+            }
+            installAPP(context, filePath, packageName, false, timeout, listener);
         } else {
             listener.onInstallFailed(InstallErrorCode.FILE_NOT_FOUND);
         }
-
     }
 
     /**
@@ -159,20 +162,18 @@ public class InstallUtils {
      * @param context     上下文
      * @param filePath    文件路径
      * @param packageName 包名（用于解压目录命名）
-     * @param delayTime   等待权限的超时时间（秒），仅 Android < 8.0 且无权限时有效
+     * @param timeOut     安装超时时间与等待权限的超时时间（秒），仅 Android < 8.0 且无权限时有效
      * @param listener    安装监听器
      */
-    public static void installAPP(Context context, String filePath, String packageName, int delayTime, InstallListener listener) {
+    public static void installAPP(Context context, String filePath, String packageName, boolean forceFileProvider, int timeOut, InstallListener listener) {
         // Android >= 8.0 或已有权限：直接安装
         boolean shouldInstallDirectly = BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.O || hasInstallAPPPermission(context, false, false);
 
         if (shouldInstallDirectly) {
-            doInstallAPP(context, filePath, packageName, delayTime, listener);
-        } else if (delayTime > 0) {
-            // Android < 8.0 且无权限：等待授权后安装
-            waitPermissionAndInstall(context, filePath, packageName, delayTime, listener);
+            doInstallAPP(context, filePath, packageName, forceFileProvider, timeOut, listener);
         } else {
-            ZLog.d(TAG, "installAPP: no permission and autoCheck disabled");
+            // Android < 8.0 且无权限：等待授权后安装
+            waitPermissionAndInstall(context, filePath, packageName, forceFileProvider, timeOut > 0 ? timeOut : APKInstall.DEFAULT_INSTALL_TIMEOUT, timeOut, listener);
         }
     }
 
@@ -181,58 +182,59 @@ public class InstallUtils {
     /**
      * 直接执行安装（不检查权限，在后台线程执行）
      */
-    private static void doInstallAPP(Context context, String filePath, String packageName, int delayTime, InstallListener listener) {
+    private static void doInstallAPP(Context context, String filePath, String packageName, boolean forceFileProvider, int timeOut, InstallListener listener) {
         ThreadManager.getInstance().start(() -> {
             ZLog.d(TAG, "doInstallAPP start: " + filePath);
-            installByFileType(context, filePath, packageName, delayTime, wrapListener(listener));
+            installByFileType(context, filePath, packageName, forceFileProvider, timeOut, wrapListener(listener));
         });
     }
 
     /**
      * 等待权限授予后再安装（Android < 8.0 且无权限时使用）
      */
-    private static void waitPermissionAndInstall(Context context, String filePath, String packageName, int delayTime, InstallListener listener) {
+    private static void waitPermissionAndInstall(Context context, String filePath, String packageName, boolean forceFileProvider, int delayTime, int timeOut, InstallListener listener) {
         // 显示提示并跳转设置页
-        hasInstallAPPPermission(context, true, true);
+        hasInstallAPPPermission(context, false, true);
+        if (delayTime > 0) {
+            final String taskName = "installAPP_" + filePath.hashCode();
+            TaskManager.getInstance().addTask(new BaseTask() {
+                private int times = 0;
 
-        final String taskName = "installAPP_" + filePath.hashCode();
-        TaskManager.getInstance().addTask(new BaseTask() {
-            private int times = 0;
-
-            @Override
-            public int getMyInterval() {
-                return 2;
-            }
-
-            @Override
-            public int getNextEarlyRunTime() {
-                return 0;
-            }
-
-            @Override
-            public void doTask() {
-                times++;
-                if (hasInstallAPPPermission(context, false, false)) {
-                    ZLog.d(TAG, "waitPermissionAndInstall: permission granted");
-                    doInstallAPP(context, filePath, packageName, delayTime, listener);
-                    TaskManager.getInstance().removeTask(taskName);
-                } else {
-                    ZLog.d(TAG, "waitPermissionAndInstall: waiting for permission");
+                @Override
+                public int getMyInterval() {
+                    return 2;
                 }
-                if (times > delayTime) {
-                    ZLog.d(TAG, "waitPermissionAndInstall: timeout after " + times + "s");
-                    TaskManager.getInstance().removeTask(taskName);
-                    if (listener != null) {
-                        listener.onInstallTimeOut();
+
+                @Override
+                public int getNextEarlyRunTime() {
+                    return 0;
+                }
+
+                @Override
+                public void doTask() {
+                    times++;
+                    if (hasInstallAPPPermission(context, false, false)) {
+                        ZLog.d(TAG, "waitPermissionAndInstall: permission granted");
+                        doInstallAPP(context, filePath, packageName, forceFileProvider, timeOut, listener);
+                        TaskManager.getInstance().removeTask(taskName);
+                    } else {
+                        ZLog.d(TAG, "waitPermissionAndInstall: waiting for permission");
+                    }
+                    if (times > delayTime) {
+                        ZLog.d(TAG, "waitPermissionAndInstall: timeout after " + times + "s");
+                        TaskManager.getInstance().removeTask(taskName);
+                        if (listener != null) {
+                            listener.onInstallTimeOut();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public String getTaskName() {
-                return taskName;
-            }
-        });
+                @Override
+                public String getTaskName() {
+                    return taskName;
+                }
+            });
+        }
     }
 
     /**
@@ -283,7 +285,7 @@ public class InstallUtils {
     /**
      * 根据文件类型选择安装方式
      */
-    static void installByFileType(Context context, String filePath, String packageName, int delayTime, InstallListener listener) {
+    static void installByFileType(Context context, String filePath, String packageName, boolean forceFileProvider, int delayTime, InstallListener listener) {
         try {
             File file = new File(filePath);
             ZLog.d(TAG, "installByFileType: " + file.getAbsolutePath());
@@ -295,16 +297,16 @@ public class InstallUtils {
 
             if (FileMimeTypes.INSTANCE.isApkFile(filePath)) {
                 // 单个 APK 文件
-                APKInstall.installAPK(context, file.getAbsolutePath(), delayTime, listener);
+                APKInstall.installAPK(context, file.getAbsolutePath(), packageName, forceFileProvider, delayTime, listener);
             } else if (ZipUtils.isZipFile(file.getAbsolutePath(), true)) {
                 // ZIP 文件
-                installFromZip(context, filePath, packageName, delayTime, listener);
+                installFromZip(context, filePath, packageName, forceFileProvider, delayTime, listener);
             } else if (file.isDirectory()) {
                 // 文件夹
-                installFromFolder(context, file.getAbsolutePath(), packageName, delayTime, listener);
+                installFromFolder(context, file.getAbsolutePath(), packageName, forceFileProvider, delayTime, listener);
             } else {
                 // 其他文件，尝试直接安装
-                APKInstall.installAPK(context, file.getAbsolutePath(), delayTime, listener);
+                APKInstall.installAPK(context, filePath, packageName, forceFileProvider, delayTime, listener);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -318,15 +320,14 @@ public class InstallUtils {
     /**
      * 从 ZIP 文件安装
      */
-    static void installFromZip(@NotNull Context context, String zipFilePath, String packageName, int delayTime, InstallListener listener) {
+    static void installFromZip(@NotNull Context context, String zipFilePath, String packageName, boolean forceFileProvider, int delayTime, InstallListener listener) {
         ZLog.d(TAG, "installFromZip: " + zipFilePath);
 
         String finalPackageName = TextUtils.isEmpty(packageName) ? FileUtils.INSTANCE.getFileNameWithoutEx(zipFilePath) : packageName;
-
         ApkInstallType type = getApkInstallTypeByZip(zipFilePath);
 
         if (type == ApkInstallType.OBB) {
-            ObbFileInstall.installObbAPKByZip(context, zipFilePath, finalPackageName, delayTime, listener);
+            ObbFileInstall.installObbAPKByZip(context, zipFilePath, finalPackageName, forceFileProvider, delayTime, listener);
         } else if (type == ApkInstallType.SPLIT_APKS) {
             // Split APKs：解压后使用 PackageInstaller
             String extractDir = ZixieFileProvider.getZixieCacheFolder(context) + finalPackageName;
@@ -343,7 +344,7 @@ public class InstallUtils {
             ZLog.d(TAG, "installFromZip: extracting to " + extractDir);
             listener.onUnCompress();
             ZipUtils.unCompress(zipFilePath, extractDir);
-            installFromFolder(context, extractDir, finalPackageName, delayTime, listener);
+            installFromFolder(context, extractDir, finalPackageName, forceFileProvider, delayTime, listener);
         }
     }
 
@@ -352,7 +353,7 @@ public class InstallUtils {
     /**
      * 从文件夹安装
      */
-    static void installFromFolder(@NotNull Context context, String folderPath, String packageName, int delayTime, InstallListener listener) {
+    static void installFromFolder(@NotNull Context context, String folderPath, String packageName, boolean forceFileProvider, int delayTime, InstallListener listener) {
         ZLog.d(TAG, "installFromFolder: " + folderPath);
 
         String finalPackageName = TextUtils.isEmpty(packageName) ? FileUtils.INSTANCE.getFileName(folderPath) : packageName;
@@ -362,7 +363,7 @@ public class InstallUtils {
         ZLog.d(TAG, "installFromFolder type: " + type);
 
         if (type == ApkInstallType.OBB) {
-            ObbFileInstall.installObbAPKByFile(context, folderPath, finalPackageName, delayTime, listener);
+            ObbFileInstall.installObbAPKByFile(context, folderPath, finalPackageName, forceFileProvider, delayTime, listener);
         } else if (type == ApkInstallType.SPLIT_APKS) {
             // Split APKs：使用 PackageInstaller
             ArrayList<String> apkFiles = new ArrayList<>();
@@ -374,7 +375,7 @@ public class InstallUtils {
             if (files != null) {
                 for (File file : files) {
                     if (FileMimeTypes.INSTANCE.isApkFile(file.getAbsolutePath())) {
-                        APKInstall.installAPK(context, file.getAbsolutePath(), delayTime, listener);
+                        APKInstall.installAPK(context, file.getAbsolutePath(), finalPackageName, forceFileProvider, delayTime, listener);
                         return;
                     }
                 }

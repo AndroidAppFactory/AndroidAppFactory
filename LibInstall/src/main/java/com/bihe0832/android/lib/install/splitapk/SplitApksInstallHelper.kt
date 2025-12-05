@@ -22,6 +22,18 @@ import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 
 /**
+ * 降级回调接口
+ * 当 Session API 安装失败时触发，允许调用方使用其他方式安装
+ */
+fun interface FallbackCallback {
+    /**
+     * Session 安装失败，需要降级处理
+     * @param errorCode 错误码
+     */
+    fun onFallback(errorCode: Int)
+}
+
+/**
  * Split APKs 安装助手
  *
  * 使用 PackageInstaller API 安装 APK，支持：
@@ -274,7 +286,26 @@ object SplitApksInstallHelper {
         timeoutSeconds: Int,
         listener: InstallListener
     ) {
-        ZLog.d(TAG, "installApk: files=${files?.size}, timeout=$timeoutSeconds")
+        installApkWithFallback(context, files, timeoutSeconds, listener, null)
+    }
+
+    /**
+     * 安装 APK 文件列表（支持降级回调）
+     *
+     * @param context 上下文
+     * @param files APK 文件路径列表
+     * @param timeoutSeconds 超时时间（秒）
+     * @param listener 安装监听器
+     * @param fallbackCallback 降级回调，当 Session 创建/写入失败时触发，允许调用方使用其他方式安装
+     */
+    fun installApkWithFallback(
+        context: Context,
+        files: ArrayList<String>?,
+        timeoutSeconds: Int,
+        listener: InstallListener,
+        fallbackCallback: FallbackCallback?
+    ) {
+        ZLog.d(TAG, "installApk: files=${files?.size}, timeout=$timeoutSeconds, hasFallback=${fallbackCallback != null}")
 
         if (files.isNullOrEmpty()) {
             ZLog.e(TAG, "Files list is null or empty")
@@ -306,7 +337,7 @@ object SplitApksInstallHelper {
 
         // 在后台线程执行安装
         ThreadManager.getInstance().start {
-            doInstall(context, ArrayList(validFiles), timeoutSeconds, listener)
+            doInstall(context, ArrayList(validFiles), timeoutSeconds, listener, fallbackCallback)
         }
     }
 
@@ -317,7 +348,8 @@ object SplitApksInstallHelper {
         context: Context,
         files: ArrayList<String>,
         timeoutSeconds: Int,
-        listener: InstallListener
+        listener: InstallListener,
+        fallbackCallback: FallbackCallback? = null
     ) {
         var sessionId = -1
         var session: PackageInstaller.Session? = null
@@ -380,9 +412,17 @@ object SplitApksInstallHelper {
                 }
             }
 
-            // 通知失败
-            ThreadManager.getInstance().runOnUIThread {
-                listener.onInstallFailed(InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION)
+            // 如果有降级回调，则触发降级；否则通知失败
+            if (fallbackCallback != null) {
+                ZLog.d(TAG, "Session install failed, triggering fallback")
+                ThreadManager.getInstance().runOnUIThread {
+                    fallbackCallback.onFallback(InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION)
+                }
+            } else {
+                // 通知失败
+                ThreadManager.getInstance().runOnUIThread {
+                    listener.onInstallFailed(InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION)
+                }
             }
 
             checkAndUnregisterReceiver(context)
@@ -476,6 +516,12 @@ object SplitApksInstallHelper {
      * 设置安装超时
      */
     private fun setupTimeout(context: Context, sessionId: Int, timeoutSeconds: Int) {
+        // timeoutSeconds <= 0 时不设置超时
+        if (timeoutSeconds <= 0) {
+            ZLog.d(TAG, "setupTimeout: timeoutSeconds <= 0, skip timeout setup")
+            return
+        }
+        
         ThreadManager.getInstance().start({
             if (installListenerMap.containsKey(sessionId)) {
                 ZLog.d(TAG, "Installation timeout for session $sessionId")

@@ -7,28 +7,36 @@ import static com.bihe0832.android.lib.install.InstallUtils.TAG;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.file.provider.ZixieFileProvider;
 import com.bihe0832.android.lib.install.InstallListener;
+import com.bihe0832.android.lib.install.splitapk.SplitApksInstallHelper;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.timer.BaseTask;
 import com.bihe0832.android.lib.timer.TaskManager;
+import com.bihe0832.android.lib.utils.MathUtils;
 import com.bihe0832.android.lib.utils.apk.APKUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * @author zixie code@bihe0832.com Created on 2020/9/25.
  * <p>
- * APK 安装工具类，支持通过 Intent 调用系统安装器安装 APK。
- * 通过轮询 PackageManager 检测安装成功（兼容高版本 Android）。
+ * APK 安装工具类，支持两种安装方式：
+ * 1. Session API（默认）：使用 PackageInstaller Session，回调可靠
+ * 2. FileProvider（降级/强制）：使用 Intent 调用系统安装器，通过轮询检测安装结果
  */
 public class APKInstall {
 
@@ -40,8 +48,29 @@ public class APKInstall {
     // 轮询间隔（TaskManager 单位是 500ms，2 表示 1 秒）
     private static final int POLL_INTERVAL = 2;
 
+    // 默认安装超时时间（秒）
+    public static final int DEFAULT_INSTALL_TIMEOUT = 120;
+
     // 应用上下文
     private static Context appContext = null;
+
+    // ==================== 工具方法 ====================
+
+    /**
+     * 根据文件大小计算安装超时时间
+     * <p>
+     * 计算规则：每 5MB 需要 1 秒，最小为 DEFAULT_INSTALL_TIMEOUT
+     *
+     * @param file APK 文件
+     * @return 超时时间（秒）
+     */
+    public static int calculateInstallTimeout(@Nullable File file) {
+        if (file == null || !file.exists()) {
+            return DEFAULT_INSTALL_TIMEOUT;
+        }
+        int compareTime = (int) (file.length() / (FileUtils.SPACE_MB * 20));
+        return MathUtils.getMax(DEFAULT_INSTALL_TIMEOUT, compareTime);
+    }
 
     // ==================== 安装方法 ====================
 
@@ -49,50 +78,112 @@ public class APKInstall {
      * 安装 APK（不带超时检测）
      */
     public static void installAPK(Context context, String filePath, InstallListener listener) {
-        installAPK(context, filePath, null, 0, listener);
-    }
-
-    /**
-     * 安装 APK（带超时检测，自动解析包名）
-     *
-     * @param context        上下文
-     * @param filePath       APK 文件路径
-     * @param timeoutSeconds 超时时间（秒），0 表示不检测超时
-     * @param listener       安装监听器
-     */
-    public static void installAPK(Context context, String filePath,
-                                  int timeoutSeconds, InstallListener listener) {
-        installAPK(context, filePath, null, timeoutSeconds, listener);
+        installAPK(context, filePath, "", listener);
     }
 
     /**
      * 安装 APK（带超时检测，指定包名）
      *
-     * @param context        上下文
-     * @param filePath       APK 文件路径
-     * @param packageName    包名（为空则自动解析）
-     * @param timeoutSeconds 超时时间（秒），0 表示不检测超时
-     * @param listener       安装监听器
+     * @param context     上下文
+     * @param filePath    APK 文件路径
+     * @param packageName 包名（为空则自动解析）
+     * @param listener    安装监听器
      */
-    public static void installAPK(Context context, String filePath, String packageName,
-                                  int timeoutSeconds, InstallListener listener) {
-        if (TextUtils.isEmpty(filePath)) {
+    public static void installAPK(Context context, String filePath, String packageName, InstallListener listener) {
+        File file = new File(filePath);
+        Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, file);
+        int timeout = listener != null ? calculateInstallTimeout(file) : 0;
+        installAPK(context, fileProvider, file, packageName, false, timeout, listener);
+    }
+
+    public static void installAPK(Context context, String filePath, String packageName, boolean forceFileProvider, int timeoutSeconds, InstallListener listener) {
+        File file = new File(filePath);
+        Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, new File(filePath));
+        installAPK(context, fileProvider, file, packageName, forceFileProvider, timeoutSeconds, listener);
+    }
+
+    /**
+     * 安装 APK（完整参数版本）
+     *
+     * @param context           上下文
+     * @param file              APK 文件
+     * @param fileProvider      FileProvider URI（为空则自动生成）
+     * @param packageName       包名（为空则自动解析）
+     * @param forceFileProvider 是否强制使用 FileProvider 方式（跳过 Session API）
+     * @param timeoutSeconds    超时时间（秒），0 表示不检测超时
+     * @param listener          安装监听器
+     */
+    public static void installAPK(Context context, Uri fileProvider, File file, String packageName,
+                                  boolean forceFileProvider, int timeoutSeconds, InstallListener listener) {
+        if (!file.exists()) {
             if (listener != null) {
                 listener.onInstallFailed(FILE_NOT_FOUND);
             }
             return;
         }
 
-        try {
-            File file = new File(filePath);
-            Uri fileProvider = ZixieFileProvider.getZixieFileProvider(context, file);
-            installAPKByProvider(context, fileProvider, file, packageName, timeoutSeconds, listener);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (listener != null) {
-                listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
+        // 决定使用哪种安装方式
+        // 1. 强制 FileProvider
+        // 2. 无回调需求（listener == null 或 timeoutSeconds <= 0）
+        // 3. API < 21（Session API 不支持）
+        boolean useFileProvider = forceFileProvider
+                || listener == null
+                || timeoutSeconds <= 0
+                || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+
+        if (useFileProvider) {
+            ZLog.d(TAG, "installAPK: using FileProvider method, forceFileProvider=" + forceFileProvider
+                    + ", hasListener=" + (listener != null) + ", timeout=" + timeoutSeconds);
+            try {
+                installAPKByProvider(context, fileProvider, file, packageName, timeoutSeconds, listener);
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (listener != null) {
+                    listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
+                }
             }
+        } else {
+            ZLog.d(TAG, "installAPK: using Session API method");
+            installAPKByPackageInstaller(context, fileProvider, file.getAbsolutePath(), packageName, timeoutSeconds, listener);
         }
+    }
+
+    // ==================== Session API 安装方式（默认） ====================
+
+    /**
+     * 通过 Session API 安装 APK（使用 SplitApksInstallHelper）
+     * 回调可靠，不依赖包可见性权限
+     *
+     * @param context        上下文
+     * @param filePath       APK 文件路径
+     * @param fileProvider   FileProvider URI（用于降级时使用）
+     * @param packageName    包名（用于降级时的轮询检测）
+     * @param timeoutSeconds 超时时间
+     * @param listener       安装监听器
+     */
+    public static void installAPKByPackageInstaller(Context context, Uri fileProvider, String filePath, String packageName,
+                                                     int timeoutSeconds, InstallListener listener) {
+        ArrayList<String> files = new ArrayList<>(Collections.singletonList(filePath));
+
+        SplitApksInstallHelper.INSTANCE.installApkWithFallback(
+                context,
+                files,
+                timeoutSeconds,
+                listener,
+                // 降级回调：Session 安装失败时使用 FileProvider 方式
+                (errorCode) -> {
+                    ZLog.w(TAG, "Session install failed with errorCode=" + errorCode + ", fallback to FileProvider");
+                    try {
+                        File file = new File(filePath);
+                        installAPKByProvider(context, fileProvider, file, packageName, timeoutSeconds, listener);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        if (listener != null) {
+                            listener.onInstallFailed(START_SYSTEM_INSTALL_EXCEPTION);
+                        }
+                    }
+                }
+        );
     }
 
     /**
@@ -131,6 +222,13 @@ public class APKInstall {
             if (BuildUtils.INSTANCE.getSDK_INT() < Build.VERSION_CODES.N) {
                 intent.setDataAndType(Uri.fromFile(file), INSTALL_TYPE);
             } else {
+                if (fileProvider == null) {
+                    ZLog.e(TAG, "installAPK: fileProvider is null, cannot install");
+                    if (listener != null) {
+                        listener.onInstallFailed(FILE_NOT_FOUND);
+                    }
+                    return;
+                }
                 intent.setDataAndType(fileProvider, INSTALL_TYPE);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);

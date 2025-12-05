@@ -26,7 +26,7 @@ import java.io.File;
  */
 public class ObbFileInstall {
 
-    public static void installObbAPKByFile(@NotNull Context context, String fileDir, String packageName, int delaySeconds,
+    public static void installObbAPKByFile(@NotNull Context context, String fileDir, String packageName, boolean forceFileProvider, int delaySeconds,
                                            final InstallListener listener) {
         try {
 
@@ -52,7 +52,7 @@ public class ObbFileInstall {
                     FileUtils.INSTANCE.copyFile(new File(result), new File(realInstallPath));
                     ZLog.d(TAG, "installObbAPKByFile finished copy apk File");
                     listener.onInstallStart();
-                    APKInstall.installAPK(context, realInstallPath, packageName, delaySeconds, listener);
+                    APKInstall.installAPK(context, realInstallPath, packageName, forceFileProvider, delaySeconds, listener);
                 }
             }
         } catch (Exception e) {
@@ -96,7 +96,7 @@ public class ObbFileInstall {
 
     }
 
-    public static void installObbAPKByZip(@NotNull Context context, String zipFile, String packageName, int delaySeconds,
+    public static void installObbAPKByZip(@NotNull Context context, String zipFile, String packageName, boolean forceFileProvider, int delaySeconds,
                                           final InstallListener listener) {
         try {
             if (!FileUtils.INSTANCE.checkStoragePermissions(context)) {
@@ -139,7 +139,7 @@ public class ObbFileInstall {
                 }
             }
             listener.onInstallStart();
-            APKInstall.installAPK(context, dstApkFilePath, packageName, delaySeconds, listener);
+            APKInstall.installAPK(context, dstApkFilePath, packageName, forceFileProvider, delaySeconds, listener);
         } catch (Exception e) {
             ZLog.d(TAG, "prepare4InstallObb failed, for " + e);
             listener.onInstallFailed(UNKNOWN_EXCEPTION);
