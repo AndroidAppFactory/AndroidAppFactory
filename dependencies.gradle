@@ -39,7 +39,7 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "8.0.3"
+ext.moduleVersionName = "8.0.4"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [
