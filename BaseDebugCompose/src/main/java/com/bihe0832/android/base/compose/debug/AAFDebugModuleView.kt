@@ -18,6 +18,7 @@ import com.bihe0832.android.base.compose.debug.log.DebugLogComposeView
 import com.bihe0832.android.base.compose.debug.media.DebugMediaComposeView
 import com.bihe0832.android.base.compose.debug.message.DebugMessageComposeView
 import com.bihe0832.android.base.compose.debug.notify.DebugNotifyComposeView
+import com.bihe0832.android.base.compose.debug.tts.DebugTTSComposeView
 import com.bihe0832.android.base.compose.debug.qrcode.DebugQRCodeFragment
 import com.bihe0832.android.base.compose.debug.request.DebugHttpActivity
 import com.bihe0832.android.base.compose.debug.shake.DebugShakeView
@@ -52,6 +53,9 @@ fun AAFDebugModuleView() {
         ) { DebugDialogComposeView() }
         DebugComposeItem("拍照、相册、图片、视频、音频操作调试", "DebugMediaComposeView") {
             DebugMediaComposeView()
+        }
+        DebugComposeItem("TTS（文字转语音）调试", "DebugTTSComposeView") {
+            DebugTTSComposeView()
         }
         DebugComposeItem("AES、RSA、MD5、SHA256等", "DebugEncryptView") { DebugEncryptView() }
 

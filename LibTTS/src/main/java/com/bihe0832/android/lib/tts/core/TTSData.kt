@@ -4,11 +4,22 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 
 /**
+ * TTS语音数据封装类
+ *
+ * 封装TTS播放所需的文本内容和参数配置，每个实例会自动生成唯一的utteranceId用于回调识别
+ *
+ * 使用示例：
+ * ```kotlin
+ * val ttsData = TTSData("你好，世界")
+ * ttsData.addSpeakParams(Bundle().apply {
+ *     putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 0.8f)
+ * })
+ * ```
+ *
+ * @param speakText 要播放的文本内容
  *
  * @author zixie code@bihe0832.com
  * Created on 2023/3/29.
- * Description: Description
- *
  */
 class TTSData(val speakText: String = "") {
 

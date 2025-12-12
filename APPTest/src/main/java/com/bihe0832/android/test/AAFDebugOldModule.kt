@@ -16,7 +16,6 @@ import com.bihe0832.android.base.debug.network.DebugWiFiFragment
 import com.bihe0832.android.base.debug.panel.DebugPanelFragment
 import com.bihe0832.android.base.debug.permission.DebugPermissionFragment
 import com.bihe0832.android.base.debug.svga.DebugSvgaFragment
-import com.bihe0832.android.base.debug.tts.DebugTTSFragment
 import com.bihe0832.android.base.debug.view.DebugBaseViewFragment
 import com.bihe0832.android.base.debug.webview.DebugWebViewFragment
 import com.bihe0832.android.base.debug.widget.DebugWidgetFragment
@@ -32,7 +31,6 @@ fun AAFDebugOldModule() {
     DebugContent {
 
         DebugFragmentItem("权限 Permission 调试", DebugPermissionFragment::class.java)
-        DebugFragmentItem("TTS 调试", DebugTTSFragment::class.java)
         DebugFragmentItem("语音和音频调试", DebugRecordAndASRFragment::class.java)
 
 

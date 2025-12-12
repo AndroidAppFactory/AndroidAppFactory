@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.text.TextUtils
 import com.bihe0832.android.lib.log.ZLog
+import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.tts.core.TTSConfig
 import com.bihe0832.android.lib.tts.core.TTSData
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -18,15 +20,29 @@ import java.util.Locale
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
+ * TTS核心实现类
+ *
+ * 封装Android TextToSpeech API，提供：
+ * - TTS引擎初始化和生命周期管理
+ * - 语音播放队列管理
+ * - 语音参数配置（语速、音调、音量）
+ * - 语音保存到文件
+ * - 播放状态回调
+ *
  * @author zixie code@bihe0832.com
  * Created on 2020-03-05.
- * Description: Description
  */
 @SuppressLint("StaticFieldLeak")
 open class TTSImpl {
 
     companion object {
         const val TAG = "TTS"
+    }
+
+    // 使用AAF框架的ThreadManager提供的单线程Handler，保证TTS操作的顺序性
+    // 使用LOOPER_TYPE_NORMAL优先级，适合处理业务逻辑
+    private val ttsHandler by lazy {
+        Handler(ThreadManager.getInstance().getLooper(ThreadManager.LOOPER_TYPE_NORMAL))
     }
 
     private var mSpeech: TextToSpeech? = null
@@ -95,15 +111,24 @@ open class TTSImpl {
             mSpeech = TextToSpeech(
                 mContext?.get(),
                 { status ->
+                    // TTS初始化回调在主线程执行，需要将耗时操作移到子线程避免ANR
                     if (status == TextToSpeech.SUCCESS) {
                         ZLog.d(TAG, "onInit: TTS引擎初始化成功")
-                        setLanguage(mLocale!!)
-                        ttsData?.let {
-                            if (speak(ttsData) == TextToSpeech.ERROR) {
-                                mTTSResultListener.onUtteranceFailed(
-                                    ttsData.getUtteranceId(),
-                                    ttsData.speakText
-                                )
+                        // 使用AAF框架的单线程Handler执行后续操作，既避免阻塞主线程，又保证操作顺序性
+                        ttsHandler.post {
+                            try {
+                                setLanguage(mLocale!!)
+                                ttsData?.let {
+                                    if (speak(ttsData) == TextToSpeech.ERROR) {
+                                        mTTSResultListener.onUtteranceFailed(
+                                            ttsData.getUtteranceId(),
+                                            ttsData.speakText
+                                        )
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                ZLog.e(TAG, "TTS初始化后处理异常: ${e.message}")
+                                e.printStackTrace()
                             }
                         }
                     } else {
@@ -192,7 +217,12 @@ open class TTSImpl {
         return supported
     }
 
-    fun isSpeak(): Boolean {
+    /**
+     * 判断当前是否正在播放语音
+     *
+     * @return true表示正在播放，false表示未播放
+     */
+    fun isSpeaking(): Boolean {
         return isSpeakIng
     }
 
@@ -200,18 +230,25 @@ open class TTSImpl {
         return mMsgList.isNotEmpty()
     }
 
+    /**
+     * 开始播放队列中的下一条语音
+     * 使用线程安全的方式从队列中取出数据
+     */
     @Synchronized
     fun startSpeak() {
         if (mMsgList.isNotEmpty()) {
-            var s = mMsgList[0]
-            mMsgList.removeAt(0)
-            speakWithTry(s)
+            val data = mMsgList.removeFirstOrNull() ?: return
+            speakWithTry(data)
         }
     }
 
+    /**
+     * 停止语音播放
+     * 如果当前正在播放，则等待播放完成后停止
+     */
     fun stopSpeak() {
-        ZLog.e(TAG, "stopSpeak")
-        if (isSpeak()) {
+        ZLog.d(TAG, "stopSpeak")
+        if (isSpeaking()) {
             mNeedStopAfterSpeak = true
         } else {
             onDestroy()
@@ -222,8 +259,18 @@ open class TTSImpl {
         onDestroy()
     }
 
+    /**
+     * 播放语音
+     *
+     * @param tempStr TTS数据
+     * @param type 播放类型：
+     *   - SPEEAK_TYPE_SEQUENCE: 顺序播放，添加到队列末尾
+     *   - SPEEAK_TYPE_NEXT: 插队播放，添加到队列头部
+     *   - SPEEAK_TYPE_FLUSH: 立即播放，打断当前播放
+     *   - SPEEAK_TYPE_CLEAR: 清空队列后播放
+     */
     open fun speak(tempStr: TTSData, type: Int) {
-        ZLog.e(TAG, "speak: ${mSpeech.hashCode()} ${isSpeak()} ${mSpeech?.isSpeaking} $tempStr")
+        ZLog.d(TAG, "speak: ${mSpeech.hashCode()} ${isSpeaking()} ${mSpeech?.isSpeaking} $tempStr")
         if (!tempStr.getSpeakBundle().containsKey(TextToSpeech.Engine.KEY_PARAM_VOLUME)) {
             tempStr.addSpeakParams(
                 Bundle().apply {
@@ -238,14 +285,14 @@ open class TTSImpl {
         when (type) {
             TTSConfig.SPEEAK_TYPE_SEQUENCE -> {
                 mMsgList.add(tempStr)
-                if (!isSpeak()) {
+                if (!isSpeaking()) {
                     startSpeak()
                 }
             }
 
             TTSConfig.SPEEAK_TYPE_NEXT -> {
                 mMsgList.add(0, tempStr)
-                if (!isSpeak()) {
+                if (!isSpeaking()) {
                     startSpeak()
                 }
             }
@@ -263,16 +310,20 @@ open class TTSImpl {
         }
     }
 
+    /**
+     * 尝试播放语音，如果失败则重新初始化TTS引擎
+     */
     private fun speakWithTry(ttsData: TTSData) {
-        ZLog.e(TAG, "speakWithTry ttsData: $ttsData ")
+        ZLog.d(TAG, "speakWithTry ttsData: $ttsData ")
         if (!isTTSServiceOK(mSpeech)) {
             initTTSAndSpeak(ttsData)
         } else {
-            var result = TextToSpeech.ERROR
-            try {
-                result = speak(ttsData) ?: TextToSpeech.ERROR
+            val result = try {
+                speak(ttsData) ?: TextToSpeech.ERROR
             } catch (e: Exception) {
+                ZLog.e(TAG, "speakWithTry exception: ${e.message}")
                 e.printStackTrace()
+                TextToSpeech.ERROR
             }
             ZLog.d(TAG, "speakWithTry result: $result ")
             if (result == TextToSpeech.ERROR) {
@@ -281,39 +332,41 @@ open class TTSImpl {
         }
     }
 
+    /**
+     * 检查TTS服务是否正常
+     * 使用反射检查mServiceConnection字段是否为null
+     *
+     * @param tts TextToSpeech实例
+     * @return true表示服务正常，false表示服务异常
+     */
     fun isTTSServiceOK(tts: TextToSpeech?): Boolean {
-        var isBindConnection = true
         if (tts == null) {
             return false
         }
-        val fields: Array<Field> = tts.javaClass.getDeclaredFields()
-        for (j in fields.indices) {
-            fields[j].setAccessible(true)
-            if (TextUtils.equals(
-                    "mServiceConnection",
-                    fields[j].getName(),
-                ) && TextUtils.equals(
-                    "android.speech.tts.TextToSpeech\$Connection",
-                    fields[j].getType().getName()
-                )
-            ) {
-                try {
-                    if (fields[j].get(tts) == null) {
-                        isBindConnection = false
-                        ZLog.e(TAG, "******* TTS -> mServiceConnection == null*******")
+        
+        return try {
+            val fields: Array<Field> = tts.javaClass.declaredFields
+            for (field in fields) {
+                field.isAccessible = true
+                if (field.name == "mServiceConnection" && 
+                    field.type.name == "android.speech.tts.TextToSpeech\$Connection") {
+                    if (field.get(tts) == null) {
+                        ZLog.w(TAG, "TTS service connection is null")
+                        return false
                     }
-                } catch (e: IllegalArgumentException) {
-                    e.printStackTrace()
-                } catch (e: IllegalAccessException) {
-                    e.printStackTrace()
-                } catch (e: java.lang.Exception) {
-                    e.printStackTrace()
                 }
             }
+            true
+        } catch (e: Exception) {
+            ZLog.e(TAG, "Failed to check TTS service status: ${e.message}")
+            e.printStackTrace()
+            false
         }
-        return isBindConnection
     }
 
+    /**
+     * 执行实际的语音播放
+     */
     private fun speak(ttsData: TTSData): Int? {
         val result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
@@ -325,13 +378,20 @@ open class TTSImpl {
                 ttsData.getUtteranceId(),
             )
         }
-        isSpeakIng = (TextToSpeech.SUCCESS == result)
-        ZLog.e(TAG, "real speak ttsData result $result ,ttsData: $ttsData ")
+        isSpeakIng = (result == TextToSpeech.SUCCESS)
+        ZLog.d(TAG, "real speak ttsData result $result ,ttsData: $ttsData ")
         return result
     }
 
+    /**
+     * 将语音保存到文件
+     *
+     * @param ttsData TTS数据
+     * @param finalFileName 目标文件路径
+     * @return TextToSpeech.SUCCESS 或 TextToSpeech.ERROR
+     */
     fun save(ttsData: TTSData, finalFileName: String): Int {
-        ZLog.e(TAG, "ttsData: $ttsData")
+        ZLog.d(TAG, "save ttsData: $ttsData")
         val result = if (BuildUtils.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             mSpeech?.speak(ttsData.speakText, TextToSpeech.QUEUE_FLUSH, ttsData.getSpeakMap())
                 ?: TextToSpeech.ERROR
@@ -399,14 +459,22 @@ open class TTSImpl {
         return mVolume
     }
 
+    /**
+     * 释放资源，停止TTS引擎
+     */
     fun onDestroy() {
-        ZLog.e(TAG, "onDestroy")
-
-        if (mSpeech != null) {
-            mSpeech!!.stop()
-            mSpeech!!.shutdown()
-            mSpeech = null
+        ZLog.d(TAG, "onDestroy")
+        
+        // 清理Handler中的所有待执行任务
+        ttsHandler.removeCallbacksAndMessages(null)
+        
+        mSpeech?.apply {
+            stop()
+            shutdown()
         }
+        mSpeech = null
+        mMsgList.clear()
         mNeedStopAfterSpeak = false
+        isSpeakIng = false
     }
 }

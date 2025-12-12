@@ -18,7 +18,7 @@ ext.asrmoduleInfo = [
                 "version"            : "8.0.0",
                 "artifactId"         : "lib-tts",
                 "apidependenciesList": [
-                        "LibConfig", "LibOS"
+                        "LibConfig", "LibOS", "LibThread"
                 ]
         ],
         "LibAudio"              : [

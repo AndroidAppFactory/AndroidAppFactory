@@ -12,13 +12,31 @@ import java.util.Locale
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
- * @author zixie code@bihe0832.com
- * Created on 2020-03-05.
- * Description: Description
+ * TTS默认音调配置值
  */
 val CONFIG_VALUE_PITCH = 0.4f
+
+/**
+ * TTS默认语速配置值
+ */
 val CONFIG_VALUE_SPEECH_RATE = 0.4f
 
+/**
+ * 带配置管理的TTS实现类
+ *
+ * 在TTSImplNotifyWithKey基础上增加了配置持久化功能，支持：
+ * - 语速、音调、音量的配置保存和读取
+ * - TTS引擎的配置保存
+ * - 多场景配置隔离（通过mScene参数）
+ * - 多监听器管理
+ *
+ * 配置会自动持久化到本地，下次启动时自动恢复。
+ *
+ * @param mScene 场景标识，用于区分不同场景的配置
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2020-03-05.
+ */
 @SuppressLint("StaticFieldLeak")
 class TTSImplWithConfig(private var mScene: String) : TTSImplNotifyWithKey() {
     private val TAG = TTSImpl.TAG

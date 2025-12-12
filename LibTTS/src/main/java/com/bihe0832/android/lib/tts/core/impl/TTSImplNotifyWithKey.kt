@@ -8,10 +8,17 @@ import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
 /**
+ * 带Key回调的TTS实现类
+ *
+ * 在TTSImpl基础上增加了Key透传功能，允许在播放时传入自定义Key，
+ * 在回调时会将该Key透传回来，方便业务层识别是哪个语音播放完成。
+ *
+ * 使用场景：
+ * - 需要区分不同语音播放的回调
+ * - 需要在回调中携带业务数据
  *
  * @author zixie code@bihe0832.com
  * Created on 2020/3/24.
- * Description: Description
  */
 open class TTSImplNotifyWithKey : TTSImpl() {
     private val TAG = TTSImpl.TAG
