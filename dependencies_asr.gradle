@@ -1,21 +1,21 @@
 apply from: rootDir.toString() + '/config.gradle'
 ext.asrmoduleInfo = [
         "LibASR"                : [
-                "version"            : "8.0.3",
+                "version"            : "8.0.4",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
                         "LibASRMin", "LibSpeechRecognition", "LibPinYin", "LibChinese"
                 ]
         ],
         "LibASRMin"             : [
-                "version"            : "8.0.3",
+                "version"            : "8.0.4",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
                         "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
                 ]
         ],
         "LibTTS"                : [
-                "version"            : "8.0.0",
+                "version"            : "8.0.4",
                 "artifactId"         : "lib-tts",
                 "apidependenciesList": [
                         "LibConfig", "LibOS", "LibThread"
