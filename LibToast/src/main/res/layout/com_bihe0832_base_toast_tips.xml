@@ -7,8 +7,8 @@
     android:layout_margin="32dp"
     android:background="@drawable/com_bihe0832_base_toast_tips_corner"
     android:gravity="center"
-    android:minWidth="224dp"
-    android:minHeight="108dp"
+    android:minWidth="@dimen/bihe0832_common_toast_tips_min_size"
+    android:minHeight="@dimen/bihe0832_common_toast_tips_min_size"
     android:orientation="vertical"
     tools:text="content">
 
@@ -29,5 +29,5 @@
         android:lineSpacingExtra="0.5mm"
         android:textColor="@color/bihe0832_common_toast_tips_text_color"
         android:textSize="14dp"
-        tools:text="这是一个测试这是一个测试这是一试这是一个测试" />
+        tools:text="这是一个测试" />
 </LinearLayout>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bihe0832_common_toast_background_color">#DFDFDF</color>
-    <color name="bihe0832_common_toast_tips_background_color">#000000</color>
+    <color name="bihe0832_common_toast_background_color">#B3DFDFDF</color>
+    <color name="bihe0832_common_toast_tips_background_color">#B3000000</color>
     <color name="bihe0832_common_toast_text_color">#212121</color>
     <color name="bihe0832_common_toast_tips_text_color">#FFFFFF</color>
     <dimen name="bihe0832_common_toast_padding">5dp</dimen>
     <dimen name="bihe0832_common_toast_img_size">20dp</dimen>
+    <dimen name="bihe0832_common_toast_tips_min_size">108dp</dimen>
     <dimen name="bihe0832_common_toast_tips_img_size">42dp</dimen>
     <dimen name="bihe0832_common_toast_text_size">14dp</dimen>
     <dimen name="bihe0832_common_toast_text_margin">8dp</dimen>
