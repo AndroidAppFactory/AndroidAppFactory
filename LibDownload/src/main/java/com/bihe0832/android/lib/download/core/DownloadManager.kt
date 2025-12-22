@@ -301,12 +301,9 @@ abstract class DownloadManager {
                 ZLog.w(TAG, "获取文件长度 $times:$realURL")
                 
                 // 使用 OkHttp 替代 HttpURLConnection，支持 HTTP/2
-                val requestBuilder = Request.Builder().url(realURL)
-                
-                // 添加自定义请求头
-                info.requestHeader?.forEach { (key, value) ->
-                    requestBuilder.addHeader(key, value)
-                }
+                val requestBuilder = Request.Builder()
+                    .url(realURL)
+                    .addDownloadHeaders(info.requestHeader)
                 
                 val request = requestBuilder.head().build()
                 val time = System.currentTimeMillis()

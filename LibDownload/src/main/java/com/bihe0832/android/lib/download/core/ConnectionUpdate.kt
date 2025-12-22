@@ -4,6 +4,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.HTTPRequestUtils
+import okhttp3.Request
 import okhttp3.Response
 import java.net.HttpURLConnection
 import javax.net.ssl.HostnameVerifier
@@ -14,9 +15,29 @@ import javax.net.ssl.SSLSession
  *
  * @author zixie code@bihe0832.com
  * Created on 2020/6/19.
- * Description: Description
+ * Description: HTTP 连接相关的扩展方法
  *
  */
+
+/**
+ * 为 OkHttp Request.Builder 添加下载所需的通用请求头
+ *
+ * @param customHeaders 自定义请求头
+ * @return Request.Builder 支持链式调用
+ */
+fun Request.Builder.addDownloadHeaders(customHeaders: Map<String, String>? = null): Request.Builder {
+    // 禁用 gzip 压缩，确保 Content-Length 与实际数据长度一致
+    addHeader("Accept-Encoding", "identity")
+    
+    // 添加自定义请求头
+    customHeaders?.forEach { (key, value) ->
+        if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
+            addHeader(key, value)
+        }
+    }
+    
+    return this
+}
 
 fun HttpURLConnection.upateRequestInfo(customProperties: Map<String, String>?) {
     connectTimeout = 5000

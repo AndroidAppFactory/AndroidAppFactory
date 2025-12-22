@@ -4,6 +4,7 @@ import android.text.TextUtils
 import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadPartInfo
 import com.bihe0832.android.lib.download.DownloadStatus
+import com.bihe0832.android.lib.download.core.addDownloadHeaders
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.core.getContentLength
 import com.bihe0832.android.lib.download.core.logResponseHeaderFields
@@ -189,11 +190,7 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         // 使用 OkHttp 替代 HttpURLConnection，支持 HTTP/2 多路复用
         val requestBuilder = Request.Builder()
             .url(mDownloadPartInfo.realDownloadURL)
-        
-        // 添加自定义请求头
-        mDownloadPartInfo.requestHeader?.forEach { (key, value) ->
-            requestBuilder.addHeader(key, value)
-        }
+            .addDownloadHeaders(mDownloadPartInfo.requestHeader)
         
         // 设置 Range 请求头
         if (rangeEnd > 0 && rangeEnd > rangeStart) {
