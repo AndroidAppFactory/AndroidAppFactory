@@ -80,7 +80,6 @@ public abstract class BaseCaptureFragment extends Fragment {
             initData(intent);
         }
         initCameraScan(view.getContext());
-        startCamera();
     }
 
 
@@ -195,5 +194,32 @@ public abstract class BaseCaptureFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Fragment 恢复时启动相机
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        startCamera();
+    }
+
+    /**
+     * Fragment 暂停时停止相机，避免后台运行浪费资源
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopCamera();
+    }
+
+    /**
+     * Fragment 销毁时释放相机资源
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        releaseCamera();
     }
 }

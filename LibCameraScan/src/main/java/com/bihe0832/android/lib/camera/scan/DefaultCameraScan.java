@@ -31,6 +31,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.detector.MathUtils;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DefaultCameraScan extends CameraScan {
@@ -59,6 +60,7 @@ public class DefaultCameraScan extends CameraScan {
     private final Context mContext;
     private final LifecycleOwner mLifecycleOwner;
     private final PreviewView mPreviewView;
+    private final ExecutorService mAnalyzerExecutor = Executors.newSingleThreadExecutor();
     private float maxZoom = 3f;
     private int zoomType = AUTO_ZOOM_IN;
     private ListenableFuture<ProcessCameraProvider> mCameraProviderFuture;
@@ -224,6 +226,13 @@ public class DefaultCameraScan extends CameraScan {
     public void startCamera() {
         initConfig();
         mLastAutoZoomTime = System.currentTimeMillis();
+        // 重置分析状态，确保能正常扫描
+        isAnalyze = true;
+        isAnalyzeResult = false;
+        // 恢复光线传感器监听
+        if (mAmbientLightManager != null) {
+            mAmbientLightManager.register();
+        }
         mCameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
         mCameraProviderFuture.addListener(() -> {
 
@@ -239,7 +248,7 @@ public class DefaultCameraScan extends CameraScan {
                 ImageAnalysis imageAnalysis = mCameraConfig.options(
                         new ImageAnalysis.Builder().setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
                                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
-                imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), image -> {
+                imageAnalysis.setAnalyzer(mAnalyzerExecutor, image -> {
                     if (isAnalyze && !isAnalyzeResult && mAnalyzer != null) {
                         Result result = mAnalyzer.analyze(image, mOrientation);
                         mResultLiveData.postValue(result);
@@ -316,9 +325,15 @@ public class DefaultCameraScan extends CameraScan {
 
     @Override
     public void stopCamera() {
+        // 暂停光线传感器监听，节省资源
+        if (mAmbientLightManager != null) {
+            mAmbientLightManager.unregister();
+        }
         if (mCameraProviderFuture != null) {
             try {
                 mCameraProviderFuture.get().unbindAll();
+                // 清空相机引用，避免访问无效对象
+                mCamera = null;
             } catch (Exception e) {
                 ZLog.e(e.toString());
             }
@@ -467,6 +482,9 @@ public class DefaultCameraScan extends CameraScan {
         flashlightView = null;
         if (mAmbientLightManager != null) {
             mAmbientLightManager.unregister();
+        }
+        if (mAnalyzerExecutor != null && !mAnalyzerExecutor.isShutdown()) {
+            mAnalyzerExecutor.shutdown();
         }
         stopCamera();
     }
