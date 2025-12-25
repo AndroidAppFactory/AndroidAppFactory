@@ -3,7 +3,7 @@ def project = ext
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "8.0.6",
+                "version"            : "8.0.7",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -162,7 +162,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibWorker"           : [
-                "version"            : "8.0.6",
+                "version"            : "8.0.7",
                 "artifactId"         : "lib-worker-task",
                 "apidependenciesList": [
                         "LibLog", "LibConfig", "LibOS", "LibForegroundService", project.androidsupport.worker

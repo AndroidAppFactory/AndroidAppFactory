@@ -1,14 +1,11 @@
 package com.bihe0832.android.lib.worker;
 
-import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
 import com.bihe0832.android.lib.log.ZLog;
 
 public abstract class AAFBaseWorker extends Worker {

@@ -14,6 +14,7 @@ import androidx.work.ListenableWorker
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.bihe0832.android.lib.foreground.service.AAFForegroundServiceManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -128,7 +129,7 @@ object AAFWorkerManager {
                 //设置指数退避策略，例如当Worker线程的执行出现了异常，如服务器宕机，你希望一段时间后重试该任务
                 setBackoffCriteria(BackoffPolicy.EXPONENTIAL, Duration.ofSeconds(delay))
             } else {
-                setBackoffCriteria(BackoffPolicy.LINEAR, OneTimeWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+                setBackoffCriteria(BackoffPolicy.LINEAR, WorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
             }
             //触发条件满足后，延迟10s执行任务
             setInitialDelay(delay, TimeUnit.SECONDS)
