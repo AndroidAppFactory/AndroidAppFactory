@@ -1,42 +1,42 @@
 apply from: "$rootDir/config.gradle"
 ext.asrmoduleInfo = [
         "LibASR"                : [
-                "version"            : "8.0.6",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-asr-wrapper",
                 "apidependenciesList": [
                         "LibASRMin", "LibSpeechRecognition", "LibPinYin", "LibChinese"
                 ]
         ],
         "LibASRMin"             : [
-                "version"            : "8.0.6",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-asr-min",
                 "apidependenciesList": [
                         "LibAudioPlayer", "LibTTS", "LibAudio", "LibAudioRecord"
                 ]
         ],
         "LibTTS"                : [
-                "version"            : "8.0.4",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-tts",
                 "apidependenciesList": [
                         "LibConfig", "LibOS", "LibThread"
                 ]
         ],
         "LibAudio"              : [
-                "version"            : "8.0.2",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-audio",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibFile", "LibGson"
                 ]
         ],
         "LibAudioPlayer"        : [
-                "version"            : "8.0.2",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-audio-player",
                 "apidependenciesList": [
                         "LibBlockTask", "LibAudio"
                 ]
         ],
         "LibAudioRecord"        : [
-                "version"            : "8.0.6",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-audio-record",
                 "apidependenciesList": [
                         "LibAudio", "LibAAF", "LibLog", "LibCommonUtils", "LibFile", "LibPermission", "LibForegroundService"
@@ -50,7 +50,7 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibSherpaOnnx"         : [
-                "version"            : "8.0.2",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-sherpa-onnx",
                 "apidependenciesList": [
                         "LibAudio", "LibOnnx"
@@ -71,21 +71,21 @@ ext.asrmoduleInfo = [
                 ]
         ],
         "LibSpeechRecognition"  : [
-                "version"            : "8.0.6",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-speech-recognition",
                 "apidependenciesList": [
                         "LibAudioRecord", "LibSherpaOnnx"
                 ]
         ],
         "LibPinYin"             : [
-                "version"            : "8.0.2",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-pinyin",
                 "apidependenciesList": [
                         "org.ahocorasick:ahocorasick:0.3.0","LibFile","LibAAF","LibChinese"
                 ]
         ],
         "LibChinese"            : [
-                "version"            : "8.0.2",
+                "version"            : "8.1.0",
                 "artifactId"         : "lib-chinese",
                 "apidependenciesList": [
                         "LibFile"
