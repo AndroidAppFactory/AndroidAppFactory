@@ -1,6 +1,6 @@
 ext {
-    kotlin_version = '1.8.10'
-    compose_version = '1.4.2'
+    kotlin_version = '1.9.0'
+    compose_version = '1.5.0'
     accompanist_version = '0.24.13-rc'
     cmake_version = "3.22.1"
     lifecycle_version = "2.6.0"
@@ -56,12 +56,12 @@ ext {
             worker             : "androidx.work:work-runtime:2.9.0",
             material_icon      : "androidx.compose.material:material-icons-extended:$compose_version",
             material3_android  : 'androidx.compose.material3:material3:1.3.2',
-            activity_compose   : "androidx.activity:activity-compose:1.4.0",
+            activity_compose   : "androidx.activity:activity-compose:1.8.0",
             compose_ui         : "androidx.compose.ui:ui:${compose_version}",
             compose_ui_tooling : "androidx.compose.ui:ui-tooling:${compose_version}",
             compose_ui_preview : "androidx.compose.ui:ui-tooling-preview:$compose_version",
             systemuicontroller : "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version",
-            compose_runtime    : "androidx.compose.runtime:runtime:1.4.0",
+            compose_runtime    : "androidx.compose.runtime:runtime:$compose_version",
             compose_paging     : "androidx.paging:paging-compose-android:3.3.6",
             compose_coil       : "io.coil-kt:coil-compose:2.4.0",
     ]
