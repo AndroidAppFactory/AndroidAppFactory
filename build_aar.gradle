@@ -1,5 +1,5 @@
-apply from: rootDir.toString() + '/config.gradle'
-apply from: rootDir.toString() + '/dependencies.gradle'
+apply from: "$rootDir/config.gradle"
+apply from: "$rootDir/dependencies.gradle"
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 

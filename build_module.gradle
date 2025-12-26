@@ -1,5 +1,5 @@
-apply from: rootDir.toString() + '/config.gradle'
-apply from: rootDir.toString() + '/dependencies.gradle'
+apply from: "$rootDir/config.gradle"
+apply from: "$rootDir/dependencies.gradle"
 
 ext {
     zixieMainProject = ext.mainProject
@@ -99,7 +99,7 @@ def checkModuleDependencies(String moduleA, String moduleB) {
 //添加依赖
 def addDependencies(String projectName) {
     HashMap<String, ArrayList> dependencies = new HashMap<>()
-    addLocalDependencies(projectName, rootDir.toString() + '/libs')
+    addLocalDependencies(projectName, "$rootDir/libs")
     autoDependencies(projectName, projectName, dependencies)
     if (zixieIsDebug) println("======== addDependencies " + projectName + " ========")
 }

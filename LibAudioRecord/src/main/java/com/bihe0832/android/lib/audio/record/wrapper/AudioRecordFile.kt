@@ -60,7 +60,8 @@ class AudioRecordFile(
             return true
         }
         try {
-            if (!FileUtils.checkAndCreateFolder(file.parentFile.absolutePath)) {
+            val parentFile = file.parentFile
+            if (parentFile == null || !FileUtils.checkAndCreateFolder(parentFile.absolutePath)) {
                 return false
             }
             hasStart = true

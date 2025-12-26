@@ -1,5 +1,4 @@
-apply from: rootDir.toString() + '/config.gradle'
-def project = ext
+apply from: "$rootDir/config.gradle"
 
 ext.tbsmoduleInfo = [
     "CommonTBSWrapper"   : [
@@ -22,7 +21,7 @@ ext.tbsmoduleInfo = [
         "version"                : "8.0.7",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
-            project.androidsupport.swiperefreshlayout,
+            ext.androidsupport.swiperefreshlayout,
             "CommonWebview", "CommonTBS"
         ],
         "specialdependenciesList": [
@@ -33,7 +32,7 @@ ext.tbsmoduleInfo = [
         "version"            : "8.0.6",
         "artifactId"         : "common-tbs",
         "apidependenciesList": [
-            project.tencent.tbssdk,
+            ext.tencent.tbssdk,
             "LibJsBridge",
             "LibOS"
         ]

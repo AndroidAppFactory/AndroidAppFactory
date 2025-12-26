@@ -1,4 +1,4 @@
-apply from: rootDir.toString() + '/config.gradle'
+apply from: "$rootDir/config.gradle"
 ext.asrmoduleInfo = [
         "LibASR"                : [
                 "version"            : "8.0.6",

@@ -1,4 +1,4 @@
-apply from: rootDir.toString() + '/dependencies_aaf_config.gradle'
+apply from: "$rootDir/dependencies_aaf_config.gradle"
 
 ext {
     //Android编译SDK版本

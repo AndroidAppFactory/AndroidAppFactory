@@ -1,5 +1,4 @@
-apply from: rootDir.toString() + '/config.gradle'
-
+apply from: "$rootDir/config.gradle"
 ext.kitmoduleInfo = [
     "ServicesWrapper"  : [
         "version"            : "8.0.2",

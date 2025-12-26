@@ -1,12 +1,12 @@
-apply from: rootDir.toString() + '/config.gradle'
+apply from: "$rootDir/config.gradle"
 
-apply from: rootDir.toString() + '/dependencies_lib.gradle'
-apply from: rootDir.toString() + '/dependencies_common.gradle'
-apply from: rootDir.toString() + '/dependencies_lock_widget.gradle'
-apply from: rootDir.toString() + '/dependencies_tbs.gradle'
-apply from: rootDir.toString() + '/dependencies_services.gradle'
-apply from: rootDir.toString() + '/dependencies_asr.gradle'
-apply from: rootDir.toString() + '/dependencies_deprecated.gradle'
+apply from: "$rootDir/dependencies_lib.gradle"
+apply from: "$rootDir/dependencies_common.gradle"
+apply from: "$rootDir/dependencies_lock_widget.gradle"
+apply from: "$rootDir/dependencies_tbs.gradle"
+apply from: "$rootDir/dependencies_services.gradle"
+apply from: "$rootDir/dependencies_asr.gradle"
+apply from: "$rootDir/dependencies_deprecated.gradle"
 
 /************************************ 组件化开发常用配置 ************************************/
 /**
@@ -18,9 +18,9 @@ ext.mainProject = "APPTest"
 /**
  * 当前开发中，涉及到修改的工程（仅填写直接修改的即可，依赖他的会自动添加），多个用 "," 分隔。
  *
- * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibViewPager,ModelRes,Framework,Application"
+ * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibAAFResource,LibViewPager,ModelRes,Framework,Application"
  **/
-ext.developModule = "Application"
+ext.developModule = "Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibAAFResource,LibViewPager,ModelRes,Framework,Application"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，

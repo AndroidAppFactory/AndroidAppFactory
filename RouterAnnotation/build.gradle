@@ -16,4 +16,4 @@ artifacts {
     archives javadocJar
 }
 
-apply from: rootDir.toString() + '/build_aar.gradle'
+apply from: "$rootDir/build_aar.gradle"

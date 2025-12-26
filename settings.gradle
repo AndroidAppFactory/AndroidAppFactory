@@ -1,4 +1,4 @@
-apply from: rootDir.toString() + '/build_module.gradle'
+apply from: "$rootDir/build_module.gradle"
 
 System.err.println("MainProjectList: " + zixieMainProject)
 System.err.println("DevProjectList: " + zixieDevelopModule)

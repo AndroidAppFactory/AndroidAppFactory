@@ -1,5 +1,4 @@
-apply from: rootDir.toString() + '/config.gradle'
-def project = ext
+apply from: "$rootDir/config.gradle"
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
@@ -62,12 +61,12 @@ ext.commonmoduleInfo = [
                 "version"                : "8.0.7",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
-                        project.androidsupport.annotation,
-                        project.androidsupport.multidex,
+                        ext.androidsupport.annotation,
+                        ext.androidsupport.multidex,
                         "LibWrapper", "Router", "RouterAnnotation", "LibTheme", "LibLanguage", "ModelRes"
                 ],
                 "specialdependenciesList": [
-                        "kapt": [project.glide.compiler, "RouterCompiler"]
+                        "kapt": [ext.glide.compiler, "RouterCompiler"]
                 ]
         ],
         "CommonCompose"         : [
@@ -75,15 +74,15 @@ ext.commonmoduleInfo = [
                 "artifactId"         : "common-compose",
                 "apidependenciesList": [
                         "Framework",
-                        project.androidsupport.activity_compose,
-                        project.androidsupport.material3_android,
-                        project.androidsupport.compose_ui,
-                        project.androidsupport.compose_ui_tooling,
-                        project.androidsupport.compose_ui_preview,
-                        project.androidsupport.systemuicontroller,
-                        project.androidsupport.compose_paging,
-                        project.androidsupport.lifecycle_viewmodel,
-                        project.androidsupport.compose_coil
+                        ext.androidsupport.activity_compose,
+                        ext.androidsupport.material3_android,
+                        ext.androidsupport.compose_ui,
+                        ext.androidsupport.compose_ui_tooling,
+                        ext.androidsupport.compose_ui_preview,
+                        ext.androidsupport.systemuicontroller,
+                        ext.androidsupport.compose_paging,
+                        ext.androidsupport.lifecycle_viewmodel,
+                        ext.androidsupport.compose_coil
                 ]
         ],
         "CommonAccessibility"   : [
@@ -138,7 +137,7 @@ ext.commonmoduleInfo = [
                 "apidependenciesList": [
                         "CommonDeprecated",
                         "LibSvga",
-                        project.svga_dependency
+                        ext.svga_dependency
 
                 ]
         ],
@@ -163,14 +162,14 @@ ext.commonmoduleInfo = [
                 "version"            : "8.0.7",
                 "artifactId"         : "common-list-compose",
                 "apidependenciesList": [
-                        "CommonCompose", project.androidsupport.lifecycle_compose,
+                        "CommonCompose", ext.androidsupport.lifecycle_compose,
                 ]
         ],
         "CommonList"            : [
                 "version"            : "8.0.7",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
-                        project.androidsupport.swiperefreshlayout,
+                        ext.androidsupport.swiperefreshlayout,
                         "CommonDeprecated"
                 ]
         ],
@@ -199,7 +198,7 @@ ext.commonmoduleInfo = [
                 "version"                : "8.0.7",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
-                        project.androidsupport.swiperefreshlayout,
+                        ext.androidsupport.swiperefreshlayout,
                         "CommonDeprecated", "LibJsBridge"
                 ],
                 "specialdependenciesList": [

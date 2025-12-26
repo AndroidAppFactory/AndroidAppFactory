@@ -1,5 +1,4 @@
-apply from: rootDir.toString() + '/config.gradle'
-def project = ext
+apply from: "$rootDir/config.gradle"
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
@@ -14,7 +13,7 @@ ext.deprecatedModuleInfo = [
                 "version"            : "8.0.0",
                 "artifactId"         : "lib-fragmentation-core",
                 "apidependenciesList": [
-                        project.androidsupport.appcompat,
+                        ext.androidsupport.appcompat,
                         "LibAAFResource", "LibOS"
                 ]
         ],
@@ -36,7 +35,7 @@ ext.deprecatedModuleInfo = [
                 "version"            : "8.0.2",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
-                        project.androidsupport.androidxcore,
+                        ext.androidsupport.androidxcore,
                         "LibAAFResource", "LibOS", "LibRequest", "LibMedia", "LibTextView"
                 ]
         ],
@@ -44,7 +43,7 @@ ext.deprecatedModuleInfo = [
                 "version"            : "8.0.0",
                 "artifactId"         : "lib-adapter",
                 "apidependenciesList": [
-                        project.androidsupport.recyclerview,
+                        ext.androidsupport.recyclerview,
                         "LibAAFResource", "LibText"
                 ]
         ],
@@ -67,8 +66,8 @@ ext.deprecatedModuleInfo = [
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",
-                        project.androidsupport.androidxcore,
-                        project.androidsupport.annotation
+                        ext.androidsupport.androidxcore,
+                        ext.androidsupport.annotation
                 ]
         ]
 ]

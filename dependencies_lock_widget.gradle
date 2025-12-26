@@ -1,5 +1,5 @@
-apply from: rootDir.toString() + '/config.gradle'
-def project = ext
+apply from: "$rootDir/config.gradle"
+
 ext.widgetmoduleInfo = [
         "LibScreenWrapper": [
                 "version"            : "8.0.7",
