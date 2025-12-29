@@ -3,10 +3,10 @@ ext {
     compose_version = '1.5.0'
     accompanist_version = '0.24.13-rc'
     cmake_version = "3.22.1"
-    lifecycle_version = "2.6.0"
+    lifecycle_version = "2.8.7"
 
     // AAF 基础库依赖的第三方库基本信息
-    gson_version = "com.google.code.gson:gson:2.10.1"
+    gson_version = "com.google.code.gson:gson:2.11.0"
     svga_dependency = "com.github.yyued:SVGAPlayer-Android:2.6.1"
 
     kotlinx_coroutines = [

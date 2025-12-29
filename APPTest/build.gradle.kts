@@ -88,10 +88,4 @@ android {
             isShrinkResources = false
         }
     }
-
-    configurations.all {
-        resolutionStrategy {
-            force("androidx.lifecycle:lifecycle-livedata-core:2.6.0")
-        }
-    }
 }
