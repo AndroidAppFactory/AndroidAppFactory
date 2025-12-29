@@ -21,14 +21,6 @@ ext.mainProject = "APPTest"
  * 当前如果全量填"Router,LibAndroid,LibOS,LibThread,LibRequest,LibSqlite,LibAAF,LibAAFResource,LibViewPager,ModelRes,Framework,Application"
  **/
 ext.developModule = "Application"
-        "CommonDebug, CommonDebugCompose, CommonDeprecated, CommonFeedback,\n" +
-        "CommonFilePreview, CommonLanguage, CommonListCompose, CommonMessage,\n" +
-        "CommonPanel, CommonPermission, CommonPhotos, CommonPraise, CommonQRCode,\n" +
-        "CommonShare, CommonTBSWebview, CommonWebview, Framework, LibAceEditor,\n" +
-        "LibAPK, LibBottomTab, LibColor, LibCustomView, LibDialog, LibDownload,\n" +
-        "LibFileSelect, LibFlycoTabLayout, LibForegroundService, LibFragmentation_core,\n" +
-        "LibInstall, LibLockScreen, LibNotification, LibPanel, LibPermission,\n" +
-        "LibRefresh, LibTextView, LibToast, LibWidget"
 /**
  * 是否将所有依赖了 developModule 的模块都加载进来。
  *  true 全都加载，
@@ -47,7 +39,7 @@ ext.isPublish = false
 
 /**
  * 组件所有模块的最新版本，下次发布时使用*/
-ext.moduleVersionName = "8.1.1"
+ext.moduleVersionName = "8.1.2"
 /************************************ 组件化开发常用配置 ************************************/
 
 ext.coremoduleInfo = [

@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.libmoduleInfo = [
         "LibWrapper"          : [
-                "version"            : "8.1.1",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-wrapper",
                 "apidependenciesList": [
                         "LibCommonUtils", "LibChannel", "LibTimer", "LibRequest", "LibGson", "LibHttpAdvanced",
@@ -107,7 +107,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibGson"             : [
-                "version"            : "8.1.0",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-gson",
                 "apidependenciesList": [
                         ext.gson_version,
@@ -122,7 +122,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibHttpAdvanced"     : [
-                "version"            : "8.1.0",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-http-advanced",
                 "apidependenciesList": [
                         "LibHttpCommon", "LibGson", "LibAAF"
@@ -200,7 +200,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibDownload"         : [
-                "version"            : "8.1.1",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-download",
                 "apidependenciesList": [
                         "LibDialog", "LibFile", "LibRequest", "LibThread", "LibSqlite",
@@ -245,7 +245,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibOkhttpWrapper"    : [
-                "version"            : "8.1.0",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-okhttp-wrapper",
                 "apidependenciesList": [
                         "LibLog", "LibHttpCommon", "LibGson",
@@ -385,7 +385,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibLifecycle"        : [
-                "version"            : "8.1.1",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-lifecycle",
                 "apidependenciesList": [
                         ext.androidsupport.lifecycle,
@@ -473,7 +473,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibPanel"            : [
-                "version"            : "8.1.1",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-panel",
                 "apidependenciesList": [
                         ext.androidsupport.annotation,
@@ -509,7 +509,7 @@ ext.libmoduleInfo = [
                 ]
         ],
         "LibAppIcon"   : [
-                "version"            : "8.1.1",
+                "version"            : "8.1.2",
                 "artifactId"         : "lib-app-icon",
                 "apidependenciesList": [
                         "LibLifecycle"
