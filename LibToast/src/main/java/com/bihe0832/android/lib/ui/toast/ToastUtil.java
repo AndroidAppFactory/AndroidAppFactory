@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bihe0832.android.lib.text.TextFactoryUtils;
 import com.bihe0832.android.lib.thread.ThreadManager;
 
@@ -24,22 +25,22 @@ public class ToastUtil {
     }
 
     public static void showTop(final Context ctx, final String toastInfo, final int duration) {
-        show(ctx, ctx.getResources().getDrawable(R.mipmap.icon), toastInfo,
-                ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size), duration, Gravity.TOP, 0,
-                (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
+        show(ctx, ctx.getResources().getDrawable(com.bihe0832.android.lib.aaf.res.R.mipmap.icon), toastInfo,
+                ctx.getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.bihe0832_common_toast_text_size), duration, Gravity.TOP, 0,
+                (int) ctx.getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.bihe0832_common_toast_y_offset));
     }
 
     public static void show(final Context ctx, final String toastInfo, final int duration) {
-        show(ctx, ctx.getResources().getDrawable(R.mipmap.icon), toastInfo, duration);
+        show(ctx, ctx.getResources().getDrawable(com.bihe0832.android.lib.aaf.res.R.mipmap.icon), toastInfo, duration);
     }
 
     public static void show(final Context ctx, final Drawable res, final String toastInfo, final int duration) {
-        show(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size), duration,
-                Gravity.BOTTOM, 0, (int) ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_y_offset));
+        show(ctx, res, toastInfo, ctx.getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.bihe0832_common_toast_text_size), duration,
+                Gravity.BOTTOM, 0, (int) ctx.getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.bihe0832_common_toast_y_offset));
     }
 
     public static void show(final Context ctx, final Drawable imageRes, final String toastInfo, final float textSize,
-            final int duration, final int gravityType, final int xOffset, final int yOffset) {
+                            final int duration, final int gravityType, final int xOffset, final int yOffset) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
@@ -61,12 +62,12 @@ public class ToastUtil {
     }
 
     public static void showTips(final Context ctx, Drawable res, final String toastInfo, final int duration) {
-        showTips(ctx, res, toastInfo, ctx.getResources().getDimension(R.dimen.bihe0832_common_toast_text_size),
+        showTips(ctx, res, toastInfo, ctx.getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.bihe0832_common_toast_text_size),
                 duration, Gravity.CENTER, 0, 0);
     }
 
     public static void showTips(final Context ctx, final Drawable imageRes, final String toastInfo,
-            final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
+                                final float textSize, final int duration, final int gravityType, final int xOffset, final int yOffset) {
         ThreadManager.getInstance().start(new Runnable() {
             @Override
             public void run() {
@@ -80,7 +81,7 @@ public class ToastUtil {
     }
 
     public static void show(final Context ctx, final View layout, final String toastInfo, final float textSize,
-            final int duration, final int gravityType, final int xOffset, final int yOffset) {
+                            final int duration, final int gravityType, final int xOffset, final int yOffset) {
         TextView toastText = (TextView) layout.findViewById(R.id.bihe0832_common_toast_text);
         CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(toastInfo);//支持html
         toastText.setText(charSequence);
@@ -89,7 +90,7 @@ public class ToastUtil {
     }
 
     public static void show(final Context ctx, final View layout, final int duration, final int gravityType,
-            final int xOffset, final int yOffset) {
+                            final int xOffset, final int yOffset) {
         ThreadManager.getInstance().runOnUIThread(new Runnable() {
             @Override
             public void run() {

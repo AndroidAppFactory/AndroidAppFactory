@@ -50,10 +50,10 @@ public class InputDialogUtils {
                         DisplayUtil.dip2px(context, 4f),
                         DisplayUtil.dip2px(context, 8f)
                 );
-                editText.setBackgroundColor(context.getResources().getColor(R.color.com_bihe0832_dialog_hint));
+                editText.setBackgroundColor(context.getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.com_bihe0832_dialog_hint));
                 editText.setTextSize(10);
-                editText.setTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_bg));
-                editText.setHintTextColor(context.getResources().getColor(R.color.com_bihe0832_dialog_split));
+                editText.setTextColor(context.getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.com_bihe0832_dialog_bg));
+                editText.setHintTextColor(context.getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.com_bihe0832_dialog_split));
                 editText.setHint(hint);
                 if (!TextUtils.isEmpty(defaultValue)) {
                     editText.requestFocus();

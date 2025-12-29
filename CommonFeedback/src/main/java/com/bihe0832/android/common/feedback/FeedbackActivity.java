@@ -25,14 +25,14 @@ public class FeedbackActivity extends BaseWebviewActivity {
 
     @Override
     protected void initToolbar() {
-        initToolbar(getResources().getString(R.string.feedback_title), true);
+        initToolbar(getResources().getString(com.bihe0832.android.model.res.R.string.feedback_title), true);
     }
 
     @Override
     protected void handleIntent(Intent intent) {
         super.handleIntent(intent);
         if (TextUtils.isEmpty(getURL())) {
-            ZixieContext.INSTANCE.showToast(getResources().getString(R.string.feedback_bad_tips));
+            ZixieContext.INSTANCE.showToast(getResources().getString(com.bihe0832.android.model.res.R.string.feedback_bad_tips));
             finish();
         }
     }

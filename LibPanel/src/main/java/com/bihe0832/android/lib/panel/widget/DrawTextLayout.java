@@ -51,7 +51,7 @@ public class DrawTextLayout extends FrameLayout {
             params.height = display.getWidth();
         }
         this.setLayoutParams(params);
-        this.setBackgroundColor(getResources().getColor(R.color.transparent));
+        this.setBackgroundColor(getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.transparent));
         showPoints();
     }
 

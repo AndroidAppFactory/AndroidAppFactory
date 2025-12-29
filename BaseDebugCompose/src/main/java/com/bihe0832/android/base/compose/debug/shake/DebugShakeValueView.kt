@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.base.compose.debug.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 @Preview
 @Composable
@@ -53,7 +53,7 @@ fun DebugShakeValueView(
                     modifier = Modifier
                         .width(150.dp)
                         .align(Alignment.Center),
-                    painter = painterResource(id = R.mipmap.icon),
+                    painter = painterResource(id = ResR.mipmap.icon),
                     contentDescription = ""
                 )
             }

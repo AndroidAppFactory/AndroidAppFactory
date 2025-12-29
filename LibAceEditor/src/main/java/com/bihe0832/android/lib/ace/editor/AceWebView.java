@@ -117,7 +117,7 @@ class AceWebView extends WebView implements NestedScrollingChild {
 
     public AceWebView(Context context) {
         super(context);
-        DisplayUtil.resetDensity(ViewExtKt.getActivity(this), ConvertUtils.parseFloat(ThemeResourcesManager.INSTANCE.getString(R.string.custom_density), 360));
+        DisplayUtil.resetDensity(ViewExtKt.getActivity(this), ConvertUtils.parseFloat(ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.custom_density), 360));
 
         mMetrics = context.getResources().getDisplayMetrics();
         mActionModeOffsetLeft = (int) (64 * mMetrics.density);

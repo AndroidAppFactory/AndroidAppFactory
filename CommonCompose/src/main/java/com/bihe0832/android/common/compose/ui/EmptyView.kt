@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.state.aafStringResource
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  *
@@ -35,7 +36,7 @@ import com.bihe0832.android.common.compose.state.aafStringResource
 @Preview
 @Composable
 fun EmptyView(
-    message: String = aafStringResource(R.string.com_bihe0832_loading_empty),
+    message: String = aafStringResource(ResR.string.com_bihe0832_loading_empty),
     colorP: Color = Color(0xFF0B0E15),
     iconSize: Int = 100,
     textSize: Int = 16,
@@ -56,7 +57,7 @@ fun EmptyView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(R.drawable.icon_empty),
+            painter = painterResource(ResR.drawable.icon_empty),
             colorFilter = ColorFilter.tint(textColor),
             contentDescription = "空数据",
             modifier = Modifier.size(iconSize.dp)

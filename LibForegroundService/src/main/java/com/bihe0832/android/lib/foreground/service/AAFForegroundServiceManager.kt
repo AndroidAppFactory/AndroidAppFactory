@@ -16,6 +16,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.concurrent.ConcurrentHashMap
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  * Summary
@@ -41,7 +42,7 @@ object AAFForegroundServiceManager {
     private var mNoticeID = NOTICE_ID
     private var mChannelID = NOTICE_CHANNEL_ID
     private var mChannelName = ""
-    private var mResID = R.mipmap.icon
+    private var mResID = ResR.mipmap.icon
     private val actionList = ConcurrentHashMap<String, ForegroundServiceAction>()
 
     private fun startByAction(action: ForegroundServiceAction) {
@@ -75,9 +76,9 @@ object AAFForegroundServiceManager {
     }
 
     private fun getNotifyContent(context: Context): String {
-        var string = APKUtils.getAppName(context) + context.getString(R.string.foreground_service_join)
+        var string = APKUtils.getAppName(context) + context.getString(ResR.string.foreground_service_join)
         string += actionList.map { it.value.getNotifyContent() }.joinToString("、")
-        return string + context.getString(R.string.foreground_service_running)
+        return string + context.getString(ResR.string.foreground_service_running)
     }
 
     internal fun getNoticeID(): Int {

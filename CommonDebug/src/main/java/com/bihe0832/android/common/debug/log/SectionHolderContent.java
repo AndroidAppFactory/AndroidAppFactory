@@ -75,7 +75,7 @@ public class SectionHolderContent extends CardBaseHolder {
             log_send.setVisibility(View.GONE);
             log_open.setVisibility(View.GONE);
             log_layout.setOnClickListener(openListener);
-            log_layout.setBackground(getContext().getResources().getDrawable(R.drawable.common_button_bg_shape));
+            log_layout.setBackground(getContext().getResources().getDrawable(com.bihe0832.android.framework.R.drawable.common_button_bg_shape));
         }
     }
 

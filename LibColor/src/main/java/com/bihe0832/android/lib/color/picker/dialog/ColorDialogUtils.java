@@ -82,9 +82,9 @@ public class ColorDialogUtils {
             final DialogIntCallback listener) {
         showColorSelectDialog(context, pickType, defaultAlpha, defaultValue,
                 DisplayUtil.dip2px(context, DEFAULT_PICK_DP),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_ok),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_button_reset),
-                ThemeResourcesManager.INSTANCE.getString(R.string.dialog_color_tips), true, listener);
+                ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.dialog_color_button_ok),
+                ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.dialog_color_button_reset),
+                ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.dialog_color_tips), true, listener);
     }
 
     public static void showColorSelectDialog(final Context context, int pickType, int defaultAlpha, int defaultValue,

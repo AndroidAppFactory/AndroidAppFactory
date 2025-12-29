@@ -15,9 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.item.DebugTips
+import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.model.res.R as ModelResR
 import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.compose.state.aafStringResource
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -29,7 +30,7 @@ import java.util.Locale
 fun DebugLanguageComposeView() {
     val context = LocalContext.current
     Column {
-        DebugTips(stringResource(R.string.app_name))
+        DebugTips(stringResource(ResR.string.app_name))
         DebugTips("当前语言：" + MultiLanguageState.getCurrentLanguageState().language + "，当前Context语言：" + LocalContext.current.resources.configuration.locale.language)
         DebugTips("Locale.getDefault：" + Locale.getDefault().language + ",Locale.Current：" + androidx.compose.ui.text.intl.Locale.current)
         CustomCompose2(1)
@@ -54,12 +55,12 @@ fun DebugLanguageComposeView() {
 @Composable
 internal fun CustomCompose1() {
 
-    Text(modifier = Modifier.background(Color.Red), text = aafStringResource(R.string.dialog_title))
-    DebugItem(stringResource(R.string.dialog_title)) { }
-    DebugItem(aafStringResource(R.string.dialog_title)) { }
+    Text(modifier = Modifier.background(Color.Red), text = aafStringResource(ModelResR.string.dialog_title))
+    DebugItem(stringResource(ModelResR.string.dialog_title)) { }
+    DebugItem(aafStringResource(ModelResR.string.dialog_title)) { }
     LazyColumn {
         items(1) { index ->
-            DebugItem("${stringResource(R.string.dialog_title)}: $index - 0 ") { }
+            DebugItem("${stringResource(ModelResR.string.dialog_title)}: $index - 0 ") { }
         }
     }
     CustomCompose2(2)
@@ -68,13 +69,13 @@ internal fun CustomCompose1() {
 
 @Composable
 internal fun CustomCompose2(num: Int) {
-    DebugItem(aafStringResource(R.string.install_success)) { }
+    DebugItem(aafStringResource(ModelResR.string.install_success)) { }
     LazyColumn {
         items(1, key = { item ->
             // 将外部变量加入key，变化时触发重建
             "$item"
         }) { index ->
-            DebugItem("${aafStringResource(R.string.install_success)} 2 - $num: $index - 0") { }
+            DebugItem("${aafStringResource(ModelResR.string.install_success)} 2 - $num: $index - 0") { }
         }
     }
 }

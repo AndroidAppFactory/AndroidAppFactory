@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.common.deprecated.R
 import com.bihe0832.android.framework.ui.BaseFragment
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 
@@ -29,7 +30,7 @@ open class CommonEmptyFragment : BaseFragment() {
         mContentString = bundle.getString(INTENT_KEY_TITLE, this.toString())
         mContentBackgroundColor = bundle.getInt(
             INTENT_KEY_COLOR,
-            ThemeResourcesManager.getColor(R.color.windowBackground)!!
+            ThemeResourcesManager.getColor(ResR.color.windowBackground)!!
         )
     }
 

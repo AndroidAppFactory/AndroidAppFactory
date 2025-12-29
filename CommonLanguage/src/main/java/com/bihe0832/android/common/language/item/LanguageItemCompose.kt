@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.common.compose.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  *
@@ -62,7 +62,7 @@ fun LanguageItemCompose(
             // 2. 选择状态图标（右侧）
             if (isSelected) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.icon_select_fill),
+                    imageVector = ImageVector.vectorResource(ResR.drawable.icon_select_fill),
                     contentDescription = "",
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.secondary

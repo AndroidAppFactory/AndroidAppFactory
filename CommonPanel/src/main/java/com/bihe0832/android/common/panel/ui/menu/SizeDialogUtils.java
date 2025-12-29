@@ -14,7 +14,6 @@ import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedIntCallback;
 import com.bihe0832.android.lib.ui.dialog.callback.DialogIntCallback;
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener;
-import com.ricky.color_picker.R;
 
 /**
  * @author zixie code@bihe0832.com
@@ -83,8 +82,8 @@ public class SizeDialogUtils {
         }
         showSizeSelectDialog(context, title, selectType, defaultValue, maxValue,
                 ThemeResourcesManager.INSTANCE.getString(
-                        R.string.dialog_color_button_ok), ThemeResourcesManager.INSTANCE.getString(
-                        R.string.dialog_color_button_reset), true, listener);
+                        com.bihe0832.android.model.res.R.string.dialog_color_button_ok), ThemeResourcesManager.INSTANCE.getString(
+                        com.bihe0832.android.model.res.R.string.dialog_color_button_reset), true, listener);
     }
 
 

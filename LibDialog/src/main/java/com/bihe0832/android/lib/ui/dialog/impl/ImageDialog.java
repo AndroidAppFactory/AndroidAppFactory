@@ -117,20 +117,20 @@ public class ImageDialog extends CommonDialog {
             params.bottomMargin = mButtonBottomMargin;
             this.mButtonLayout.setLayoutParams(params);
             if (mShowButtonBg) {
-                int colorAccent = getContext().getResources().getColor(R.color.colorAccent);
+                int colorAccent = getContext().getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.colorAccent);
                 int colorWithAlpha = Color.argb(128, Color.red(colorAccent), Color.green(colorAccent),
                         Color.blue(colorAccent));
                 this.mButtonLayout.setBackgroundColor(colorWithAlpha);
 
             } else {
-                this.mButtonLayout.setBackgroundResource(R.color.transparent);
+                this.mButtonLayout.setBackgroundResource(com.bihe0832.android.lib.aaf.res.R.color.transparent);
             }
         }
 
         if (null != this.mContentImageView) {
             if (URLUtils.isHTTPUrl(this.url)) {
-                GlideExtKt.loadCenterInsideImage(this.mContentImageView, this.url, R.color.transparent,
-                        R.color.transparent);
+                GlideExtKt.loadCenterInsideImage(this.mContentImageView, this.url, com.bihe0832.android.lib.aaf.res.R.color.transparent,
+                        com.bihe0832.android.lib.aaf.res.R.color.transparent);
             } else if (this.res > 0) {
                 this.mContentImageView.setImageResource(this.res);
             } else {

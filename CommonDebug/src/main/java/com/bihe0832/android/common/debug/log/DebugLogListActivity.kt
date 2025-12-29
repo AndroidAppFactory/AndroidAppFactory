@@ -10,7 +10,7 @@ import com.bihe0832.android.common.list.CardItemForCommonList
 import com.bihe0832.android.common.list.CommonListLiveData
 import com.bihe0832.android.common.list.swiperefresh.CommonListActivity
 import com.bihe0832.android.common.webview.core.WebViewLoggerFile
-import com.bihe0832.android.framework.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.router.RouterConstants
@@ -50,7 +50,7 @@ open class DebugLogListActivity : CommonListActivity() {
     }
 
     override fun getNavigationBarColor(): Int {
-        return ThemeResourcesManager.getColor(R.color.transparent)!!
+        return ThemeResourcesManager.getColor(ResR.color.transparent)!!
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
@@ -144,7 +144,7 @@ open class DebugLogListActivity : CommonListActivity() {
 
     override fun initView() {
         super.initView()
-        updateIcon(R.drawable.icon_left_arrow, true)
+        updateIcon(ResR.drawable.icon_left_arrow, true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

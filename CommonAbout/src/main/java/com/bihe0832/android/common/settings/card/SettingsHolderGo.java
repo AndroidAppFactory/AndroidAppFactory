@@ -67,7 +67,7 @@ public class SettingsHolderGo extends CardBaseHolder {
                     GlideExtKt.loadImage(mHeaderIcon, drawable, 0, 0, new RequestOptions());
                     if (data.mItemIconResColorFilter == null) {
                         if (data.mAutoGenerateColorFilter) {
-                            mHeaderIcon.setColorFilter(getContext().getResources().getColor(R.color.textColorPrimary));
+                            mHeaderIcon.setColorFilter(getContext().getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.textColorPrimary));
                         } else {
                             mHeaderIcon.setColorFilter(null);
                         }
@@ -79,7 +79,7 @@ public class SettingsHolderGo extends CardBaseHolder {
                 }
             }
         } else {
-            GlideExtKt.loadImage(mHeaderIcon, data.mItemIconURL, R.mipmap.icon, R.mipmap.icon);
+            GlideExtKt.loadImage(mHeaderIcon, data.mItemIconURL, com.bihe0832.android.lib.aaf.res.R.mipmap.icon, com.bihe0832.android.lib.aaf.res.R.mipmap.icon);
             mHeaderIcon.setVisibility(View.VISIBLE);
         }
 

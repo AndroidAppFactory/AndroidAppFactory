@@ -102,7 +102,7 @@ public class DrawPenView extends View {
      * 初始化画笔
      */
     public void changeEraser() {
-        mPaint.setColor(mContext.getResources().getColor(R.color.transparent));
+        mPaint.setColor(mContext.getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.transparent));
         mPaint.setStrokeWidth(2 * PanelManager.getInstance().mCurrentEraserSize);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));//擦除模式
         postInvalidate();
@@ -145,7 +145,7 @@ public class DrawPenView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-        canvas.drawColor(mContext.getResources().getColor(R.color.transparent));
+        canvas.drawColor(mContext.getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.transparent));
         int nCanvasHeight = canvas.getHeight();
         int nBitmapHeight = mBottomBitmap.getHeight();
         mBottomBitmapDrawHeight = (nCanvasHeight - nBitmapHeight) / 2;

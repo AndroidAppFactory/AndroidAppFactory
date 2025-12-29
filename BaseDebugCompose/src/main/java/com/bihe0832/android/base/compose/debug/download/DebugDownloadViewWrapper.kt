@@ -2,8 +2,8 @@ package com.bihe0832.android.base.compose.debug.download
 
 import android.app.Activity
 import android.content.Context
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2.showInputDialog
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.framework.file.AAFFileWrapper
 import com.bihe0832.android.framework.request.ZixieRequestHttp
 import com.bihe0832.android.lib.download.DownloadItem
@@ -49,7 +49,7 @@ fun startDownload(context: Context, type: Int, url: String, md5: String) {
     FileUtils.copyAssetsFileToPath(context, "ZPUZZLE_official.apk", file)
     DownloadItem().apply {
         setNotificationVisibility(true)
-        downloadTitle = ThemeResourcesManager.getString(R.string.app_name)
+        downloadTitle = ThemeResourcesManager.getString(ResR.string.app_name)
         downloadDesc = "ffsf"
         downloadIcon = if (type == INSTALL_BY_CUSTOMER) {
             "https://cdn.bihe0832.com/images/zixie_32.ico"
@@ -188,7 +188,7 @@ fun testDownloadProcess(activity: Activity) {
     }
     DownloadFile.downloadWithProcess(activity!!,
         String.format(
-            ThemeResourcesManager.getString(com.bihe0832.android.framework.R.string.dialog_apk_updating)!!,
+            ThemeResourcesManager.getString(com.bihe0832.android.model.res.R.string.dialog_apk_updating)!!,
             "（V.2.2.21)",
         ),
         "这是一个Desc测试",

@@ -11,6 +11,7 @@ import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity
 import com.bihe0832.android.lib.permission.wrapper.openFloatSettings
+import com.bihe0832.android.model.res.R as ModelResR
 
 /**
  *
@@ -42,24 +43,24 @@ object AAFPermissionManager {
         PermissionManager.addPermissionGroupDesc(
             "",
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            context.getString(R.string.common_permission_title_location)
+            context.getString(ModelResR.string.common_permission_title_location)
         )
         PermissionManager.addPermissionGroupScene(
             "",
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            context.getString(R.string.common_permission_scene_location),
+            context.getString(ModelResR.string.common_permission_scene_location),
         )
 
         PermissionManager.addPermissionGroup("", Manifest.permission.CAMERA, takePhotoPermission)
         PermissionManager.addPermissionGroupDesc(
             "",
             Manifest.permission.CAMERA,
-            context.getString(R.string.common_permission_title_camera)
+            context.getString(ModelResR.string.common_permission_title_camera)
         )
         PermissionManager.addPermissionGroupScene(
             "",
             Manifest.permission.CAMERA,
-            context.getString(R.string.common_permission_title_qrcode)
+            context.getString(ModelResR.string.common_permission_title_qrcode)
         )
     }
 

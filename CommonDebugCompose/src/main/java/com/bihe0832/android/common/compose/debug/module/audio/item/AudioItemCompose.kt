@@ -26,8 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  *
@@ -53,7 +53,7 @@ fun AudioItemCompose(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(R.drawable.icon_file_type_audio),
+            painter = painterResource(ResR.drawable.icon_file_type_audio),
             contentDescription = null,
             modifier = Modifier
                 .size(42.dp)
@@ -76,7 +76,7 @@ fun AudioItemCompose(
         ) {
             Text(
                 text = title,
-                color = colorResource(id = R.color.textColorSecondary),
+                color = colorResource(id = ResR.color.textColorSecondary),
                 fontSize = 14.sp,
                 modifier = Modifier
                     .fillMaxWidth()

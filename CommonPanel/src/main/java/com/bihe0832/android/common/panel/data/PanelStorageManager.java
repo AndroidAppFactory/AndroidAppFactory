@@ -6,7 +6,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.text.TextUtils;
-import com.bihe0832.android.common.panel.R;
 import com.bihe0832.android.framework.ZixieContext;
 import com.bihe0832.android.lib.file.FileUtils;
 import com.bihe0832.android.lib.gson.JsonHelper;
@@ -72,7 +71,7 @@ public class PanelStorageManager {
         }
         String result = JsonHelper.INSTANCE.toJson(boardPoints);
         FileUtils.INSTANCE.writeToFile(filePath, result, false);
-        ZixieContext.INSTANCE.showToast(ThemeResourcesManager.INSTANCE.getString(R.string.white_board_save_sucess));
+        ZixieContext.INSTANCE.showToast(ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.model.res.R.string.white_board_save_sucess));
     }
 
     /**

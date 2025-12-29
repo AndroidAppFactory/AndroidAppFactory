@@ -54,7 +54,7 @@ public class DebugStackDelegate implements SensorEventListener {
         if (root instanceof FrameLayout) {
             FrameLayout content = (FrameLayout) root;
             final ImageView stackView = new ImageView(mActivity);
-            stackView.setImageResource(R.drawable.icon_android);
+            stackView.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_android);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.END;
             final int dp18 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, mActivity.getResources().getDisplayMetrics());

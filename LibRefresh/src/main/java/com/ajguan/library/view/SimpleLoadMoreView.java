@@ -31,33 +31,33 @@ public class SimpleLoadMoreView extends FrameLayout implements ILoadMoreView {
     @Override
     public void reset() {
         tvHitText.setVisibility(INVISIBLE);
-        tvHitText.setText(getContext().getString(R.string.com_bihe0832_loading));
+        tvHitText.setText(getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_loading));
     }
 
     @Override
     public void loading() {
         tvHitText.setVisibility(VISIBLE);
-        tvHitText.setText(getContext().getString(R.string.com_bihe0832_loading));
+        tvHitText.setText(getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_loading));
     }
 
     @Override
     public void loadComplete() {
         tvHitText.setVisibility(VISIBLE);
-        tvHitText.setText(getContext().getString(R.string.com_bihe0832_loading_completed));
+        tvHitText.setText(getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_loading_completed));
 
     }
 
     @Override
     public void loadFail() {
         tvHitText.setVisibility(VISIBLE);
-        tvHitText.setText(getContext().getString(R.string.com_bihe0832_load_failed));
+        tvHitText.setText(getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_load_failed));
 
     }
 
     @Override
     public void loadNothing() {
         tvHitText.setVisibility(VISIBLE);
-        tvHitText.setText(getContext().getString(R.string.com_bihe0832_load_more_end));
+        tvHitText.setText(getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_load_more_end));
     }
 
     @Override

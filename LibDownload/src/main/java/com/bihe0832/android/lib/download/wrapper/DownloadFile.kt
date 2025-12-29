@@ -5,6 +5,7 @@ import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -175,10 +176,10 @@ object DownloadFile {
         if (NetworkUtil.isNetworkConnected(activity)) {
             if (NetworkUtil.isMobileNet(activity)) {
                 DialogUtils.showConfirmDialog(activity,
-                    activity.getString(R.string.download_dialog_mobile_title),
-                    activity.getString(R.string.download_dialog_mobile_desc),
-                    activity.getString(R.string.download_dialog_mobile_positive),
-                    activity.getString(R.string.download_dialog_mobile_negative),
+                    activity.getString(ResR.string.download_dialog_mobile_title),
+                    activity.getString(ResR.string.download_dialog_mobile_desc),
+                    activity.getString(ResR.string.download_dialog_mobile_positive),
+                    activity.getString(ResR.string.download_dialog_mobile_negative),
                     canCancel,
                     object : SimpleDialogListener() {
                         override fun onPositiveClick() {
@@ -269,7 +270,7 @@ object DownloadFile {
                 }
             }
         } else {
-            ToastUtil.showShort(activity, activity.getString(R.string.download_network_bad))
+            ToastUtil.showShort(activity, activity.getString(ResR.string.download_network_bad))
         }
     }
 
@@ -301,10 +302,10 @@ object DownloadFile {
             setCurrentSize(0, 0)
             setShouldCanceled(canCancel)
             if (canCancel) {
-                setPositive(activity.getString(R.string.download_background_downloading))
-                setNegative(activity.getString(R.string.download_cancel))
+                setPositive(activity.getString(ResR.string.download_background_downloading))
+                setNegative(activity.getString(ResR.string.download_cancel))
             } else {
-                setPositive(activity.getString(R.string.download_cancel))
+                setPositive(activity.getString(ResR.string.download_cancel))
             }
 
             setOnClickListener(object : OnDialogListener {
@@ -312,7 +313,7 @@ object DownloadFile {
                     if (canCancel) {
                         ToastUtil.showShort(
                             activity,
-                            activity.getString(R.string.download_background)
+                            activity.getString(ResR.string.download_background)
                         )
                     }
                     dismiss()
@@ -331,7 +332,7 @@ object DownloadFile {
                     if (canCancel) {
                         ToastUtil.showShort(
                             activity,
-                            activity.getString(R.string.download_background)
+                            activity.getString(ResR.string.download_background)
                         )
                     }
                     dismiss()
@@ -367,7 +368,7 @@ object DownloadFile {
                 override fun onFail(errorCode: Int, msg: String, item: DownloadItem) {
                     ToastUtil.showShort(
                         activity,
-                        activity.getString(R.string.download_failed) + "（$errorCode）"
+                        activity.getString(ResR.string.download_failed) + "（$errorCode）"
                     )
                     ThreadManager.getInstance().start({
                         downloadListener?.onFail(errorCode, msg, item)

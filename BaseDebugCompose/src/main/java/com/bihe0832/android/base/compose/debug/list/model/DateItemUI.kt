@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.bihe0832.android.common.compose.ui.utils.VerticalSpacer
-import com.bihe0832.android.common.message.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.request.URLUtils
 
 /**
@@ -74,9 +74,9 @@ fun DateItemUI(
                     model = if (URLUtils.isHTTPUrl(url)) {
                         url
                     } else {
-                        R.drawable.icon_message
+                        ResR.drawable.icon_message
                     },
-                    placeholder = painterResource(R.drawable.icon_message),
+                    placeholder = painterResource(ResR.drawable.icon_message),
                     contentDescription = "",
                     modifier = Modifier.size(24.dp),
                     colorFilter = if (URLUtils.isHTTPUrl(url)) {
@@ -137,7 +137,7 @@ fun DateItemUI(
                     .align(Alignment.CenterVertically) // 关键修改：添加垂直居中
                 ,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer),
-                painter = painterResource(R.drawable.icon_delete_fill))
+                painter = painterResource(ResR.drawable.icon_delete_fill))
         }
     }
 }

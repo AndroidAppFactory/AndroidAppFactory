@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.bihe0832.android.lib.foreground.service.BaseForegroundService
-import com.bihe0832.android.lib.foreground.service.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.notification.NotifyManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
@@ -35,7 +35,7 @@ open class DebugForegroundService : BaseForegroundService() {
         NotifyManager.createNotificationChannel(context, channelName, NOTICE_CHANNEL_ID)
         // 如果API大于18，需要弹出一个可见通知
         return if (BuildUtils.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            NotificationCompat.Builder(context, NOTICE_CHANNEL_ID).setOngoing(true).setSmallIcon(R.mipmap.icon)
+            NotificationCompat.Builder(context, NOTICE_CHANNEL_ID).setOngoing(true).setSmallIcon(ResR.mipmap.icon)
                     .setContentText(NOTICE_CHANNEL_ID).setContentTitle(channelName).build()
         } else {
             Notification()

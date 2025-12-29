@@ -332,10 +332,10 @@ public abstract class TBSWebViewFragment extends BaseWebViewFragment {
         public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
             DialogUtils.INSTANCE.showConfirmDialog(
                     getContext(),
-                    getResources().getString(R.string.dialog_title),
-                    getResources().getString(R.string.com_bihe0832_web_ssl_error_message),
-                    getResources().getString(R.string.dialog_button_ok),
-                    getResources().getString(R.string.dialog_button_cancel),
+                    getResources().getString(com.bihe0832.android.model.res.R.string.dialog_title),
+                    getResources().getString(com.bihe0832.android.model.res.R.string.com_bihe0832_web_ssl_error_message),
+                    getResources().getString(com.bihe0832.android.model.res.R.string.dialog_button_ok),
+                    getResources().getString(com.bihe0832.android.model.res.R.string.dialog_button_cancel),
                     new OnDialogListener() {
                         @Override
                         public void onPositiveClick() {

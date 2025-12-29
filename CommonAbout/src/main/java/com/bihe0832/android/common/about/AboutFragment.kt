@@ -8,6 +8,7 @@ import com.bihe0832.android.framework.update.UpdateInfoLiveData
 import com.bihe0832.android.lib.adapter.CardBaseHolder
 import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
+import com.bihe0832.android.model.res.R as ModelResR
 
 open class AboutFragment : SettingsFragment() {
 
@@ -24,7 +25,7 @@ open class AboutFragment : SettingsFragment() {
     }
 
     open fun changeUpdateRedDot(cloud: UpdateDataFromCloud?, showTips: Boolean) {
-        changeUpdateRedDot(ThemeResourcesManager.getString(R.string.settings_update_title), cloud, showTips)
+        changeUpdateRedDot(ThemeResourcesManager.getString(ModelResR.string.settings_update_title), cloud, showTips)
     }
 
     open fun changeUpdateRedDot(title: String?, cloud: UpdateDataFromCloud?, showTips: Boolean) {
@@ -34,7 +35,7 @@ open class AboutFragment : SettingsFragment() {
                 updateItemRedDot(
                     position,
                     0,
-                    ThemeResourcesManager.getString(R.string.settings_update_tips)
+                    ThemeResourcesManager.getString(ModelResR.string.settings_update_tips)
                         ?: "",
                 )
             } else {

@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.bihe0832.android.lib.config.Config;
-import com.bihe0832.android.lib.lock.screen.R;
+
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.notification.NotifyManager;
 import com.bihe0832.android.lib.utils.intent.PendingIntentUtils;
@@ -89,7 +89,7 @@ public abstract class LockScreenService extends Service {
         //如果API大于18，需要弹出一个可见通知
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId);
-            Notification notification = builder.setOngoing(true).setSmallIcon(R.mipmap.icon).setContentTitle(NOTICE_CHANNEL_NAME).build();
+            Notification notification = builder.setOngoing(true).setSmallIcon(com.bihe0832.android.lib.aaf.res.R.mipmap.icon).setContentTitle(NOTICE_CHANNEL_NAME).build();
             startForeground(NOTICE_ID, notification);
         } else {
             startForeground(NOTICE_ID, new Notification());

@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.state.RenderState
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.compose.ui.activity.CommonActivityToolbarViewWithDrawer
 
 /**
@@ -29,7 +29,7 @@ abstract class DebugComposeMainWithDrawerActivity : DebugComposeMainActivity() {
                 handleEffect(LocalContext.current)
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 CommonActivityToolbarViewWithDrawer(
-                    icon = ImageVector.vectorResource(R.drawable.icon_menu),
+                    icon = ImageVector.vectorResource(ResR.drawable.icon_menu),
                     drawerState = drawerState,
                     drawerContent = { getDrawerContentContentRender().Content() },
                     title = getTitleName(),

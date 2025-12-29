@@ -5,6 +5,7 @@ import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.mvi.ViewEvent
 import com.bihe0832.android.common.compose.mvi.ViewSideEffect
 import com.bihe0832.android.common.compose.mvi.ViewState
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 open class CommonActionEvent : ViewEvent {
     object InitData : CommonActionEvent()
@@ -31,7 +32,7 @@ fun getCommonActionState(context: Context): CommonActionState {
         canRefresh = true,
         isLoading = false,
         isRefreshLoading = false,
-        loadingMsg = context.getString(R.string.com_bihe0832_loading),
+        loadingMsg = context.getString(ResR.string.com_bihe0832_loading),
         errorMsg = ""
     )
 }

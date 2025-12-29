@@ -243,9 +243,9 @@ public class PanelDrawFragment extends BaseFragment {
             String fileName = BitmapUtil.getViewBitmap(mContentLayout);
             mContentLayout.destroyDrawingCache();
             Media.addToPhotos(getContext(), fileName);
-            ZixieContext.INSTANCE.showToast(getString(R.string.white_board_export_tip) + fileName);
+            ZixieContext.INSTANCE.showToast(getString(com.bihe0832.android.model.res.R.string.white_board_export_tip) + fileName);
         } catch (Exception e) {
-            ZixieContext.INSTANCE.showToast(getString(R.string.white_board_export_fail));
+            ZixieContext.INSTANCE.showToast(getString(com.bihe0832.android.model.res.R.string.white_board_export_fail));
             e.printStackTrace();
         }
     }

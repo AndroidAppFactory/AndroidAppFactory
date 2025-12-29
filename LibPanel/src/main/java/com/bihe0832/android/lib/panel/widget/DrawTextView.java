@@ -195,17 +195,17 @@ public class DrawTextView extends RelativeLayout implements View.OnClickListener
                 panel_draw_text_outside.setVisibility(View.GONE);
                 panel_draw_text_content.setVisibility(View.VISIBLE);
                 panel_draw_text_container.setBackgroundResource(
-                        R.color.transparent);
+                        com.bihe0832.android.lib.aaf.res.R.color.transparent);
                 panel_draw_text_action_edit.setVisibility(View.GONE);
                 panel_draw_text_action_delete.setVisibility(View.GONE);
                 break;
             case TEXT_EDIT:
                 final String last = panel_draw_text_content.getText().toString();
                 DialogUtils.INSTANCE.showInputDialog(getContext(),
-                        getContext().getString(R.string.panel_draw_text_add_title),
+                        getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.panel_draw_text_add_title),
                         "",
-                        TextUtils.isEmpty(last) ? getContext().getString(R.string.dialog_button_ok) : getContext().getString(R.string.panel_draw_text_add_positive),
-                        TextUtils.isEmpty(last) ? "" : getContext().getString(R.string.panel_draw_text_add_negative),
+                        TextUtils.isEmpty(last) ? getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.dialog_button_ok) : getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.panel_draw_text_add_positive),
+                        TextUtils.isEmpty(last) ? "" : getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.panel_draw_text_add_negative),
                         true,
                         EditorInfo.TYPE_CLASS_TEXT,
                         last,
@@ -230,7 +230,7 @@ public class DrawTextView extends RelativeLayout implements View.OnClickListener
                 );
                 break;
             case TEXT_DETAIL:
-                panel_draw_text_outside.setBackgroundResource(R.color.transparent);
+                panel_draw_text_outside.setBackgroundResource(com.bihe0832.android.lib.aaf.res.R.color.transparent);
                 panel_draw_text_outside.setVisibility(View.VISIBLE);
                 panel_draw_text_content.setVisibility(View.VISIBLE);
                 panel_draw_text_container.setBackgroundResource(R.drawable.com_bihe0832_lib_panel_draw_text_border);

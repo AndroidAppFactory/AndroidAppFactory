@@ -13,6 +13,7 @@ import android.view.View
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.text.ClipboardUtil
 import com.bihe0832.android.lib.ui.menu.PopupList
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 class AceSelectionActionHelper(private val mContext: Activity) {
 
@@ -29,11 +30,11 @@ class AceSelectionActionHelper(private val mContext: Activity) {
     }
 
     private var mPopup: PopupList = PopupList(mContext).apply {
-        normalBackgroundColor = resources.getColor(R.color.com_bihe0832_dialog_bg)
-        pressedBackgroundColor = resources.getColor(R.color.com_bihe0832_dialog_bg)
-        normalTextColor = resources.getColor(R.color.com_bihe0832_pop_menu_text_color)
-        pressedTextColor = resources.getColor(R.color.com_bihe0832_select_state_pressed)
-        dividerColor = resources.getColor(R.color.com_bihe0832_dialog_split)
+        normalBackgroundColor = resources.getColor(ResR.color.com_bihe0832_dialog_bg)
+        pressedBackgroundColor = resources.getColor(ResR.color.com_bihe0832_dialog_bg)
+        normalTextColor = resources.getColor(ResR.color.com_bihe0832_pop_menu_text_color)
+        pressedTextColor = resources.getColor(ResR.color.com_bihe0832_select_state_pressed)
+        dividerColor = resources.getColor(ResR.color.com_bihe0832_dialog_split)
     }
 
     private var mOnSelectionItemPressedListener: OnSelectionItemPressed? = null

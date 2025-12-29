@@ -20,13 +20,13 @@ class UnreadMsgUtils {
         msgView.setVisibility(View.VISIBLE);
         if (num <= 0) {//圆点,设置默认宽高
             msgView.setText("");
-            int redDotSize = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_dot_size);
+            int redDotSize = (int) msgView.getContext().getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.com_bihe0832_tab_red_dot_size);
             lp.width = redDotSize;
             lp.height = redDotSize;
             msgView.setLayoutParams(lp);
         } else {
-            int height = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_height);
-            int padding = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_padding);
+            int height = (int) msgView.getContext().getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.com_bihe0832_tab_red_msg_height);
+            int padding = (int) msgView.getContext().getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.com_bihe0832_tab_red_msg_padding);
 
 
             lp.height = height;
@@ -52,8 +52,8 @@ class UnreadMsgUtils {
         }
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) msgView.getLayoutParams();
         msgView.setVisibility(View.VISIBLE);
-        int height = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_height);
-        int padding = (int) msgView.getContext().getResources().getDimension(R.dimen.com_bihe0832_tab_red_msg_padding);
+        int height = (int) msgView.getContext().getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.com_bihe0832_tab_red_msg_height);
+        int padding = (int) msgView.getContext().getResources().getDimension(com.bihe0832.android.lib.aaf.res.R.dimen.com_bihe0832_tab_red_msg_padding);
 
         lp.height = height;
         lp.width = RelativeLayout.LayoutParams.WRAP_CONTENT;

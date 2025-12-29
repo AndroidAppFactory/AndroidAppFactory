@@ -36,8 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.debug.DebugBaseComposeActivity
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.compose.state.RenderState
 import kotlinx.coroutines.launch
 
@@ -57,7 +57,7 @@ abstract class DebugComposeMainActivity : DebugBaseComposeActivity() {
 
     @Composable
     override fun getNavigationIcon(): ImageVector? {
-        return ImageVector.vectorResource(R.drawable.icon_menu)
+        return ImageVector.vectorResource(ResR.drawable.icon_menu)
     }
 
     @Composable

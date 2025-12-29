@@ -19,6 +19,7 @@ import com.bihe0832.android.common.qrcode.core.BaseScanFragment
 import com.bihe0832.android.framework.router.RouterConstants
 import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.router.annotation.Module
+import com.bihe0832.android.model.res.R as ModelResR
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Locale
 
@@ -34,12 +35,12 @@ open class CommonScanActivity : BaseComposeActivity() {
         PermissionManager.addPermissionGroupDesc(
             RouterConstants.MODULE_NAME_QRCODE_SCAN,
             Manifest.permission.CAMERA,
-            getString(R.string.common_permission_title_camera),
+            getString(ModelResR.string.common_permission_title_camera),
         )
         PermissionManager.addPermissionGroupScene(
             RouterConstants.MODULE_NAME_QRCODE_SCAN,
             Manifest.permission.CAMERA,
-            getString(R.string.common_permission_title_qrcode)
+            getString(ModelResR.string.common_permission_title_qrcode)
         )
     }
 

@@ -205,13 +205,13 @@ public class BaseScanFragment extends BaseCaptureFragment {
         }
         mLoading.setCanCanceled(false);
         ThreadManager.getInstance().runOnUIThread(() -> {
-            mLoading.show(getString(R.string.common_scan_scanning));
+            mLoading.show(getString(com.bihe0832.android.model.res.R.string.common_scan_scanning));
             Result result = QRCodeDecodingHandler.decodeCode(getActivity(), uri, BITMAP_WIDTH, BITMAP_WIDTH);
             mLoading.dismiss();
             if (result != null) {
                 handleDecode(result);
             } else {
-                ZixieContext.INSTANCE.showToast(getString(R.string.common_scan_bad));
+                ZixieContext.INSTANCE.showToast(getString(com.bihe0832.android.model.res.R.string.common_scan_bad));
             }
         });
     }

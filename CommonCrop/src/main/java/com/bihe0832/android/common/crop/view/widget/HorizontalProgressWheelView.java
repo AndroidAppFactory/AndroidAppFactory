@@ -125,7 +125,7 @@ public class HorizontalProgressWheelView extends View {
     }
 
     private void init() {
-        mMiddleLineColor = ContextCompat.getColor(getContext(), R.color.com_bihe0832_dialog_hint);
+        mMiddleLineColor = ContextCompat.getColor(getContext(), com.bihe0832.android.lib.aaf.res.R.color.com_bihe0832_dialog_hint);
 
         mProgressLineWidth = getContext().getResources()
                 .getDimensionPixelSize(R.dimen.crop_width_horizontal_wheel_progress_line);

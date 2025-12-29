@@ -110,13 +110,13 @@ public class AspectRatioTextView extends AppCompatTextView {
             mAspectRatio = mAspectRatioX / mAspectRatioY;
         }
 
-        mDotSize = getContext().getResources().getDimensionPixelSize(R.dimen.com_bihe0832_tab_red_dot_size);
+        mDotSize = getContext().getResources().getDimensionPixelSize(com.bihe0832.android.lib.aaf.res.R.dimen.com_bihe0832_tab_red_dot_size);
         mDotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDotPaint.setStyle(Paint.Style.FILL);
 
         setTitle();
 
-        int activeColor = getResources().getColor(R.color.colorAccent);
+        int activeColor = getResources().getColor(com.bihe0832.android.lib.aaf.res.R.color.colorAccent);
         applyActiveColor(activeColor);
 
         a.recycle();
@@ -133,7 +133,7 @@ public class AspectRatioTextView extends AppCompatTextView {
                 },
                 new int[]{
                         activeColor,
-                        ContextCompat.getColor(getContext(), R.color.textColorPrimary)
+                        ContextCompat.getColor(getContext(), com.bihe0832.android.lib.aaf.res.R.color.textColorPrimary)
                 }
         );
 

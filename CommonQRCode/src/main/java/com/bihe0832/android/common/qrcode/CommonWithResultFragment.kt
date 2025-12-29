@@ -8,6 +8,8 @@ import com.bihe0832.android.framework.router.RouterAction
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.model.res.R as ModelResR
 import com.google.zxing.Result
 
 /**
@@ -31,8 +33,8 @@ class CommonWithResultFragment : CommonScanFragment() {
         if (TextUtils.isEmpty(scanResult)) {
             ZixieContext.showToast(
                 String.format(
-                    ThemeResourcesManager.getString(R.string.common_scan_failed) ?: "",
-                    ThemeResourcesManager.getString(R.string.app_name)
+                    ThemeResourcesManager.getString(ModelResR.string.common_scan_failed) ?: "",
+                    ThemeResourcesManager.getString(ResR.string.app_name)
                 )
             )
         } else {
@@ -49,9 +51,9 @@ class CommonWithResultFragment : CommonScanFragment() {
                         if (!IntentUtils.startIntent(context!!, it)) {
                             ZixieContext.showToast(
                                 String.format(
-                                    ThemeResourcesManager.getString(R.string.common_scan_failed)
+                                    ThemeResourcesManager.getString(ModelResR.string.common_scan_failed)
                                         ?: "",
-                                    ThemeResourcesManager.getString(R.string.app_name)
+                                    ThemeResourcesManager.getString(ResR.string.app_name)
                                 )
                             )
                         } else {

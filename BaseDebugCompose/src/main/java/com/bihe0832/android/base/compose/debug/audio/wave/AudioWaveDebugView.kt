@@ -33,8 +33,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.base.compose.debug.color.getDebugColorPalettes
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.audio.wave.AAFAudioWaveView
 import com.bihe0832.android.lib.audio.wave.model.AmplitudeType
 import com.bihe0832.android.lib.audio.wave.model.WaveformAlignment
@@ -57,7 +57,7 @@ fun AudioWaveDebugView(
     var spikeCornerRadius by remember { mutableStateOf(1F) }
     var scrollEnabled by remember { mutableStateOf(true) }
     val playButtonIcon by remember(uiState.isPlaying) {
-        mutableStateOf(if (uiState.isPlaying) R.drawable.icon_pause else R.drawable.icon_start_fill)
+        mutableStateOf(if (uiState.isPlaying) ResR.drawable.icon_pause else ResR.drawable.icon_start_fill)
     }
     Box(
         modifier = Modifier.fillMaxSize()

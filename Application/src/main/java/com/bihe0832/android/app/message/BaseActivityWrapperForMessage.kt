@@ -2,9 +2,9 @@ package com.bihe0832.android.app.message
 
 import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
-import com.bihe0832.android.app.R
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.framework.ui.BaseFragment
@@ -46,7 +46,7 @@ fun BaseFragment.checkMsgAndShowFace() {
 @Synchronized
 private fun setMessageIconActionAndShowFace(activity: FragmentActivity, messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
     messageView.apply {
-        setColorFilter(resources.getColor(R.color.colorOnPrimary))
+        setColorFilter(resources.getColor(ResR.color.colorOnPrimary))
         setOnClickListener {
             RouterHelper.openPageByRouter(RouterConstants.MODULE_NAME_MESSAGE)
         }

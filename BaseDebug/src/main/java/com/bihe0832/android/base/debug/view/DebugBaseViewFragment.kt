@@ -8,8 +8,8 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.setPadding
-import com.bihe0832.android.base.debug.R
 import com.bihe0832.android.base.debug.touch.TouchRegionActivity
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.base.debug.view.customview.DebugCustomViewFragment
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
@@ -97,12 +97,12 @@ class DebugBaseViewFragment : DebugEnvFragment() {
         TextView(context).apply {
             text = "ViewCaptureLayout getViewBitmap:" + DateUtil.getCurrentDateEN()
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20f)
-            setTextColor(context.getColor(R.color.md_theme_tertiary))
+            setTextColor(context.getColor(ResR.color.md_theme_tertiary))
             setPadding(40)
         }.let {
             ViewCaptureLayout(context).apply {
                 addView(it, 0)
-                background = context.getDrawable(R.drawable.com_bihe0832_base_dialog_bg)
+                background = context.getDrawable(ResR.drawable.com_bihe0832_base_dialog_bg)
             }.getViewBitmap { data ->
                 Media.addToPhotos(context, BitmapUtil.saveBitmap(context, data))
             }

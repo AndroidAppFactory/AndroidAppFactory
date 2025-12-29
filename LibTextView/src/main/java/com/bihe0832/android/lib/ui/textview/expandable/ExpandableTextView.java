@@ -144,15 +144,15 @@ public abstract class ExpandableTextView extends AppCompatTextView {
         mCurrentStatus = typedArray.getInt(R.styleable.ExpandableTextView_etv_InitState, STATUS_SHRINK);
 
         if (mEllipsisHint == null) {
-            mEllipsisHint = ThemeResourcesManager.INSTANCE.getString(R.string.to_ellipsis_hint);
+            mEllipsisHint = ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.to_ellipsis_hint);
         }
 
         if (mToExpandHint == null) {
-            mToExpandHint = ThemeResourcesManager.INSTANCE.getString(R.string.to_expand_hint);
+            mToExpandHint = ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.to_expand_hint);
         }
 
         if (mToShrinkHint == null) {
-            mToShrinkHint = ThemeResourcesManager.INSTANCE.getString(R.string.to_shrink_hint);
+            mToShrinkHint = ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.to_shrink_hint);
         }
 
         typedArray.recycle();

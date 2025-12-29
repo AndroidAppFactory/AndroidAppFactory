@@ -20,6 +20,9 @@ import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
 import com.bihe0832.android.lib.utils.ConvertUtils
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.framework.R as FrameworkR
 
 
 @Module(RouterConstants.MODULE_NAME_SHOW_FILE_CONTENT)
@@ -52,7 +55,7 @@ open class FileContentInfoActivity : CommonListActivity() {
     }
 
     override fun getTitleText(): String {
-        return getString(R.string.common_file_preview_title)
+        return getString(ModelResR.string.common_file_preview_title)
     }
 
     override fun getDataLiveData(): CommonListLiveData {
@@ -60,7 +63,7 @@ open class FileContentInfoActivity : CommonListActivity() {
     }
 
     override fun getEmptyText(): String {
-        return getString(R.string.common_file_preview_empty)
+        return getString(ModelResR.string.common_file_preview_empty)
     }
 
     override fun getCardList(): List<CardItemForCommonList>? {
@@ -74,7 +77,7 @@ open class FileContentInfoActivity : CommonListActivity() {
         super.parseBundle(bundle)
         logPath = bundle.getString(FileSelectTools.INTENT_EXTRA_KEY_WEB_URL, "")
         if (logPath.isBlank() || !FileUtils.checkFileExist(logPath)) {
-            ZixieContext.showToast(getString(R.string.ace_editor_load_file_not_found))
+            ZixieContext.showToast(getString(ModelResR.string.ace_editor_load_file_not_found))
             finish()
         }
         findViewById<TextView>(R.id.title_text).apply {
@@ -129,8 +132,8 @@ open class FileContentInfoActivity : CommonListActivity() {
 
     fun getSendLogMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
-            actionName = getString(R.string.common_file_menu_share)
-            iconResId = R.drawable.icon_send
+            actionName = getString(ModelResR.string.common_file_menu_share)
+            iconResId = ResR.drawable.icon_send
             setItemClickListener {
                 menu.hide()
                 FileUtils.sendFile(this@FileContentInfoActivity, logPath)
@@ -141,14 +144,14 @@ open class FileContentInfoActivity : CommonListActivity() {
     fun getReversedMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
             actionName = if (isReversed) {
-                getString(R.string.common_file_menu_show_sort)
+                getString(ModelResR.string.common_file_menu_show_sort)
             } else {
-                getString(R.string.common_file_menu_show_reversed)
+                getString(ModelResR.string.common_file_menu_show_reversed)
             }
             iconResId = if (isReversed) {
-                R.drawable.icon_ascending
+                FrameworkR.drawable.icon_ascending
             } else {
-                R.drawable.icon_descending
+                FrameworkR.drawable.icon_descending
             }
             setItemClickListener {
                 menu.hide()
@@ -161,11 +164,11 @@ open class FileContentInfoActivity : CommonListActivity() {
     fun getShowLineMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
             actionName = if (showLine) {
-                getString(R.string.common_file_menu_driver_hide)
+                getString(ModelResR.string.common_file_menu_driver_hide)
             } else {
-                getString(R.string.common_file_menu_driver_show)
+                getString(ModelResR.string.common_file_menu_driver_show)
             }
-            iconResId = R.drawable.icon_edit
+            iconResId = FrameworkR.drawable.icon_edit
             setItemClickListener {
                 menu.hide()
                 showLine = !showLine
@@ -176,14 +179,14 @@ open class FileContentInfoActivity : CommonListActivity() {
 
     fun getChangeNumMenu(menu: PopMenu): PopMenuItem {
         return PopMenuItem().apply {
-            actionName = getString(R.string.common_file_line_title)
-            iconResId = R.drawable.icon_number
+            actionName = getString(ModelResR.string.common_file_line_title)
+            iconResId = FrameworkR.drawable.icon_number
             setItemClickListener {
                 menu.hide()
                 DialogUtils.showInputDialog(
                     this@FileContentInfoActivity,
-                    getString(R.string.common_file_line_title),
-                    String.format(getString(R.string.common_file_line_desc), showNum.toString()),
+                    getString(ModelResR.string.common_file_line_title),
+                    String.format(getString(ModelResR.string.common_file_line_desc), showNum.toString()),
                     showNum.toString()
                 ) { p0 ->
                     if (!showNum.toString().equals(p0)) {
@@ -225,7 +228,7 @@ open class FileContentInfoActivity : CommonListActivity() {
         return ContentItemData(
             logInfo, null, {
                 ClipboardUtil.copyToClipboard(this@FileContentInfoActivity, logInfo)
-                ZixieContext.showToast(getString(R.string.common_file_copy))
+                ZixieContext.showToast(getString(ModelResR.string.common_file_copy))
                 true
             }, 10, Color.parseColor("#333333"), false, false, null, 6, 6, if (index % 2 == 0) {
                 Color.parseColor("#FFFFFF")

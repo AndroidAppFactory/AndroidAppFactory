@@ -20,6 +20,7 @@ import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.model.res.R as ModelResR
 
 object UpdateHelper {
 
@@ -36,7 +37,7 @@ object UpdateHelper {
         canCancel: Boolean
     ) {
         val title = String.format(
-            ThemeResourcesManager.getString(R.string.dialog_apk_updating)!!,
+            ThemeResourcesManager.getString(ModelResR.string.dialog_apk_updating)!!,
             versionName
         )
 
@@ -70,9 +71,9 @@ object UpdateHelper {
                     DialogUtils.showConfirmDialog(
                         activity,
                         title,
-                        ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_desc)!!,
-                        ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_positive),
-                        ThemeResourcesManager.getString(R.string.dialog_apk_update_failed_negative),
+                        ThemeResourcesManager.getString(ModelResR.string.dialog_apk_update_failed_desc)!!,
+                        ThemeResourcesManager.getString(ModelResR.string.dialog_apk_update_failed_positive),
+                        ThemeResourcesManager.getString(ModelResR.string.dialog_apk_update_failed_negative),
                         object :
                             OnDialogListener {
                             override fun onPositiveClick() {
@@ -135,8 +136,8 @@ object UpdateHelper {
             CommonDialog(activity).apply {
                 title = titleString
                 setHtmlContent(desc)
-                positive = activity.getString(R.string.dialog_apk_update_positive)
-                negative = activity.getString(R.string.dialog_apk_update_negative)
+                positive = activity.getString(ModelResR.string.dialog_apk_update_positive)
+                negative = activity.getString(ModelResR.string.dialog_apk_update_negative)
                 setOnClickBottomListener(object :
                     OnDialogListener {
                     override fun onPositiveClick() {
@@ -227,7 +228,7 @@ object UpdateHelper {
     ) {
         hasShow = false
         var title = if (TextUtils.isEmpty(titleString)) {
-            ThemeResourcesManager.getString(R.string.settings_update_tips) + ": " + versionName
+            ThemeResourcesManager.getString(ModelResR.string.settings_update_tips) + ": " + versionName
         } else {
             titleString
         }
@@ -236,7 +237,7 @@ object UpdateHelper {
             versionName,
             versionCode,
             title,
-            ThemeResourcesManager.getString(R.string.dialog_apk_update_info_pre) + desc,
+            ThemeResourcesManager.getString(ModelResR.string.dialog_apk_update_info_pre) + desc,
             url,
             md5,
             type
@@ -326,7 +327,7 @@ object UpdateHelper {
                 if (checkUpdateByUser) {
                     ToastUtil.showLong(
                         activity,
-                        activity.getString(R.string.dialog_apk_update_version_new)
+                        activity.getString(ModelResR.string.dialog_apk_update_version_new)
                     )
                 }
             }

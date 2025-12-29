@@ -1,8 +1,9 @@
 package com.bihe0832.android.app.ui.navigation
 
 import android.view.View
-import com.bihe0832.android.app.R
 import com.bihe0832.android.app.about.getFeedbackItem
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.framework.R as FrameworkR
 import com.bihe0832.android.app.message.AAFMessageManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
@@ -29,7 +30,7 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
         super.initView(view)
         AAFMessageManager.getMessageLiveData().observe(this) { t ->
             changeMessageRedDot(
-                ThemeResourcesManager.getString(R.string.settings_message_title),
+                ThemeResourcesManager.getString(ModelResR.string.settings_message_title),
                 AAFMessageManager.getUnreadNum(),
             )
         }
@@ -39,8 +40,8 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
     }
 
     fun getChangeLanguage(): SettingsDataGo {
-        return SettingsDataGo(resources.getString(R.string.settings_language_title)).apply {
-            mItemIconRes = R.drawable.icon_language
+        return SettingsDataGo(resources.getString(ModelResR.string.settings_language_title)).apply {
+            mItemIconRes = FrameworkR.drawable.icon_language
             mShowDriver = true
             mShowGo = true
             mHeaderListener = object : View.OnClickListener {
@@ -74,7 +75,7 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
 
             add(PermissionItem.getPermission(context!!, PermissionFragment::class.java))
             add(getFeedbackItem(activity))
-            add(SettingsItem.getShareAPP(true,resources.getString(R.string.com_bihe0832_share_title)))
+            add(SettingsItem.getShareAPP(true,resources.getString(ModelResR.string.com_bihe0832_share_title)))
             add(getChangeLanguage())
             addAll(super.getDataList(false))
             add(SettingsItem.getClearCache(activity!!))

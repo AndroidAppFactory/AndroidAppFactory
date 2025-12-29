@@ -3,9 +3,9 @@ package com.bihe0832.android.base.compose.debug.share
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.common.qrcode.QrcodeUtils
 import com.bihe0832.android.common.share.ShareBaseActivity
+import com.bihe0832.android.common.share.R as ShareR
 import com.bihe0832.android.framework.constant.ZixieActivityRequestCode
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.media.image.loadCenterInsideImage
@@ -14,7 +14,7 @@ class DebugBottomActivity : ShareBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSuperView()
-        findViewById<ImageView>(R.id.shareImagePreview).loadCenterInsideImage("https://cdn.bihe0832.com/images/cv_v.png")
+        findViewById<ImageView>(ShareR.id.shareImagePreview).loadCenterInsideImage("https://cdn.bihe0832.com/images/cv_v.png")
     }
 
     override fun onShareCancelClick() {

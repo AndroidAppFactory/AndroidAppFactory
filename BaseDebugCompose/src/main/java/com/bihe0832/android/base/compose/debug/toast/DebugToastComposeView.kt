@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.common.compose.debug.item.DebugComposeActivityItem
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.framework.ZixieContext
@@ -30,7 +30,7 @@ fun DebugToastComposeView() {
         }
         DebugItem("Tips Toast") {
             ToastUtil.showTips(
-                it, it.resources.getDrawable(R.mipmap.icon).apply {
+                it, it.resources.getDrawable(ResR.mipmap.icon).apply {
                     setTint(Color.RED)
                 }, "执行成功", Toast.LENGTH_SHORT
             )

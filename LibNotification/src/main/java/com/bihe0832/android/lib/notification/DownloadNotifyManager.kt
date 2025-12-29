@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.utils.IdGenerator
 import com.bihe0832.android.lib.utils.intent.PendingIntentUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 import java.util.concurrent.ConcurrentHashMap
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 object DownloadNotifyManager {
 
@@ -152,7 +153,7 @@ object DownloadNotifyManager {
             DOWNLOAD_TYPE_DOWNLOADING -> {
                 remoteViews.setTextViewText(
                     R.id.download_notification_title,
-                    context.getString(R.string.download_notify_downloading) + appName
+                    context.getString(ResR.string.download_notify_downloading) + appName
                 )
                 if (speed > 0) {
                     remoteViews.setTextViewText(
@@ -161,7 +162,7 @@ object DownloadNotifyManager {
                     )
                 }
                 R.id.download_notification_btn_restart.let {
-                    remoteViews.setImageViewResource(it, R.drawable.icon_pause_fill)
+                    remoteViews.setImageViewResource(it, ResR.drawable.icon_pause_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -169,7 +170,7 @@ object DownloadNotifyManager {
                     )
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.drawable.icon_close_fill)
+                    remoteViews.setImageViewResource(it, ResR.drawable.icon_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -181,11 +182,11 @@ object DownloadNotifyManager {
             DOWNLOAD_TYPE_PAUSED -> {
                 remoteViews.setTextViewText(
                     R.id.download_notification_title,
-                    appName + context.getString(R.string.download_notify_download_paused)
+                    appName + context.getString(ResR.string.download_notify_download_paused)
                 )
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 R.id.download_notification_btn_restart.let {
-                    remoteViews.setImageViewResource(it, R.drawable.icon_start_fill)
+                    remoteViews.setImageViewResource(it, ResR.drawable.icon_start_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -193,7 +194,7 @@ object DownloadNotifyManager {
                     )
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.drawable.icon_close_fill)
+                    remoteViews.setImageViewResource(it, ResR.drawable.icon_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -205,11 +206,11 @@ object DownloadNotifyManager {
             DOWNLOAD_TYPE_FAILED -> {
                 remoteViews.setTextViewText(
                     R.id.download_notification_title,
-                    appName + context.getString(R.string.download_notify_download_failed)
+                    appName + context.getString(ResR.string.download_notify_download_failed)
                 )
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 R.id.download_notification_btn_restart.let {
-                    remoteViews.setImageViewResource(it, R.drawable.icon_start_fill)
+                    remoteViews.setImageViewResource(it, ResR.drawable.icon_start_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -217,7 +218,7 @@ object DownloadNotifyManager {
                     )
                 }
                 R.id.download_notification_btn_cancel.let {
-                    remoteViews.setImageViewResource(it, R.drawable.icon_close_fill)
+                    remoteViews.setImageViewResource(it, ResR.drawable.icon_close_fill)
                     remoteViews.setViewVisibility(it, View.VISIBLE)
                     remoteViews.setOnClickPendingIntent(
                         it,
@@ -229,7 +230,7 @@ object DownloadNotifyManager {
             DOWNLOAD_TYPE_FINISHED -> {
                 remoteViews.setTextViewText(
                     R.id.download_notification_title,
-                    appName + context.getString(R.string.download_notify_download_finished)
+                    appName + context.getString(ResR.string.download_notify_download_finished)
                 )
                 remoteViews.setTextViewText(R.id.download_notification_desc, "")
                 remoteViews.setViewVisibility(R.id.download_notification_btn_restart, View.GONE)
@@ -254,7 +255,7 @@ object DownloadNotifyManager {
                         try {
                             bitmap = BitmapFactory.decodeResource(
                                 context.applicationContext.resources,
-                                R.mipmap.icon
+                                ResR.mipmap.icon
                             )
                         } catch (e: java.lang.Exception) {
                             e.printStackTrace()
@@ -282,7 +283,7 @@ object DownloadNotifyManager {
                 }
             }
         } else {
-            remoteViews.setImageViewResource(R.id.download_notification_logo, R.mipmap.icon)
+            remoteViews.setImageViewResource(R.id.download_notification_logo, ResR.mipmap.icon)
             NotifyManager.sendNotifyNow(context, remoteViews, channelID, notifyID)
         }
     }

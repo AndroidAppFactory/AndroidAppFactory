@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.View
 import android.widget.CompoundButton
 import com.bihe0832.android.common.permission.PermissionResultOfAAF
-import com.bihe0832.android.common.permission.R
 import com.bihe0832.android.common.settings.card.SettingsDataGo
 import com.bihe0832.android.common.settings.card.SettingsDataSwitch
 import com.bihe0832.android.framework.ui.main.CommonRootActivity
@@ -16,6 +15,8 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  *
@@ -27,9 +28,9 @@ import com.bihe0832.android.lib.utils.intent.IntentUtils
 object PermissionItem {
 
     fun getPermission(context: Context, cls: Class<out PermissionFragment>): SettingsDataGo {
-        val title = context.getString(R.string.common_permission_item_title_privacy)
+        val title = context.getString(ModelResR.string.common_permission_item_title_privacy)
         return SettingsDataGo(title).apply {
-            mItemIconRes = R.drawable.icon_privacy_tip
+            mItemIconRes = ResR.drawable.icon_privacy_tip
             mShowDriver = true
             mShowGo = true
             mHeaderListener = View.OnClickListener {
@@ -40,8 +41,8 @@ object PermissionItem {
 
     fun getRecommandSetting(context: Context): SettingsDataSwitch {
         return SettingsDataSwitch().apply {
-            title = context.getString(R.string.common_permission_item_title_recommend)
-            description = context.getString(R.string.common_permission_item_desc_recommend)
+            title = context.getString(ModelResR.string.common_permission_item_title_recommend)
+            description = context.getString(ModelResR.string.common_permission_item_desc_recommend)
             isChecked = false
             onCheckedChangeListener =
                 CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
@@ -64,7 +65,7 @@ object PermissionItem {
             permissionGroup,
             useDefault = false,
             needSpecial = false,
-        ) + activity.getString(R.string.common_permission_desc_ext)
+        ) + activity.getString(ModelResR.string.common_permission_desc_ext)
         val permissionScene: String =
             PermissionManager.getPermissionScene(
                 scene,
@@ -95,22 +96,22 @@ object PermissionItem {
                 PermissionManager.isAllPermissionOK(activity, permissionGroup)
             tips = if (hasPermission) {
                 TextFactoryUtils.getSpecialText(
-                    activity.getString(R.string.common_permission_status_enabled),
-                    ThemeResourcesManager.getColor(R.color.textColorSecondary)!!
+                    activity.getString(ModelResR.string.common_permission_status_enabled),
+                    ThemeResourcesManager.getColor(ResR.color.textColorSecondary)!!
                 )
             } else {
                 TextFactoryUtils.getSpecialText(
-                    activity.getString(R.string.common_permission_action_setting),
-                    ThemeResourcesManager.getColor(R.color.textColorPrimary)!!
+                    activity.getString(ModelResR.string.common_permission_action_setting),
+                    ThemeResourcesManager.getColor(ResR.color.textColorPrimary)!!
                 )
             }
             onClickListener = View.OnClickListener {
                 if (hasPermission) {
                     showPermissionCloseDialog(
                         activity,
-                        activity.getString(R.string.common_permission_action_close) + " " + permissionDesc,
-                        activity.getString(R.string.common_permission_action_close) + " " + permissionDesc + " " +
-                                activity.getString(R.string.common_permission_desc_close) + " $description",
+                        activity.getString(ModelResR.string.common_permission_action_close) + " " + permissionDesc,
+                        activity.getString(ModelResR.string.common_permission_action_close) + " " + permissionDesc + " " +
+                                activity.getString(ModelResR.string.common_permission_desc_close) + " $description",
                         permissionGroup,
                     )
                 } else {
@@ -138,8 +139,8 @@ object PermissionItem {
         CommonDialog(activity).apply {
             title = titleString
             setHtmlContent(permissionCloseDesc)
-            positive = activity.getString(R.string.common_permission_action_setting)
-            negative = activity.getString(R.string.common_permission_action_cancel)
+            positive = activity.getString(ModelResR.string.common_permission_action_setting)
+            negative = activity.getString(ModelResR.string.common_permission_action_cancel)
             shouldCanceled = false
             onClickBottomListener = object : OnDialogListener {
                 override fun onPositiveClick() {

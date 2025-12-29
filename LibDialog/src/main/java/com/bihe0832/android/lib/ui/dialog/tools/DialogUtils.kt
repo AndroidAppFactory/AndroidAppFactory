@@ -17,6 +17,7 @@ import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.callback.DialogStringCallback
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.input.InputDialogUtils
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  * @author zixie code@bihe0832.com
@@ -133,7 +134,7 @@ object DialogUtils {
             context,
             title,
             msg,
-            ThemeResourcesManager.getString(R.string.dialog_button_ok)!!,
+            ThemeResourcesManager.getString(ResR.string.dialog_button_ok)!!,
             "",
             true,
             if (inputType == 0) EditorInfo.TYPE_CLASS_TEXT else inputType,
@@ -165,7 +166,7 @@ object DialogUtils {
             context,
             titleName,
             msg,
-            ThemeResourcesManager.getString(R.string.dialog_input_hint)!!,
+            ThemeResourcesManager.getString(ResR.string.dialog_input_hint)!!,
             defaultValue,
             EditorInfo.TYPE_CLASS_TEXT,
             listener,
@@ -216,7 +217,7 @@ object DialogUtils {
     ) {
         showConfirmDialog(
             context,
-            ThemeResourcesManager.getString(R.string.dialog_title)!!,
+            ThemeResourcesManager.getString(ResR.string.dialog_title)!!,
             message,
             positiveStr,
             negativeStr,
@@ -236,8 +237,8 @@ object DialogUtils {
             context,
             title,
             message,
-            ThemeResourcesManager.getString(R.string.dialog_button_ok),
-            ThemeResourcesManager.getString(R.string.dialog_button_cancel),
+            ThemeResourcesManager.getString(ResR.string.dialog_button_ok),
+            ThemeResourcesManager.getString(ResR.string.dialog_button_cancel),
             canCancel,
             callback,
         )
@@ -246,10 +247,10 @@ object DialogUtils {
     fun showConfirmDialog(context: Context, message: String, canCancel: Boolean, callback: OnDialogListener) {
         showConfirmDialog(
             context,
-            ThemeResourcesManager.getString(R.string.dialog_title)!!,
+            ThemeResourcesManager.getString(ResR.string.dialog_title)!!,
             message,
-            ThemeResourcesManager.getString(R.string.dialog_button_ok),
-            ThemeResourcesManager.getString(R.string.dialog_button_cancel),
+            ThemeResourcesManager.getString(ResR.string.dialog_button_ok),
+            ThemeResourcesManager.getString(ResR.string.dialog_button_cancel),
             canCancel,
             callback,
         )
@@ -280,7 +281,7 @@ object DialogUtils {
             context,
             title,
             message,
-            ThemeResourcesManager.getString(R.string.dialog_tips_button)!!,
+            ThemeResourcesManager.getString(ResR.string.dialog_tips_button)!!,
             canCancel,
             callback,
         )
@@ -291,6 +292,6 @@ object DialogUtils {
     }
 
     fun showAlertDialog(context: Context, message: String?) {
-        showAlertDialog(context, ThemeResourcesManager.getString(R.string.dialog_title), message, true)
+        showAlertDialog(context, ThemeResourcesManager.getString(ResR.string.dialog_title), message, true)
     }
 }

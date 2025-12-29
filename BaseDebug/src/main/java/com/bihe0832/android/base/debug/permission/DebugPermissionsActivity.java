@@ -3,7 +3,6 @@ package com.bihe0832.android.base.debug.permission;
 import android.Manifest;
 import android.Manifest.permission;
 
-import com.bihe0832.android.base.debug.R;
 import com.bihe0832.android.lib.permission.ui.PermissionDialog;
 import com.bihe0832.android.lib.permission.ui.PermissionsActivity;
 import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2;
@@ -42,6 +41,6 @@ public class DebugPermissionsActivity extends PermissionsActivityV2 {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0, R.anim.fade_out);
+        overridePendingTransition(0, com.bihe0832.android.framework.R.anim.fade_out);
     }
 }

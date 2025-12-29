@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnreadMsg
 import com.bihe0832.android.lib.ui.custom.view.background.setUnreadMsg
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  * height:56
@@ -55,7 +56,7 @@ abstract class BaseBottomBarTab(context: Context, attrs: AttributeSet?, defStyle
 
     open fun setUnreadMsgNum(num: Int) {
         mTipsNum = num
-        getTipsView()?.setUnreadMsg(num, context.resources.getDimension(R.dimen.com_bihe0832_tab_red_dot_size).toInt())
+        getTipsView()?.setUnreadMsg(num, context.resources.getDimension(ResR.dimen.com_bihe0832_tab_red_dot_size).toInt())
     }
 
     open fun getUnreadMsgNum(): Int {
@@ -72,7 +73,7 @@ abstract class BaseBottomBarTab(context: Context, attrs: AttributeSet?, defStyle
     }
 
     open fun showUnreadMsg() {
-        getTipsView()?.changeStatusWithUnreadMsg(getUnreadMsgNum(), context.resources.getDimension(R.dimen.com_bihe0832_tab_red_dot_size).toInt())
+        getTipsView()?.changeStatusWithUnreadMsg(getUnreadMsgNum(), context.resources.getDimension(ResR.dimen.com_bihe0832_tab_red_dot_size).toInt())
     }
 
     open fun hideUnreadMsg() {

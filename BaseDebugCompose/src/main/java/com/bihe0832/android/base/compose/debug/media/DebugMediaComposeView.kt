@@ -6,9 +6,9 @@ import android.graphics.Matrix
 import android.text.Layout
 import android.text.TextUtils
 import androidx.compose.runtime.Composable
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.base.compose.debug.audio.DebugAudioComposeView
 import com.bihe0832.android.base.compose.debug.audio.DebugAudioWaveView
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.compose.debug.item.DebugComposeFragmentItem
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
@@ -230,7 +230,7 @@ private fun textToImage(context: Context) {
         280,
         "#000000",
         16,
-        BitmapUtil.getLocalBitmap(ZixieContext.applicationContext, R.mipmap.icon, 1),
+        BitmapUtil.getLocalBitmap(ZixieContext.applicationContext, ResR.mipmap.icon, 1),
         18,
         DateUtil.getCurrentDateEN(),
         "#FFFFFF",

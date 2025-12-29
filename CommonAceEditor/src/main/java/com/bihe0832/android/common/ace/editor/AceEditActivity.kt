@@ -27,6 +27,9 @@ import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.menu.PopMenu
 import com.bihe0832.android.lib.ui.menu.PopMenuItem
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.framework.R as FrameworkR
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import java.net.URLDecoder
 
 
@@ -38,7 +41,7 @@ class AceEditActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_layout)
-        initToolbar(R.id.common_toolbar, resources.getString(R.string.ace_editor_title), true)
+        initToolbar(R.id.common_toolbar, resources.getString(ModelResR.string.ace_editor_title), true)
         parseBundle(intent.extras)
         initView()
     }
@@ -50,8 +53,8 @@ class AceEditActivity : BaseActivity() {
                     ArrayList<PopMenuItem>().apply {
                         add(PopMenuItem().apply {
                             actionName =
-                                ThemeResourcesManager.getString(R.string.common_file_menu_open_new)
-                            iconResId = R.drawable.icon_folder_open
+                                ThemeResourcesManager.getString(ModelResR.string.common_file_menu_open_new)
+                            iconResId = FrameworkR.drawable.icon_folder_open
                             setItemClickListener {
                                 hide()
                                 FileSelectTools.openFileSelect(
@@ -62,8 +65,8 @@ class AceEditActivity : BaseActivity() {
                         })
                         add(PopMenuItem().apply {
                             actionName =
-                                ThemeResourcesManager.getString(R.string.common_file_menu_share)
-                            iconResId = R.drawable.icon_send
+                                ThemeResourcesManager.getString(ModelResR.string.common_file_menu_share)
+                            iconResId = ResR.drawable.icon_send
                             setItemClickListener {
                                 hide()
                                 FileUtils.sendFile(this@AceEditActivity, filePath)
@@ -72,17 +75,17 @@ class AceEditActivity : BaseActivity() {
 
                         add(PopMenuItem().apply {
                             if (mAceEditFragment.isAutoWrap()) {
-                                R.string.common_file_menu_close
+                                ModelResR.string.common_file_menu_close
                             } else {
-                                R.string.common_file_menu_open
+                                ModelResR.string.common_file_menu_open
                             }.let {
                                 actionName =
                                     ThemeResourcesManager.getString(it) + ThemeResourcesManager.getString(
-                                        R.string.common_file_menu_auto_wrap
+                                        ModelResR.string.common_file_menu_auto_wrap
                                     )
                             }
 
-                            iconResId = R.drawable.icon_wrap_text
+                            iconResId = FrameworkR.drawable.icon_wrap_text
                             setItemClickListener {
                                 hide()
                                 mAceEditFragment.setAutoWrap(!mAceEditFragment.isAutoWrap())
@@ -122,7 +125,7 @@ class AceEditActivity : BaseActivity() {
         super.onResume()
         if (FileUtils.checkFileExist(filePath)) {
             if (!FileMimeTypes.isTextFile(filePath)) {
-                showBadFile(ThemeResourcesManager.getString(R.string.ace_editor_load_file_folder)!!)
+                showBadFile(ThemeResourcesManager.getString(ModelResR.string.ace_editor_load_file_folder)!!)
             } else {
                 mAceEditFragment.setFilePath(filePath)
                 if (findFragment(AceEditFragment::class.java) == null) {
@@ -131,9 +134,9 @@ class AceEditActivity : BaseActivity() {
             }
         } else {
             if (TextUtils.isEmpty(filePath)) {
-                showBadFile(ThemeResourcesManager.getString(R.string.ace_editor_load_file_empty)!!)
+                showBadFile(ThemeResourcesManager.getString(ModelResR.string.ace_editor_load_file_empty)!!)
             } else {
-                showBadFile(ThemeResourcesManager.getString(R.string.ace_editor_load_file_not_found)!!)
+                showBadFile(ThemeResourcesManager.getString(ModelResR.string.ace_editor_load_file_not_found)!!)
             }
         }
     }
@@ -159,10 +162,10 @@ class AceEditActivity : BaseActivity() {
     private fun showBadFile(msg: String) {
         DialogUtils.showConfirmDialog(
             this,
-            ThemeResourcesManager.getString(R.string.dialog_title)!!,
+            ThemeResourcesManager.getString(ModelResR.string.dialog_title)!!,
             msg,
-            resources.getString(R.string.ace_editor_load_file_not_found_positive),
-            resources.getString(R.string.ace_editor_load_file_not_found_negative),
+            resources.getString(ModelResR.string.ace_editor_load_file_not_found_positive),
+            resources.getString(ModelResR.string.ace_editor_load_file_not_found_negative),
             false,
             object : OnDialogListener {
                 override fun onPositiveClick() {

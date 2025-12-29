@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.bihe0832.android.lib.lock.screen.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.permission.PermissionManager
@@ -33,12 +34,12 @@ object LockScreenPermission {
         PermissionManager.addPermissionGroupDesc(
             SCENE,
             Manifest.permission.WAKE_LOCK,
-            context.getString(R.string.com_bihe0832_lock_screen_permission_desc_lock)
+            context.getString(ResR.string.com_bihe0832_lock_screen_permission_desc_lock)
         )
         PermissionManager.addPermissionGroupScene(
             SCENE,
             Manifest.permission.WAKE_LOCK,
-            context.getString(R.string.com_bihe0832_lock_screen_permission_scene_lock)
+            context.getString(ResR.string.com_bihe0832_lock_screen_permission_scene_lock)
         )
     }
 
@@ -64,8 +65,8 @@ object LockScreenPermission {
             startLockService(context, cls)
         } else {
             PermissionDialog(context).apply {
-                negative = context.getString(R.string.com_bihe0832_lock_screen_permission_force)
-                positive = context.getString(R.string.com_bihe0832_lock_screen_permission_enabled)
+                negative = context.getString(ResR.string.com_bihe0832_lock_screen_permission_force)
+                positive = context.getString(ResR.string.com_bihe0832_lock_screen_permission_enabled)
                 needSpecial = true
             }.let {
                 it.show(

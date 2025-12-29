@@ -52,10 +52,10 @@ public class PermissionsActivityWithSpecial extends PermissionsActivityV2 {
         PermissionDialog dialog = new PermissionDialog(this);
         String content = PermissionManager.INSTANCE.getPermissionContent(this, scene, Arrays.asList(permission),
                 getUseDefault(), getNeedSpecial());
-        dialog.setTitle(getString(R.string.common_permission_title_location));
+        dialog.setTitle(getString(com.bihe0832.android.model.res.R.string.common_permission_title_location));
         dialog.setHtmlContent(content);
-        dialog.setPositive(getString(R.string.common_permission_title_location));
-        dialog.setNegative(getString(R.string.common_permission_action_delay));
+        dialog.setPositive(getString(com.bihe0832.android.model.res.R.string.common_permission_title_location));
+        dialog.setNegative(getString(com.bihe0832.android.model.res.R.string.common_permission_action_delay));
         dialog.setShouldCanceled(true);
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override

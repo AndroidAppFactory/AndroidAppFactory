@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.bihe0832.android.base.debug.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.webview.nativeimpl.NativeWebView
 import com.bihe0832.android.framework.ui.BaseFragment
 
@@ -32,7 +33,7 @@ class DebugH5NativeWebFragment : BaseFragment() {
     companion object {
         fun getTextView(context: Context): TextView {
             val textView = TextView(context)
-            textView.setBackgroundColor(context.resources.getColor(R.color.bihe0832_common_toast_background_color))
+            textView.setBackgroundColor(context.resources.getColor(ResR.color.bihe0832_common_toast_background_color))
             textView.text = "Zixie AAF Webview Debug TextView2 "
             textView.gravity = Gravity.CENTER
             textView.layoutParams = ViewGroup.MarginLayoutParams(

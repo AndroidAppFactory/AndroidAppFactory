@@ -28,6 +28,8 @@ import com.bihe0832.android.common.crop.view.TransformImageView
 import com.bihe0832.android.common.crop.view.widget.AspectRatioTextView
 import com.bihe0832.android.common.crop.view.widget.HorizontalProgressWheelView
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.bottom.bar.BottomBar
@@ -182,7 +184,7 @@ class CropActivity : BaseActivity() {
                         CropBottomTab(
                             context,
                             R.drawable.ic_crop,
-                            ThemeResourcesManager.getString(R.string.menu_crop),
+                            ThemeResourcesManager.getString(ModelResR.string.menu_crop),
                             TAB_ID_ASPECT,
                         ),
                     )
@@ -193,7 +195,7 @@ class CropActivity : BaseActivity() {
                         CropBottomTab(
                             context,
                             R.drawable.ic_rotate,
-                            ThemeResourcesManager.getString(R.string.menu_rotate),
+                            ThemeResourcesManager.getString(ModelResR.string.menu_rotate),
                             TAB_ID_ROTATE,
                         ),
                     )
@@ -204,7 +206,7 @@ class CropActivity : BaseActivity() {
                         CropBottomTab(
                             context,
                             R.drawable.ic_scale,
-                            ThemeResourcesManager.getString(R.string.menu_scale),
+                            ThemeResourcesManager.getString(ModelResR.string.menu_scale),
                             TAB_ID_SCALE,
                         ),
                     )
@@ -549,7 +551,7 @@ class CropActivity : BaseActivity() {
             aspectRatioList.add(AspectRatio(null, 3f, 4f))
             aspectRatioList.add(
                 AspectRatio(
-                    getString(R.string.label_original).uppercase(Locale.getDefault()),
+                    getString(ModelResR.string.label_original).uppercase(Locale.getDefault()),
                     CropImageView.SOURCE_IMAGE_ASPECT_RATIO,
                     CropImageView.SOURCE_IMAGE_ASPECT_RATIO,
                 ),
@@ -567,7 +569,7 @@ class CropActivity : BaseActivity() {
                 layoutInflater.inflate(R.layout.com_bihe_0832_android_common_crop_aspect_ratio, null) as FrameLayout
             wrapperAspectRatio.layoutParams = lp
             aspectRatioTextView = wrapperAspectRatio.getChildAt(0) as AspectRatioTextView
-            aspectRatioTextView.setActiveColor(ThemeResourcesManager.getColor(R.color.colorAccent) ?: Color.BLACK)
+            aspectRatioTextView.setActiveColor(ThemeResourcesManager.getColor(ResR.color.colorAccent) ?: Color.BLACK)
             aspectRatioTextView.setAspectRatio(aspectRatio!!)
             wrapperAspectRatioList.addView(wrapperAspectRatio)
             mCropAspectRatioViews.add(wrapperAspectRatio)

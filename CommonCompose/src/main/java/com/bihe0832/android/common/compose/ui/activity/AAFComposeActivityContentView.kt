@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.base.BaseComposeActivity
 import com.bihe0832.android.common.compose.common.CommonActionEvent
 import com.bihe0832.android.common.compose.common.CommonActionState
@@ -46,6 +45,7 @@ import com.bihe0832.android.common.compose.ui.LoadingView
 import com.bihe0832.android.common.compose.ui.RefreshView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  *
@@ -386,7 +386,7 @@ fun CommonContent(
 @Preview
 @Composable
 fun Preview() {
-    ActivityToolBarView(navigationIcon = ImageVector.vectorResource(R.drawable.icon_left_go),
+    ActivityToolBarView(navigationIcon = ImageVector.vectorResource(ResR.drawable.icon_left_go),
         navigationOnClick = {
 
         },

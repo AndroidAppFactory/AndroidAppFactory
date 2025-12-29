@@ -112,9 +112,9 @@ public class ShowDebugClick implements View.OnClickListener {
     }
 
     public static void sendInfo(Context ctx, String result) {
-        SendTextUtils.sendInfo(ctx, ctx.getString(R.string.com_bihe0832_share_to_develop_title),
-                ctx.getString(R.string.com_bihe0832_share_to_develop_content), result,
-                ctx.getString(R.string.com_bihe0832_share_to_develop_tips),
-                ctx.getString(R.string.com_bihe0832_share_to_develop), true);
+        SendTextUtils.sendInfo(ctx, ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop_title),
+                ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop_content), result,
+                ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop_tips),
+                ctx.getString(com.bihe0832.android.model.res.R.string.com_bihe0832_share_to_develop), true);
     }
 }

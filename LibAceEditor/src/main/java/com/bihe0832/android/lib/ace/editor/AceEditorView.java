@@ -140,13 +140,13 @@ public class AceEditorView extends FrameLayout {
                 final String msg = consoleMessage.message();
                 if (msg.equals("edt:crc")) {
                     if (mMessageListener != null) {
-                        mMessageListener.onErrorMessage(R.string.ace_editor_load_failed);
+                        mMessageListener.onErrorMessage(com.bihe0832.android.lib.aaf.res.R.string.ace_editor_load_failed);
                     }
                     return true;
                 }
                 if (msg.equals("edt:big")) {
                     if (mMessageListener != null) {
-                        mMessageListener.onWarnMessage(R.string.ace_editor_file_too_big);
+                        mMessageListener.onWarnMessage(com.bihe0832.android.lib.aaf.res.R.string.ace_editor_file_too_big);
                     }
                     return true;
                 }
@@ -204,7 +204,7 @@ public class AceEditorView extends FrameLayout {
                             int computedCrc = crc(content);
                             if (crc != -1 && crc != computedCrc) {
                                 if (mMessageListener != null) {
-                                    mMessageListener.onErrorMessage(R.string.ace_editor_save_failed);
+                                    mMessageListener.onErrorMessage(com.bihe0832.android.lib.aaf.res.R.string.ace_editor_save_failed);
                                 }
                                 return true;
                             }

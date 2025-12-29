@@ -10,6 +10,7 @@ import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.ui.dialog.R
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 class BottomListDialog(activity: Activity) : BottomDialog(activity) {
 
@@ -60,11 +61,11 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
                 gravity = Gravity.CENTER_HORIZONTAL
                 setTextSize(
                     TypedValue.COMPLEX_UNIT_PX,
-                    context.resources.getDimension(R.dimen.com_bihe0832_dialog_button_text_size),
+                    context.resources.getDimension(ResR.dimen.com_bihe0832_dialog_button_text_size),
                 )
                 this.text = TextFactoryUtils.getSpannedTextByHtml(text)
                 setTextColor(
-                    getContext().getResources().getColorStateList(R.drawable.com_bihe0832_base_dialog_positive_style),
+                    getContext().getResources().getColorStateList(ResR.drawable.com_bihe0832_base_dialog_positive_style),
                 )
                 setOnClickListener {
                     itemClickListener?.invoke(textList.indexOf(text))
@@ -76,7 +77,7 @@ class BottomListDialog(activity: Activity) : BottomDialog(activity) {
 
             View(context).apply {
                 layoutParams = lineViewLayoutParams
-                setBackgroundColor(context.resources.getColor(R.color.com_bihe0832_dialog_split))
+                setBackgroundColor(context.resources.getColor(ResR.color.com_bihe0832_dialog_split))
             }.let {
                 layout_List.addView(it)
             }

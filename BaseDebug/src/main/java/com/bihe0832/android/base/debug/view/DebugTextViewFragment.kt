@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.bihe0832.android.base.debug.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ui.BaseFragment
 import com.bihe0832.android.lib.log.ZLog
@@ -48,7 +49,7 @@ class DebugTextViewFragment : BaseFragment() {
     override fun initView(view: View) {
         view.findViewById<MarqueeTextView>(R.id.text_marquee).apply {
 //            background = getDrawable(intArrayOf(Color.RED, Color.YELLOW), GradientDrawable.Orientation.LEFT_RIGHT, DisplayUtil.dip2px(context, 4f).toFloat(), DisplayUtil.dip2px(context, 2f), Color.BLUE)
-            setDrawableLeft(R.drawable.icon_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
+            setDrawableLeft(ResR.drawable.icon_menu, DisplayUtil.dip2px(context, 16f), DisplayUtil.dip2px(context, 16f))
             text = ":fds"
             startScroll()
             setOnScrollListener(object : OnScrollListener {
@@ -155,7 +156,7 @@ class DebugTextViewFragment : BaseFragment() {
                     context!!,
                     BitmapUtil.getLocalBitmap(
                         context!!,
-                        R.drawable.icon_author,
+                        ResR.drawable.icon_author,
                         1,
                     ),
                 ),
@@ -173,7 +174,7 @@ class DebugTextViewFragment : BaseFragment() {
             setSpan(
                 ZixieTextImageSpan(
                     context!!,
-                    BitmapUtil.getLocalBitmap(context!!, R.drawable.icon_author, 1),
+                    BitmapUtil.getLocalBitmap(context!!, ResR.drawable.icon_author, 1),
                 ),
                 2,
                 3,

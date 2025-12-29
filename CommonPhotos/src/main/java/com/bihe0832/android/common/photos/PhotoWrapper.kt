@@ -23,6 +23,7 @@ import com.bihe0832.android.lib.permission.PermissionManager
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.OSUtils
 import java.io.File
+import com.bihe0832.android.model.res.R as ModelResR
 
 fun getAutoChangedPhotoName(): String {
     return "zixie_" + System.currentTimeMillis() + ".jpg"
@@ -173,7 +174,7 @@ fun Activity.choosePhoto(fileType: String) {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
     } catch (e: Exception) {
         e.printStackTrace()
-        ZixieContext.showDebug(getString(R.string.common_photo_choose_photo_bad))
+        ZixieContext.showDebug(getString(ModelResR.string.common_photo_choose_photo_bad))
     }
 }
 
@@ -184,7 +185,7 @@ fun Fragment.choosePhoto(fileType: String) {
         startActivityForResult(intent, ZixieActivityRequestCode.CHOOSE_PHOTO)
     } catch (e: Exception) {
         e.printStackTrace()
-        ZixieContext.showDebug(getString(R.string.common_photo_choose_photo_bad))
+        ZixieContext.showDebug(getString(ModelResR.string.common_photo_choose_photo_bad))
     }
 }
 

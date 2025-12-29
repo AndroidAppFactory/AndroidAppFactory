@@ -194,7 +194,7 @@ public class CommonDialog extends Dialog {
             if (!TextUtils.isEmpty(positiveString)) {
                 positiveBn.setText(TextFactoryUtils.getSpannedTextByHtml(positiveString));
             } else {
-                positiveBn.setText(ThemeResourcesManager.INSTANCE.getString(R.string.dialog_button_ok));
+                positiveBn.setText(ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.lib.aaf.res.R.string.dialog_button_ok));
             }
         }
 

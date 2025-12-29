@@ -56,8 +56,8 @@ public class FileActivity extends SupportActivity {
         setContentView(R.layout.com_bihe0832_activity_file);
 
         AppCompatActivityImmersiveExtKt.enableActivityImmersive(this,
-                ThemeResourcesManager.INSTANCE.getColor(R.color.colorPrimaryDark),
-                ThemeResourcesManager.INSTANCE.getColor(R.color.navigationBarColor));
+                ThemeResourcesManager.INSTANCE.getColor(com.bihe0832.android.lib.aaf.res.R.color.colorPrimaryDark),
+                ThemeResourcesManager.INSTANCE.getColor(com.bihe0832.android.lib.aaf.res.R.color.navigationBarColor));
         initPermission();
         initHandler();
         initView();
@@ -80,10 +80,10 @@ public class FileActivity extends SupportActivity {
         needSDcard = getIntent().getBooleanExtra(FileSelectTools.INTENT_EXTRA_KEY_NEED_SDCARD_PERMISSION, false);
         if (needSDcard) {
             PermissionManager.INSTANCE.addPermissionGroupDesc("FileSelect", Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    getString(R.string.com_bihe0832_file_select_permission_scene));
+                    getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_select_permission_scene));
             PermissionManager.INSTANCE.addPermissionGroupContent("FileSelect",
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    getString(R.string.com_bihe0832_file_select_permission_content));
+                    getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_select_permission_content));
 
             ArrayList permission = new ArrayList();
             permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -96,19 +96,19 @@ public class FileActivity extends SupportActivity {
                 @Override
                 public void onUserCancel(String scene, String permissionGroupID, String permission) {
                     ToastUtil.showShort(FileActivity.this,
-                            getString(R.string.com_bihe0832_file_select_permission_deny));
+                            getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_select_permission_deny));
                 }
 
                 @Override
                 public void onUserDeny(String scene, String permissionGroupID, String permission) {
                     ToastUtil.showShort(FileActivity.this,
-                            getString(R.string.com_bihe0832_file_select_permission_deny));
+                            getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_select_permission_deny));
                 }
 
                 @Override
                 public void onFailed(@NotNull String msg) {
                     ToastUtil.showShort(FileActivity.this,
-                            getString(R.string.com_bihe0832_file_select_permission_deny));
+                            getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_select_permission_deny));
                 }
             }, permission);
         }
@@ -175,7 +175,7 @@ public class FileActivity extends SupportActivity {
                         stopSearch();
                         if (mTempFile.list() == null || mTempFile.listFiles() == null
                                 || mTempFile.listFiles().length < 1) {
-                            ToastUtil.showShort(FileActivity.this, getString(R.string.com_bihe0832_file_empty));
+                            ToastUtil.showShort(FileActivity.this, getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_empty));
                         } else {
                             mFSTask = new FileSearchTask();
                             mFSTask.execute(mTempFile);
@@ -209,11 +209,11 @@ public class FileActivity extends SupportActivity {
                 switch (msg.what) {
                     case HANDLER_MSG_SELECTED:
                         if (mSelectedPath != null) {
-                            btn_close.setBackgroundResource(R.drawable.icon_done_fill);
+                            btn_close.setBackgroundResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_done_fill);
                             btn_back.setVisibility(View.GONE);
-                            tv_path.setText(getString(R.string.com_bihe0832_file_selected) + "：" + mSelectedPath);
+                            tv_path.setText(getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_selected) + "：" + mSelectedPath);
                         } else {
-                            btn_close.setBackgroundResource(R.drawable.icon_close);
+                            btn_close.setBackgroundResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_close);
                             btn_back.setVisibility(View.VISIBLE);
                             tv_path.setText(mFile.getAbsolutePath());
                         }
@@ -261,7 +261,7 @@ public class FileActivity extends SupportActivity {
                 mFSTask = new FileSearchTask();
                 mFSTask.execute(mTempFile);
             } else {
-                ToastUtil.showShort(FileActivity.this, getString(R.string.com_bihe0832_file_root));
+                ToastUtil.showShort(FileActivity.this, getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_file_root));
             }
         }
     }
@@ -359,22 +359,22 @@ public class FileActivity extends SupportActivity {
 
             File mTempFile = mFileArr[position];
             if (mTempFile.isDirectory()) {
-                mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_folder);
+                mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_folder);
             } else {
                 if (FileMimeTypes.INSTANCE.isTextFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_text);
+                    mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_text);
                 } else if (FileMimeTypes.INSTANCE.isApkFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_apk);
+                    mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_apk);
                 } else if (FileMimeTypes.INSTANCE.isImageFile(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_image);
+                    mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_image);
                 } else if (FileMimeTypes.INSTANCE.isArchive(mTempFile.getName())) {
-                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_archive);
+                    mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_archive);
                 } else if (FileMimeTypes.INSTANCE.isVideoFile(mTempFile)) {
-                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_video);
+                    mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_video);
                 } else if (FileMimeTypes.INSTANCE.isAudioFile(mTempFile)) {
-                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_audio);
+                    mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_audio);
                 } else {
-                    mHolder.iv_icon.setImageResource(R.drawable.icon_file_type_file);
+                    mHolder.iv_icon.setImageResource(com.bihe0832.android.lib.aaf.res.R.drawable.icon_file_type_file);
                 }
             }
             mHolder.cb_selected.setVisibility(View.VISIBLE);

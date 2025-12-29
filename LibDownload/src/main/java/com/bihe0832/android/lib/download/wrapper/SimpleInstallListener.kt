@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download.wrapper
 import android.app.Activity
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.install.InstallUtils.ApkInstallType
@@ -56,17 +57,17 @@ open class SimpleInstallListener(
         setIsFullScreen(true)
         setCanCanceled(true)
         setOnCancelListener {
-            ToastUtil.showShort(context, activity.getString(R.string.install_background))
+            ToastUtil.showShort(context, activity.getString(ResR.string.install_background))
         }
     }
     private val installListener = object : InstallListener {
 
         override fun onUnCompress() {
-            loadingDialog.show(activity.getString(R.string.install_uncompress))
+            loadingDialog.show(activity.getString(ResR.string.install_uncompress))
         }
 
         override fun onInstallPrepare() {
-            loadingDialog.show(activity.getString(R.string.install_prepare))
+            loadingDialog.show(activity.getString(ResR.string.install_prepare))
         }
 
         override fun onInstallStart() {
@@ -78,11 +79,11 @@ open class SimpleInstallListener(
         }
 
         override fun onInstallSuccess() {
-            loadingDialog.show(activity.getString(R.string.install_success))
+            loadingDialog.show(activity.getString(ResR.string.install_success))
         }
 
         override fun onInstallTimeOut() {
-            loadingDialog.show(activity.getString(R.string.install_timeout))
+            loadingDialog.show(activity.getString(ResR.string.install_timeout))
         }
     }
 

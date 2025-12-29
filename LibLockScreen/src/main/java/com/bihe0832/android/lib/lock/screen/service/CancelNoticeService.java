@@ -13,7 +13,7 @@ import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
 
-import com.bihe0832.android.lib.lock.screen.R;
+
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.utils.os.BuildUtils;
@@ -35,7 +35,7 @@ public class CancelNoticeService extends Service {
         //如果API大于18，需要弹出一个可见通知
         if (BuildUtils.INSTANCE.getSDK_INT() >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, LockScreenService.NOTICE_CHANNEL_ID);
-            Notification notification = builder.setOngoing(true).setSmallIcon(R.mipmap.icon).setPriority(PRIORITY_MIN).setCategory(Notification.CATEGORY_SERVICE).build();
+            Notification notification = builder.setOngoing(true).setSmallIcon(com.bihe0832.android.lib.aaf.res.R.mipmap.icon).setPriority(PRIORITY_MIN).setCategory(Notification.CATEGORY_SERVICE).build();
             startForeground(LockScreenService.NOTICE_ID, notification);
         } else {
             startForeground(LockScreenService.NOTICE_ID, new Notification());

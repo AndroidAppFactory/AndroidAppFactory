@@ -183,7 +183,7 @@ public abstract class BaseCaptureFragment extends Fragment {
                 boolean isTorch = mCameraScan.isTorchEnabled();
                 if (!isTorch) {
                     ZixieContext.INSTANCE.showToast(
-                            ZixieContext.INSTANCE.getApplicationContext().getString(R.string.common_scan_flash_failed));
+                            ZixieContext.INSTANCE.getApplicationContext().getString(com.bihe0832.android.model.res.R.string.common_scan_flash_failed));
                     return;
                 }
                 mCameraScan.enableTorch(!isTorch);

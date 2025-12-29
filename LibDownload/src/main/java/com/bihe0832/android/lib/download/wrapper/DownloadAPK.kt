@@ -6,6 +6,7 @@ import android.provider.Settings
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -43,9 +44,9 @@ object DownloadAPK {
         DialogUtils.showConfirmDialog(
             activity,
             title,
-            activity.getString(R.string.download_background_permission),
-            activity.getString(R.string.com_bihe0832_permission_positive),
-            activity.getString(R.string.com_bihe0832_permission_negtive),
+            activity.getString(ResR.string.download_background_permission),
+            activity.getString(ResR.string.com_bihe0832_permission_positive),
+            activity.getString(ResR.string.com_bihe0832_permission_negtive),
             false,
             object : OnDialogListener {
                 override fun onPositiveClick() {
@@ -219,7 +220,7 @@ object DownloadAPK {
                     if (!InstallUtils.hasInstallAPPPermission(activity, false, false)) {
                         showInstallPermissionDialog(
                             activity,
-                            activity.getString(R.string.dialog_title),
+                            activity.getString(ResR.string.dialog_title),
                             null
                         )
                     }

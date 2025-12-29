@@ -3,8 +3,9 @@ package com.bihe0832.android.common.debug.item
 import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
-import com.bihe0832.android.common.debug.R
 import com.bihe0832.android.common.debug.base.BaseDebugListFragment
+import com.bihe0832.android.common.deprecated.R as DeprecatedR
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.file.preview.ContentItemData
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.ZixieContext.applicationContext
@@ -17,17 +18,17 @@ import com.bihe0832.android.framework.router.RouterAction
 
 fun getDebugItemTextColor(isTips: Boolean): Int {
     return if (isTips) {
-        applicationContext!!.resources.getColor(R.color.colorOnPrimary)
+        applicationContext!!.resources.getColor(ResR.color.colorOnPrimary)
     } else {
-        applicationContext!!.resources.getColor(R.color.colorOnBackground)
+        applicationContext!!.resources.getColor(ResR.color.colorOnBackground)
     }
 }
 
 fun getDebugItemBackGroundColor(isTips: Boolean): Int {
     return if (isTips) {
-        applicationContext!!.resources.getColor(R.color.colorAccent)
+        applicationContext!!.resources.getColor(ResR.color.colorAccent)
     } else {
-        applicationContext!!.resources.getColor(R.color.windowBackground)
+        applicationContext!!.resources.getColor(ResR.color.windowBackground)
     }
 }
 
@@ -57,7 +58,7 @@ fun getDebugItem(
         paddingLeftDp,
         getDebugItemBackGroundColor(isTips),
         if (showBottomLine) {
-            ZixieContext.applicationContext!!.getColor(R.color.divider)
+            ZixieContext.applicationContext!!.getColor(DeprecatedR.color.divider)
         } else {
             Color.TRANSPARENT
         }

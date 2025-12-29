@@ -2,8 +2,9 @@ package com.bihe0832.android.base.compose.debug.dialog
 
 import android.app.Activity
 import com.bihe0832.android.app.dialog.AAFUniqueDialogManager
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.framework.ZixieContext
+import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.model.res.R as ModelResR
 import com.bihe0832.android.framework.ZixieContext.showToast
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.text.ClipboardUtil
@@ -60,7 +61,7 @@ internal fun getAlert(activity: Activity, dialog: CommonDialog) {
     dialog.setTitle(title)
     dialog.setPositive("分享给我们")
     dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")
-//        dialog.setImageContentResId(R.mipmap.debug)
+//        dialog.setImageContentResId(ResR.mipmap.debug)
 //        dialog.setFeedBackContent("我们承诺你提供的信息仅用于问题定位")
 //        dialog.setNegative("复制到剪切板")
     dialog.setShouldCanceled(true)
@@ -177,7 +178,7 @@ internal fun testHURLImage(activity: Activity) {
 
 internal fun testImage(activity: Activity?) {
     val dialog = ImageDialog(activity)
-    dialog.setImageRes(R.drawable.icon_android)
+    dialog.setImageRes(ResR.drawable.icon_android)
     dialog.show()
 }
 
@@ -190,7 +191,7 @@ internal fun testRadio(activity: Activity?) {
     dialog.setContent(content)
     dialog.setPositive("分享给我们")
     dialog.setNegative("复制到剪切板")
-    dialog.setFeedBackContent(ThemeResourcesManager.getString(R.string.theme_change_tips))
+    dialog.setFeedBackContent(ThemeResourcesManager.getString(ModelResR.string.theme_change_tips))
     dialog.setShouldCanceled(true)
 
     dialog.setRadioData(
@@ -233,7 +234,7 @@ internal fun testCustom(activity: Activity?) {
     var title = "分享的标题"
     var content = "分享的内容"
     dialog.setTitle(title)
-    dialog.setImageContentResId(R.mipmap.debug)
+    dialog.setImageContentResId(ResR.mipmap.debug)
     dialog.setFeedBackContent("我们承诺你提供的信息仅用于问题定位")
     dialog.setPositive("分享给我们")
     dialog.setContent("调试信息已经准备好，你可以直接「分享给我们」或将信息「复制到剪贴板」后转发给我们")

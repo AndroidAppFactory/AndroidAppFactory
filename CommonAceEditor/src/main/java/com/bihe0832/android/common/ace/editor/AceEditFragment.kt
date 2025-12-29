@@ -18,6 +18,7 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.impl.LoadingDialog
+import com.bihe0832.android.model.res.R as ModelResR
 
 class AceEditFragment : BaseFragment() {
     private var filePath = ""
@@ -78,7 +79,7 @@ class AceEditFragment : BaseFragment() {
     override fun initData() {
         super.initData()
         if (FileUtils.checkFileExist(filePath)) {
-            mLoadingDialog?.show(ThemeResourcesManager.getString(R.string.ace_editor_load_file_tips))
+            mLoadingDialog?.show(ThemeResourcesManager.getString(ModelResR.string.ace_editor_load_file_tips))
             ThreadManager.getInstance().start {
                 FileUtils.getFileBytes(filePath).let {
                     view?.findViewById<AceEditorView>(R.id.main_ace_editor)?.loadContent(filePath, it)

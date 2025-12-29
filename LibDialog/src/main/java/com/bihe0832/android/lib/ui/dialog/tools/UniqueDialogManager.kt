@@ -6,6 +6,7 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.R
 import java.util.concurrent.CopyOnWriteArrayList
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 
 public class UniqueDialogManager {
@@ -23,7 +24,7 @@ public class UniqueDialogManager {
     }
 
     fun showUniqueDialog(context: Context, content: String): Boolean {
-        return showUniqueDialog(context, content, content, ThemeResourcesManager.getString(R.string.dialog_tips_button)!!)
+        return showUniqueDialog(context, content, content, ThemeResourcesManager.getString(ResR.string.dialog_tips_button)!!)
     }
 
     fun showUniqueDialog(context: Context, content: String, buttonText: String): Boolean {

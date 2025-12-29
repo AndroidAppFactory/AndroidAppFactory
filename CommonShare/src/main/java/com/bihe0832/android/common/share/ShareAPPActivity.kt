@@ -10,6 +10,9 @@ import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.framework.R as FrameworkR
 import java.io.File
 
 
@@ -31,11 +34,11 @@ class ShareAPPActivity : ShareQRCodeActivity() {
                     APKUtils.getAPKPath(this.context, packageName).let {
                         if (FileUtils.checkFileExist(it)) {
                             if (File(it).length() > FileUtils.SPACE_MB * 100) {
-                                ZixieContext.showToast(ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_big)!!)
+                                ZixieContext.showToast(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_share_app_big)!!)
                             }
                             AAFFileTools.sendFile(it)
                         } else {
-                            ZixieContext.showToast(ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_faild)!!)
+                            ZixieContext.showToast(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_share_app_faild)!!)
                         }
                     }
                 }
@@ -47,16 +50,16 @@ class ShareAPPActivity : ShareQRCodeActivity() {
     }
 
     override fun getShareData(): String {
-        return ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_target)!!
+        return ThemeResourcesManager.getString(FrameworkR.string.com_bihe0832_share_app_target)!!
     }
 
     // 文本分享的内容
     override fun getShareLink(): String {
-        return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_app)!!, ThemeResourcesManager.getString(R.string.app_name), ThemeResourcesManager.getString(R.string.com_bihe0832_share_app_target))
+        return String.format(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_share_app)!!, ThemeResourcesManager.getString(ResR.string.app_name), ThemeResourcesManager.getString(FrameworkR.string.com_bihe0832_share_app_target))
 
     }
 
     override fun getShareDialogTitle(): String {
-        return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_dialog_title)!!, ThemeResourcesManager.getString(R.string.app_name))
+        return String.format(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_share_dialog_title)!!, ThemeResourcesManager.getString(ResR.string.app_name))
     }
 }

@@ -30,6 +30,7 @@ import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import me.yokeyword.fragmentation.SupportActivity
 import java.util.Locale
 
@@ -68,7 +69,7 @@ open class BaseActivity : SupportActivity() {
             DisplayUtil.resetDensity(
                 this,
                 ConvertUtils.parseFloat(
-                    ThemeResourcesManager.getString(R.string.custom_density),
+                    ThemeResourcesManager.getString(ResR.string.custom_density),
                     Constants.CUSTOM_DENSITY,
                 ),
             )
@@ -80,11 +81,11 @@ open class BaseActivity : SupportActivity() {
     }
 
     open fun getStatusBarColor(): Int {
-        return ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!
+        return ThemeResourcesManager.getColor(ResR.color.colorPrimaryDark)!!
     }
 
     open fun getNavigationBarColor(): Int {
-        return ThemeResourcesManager.getColor(R.color.navigationBarColor)!!
+        return ThemeResourcesManager.getColor(ResR.color.navigationBarColor)!!
     }
 
     override fun onRestart() {
@@ -118,14 +119,14 @@ open class BaseActivity : SupportActivity() {
         super.onResume()
         if (getStatusBarColor() == Color.TRANSPARENT) {
             enableActivityImmersive(
-                ColorUtils.addAlpha(0f, ThemeResourcesManager.getColor(R.color.colorPrimaryDark)!!),
+                ColorUtils.addAlpha(0f, ThemeResourcesManager.getColor(ResR.color.colorPrimaryDark)!!),
                 getNavigationBarColor(),
             )
         } else {
             enableActivityImmersive(getStatusBarColor(), getNavigationBarColor())
         }
 
-        mToolbar?.setBackgroundColor(ThemeResourcesManager.getColor(R.color.colorPrimary)!!)
+        mToolbar?.setBackgroundColor(ThemeResourcesManager.getColor(ResR.color.colorPrimary)!!)
 
         if (mNeedEnableLayerToGray) {
             setLayerToGray()

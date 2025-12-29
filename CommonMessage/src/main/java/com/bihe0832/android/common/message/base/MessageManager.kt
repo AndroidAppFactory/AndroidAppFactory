@@ -21,6 +21,7 @@ import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
+import com.bihe0832.android.model.res.R as ModelResR
 import java.net.HttpURLConnection
 
 /**
@@ -108,16 +109,16 @@ public open class MessageManager {
                     setSingle(TextUtils.isEmpty(item.action))
                     setPositive(
                         if (TextUtils.isEmpty(item.action)) {
-                            activity.getString(R.string.com_bihe0832_message_confirm)
+                            activity.getString(ModelResR.string.com_bihe0832_message_confirm)
                         } else {
                             if (item.type == MessageInfoItem.TYPE_APK) {
-                                activity.getString(R.string.com_bihe0832_message_download)
+                                activity.getString(ModelResR.string.com_bihe0832_message_download)
                             } else {
-                                activity.getString(R.string.com_bihe0832_message_go)
+                                activity.getString(ModelResR.string.com_bihe0832_message_go)
                             }
                         },
                     )
-                    setNegative(activity.getString(R.string.com_bihe0832_message_close))
+                    setNegative(activity.getString(ModelResR.string.com_bihe0832_message_close))
                     setOnClickBottomListener(object : OnDialogListener {
                         override fun onPositiveClick() {
                             if (!TextUtils.isEmpty(item.action)) {

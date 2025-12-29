@@ -1,6 +1,6 @@
 package com.bihe0832.android.framework.ui
 
-import com.bihe0832.android.common.deprecated.R
+import com.bihe0832.android.framework.R as FrameworkR
 
 
 /**
@@ -14,6 +14,6 @@ open class BaseBottomActivity : BaseActivity() {
     }
 
     fun getExitAnimation(): Int {
-        return R.anim.fade_out
+        return FrameworkR.anim.fade_out
     }
 }

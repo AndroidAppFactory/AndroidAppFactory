@@ -1,8 +1,8 @@
 package com.bihe0832.android.app.ui
 
 import android.os.Bundle
-import com.bihe0832.android.app.R
 import com.bihe0832.android.app.message.checkMsgAndShowFace
+import com.bihe0832.android.common.navigation.drawer.R as NavigationDrawerR
 import com.bihe0832.android.app.ui.navigation.AAFNavigationDrawerFragment
 import com.bihe0832.android.app.ui.navigation.addRedDotAction
 import com.bihe0832.android.app.update.UpdateManager
@@ -26,7 +26,7 @@ open class AAFCommonMainActivity : CommonActivityWithNavigationDrawer() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        addRedDotAction(findViewById(R.id.title_icon_unread))
+        addRedDotAction(findViewById(NavigationDrawerR.id.title_icon_unread))
         checkMsgAndShowFace()
         UpdateManager.checkUpdateAndShowDialog(this, false, ZixieContext.isOfficial())
         updateTitle(titleName)

@@ -65,7 +65,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
                 && ConvertUtils.parseInt(intent.getStringExtra(RouterConstants.INTENT_EXTRA_KEY_WEB_TITLE_STATUS),
                 RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_SHOW)
                 == RouterConstants.INTENT_EXTRA_VALUE_WEB_TITLE_HIDE) {
-            findViewById(R.id.common_toolbar).setVisibility(View.GONE);
+            findViewById(com.bihe0832.android.common.deprecated.R.id.common_toolbar).setVisibility(View.GONE);
         } else {
             initToolbar();
         }
@@ -86,7 +86,7 @@ public abstract class BaseWebviewActivity extends CommonActivity {
     }
 
     protected void initToolbar() {
-        initToolbar(R.id.common_toolbar, "", true);
+        initToolbar(com.bihe0832.android.common.deprecated.R.id.common_toolbar, "", true);
         getMToolbar().setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

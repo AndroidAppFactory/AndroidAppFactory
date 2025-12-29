@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.ui.utils.HorizontalDotLoader
 import com.bihe0832.android.common.compose.ui.utils.dpToSp
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  *
@@ -33,7 +34,7 @@ import com.bihe0832.android.common.compose.ui.utils.dpToSp
 @Preview
 @Composable
 fun LoadingView(
-    message: String = stringResource(R.string.com_bihe0832_loading),
+    message: String = stringResource(ResR.string.com_bihe0832_loading),
     colorP: Color = Color.Black.copy(alpha = 0.75F),
     textSize: Dp = 14.dp,
     textColor: Color = Color(0xFFEEEEEE),

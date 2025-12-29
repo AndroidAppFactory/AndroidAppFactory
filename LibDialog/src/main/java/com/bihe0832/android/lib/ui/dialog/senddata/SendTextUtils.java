@@ -52,7 +52,7 @@ public class SendTextUtils {
         logInfo("DEBUG", title, sendData);
         dialog.setShouldCanceled(dialogCanAutoCancel);
         dialog.setPositive(positiveText);
-        dialog.setNegative(context.getString(R.string.com_bihe0832_share_item_copy_clipboard));
+        dialog.setNegative(context.getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_share_item_copy_clipboard));
         dialog.setOnClickBottomListener(new OnDialogListener() {
             @Override
             public void onPositiveClick() {
@@ -85,7 +85,7 @@ public class SendTextUtils {
 
     public static void copyToClipboard(Context context, String content) {
         ClipboardUtil.copyToClipboard(context, content);
-        ToastUtil.showShort(context, context.getString(R.string.com_bihe0832_share_tips_copy_clipboard));
+        ToastUtil.showShort(context, context.getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_share_tips_copy_clipboard));
     }
 
     public static void sendInfo(final Context context, final String title, final String content) {

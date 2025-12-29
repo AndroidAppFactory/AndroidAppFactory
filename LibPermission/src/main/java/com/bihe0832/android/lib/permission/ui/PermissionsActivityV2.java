@@ -49,7 +49,7 @@ public class PermissionsActivityV2 extends PermissionsActivity {
 
         if (!TextUtils.isEmpty(permissionDesc)) {
             ((TextView) findViewById(R.id.permission_title)).setText(TextFactoryUtils.getSpannedTextByHtml(
-                    permissionDesc + " " + getString(R.string.com_bihe0832_permission_tips)));
+                    permissionDesc + " " + getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_permission_tips)));
             if (!TextUtils.isEmpty(permissionScene)) {
                 ((TextView) findViewById(R.id.permission_desc)).setText(
                         TextFactoryUtils.getSpannedTextByHtml(permissionScene));

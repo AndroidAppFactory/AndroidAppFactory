@@ -17,6 +17,7 @@ import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.ui.EmptyView
 import com.bihe0832.android.common.compose.ui.activity.CommonActivityToolbarView
 import com.bihe0832.android.common.compose.ui.activity.CommonContent
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 open class CommonComposeActivity : BaseComposeActivity() {
 
@@ -63,12 +64,12 @@ open class CommonComposeActivity : BaseComposeActivity() {
 
     @Composable
     open fun getTitleName(): String {
-        return stringResource(R.string.app_name)
+        return stringResource(ResR.string.app_name)
     }
 
     @Composable
     open fun getNavigationIcon(): ImageVector? {
-        return ImageVector.vectorResource(R.drawable.icon_left_go)
+        return ImageVector.vectorResource(ResR.drawable.icon_left_go)
     }
 
     @Composable

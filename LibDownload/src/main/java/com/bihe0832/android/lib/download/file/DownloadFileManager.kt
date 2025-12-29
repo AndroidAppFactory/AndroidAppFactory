@@ -28,6 +28,7 @@ import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
 import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
@@ -121,7 +122,7 @@ object DownloadFileManager : DownloadManager() {
                 addWaitToDownload()
             }
             if (ERR_URL_IS_TOO_OLD_THAN_LOACL == errorCode) {
-                getContext()?.getString(R.string.download_failed_local_is_new)?.let {
+                getContext()?.getString(ResR.string.download_failed_local_is_new)?.let {
                     ToastUtil.showLong(context, String.format(it, item.downloadTitle))
                 }
             }

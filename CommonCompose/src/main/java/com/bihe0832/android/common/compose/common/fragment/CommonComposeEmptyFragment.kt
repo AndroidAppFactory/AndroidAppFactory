@@ -9,6 +9,7 @@ import com.bihe0832.android.common.compose.base.BaseComposeFragment
 import com.bihe0832.android.common.compose.state.RenderState
 import com.bihe0832.android.common.compose.ui.EmptyView
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import java.util.Locale
 
 /**
@@ -42,7 +43,7 @@ open class CommonComposeEmptyFragment : BaseComposeFragment() {
         mContentString = bundle.getString(INTENT_KEY_TITLE, this.toString())
         mContentBackgroundColor = Color(
             bundle.getInt(
-                INTENT_KEY_COLOR, ThemeResourcesManager.getColor(R.color.windowBackground)!!
+                INTENT_KEY_COLOR, ThemeResourcesManager.getColor(ResR.color.windowBackground)!!
             )
         )
     }

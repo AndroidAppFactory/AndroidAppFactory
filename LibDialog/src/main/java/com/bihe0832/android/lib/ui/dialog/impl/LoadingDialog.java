@@ -73,7 +73,7 @@ public class LoadingDialog extends Dialog {
         setCanceledOnTouchOutside(shouldCanceledOutside);
         if (titleTv != null) {
             if (TextUtils.isEmpty(title)) {
-                title = getContext().getString(R.string.com_bihe0832_loading);
+                title = getContext().getString(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_loading);
             }
             CharSequence charSequence = TextFactoryUtils.getSpannedTextByHtml(title);//支持html
             titleTv.setText(charSequence);
@@ -87,7 +87,7 @@ public class LoadingDialog extends Dialog {
                 lp.height = WindowManager.LayoutParams.MATCH_PARENT;
                 layout.setLayoutParams(lp);
             } else {
-                layout.setBackgroundResource(R.drawable.com_bihe0832_base_loading_progress_bg);
+                layout.setBackgroundResource(com.bihe0832.android.lib.aaf.res.R.drawable.com_bihe0832_base_loading_progress_bg);
             }
         }
     }

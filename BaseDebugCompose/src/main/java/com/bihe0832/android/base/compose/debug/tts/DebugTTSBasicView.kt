@@ -165,8 +165,8 @@ fun DebugTTSBasicView() {
                             (context as? Activity)?.let { activity ->
                                 DownloadAPK.startDownloadWithCheckAndProcess(
                                     activity,
-                                    "${ThemeResourcesManager.getString(com.bihe0832.android.base.compose.debug.R.string.app_name)}:谷歌TTS下载",
-                                    "${ThemeResourcesManager.getString(com.bihe0832.android.base.compose.debug.R.string.app_name)}:谷歌TTS下载",
+                                    "${ThemeResourcesManager.getString(com.bihe0832.android.lib.aaf.res.R.string.app_name)}:谷歌TTS下载",
+                                    "${ThemeResourcesManager.getString(com.bihe0832.android.lib.aaf.res.R.string.app_name)}:谷歌TTS下载",
                                     "https://imtt.dd.qq.com/16891/apk/D1A7AE1C0B980EB66278E14008C9A6FF.apk",
                                     "",
                                     ""

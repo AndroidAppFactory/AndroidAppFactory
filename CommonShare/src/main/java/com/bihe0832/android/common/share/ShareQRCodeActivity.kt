@@ -18,6 +18,8 @@ import com.bihe0832.android.lib.router.annotation.Module
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.os.DisplayUtil
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import java.net.URLDecoder
 
 /**
@@ -61,7 +63,7 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
         }
 
         ThreadManager.getInstance().start {
-            val log = BitmapUtil.getLocalBitmap(ZixieContext.applicationContext, R.mipmap.icon, 1)
+            val log = BitmapUtil.getLocalBitmap(ZixieContext.applicationContext, ResR.mipmap.icon, 1)
             QRCodeEncodingHandler.createQRCode(
                 mShareData,
                 DisplayUtil.dip2px(this, 200f),
@@ -124,21 +126,21 @@ open class ShareQRCodeActivity : ShareBaseActivity() {
 
     // 图片主文字
     open fun getShareTitle(): String {
-        return ThemeResourcesManager.getString(R.string.app_name)!!
+        return ThemeResourcesManager.getString(ResR.string.app_name)!!
     }
 
     // 图片副文字
     open fun getShareDesc(): String {
-        return ThemeResourcesManager.getString(R.string.com_bihe0832_share_desc_qrcode)!!
+        return ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_share_desc_qrcode)!!
     }
 
     // 文本分享的内容
     open fun getShareLink(): String {
-        return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_link)!!, mShareData)
+        return String.format(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_share_link)!!, mShareData)
     }
 
     open fun getShareDialogTitle(): String {
-        return String.format(ThemeResourcesManager.getString(R.string.com_bihe0832_share_dialog_title)!!, "")
+        return String.format(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_share_dialog_title)!!, "")
     }
 
     override fun onShareCancelClick() {

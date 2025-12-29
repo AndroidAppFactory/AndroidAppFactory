@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import com.bihe0832.android.lib.ui.custom.view.R;
+import com.bihe0832.android.lib.aaf.res.R;
 
 /**
  * @author zixie code@bihe0832.com

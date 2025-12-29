@@ -18,6 +18,7 @@ import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
 import java.util.concurrent.ConcurrentHashMap
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 
 object NotifyManager {
@@ -105,7 +106,7 @@ object NotifyManager {
                 }
                 setAutoCancel(true)
                 //设置小图标
-                setSmallIcon(R.mipmap.icon)
+                setSmallIcon(ResR.mipmap.icon)
                 //设置通知时间
                 setWhen(System.currentTimeMillis())
                 //设置通知方式，声音，震动，呼吸灯等效果，这里通知方式为声音
@@ -124,7 +125,7 @@ object NotifyManager {
                 setOnlyAlertOnce(true)
                 setContent(remoteViews)
                 //设置小图标
-                setSmallIcon(R.mipmap.icon)
+                setSmallIcon(ResR.mipmap.icon)
                 //禁止用户点击删除按钮删除
                 setAutoCancel(false)
                 //禁止滑动删除

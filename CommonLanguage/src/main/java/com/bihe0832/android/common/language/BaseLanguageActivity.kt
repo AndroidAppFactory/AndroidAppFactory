@@ -10,6 +10,7 @@ import com.bihe0832.android.common.compose.common.activity.CommonComposeActivity
 import com.bihe0832.android.common.compose.state.LanguageItem
 import com.bihe0832.android.common.compose.state.MultiLanguageState
 import com.bihe0832.android.common.compose.state.RenderState
+import com.bihe0832.android.model.res.R as ModelResR
 import java.util.Locale
 
 /**
@@ -40,7 +41,7 @@ abstract class BaseLanguageActivity : CommonComposeActivity() {
 
     @Composable
     override fun getTitleName(): String {
-        return stringResource(R.string.settings_language_title)
+        return stringResource(ModelResR.string.settings_language_title)
     }
 
 }

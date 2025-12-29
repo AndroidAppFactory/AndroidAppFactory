@@ -115,7 +115,7 @@ public class PanelMainFragment extends BaseFragment {
     }
 
     private int getColorAccent() {
-        return ThemeResourcesManager.INSTANCE.getColor(R.color.colorAccent);
+        return ThemeResourcesManager.INSTANCE.getColor(com.bihe0832.android.lib.aaf.res.R.color.colorAccent);
     }
 
     private void initMenu(View view) {
@@ -503,7 +503,7 @@ public class PanelMainFragment extends BaseFragment {
         } else {
             DialogUtils.INSTANCE.showConfirmDialog(
                     getContext(),
-                    ThemeResourcesManager.INSTANCE.getString(R.string.dialog_title),
+                    ThemeResourcesManager.INSTANCE.getString(com.bihe0832.android.model.res.R.string.dialog_title),
                     "当前画作尚未保存，确认要退出么？",
                     "保存并退出",
                     "直接退出",

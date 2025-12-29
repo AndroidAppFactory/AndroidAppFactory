@@ -18,6 +18,7 @@ import com.bihe0832.android.lib.thread.ThreadManager;
 import com.bihe0832.android.lib.timer.BaseTask;
 import com.bihe0832.android.lib.timer.TaskManager;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
+import com.bihe0832.android.lib.aaf.res.R;
 import com.bihe0832.android.lib.utils.MathUtils;
 import com.bihe0832.android.lib.utils.intent.IntentUtils;
 import com.bihe0832.android.lib.utils.os.BuildUtils;

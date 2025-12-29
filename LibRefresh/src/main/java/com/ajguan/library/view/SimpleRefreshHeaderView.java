@@ -45,7 +45,7 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
 
     @Override
     public void reset() {
-        textView.setText(getResources().getText(R.string.com_bihe0832_header_reset));
+        textView.setText(getResources().getText(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_header_reset));
         successIcon.setVisibility(INVISIBLE);
         arrowIcon.setVisibility(VISIBLE);
         arrowIcon.clearAnimation();
@@ -59,7 +59,7 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
     @Override
     public void refreshing() {
         arrowIcon.setVisibility(INVISIBLE);
-        textView.setText(getResources().getText(R.string.com_bihe0832_header_refreshing));
+        textView.setText(getResources().getText(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_header_refreshing));
         arrowIcon.clearAnimation();
     }
 
@@ -69,7 +69,7 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
         if (currentPos < refreshPos && lastPos >= refreshPos) {
             Log.i("", ">>>>up");
             if (isTouch && state == State.PULL) {
-                textView.setText(getResources().getText(R.string.com_bihe0832_header_pull));
+                textView.setText(getResources().getText(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_header_pull));
                 arrowIcon.clearAnimation();
                 arrowIcon.startAnimation(rotate_down);
             }
@@ -77,7 +77,7 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
         } else if (currentPos > refreshPos && lastPos <= refreshPos) {
             Log.i("", ">>>>down");
             if (isTouch && state == State.PULL) {
-                textView.setText(getResources().getText(R.string.com_bihe0832_header_pull_over));
+                textView.setText(getResources().getText(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_header_pull_over));
                 arrowIcon.clearAnimation();
                 arrowIcon.startAnimation(rotate_up);
             }
@@ -87,6 +87,6 @@ public class SimpleRefreshHeaderView extends FrameLayout implements IRefreshHead
     @Override
     public void complete() {
         successIcon.setVisibility(VISIBLE);
-        textView.setText(getResources().getText(R.string.com_bihe0832_header_completed));
+        textView.setText(getResources().getText(com.bihe0832.android.lib.aaf.res.R.string.com_bihe0832_header_completed));
     }
 }

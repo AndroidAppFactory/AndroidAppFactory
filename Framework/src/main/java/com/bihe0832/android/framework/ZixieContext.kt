@@ -34,6 +34,8 @@ import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -111,7 +113,7 @@ object ZixieContext {
 
     fun showDebugEditionToast() {
         if (!isOfficial()) {
-            ThemeResourcesManager.getString(R.string.common_tips_debug)?.takeIf { it.isNotBlank() }
+            ThemeResourcesManager.getString(ModelResR.string.common_tips_debug)?.takeIf { it.isNotBlank() }
                 ?.let { text ->
                     showLongToast(text)
                 }
@@ -167,7 +169,7 @@ object ZixieContext {
     }
 
     fun showWaiting() {
-        ThemeResourcesManager.getString(R.string.common_tips_waiting)?.takeIf { it.isNotBlank() }
+        ThemeResourcesManager.getString(ModelResR.string.common_tips_waiting)?.takeIf { it.isNotBlank() }
             ?.let { text ->
                 showLongToast(text)
             }
@@ -282,13 +284,13 @@ object ZixieContext {
 
     fun exitAPP(dialog: CommonDialog, callbackListener: OnDialogListener?) {
         DialogUtils.showConfirmDialog(dialog,
-            ThemeResourcesManager.getString(R.string.common_reminder_title)!!,
+            ThemeResourcesManager.getString(ModelResR.string.common_reminder_title)!!,
             String.format(
-                ThemeResourcesManager.getString(R.string.exist_msg)!!,
-                ThemeResourcesManager.getString(R.string.app_name)
+                ThemeResourcesManager.getString(ModelResR.string.exist_msg)!!,
+                ThemeResourcesManager.getString(ResR.string.app_name)
             ),
-            ThemeResourcesManager.getString(R.string.comfirm),
-            ThemeResourcesManager.getString(R.string.cancel),
+            ThemeResourcesManager.getString(ModelResR.string.comfirm),
+            ThemeResourcesManager.getString(ModelResR.string.cancel),
             true,
             object : OnDialogListener {
                 override fun onPositiveClick() {
@@ -316,7 +318,7 @@ object ZixieContext {
 
     open fun restartApp(waitTime: Long) {
         applicationContext?.let { context ->
-            ThemeResourcesManager.getString(R.string.common_tips_restart)
+            ThemeResourcesManager.getString(ModelResR.string.common_tips_restart)
                 ?.takeIf { it.isNotBlank() }?.let { text ->
                     showLongToast(text)
                 }

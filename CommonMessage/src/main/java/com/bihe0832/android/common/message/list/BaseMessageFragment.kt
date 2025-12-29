@@ -11,6 +11,7 @@ import com.bihe0832.android.common.message.data.MessageInfoItem
 import com.bihe0832.android.common.message.list.card.MessageItemData
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.custom.view.PlaceholderView
+import com.bihe0832.android.model.res.R as ModelResR
 
 
 abstract class BaseMessageFragment : CommonListFragment() {
@@ -46,7 +47,7 @@ abstract class BaseMessageFragment : CommonListFragment() {
                 }
             }
 
-            emptyView = PlaceholderView(context!!, ThemeResourcesManager.getString(R.string.com_bihe0832_message_empty_text))
+            emptyView = PlaceholderView(context!!, ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_message_empty_text))
         }
     }
 

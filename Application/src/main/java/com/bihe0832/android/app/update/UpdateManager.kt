@@ -2,8 +2,9 @@ package com.bihe0832.android.app.update
 
 import android.app.Activity
 import android.text.TextUtils
-import com.bihe0832.android.app.R
 import com.bihe0832.android.app.api.AAFNetWorkApi
+import com.bihe0832.android.app.R as AppR
+import com.bihe0832.android.model.res.R as ModelResR
 import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.update.UpdateDataFromCloud
@@ -36,7 +37,7 @@ object UpdateManager {
             UpdateHelper.showUpdate(activity, checkUpdateByUser, showIfNeedUpdate, it)
         }, {
             if (checkUpdateByUser) {
-                ZixieContext.showLongToast(activity.getString(R.string.dialog_apk_update_version_new))
+                ZixieContext.showLongToast(activity.getString(ModelResR.string.dialog_apk_update_version_new))
             }
         })
     }
@@ -47,7 +48,7 @@ object UpdateManager {
         failedAction: () -> Unit,
     ) {
         HTTPServer.getInstance().doRequest(
-            AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(R.string.update_url), ""),
+            AAFNetWorkApi.getCommonURL(ThemeResourcesManager.getString(AppR.string.update_url), ""),
         ) { statusCode, updateString ->
             AAFLoggerFile.logUpdate("statusCode:$statusCode")
             AAFLoggerFile.logUpdate("updateString:$updateString")

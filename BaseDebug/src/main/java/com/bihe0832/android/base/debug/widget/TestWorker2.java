@@ -52,7 +52,7 @@ public class TestWorker2 extends BaseWidgetWorker {
                         DisplayUtil.dip2px(context, 40f), DisplayUtil.dip2px(context, 40f));
                 if (null == bitmap) {
                     try {
-                        bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.icon);
+                        bitmap = BitmapFactory.decodeResource(context.getResources(), com.bihe0832.android.lib.aaf.res.R.mipmap.icon);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

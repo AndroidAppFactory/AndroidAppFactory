@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bihe0832.android.common.compose.ui.utils.dpToSp
 import com.bihe0832.android.common.list.compose.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  *
@@ -30,10 +31,10 @@ import com.bihe0832.android.common.list.compose.R
 @Preview
 @Composable
 fun ListMoreDataEmptyView(
-    message: String = stringResource(R.string.com_bihe0832_load_more_end),
-    colorP: Color = colorResource(R.color.windowBackground),
+    message: String = stringResource(ResR.string.com_bihe0832_load_more_end),
+    colorP: Color = colorResource(ResR.color.windowBackground),
     textSize: Dp = 12.dp,
-    textColor: Color = colorResource(R.color.textColorPrimary)
+    textColor: Color = colorResource(ResR.color.textColorPrimary)
 ) {
     Column(
         modifier = Modifier

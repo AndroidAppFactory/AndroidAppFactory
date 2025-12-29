@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.permission.ui.PermissionsActivityV2
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import java.util.concurrent.ConcurrentHashMap
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 object PermissionManager {
 
@@ -49,11 +50,11 @@ object PermissionManager {
 
 
     private val mDefaultScene by lazy {
-        ThemeResourcesManager.getString(R.string.com_bihe0832_permission_default_scene) ?: "完整"
+        ThemeResourcesManager.getString(ResR.string.com_bihe0832_permission_default_scene) ?: "完整"
     }
 
     private val mDefaultDesc by lazy {
-        ThemeResourcesManager.getString(R.string.com_bihe0832_permission_default_desc) ?: "设备"
+        ThemeResourcesManager.getString(ResR.string.com_bihe0832_permission_default_desc) ?: "设备"
     }
 
 
@@ -316,9 +317,9 @@ object PermissionManager {
 
     fun getPermissionIcon(permissionGroupID: String): Int {
         return if (mPermissionIcon.containsKey(permissionGroupID)) {
-            return mPermissionIcon.get(permissionGroupID) ?: R.mipmap.icon
+            return mPermissionIcon.get(permissionGroupID) ?: ResR.mipmap.icon
         } else {
-            R.mipmap.icon
+            ResR.mipmap.icon
         }
     }
 
@@ -452,7 +453,7 @@ object PermissionManager {
 
     fun getDefaultPermissionContent(context: Context, sceneText: String, permissionDesc: String): String {
         return String.format(
-            ThemeResourcesManager.getString(R.string.com_bihe0832_permission_default_content)!!,
+            ThemeResourcesManager.getString(ResR.string.com_bihe0832_permission_default_content)!!,
             APKUtils.getAppName(context),
             if (TextUtils.isEmpty(sceneText)) {
                 mDefaultScene
@@ -468,15 +469,15 @@ object PermissionManager {
     }
 
     fun getTitle(context: Context): String {
-        return ThemeResourcesManager.getString(R.string.com_bihe0832_permission_title)!!
+        return ThemeResourcesManager.getString(ResR.string.com_bihe0832_permission_title)!!
     }
 
     fun getNegativeText(context: Context): String {
-        return ThemeResourcesManager.getString(R.string.com_bihe0832_permission_negtive)!!
+        return ThemeResourcesManager.getString(ResR.string.com_bihe0832_permission_negtive)!!
     }
 
     fun getPositiveText(context: Context): String {
-        return ThemeResourcesManager.getString(R.string.com_bihe0832_permission_positive)!!
+        return ThemeResourcesManager.getString(ResR.string.com_bihe0832_permission_positive)!!
     }
 
     fun getPermissionGroupDenyTime(permissionGroup: String): Long {
@@ -497,7 +498,7 @@ object PermissionManager {
 
     fun addPermissionHtmlWrapper(content: String): String {
         var color = "#38ADFF"
-        ThemeResourcesManager.getColor(R.color.com_bihe0832_permission_color)?.let {
+        ThemeResourcesManager.getColor(ResR.color.com_bihe0832_permission_color)?.let {
             color = String.format("#%06X", (0xFFFFFF and it))
         }
         return "<font color ='$color'><b>$content</b></font>"

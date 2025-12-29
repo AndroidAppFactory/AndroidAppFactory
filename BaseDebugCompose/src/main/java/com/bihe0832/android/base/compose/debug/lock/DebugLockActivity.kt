@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.framework.ui.BaseActivity
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.device.battery.BatteryHelper
 import com.bihe0832.android.lib.device.battery.BatteryHelper.getBatteryStatus
 import com.bihe0832.android.lib.lock.screen.service.LockScreenService
@@ -61,11 +62,11 @@ class DebugLockActivity : BaseActivity() {
     }
 
     override fun getStatusBarColor(): Int {
-        return resources.getColor(R.color.transparent)
+        return resources.getColor(ResR.color.transparent)
     }
 
     override fun getNavigationBarColor(): Int {
-        return resources.getColor(R.color.transparent)
+        return resources.getColor(ResR.color.transparent)
     }
 
     private fun initView() {
@@ -81,8 +82,8 @@ class DebugLockActivity : BaseActivity() {
         }
         lock_charge_process = findViewById<AccCircleProgress>(R.id.lock_charge_process).apply {
             setArcBackgroundColor(intArrayOf(Color.GREEN, Color.GREEN))
-            setCircleBackgroundColor(resources.getColor(R.color.md_theme_outline))
-            setIconRes(R.drawable.icon_android)
+            setCircleBackgroundColor(resources.getColor(ResR.color.md_theme_outline))
+            setIconRes(ResR.drawable.icon_android)
             setCircleWidth(DisplayUtil.dip2px(context, 2f).toFloat())
             setArcWidth(DisplayUtil.dip2px(context, 2f).toFloat())
             setMax(100)

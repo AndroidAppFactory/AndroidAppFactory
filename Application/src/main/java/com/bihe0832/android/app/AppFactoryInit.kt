@@ -178,7 +178,7 @@ object AppFactoryInit {
                         if (processName.equals(application.packageName, ignoreCase = true)) {
                             initExtra(application)
                         } else if (processName.equals(
-                                application.packageName + application.applicationContext.getString(R.string.com_bihe0832_lock_screen_process_name),
+                                application.packageName + application.applicationContext.getString(com.bihe0832.android.lib.lock.screen.R.string.com_bihe0832_lock_screen_process_name),
                                 ignoreCase = true,
                             )
                         ) {

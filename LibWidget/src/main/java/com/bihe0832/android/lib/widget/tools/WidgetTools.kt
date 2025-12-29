@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.utils.os.BuildUtils
 import com.bihe0832.android.lib.utils.os.ManufacturerUtil
 import com.bihe0832.android.lib.widget.BaseWidgetProvider
 import com.bihe0832.android.lib.widget.R
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.widget.permission.ShortcutPermission
 
 
@@ -48,11 +49,11 @@ object WidgetTools {
     fun pickWidget(context: Context) {
         pickWidget(
             context,
-            context.getString(R.string.widget_add_dialog_title),
-            "<font color ='" + context.resources.getColor(R.color.colorAccent) + "'>" + context.resources.getString(
-                R.string.widget_add_dialog_desc
+            context.getString(ResR.string.widget_add_dialog_title),
+            "<font color ='" + context.resources.getColor(ResR.color.colorAccent) + "'>" + context.resources.getString(
+                ResR.string.widget_add_dialog_desc
             ),
-            context.getString(R.string.dialog_button_close),
+            context.getString(ResR.string.dialog_button_close),
             ""
         )
     }

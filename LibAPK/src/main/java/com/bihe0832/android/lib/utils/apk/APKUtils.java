@@ -11,6 +11,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.bihe0832.android.lib.aaf.tools.AAFException;
+import com.bihe0832.android.lib.aaf.res.R;
 import com.bihe0832.android.lib.log.ZLog;
 import com.bihe0832.android.lib.ui.toast.ToastUtil;
 import com.bihe0832.android.lib.utils.ConvertUtils;

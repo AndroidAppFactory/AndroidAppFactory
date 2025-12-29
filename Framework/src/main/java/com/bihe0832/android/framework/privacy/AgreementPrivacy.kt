@@ -14,6 +14,7 @@ import com.bihe0832.android.lib.ui.dialog.CommonDialog
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.textview.ext.addClickActionText
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.model.res.R as ModelResR
 
 object AgreementPrivacy {
 
@@ -35,13 +36,13 @@ object AgreementPrivacy {
     fun getAgreementAndPrivacyClickActionMap(context: Context): HashMap<String, View.OnClickListener> {
         return HashMap<String, View.OnClickListener>().apply {
             put(
-                ThemeResourcesManager.getString(R.string.privacy_title)!!,
+                ThemeResourcesManager.getString(ModelResR.string.privacy_title)!!,
                 View.OnClickListener {
                     IntentUtils.openWebPage(context,ThemeResourcesManager.getString(R.string.privacy_url))
                 },
             )
             put(
-                ThemeResourcesManager.getString(R.string.agreement_title)!!,
+                ThemeResourcesManager.getString(ModelResR.string.agreement_title)!!,
                 View.OnClickListener {
                     IntentUtils.openWebPage(context,ThemeResourcesManager.getString(R.string.agreement_url))
                 },
@@ -51,8 +52,8 @@ object AgreementPrivacy {
 
     fun setAgreementAndPrivacyText(textview: TextView) {
         textview.addClickActionText(
-            ThemeResourcesManager.getString(R.string.privacy_title) + "和" +
-                ThemeResourcesManager.getString(R.string.agreement_title),
+            ThemeResourcesManager.getString(ModelResR.string.privacy_title) + "和" +
+                ThemeResourcesManager.getString(ModelResR.string.agreement_title),
             getAgreementAndPrivacyClickActionMap(textview.context),
         )
     }
@@ -64,8 +65,8 @@ object AgreementPrivacy {
     fun showPrivacy(activity: Activity, linkList: HashMap<String, View.OnClickListener>, nextAction: () -> Unit) {
         showPrivacy(
             activity,
-            ThemeResourcesManager.getString(R.string.dialog_title_privacy_and_agreement)!!,
-            ThemeResourcesManager.getString(R.string.privacy_agreement_content)!!,
+            ThemeResourcesManager.getString(ModelResR.string.dialog_title_privacy_and_agreement)!!,
+            ThemeResourcesManager.getString(ModelResR.string.privacy_agreement_content)!!,
             linkList,
             nextAction,
         )
@@ -84,8 +85,8 @@ object AgreementPrivacy {
                 TextFactoryUtils.getCharSequenceWithClickAction(content, linkList),
                 LinkMovementMethod.getInstance(),
             )
-            positive = ThemeResourcesManager.getString(R.string.agreement_positive)
-            negative = ThemeResourcesManager.getString(R.string.agreement_negative)
+            positive = ThemeResourcesManager.getString(ModelResR.string.agreement_positive)
+            negative = ThemeResourcesManager.getString(ModelResR.string.agreement_negative)
             setOnClickBottomListener(object :
                 OnDialogListener {
                 override fun onPositiveClick() {

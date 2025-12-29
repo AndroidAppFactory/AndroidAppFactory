@@ -7,8 +7,9 @@ import com.bihe0832.android.app.compose.AAFComposeStateManager
 import com.bihe0832.android.app.router.RouterConstants
 import com.bihe0832.android.app.router.RouterHelper
 import com.bihe0832.android.app.shortcut.AAFShortcutManager
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.base.compose.debug.language.DebugLanguageComposeView
+import com.bihe0832.android.base.compose.debug.R as DebugR
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.common.compose.debug.DebugUtilsV2
 import com.bihe0832.android.common.compose.debug.item.DebugComposeItem
 import com.bihe0832.android.common.compose.debug.item.DebugItem
@@ -35,8 +36,8 @@ fun DebugApplicaionUIView() {
         "com.bihe0832.android.test.FestivalAlias"
     )
     DebugContent {
-        DebugTips(stringResource(R.string.app_name))
-        DebugTips(aafStringResource(R.string.app_name))
+        DebugTips(stringResource(ResR.string.app_name))
+        DebugTips(aafStringResource(ResR.string.app_name))
         DebugItem("哀悼日全局置灰") {
             Config.writeConfig(
                 Constants.CONFIG_KEY_LAYER_START_VALUE, System.currentTimeMillis() / 1000 - 3600
@@ -156,17 +157,17 @@ private fun showLanguageInfo(context: Context) {
         add("系统当前语言: ${MultiLanguageHelper.getSystemLocale().displayName}")
         add("应用当前语音: ${MultiLanguageHelper.getContextLocale(context).displayName}")
         add("应用设置语音: ${MultiLanguageHelper.getLanguageConfig(context).displayName}")
-        add("页面Context: ${context.resources.getString(R.string.debug_msg)}")
+        add("页面Context: ${context.resources.getString(DebugR.string.debug_msg)}")
         add(
             "页面Context实时: ${
-                MultiLanguageHelper.getRealResources(context).getString(R.string.debug_msg)
+                MultiLanguageHelper.getRealResources(context).getString(DebugR.string.debug_msg)
             }"
         )
-        add("Application Context: ${ZixieContext.applicationContext!!.resources.getString(R.string.debug_msg)}")
+        add("Application Context: ${ZixieContext.applicationContext!!.resources.getString(DebugR.string.debug_msg)}")
         add(
             "Application Context 实时: ${
                 MultiLanguageHelper.getRealResources(ZixieContext.applicationContext!!)
-                    .getString(R.string.debug_msg)
+                    .getString(DebugR.string.debug_msg)
             }"
         )
     })

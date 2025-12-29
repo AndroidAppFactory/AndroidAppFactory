@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bihe0832.android.common.deprecated.R
 import com.bihe0832.android.framework.constant.Constants
+import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.utils.ConvertUtils
@@ -77,7 +77,7 @@ open class BaseFragment : SwipeBackFragment() {
         if (resetDensity()) {
             activity?.let {
                 DisplayUtil.resetDensity(it, ConvertUtils.parseFloat(ThemeResourcesManager.getString(
-                    R.string.custom_density), Constants.CUSTOM_DENSITY))
+                    ResR.string.custom_density), Constants.CUSTOM_DENSITY))
             }
         }
         hasCreateView = true

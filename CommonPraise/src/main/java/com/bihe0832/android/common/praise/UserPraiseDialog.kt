@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import com.bihe0832.android.lib.ui.dialog.CommonDialog
+import com.bihe0832.android.model.res.R as ModelResR
 
 class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : CommonDialog(context) {
 
@@ -17,8 +18,8 @@ class UserPraiseDialog(context: Context?, private val feedbackRouter: String) : 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setShouldCanceled(true)
-        setPositive(ThemeResourcesManager.getString(R.string.com_bihe0832_praise_positive))
-        setNegative(ThemeResourcesManager.getString(R.string.com_bihe0832_praise_negative))
+        setPositive(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_praise_positive))
+        setNegative(ThemeResourcesManager.getString(ModelResR.string.com_bihe0832_praise_negative))
         findViewById<View>(R.id.close).setOnClickListener {
             dismiss()
         }

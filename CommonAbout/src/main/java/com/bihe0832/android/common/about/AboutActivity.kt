@@ -13,6 +13,8 @@ import com.bihe0832.android.framework.ui.BaseActivity
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 import java.util.Calendar
+import com.bihe0832.android.model.res.R as ModelResR
+import com.bihe0832.android.framework.R as FrameworkR
 
 open class AboutActivity : BaseActivity() {
 
@@ -27,7 +29,7 @@ open class AboutActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.about_layout)
-        initToolbar(R.id.app_about_toolbar, ThemeResourcesManager.getString(R.string.about), true)
+        initToolbar(R.id.app_about_toolbar, ThemeResourcesManager.getString(ModelResR.string.about), true)
         initView()
         //仅检查更新，不做升级
         if (findFragment(getAboutItemClass()) == null) {
@@ -37,7 +39,7 @@ open class AboutActivity : BaseActivity() {
 
     protected open fun initView() {
         getVersionTextView()?.text =
-            resources.getString(R.string.settings_update_current) + ZixieContext.getVersionName()
+            resources.getString(ModelResR.string.settings_update_current) + ZixieContext.getVersionName()
         getVersionIcon()?.setOnClickListener(object : ShowDebugClick() {
             override fun onClickAction() {
                 showVersionDetail()
@@ -47,14 +49,14 @@ open class AboutActivity : BaseActivity() {
 
             }
         })
-        ThemeResourcesManager.getString(R.string.privacy_url).let { privacy_url ->
+        ThemeResourcesManager.getString(FrameworkR.string.privacy_url).let { privacy_url ->
             if (TextUtils.isEmpty(privacy_url)) {
                 getPrivacyTextView()?.visibility = View.GONE
             } else {
                 getPrivacyTextView()?.apply {
                     visibility = View.VISIBLE
                     text = TextFactoryUtils.getCharSequenceWithClickAction(
-                        resources.getString(R.string.privacy_agreement_entrance),
+                        resources.getString(ModelResR.string.privacy_agreement_entrance),
                         AgreementPrivacy.getAgreementAndPrivacyClickActionMap(this@AboutActivity)
                     )
                     movementMethod = LinkMovementMethod.getInstance()
@@ -67,14 +69,14 @@ open class AboutActivity : BaseActivity() {
 
     protected open fun getCommonRightText(): String {
         return "Copyright 2019-" + Calendar.getInstance()[Calendar.YEAR] + " " + ThemeResourcesManager.getString(
-            R.string.author
+            ModelResR.string.author
         ) + " .All Rights Reserved"
 
     }
 
     protected fun showVersionDetail() {
         getVersionTextView()?.text =
-            resources.getString(R.string.settings_update_current) + ZixieContext.getVersionNameAndCode()
+            resources.getString(ModelResR.string.settings_update_current) + ZixieContext.getVersionNameAndCode()
     }
 
     protected fun getVersionIcon(): ImageView? {

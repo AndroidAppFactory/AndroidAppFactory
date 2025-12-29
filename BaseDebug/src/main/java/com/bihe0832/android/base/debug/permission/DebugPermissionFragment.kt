@@ -3,7 +3,7 @@ package com.bihe0832.android.base.debug.permission
 import android.Manifest
 import android.app.Activity
 import android.view.View
-import com.bihe0832.android.base.debug.R
+import com.bihe0832.android.base.compose.debug.R as DebugComposeR
 import com.bihe0832.android.common.debug.item.getDebugItem
 import com.bihe0832.android.common.debug.module.DebugEnvFragment
 import com.bihe0832.android.common.permission.AAFPermissionManager
@@ -67,7 +67,7 @@ class DebugPermissionFragment : DebugEnvFragment() {
             HashMap<String, String>().apply {
                 put(
                     Manifest.permission.CAMERA,
-                    activity?.getString(R.string.name_permission_debug)?:"",
+                    activity?.getString(DebugComposeR.string.name_permission_debug)?:"",
                 )
             },
         )

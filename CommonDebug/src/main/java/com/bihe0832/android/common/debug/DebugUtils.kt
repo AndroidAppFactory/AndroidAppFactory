@@ -8,6 +8,7 @@ import com.bihe0832.android.common.debug.module.DebugRootActivity
 import com.bihe0832.android.lib.ui.dialog.callback.DialogCompletedStringCallback
 import com.bihe0832.android.lib.ui.dialog.senddata.SendTextUtils
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
+import com.bihe0832.android.model.res.R as ModelResR
 
 /**
  * @author zixie code@bihe0832.com
@@ -29,9 +30,9 @@ object DebugUtils {
             content,
             null,
             null,
-            context.getString(R.string.com_bihe0832_share_to_develop_tips),
+            context.getString(ModelResR.string.com_bihe0832_share_to_develop_tips),
             content,
-            context.getString(R.string.com_bihe0832_share_to_develop),
+            context.getString(ModelResR.string.com_bihe0832_share_to_develop),
             showDialog,
             dialogCanAutoCancel
         )
@@ -54,8 +55,8 @@ object DebugUtils {
             context,
             title,
             content.joinToString("<BR>"),
-            context.getString(R.string.com_bihe0832_share_to_develop_tips),
-            context.getString(R.string.com_bihe0832_share_to_develop),
+            context.getString(ModelResR.string.com_bihe0832_share_to_develop_tips),
+            context.getString(ModelResR.string.com_bihe0832_share_to_develop),
             true, true
         )
     }

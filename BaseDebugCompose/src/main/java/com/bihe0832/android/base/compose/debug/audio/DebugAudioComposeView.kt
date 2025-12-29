@@ -3,8 +3,9 @@ package com.bihe0832.android.base.compose.debug.audio
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.bihe0832.android.base.compose.debug.R
 import com.bihe0832.android.common.compose.debug.item.DebugComposeActivityItem
+import com.bihe0832.android.base.compose.debug.R as DebugR
+import com.bihe0832.android.common.qrcode.R as QRCodeR
 import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListActivity
 import com.bihe0832.android.common.compose.debug.module.audio.DebugAudioListWithProcessActivity
@@ -39,8 +40,8 @@ fun DebugAudioComposeView() {
                 object : SimpleDownloadListener() {
                     override fun onComplete(filePath: String, item: DownloadItem): String {
                         blockAudioPlayerManager.play(filePath)
-                        blockAudioPlayerManager.play(it, R.raw.one)
-                        blockAudioPlayerManager.play(it, R.raw.four)
+                        blockAudioPlayerManager.play(it, DebugR.raw.one)
+                        blockAudioPlayerManager.play(it, DebugR.raw.four)
                         return filePath
                     }
 
@@ -90,12 +91,12 @@ fun DebugAudioComposeView() {
 
         }
         DebugItem("播放本地音频") {
-            blockAudioPlayerManager.play(it, R.raw.one)
-            blockAudioPlayerManager.play(it, R.raw.two, 0.1f, 1.0f, 1.0f, 1, null)
-            blockAudioPlayerManager.play(it, R.raw.three)
-            blockAudioPlayerManager.play(it, R.raw.icon)
-            blockAudioPlayerManager.play(it, R.raw.test)
-            blockAudioPlayerManager.play(it, R.raw.three)
+            blockAudioPlayerManager.play(it, DebugR.raw.one)
+            blockAudioPlayerManager.play(it, DebugR.raw.two, 0.1f, 1.0f, 1.0f, 1, null)
+            blockAudioPlayerManager.play(it, DebugR.raw.three)
+            blockAudioPlayerManager.play(it, DebugR.raw.icon)
+            blockAudioPlayerManager.play(it, DebugR.raw.test)
+            blockAudioPlayerManager.play(it, DebugR.raw.three)
         }
         DebugItem("PCM转WAV") {
             DownloadFile.download(
@@ -126,13 +127,13 @@ fun DebugAudioComposeView() {
             ThreadManager.getInstance().start {
                 ZLog.d("本地音频极限测试开始")
                 for (i in 0..257) {
-                    blockAudioPlayerManager.play(it, R.raw.one)
+                    blockAudioPlayerManager.play(it, DebugR.raw.one)
                 }
                 ZLog.d("本地音频极限测试结束")
             }
         }
         DebugItem("播放扫码音频") {
-            blockAudioPlayerManager.play(it, R.raw.beep)
+            blockAudioPlayerManager.play(it, QRCodeR.raw.beep)
         }
 
 
@@ -146,13 +147,13 @@ fun DebugAudioComposeView() {
 
         DebugItem("清空队列并播放") {
             blockAudioPlayerManager.stopAll(false)
-            blockAudioPlayerManager.play(it, R.raw.three)
+            blockAudioPlayerManager.play(it, DebugR.raw.three)
         }
 
         DebugItem("强制中断当前并播放下一个") {
             blockAudioPlayerManager.play(
                 it,
-                R.raw.three,
+                DebugR.raw.three,
                 0.1f,
                 1.0f,
                 1.0f,
@@ -178,7 +179,7 @@ fun DebugAudioComposeView() {
             ThreadManager.getInstance().start({
                 blockAudioPlayerManager.finishCurrent()
                 blockAudioPlayerManager.play(it,
-                    R.raw.three,
+                    DebugR.raw.three,
                     0.1f,
                     1.0f,
                     1.0f,

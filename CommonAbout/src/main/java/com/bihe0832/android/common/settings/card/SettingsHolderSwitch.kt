@@ -13,6 +13,7 @@ import com.bihe0832.android.lib.media.image.loadImage
 import com.bihe0832.android.lib.text.TextFactoryUtils
 import com.bihe0832.android.lib.theme.ThemeResourcesManager.getDrawable
 import com.bumptech.glide.request.RequestOptions
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 open class SettingsHolderSwitch(view: View, context: Context) : CardBaseHolder(view, context) {
     private var mHeaderIcon: ImageView? = null
@@ -46,7 +47,7 @@ open class SettingsHolderSwitch(view: View, context: Context) : CardBaseHolder(v
                             loadImage(drawable, 0, 0, RequestOptions())
                             if (item.mItemIconResColorFilter == null) {
                                 if (item.mAutoGenerateColorFilter) {
-                                    setColorFilter(context.resources.getColor(R.color.textColorPrimary))
+                                    setColorFilter(context.resources.getColor(ResR.color.textColorPrimary))
                                 } else {
                                     setColorFilter(null)
                                 }
@@ -57,7 +58,7 @@ open class SettingsHolderSwitch(view: View, context: Context) : CardBaseHolder(v
                         }
                     }
                 } else {
-                    loadImage(settingData.mItemIconURL, R.mipmap.icon, R.mipmap.icon)
+                    loadImage(settingData.mItemIconURL, ResR.mipmap.icon, ResR.mipmap.icon)
                     setVisibility(View.VISIBLE)
                 }
             }
