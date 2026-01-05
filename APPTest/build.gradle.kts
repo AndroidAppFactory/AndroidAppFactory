@@ -25,6 +25,7 @@ android {
 
     packagingOptions {
         jniLibs {
+            useLegacyPackaging = rootProject.extra["useLegacyPackaging"] as Boolean
             keepDebugSymbols.addAll(listOf("**/*.so"))
             pickFirsts.addAll(listOf(
                 "lib/armeabi/libc++_shared.so",
@@ -57,7 +58,7 @@ android {
 
     @Suppress("UNCHECKED_CAST")
     val signingConfigMap = rootProject.extra["signingConfigs"] as Map<String, Any>
-    
+
     signingConfigs {
         getByName("debug") {
             keyAlias = signingConfigMap["keyAlias"] as String

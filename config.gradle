@@ -17,6 +17,8 @@ ext {
     versionName = "1.2.0"
     //Android 构建包时是否混淆代码
     minifyEnabled = true
+    //是否使用传统的 so 打包方式
+    useLegacyPackaging = true
 
     // 所有的CPU 类型
     ndk_abiFilters_all = "armeabi,x86,x86_64,armeabi-v7a,arm64-v8a"
