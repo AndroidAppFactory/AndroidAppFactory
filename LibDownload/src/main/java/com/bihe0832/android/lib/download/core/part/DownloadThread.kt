@@ -7,6 +7,7 @@ import com.bihe0832.android.lib.download.DownloadStatus
 import com.bihe0832.android.lib.download.core.addDownloadHeaders
 import com.bihe0832.android.lib.download.core.dabase.DownloadInfoDBManager
 import com.bihe0832.android.lib.download.core.getContentLength
+import com.bihe0832.android.lib.download.core.logRequestHeaderFields
 import com.bihe0832.android.lib.download.core.logResponseHeaderFields
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
@@ -191,15 +192,14 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         val requestBuilder = Request.Builder()
             .url(mDownloadPartInfo.realDownloadURL)
             .addDownloadHeaders(mDownloadPartInfo.requestHeader)
+            .get()
         
         // 设置 Range 请求头
         if (rangeEnd > 0 && rangeEnd > rangeStart) {
             requestBuilder.addHeader("Range", "bytes=$rangeStart-${rangeEnd}")
         }
-        
         val request = requestBuilder.build()
-        
-        var time = System.currentTimeMillis()
+        val time = System.currentTimeMillis()
         val response = OkHttpClientManager.executeRequest(request)
         ZLog.w(
             TAG,
@@ -207,8 +207,8 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         )
 
         // 从 header 中读取 Content-Length，使用统一的扩展方法
-        var serverContentLength = response.getContentLength()
-        var localContentLength = mDownloadPartInfo.partLength - mDownloadPartInfo.partFinished
+        val serverContentLength = response.getContentLength()
+        val localContentLength = mDownloadPartInfo.partLength - mDownloadPartInfo.partFinished
         ZLog.e(TAG, "~~~~~~~~~~~~~ 分片信息 第${mDownloadPartInfo.downloadPartID} 分片 ~~~~~~~~~~~~~")
         ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: getContentType:${response.body?.contentType()}")
         ZLog.e(TAG, "分片下载 第${mDownloadPartInfo.downloadPartID}分片: responseCode:${response.code}")

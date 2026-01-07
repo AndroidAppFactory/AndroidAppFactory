@@ -300,18 +300,27 @@ abstract class DownloadManager {
             try {
                 ZLog.w(TAG, "获取文件长度 $times:$realURL")
                 
-                // 使用 OkHttp 替代 HttpURLConnection，支持 HTTP/2
+
                 val requestBuilder = Request.Builder()
                     .url(realURL)
                     .addDownloadHeaders(info.requestHeader)
+                    .get()  // 使用 GET 请求（与签名校验的 method 保持一致）
                 
-                val request = requestBuilder.head().build()
+                val request = requestBuilder.build()
                 val time = System.currentTimeMillis()
+                
+                // 调试模式下打印请求头
+                if (isDebug) {
+                    request.logRequestHeaderFields("获取文件长度")
+                }
                 
                 val response = OkHttpClientManager.executeRequest(request)
                 
+                // 获取最终 URL（重定向后的实际 URL）
+                realURL = response.request.url.toString()
+                
                 ZLog.e(
-                    TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time}, 协议: ${response.protocol} ~~~~~~~~~~~~~"
+                    TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time}, 协议: ${response.protocol}, 最终URL: $realURL ~~~~~~~~~~~~~"
                 )
                 
                 // 调试模式下打印服务端返回的所有 header

@@ -21,72 +21,52 @@ import javax.net.ssl.SSLSession
 
 /**
  * 为 OkHttp Request.Builder 添加下载所需的通用请求头
+ * 
+ * 参考 HttpURLConnection.upateRequestInfo 设置相同的请求头
  *
  * @param customHeaders 自定义请求头
  * @return Request.Builder 支持链式调用
  */
 fun Request.Builder.addDownloadHeaders(customHeaders: Map<String, String>? = null): Request.Builder {
+    // 禁用连接复用（与 HttpURLConnection 保持一致）
+    addHeader("Connection", "close")
+    // User-Agent
+    addHeader("User-Agent", HTTPRequestUtils.USER_AGENT_COMMON_ZIXIE + "Zixie Download/2}")
+    // 二进制流类型
+    addHeader("Content-Type", "application/octet-stream; charset=UTF-8")
     // 禁用 gzip 压缩，确保 Content-Length 与实际数据长度一致
     addHeader("Accept-Encoding", "identity")
-    
     // 添加自定义请求头
-    customHeaders?.forEach { (key, value) ->
-        if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
-            addHeader(key, value)
+    if (customHeaders.isNullOrEmpty()) {
+        ZLog.d(DownloadItem.TAG, "addDownloadHeaders: customHeaders is null or empty")
+    } else {
+        ZLog.d(DownloadItem.TAG, "addDownloadHeaders: customHeaders size=${customHeaders.size}")
+        customHeaders.forEach { (key, value) ->
+            if (!TextUtils.isEmpty(key) && !TextUtils.isEmpty(value)) {
+                ZLog.d(DownloadItem.TAG, "addDownloadHeaders: adding header $key=$value")
+                addHeader(key, value)
+            } else {
+                ZLog.w(DownloadItem.TAG, "addDownloadHeaders: requestHeader is bad, key=$key, value=$value")
+            }
         }
     }
     
     return this
 }
 
-fun HttpURLConnection.upateRequestInfo(customProperties: Map<String, String>?) {
-    connectTimeout = 5000
-    readTimeout = 10000
-    requestMethod = "GET"
-    useCaches = false
-    setRequestProperty("Connection", "close")
-    setRequestProperty("User-Agent", HTTPRequestUtils.USER_AGENT_COMMON_ZIXIE + "Zixie Download/1}")
-    setRequestProperty("Content-Type", "application/octet-stream; charset=UTF-8")
-    setRequestProperty("Accept-Encoding", "identity")
-    //用户指定IP的场景
-    setRequestProperty("Host", url.host)
-    if (this is HttpsURLConnection) {
-        hostnameVerifier = object : HostnameVerifier {
-            override fun verify(hostname: String, session: SSLSession): Boolean {
-                return HttpsURLConnection.getDefaultHostnameVerifier().verify(url.host, session)
-            }
-        }
+/**
+ * 打印 OkHttp Request 的请求头信息（用于调试）
+ *
+ * @param msg 日志前缀消息
+ */
+fun Request.logRequestHeaderFields(msg: String) {
+    ZLog.w(DownloadItem.TAG, "$msg  --------------------------------------------")
+    ZLog.w(DownloadItem.TAG, "$msg  Request - url:$url ")
+    ZLog.w(DownloadItem.TAG, "$msg  Request - method:$method ")
+    for ((key, value) in headers) {
+        ZLog.w(DownloadItem.TAG, "$msg  Request - :$key - $value ")
     }
-    if (customProperties?.isNotEmpty() == true) {
-        for ((key, value) in customProperties.entries) {
-            if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
-                ZLog.d(DownloadItem.TAG, "requestProperty is bad:$key")
-            } else {
-                setRequestProperty(key, value)
-            }
-        }
-    }
-}
-
-fun HttpURLConnection.logRequestHeaderFields(msg: String) {
-    for ((key, value) in requestProperties.entries) {
-        ZLog.w(DownloadItem.TAG, "$msg  Request - :${key} - $value ")
-    }
-}
-
-fun HttpURLConnection.logResponseHeaderFields(msg: String) {
-    ZLog.w(DownloadItem.TAG, "$msg  Response - responseCode:$responseCode ")
-    ZLog.w(DownloadItem.TAG, "$msg  Response - contentType:$contentType ")
-    // 从 header 中读取 Content-Length，使用统一的工具方法
-    ZLog.w(DownloadItem.TAG, "$msg  Response - contentLength:${HTTPRequestUtils.getContentLength(this)} ")
-
-    for ((key, value1) in headerFields.entries) {
-        var values = ""
-        for (value in value1) {
-            values += "$value,"
-        }
-        ZLog.w(DownloadItem.TAG, "$msg  Response - :${key} - $values ")
-    }
+    ZLog.w(DownloadItem.TAG, "$msg  --------------------------------------------")
 }
 
 /**
@@ -95,6 +75,7 @@ fun HttpURLConnection.logResponseHeaderFields(msg: String) {
  * @param msg 日志前缀消息
  */
 fun Response.logResponseHeaderFields(msg: String) {
+    ZLog.w(DownloadItem.TAG, "$msg  --------------------------------------------")
     ZLog.w(DownloadItem.TAG, "$msg  Response - responseCode:$code ")
     ZLog.w(DownloadItem.TAG, "$msg  Response - protocol:$protocol ")
     ZLog.w(DownloadItem.TAG, "$msg  Response - contentType:${body?.contentType()} ")
@@ -104,6 +85,7 @@ fun Response.logResponseHeaderFields(msg: String) {
     for ((key, value) in headers) {
         ZLog.w(DownloadItem.TAG, "$msg  Response - :$key - $value ")
     }
+    ZLog.w(DownloadItem.TAG, "$msg  --------------------------------------------")
 }
 
 /**
