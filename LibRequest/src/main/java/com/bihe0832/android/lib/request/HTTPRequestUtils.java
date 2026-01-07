@@ -24,7 +24,7 @@ public class HTTPRequestUtils {
     private static final Pattern TITLE_TAG = Pattern
             .compile("\\<title>(.*)\\</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-    public static final String USER_AGENT_COMMON_ZIXIE = "Mozilla/5.0 (Linux; Android 10; UNKnown) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 Mobile Safari/537.36/ ";
+    public static final String USER_AGENT_COMMON_ZIXIE = "Mozilla/5.0 (Linux; Android 10; UNKnown) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 Mobile Safari/537.36/";
 
     /**
      * 建立连接的超时时间
