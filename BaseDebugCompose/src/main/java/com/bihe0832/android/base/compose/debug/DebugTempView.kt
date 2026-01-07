@@ -15,15 +15,12 @@ import com.bihe0832.android.common.compose.debug.item.DebugItem
 import com.bihe0832.android.common.compose.debug.ui.DebugContent
 import com.bihe0832.android.common.qrcode.QrcodeUtils
 
-
 @Composable
 fun DebugTempView() {
     DebugContent {
         val activity = LocalContext.current as? Activity
         DebugItem("通用测试预处理") {
-            activity?.let {
-                QrcodeUtils.openQrScan(it)
-            }
+
         }
         DebugItem("简单测试函数") {
             QrcodeUtils.openQrScanAndParse()
