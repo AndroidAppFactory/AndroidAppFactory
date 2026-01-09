@@ -20,15 +20,25 @@ import java.io.Reader
 import java.nio.charset.Charset
 
 /**
+ * OkHttp 扩展函数
+ *
+ * 提供 Request 和 Response 的扩展方法，用于获取请求参数和响应数据
  *
  * @author zixie code@bihe0832.com
  * Created on 2022/6/21.
- * Description: Description
  *
+ * @since 1.0.0
  */
 
 
-
+/**
+ * 获取响应体数据
+ *
+ * 使用 peekBody 读取响应内容，不会消耗原始响应流
+ *
+ * @param enableLog 是否打印异常日志
+ * @return 响应体字符串
+ */
 fun Response.getResponseData(enableLog: Boolean): String {
     var jsonReader: Reader? = null
     var reader: BufferedReader? = null
@@ -68,6 +78,14 @@ fun Response.getResponseData(enableLog: Boolean): String {
     return result.toString()
 }
 
+/**
+ * 获取请求体参数
+ *
+ * 读取请求体内容并转换为字符串
+ *
+ * @param enableLog 是否打印异常日志
+ * @return 请求体字符串，无请求体时返回空字符串
+ */
 fun Request.getRequestParams(enableLog: Boolean): String {
     this.body?.let {
         val buffer = okio.Buffer()
@@ -93,7 +111,12 @@ fun Request.getRequestParams(enableLog: Boolean): String {
     return ""
 }
 
-
+/**
+ * 根据 JSON 字符串创建请求体
+ *
+ * @param jsonString JSON 格式的字符串
+ * @return RequestBody 实例
+ */
 fun getRequestBodyByJsonString(jsonString: String): RequestBody {
     return RequestBody.create(GsonRequestBodyConverter.MEDIA_TYPE, jsonString)
 }

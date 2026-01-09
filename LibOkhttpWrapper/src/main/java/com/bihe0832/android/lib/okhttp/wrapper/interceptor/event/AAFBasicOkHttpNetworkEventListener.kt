@@ -26,30 +26,69 @@ import java.net.InetSocketAddress
 import java.net.Proxy
 
 /**
- * 仅记录请求的关键阶段，日常开发推荐
+ * 基础网络事件监听器
+ *
+ * 仅记录请求的关键阶段，适用于日常开发：
+ * - callStart：请求开始
+ * - requestHeadersEnd：请求头发送完成
+ * - requestBodyEnd：请求体发送完成
+ * - responseBodyEnd：响应体接收完成
+ * - callEnd：请求结束
+ * - callFailed：请求失败
+ *
+ * @param enableTrace 是否统计请求耗时
+ * @param enableLog 是否打印基本的请求数据
+ * @param listener 自定义网络事件回调
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2022/6/27
+ *
+ * @since 1.0.0
  */
 open class AAFBasicOkHttpNetworkEventListener(
-    // 是否统计请求耗时
     protected val enableTrace: Boolean = false,
-    // 是否打印基本的请求数据
     protected val enableLog: Boolean = false,
-    // 网络事件回调
     protected val listener: EventListener?
 ) : EventListener() {
 
+    /** 耗时追踪记录 */
     private var mRequestTraceTimeRecord: RequestTraceTimeRecord? = null
+
+    /** 追踪请求 ID */
     private var mNetworkTraceRequestID: String = ""
+
+    /** 内容请求 ID */
     private var mNetworkContentRequestID: String = ""
+
+    /** 上次记录的追踪请求 ID，用于避免重复日志 */
     private var lastTraceNetworkRequestID = ""
 
+    /**
+     * 判断是否需要追踪此请求
+     *
+     * 子类可重写此方法自定义追踪条件
+     *
+     * @param call 请求调用
+     * @return 是否追踪
+     */
     open fun canTrace(call: Call): Boolean {
         return enableTrace
     }
 
+    /**
+     * 获取追踪请求 ID
+     *
+     * @return 追踪请求 ID
+     */
     fun getNetworkTraceRequestID(): String {
         return mNetworkTraceRequestID
     }
 
+    /**
+     * 获取内容请求 ID
+     *
+     * @return 内容请求 ID
+     */
     fun getNetworkContentRequestID(): String {
         return mNetworkContentRequestID
     }
