@@ -16,6 +16,7 @@ import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
+import com.bihe0832.android.framework.ZixieCoreInit.TAG
 import com.bihe0832.android.lib.channel.ChannelTools
 import com.bihe0832.android.lib.device.DeviceIDUtils
 import com.bihe0832.android.lib.file.FileUtils
@@ -34,10 +35,10 @@ import com.bihe0832.android.lib.utils.ConvertUtils
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 import com.bihe0832.android.lib.utils.os.BuildUtils
-import com.bihe0832.android.model.res.R as ModelResR
-import com.bihe0832.android.lib.aaf.res.R as ResR
 import java.io.File
 import kotlin.system.exitProcess
+import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.model.res.R as ModelResR
 
 
 /**
@@ -52,8 +53,10 @@ object ZixieContext {
 
     private var versionName = ""
     private var versionCode = 0L
-    private var mDebug = true
     private var mOfficial = true
+    private var mDebug = !mOfficial
+    private var mShowLog = mDebug
+
     private var mTag = "Tag_ZIXIE_1.0.0_1"
 
     private val zixieFolderPath by lazy {
@@ -72,6 +75,9 @@ object ZixieContext {
         updateApplicationContext(app.applicationContext, supportMultiLanguage)
         mDebug = appIsDebug
         mOfficial = appIsOfficial
+        val logFileEnabled = enableLogByFile()
+        mShowLog = mDebug || logFileEnabled
+        Log.e(TAG, "log enable: $mDebug $logFileEnabled $mShowLog ")
         mTag = appTag
         initModule({ ChannelTools.init(app, "DEBUG") }, false)
     }
@@ -94,6 +100,15 @@ object ZixieContext {
         return mDebug
     }
 
+    fun enableLogByFile(): Boolean {
+        Log.e(TAG, "log enable: isFileEnabled, ${getZixieFolder()} ")
+        return FileUtils.checkFileExist("${getZixieFolder()}logFileEnabled")
+    }
+
+    fun enableLog(): Boolean {
+        return mShowLog
+    }
+
     fun isOfficial(): Boolean {
         return mOfficial
     }
@@ -113,8 +128,8 @@ object ZixieContext {
 
     fun showDebugEditionToast() {
         if (!isOfficial()) {
-            ThemeResourcesManager.getString(ModelResR.string.common_tips_debug)?.takeIf { it.isNotBlank() }
-                ?.let { text ->
+            ThemeResourcesManager.getString(ModelResR.string.common_tips_debug)
+                ?.takeIf { it.isNotBlank() }?.let { text ->
                     showLongToast(text)
                 }
         }
@@ -169,8 +184,8 @@ object ZixieContext {
     }
 
     fun showWaiting() {
-        ThemeResourcesManager.getString(ModelResR.string.common_tips_waiting)?.takeIf { it.isNotBlank() }
-            ?.let { text ->
+        ThemeResourcesManager.getString(ModelResR.string.common_tips_waiting)
+            ?.takeIf { it.isNotBlank() }?.let { text ->
                 showLongToast(text)
             }
     }

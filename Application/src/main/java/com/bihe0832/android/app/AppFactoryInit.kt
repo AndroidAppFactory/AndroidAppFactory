@@ -34,19 +34,41 @@ import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsPrivacyAccess
 
 /**
+ * AAF 框架初始化管理器
+ *
+ * 负责 AAF 框架各模块的初始化工作，包括：
+ * - 核心模块初始化（路由、权限、下载、消息等）
+ * - WebView 初始化（TBS 内核）
+ * - 扩展模块初始化（网络监听、主题、Widget 等）
+ *
+ * 初始化流程会根据进程类型和隐私协议状态进行差异化处理
  *
  * @author zixie code@bihe0832.com
  * Created on 2019-07-09.
- * Description: 加速器相关的初始化
- *
  */
-
 object AppFactoryInit {
-    // 全局变量的初始化
+
+    /** 核心模块是否已初始化 */
     var hasInitCore = false
+
+    /** 扩展模块是否已初始化 */
     var hasInitExtra = false
 
-    // 目前仅仅主进程和web进程需要初始化
+    /**
+     * 初始化核心模块
+     *
+     * 仅主进程和 Web 进程需要初始化，包括：
+     * - 隐私协议后的框架初始化
+     * - 路由系统初始化
+     * - 权限管理初始化
+     * - 下载工具初始化
+     * - 消息模块初始化
+     * - Compose 状态管理初始化
+     * - 快捷方式管理初始化
+     *
+     * @param application Application 实例
+     * @param processName 当前进程名称
+     */
     @Synchronized
     private fun initCore(application: android.app.Application, processName: String) {
         ZLog.d(ZixieCoreInit.TAG, "Application process $processName initCore ")
@@ -68,7 +90,7 @@ object AppFactoryInit {
                     ""
                 },
             )
-            Log.e(ZixieCoreInit.TAG, "文件日志开关: ${ZixieCoreInit.enableLogByFile()}")
+            Log.e(ZixieCoreInit.TAG, "文件日志开关: ${ZixieContext.enableLog()}")
             Log.e(ZixieCoreInit.TAG, "———————————————————————— 设备信息 ————————————————————————")
 
             RouterHelper.initRouter()
@@ -89,6 +111,14 @@ object AppFactoryInit {
         }
     }
 
+    /**
+     * 初始化 WebView
+     *
+     * 主进程初始化 TBS WebView 内核，其他进程设置数据目录后缀以避免冲突
+     *
+     * @param application Application 实例
+     * @param processInfo 当前进程信息
+     */
     private fun initWebview(
         application: android.app.Application,
         processInfo: ActivityManager.RunningAppProcessInfo
@@ -132,6 +162,13 @@ object AppFactoryInit {
         }
     }
 
+    /**
+     * 初始化扩展模块
+     *
+     * 包括网络状态监听、信号监听、主题管理、Widget 管理、Google 广告等
+     *
+     * @param application Application 实例
+     */
     @Synchronized
     private fun initExtra(application: android.app.Application) {
         ZLog.d(ZixieCoreInit.TAG, "Application initExtra ")
@@ -155,6 +192,16 @@ object AppFactoryInit {
         }
     }
 
+    /**
+     * 执行完整的初始化流程
+     *
+     * 根据隐私协议状态和进程类型，执行相应的初始化操作：
+     * - 主进程：初始化核心模块 + 扩展模块 + WebView
+     * - 锁屏进程：仅初始化核心模块
+     * - 其他进程：根据需要初始化核心模块和 WebView
+     *
+     * @param application Application 实例
+     */
     fun initAll(application: android.app.Application) {
         ZLog.d(ZixieCoreInit.TAG, "Application initAll ")
         if (AgreementPrivacy.hasAgreedPrivacy()) {
@@ -194,6 +241,13 @@ object AppFactoryInit {
         }
     }
 
+    /**
+     * 用户登录成功后的初始化回调
+     *
+     * 在获取用户信息之前调用，用于执行登录后的初始化操作
+     *
+     * @param openid 用户的 OpenID
+     */
     fun initUserLoginRetBeforeGetUser(openid: String) {
     }
 }

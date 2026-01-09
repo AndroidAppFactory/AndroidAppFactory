@@ -54,9 +54,9 @@ object LoggerFile {
     private val mLoggerFileHandler by lazy { Handler(mLoggerHandlerThread.looper) }
 
     @Synchronized
-    fun init(context: Context, isDebug: Boolean, duration: Long, default: String) {
+    fun init(context: Context, openLog: Boolean, duration: Long, default: String) {
         mContext = context
-        mCanSaveSpecialFile = isDebug
+        mCanSaveSpecialFile = openLog
         mDuration = if (duration > DEFAULT_DURATION) {
             duration
         } else {
@@ -66,13 +66,13 @@ object LoggerFile {
     }
 
     @Synchronized
-    fun init(context: Context, isDebug: Boolean, duration: Long) {
-        init(context, isDebug, duration, "")
+    fun init(context: Context, openLog: Boolean, duration: Long) {
+        init(context, openLog, duration, "")
     }
 
     @Synchronized
-    fun init(context: Context, isDebug: Boolean) {
-        init(context, isDebug, 7 * DateUtil.MILLISECOND_OF_DAY, "")
+    fun init(context: Context, openLog: Boolean) {
+        init(context, openLog, 7 * DateUtil.MILLISECOND_OF_DAY, "")
     }
 
     private fun checkOldFile(file: File) {

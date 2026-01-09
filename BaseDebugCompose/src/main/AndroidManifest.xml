@@ -81,6 +81,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/android:Theme.Material.Light.NoActionBar" />
 
+        <activity
+            android:name="com.bihe0832.android.base.compose.debug.request.DebugHttpActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/android:Theme.Material.Light.NoActionBar" />
     </application>
 
 </manifest>

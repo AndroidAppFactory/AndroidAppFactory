@@ -44,7 +44,7 @@ object ZixieCoreInit {
         ZixieContext.init(application, appIsDebug, appIsOfficial, appTag, supportMultiLanguage)
         if (!hasInit) {
             hasInit = true
-            initLog(application, !ZixieContext.isOfficial())
+            initLog(application)
             // 初始化配置管理
             Config.init(
                 ZixieContext.applicationContext,
@@ -60,13 +60,14 @@ object ZixieCoreInit {
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
             Log.e(
                 TAG,
-                "isDebug: ${ZixieContext.isDebug()} ;isOfficial: ${ZixieContext.isOfficial()}"
+                "isDebug: ${ZixieContext.isDebug()}; isOfficial: ${ZixieContext.isOfficial()}"
             )
+            Log.e(TAG, "enableLog: ${ZixieContext.enableLog()}")
             Log.e(TAG, "tag: ${ZixieContext.getVersionTag()}")
             Log.e(TAG, "version: ${ZixieContext.getVersionNameAndCode()}")
             Log.e(
                 TAG,
-                "APPInstalledTime: ${DateUtil.getDateEN(ZixieContext.getAPPInstalledTime())} ;VersionInstalledTime: ${
+                "APPInstalledTime: ${DateUtil.getDateEN(ZixieContext.getAPPInstalledTime())}; VersionInstalledTime: ${
                     DateUtil.getDateEN(ZixieContext.getAPPLastVersionInstalledTime())
                 }"
             )
@@ -80,24 +81,16 @@ object ZixieCoreInit {
         }
     }
 
-    private fun initLog(application: Application, openLog: Boolean) {
-
-        val logFileEnabled = enableLogByFile()
-        val logEnable = openLog || logFileEnabled
-        Log.e(TAG, "log enable: $openLog  $logFileEnabled $logEnable ")
+    private fun initLog(application: Application) {
+        val logEnable = ZixieContext.enableLog()
         ZLog.setDebug(logEnable)
         ZLog.setLogLineLength(1500)
         LoggerFile.init(application, logEnable)
     }
 
-    fun enableLogByFile(): Boolean {
-        Log.e(TAG, "log enable: isFileEnabled, $${ZixieContext.getZixieFolder()} ")
-        return FileUtils.checkFileExist("${ZixieContext.getZixieFolder()}logFileEnabled")
-    }
-
     private fun initScreenWidthAndHeight() {
-        var width = DisplayUtil.getRealScreenSizeX(ZixieContext.applicationContext)
-        var height = DisplayUtil.getRealScreenSizeY(ZixieContext.applicationContext)
+        val width = DisplayUtil.getRealScreenSizeX(ZixieContext.applicationContext)
+        val height = DisplayUtil.getRealScreenSizeY(ZixieContext.applicationContext)
         ZixieContext.screenWidth = Math.min(width, height)
         ZixieContext.screenHeight = Math.max(width, height)
     }

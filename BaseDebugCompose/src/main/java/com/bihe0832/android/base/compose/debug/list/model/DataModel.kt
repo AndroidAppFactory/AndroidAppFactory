@@ -1,6 +1,6 @@
 package com.bihe0832.android.base.compose.debug.list.model
 
-import com.bihe0832.android.app.api.BaseResponse
+import com.bihe0832.android.app.api.call.BaseResponse
 import com.google.gson.annotations.SerializedName
 
 /**

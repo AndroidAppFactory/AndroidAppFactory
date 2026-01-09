@@ -1,7 +1,7 @@
 package com.bihe0832.android.base.compose.debug.list.model
 
 import com.bihe0832.android.app.api.AAFNetWorkApi
-import com.bihe0832.android.app.api.AAFNetworkCallback
+import com.bihe0832.android.app.api.call.AAFNetworkCallback
 import com.bihe0832.android.common.coroutines.AAFCoroutinesData
 import com.bihe0832.android.lib.log.ZLog
 import retrofit2.Call
