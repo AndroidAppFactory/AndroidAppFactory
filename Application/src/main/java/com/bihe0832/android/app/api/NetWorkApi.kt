@@ -9,15 +9,11 @@ import com.bihe0832.android.lib.okhttp.wrapper.TIME_OUT_READ
 import com.bihe0832.android.lib.okhttp.wrapper.TIME_OUT_WRITE
 import com.bihe0832.android.lib.okhttp.wrapper.convert.GsonConverterFactory
 import com.bihe0832.android.lib.okhttp.wrapper.ext.getRequestBodyByJsonString
-import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpAppInterceptor
 import com.bihe0832.android.lib.request.URLUtils
-import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
 import okhttp3.RequestBody
 import org.json.JSONObject
 import retrofit2.Retrofit
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -48,29 +44,26 @@ object AAFNetWorkApi {
      * @return 配置好的 OkHttpClient 实例
      */
     fun getHttpClientBy(connectTimeOut: Long, readTimeOut: Long, writeTimeOut: Long): OkHttpClient {
-        return OkHttpClient.Builder().apply {
-            connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
-            readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
-            writeTimeout(writeTimeOut, TimeUnit.MILLISECONDS)
-            connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
-            protocols(listOf(Protocol.HTTP_1_1))
-            retryOnConnectionFailure(true)
-            addInterceptor(
-                AAFOkHttpAppInterceptor(
-                    !ZixieContext.isOfficial()
+        return OkHttpWrapper.getOkHttpClientBuilder(
+            ZixieContext.applicationContext!!,
+            connectTimeOut,
+            readTimeOut,
+            writeTimeOut,
+            !ZixieContext.isOfficial()
+        ).apply {
+            if (ZixieContext.enableLog()) {
+                addNetworkInterceptor(
+                    OkHttpWrapper.apply {
+                        setMaxRequestNumInRequestCacheList(20)
+                    }.generateNetworkInterceptor(ZixieContext.enableLog()),
                 )
-            )
-            addNetworkInterceptor(
-                OkHttpWrapper.apply {
-                    setMaxRequestNumInRequestCacheList(20)
-                }.generateNetworkInterceptor(ZixieContext.enableLog()),
-            )
-            eventListenerFactory {
-                AAFNetworkEventListener(
-                    ZixieContext.enableLog(),
-                    ZixieContext.enableLog(),
-                    null,
-                )
+                eventListenerFactory {
+                    AAFNetworkEventListener(
+                        ZixieContext.enableLog(),
+                        ZixieContext.enableLog(),
+                        null,
+                    )
+                }
             }
         }.build()
     }
