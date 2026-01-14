@@ -24,6 +24,7 @@ import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import okhttp3.Protocol
 import java.io.File
 
 @SuppressLint("StaticFieldLeak")
@@ -123,6 +124,7 @@ object DownloadRangeManager : DownloadManager() {
         rangeLength: Long,
         localStart: Long,
         realURL: String,
+        protocol: Protocol,
         serverContentLength: Long,
         downloadAfterAdd: Boolean
     ): Boolean {
@@ -190,7 +192,7 @@ object DownloadRangeManager : DownloadManager() {
                 return
             }
             if (info.contentLength < 1) {
-                ZLog.e(TAG, "bad para contentLength:$info")
+                ZLog.e(TAG, "bad para contentLength, contentLength:${info.contentLength} $info")
                 innerDownloadListener.onFail(ERR_BAD_URL, "bad para contentLength", info)
                 return
             }

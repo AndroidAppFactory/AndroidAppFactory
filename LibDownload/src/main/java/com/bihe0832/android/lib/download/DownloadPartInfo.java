@@ -3,6 +3,7 @@ package com.bihe0832.android.lib.download;
 import com.bihe0832.android.lib.log.ZLog;
 import java.util.HashMap;
 import java.util.Map;
+import okhttp3.Protocol;
 
 public class DownloadPartInfo {
 
@@ -22,6 +23,9 @@ public class DownloadPartInfo {
     private long mPartFinished;
     private long mPartFinishedBefore;
     private int mPartStatus;
+    
+    // 实际使用的协议版本，从 DownloadItem 传递过来
+    private Protocol mProtocol = Protocol.HTTP_1_1;
 
     public DownloadPartInfo() {
     }
@@ -136,6 +140,25 @@ public class DownloadPartInfo {
         this.requestHeader = requestHeader;
     }
 
+    public Protocol getProtocol() {
+        return mProtocol;
+    }
+
+    public void setProtocol(Protocol protocol) {
+        if (protocol != null) {
+            this.mProtocol = protocol;
+        }
+    }
+
+    /**
+     * 判断是否使用 HTTP/2 协议
+     * 
+     * @return true 使用 HTTP/2，false 使用 HTTP/1.x
+     */
+    public boolean isHttp2() {
+        return mProtocol == Protocol.HTTP_2;
+    }
+
     @Override
     public String toString() {
         return "DownloadPartInfo{" + "mPartID=" + mPartNo + ", mDownloadID=" + mDownloadID
@@ -143,6 +166,6 @@ public class DownloadPartInfo {
                 + ", mPartRangeStart=" + mPartRangeStart + ", mPartLocalStart=" + mPartLocalStart
                 + ", mPartLength=" + mPartLength + ", mPartFinishedBefore=" + mPartFinishedBefore
                 + ", mPartFinished=" + mPartFinished + ", mFinalFileName='" + mFinalFileName
-                + ", mPartStatus=" + mPartStatus + '}';
+                + ", mPartStatus=" + mPartStatus + ", mProtocol=" + mProtocol + '}';
     }
 }

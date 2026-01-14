@@ -77,6 +77,26 @@ object OkHttpClientManager {
     /** 服务器 HTTP/2 支持缓存 */
     private val http2SupportCache = ConcurrentHashMap<String, Boolean>()
 
+    /** 协议缓存过期时间：30 分钟 */
+    private const val CACHE_TTL_MS = 30 * 60 * 1000L
+
+    /**
+     * 协议缓存条目
+     * 
+     * @param protocol 实际使用的协议
+     * @param timestamp 缓存时间戳
+     */
+    data class ProtocolCacheEntry(
+        val protocol: Protocol,
+        val timestamp: Long = System.currentTimeMillis()
+    )
+
+    /** URL 级别协议缓存（精确匹配） */
+    private val urlProtocolCache = ConcurrentHashMap<String, ProtocolCacheEntry>()
+
+    /** 域名级别协议缓存 */
+    private val hostProtocolCache = ConcurrentHashMap<String, ProtocolCacheEntry>()
+
     /**
      * 创建 OkHttpClient 实例
      *
@@ -257,7 +277,75 @@ object OkHttpClientManager {
      */
     fun clearProtocolCache() {
         http2SupportCache.clear()
+        urlProtocolCache.clear()
+        hostProtocolCache.clear()
         ZLog.d(TAG, "HTTP/2 支持缓存已清除")
+    }
+
+    /**
+     * 记录 URL 的实际协议版本
+     * 
+     * 用于在实际请求后更新缓存，确保缓存准确性
+     * 
+     * @param url 请求的 URL
+     * @param protocol 实际使用的协议
+     */
+    fun recordProtocolForUrl(url: String, protocol: Protocol) {
+        val host = extractHost(url)
+        val entry = ProtocolCacheEntry(protocol)
+        
+        // 更新 URL 级别缓存
+        urlProtocolCache[url] = entry
+        
+        // 更新域名级别缓存（保守策略：如果发现不支持 HTTP/2，更新域名缓存）
+        val existingHostEntry = hostProtocolCache[host]
+        if (existingHostEntry == null || protocol != Protocol.HTTP_2) {
+            hostProtocolCache[host] = entry
+            ZLog.d(TAG, "更新域名协议缓存 $host: $protocol")
+        }
+        
+        ZLog.d(TAG, "记录 URL 协议 $url: $protocol")
+    }
+
+    /**
+     * 查询 URL 的协议（仅查缓存，不发请求）
+     * 
+     * @param url 目标 URL
+     * @return 缓存的协议，如果缓存未命中或已过期返回 null
+     */
+    fun getProtocolFromCache(url: String): Protocol? {
+        val now = System.currentTimeMillis()
+        
+        // 先查 URL 缓存
+        urlProtocolCache[url]?.let { entry ->
+            if (now - entry.timestamp < CACHE_TTL_MS) {
+                ZLog.d(TAG, "URL 缓存命中 $url: ${entry.protocol}")
+                return entry.protocol
+            }
+        }
+        
+        // 再查域名缓存
+        val host = extractHost(url)
+        hostProtocolCache[host]?.let { entry ->
+            if (now - entry.timestamp < CACHE_TTL_MS) {
+                ZLog.d(TAG, "域名缓存命中 $host: ${entry.protocol}")
+                return entry.protocol
+            }
+        }
+        
+        return null
+    }
+
+    /**
+     * 清除过期的协议缓存
+     */
+    fun cleanExpiredCache() {
+        val now = System.currentTimeMillis()
+        
+        urlProtocolCache.entries.removeIf { now - it.value.timestamp > CACHE_TTL_MS }
+        hostProtocolCache.entries.removeIf { now - it.value.timestamp > CACHE_TTL_MS }
+        
+        ZLog.d(TAG, "已清理过期协议缓存")
     }
 
     /**

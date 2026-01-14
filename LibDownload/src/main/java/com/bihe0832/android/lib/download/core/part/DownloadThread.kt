@@ -12,6 +12,7 @@ import com.bihe0832.android.lib.download.core.logResponseHeaderFields
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpClientManager
+import okhttp3.Protocol
 import okhttp3.Request
 import java.io.File
 import java.io.RandomAccessFile
@@ -200,7 +201,21 @@ class DownloadThread(private val mDownloadPartInfo: DownloadPartInfo) : Thread()
         }
         val request = requestBuilder.build()
         val time = System.currentTimeMillis()
-        val response = OkHttpClientManager.executeRequest(request)
+        
+        // 使用传递过来的协议信息选择客户端
+        val preferHttp2 = mDownloadPartInfo.isHttp2
+        val response = OkHttpClientManager.executeRequest(request, preferHttp2)
+        
+        // 如果实际协议与预期不同，更新缓存（保守策略）
+        if (response.protocol != mDownloadPartInfo.protocol) {
+            OkHttpClientManager.recordProtocolForUrl(
+                mDownloadPartInfo.realDownloadURL, 
+                response.protocol
+            )
+            ZLog.w(TAG, "分片 ${mDownloadPartInfo.downloadPartID} 协议变化: " +
+                "${mDownloadPartInfo.protocol} -> ${response.protocol}")
+        }
+        
         ZLog.w(
             TAG,
             "分片下载 第${mDownloadPartInfo.downloadPartID}分片: 请求用时: ${System.currentTimeMillis() - time}, 协议: ${response.protocol} ~~~~~~~~~~~~~",

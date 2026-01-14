@@ -43,6 +43,7 @@ import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
+import okhttp3.Protocol
 import java.io.File
 
 @SuppressLint("StaticFieldLeak")
@@ -319,6 +320,7 @@ object DownloadFileManager : DownloadManager() {
         rangeLength: Long,
         localStart: Long,
         realURL: String,
+        protocol: Protocol,
         serverContentLength: Long,
         downloadAfterAdd: Boolean
     ): Boolean {
@@ -337,6 +339,7 @@ object DownloadFileManager : DownloadManager() {
                 return false
             }
             info.realURL = realURL
+            info.protocol = protocol
             info.rangeStart = rangeStart
             info.contentLength = serverContentLength
             info.localStart = localStart

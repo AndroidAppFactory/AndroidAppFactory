@@ -22,11 +22,11 @@ import com.bihe0832.android.lib.file.provider.ZixieFileProvider
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpClientManager
-import com.bihe0832.android.lib.request.HTTPRequestUtils
 import com.bihe0832.android.lib.request.URLUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.MD5
 import com.bihe0832.android.lib.utils.encrypt.messagedigest.SHA256
+import okhttp3.Protocol
 import okhttp3.Request
 import java.net.HttpURLConnection
 
@@ -79,6 +79,7 @@ abstract class DownloadManager {
         rangeLength: Long,
         localStart: Long,
         realURL: String,
+        protocol: Protocol,
         serverContentLength: Long,
         downloadAfterAdd: Boolean
     ): Boolean
@@ -88,10 +89,10 @@ abstract class DownloadManager {
     internal var maxNum = DEFAULT_MAX_NUM
     internal var hasInit = false
     internal var isDebug = false
-    
+
     /** 下载配置实例，每个 DownloadManager 拥有独立配置 */
     internal var downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault()
-    
+
     private var netReceiver: BroadcastReceiver? = null
 
     private val msgHandler =
@@ -133,13 +134,18 @@ abstract class DownloadManager {
 
     /**
      * 初始化下载管理器
-     * 
+     *
      * @param context 应用上下文
      * @param maxNum 最大并发下载数
      * @param downloadClientConfig 下载配置，用于设置 HTTP/2、分片策略等
      * @param isDebug 是否开启调试模式
      */
-    open fun init(context: Context, maxNum: Int, downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault(), isDebug: Boolean = false) {
+    open fun init(
+        context: Context,
+        maxNum: Int,
+        downloadClientConfig: DownloadClientConfig = DownloadClientConfig.createDefault(),
+        isDebug: Boolean = false
+    ) {
         this.downloadClientConfig = downloadClientConfig
         // 使用 ApplicationContext 避免内存泄漏
         initContext(context.applicationContext)
@@ -155,15 +161,21 @@ abstract class DownloadManager {
             hasInit = true
             DownloadInfoDBManager.init(context, isDebug)
         }
-        
+
         // 日志输出当前配置
         if (isDebug || downloadClientConfig.logProtocolInfo) {
             ZLog.d(TAG, "下载管理器初始化配置:")
             ZLog.d(TAG, "  - HTTP/2 支持: ${downloadClientConfig.enableHttp2}")
             ZLog.d(TAG, "  - HTTP/2 最大分片: ${downloadClientConfig.http2MaxChunks}")
             ZLog.d(TAG, "  - HTTP/1.1 最大分片: ${downloadClientConfig.http1MaxChunks}")
-            ZLog.d(TAG, "  - HTTP/2 最小分片大小: ${FileUtils.getFileLength(downloadClientConfig.http2MinChunkSize.toLong())}")
-            ZLog.d(TAG, "  - HTTP/1.1 最小分片大小: ${FileUtils.getFileLength(downloadClientConfig.http1MinChunkSize.toLong())}")
+            ZLog.d(
+                TAG,
+                "  - HTTP/2 最小分片大小: ${FileUtils.getFileLength(downloadClientConfig.http2MinChunkSize.toLong())}"
+            )
+            ZLog.d(
+                TAG,
+                "  - HTTP/1.1 最小分片大小: ${FileUtils.getFileLength(downloadClientConfig.http1MinChunkSize.toLong())}"
+            )
         }
 
         netReceiver = object : BroadcastReceiver() {
@@ -294,40 +306,53 @@ abstract class DownloadManager {
         ZLog.w(TAG, "updateDownItemByServerInfo:$info")
         // 重新启动，获取文件总长度
         var times = 0
-        var realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
+        // 直接使用原始 URL，让 OkHttp 自动处理重定向
+        var requestURL = info.downloadURL
         do {
             times++
             try {
-                ZLog.w(TAG, "获取文件长度 $times:$realURL")
-                
+                ZLog.w(TAG, "获取文件长度 $times:$requestURL")
+
 
                 val requestBuilder = Request.Builder()
-                    .url(realURL)
+                    .url(requestURL)
                     .addDownloadHeaders(info.requestHeader)
                     .get()  // 使用 GET 请求（与签名校验的 method 保持一致）
-                
+
                 val request = requestBuilder.build()
                 val time = System.currentTimeMillis()
-                
+
                 // 调试模式下打印请求头
                 if (isDebug) {
                     request.logRequestHeaderFields("获取文件长度")
                 }
-                
-                val response = OkHttpClientManager.executeRequest(request)
-                
-                // 获取最终 URL（重定向后的实际 URL）
-                realURL = response.request.url.toString()
-                
+
+                val response =
+                    OkHttpClientManager.executeRequest(request, downloadClientConfig.enableHttp2)
+
+                // 从 response 获取最终 URL（重定向后的实际 URL）
+                val realURL = response.request.url.toString()
+
+                // 同时更新 DownloadItem 的 realURL 和协议信息
+                info.realURL = realURL
+                info.protocol = response.protocol
+
+                // 记录原始 URL 和最终 URL 的协议版本
+                OkHttpClientManager.recordProtocolForUrl(info.downloadURL, response.protocol)
+                if (realURL != info.downloadURL) {
+                    OkHttpClientManager.recordProtocolForUrl(realURL, response.protocol)
+                }
+
                 ZLog.e(
-                    TAG, "获取文件长度，请求用时: ${System.currentTimeMillis() - time}, 协议: ${response.protocol}, 最终URL: $realURL ~~~~~~~~~~~~~"
+                    TAG,
+                    "获取文件长度，请求用时: ${System.currentTimeMillis() - time}, 协议: ${response.protocol}, 原始URL: ${info.downloadURL}, 最终URL: $realURL ~~~~~~~~~~~~~"
                 )
-                
+
                 // 调试模式下打印服务端返回的所有 header
                 if (isDebug) {
                     response.logResponseHeaderFields("获取文件长度")
                 }
-                
+
                 // 从 header 中读取 Content-Length，使用统一的扩展方法
                 val contentLength = response.getContentLength()
                 ZLog.e(TAG, "获取文件长度 getContentType:${response.body?.contentType()}")
@@ -335,7 +360,7 @@ abstract class DownloadManager {
                 ZLog.e(TAG, "获取文件长度 protocol:${response.protocol}")
                 ZLog.e(TAG, "计划下载的信息 rangeStart:${rangeStart}, rangeLength:${rangeLength}")
                 ZLog.e(TAG, "获取文件长度 responseCode:${response.code}")
-                
+
                 if (response.code == HttpURLConnection.HTTP_OK || response.code == HttpURLConnection.HTTP_PARTIAL) {
                     val result = updateItemByServer(
                         info,
@@ -343,6 +368,7 @@ abstract class DownloadManager {
                         rangeLength,
                         localStart,
                         realURL,
+                        response.protocol,
                         contentLength,
                         downloadAfterAdd
                     )
@@ -368,7 +394,8 @@ abstract class DownloadManager {
                             "download with error file length :${response.code} " + info
                         )
                         response.close()
-                        realURL = HTTPRequestUtils.getRedirectUrl(info.downloadURL)
+                        // 重试时仍使用原始 URL
+                        requestURL = info.downloadURL
                     }
                 }
             } catch (e: Exception) {

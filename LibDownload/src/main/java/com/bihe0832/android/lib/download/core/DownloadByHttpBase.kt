@@ -16,6 +16,7 @@ import com.bihe0832.android.lib.okhttp.wrapper.OkHttpClientManager
 import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.thread.ThreadManager
+import okhttp3.Protocol
 import java.io.File
 
 /**
@@ -110,6 +111,15 @@ abstract class DownloadByHttpBase(
         val hasDownload = DownloadInfoDBManager.hasDownloadPartInfo(info.downloadID, isDebug)
         if (file.exists() && hasDownload && rangeLength > 0 && file.length() <= rangeLength) {
             ZLog.e(TAG, "断点续传逻辑:$info")
+            
+            // 断点续传：如果协议信息丢失，从缓存查询或使用保守策略
+            if (info.protocol == Protocol.HTTP_1_1 && info.realURL.isNotEmpty()) {
+                OkHttpClientManager.getProtocolFromCache(info.realURL)?.let {
+                    info.protocol = it
+                    ZLog.d(TAG, "断点续传：从缓存恢复协议信息 ${info.realURL}: $it")
+                }
+            }
+            
             //断点续传逻辑
             ZLog.e(
                 TAG,
@@ -176,15 +186,15 @@ abstract class DownloadByHttpBase(
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ startNew ~~~~~~~~~~~~~~~~~~")
         ZLog.e(TAG, "开启新下载: startNew: start：$rangeStart, rangeLength: $rangeLength,localStart:$localStart $info ")
         
-        // 检测是否支持 HTTP/2，根据协议动态调整分片策略
-        val isHttp2 = downloadClientConfig.enableHttp2 &&
-                      OkHttpClientManager.checkHttp2Support(info.realURL)
+        // 使用 DownloadItem 中已记录的协议版本，而不是重新检测
+        // 这确保了分片策略与实际下载使用相同的协议判断
+        val isHttp2 = downloadClientConfig.enableHttp2 && info.isHttp2
         
         val maxThreadNum = downloadClientConfig.getMaxChunks(isHttp2)
         val minChunkSize = downloadClientConfig.getMinChunkSize(isHttp2)
         
         if (downloadClientConfig.logProtocolInfo) {
-            ZLog.e(TAG, "开启新下载: 协议类型: ${if (isHttp2) "HTTP/2" else "HTTP/1.1"}, 最大分片数: $maxThreadNum, 最小分片大小: ${FileUtils.getFileLength(minChunkSize)}")
+            ZLog.e(TAG, "开启新下载: 协议类型: ${info.protocol}, 最大分片数: $maxThreadNum, 最小分片大小: ${FileUtils.getFileLength(minChunkSize)}")
         }
         
         var threadNum = 1
@@ -284,6 +294,7 @@ abstract class DownloadByHttpBase(
             this.partLength = length
             this.partFinished = finished
             this.partFinishedBefore = finished
+            this.protocol = info.protocol  // 传递协议信息到分片
         }.also {
             ZLog.d(TAG, "分片下载数据 ${info.downloadID} - $partNo: 开始:$it")
         })

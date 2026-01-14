@@ -7,6 +7,7 @@ import com.bihe0832.android.lib.utils.ConvertUtils;
 import com.bihe0832.android.lib.utils.MathUtils;
 import java.io.Serializable;
 import java.util.Map;
+import okhttp3.Protocol;
 
 
 /**
@@ -98,6 +99,9 @@ public class DownloadItem implements Serializable {
     private int downloadPriority = DEFAULT_DOWNLOAD_PRIORITY;
     //是否保存本次的下载记录
     private boolean needRecord = false;
+
+    // 实际使用的协议版本，在获取文件长度时检测并记录，供分片策略使用
+    private Protocol protocol = Protocol.HTTP_1_1;
 
     public static long getDownloadIDByURL(String url, String actionKey) {
         return ConvertUtils.getUnsignedInt((actionKey + url).hashCode());
@@ -444,6 +448,25 @@ public class DownloadItem implements Serializable {
         }
     }
 
+    public Protocol getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(Protocol protocol) {
+        if (protocol != null) {
+            this.protocol = protocol;
+        }
+    }
+
+    /**
+     * 判断是否使用 HTTP/2 协议
+     * 
+     * @return true 使用 HTTP/2，false 使用 HTTP/1.x
+     */
+    public boolean isHttp2() {
+        return protocol == Protocol.HTTP_2;
+    }
+
     public void update(DownloadItem item) {
         if (item.getDownloadID() == getDownloadID()) {
             this.downloadURL = item.downloadURL;
@@ -475,6 +498,9 @@ public class DownloadItem implements Serializable {
 
             this.downloadPriority = item.downloadPriority;
             this.needRecord = item.needRecord;
+            if (item.protocol != null) {
+                this.protocol = item.protocol;
+            }
         } else {
             Log.e(TAG, "update error , download id is bad ");
         }
@@ -495,6 +521,7 @@ public class DownloadItem implements Serializable {
                 + finishedLength + ", finishedLengthBefore=" + finishedLengthBefore + ", lastSpeed=" + lastSpeed
                 + ", startTime=" + startTime + ", pauseTime=" + pauseTime + ", downloadIcon='" + downloadIcon
                 + ", autoInstall=" + autoInstall + ", status=" + status + ", downloadWhenUseMobile="
-                + downloadWhenUseMobile + ", downloadWhenAdd=" + downloadWhenAdd + '}';
+                + downloadWhenUseMobile + ", downloadWhenAdd=" + downloadWhenAdd
+                + ", protocol=" + protocol + '}';
     }
 }
