@@ -23,7 +23,7 @@ fun DebugDownloadView() {
             }
 
         }
-        DebugItem("测试批量区间下载") { testDownloadRange(it, 20) }
+        DebugItem("测试批量区间下载") { testDownloadRange(it, 5) }
         DebugItem("测试区间下载") { testDownloadRange(it, 1) }
         DebugItem("暂停所有区间下载") { DownloadRangeUtils.pauseAll(true, true) }
         DebugItem("测试下载队列") { testDownloadList(it) }
@@ -64,13 +64,13 @@ fun DebugDownloadView() {
 
 
 internal fun testDownloadRange(context: Context, num: Int) {
-//    for (i in 0 until num) {
-    val url = URL_YYB_WZ
-    val start = 0 * 50000000L
-    startDownload(
-        context, url, start, start.toInt(), ""
-    )
-//    }
+    for (i in 0 until num) {
+        val url = URL_YYB_WZ
+        val start = (i + 1) * 50000000L
+        startDownload(
+            context, url, start, start.toInt(), ""
+        )
+    }
 }
 
 
