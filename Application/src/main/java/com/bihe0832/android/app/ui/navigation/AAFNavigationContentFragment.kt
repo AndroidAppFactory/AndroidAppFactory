@@ -18,14 +18,29 @@ import com.bihe0832.android.lib.adapter.CardBaseModule
 import com.bihe0832.android.lib.theme.ThemeResourcesManager
 
 /**
+ * AAF 侧边栏导航内容 Fragment
+ *
+ * 展示侧边栏的设置项列表，包括：
+ * - 关于应用
+ * - 消息中心
+ * - 权限管理
+ * - 反馈
+ * - 分享
+ * - 语言设置
+ * - 清除缓存
  *
  * @author zixie code@bihe0832.com
  * Created on 2023/4/10.
- * Description: Description
- *
  */
 class AAFNavigationContentFragment : CommonNavigationContentFragment() {
 
+    /**
+     * 初始化视图
+     *
+     * 设置消息和更新状态的监听，自动更新红点显示
+     *
+     * @param view 根视图
+     */
     override fun initView(view: View) {
         super.initView(view)
         AAFMessageManager.getMessageLiveData().observe(this) { t ->
@@ -39,6 +54,11 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
         }
     }
 
+    /**
+     * 获取语言切换设置项
+     *
+     * @return 语言设置项数据
+     */
     fun getChangeLanguage(): SettingsDataGo {
         return SettingsDataGo(resources.getString(ModelResR.string.settings_language_title)).apply {
             mItemIconRes = FrameworkR.drawable.icon_language
@@ -52,6 +72,12 @@ class AAFNavigationContentFragment : CommonNavigationContentFragment() {
         }
     }
 
+    /**
+     * 获取设置项数据列表
+     *
+     * @param processLast 是否处理最后一项的分隔线
+     * @return 设置项数据列表
+     */
     override fun getDataList(processLast: Boolean): ArrayList<CardBaseModule> {
         return ArrayList<CardBaseModule>().apply {
             add(

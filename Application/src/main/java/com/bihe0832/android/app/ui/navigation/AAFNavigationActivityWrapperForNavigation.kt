@@ -8,13 +8,21 @@ import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnread
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 /**
+ * 导航栏红点管理扩展
+ *
+ * 根据更新状态和消息未读数目汇总红点数目
  *
  * @author zixie code@bihe0832.com
  * Created on 2023/3/9.
- * Description: 根据更新和消息未读数目汇总红点数目
- *
  */
 
+/**
+ * 添加红点更新监听
+ *
+ * 监听消息和更新状态变化，自动更新红点显示
+ *
+ * @param unreadView 红点显示 View
+ */
 fun CommonActivityWithNavigationDrawer.addRedDotAction(unreadView: TextViewWithBackground) {
     updateRedDot(unreadView)
     AAFMessageManager.getMessageLiveData().observe(this) { t ->
@@ -25,6 +33,13 @@ fun CommonActivityWithNavigationDrawer.addRedDotAction(unreadView: TextViewWithB
     }
 }
 
+/**
+ * 更新红点显示
+ *
+ * 根据更新状态和未读消息数计算红点数目
+ *
+ * @param unreadView 红点显示 View
+ */
 private fun updateRedDot(unreadView: TextViewWithBackground) {
     val hasNewUpdate = UpdateInfoLiveData.value?.canShowNew() ?: false
     val msgNum = AAFMessageManager.getUnreadNum()

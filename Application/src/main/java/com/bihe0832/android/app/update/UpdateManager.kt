@@ -19,16 +19,27 @@ import com.bihe0832.android.lib.thread.ThreadManager.getInstance
 import java.net.HttpURLConnection
 
 /**
+ * AAF 应用更新管理器
+ *
+ * 负责应用版本更新的检查和展示，包括：
+ * - 从服务器获取更新信息
+ * - 判断更新类型（强制更新、建议更新等）
+ * - 展示更新对话框
  *
  * @author zixie code@bihe0832.com
  * Created on 2019-10-21.
- * Description: Description
- *
  */
 object UpdateManager {
 
     private val TAG = "UpdateHelper-> "
 
+    /**
+     * 检查更新并显示对话框
+     *
+     * @param activity 当前 Activity
+     * @param checkUpdateByUser 是否由用户主动触发检查
+     * @param showIfNeedUpdate 如果有更新是否显示对话框
+     */
     fun checkUpdateAndShowDialog(activity: Activity, checkUpdateByUser: Boolean, showIfNeedUpdate: Boolean) {
         fetchUpdate(activity, {
             getInstance().runOnUIThread {
@@ -42,6 +53,13 @@ object UpdateManager {
         })
     }
 
+    /**
+     * 从服务器获取更新信息
+     *
+     * @param activity 当前 Activity
+     * @param successAction 成功回调
+     * @param failedAction 失败回调
+     */
     private fun fetchUpdate(
         activity: Activity,
         successAction: (info: UpdateDataFromCloud) -> Unit,
@@ -54,7 +72,6 @@ object UpdateManager {
             AAFLoggerFile.logUpdate("updateString:$updateString")
             if (HttpURLConnection.HTTP_OK == statusCode && !TextUtils.isEmpty(updateString)) {
                 try {
-                    //                            var updateString = "{\"newVersionName\":\"1.3.1\",\"newVersionCode\":\"140\",\"newVersionURL\":\"https://android.bihe0832.com/app/release/ZAPK_official.apk\",\"newVersionMD5\":\"12973fbecaceaf6e1426d1936eb56d91\",\"newVersionInfo\":\"1. 添加邮件通知<BR>2. 修复下拉刷新的问题\",\"showRedMaxVersionCode\":\"139\",\"needUpdateMinVersionCode\":\"139\",\"forceUpdateMinVersionCode\":\"1\",\"needUpdateList\":\"\",\"forceUpdateList\":\"\"}"
                     var updateInfo =
                         JsonHelper.fromJson(updateString ?: "", UpdateDataFromCloud::class.java)
                     if (null == updateInfo) {

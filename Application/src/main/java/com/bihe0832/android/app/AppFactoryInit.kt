@@ -21,6 +21,7 @@ import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.adapter.CardInfoHelper
 import com.bihe0832.android.lib.download.wrapper.DownloadFileUtils
+import com.bihe0832.android.lib.download.wrapper.DownloadRangeUtils
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.MobileUtil
 import com.bihe0832.android.lib.theme.ThemeManager
@@ -97,6 +98,7 @@ object AppFactoryInit {
             AAFPermissionManager.initPermission(ctx)
             ThreadManager.getInstance().start {
                 DownloadFileUtils.init(ctx, ZixieContext.isDebug())
+                DownloadRangeUtils.init(ctx, ZixieContext.isDebug())
             }
             ThreadManager.getInstance().start {
                 AAFFileWrapper.autoClear(DateUtil.MILLISECOND_OF_MONTH)

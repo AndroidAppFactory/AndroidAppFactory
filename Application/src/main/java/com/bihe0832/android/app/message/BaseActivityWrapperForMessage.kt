@@ -13,25 +13,46 @@ import com.bihe0832.android.lib.ui.custom.view.background.changeStatusWithUnread
 import com.bihe0832.android.lib.utils.os.DisplayUtil
 
 /**
+ * 消息功能的 Activity/Fragment 扩展
+ *
+ * 提供消息图标点击、未读数显示、消息拍脸等功能的扩展方法
  *
  * @author zixie code@bihe0832.com
  * Created on 2023/3/9.
- * Description: Description
- *
  */
 
+/**
+ * BaseActivity 扩展：添加消息图标点击事件并自动显示拍脸消息
+ *
+ * @param messageView 消息图标 ImageView
+ * @param unreadView 未读数显示 View
+ * @param autoShow 是否自动显示拍脸消息
+ */
 fun BaseActivity.addMessageIconActionAndShowFace(messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
     setMessageIconActionAndShowFace(this, messageView, unreadView, autoShow)
 }
 
+/**
+ * BaseActivity 扩展：检查并显示拍脸消息
+ */
 fun BaseActivity.checkMsgAndShowFace() {
     checkMsgAndShowFace(this)
 }
 
+/**
+ * BaseFragment 扩展：添加消息图标点击事件并自动显示拍脸消息
+ *
+ * @param messageView 消息图标 ImageView
+ * @param unreadView 未读数显示 View
+ * @param autoShow 是否自动显示拍脸消息
+ */
 fun BaseFragment.addMessageIconActionAndShowFace(messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
     setMessageIconActionAndShowFace(activity!!, messageView, unreadView, autoShow)
 }
 
+/**
+ * BaseFragment 扩展：检查并显示拍脸消息
+ */
 fun BaseFragment.checkMsgAndShowFace() {
     activity?.let {
         checkMsgAndShowFace(it)
@@ -39,9 +60,14 @@ fun BaseFragment.checkMsgAndShowFace() {
 }
 
 /**
- * 设置点击跳转，观察回调，自动拍脸并更新未读数
+ * 设置消息图标点击跳转，观察消息回调，自动拍脸并更新未读数
  *
  * 用于存在公告按钮的场景
+ *
+ * @param activity FragmentActivity 实例
+ * @param messageView 消息图标 ImageView
+ * @param unreadView 未读数显示 View
+ * @param autoShow 是否自动显示拍脸消息
  */
 @Synchronized
 private fun setMessageIconActionAndShowFace(activity: FragmentActivity, messageView: ImageView, unreadView: TextViewWithBackground, autoShow: Boolean) {
@@ -59,9 +85,11 @@ private fun setMessageIconActionAndShowFace(activity: FragmentActivity, messageV
 }
 
 /**
- * 观察回调，自动拍脸
+ * 观察消息回调，自动拍脸
  *
  * 用于只需要拍脸，不存在按钮的场景
+ *
+ * @param activity FragmentActivity 实例
  */
 @Synchronized
 private fun checkMsgAndShowFace(activity: FragmentActivity) {
@@ -76,6 +104,11 @@ private fun checkMsgAndShowFace(activity: FragmentActivity) {
 
 /**
  * 更新未读数目，并检查是否有拍脸待弹出
+ *
+ * @param noticeList 消息列表
+ * @param activity FragmentActivity 实例
+ * @param unreadView 未读数显示 View
+ * @param autoShow 是否自动显示拍脸消息
  */
 @Synchronized
 fun updateMessageMenuAndShowFace(noticeList: List<MessageInfoItem>?, activity: FragmentActivity, unreadView: TextViewWithBackground, autoShow: Boolean) {
@@ -97,6 +130,11 @@ fun updateMessageMenuAndShowFace(noticeList: List<MessageInfoItem>?, activity: F
 
 /**
  * 仅检查有没有拍脸立即弹出
+ *
+ * 过滤未展示过的消息，依次显示
+ *
+ * @param activity FragmentActivity 实例
+ * @param noticeList 消息列表
  */
 private fun checkMsgAndShowFace(activity: FragmentActivity, noticeList: List<MessageInfoItem>?) {
     noticeList?.distinctBy { it.messageID }?.filter { !AAFMessageManager.mAutoShowMessageList.contains(it.messageID) && AAFMessageManager.canShowFace(it, false) }?.forEach {

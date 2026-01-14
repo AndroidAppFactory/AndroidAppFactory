@@ -20,29 +20,41 @@ import com.bihe0832.android.lib.router.Routers
 import com.bihe0832.android.lib.utils.intent.IntentUtils
 
 /**
- * Created by zixie on 2017/6/27.
+ * AAF 路由辅助类
  *
+ * 提供应用内页面跳转的统一入口，包括：
+ * - 路由初始化和拦截器配置
+ * - 页面跳转方法封装
+ * - 临时授权跳转支持
+ *
+ * @author zixie code@bihe0832.com
+ * Created on 2017/6/27.
  */
 object RouterHelper {
 
-    // 需要拦截
+    /** 需要权限检查拦截的路由列表 */
     private val needCheckInterceptHostList by lazy {
         getNeedCheckInterceptHostList()
     }
 
-    // 需要登录
+    /** 需要登录拦截的路由列表 */
     private val needLoginInterceptHostList by lazy {
         getNeedLoginInterceptHostList()
     }
 
-    // 不需要检查，直接跳过的路由
+    /** 不需要检查，直接跳过的路由列表 */
     private val skipListHostList by lazy {
         getSkipListHostList()
     }
 
-    // 一些特殊场景，需要直接跳过的URL（完整URL）
+    /** 临时跳过检查的路由列表（完整 URL） */
     private val tempSkipRouterList = mutableListOf<String>()
 
+    /**
+     * 初始化路由系统
+     *
+     * 配置应用前后台监听、Activity 生命周期监听和路由拦截器
+     */
     fun initRouter() {
         // 应用前后台检测
         ApplicationObserver.addStatusChangeListener(object : ApplicationObserver.APPStatusChangeListener {
@@ -116,6 +128,11 @@ object RouterHelper {
         })
     }
 
+    /**
+     * 跳转到启动页
+     *
+     * @param uri 原始跳转 URI，启动页完成后会继续跳转
+     */
     private fun goSplash(uri: Uri?) {
         HashMap<String, String>().apply {
             uri?.let {
@@ -127,32 +144,62 @@ object RouterHelper {
     }
 
     /**
-     * 通过传入实际路径打开路由，同时将路由添加到临时权限调用示例
+     * 打开路由并临时授权
      *
-     * RouterHelper.openAndTempAuthorize(RouterHelper.getFinalURL(RouterConstants.MODULE_NAME_TEST,mutableMapOf(RouterConstants.INTENT_EXTRA_KEY_TEST_ITEM_TAB to 1)))
+     * 将路由添加到临时跳过列表后打开，用于特殊场景的权限绕过
      *
+     * @param url 完整的路由 URL
      */
     fun openFinalURLAndTempAuthorize(url: String) {
         tempSkipRouterList.add(url)
         openFinalURL(url)
     }
 
+    /**
+     * 打开完整路由 URL
+     *
+     * @param pathHost 完整的路由路径
+     */
     private fun openFinalURL(pathHost: String) {
         RouterAction.openFinalURL(pathHost)
     }
 
+    /**
+     * 构建完整的路由 URL
+     *
+     * @param pathHost 路由路径
+     * @param para 路由参数
+     * @return 完整的路由 URL
+     */
     fun getFinalURL(pathHost: String, para: Map<String, String>?): String {
         return RouterAction.getFinalURL(SCHEME, pathHost, para)
     }
 
+    /**
+     * 构建完整的路由 URL（无参数）
+     *
+     * @param pathHost 路由路径
+     * @return 完整的路由 URL
+     */
     fun getFinalURL(pathHost: String): String {
         return RouterAction.getFinalURL(pathHost)
     }
 
+    /**
+     * 通过路由打开页面
+     *
+     * @param pathHost 路由路径
+     * @param para 路由参数
+     */
     fun openPageByRouter(pathHost: String, para: Map<String, String>?) {
         RouterAction.openPageByRouter(pathHost, para)
     }
 
+    /**
+     * 通过路由打开页面（无参数）
+     *
+     * @param pathHost 路由路径
+     */
     fun openPageByRouter(pathHost: String) {
         RouterAction.openPageByRouter(pathHost)
     }

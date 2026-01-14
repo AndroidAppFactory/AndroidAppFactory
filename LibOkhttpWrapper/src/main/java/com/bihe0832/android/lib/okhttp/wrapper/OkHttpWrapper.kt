@@ -13,6 +13,7 @@ import android.os.SystemClock
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOKHttpInterceptor
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.AAFOkHttpAppInterceptor
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.AAFRequestDataRepository
+import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestContentDataRecord
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.data.RequestRecord
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFBasicOkHttpNetworkEventListener
 import com.bihe0832.android.lib.okhttp.wrapper.interceptor.event.AAFOkHttpNetworkEventListener

@@ -1,6 +1,7 @@
 package com.bihe0832.android.app.api
 
 import android.text.TextUtils
+import com.bihe0832.android.app.log.AAFLoggerFile
 import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.lib.okhttp.wrapper.OkHttpWrapper
@@ -14,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import org.json.JSONObject
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 
 
 /**
