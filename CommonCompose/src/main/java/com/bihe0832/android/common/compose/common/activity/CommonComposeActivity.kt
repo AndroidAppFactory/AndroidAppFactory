@@ -7,10 +7,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bihe0832.android.common.compose.R
 import com.bihe0832.android.common.compose.base.BaseComposeActivity
 import com.bihe0832.android.common.compose.common.CommonActionViewModel
 import com.bihe0832.android.common.compose.state.RenderState
