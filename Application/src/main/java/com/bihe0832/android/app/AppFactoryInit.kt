@@ -97,8 +97,8 @@ object AppFactoryInit {
             RouterHelper.initRouter()
             AAFPermissionManager.initPermission(ctx)
             ThreadManager.getInstance().start {
-                DownloadFileUtils.init(ctx, ZixieContext.isDebug())
-                DownloadRangeUtils.init(ctx, ZixieContext.isDebug())
+                DownloadFileUtils.init(ctx, ZixieContext.enableLog())
+                DownloadRangeUtils.init(ctx, ZixieContext.enableLog())
             }
             ThreadManager.getInstance().start {
                 AAFFileWrapper.autoClear(DateUtil.MILLISECOND_OF_MONTH)

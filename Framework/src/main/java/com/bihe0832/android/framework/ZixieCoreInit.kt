@@ -8,7 +8,6 @@ import com.bihe0832.android.framework.constant.Constants
 import com.bihe0832.android.framework.log.LoggerFile
 import com.bihe0832.android.framework.privacy.AgreementPrivacy
 import com.bihe0832.android.lib.config.Config
-import com.bihe0832.android.lib.file.FileUtils
 import com.bihe0832.android.lib.language.MultiLanguageHelper
 import com.bihe0832.android.lib.lifecycle.LifecycleHelper
 import com.bihe0832.android.lib.log.ZLog
@@ -49,12 +48,12 @@ object ZixieCoreInit {
             Config.init(
                 ZixieContext.applicationContext,
                 Constants.CONFIG_COMMON_FILE_NAME,
-                !ZixieContext.isOfficial()
+                ZixieContext.enableLog()
             )
             Config.loadLoaclFile(
                 application,
                 Constants.CONFIG_SPECIAL_FILE_NAME,
-                !ZixieContext.isOfficial()
+                ZixieContext.enableLog()
             )
             ThemeResourcesManager.init(ZixieContext.application!!)
             Log.e(TAG, "———————————————————————— 版本信息 ————————————————————————")
@@ -81,11 +80,11 @@ object ZixieCoreInit {
         }
     }
 
-    private fun initLog(application: Application) {
+    private fun initLog(context: Context) {
         val logEnable = ZixieContext.enableLog()
-        ZLog.setDebug(logEnable)
+        ZLog.setLogEnabled(logEnable)
         ZLog.setLogLineLength(1500)
-        LoggerFile.init(application, logEnable)
+        LoggerFile.init(context, logEnable)
     }
 
     private fun initScreenWidthAndHeight() {

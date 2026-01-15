@@ -323,7 +323,7 @@ object ZixieContext {
             })
     }
 
-    open fun restartApp() {
+    fun restartApp() {
         restartApp(
             ConvertUtils.parseLong(
                 ThemeResourcesManager.getString(R.string.common_waiting_duration_restart), 1500L
@@ -331,7 +331,7 @@ object ZixieContext {
         )
     }
 
-    open fun restartApp(waitTime: Long) {
+    fun restartApp(waitTime: Long) {
         applicationContext?.let { context ->
             ThemeResourcesManager.getString(ModelResR.string.common_tips_restart)
                 ?.takeIf { it.isNotBlank() }?.let { text ->

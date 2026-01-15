@@ -116,7 +116,7 @@ abstract class DownloadManager {
     }
 
     fun init(context: Context) {
-        init(context, false)
+        init(context, ZLog.isLogEnabled())
     }
 
     fun init(context: Context, isDebug: Boolean = false) {

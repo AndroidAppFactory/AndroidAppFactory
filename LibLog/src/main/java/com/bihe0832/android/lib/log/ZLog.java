@@ -18,7 +18,7 @@ import kotlin.jvm.Synchronized;
  */
 public final class ZLog {
 
-    private static boolean sDebug = false;
+    private static boolean sEnableLog = false;
     private static int sLogLineLength = 2000;
 
     private static final String TAG = "ZLog";
@@ -77,13 +77,13 @@ public final class ZLog {
     }
 
     public static void i(String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             i(getTag(), log);
         }
     }
 
     public static void i(String tag, String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             if (log.length() > sLogLineLength) {
                 for (int i = 0; i < log.length(); i += sLogLineLength) {
                     if (i + sLogLineLength < log.length()) {
@@ -117,7 +117,7 @@ public final class ZLog {
     }
 
     public static void d(String tag, Bundle b) {
-        if (sDebug) {
+        if (sEnableLog) {
             if (b == null) {
                 debugLog(tag, "empty bundle");
                 return;
@@ -141,7 +141,7 @@ public final class ZLog {
     }
 
     public static void d(String subTag, Intent i) {
-        if (sDebug) {
+        if (sEnableLog) {
             if (i == null || i.getExtras() == null) {
                 debugLog(subTag, "********************** INTENT START **************************");
                 debugLog(subTag, "********************** INTENT END **************************");
@@ -173,33 +173,33 @@ public final class ZLog {
     }
 
     public static void d(String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             debugLog(getTag(), log);
         }
     }
 
     public static void d(String tag, String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             debugLog(tag, log);
         }
     }
 
     public static void d(Bundle b) {
-        if (sDebug) {
+        if (sEnableLog) {
             String tag = getTag(null, STACK_TRACE_DEEP);
             d(tag, b);
         }
     }
 
     public static void d(Intent i) {
-        if (sDebug) {
+        if (sEnableLog) {
             String tag = getTag(null, STACK_TRACE_DEEP);
             d(tag, i);
         }
     }
 
     public static void w(String tag, String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             if (log.length() > sLogLineLength) {
                 for (int i = 0; i < log.length(); i += sLogLineLength) {
                     if (i + sLogLineLength < log.length()) {
@@ -217,13 +217,13 @@ public final class ZLog {
     }
 
     public static void w(String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             w(getTag(), log);
         }
     }
 
     public static void e(String tag, String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             if (log.length() > sLogLineLength) {
                 for (int i = 0; i < log.length(); i += sLogLineLength) {
                     if (i + sLogLineLength < log.length()) {
@@ -241,13 +241,17 @@ public final class ZLog {
     }
 
     public static void e(String log) {
-        if (sDebug) {
+        if (sEnableLog) {
             e(getTag(), log);
         }
     }
 
-    public static final void setDebug(boolean debug) {
-        sDebug = debug;
+    public static final void setLogEnabled(boolean enabled) {
+        sEnableLog = enabled;
+    }
+
+    public static boolean isLogEnabled() {
+        return sEnableLog;
     }
 
     public static final void setLogLineLength(int length) {

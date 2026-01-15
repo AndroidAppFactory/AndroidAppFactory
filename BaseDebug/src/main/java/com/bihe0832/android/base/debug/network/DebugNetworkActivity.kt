@@ -37,7 +37,7 @@ class DebugNetworkActivity : BaseActivity() {
         updateContent()
         WifiManagerWrapper.init(
             this,
-            !ZixieContext.isOfficial(),
+            ZixieContext.enableLog(),
             notifyRSSI = true,
             canScanWifi = true,
             canWifiConfiguration = false

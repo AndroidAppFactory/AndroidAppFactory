@@ -72,7 +72,7 @@ public class AAFAppGlideModule extends AppGlideModule {
         int logLevel = Log.ERROR;
         if (ZixieContext.INSTANCE.isOfficial()) {
             logLevel = Log.ERROR;
-        } else if (ZixieContext.INSTANCE.isDebug()) {
+        } else if (ZixieContext.INSTANCE.enableLog()) {
             logLevel = Log.DEBUG;
         } else {
             logLevel = Log.WARN;

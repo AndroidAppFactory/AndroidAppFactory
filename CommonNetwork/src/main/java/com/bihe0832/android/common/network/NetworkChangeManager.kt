@@ -12,7 +12,7 @@ import android.net.NetworkRequest
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiConfiguration
 import android.os.Build
-import com.bihe0832.android.framework.ZixieContext.isDebug
+import com.bihe0832.android.framework.ZixieContext
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.DeviceInfoManager
 import com.bihe0832.android.lib.network.DtTypeInfo
@@ -118,7 +118,7 @@ object NetworkChangeManager {
         DeviceInfoManager.getInstance().init(context.applicationContext)
         WifiManagerWrapper.init(
             context,
-            isDebug(),
+            ZixieContext.enableLog(),
             notifyRSSI = false,
             canScanWifi = false,
             canWifiConfiguration = false

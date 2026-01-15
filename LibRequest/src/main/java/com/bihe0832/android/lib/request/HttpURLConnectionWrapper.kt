@@ -44,16 +44,16 @@ fun HttpURLConnection.upateRequestInfo(customProperties: Map<String, String>?) {
 
 fun HttpURLConnection.logRequestHeaderFields(tag: String, msg: String) {
     for ((key, value) in requestProperties.entries) {
-        ZLog.w(tag, "$msg  Request - :${key} - $value ")
+        ZLog.w(tag, "$msg Request - ${key}:$value ")
     }
 }
 
 fun HttpURLConnection.logResponseHeaderFields(tag: String, msg: String) {
-    ZLog.w(tag, "$msg  Response - responseCode:$responseCode ")
-    ZLog.w(tag, "$msg  Response - contentType:$contentType ")
+    ZLog.w(tag, "$msg Response - responseCode:$responseCode ")
+    ZLog.w(tag, "$msg Response - contentType:$contentType ")
     // 从 header 中读取 Content-Length，使用统一的工具方法
     ZLog.w(
-        tag, "$msg  Response - contentLength:${HTTPRequestUtils.getContentLength(this)} "
+        tag, "$msg Response - contentLength:${HTTPRequestUtils.getContentLength(this)} "
     )
 
     for ((key, value1) in headerFields.entries) {
@@ -61,6 +61,6 @@ fun HttpURLConnection.logResponseHeaderFields(tag: String, msg: String) {
         for (value in value1) {
             values += "$value,"
         }
-        ZLog.w(tag, "$msg  Response - :${key} - $values ")
+        ZLog.w(tag, "$msg Response - ${key}:$values ")
     }
 }
