@@ -1,7 +1,7 @@
 apply from: "$rootDir/config.gradle"
 ext.kitmoduleInfo = [
     "ServicesWrapper"  : [
-        "version"            : "8.1.6",
+        "version"            : "8.2.0",
         "artifactId"         : "services-wrapper",
         "apidependenciesList": [
             "ServicesGooglePay", "ServicesGoogleAD", "ServicesGoogle"
@@ -16,7 +16,7 @@ ext.kitmoduleInfo = [
         ]
     ],
     "ServicesGoogleAD" : [
-        "version"            : "8.1.6",
+        "version"            : "8.2.0",
         "artifactId"         : "services-google-ad",
         "apidependenciesList": [
             "LibLog",

@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.deprecatedModuleInfo = [
         "CommonDeprecated"          : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "common-deprecated",
                 "apidependenciesList": [
                         "CommonCompose", "LibFragmentation_swipeback", "LibFlycoTabLayout", "LibAdapter",
@@ -10,7 +10,7 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibFragmentation_core"     : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-fragmentation-core",
                 "apidependenciesList": [
                         ext.androidsupport.appcompat,
@@ -18,21 +18,21 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibFragmentation"          : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-fragmentation",
                 "apidependenciesList": [
                         "LibFragmentation_core"
                 ]
         ],
         "LibFragmentation_swipeback": [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-fragmentation-swipeback",
                 "apidependenciesList": [
                         "LibFragmentation"
                 ]
         ],
         "LibFlycoTabLayout"         : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-flycotablayout",
                 "apidependenciesList": [
                         ext.androidsupport.androidxcore,
@@ -40,7 +40,7 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibAdapter"                : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-adapter",
                 "apidependenciesList": [
                         ext.androidsupport.recyclerview,
@@ -48,21 +48,21 @@ ext.deprecatedModuleInfo = [
                 ]
         ],
         "LibRefresh"                : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-refresh",
                 "apidependenciesList": [
                         "LibAdapter"
                 ]
         ],
         "LibRecycleviewExt"         : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-recycleview-ext",
                 "apidependenciesList": [
                         "LibRefresh", "LibTheme"
                 ]
         ],
         "LibBottomTab"              : [
-                "version"            : "8.1.6",
+                "version"            : "8.2.0",
                 "artifactId"         : "lib-bottom-tab",
                 "apidependenciesList": [
                         "LibAndroid", "LibOS", "LibTextView",
