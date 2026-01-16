@@ -51,6 +51,9 @@ def updateRealDependencies(String projectName, String moduleName) {
                         if (zixieIsDebug) println("skip add " + item + " from " + moduleName + " to " + projectName)
                     } else {
                         if (zixieIsDebug) println("add " + item + " from " + moduleName + " to " + projectName)
+                        if (zixieDepenciesList[projectName] == null) {
+                            zixieDepenciesList[projectName] = new ArrayList<>()
+                        }
                         zixieDepenciesList[projectName].add(item)
                         if (!item.contains(":")) {
                             updateRealDependencies(projectName, item)

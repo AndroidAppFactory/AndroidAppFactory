@@ -23,7 +23,7 @@ android {
         multiDexEnabled = true
     }
 
-    packagingOptions {
+    packaging {
         jniLibs {
             useLegacyPackaging = rootProject.extra["useLegacyPackaging"] as Boolean
             keepDebugSymbols.addAll(listOf("**/*.so"))
