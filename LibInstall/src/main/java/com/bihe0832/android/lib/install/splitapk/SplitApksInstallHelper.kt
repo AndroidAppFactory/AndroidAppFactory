@@ -147,6 +147,10 @@ object SplitApksInstallHelper {
 
     /**
      * 处理需要用户确认的情况
+     * 
+     * 安全说明：
+     * - 验证 Intent 来源，防止 Intent Redirection 攻击
+     * - 只接受来自系统 PackageInstaller 的 Intent
      */
     private fun handlePendingUserAction(context: Context, intent: Intent, sessionId: Int) {
         ZLog.d(TAG, "Requesting user confirmation for session $sessionId")
@@ -159,6 +163,13 @@ object SplitApksInstallHelper {
         }
 
         if (confirmIntent != null) {
+            // 安全检查：验证 Intent 是否来自系统 PackageInstaller
+            if (!isValidPackageInstallerIntent(confirmIntent)) {
+                ZLog.e(TAG, "Security check failed: Intent is not from system PackageInstaller")
+                notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, "Invalid intent source")
+                return
+            }
+            
             try {
                 confirmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(confirmIntent)
@@ -171,6 +182,57 @@ object SplitApksInstallHelper {
             ZLog.e(TAG, "Confirmation intent is null")
             notifyFailed(sessionId, InstallErrorCode.START_SYSTEM_INSTALL_EXCEPTION, "Confirmation intent is null")
         }
+    }
+    
+    /**
+     * 验证 Intent 是否来自系统 PackageInstaller
+     * 
+     * 防止 Intent Redirection 攻击：
+     * - 检查 Intent 的目标组件是否属于系统包（com.android.* 或 com.google.android.*）
+     * - 检查 action 是否为 PackageInstaller 相关的 action
+     * 
+     * @param intent 待验证的 Intent
+     * @return true 如果是合法的系统 Intent，false 否则
+     */
+    private fun isValidPackageInstallerIntent(intent: Intent): Boolean {
+        // 检查目标组件
+        val component = intent.component
+        if (component != null) {
+            val packageName = component.packageName
+            // 只允许系统包
+            val isSystemPackage = packageName.startsWith("com.android.") ||
+                    packageName.startsWith("com.google.android.") ||
+                    packageName == "android"
+            
+            if (!isSystemPackage) {
+                ZLog.e(TAG, "Invalid package: $packageName")
+                return false
+            }
+            
+            ZLog.d(TAG, "Valid system package: $packageName")
+            return true
+        }
+        
+        // 如果没有组件，检查 action
+        val action = intent.action
+        if (action != null) {
+            // PackageInstaller 相关的合法 action
+            val validActions = listOf(
+                "android.content.pm.action.CONFIRM_INSTALL",
+                "android.content.pm.action.CONFIRM_PERMISSIONS",
+                "android.intent.action.INSTALL_PACKAGE",
+                "com.android.packageinstaller.action.CONFIRM_INSTALL"
+            )
+            
+            if (validActions.any { action.contains(it, ignoreCase = true) || it.contains(action, ignoreCase = true) }) {
+                ZLog.d(TAG, "Valid action: $action")
+                return true
+            }
+        }
+        
+        // 默认拒绝未知来源的 Intent
+        ZLog.e(TAG, "Unknown intent source: component=$component, action=$action")
+        return false
     }
 
     /**
