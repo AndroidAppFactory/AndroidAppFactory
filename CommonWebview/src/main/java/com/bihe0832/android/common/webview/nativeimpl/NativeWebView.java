@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import com.bihe0832.android.lib.utils.os.BuildUtils;
 
 
@@ -93,7 +94,7 @@ public class NativeWebView extends WebView {
     private void setHTMLSupport(WebSettings webSetting) {
         //设置WebView属性，能够执行Javascript脚本
         webSetting.setJavaScriptEnabled(true);
-        webSetting.setAllowUniversalAccessFromFileURLs(true);
+        webSetting.setAllowUniversalAccessFromFileURLs(false);
         webSetting.setAllowFileAccess(true);
         webSetting.setSupportMultipleWindows(true);
         webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);

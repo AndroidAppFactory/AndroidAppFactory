@@ -119,7 +119,7 @@ public class TBSWebView extends WebView {
     private void setHTMLSupport(WebSettings webSetting) {
         //设置WebView属性，能够执行Javascript脚本
         webSetting.setJavaScriptEnabled(true);
-        webSetting.setAllowUniversalAccessFromFileURLs(true);
+        webSetting.setAllowUniversalAccessFromFileURLs(false);
         webSetting.setAllowFileAccess(true);
         webSetting.setSupportMultipleWindows(false);
         webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
