@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"                : "8.2.0",
+                "version"                : "8.2.1",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper","CommonPermission", "LibDebug"
@@ -26,7 +26,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "8.2.0",
+                "version"            : "8.2.1",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -34,7 +34,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperMin"      : [
-                "version"            : "8.2.0",
+                "version"            : "8.2.1",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
@@ -195,7 +195,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWebview"         : [
-                "version"                : "8.2.0",
+                "version"                : "8.2.1",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         ext.androidsupport.swiperefreshlayout,
@@ -206,7 +206,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonFeedback"        : [
-                "version"                : "8.2.0",
+                "version"                : "8.2.1",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : ["CommonWebview"
                 ],
