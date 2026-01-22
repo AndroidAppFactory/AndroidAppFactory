@@ -83,6 +83,7 @@ object DownloadConfig {
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_CONFIG
             isDownloadWhenUseMobile = true
             setShouldForceReDownload(TextUtils.isEmpty(md5))
+            isDownloadWhenAdd = true
             fileFolder = cacheFilePath
             isNeedRecord = false
             this.downloadListener = object : SimpleDownloadListener() {

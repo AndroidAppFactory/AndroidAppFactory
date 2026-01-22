@@ -87,7 +87,7 @@ public class DownloadRangeUtils {
 
     public static void startDownload(Context context, @NotNull DownloadItem info, long start, long length,
                                      long localStart) {
-        startDownload(context, info, start, length, localStart, info.shouldForceReDownload());
+        startDownload(context, info, start, length, localStart, info.shouldForceReDownload(), !DownloadRangeManager.INSTANCE.hasPauseAll());
     }
 
     /**
@@ -96,7 +96,7 @@ public class DownloadRangeUtils {
      * @param info 添加任务的信息，除 downloadURL ，其余都非必填，下载本地仅支持传入文件夹，不支持传入下载文件路径，如果是要下载到指定文件，请参考 DownloadTools 二次分封装
      */
     public static void startDownload(Context context, @NotNull DownloadItem info, long start, long length,
-                                     long localStart, boolean forceDownload) {
+                                     long localStart, boolean forceDownload, boolean downloadAfterAdd) {
         if (!DownloadRangeManager.INSTANCE.hasInit()) {
             DownloadRangeManager.INSTANCE.init(context);
         }
@@ -104,6 +104,7 @@ public class DownloadRangeUtils {
             info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
         }
         info.setShouldForceReDownload(true);
+        info.setDownloadWhenAdd(downloadAfterAdd);
         DownloadRangeManager.INSTANCE.addTask(info, start, length, localStart);
     }
 

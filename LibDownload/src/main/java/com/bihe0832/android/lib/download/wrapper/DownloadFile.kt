@@ -4,8 +4,7 @@ import android.app.Activity
 import android.content.Context
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.download.R
-import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.log.ZLog
 import com.bihe0832.android.lib.network.NetworkUtil
 import com.bihe0832.android.lib.thread.ThreadManager
@@ -14,6 +13,7 @@ import com.bihe0832.android.lib.ui.dialog.impl.DownloadProgressDialog
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.ui.dialog.tools.SimpleDialogListener
 import com.bihe0832.android.lib.ui.toast.ToastUtil
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  * 通用文件下载工具类
@@ -114,7 +114,7 @@ object DownloadFile {
             sha256 = "",
             canCancel = canCancel,
             useProcess = false,
-            forceDownload = false,
+            shouldFirstDownload = false,
             needRecord = false,
             listener = listener,
             downloadListener = downloadListener
@@ -145,7 +145,7 @@ object DownloadFile {
             sha256 = "",
             canCancel = canCancel,
             useProcess = true,
-            forceDownload = false,
+            shouldFirstDownload = false,
             needRecord = false,
             listener = listener,
             downloadListener = downloadListener
@@ -165,7 +165,7 @@ object DownloadFile {
         sha256: String,
         canCancel: Boolean,
         useProcess: Boolean,
-        forceDownload: Boolean,
+        shouldFirstDownload: Boolean,
         needRecord: Boolean,
         listener: OnDialogListener?,
         downloadListener: DownloadListener?
@@ -199,7 +199,7 @@ object DownloadFile {
                                     canCancel = canCancel,
                                     forceDownloadNew = false,
                                     useMobile = true,
-                                    forceDownload = forceDownload,
+                                    shouldFirstDownload = shouldFirstDownload,
                                     needRecord = needRecord,
                                     listener = listener,
                                     downloadListener = downloadListener
@@ -219,7 +219,7 @@ object DownloadFile {
                                     versionCode = 0,
                                     forceDownloadNew = false,
                                     useMobile = true,
-                                    forceDownload = forceDownload,
+                                    shouldFirstDownload = shouldFirstDownload,
                                     needRecord = needRecord,
                                     downloadListener = downloadListener
                                 )
@@ -243,7 +243,7 @@ object DownloadFile {
                         canCancel = canCancel,
                         forceDownloadNew = false,
                         useMobile = true,
-                        forceDownload = forceDownload,
+                        shouldFirstDownload = shouldFirstDownload,
                         needRecord = needRecord,
                         listener = listener,
                         downloadListener = downloadListener
@@ -263,7 +263,7 @@ object DownloadFile {
                         versionCode = 0,
                         forceDownloadNew = false,
                         useMobile = true,
-                        forceDownload = forceDownload,
+                        shouldFirstDownload = shouldFirstDownload,
                         needRecord = needRecord,
                         downloadListener = downloadListener
                     )
@@ -290,7 +290,7 @@ object DownloadFile {
         canCancel: Boolean,
         forceDownloadNew: Boolean,
         useMobile: Boolean,
-        forceDownload: Boolean,
+        shouldFirstDownload: Boolean,
         needRecord: Boolean,
         listener: OnDialogListener?,
         downloadListener: DownloadListener?
@@ -355,7 +355,7 @@ object DownloadFile {
             versionCode = versionCode,
             forceDownloadNew = forceDownloadNew,
             useMobile = useMobile,
-            forceDownload = forceDownload,
+            shouldFirstDownload = shouldFirstDownload,
             needRecord = needRecord,
             downloadListener = object : DownloadListener {
                 fun updateProcess(item: DownloadItem) {
@@ -596,7 +596,7 @@ object DownloadFile {
             versionCode = 0,
             forceDownloadNew = forceDownloadNew,
             useMobile = UseMobile,
-            forceDownload = false,
+            shouldFirstDownload = false,
             needRecord = false,
             downloadListener = downloadListener
         )
@@ -630,7 +630,7 @@ object DownloadFile {
             versionCode = 0,
             forceDownloadNew = forceDownloadNew,
             useMobile = UseMobile,
-            forceDownload = true,
+            shouldFirstDownload = true,
             needRecord = false,
             downloadListener = downloadListener
         )
@@ -650,7 +650,7 @@ object DownloadFile {
         versionCode: Long,
         forceDownloadNew: Boolean,
         useMobile: Boolean,
-        forceDownload: Boolean,
+        shouldFirstDownload: Boolean,
         needRecord: Boolean,
         downloadListener: DownloadListener?
     ) {
@@ -669,7 +669,8 @@ object DownloadFile {
             forceDownloadNew = forceDownloadNew,
             useMobile = useMobile,
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_FILE,
-            forceDownload = forceDownload,
+            shouldFirstDownload = shouldFirstDownload,
+            downloadAfterAdd = !DownloadFileManager.hasPauseAll(),
             needRecord = needRecord,
             downloadListener = downloadListener
         )

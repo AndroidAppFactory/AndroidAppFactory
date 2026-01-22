@@ -67,28 +67,15 @@ public class DownloadFileUtils {
         DownloadFileManager.INSTANCE.onDestroy();
     }
 
-    /**
-     * 添加一个下载任务
-     *
-     * @param info 添加任务的信息，除 downloadURL ，其余都非必填，下载本地仅支持传入文件夹，不支持传入下载文件路径，如果是要下载到指定文件，请参考 DownloadTools 二次分封装
-     */
-    public static void startDownload(Context context, @NotNull DownloadItem info, boolean shouldForceReDownload) {
-        if (!DownloadFileManager.INSTANCE.hasInit()) {
-            DownloadFileManager.INSTANCE.init(context);
-        }
-        if (shouldForceReDownload && info.getDownloadPriority() < DownloadItem.FORCE_DOWNLOAD_PRIORITY) {
-            info.setDownloadPriority(DownloadItem.FORCE_DOWNLOAD_PRIORITY);
-        }
-        DownloadFileManager.INSTANCE.addTask(info);
-    }
-
     public static void startDownload(Context context, @NotNull DownloadItem info) {
         if (!info.shouldForceReDownload()) {
             info.setShouldForceReDownload(
                     TextUtils.isEmpty(info.getContentMD5()) && TextUtils.isEmpty(info.getContentSHA256()));
         }
-        // 默认所有需要强制重新下载的，都提高下载优先级，else 优先级不变
-        startDownload(context, info, info.shouldForceReDownload());
+        if (!DownloadFileManager.INSTANCE.hasInit()) {
+            DownloadFileManager.INSTANCE.init(context);
+        }
+        DownloadFileManager.INSTANCE.addTask(info);
     }
 
     /**

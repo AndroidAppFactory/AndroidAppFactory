@@ -13,8 +13,6 @@ import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
-import com.bihe0832.android.lib.download.R
-import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
 import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
@@ -26,6 +24,7 @@ import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.toast.ToastUtil
 import okhttp3.Protocol
 import java.io.File
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 @SuppressLint("StaticFieldLeak")
 object DownloadRangeManager : DownloadManager() {
@@ -164,6 +163,7 @@ object DownloadRangeManager : DownloadManager() {
             info.rangeStart = rangeStart
             info.contentLength = rangeLength
             info.localStart = localStart
+            info.isDownloadWhenAdd = downloadAfterAdd
             ZLog.d(TAG, "获取文件长度 保存信息:${info}")
             DownloadInfoDBManager.saveDownloadInfo(info)
             return true
@@ -211,23 +211,18 @@ object DownloadRangeManager : DownloadManager() {
                         if (currentTime - info.pauseTime < 3000L) {
                             ZLog.e(TAG, "resume to quick:$info")
                             innerDownloadListener.onWait(info)
-                            info.isDownloadWhenAdd = true
                             (info.pauseTime + 3000L - currentTime).let {
                                 if (it > 0) {
                                     Thread.sleep(it)
                                 }
                             }
                         }
-                        if (!hasPauseAll()) {
-                            mDownloadEngine.startDownload(
-                                info,
-                                info.rangeStart,
-                                info.contentLength,
-                                info.localStart
-                            )
-                        } else {
-                            ZLog.e(TAG, "download paused by pause all")
-                        }
+                        mDownloadEngine.startDownload(
+                            info,
+                            info.rangeStart,
+                            info.contentLength,
+                            info.localStart
+                        )
                     }
                 } else {
                     ZLog.e(TAG, "download paused by downloadAfterAdd")

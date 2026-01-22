@@ -27,8 +27,6 @@ import com.bihe0832.android.lib.download.DownloadItem.TAG
 import com.bihe0832.android.lib.download.DownloadListener
 import com.bihe0832.android.lib.download.DownloadPauseType
 import com.bihe0832.android.lib.download.DownloadStatus
-import com.bihe0832.android.lib.download.R
-import com.bihe0832.android.lib.aaf.res.R as ResR
 import com.bihe0832.android.lib.download.core.DownloadByHttpBase
 import com.bihe0832.android.lib.download.core.DownloadManager
 import com.bihe0832.android.lib.download.core.DownloadTaskList
@@ -45,6 +43,7 @@ import com.bihe0832.android.lib.ui.toast.ToastUtil
 import com.bihe0832.android.lib.utils.apk.APKUtils
 import okhttp3.Protocol
 import java.io.File
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 @SuppressLint("StaticFieldLeak")
 object DownloadFileManager : DownloadManager() {
@@ -296,11 +295,7 @@ object DownloadFileManager : DownloadManager() {
                                     }
                                 }
                             }
-                            if (!hasPauseAll()) {
-                                mDownloadEngine.startDownload(info)
-                            } else {
-                                ZLog.e(TAG, "download paused by pause all")
-                            }
+                            mDownloadEngine.startDownload(info)
                         }
                     } else {
                         ZLog.e(TAG, "download paused by downloadAfterAdd")
@@ -343,6 +338,7 @@ object DownloadFileManager : DownloadManager() {
             info.rangeStart = rangeStart
             info.contentLength = serverContentLength
             info.localStart = localStart
+            info.isDownloadWhenAdd = downloadAfterAdd
             DownloadInfoDBManager.saveDownloadInfo(info)
 
             return true

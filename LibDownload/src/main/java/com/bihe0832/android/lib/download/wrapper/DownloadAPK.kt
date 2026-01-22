@@ -5,14 +5,14 @@ import android.content.Context
 import android.provider.Settings
 import com.bihe0832.android.lib.download.DownloadItem
 import com.bihe0832.android.lib.download.DownloadListener
-import com.bihe0832.android.lib.download.R
-import com.bihe0832.android.lib.aaf.res.R as ResR
+import com.bihe0832.android.lib.download.file.DownloadFileManager
 import com.bihe0832.android.lib.install.InstallListener
 import com.bihe0832.android.lib.install.InstallUtils
 import com.bihe0832.android.lib.thread.ThreadManager
 import com.bihe0832.android.lib.ui.dialog.callback.OnDialogListener
 import com.bihe0832.android.lib.ui.dialog.tools.DialogUtils
 import com.bihe0832.android.lib.utils.intent.IntentUtils
+import com.bihe0832.android.lib.aaf.res.R as ResR
 
 /**
  * APK 下载工具类
@@ -111,7 +111,7 @@ object DownloadAPK {
             url, header, "", false, md5, "",
             canCancel,
             true,
-            forceDownload = false,
+            shouldFirstDownload = false,
             needRecord = false,
             object : OnDialogListener {
                 override fun onPositiveClick() {
@@ -148,7 +148,7 @@ object DownloadAPK {
             activity,
             title, msg,
             url, emptyMap(), md5, packageName, versionCode,
-            canCancel, downloadMobile,
+            canCancel, false, downloadMobile,
             listener,
             SimpleInstallListener(activity, packageName, listener)
         )
@@ -164,6 +164,7 @@ object DownloadAPK {
         packageName: String,
         versionCode: Long,
         canCancel: Boolean,
+        shouldFirstDownload: Boolean,
         downloadMobile: Boolean,
         listener: OnDialogListener?,
         downloadListener: DownloadListener?,
@@ -183,7 +184,7 @@ object DownloadAPK {
             canCancel,
             forceDownloadNew = false,
             downloadMobile,
-            forceDownload = true,
+            shouldFirstDownload = shouldFirstDownload,
             needRecord = false,
             object : OnDialogListener {
                 override fun onPositiveClick() {
@@ -214,7 +215,7 @@ object DownloadAPK {
             "", "",
             url, emptyMap(), "", false, md5, "",
             canCancel = true, useProcess = false,
-            forceDownload = true, needRecord = false,
+            shouldFirstDownload = true, needRecord = false,
             listener = object : OnDialogListener {
                 override fun onPositiveClick() {
                     if (!InstallUtils.hasInstallAPPPermission(activity, false, false)) {
@@ -265,7 +266,6 @@ object DownloadAPK {
         md5: String,
         packageName: String,
         versionCode: Long,
-        delay: Int,
         installListener: InstallListener
     ) {
         DownloadTools.startDownload(
@@ -283,8 +283,9 @@ object DownloadAPK {
             forceDownloadNew = true,
             useMobile = true,
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
-            forceDownload = false,
+            shouldFirstDownload = true,
             needRecord = false,
+            downloadAfterAdd = true,
             downloadListener = SimpleAPKDownloadListener(
                 context,
                 packageName,
@@ -299,7 +300,6 @@ object DownloadAPK {
         md5: String,
         packageName: String,
         versionCode: Long,
-        delay: Int,
         installListener: InstallListener
     ) {
         DownloadTools.startDownload(
@@ -317,8 +317,9 @@ object DownloadAPK {
             forceDownloadNew = false,
             useMobile = true,
             actionKey = DownloadFileUtils.DOWNLOAD_ACTION_KEY_APK,
-            forceDownload = false,
+            shouldFirstDownload = false,
             needRecord = false,
+            downloadAfterAdd = !DownloadFileManager.hasPauseAll(),
             downloadListener = SimpleAPKDownloadListener(
                 context,
                 packageName,

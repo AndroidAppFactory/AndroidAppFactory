@@ -37,7 +37,7 @@ object DownloadTools {
 
     // 外部注册的全局回调，仅回调，不包含任何逻辑，如果一个URL在多个地方下载，下载状态也只会每个Listener触发一次
     private var mGlobalDownloadListenerList = CopyOnWriteArrayList<DownloadListener>()
-    
+
     /**
      * 添加全局下载监听器
      * @param downloadListener 下载监听器（自动去重）
@@ -80,6 +80,7 @@ object DownloadTools {
             }
             mGlobalDownloadListenerList.forEach(action)
         }
+
         private val mListener = object : DownloadListener {
             override fun onWait(item: DownloadItem) {
                 notifyListeners { it.onWait(item) }
@@ -264,7 +265,8 @@ object DownloadTools {
         forceDownloadNew: Boolean,
         useMobile: Boolean,
         actionKey: String,
-        forceDownload: Boolean,
+        shouldFirstDownload: Boolean,
+        downloadAfterAdd: Boolean,
         needRecord: Boolean,
         downloadListener: DownloadListener?,
     ) {
@@ -295,6 +297,12 @@ object DownloadTools {
             this.actionKey = actionKey
             this.isDownloadWhenUseMobile = useMobile
             this.isNeedRecord = needRecord
+            if (shouldFirstDownload) {
+                this.downloadPriority = DownloadItem.FORCE_DOWNLOAD_PRIORITY
+                this.isDownloadWhenAdd = true
+            } else {
+                this.isDownloadWhenAdd = downloadAfterAdd
+            }
         }.let { downloadItem ->
             if (!URLUtils.isHTTPUrl(url)) {
                 downloadListener?.onFail(DownloadErrorCode.ERR_BAD_URL, "url is null", downloadItem)
@@ -326,7 +334,10 @@ object DownloadTools {
                     addNewKeyListener(downloadItem.downloadID, path, isFilePath, downloadListener)
                     downloadItem.downloadListener =
                         mDownloadKeyListenerList[downloadItem.downloadID]?.getDownloadListener()
-                    DownloadFileUtils.startDownload(context, downloadItem, forceDownload)
+                    DownloadFileUtils.startDownload(
+                        context,
+                        downloadItem
+                    )
                 }
             }.start()
         }

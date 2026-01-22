@@ -128,7 +128,6 @@ abstract class DownloadManager {
     }
 
     fun addNewTask(info: DownloadItem, downloadAfterAdd: Boolean) {
-        hasPauseAll = false
         startTask(info, downloadAfterAdd)
     }
 
@@ -522,7 +521,6 @@ abstract class DownloadManager {
         startByUser: Boolean,
         downloadWhenUseMobile: Boolean,
     ) {
-        hasPauseAll = false
         DownloadTaskList.getTaskByDownloadID(downloadId)?.let { info ->
             ZLog.d(TAG, "resumeTask:$info")
             if (startByUser) {
