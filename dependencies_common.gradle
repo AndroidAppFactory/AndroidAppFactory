@@ -2,7 +2,7 @@ apply from: "$rootDir/config.gradle"
 
 ext.commonmoduleInfo = [
         "CommonDebug"           : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-debug",
                 "apidependenciesList"    : [
                         "CommonWrapperMin", "CommonAceEditor", "LibScreenWrapper","CommonPermission", "LibDebug"
@@ -14,7 +14,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonDebugCompose"    : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-compose-debug",
                 "apidependenciesList"    : [
                         "CommonWrapperCompose","CommonPermission", "LibDebug"
@@ -26,7 +26,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapper"         : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-wrapper",
                 "apidependenciesList": [
                         "CommonWrapperMin", "CommonWrapperCompose", "CommonAceEditor", "CommonSvga", "CommonAccessibility",
@@ -34,7 +34,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperMin"      : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-wrapper-min",
                 "apidependenciesList": [
                         "CommonFeedback", "CommonSplash", "CommonPraise", "CommonAbout",
@@ -44,7 +44,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonWrapperCompose"  : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-wrapper-compose",
                 "apidependenciesList": [
                         "CommonCompose", "CommonListCompose"
@@ -58,7 +58,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "Framework"             : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "framework",
                 "apidependenciesList"    : [
                         ext.androidsupport.annotation,
@@ -70,7 +70,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonCompose"         : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-compose",
                 "apidependenciesList": [
                         "Framework",
@@ -86,14 +86,14 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonAccessibility"   : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-accessibility",
                 "apidependenciesList": [
                         "CommonDeprecated"
                 ]
         ],
         "CommonQRCode"          : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-qrcode",
                 "apidependenciesList"    : [
                         "CommonPhotos", "LibCameraScan"
@@ -103,14 +103,14 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonMessage"         : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-message",
                 "apidependenciesList": [
                         "CommonList", "CommonListCompose"
                 ]
         ],
         "CommonShare"           : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-share",
                 "apidependenciesList"    : [
                         "CommonDeprecated"
@@ -120,19 +120,19 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonNavigationDrawer": [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-navigation-drawer",
                 "apidependenciesList": ["CommonList", "CommonAbout", "CommonMessage", "CommonQRCode"]
         ],
         "CommonBottomTab"       : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-bottom-tab",
                 "apidependenciesList": [
                         "CommonSvga"
                 ]
         ],
         "CommonSvga"            : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-svga",
                 "apidependenciesList": [
                         "CommonDeprecated",
@@ -142,7 +142,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonAceEditor"       : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-ace-editor",
                 "apidependenciesList"    : [
                         "CommonDeprecated", "LibAceEditor"
@@ -152,21 +152,21 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonAbout"           : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-about",
                 "apidependenciesList": [
                         "CommonDeprecated", "CommonList"
                 ]
         ],
         "CommonListCompose"     : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-list-compose",
                 "apidependenciesList": [
                         "CommonCompose", ext.androidsupport.lifecycle_compose,
                 ]
         ],
         "CommonList"            : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-list",
                 "apidependenciesList": [
                         ext.androidsupport.swiperefreshlayout,
@@ -174,28 +174,28 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonSplash"          : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-splash",
                 "apidependenciesList": [
                         "CommonDeprecated"
                 ]
         ],
         "CommonPhotos"          : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-photos",
                 "apidependenciesList": [
                         "CommonDeprecated", "CommonPermission"
                 ]
         ],
         "CommonNetwork"         : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-network",
                 "apidependenciesList": [
                         "CommonDeprecated"
                 ]
         ],
         "CommonWebview"         : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-webview",
                 "apidependenciesList"    : [
                         ext.androidsupport.swiperefreshlayout,
@@ -206,7 +206,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonFeedback"        : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-feedback",
                 "apidependenciesList"    : ["CommonWebview"
                 ],
@@ -215,42 +215,42 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonPraise"          : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-praise",
                 "apidependenciesList": [
                         "CommonDeprecated"
                 ]
         ],
         "CommonPermission"      : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-permission",
                 "apidependenciesList": [
                         "CommonAbout"
                 ]
         ],
         "CommonPanel"           : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-panel",
                 "apidependenciesList": [
                         "CommonDeprecated", "LibPanel"
                 ]
         ],
         "CommonMedia"           : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-media",
                 "apidependenciesList": [
                         "CommonDeprecated", "LibFFmpegMobile", "CommonAudioWave"
                 ]
         ],
         "CommonCrop"            : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-crop",
                 "apidependenciesList": [
                         "CommonDeprecated", "CommonBottomTab", "LibImageMetadata", "LibCrop"
                 ]
         ],
         "CommonLanguage"        : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-language",
                 "apidependenciesList"    : [
                         "CommonListCompose"
@@ -260,7 +260,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonFilePreview"     : [
-                "version"                : "8.2.2",
+                "version"                : "8.2.3",
                 "artifactId"             : "common-file-preview",
                 "apidependenciesList"    : [
                         "CommonList"
@@ -270,7 +270,7 @@ ext.commonmoduleInfo = [
                 ]
         ],
         "CommonAudioWave" : [
-                "version"            : "8.2.2",
+                "version"            : "8.2.3",
                 "artifactId"         : "common-audio-wave",
                 "apidependenciesList": [
                         "CommonCompose"

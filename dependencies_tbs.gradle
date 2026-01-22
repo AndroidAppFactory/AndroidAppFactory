@@ -2,14 +2,14 @@ apply from: "$rootDir/config.gradle"
 
 ext.tbsmoduleInfo = [
     "CommonTBSWrapper"   : [
-        "version"            : "8.2.2",
+        "version"            : "8.2.3",
         "artifactId"         : "common-wrapper-tbs",
         "apidependenciesList": [
             "CommonTBS", "CommonTBSWebview", "CommonTBSFeedback"
         ]
     ],
     "CommonTBSFeedback": [
-        "version"                : "8.2.2",
+        "version"                : "8.2.3",
         "artifactId"             : "common-feedback-tbs",
         "apidependenciesList": ["CommonTBSWebview", "CommonFeedback"
         ],
@@ -18,7 +18,7 @@ ext.tbsmoduleInfo = [
         ]
     ],
     "CommonTBSWebview" : [
-        "version"                : "8.2.2",
+        "version"                : "8.2.3",
         "artifactId"             : "common-webview-tbs",
         "apidependenciesList"    : [
             ext.androidsupport.swiperefreshlayout,
