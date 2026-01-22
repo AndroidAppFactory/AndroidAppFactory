@@ -104,6 +104,9 @@ abstract class DownloadByHttpBase(
         ZLog.e(TAG, "goDownload rangeLength:${rangeLength} ${FileUtils.getFileLength(rangeLength)}")
         ZLog.e(TAG, "goDownload localStart:${localStart}")
         ZLog.e(TAG, "goDownload contentLength:${info.contentLength} ${FileUtils.getFileLength(info.contentLength)}")
+        if (downloadType == DownloadItem.TYPE_RANGE && (rangeLength <= 0 || info.contentLength <= 0)) {
+            ZLog.w(TAG, "goDownload ⚠️ Range下载但内容大小未知(rangeLength=$rangeLength, contentLength=${info.contentLength})，不支持断点续传，下载中断后需重新下载")
+        }
         ZLog.e(TAG, "goDownload info:${info}")
         ZLog.e(TAG, "~~~~~~~~~~~~~~~~~~ goDownload 最终入参 ~~~~~~~~~~~~~~~~~~")
         ZLog.e(TAG, "\n")
